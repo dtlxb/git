@@ -1,0 +1,67 @@
+package com.gogoal.app.base;
+
+import android.app.Application;
+import android.content.Context;
+
+import com.gogoal.app.common.AppConst;
+import com.gogoal.app.common.SPTools;
+import com.gogoal.app.wxapi.WXEntryActivity;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+
+/**
+ * author wangjd on 2017/2/8 0008.
+ * Staff_id 1375
+ * phone 18930640263
+ */
+public class MyApp extends Application {
+    public static IWXAPI sApi;
+
+    public static Context mContext;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mContext=getApplicationContext();
+        sApi = WXEntryActivity.initWeiXin(this, AppConst.WEIXIN_APP_ID);//初始化组件
+        SPTools.initSharedPreferences(this);
+
+        //只有主进程运行的时候才需要初始化
+        if (getApplicationInfo().packageName.equals(getMyProcessName())){
+            //TODO im初始化
+
+            //TODO 注册消息接收器
+
+        }
+
+    }
+    /**
+     * 获取当前运行的进程名
+     * @return
+     */
+    public static String getMyProcessName() {
+        try {
+            File file = new File("/proc/" + android.os.Process.myPid() + "/" + "cmdline");
+            BufferedReader mBufferedReader = new BufferedReader(new FileReader(file));
+            String processName = mBufferedReader.readLine().trim();
+            mBufferedReader.close();
+            return processName;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+    }
+
+
+    public static Context getContext(){
+        return mContext;
+    }
+}

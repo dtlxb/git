@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.gogoal.app.fragment.MessageFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:gravity="center"
+        android:background="@color/colorPrimary"
+        android:text="消息"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"/>
+
+    <Button
+        android:id="@+id/btn_openGallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10dp"
+        android:text="打开相册(全适配)"/>
+
+
+</RelativeLayout>
