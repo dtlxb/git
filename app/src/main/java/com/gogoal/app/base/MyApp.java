@@ -3,6 +3,7 @@ package com.gogoal.app.base;
 import android.app.Application;
 import android.content.Context;
 
+import com.avos.avoscloud.AVOSCloud;
 import com.gogoal.app.common.AppConst;
 import com.gogoal.app.common.SPTools;
 import com.gogoal.app.wxapi.WXEntryActivity;
@@ -28,6 +29,11 @@ public class MyApp extends Application {
         mContext=getApplicationContext();
         sApi = WXEntryActivity.initWeiXin(this, AppConst.WEIXIN_APP_ID);//初始化组件
         SPTools.initSharedPreferences(this);
+
+        //初始化参数依次this，AppId,AppKey
+        AVOSCloud.initialize(this, "pTmU7KLB45ois6aYDU0wf2PK-gzGzoHsz", "vPzvJbnQ0XMvvMEzVLf17OJm");
+        // 启用北美节点
+        AVOSCloud.useAVCloudUS();
 
         //只有主进程运行的时候才需要初始化
         if (getApplicationInfo().packageName.equals(getMyProcessName())){

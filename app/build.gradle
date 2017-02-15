@@ -19,6 +19,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+    lintOptions{
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -57,4 +64,7 @@ dependencies {
     //自己库
     compile project(':imagepicker')
     compile project(':jsbridge')
+    //LeanCloud实时聊天
+    compile 'cn.leancloud.android:avoscloud-sdk:v3.+'
+    compile('cn.leancloud.android:avoscloud-push:v3.+@aar') { transitive = true }
 }
