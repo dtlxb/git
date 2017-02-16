@@ -31,7 +31,7 @@ public class MyApp extends Application {
 
         sApi = WXEntryActivity.initWeiXin(this, AppConst.WEIXIN_APP_ID);//初始化组件
         SPTools.initSharedPreferences(this);
-        
+
         //初始化参数依次this，AppId,AppKey
         AVOSCloud.initialize(this, "hi22KV7K693uIQLX5X4ROSbs-gzGzoHsz", "qTkdjmpyuVdJAearcTthBw5N");
         //启用北美节点
