@@ -60,7 +60,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
     }
 
     /**
-     * 初始化垂直的RecycleView
+     * 初始化垂直列表的RecycleView
+     * @param recyclerView:初始化对象;
+     * @param dividerId:分割线对象 : 0时为默认一条直线;int值 shape资源；null(不要分割线)
      */
     public void initRecycleView(RecyclerView recyclerView, Integer dividerId) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());

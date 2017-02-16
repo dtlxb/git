@@ -30,7 +30,7 @@ public class AppManager {
         }
 
         if (activityStack == null) {
-            activityStack = new Stack<Activity>();
+            activityStack = new Stack<>();
         }
 
         return instance;

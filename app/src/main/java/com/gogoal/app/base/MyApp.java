@@ -19,17 +19,19 @@ import java.io.FileReader;
  * phone 18930640263
  */
 public class MyApp extends Application {
+
     public static IWXAPI sApi;
 
-    public static Context mContext;
-
+    private static MyApp app;
     @Override
     public void onCreate() {
         super.onCreate();
-        mContext=getApplicationContext();
+
+        app=this;
+
         sApi = WXEntryActivity.initWeiXin(this, AppConst.WEIXIN_APP_ID);//初始化组件
         SPTools.initSharedPreferences(this);
-
+        
         //初始化参数依次this，AppId,AppKey
         AVOSCloud.initialize(this, "hi22KV7K693uIQLX5X4ROSbs-gzGzoHsz", "qTkdjmpyuVdJAearcTthBw5N");
         //启用北美节点
@@ -49,8 +51,7 @@ public class MyApp extends Application {
 
     }
     /**
-     * 获取当前运行的进程名
-     * @return
+     * @return 获取当前运行的进程名
      */
     public static String getMyProcessName() {
         try {
@@ -72,6 +73,6 @@ public class MyApp extends Application {
 
 
     public static Context getContext(){
-        return mContext;
+        return app.getApplicationContext();
     }
 }
