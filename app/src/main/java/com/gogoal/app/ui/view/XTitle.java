@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,14 +65,18 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         if (mImmersive) {
             mStatusBarHeight = getStatusBarHeight();
         }
-        mActionPadding = dip2px(5);
-        mOutPadding = dip2px(8);
-        mHeight = dip2px(DEFAULT_TITLE_BAR_HEIGHT);
+        mActionPadding = dp2px(5);
+        mOutPadding = dp2px(8);
+        mHeight = dp2px(DEFAULT_TITLE_BAR_HEIGHT);
         initView(context);
     }
 
     private void initView(Context context) {
         mLeftText = new TextView(context);
+        TypedValue typedValue=new TypedValue();
+        context.getTheme().resolveAttribute(android.R.attr.selectableItemBackground,typedValue,true);
+        mLeftText.setBackgroundResource(typedValue.resourceId);
+
         mCenterLayout = new LinearLayout(context);
         mRightLayout = new LinearLayout(context);
         mDividerView = new View(context);
@@ -402,7 +407,7 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         mDividerView.layout(0, getMeasuredHeight() - mDividerView.getMeasuredHeight(), getMeasuredWidth(), getMeasuredHeight());
     }
 
-    public static int dip2px(int dpValue) {
+    public static int dp2px(int dpValue) {
         final float scale = Resources.getSystem().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }

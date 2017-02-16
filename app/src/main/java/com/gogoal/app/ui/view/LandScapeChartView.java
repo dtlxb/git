@@ -13,7 +13,7 @@ import android.view.View;
 
 import com.gogoal.app.R;
 import com.gogoal.app.bean.StockMinuteData;
-import com.gogoal.app.common.BitmapUtils.TimesFivesBitmap;
+import com.gogoal.app.common.ImageUtils.TimesFivesBitmap;
 import com.gogoal.app.common.stockUtils;
 
 import java.util.ArrayList;
