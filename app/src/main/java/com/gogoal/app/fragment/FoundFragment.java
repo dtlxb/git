@@ -14,14 +14,14 @@ import butterknife.OnClick;
 /**
  * 应用
  */
-public class FunctionsFragment extends BaseFragment {
+public class FoundFragment extends BaseFragment {
 
-    public FunctionsFragment() {
+    public FoundFragment() {
     }
 
     @Override
     public int bindLayout() {
-        return R.layout.fragment_functions;
+        return R.layout.fragment_found;
     }
 
     @Override
