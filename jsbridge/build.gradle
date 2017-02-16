@@ -31,5 +31,5 @@ dependencies {
 
     compile 'com.github.zhaokaiqiang.klog:library:1.5.0'
 
-    compile 'com.alibaba:fastjson:1.1.55.android'
+    compile 'cn.leancloud.android:fastjson:1.1.39-leancloud'
 }

@@ -9,6 +9,8 @@ import com.gogoal.app.R;
 import com.gogoal.app.activity.FunctionActivity;
 import com.gogoal.app.base.BaseFragment;
 
+import butterknife.OnClick;
+
 /**
  * 应用
  */
@@ -27,7 +29,9 @@ public class FunctionsFragment extends BaseFragment {
 
     }
 
-    public void onClick(View view){
-        startActivity(new Intent(view.getContext(),FunctionActivity.class));
+    @OnClick(R.id.btn_test)
+    void test(View view) {
+        startActivity(new Intent(view.getContext(), FunctionActivity.class));
     }
+
 }
