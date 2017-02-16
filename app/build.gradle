@@ -65,4 +65,7 @@ dependencies {
     //LeanCloud实时聊天
     compile 'cn.leancloud.android:avoscloud-sdk:v3.+'
     compile('cn.leancloud.android:avoscloud-push:v3.+@aar') { transitive = true }
+
+    //开源adapter
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.8.0'
 }

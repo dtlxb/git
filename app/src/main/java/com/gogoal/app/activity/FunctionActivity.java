@@ -26,7 +26,16 @@ public class FunctionActivity extends BaseActivity {
     }
 
     @Override
+    protected void setStatusBar(int statusBarColorId) {
+        super.setStatusBar(statusBarColorId);
+    }
+
+    @Override
     public void doBusiness(Context mContext) {
+        setMyTitle("web测试",true);
+
+        etInput.setSelection(etInput.getText().length());
+
         etInput.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {

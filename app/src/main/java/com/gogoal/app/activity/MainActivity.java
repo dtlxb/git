@@ -102,7 +102,11 @@ public class MainActivity extends BaseActivity {
             ImageView imageView = (ImageView) view.findViewById(R.id.img_main_tab);
             switch (position) {
                 case 0:
-                    imageView.setImageResource(R.drawable.selector_icon_main_tab_message);
+//                    if (!TextUtils.isEmpty(url)){//底部按钮icon图片可以为后台提供(节假日纪念日活动)
+//                    ImageDisplay.loadNetImage(getActivity(),url,imageView);
+//                    }else {
+                        imageView.setImageResource(R.drawable.selector_icon_main_tab_message);
+//                    }
                     break;
                 case 1:
                     imageView.setImageResource(R.drawable.selector_icon_main_tab_contact);
@@ -114,7 +118,9 @@ public class MainActivity extends BaseActivity {
                     imageView.setImageResource(R.drawable.selector_icon_main_tab_mine);
                     break;
             }
+
             tv.setText(titles[position]);
+
             return view;
         }
     }

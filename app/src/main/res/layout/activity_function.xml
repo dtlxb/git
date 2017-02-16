@@ -5,13 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@android:color/white"
     tools:context="com.gogoal.app.activity.FunctionActivity">
 
+    <include layout="@layout/include_title"/>
     <EditText
         android:id="@+id/et_input"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:padding="10dp"
+        android:text="http://"
         android:hint="input url"/>
 
 
@@ -19,4 +22,5 @@
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.gogoal.app.common.BitmapUtils;
+package com.gogoal.app.common.ImageUtils;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

@@ -1,16 +1,19 @@
 package com.gogoal.app.base;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.gogoal.app.R;
 import com.gogoal.app.ui.view.StatusBarUtil;
+import com.gogoal.app.ui.view.XTitle;
 
 import butterknife.ButterKnife;
 
@@ -43,6 +46,27 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
     public void setContentView(View contextView) {
         super.setContentView(mContentView);
         setStatusBar(R.color.colorPrimary);
+    }
+
+    public XTitle setMyTitle(String title,boolean canBack){
+        XTitle xTitle= (XTitle) findViewById(R.id.title_bar);
+        if (!TextUtils.isEmpty(title)){
+            xTitle.setTitle(title);
+            xTitle.setTitleColor(Color.WHITE);
+        }
+        if (canBack){
+            xTitle.setLeftImageResource(R.mipmap.image_title_back);
+            xTitle.setLeftText("返回");
+            xTitle.setLeftTextColor(Color.WHITE);
+            xTitle.setLeftClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
+
+        return xTitle;
     }
 
     protected void setStatusBar(int statusBarColorId) {
