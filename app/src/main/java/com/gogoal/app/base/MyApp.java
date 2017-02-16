@@ -18,18 +18,20 @@ import java.io.FileReader;
  * phone 18930640263
  */
 public class MyApp extends Application {
+
     public static IWXAPI sApi;
 
-    public static Context mContext;
-
+    private static MyApp app;
     @Override
     public void onCreate() {
         super.onCreate();
-        mContext=getApplicationContext();
+
+        app=this;
+
         sApi = WXEntryActivity.initWeiXin(this, AppConst.WEIXIN_APP_ID);//初始化组件
         SPTools.initSharedPreferences(this);
 
-        //只有主进程运行的时候才需要初始化
+        //只有主进程运行的时候k才需要初始化
         if (getApplicationInfo().packageName.equals(getMyProcessName())){
             //TODO im初始化
 
@@ -39,8 +41,7 @@ public class MyApp extends Application {
 
     }
     /**
-     * 获取当前运行的进程名
-     * @return
+     * @return 获取当前运行的进程名
      */
     public static String getMyProcessName() {
         try {
@@ -62,6 +63,6 @@ public class MyApp extends Application {
 
 
     public static Context getContext(){
-        return mContext;
+        return app.getApplicationContext();
     }
 }
