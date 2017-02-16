@@ -2,19 +2,37 @@ package com.gogoal.app.fragment;
 
 
 import android.content.Context;
-import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.gogoal.app.R;
-import com.gogoal.app.activity.FunctionActivity;
 import com.gogoal.app.base.BaseFragment;
+import com.gogoal.app.bean.FunctionBean;
+import com.gogoal.app.common.AppDevice;
+import com.gogoal.app.common.GridSpacingItemDecoration;
 
-import butterknife.OnClick;
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
 
 /**
  * 应用
  */
 public class FunctionsFragment extends BaseFragment {
+
+    @BindView(R.id.function_list)
+    RecyclerView function_list;
+
+    @BindView(R.id.report_list)
+    RecyclerView report_list;
+
+    private  List<FunctionBean> functions=new ArrayList<>();
+    private  List<FunctionBean> reports=new ArrayList<>();
 
     public FunctionsFragment() {
     }
@@ -26,12 +44,71 @@ public class FunctionsFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-
+        intData();
+        FunctionsAdapter functionsAdapter=new FunctionsAdapter(functions);
+        FunctionsAdapter reportsAdapter=new FunctionsAdapter(reports);
+        function_list.addItemDecoration(new GridSpacingItemDecoration(3, AppDevice.dp2px(getContext(), 1), false));
+        report_list.addItemDecoration(new GridSpacingItemDecoration(3, AppDevice.dp2px(getContext(), 1), false));
+        function_list.setAdapter(functionsAdapter);
+        report_list.setAdapter(reportsAdapter);
     }
 
-    @OnClick(R.id.btn_test)
-    void test(View view) {
-        startActivity(new Intent(view.getContext(), FunctionActivity.class));
+    private void intData() {
+        FunctionBean functionLive=new FunctionBean("Go-Goal直播",R.mipmap.function_icon_onlive);
+        FunctionBean functionReport=new FunctionBean("中国研究员专业网",R.mipmap.function_icon_report);
+        FunctionBean functionSchool=new FunctionBean("Go-Goal学院",R.mipmap.function_icon_school);
+        FunctionBean functionOneQ=new FunctionBean("金融1Q",R.mipmap.function_icon_1q);
+
+        functions.add(functionLive);
+        functions.add(functionReport);
+        functions.add(functionSchool);
+        functions.add(functionOneQ);
+
+        FunctionBean stockReport=new FunctionBean("Go-Goal直播",R.mipmap.function_icon_onlive);
+        FunctionBean stockTitle=new FunctionBean("中国研究员专业网",R.mipmap.function_icon_report);
+        FunctionBean stockNews=new FunctionBean("Go-Goal学院",R.mipmap.function_icon_school);
+
+        reports.add(stockReport);
+        reports.add(stockTitle);
+        reports.add(stockNews);
+    }
+
+    class FunctionsAdapter extends RecyclerView.Adapter<FunctionsAdapter.FunctionViewHolder>{
+
+        List<FunctionBean> mData;
+        public FunctionsAdapter(List<FunctionBean> list) {
+            this.mData=list;
+        }
+
+        @Override
+        public FunctionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            FunctionViewHolder holder=new FunctionViewHolder(LayoutInflater.from(getContext()).inflate(R.layout.item_function,parent,false));
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(FunctionViewHolder holder, int position) {
+            holder.imageView.setImageResource(mData.get(position).getFunction_map());
+            holder.textView.setText(mData.get(position).getFunction_name());
+        }
+
+        @Override
+        public int getItemCount() {
+            return mData.size();
+        }
+
+        class FunctionViewHolder extends RecyclerView.ViewHolder{
+
+            ImageView imageView;
+            TextView textView;
+
+            public FunctionViewHolder(View itemView) {
+                super(itemView);
+                imageView= (ImageView) itemView.findViewById(R.id.function_icon);
+                textView= (TextView) itemView.findViewById(R.id.function_name);
+            }
+        }
+
     }
 
 }
