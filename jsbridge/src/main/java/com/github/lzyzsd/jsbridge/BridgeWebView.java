@@ -35,7 +35,9 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
     }
 
     public void setOnWebChangeListener(WebChangeListener changeListener) {
-        mChangeListener = changeListener;
+        if (changeListener!=null) {
+            mChangeListener = changeListener;
+        }
     }
 
     public Map<String, BridgeHandler> getMessageHandlers() {

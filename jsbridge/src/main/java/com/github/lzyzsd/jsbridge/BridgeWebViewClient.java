@@ -62,7 +62,13 @@ public class BridgeWebViewClient extends WebViewClient {
     public void onPageFinished(WebView view, String url) {
         KLog.d(url);
         super.onPageFinished(view, url);
-        mFinishListener.onFinish(view.getUrl(), view.getTitle());
+        if (mFinishListener!=null) {
+            try {
+                mFinishListener.onFinish(view.getUrl(), view.getTitle());
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
 
         if (BridgeUtil.useEvaluateJS()) {
             BridgeUtil.webViewLoadLocalJs(view, "WebViewJavascriptBridgeGE19.js");
@@ -84,7 +90,7 @@ public class BridgeWebViewClient extends WebViewClient {
                     loadingDialog.dismiss();
                     loadingDialog.cancel();
                 }
-            }, 800);
+            }, 500);
         }
     }
 
@@ -92,16 +98,16 @@ public class BridgeWebViewClient extends WebViewClient {
     public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
         super.onReceivedError(view, request, error);
 
-        if (view.copyBackForwardList().getSize()==1) {
-            switch (Utils.getNetworkType(view.getContext())) {//获取网络状态
-                case 0://无网络
-                    view.loadUrl("file:///android_asset/404.html");
-                    break;
-                default:
-                    view.loadUrl("file:///android_asset/erro.html");
-                    break;
-            }
-        }
+//        if (view.copyBackForwardList().getSize()==1) {
+//            switch (Utils.getNetworkType(view.getContext())) {//获取网络状态
+//                case 0://无网络
+//                    view.loadUrl("file:///android_asset/404.html");
+//                    break;
+//                default:
+//                    view.loadUrl("file:///android_asset/erro.html");
+//                    break;
+//            }
+//        }
     }
 
     @Override
