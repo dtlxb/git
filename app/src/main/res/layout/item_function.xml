@@ -18,10 +18,11 @@
             android:background="@mipmap/function_icon_1q"/>
         <TextView
             android:layout_marginTop="15dp"
+            android:textSize="14sp"
+            android:textColor="@color/textColor_333333"
             android:id="@+id/function_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="金融1Q金融1Q金融1Q"/>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

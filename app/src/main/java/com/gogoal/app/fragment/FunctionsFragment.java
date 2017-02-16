@@ -54,6 +54,8 @@ public class FunctionsFragment extends BaseFragment {
     }
 
     private void intData() {
+        functions.clear();
+        reports.clear();
         FunctionBean functionLive=new FunctionBean("Go-Goal直播",R.mipmap.function_icon_onlive);
         FunctionBean functionReport=new FunctionBean("中国研究员专业网",R.mipmap.function_icon_report);
         FunctionBean functionSchool=new FunctionBean("Go-Goal学院",R.mipmap.function_icon_school);
