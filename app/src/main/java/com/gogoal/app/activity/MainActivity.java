@@ -42,7 +42,7 @@ public class MainActivity extends BaseActivity {
 
         ContactsFragment contactsFragment = new ContactsFragment();     // TAB2 联系人
 
-        FoundFragment foundFragment = new FoundFragment();  // TAB3 发现
+        FoundFragment foundFragment = new FoundFragment();              // TAB3 发现
 
         MineFragment mineFragment = new MineFragment();                 // TAB4 我的
 

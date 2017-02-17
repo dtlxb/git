@@ -44,6 +44,8 @@ public class FoundFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
+        setFragmentTitle("Go-Goal金融终端");
+
         intData();
         FunctionsAdapter functionsAdapter=new FunctionsAdapter(functions);
         FunctionsAdapter reportsAdapter=new FunctionsAdapter(reports);
