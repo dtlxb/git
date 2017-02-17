@@ -48,9 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 app:layoutManager="android.support.v7.widget.GridLayoutManager"
-                app:spanCount="3">
-
-            </android.support.v7.widget.RecyclerView>
+                app:spanCount="3"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -70,9 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 app:layoutManager="android.support.v7.widget.GridLayoutManager"
-                app:spanCount="3">
-
-            </android.support.v7.widget.RecyclerView>
+                app:spanCount="3"/>
 
         </LinearLayout>
 
