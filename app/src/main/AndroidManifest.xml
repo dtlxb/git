@@ -5,15 +5,16 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <!-- LeanCloud基础模块（必须加入以下声明）START -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 基础模块 END -->
 
-    <!-- 阿里云播放器-->
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+
+    <!-- 阿里云播放器 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <application
         android:name=".base.MyApp"
@@ -49,7 +50,8 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".activity.FunctionActivity"></activity>
+        <activity android:name=".activity.FunctionActivity" />
+        <activity android:name=".activity.PlayerActivity" />
     </application>
 
 </manifest>
