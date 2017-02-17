@@ -28,7 +28,7 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
     private String[] titles;
 
     private Context mContext;
-
+    
     public SimpleFragmentPagerAdapter(FragmentManager fm, Context mContext, List<Fragment> fragments, String[] titles) {
         super(fm);
         this.fragments = fragments;

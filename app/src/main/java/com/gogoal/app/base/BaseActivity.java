@@ -18,8 +18,8 @@ import android.view.WindowManager;
 
 import com.gogoal.app.R;
 import com.gogoal.app.common.BuildProperties;
-import com.gogoal.app.ui.view.StatusBarUtil;
 import com.gogoal.app.ui.view.XTitle;
+import com.hply.imagepicker.view.SystemBarTintManager;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -33,6 +33,7 @@ import butterknife.ButterKnife;
 public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     private View mContentView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,39 +51,36 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         doBusiness(this);
     }
 
-    public void setContentView(View contextView) {
-        super.setContentView(mContentView);
-        setStatusBarColor(R.color.colorTitle);
-    }
-
-    private void setStatusBarColor(@ColorRes int color) {
-        StatusBarUtil.setColor(this,ContextCompat.getColor(this,color));
-    }
-
-    /**通配 状态栏
-         *
-         * if(miui){
-         *     执行miui方案
-         * }else if(Flyme){
-         *     执行魅族方案
-         * }else{
-         *     VERSION >=Android6.0{
-         *         执行原生方案，设置黑色调状态栏图标
-         *     }else{
-         *         直接将状态栏背景设置黑色
-         *     }
-         * }
-         * */
+    /**
+     * 通配 状态栏
+     * <p>
+     * if(miui){
+     * 执行miui方案
+     * }else if(Flyme){
+     * 执行魅族方案
+     * }else{
+     * VERSION >=Android6.0{
+     * 执行原生方案，设置黑色调状态栏图标
+     * }else{
+     * 直接将状态栏背景设置黑色
+     * }
+     * }
+     */
     private void setStatusBar() {
-        if (isMiUIV6()){
-            setMIUIStatusBarTextColor(this,1);
-        }else if (isFlyme()){
-            setMeizuStatusBarDarkIcon(this,true);
-        }else {
-            if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
-                    getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            }else {
-                setStatusBarColor(android.R.color.black);
+        if (isMiUIV6()) {
+            setMIUIStatusBarTextColor(this, 1);
+            setImmersive(true);
+            setStatusColor(R.color.colorTitle);
+
+        } else if (isFlyme()) {
+            setMeizuStatusBarDarkIcon(this, true);
+            setStatusColor(R.color.colorTitle);
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.colorTitle));
+            } else {
+                setStatusColor(android.R.color.black);
             }
         }
     }
@@ -92,19 +90,32 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     }
 
+    /**
+     * 设置通知栏背景颜色
+     *
+     * @param colorResId
+     */
+    protected void setStatusColor(@ColorRes int colorResId) {
+        if (colorResId != -1) {
+            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintResource(colorResId);//通知栏所需颜色
+        }
+    }
+
     @Override
     public void resume() {
         onResume();
     }
 
-    public XTitle setMyTitle(String title, boolean canBack){
-        XTitle xTitle= (XTitle) findViewById(R.id.title_bar);
+    public XTitle setMyTitle(String title, boolean canBack) {
+        XTitle xTitle = (XTitle) findViewById(R.id.title_bar);
         xTitle.setImmersive(true);
-        if (!TextUtils.isEmpty(title)){
+        if (!TextUtils.isEmpty(title)) {
             xTitle.setTitle(title);
             xTitle.setTitleColor(Color.BLACK);
         }
-        if (canBack){
+        if (canBack) {
             xTitle.setLeftImageResource(R.mipmap.image_title_back_b);
             xTitle.setLeftText("返回");
             xTitle.setLeftTextColor(Color.BLACK);
@@ -121,8 +132,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     /**
      * 初始化垂直列表的RecycleView
+     *
      * @param recyclerView:初始化对象;
-     * @param dividerId:分割线对象 : 0时为默认一条直线;int值 shape资源；null(不要分割线)
+     * @param dividerId:分割线对象     : 0时为默认一条直线;int值 shape资源；null(不要分割线)
      */
     public void initRecycleView(RecyclerView recyclerView, Integer dividerId) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());

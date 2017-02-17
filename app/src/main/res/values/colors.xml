@@ -4,9 +4,8 @@
     <color name="colorPrimaryDark">@color/colorTitle</color>
     <color name="colorAccent">#38ADFF</color>
 
-    <color name="theme_body">#cc22292c</color>
-
     <color name="colorTitle">#f0f0f0</color>
+
     <color name="textColor_333333">#333333</color> <!--主字黑-->
     <color name="textColor_999999">#999999</color> <!--字亮灰-->
     <color name="textColor_666666">#666666</color> <!--字深灰-->
