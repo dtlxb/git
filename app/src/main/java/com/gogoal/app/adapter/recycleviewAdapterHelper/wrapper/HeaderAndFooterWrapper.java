@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.utils.WrapperUtils;
 
-
 public class HeaderAndFooterWrapper<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int BASE_ITEM_TYPE_HEADER = 100000;
     private static final int BASE_ITEM_TYPE_FOOTER = 200000;

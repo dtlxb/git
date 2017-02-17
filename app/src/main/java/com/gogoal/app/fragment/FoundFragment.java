@@ -23,8 +23,11 @@ import butterknife.BindView;
 /**
  * 应用
  */
-public class FunctionsFragment extends BaseFragment {
+public class FoundFragment extends BaseFragment {
 
+    public FoundFragment() {
+
+    }
     @BindView(R.id.function_list)
     RecyclerView function_list;
 
@@ -34,16 +37,15 @@ public class FunctionsFragment extends BaseFragment {
     private  List<FunctionBean> functions=new ArrayList<>();
     private  List<FunctionBean> reports=new ArrayList<>();
 
-    public FunctionsFragment() {
-    }
-
     @Override
     public int bindLayout() {
-        return R.layout.fragment_functions;
+        return R.layout.fragment_found;
     }
 
     @Override
     public void doBusiness(Context mContext) {
+        setFragmentTitle("Go-Goal金融终端");
+
         intData();
         FunctionsAdapter functionsAdapter=new FunctionsAdapter(functions);
         FunctionsAdapter reportsAdapter=new FunctionsAdapter(reports);
@@ -66,9 +68,9 @@ public class FunctionsFragment extends BaseFragment {
         functions.add(functionSchool);
         functions.add(functionOneQ);
 
-        FunctionBean stockReport=new FunctionBean("Go-Goal直播",R.mipmap.function_icon_onlive);
-        FunctionBean stockTitle=new FunctionBean("中国研究员专业网",R.mipmap.function_icon_report);
-        FunctionBean stockNews=new FunctionBean("Go-Goal学院",R.mipmap.function_icon_school);
+        FunctionBean stockReport=new FunctionBean("精要研报",R.mipmap.function_icon_improtant_report);
+        FunctionBean stockTitle=new FunctionBean("优选主题",R.mipmap.function_icon_title);
+        FunctionBean stockNews=new FunctionBean("公司大事件",R.mipmap.function_icon_news);
 
         reports.add(stockReport);
         reports.add(stockTitle);

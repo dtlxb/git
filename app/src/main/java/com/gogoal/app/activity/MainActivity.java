@@ -9,7 +9,7 @@ import com.gogoal.app.R;
 import com.gogoal.app.adapter.SimpleFragmentPagerAdapter;
 import com.gogoal.app.base.BaseActivity;
 import com.gogoal.app.fragment.ContactsFragment;
-import com.gogoal.app.fragment.FunctionsFragment;
+import com.gogoal.app.fragment.FoundFragment;
 import com.gogoal.app.fragment.MessageFragment;
 import com.gogoal.app.fragment.MineFragment;
 
@@ -42,14 +42,14 @@ public class MainActivity extends BaseActivity {
 
         ContactsFragment contactsFragment = new ContactsFragment();     // TAB2 联系人
 
-        FunctionsFragment functionsFragment = new FunctionsFragment();  // TAB3 发现
+        FoundFragment foundFragment = new FoundFragment();              // TAB3 发现
 
         MineFragment mineFragment = new MineFragment();                 // TAB4 我的
 
         List<Fragment> tabFragments = new ArrayList<>();
         tabFragments.add(messageFragment);
         tabFragments.add(contactsFragment);
-        tabFragments.add(functionsFragment);
+        tabFragments.add(foundFragment);
         tabFragments.add(mineFragment);
 
         SimpleFragmentPagerAdapter tabAdapter = new SimpleFragmentPagerAdapter(

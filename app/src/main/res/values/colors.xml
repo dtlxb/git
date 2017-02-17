@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#ED1B1B</color>
-    <color name="colorPrimaryDark">#ED1B1B</color>
+    <color name="colorPrimaryDark">@color/colorTitle</color>
     <color name="colorAccent">#38ADFF</color>
 
-    <color name="theme_body">#cc22292c</color>
+    <color name="colorTitle">#f0f0f0</color>
 
     <color name="textColor_333333">#333333</color> <!--主字黑-->
     <color name="textColor_999999">#999999</color> <!--字亮灰-->

@@ -4,16 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.gogoal.app.fragment.FunctionsFragment">
+    tools:context="com.gogoal.app.fragment.FoundFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:text="Go-Goal金融终端"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
+    <include layout="@layout/include_title"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -48,9 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 app:layoutManager="android.support.v7.widget.GridLayoutManager"
-                app:spanCount="3">
-
-            </android.support.v7.widget.RecyclerView>
+                app:spanCount="3"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -70,9 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 app:layoutManager="android.support.v7.widget.GridLayoutManager"
-                app:spanCount="3">
-
-            </android.support.v7.widget.RecyclerView>
+                app:spanCount="3"/>
 
         </LinearLayout>
 
