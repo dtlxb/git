@@ -6,6 +6,11 @@ import com.gogoal.app.activity.PlayerActivity;
 
 import java.util.Random;
 
+/**
+ * Created by dave.
+ * Date: 2017/2/17.
+ * Desc: description
+ */
 public class PlayerControl {
 
     public static final int CMD_START = 1;

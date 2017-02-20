@@ -89,7 +89,6 @@ public class PlayerActivity extends BaseActivity {
     private Handler mTimerHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
-
                 case CMD_PAUSE:
                     pause();
                     break;
@@ -377,6 +376,7 @@ public class PlayerActivity extends BaseActivity {
         if (mPlayer == null) {
             // 初始化播放器
             mPlayer = new AliVcMediaPlayer(this, mSurfaceView);
+            mPlayer.setMediaType(MediaPlayer.MediaType.Live); //媒体类型 Live 表示直播；Vod 表示点播
             mPlayer.setPreparedListener(new VideoPreparedListener());
             mPlayer.setErrorListener(new VideoErrorListener());
             mPlayer.setInfoListener(new VideoInfolistener());
@@ -436,6 +436,7 @@ public class PlayerActivity extends BaseActivity {
     Runnable mUIRunnable = new Runnable() {
         @Override
         public void run() {
+
         }
     };
 

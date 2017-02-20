@@ -4,6 +4,7 @@
     android:id="@+id/activity_player"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="0dp"
     tools:context="com.gogoal.app.activity.PlayerActivity">
 
     <FrameLayout
@@ -28,5 +29,65 @@
         android:paddingRight="0dp"
         android:paddingStart="0dp"
         android:paddingTop="0dp" />
+
+    <RelativeLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/GLViewContainer"
+        android:layout_gravity="center_horizontal|bottom"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="20dp"
+        android:background="#00000000"
+        android:paddingLeft="15dp"
+        android:paddingRight="16dp">
+
+        <ImageView
+            android:id="@+id/imgPlayerChat"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:background="@mipmap/player_chat" />
+
+        <ImageView
+            android:id="@+id/imgPlayerProfiles"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@+id/imgPlayerChat"
+            android:layout_marginLeft="15dp"
+            android:background="@mipmap/player_profiles" />
+
+        <ImageView
+            android:id="@+id/imgPlayerRelaterVideo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@+id/imgPlayerProfiles"
+            android:layout_marginLeft="15dp"
+            android:background="@mipmap/player_related_video" />
+
+        <ImageView
+            android:id="@+id/imgPlayerShare"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@+id/imgPlayerRelaterVideo"
+            android:layout_marginLeft="15dp"
+            android:background="@mipmap/player_share" />
+
+        <ImageView
+            android:id="@+id/imgPlayerShotCut"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_toRightOf="@+id/imgPlayerShare"
+            android:layout_marginLeft="15dp"
+            android:background="@mipmap/player_shot_cut" />
+
+        <ImageView
+            android:id="@+id/imgPlayerClose"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:background="@mipmap/player_close" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
