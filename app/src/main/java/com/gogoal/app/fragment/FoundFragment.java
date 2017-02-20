@@ -2,6 +2,7 @@ package com.gogoal.app.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gogoal.app.R;
+import com.gogoal.app.activity.FunctionActivity;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.CommonAdapter;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.wrapper.HeaderAndFooterWrapper;
@@ -154,7 +156,7 @@ public class FoundFragment extends BaseFragment {
         }
 
         @Override
-        protected void convert(ViewHolder holder, final FoundData.ItemPojos itemPojos, int position) {
+        protected void convert(ViewHolder holder, final FoundData.ItemPojos itemPojos, final int position) {
 
             final View view = holder.getView(R.id.layout_grid);
 
@@ -188,7 +190,11 @@ public class FoundFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     if (!TextUtils.isEmpty(itemPojos.getUrl())) {
-                        Toast.makeText(getContext(), itemPojos.getIconDescription(), Toast.LENGTH_SHORT).show();
+                        if (position==0){
+                            startActivity(new Intent(getContext(), FunctionActivity.class));
+                        }else {
+                            Toast.makeText(getContext(), itemPojos.getIconDescription(), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
