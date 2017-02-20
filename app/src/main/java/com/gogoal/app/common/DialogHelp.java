@@ -48,8 +48,8 @@ public class DialogHelp {
      * @param context
      * @param message
      * @param onClickListener
-     * @return
      */
+
     public static AlertDialog.Builder getMessageDialog(Context context, String message, DialogInterface.OnClickListener onClickListener) {
         AlertDialog.Builder builder = getDialog(context);
         builder.setMessage(message);
@@ -156,13 +156,14 @@ public class DialogHelp {
         dialog.show();
         dialog.setCancelable(false);
         Window window = dialog.getWindow();
-        window.setBackgroundDrawableResource(android.R.color.transparent);
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = 5 * AppDevice.getWidth(context) / 6;
-        window.setAttributes(lp);
+        if (window!=null) {
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+            WindowManager.LayoutParams lp = window.getAttributes();
+            lp.width = 5 * AppDevice.getWidth(context) / 6;
+            window.setAttributes(lp);
 
-        window.setContentView(dialogView);
-
+            window.setContentView(dialogView);
+        }
         return dialog;
     }
 
@@ -171,7 +172,7 @@ public class DialogHelp {
      *
      * @param context    上下文
      * @param dialogView 弹窗视图
-     * @dialogWindowWidth 窗体宽度
+     * @param dialogWindowWidth 窗体宽度
      */
     public static AlertDialog getWindoDialog(Context context, View dialogView, int dialogWindowWidth) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -180,13 +181,14 @@ public class DialogHelp {
         dialog.show();
         dialog.setCancelable(false);
         Window window = dialog.getWindow();
-        window.setBackgroundDrawableResource(android.R.color.transparent);
-        WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = dialogWindowWidth;
-        window.setAttributes(lp);
+        if (window!=null) {
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+            WindowManager.LayoutParams lp = window.getAttributes();
+            lp.width = dialogWindowWidth;
+            window.setAttributes(lp);
 
-        window.setContentView(dialogView);
-
+            window.setContentView(dialogView);
+        }
         return dialog;
     }
 }
