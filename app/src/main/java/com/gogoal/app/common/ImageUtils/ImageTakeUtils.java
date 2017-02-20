@@ -1,4 +1,4 @@
-package com.gogoal.app.common.image;
+package com.gogoal.app.common.ImageUtils;
 
 import android.content.Context;
 import android.content.Intent;

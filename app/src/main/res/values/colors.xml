@@ -19,4 +19,6 @@
     <color name="time_prive">#1a79ff</color>
     <color name="time_avg_prive">#fdc20f</color>
     <color name="out_circle">#4b94fa</color>
+
+    <color name="colorGriddivider">#e4e4e4</color>
 </resources>

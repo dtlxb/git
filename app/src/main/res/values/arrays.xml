@@ -6,4 +6,22 @@
         <item>发现</item>
         <item>我的</item>
     </string-array>
+
+    <string-array name="found_fun0">
+        <item>Go-Goal直播</item>
+        <item>中国研究员专业网</item>
+        <item>Go-Goal学院</item>
+        <item>金融1Q</item>
+    </string-array>
+
+    <string-array name="found_fun1">
+        <item>精要研报</item>
+        <item>优选主题</item>
+        <item>公司大事件</item>
+    </string-array>
+
+    <string-array name="found_title">
+        <item>我的活动</item>
+        <item>股票投研</item>
+    </string-array>
 </resources>

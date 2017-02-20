@@ -2,22 +2,35 @@ package com.gogoal.app.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gogoal.app.R;
+import com.gogoal.app.activity.FunctionActivity;
+import com.gogoal.app.adapter.recycleviewAdapterHelper.CommonAdapter;
+import com.gogoal.app.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import com.gogoal.app.adapter.recycleviewAdapterHelper.wrapper.HeaderAndFooterWrapper;
 import com.gogoal.app.base.BaseFragment;
-import com.gogoal.app.bean.FunctionBean;
+import com.gogoal.app.bean.FoundData;
 import com.gogoal.app.common.AppDevice;
-import com.gogoal.app.common.GridSpacingItemDecoration;
+import com.gogoal.app.common.ImageUtils.ImageDisplay;
+import com.gogoal.app.common.UIHelper;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindArray;
 import butterknife.BindView;
 
 /**
@@ -25,17 +38,18 @@ import butterknife.BindView;
  */
 public class FoundFragment extends BaseFragment {
 
+    @BindView(R.id.rv_found)
+    RecyclerView recyclerView;
+
+    @BindArray(R.array.found_fun0)
+    String[] functionArr0;
+
+    @BindArray(R.array.found_fun1)
+    String[] functionArr1;
+
     public FoundFragment() {
 
     }
-    @BindView(R.id.function_list)
-    RecyclerView function_list;
-
-    @BindView(R.id.report_list)
-    RecyclerView report_list;
-
-    private  List<FunctionBean> functions=new ArrayList<>();
-    private  List<FunctionBean> reports=new ArrayList<>();
 
     @Override
     public int bindLayout() {
@@ -46,73 +60,145 @@ public class FoundFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         setFragmentTitle("Go-Goal金融终端");
 
-        intData();
-        FunctionsAdapter functionsAdapter=new FunctionsAdapter(functions);
-        FunctionsAdapter reportsAdapter=new FunctionsAdapter(reports);
-        function_list.addItemDecoration(new GridSpacingItemDecoration(3, AppDevice.dp2px(getContext(), 1), false));
-        report_list.addItemDecoration(new GridSpacingItemDecoration(3, AppDevice.dp2px(getContext(), 1), false));
-        function_list.setAdapter(functionsAdapter);
-        report_list.setAdapter(reportsAdapter);
+        initRecycleView(recyclerView, R.drawable.shape_divider_10dp);
+
+        List<FoundData> datas = getFunctionDatas();//模拟数据
+
+        KLog.e(JSONObject.toJSON(datas).toString());
+
+        HeaderAndFooterWrapper wraper = addHeadImage(datas);
+
+        recyclerView.setAdapter(wraper);
     }
 
-    private void intData() {
-        functions.clear();
-        reports.clear();
-        FunctionBean functionLive=new FunctionBean("Go-Goal直播",R.mipmap.function_icon_onlive);
-        FunctionBean functionReport=new FunctionBean("中国研究员专业网",R.mipmap.function_icon_report);
-        FunctionBean functionSchool=new FunctionBean("Go-Goal学院",R.mipmap.function_icon_school);
-        FunctionBean functionOneQ=new FunctionBean("金融1Q",R.mipmap.function_icon_1q);
+    @NonNull
+    private HeaderAndFooterWrapper addHeadImage(List<FoundData> datas) {
+        HeaderAndFooterWrapper wraper = new HeaderAndFooterWrapper(new MainAdapter(getContext(), R.layout.item_foundfragment, datas));
+        ImageView imageHead = new ImageView(getContext());
+        imageHead.setAdjustViewBounds(true);
 
-        functions.add(functionLive);
-        functions.add(functionReport);
-        functions.add(functionSchool);
-        functions.add(functionOneQ);
+        LinearLayout.LayoutParams headParams = new LinearLayout.LayoutParams(AppDevice.getWidth(getContext()),
+                AppDevice.getWidth(getContext()) * 120 / 375);
 
-        FunctionBean stockReport=new FunctionBean("精要研报",R.mipmap.function_icon_improtant_report);
-        FunctionBean stockTitle=new FunctionBean("优选主题",R.mipmap.function_icon_title);
-        FunctionBean stockNews=new FunctionBean("公司大事件",R.mipmap.function_icon_news);
-
-        reports.add(stockReport);
-        reports.add(stockTitle);
-        reports.add(stockNews);
+        imageHead.setLayoutParams(headParams);
+        imageHead.setImageResource(R.mipmap.image_found_top_ad);
+        imageHead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIHelper.toast(getContext(), "单页广告图");
+            }
+        });
+        wraper.addHeaderView(imageHead);
+        return wraper;
     }
 
-    class FunctionsAdapter extends RecyclerView.Adapter<FunctionsAdapter.FunctionViewHolder>{
+    /**模拟数据，后续可以简单修改变成服务端请求数据*/
+    private List<FoundData> getFunctionDatas() {
+        String[] titles=getResources().getStringArray(R.array.found_title);
 
-        List<FunctionBean> mData;
-        public FunctionsAdapter(List<FunctionBean> list) {
-            this.mData=list;
+        int[][] iconArray = {{R.mipmap.function_icon_onlive, R.mipmap.function_icon_report,
+                R.mipmap.function_icon_school, R.mipmap.function_icon_1q},
+                {R.mipmap.function_icon_improtant_report, R.mipmap.function_icon_title, R.mipmap.function_icon_news}};
+
+        String[][] iconDescription = {functionArr0, functionArr1};
+
+        List<FoundData> datas = new ArrayList<>();
+
+        for (int i = 0; i < iconArray.length; i++) {
+
+            List<FoundData.ItemPojos> itemPojoses = new ArrayList<>();
+
+            for (int j = 0; j < iconArray[i].length; j++) {
+                itemPojoses.add(new FoundData.ItemPojos(iconDescription[i][j],iconArray[i][j],"https://m.baidu.com"));
+            }
+
+            datas.add(new FoundData(itemPojoses,titles[i]));
+        }
+
+        return datas;
+    }
+
+    class MainAdapter extends CommonAdapter<FoundData> {
+
+        private MainAdapter(Context context, int layoutId, List<FoundData> datas) {
+            super(context, layoutId, datas);
         }
 
         @Override
-        public FunctionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            FunctionViewHolder holder=new FunctionViewHolder(LayoutInflater.from(getContext()).inflate(R.layout.item_function,parent,false));
-            return holder;
-        }
+        protected void convert(ViewHolder holder, FoundData foundData, int position) {
+            holder.setText(R.id.tv_title, foundData.getTitle());
 
-        @Override
-        public void onBindViewHolder(FunctionViewHolder holder, int position) {
-            holder.imageView.setImageResource(mData.get(position).getFunction_map());
-            holder.textView.setText(mData.get(position).getFunction_name());
-        }
+            List<FoundData.ItemPojos> itemPojos = foundData.getItemPojos();
+            if (itemPojos != null) {
+                if (itemPojos.size() % 3 == 2) {
+                    FoundData.ItemPojos itemPojos1 = new FoundData.ItemPojos("",0,"");
+                    itemPojos.add(itemPojos1);
+                } else if (itemPojos.size() % 3 == 1) {
+                    FoundData.ItemPojos itemPojos1 = new FoundData.ItemPojos("",0,"");
+                    itemPojos.add(itemPojos1);
 
-        @Override
-        public int getItemCount() {
-            return mData.size();
-        }
+                    FoundData.ItemPojos itemPojos2 = new FoundData.ItemPojos("",0,"");
+                    itemPojos.add(itemPojos2);
+                }
 
-        class FunctionViewHolder extends RecyclerView.ViewHolder{
-
-            ImageView imageView;
-            TextView textView;
-
-            public FunctionViewHolder(View itemView) {
-                super(itemView);
-                imageView= (ImageView) itemView.findViewById(R.id.function_icon);
-                textView= (TextView) itemView.findViewById(R.id.function_name);
+                GridAdapter gridAdapter = new GridAdapter(itemPojos);
+                RecyclerView recyclerView = holder.getView(R.id.rv_grid);
+                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                recyclerView.setAdapter(gridAdapter);
             }
         }
+    }
 
+    class GridAdapter extends CommonAdapter<FoundData.ItemPojos> {
+
+        private GridAdapter(List<FoundData.ItemPojos> datas) {
+            super(getContext(), R.layout.item_grid_foundfragment, datas);
+        }
+
+        @Override
+        protected void convert(ViewHolder holder, final FoundData.ItemPojos itemPojos, final int position) {
+
+            final View view = holder.getView(R.id.layout_grid);
+
+            if (TextUtils.isEmpty(itemPojos.getUrl())) {
+                view.setEnabled(false);
+            }
+
+            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+
+            layoutParams.width = (AppDevice.getWidth(getContext()) - AppDevice.dp2px(getContext(), 4)) / 3;
+
+            layoutParams.height = (AppDevice.getWidth(getContext()) - AppDevice.dp2px(getContext(), 4)) / 3;
+
+            view.setLayoutParams(layoutParams);
+
+            holder.setText(R.id.tv, itemPojos.getIconDescription());
+
+            ImageView imageIcon = holder.getView(R.id.iv);
+            ViewGroup.LayoutParams viewParams = imageIcon.getLayoutParams();
+            viewParams.width=AppDevice.getWidth(getContext())/9;
+            viewParams.height=AppDevice.getWidth(getContext())/9;
+            imageIcon.setLayoutParams(viewParams);
+
+            ImageDisplay.loadResImage(getContext(),itemPojos.getIconRes(),imageIcon);
+
+            final TypedValue typeValue = new TypedValue();
+
+            getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, typeValue, true);
+
+            holder.setOnClickListener(R.id.layout_grid, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!TextUtils.isEmpty(itemPojos.getUrl())) {
+                        if (position==0){
+                            startActivity(new Intent(getContext(), FunctionActivity.class));
+                        }else {
+                            Toast.makeText(getContext(), itemPojos.getIconDescription(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            });
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-package com.gogoal.app.common.image;
+package com.gogoal.app.common.ImageUtils;
 
 import android.app.Activity;
 import android.net.Uri;

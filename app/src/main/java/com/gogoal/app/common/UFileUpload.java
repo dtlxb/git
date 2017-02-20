@@ -6,7 +6,7 @@ package com.gogoal.app.common;
  * Staff_id 1375
  * phone 18930640263
  *
- * ufile上传的封装
+ * ufile上传的封装——半成品
  */
 
 public class UFileUpload {

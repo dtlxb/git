@@ -50,8 +50,10 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".activity.FunctionActivity" />
         <activity android:name=".activity.PlayerActivity" />
+        <activity
+            android:name=".activity.FunctionActivity"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>
