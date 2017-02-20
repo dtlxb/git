@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.gogoal.app.common.image.ImageTakeUtils;
-import com.gogoal.app.common.image.UILImageLoader;
+import com.gogoal.app.common.ImageUtils.ImageTakeUtils;
+import com.gogoal.app.common.ImageUtils.UILImageLoader;
 import com.hply.imagepicker.ITakePhoto;
 import com.hply.imagepicker.ImagePicker;
 import com.hply.imagepicker.bean.ImageItem;
