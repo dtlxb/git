@@ -141,7 +141,7 @@ public class FoundFragment extends BaseFragment {
                     itemPojos.add(itemPojos2);
                 }
 
-                GridAdapter gridAdapter = new GridAdapter(itemPojos);
+                GridAdapter gridAdapter = new GridAdapter(itemPojos,position);
                 RecyclerView recyclerView = holder.getView(R.id.rv_grid);
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
                 recyclerView.setAdapter(gridAdapter);
@@ -151,8 +151,11 @@ public class FoundFragment extends BaseFragment {
 
     class GridAdapter extends CommonAdapter<FoundData.ItemPojos> {
 
-        private GridAdapter(List<FoundData.ItemPojos> datas) {
+        private int parentPosition;
+
+        public GridAdapter(List<FoundData.ItemPojos> datas, int parentPosition) {
             super(getContext(), R.layout.item_grid_foundfragment, datas);
+            this.parentPosition = parentPosition;
         }
 
         @Override
@@ -189,8 +192,8 @@ public class FoundFragment extends BaseFragment {
             holder.setOnClickListener(R.id.layout_grid, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!TextUtils.isEmpty(itemPojos.getUrl())) {
-                        if (position==0){
+                    if (!TextUtils.isEmpty(itemPojos.getUrl())) {//由于增加了headView,所以父Item是从1开始的
+                        if (parentPosition==1 && position==0){
                             startActivity(new Intent(getContext(), FunctionActivity.class));
                         }else {
                             Toast.makeText(getContext(), itemPojos.getIconDescription(), Toast.LENGTH_SHORT).show();

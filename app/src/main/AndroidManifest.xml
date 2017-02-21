@@ -54,6 +54,15 @@
         <activity
             android:name=".activity.FunctionActivity"
             android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.SquareChatRoomActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.SingleChatRoomActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.IMRegisterActivity"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

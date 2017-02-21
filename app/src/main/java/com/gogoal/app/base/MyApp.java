@@ -4,7 +4,11 @@ import android.app.Application;
 import android.content.Context;
 
 import com.avos.avoscloud.AVOSCloud;
+import com.avos.avoscloud.im.v2.AVIMMessage;
+import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.gogoal.app.common.AppConst;
+import com.gogoal.app.common.IMHelpers.MyConversationHandler;
+import com.gogoal.app.common.IMHelpers.MyMessageHandler;
 import com.gogoal.app.common.SPTools;
 import com.gogoal.app.wxapi.WXEntryActivity;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -33,13 +37,14 @@ public class MyApp extends Application {
         SPTools.initSharedPreferences(this);
 
         //初始化参数依次this，AppId,AppKey
-        AVOSCloud.initialize(this, "hi22KV7K693uIQLX5X4ROSbs-gzGzoHsz", "qTkdjmpyuVdJAearcTthBw5N");
+        AVOSCloud.initialize(this, "dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz", "ye24iIK6ys8IvaISMC4Bs5WK");
+        //AVOSCloud.initialize(this,"hi22KV7K693uIQLX5X4ROSbs-gzGzoHsz","qTkdjmpyuVdJAearcTthBw5N");
         //启用北美节点
         AVOSCloud.useAVCloudUS();
         //必须在启动的时候注册 MessageHandler
         //注册默认的消息处理逻辑
-        /*AVIMMessageManager.registerMessageHandler(AVIMMessage.class, new MyMessageHandler());
-        AVIMMessageManager.setConversationEventHandler(new MyConversationHandler());*/
+        AVIMMessageManager.registerMessageHandler(AVIMMessage.class, new MyMessageHandler());
+        AVIMMessageManager.setConversationEventHandler(new MyConversationHandler());
 
         //只有主进程运行的时候才需要初始化
         if (getApplicationInfo().packageName.equals(getMyProcessName())){
