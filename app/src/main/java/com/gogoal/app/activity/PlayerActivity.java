@@ -27,6 +27,7 @@ import com.alivc.player.AliVcMediaPlayer;
 import com.alivc.player.MediaPlayer;
 import com.gogoal.app.R;
 import com.gogoal.app.base.BaseActivity;
+import com.gogoal.app.common.PlayerUtils.CountDownTimerView;
 import com.gogoal.app.common.PlayerUtils.PlayerControl;
 import com.gogoal.app.common.PlayerUtils.StatusListener;
 import com.socks.library.KLog;
@@ -45,6 +46,10 @@ public class PlayerActivity extends BaseActivity {
 
     @BindView(R.id.GLViewContainer)
     FrameLayout frameContainer;
+
+    //直播预告展示
+    @BindView(R.id.countDownTimer)
+    CountDownTimerView countDownTimer;
 
     public static final int STATUS_START = 1;
     public static final int STATUS_STOP = 2;
@@ -138,6 +143,10 @@ public class PlayerActivity extends BaseActivity {
         acquireWakeLock();
 
         initSurface();
+
+        countDownTimer.addTime(100);
+        countDownTimer.start();
+
     }
 
     /**

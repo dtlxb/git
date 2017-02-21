@@ -27,5 +27,6 @@
     <color name="market_interpre">#888888</color>
     <color name="online_number">#f44744</color>
     <color name="live_trailer">#5b5b5b</color>
+    <color name="count_down">#FFA200</color>
 
 </resources>
