@@ -8,33 +8,33 @@ import java.util.Map;
  * @phone 18930640263
  */
 
-public class BaseMessge {
+public class BaseMessage {
     private String code;
     private Map<String, Object> others;
     private Integer type;
     private String msg;
 
-    public BaseMessge() {
+    public BaseMessage() {
     }
 
-    public BaseMessge(String code, Map<String, Object> others) {
+    public BaseMessage(String code, Map<String, Object> others) {
         this.code = code;
         this.others = others;
     }
 
-    public BaseMessge(String code, Integer type, String msg) {
+    public BaseMessage(String code, Integer type, String msg) {
         this.code = code;
         this.type = type;
         this.msg = msg;
     }
 
 
-    public BaseMessge(String code, String msg) {
+    public BaseMessage(String code, String msg) {
         this.code = code;
         this.msg = msg;
     }
 
-    public BaseMessge(String code) {
+    public BaseMessage(String code) {
         this.code = code;
     }
 

@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import com.gogoal.app.R;
 import com.gogoal.app.ui.view.XTitle;
 
+import org.simple.eventbus.EventBus;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -32,6 +34,9 @@ public abstract class BaseFragment extends Fragment implements IBase {
         bind = ButterKnife.bind(this, view);
         // 控件初始化
         initView(view);
+
+        EventBus.getDefault().register(this);
+
         doBusiness(getActivity());
 
         return view;
@@ -79,6 +84,7 @@ public abstract class BaseFragment extends Fragment implements IBase {
     public void onDestroyView() {
         super.onDestroyView();
         bind.unbind();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

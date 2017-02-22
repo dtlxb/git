@@ -11,14 +11,18 @@ import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
+import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.gogoal.app.R;
 import com.gogoal.app.base.BaseFragment;
-import com.gogoal.app.common.IMHelpers.AVImClientManager;
+import com.gogoal.app.bean.BaseMessage;
 import com.gogoal.app.common.UIHelper;
+
+import org.simple.eventbus.Subscriber;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -46,8 +50,7 @@ public class ChatFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        //接收消息
-        loadConvertManager();
+
         //发送消息(之后会改成向公司服务器发送消息，然后后台再处理给LeanCloud发送消息)
         message_send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +60,7 @@ public class ChatFragment extends BaseFragment {
                 attrsMap.put("username", "Bjergsen");
                 AVIMTextMessage msg = new AVIMTextMessage();
                 msg.setText(message_input.getText().toString());
-                //msg.setAttrs(attrsMap);
+                msg.setAttrs(attrsMap);
 
                 imConversation.sendMessage(msg, new AVIMConversationCallback() {
                     @Override
@@ -70,28 +73,42 @@ public class ChatFragment extends BaseFragment {
         });
     }
 
-    public void setConversation(AVIMConversation conversation) {
-        if (null != conversation) {
-            imConversation = conversation;
+    private void getHistoryMessage() {
+        if (null != imConversation) {
+            imConversation.queryMessages(20, new AVIMMessagesQueryCallback() {
+                @Override
+                public void done(List<AVIMMessage> list, AVIMException e) {
+                    if (null != e) {
+
+                    }
+                }
+            });
         }
     }
 
-    private void loadConvertManager() {
-        AVImClientManager.getInstance().setChatInfoManager(new AVImClientManager.ChatInfoManager() {
-            @Override
-            public void chatRoomMessages(List<AVIMMessage> list) {
+    public void setConversation(AVIMConversation conversation) {
+        if (null != conversation) {
+            imConversation = conversation;
+            //拉取历史记录(直接从LeanCloud拉取)
+            getHistoryMessage();
+        }
+    }
 
+    /**
+     * 消息接收
+     */
+    @Subscriber(tag = "IM_Message")
+    public void handleMessage(BaseMessage baseMessage) {
+        if (null != imConversation && null != baseMessage) {
+            Map<String, Object> map = baseMessage.getOthers();
+            AVIMMessage message = (AVIMMessage) map.get("message");
+            AVIMConversation conversation = (AVIMConversation) map.get("conversation");
+            Log.e("+++leancloud", imConversation.getConversationId() + "");
+            //判断房间一致然后做消息接收处理
+            if (imConversation.getConversationId().equals(conversation.getConversationId())) {
+                AVIMTextMessage msg = (AVIMTextMessage) message;
+                message_show.setText(msg.getText());
             }
-
-            @Override
-            public void chatRoomReceiveMessage(AVIMConversation conversation, AVIMMessage message) {
-                //判断房间是否一样
-                //if (imConversation.getConversationId().equals(conversation.getConversationId())) {
-                    AVIMTextMessage textMessage = (AVIMTextMessage) message;
-                    message_show.setText(textMessage.getText());
-                    Log.e("LEAN_CLOUD", "get this message");
-                //}
-            }
-        });
+        }
     }
 }

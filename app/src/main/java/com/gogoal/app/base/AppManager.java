@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 
-import com.gogoal.app.bean.BaseMessge;
+import com.gogoal.app.bean.BaseMessage;
 
 import org.simple.eventbus.EventBus;
 
@@ -137,14 +137,14 @@ public class AppManager {
      * @param tag
      */
     public void sendMessage(String tag) {
-        EventBus.getDefault().post(new BaseMessge(), tag);
+        EventBus.getDefault().post(new BaseMessage(), tag);
     }
 
     public void sendMessage(String tag, String code) {
         EventBus.getDefault().post(code, tag);
     }
 
-    public void sendMessage(String tag, BaseMessge msg) {
+    public void sendMessage(String tag, BaseMessage msg) {
         EventBus.getDefault().post(msg, tag);
     }
 

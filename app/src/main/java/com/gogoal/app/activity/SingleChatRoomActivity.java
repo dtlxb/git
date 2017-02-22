@@ -3,9 +3,12 @@ package com.gogoal.app.activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
+import com.avos.avoscloud.im.v2.AVIMConversationQuery;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCreatedCallback;
+import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
 import com.gogoal.app.R;
 import com.gogoal.app.base.BaseActivity;
 import com.gogoal.app.common.IMHelpers.AVImClientManager;
@@ -13,6 +16,7 @@ import com.gogoal.app.fragment.ChatFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by huangxx on 2017/2/21.
@@ -38,26 +42,40 @@ public class SingleChatRoomActivity extends BaseActivity {
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
         //输入聊天对象ID，返回conversation对象
         //getSingleConversation(memberID);
-        getSingleConversation("2046");
+        getSingleConversation("明天");
     }
 
     public void getSingleConversation(String memberID) {
-
-        HashMap<String, Object> attributes = new HashMap<String, Object>();
-        attributes.put("customConversationType", 1);
+        final AVIMClient avimClient = AVImClientManager.getInstance().getClient();
 
         //添加聊天对象
-        ArrayList<String> memberList = new ArrayList<>();
+        final ArrayList<String> memberList = new ArrayList<>();
         memberList.add(AVImClientManager.getInstance().avimClient.getClientId());
         memberList.add(memberID);
-        Log.e("LEAN_CLOUD", "you are" + AVImClientManager.getInstance().avimClient.getClientId());
-        AVImClientManager.getInstance().avimClient.createConversation(memberList, null, attributes, false, true, new AVIMConversationCreatedCallback() {
+
+        AVIMConversationQuery conversationQuery = avimClient.getQuery();
+        conversationQuery.withMembers(memberList, true);
+        conversationQuery.whereEqualTo("customConversationType", 1);
+        conversationQuery.findInBackground(new AVIMConversationQueryCallback() {
             @Override
-            public void done(AVIMConversation avimConversation, AVIMException e) {
+            public void done(List<AVIMConversation> list, AVIMException e) {
                 if (null == e) {
-                    imConversation = avimConversation;
-                    chatFragment.setConversation(imConversation);
-                    Log.e("LEAN_CLOUD", "find conversation success");
+                    if (null != list && list.size() > 0) {
+                        chatFragment.setConversation(list.get(0));
+                    } else {
+                        HashMap<String, Object> attributes = new HashMap<String, Object>();
+                        attributes.put("customConversationType", 1);
+                        avimClient.createConversation(memberList, null, attributes, false, true, new AVIMConversationCreatedCallback() {
+                            @Override
+                            public void done(AVIMConversation avimConversation, AVIMException e) {
+                                if (null == e) {
+                                    imConversation = avimConversation;
+                                    chatFragment.setConversation(imConversation);
+                                    Log.e("LEAN_CLOUD", "find conversation success" + " : " + imConversation.getConversationId());
+                                }
+                            }
+                        });
+                    }
                 }
             }
         });
