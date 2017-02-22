@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
@@ -16,6 +18,7 @@ import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.gogoal.app.R;
 import com.gogoal.app.base.BaseFragment;
 import com.gogoal.app.bean.BaseMessage;
+import com.gogoal.app.common.SPTools;
 import com.gogoal.app.common.UIHelper;
 
 import org.simple.eventbus.Subscriber;
@@ -42,6 +45,8 @@ public class ChatFragment extends BaseFragment {
     Button message_send;
 
     private AVIMConversation imConversation;
+    private JSONObject jsonObject = new JSONObject();
+    private JSONArray jsonArray;
 
     @Override
     public int bindLayout() {
@@ -91,6 +96,21 @@ public class ChatFragment extends BaseFragment {
             imConversation = conversation;
             //拉取历史记录(直接从LeanCloud拉取)
             getHistoryMessage();
+
+            jsonArray = SPTools.getJsonArray("conversation_beans", null);
+            jsonObject.put("conversationID", imConversation.getConversationId());
+            jsonObject.put("lastTime", imConversation.getLastMessageAt() + "");
+            jsonObject.put("lastMessage", imConversation.getLastMessage() + "");
+            jsonObject.put("unReadCounts", 10 + "");
+
+            if (!jsonArray.contains(jsonObject)) {
+                jsonArray.add(jsonObject);
+                SPTools.saveJsonArray("conversation_beans", jsonArray);
+            } else {
+
+            }
+
+            Log.e("+++jsonAdd", jsonArray + "");
         }
     }
 
@@ -103,7 +123,7 @@ public class ChatFragment extends BaseFragment {
             Map<String, Object> map = baseMessage.getOthers();
             AVIMMessage message = (AVIMMessage) map.get("message");
             AVIMConversation conversation = (AVIMConversation) map.get("conversation");
-            Log.e("+++leancloud", imConversation.getConversationId() + "");
+
             //判断房间一致然后做消息接收处理
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
                 AVIMTextMessage msg = (AVIMTextMessage) message;

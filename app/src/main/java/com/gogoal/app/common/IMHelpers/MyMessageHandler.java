@@ -16,13 +16,13 @@ import java.util.HashMap;
 public class MyMessageHandler extends AVIMMessageHandler {
     @Override
     public void onMessage(AVIMMessage message, AVIMConversation conversation, AVIMClient client) {
-        //EventBus.getDefault().register(this);
         String clientID = "";
         try {
             clientID = AVImClientManager.getInstance().getClientId();
 
             if (clientID.equals(client.getClientId())) {
                 if (!message.getFrom().equals(clientID)) {
+                    //接收到消息，发送出去
                     sendIMMessage(message, conversation);
                 }
             } else {

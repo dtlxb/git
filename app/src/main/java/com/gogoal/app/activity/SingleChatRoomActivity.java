@@ -61,7 +61,8 @@ public class SingleChatRoomActivity extends BaseActivity {
             public void done(List<AVIMConversation> list, AVIMException e) {
                 if (null == e) {
                     if (null != list && list.size() > 0) {
-                        chatFragment.setConversation(list.get(0));
+                        imConversation = list.get(0);
+                        chatFragment.setConversation(imConversation);
                     } else {
                         HashMap<String, Object> attributes = new HashMap<String, Object>();
                         attributes.put("customConversationType", 1);
