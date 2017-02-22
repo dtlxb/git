@@ -54,50 +54,66 @@ function addText(text){
                 'naviveDialogWithCallBack'
                 ,"是否要添加数据？？？"
                 , function(responseData) {
+                        alert(responseData);
                      console.log("回调结果==="+responseData);//responseData
                     addText(responseData);
                 }
             );
     }
 
-        function bridgeLog(logContent) {
-            //do something
-        }
+    function bridgeLog(logContent) {
+        //do something
+    }
 
-        function connectWebViewJavascriptBridge(callback) {
-            if (window.WebViewJavascriptBridge) {
-                callback(WebViewJavascriptBridge)
-            } else {
-                document.addEventListener(
-                    'WebViewJavascriptBridgeReady'
-                    , function() {
-                        callback(WebViewJavascriptBridge)
-                    },
-                    false
-                );
+    function connectWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) {
+            callback(WebViewJavascriptBridge)
+        } else {
+            document.addEventListener(
+                'WebViewJavascriptBridgeReady'
+                , function() {
+                    callback(WebViewJavascriptBridge)
+                },
+                false
+            );
+        }
+    }
+
+    connectWebViewJavascriptBridge(function(bridge) {
+        bridge.init(function(message, responseCallback) {
+            console.log('JS got a message ' + message);
+            var data = {
+                'Javascript Responds': '测试中文!'
+            };
+            console.log('JS responding with ' + data);
+            if (typeof responseCallback != 'undefined') {
+                responseCallback(data);
             }
-        }
+            return data;
+        });
 
-        connectWebViewJavascriptBridge(function(bridge) {
-            bridge.init(function(message, responseCallback) {
-                console.log('JS got a message ' + message);
-                var data = {
-                    'Javascript Responds': '测试中文!'
-                };
-                console.log('JS responding with ' + data);
-                if (typeof responseCallback != 'undefined') {
-                    responseCallback(data);
-                }
-                return data;
-            });
+        bridge.registerHandler("methodFromJs", function(data, responseCallback) {
+                //do something 给java调用的测试方法
+            addText(data);
+            var date = new Date();
+            var seperator1 = "-";
+            var seperator2 = ":";
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+                    + " " + date.getHours() + seperator2 + date.getMinutes()
+                    + seperator2 + date.getSeconds();
+            return "当前时间:"+currentdate;
+        });
 
-            bridge.registerHandler("jsBack", function(data, responseCallback) {
-                    //do something 原生返回键逻辑处理
-                console.log("消息==="+data)
-                return responseData;
-            });
+    })
 
-        })
 
 
 
