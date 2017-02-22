@@ -5,10 +5,8 @@ import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.webkit.JsResult;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
-import android.webkit.WebView;
 import android.widget.EditText;
 
 import com.github.lzyzsd.jsbridge.BridgeHandler;
@@ -18,6 +16,7 @@ import com.gogoal.app.base.BaseActivity;
 import com.gogoal.app.common.DialogHelp;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class FunctionActivity extends BaseActivity {
 
@@ -81,6 +80,18 @@ public class FunctionActivity extends BaseActivity {
                         .show();
             }
         });
+
+    }
+
+    @OnClick(R.id.fab)
+    void doJs(View view){
+        webView.callHandler("methodFromJs","这是一段来自java的数据", new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String data) {
+                //调通js方法methodFromJs后的返回
+                DialogHelp.getMessageDialog(FunctionActivity.this,"调用js方法后的回调=="+data).show();
+            }
+        });
     }
 
     private void loadUrl(String url) {
@@ -103,11 +114,6 @@ public class FunctionActivity extends BaseActivity {
         mWebView.getSettings().setAllowFileAccess(true);
         mWebView.getSettings().setAppCacheEnabled(true);
 
-        mWebView.setWebChromeClient(new WebChromeClient(){
-            @Override
-            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                return super.onJsAlert(view, url, message, result);
-            }
-        });
+        mWebView.setWebChromeClient(new WebChromeClient());//启动JS弹窗
     }
 }
