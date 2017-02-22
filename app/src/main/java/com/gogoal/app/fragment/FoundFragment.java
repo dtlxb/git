@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONObject;
 import com.gogoal.app.R;
 import com.gogoal.app.activity.FunctionActivity;
+import com.gogoal.app.activity.IMRegisterActivity;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.CommonAdapter;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.wrapper.HeaderAndFooterWrapper;
@@ -195,8 +196,14 @@ public class FoundFragment extends BaseFragment {
                     if (!TextUtils.isEmpty(itemPojos.getUrl())) {//由于增加了headView,所以父Item是从1开始的
                         if (parentPosition==1 && position==0){
                             startActivity(new Intent(getContext(), FunctionActivity.class));
-                        }else {
+                        }else if (parentPosition==1 && position==1){
+                            startActivity(new Intent(getContext(), IMRegisterActivity.class));
+                        }
+                        else {
                             Toast.makeText(getContext(), itemPojos.getIconDescription(), Toast.LENGTH_SHORT).show();
+                            Intent intent=new Intent(getContext(),FunctionActivity.class);
+                            intent.putExtra("function_url",itemPojos.getUrl());
+                            startActivity(intent);
                         }
                     }
                 }

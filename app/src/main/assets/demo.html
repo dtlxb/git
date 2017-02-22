@@ -1,0 +1,108 @@
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <title>
+        Js与Java交互Demo
+    </title>
+    <script src="http://cdn.bootcss.com/zepto/1.2.0/zepto.min.js"></script>
+</head>
+
+<body>
+
+<p>
+    <input type="button" id="enter0" value="测试弹窗" onclick="jsTestDialog();"/>
+</p>
+
+<p>
+    <input type="button" id="enter1" value="测试数据，带回调信息" onclick="jsDialogWithCallBack();"/>
+</p>
+
+<p>
+    <img id="imgTag"/>
+</p>
+
+<div id="div1" style="width:300px; height:200px;"></div>
+
+</body>
+
+<script>
+
+function addText(text){
+
+        $("#div1").empty();
+
+        var textNode = document.createElement("p");
+        textNode.innerHTML = JSON.stringify(text);
+        textNode.width = 340;
+        textNode.height = 220;
+
+        $("#div1").append(textNode);
+    }
+
+    function jsTestDialog() {
+            window.WebViewJavascriptBridge.callHandler(
+                'naviveDialog'
+                ,"巴拉巴拉巴拉巴拉"
+                , function(responseData) {
+                    //do nothing
+                }
+            );
+    }
+
+    function jsDialogWithCallBack() {
+            window.WebViewJavascriptBridge.callHandler(
+                'naviveDialogWithCallBack'
+                ,"是否要添加数据？？？"
+                , function(responseData) {
+                     console.log("回调结果==="+responseData);//responseData
+                    addText(responseData);
+                }
+            );
+    }
+
+        function bridgeLog(logContent) {
+            //do something
+        }
+
+        function connectWebViewJavascriptBridge(callback) {
+            if (window.WebViewJavascriptBridge) {
+                callback(WebViewJavascriptBridge)
+            } else {
+                document.addEventListener(
+                    'WebViewJavascriptBridgeReady'
+                    , function() {
+                        callback(WebViewJavascriptBridge)
+                    },
+                    false
+                );
+            }
+        }
+
+        connectWebViewJavascriptBridge(function(bridge) {
+            bridge.init(function(message, responseCallback) {
+                console.log('JS got a message ' + message);
+                var data = {
+                    'Javascript Responds': '测试中文!'
+                };
+                console.log('JS responding with ' + data);
+                if (typeof responseCallback != 'undefined') {
+                    responseCallback(data);
+                }
+                return data;
+            });
+
+            bridge.registerHandler("jsBack", function(data, responseCallback) {
+                    //do something 原生返回键逻辑处理
+                console.log("消息==="+data)
+                return responseData;
+            });
+
+        })
+
+
+
+
+
+</script>
+
+</html>
