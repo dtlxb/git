@@ -94,6 +94,10 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     }
 
+    public View getRootView(){
+        return mContentView;
+    }
+
     /**
      * 设置通知栏背景颜色
      *

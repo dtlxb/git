@@ -1,8 +1,6 @@
 package com.gogoal.app.base;
 
 import android.app.Activity;
-import android.content.Context;
-import android.support.v4.content.ContextCompat;
 
 import com.gogoal.app.bean.BaseMessage;
 
@@ -41,7 +39,7 @@ public class AppManager {
      *
      * @author kymjs
      */
-    public static Activity getActivity(Class<?> cls) {
+    public Activity getActivity(Class<?> cls) {
         if (activityStack != null)
             for (Activity activity : activityStack) {
                 if (activity.getClass().equals(cls)) {
@@ -148,10 +146,4 @@ public class AppManager {
         EventBus.getDefault().post(msg, tag);
     }
 
-    /*
-    * 设置颜色
-    * */
-    public int getResourceColor(Context context, int color) {
-        return ContextCompat.getColor(context, color);
-    }
 }

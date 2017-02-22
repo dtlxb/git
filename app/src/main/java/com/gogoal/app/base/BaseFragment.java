@@ -42,7 +42,7 @@ public abstract class BaseFragment extends Fragment implements IBase {
         return view;
     }
 
-    public View getBaseView(){
+    public View getRootView(){
         return view;
     }
 
