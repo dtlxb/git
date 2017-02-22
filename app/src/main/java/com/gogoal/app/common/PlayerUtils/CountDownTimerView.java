@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.gogoal.app.R;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,6 +21,10 @@ import java.util.TimerTask;
  * Desc: 倒计时
  */
 public class CountDownTimerView extends LinearLayout {
+
+    private LinearLayout liveTelecastTrailer;
+
+    private TextView textLiveTrailer;
 
     // 天，十位
     private TextView textDaysDecade;
@@ -69,6 +74,9 @@ public class CountDownTimerView extends LinearLayout {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.view_countdowntimer, this);
 
+
+        liveTelecastTrailer = (LinearLayout) view.findViewById(R.id.liveTelecastTrailer);
+        textLiveTrailer = (TextView) view.findViewById(R.id.textLiveTrailer);
         textDaysDecade = (TextView) view.findViewById(R.id.textDaysDecade);
         textDaysUnit = (TextView) view.findViewById(R.id.textDaysUnit);
         textHoursDecade = (TextView) view.findViewById(R.id.textHoursDecade);
@@ -115,16 +123,10 @@ public class CountDownTimerView extends LinearLayout {
     // 如果:sum = 12345678
     public void addTime(int sum) {
 
-        // 求出天数
-        int day = sum / 60 / 60 / 24;
-        // int day_time = sum % 24;
+        //当前时间
+        Long cur_time = new Date().getTime();
 
-        // 求出小时
-        // int hour = day_time / 60;
-        // int hour_time = day_time % 60;
-        //
-        // Log.e("小时", hour + "");
-        //
+
         // 先获取个秒数值
         int sec = sum % 60;
         // 如果大于60秒，获取分钟。（秒数）
@@ -138,11 +140,6 @@ public class CountDownTimerView extends LinearLayout {
         // 剩下的自然是天数
         day = min_time / 24;
 
-        //
-        // Log.e("分钟", min + "");
-        //
-        // // 求出秒数
-        // Log.e("秒数", sec + "");
         setTime(day, hour, min, sec);
 
     }
@@ -178,6 +175,8 @@ public class CountDownTimerView extends LinearLayout {
     }
 
     private void timeClean() {
+        textLiveTrailer.setText("距" + "08月28日 15:30" + "直播开始还有");
+
         textDaysDecade.setText(day_decade + "");
         textDaysUnit.setText(day_unit + "");
         textHoursDecade.setText(hour_decade + "");
@@ -216,6 +215,7 @@ public class CountDownTimerView extends LinearLayout {
                                         textSecondsDecade.setText("0");
                                         textSecondsUnit.setText("0");
                                         stop();
+                                        liveTelecastTrailer.setVisibility(View.GONE);
                                         return false;
                                     }
                                 }

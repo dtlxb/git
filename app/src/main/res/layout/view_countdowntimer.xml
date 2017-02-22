@@ -12,7 +12,6 @@
         android:id="@+id/textLiveTrailer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="距08月28日 15:30 直播开始还有"
         android:textColor="@android:color/white"
         android:textSize="12dp" />
 

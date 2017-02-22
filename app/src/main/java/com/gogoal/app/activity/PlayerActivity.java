@@ -144,7 +144,7 @@ public class PlayerActivity extends BaseActivity {
 
         initSurface();
 
-        countDownTimer.addTime(100);
+        countDownTimer.addTime(10);
         countDownTimer.start();
 
     }
