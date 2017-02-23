@@ -1,6 +1,5 @@
 package com.gogoal.app.common;
 
-import android.content.Context;
 import android.util.Base64;
 
 import com.gogoal.app.R;
@@ -33,7 +32,7 @@ public class UFileUpload {
 
     private static UFileUpload instance = null;
 
-    public static UFileUpload getInstance(Context mContext) {
+    public static UFileUpload getInstance() {
         if (instance == null) {
             synchronized (UFileUpload.class) {
                 if (instance == null) {
@@ -51,7 +50,7 @@ public class UFileUpload {
 
         void onUploading(int progress);
 
-        void onSuccess(String onLineUrl);
+        void onSuccess(String onlineUri);
 
         void onFailed();
     }
@@ -64,7 +63,7 @@ public class UFileUpload {
         String date = "";
 
         String key_name = MyApp.getContext().getString(R.string.app_name) + "_" +
-                System.currentTimeMillis() +
+                Md5Utils.Md5String(file.getPath()) +
                 file.getPath().substring(file.getPath().lastIndexOf('.'));
 
         String authorization = getAuthorization(http_method, content_md5, content_type, date, bucket, key_name);

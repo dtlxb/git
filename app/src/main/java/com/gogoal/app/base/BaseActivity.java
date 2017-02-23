@@ -20,6 +20,7 @@ import com.gogoal.app.R;
 import com.gogoal.app.common.BuildProperties;
 import com.gogoal.app.ui.view.XTitle;
 import com.hply.imagepicker.view.SystemBarTintManager;
+import com.socks.library.KLog;
 
 import org.simple.eventbus.EventBus;
 
@@ -35,6 +36,16 @@ import butterknife.ButterKnife;
 public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     private View mContentView;
+    private boolean immersive;
+
+    public boolean needImmersive() {
+        return immersive;
+    }
+
+    @Override
+    public void setImmersive(boolean immersive) {
+        this.immersive = immersive;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +55,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
         setContentView(mContentView);
 
-        setStatusBar();
-
         ButterKnife.bind(this);
 
         initView(mContentView);
@@ -53,10 +62,18 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         EventBus.getDefault().register(this);
 
         doBusiness(this);
+
+        if (!needImmersive()) {
+            Window window = getWindow();
+            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            setStatusBar();
+        }
     }
 
     /**
-     * 通配 状态栏
+     * 非沉浸式通配 状态栏
      * <p>
      * if(miui){
      * 执行miui方案
@@ -75,16 +92,16 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
             setMIUIStatusBarTextColor(this, 1);
             setImmersive(true);
             setStatusColor(R.color.colorTitle);
-
         } else if (isFlyme()) {
             setMeizuStatusBarDarkIcon(this, true);
             setStatusColor(R.color.colorTitle);
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.colorTitle));
+                getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorTitle));
             } else {
                 setStatusColor(android.R.color.black);
+                KLog.e("设置黑色");
             }
         }
     }
@@ -94,14 +111,14 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     }
 
-    public View getRootView(){
+    public View getRootView() {
         return mContentView;
     }
 
     /**
      * 设置通知栏背景颜色
      *
-     * @param colorResId
+     * @param colorResId 颜色资源Id值；
      */
     protected void setStatusColor(@ColorRes int colorResId) {
         if (colorResId != -1) {
@@ -258,5 +275,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    public BaseActivity getContext() {
+        return BaseActivity.this;
     }
 }

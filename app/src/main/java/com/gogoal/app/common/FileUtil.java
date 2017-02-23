@@ -10,10 +10,9 @@ import java.io.IOException;
 import java.util.Locale;
 
 /**
- * author wangjd on 2017/2/13 0013.
- * Staff_id 1375
- * phone 18930640263
+ * Created by Administrator on 2017/1/15 0015.
  */
+
 public class FileUtil {
 
     public static void writeSDcard(String str, String fileName) {
@@ -25,7 +24,7 @@ public class FileUtil {
                 // 获取SD卡的目录
                 File sdDire = Environment.getExternalStorageDirectory();
                 outFileStream = new FileOutputStream(
-                        sdDire.getCanonicalPath() + File.separator + fileName);
+                        sdDire.getCanonicalPath() + "//" + fileName);
                 outFileStream.write(str.getBytes());
                 outFileStream.close();
             }
@@ -39,7 +38,7 @@ public class FileUtil {
     /**
      * 关闭流
      *
-     * @param closeables;
+     * @param closeables
      */
     public static void closeIO(Closeable... closeables) {
         if (null == closeables || closeables.length <= 0) {

@@ -16,20 +16,23 @@ import android.os.PowerManager;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.alivc.player.AliVcMediaPlayer;
 import com.alivc.player.MediaPlayer;
 import com.gogoal.app.R;
 import com.gogoal.app.base.BaseActivity;
+import com.gogoal.app.common.DialogHelp;
 import com.gogoal.app.common.PlayerUtils.CountDownTimerView;
 import com.gogoal.app.common.PlayerUtils.PlayerControl;
 import com.gogoal.app.common.PlayerUtils.StatusListener;
+import com.gogoal.app.common.UIHelper;
 import com.socks.library.KLog;
 
 import java.util.List;
@@ -127,9 +130,7 @@ public class PlayerActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        setImmersive(true);
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -658,7 +659,6 @@ public class PlayerActivity extends BaseActivity {
         }
 
         super.onDestroy();
-        return;
     }
 
     @Override
@@ -747,6 +747,7 @@ public class PlayerActivity extends BaseActivity {
             case R.id.imgPlayerRelaterVideo:
                 break;
             case R.id.imgPlayerShare:
+                UIHelper.showShareDialog(getContext(), null, null, "分享", "第一次分享");
                 break;
             case R.id.imgPlayerShotCut:
                 break;
