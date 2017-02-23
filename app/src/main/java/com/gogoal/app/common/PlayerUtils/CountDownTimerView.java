@@ -54,6 +54,8 @@ public class CountDownTimerView extends LinearLayout {
     private Long min_unit;
     private Long sec_decade;
     private Long sec_unit;
+
+    private String startTime;
     // 计时器
     private Timer timer;
 
@@ -124,12 +126,14 @@ public class CountDownTimerView extends LinearLayout {
     // 如果:sum = 12345678
     public void addTime(String start_time) {
 
+        startTime = start_time;
+
         //当前时间
         Long cur_time = new Date().getTime();
 
-        Date date = CalendarUtils.parseString2Date(start_time);
+        Date date = CalendarUtils.parseString2Date(startTime);
 
-        Long sum = (date.getTime() - cur_time)/1000;
+        Long sum = (date.getTime() - cur_time) / 1000;
 
         // 先获取个秒数值
         Long sec = sum % 60;
@@ -179,7 +183,12 @@ public class CountDownTimerView extends LinearLayout {
     }
 
     private void timeClean() {
-        textLiveTrailer.setText("距" + "08月28日 15:30" + "直播开始还有");
+
+        String[] str = CalendarUtils.formatDate("yyyy-MM-dd HH:mm:ss", "MM-dd", startTime).split("-");
+        String date = "距" + str[0] + "月" + str[1] + "日";
+        String time = CalendarUtils.formatDate("yyyy-MM-dd HH:mm:ss", "HH:mm", startTime);
+
+        textLiveTrailer.setText(date + " " + time + " 直播开始还有");
 
         textDaysDecade.setText(day_decade + "");
         textDaysUnit.setText(day_unit + "");
