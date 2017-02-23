@@ -46,6 +46,8 @@ public class ChatFragment extends BaseFragment {
 
     private AVIMConversation imConversation;
 
+    private JSONArray jsonArray;
+
     @Override
     public int bindLayout() {
         return R.layout.fragment_chat;
@@ -55,6 +57,9 @@ public class ChatFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
 
         Log.e("+++funny", "ChatFragment start");
+
+        jsonArray = SPTools.getJsonArray("conversation_beans", null);
+
         //发送消息(之后会改成向公司服务器发送消息，然后后台再处理给LeanCloud发送消息)
         message_send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,43 +96,29 @@ public class ChatFragment extends BaseFragment {
     }
 
     public void setConversation(AVIMConversation conversation) {
-        Log.e("+++here", "work here");
         if (null != conversation) {
             imConversation = conversation;
-            Log.e("+++imConversation", "work here");
             //拉取历史记录(直接从LeanCloud拉取)
             //getHistoryMessage();
 
-            JSONArray jsonArray = SPTools.getJsonArray("conversation_beans", null);
             JSONObject jsonObject = new JSONObject();
 
-            Log.e("TTT", jsonArray.toString());
-
             jsonObject.put("conversationID", imConversation.getConversationId());
-            Log.e("+++conversationID", imConversation.getConversationId()+"");
+            Log.e("+++conversationID", imConversation.getConversationId() + "");
             jsonObject.put("lastTime", imConversation.getLastMessageAt() + "");
-            Log.e("+++lastTime", imConversation.getLastMessageAt()+"");
+            Log.e("+++lastTime", imConversation.getLastMessageAt() + "");
             jsonObject.put("lastMessage", imConversation.getLastMessage() + "");
-            Log.e("+++lastMessage", imConversation.getLastMessage()+"");
+            Log.e("+++lastMessage", imConversation.getLastMessage() + "");
             jsonObject.put("unReadCounts", 10 + "");
-            Log.e("+++lastMessage1", imConversation.getLastMessage()+"");
-           /* if (!jsonArray.contains(jsonObject)) {
+            if (jsonArray == null) {
+                jsonArray = new JSONArray();
+            }
+            if (!jsonArray.contains(jsonObject)) {
                 jsonArray.add(jsonObject);
                 SPTools.saveJsonArray("conversation_beans", jsonArray);
             } else {
 
-            }*/
-
-            Log.e("TTT", "before add count" + jsonArray.size() + "");
-
-            jsonArray.add(jsonObject);
-
-            Log.e("TTT", "after add count" + jsonArray.size() + "");
-
-            SPTools.saveJsonArray("conversation_beans", jsonArray);
-            Log.e("+++lastMessage2", imConversation.getLastMessage()+"");
-            Log.e("+++jsonADD", jsonArray+"");
-            Log.e("+++lastMessage3", imConversation.getLastMessage()+"");
+            }
         }
     }
 
