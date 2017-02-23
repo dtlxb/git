@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gogoal.app.R;
+import com.gogoal.app.common.CalendarUtils;
 
 import java.util.Date;
 import java.util.Timer;
@@ -44,15 +45,15 @@ public class CountDownTimerView extends LinearLayout {
     private TextView textSecondsUnit;
 
     private Context context;
-    private int day_decade;
-    private int day_unit;
+    private Long day_decade;
+    private Long day_unit;
 
-    private int hour_decade;
-    private int hour_unit;
-    private int min_decade;
-    private int min_unit;
-    private int sec_decade;
-    private int sec_unit;
+    private Long hour_decade;
+    private Long hour_unit;
+    private Long min_decade;
+    private Long min_unit;
+    private Long sec_decade;
+    private Long sec_unit;
     // 计时器
     private Timer timer;
 
@@ -121,24 +122,27 @@ public class CountDownTimerView extends LinearLayout {
     }
 
     // 如果:sum = 12345678
-    public void addTime(int sum) {
+    public void addTime(String start_time) {
 
         //当前时间
         Long cur_time = new Date().getTime();
 
+        Date date = CalendarUtils.parseString2Date(start_time);
+
+        Long sum = (date.getTime() - cur_time)/1000;
 
         // 先获取个秒数值
-        int sec = sum % 60;
+        Long sec = sum % 60;
         // 如果大于60秒，获取分钟。（秒数）
-        int sec_time = sum / 60;
+        Long sec_time = sum / 60;
         // 再获取分钟
-        int min = sec_time % 60;
+        Long min = sec_time % 60;
         // 如果大于60分钟，获取小时（分钟数）。
-        int min_time = sec_time / 60;
+        Long min_time = sec_time / 60;
         // 获取小时
-        int hour = min_time % 24;
+        Long hour = min_time % 24;
         // 剩下的自然是天数
-        day = min_time / 24;
+        Long day = min_time / 24;
 
         setTime(day, hour, min, sec);
 
@@ -151,7 +155,7 @@ public class CountDownTimerView extends LinearLayout {
      * @throws
      * @Description: 设置倒计时的时长
      */
-    public void setTime(int day, int hour, int min, int sec) {
+    public void setTime(Long day, Long hour, Long min, Long sec) {
         //这里的天数不写也行，我写365
         if (day >= 365 || hour >= 24 || min >= 60 || sec >= 60 || day < 0
                 || hour < 0 || min < 0 || sec < 0) {

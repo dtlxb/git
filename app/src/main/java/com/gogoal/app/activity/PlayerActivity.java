@@ -91,7 +91,7 @@ public class PlayerActivity extends BaseActivity {
     private int mPosition = 0;
     private int mVolumn = 50;
 
-    private static final String mURI = "rtmp://192.168.52.143:1935/rtmplive/room";
+    private static final String mURI = "rtmp://192.168.52.143:1935/hls/androidtest";
 
     private Handler mTimerHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -144,7 +144,7 @@ public class PlayerActivity extends BaseActivity {
 
         initSurface();
 
-        countDownTimer.addTime(10);
+        countDownTimer.addTime("2017-02-25 10:01:00");
         countDownTimer.start();
 
     }
@@ -751,6 +751,7 @@ public class PlayerActivity extends BaseActivity {
             case R.id.imgPlayerShotCut:
                 break;
             case R.id.imgPlayerClose:
+                finish();
                 break;
         }
     }
