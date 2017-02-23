@@ -48,7 +48,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#D2D1D1" />
+        android:background="@color/wx_share_line" />
 
     <TextView
         android:id="@+id/btn_dialog_cancle"
@@ -56,6 +56,6 @@
         android:layout_height="50dp"
         android:gravity="center"
         android:text="@string/share_clone"
-        android:textColor="#222222"
+        android:textColor="@color/textColor_333333"
         android:textSize="16sp" />
 </LinearLayout>
