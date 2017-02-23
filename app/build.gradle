@@ -11,6 +11,10 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters "armeabi", "arm64-v8a"
+        }
     }
 
     buildTypes {
@@ -23,8 +27,14 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
-    lintOptions{
+    lintOptions {
         abortOnError false
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
     }
 }
 
@@ -37,9 +47,7 @@ dependencies {
     compile "com.android.support:appcompat-v7:$rootProject.ext.supportVersion"
     compile "com.android.support:design:$rootProject.ext.supportVersion"
     compile "com.android.support:recyclerview-v7:$rootProject.ext.supportVersion"
-
-    /**第三方依赖*/
-
+    /** 第三方依赖 */
     //微信登录、分享、支付依赖
     compile files('libs/libammsdk.jar')
     //网络请求
@@ -65,5 +73,6 @@ dependencies {
     //LeanCloud实时聊天
     compile 'cn.leancloud.android:avoscloud-sdk:v3.+'
     compile('cn.leancloud.android:avoscloud-push:v3.+@aar') { transitive = true }
-
+    //阿里云播放器
+    compile files('libs/alivc-player-2.2.0.20.jar')
 }
