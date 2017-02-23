@@ -4,9 +4,7 @@ package com.gogoal.app.fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.gogoal.app.R;
 import com.gogoal.app.activity.PlayerActivity;
@@ -65,9 +63,7 @@ public class MineFragment extends BaseFragment {
                 });
                 break;
             case R.id.btn_share:
-                View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_share_layout, new LinearLayout(getContext()), false);
-//                TextView tv= (TextView) dialogView.findViewById(R.id.tv_dialog_share_wx);
-                DialogHelp.getBottomSheelNormalDialog(getContext(), dialogView).show();
+                UIHelper.showShareDialog(getContext(), null, null, "分享", "第一次分享");
                 break;
         }
     }
@@ -84,20 +80,21 @@ public class MineFragment extends BaseFragment {
             public void onPreExecute() {
 
             }
+
             @Override
             public void doInBackground() {
                 UFileUpload.getInstance().upload(new File(uriPaths.get(0)), new UFileUpload.UploadListener() {
 
                     @Override
                     public void onUploading(final int progress) {
-                        KLog.e("上传进度==="+progress);
+                        KLog.e("上传进度===" + progress);
                     }
 
                     @Override
                     public void onSuccess(String onlineUri) {
-                        KLog.e("上传成功==="+onlineUri);
+                        KLog.e("上传成功===" + onlineUri);
                         waitDialog[0].cancel();
-                      UIHelper.toast(getContext(),"上传成功"+onlineUri);
+                        UIHelper.toast(getContext(), "上传成功" + onlineUri);
                     }
 
                     @Override

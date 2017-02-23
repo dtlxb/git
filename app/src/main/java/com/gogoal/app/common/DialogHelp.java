@@ -159,7 +159,7 @@ public class DialogHelp {
         dialog.show();
         dialog.setCancelable(false);
         Window window = dialog.getWindow();
-        if (window!=null) {
+        if (window != null) {
             window.setBackgroundDrawableResource(android.R.color.transparent);
             WindowManager.LayoutParams lp = window.getAttributes();
             lp.width = 5 * AppDevice.getWidth(context) / 6;
@@ -173,8 +173,8 @@ public class DialogHelp {
     /**
      * 弹出window窗体
      *
-     * @param context    上下文
-     * @param dialogView 弹窗视图
+     * @param context           上下文
+     * @param dialogView        弹窗视图
      * @param dialogWindowWidth 窗体宽度
      */
     public static AlertDialog getWindoDialog(Context context, View dialogView, int dialogWindowWidth) {
@@ -184,7 +184,7 @@ public class DialogHelp {
         dialog.show();
         dialog.setCancelable(false);
         Window window = dialog.getWindow();
-        if (window!=null) {
+        if (window != null) {
             window.setBackgroundDrawableResource(android.R.color.transparent);
             WindowManager.LayoutParams lp = window.getAttributes();
             lp.width = dialogWindowWidth;
@@ -195,9 +195,11 @@ public class DialogHelp {
         return dialog;
     }
 
-    /**通用底部弹出窗*/
-    public static BottomSheetDialog getBottomSheelNormalDialog(Context context, View dialogView){
-        if (context!=null && dialogView!=null) {
+    /**
+     * 通用底部弹出窗
+     */
+    public static BottomSheetDialog getBottomSheelNormalDialog(Context context, View dialogView) {
+        if (context != null && dialogView != null) {
             BottomSheetDialog dialog = new BottomSheetDialog(context, R.style.BottomSheetSelectorDialogStyle);
             dialog.setContentView(dialogView);
             return dialog;

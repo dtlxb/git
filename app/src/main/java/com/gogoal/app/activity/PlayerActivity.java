@@ -32,6 +32,7 @@ import com.gogoal.app.common.DialogHelp;
 import com.gogoal.app.common.PlayerUtils.CountDownTimerView;
 import com.gogoal.app.common.PlayerUtils.PlayerControl;
 import com.gogoal.app.common.PlayerUtils.StatusListener;
+import com.gogoal.app.common.UIHelper;
 import com.socks.library.KLog;
 
 import java.util.List;
@@ -746,9 +747,7 @@ public class PlayerActivity extends BaseActivity {
             case R.id.imgPlayerRelaterVideo:
                 break;
             case R.id.imgPlayerShare:
-                View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_share_layout, new LinearLayout(getContext()), false);
-//                TextView tv= (TextView) dialogView.findViewById(R.id.tv_dialog_share_wx);
-                DialogHelp.getBottomSheelNormalDialog(getContext(), dialogView).show();
+                UIHelper.showShareDialog(getContext(), null, null, "分享", "第一次分享");
                 break;
             case R.id.imgPlayerShotCut:
                 break;

@@ -19,6 +19,8 @@
         <TextView
             android:id="@+id/tv_dialog_share_gogoal"
             style="@style/ShareDialogButton"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:drawableTop="@mipmap/icon_share_gogoal"
             android:text="GoGoal好友" />
 
@@ -26,34 +28,34 @@
             android:id="@+id/tv_dialog_share_wx"
             style="@style/ShareDialogButton"
             android:drawableTop="@mipmap/icon_share_friend"
-            android:text="微信好友" />
+            android:text="@string/share_friend"/>
 
         <TextView
             android:id="@+id/tv_dialog_share_wx_circle"
             style="@style/ShareDialogButton"
             android:drawableTop="@mipmap/icon_share_wx_circle"
-            android:text="微信朋友圈" />
+            android:text="@string/share_wx_circle"/>
 
         <TextView
             android:id="@+id/tv_dialog_share_copy"
             style="@style/ShareDialogButton"
             android:drawableTop="@mipmap/icon_share_copy"
             android:gravity="center"
-            android:text="复制链接" />
+            android:text="@string/share_copy"/>
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#D2D1D1" />
+        android:background="@color/wx_share_line" />
 
     <TextView
         android:id="@+id/btn_dialog_cancle"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center"
-        android:text="取消"
-        android:textColor="#222222"
+        android:text="@string/share_clone"
+        android:textColor="@color/textColor_333333"
         android:textSize="16sp" />
 </LinearLayout>
