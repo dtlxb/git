@@ -259,4 +259,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
+    public BaseActivity getContext(){
+        return BaseActivity.this;
+    }
 }

@@ -30,6 +30,7 @@
 
     <style name="BottomSheetModal" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
+        <item name="behavior_peekHeight">700dp</item>
     </style>
 
     <!--分享弹窗按钮样式-->
