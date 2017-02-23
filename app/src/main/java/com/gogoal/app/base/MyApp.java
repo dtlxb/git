@@ -44,7 +44,7 @@ public class MyApp extends Application {
         AVOSCloud.initialize(this, "dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz", "ye24iIK6ys8IvaISMC4Bs5WK");
         //AVOSCloud.initialize(this,"hi22KV7K693uIQLX5X4ROSbs-gzGzoHsz","qTkdjmpyuVdJAearcTthBw5N");
         //启用北美节点
-        AVOSCloud.useAVCloudUS();
+//        AVOSCloud.useAVCloudUS();
         //必须在启动的时候注册 MessageHandler
         //注册默认的消息处理逻辑
         AVIMMessageManager.registerMessageHandler(AVIMMessage.class, new MyMessageHandler());

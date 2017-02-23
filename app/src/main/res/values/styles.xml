@@ -23,4 +23,28 @@
         <item name="textAllCaps">false</item>
     </style>
 
+    <!--底部选择弹窗-->
+    <style name="BottomSheetSelectorDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetModal</item>
+    </style>
+
+    <style name="BottomSheetModal" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="behavior_peekHeight">700dp</item>
+    </style>
+
+    <!--分享弹窗按钮样式-->
+    <style name="ShareDialogButton">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:drawablePadding">10dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textColor">#222222</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
 </resources>

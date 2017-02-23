@@ -42,7 +42,7 @@ public class MessageFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle("消息");
+        setFragmentTitle(R.string.title_message);
     }
 
     @Override

@@ -6,7 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.gogoal.app.common.StringUtils.$;
+import static com.gogoal.app.common.StringUtils.formatInteger;
+
 
 public class CalendarUtils {
 
@@ -220,7 +221,8 @@ public class CalendarUtils {
         try {
             Calendar c = Calendar.getInstance();
             c.setTime(simpleDateFormat.parse(yMDHms));
-            return $(c.get(Calendar.HOUR_OF_DAY)) + ":" + $(c.get(Calendar.MINUTE));
+            return formatInteger(c.get(Calendar.HOUR_OF_DAY)) + ":" +
+                    formatInteger(c.get(Calendar.MINUTE));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -232,7 +234,7 @@ public class CalendarUtils {
         try {
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(timeMillis);
-            return $(c.get(Calendar.HOUR_OF_DAY)) + ":" + $(c.get(Calendar.MINUTE));
+            return formatInteger(c.get(Calendar.HOUR_OF_DAY)) + ":" + formatInteger(c.get(Calendar.MINUTE));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -246,9 +248,10 @@ public class CalendarUtils {
             Calendar c = Calendar.getInstance();
             c.setTime(simpleDateFormat.parse(yMDHms));
             if (c.get(Calendar.YEAR) != Calendar.getInstance().get(Calendar.YEAR)) {
-                return c.get(Calendar.YEAR) + "-" + $(c.get(Calendar.MONTH)+1) + "-" + $(c.get(Calendar.DAY_OF_MONTH));
+                return c.get(Calendar.YEAR) + "-" + formatInteger(c.get(Calendar.MONTH)+1) + "-" +
+                        formatInteger(c.get(Calendar.DAY_OF_MONTH));
             } else {
-                return $(c.get(Calendar.MONTH)+1) + "-" + $(c.get(Calendar.DAY_OF_MONTH));
+                return formatInteger(c.get(Calendar.MONTH)+1) + "-" + formatInteger(c.get(Calendar.DAY_OF_MONTH));
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -325,31 +328,6 @@ public class CalendarUtils {
         return "进行中";
     }
 
-//    private static int howmanyDay(long timeMill) {
-//        return (int) (timeMill / (86400 * 1000));
-//    }
-
-    /*Live是否开始*/
-    /*public static boolean isStart(LiveListData data) {
-        if (data!=null){
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CANADA);
-            try {
-                if (format.parse(data.getAttr().getStart_time()).getTime()-System.currentTimeMillis()>0) {
-                    if (data.is_close()){
-                        return false;
-                    }else {
-                        return true;
-                    }
-                }else {
-                    return false;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }*/
-
     /**
      * 消息时间处理
      */
@@ -376,16 +354,16 @@ public class CalendarUtils {
     /**
      * 格式化时间字符串
      *
-     * @param tofomat
-     * @param date
-     * @return
+     * @param tofomat;
+     * @param date;
+     * @return data;
      */
     public static String formatDate(String originFormat, String tofomat, String date) {
-        SimpleDateFormat df = new SimpleDateFormat(tofomat);
+        SimpleDateFormat df = new SimpleDateFormat(tofomat,Locale.CHINA);
         if (isEmpty(date)) {
             return df.format(new Date());
         } else {
-            SimpleDateFormat df1 = new SimpleDateFormat(originFormat);
+            SimpleDateFormat df1 = new SimpleDateFormat(originFormat,Locale.CHINA);
             try {
                 Date mdata = df1.parse(date);
                 return df.format(mdata);
@@ -398,8 +376,8 @@ public class CalendarUtils {
     /**
      * 判断给定字符串是否空白串。 空白串是指由空格、制表符、回车符、换行符组成的字符串 若输入字符串为null或空字符串，返回true
      *
-     * @param input
-     * @return boolean
+     * @param input;
+     * @return boolean;
      */
     public static boolean isEmpty(String input) {
         if (input == null || "".equals(input))

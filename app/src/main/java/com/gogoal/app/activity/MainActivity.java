@@ -56,6 +56,7 @@ public class MainActivity extends BaseActivity {
                 getSupportFragmentManager(),getActivity(),tabFragments, mainTabArray);
 
         vpMain.setAdapter(tabAdapter);
+        vpMain.setOffscreenPageLimit(3);
         tabMain.setupWithViewPager(vpMain);
 
         for (int i = 0; i < mainTabArray.length; i++) {

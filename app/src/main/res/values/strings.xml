@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">GoGoal</string>
 
+    <string name="title_message">消息</string>
+    <string name="title_contacts">通讯录</string>
+    <string name="title_found">Go-Goal金融终端</string>
+    <string name="title_mine">我的</string>
+
     <string name="all_images">全部图片</string>
     <string name="folder_image_count">共%1$d张</string>
     <string name="preview_image_count">%1$s/%2$s</string>
@@ -11,5 +16,8 @@
     <string name="photo_crop">图片裁剪</string>
     <string name="origin">原图</string>
     <string name="origin_size">原图(%1$s)</string>
+
+    <!--直播-->
+    <string name="live_together">一起直播</string>
 
 </resources>

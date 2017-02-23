@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSONObject;
 import com.gogoal.app.R;
 import com.gogoal.app.activity.FunctionActivity;
 import com.gogoal.app.activity.SingleChatRoomActivity;
@@ -26,7 +25,6 @@ import com.gogoal.app.bean.FoundData;
 import com.gogoal.app.common.AppDevice;
 import com.gogoal.app.common.ImageUtils.ImageDisplay;
 import com.gogoal.app.common.UIHelper;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,13 +57,13 @@ public class FoundFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle("Go-Goal金融终端");
+        setFragmentTitle(R.string.title_found);
 
         initRecycleView(recyclerView, R.drawable.shape_divider_10dp);
 
         List<FoundData> datas = getFunctionDatas();//模拟数据
 
-        KLog.e(JSONObject.toJSON(datas).toString());
+//      KLog.e(JSONObject.toJSON(datas).toString());
 
         HeaderAndFooterWrapper wraper = addHeadImage(datas);
 
