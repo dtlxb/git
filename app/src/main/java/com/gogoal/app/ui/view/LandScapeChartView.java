@@ -14,7 +14,7 @@ import android.view.View;
 import com.gogoal.app.R;
 import com.gogoal.app.bean.StockMinuteData;
 import com.gogoal.app.common.ImageUtils.TimesFivesBitmap;
-import com.gogoal.app.common.stockUtils;
+import com.gogoal.app.common.StockUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -295,7 +295,7 @@ public class LandScapeChartView extends View {
         this.timesFivesBitmap = timesFivesBitmap;
         timesList.clear();
         timesList.addAll(timesFivesBitmap.getTimeList());
-        if (timesList.size() > 0 && timesList != null && stock_charge_type == 1 && stockUtils.isTradeTime()) {
+        if (timesList.size() > 0 && timesList != null && stock_charge_type == 1 && StockUtils.isTradeTime()) {
             needDraw = true;
         }
         dateList = timesFivesBitmap.getDateList();

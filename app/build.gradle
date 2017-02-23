@@ -15,6 +15,10 @@ android {
         jackOptions {
             enabled true
         }
+
+        ndk {
+            abiFilters "armeabi", "arm64-v8a"
+        }
     }
 
     buildTypes {
@@ -35,6 +39,11 @@ android {
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
     }
 }
 
@@ -76,4 +85,6 @@ dependencies {
     compile('cn.leancloud.android:avoscloud-push:v3.+@aar') { transitive = true }
     //UCloud存储
     compile project(':uFileLib')
+    //阿里云播放器
+    compile files('libs/alivc-player-2.2.0.20.jar')
 }

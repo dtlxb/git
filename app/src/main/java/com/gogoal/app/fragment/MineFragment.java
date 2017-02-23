@@ -2,11 +2,15 @@ package com.gogoal.app.fragment;
 
 
 import android.content.Context;
+<<<<<<<HEAD
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.content.Intent;
 
 import com.gogoal.app.R;
+import com.gogoal.app.activity.PlayerActivity;
 import com.gogoal.app.base.BaseFragment;
 import com.gogoal.app.common.DialogHelp;
 import com.gogoal.app.common.ImageUtils.ImageTakeUtils;
@@ -14,6 +18,8 @@ import com.hply.imagepicker.ITakePhoto;
 import com.socks.library.KLog;
 
 import java.util.List;
+
+import butterknife.OnClick;
 
 import butterknife.OnClick;
 
@@ -34,14 +40,17 @@ public class MineFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
     }
 
-    @OnClick({R.id.btn_test, R.id.btn_share})
-    void click(View view) {
+    @OnClick({R.id.setWatchLive, R.id.btn_share, R.id.btn_upload})
+    public void WatchLive(View view) {
         switch (view.getId()) {
-            case R.id.btn_test:
+            case R.id.setWatchLive:
+                startActivity(new Intent(getContext(), PlayerActivity.class));
+                break;
+            case R.id.btn_upload:
                 ImageTakeUtils.getInstance().takePhoto(getContext(), 9, false, new ITakePhoto() {
                     @Override
                     public void sueecss(List<String> uriPaths, boolean isOriginalPic) {
-                        KLog.e(uriPaths.toString());
+                        KLog.e(uriPaths);
                     }
 
                     @Override
@@ -51,6 +60,7 @@ public class MineFragment extends BaseFragment {
                 });
                 break;
             case R.id.btn_share:
+                
                 View dialogView= LayoutInflater.from(getContext()).inflate(R.layout.dialog_share_layout,new LinearLayout(getContext()),false);
                 DialogHelp.getBottomSheelNormalDialog(getContext(),dialogView).show();
                 break;

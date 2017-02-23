@@ -9,15 +9,21 @@
     <include layout="@layout/include_title"/>
 
     <Button
-        android:id="@+id/btn_test"
+        android:id="@+id/setWatchLive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="测试图片上传UFile"/>
+        android:text="播放器"
+        android:layout_marginTop="20dp" />
+
+    <Button
+        android:id="@+id/btn_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="测试上传图片"/>
 
     <Button
         android:id="@+id/btn_share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="弹窗分享"/>
+        android:text="测试弹窗分享"/>
 </LinearLayout>

@@ -45,7 +45,7 @@ public class ChatFragment extends BaseFragment {
     Button message_send;
 
     private AVIMConversation imConversation;
-    private JSONObject jsonObject = new JSONObject();
+
     private JSONArray jsonArray;
 
     @Override
@@ -55,6 +55,10 @@ public class ChatFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
+
+        Log.e("+++funny", "ChatFragment start");
+
+        jsonArray = SPTools.getJsonArray("conversation_beans", null);
 
         //发送消息(之后会改成向公司服务器发送消息，然后后台再处理给LeanCloud发送消息)
         message_send.setOnClickListener(new View.OnClickListener() {
@@ -95,22 +99,32 @@ public class ChatFragment extends BaseFragment {
         if (null != conversation) {
             imConversation = conversation;
             //拉取历史记录(直接从LeanCloud拉取)
-            getHistoryMessage();
+            //getHistoryMessage();
 
-            jsonArray = SPTools.getJsonArray("conversation_beans", null);
+            boolean isNeedAdd = true;
+            JSONObject jsonObject = new JSONObject();
+
             jsonObject.put("conversationID", imConversation.getConversationId());
+            Log.e("+++conversationID", imConversation.getConversationId() + "");
             jsonObject.put("lastTime", imConversation.getLastMessageAt() + "");
+            Log.e("+++lastTime", imConversation.getLastMessageAt() + "");
             jsonObject.put("lastMessage", imConversation.getLastMessage() + "");
+            Log.e("+++lastMessage", imConversation.getLastMessage() + "");
             jsonObject.put("unReadCounts", 10 + "");
+            if (jsonArray == null) {
+                jsonArray = new JSONArray();
+            }
+            for (int i = 0; i < jsonArray.size(); i++) {
+                if (jsonArray.getJSONObject(i).get("conversationID").equals(jsonObject.get("conversationID"))) {
+                    isNeedAdd = false;
+                } else {
 
-            if (!jsonArray.contains(jsonObject)) {
+                }
+            }
+            if (isNeedAdd){
                 jsonArray.add(jsonObject);
                 SPTools.saveJsonArray("conversation_beans", jsonArray);
-            } else {
-
             }
-
-            Log.e("+++jsonAdd", jsonArray + "");
         }
     }
 

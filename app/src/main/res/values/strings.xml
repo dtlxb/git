@@ -17,4 +17,7 @@
     <string name="origin">原图</string>
     <string name="origin_size">原图(%1$s)</string>
 
+    <!--直播-->
+    <string name="live_together">一起直播</string>
+
 </resources>

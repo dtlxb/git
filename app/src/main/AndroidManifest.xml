@@ -11,6 +11,11 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 基础模块 END -->
 
+
+    <!-- 阿里云播放器 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
     <application
         android:name=".base.MyApp"
         android:allowBackup="true"
@@ -45,7 +50,7 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
+        <activity android:name=".activity.PlayerActivity" />
         <activity
             android:name=".activity.FunctionActivity"
             android:windowSoftInputMode="adjustPan" />

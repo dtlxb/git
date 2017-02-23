@@ -15,7 +15,7 @@ import com.gogoal.app.base.MyApp;
 import com.gogoal.app.bean.StockMinuteBean;
 import com.gogoal.app.bean.StockMinuteData;
 import com.gogoal.app.common.StringUtils;
-import com.gogoal.app.common.stockUtils;
+import com.gogoal.app.common.StockUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -513,7 +513,7 @@ public class TimesFivesBitmap {
      * 停牌状态图表处理
      * */
     private void drawStopLines(Canvas canvas) {
-        if (isSuspension && stockUtils.isTradeTime()) {
+        if (isSuspension && StockUtils.isTradeTime()) {
             //绘制停牌阴影部分
             Path stop_shadow_path = new Path();
             //绘制停牌分时线
@@ -528,7 +528,7 @@ public class TimesFivesBitmap {
             if (isTimes) {
                 endStopX1 = leftMargin;
                 endStopY = getLatitudeSpacing();
-                if (stockUtils.isTradeTime()) {
+                if (StockUtils.isTradeTime()) {
                     endStopX2 = getMinute(hour, minute) * dataSpacing + leftMargin;
                 } else {
                     if (hour == 11 || hour == 12) {
@@ -541,7 +541,7 @@ public class TimesFivesBitmap {
                 fenshiData = timesList.get(timesList.size() - 1);
                 endStopX1 = (dateList.size() - 1) * 60 * dataSpacing + leftMargin;
                 endStopY = (float) (uperBottom - (fenshiData.getPrice() + uperHalfHigh - initialWeightedIndex) * uperRate);
-                if (stockUtils.isTradeTime()) {
+                if (StockUtils.isTradeTime()) {
                     endStopX2 = ((dateList.size() - 1) * 60 + getMinute(hour, minute) / 4 + 1) * dataSpacing + leftMargin;
                 } else {
                     if (hour == 11 || hour == 12) {
@@ -663,7 +663,7 @@ public class TimesFivesBitmap {
                 Collections.sort(list);
                 lowerHigh = list.get(list.size() - 1);
             } else {
-                this.closePrice = stockUtils.getColseprice();
+                this.closePrice = StockUtils.getColseprice();
             }
         }
         drawBitMap(canvas);
