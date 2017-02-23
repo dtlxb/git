@@ -15,6 +15,7 @@ import cn.ucloud.ufilesdk.UFileRequest;
 import cn.ucloud.ufilesdk.UFileSDK;
 import cn.ucloud.ufilesdk.UFileUtils;
 
+
 /**
  * /**
  * author wangjd on 2017/2/13 0013.
@@ -26,6 +27,7 @@ import cn.ucloud.ufilesdk.UFileUtils;
 
 public class UFileUpload {
 
+    private static final String bucket="hackfile";
     private UFileUpload() {
     }
 
@@ -36,7 +38,7 @@ public class UFileUpload {
             synchronized (UFileUpload.class) {
                 if (instance == null) {
                     instance = new UFileUpload();
-                    uFileSDK=new UFileSDK(bucket);
+                    uFileSDK=new UFileSDK(bucket);//域名后缀
                 }
             }
         }
@@ -44,19 +46,6 @@ public class UFileUpload {
     }
 
     private static UFileSDK uFileSDK;
-    /**
-     * bucket : bucket name
-     * proxySuffix : 域名后缀
-     */
-    private static final String bucket = "hackfile";
-
-    private static final String proxySuffix = "http://hackfile.ufile.ucloud.cn";
-
-    /**
-     * 公钥私钥
-     */
-    private static final String publicKey = "ucloudgcqin@go-goal.com13648682571239575500";
-    private static final String privatekey = "27f435a8c39f515b01a3db66acbdd7ef9b37d16c";
 
     public interface UploadListener {
 
@@ -109,11 +98,11 @@ public class UFileUpload {
         String signature = "";
         try {
             String strToSign = http_method + "\n" + content_md5 + "\n" + content_type + "\n" + date + "\n" + "/" + bucket + "/" + key;
-            byte[] hmac = UFileUtils.hmacSha1(privatekey, strToSign);
+            byte[] hmac = UFileUtils.hmacSha1(AppConst.privatekey, strToSign);
             signature = Base64.encodeToString(hmac, Base64.DEFAULT);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "UCloud" + " " + publicKey + ":" + signature;
+        return "UCloud" + " " + AppConst.publicKey + ":" + signature;
     }
 }
