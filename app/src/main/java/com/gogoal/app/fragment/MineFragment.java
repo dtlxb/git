@@ -3,15 +3,13 @@ package com.gogoal.app.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.gogoal.app.R;
 import com.gogoal.app.activity.PlayerActivity;
 import com.gogoal.app.base.BaseFragment;
-import com.gogoal.app.common.DialogHelp;
 import com.gogoal.app.common.ImageUtils.ImageTakeUtils;
+import com.gogoal.app.common.UIHelper;
 import com.hply.imagepicker.ITakePhoto;
 import com.socks.library.KLog;
 
@@ -56,11 +54,7 @@ public class MineFragment extends BaseFragment {
                 });
                 break;
             case R.id.btn_share:
-                View dialogView= LayoutInflater.from(getContext()).inflate(R.layout.dialog_share_layout,new LinearLayout(getContext()),false);
-
-//                TextView tv= (TextView) dialogView.findViewById(R.id.tv_dialog_share_wx);
-
-                DialogHelp.getBottomSheelNormalDialog(getContext(),dialogView).show();
+                UIHelper.showShareDialog(getContext(), null, null, "分享", "第一次分享");
                 break;
         }
     }

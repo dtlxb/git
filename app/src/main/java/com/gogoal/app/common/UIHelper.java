@@ -1,12 +1,17 @@
 package com.gogoal.app.common;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.design.widget.Snackbar;
+import android.text.ClipboardManager;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gogoal.app.R;
@@ -147,17 +152,45 @@ public class UIHelper {
         mSnackBar.show();
     }
 
+    /**
+     * 读取raw文件夹中文本或超文本内容为字符串
+     */
+    public static String getRawString(Context context, int rawId) {
+        InputStream in = context.getResources().openRawResource(rawId);
+        InputStreamReader isr = new InputStreamReader(in);
+        BufferedReader br = new BufferedReader(isr);
+        StringBuffer sb = new StringBuffer();
+        String line;
+        try {
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } finally {
+            try {
+                br.close();
+                isr.close();
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sb.toString();
+    }
+
     private static String buildTransaction(final String type) {
         return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
 
     /**
      * 微信分享
-     * @param sharetType :分享类型===0：微信好友，1：朋友圈，2：微信收藏;
-     * @param context 上下文
-     * @param url 分享的url
-     * @param imageUrl 分享内容中的小图标
-     * @param title 分享内容的标题
+     *
+     * @param sharetType  :分享类型===0：微信好友，1：朋友圈，2：微信收藏;
+     * @param context     上下文
+     * @param url         分享的url
+     * @param imageUrl    分享内容中的小图标
+     * @param title       分享内容的标题
      * @param description 分享内容头部
      */
     public static void WXshare(int sharetType, final Context context, String url, String imageUrl, String title, String description) {
@@ -184,6 +217,7 @@ public class UIHelper {
             OkHttpUtils.get().url(imageUrl).build().execute(new BitmapCallback() {
                 public void onError(Call call, Exception e) {
                 }
+
                 public void onResponse(Bitmap bitmap) {
                     if (bitmap != null) {
                         Bitmap thumbBmp = Bitmap.createScaledBitmap(bitmap, 120, 120, true);
@@ -208,29 +242,56 @@ public class UIHelper {
         }
     }
 
-    /**读取raw文件夹中文本或超文本内容为字符串*/
-    public static String getRawString(Context context,int rawId){
-        InputStream in = context.getResources().openRawResource(rawId);
-        InputStreamReader isr = new InputStreamReader(in);
-        BufferedReader br = new BufferedReader(isr);
-        StringBuffer sb = new StringBuffer();
-        String line;
-        try {
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
+    /*
+    * 微信分享弹窗
+    *
+    * */
+    public static void showShareDialog(final Context context, final String url, final String imageUrl, final String title, final String description) {
+
+        final View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_share_layout, new LinearLayout(context), false);
+
+        final Dialog share_dialog = DialogHelp.getBottomSheelNormalDialog(context, dialogView);
+
+        TextView share_gogoal = (TextView) dialogView.findViewById(R.id.tv_dialog_share_gogoal);
+        TextView share_wx = (TextView) dialogView.findViewById(R.id.tv_dialog_share_wx);
+        TextView share_wx_circle = (TextView) dialogView.findViewById(R.id.tv_dialog_share_wx_circle);
+        TextView share_copy = (TextView) dialogView.findViewById(R.id.tv_dialog_share_copy);
+        TextView btn_dialog_cancle = (TextView) dialogView.findViewById(R.id.btn_dialog_cancle);
+
+        //设置按钮监听
+        View.OnClickListener shareOnClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                share_dialog.dismiss();
+
+                switch (view.getId()) {
+                    case R.id.tv_dialog_share_gogoal:
+                        toast(context, "Go-Goal好友");
+                        break;
+                    case R.id.tv_dialog_share_wx:
+                        toast(context, "微信好友");
+                        WXshare(0, context, url, imageUrl, title, description);
+                        break;
+                    case R.id.tv_dialog_share_wx_circle:
+                        toast(context, "微信朋友圈");
+                        WXshare(1, context, url, imageUrl, title, description);
+                        break;
+                    case R.id.tv_dialog_share_copy:
+                        ClipboardManager clip = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                        clip.setText(url);
+                        toast(context, "复制成功");
+                        break;
+                }
             }
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        } finally {
-            try {
-                br.close();
-                isr.close();
-                in.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return sb.toString();
+        };
+
+        share_gogoal.setOnClickListener(shareOnClick);
+        share_wx.setOnClickListener(shareOnClick);
+        share_wx_circle.setOnClickListener(shareOnClick);
+        share_copy.setOnClickListener(shareOnClick);
+        btn_dialog_cancle.setOnClickListener(shareOnClick);
+
+        share_dialog.show();
     }
 
 }

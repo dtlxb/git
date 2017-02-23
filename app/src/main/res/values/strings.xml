@@ -20,4 +20,11 @@
     <!--直播-->
     <string name="live_together">一起直播</string>
 
+    <!--分享-->
+    <string name="share_clone">关闭</string>
+    <string name="share_copy">复制链接</string>
+    <string name="share_wx_circle">微信朋友圈</string>
+    <string name="share_friend">微信好友</string>
+    <string name="share_gogoal">Go-Goal</string>
+
 </resources>
