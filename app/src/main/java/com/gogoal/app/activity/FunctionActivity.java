@@ -106,7 +106,7 @@ public class FunctionActivity extends BaseActivity {
         // 开启DOM缓存。
         mWebView.getSettings().setDomStorageEnabled(true);
         mWebView.getSettings().setDatabaseEnabled(true);
-        mWebView.getSettings().setDatabasePath(getActivity().getApplicationContext().getCacheDir().getAbsolutePath());
+        mWebView.getSettings().setDatabasePath(getContext().getApplicationContext().getCacheDir().getAbsolutePath());
         mWebView.getSettings().setDomStorageEnabled(true);
         mWebView.getSettings().setAppCacheMaxSize(1024 * 1024 * 8);
         String appCachePath = getApplicationContext().getCacheDir().getAbsolutePath();

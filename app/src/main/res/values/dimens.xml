@@ -9,5 +9,5 @@
 
     <dimen name="action_sheet_dialog_radius">10dp</dimen>
 
-    <dimen name="dialog_share">12sp</dimen>
+    <dimen name="dialog_share">13sp</dimen>
 </resources>

@@ -8,10 +8,12 @@ import android.support.v4.view.ViewPager;
 import com.gogoal.app.R;
 import com.gogoal.app.adapter.SimpleFragmentPagerAdapter;
 import com.gogoal.app.base.BaseActivity;
+import com.gogoal.app.common.AppDevice;
 import com.gogoal.app.fragment.ContactsFragment;
 import com.gogoal.app.fragment.FoundFragment;
 import com.gogoal.app.fragment.MessageFragment;
 import com.gogoal.app.fragment.MineFragment;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +55,7 @@ public class MainActivity extends BaseActivity {
         tabFragments.add(mineFragment);
 
         SimpleFragmentPagerAdapter tabAdapter = new SimpleFragmentPagerAdapter(
-                getSupportFragmentManager(),getActivity(),tabFragments, mainTabArray);
+                getSupportFragmentManager(),getContext(),tabFragments, mainTabArray);
 
         vpMain.setAdapter(tabAdapter);
         vpMain.setOffscreenPageLimit(3);
@@ -66,6 +68,9 @@ public class MainActivity extends BaseActivity {
             }
         }
 
+        KLog.e("width==="+AppDevice.getWidth(getContext())+";Height==="+AppDevice.getHeight(getContext()));
+        KLog.e("widthDpValue==="+AppDevice.px2dp(getContext(),AppDevice.getWidth(getContext()))+
+                ";HeightDpValue==="+AppDevice.px2dp(getContext(),AppDevice.getHeight(getContext())));
     }
 
 }
