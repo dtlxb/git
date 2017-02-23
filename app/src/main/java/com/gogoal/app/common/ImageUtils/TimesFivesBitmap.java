@@ -14,7 +14,7 @@ import com.gogoal.app.R;
 import com.gogoal.app.base.MyApp;
 import com.gogoal.app.bean.StockMinuteBean;
 import com.gogoal.app.bean.StockMinuteData;
-import com.gogoal.app.common.DataUtils;
+import com.gogoal.app.common.StringUtils;
 import com.gogoal.app.common.stockUtils;
 
 import java.text.ParseException;
@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by huangxx on 2017/valentine's day.
@@ -52,8 +53,8 @@ public class TimesFivesBitmap {
     private float mLowerChartHeight;                         //下表高度
     private int leftMargin;                                  //左边坐标宽度
     private int rightMargin;                                 //右边坐标宽度
-    private static int longitudeNum;                         //上表纬线数
-    private static int uperLatitudeNum;                      //经线数
+    private int longitudeNum;                               //上表纬线数
+    private int uperLatitudeNum;                            //经线数
     private float longitudeSpacing;                            //经度的间隔
     private float latitudeSpacing;                             //纬度的间隔
     private DashPathEffect mRedDashPathEffect;                 //中间红色虚线
@@ -269,18 +270,18 @@ public class TimesFivesBitmap {
         //绘制左边价格
         String pos_max_price = "";
         if (isTimes && isSuspension) {
-            pos_max_price = DataUtils.getAnyPointDouble("%.2f",1.01 * closePrice);
+            pos_max_price = StringUtils.getAnyPointDouble("%.2f",1.01 * closePrice);
         } else {
-            pos_max_price = DataUtils.getAnyPointDouble("%.2f",initialWeightedIndex + uperHalfHigh);
+            pos_max_price = StringUtils.getAnyPointDouble("%.2f",initialWeightedIndex + uperHalfHigh);
         }
 
         String close_price = String.format("%.2f", closePrice);
 
         String pos_min_price = "";
         if (isTimes && isSuspension) {
-            pos_min_price = DataUtils.getAnyPointDouble("%.2f",0.99 * closePrice);
+            pos_min_price = StringUtils.getAnyPointDouble("%.2f",0.99 * closePrice);
         } else {
-            pos_min_price = DataUtils.getAnyPointDouble("%.2f",initialWeightedIndex - uperHalfHigh);
+            pos_min_price = StringUtils.getAnyPointDouble("%.2f",initialWeightedIndex - uperHalfHigh);
         }
 
         if (isFromDetail) {
@@ -296,18 +297,18 @@ public class TimesFivesBitmap {
         //绘制右边率
         String pos_max_rate = "";
         if (isTimes && isSuspension) {
-            pos_max_rate = DataUtils.getAnyPointDouble("%.2f",1.00) + "%";
+            pos_max_rate = StringUtils.getAnyPointDouble("%.2f",1.00) + "%";
         } else {
-            pos_max_rate = DataUtils.getAnyPointDouble("%.2f",uperHalfHigh / initialWeightedIndex * 100) + "%";
+            pos_max_rate = StringUtils.getAnyPointDouble("%.2f",uperHalfHigh / initialWeightedIndex * 100) + "%";
         }
 
         String close_rate = String.format("%.2f", 0.00) + "%";
 
         String pos_min_rate = "";
         if (isTimes && isSuspension) {
-            pos_min_rate = DataUtils.getAnyPointDouble("%.2f",-1.00) + "%";
+            pos_min_rate = StringUtils.getAnyPointDouble("%.2f",-1.00) + "%";
         } else {
-            pos_min_rate = DataUtils.getAnyPointDouble("%.2f",-uperHalfHigh / initialWeightedIndex * 100) + "%";
+            pos_min_rate = StringUtils.getAnyPointDouble("%.2f",-uperHalfHigh / initialWeightedIndex * 100) + "%";
         }
 
         fontHeight = r.height();
@@ -418,14 +419,14 @@ public class TimesFivesBitmap {
             } else {
                 uperBlueX = dataSpacing * i + leftMargin;
             }
-            DetailMap.put(DataUtils.getAnyPointDouble("%.2f",uperBlueX), fenshiData);
-            float endBlueY = (float) (uperBottom - (DetailMap.get(DataUtils.getAnyPointDouble("%.2f",uperBlueX)).getPrice()
+            DetailMap.put(StringUtils.getAnyPointDouble("%.2f",uperBlueX), fenshiData);
+            float endBlueY = (float) (uperBottom - (DetailMap.get(StringUtils.getAnyPointDouble("%.2f",uperBlueX)).getPrice()
                     + uperHalfHigh - initialWeightedIndex)
                     * uperRate);
             if (i == timesList.size() - 1) {
                 endBlueLastX = uperBlueX;
             }
-            float endYelloY = (float) (uperBottom - (DetailMap.get(DataUtils.getAnyPointDouble("%.2f",uperBlueX)).getAvg_price() + uperHalfHigh - initialWeightedIndex)
+            float endYelloY = (float) (uperBottom - (DetailMap.get(StringUtils.getAnyPointDouble("%.2f",uperBlueX)).getAvg_price() + uperHalfHigh - initialWeightedIndex)
                     * uperRate);
             //五日图绘制
             if (!isTimes) {
@@ -580,9 +581,9 @@ public class TimesFivesBitmap {
             DATA_MAX_COUNT = 302;
         }
         c = Calendar.getInstance();
-        List<StockMinuteData> timesorFivesList = new ArrayList<StockMinuteData>();
-        SimpleDateFormat date_format_get_year = new SimpleDateFormat("yyyy-MM-dd");
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        List<StockMinuteData> timesorFivesList = new ArrayList<>();
+        SimpleDateFormat date_format_get_year = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
         Date tmp_date = null;
         List<Date> unsorted_date_list = new ArrayList<>();
         Bitmap bitmap = Bitmap.createBitmap(viewWidth, viewHeight, Bitmap.Config.ARGB_8888);
@@ -624,7 +625,7 @@ public class TimesFivesBitmap {
                 String today = m + "-" + day;
                 dateList.add(today);
             }
-            if (timesorFivesList != null && timesorFivesList.size() > 0) {
+            if (timesorFivesList.size() > 0) {
                 StockMinuteData fiveDayData = timesorFivesList.get(0);
                 //分时和五日数据处理
                 double weightedIndex = fiveDayData.getPrice();

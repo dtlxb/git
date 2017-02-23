@@ -42,23 +42,31 @@ public abstract class BaseFragment extends Fragment implements IBase {
         return view;
     }
 
-    public View getRootView(){
+    public View getRootView() {
         return view;
     }
 
-    public XTitle setFragmentTitle(String title){
-        XTitle fragmentTitle= (XTitle) view.findViewById(R.id.title_bar);
-        if (!TextUtils.isEmpty(title)){
+    public XTitle setFragmentTitle(String title) {
+        XTitle fragmentTitle = (XTitle) view.findViewById(R.id.title_bar);
+        if (!TextUtils.isEmpty(title)) {
             fragmentTitle.setTitle(title);
             fragmentTitle.setTitleColor(Color.BLACK);
         }
         return fragmentTitle;
     }
 
+    public XTitle setFragmentTitle(int titleId) {
+        XTitle fragmentTitle = (XTitle) view.findViewById(R.id.title_bar);
+        fragmentTitle.setTitle(getString(titleId));
+        fragmentTitle.setTitleColor(Color.BLACK);
+        return fragmentTitle;
+    }
+
     /**
      * 初始化垂直列表的RecycleView
+     *
      * @param recyclerView:初始化对象;
-     * @param dividerId:分割线对象 : 0时为默认一条直线;int值 shape资源；null(不要分割线)
+     * @param dividerId:分割线对象     : 0时为默认一条直线;int值 shape资源；null(不要分割线)
      */
     public void initRecycleView(RecyclerView recyclerView, Integer dividerId) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());

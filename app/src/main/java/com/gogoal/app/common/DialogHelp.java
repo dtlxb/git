@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.gogoal.app.ui.widget.BottomSheetDialog;
+
 
 /**
  * 对话框辅助类
@@ -190,5 +192,15 @@ public class DialogHelp {
             window.setContentView(dialogView);
         }
         return dialog;
+    }
+
+    /**通用底部弹出窗*/
+    public static BottomSheetDialog getBottomSheelNormalDialog(Context context, View dialogView){
+        if (context!=null && dialogView!=null) {
+            BottomSheetDialog dialog = new BottomSheetDialog(context);
+            dialog.setContentView(dialogView);
+            return dialog;
+        }
+        return null;
     }
 }

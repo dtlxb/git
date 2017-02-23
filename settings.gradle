@@ -1,1 +1,1 @@
-include ':app', ':imagepicker', ':jsbridge'
+include ':app', ':imagepicker', ':jsbridge', ':uFileLib'
