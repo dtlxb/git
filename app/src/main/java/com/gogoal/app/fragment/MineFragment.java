@@ -66,9 +66,7 @@ public class MineFragment extends BaseFragment {
                 break;
             case R.id.btn_share:
                 View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_share_layout, new LinearLayout(getContext()), false);
-
 //                TextView tv= (TextView) dialogView.findViewById(R.id.tv_dialog_share_wx);
-
                 DialogHelp.getBottomSheelNormalDialog(getContext(), dialogView).show();
                 break;
         }

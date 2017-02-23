@@ -16,16 +16,19 @@ import android.os.PowerManager;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.alivc.player.AliVcMediaPlayer;
 import com.alivc.player.MediaPlayer;
 import com.gogoal.app.R;
 import com.gogoal.app.base.BaseActivity;
+import com.gogoal.app.common.DialogHelp;
 import com.gogoal.app.common.PlayerUtils.CountDownTimerView;
 import com.gogoal.app.common.PlayerUtils.PlayerControl;
 import com.gogoal.app.common.PlayerUtils.StatusListener;
@@ -655,7 +658,6 @@ public class PlayerActivity extends BaseActivity {
         }
 
         super.onDestroy();
-        return;
     }
 
     @Override
@@ -744,6 +746,9 @@ public class PlayerActivity extends BaseActivity {
             case R.id.imgPlayerRelaterVideo:
                 break;
             case R.id.imgPlayerShare:
+                View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_share_layout, new LinearLayout(getContext()), false);
+//                TextView tv= (TextView) dialogView.findViewById(R.id.tv_dialog_share_wx);
+                DialogHelp.getBottomSheelNormalDialog(getContext(), dialogView).show();
                 break;
             case R.id.imgPlayerShotCut:
                 break;
