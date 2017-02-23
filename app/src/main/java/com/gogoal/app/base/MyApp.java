@@ -4,9 +4,13 @@ import android.app.Application;
 import android.content.Context;
 
 import com.avos.avoscloud.AVOSCloud;
+import com.avos.avoscloud.im.v2.AVIMClient;
+import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
+import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.gogoal.app.common.AppConst;
+import com.gogoal.app.common.IMHelpers.AVImClientManager;
 import com.gogoal.app.common.IMHelpers.MyConversationHandler;
 import com.gogoal.app.common.IMHelpers.MyMessageHandler;
 import com.gogoal.app.common.SPTools;
@@ -45,6 +49,13 @@ public class MyApp extends Application {
         //注册默认的消息处理逻辑
         AVIMMessageManager.registerMessageHandler(AVIMMessage.class, new MyMessageHandler());
         AVIMMessageManager.setConversationEventHandler(new MyConversationHandler());
+
+        //连接服务器
+        AVImClientManager.getInstance().open(AppConst.LEAN_CLOUD_TOKEN, new AVIMClientCallback() {
+            @Override
+            public void done(AVIMClient avimClient, AVIMException e) {
+            }
+        });
 
         //只有主进程运行的时候才需要初始化
         if (getApplicationInfo().packageName.equals(getMyProcessName())){

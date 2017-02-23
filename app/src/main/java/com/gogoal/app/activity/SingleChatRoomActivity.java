@@ -11,6 +11,7 @@ import com.avos.avoscloud.im.v2.callback.AVIMConversationCreatedCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
 import com.gogoal.app.R;
 import com.gogoal.app.base.BaseActivity;
+import com.gogoal.app.common.AppConst;
 import com.gogoal.app.common.IMHelpers.AVImClientManager;
 import com.gogoal.app.fragment.ChatFragment;
 
@@ -35,14 +36,14 @@ public class SingleChatRoomActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        String memberID = this.getIntent().getExtras().getString("member_id");
-        String userName = this.getIntent().getExtras().getString("userName");
-        setMyTitle(userName + "聊天窗口", false);
+        /*String memberID = this.getIntent().getExtras().getString("member_id");
+        String userName = this.getIntent().getExtras().getString("userName");*/
+        setMyTitle(AppConst.LEAN_CLOUD_TOKEN + "聊天窗口", false);
 
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
         //输入聊天对象ID，返回conversation对象
         //getSingleConversation(memberID);
-        getSingleConversation("明天");
+        getSingleConversation("2046");
     }
 
     public void getSingleConversation(String memberID) {
