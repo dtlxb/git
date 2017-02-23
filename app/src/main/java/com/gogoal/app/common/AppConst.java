@@ -35,4 +35,6 @@ public class AppConst {
     public static final String REFRESH_TOKEN_URL =
             "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=%s&grant_type=refresh_token&refresh_token=%s";
 
+    public static final String LEAN_CLOUD_TOKEN = "比尔森007";
+
 }

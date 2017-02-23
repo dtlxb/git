@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.gogoal.app.R;
 import com.gogoal.app.activity.FunctionActivity;
-import com.gogoal.app.activity.IMRegisterActivity;
+import com.gogoal.app.activity.SingleChatRoomActivity;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.CommonAdapter;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.wrapper.HeaderAndFooterWrapper;
@@ -91,9 +91,11 @@ public class FoundFragment extends BaseFragment {
         return wraper;
     }
 
-    /**模拟数据，后续可以简单修改变成服务端请求数据*/
+    /**
+     * 模拟数据，后续可以简单修改变成服务端请求数据
+     */
     private List<FoundData> getFunctionDatas() {
-        String[] titles=getResources().getStringArray(R.array.found_title);
+        String[] titles = getResources().getStringArray(R.array.found_title);
 
         int[][] iconArray = {{R.mipmap.function_icon_onlive, R.mipmap.function_icon_report,
                 R.mipmap.function_icon_school, R.mipmap.function_icon_1q},
@@ -108,10 +110,10 @@ public class FoundFragment extends BaseFragment {
             List<FoundData.ItemPojos> itemPojoses = new ArrayList<>();
 
             for (int j = 0; j < iconArray[i].length; j++) {
-                itemPojoses.add(new FoundData.ItemPojos(iconDescription[i][j],iconArray[i][j],"https://m.baidu.com"));
+                itemPojoses.add(new FoundData.ItemPojos(iconDescription[i][j], iconArray[i][j], "https://m.baidu.com"));
             }
 
-            datas.add(new FoundData(itemPojoses,titles[i]));
+            datas.add(new FoundData(itemPojoses, titles[i]));
         }
 
         return datas;
@@ -130,17 +132,17 @@ public class FoundFragment extends BaseFragment {
             List<FoundData.ItemPojos> itemPojos = foundData.getItemPojos();
             if (itemPojos != null) {
                 if (itemPojos.size() % 3 == 2) {
-                    FoundData.ItemPojos itemPojos1 = new FoundData.ItemPojos("",0,"");
+                    FoundData.ItemPojos itemPojos1 = new FoundData.ItemPojos("", 0, "");
                     itemPojos.add(itemPojos1);
                 } else if (itemPojos.size() % 3 == 1) {
-                    FoundData.ItemPojos itemPojos1 = new FoundData.ItemPojos("",0,"");
+                    FoundData.ItemPojos itemPojos1 = new FoundData.ItemPojos("", 0, "");
                     itemPojos.add(itemPojos1);
 
-                    FoundData.ItemPojos itemPojos2 = new FoundData.ItemPojos("",0,"");
+                    FoundData.ItemPojos itemPojos2 = new FoundData.ItemPojos("", 0, "");
                     itemPojos.add(itemPojos2);
                 }
 
-                GridAdapter gridAdapter = new GridAdapter(itemPojos,position);
+                GridAdapter gridAdapter = new GridAdapter(itemPojos, position);
                 RecyclerView recyclerView = holder.getView(R.id.rv_grid);
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
                 recyclerView.setAdapter(gridAdapter);
@@ -178,11 +180,11 @@ public class FoundFragment extends BaseFragment {
 
             ImageView imageIcon = holder.getView(R.id.iv);
             ViewGroup.LayoutParams viewParams = imageIcon.getLayoutParams();
-            viewParams.width=AppDevice.getWidth(getContext())/9;
-            viewParams.height=AppDevice.getWidth(getContext())/9;
+            viewParams.width = AppDevice.getWidth(getContext()) / 9;
+            viewParams.height = AppDevice.getWidth(getContext()) / 9;
             imageIcon.setLayoutParams(viewParams);
 
-            ImageDisplay.loadResImage(getContext(),itemPojos.getIconRes(),imageIcon);
+            ImageDisplay.loadResImage(getContext(), itemPojos.getIconRes(), imageIcon);
 
             final TypedValue typeValue = new TypedValue();
 
@@ -192,15 +194,14 @@ public class FoundFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     if (!TextUtils.isEmpty(itemPojos.getUrl())) {//由于增加了headView,所以父Item是从1开始的
-                        if (parentPosition==1 && position==0){
+                        if (parentPosition == 1 && position == 0) {
                             startActivity(new Intent(getContext(), FunctionActivity.class));
-                        }else if (parentPosition==1 && position==1){
-                            startActivity(new Intent(getContext(), IMRegisterActivity.class));
-                        }
-                        else {
+                        } else if (parentPosition == 1 && position == 1) {
+                            startActivity(new Intent(getContext(), SingleChatRoomActivity.class));
+                        } else {
                             Toast.makeText(getContext(), itemPojos.getIconDescription(), Toast.LENGTH_SHORT).show();
-                            Intent intent=new Intent(getContext(),FunctionActivity.class);
-                            intent.putExtra("function_url",itemPojos.getUrl());
+                            Intent intent = new Intent(getContext(), FunctionActivity.class);
+                            intent.putExtra("function_url", itemPojos.getUrl());
                             startActivity(intent);
                         }
                     }
