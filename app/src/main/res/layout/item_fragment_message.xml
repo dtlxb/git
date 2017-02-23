@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/head_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/timg" />
+
+        <TextView
+            android:id="@+id/whose_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="50dp"
+            android:text="JR屎密斯"
+            android:textColor="@color/textColor_333333"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/last_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="50dp"
+            android:lines="1"
+            android:text="你晚饭还吃不吃了，不吃我吃了"
+            android:textColor="@color/textColor_666666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/last_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="今天下午"
+            android:textColor="@color/textColor_999999"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

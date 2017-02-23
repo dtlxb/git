@@ -21,6 +21,8 @@ import com.gogoal.app.common.BuildProperties;
 import com.gogoal.app.ui.view.XTitle;
 import com.hply.imagepicker.view.SystemBarTintManager;
 
+import org.simple.eventbus.EventBus;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -47,6 +49,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         ButterKnife.bind(this);
 
         initView(mContentView);
+
+        EventBus.getDefault().register(this);
 
         doBusiness(this);
     }
@@ -250,4 +254,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         return this;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }
