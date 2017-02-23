@@ -35,6 +35,16 @@ import butterknife.ButterKnife;
 public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     private View mContentView;
+    private boolean immersive;
+
+    public boolean needImmersive() {
+        return immersive;
+    }
+
+    @Override
+    public void setImmersive(boolean immersive) {
+        this.immersive = immersive;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +54,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
         setContentView(mContentView);
 
-        setStatusBar();
-
         ButterKnife.bind(this);
 
         initView(mContentView);
@@ -53,10 +61,18 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         EventBus.getDefault().register(this);
 
         doBusiness(this);
+
+        if (!needImmersive()) {
+            Window window = getWindow();
+            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            setStatusBar();
+        }
     }
 
     /**
-     * 通配 状态栏
+     * 非沉浸式通配 状态栏
      * <p>
      * if(miui){
      * 执行miui方案
@@ -75,14 +91,13 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
             setMIUIStatusBarTextColor(this, 1);
             setImmersive(true);
             setStatusColor(R.color.colorTitle);
-
         } else if (isFlyme()) {
             setMeizuStatusBarDarkIcon(this, true);
             setStatusColor(R.color.colorTitle);
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                getWindow().setStatusBarColor(ContextCompat.getColor(this,R.color.colorTitle));
+                getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorTitle));
             } else {
                 setStatusColor(android.R.color.black);
             }
@@ -94,14 +109,14 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     }
 
-    public View getRootView(){
+    public View getRootView() {
         return mContentView;
     }
 
     /**
      * 设置通知栏背景颜色
      *
-     * @param colorResId
+     * @param colorResId 颜色资源Id值；
      */
     protected void setStatusColor(@ColorRes int colorResId) {
         if (colorResId != -1) {
@@ -145,18 +160,18 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
      * @param dividerId:分割线对象     : 0时为默认一条直线;int值 shape资源；null(不要分割线)
      */
     public void initRecycleView(RecyclerView recyclerView, Integer dividerId) {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         if (dividerId != null) {
             if (dividerId != 0x00) {
                 try {
-                    DividerItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL);
-                    itemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), dividerId));//R.drawable.shape_divider
+                    DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
+                    itemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), dividerId));//R.drawable.shape_divider
                     recyclerView.addItemDecoration(itemDecoration);
                 } catch (Exception e) {
                     throw new IllegalArgumentException("initRecycleView(RecyclerView,Integer)第二个参数必须是一个分割线shape资源或者填0或者null");
                 }
             } else {
-                DividerItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL);
+                DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
                 recyclerView.addItemDecoration(itemDecoration);
             }
         }
@@ -250,17 +265,13 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         }
     }
 
-    public BaseActivity getActivity() {
-        return this;
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
 
-    public BaseActivity getContext(){
+    public BaseActivity getContext() {
         return BaseActivity.this;
     }
 }
