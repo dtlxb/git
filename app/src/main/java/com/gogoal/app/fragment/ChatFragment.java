@@ -101,6 +101,7 @@ public class ChatFragment extends BaseFragment {
             //拉取历史记录(直接从LeanCloud拉取)
             //getHistoryMessage();
 
+            boolean isNeedAdd = true;
             JSONObject jsonObject = new JSONObject();
 
             jsonObject.put("conversationID", imConversation.getConversationId());
@@ -113,11 +114,16 @@ public class ChatFragment extends BaseFragment {
             if (jsonArray == null) {
                 jsonArray = new JSONArray();
             }
-            if (!jsonArray.contains(jsonObject)) {
+            for (int i = 0; i < jsonArray.size(); i++) {
+                if (jsonArray.getJSONObject(i).get("conversationID").equals(jsonObject.get("conversationID"))) {
+                    isNeedAdd = false;
+                } else {
+
+                }
+            }
+            if (isNeedAdd){
                 jsonArray.add(jsonObject);
                 SPTools.saveJsonArray("conversation_beans", jsonArray);
-            } else {
-
             }
         }
     }

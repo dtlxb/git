@@ -9,7 +9,7 @@ import java.util.Calendar;
  * Created by huangxx on 2017/2/14.
  */
 
-public class stockUtils {
+public class StockUtils {
     /**
      * 存储自选股
      *
@@ -77,7 +77,7 @@ public class stockUtils {
 
     //判断是否已添加自选股
     public static boolean isMyStocks(String stockCode) {
-        com.alibaba.fastjson.JSONArray array = stockUtils.getStocks();
+        com.alibaba.fastjson.JSONArray array = StockUtils.getStocks();
         boolean flag = false;
         for (int i = 0; i < array.size(); i++) {
             JSONObject list = array.getJSONObject(i);

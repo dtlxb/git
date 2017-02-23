@@ -45,7 +45,6 @@ public class MessageFragment extends BaseFragment {
         super.onResume();
 
         JSONArray jsonArray = SPTools.getJsonArray("conversation_beans", null);
-        Log.e("+++jsonArray", jsonArray + "");
 
         List<JSONObject> jsonObjects = new ArrayList<>();
         jsonObjects.clear();
