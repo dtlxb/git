@@ -20,7 +20,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.alivc.player.AliVcMediaPlayer;
@@ -127,9 +126,7 @@ public class PlayerActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        setImmersive(true);
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
