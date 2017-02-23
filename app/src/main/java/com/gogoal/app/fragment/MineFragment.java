@@ -2,12 +2,10 @@ package com.gogoal.app.fragment;
 
 
 import android.content.Context;
-<<<<<<<HEAD
-import android.text.Layout;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.content.Intent;
 
 import com.gogoal.app.R;
 import com.gogoal.app.activity.PlayerActivity;
@@ -18,8 +16,6 @@ import com.hply.imagepicker.ITakePhoto;
 import com.socks.library.KLog;
 
 import java.util.List;
-
-import butterknife.OnClick;
 
 import butterknife.OnClick;
 
@@ -60,7 +56,7 @@ public class MineFragment extends BaseFragment {
                 });
                 break;
             case R.id.btn_share:
-                
+
                 View dialogView= LayoutInflater.from(getContext()).inflate(R.layout.dialog_share_layout,new LinearLayout(getContext()),false);
                 DialogHelp.getBottomSheelNormalDialog(getContext(),dialogView).show();
                 break;
