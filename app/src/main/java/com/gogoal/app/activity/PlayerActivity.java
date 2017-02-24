@@ -743,6 +743,8 @@ public class PlayerActivity extends BaseActivity {
             case R.id.imgPlayerChat:
                 break;
             case R.id.imgPlayerProfiles:
+                View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_anchor_introduction, new LinearLayout(getContext()), false);
+                DialogHelp.getBottomSheelNormalDialog(getContext(), dialogView).show();
                 break;
             case R.id.imgPlayerRelaterVideo:
                 break;

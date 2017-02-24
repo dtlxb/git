@@ -244,7 +244,6 @@ public class UIHelper {
 
     /*
     * 微信分享弹窗
-    *
     * */
     public static void showShareDialog(final Context context, final String url, final String imageUrl, final String title, final String description) {
 
