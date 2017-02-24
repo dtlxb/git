@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="horizontal"
+    android:paddingBottom="16dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp">
+
+    <FrameLayout
+        android:layout_width="153dp"
+        android:layout_height="86dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="10dp">
+
+        <ImageView
+            android:id="@+id/relater_img"
+            android:layout_width="match_parent"
+            android:layout_height="86dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/dave" />
+
+        <RelativeLayout
+            android:id="@+id/relative_player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginTop="7dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:background="@drawable/shape_relater_invite"
+                android:text="邀约"
+                android:textColor="@android:color/white"
+                android:textSize="11dp" />
+
+            <TextView
+                android:id="@+id/text_playback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/shape_relater_playback"
+                android:text="市场解读"
+                android:textColor="@android:color/white"
+                android:textSize="11dp" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/relater_tittle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="证券投资基金课堂证券投资基金课堂证券投"
+            android:textColor="@color/textColor_333333"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/relater_play_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:drawableLeft="@mipmap/play_count"
+            android:drawablePadding="6dp"
+            android:gravity="center_vertical"
+            android:text="1.5万次"
+            android:textColor="@color/relater_play_count"
+            android:textSize="12dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/relater_avatar"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:scaleType="fitXY"
+                android:src="@mipmap/play_count" />
+
+            <TextView
+                android:id="@+id/relater_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="3dp"
+                android:layout_toRightOf="@+id/relater_avatar"
+                android:text="孙永刚"
+                android:textColor="@color/relater_play_count"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/relater_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="中国私募基金风云榜"
+                android:textColor="@color/relater_play_count"
+                android:textSize="12dp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

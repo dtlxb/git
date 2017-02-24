@@ -13,6 +13,7 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -22,12 +23,17 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.alivc.player.AliVcMediaPlayer;
 import com.alivc.player.MediaPlayer;
 import com.gogoal.app.R;
+import com.gogoal.app.adapter.recycleviewAdapterHelper.CommonAdapter;
+import com.gogoal.app.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import com.gogoal.app.base.BaseActivity;
+import com.gogoal.app.bean.RelaterVideoData;
 import com.gogoal.app.common.DialogHelp;
 import com.gogoal.app.common.PlayerUtils.CountDownTimerView;
 import com.gogoal.app.common.PlayerUtils.PlayerControl;
@@ -35,6 +41,7 @@ import com.gogoal.app.common.PlayerUtils.StatusListener;
 import com.gogoal.app.common.UIHelper;
 import com.socks.library.KLog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -740,15 +747,16 @@ public class PlayerActivity extends BaseActivity {
             R.id.imgPlayerShotCut, R.id.imgPlayerClose})
     public void setClickFunctionBar(View v) {
         switch (v.getId()) {
-            case R.id.imgPlayerChat:
+            case R.id.imgPlayerChat: //发消息
+
                 break;
-            case R.id.imgPlayerProfiles:
-                View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_anchor_introduction, new LinearLayout(getContext()), false);
-                DialogHelp.getBottomSheelNormalDialog(getContext(), dialogView).show();
+            case R.id.imgPlayerProfiles: //主播介绍
+                showAnchorProfiles();
                 break;
-            case R.id.imgPlayerRelaterVideo:
+            case R.id.imgPlayerRelaterVideo: //相关视频
+                showRelaterVideo();
                 break;
-            case R.id.imgPlayerShare:
+            case R.id.imgPlayerShare: //分享
                 UIHelper.showShareDialog(getContext(), null, null, "分享", "第一次分享");
                 break;
             case R.id.imgPlayerShotCut:
@@ -756,6 +764,46 @@ public class PlayerActivity extends BaseActivity {
             case R.id.imgPlayerClose:
                 finish();
                 break;
+        }
+    }
+
+    private void showAnchorProfiles() {
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_anchor_introduction, new LinearLayout(getContext()), false);
+
+        ImageView anchor_avatar = (ImageView) dialogView.findViewById(R.id.anchor_avatar);
+        TextView anchor_name = (TextView) dialogView.findViewById(R.id.anchor_name);
+        TextView anchor_position = (TextView) dialogView.findViewById(R.id.anchor_position);
+        TextView anchor_achieve = (TextView) dialogView.findViewById(R.id.anchor_achieve);
+        TextView anchor_intro = (TextView) dialogView.findViewById(R.id.anchor_intro);
+
+        DialogHelp.getBottomSheelNormalDialog(getContext(), dialogView).show();
+    }
+
+    private void showRelaterVideo() {
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_relater_video, new LinearLayout(getContext()), false);
+
+        RecyclerView recy_relater = (RecyclerView) dialogView.findViewById(R.id.recy_relater);
+        initRecycleView(recy_relater, null);
+
+        ArrayList<RelaterVideoData> data = new ArrayList<>();
+
+        RelaterVideoAdapter adapter = new RelaterVideoAdapter(getContext(), data);
+
+        recy_relater.setAdapter(adapter);
+
+        DialogHelp.getBottomSheelNormalDialog(getContext(), dialogView).show();
+    }
+
+    class RelaterVideoAdapter extends CommonAdapter<RelaterVideoData> {
+
+        public RelaterVideoAdapter(Context context, List<RelaterVideoData> data) {
+            super(context, R.layout.item_relater_video, data);
+        }
+
+        @Override
+        protected void convert(ViewHolder holder, final RelaterVideoData data, int position) {
+
+            holder.setAlpha(R.id.text_playback, (float) 0.5);
         }
     }
 }
