@@ -9,16 +9,24 @@ import android.view.View;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMConversation;
+import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.gogoal.app.R;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.CommonAdapter;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.MultiItemTypeAdapter;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import com.gogoal.app.base.BaseFragment;
+import com.gogoal.app.bean.BaseMessage;
+import com.gogoal.app.bean.IMMessageBean;
+import com.gogoal.app.common.AppConst;
 import com.gogoal.app.common.CalendarUtils;
 import com.gogoal.app.common.SPTools;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -29,7 +37,7 @@ public class MessageFragment extends BaseFragment {
 
     @BindView(R.id.message_recycler)
     RecyclerView message_recycler;
-    private List<JSONObject> jsonObjects = new ArrayList<>();
+    private List<IMMessageBean> IMMessageBeans = new ArrayList<>();
     private ListAdapter listAdapter;
 
     public MessageFragment() {
@@ -50,20 +58,17 @@ public class MessageFragment extends BaseFragment {
         super.onResume();
 
         JSONArray jsonArray = SPTools.getJsonArray("conversation_beans", null);
-
-        List<JSONObject> jsonObjects = new ArrayList<>();
-        jsonObjects.clear();
-        if (null != jsonArray) {
-            for (int i = 0; i < jsonArray.size(); i++) {
-                jsonObjects.add(jsonArray.getJSONObject(i));
-            }
-        }
-
-        Log.e("+++jsonObjects", jsonObjects.size() + "");
+        IMMessageBeans.clear();
 
         initRecycleView(message_recycler, 0);
 
-        listAdapter = new ListAdapter(getContext(), R.layout.item_fragment_message, jsonObjects);
+        if (null != jsonArray) {
+            IMMessageBeans = JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class);
+        }
+
+        Log.e("+++IMMessageBeans", IMMessageBeans + "");
+
+        listAdapter = new ListAdapter(getContext(), R.layout.item_fragment_message, IMMessageBeans);
 
         message_recycler.setAdapter(listAdapter);
 
@@ -82,18 +87,20 @@ public class MessageFragment extends BaseFragment {
 
     }
 
-    class ListAdapter extends CommonAdapter<JSONObject> {
+    class ListAdapter extends CommonAdapter<IMMessageBean> {
 
-        public ListAdapter(Context context, int layoutId, List<JSONObject> datas) {
+        public ListAdapter(Context context, int layoutId, List<IMMessageBean> datas) {
             super(context, layoutId, datas);
         }
 
         @Override
-        protected void convert(ViewHolder holder, JSONObject jsonObject, int position) {
+        protected void convert(ViewHolder holder, IMMessageBean messageBean, int position) {
             String dateStr = "";
             String message = "";
-            if (null != jsonObject.get("lastTime")) {
-                dateStr = CalendarUtils.parseDateFormat((Long) jsonObject.get("lastTime"));
+            String speaker = "";
+            List<String> members = new ArrayList<String>();
+            if (null != messageBean.getLastTime()) {
+                dateStr = CalendarUtils.parseStampToDate(messageBean.getLastTime());
             }
 
             /*if (jsonObject.get("lastMessage") instanceof AVIMTextMessage) {
@@ -104,16 +111,34 @@ public class MessageFragment extends BaseFragment {
                 message = "图片信息";
             }*/
 
-            Log.e("+++message", jsonObject.get("lastMessage") + "");
-            if (jsonObject.get("lastMessage") == null) {
+            members.clear();
+            members.addAll(messageBean.getSpeakerTo());
+            Log.e("+++members", members + "");
+            if (members.size() > 0) {
+                if (members.size() == 2) {
+                    //硬代码
+                    if (members.contains(AppConst.LEAN_CLOUD_TOKEN)) {
+                        members.remove(AppConst.LEAN_CLOUD_TOKEN);
+                        speaker = members.get(0);
+                        Log.e("+++members2", members + "");
+                    }
+                } else {
+                    speaker = "群聊房间";
+                }
+            } else {
+            }
+
+
+            Log.e("+++message", messageBean.getLastMessage() + "");
+            if (messageBean.getLastMessage() == null) {
                 message = "";
             } else {
-                JSONObject object = JSON.parseObject(jsonObject.getString("lastMessage"));
-                JSONObject contentObject=JSON.parseObject(object.getString("content"));
+                String content = messageBean.getLastMessage().getContent();
+                JSONObject contentObject = JSON.parseObject(content);
                 message = contentObject.getString("_lctext");
             }
 
-            holder.setText(R.id.whose_message, (String) jsonObject.get("speakerTo"));
+            holder.setText(R.id.whose_message, speaker);
             holder.setText(R.id.last_message, message);
             holder.setText(R.id.last_time, dateStr);
         }
@@ -122,20 +147,27 @@ public class MessageFragment extends BaseFragment {
     /**
      * 消息接收
      */
-    /*@Subscriber(tag = "IM_Message")
+    @Subscriber(tag = "IM_Message")
     public void handleMessage(BaseMessage baseMessage) {
-        if (null != imConversation && null != baseMessage) {
-            Map<String, Object> map = baseMessage.getOthers();
-            AVIMMessage message = (AVIMMessage) map.get("message");
-            AVIMConversation conversation = (AVIMConversation) map.get("conversation");
+        Map<String, Object> map = baseMessage.getOthers();
+        AVIMMessage message = (AVIMMessage) map.get("message");
+        AVIMConversation conversation = (AVIMConversation) map.get("conversation");
 
-            //判断房间一致然后做消息接收处理
-            if (imConversation.getConversationId().equals(conversation.getConversationId())) {
-                AVIMTextMessage msg = (AVIMTextMessage) message;
-                message_show.setText(msg.getText());
+
+        Log.e("+++thisMessage", message + "");
+
+        for (int i = 0; i < IMMessageBeans.size(); i++) {
+            if (IMMessageBeans.get(i).getConversationID().equals(conversation.getConversationId())) {
+                IMMessageBeans.get(i).setLastTime(String.valueOf(conversation.getLastMessageAt().getTime()));
+                IMMessageBeans.get(i).setLastMessage(message);
             }
         }
-    }*/
-
+        listAdapter.notifyDataSetChanged();
+        /*//判断房间一致然后做消息接收处理
+        if (imConversation.getConversationId().equals(conversation.getConversationId())) {
+            AVIMTextMessage msg = (AVIMTextMessage) message;
+            message_show.setText(msg.getText());
+        }*/
+    }
 
 }

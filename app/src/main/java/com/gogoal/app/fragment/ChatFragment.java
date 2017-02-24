@@ -23,7 +23,6 @@ import com.gogoal.app.common.UIHelper;
 
 import org.simple.eventbus.Subscriber;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,31 +102,12 @@ public class ChatFragment extends BaseFragment {
             //getHistoryMessage();
 
             boolean isNeedAdd = true;
-            String speaker = "";
-            List<String> members = new ArrayList<String>();
 
             JSONObject jsonObject = new JSONObject();
 
-            members = conversation.getMembers();
-            Log.e("+++members", members + "");
-            if (members.size() > 0) {
-                if (members.size() == 2) {
-                    //硬代码
-                    speaker = members.get(0);
-                    /*if (members.contains(AppConst.LEAN_CLOUD_TOKEN)) {
-                        members.remove(0);
-                        Log.e("+++members2", members + "");
-                    }*/
-                } else {
-                    speaker = "群聊房间";
-                }
-            } else {
-            }
-
             jsonObject.put("conversationID", imConversation.getConversationId());
             jsonObject.put("lastTime", imConversation.getLastMessageAt());
-            jsonObject.put("speakerTo", speaker);
-            Log.e("+++speakerTo", speaker + "");
+            jsonObject.put("speakerTo", imConversation.getMembers());
             jsonObject.put("lastMessage", imConversation.getLastMessage());
             jsonObject.put("unReadCounts", 10 + "");
             if (jsonArray == null) {

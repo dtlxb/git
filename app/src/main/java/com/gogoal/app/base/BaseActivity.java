@@ -20,7 +20,6 @@ import com.gogoal.app.R;
 import com.gogoal.app.common.BuildProperties;
 import com.gogoal.app.ui.view.XTitle;
 import com.hply.imagepicker.view.SystemBarTintManager;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.EventBus;
 
@@ -101,7 +100,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
                 getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.colorTitle));
             } else {
                 setStatusColor(android.R.color.black);
-                KLog.e("设置黑色");
             }
         }
     }
@@ -162,18 +160,18 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
      * @param dividerId:分割线对象     : 0时为默认一条直线;int值 shape资源；null(不要分割线)
      */
     public void initRecycleView(RecyclerView recyclerView, Integer dividerId) {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         if (dividerId != null) {
             if (dividerId != 0x00) {
                 try {
-                    DividerItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL);
-                    itemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), dividerId));//R.drawable.shape_divider
+                    DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
+                    itemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), dividerId));//R.drawable.shape_divider
                     recyclerView.addItemDecoration(itemDecoration);
                 } catch (Exception e) {
                     throw new IllegalArgumentException("initRecycleView(RecyclerView,Integer)第二个参数必须是一个分割线shape资源或者填0或者null");
                 }
             } else {
-                DividerItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL);
+                DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
                 recyclerView.addItemDecoration(itemDecoration);
             }
         }
@@ -265,10 +263,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         } catch (final Exception e) {
             return false;
         }
-    }
-
-    public BaseActivity getActivity() {
-        return this;
     }
 
     @Override
