@@ -419,7 +419,9 @@ public class PlayerActivity extends BaseActivity {
             }
         }
 
+        //添加播放器地址
         mPlayer.prepareAndPlay(mURI);
+
         if (mStatusListener != null)
             mStatusListener.notifyStatus(STATUS_START);
 
