@@ -19,6 +19,7 @@
 
     <!--直播-->
     <string name="live_together">一起直播</string>
+    <string name="anchor_introduction">主播介绍</string>
 
     <!--分享-->
     <string name="share_clone">关闭</string>

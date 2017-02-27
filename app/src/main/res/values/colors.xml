@@ -28,6 +28,9 @@
     <color name="online_number">#f44744</color>
     <color name="live_trailer">#5b5b5b</color>
     <color name="count_down">#FFA200</color>
+    <color name="relater_play_count">#9d9d9d</color>
+
+    <color name="relater_playback">#000000</color>
 
     <color name="wx_share_line">#e4e4e4</color>
 
