@@ -152,8 +152,8 @@ public class PlayerActivity extends BaseActivity {
 
         initSurface();
 
-        countDownTimer.addTime("2017-02-25 10:01:00");
-        countDownTimer.start();
+//        countDownTimer.addTime("2017-02-28 10:01:00");
+//        countDownTimer.start();
 
     }
 
