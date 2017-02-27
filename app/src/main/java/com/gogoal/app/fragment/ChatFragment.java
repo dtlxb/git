@@ -56,8 +56,6 @@ public class ChatFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
 
-        Log.e("+++funny", "ChatFragment start");
-
         jsonArray = SPTools.getJsonArray("conversation_beans", null);
 
         //发送消息(之后会改成向公司服务器发送消息，然后后台再处理给LeanCloud发送消息)
