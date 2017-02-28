@@ -5,12 +5,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.gogoal.app.R;
 import com.gogoal.app.activity.PlayerActivity;
 import com.gogoal.app.base.BaseFragment;
+import com.gogoal.app.common.AppDevice;
 import com.gogoal.app.common.AsyncTaskUtil;
 import com.gogoal.app.common.DialogHelp;
+import com.gogoal.app.common.ImageUtils.ImageDisplay;
 import com.gogoal.app.common.ImageUtils.ImageTakeUtils;
 import com.gogoal.app.common.UFileUpload;
 import com.gogoal.app.common.UIHelper;
@@ -20,12 +23,16 @@ import com.socks.library.KLog;
 import java.io.File;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
  * 我的
  */
 public class MineFragment extends BaseFragment {
+
+    @BindView(R.id.image_ad)
+    ImageView imageView;
 
     public MineFragment() {
     }
@@ -37,6 +44,11 @@ public class MineFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
+        ImageDisplay.loadRoundedRectangleImage(
+                mContext,
+                imageView,
+                AppDevice.dp2px(mContext,5),
+                R.mipmap.image_found_top_ad);
     }
 
     @OnClick({R.id.setWatchLive, R.id.btn_share, R.id.btn_upload})
@@ -63,7 +75,7 @@ public class MineFragment extends BaseFragment {
                 });
                 break;
             case R.id.btn_share:
-                UIHelper.showShareDialog(getContext(), null, null, "分享", "第一次分享");
+                UIHelper.showShareDialog(getActivity(), "https://m.baidu.com", "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
                 break;
         }
     }
@@ -83,7 +95,7 @@ public class MineFragment extends BaseFragment {
 
             @Override
             public void doInBackground() {
-                UFileUpload.getInstance().upload(new File(uriPaths.get(0)), new UFileUpload.UploadListener() {
+                UFileUpload.getInstance().upload(new File(uriPaths.get(0)), UFileUpload.Type.IMAGE, new UFileUpload.UploadListener() {
 
                     @Override
                     public void onUploading(final int progress) {

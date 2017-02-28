@@ -3,6 +3,8 @@ package com.gogoal.app.common;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.annotation.LayoutRes;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.TextUtils;
@@ -10,8 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.gogoal.app.R;
-import com.gogoal.app.ui.widget.BottomSheetDialog;
+import com.gogoal.app.ui.widget.BottomDialog;
 
 
 /**
@@ -198,11 +199,12 @@ public class DialogHelp {
     /**
      * 通用底部弹出窗
      */
-    public static BottomSheetDialog getBottomSheelNormalDialog(Context context, View dialogView) {
-        if (context != null && dialogView != null) {
-            BottomSheetDialog dialog = new BottomSheetDialog(context, R.style.BottomSheetSelectorDialogStyle);
-            dialog.setContentView(dialogView);
-            return dialog;
+    public static BottomDialog getBottomSheelNormalDialog(FragmentActivity context, @LayoutRes int dialogViewId) {
+        if (context != null ) {
+            return BottomDialog.create(context.getSupportFragmentManager())
+                    .setLayoutRes(dialogViewId)
+                    .setDimAmount(0.9f)
+                    .setTag("BottomDialog");
         }
         return null;
     }

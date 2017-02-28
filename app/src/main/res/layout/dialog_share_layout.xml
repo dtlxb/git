@@ -19,29 +19,29 @@
         <TextView
             android:id="@+id/tv_dialog_share_gogoal"
             style="@style/ShareDialogButton"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
             android:drawableTop="@mipmap/icon_share_gogoal"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
             android:text="GoGoal好友" />
 
         <TextView
             android:id="@+id/tv_dialog_share_wx"
             style="@style/ShareDialogButton"
             android:drawableTop="@mipmap/icon_share_friend"
-            android:text="@string/share_friend"/>
+            android:text="@string/share_friend" />
 
         <TextView
             android:id="@+id/tv_dialog_share_wx_circle"
             style="@style/ShareDialogButton"
             android:drawableTop="@mipmap/icon_share_wx_circle"
-            android:text="@string/share_wx_circle"/>
+            android:text="@string/share_wx_circle" />
 
         <TextView
             android:id="@+id/tv_dialog_share_copy"
             style="@style/ShareDialogButton"
             android:drawableTop="@mipmap/icon_share_copy"
             android:gravity="center"
-            android:text="@string/share_copy"/>
+            android:text="@string/share_copy" />
 
     </LinearLayout>
 

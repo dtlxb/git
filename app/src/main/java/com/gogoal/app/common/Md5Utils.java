@@ -9,10 +9,10 @@ import java.security.NoSuchAlgorithmException;
  * phone 18930640263
  */
 
-public class Md5Utils {
+public class MD5Utils {
     private static final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-    public static String Md5String(String originalString){
+    public static String getMD5EncryptyString(String originalString){
         return bytes2HexString(encryptMD5(originalString.getBytes()));
     }
 

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/dialog_top"
+        android:gravity="top"
+        android:textColor="#333333"
+        android:hint="随便说点什么吧"
+        android:padding="10dp"
+        android:textSize="14sp" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_dialog_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:padding="10dp"
+            android:src="@mipmap/icon_image_4" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/iv_dialog_camera"
+            android:layout_toRightOf="@+id/iv_dialog_camera"
+            android:contentDescription="@null"
+            android:padding="10dp"
+            android:src="@mipmap/icon_image_3" />
+
+        <com.gogoal.app.ui.view.SelectorButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:text="发送"
+            android:textColor="#939393"
+            android:textSize="16sp"
+            app:normalBackgroundColor="@android:color/white"
+            app:normalStrokeColor="@android:color/darker_gray"
+            app:normalStrokeWidth="2dp"
+            app:normalTextColor="@android:color/darker_gray"
+            app:radius="5dp" />
+    </RelativeLayout>
+</LinearLayout>
