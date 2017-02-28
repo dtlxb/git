@@ -3,10 +3,7 @@ package com.gogoal.app.common;
 import android.view.View;
 
 import com.gogoal.app.R;
-import com.gogoal.app.ui.widget.BottomDialog;
-
-import static com.gogoal.app.common.UIHelper.WXshare;
-import static com.gogoal.app.common.UIHelper.toast;
+import com.gogoal.app.ui.widget.ShareBottomDialog;
 
 /**
  * author wangjd on 2017/2/28 0028.
@@ -14,13 +11,13 @@ import static com.gogoal.app.common.UIHelper.toast;
  * phone 18930640263
  */
 public class ShareOnClick implements android.view.View.OnClickListener{
-    private BottomDialog dialog;
+    private ShareBottomDialog dialog;
     private String url;
     private String imageUrl;
     private String title;
     private String description;
 
-    public ShareOnClick(BottomDialog dialog, String url, String imageUrl, String title, String description) {
+    public ShareOnClick(ShareBottomDialog dialog, String url, String imageUrl, String title, String description) {
         this.dialog = dialog;
         this.url = url;
         this.imageUrl = imageUrl;

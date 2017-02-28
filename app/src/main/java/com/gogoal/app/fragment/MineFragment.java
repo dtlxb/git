@@ -75,7 +75,7 @@ public class MineFragment extends BaseFragment {
                 });
                 break;
             case R.id.btn_share:
-                UIHelper.showShareDialog(getActivity(), null, null, "分享", "第一次分享");
+                UIHelper.showShareDialog(getActivity(), "https://m.baidu.com", "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
                 break;
         }
     }
