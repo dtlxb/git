@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/live_chat_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="#FFFFFF"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/live_chat_edit"
+            android:layout_width="0dp"
+            android:layout_height="34dp"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/live_edite_border"
+            android:hint="请输入..."
+            android:paddingLeft="20dp"
+            android:textSize="14dp" />
+
+
+        <TextView
+            android:id="@+id/message_send"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="发送"
+            android:textColor="@color/online_number"
+            android:textSize="16sp" />
+    </LinearLayout>
+</LinearLayout>

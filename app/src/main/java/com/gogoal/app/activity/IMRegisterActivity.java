@@ -52,19 +52,12 @@ public class IMRegisterActivity extends BaseActivity {
 
         chat_room_login.setEnabled(false);
         login_et_username.setEnabled(false);
-        //连接服务器
-        AVImClientManager.getInstance().open(MyId, new AVIMClientCallback() {
-            @Override
-            public void done(AVIMClient avimClient, AVIMException e) {
-                chat_room_login.setEnabled(true);
-                login_et_username.setEnabled(true);
 
-                Intent intent = new Intent(IMRegisterActivity.this, SingleChatRoomActivity.class);
-                intent.putExtra("conversation_id", "58aaa02d8d6d8100636e8be9");
-                intent.putExtra("userName", login_et_username.getText().toString().trim());
-                startActivity(intent);
-                finish();
-            }
-        });
+        Intent intent = new Intent(IMRegisterActivity.this, SingleChatRoomActivity.class);
+        intent.putExtra("member_id", MyId);
+        intent.putExtra("userName", MyId);
+        startActivity(intent);
+        finish();
     }
+
 }

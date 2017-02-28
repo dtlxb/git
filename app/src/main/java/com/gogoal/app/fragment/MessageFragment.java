@@ -2,6 +2,7 @@ package com.gogoal.app.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.gogoal.app.R;
+import com.gogoal.app.activity.SingleChatRoomActivity;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.CommonAdapter;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.MultiItemTypeAdapter;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.base.ViewHolder;
@@ -20,11 +22,14 @@ import com.gogoal.app.bean.BaseMessage;
 import com.gogoal.app.bean.IMMessageBean;
 import com.gogoal.app.common.AppConst;
 import com.gogoal.app.common.CalendarUtils;
+import com.gogoal.app.common.IMHelpers.MessageUtils;
 import com.gogoal.app.common.SPTools;
 
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +44,7 @@ public class MessageFragment extends BaseFragment {
     RecyclerView message_recycler;
     private List<IMMessageBean> IMMessageBeans = new ArrayList<>();
     private ListAdapter listAdapter;
+    private JSONArray jsonArray;
 
     public MessageFragment() {
     }
@@ -57,13 +63,23 @@ public class MessageFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 
-        JSONArray jsonArray = SPTools.getJsonArray("conversation_beans", null);
+        jsonArray = SPTools.getJsonArray("conversation_beans", new JSONArray());
         IMMessageBeans.clear();
 
         initRecycleView(message_recycler, 0);
 
         if (null != jsonArray) {
             IMMessageBeans = JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class);
+        }
+
+        if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
+            //按照时间排序
+            Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
+                @Override
+                public int compare(IMMessageBean object1, IMMessageBean object2) {
+                    return Long.compare(Long.parseLong(object2.getLastTime()), Long.parseLong(object1.getLastTime()));
+                }
+            });
         }
 
         Log.e("+++IMMessageBeans", IMMessageBeans + "");
@@ -76,7 +92,23 @@ public class MessageFragment extends BaseFragment {
         listAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                String conversation_id = IMMessageBeans.get(position).getConversationID();
+                String member_id = "";
+                Intent intent;
 
+                //单聊处理
+                List<String> members = new ArrayList<>();
+                intent = new Intent(getContext(), SingleChatRoomActivity.class);
+                members.clear();
+                members.addAll(IMMessageBeans.get(position).getSpeakerTo());
+                if (members.size() == 2) {
+                    if (members.contains(AppConst.LEAN_CLOUD_TOKEN)) {
+                        members.remove(AppConst.LEAN_CLOUD_TOKEN);
+                        member_id = members.get(0);
+                    }
+                }
+                intent.putExtra("member_id", member_id);
+                startActivity(intent);
             }
 
             @Override
@@ -152,22 +184,41 @@ public class MessageFragment extends BaseFragment {
         Map<String, Object> map = baseMessage.getOthers();
         AVIMMessage message = (AVIMMessage) map.get("message");
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
-
-
-        Log.e("+++thisMessage", message + "");
+        boolean isTheSame = false;
 
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(conversation.getConversationId())) {
                 IMMessageBeans.get(i).setLastTime(String.valueOf(conversation.getLastMessageAt().getTime()));
                 IMMessageBeans.get(i).setLastMessage(message);
+                MessageUtils.saveMessageInfo(jsonArray, conversation);
+                isTheSame = true;
+            } else {
             }
         }
+
+        if (!isTheSame) {
+            IMMessageBean imMessageBean = new IMMessageBean();
+            imMessageBean.setConversationID(conversation.getConversationId());
+            imMessageBean.setLastMessage(message);
+            imMessageBean.setLastTime(String.valueOf(conversation.getLastMessageAt().getTime()));
+            imMessageBean.setSpeakerTo(conversation.getMembers());
+            imMessageBean.setUnReadCounts("99");
+
+            IMMessageBeans.add(imMessageBean);
+            MessageUtils.saveMessageInfo(jsonArray, conversation);
+        }
+
+        if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
+            Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
+                @Override
+                public int compare(IMMessageBean object1, IMMessageBean object2) {
+                    return Long.compare(Long.parseLong(object2.getLastTime()), Long.parseLong(object1.getLastTime()));
+                }
+            });
+        }
+
         listAdapter.notifyDataSetChanged();
-        /*//判断房间一致然后做消息接收处理
-        if (imConversation.getConversationId().equals(conversation.getConversationId())) {
-            AVIMTextMessage msg = (AVIMTextMessage) message;
-            message_show.setText(msg.getText());
-        }*/
+
     }
 
 }

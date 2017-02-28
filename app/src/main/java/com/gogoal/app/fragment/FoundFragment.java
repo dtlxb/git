@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.gogoal.app.R;
 import com.gogoal.app.activity.FunctionActivity;
+import com.gogoal.app.activity.IMRegisterActivity;
 import com.gogoal.app.activity.SingleChatRoomActivity;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.CommonAdapter;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.base.ViewHolder;
@@ -197,7 +198,7 @@ public class FoundFragment extends BaseFragment {
                         if (parentPosition == 1 && position == 0) {
                             startActivity(new Intent(getContext(), FunctionActivity.class));
                         } else if (parentPosition == 1 && position == 1) {
-                            startActivity(new Intent(getContext(), SingleChatRoomActivity.class));
+                            startActivity(new Intent(getContext(), IMRegisterActivity.class));
                         } else {
                             Toast.makeText(getContext(), itemPojos.getIconDescription(), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getContext(), FunctionActivity.class);
