@@ -2,6 +2,7 @@ package com.gogoal.app.common.ImageUtils;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.IntegerRes;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
@@ -17,6 +18,7 @@ import java.io.File;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import jp.wasabeef.glide.transformations.gpu.PixelationFilterTransformation;
 
 /**
@@ -106,6 +108,30 @@ public class ImageDisplay {
         }
     }
 
+    //=====================================圆角矩形=======================================
+
+    /**
+     * @param context 上下文对象
+     * @param radius  圆角矩形角度
+     * @param res      图片资源res
+     * */
+    public static void loadRoundedRectangle(Context context,ImageView imageView,int radius,@IntegerRes int res){
+        Glide.with(context)
+                .load(res)
+                .bitmapTransform(new RoundedCornersTransformation(context,radius,0))
+                .into(imageView);
+    }
+    /**
+     * @param context   上下文对象
+     * @param radius    圆角矩形角度
+     * @param imageUrl  图片url地址
+     * */
+    public static void loadRoundedRectangle(Context context,ImageView imageView,int radius,String imageUrl){
+        Glide.with(context)
+                .load(imageUrl)
+                .bitmapTransform(new RoundedCornersTransformation(context,radius,0))
+                .into(imageView);
+    }
     //=====================================加载GIF图=======================================
     public static void loadGifResImage(Context context, int resId, ImageView view) {
 //        Glide.with(context).load(resId)

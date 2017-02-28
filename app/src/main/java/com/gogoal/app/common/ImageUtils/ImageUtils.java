@@ -308,8 +308,7 @@ public class ImageUtils {
         InputStream in = null;
         try {
             in = new FileInputStream(file);
-            String type = getImageType(in);
-            return type;
+            return getImageType(in);
         } catch (IOException e) {
             return null;
         } finally {
@@ -318,6 +317,7 @@ public class ImageUtils {
                     in.close();
                 }
             } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

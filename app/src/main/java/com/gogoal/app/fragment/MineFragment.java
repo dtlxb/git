@@ -83,7 +83,7 @@ public class MineFragment extends BaseFragment {
 
             @Override
             public void doInBackground() {
-                UFileUpload.getInstance().upload(new File(uriPaths.get(0)), new UFileUpload.UploadListener() {
+                UFileUpload.getInstance().upload(new File(uriPaths.get(0)), UFileUpload.Type.IMAGE ,new UFileUpload.UploadListener() {
 
                     @Override
                     public void onUploading(final int progress) {

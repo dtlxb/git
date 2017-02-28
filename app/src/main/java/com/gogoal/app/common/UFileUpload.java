@@ -26,7 +26,8 @@ import cn.ucloud.ufilesdk.UFileUtils;
 
 public class UFileUpload {
 
-    private static final String bucket="hackfile";
+    private static final String bucket = "hackfile";
+
     private UFileUpload() {
     }
 
@@ -37,7 +38,7 @@ public class UFileUpload {
             synchronized (UFileUpload.class) {
                 if (instance == null) {
                     instance = new UFileUpload();
-                    uFileSDK=new UFileSDK(bucket);//域名后缀
+                    uFileSDK = new UFileSDK(bucket);//域名后缀
                 }
             }
         }
@@ -55,15 +56,53 @@ public class UFileUpload {
         void onFailed();
     }
 
-    public void upload(final File file, final UploadListener listener) {
+    /**
+     * 枚举四中类型
+     */
+    public enum Type {
+        IMAGE(0), AUDIO(1), VIDEO(2), FILE(4);
+
+        int type;
+
+        Type(int type) {
+            this.type = type;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
+    }
+
+    public void upload(final File file, Type type, final UploadListener listener) {
 
         String http_method = "PUT";
+
         String content_md5 = UFileUtils.getFileMD5(file);
-        String content_type = ImageUtils.getImageType(file);
+
+        String content_type = null;
+        switch (type) {
+            case IMAGE:
+                content_type = ImageUtils.getImageType(file);
+                break;
+            case AUDIO:
+                content_type = "audio/amr";
+                break;
+            case VIDEO:
+                content_type = "video/mpeg4";
+                break;
+            case FILE:
+                content_type = "application/octet-stream";//文件
+                break;
+        }
+
         String date = "";
 
         String key_name = MyApp.getContext().getString(R.string.app_name) + "_" +
-                Md5Utils.Md5String(file.getPath()) +
+                MD5Utils.getMD5EncryptyString(file.getPath()) +
                 file.getPath().substring(file.getPath().lastIndexOf('.'));
 
         String authorization = getAuthorization(http_method, content_md5, content_type, date, bucket, key_name);
@@ -93,6 +132,9 @@ public class UFileUpload {
 
     }
 
+    /**
+     * UCloud签名
+     */
     private String getAuthorization(String http_method, String content_md5, String content_type, String date, String bucket, String key) {
         String signature = "";
         try {
