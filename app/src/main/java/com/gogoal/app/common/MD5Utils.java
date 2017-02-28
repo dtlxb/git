@@ -1,4 +1,4 @@
-﻿package com.gogoal.app.common;
+package com.gogoal.app.common;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
