@@ -39,6 +39,7 @@ import com.gogoal.app.common.PlayerUtils.CountDownTimerView;
 import com.gogoal.app.common.PlayerUtils.PlayerControl;
 import com.gogoal.app.common.PlayerUtils.StatusListener;
 import com.gogoal.app.common.UIHelper;
+import com.gogoal.app.ui.widget.BottomDialog;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -778,7 +779,13 @@ public class PlayerActivity extends BaseActivity {
         TextView anchor_achieve = (TextView) dialogView.findViewById(R.id.anchor_achieve);
         TextView anchor_intro = (TextView) dialogView.findViewById(R.id.anchor_intro);
 
-        DialogHelp.getBottomSheelNormalDialog(getContext(), dialogView).show();
+        DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_anchor_introduction).setViewListener(new BottomDialog.ViewListener() {
+            @Override
+            public void bindView(View v) {
+
+            }
+        });
+
     }
 
     private void showRelaterVideo() {
@@ -793,7 +800,13 @@ public class PlayerActivity extends BaseActivity {
 
         recy_relater.setAdapter(adapter);
 
-        DialogHelp.getBottomSheelNormalDialog(getContext(), dialogView).show();
+        BottomDialog dialog = DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_relater_video);
+        dialog.setViewListener(new BottomDialog.ViewListener() {
+            @Override
+            public void bindView(View v) {
+                //弹窗内控件点击
+            }
+        }).show();
     }
 
     class RelaterVideoAdapter extends CommonAdapter<RelaterVideoData> {

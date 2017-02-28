@@ -1,21 +1,19 @@
 package com.gogoal.app.common;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.design.widget.Snackbar;
-import android.text.ClipboardManager;
+import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gogoal.app.R;
 import com.gogoal.app.base.MyApp;
+import com.gogoal.app.ui.widget.BottomDialog;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
@@ -245,52 +243,25 @@ public class UIHelper {
     /*
     * 微信分享弹窗
     * */
-    public static void showShareDialog(final Context context, final String url, final String imageUrl, final String title, final String description) {
+    public static void showShareDialog(final FragmentActivity context, final String url, final String imageUrl, final String title, final String description) {
 
-        final View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_share_layout, new LinearLayout(context), false);
+        final BottomDialog shareDialog = DialogHelp.getBottomSheelNormalDialog(context, R.layout.dialog_share_layout);
 
-        final Dialog share_dialog = DialogHelp.getBottomSheelNormalDialog(context, dialogView);
-
-        TextView share_gogoal = (TextView) dialogView.findViewById(R.id.tv_dialog_share_gogoal);
-        TextView share_wx = (TextView) dialogView.findViewById(R.id.tv_dialog_share_wx);
-        TextView share_wx_circle = (TextView) dialogView.findViewById(R.id.tv_dialog_share_wx_circle);
-        TextView share_copy = (TextView) dialogView.findViewById(R.id.tv_dialog_share_copy);
-        TextView btn_dialog_cancle = (TextView) dialogView.findViewById(R.id.btn_dialog_cancle);
-
-        //设置按钮监听
-        View.OnClickListener shareOnClick = new View.OnClickListener() {
+        shareDialog.setViewListener(new BottomDialog.ViewListener() {
             @Override
-            public void onClick(View view) {
-                share_dialog.dismiss();
+            public void bindView(View dialogView) {
+                TextView share_gogoal = (TextView) dialogView.findViewById(R.id.tv_dialog_share_gogoal);
+                TextView share_wx = (TextView) dialogView.findViewById(R.id.tv_dialog_share_wx);
+                TextView share_wx_circle = (TextView) dialogView.findViewById(R.id.tv_dialog_share_wx_circle);
+                TextView share_copy = (TextView) dialogView.findViewById(R.id.tv_dialog_share_copy);
+                TextView btn_dialog_cancle = (TextView) dialogView.findViewById(R.id.btn_dialog_cancle);
 
-                switch (view.getId()) {
-                    case R.id.tv_dialog_share_gogoal:
-                        toast(context, "Go-Goal好友");
-                        break;
-                    case R.id.tv_dialog_share_wx:
-                        toast(context, "微信好友");
-                        WXshare(0, context, url, imageUrl, title, description);
-                        break;
-                    case R.id.tv_dialog_share_wx_circle:
-                        toast(context, "微信朋友圈");
-                        WXshare(1, context, url, imageUrl, title, description);
-                        break;
-                    case R.id.tv_dialog_share_copy:
-                        ClipboardManager clip = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                        clip.setText(url);
-                        toast(context, "复制成功");
-                        break;
-                }
+                share_gogoal.setOnClickListener(new ShareOnClick(shareDialog,url,imageUrl,title,description));
+                share_wx.setOnClickListener(new ShareOnClick(shareDialog,url,imageUrl,title,description));
+                share_wx_circle.setOnClickListener(new ShareOnClick(shareDialog,url,imageUrl,title,description));
+                share_copy.setOnClickListener(new ShareOnClick(shareDialog,url,imageUrl,title,description));
+                btn_dialog_cancle.setOnClickListener(new ShareOnClick(shareDialog,url,imageUrl,title,description));
             }
-        };
-
-        share_gogoal.setOnClickListener(shareOnClick);
-        share_wx.setOnClickListener(shareOnClick);
-        share_wx_circle.setOnClickListener(shareOnClick);
-        share_copy.setOnClickListener(shareOnClick);
-        btn_dialog_cancle.setOnClickListener(shareOnClick);
-
-        share_dialog.show();
+        }).show();
     }
-
 }

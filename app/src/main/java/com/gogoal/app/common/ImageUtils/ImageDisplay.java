@@ -2,7 +2,7 @@ package com.gogoal.app.common.ImageUtils;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.IntegerRes;
+import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
@@ -115,7 +115,7 @@ public class ImageDisplay {
      * @param radius  圆角矩形角度
      * @param res      图片资源res
      * */
-    public static void loadRoundedRectangle(Context context,ImageView imageView,int radius,@IntegerRes int res){
+    public static void loadRoundedRectangleImage(Context context,ImageView imageView,int radius,@DrawableRes int res){
         Glide.with(context)
                 .load(res)
                 .bitmapTransform(new RoundedCornersTransformation(context,radius,0))
@@ -126,7 +126,7 @@ public class ImageDisplay {
      * @param radius    圆角矩形角度
      * @param imageUrl  图片url地址
      * */
-    public static void loadRoundedRectangle(Context context,ImageView imageView,int radius,String imageUrl){
+    public static void loadRoundedRectangleImage(Context context,ImageView imageView,int radius,String imageUrl){
         Glide.with(context)
                 .load(imageUrl)
                 .bitmapTransform(new RoundedCornersTransformation(context,radius,0))
