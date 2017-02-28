@@ -191,6 +191,18 @@ public class CalendarUtils {
         }
     }
 
+    /**
+     * 将时间戳转换为时间
+     */
+    public static String parseStampToDate(String s) {
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long lt = new Long(s);
+        Date date = new Date(lt);
+        res = simpleDateFormat.format(date);
+        return res;
+    }
+
     //时间毫秒值转成yyyy-MM-dd HH:mm:ss格式
     public static String parseDateFormatAll(long dateMill) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
@@ -204,7 +216,7 @@ public class CalendarUtils {
     }
 
     //date时间转成yyyy-MM-dd HH:mm:ss格式
-    public static String parseDateFormat(Date date) {
+    public static String parseDateFormat(String date) {
         SimpleDateFormat format = new SimpleDateFormat("MM-dd HH:mm", Locale.CHINA);
         return format.format(date);
     }
@@ -248,10 +260,10 @@ public class CalendarUtils {
             Calendar c = Calendar.getInstance();
             c.setTime(simpleDateFormat.parse(yMDHms));
             if (c.get(Calendar.YEAR) != Calendar.getInstance().get(Calendar.YEAR)) {
-                return c.get(Calendar.YEAR) + "-" + formatInteger(c.get(Calendar.MONTH)+1) + "-" +
+                return c.get(Calendar.YEAR) + "-" + formatInteger(c.get(Calendar.MONTH) + 1) + "-" +
                         formatInteger(c.get(Calendar.DAY_OF_MONTH));
             } else {
-                return formatInteger(c.get(Calendar.MONTH)+1) + "-" + formatInteger(c.get(Calendar.DAY_OF_MONTH));
+                return formatInteger(c.get(Calendar.MONTH) + 1) + "-" + formatInteger(c.get(Calendar.DAY_OF_MONTH));
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -305,15 +317,15 @@ public class CalendarUtils {
             return dateString.substring(0, 10);
         }
         if (diff > month) {
-            return getMonth$Day(dateString)  ;
+            return getMonth$Day(dateString);
         }
         if (diff > day) {
-            if ((diff / day)==1){
-                return "明天\u3000"+getHour$Min(dateString);
-            }else if ((diff / day)==2){
-                return "后天\u3000"+getHour$Min(dateString);
-            }else {
-                return getMonth$Day(dateString)+"\u3000"+getHour$Min(dateString);
+            if ((diff / day) == 1) {
+                return "明天\u3000" + getHour$Min(dateString);
+            } else if ((diff / day) == 2) {
+                return "后天\u3000" + getHour$Min(dateString);
+            } else {
+                return getMonth$Day(dateString) + "\u3000" + getHour$Min(dateString);
             }
         }
         if (diff > hour) {
@@ -359,11 +371,11 @@ public class CalendarUtils {
      * @return data;
      */
     public static String formatDate(String originFormat, String tofomat, String date) {
-        SimpleDateFormat df = new SimpleDateFormat(tofomat,Locale.CHINA);
+        SimpleDateFormat df = new SimpleDateFormat(tofomat, Locale.CHINA);
         if (isEmpty(date)) {
             return df.format(new Date());
         } else {
-            SimpleDateFormat df1 = new SimpleDateFormat(originFormat,Locale.CHINA);
+            SimpleDateFormat df1 = new SimpleDateFormat(originFormat, Locale.CHINA);
             try {
                 Date mdata = df1.parse(date);
                 return df.format(mdata);
