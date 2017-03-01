@@ -37,4 +37,6 @@ public class AppConst {
 
     public static final String LEAN_CLOUD_TOKEN = "2046";
 
+    public static final String LEAN_CLOUD_CONVERSATION_ID = "58aaa02d8d6d8100636e8be9";
+
 }
