@@ -227,4 +227,6 @@ public class DialogHelp {
         ShareBottomDialog shareDialog=ShareBottomDialog.getInstance(url,imageUrl,title,description);
         shareDialog.show(context.getSupportFragmentManager());
     }
+
+
 }
