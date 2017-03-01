@@ -2,7 +2,6 @@ package com.gogoal.app.activity;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -52,6 +52,7 @@ import com.gogoal.app.common.IMHelpers.AVImClientManager;
 import com.gogoal.app.common.PlayerUtils.CountDownTimerView;
 import com.gogoal.app.common.PlayerUtils.PlayerControl;
 import com.gogoal.app.common.PlayerUtils.StatusListener;
+import com.gogoal.app.common.UIHelper;
 import com.gogoal.app.ui.widget.BottomSheetNormalDialog;
 import com.socks.library.KLog;
 
@@ -869,58 +870,69 @@ public class PlayerActivity extends BaseActivity {
     }
 
     private void showPlayerChat() {
-        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_show_chat, new LinearLayout(getContext()), false);
 
-        final EditText player_edit = (EditText) dialogView.findViewById(R.id.player_edit);
-        TextView send_text = (TextView) dialogView.findViewById(R.id.send_text);
-
-        player_edit.setFocusableInTouchMode(true);
-        player_edit.setFocusable(true);
-        player_edit.requestFocus();
-        AppDevice.showSoftKeyboard(player_edit);
-
-        final BottomDialog dialog = DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_show_chat);
-
-        send_text.setOnClickListener(new View.OnClickListener() {
+        DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_show_chat, new BottomSheetNormalDialog.ViewListener() {
             @Override
-            public void onClick(View view) {
+            public void bindDialogView(final BottomSheetNormalDialog dialog, View dialogView) {
 
-                if(player_edit.getText().toString() == null) {
-                    UIHelper.showSnack(PlayerActivity.this, "请输入内容");
-                    return;
-                }
+                final EditText player_edit = (EditText) dialogView.findViewById(R.id.player_edit);
+                final TextView send_text = (TextView) dialogView.findViewById(R.id.send_text);
 
-                if (null != imConversation) {
-                    HashMap<String, Object> attrsMap = new HashMap<String, Object>();
-                    attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
-                    final AVIMTextMessage msg = new AVIMTextMessage();
-                    msg.setText(player_edit.getText().toString());
-                    msg.setAttrs(attrsMap);
+//                player_edit.setFocusableInTouchMode(true);
+//                player_edit.setFocusable(true);
+//                player_edit.requestFocus();
+//                AppDevice.showSoftKeyboard(dialogView);
 
-                    messageList.add(msg);
-                    mLiveChatAdapter.notifyDataSetChanged();
-                    recyler_chat.smoothScrollToPosition(messageList.size());
+                player_edit.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        InputMethodManager imm =
+                                (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(player_edit, 0);
+                    }
+                });
 
-                    imConversation.sendMessage(msg, new AVIMConversationCallback() {
-                        @Override
-                        public void done(AVIMException e) {
-                            dialog.dismiss();
-                            player_edit.setText("");
-                            UIHelper.showSnack(PlayerActivity.this, "发送成功");
+                send_text.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (player_edit.getText().toString().equals("")) {
+                            UIHelper.showSnack(PlayerActivity.this, "请输入内容");
+                            return;
                         }
-                    });
-                }
+
+                        if (null != imConversation) {
+                            HashMap<String, Object> attrsMap = new HashMap<String, Object>();
+                            attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
+                            final AVIMTextMessage msg = new AVIMTextMessage();
+                            msg.setText(player_edit.getText().toString());
+                            msg.setAttrs(attrsMap);
+
+                            messageList.add(msg);
+                            mLiveChatAdapter.notifyDataSetChanged();
+                            recyler_chat.smoothScrollToPosition(messageList.size());
+
+                            imConversation.sendMessage(msg, new AVIMConversationCallback() {
+                                @Override
+                                public void done(AVIMException e) {
+                                    dialog.dismiss();
+                                    AppDevice.hideSoftKeyboard(send_text);
+                                    player_edit.setText("");
+                                    UIHelper.showSnack(PlayerActivity.this, "发送成功");
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
-
-        dialog.show();
     }
 
     private void showAnchorProfiles() {
 
-        DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_anchor_introduction,new BottomSheetNormalDialog.ViewListener() {
+        DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_anchor_introduction, new BottomSheetNormalDialog.ViewListener() {
             @Override
-            public void bindDialogView(BottomSheetNormalDialog dialog,View dialogView) {
+            public void bindDialogView(BottomSheetNormalDialog dialog, View dialogView) {
                 ImageView anchor_avatar = (ImageView) dialogView.findViewById(R.id.anchor_avatar);
                 TextView anchor_name = (TextView) dialogView.findViewById(R.id.anchor_name);
                 TextView anchor_position = (TextView) dialogView.findViewById(R.id.anchor_position);
@@ -945,7 +957,7 @@ public class PlayerActivity extends BaseActivity {
 
         DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_relater_video, new BottomSheetNormalDialog.ViewListener() {
             @Override
-            public void bindDialogView(BottomSheetNormalDialog dialog,View dialogView) {
+            public void bindDialogView(BottomSheetNormalDialog dialog, View dialogView) {
 
             }
         });
