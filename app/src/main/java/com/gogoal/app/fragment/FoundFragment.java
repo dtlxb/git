@@ -154,7 +154,7 @@ public class FoundFragment extends BaseFragment {
 
         private int parentPosition;
 
-        public GridAdapter(List<FoundData.ItemPojos> datas, int parentPosition) {
+        private GridAdapter(List<FoundData.ItemPojos> datas, int parentPosition) {
             super(getContext(), R.layout.item_grid_foundfragment, datas);
             this.parentPosition = parentPosition;
         }
@@ -200,9 +200,9 @@ public class FoundFragment extends BaseFragment {
                             startActivity(new Intent(getContext(), SingleChatRoomActivity.class));
                         } else {
                             Toast.makeText(getContext(), itemPojos.getIconDescription(), Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getContext(), FunctionActivity.class);
-                            intent.putExtra("function_url", itemPojos.getUrl());
-                            startActivity(intent);
+//                            Intent intent = new Intent(getContext(), FunctionActivity.class);
+//                            intent.putExtra("function_url", itemPojos.getUrl());
+//                            startActivity(intent);
                         }
                     }
                 }

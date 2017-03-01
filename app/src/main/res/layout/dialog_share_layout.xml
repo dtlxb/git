@@ -51,7 +51,7 @@
         android:background="@color/wx_share_line" />
 
     <TextView
-        android:id="@+id/btn_dialog_cancle"
+        android:id="@+id/tv_dialog_cancle"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center"

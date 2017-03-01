@@ -1,16 +1,40 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.gogoal.app.fragment.ContactsFragment">
 
-    <include layout="@layout/include_title"/>
+    <include layout="@layout/include_title" />
 
-    <TextView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="联系人"
-        android:textSize="30sp"/>
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-</FrameLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_contacts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.gogoal.app.ui.view.IndexBar
+            android:id="@+id/index_bar"
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end" />
+
+        <TextView
+            android:id="@+id/tv_constacts_flag"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center"
+            android:background="@drawable/shape_index_bar_bg"
+            android:text="W"
+            android:visibility="gone"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="40sp" />
+
+    </FrameLayout>
+
+</LinearLayout>

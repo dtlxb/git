@@ -10,4 +10,8 @@
     <dimen name="action_sheet_dialog_radius">10dp</dimen>
 
     <dimen name="dialog_share">13sp</dimen>
+
+    <dimen name="item_coantacts">55dp</dimen>
+
+    <dimen name="item_dialog_list">50dp</dimen>
 </resources>

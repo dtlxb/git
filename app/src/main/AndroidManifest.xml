@@ -53,7 +53,8 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".activity.PlayerActivity"
-            android:theme="@style/TranslucentTheme"/>
+            android:theme="@style/TranslucentTheme"
+            android:configChanges="screenSize|keyboardHidden|orientation"/>
         <activity
             android:name=".activity.FunctionActivity"
             android:screenOrientation="portrait"

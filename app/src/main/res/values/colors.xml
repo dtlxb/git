@@ -34,4 +34,11 @@
 
     <color name="wx_share_line">#e4e4e4</color>
 
+    <!--封装通用底部列表弹窗颜色-->
+    <color name="item_press">@color/wx_share_line</color>
+
+    <!--快速索引bar颜色-->
+    <color name="index_bar_text">@color/textColor_666666</color>
+    <color name="index_bar_pressed">#33000000</color>
+    <color name="index_bar_text_flag">#66000000</color>
 </resources>

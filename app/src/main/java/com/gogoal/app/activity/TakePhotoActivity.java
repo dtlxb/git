@@ -59,10 +59,10 @@ public class TakePhotoActivity extends Activity{
                 }
 
                 if (takePhotoListener != null) {
-                    takePhotoListener.sueecss(paths, isOrig);
+                    takePhotoListener.success(paths, isOrig);
                 }
             } else {
-                takePhotoListener.erro();
+                takePhotoListener.error();
             }
         }
         finish();

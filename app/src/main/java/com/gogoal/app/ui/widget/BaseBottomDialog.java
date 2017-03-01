@@ -22,7 +22,7 @@ import com.gogoal.app.R;
 public abstract class BaseBottomDialog extends DialogFragment {
     private static final String TAG = "base_bottom_dialog";
 
-    private static final float DEFAULT_DIM = 0.2f;
+    private static final float DEFAULT_DIM = 0.5f;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,9 @@ public abstract class BaseBottomDialog extends DialogFragment {
         getDialog().setCanceledOnTouchOutside(getCancelOutside());
 
         View v = inflater.inflate(getLayoutRes(), container, false);
+
         bindView(v);
+
         return v;
     }
 
