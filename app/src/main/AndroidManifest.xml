@@ -53,8 +53,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".activity.PlayerActivity"
-            android:theme="@style/TranslucentTheme"
-            android:windowSoftInputMode="adjustPan"/>
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name=".activity.FunctionActivity"
             android:screenOrientation="portrait"

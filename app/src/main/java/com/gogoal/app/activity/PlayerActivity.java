@@ -23,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,6 +58,7 @@ import com.socks.library.KLog;
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,6 +74,13 @@ public class PlayerActivity extends BaseActivity {
 
     @BindView(R.id.GLViewContainer)
     FrameLayout frameContainer;
+
+    @BindView(R.id.player_recyc)
+    RecyclerView recyler_chat;
+    @BindView(R.id.player_linear)
+    LinearLayout player_linear;
+    @BindView(R.id.player_edit)
+    EditText player_edit;
 
     //直播预告展示
     @BindView(R.id.countDownTimer)
@@ -116,6 +125,8 @@ public class PlayerActivity extends BaseActivity {
     //视频播放位置
     private int mPosition = 0;
     private int mVolumn = 50;
+    private List<AVIMMessage> messageList = new ArrayList<>();
+    private LiveChatAdapter mLiveChatAdapter;
 
     private static final String mURI = "rtmp://192.168.52.143:1935/hls/androidtest";
 
@@ -171,10 +182,14 @@ public class PlayerActivity extends BaseActivity {
 
         initSurface();
 
+        initRecycleView(recyler_chat, null);
         //String conversationID = this.getIntent().getExtras().getString("conversation_id");
         String conversationID = AppConst.LEAN_CLOUD_CONVERSATION_ID;
 
         getSquareConversation(conversationID);
+
+        mLiveChatAdapter = new LiveChatAdapter(PlayerActivity.this, R.layout.item_live_chat, messageList);
+        recyler_chat.setAdapter(mLiveChatAdapter);
 //        countDownTimer.addTime("2017-02-28 10:01:00");
 //        countDownTimer.start();
 
@@ -237,10 +252,9 @@ public class PlayerActivity extends BaseActivity {
 
             //判断房间一致然后做消息接收处理
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
-                AVIMTextMessage msg = (AVIMTextMessage) message;
-                /*imChatAdapter.addItem(message);
-                message_recycler.smoothScrollToPosition(messageList.size());
-                MessageUtils.saveMessageInfo(jsonArray, conversation);*/
+                messageList.add(message);
+                mLiveChatAdapter.notifyDataSetChanged();
+                recyler_chat.smoothScrollToPosition(messageList.size());
             }
         }
     }
@@ -834,7 +848,7 @@ public class PlayerActivity extends BaseActivity {
     }
 
     @OnClick({R.id.imgPlayerChat, R.id.imgPlayerProfiles, R.id.imgPlayerRelaterVideo, R.id.imgPlayerShare,
-            R.id.imgPlayerShotCut, R.id.imgPlayerClose})
+            R.id.imgPlayerShotCut, R.id.imgPlayerClose, R.id.send_text})
     public void setClickFunctionBar(View v) {
         switch (v.getId()) {
             case R.id.imgPlayerChat: //发消息
@@ -853,6 +867,27 @@ public class PlayerActivity extends BaseActivity {
                 break;
             case R.id.imgPlayerClose:
                 finish();
+                break;
+            case R.id.send_text:
+                if (null != imConversation) {
+                    HashMap<String, Object> attrsMap = new HashMap<String, Object>();
+                    attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
+                    final AVIMTextMessage msg = new AVIMTextMessage();
+                    msg.setText(player_edit.getText().toString());
+                    msg.setAttrs(attrsMap);
+
+                    messageList.add(msg);
+                    mLiveChatAdapter.notifyDataSetChanged();
+                    recyler_chat.smoothScrollToPosition(messageList.size());
+
+                    imConversation.sendMessage(msg, new AVIMConversationCallback() {
+                        @Override
+                        public void done(AVIMException e) {
+                            player_edit.setText("");
+                            UIHelper.showSnack(PlayerActivity.this, "发送成功");
+                        }
+                    });
+                }
                 break;
         }
     }
@@ -906,6 +941,19 @@ public class PlayerActivity extends BaseActivity {
         protected void convert(ViewHolder holder, final RelaterVideoData data, int position) {
 
             holder.setAlpha(R.id.text_playback, (float) 0.5);
+        }
+    }
+
+    class LiveChatAdapter extends CommonAdapter<AVIMMessage> {
+
+        public LiveChatAdapter(Context context, int layoutId, List<AVIMMessage> datas) {
+            super(context, layoutId, datas);
+        }
+
+        @Override
+        protected void convert(ViewHolder holder, AVIMMessage message, int position) {
+            AVIMTextMessage msg = (AVIMTextMessage) message;
+            holder.setText(R.id.text_you_send, msg.getAttrs().get("username") + ":" + " " + msg.getText());
         }
     }
 }
