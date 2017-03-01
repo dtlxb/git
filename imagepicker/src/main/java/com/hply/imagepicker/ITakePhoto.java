@@ -8,6 +8,6 @@ import java.util.List;
  * phone 18930640263
  */
 public interface ITakePhoto{
-    void sueecss(List<String> uriPaths, boolean isOriginalPic);
-    void erro();
+    void success(List<String> uriPaths, boolean isOriginalPic);
+    void error();
 }

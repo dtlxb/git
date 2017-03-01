@@ -81,4 +81,5 @@ dependencies {
 
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 
+    compile files('libs/pinyin4j-2.5.0.jar')
 }

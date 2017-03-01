@@ -12,7 +12,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.gogoal.app.ui.widget.BottomDialog;
+import com.gogoal.app.ui.widget.BottomSheetListDialog;
+import com.gogoal.app.ui.widget.BottomSheetNormalDialog;
+import com.gogoal.app.ui.widget.ShareBottomDialog;
+
+import java.util.ArrayList;
 
 
 /**
@@ -199,13 +203,28 @@ public class DialogHelp {
     /**
      * 通用底部弹出窗
      */
-    public static BottomDialog getBottomSheelNormalDialog(FragmentActivity context, @LayoutRes int dialogViewId) {
-        if (context != null ) {
-            return BottomDialog.create(context.getSupportFragmentManager())
+    public static void getBottomSheelNormalDialog(FragmentActivity context, @LayoutRes int dialogViewId, BottomSheetNormalDialog.ViewListener listener) {
+        if (context != null) {
+            BottomSheetNormalDialog normalDialog = BottomSheetNormalDialog.create(context.getSupportFragmentManager())
                     .setLayoutRes(dialogViewId)
-                    .setDimAmount(0.9f)
-                    .setTag("BottomDialog");
+                    .setViewListener(listener)
+                    .setTag("BottomSheetNormalDialog");
+            normalDialog.show();
         }
-        return null;
+    }
+
+    /**好用到只需传一个数据的列表类弹窗*/
+    public static void getBottomSheetListDialog(FragmentActivity context, ArrayList<String> list, BottomSheetListDialog.DialogItemClick listener){
+        final BottomSheetListDialog listDialog = BottomSheetListDialog.getInstance(list);
+        listDialog.show(context.getSupportFragmentManager());
+        listDialog.setOnDialogItemClickListener(listener);
+    }
+
+    /*
+   * 微信分享弹窗
+   * */
+    public static void showShareDialog(FragmentActivity context,final String url, final String imageUrl, final String title, final String description) {
+        ShareBottomDialog shareDialog=ShareBottomDialog.getInstance(url,imageUrl,title,description);
+        shareDialog.show(context.getSupportFragmentManager());
     }
 }

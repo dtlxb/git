@@ -52,8 +52,7 @@ import com.gogoal.app.common.IMHelpers.AVImClientManager;
 import com.gogoal.app.common.PlayerUtils.CountDownTimerView;
 import com.gogoal.app.common.PlayerUtils.PlayerControl;
 import com.gogoal.app.common.PlayerUtils.StatusListener;
-import com.gogoal.app.common.UIHelper;
-import com.gogoal.app.ui.widget.BottomDialog;
+import com.gogoal.app.ui.widget.BottomSheetNormalDialog;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -859,7 +858,7 @@ public class PlayerActivity extends BaseActivity {
                 showRelaterVideo();
                 break;
             case R.id.imgPlayerShare: //分享
-                UIHelper.showShareDialog(getContext(), null, null, "分享", "第一次分享");
+                DialogHelp.showShareDialog(getContext(), "https://m.baidu.com", "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
                 break;
             case R.id.imgPlayerShotCut:
                 break;
@@ -918,18 +917,15 @@ public class PlayerActivity extends BaseActivity {
     }
 
     private void showAnchorProfiles() {
-        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_anchor_introduction, new LinearLayout(getContext()), false);
 
-        ImageView anchor_avatar = (ImageView) dialogView.findViewById(R.id.anchor_avatar);
-        TextView anchor_name = (TextView) dialogView.findViewById(R.id.anchor_name);
-        TextView anchor_position = (TextView) dialogView.findViewById(R.id.anchor_position);
-        TextView anchor_achieve = (TextView) dialogView.findViewById(R.id.anchor_achieve);
-        TextView anchor_intro = (TextView) dialogView.findViewById(R.id.anchor_intro);
-
-        DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_anchor_introduction).setViewListener(new BottomDialog.ViewListener() {
+        DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_anchor_introduction,new BottomSheetNormalDialog.ViewListener() {
             @Override
-            public void bindView(View v) {
-
+            public void bindDialogView(BottomSheetNormalDialog dialog,View dialogView) {
+                ImageView anchor_avatar = (ImageView) dialogView.findViewById(R.id.anchor_avatar);
+                TextView anchor_name = (TextView) dialogView.findViewById(R.id.anchor_name);
+                TextView anchor_position = (TextView) dialogView.findViewById(R.id.anchor_position);
+                TextView anchor_achieve = (TextView) dialogView.findViewById(R.id.anchor_achieve);
+                TextView anchor_intro = (TextView) dialogView.findViewById(R.id.anchor_intro);
             }
         });
 
@@ -947,13 +943,12 @@ public class PlayerActivity extends BaseActivity {
 
         recy_relater.setAdapter(adapter);
 
-        BottomDialog dialog = DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_relater_video);
-        dialog.setViewListener(new BottomDialog.ViewListener() {
+        DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_relater_video, new BottomSheetNormalDialog.ViewListener() {
             @Override
-            public void bindView(View v) {
-                //弹窗内控件点击
+            public void bindDialogView(BottomSheetNormalDialog dialog,View dialogView) {
+
             }
-        }).show();
+        });
     }
 
     class RelaterVideoAdapter extends CommonAdapter<RelaterVideoData> {

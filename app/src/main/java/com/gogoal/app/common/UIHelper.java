@@ -5,14 +5,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
 
 import com.gogoal.app.R;
 import com.gogoal.app.base.MyApp;
-import com.gogoal.app.ui.widget.ShareBottomDialog;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
@@ -156,7 +154,7 @@ public class UIHelper {
         InputStream in = context.getResources().openRawResource(rawId);
         InputStreamReader isr = new InputStreamReader(in);
         BufferedReader br = new BufferedReader(isr);
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         String line;
         try {
             while ((line = br.readLine()) != null) {
@@ -237,13 +235,5 @@ public class UIHelper {
                 }
             });
         }
-    }
-
-    /*
-    * 微信分享弹窗
-    * */
-    public static void showShareDialog(FragmentActivity context,final String url, final String imageUrl, final String title, final String description) {
-        ShareBottomDialog shareDialog=ShareBottomDialog.getInstance(url,imageUrl,title,description);
-        shareDialog.show(context.getSupportFragmentManager());
     }
 }
