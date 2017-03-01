@@ -124,100 +124,150 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginTop="13dp" />
+        android:layout_marginTop="13dp"
+        android:visibility="gone" />
 
     <LinearLayout
-        android:id="@+id/functionBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/GLViewContainer"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_marginBottom="20dp"
-        android:background="#00000000"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/player_recyc"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="15dp"/>
+        
+        <LinearLayout
+            android:id="@+id/player_linear"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:background="@color/edit_bag">
 
-            <ImageView
-                android:id="@+id/imgPlayerChat"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/player_chat" />
+            <EditText
+                android:id="@+id/player_edit"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:focusable="true"
+                android:background="@android:color/transparent"
+                android:focusableInTouchMode="true"
+                android:gravity="center_vertical|left"
+                android:hint="@string/player_edit"
+                android:paddingLeft="12dp"
+                android:textColorHint="@color/edit_hint"
+                android:textSize="14dp"
+                android:textColor="@color/textColor_333333"/>
+
+            <TextView
+                android:id="@+id/send_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/send_text"
+                android:text="@string/send"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textSize="16dp"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/functionBar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:background="#00000000"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/imgPlayerProfiles"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/player_profiles" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
 
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/imgPlayerChat"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@mipmap/player_chat" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
+            </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imgPlayerRelaterVideo"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/player_related_video" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
 
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/imgPlayerProfiles"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@mipmap/player_profiles" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
+            </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imgPlayerShare"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/player_share" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
 
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/imgPlayerRelaterVideo"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@mipmap/player_related_video" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
+            </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imgPlayerShotCut"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/player_shot_cut" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
 
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/imgPlayerShare"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@mipmap/player_share" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:gravity="center">
+            </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imgPlayerClose"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/player_close" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/imgPlayerShotCut"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@mipmap/player_shot_cut" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/imgPlayerClose"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@mipmap/player_close" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
