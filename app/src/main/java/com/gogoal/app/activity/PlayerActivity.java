@@ -47,10 +47,10 @@ import com.gogoal.app.bean.RelaterVideoData;
 import com.gogoal.app.common.AppConst;
 import com.gogoal.app.common.DialogHelp;
 import com.gogoal.app.common.IMHelpers.AVImClientManager;
-import com.gogoal.app.common.IMHelpers.MessageUtils;
 import com.gogoal.app.common.PlayerUtils.CountDownTimerView;
 import com.gogoal.app.common.PlayerUtils.PlayerControl;
 import com.gogoal.app.common.PlayerUtils.StatusListener;
+import com.gogoal.app.common.UIHelper;
 import com.gogoal.app.ui.widget.BottomSheetNormalDialog;
 import com.socks.library.KLog;
 
