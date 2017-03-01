@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -29,12 +30,23 @@ import android.widget.TextView;
 
 import com.alivc.player.AliVcMediaPlayer;
 import com.alivc.player.MediaPlayer;
+import com.avos.avoscloud.im.v2.AVIMConversation;
+import com.avos.avoscloud.im.v2.AVIMConversationQuery;
+import com.avos.avoscloud.im.v2.AVIMException;
+import com.avos.avoscloud.im.v2.AVIMMessage;
+import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
+import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
+import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.gogoal.app.R;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.CommonAdapter;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import com.gogoal.app.base.BaseActivity;
+import com.gogoal.app.bean.BaseMessage;
 import com.gogoal.app.bean.RelaterVideoData;
+import com.gogoal.app.common.AppConst;
 import com.gogoal.app.common.DialogHelp;
+import com.gogoal.app.common.IMHelpers.AVImClientManager;
+import com.gogoal.app.common.IMHelpers.MessageUtils;
 import com.gogoal.app.common.PlayerUtils.CountDownTimerView;
 import com.gogoal.app.common.PlayerUtils.PlayerControl;
 import com.gogoal.app.common.PlayerUtils.StatusListener;
@@ -42,8 +54,11 @@ import com.gogoal.app.common.UIHelper;
 import com.gogoal.app.ui.widget.BottomDialog;
 import com.socks.library.KLog;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -104,6 +119,9 @@ public class PlayerActivity extends BaseActivity {
 
     private static final String mURI = "rtmp://192.168.52.143:1935/hls/androidtest";
 
+    //聊天对象
+    private AVIMConversation imConversation;
+
     private Handler mTimerHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -153,9 +171,78 @@ public class PlayerActivity extends BaseActivity {
 
         initSurface();
 
+        //String conversationID = this.getIntent().getExtras().getString("conversation_id");
+        String conversationID = AppConst.LEAN_CLOUD_CONVERSATION_ID;
+
+        getSquareConversation(conversationID);
 //        countDownTimer.addTime("2017-02-28 10:01:00");
 //        countDownTimer.start();
 
+    }
+
+    private void getSquareConversation(String conversationId) {
+        AVIMConversationQuery conversationQuery = AVImClientManager.getInstance().getClient().getQuery();
+        // 根据room_id查找房间
+        conversationQuery.whereEqualTo("objectId", conversationId);
+
+        Log.e("LEAN_CLOUD", "查找聊天室" + conversationId);
+
+        // 查找聊天
+        conversationQuery.findInBackground(new AVIMConversationQueryCallback() {
+            @Override
+            public void done(List<AVIMConversation> list, AVIMException e) {
+
+                if (null == e) {
+                    // 查询列表取第一个
+                    if (null != list && list.size() > 0) {
+
+                        imConversation = list.get(0);
+                        joinSquare(imConversation);
+                        Log.e("LEAN_CLOUD", "search chatroom success");
+                    } else {
+                        Log.e("LEAN_CLOUD", "search chatroom fail ");
+                    }
+                } else {
+                    UIHelper.showSnack(PlayerActivity.this, "当前聊天房间不存在");
+                    Log.e("LEAN_CLOUD", "查询条件没有查找到聊天对象" + e.toString());
+                }
+            }
+        });
+
+    }
+
+    /**
+     * 加入聊天室
+     */
+    private void joinSquare(AVIMConversation conversation) {
+        conversation.join(new AVIMConversationCallback() {
+            @Override
+            public void done(AVIMException e) {
+                if (e == null) {
+
+                }
+            }
+        });
+    }
+
+    /**
+     * 消息接收
+     */
+    @Subscriber(tag = "IM_Message")
+    public void handleMessage(BaseMessage baseMessage) {
+        if (null != imConversation && null != baseMessage) {
+            Map<String, Object> map = baseMessage.getOthers();
+            AVIMMessage message = (AVIMMessage) map.get("message");
+            AVIMConversation conversation = (AVIMConversation) map.get("conversation");
+
+            //判断房间一致然后做消息接收处理
+            if (imConversation.getConversationId().equals(conversation.getConversationId())) {
+                AVIMTextMessage msg = (AVIMTextMessage) message;
+                /*imChatAdapter.addItem(message);
+                message_recycler.smoothScrollToPosition(messageList.size());
+                MessageUtils.saveMessageInfo(jsonArray, conversation);*/
+            }
+        }
     }
 
     /**

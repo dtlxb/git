@@ -34,7 +34,7 @@ public class SquareChatRoomActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         String userName = this.getIntent().getExtras().getString("userName");
-        setMyTitle(userName + "聊天窗口", false);
+        setMyTitle(userName, false);
         final String conversationID = this.getIntent().getExtras().getString("conversation_id");
 
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);

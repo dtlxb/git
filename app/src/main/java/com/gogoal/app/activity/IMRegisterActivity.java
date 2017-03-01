@@ -2,18 +2,27 @@ package com.gogoal.app.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.avos.avoscloud.im.v2.AVIMClient;
+import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
-import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
+import com.avos.avoscloud.im.v2.callback.AVIMConversationCreatedCallback;
 import com.gogoal.app.R;
 import com.gogoal.app.base.BaseActivity;
 import com.gogoal.app.common.IMHelpers.AVImClientManager;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.util.Collections;
 
 import butterknife.BindView;
 
@@ -36,6 +45,7 @@ public class IMRegisterActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+        login_et_username.setText("大顺聊天室");
         chat_room_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,8 +63,24 @@ public class IMRegisterActivity extends BaseActivity {
         chat_room_login.setEnabled(false);
         login_et_username.setEnabled(false);
 
-        Intent intent = new Intent(IMRegisterActivity.this, SingleChatRoomActivity.class);
+        AVImClientManager.getInstance().getClient().createConversation(Collections.<String>emptyList(), "HelloKitty PK 加菲猫", null, true, new AVIMConversationCreatedCallback() {
+            @Override
+            public void done(AVIMConversation avimConversation, AVIMException e) {
+                Log.e("+++ConversationId", avimConversation.getConversationId());
+                avimConversation.getConversationId();
+            }
+        });
+
+        //单聊页面
+        /*Intent intent = new Intent(IMRegisterActivity.this, SingleChatRoomActivity.class);
         intent.putExtra("member_id", MyId);
+        intent.putExtra("userName", MyId);*/
+
+
+        //群聊
+        Intent intent = new Intent(IMRegisterActivity.this, SquareChatRoomActivity.class);
+        //ntent.putExtra("conversation_id", "58b5452561ff4b006b1e3353");
+        intent.putExtra("conversation_id", "58aaa02d8d6d8100636e8be9");
         intent.putExtra("userName", MyId);
         startActivity(intent);
         finish();

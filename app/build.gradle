@@ -75,4 +75,5 @@ dependencies {
     compile project(':uFileLib')
     //阿里云播放器
     compile files('libs/alivc-player-2.2.0.20.jar')
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }

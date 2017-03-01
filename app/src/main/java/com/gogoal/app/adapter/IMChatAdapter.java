@@ -11,9 +11,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.avos.avoscloud.im.v2.AVIMMessage;
+import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.gogoal.app.R;
 import com.gogoal.app.common.AppConst;
+import com.gogoal.app.common.ImageUtils.ImageDisplay;
 
 import java.util.List;
 
@@ -49,6 +51,10 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             return new LeftTextViewHolder(mLayoutInflater.inflate(R.layout.item_left_text, parent, false));
         } else if (viewType == TYPE_RIGHT_TEXT_MESSAGE) {
             return new RightTextViewHolder(mLayoutInflater.inflate(R.layout.item_right_text, parent, false));
+        } else if (viewType == TYPE_LEFT_IMAGE_MESSAGE) {
+            return new LeftImageViewHolder(mLayoutInflater.inflate(R.layout.item_left_image, parent, false));
+        } else if (viewType == TYPE_RIGHT_IMAGE_MESSAGE) {
+            return new RightImageViewHolder(mLayoutInflater.inflate(R.layout.item_right_image, parent, false));
         } else {
             return null;
         }
@@ -56,12 +62,20 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        AVIMTextMessage textMessage = (AVIMTextMessage) messageList.get(position);
         if (holder instanceof LeftTextViewHolder) {
+            AVIMTextMessage textMessage = (AVIMTextMessage) messageList.get(position);
             ((LeftTextViewHolder) holder).user_name.setText((String) textMessage.getAttrs().get("username"));
             ((LeftTextViewHolder) holder).what_user_send.setText(textMessage.getText());
         } else if (holder instanceof RightTextViewHolder) {
+            AVIMTextMessage textMessage = (AVIMTextMessage) messageList.get(position);
             ((RightTextViewHolder) holder).what_user_send.setText(textMessage.getText());
+        } else if (holder instanceof LeftImageViewHolder) {
+            AVIMImageMessage imageMessage = (AVIMImageMessage) messageList.get(position);
+            ((LeftImageViewHolder) holder).user_name.setText((String) imageMessage.getAttrs().get("username"));
+            ImageDisplay.loadNetImage(mContext, imageMessage.getFileUrl(), ((LeftImageViewHolder) holder).image_user_send);
+        } else if (holder instanceof RightImageViewHolder) {
+            AVIMImageMessage imageMessage = (AVIMImageMessage) messageList.get(position);
+            ImageDisplay.loadNetImage(mContext, imageMessage.getFileUrl(), ((RightImageViewHolder) holder).image_user_send);
         }
     }
 
@@ -72,10 +86,24 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
+        AVIMMessage message = messageList.get(position);
+
         if (messageList.get(position).getFrom().equals(AppConst.LEAN_CLOUD_TOKEN)) {
-            return TYPE_RIGHT_TEXT_MESSAGE;
+            if (message instanceof AVIMTextMessage) {
+                return TYPE_RIGHT_TEXT_MESSAGE;
+            } else if (message instanceof AVIMImageMessage) {
+                return TYPE_RIGHT_IMAGE_MESSAGE;
+            } else {
+                return TYPE_RIGHT_VOICE_MESSAGE;
+            }
         } else {
-            return TYPE_LEFT_TEXT_MESSAGE;
+            if (message instanceof AVIMTextMessage) {
+                return TYPE_LEFT_TEXT_MESSAGE;
+            } else if (message instanceof AVIMImageMessage) {
+                return TYPE_LEFT_IMAGE_MESSAGE;
+            } else {
+                return TYPE_LEFT_VOICE_MESSAGE;
+            }
         }
     }
 
@@ -84,36 +112,16 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         this.notifyDataSetChanged();
     }
 
-    /*public static class TextViewHolder extends RecyclerView.ViewHolder {
-        private ImageView user_head_photo;
-        private RelativeLayout user_layout;
-        private TextView user_name;
-        private TextView what_user_send;
-
-        public TextViewHolder(View itemView) {
-            super(itemView);
-            user_head_photo = (ImageView) itemView.findViewById(R.id.user_head_photo);
-            user_layout = (RelativeLayout) itemView.findViewById(R.id.user_layout);
-            user_name = (TextView) itemView.findViewById(R.id.user_name);
-            what_user_send = (TextView) itemView.findViewById(R.id.what_user_send);
-
-            user_head_photo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("LEAN_CLOUD", "TextViewHolder" + getPosition());
-                }
-            });
-        }
-    }*/
-
     private static class IMCHatViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView user_head_photo;
-        public RelativeLayout user_layout;
+        protected ImageView user_head_photo;
+        protected RelativeLayout user_layout;
+        protected TextView user_name;
 
         public IMCHatViewHolder(View itemView) {
             super(itemView);
 
+            user_name = (TextView) itemView.findViewById(R.id.user_name);
             user_head_photo = (ImageView) itemView.findViewById(R.id.user_head_photo);
             user_layout = (RelativeLayout) itemView.findViewById(R.id.user_layout);
 
@@ -128,12 +136,10 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
     private class RightTextViewHolder extends IMCHatViewHolder {
 
-        private TextView user_name;
         private TextView what_user_send;
 
         public RightTextViewHolder(View itemView) {
             super(itemView);
-            user_name = (TextView) itemView.findViewById(R.id.user_name);
             what_user_send = (TextView) itemView.findViewById(R.id.what_user_send);
         }
 
@@ -141,7 +147,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
     private class LeftTextViewHolder extends IMCHatViewHolder {
 
-        private TextView user_name;
         private TextView what_user_send;
 
         public LeftTextViewHolder(View itemView) {
@@ -150,6 +155,26 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             what_user_send = (TextView) itemView.findViewById(R.id.what_user_send);
         }
 
+    }
+
+    private class RightImageViewHolder extends IMCHatViewHolder {
+
+        private ImageView image_user_send;
+
+        public RightImageViewHolder(View itemView) {
+            super(itemView);
+            image_user_send = (ImageView) itemView.findViewById(R.id.image_user_send);
+        }
+    }
+
+    private class LeftImageViewHolder extends IMCHatViewHolder {
+
+        private ImageView image_user_send;
+
+        public LeftImageViewHolder(View itemView) {
+            super(itemView);
+            image_user_send = (ImageView) itemView.findViewById(R.id.image_user_send);
+        }
     }
 
 }

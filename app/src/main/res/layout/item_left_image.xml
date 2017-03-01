@@ -8,14 +8,12 @@
         android:id="@+id/user_head_photo"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_alignParentEnd="true"
         android:background="@mipmap/timg" />
 
     <RelativeLayout
         android:id="@+id/user_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp">
 
@@ -23,24 +21,19 @@
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-4dp"
+            android:layout_marginTop="-3dp"
             android:text="what the fag say"
             android:textColor="@color/textColor_666666"
-            android:textSize="12sp"
-            android:visibility="gone" />
+            android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/what_user_send"
+        <ImageView
+            android:id="@+id/image_user_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="40dp"
             android:layout_below="@+id/user_name"
+            android:adjustViewBounds="true"
             android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:padding="10dp"
-            android:text="为什么没有人了,人呢?"
-            android:textColor="@color/textColor_333333"
-            android:textSize="14sp" />
+            android:scaleType="centerCrop" />
 
     </RelativeLayout>
 

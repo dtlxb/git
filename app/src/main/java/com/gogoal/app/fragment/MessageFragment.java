@@ -14,6 +14,7 @@ import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.gogoal.app.R;
 import com.gogoal.app.activity.SingleChatRoomActivity;
+import com.gogoal.app.activity.SquareChatRoomActivity;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.CommonAdapter;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.MultiItemTypeAdapter;
 import com.gogoal.app.adapter.recycleviewAdapterHelper.base.ViewHolder;
@@ -96,8 +97,13 @@ public class MessageFragment extends BaseFragment {
                 String member_id = "";
                 Intent intent;
 
+                //群聊处理
+                intent = new Intent(getContext(), SquareChatRoomActivity.class);
+                intent.putExtra("conversation_id", conversation_id);
+                startActivity(intent);
+
                 //单聊处理
-                List<String> members = new ArrayList<>();
+                /*List<String> members = new ArrayList<>();
                 intent = new Intent(getContext(), SingleChatRoomActivity.class);
                 members.clear();
                 members.addAll(IMMessageBeans.get(position).getSpeakerTo());
@@ -108,7 +114,7 @@ public class MessageFragment extends BaseFragment {
                     }
                 }
                 intent.putExtra("member_id", member_id);
-                startActivity(intent);
+                startActivity(intent);*/
             }
 
             @Override
