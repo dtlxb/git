@@ -29,18 +29,14 @@
             android:textSize="12sp"
             android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/what_user_send"
+        <ImageView
+            android:id="@+id/image_user_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="40dp"
             android:layout_below="@+id/user_name"
+            android:adjustViewBounds="true"
             android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:padding="10dp"
-            android:text="为什么没有人了,人呢?"
-            android:textColor="@color/textColor_333333"
-            android:textSize="14sp" />
+            android:scaleType="centerCrop" />
 
     </RelativeLayout>
 
