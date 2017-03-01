@@ -36,14 +36,13 @@ public class SingleChatRoomActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        /*String memberID = this.getIntent().getExtras().getString("member_id");
-        String userName = this.getIntent().getExtras().getString("userName");*/
-        setMyTitle(AppConst.LEAN_CLOUD_TOKEN + "聊天窗口", false);
+        String memberID = this.getIntent().getExtras().getString("member_id");
+        //String userName = this.getIntent().getExtras().getString("userName");
+        setMyTitle(memberID + "聊天窗口", false);
 
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
         //输入聊天对象ID，返回conversation对象
-        //getSingleConversation(memberID);
-        getSingleConversation("2046");
+        getSingleConversation(memberID);
     }
 
     public void getSingleConversation(String memberID) {

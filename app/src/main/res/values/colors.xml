@@ -41,4 +41,9 @@
     <color name="index_bar_text">@color/textColor_666666</color>
     <color name="index_bar_pressed">#33000000</color>
     <color name="index_bar_text_flag">#66000000</color>
+
+    <color name="edit_hint">#9a9a9a</color>
+    <color name="edit_bag">#e6FAFAFA</color>
+    <color name="send_text">#0076ff</color>
+
 </resources>

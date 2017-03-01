@@ -1,28 +1,31 @@
 package com.gogoal.app.fragment;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
+import com.avos.avoscloud.im.v2.Conversation;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.gogoal.app.R;
+import com.gogoal.app.adapter.IMChatAdapter;
 import com.gogoal.app.base.BaseFragment;
 import com.gogoal.app.bean.BaseMessage;
+import com.gogoal.app.common.AppConst;
+import com.gogoal.app.common.IMHelpers.MessageUtils;
 import com.gogoal.app.common.SPTools;
 import com.gogoal.app.common.UIHelper;
+import com.gogoal.app.ui.view.MessageSendView;
 
 import org.simple.eventbus.Subscriber;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,49 +38,62 @@ import butterknife.BindView;
 
 public class ChatFragment extends BaseFragment {
 
-    @BindView(R.id.message_show)
-    TextView message_show;
+    @BindView(R.id.message_list)
+    RecyclerView message_recycler;
 
-    @BindView(R.id.message_input)
-    EditText message_input;
-
-    @BindView(R.id.message_send)
-    Button message_send;
+    @BindView(R.id.message_send_view)
+    MessageSendView message_send_view;
 
     private AVIMConversation imConversation;
+
+    private List<AVIMMessage> messageList = new ArrayList<>();
+
+    private IMChatAdapter imChatAdapter;
 
     private JSONArray jsonArray;
 
     @Override
     public int bindLayout() {
-        return R.layout.fragment_chat;
+        return R.layout.fragment_imchat;
     }
 
     @Override
     public void doBusiness(Context mContext) {
 
-        jsonArray = SPTools.getJsonArray("conversation_beans", null);
+        initRecycleView(message_recycler, null);
+
+        imChatAdapter = new IMChatAdapter(getContext(), messageList);
+
+        message_recycler.setAdapter(imChatAdapter);
 
         //发送消息(之后会改成向公司服务器发送消息，然后后台再处理给LeanCloud发送消息)
-        message_send.setOnClickListener(new View.OnClickListener() {
+        message_send_view.setDelegate(new MessageSendView.LiveMessageDelegate() {
             @Override
-            public void onClick(View v) {
-
+            public void sendMessage(String text) {
                 HashMap<String, Object> attrsMap = new HashMap<String, Object>();
-                attrsMap.put("username", "Bjergsen");
-                AVIMTextMessage msg = new AVIMTextMessage();
-                msg.setText(message_input.getText().toString());
+                attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
+                final AVIMTextMessage msg = new AVIMTextMessage();
+                msg.setText(text);
                 msg.setAttrs(attrsMap);
+
+                imChatAdapter.addItem(msg);
+                message_recycler.smoothScrollToPosition(messageList.size());
 
                 imConversation.sendMessage(msg, new AVIMConversationCallback() {
                     @Override
                     public void done(AVIMException e) {
-                        message_input.setText("");
                         UIHelper.showSnack(getActivity(), "发送成功");
+                        MessageUtils.saveMessageInfo(jsonArray, imConversation);
                     }
                 });
             }
+
+            @Override
+            public void onClick(int type) {
+
+            }
         });
+
     }
 
     private void getHistoryMessage() {
@@ -85,8 +101,13 @@ public class ChatFragment extends BaseFragment {
             imConversation.queryMessages(20, new AVIMMessagesQueryCallback() {
                 @Override
                 public void done(List<AVIMMessage> list, AVIMException e) {
-                    if (null != e) {
-
+                    if (null == e) {
+                        for (int i = 0; i < list.size(); i++) {
+                            Log.e("+++AVIMMessage", list.get(i).getFrom() + "");
+                        }
+                        messageList.addAll(list);
+                        imChatAdapter.notifyDataSetChanged();
+                        message_recycler.smoothScrollToPosition(messageList.size());
                     }
                 }
             });
@@ -94,35 +115,15 @@ public class ChatFragment extends BaseFragment {
     }
 
     public void setConversation(AVIMConversation conversation) {
+        Log.e("+++conversation", conversation.getConversationId() + "");
         if (null != conversation) {
             imConversation = conversation;
             //拉取历史记录(直接从LeanCloud拉取)
-            //getHistoryMessage();
+            getHistoryMessage();
 
-            boolean isNeedAdd = true;
+            jsonArray = SPTools.getJsonArray("conversation_beans", new JSONArray());
 
-            JSONObject jsonObject = new JSONObject();
-
-            jsonObject.put("conversationID", imConversation.getConversationId());
-            jsonObject.put("lastTime", imConversation.getLastMessageAt());
-            jsonObject.put("speakerTo", imConversation.getMembers());
-            jsonObject.put("lastMessage", imConversation.getLastMessage());
-            jsonObject.put("unReadCounts", 10 + "");
-            if (jsonArray == null) {
-                jsonArray = new JSONArray();
-            }
-
-            for (int i = 0; i < jsonArray.size(); i++) {
-                if (jsonArray.getJSONObject(i).get("conversationID").equals(jsonObject.get("conversationID"))) {
-                    isNeedAdd = false;
-                } else {
-
-                }
-            }
-            if (isNeedAdd) {
-                jsonArray.add(jsonObject);
-                SPTools.saveJsonArray("conversation_beans", jsonArray);
-            }
+            MessageUtils.saveMessageInfo(jsonArray, conversation);
         }
     }
 
@@ -138,9 +139,12 @@ public class ChatFragment extends BaseFragment {
 
             //判断房间一致然后做消息接收处理
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
-                AVIMTextMessage msg = (AVIMTextMessage) message;
-                message_show.setText(msg.getText());
+                //AVIMTextMessage msg = (AVIMTextMessage) message;
+                imChatAdapter.addItem(message);
+                message_recycler.smoothScrollToPosition(messageList.size());
+                MessageUtils.saveMessageInfo(jsonArray, conversation);
             }
         }
     }
+
 }

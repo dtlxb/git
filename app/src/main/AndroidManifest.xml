@@ -51,10 +51,12 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <activity
             android:name=".activity.PlayerActivity"
             android:theme="@style/TranslucentTheme"
             android:configChanges="screenSize|keyboardHidden|orientation"/>
+
         <activity
             android:name=".activity.FunctionActivity"
             android:screenOrientation="portrait"
@@ -70,7 +72,11 @@
         <activity
             android:name=".activity.IMRegisterActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan" /><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>
