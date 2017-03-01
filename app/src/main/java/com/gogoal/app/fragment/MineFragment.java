@@ -20,6 +20,7 @@ import com.gogoal.app.common.UFileUpload;
 import com.gogoal.app.common.UIHelper;
 import com.gogoal.app.ui.widget.BottomSheetListDialog;
 import com.gogoal.app.ui.widget.BottomSheetNormalDialog;
+import com.gogoal.app.ui.widget.EditTextDialog;
 import com.hply.imagepicker.ITakePhoto;
 import com.socks.library.KLog;
 
@@ -57,7 +58,7 @@ public class MineFragment extends BaseFragment {
                 R.mipmap.image_found_top_ad);
     }
 
-    @OnClick({R.id.setWatchLive, R.id.btn_test, R.id.btn_upload, R.id.btn_item_dialog,R.id.btn_wechat})
+    @OnClick({R.id.setWatchLive, R.id.btn_test, R.id.btn_upload, R.id.btn_item_dialog,R.id.btn_wechat,R.id.btn_item_edit})
     public void WatchLive(View view) {
         switch (view.getId()) {
             case R.id.setWatchLive:
@@ -128,6 +129,19 @@ public class MineFragment extends BaseFragment {
                         });
                     }
                 });
+
+            case R.id.btn_item_edit:
+                EditTextDialog dialog=new EditTextDialog();
+                dialog.show(getActivity().getSupportFragmentManager());
+
+                dialog.setOnSendButtonClick(new EditTextDialog.OnSendMessageListener() {
+                    @Override
+                    public void doSend(View view, String msg) {
+                        //noz9Z();
+                        //
+                    }
+                });
+
                 break;
         }
     }

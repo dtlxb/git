@@ -58,9 +58,14 @@
                     android:text="微信分享"/>
             </TableRow>
 
-            <Button
-                android:id="@+id/btn_item_dialog"
-                android:text="itemDialog" />
+            <TableRow>
+                <Button
+                    android:id="@+id/btn_item_dialog"
+                    android:text="itemDialog" />
+                <Button
+                    android:id="@+id/btn_item_edit"
+                    android:text="editDialog" />
+            </TableRow>
         </TableLayout>
 
     </ScrollView>
