@@ -35,7 +35,7 @@
     <color name="wx_share_line">#e4e4e4</color>
 
     <color name="edit_hint">#9a9a9a</color>
-    <color name="edit_bag">#e6FAFAFA</color>
+    <color name="edit_bag">#FAFAFA</color>
     <color name="send_text">#0076ff</color>
 
 </resources>

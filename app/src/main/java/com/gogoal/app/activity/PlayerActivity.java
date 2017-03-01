@@ -2,6 +2,7 @@ package com.gogoal.app.activity;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -45,9 +46,9 @@ import com.gogoal.app.base.BaseActivity;
 import com.gogoal.app.bean.BaseMessage;
 import com.gogoal.app.bean.RelaterVideoData;
 import com.gogoal.app.common.AppConst;
+import com.gogoal.app.common.AppDevice;
 import com.gogoal.app.common.DialogHelp;
 import com.gogoal.app.common.IMHelpers.AVImClientManager;
-import com.gogoal.app.common.IMHelpers.MessageUtils;
 import com.gogoal.app.common.PlayerUtils.CountDownTimerView;
 import com.gogoal.app.common.PlayerUtils.PlayerControl;
 import com.gogoal.app.common.PlayerUtils.StatusListener;
@@ -77,10 +78,6 @@ public class PlayerActivity extends BaseActivity {
 
     @BindView(R.id.player_recyc)
     RecyclerView recyler_chat;
-    @BindView(R.id.player_linear)
-    LinearLayout player_linear;
-    @BindView(R.id.player_edit)
-    EditText player_edit;
 
     //直播预告展示
     @BindView(R.id.countDownTimer)
@@ -190,6 +187,7 @@ public class PlayerActivity extends BaseActivity {
 
         mLiveChatAdapter = new LiveChatAdapter(PlayerActivity.this, R.layout.item_live_chat, messageList);
         recyler_chat.setAdapter(mLiveChatAdapter);
+
 //        countDownTimer.addTime("2017-02-28 10:01:00");
 //        countDownTimer.start();
 
@@ -848,11 +846,11 @@ public class PlayerActivity extends BaseActivity {
     }
 
     @OnClick({R.id.imgPlayerChat, R.id.imgPlayerProfiles, R.id.imgPlayerRelaterVideo, R.id.imgPlayerShare,
-            R.id.imgPlayerShotCut, R.id.imgPlayerClose, R.id.send_text})
+            R.id.imgPlayerShotCut, R.id.imgPlayerClose})
     public void setClickFunctionBar(View v) {
         switch (v.getId()) {
             case R.id.imgPlayerChat: //发消息
-
+                showPlayerChat();
                 break;
             case R.id.imgPlayerProfiles: //主播介绍
                 showAnchorProfiles();
@@ -868,7 +866,31 @@ public class PlayerActivity extends BaseActivity {
             case R.id.imgPlayerClose:
                 finish();
                 break;
-            case R.id.send_text:
+        }
+    }
+
+    private void showPlayerChat() {
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_show_chat, new LinearLayout(getContext()), false);
+
+        final EditText player_edit = (EditText) dialogView.findViewById(R.id.player_edit);
+        TextView send_text = (TextView) dialogView.findViewById(R.id.send_text);
+
+        player_edit.setFocusableInTouchMode(true);
+        player_edit.setFocusable(true);
+        player_edit.requestFocus();
+        AppDevice.showSoftKeyboard(player_edit);
+
+        final BottomDialog dialog = DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_show_chat);
+
+        send_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(player_edit.getText().toString() == null) {
+                    UIHelper.showSnack(PlayerActivity.this, "请输入内容");
+                    return;
+                }
+
                 if (null != imConversation) {
                     HashMap<String, Object> attrsMap = new HashMap<String, Object>();
                     attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
@@ -883,13 +905,16 @@ public class PlayerActivity extends BaseActivity {
                     imConversation.sendMessage(msg, new AVIMConversationCallback() {
                         @Override
                         public void done(AVIMException e) {
+                            dialog.dismiss();
                             player_edit.setText("");
                             UIHelper.showSnack(PlayerActivity.this, "发送成功");
                         }
                     });
                 }
-                break;
-        }
+            }
+        });
+
+        dialog.show();
     }
 
     private void showAnchorProfiles() {
