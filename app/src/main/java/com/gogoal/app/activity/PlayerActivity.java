@@ -23,7 +23,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -54,6 +53,7 @@ import com.gogoal.app.common.PlayerUtils.PlayerControl;
 import com.gogoal.app.common.PlayerUtils.StatusListener;
 import com.gogoal.app.common.UIHelper;
 import com.gogoal.app.ui.widget.BottomSheetNormalDialog;
+import com.gogoal.app.ui.widget.EditTextDialog;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -870,60 +870,33 @@ public class PlayerActivity extends BaseActivity {
     }
 
     private void showPlayerChat() {
+        final EditTextDialog dialog = new EditTextDialog();
+        dialog.show(getContext().getSupportFragmentManager());
 
-        DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_show_chat, new BottomSheetNormalDialog.ViewListener() {
+        dialog.setOnSendButtonClick(new EditTextDialog.OnSendMessageListener() {
             @Override
-            public void bindDialogView(final BottomSheetNormalDialog dialog, View dialogView) {
+            public void doSend(View view, final EditText player_edit) {
 
-                final EditText player_edit = (EditText) dialogView.findViewById(R.id.player_edit);
-                final TextView send_text = (TextView) dialogView.findViewById(R.id.send_text);
+                if (null != imConversation) {
+                    HashMap<String, Object> attrsMap = new HashMap<String, Object>();
+                    attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
+                    final AVIMTextMessage msg = new AVIMTextMessage();
+                    msg.setText(player_edit.getText().toString());
+                    msg.setAttrs(attrsMap);
 
-//                player_edit.setFocusableInTouchMode(true);
-//                player_edit.setFocusable(true);
-//                player_edit.requestFocus();
-//                AppDevice.showSoftKeyboard(dialogView);
+                    messageList.add(msg);
+                    mLiveChatAdapter.notifyDataSetChanged();
+                    recyler_chat.smoothScrollToPosition(messageList.size());
 
-                player_edit.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        InputMethodManager imm =
-                                (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(player_edit, 0);
-                    }
-                });
-
-                send_text.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if (player_edit.getText().toString().equals("")) {
-                            UIHelper.showSnack(PlayerActivity.this, "请输入内容");
-                            return;
+                    imConversation.sendMessage(msg, new AVIMConversationCallback() {
+                        @Override
+                        public void done(AVIMException e) {
+                            dialog.dismiss();
+                            AppDevice.hideSoftKeyboard(player_edit);
+                            player_edit.setText("");
                         }
-
-                        if (null != imConversation) {
-                            HashMap<String, Object> attrsMap = new HashMap<String, Object>();
-                            attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
-                            final AVIMTextMessage msg = new AVIMTextMessage();
-                            msg.setText(player_edit.getText().toString());
-                            msg.setAttrs(attrsMap);
-
-                            messageList.add(msg);
-                            mLiveChatAdapter.notifyDataSetChanged();
-                            recyler_chat.smoothScrollToPosition(messageList.size());
-
-                            imConversation.sendMessage(msg, new AVIMConversationCallback() {
-                                @Override
-                                public void done(AVIMException e) {
-                                    dialog.dismiss();
-                                    AppDevice.hideSoftKeyboard(send_text);
-                                    player_edit.setText("");
-                                    UIHelper.showSnack(PlayerActivity.this, "发送成功");
-                                }
-                            });
-                        }
-                    }
-                });
+                    });
+                }
             }
         });
     }
