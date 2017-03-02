@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -136,7 +137,7 @@ public class MineFragment extends BaseFragment {
 
                 dialog.setOnSendButtonClick(new EditTextDialog.OnSendMessageListener() {
                     @Override
-                    public void doSend(View view, String msg) {
+                    public void doSend(View view, EditText msg) {
                         //noz9Z();
                         //
                     }
