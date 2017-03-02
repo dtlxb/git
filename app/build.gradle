@@ -74,5 +74,6 @@ dependencies {
     compile project(':uFileLib')
     //阿里云播放器
     compile files('libs/alivc-player-2.2.0.20.jar')
-    compile files('libs/pinyin4j-2.5.0.jar')
+
+    compile 'com.github.promeg:tinypinyin:2.0.2' // 约80KB
 }

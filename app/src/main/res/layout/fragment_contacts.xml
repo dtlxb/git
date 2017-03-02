@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.gogoal.app.ui.view.IndexBar
+        <com.gogoal.app.ui.index.IndexBar
             android:id="@+id/index_bar"
             android:layout_width="25dp"
             android:layout_height="match_parent"

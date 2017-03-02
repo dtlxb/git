@@ -1,9 +1,5 @@
 package com.gogoal.app.common;
 
-import android.text.TextUtils;
-
-import net.sourceforge.pinyin4j.PinyinHelper;
-
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -78,29 +74,6 @@ public class PinYinHelper {
             }
         }
         return result;
-    }
-
-    /**
-     * 提取每个汉字的首字母(大写)
-     */
-    public static String getPinYinHeadChar(String str) {
-        if (TextUtils.isEmpty(str)) {
-            return "";
-        }
-        String convert = "";
-        for (int j = 0; j < str.length(); j++) {
-            char word = str.charAt(j);
-            // 提取汉字的首字母
-            String[] pinyinArray = PinyinHelper.toHanyuPinyinStringArray(word);
-            if (pinyinArray != null) {
-                convert += pinyinArray[0].charAt(0);
-            }
-            else {
-                convert += word;
-            }
-        }
-
-        return StringUtils.replaceBlank(convert).toUpperCase();
     }
 
 }

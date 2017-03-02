@@ -56,7 +56,7 @@ public class EditTextDialog extends BaseBottomDialog {
 
     @Override
     public float getDimAmount() {
-        return 0.9f;
+        return 0.6f;
     }
 
     @Override

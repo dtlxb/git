@@ -1,13 +1,15 @@
 package com.gogoal.app.bean;
 
-import java.io.Serializable;
+import com.gogoal.app.ui.index.BaseIndexPinyinBean;
 
 /**
  * author wangjd on 2017/2/28 0028.
  * Staff_id 1375
  * phone 18930640263
  */
-public class ContactBean implements Comparable<ContactBean>, Serializable {
+public class ContactBean<T> extends BaseIndexPinyinBean{
+
+    private ContactType contactType;//item类型
 
     private String mAccountId;//账号Id
 
@@ -19,58 +21,102 @@ public class ContactBean implements Comparable<ContactBean>, Serializable {
 
     private String mPinyin;//昵称/备注的全拼
 
-    private String mAvatar;//头像地址
+    private T mAvatar;//头像地址
 
-    @Override
-    public int compareTo(ContactBean o) {
-        return this.mPinyin.compareTo(o.getmPinyin());
+    public ContactType getContactType() {
+        return contactType;
+    }
+
+    public ContactBean setContactType(ContactType contactType) {
+        this.contactType = contactType;
+        return this;
     }
 
     public String getmAccountId() {
         return mAccountId;
     }
 
-    public void setmAccountId(String mAccountId) {
+    public ContactBean setmAccountId(String mAccountId) {
         this.mAccountId = mAccountId;
+        return this;
     }
 
     public String getmAccount() {
         return mAccount;
     }
 
-    public void setmAccount(String mAccount) {
+    public ContactBean setmAccount(String mAccount) {
         this.mAccount = mAccount;
+        return this;
     }
 
     public String getmName() {
         return mName;
     }
 
-    public void setmName(String mName) {
+    public ContactBean setmName(String mName) {
         this.mName = mName;
+        return this;
     }
 
     public String getmAlias() {
         return mAlias;
     }
 
-    public void setmAlias(String mAlias) {
+    public ContactBean setmAlias(String mAlias) {
         this.mAlias = mAlias;
+        return this;
     }
 
     public String getmPinyin() {
         return mPinyin;
     }
 
-    public void setmPinyin(String mPinyin) {
+    public ContactBean setmPinyin(String mPinyin) {
         this.mPinyin = mPinyin;
+        return this;
     }
 
-    public String getmAvatar() {
+    public T getmAvatar() {
         return mAvatar;
     }
 
-    public void setmAvatar(String mAvatar) {
+    public ContactBean setmAvatar(T mAvatar) {
         this.mAvatar = mAvatar;
+        return this;
+    }
+
+    @Override
+    public String getTarget() {
+        return mName;
+    }
+
+    @Override
+    public boolean isNeedToPinyin() {
+        return getContactType()==ContactType.PersionItem;
+    }
+
+
+    @Override
+    public boolean isShowSuspension() {
+        return getContactType()==ContactType.PersionItem;
+    }
+
+
+    public enum ContactType{
+        FunctionItem(0),PersionItem(0);
+        private int type;
+
+        ContactType(int type) {
+            this.type = type;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
     }
 }
