@@ -13,7 +13,11 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -958,7 +962,17 @@ public class PlayerActivity extends BaseActivity {
         @Override
         protected void convert(ViewHolder holder, AVIMMessage message, int position) {
             AVIMTextMessage msg = (AVIMTextMessage) message;
-            holder.setText(R.id.text_you_send, msg.getAttrs().get("username") + ":" + " " + msg.getText());
+            String username = msg.getAttrs().get("username") + ": ";
+
+            TextView textSend = holder.getView(R.id.text_you_send);
+            textSend.setText(username + msg.getText());
+
+            SpannableStringBuilder builder = new SpannableStringBuilder(textSend.getText().toString());
+            ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.live_chat_level1));
+            ForegroundColorSpan Span2 = new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.textColor_333333));
+            builder.setSpan(Span1, 0, username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder.setSpan(Span2, username.length(), textSend.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            textSend.setText(builder);
         }
     }
 }
