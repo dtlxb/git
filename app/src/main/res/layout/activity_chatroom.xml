@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ChatRoomActivity">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/flag_bottom">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/flag_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/img_voice"
+            style="@style/BottomImageStyle"
+            android:contentDescription="@null"
+            android:src="@mipmap/cache_chat_img_voice" />
+
+        <EditText
+            android:id="@+id/et_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/input"
+            android:maxLines="4" />
+
+        <com.gogoal.app.ui.view.VoiceView
+            android:id="@+id/voiveView"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:background="@drawable/shape_voice_view"
+            android:layout_height="45dp" />
+
+        <ImageButton
+            android:id="@+id/img_emoji"
+            style="@style/BottomImageStyle"
+            android:contentDescription="@null"
+            android:src="@mipmap/cache_chat_img_emoji" />
+
+        <FrameLayout
+            android:id="@+id/flag_layout_send"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/img_function"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@null"
+                android:padding="10dp"
+                android:src="@mipmap/cache_chat_img_more" />
+
+            <Button
+                android:id="@+id/btn_send"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="?attr/selectableItemBackground"
+                android:minWidth="0dp"
+                android:padding="5dp"
+                android:text="@string/send"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                android:visibility="invisible" />
+        </FrameLayout>
+    </LinearLayout>
+
+</RelativeLayout>

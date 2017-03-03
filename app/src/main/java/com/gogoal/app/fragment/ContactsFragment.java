@@ -14,8 +14,8 @@ import com.gogoal.app.adapter.ContactAdapter;
 import com.gogoal.app.base.BaseFragment;
 import com.gogoal.app.bean.ContactBean;
 import com.gogoal.app.common.AppDevice;
-import com.gogoal.app.ui.SuspensionDecoration;
 import com.gogoal.app.ui.index.IndexBar;
+import com.gogoal.app.ui.index.SuspendedDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,14 +36,6 @@ public class ContactsFragment extends BaseFragment {
     @BindView(R.id.tv_constacts_flag)
     TextView tvConstactsFlag;
 
-    private LinearLayoutManager layoutManager;
-
-    private List<ContactBean> contactBeanList;
-
-    private ContactAdapter contactAdapter;
-
-    private SuspensionDecoration mDecoration;
-
     public ContactsFragment() {
     }
 
@@ -62,6 +54,7 @@ public class ContactsFragment extends BaseFragment {
         tvConstactsFlag.setLayoutParams(tvParams);
 
         //初始化
+        LinearLayoutManager layoutManager;
         rvContacts.setLayoutManager(layoutManager = new LinearLayoutManager(
                 getContext(), LinearLayoutManager.VERTICAL, false));
 
@@ -70,13 +63,13 @@ public class ContactsFragment extends BaseFragment {
                 .setNeedRealIndex(false)//设置需要真实的索引
                 .setmLayoutManager(layoutManager);//设置RecyclerView的LayoutManager
 
-        contactBeanList = getConstactsData();//模拟数据
+        List<ContactBean> contactBeanList = getConstactsData();
 
-        contactAdapter=new ContactAdapter(getContext(),contactBeanList);
+        ContactAdapter contactAdapter = new ContactAdapter(getContext(), contactBeanList);
 
         contactAdapter.notifyDataSetChanged();
 
-        mDecoration = new SuspensionDecoration(getContext(),contactBeanList);
+        SuspendedDecoration mDecoration = new SuspendedDecoration(getContext(), contactBeanList);
 
         indexBar.setmSourceDatas(contactBeanList)//设置数据
                 .invalidate();
@@ -90,6 +83,7 @@ public class ContactsFragment extends BaseFragment {
 
     }
 
+    //==========================================临时代码段--开始，模拟数据================================
     /**
      * 模拟好友数据 20组英文名，10个数字名字，50组中文名
      */
@@ -168,4 +162,6 @@ public class ContactsFragment extends BaseFragment {
                 + chArr[(int) (Math.random() * chArr.length)]
                 + chArr[(int) (Math.random() * chArr.length)];
     }
+
+    //==========================================临时代码段--结束，模拟数据================================
 }

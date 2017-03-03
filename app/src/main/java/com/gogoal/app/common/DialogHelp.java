@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.gogoal.app.R;
 import com.gogoal.app.ui.widget.BottomSheetListDialog;
 import com.gogoal.app.ui.widget.BottomSheetNormalDialog;
 import com.gogoal.app.ui.widget.ShareBottomDialog;
@@ -182,8 +183,8 @@ public class DialogHelp {
      * @param dialogView        弹窗视图
      * @param dialogWindowWidth 窗体宽度
      */
-    public static AlertDialog getWindoDialog(Context context, View dialogView, int dialogWindowWidth) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+    public static AlertDialog getWindoDialog(Context context, View dialogView, int dialogWindowWidth,int dialogWindowHeight) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.WindowDialogStyle);
 
         final AlertDialog dialog = builder.create();
         dialog.show();
@@ -192,7 +193,12 @@ public class DialogHelp {
         if (window != null) {
             window.setBackgroundDrawableResource(android.R.color.transparent);
             WindowManager.LayoutParams lp = window.getAttributes();
-            lp.width = dialogWindowWidth;
+            if (dialogWindowWidth>0) {
+                lp.width = dialogWindowWidth;
+            }
+            if (dialogWindowHeight>0){
+                lp.height=dialogWindowHeight;
+            }
             window.setAttributes(lp);
 
             window.setContentView(dialogView);

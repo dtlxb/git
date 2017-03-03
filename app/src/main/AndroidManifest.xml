@@ -45,6 +45,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activity.TakePhotoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -72,6 +73,10 @@
 
         <activity
             android:name=".activity.IMRegisterActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".activity.ChatRoomActivity"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"/>
 
     </application>

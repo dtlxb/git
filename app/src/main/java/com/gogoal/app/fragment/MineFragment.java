@@ -50,6 +50,7 @@ public class MineFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
+
         //对显示图片圆角矩形处理
         ImageDisplay.loadRoundedRectangleImage(
                 mContext,
@@ -79,7 +80,7 @@ public class MineFragment extends BaseFragment {
                         KLog.e(uriPaths);
                         if (uriPaths != null) {
                             //返回的图片集合不为空，执行上传操作
-//                            doUpload(uriPaths);
+                            doUpload(uriPaths);
                             UIHelper.toast(getContext(),uriPaths.toString());
                         }
                     }
@@ -178,6 +179,7 @@ public class MineFragment extends BaseFragment {
                     @Override
                     public void onFailed() {
                         KLog.e("上传失败!!!!!!");
+                        waitDialog[0].cancel();
                     }
                 });
             }

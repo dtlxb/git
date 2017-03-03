@@ -31,7 +31,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     //图片
     public static int TYPE_LEFT_IMAGE_MESSAGE = 0x03;
     public static int TYPE_RIGHT_IMAGE_MESSAGE = 0x04;
-    //语音
+    //cache_chat_img_voice
     public static int TYPE_LEFT_VOICE_MESSAGE = 0x05;
     public static int TYPE_RIGHT_VOICE_MESSAGE = 0x06;
 

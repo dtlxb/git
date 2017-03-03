@@ -18,6 +18,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -39,6 +40,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +48,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
+import static com.gogoal.app.base.MyApp.getContext;
 
 public class AppDevice {
 
@@ -877,7 +880,7 @@ public class AppDevice {
     }
 
     /**
-     * 禁止EditText输入空格
+     * 禁止EditText输入空格 回车
      *
      * @param editText
      */
@@ -885,7 +888,7 @@ public class AppDevice {
         InputFilter filter = new InputFilter() {
             @Override
             public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-                if (source.equals(" ")){
+                if (source.equals(" ") || source.equals("\n\r")||source.equals("\n") || source.equals("\r")){
                     return "";
                 }else {
                     return null;
@@ -893,5 +896,28 @@ public class AppDevice {
             }
         };
         editText.setFilters(new InputFilter[]{filter});
+    }
+
+    public static int getAudioDurition(String path){
+
+        MediaPlayer mediaPlayer = new MediaPlayer();
+
+        try {
+            mediaPlayer.setDataSource(getContext(), Uri.fromFile(new File(path)));
+
+            mediaPlayer.setAudioStreamType(android.media.AudioManager.STREAM_MUSIC);
+
+            mediaPlayer.prepare();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        int duration = mediaPlayer.getDuration();
+
+        mediaPlayer.release();
+        mediaPlayer=null;
+
+        return duration;
     }
 }
