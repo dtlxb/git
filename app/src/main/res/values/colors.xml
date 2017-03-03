@@ -34,6 +34,16 @@
 
     <color name="wx_share_line">#e4e4e4</color>
 
+    <color name="edit_hint">#9a9a9a</color>
+    <color name="edit_bag">#FAFAFA</color>
+    <color name="send_text">#0076ff</color>
+
+    <color name="live_chat">#c8ffffff</color>
+
+    <color name="live_chat_level1">#ee514d</color>
+    <color name="live_chat_level2">#1d8fe1</color>
+    <color name="live_chat_level3">#31b48d</color>
+
     <!--封装通用底部列表弹窗颜色-->
     <color name="item_press">@color/wx_share_line</color>
 
@@ -41,9 +51,5 @@
     <color name="index_bar_text">@color/textColor_666666</color>
     <color name="index_bar_pressed">#33000000</color>
     <color name="index_bar_text_flag">#66000000</color>
-
-    <color name="edit_hint">#9a9a9a</color>
-    <color name="edit_bag">#e6FAFAFA</color>
-    <color name="send_text">#0076ff</color>
 
 </resources>

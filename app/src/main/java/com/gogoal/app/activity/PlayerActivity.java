@@ -13,7 +13,11 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -45,6 +49,7 @@ import com.gogoal.app.base.BaseActivity;
 import com.gogoal.app.bean.BaseMessage;
 import com.gogoal.app.bean.RelaterVideoData;
 import com.gogoal.app.common.AppConst;
+import com.gogoal.app.common.AppDevice;
 import com.gogoal.app.common.DialogHelp;
 import com.gogoal.app.common.IMHelpers.AVImClientManager;
 import com.gogoal.app.common.PlayerUtils.CountDownTimerView;
@@ -52,6 +57,7 @@ import com.gogoal.app.common.PlayerUtils.PlayerControl;
 import com.gogoal.app.common.PlayerUtils.StatusListener;
 import com.gogoal.app.common.UIHelper;
 import com.gogoal.app.ui.widget.BottomSheetNormalDialog;
+import com.gogoal.app.ui.widget.EditTextDialog;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -76,10 +82,6 @@ public class PlayerActivity extends BaseActivity {
 
     @BindView(R.id.player_recyc)
     RecyclerView recyler_chat;
-    @BindView(R.id.player_linear)
-    LinearLayout player_linear;
-    @BindView(R.id.player_edit)
-    EditText player_edit;
 
     //直播预告展示
     @BindView(R.id.countDownTimer)
@@ -189,6 +191,7 @@ public class PlayerActivity extends BaseActivity {
 
         mLiveChatAdapter = new LiveChatAdapter(PlayerActivity.this, R.layout.item_live_chat, messageList);
         recyler_chat.setAdapter(mLiveChatAdapter);
+
 //        countDownTimer.addTime("2017-02-28 10:01:00");
 //        countDownTimer.start();
 
@@ -847,11 +850,11 @@ public class PlayerActivity extends BaseActivity {
     }
 
     @OnClick({R.id.imgPlayerChat, R.id.imgPlayerProfiles, R.id.imgPlayerRelaterVideo, R.id.imgPlayerShare,
-            R.id.imgPlayerShotCut, R.id.imgPlayerClose, R.id.send_text})
+            R.id.imgPlayerShotCut, R.id.imgPlayerClose})
     public void setClickFunctionBar(View v) {
         switch (v.getId()) {
             case R.id.imgPlayerChat: //发消息
-
+                showPlayerChat();
                 break;
             case R.id.imgPlayerProfiles: //主播介绍
                 showAnchorProfiles();
@@ -867,7 +870,17 @@ public class PlayerActivity extends BaseActivity {
             case R.id.imgPlayerClose:
                 finish();
                 break;
-            case R.id.send_text:
+        }
+    }
+
+    private void showPlayerChat() {
+        final EditTextDialog dialog = new EditTextDialog();
+        dialog.show(getContext().getSupportFragmentManager());
+
+        dialog.setOnSendButtonClick(new EditTextDialog.OnSendMessageListener() {
+            @Override
+            public void doSend(View view, final EditText player_edit) {
+
                 if (null != imConversation) {
                     HashMap<String, Object> attrsMap = new HashMap<String, Object>();
                     attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
@@ -882,20 +895,21 @@ public class PlayerActivity extends BaseActivity {
                     imConversation.sendMessage(msg, new AVIMConversationCallback() {
                         @Override
                         public void done(AVIMException e) {
+                            dialog.dismiss();
+                            AppDevice.hideSoftKeyboard(player_edit);
                             player_edit.setText("");
-                            UIHelper.showSnack(PlayerActivity.this, "发送成功");
                         }
                     });
                 }
-                break;
-        }
+            }
+        });
     }
 
     private void showAnchorProfiles() {
 
-        DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_anchor_introduction,new BottomSheetNormalDialog.ViewListener() {
+        DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_anchor_introduction, new BottomSheetNormalDialog.ViewListener() {
             @Override
-            public void bindDialogView(BottomSheetNormalDialog dialog,View dialogView) {
+            public void bindDialogView(BottomSheetNormalDialog dialog, View dialogView) {
                 ImageView anchor_avatar = (ImageView) dialogView.findViewById(R.id.anchor_avatar);
                 TextView anchor_name = (TextView) dialogView.findViewById(R.id.anchor_name);
                 TextView anchor_position = (TextView) dialogView.findViewById(R.id.anchor_position);
@@ -920,7 +934,7 @@ public class PlayerActivity extends BaseActivity {
 
         DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_relater_video, new BottomSheetNormalDialog.ViewListener() {
             @Override
-            public void bindDialogView(BottomSheetNormalDialog dialog,View dialogView) {
+            public void bindDialogView(BottomSheetNormalDialog dialog, View dialogView) {
 
             }
         });
@@ -948,7 +962,17 @@ public class PlayerActivity extends BaseActivity {
         @Override
         protected void convert(ViewHolder holder, AVIMMessage message, int position) {
             AVIMTextMessage msg = (AVIMTextMessage) message;
-            holder.setText(R.id.text_you_send, msg.getAttrs().get("username") + ":" + " " + msg.getText());
+            String username = msg.getAttrs().get("username") + ": ";
+
+            TextView textSend = holder.getView(R.id.text_you_send);
+            textSend.setText(username + msg.getText());
+
+            SpannableStringBuilder builder = new SpannableStringBuilder(textSend.getText().toString());
+            ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.live_chat_level1));
+            ForegroundColorSpan Span2 = new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.textColor_333333));
+            builder.setSpan(Span1, 0, username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder.setSpan(Span2, username.length(), textSend.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            textSend.setText(builder);
         }
     }
 }
