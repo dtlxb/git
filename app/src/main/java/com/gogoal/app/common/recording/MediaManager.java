@@ -1,7 +1,7 @@
-package com.gogoal.app.ui.recorder;
+package com.gogoal.app.common.recording;
 
-import android.media.*;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 
 import java.io.IOException;
 

@@ -1,12 +1,10 @@
-package com.gogoal.app.ui.recorder;
+package com.gogoal.app.common.recording;
 
 import android.media.MediaRecorder;
 
-import com.gogoal.app.base.MyApp;
-import com.gogoal.app.common.MD5Utils;
-
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 public class AudioManager {
     private MediaRecorder mMediaRecorder;
@@ -15,8 +13,7 @@ public class AudioManager {
     private boolean isPrepared;
 
     private static AudioManager mInstance;
-
-    public static AudioManager getmInstance(String dir){
+    public static AudioManager getInstance(String dir){
         if(mInstance == null) {
             synchronized (AudioManager.class){
                 if(mInstance == null) {
@@ -37,7 +34,7 @@ public class AudioManager {
      * 回调准备完毕
      */
     public interface AudioStateListener{
-        void prepareDown();
+        void wellPrepared();
     }
 
     public void setOnAudioStateListener(AudioStateListener listener) {
@@ -53,6 +50,9 @@ public class AudioManager {
             isPrepared = false;
 
             File dir = new File(mDir);
+            if(!dir.exists()) {
+                dir.mkdirs();
+            }
             String fileName = generateFileName();
             File file = new File(dir,fileName);
 
@@ -60,6 +60,7 @@ public class AudioManager {
             mMediaRecorder = new MediaRecorder();
             //设置输出文件
             mMediaRecorder.setOutputFile(file.getAbsolutePath());
+
             //设置MediaRecorder的音频源为麦克风
             mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             //设置音频的格式
@@ -73,7 +74,7 @@ public class AudioManager {
             //准备结束
             isPrepared = true;
             if(mListener != null) {
-                mListener.prepareDown();
+                mListener.wellPrepared();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -85,19 +86,20 @@ public class AudioManager {
      * @return
      */
     private String generateFileName() {
-        return MD5Utils.getMD5EncryptyString(MyApp.getContext().getPackageName()+"_"+System.currentTimeMillis())+".amr";
+        return UUID.randomUUID().toString()+".amr";
     }
 
     /**
      * 获得音量等级
+     * @return
      */
     public int getVoiceLevel(int maxLevel){
         if(isPrepared){
             try{
-                //mMediaRecorder.getMaxAmplitude() 范围:1-2^15之间
+                //mMediaRecorder.getMaxAmplitude() 范围:1-32767之间
                 return maxLevel * mMediaRecorder.getMaxAmplitude() / 32768 + 1;
             }catch (Exception e){
-                e.printStackTrace();
+
             }
         }
         return 1;

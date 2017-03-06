@@ -25,7 +25,7 @@ public class EditTextDialog extends BaseBottomDialog {
 
     @Override
     public int getLayoutRes() {
-        return R.layout.dialog_show_chat;
+        return R.layout.dialog_live_chat;
     }
 
     @Override

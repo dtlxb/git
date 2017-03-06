@@ -18,13 +18,13 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.PowerManager;
 import android.support.annotation.ColorInt;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
@@ -534,6 +534,7 @@ public class AppDevice {
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
 
+    /**取消全屏*/
     public static void cancelFullScreen(Activity activity) {
         WindowManager.LayoutParams params = activity.getWindow()
                 .getAttributes();
@@ -543,54 +544,109 @@ public class AppDevice {
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
 
-    public static PackageInfo getPackageInfo(Context context, String pckName) {
+    /**
+     * 获取当前应用程序的包名
+     * @param context 上下文对象
+     * @return 返回包名
+     */
+    public static String getAppProcessName(Context context) {
+        //当前应用pid
+        int pid = android.os.Process.myPid();
+        //任务管理类
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        //遍历所有应用
+        List<ActivityManager.RunningAppProcessInfo> infos = manager.getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo info : infos) {
+            if (info.pid == pid)//得到当前应用
+                return info.processName;//返回包名
+        }
+        return "";
+    }
+    /**
+     * 获取程序 图标
+     * @param context ;
+     * @param packname 应用包名
+     * @return ;
+     */
+    public Drawable getAppIcon(Context context, String packname){
         try {
-            return context.getPackageManager()
-                    .getPackageInfo(pckName, 0);
+            //包管理操作管理类
+            PackageManager pm = context.getPackageManager();
+            //获取到应用信息
+            ApplicationInfo info = pm.getApplicationInfo(packname, 0);
+            return info.loadIcon(pm);
         } catch (NameNotFoundException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
-    public static int getVersionCode(Context context) {
-        int versionCode = 0;
+    /**
+     * 获取程序的版本号
+     * @param context ;
+     * @param packname ;
+     * @return ;
+     */
+    public String getAppVersion(Context context,String packname){
+        //包管理操作管理类
+        PackageManager pm = context.getPackageManager();
         try {
-            versionCode = context
-                    .getPackageManager()
-                    .getPackageInfo(context.getPackageName(),
-                            0).versionCode;
-        } catch (NameNotFoundException ex) {
-            versionCode = 0;
+            PackageInfo packinfo = pm.getPackageInfo(packname, 0);
+            return packinfo.versionName;
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+
         }
-        return versionCode;
+        return packname;
     }
 
-    public static int getVersionCode(Context context, String packageName) {
-        int versionCode = 0;
+
+    /**
+     * 获取程序的名字
+     * @param context ;
+     * @param packname ;
+     * @return ;
+     */
+    public String getAppName(Context context,String packname){
+        //包管理操作管理类
+        PackageManager pm = context.getPackageManager();
         try {
-            versionCode = context.getPackageManager()
-                    .getPackageInfo(packageName, 0).versionCode;
-        } catch (NameNotFoundException ex) {
-            versionCode = 0;
+            ApplicationInfo info = pm.getApplicationInfo(packname, 0);
+            return info.loadLabel(pm).toString();
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
         }
-        return versionCode;
+        return packname;
     }
 
-    public static String getVersionName(Context context) {
-        String name = "";
+    /**
+     * 获取程序的签名
+     * @param context ;
+     * @param packname ;
+     * @return ;
+     */
+    public static String getAppSignature(Context context,String packname){
         try {
-            name = context.getPackageManager()
-                    .getPackageInfo(context.getPackageName(),
-                            0).versionName;
-        } catch (NameNotFoundException ex) {
-            name = "";
-        }
-        return name;
-    }
+            //包管理操作管理类
+            PackageManager pm = context.getPackageManager();
+            PackageInfo packinfo = pm.getPackageInfo(packname, PackageManager.GET_SIGNATURES);
+            //获取当前应用签名
+            return packinfo.signatures[0].toCharsString();
 
-    public static boolean isScreenOn(Context context) {
-        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        return pm.isScreenOn();
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+
+        }
+        return packname;
+    }
+    /**
+     * 获取当前展示 的Activity名称
+     * @return
+     */
+    private static String getCurrentActivityName(Context context){
+        ActivityManager activityManager=(ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        String runningActivity=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+        return runningActivity;
     }
 
     /**
@@ -661,14 +717,6 @@ public class AppDevice {
         Intent it = new Intent(Intent.ACTION_SENDTO, uri);
         it.putExtra("sms_body", smsBody);
         context.startActivity(it);
-    }
-
-
-    public static void openCamera(Context context) {
-        Intent intent = new Intent(); // 调用照相机
-        intent.setAction("android.media.action.STILL_IMAGE_CAMERA");
-        intent.setFlags(0x34c40000);
-        context.startActivity(intent);
     }
 
    /* public static void openWeChat(Context context) {

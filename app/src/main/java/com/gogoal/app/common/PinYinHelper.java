@@ -16,7 +16,7 @@ public class PinYinHelper {
             2433, 2594, 2787, 3106, 3212, 3472, 3635, 3722, 3730, 3858, 4027,
             4086, 4390, 4558, 4684, 4925, 5249, 5600};
 
-    // 存放国标一级汉字不同读音的起始区位码对应读音
+    // 存放国标一级汉字不同读音的声母起始区位码对应读音
     private static final char[] firstLetter = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
             'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'w', 'x',
             'y', 'z'};
@@ -38,16 +38,16 @@ public class PinYinHelper {
     }
 
     // 获取一个汉字的首字母
-    private static Character getFirstLetter(char ch) {
+    private static char getFirstLetter(char ch) {
         byte[] uniCode;
         try {
             uniCode = String.valueOf(ch).getBytes("GBK");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-            return null;
+            return '?';
         }
         if (uniCode[0] > 0) { // 非汉字
-            return null;
+            return '?';
         } else {
             return convert(uniCode);
         }

@@ -1,19 +1,24 @@
-package com.gogoal.app.ui.recorder;
+package com.gogoal.app.ui.view;
 
 import android.content.Context;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 
 import com.gogoal.app.R;
 import com.gogoal.app.common.AppDevice;
-import com.socks.library.KLog;
+import com.gogoal.app.common.UIHelper;
+import com.gogoal.app.common.recording.AudioManager;
+import com.gogoal.app.common.recording.DialogManager;
 
-public class AudioRecorderButton extends Button implements AudioManager.AudioStateListener {
-    private static int DISTANCE_Y_CANCEL; //正常开发情况下,应该使用dp,然后将dp转换为px
+import java.io.File;
+
+
+public class VoiceButton extends SelectorButton implements AudioManager.AudioStateListener {
+    private static final int DISTANCE_Y_CANCEL = 50; //正常开发情况下,应该使用dp,然后将dp转换为px
     private static final int STATE_NORMAL = 1; //默认状态
     private static final int STATE_RECORDING = 2; //正在录音
     private static final int STATE_WANT_TO_CANCEL = 3; //希望取消
@@ -32,23 +37,33 @@ public class AudioRecorderButton extends Button implements AudioManager.AudioSta
     //是否触发longClick方法
     private boolean mReady;
 
-    public AudioRecorderButton(Context context) {
+    public VoiceButton(Context context) {
         this(context, null);
     }
 
-    public AudioRecorderButton(Context context, AttributeSet attrs) {
+    public VoiceButton(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public AudioRecorderButton(Context context, AttributeSet attrs, int defStyle) {
+    public VoiceButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        DISTANCE_Y_CANCEL= AppDevice.getHeight(context)/5;
         mDialogManger = new DialogManager(context);
-        try {
-            mAudioManger = AudioManager.getmInstance(context.getExternalFilesDir("chatRecorder").getPath());
-        }catch (Exception e){
-            KLog.e("检查SD卡");
+        //TODO 判断SD卡是否存在
+        if (!AppDevice.isSdcardReady()){
+            UIHelper.toast(context,"设备SD卡出错");
+            return;
         }
+        String dir;
+        File filesDir = context.getExternalFilesDir("recorder");
+        if (filesDir!=null && filesDir.exists()){
+            dir=filesDir.getPath();
+        }else {
+            dir=Environment.getExternalStorageDirectory().getPath()
+                    +"Android"+File.separator+"data"+File.separator
+                    + AppDevice.getAppProcessName(context)+File.separator
+                    +"file"+File.separator+"recorder";
+        }
+        mAudioManger = AudioManager.getInstance(dir);
         mAudioManger.setOnAudioStateListener(this);
 
         this.setOnLongClickListener(new OnLongClickListener() {
@@ -113,7 +128,7 @@ public class AudioRecorderButton extends Button implements AudioManager.AudioSta
     };
 
     @Override
-    public void prepareDown() {
+    public void wellPrepared() {
         handler.sendEmptyMessage(MSG_AUDIO_PREPARED);
     }
 
@@ -186,7 +201,6 @@ public class AudioRecorderButton extends Button implements AudioManager.AudioSta
         if(y < -DISTANCE_Y_CANCEL || y > getHeight() + DISTANCE_Y_CANCEL) {
             return true;
         }
-
         return false;
     }
 

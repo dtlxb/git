@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".activity.ChatRoomActivity">
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -22,12 +24,12 @@
         android:id="@+id/flag_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:background="@android:color/white"
         android:gravity="center"
-        android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
-        <ImageButton
+        <com.gogoal.app.ui.view.SwitchImageView
             android:id="@+id/img_voice"
             style="@style/BottomImageStyle"
             android:contentDescription="@null"
@@ -39,15 +41,22 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/input"
-            android:maxLines="4" />
+            android:maxLines="4"
+            android:visibility="gone" />
 
-        <com.gogoal.app.ui.view.VoiceView
+        <com.gogoal.app.ui.view.VoiceButton
             android:id="@+id/voiveView"
             android:layout_width="0dp"
+            android:layout_height="40dp"
             android:layout_weight="1"
-            android:visibility="gone"
-            android:background="@drawable/shape_voice_view"
-            android:layout_height="45dp" />
+            android:gravity="center"
+            android:minHeight="0dp"
+            android:text="按住 说话"
+            app:normalBackgroundColor="@color/colorTitle"
+            app:normalStrokeColor="@android:color/darker_gray"
+            app:normalStrokeWidth="1dp"
+            app:pressedBackgroundColor="@android:color/darker_gray"
+            app:radius="5dp" />
 
         <ImageButton
             android:id="@+id/img_emoji"
