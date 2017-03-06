@@ -42,7 +42,7 @@ public class MyApp extends Application {
 
         //初始化参数依次this，AppId,AppKey
         AVOSCloud.initialize(this, "dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz", "ye24iIK6ys8IvaISMC4Bs5WK");
-        //AVOSCloud.initialize(this,"hi22KV7K693uIQLX5X4ROSbs-gzGzoHsz","qTkdjmpyuVdJAearcTthBw5N");
+        //AVOSCloud.initialize(this,"R7vH8N41V1rqJIqrlTQ1mMnR-gzGzoHsz","4iXr2Ylh1VwVyYjaxs3ufFmo");
         //启用北美节点
 //        AVOSCloud.useAVCloudUS();
         //必须在启动的时候注册 MessageHandler

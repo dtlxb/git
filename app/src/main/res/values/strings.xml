@@ -30,4 +30,21 @@
     <string name="player_edit">和大家说点什么</string>
     <string name="send">发送</string>
 
+    <!-- 发送图片-->
+    <string name="action_select">选择操作</string>
+    <string name="action_select_picture">选择图片</string>
+    <string name="title_error_photo">无法保存照片，请检查SD卡是否挂载</string>
+    <string name="title_update_icon_status">正在上传头像中&#8230;</string>
+    <string name="title_icon_null">图像不存在，上传失败</string>
+    <string name="title_icon_upload_error">图片上传失败&#8230;</string>
+    <string name="title_update_success_status">个人信息更新成功&#8230;</string>
+    <string name="title_update_fail_status">个人信息更新失败&#8230;</string>
+
+    <string name="permissions_camera_error">相机无法完成初始化,请正确授权。</string>
+    <string name="str_request_camera_message">请求获取相机权限</string>
+
+    <string name="permissions_record_error">录音无法完成初始化,请正确授权。</string>
+    <string name="str_request_record_message">请求获取录音权限</string>
+    <string name="record_init_error">录音异常，无法完成初始化。</string>
+
 </resources>

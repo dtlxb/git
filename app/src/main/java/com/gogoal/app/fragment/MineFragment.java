@@ -60,7 +60,7 @@ public class MineFragment extends BaseFragment {
             case R.id.btn_upload:
                 ImageTakeUtils.getInstance().takePhoto(getContext(), 1, false, new ITakePhoto() {
                     @Override
-                    public void sueecss(List<String> uriPaths, boolean isOriginalPic) {
+                    public void success(List<String> uriPaths, boolean isOriginalPic) {
                         KLog.e(uriPaths);
                         if (uriPaths != null) {
                             //返回的图片集合不为空，执行上传操作
@@ -69,7 +69,7 @@ public class MineFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void erro() {
+                    public void error() {
 
                     }
                 });

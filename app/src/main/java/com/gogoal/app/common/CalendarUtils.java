@@ -403,4 +403,10 @@ public class CalendarUtils {
         }
         return true;
     }
+    /**
+    * 获取当前时间的时间戳
+    * */
+    public static long getCurrentTime(){
+        return System.currentTimeMillis();
+    }
 }

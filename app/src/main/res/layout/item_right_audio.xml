@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <ImageView
+        android:layout_alignParentEnd="true"
+        android:id="@+id/user_head_photo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@mipmap/timg" />
+
+    <RelativeLayout
+        android:layout_alignParentEnd="true"
+        android:id="@+id/user_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp">
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-3dp"
+            android:text="what the fag say"
+            android:textColor="@color/textColor_666666"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/audio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@+id/user_name"
+            android:text="播放语音" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
