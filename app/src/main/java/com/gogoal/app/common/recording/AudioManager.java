@@ -67,6 +67,11 @@ public class AudioManager {
             mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_NB);
             //设置音频的编码为amr
             mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            //设置采样为数
+            mMediaRecorder.setAudioEncodingBitRate(16);
+            //设置采样率
+            mMediaRecorder.setAudioSamplingRate(8000);
+
             //准备录音
             mMediaRecorder.prepare();
             //开始录音

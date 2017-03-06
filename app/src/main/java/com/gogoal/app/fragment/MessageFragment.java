@@ -165,7 +165,6 @@ public class MessageFragment extends BaseFragment {
             } else {
             }
 
-
             Log.e("+++message", messageBean.getLastMessage() + "");
             if (messageBean.getLastMessage() == null) {
                 message = "";

@@ -2,6 +2,8 @@ package com.gogoal.app.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONArray;
 import com.avos.avoscloud.im.v2.AVIMConversation;
@@ -23,6 +24,7 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
+import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.gogoal.app.R;
 import com.gogoal.app.adapter.IMChatAdapter;
@@ -44,6 +46,7 @@ import com.socks.library.KLog;
 import org.simple.eventbus.Subscriber;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,8 +55,6 @@ import java.util.Map;
 import butterknife.BindView;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
-
-import static com.gogoal.app.base.MyApp.getContext;
 
 /**
  * Created by huangxx on 2017/2/21.
@@ -95,8 +96,7 @@ public class ChatFragment extends BaseFragment {
     private IMChatAdapter imChatAdapter;
     private JSONArray jsonArray;
     private AudioRecoderUtils mAudioRecoderUtils;
-
-    private AVIMMessage mMessage;
+    private boolean hasRecode = false;
 
     @Override
     public int bindLayout() {
@@ -124,14 +124,12 @@ public class ChatFragment extends BaseFragment {
                         KLog.e(uriPaths);
                         if (uriPaths != null) {
                             //返回的图片集合不为空，执行上传操作
-                            if (!isOriginalPic) {
-                                List<String> newUriPaths = new ArrayList<String>();
-                                newUriPaths.addAll(compressPhoto(uriPaths));
-                                doUpload(newUriPaths);
-                                sendImageToZyyx(newUriPaths);
-                            } else {
+                            if (isOriginalPic) {
                                 doUpload(uriPaths);
                                 sendImageToZyyx(uriPaths);
+                            } else {
+                                //压缩后上传
+                                compressPhoto(uriPaths);
                             }
                         }
                     }
@@ -148,16 +146,16 @@ public class ChatFragment extends BaseFragment {
         send_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HashMap<String, Object> attrsMap = new HashMap<String, Object>();
+                AVIMTextMessage mTextMessage = new AVIMTextMessage();
+                HashMap<String, Object> attrsMap = new HashMap<>();
                 attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
-                final AVIMTextMessage msg = new AVIMTextMessage();
-                msg.setText(input_text.getText().toString());
-                msg.setAttrs(attrsMap);
+                mTextMessage.setAttrs(attrsMap);
+                mTextMessage.setText(input_text.getText().toString());
 
-                imChatAdapter.addItem(msg);
+                imChatAdapter.addItem(mTextMessage);
                 message_recycler.smoothScrollToPosition(messageList.size());
 
-                imConversation.sendMessage(msg, new AVIMConversationCallback() {
+                imConversation.sendMessage(mTextMessage, new AVIMConversationCallback() {
                     @Override
                     public void done(AVIMException e) {
                         UIHelper.showSnack(getActivity(), "发送成功");
@@ -165,6 +163,7 @@ public class ChatFragment extends BaseFragment {
                         MessageUtils.saveMessageInfo(jsonArray, imConversation);
                     }
                 });
+
             }
         });
 
@@ -219,15 +218,13 @@ public class ChatFragment extends BaseFragment {
                     expand_layout.setVisibility(View.VISIBLE);
                     send_text.setVisibility(View.GONE);
                 } else {
-                    mMessage = new AVIMTextMessage();
-
-                    //mMessage.setContent();
                     expand_layout.setVisibility(View.GONE);
                     send_text.setVisibility(View.VISIBLE);
                 }
             }
         });
 
+        //录音完成发送录音
         mAudioRecoderUtils.setOnAudioStatusUpdateListener(new AudioRecoderUtils.OnAudioStatusUpdateListener() {
             @Override
             public void onUpdate(double db, long time) {
@@ -236,8 +233,26 @@ public class ChatFragment extends BaseFragment {
 
             @Override
             public void onStop(String filePath) {
+                //上传UFile；
                 sendVoiceToUCloud(filePath);
-
+                //上传公司后台
+                AVIMAudioMessage mAudioMessage = null;
+                HashMap<String, Object> attrsMap = new HashMap<>();
+                attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
+                try {
+                    mAudioMessage = new AVIMAudioMessage(filePath);
+                    mAudioMessage.setAttrs(attrsMap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                imChatAdapter.addItem(mAudioMessage);
+                message_recycler.smoothScrollToPosition(messageList.size());
+                imConversation.sendMessage(mAudioMessage, new AVIMConversationCallback() {
+                    @Override
+                    public void done(AVIMException e) {
+                        UIHelper.toast(getActivity(), "录音发送成功");
+                    }
+                });
                 Log.e("+++recoder", "录音保存在：" + filePath);
             }
         });
@@ -251,10 +266,12 @@ public class ChatFragment extends BaseFragment {
                     case MotionEvent.ACTION_DOWN:
                         recode_voice.setText("松开 结束");
                         mAudioRecoderUtils.startRecord();
+                        hasRecode = true;
                         break;
                     case MotionEvent.ACTION_UP:
                         recode_voice.setText("按住 说话");
                         duration = (int) ((mAudioRecoderUtils.stopRecord()) / 1000);
+                        hasRecode = false;
                         KLog.e(duration);
                         break;
                 }
@@ -262,16 +279,37 @@ public class ChatFragment extends BaseFragment {
             }
         });
 
-
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mAudioRecoderUtils.cancelRecord();
+        if (hasRecode) {
+            mAudioRecoderUtils.cancelRecord();
+        }
     }
 
     private void sendImageToZyyx(List<String> uriPaths) {
+        for (int i = 0; i < uriPaths.size(); i++) {
+            AVIMImageMessage mImageMessage = null;
+            HashMap<String, Object> attrsMap = new HashMap<>();
+            attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
+            try {
+                mImageMessage = new AVIMImageMessage(uriPaths.get(i));
+                mImageMessage.setAttrs(attrsMap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            imChatAdapter.addItem(mImageMessage);
+
+            imConversation.sendMessage(mImageMessage, new AVIMConversationCallback() {
+                @Override
+                public void done(AVIMException e) {
+                    UIHelper.toast(getActivity(), "图片发送成功");
+                }
+            });
+        }
         /*for (int i = 0; i < uriPaths.size(); i++) {
             Map<String, String> param = new HashMap<>();
             param.put("image", response);
@@ -293,8 +331,8 @@ public class ChatFragment extends BaseFragment {
 
     }
 
-    private List<String> compressPhoto(List<String> uriPaths) {
-        final List<String> newPaths = new ArrayList<>();
+    private void compressPhoto(List<String> uriPaths) {
+        KLog.e(uriPaths);
         for (int i = 0; i < uriPaths.size(); i++) {
             Luban.get(getActivity())
                     .load(new File(uriPaths.get(i)))                     //传人要压缩的图片
@@ -307,8 +345,45 @@ public class ChatFragment extends BaseFragment {
                         }
 
                         @Override
-                        public void onSuccess(File file) {
-                            newPaths.add(file.getPath());
+                        public void onSuccess(final File file) {
+                            //分个上传UFile;
+                            UFileUpload.getInstance().upload(file, UFileUpload.Type.IMAGE, new UFileUpload.UploadListener() {
+                                @Override
+                                public void onUploading(int progress) {
+
+                                }
+
+                                @Override
+                                public void onSuccess(String onlineUri) {
+
+                                    Log.e("TTT", onlineUri);
+
+                                }
+
+                                @Override
+                                public void onFailed() {
+
+                                }
+                            });
+                            //上传公司后台
+                            AVIMImageMessage mImageMessage = null;
+                            HashMap<String, Object> attrsMap = new HashMap<>();
+                            //Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+                            attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
+                            try {
+                                mImageMessage = new AVIMImageMessage(file.getPath());
+                                mImageMessage.setAttrs(attrsMap);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            imChatAdapter.addItem(mImageMessage);
+                            message_recycler.smoothScrollToPosition(messageList.size());
+                            imConversation.sendMessage(mImageMessage, new AVIMConversationCallback() {
+                                @Override
+                                public void done(AVIMException e) {
+                                    UIHelper.toast(getActivity(), "图片发送成功");
+                                }
+                            });
                         }
 
                         @Override
@@ -317,7 +392,6 @@ public class ChatFragment extends BaseFragment {
                         }
                     }).launch();
         }
-        return newPaths;
     }
 
     private void doUpload(final List<String> uriPaths) {
@@ -347,7 +421,6 @@ public class ChatFragment extends BaseFragment {
                     public void onSuccess(String onlineUri) {
                         KLog.e("上传成功===" + onlineUri);
                         waitDialog[0].cancel();
-                        UIHelper.toast(getContext(), "上传成功" + onlineUri);
                     }
 
                     @Override
@@ -398,7 +471,7 @@ public class ChatFragment extends BaseFragment {
 
                     @Override
                     public void onSuccess(String onlineUri) {
-                        UIHelper.toast(getContext(), "上传成功" + onlineUri);
+
                     }
 
                     @Override

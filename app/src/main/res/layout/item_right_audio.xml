@@ -5,36 +5,59 @@
     android:padding="10dp">
 
     <ImageView
-        android:layout_alignParentEnd="true"
         android:id="@+id/user_head_photo"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
         android:background="@mipmap/timg" />
 
     <RelativeLayout
-        android:layout_alignParentEnd="true"
         android:id="@+id/user_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp">
 
         <TextView
-            android:visibility="gone"
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="-3dp"
             android:text="what the fag say"
             android:textColor="@color/textColor_666666"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone" />
 
-        <Button
-            android:id="@+id/audio_button"
+        <FrameLayout
+            android:id="@+id/recorder_length"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_below="@+id/user_name"
-            android:text="播放语音" />
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/icon"
+            android:background="@drawable/adp">
+
+            <View
+                android:id="@+id/recorder_anim"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical|right"
+                android:background="@drawable/v_anim3" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/recorder_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@id/recorder_length"
+            android:text="222"
+            android:textColor="@color/textColor_666666"
+            android:textSize="14sp" />
 
     </RelativeLayout>
 
