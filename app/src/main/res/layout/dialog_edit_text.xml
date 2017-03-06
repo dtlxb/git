@@ -43,6 +43,7 @@
             android:src="@mipmap/icon_image_3" />
 
         <com.gogoal.app.ui.view.SelectorButton
+            android:id="@+id/dialog_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

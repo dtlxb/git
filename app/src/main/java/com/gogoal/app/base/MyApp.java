@@ -9,6 +9,7 @@ import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
+import com.duanqu.qupai.jni.ApplicationGlue;
 import com.gogoal.app.common.AppConst;
 import com.gogoal.app.common.IMHelpers.AVImClientManager;
 import com.gogoal.app.common.IMHelpers.MyConversationHandler;
@@ -31,11 +32,12 @@ public class MyApp extends Application {
     public static IWXAPI sApi;
 
     private static MyApp app;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        app=this;
+        app = this;
 
         sApi = WXEntryActivity.initWeiXin(this, AppConst.WEIXIN_APP_ID);//初始化组件
         SPTools.initSharedPreferences(this);
@@ -58,14 +60,23 @@ public class MyApp extends Application {
         });
 
         //只有主进程运行的时候才需要初始化
-        if (getApplicationInfo().packageName.equals(getMyProcessName())){
+        if (getApplicationInfo().packageName.equals(getMyProcessName())) {
             //TODO im初始化
 
             //TODO 注册消息接收器
 
         }
 
+        //阿里云推流
+        System.loadLibrary("gnustl_shared");
+//        System.loadLibrary("ijkffmpeg");//目前使用微博的ijkffmpeg会出现1K再换wifi不重连的情况
+        System.loadLibrary("qupai-media-thirdparty");
+//        System.loadLibrary("alivc-media-jni");
+        System.loadLibrary("qupai-media-jni");
+        ApplicationGlue.initialize(this);
+
     }
+
     /**
      * @return 获取当前运行的进程名
      */
@@ -88,7 +99,7 @@ public class MyApp extends Application {
     }
 
 
-    public static Context getContext(){
+    public static Context getContext() {
         return app.getApplicationContext();
     }
 }

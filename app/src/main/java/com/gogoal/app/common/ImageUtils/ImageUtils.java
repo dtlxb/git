@@ -17,6 +17,8 @@ import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 
+import com.gogoal.app.common.FileUtil;
+
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -502,31 +504,16 @@ public class ImageUtils {
     public static String getImageWidth$Height(File imageFile) {
         InputStream is = null;
         try {
-            FileInputStream b = new FileInputStream(imageFile);
-            SimpleImageInfo imageInfo = new SimpleImageInfo(b);
-            System.out.println(imageInfo);
-            // Getting image data from a file
-            imageInfo = new SimpleImageInfo(imageFile);
-            System.out.println(imageInfo);
-            // Getting image data from a byte array
+            SimpleImageInfo imageInfo;
             byte[] buffer = new byte[1024 * 6];
             is = new FileInputStream(imageFile);
-            while (is.read(buffer) == -1) {
-            }
-            is.close();
             imageInfo = new SimpleImageInfo(buffer);
-            System.out.println(imageInfo);
             return imageInfo.getWidth() + "×" + imageInfo.getHeight();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             return "0×0";
         } finally {
             if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                FileUtil.closeIO(is);
             }
         }
     }
@@ -568,9 +555,4 @@ public class ImageUtils {
         return bitmap;
     }
 
-    /*获取UCloud的实际头像大图*/
-    public static String getRealImg(String miniUrl) {
-//        http://hackfile.ufile.ucloud.cn/avatar_67.jpg?iopcmd=thumbnail&type=1&scale=25
-        return miniUrl.contains("?iopcmd") ? miniUrl.substring(0, miniUrl.indexOf("?iopcmd")) : miniUrl;
-    }
 }

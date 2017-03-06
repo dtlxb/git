@@ -12,9 +12,9 @@ android {
         versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        ndk {
+        /*ndk {
             abiFilters "armeabi", "arm64-v8a"
-        }
+        }*/
     }
 
     buildTypes {
@@ -23,14 +23,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
 
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi-v7a'
         }
     }
 }
@@ -41,11 +44,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile 'junit:junit:4.12'
-
     compile "com.android.support:appcompat-v7:$rootProject.ext.supportVersion"
     compile "com.android.support:design:$rootProject.ext.supportVersion"
-    compile "com.android.support:recyclerview-v7:$rootProject.ext.supportVersion"
-    /**第三方依赖*/
+    /** 第三方依赖 */
     //微信登录、分享、支付依赖
     compile files('libs/libammsdk.jar')
     //网络请求
@@ -75,9 +76,16 @@ dependencies {
     compile project(':uFileLib')
     //阿里云播放器
     compile files('libs/alivc-player-2.2.0.20.jar')
+    //阿里云推流
+    compile files('libs/alivc-live-record-v1.2.0.jar')
+
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+
     //鲁班压缩
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'
     compile 'top.zibin:Luban:1.0.9'
+    compile files('libs/pinyin4j-2.5.0.jar')
+    compile 'com.github.promeg:tinypinyin:2.0.2' // 约80KB
+
 }

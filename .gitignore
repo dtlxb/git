@@ -52,4 +52,4 @@ eclipsebin
 proguard/
 
 #NDK（NDK相关的）
-jniLibs
+gradle/wrapper/gradle-wrapper.properties

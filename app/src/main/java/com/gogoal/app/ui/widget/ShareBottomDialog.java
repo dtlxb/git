@@ -42,7 +42,7 @@ public class ShareBottomDialog extends BaseBottomDialog {
         TextView tvShareWeChat = (TextView) v.findViewById(R.id.tv_dialog_share_wx);
         TextView tvShareWeChatCircle = (TextView) v.findViewById(R.id.tv_dialog_share_wx_circle);
         TextView tvShareCopyUrl = (TextView) v.findViewById(R.id.tv_dialog_share_copy);
-        TextView tvShareCancle = (TextView) v.findViewById(R.id.btn_dialog_cancle);
+        TextView tvShareCancle = (TextView) v.findViewById(R.id.tv_dialog_cancle);
 
         tvShareCancle.setOnClickListener(new View.OnClickListener() {
             @Override

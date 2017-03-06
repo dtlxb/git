@@ -10,7 +10,7 @@ import android.view.View;
  * Staff_id 1375
  * phone 18930640263
  */
-public class BottomDialog extends BaseBottomDialog {
+public class BottomSheetNormalDialog extends BaseBottomDialog {
 
     private static final String KEY_LAYOUT_RES = "bottom_layout_res";
     private static final String KEY_HEIGHT = "bottom_height";
@@ -32,8 +32,8 @@ public class BottomDialog extends BaseBottomDialog {
 
     private ViewListener mViewListener;
 
-    public static BottomDialog create(FragmentManager manager) {
-        BottomDialog dialog = new BottomDialog();
+    public static BottomSheetNormalDialog create(FragmentManager manager) {
+        BottomSheetNormalDialog dialog = new BottomSheetNormalDialog();
         dialog.setFragmentManager(manager);
         return dialog;
     }
@@ -60,9 +60,9 @@ public class BottomDialog extends BaseBottomDialog {
     }
 
     @Override
-    public void bindView(View v) {
+    public void bindView(final View dialogView) {
         if (mViewListener != null) {
-            mViewListener.bindView(v);
+            mViewListener.bindDialogView(getParentDialog(),dialogView);
         }
     }
 
@@ -71,41 +71,44 @@ public class BottomDialog extends BaseBottomDialog {
         return mLayoutRes;
     }
 
-    public BottomDialog setFragmentManager(FragmentManager manager) {
+    public BottomSheetNormalDialog setFragmentManager(FragmentManager manager) {
         mFragmentManager = manager;
         return this;
     }
 
-    public BottomDialog setViewListener(ViewListener listener) {
+    public BottomSheetNormalDialog setViewListener(ViewListener listener) {
         mViewListener = listener;
         return this;
     }
 
-    public BottomDialog setLayoutRes(@LayoutRes int layoutRes) {
+    public BottomSheetNormalDialog setLayoutRes(@LayoutRes int layoutRes) {
         mLayoutRes = layoutRes;
         return this;
     }
 
-    public BottomDialog setCancelOutside(boolean cancel) {
+    public BottomSheetNormalDialog setCancelOutside(boolean cancel) {
         mIsCancelOutside = cancel;
         return this;
     }
 
-    public BottomDialog setTag(String tag) {
+    public BottomSheetNormalDialog setTag(String tag) {
         mTag = tag;
         return this;
     }
 
-    public BottomDialog setDimAmount(float dim) {
+    public BottomSheetNormalDialog setDimAmount(float dim) {
         mDimAmount = dim;
         return this;
     }
 
-    public BottomDialog setHeight(int heightPx) {
+    public BottomSheetNormalDialog setHeight(int heightPx) {
         mHeight = heightPx;
         return this;
     }
 
+    private BottomSheetNormalDialog getParentDialog(){
+        return BottomSheetNormalDialog.this;
+    }
     @Override
     public float getDimAmount() {
         return mDimAmount;
@@ -127,7 +130,7 @@ public class BottomDialog extends BaseBottomDialog {
     }
 
     public interface ViewListener {
-        void bindView(View v);
+        void bindDialogView(BottomSheetNormalDialog dialog,View dialogView);
     }
 
     public BaseBottomDialog show() {

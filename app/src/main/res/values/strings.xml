@@ -27,8 +27,22 @@
     <string name="share_wx_circle">微信朋友圈</string>
     <string name="share_friend">微信好友</string>
     <string name="share_gogoal">Go-Goal</string>
+
+    <string name="tv_cancle">取消</string>
+
     <string name="player_edit">和大家说点什么</string>
     <string name="send">发送</string>
+    <string name="input">输入聊天内容</string>
+
+    <!--聊天语音按钮-->
+    <string name="str_recorder_normal">按住 说话</string>
+    <string name="str_recorder_recording">松开 结束</string>
+    <string name="str_recorder_want_cancel">松开手指 取消发送</string>
+
+    <!--聊天语音弹窗-->
+    <string name="str_recorder_dialog_recording">手指上滑，取消发送</string>
+    <string name="str_recorder_dialog_cancle">@string/str_recorder_want_cancel</string>
+    <string name="str_recorder_dialog_22short">录音时间太短</string>
 
     <!-- 发送图片-->
     <string name="action_select">选择操作</string>

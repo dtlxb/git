@@ -1,5 +1,7 @@
 package com.gogoal.app.common;
 
+import android.text.TextUtils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -186,21 +188,24 @@ public class CalendarUtils {
         try {
             return format.parse(dateString);
         } catch (ParseException e) {
-            e.printStackTrace();
-            return new Date();
+            try {
+                throw new Exception("错误的8位时间格式");
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
         }
+        return null;
     }
 
     /**
      * 将时间戳转换为时间
      */
-    public static String parseStampToDate(String s) {
-        String res;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        long lt = new Long(s);
-        Date date = new Date(lt);
-        res = simpleDateFormat.format(date);
-        return res;
+    public static String parseStampToDate(String sec) {
+        if (!TextUtils.isEmpty(sec)) {
+            return parseDateFormatAll(Long.parseLong(sec));
+        }else {
+            return null;
+        }
     }
 
     //时间毫秒值转成yyyy-MM-dd HH:mm:ss格式

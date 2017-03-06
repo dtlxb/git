@@ -24,15 +24,6 @@
     </style>
 
     <!--底部选择弹窗-->
-    <style name="BottomSheetSelectorDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/BottomSheetModal</item>
-    </style>
-
-    <style name="BottomSheetModal" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@android:color/transparent</item>
-        <item name="behavior_peekHeight">auto</item>
-    </style>
-
     <style name="BottomDialog" parent="@android:style/Theme.DeviceDefault.Dialog">
         <item name="android:windowTitleStyle">@null</item>
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -59,6 +50,22 @@
         <item name="android:textColor">@color/textColor_333333</item>
         <item name="android:textSize">13sp</item>
         <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <!--聊天界面底部几个图片按钮样式-->
+    <style name="BottomImageStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="WindowDialogStyle" parent="android:Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
     </style>
 
 </resources>

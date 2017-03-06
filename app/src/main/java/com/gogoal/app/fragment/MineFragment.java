@@ -5,7 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.gogoal.app.R;
 import com.gogoal.app.activity.PlayerActivity;
@@ -17,10 +19,15 @@ import com.gogoal.app.common.ImageUtils.ImageDisplay;
 import com.gogoal.app.common.ImageUtils.ImageTakeUtils;
 import com.gogoal.app.common.UFileUpload;
 import com.gogoal.app.common.UIHelper;
+import com.gogoal.app.ui.widget.BottomSheetListDialog;
+import com.gogoal.app.ui.widget.BottomSheetNormalDialog;
+import com.gogoal.app.ui.widget.EditTextDialog;
 import com.hply.imagepicker.ITakePhoto;
 import com.socks.library.KLog;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -44,27 +51,38 @@ public class MineFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
+
+        //对显示图片圆角矩形处理
         ImageDisplay.loadRoundedRectangleImage(
                 mContext,
                 imageView,
-                AppDevice.dp2px(mContext,5),
+                AppDevice.dp2px(mContext, 5),//圆角弧度
                 R.mipmap.image_found_top_ad);
     }
 
-    @OnClick({R.id.setWatchLive, R.id.btn_share, R.id.btn_upload})
+    @OnClick({R.id.setWatchLive, R.id.btn_test, R.id.btn_upload, R.id.btn_item_dialog,R.id.btn_wechat,R.id.btn_item_edit})
     public void WatchLive(View view) {
         switch (view.getId()) {
             case R.id.setWatchLive:
                 startActivity(new Intent(getContext(), PlayerActivity.class));
                 break;
+
+            case R.id.btn_wechat:
+                DialogHelp.showShareDialog(getActivity(),
+                        "https://m.baidu.com", "http://g1.dfcfw.com/g2/201702/20170216133526.png",
+                        "分享",
+                        "第一次分享");
+                break;
+
             case R.id.btn_upload:
-                ImageTakeUtils.getInstance().takePhoto(getContext(), 1, false, new ITakePhoto() {
+                ImageTakeUtils.getInstance().takePhoto(getContext(),9, false, new ITakePhoto() {
                     @Override
                     public void success(List<String> uriPaths, boolean isOriginalPic) {
                         KLog.e(uriPaths);
                         if (uriPaths != null) {
                             //返回的图片集合不为空，执行上传操作
                             doUpload(uriPaths);
+                            UIHelper.toast(getContext(),uriPaths.toString());
                         }
                     }
 
@@ -74,8 +92,58 @@ public class MineFragment extends BaseFragment {
                     }
                 });
                 break;
-            case R.id.btn_share:
-                UIHelper.showShareDialog(getActivity(), "https://m.baidu.com", "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
+            case R.id.btn_item_dialog:
+                //传个集合就行啦，真是666 啊，东哥
+                ArrayList<String> menu = new ArrayList<>(Arrays.asList(
+                        new String[]{"保存图片", "查看原图", "转发微博", "赞", "举报"}));
+
+                DialogHelp.getBottomSheetListDialog(getActivity(), menu, new BottomSheetListDialog.DialogItemClick() {
+                    @Override
+                    public void onItemClick(BottomSheetListDialog dialog, TextView view, int position) {
+                        switch (position) {
+                            case 0:
+                                break;
+                            case 1:
+                                break;
+                            case 2:
+                                break;
+                            case 3:
+                                break;
+                            case 4:
+                                dialog.dismiss();
+                                break;
+                        }
+                        UIHelper.toast(getContext(),view.getText().toString());
+                    }
+                });
+
+                break;
+            case R.id.btn_test:
+                DialogHelp.getBottomSheelNormalDialog(getActivity(), R.layout.activity_imregister, new BottomSheetNormalDialog.ViewListener() {
+
+                    @Override
+                    public void bindDialogView(final BottomSheetNormalDialog dialog, View dialogView) {
+                        dialogView.findViewById(R.id.chat_room_login).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                });
+
+            case R.id.btn_item_edit:
+                EditTextDialog dialog=new EditTextDialog();
+                dialog.show(getActivity().getSupportFragmentManager());
+
+                dialog.setOnSendButtonClick(new EditTextDialog.OnSendMessageListener() {
+                    @Override
+                    public void doSend(View view, EditText msg) {
+                        //noz9Z();
+                        //
+                    }
+                });
+
                 break;
         }
     }
@@ -112,6 +180,7 @@ public class MineFragment extends BaseFragment {
                     @Override
                     public void onFailed() {
                         KLog.e("上传失败!!!!!!");
+                        waitDialog[0].cancel();
                     }
                 });
             }
