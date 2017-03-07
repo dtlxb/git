@@ -17,8 +17,6 @@ import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 
-import com.gogoal.app.common.FileUtil;
-
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -487,21 +485,12 @@ public class ImageUtils {
     }
 
     /*获取图片的长宽尺寸*/
-    public static String getImageWidth$Height(File imageFile) {
-        InputStream is = null;
-        try {
-            SimpleImageInfo imageInfo;
-            byte[] buffer = new byte[1024 * 6];
-            is = new FileInputStream(imageFile);
-            imageInfo = new SimpleImageInfo(buffer);
-            return imageInfo.getWidth() + "×" + imageInfo.getHeight();
-        } catch (Exception e) {
-            return "0×0";
-        } finally {
-            if (is != null) {
-                FileUtil.closeIO(is);
-            }
-        }
+    public static String getImageWidth_Height(File imageFile) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        options.inSampleSize=1;
+        BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options); // 此时返回的bitmap为null
+        return options.outHeight+"x"+options.outWidth;
     }
 
     public static Bitmap imageZoom(Bitmap bitmap) {

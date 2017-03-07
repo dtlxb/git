@@ -103,7 +103,8 @@ public class UFileUpload {
 
         String key_name = MyApp.getContext().getString(R.string.app_name) + "_" +
                 MD5Utils.getMD5EncryptyString(file.getPath()) +
-                file.getPath().substring(file.getPath().lastIndexOf('.'));
+                file.getPath().substring(file.getPath().lastIndexOf('.'))+
+                (type==UFileUpload.Type.IMAGE ? "@"+ImageUtils.getImageWidth_Height(file):"");
 
         String authorization = getAuthorization(http_method, content_md5, content_type, date, bucket, key_name);
         final UFileRequest request = new UFileRequest();
