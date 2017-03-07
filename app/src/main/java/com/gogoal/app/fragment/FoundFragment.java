@@ -120,7 +120,7 @@ public class FoundFragment extends BaseFragment {
         return datas;
     }
 
-    class MainAdapter extends CommonAdapter<FoundData> {
+    private class MainAdapter extends CommonAdapter<FoundData> {
 
         private MainAdapter(Context context, int layoutId, List<FoundData> datas) {
             super(context, layoutId, datas);
@@ -151,7 +151,7 @@ public class FoundFragment extends BaseFragment {
         }
     }
 
-    class GridAdapter extends CommonAdapter<FoundData.ItemPojos> {
+    private class GridAdapter extends CommonAdapter<FoundData.ItemPojos> {
 
         private int parentPosition;
 

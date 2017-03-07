@@ -121,6 +121,7 @@ public class ImageDisplay {
                 .bitmapTransform(new RoundedCornersTransformation(context,radius,0))
                 .into(imageView);
     }
+
     /**
      * @param context   上下文对象
      * @param radius    圆角矩形角度
@@ -129,6 +130,17 @@ public class ImageDisplay {
     public static void loadRoundedRectangleImage(Context context,ImageView imageView,int radius,String imageUrl){
         Glide.with(context)
                 .load(imageUrl)
+                .bitmapTransform(new RoundedCornersTransformation(context,radius,0))
+                .into(imageView);
+    }
+    /**
+     * @param context   上下文对象
+     * @param radius    圆角矩形角度
+     * @param imageFile  磁盘图片
+     * */
+    public static void loadRoundedRectangleImage(Context context,ImageView imageView,int radius,File imageFile){
+        Glide.with(context)
+                .load(Uri.fromFile(imageFile))
                 .bitmapTransform(new RoundedCornersTransformation(context,radius,0))
                 .into(imageView);
     }

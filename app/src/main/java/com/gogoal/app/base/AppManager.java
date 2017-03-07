@@ -1,6 +1,7 @@
 package com.gogoal.app.base;
 
 import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 
 import com.gogoal.app.bean.BaseMessage;
 
@@ -13,7 +14,7 @@ import java.util.Stack;
  */
 public class AppManager {
 
-    private static Stack<Activity> activityStack;
+    private static Stack<FragmentActivity> activityStack;
     private static AppManager instance;
 
     private AppManager() {
@@ -52,7 +53,7 @@ public class AppManager {
     /**
      * 添加Activity到堆栈
      */
-    public void addActivity(Activity activity) {
+    public void addActivity(FragmentActivity activity) {
         activityStack.add(activity);
     }
 
@@ -68,14 +69,14 @@ public class AppManager {
      * 结束当前Activity（堆栈中最后一个压入的）
      */
     public void finishActivity() {
-        Activity activity = activityStack.lastElement();
+        FragmentActivity activity = activityStack.lastElement();
         finishActivity(activity);
     }
 
     /**
      * 结束指定的Activity
      */
-    public void finishActivity(Activity activity) {
+    public void finishActivity(FragmentActivity activity) {
         if (activity != null && activityStack.contains(activity)) {
             activityStack.remove(activity);
             activity.finish();
@@ -85,7 +86,7 @@ public class AppManager {
     /**
      * 结束指定的Activity
      */
-    public void removeActivity(Activity activity) {
+    public void removeActivity(FragmentActivity activity) {
         if (activity != null && activityStack.contains(activity)) {
             activityStack.remove(activity);
         }
@@ -95,7 +96,7 @@ public class AppManager {
      * 结束指定类名的Activity
      */
     public void finishActivity(Class<?> cls) {
-        for (Activity activity : activityStack) {
+        for (FragmentActivity activity : activityStack) {
             if (activity.getClass().equals(cls)) {
                 finishActivity(activity);
                 break;
@@ -107,8 +108,8 @@ public class AppManager {
      * 结束除当前Activity之外的Activity
      */
 
-    public void finishBackActivity(Activity activity){
-        for (Activity a : activityStack) {
+    public void finishBackActivity(FragmentActivity activity){
+        for (FragmentActivity a : activityStack) {
             if (!a.getClass().equals(activity.getClass())) {
                 finishActivity(a);
                 break;
@@ -129,10 +130,14 @@ public class AppManager {
 
     }
 
+    public FragmentActivity getCurrentActivity(){
+        if (!activityStack.isEmpty()){
+            return activityStack.get(activityStack.size()-1);
+        }
+        return null;
+    }
     /**
      * 发送消息
-     *
-     * @param tag
      */
     public void sendMessage(String tag) {
         EventBus.getDefault().post(new BaseMessage(), tag);

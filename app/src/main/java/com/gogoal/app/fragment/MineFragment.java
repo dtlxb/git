@@ -19,6 +19,8 @@ import com.gogoal.app.common.ImageUtils.ImageDisplay;
 import com.gogoal.app.common.ImageUtils.ImageTakeUtils;
 import com.gogoal.app.common.UFileUpload;
 import com.gogoal.app.common.UIHelper;
+import com.gogoal.app.common.wjd.IWechatCallback;
+import com.gogoal.app.common.wjd.ThreePartFactory;
 import com.gogoal.app.ui.widget.BottomSheetListDialog;
 import com.gogoal.app.ui.widget.BottomSheetNormalDialog;
 import com.gogoal.app.ui.widget.EditTextDialog;
@@ -95,13 +97,24 @@ public class MineFragment extends BaseFragment {
             case R.id.btn_item_dialog:
                 //传个集合就行啦，真是666 啊，东哥
                 ArrayList<String> menu = new ArrayList<>(Arrays.asList(
-                        new String[]{"保存图片", "查看原图", "转发微博", "赞", "举报"}));
+                        new String[]{"微信登录", "分享到微信好友", "分享到朋友圈", "微信收藏", "测试"}));
 
                 DialogHelp.getBottomSheetListDialog(getActivity(), menu, new BottomSheetListDialog.DialogItemClick() {
                     @Override
                     public void onItemClick(BottomSheetListDialog dialog, TextView view, int position) {
                         switch (position) {
                             case 0:
+                                ThreePartFactory.with(getContext())
+                                        .wechat().login(new IWechatCallback() {
+                                    @Override
+                                    public void onFailed(String errorString) {
+                                        KLog.e(errorString);
+                                    }
+                                    @Override
+                                    public void onSuccess(String responceString) {
+                                        KLog.e(responceString);
+                                    }
+                                });
                                 break;
                             case 1:
                                 break;

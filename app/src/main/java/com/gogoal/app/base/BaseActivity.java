@@ -1,10 +1,13 @@
 package com.gogoal.app.base;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
+import android.support.annotation.StringRes;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -18,6 +21,7 @@ import android.view.WindowManager;
 
 import com.gogoal.app.R;
 import com.gogoal.app.common.BuildProperties;
+import com.gogoal.app.common.DialogHelp;
 import com.gogoal.app.ui.view.XTitle;
 import com.hply.imagepicker.view.SystemBarTintManager;
 
@@ -53,6 +57,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         mContentView = LayoutInflater.from(this).inflate(bindLayout(), null);
 
         setContentView(mContentView);
+
+        AppManager.getInstance().addActivity(this);
 
         ButterKnife.bind(this);
 
@@ -179,6 +185,38 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         recyclerView.setLayoutManager(layoutManager);
     }
 
+    private ProgressDialog mDialog;
+
+    protected ProgressDialog showWaitDialog(@StringRes int messageId) {
+        if (mDialog == null) {
+            if (messageId <= 0) {
+                mDialog = DialogHelp.getProgressDialog(this, true);
+            } else {
+                String message = getResources().getString(messageId);
+                mDialog = DialogHelp.getProgressDialog(this, message, true);
+            }
+        }
+        mDialog.show();
+
+        return mDialog;
+    }
+
+    /**
+     * hide waitDialog
+     */
+    protected void hideWaitDialog() {
+        ProgressDialog dialog = mDialog;
+        if (dialog != null) {
+            mDialog = null;
+            try {
+                dialog.cancel();
+                // dialog.dismiss();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
     /*
   * 针对特殊页面通知栏颜色设置--MIUI
   * */
@@ -269,9 +307,10 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        AppManager.getInstance().finishActivity(this);
     }
 
-    public BaseActivity getContext() {
-        return BaseActivity.this;
+    public FragmentActivity getContext() {
+        return AppManager.getInstance().getCurrentActivity();
     }
 }

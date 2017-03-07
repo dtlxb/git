@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gogoal.app.R;
@@ -27,13 +28,14 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private String[] titles;
 
-    private Context mContext;
-    
-    public SimpleFragmentPagerAdapter(FragmentManager fm, Context mContext, List<Fragment> fragments, String[] titles) {
+    private Context context;
+
+    public SimpleFragmentPagerAdapter(FragmentManager fm, Context context, List<Fragment> fragments, String[] titles) {
         super(fm);
         this.fragments = fragments;
         this.titles = titles;
-        this.mContext=mContext;
+        this.context=context;
+
     }
 
     @Override
@@ -52,7 +54,7 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
     }
 
     public View getTabView(int position) {
-        ViewGroup view = (ViewGroup) LayoutInflater.from(mContext).inflate(R.layout.tab_layout_item, null);
+        ViewGroup view = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.tab_layout_item,new LinearLayout(context),false);
         TextView tv = (TextView) view.findViewById(R.id.tv_main_tab);
         ImageView imageView = (ImageView) view.findViewById(R.id.img_main_tab);
         switch (position) {

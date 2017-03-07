@@ -10,10 +10,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.gogoal.app.R;
-import com.gogoal.app.base.MyApp;
-import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.gogoal.app.common.wjd.WechatOperator;
+import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 
@@ -189,6 +190,11 @@ public class UIHelper {
      * @param description 分享内容头部
      */
     public static void WXshare(int sharetType, final Context context, String url, String imageUrl, String title, String description) {
+        final IWXAPI iwxapi = WechatOperator.init(context, AppConst.WEIXIN_APP_ID);
+        if (iwxapi==null){
+            UIHelper.toast(context,context.getString(R.string.donot_found_wechat));
+            return;
+        }
         final SendMessageToWX.Req req = new SendMessageToWX.Req();
         WXWebpageObject webpage = new WXWebpageObject();
         // 要跳转的地址
@@ -206,7 +212,7 @@ public class UIHelper {
             req.transaction = buildTransaction("webpage");
             req.message = msg;
             req.scene = shareWhat;
-            MyApp.sApi.sendReq(req);
+            iwxapi.sendReq(req);
         } else {
             //下载图片，第二个参数是否缓存至内存中
             OkHttpUtils.get().url(imageUrl).build().execute(new BitmapCallback() {
@@ -220,13 +226,13 @@ public class UIHelper {
                         req.transaction = buildTransaction("webpage");
                         req.message = msg;
                         req.scene = shareWhat;
-                        MyApp.sApi.sendReq(req);
+                        iwxapi.sendReq(req);
                     } else {
                         msg.thumbData = WXUtil.bmpToByteArray(thumbBmp, true);
                         req.transaction = buildTransaction("webpage");
                         req.message = msg;
                         req.scene = shareWhat;
-                        MyApp.sApi.sendReq(req);
+                        iwxapi.sendReq(req);
                     }
 
                     if (!thumbBmp.isRecycled()) {

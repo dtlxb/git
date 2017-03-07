@@ -204,6 +204,54 @@ public class DialogHelp {
     }
 
     /**
+     * 获取一个等待对话框
+     */
+    public static ProgressDialog getProgressDialog(Context context) {
+        return new ProgressDialog(context);
+    }
+
+    /**
+     * 获取一个等待对话框
+     */
+    public static ProgressDialog getProgressDialog(Context context, boolean cancelable) {
+        ProgressDialog dialog = getProgressDialog(context);
+        dialog.setCancelable(cancelable);
+        return dialog;
+    }
+
+    /**
+     * 获取一个等待对话框
+     */
+    public static ProgressDialog getProgressDialog(Context context, String message) {
+        ProgressDialog dialog = getProgressDialog(context);
+        dialog.setMessage(message);
+        return dialog;
+    }
+
+    /**
+     * 获取一个等待对话框
+     */
+    public static ProgressDialog getProgressDialog(
+            Context context, String title, String message, boolean cancelable) {
+        ProgressDialog dialog = getProgressDialog(context);
+        dialog.setCancelable(cancelable);
+        dialog.setTitle(title);
+        dialog.setMessage(message);
+        return dialog;
+    }
+
+    /**
+     * 获取一个等待对话框
+     */
+    public static ProgressDialog getProgressDialog(
+            Context context, String message, boolean cancelable) {
+        ProgressDialog dialog = getProgressDialog(context);
+        dialog.setCancelable(cancelable);
+        dialog.setMessage(message);
+        return dialog;
+    }
+
+    /**
      * 通用底部弹出窗
      */
     public static void getBottomSheelNormalDialog(FragmentActivity context, @LayoutRes int dialogViewId, BottomSheetNormalDialog.ViewListener listener) {

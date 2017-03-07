@@ -8,9 +8,9 @@ package com.gogoal.app.common;
 public class AppConst {
 
     //LeanCloud参数
-    public static final String LEANCLOUD_APP_ID="8XeoaOHzUJVUhBp4e64blvKe-gzGzoHsz";
+    public static final String LEANCLOUD_APP_ID="dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz";
 
-    public static final String LEANCLOUD_APP_KEY="J08LP63OdXp6TnOkFnbT2fND";
+    public static final String LEANCLOUD_APP_KEY="ye24iIK6ys8IvaISMC4Bs5WK";
 
     //UCloud  UFile
     public static final String publicKey = "ucloudgcqin@go-goal.com13648682571239575500";
@@ -23,7 +23,7 @@ public class AppConst {
     public static final String WEIXIN_APP_ID = "wx05acb31be27d76aa";
     public static final String WEIXIN_APP_SECRET = "cc2412a472da396eb16ea879d64613ad";
 
-    public static final String WEXIN_TAOKE_ACCESS_TOKEN_URL =
+    public static final String WEXIN_GET_ACCESS_TOKEN_URL =
             "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&grant_type=authorization_code&code=%s";
 
     public static final String WEXIN_IS_EXPIRE_ACCESS_TOKEN =

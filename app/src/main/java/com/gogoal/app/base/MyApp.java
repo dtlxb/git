@@ -15,8 +15,6 @@ import com.gogoal.app.common.IMHelpers.AVImClientManager;
 import com.gogoal.app.common.IMHelpers.MyConversationHandler;
 import com.gogoal.app.common.IMHelpers.MyMessageHandler;
 import com.gogoal.app.common.SPTools;
-import com.gogoal.app.wxapi.WXEntryActivity;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,8 +27,6 @@ import java.io.FileReader;
  */
 public class MyApp extends Application {
 
-    public static IWXAPI sApi;
-
     private static MyApp app;
 
     @Override
@@ -39,30 +35,28 @@ public class MyApp extends Application {
 
         app = this;
 
-        sApi = WXEntryActivity.initWeiXin(this, AppConst.WEIXIN_APP_ID);//初始化组件
         SPTools.initSharedPreferences(this);
 
-        //初始化参数依次this，AppId,AppKey
-        AVOSCloud.initialize(this, "dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz", "ye24iIK6ys8IvaISMC4Bs5WK");
-        //AVOSCloud.initialize(this,"hi22KV7K693uIQLX5X4ROSbs-gzGzoHsz","qTkdjmpyuVdJAearcTthBw5N");
-        //启用北美节点
-//        AVOSCloud.useAVCloudUS();
-        //必须在启动的时候注册 MessageHandler
-        //注册默认的消息处理逻辑
-        AVIMMessageManager.registerMessageHandler(AVIMMessage.class, new MyMessageHandler());
-        AVIMMessageManager.setConversationEventHandler(new MyConversationHandler());
-
-        //连接服务器
-        AVImClientManager.getInstance().open(AppConst.LEAN_CLOUD_TOKEN, new AVIMClientCallback() {
-            @Override
-            public void done(AVIMClient avimClient, AVIMException e) {
-            }
-        });
 
         //只有主进程运行的时候才需要初始化
         if (getApplicationInfo().packageName.equals(getMyProcessName())) {
             //TODO im初始化
+            //初始化参数依次this，AppId,AppKey
+            AVOSCloud.initialize(this,AppConst.LEANCLOUD_APP_ID,AppConst.LEANCLOUD_APP_KEY);
+            //AVOSCloud.initialize(this,"hi22KV7K693uIQLX5X4ROSbs-gzGzoHsz","qTkdjmpyuVdJAearcTthBw5N");
+            //启用北美节点
+//        AVOSCloud.useAVCloudUS();
+            //必须在启动的时候注册 MessageHandler
+            //注册默认的消息处理逻辑
+            AVIMMessageManager.registerMessageHandler(AVIMMessage.class, new MyMessageHandler());
+            AVIMMessageManager.setConversationEventHandler(new MyConversationHandler());
 
+            //连接服务器
+            AVImClientManager.getInstance().open(AppConst.LEAN_CLOUD_TOKEN, new AVIMClientCallback() {
+                @Override
+                public void done(AVIMClient avimClient, AVIMException e) {
+                }
+            });
             //TODO 注册消息接收器
 
         }
@@ -97,7 +91,6 @@ public class MyApp extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
     }
-
 
     public static Context getContext() {
         return app.getApplicationContext();

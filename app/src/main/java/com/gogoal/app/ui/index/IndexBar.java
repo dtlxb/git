@@ -54,6 +54,7 @@ public class IndexBar extends View {
     private List<? extends BaseIndexPinyinBean> mSourceDatas;//Adapter的数据源
     private LinearLayoutManager mLayoutManager;
     private int mHeaderViewCount = 0;
+    private Rect indexBounds;
 
     public IndexBar(Context context) {
         this(context, null);
@@ -75,8 +76,8 @@ public class IndexBar extends View {
     /**
      * 设置Headerview的Count
      *
-     * @param headerViewCount
-     * @return
+     * @param headerViewCount ;
+     * @return ;
      */
     public IndexBar setHeaderViewCount(int headerViewCount) {
         mHeaderViewCount = headerViewCount;
@@ -90,8 +91,8 @@ public class IndexBar extends View {
     /**
      * 源数据 是否已经有序
      *
-     * @param sourceDatasAlreadySorted
-     * @return
+     * @param sourceDatasAlreadySorted ;
+     * @return ;
      */
     public IndexBar setSourceDatasAlreadySorted(boolean sourceDatasAlreadySorted) {
         isSourceDatasAlreadySorted = sourceDatasAlreadySorted;
@@ -105,8 +106,8 @@ public class IndexBar extends View {
     /**
      * 设置数据源帮助类
      *
-     * @param dataHelper
-     * @return
+     * @param dataHelper ;
+     * @return ;
      */
     public IndexBar setDataHelper(IIndexBarDataHelper dataHelper) {
         mDataHelper = dataHelper;
@@ -114,6 +115,8 @@ public class IndexBar extends View {
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
+        indexBounds = new Rect();//存放每个绘制的index的Rect区域
+
         int textSize = (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_SP, 16, getResources().getDisplayMetrics());//默认的TextSize
         mPressedBackground = Color.parseColor("#33000000");//默认按下是纯黑色
@@ -121,7 +124,7 @@ public class IndexBar extends View {
         int n = typedArray.getIndexCount();
         for (int i = 0; i < n; i++) {
             int attr = typedArray.getIndex(i);
-            //modify 2016 09 07 :如果引用成AndroidLib 资源都不是常量，无法使用switch case
+            //如果引用成AndroidLib 资源都不是常量，无法使用switch case
             if (attr == R.styleable.IndexBar_indexBarTextSize) {
                 textSize = typedArray.getDimensionPixelSize(attr, textSize);
             } else if (attr == R.styleable.IndexBar_indexBarPressBackground) {
@@ -177,7 +180,6 @@ public class IndexBar extends View {
         int measureWidth = 0, measureHeight = 0;//最终测量出来的宽高
 
         //得到合适宽度：
-        Rect indexBounds = new Rect();//存放每个绘制的index的Rect区域
         String index;//每个要绘制的index内容
         for (int i = 0; i < mIndexDatas.size(); i++) {
             index = mIndexDatas.get(i);
@@ -186,6 +188,7 @@ public class IndexBar extends View {
             measureHeight = Math.max(indexBounds.height(), measureHeight);//循环结束后，得到index的最大高度，然后*size
         }
         measureHeight *= mIndexDatas.size();
+
         switch (wMode) {
             case MeasureSpec.EXACTLY:
                 measureWidth = wSize;
@@ -265,7 +268,6 @@ public class IndexBar extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         mWidth = w;
         mHeight = h;
-        //add by zhangxutong 2016 09 08 :解决源数据为空 或者size为0的情况,
         if (null == mIndexDatas || mIndexDatas.isEmpty()) {
             return;
         }
@@ -293,10 +295,7 @@ public class IndexBar extends View {
 
     /**
      * 显示当前被按下的index的TextView
-     *
-     * @return
      */
-
     public IndexBar setmPressedShowTextView(TextView mPressedShowTextView) {
         this.mPressedShowTextView = mPressedShowTextView;
         return this;
@@ -327,6 +326,12 @@ public class IndexBar extends View {
         }
     }
 
+//    private List<String> getRealIndex() {
+//        List<String> realIndexs=new ArrayList<>();
+//
+//        return realIndexs;
+//    }
+
     public IndexBar setmSourceDatas(List<? extends BaseIndexPinyinBean> mSourceDatas) {
         this.mSourceDatas = mSourceDatas;
         initSourceDatas();//对数据源进行初始化
@@ -336,11 +341,9 @@ public class IndexBar extends View {
 
     /**
      * 初始化原始数据源，并取出索引数据源
-     *
-     * @return
      */
     private void initSourceDatas() {
-        //add by zhangxutong 2016 09 08 :解决源数据为空 或者size为0的情况,
+        //解决源数据为空 或者size为0的情况,
         if (null == mSourceDatas || mSourceDatas.isEmpty()) {
             return;
         }
@@ -371,12 +374,9 @@ public class IndexBar extends View {
 
     /**
      * 根据传入的pos返回tag
-     *
-     * @param tag
-     * @return
      */
     private int getPosByTag(String tag) {
-        //add by zhangxutong 2016 09 08 :解决源数据为空 或者size为0的情况,
+        //解决源数据为空 或者size为0的情况,
         if (null == mSourceDatas || mSourceDatas.isEmpty()) {
             return -1;
         }
