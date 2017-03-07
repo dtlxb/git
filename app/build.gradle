@@ -4,6 +4,10 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
+    /*dexOptions {
+        javaMaxHeapSize "4g"
+    }*/
+
     defaultConfig {
         applicationId rootProject.ext.applicationId
         minSdkVersion rootProject.ext.minSdkVersion
@@ -11,10 +15,17 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
 
-        /*ndk {
-            abiFilters "armeabi", "arm64-v8a"
-        }*/
+        manifestPlaceholders = [
+                GETUI_APP_ID    : "Kb4fbbPem39Psl4xC3ta34",
+                GETUI_APP_KEY   : "finYiVZzSaAGjpE0sTb9S4",
+                GETUI_APP_SECRET: "a6CrMypVHMArwEScTt43E4"
+        ]
+
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86_64"
+        }
     }
 
     buildTypes {
@@ -88,4 +99,7 @@ dependencies {
     compile files('libs/pinyin4j-2.5.0.jar')
     compile 'com.github.promeg:tinypinyin:2.0.2' // 约80KB
 
+    //个推
+    compile 'com.getui:sdk:2.9.5.0'
+    compile 'com.android.support:multidex:1.0.1'
 }

@@ -2,6 +2,7 @@ package com.gogoal.app.base;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.im.v2.AVIMClient;
@@ -15,7 +16,10 @@ import com.gogoal.app.common.IMHelpers.AVImClientManager;
 import com.gogoal.app.common.IMHelpers.MyConversationHandler;
 import com.gogoal.app.common.IMHelpers.MyMessageHandler;
 import com.gogoal.app.common.SPTools;
+import com.gogoal.app.servise.IntentService;
+import com.gogoal.app.servise.PushService;
 import com.gogoal.app.wxapi.WXEntryActivity;
+import com.igexin.sdk.PushManager;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 
 import java.io.BufferedReader;
@@ -75,6 +79,9 @@ public class MyApp extends Application {
         System.loadLibrary("qupai-media-jni");
         ApplicationGlue.initialize(this);
 
+        //个推
+        PushManager.getInstance().initialize(this, PushService.class);
+        PushManager.getInstance().registerPushIntentService(this, IntentService.class);
     }
 
     /**
@@ -96,6 +103,7 @@ public class MyApp extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
 
