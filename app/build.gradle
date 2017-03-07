@@ -78,6 +78,9 @@ dependencies {
     compile files('libs/alivc-player-2.2.0.20.jar')
     //阿里云推流
     compile files('libs/alivc-live-record-v1.2.0.jar')
-    compile files('libs/pinyin4j-2.5.0.jar')
     compile 'com.github.promeg:tinypinyin:2.0.2'// 约80KB
+    //鲁班压缩
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.1.6'
+    compile 'top.zibin:Luban:1.0.9'
 }

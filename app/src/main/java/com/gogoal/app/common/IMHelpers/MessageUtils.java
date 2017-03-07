@@ -3,6 +3,7 @@ package com.gogoal.app.common.IMHelpers;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
+import com.gogoal.app.common.AppConst;
 import com.gogoal.app.common.SPTools;
 
 /**
@@ -29,7 +30,7 @@ public class MessageUtils {
             jsonObject.put("unReadCounts", 10 + "");
 
             thisJsonArray.add(jsonObject);
-            SPTools.saveJsonArray("conversation_beans", thisJsonArray);
+            SPTools.saveJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", thisJsonArray);
         } else {
 
         }

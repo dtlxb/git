@@ -64,7 +64,7 @@ public class MessageFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 
-        jsonArray = SPTools.getJsonArray("conversation_beans", new JSONArray());
+        jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
         IMMessageBeans.clear();
 
         initRecycleView(message_recycler, 0);
@@ -72,6 +72,7 @@ public class MessageFragment extends BaseFragment {
         if (null != jsonArray) {
             IMMessageBeans = JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class);
         }
+        Log.e("+++IMMessageBeans", IMMessageBeans + "");
 
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
             //按照时间排序
@@ -83,7 +84,6 @@ public class MessageFragment extends BaseFragment {
             });
         }
 
-        Log.e("+++IMMessageBeans", IMMessageBeans + "");
 
         listAdapter = new ListAdapter(getContext(), R.layout.item_fragment_message, IMMessageBeans);
 
@@ -151,7 +151,6 @@ public class MessageFragment extends BaseFragment {
 
             members.clear();
             members.addAll(messageBean.getSpeakerTo());
-            Log.e("+++members", members + "");
             if (members.size() > 0) {
                 if (members.size() == 2) {
                     //硬代码
@@ -165,7 +164,6 @@ public class MessageFragment extends BaseFragment {
                 }
             } else {
             }
-
 
             Log.e("+++message", messageBean.getLastMessage() + "");
             if (messageBean.getLastMessage() == null) {

@@ -37,7 +37,6 @@ public class MyApp extends Application {
 
         SPTools.initSharedPreferences(this);
 
-
         //只有主进程运行的时候才需要初始化
         if (getApplicationInfo().packageName.equals(getMyProcessName())) {
             //TODO im初始化

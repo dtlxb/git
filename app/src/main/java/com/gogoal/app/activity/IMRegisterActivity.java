@@ -66,16 +66,16 @@ public class IMRegisterActivity extends BaseActivity {
         });
 
         //单聊页面
-        /*Intent intent = new Intent(IMRegisterActivity.this, SingleChatRoomActivity.class);
+        Intent intent = new Intent(IMRegisterActivity.this, SingleChatRoomActivity.class);
         intent.putExtra("member_id", MyId);
-        intent.putExtra("userName", MyId);*/
+        intent.putExtra("userName", MyId);
 
 
         //群聊
-        Intent intent = new Intent(IMRegisterActivity.this, SquareChatRoomActivity.class);
+        /*Intent intent = new Intent(IMRegisterActivity.this, SquareChatRoomActivity.class);
         //ntent.putExtra("conversation_id", "58b5452561ff4b006b1e3353");
         intent.putExtra("conversation_id", "58aaa02d8d6d8100636e8be9");
-        intent.putExtra("userName", MyId);
+        intent.putExtra("userName", MyId);*/
         startActivity(intent);
         finish();
     }

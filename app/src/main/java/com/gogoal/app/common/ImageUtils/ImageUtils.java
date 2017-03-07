@@ -37,6 +37,20 @@ import java.net.URLConnection;
  * phone 18930640263
  */
 public class ImageUtils {
+
+    /**
+     * 请求相册
+     */
+    public static final int REQUEST_CODE_GETIMAGE_BYSDCARD = 0;
+    /**
+     * 请求相机
+     */
+    public static final int REQUEST_CODE_GETIMAGE_BYCAMERA = 1;
+    /**
+     * 请求裁剪
+     */
+    public static final int REQUEST_CODE_GETIMAGE_BYCROP = 2;
+
     public final static String SDCARD_MNT = "/mnt/sdcard";
     //    public final static String SDCARD = "/sdcard";
     public final static String SDCARD = Environment.getExternalStorageState();
