@@ -61,12 +61,12 @@ public class MyApp extends Application {
             //TODO 注册消息接收器
 
             //阿里云推流
-            System.loadLibrary("gnustl_shared");
-//        System.loadLibrary("ijkffmpeg");//目前使用微博的ijkffmpeg会出现1K再换wifi不重连的情况
-            System.loadLibrary("qupai-media-thirdparty");
-//        System.loadLibrary("alivc-media-jni");
-            System.loadLibrary("qupai-media-jni");
-            ApplicationGlue.initialize(this);
+//            System.loadLibrary("gnustl_shared");
+////        System.loadLibrary("ijkffmpeg");//目前使用微博的ijkffmpeg会出现1K再换wifi不重连的情况
+//            System.loadLibrary("qupai-media-thirdparty");
+////        System.loadLibrary("alivc-media-jni");
+//            System.loadLibrary("qupai-media-jni");
+//            ApplicationGlue.initialize(this);
         }
     }
 
