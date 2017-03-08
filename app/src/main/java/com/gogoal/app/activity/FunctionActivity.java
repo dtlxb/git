@@ -4,27 +4,28 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
-import android.widget.EditText;
 
 import com.github.lzyzsd.jsbridge.BridgeHandler;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.gogoal.app.R;
 import com.gogoal.app.base.BaseActivity;
 import com.gogoal.app.common.DialogHelp;
+import com.gogoal.app.common.GGOKHTTP.GGAPI;
+import com.socks.library.KLog;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 public class FunctionActivity extends BaseActivity {
 
     @BindView(R.id.webView)
     BridgeWebView webView;
 
-    @BindView(R.id.et_input)
-    EditText etInput;
+    private String url;
+
+    private String title;
+    private int type;
 
     @Override
     public int bindLayout() {
@@ -33,30 +34,29 @@ public class FunctionActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        setMyTitle("web测试",true);
 
-        etInput.setSelection(etInput.getText().length());
+        title = getIntent().getStringExtra("title");
+        type = getIntent().getIntExtra("type", 0);
 
-        etInput.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-                    loadUrl(etInput.getText().toString());
-                    return true;
-                }
-                return false;
-            }
-        });
+        setMyTitle(title, true);
+
 
         initWebView(webView);
 
-        webView.loadUrl("file:///android_asset/demo.html");
+        if (type == 1) {
+            url = GGAPI.WEB_URL + "/live/list";
+        } else if (type == 2) {
+            url = GGAPI.WEB_URL + "/report";
+        } else {
+            url = "file:///android_asset/demo.html";
+        }
+        webView.loadUrl(url);
 
         //1.添加原生方法，测试弹窗
         webView.registerHandler("naviveDialog", new BridgeHandler() {
             @Override
             public void handler(String data, final ValueCallback<String> function) {
-                DialogHelp.getMessageDialog(FunctionActivity.this,data).show();
+                DialogHelp.getMessageDialog(FunctionActivity.this, data).show();
             }
         });
 
@@ -64,7 +64,7 @@ public class FunctionActivity extends BaseActivity {
         webView.registerHandler("naviveDialogWithCallBack", new BridgeHandler() {
             @Override
             public void handler(String data, final ValueCallback<String> function) {
-                DialogHelp.getMessageDialog(FunctionActivity.this,data)
+                DialogHelp.getMessageDialog(FunctionActivity.this, data)
                         .setPositiveButton("是的", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -81,21 +81,32 @@ public class FunctionActivity extends BaseActivity {
             }
         });
 
+        //添加Go_Goal直播中的页面跳转
+        webView.registerHandler("JumpPlayerDetial", new BridgeHandler() {
+            @Override
+            public void handler(String data, ValueCallback<String> function) {
+                KLog.json(data);
+//                Intent intent = new Intent(getContext(), PlayerActivity.class);
+//                intent.putExtra("live_id", data);
+//                startActivity(intent);
+            }
+        });
+
     }
 
-    @OnClick(R.id.fab)
-    void doJs(View view){
-        webView.callHandler("methodFromJs","这是一段来自java的数据", new ValueCallback<String>() {
+    /*@OnClick(R.id.fab)
+    void doJs(View view) {
+        webView.callHandler("methodFromJs", "这是一段来自java的数据", new ValueCallback<String>() {
             @Override
             public void onReceiveValue(String data) {
                 //调通js方法methodFromJs后的返回
-                DialogHelp.getMessageDialog(FunctionActivity.this,"调用js方法后的回调=="+data).show();
+                DialogHelp.getMessageDialog(FunctionActivity.this, "调用js方法后的回调==" + data).show();
             }
         });
-    }
+    }*/
 
     private void loadUrl(String url) {
-        if (!TextUtils.isEmpty(url)){
+        if (!TextUtils.isEmpty(url)) {
             webView.loadUrl(url);
         }
     }
@@ -115,5 +126,14 @@ public class FunctionActivity extends BaseActivity {
         mWebView.getSettings().setAppCacheEnabled(true);
 
         mWebView.setWebChromeClient(new WebChromeClient());//启动JS弹窗
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && webView.canGoBack()) {
+            webView.goBack();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

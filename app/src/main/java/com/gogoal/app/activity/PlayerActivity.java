@@ -135,6 +135,8 @@ public class PlayerActivity extends BaseActivity {
     //聊天对象
     private AVIMConversation imConversation;
 
+    private String live_id;
+
     private Handler mTimerHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -171,6 +173,8 @@ public class PlayerActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         setImmersive(true);
 
+        live_id = getIntent().getStringExtra("live_id");
+
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(connectionReceiver, intentFilter);
@@ -205,7 +209,7 @@ public class PlayerActivity extends BaseActivity {
     private void getPlayerInfo() {
 
         Map<String, String> param = new HashMap<>();
-        param.put("live_id", "d152f024-56ff-49a7-b92e-d96107c08631");
+        param.put("live_id", live_id);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
