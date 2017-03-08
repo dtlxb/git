@@ -64,6 +64,8 @@ public class ImageDisplay {
         if (!TextUtils.isEmpty(url)) {
             Glide.with(context)
                     .load(url)
+                    .skipMemoryCache(false)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .placeholder(R.mipmap.image_placeholder)
                     .thumbnail(0.1f)
                     .into(imageView);

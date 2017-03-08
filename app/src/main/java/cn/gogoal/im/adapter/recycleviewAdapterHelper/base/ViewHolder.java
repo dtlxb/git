@@ -1,6 +1,5 @@
 package cn.gogoal.im.adapter.recycleviewAdapterHelper.base;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
@@ -8,6 +7,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.text.util.Linkify;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 
 
 public class ViewHolder extends RecyclerView.ViewHolder {
@@ -93,6 +95,14 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+    public ViewHolder setImageUrl(int viewId, String url) {
+        ImageView view = getView(viewId);
+        if (!TextUtils.isEmpty(url)){
+            ImageDisplay.loadNetImage(mContext,url,view);
+        }
+        return this;
+    }
+
     public ViewHolder setImageBitmap(int viewId, Bitmap bitmap) {
         ImageView view = getView(viewId);
         view.setImageBitmap(bitmap);
@@ -129,7 +139,6 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    @SuppressLint("NewApi")
     public ViewHolder setAlpha(int viewId, float value) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getView(viewId).setAlpha(value);

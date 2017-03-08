@@ -161,11 +161,13 @@ public class SuspendedDecoration extends RecyclerView.ItemDecoration {
 
         mPaint.setColor(COLOR_TITLE_FONT);
 
-        mPaint.getTextBounds(tag, 0, tag.length(), mBounds);
-
-        c.drawText(tag, child.getPaddingLeft(),
-                parent.getPaddingTop() + mTitleHeight - (mTitleHeight / 2 - mBounds.height() / 2),
-                mPaint);
+        try {
+            mPaint.getTextBounds(tag, 0, tag.length(), mBounds);
+            c.drawText(tag, child.getPaddingLeft(),
+                    parent.getPaddingTop() + mTitleHeight - (mTitleHeight / 2 - mBounds.height() / 2),
+                    mPaint);
+        }catch (NullPointerException e) {
+        }
 
         if (flag)
             c.restore();//恢复画布到之前保存的状态

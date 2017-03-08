@@ -1,5 +1,7 @@
 package cn.gogoal.im.bean;
 
+import android.text.TextUtils;
+
 import cn.gogoal.im.ui.index.BaseIndexPinyinBean;
 
 /**
@@ -11,100 +13,105 @@ public class ContactBean<T> extends BaseIndexPinyinBean {
 
     private ContactType contactType;//item类型
 
-    private String mAccountId;//账号Id
+    private int id;
 
-    private String mAccount;//账号
+    private int friend_id;
 
-    private String mName;//昵称
+    private String remark;//备注
 
-    private String mAlias;//备注
+    private String conv_id;
+
+    private String nickname;//昵称
+
+    private T avatar;//头像URL
 
     private String mPinyin;//昵称/备注的全拼
-
-    private T mAvatar;//头像地址
 
     public ContactType getContactType() {
         return contactType;
     }
 
-    public ContactBean setContactType(ContactType contactType) {
+    public void setContactType(ContactType contactType) {
         this.contactType = contactType;
-        return this;
     }
 
-    public String getmAccountId() {
-        return mAccountId;
+    public int getId() {
+        return id;
     }
 
-    public ContactBean setmAccountId(String mAccountId) {
-        this.mAccountId = mAccountId;
-        return this;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getmAccount() {
-        return mAccount;
+    public int getFriend_id() {
+        return friend_id;
     }
 
-    public ContactBean setmAccount(String mAccount) {
-        this.mAccount = mAccount;
-        return this;
+    public void setFriend_id(int friend_id) {
+        this.friend_id = friend_id;
     }
 
-    public String getmName() {
-        return mName;
+    public String getRemark() {
+        return remark;
     }
 
-    public ContactBean setmName(String mName) {
-        this.mName = mName;
-        return this;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
-    public String getmAlias() {
-        return mAlias;
+    public String getConv_id() {
+        return conv_id;
     }
 
-    public ContactBean setmAlias(String mAlias) {
-        this.mAlias = mAlias;
-        return this;
+    public void setConv_id(String conv_id) {
+        this.conv_id = conv_id;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public T getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(T avatar) {
+        this.avatar = avatar;
     }
 
     public String getmPinyin() {
         return mPinyin;
     }
 
-    public ContactBean setmPinyin(String mPinyin) {
+    public void setmPinyin(String mPinyin) {
         this.mPinyin = mPinyin;
-        return this;
-    }
-
-    public T getmAvatar() {
-        return mAvatar;
-    }
-
-    public ContactBean setmAvatar(T mAvatar) {
-        this.mAvatar = mAvatar;
-        return this;
     }
 
     @Override
     public String getTarget() {
-        return mName;
+        return TextUtils.isEmpty(getRemark())?
+                (TextUtils.isEmpty(getNickname())?"未命名":getNickname()):
+                getRemark();
     }
 
     @Override
     public boolean isNeedToPinyin() {
-        return getContactType()==ContactType.PersionItem;
+        return getContactType()==ContactType.PERSION_ITEM;
     }
 
 
     @Override
     public boolean isShowSuspension() {
-        return getContactType()==ContactType.PersionItem;
+        return getContactType()==ContactType.PERSION_ITEM;
     }
 
 
     public enum ContactType{
-        FunctionItem(0),PersionItem(0);
+        FUNCTION_ITEM(0), PERSION_ITEM(0);
         private int type;
 
         ContactType(int type) {
@@ -118,5 +125,19 @@ public class ContactBean<T> extends BaseIndexPinyinBean {
         public void setType(int type) {
             this.type = type;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ContactBean{" +
+                "contactType=" + contactType +
+                ", id=" + id +
+                ", friend_id=" + friend_id +
+                ", remark='" + remark + '\'' +
+                ", conv_id='" + conv_id + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", avatar=" + avatar +
+                ", mPinyin='" + mPinyin + '\'' +
+                '}';
     }
 }

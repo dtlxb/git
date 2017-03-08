@@ -3,7 +3,6 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 
@@ -15,17 +14,13 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.DialogHelp;
-import cn.gogoal.im.common.GGOKHTTP.GGAPI;
 
 public class FunctionActivity extends BaseActivity {
 
     @BindView(R.id.webView)
     BridgeWebView webView;
 
-    private String url;
-
     private String title;
-    private int type;
 
     @Override
     public int bindLayout() {
@@ -36,20 +31,12 @@ public class FunctionActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
 
         title = getIntent().getStringExtra("title");
-        type = getIntent().getIntExtra("type", 0);
+        String url=getIntent().getStringExtra("function_url");
 
         setMyTitle(title, true);
 
-
         initWebView(webView);
 
-        if (type == 1) {
-            url = GGAPI.WEB_URL + "/live/list";
-        } else if (type == 2) {
-            url = GGAPI.WEB_URL + "/report";
-        } else {
-            url = "file:///android_asset/demo.html";
-        }
         webView.loadUrl(url);
 
         //1.添加原生方法，测试弹窗
@@ -128,12 +115,4 @@ public class FunctionActivity extends BaseActivity {
         mWebView.setWebChromeClient(new WebChromeClient());//启动JS弹窗
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && webView.canGoBack()) {
-            webView.goBack();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 }

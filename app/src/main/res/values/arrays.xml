@@ -2,8 +2,8 @@
 <resources>
     <string-array name="main_tab">
         <item>消息</item>
-        <item>通讯录</item>
-        <item>发现</item>
+        <item>人脉</item>
+        <item>投研</item>
         <item>我的</item>
     </string-array>
 
@@ -12,6 +12,7 @@
         <item>中国研网</item>
         <item>Go-Goal学院</item>
         <item>金融1Q</item>
+        <item>JS&#38;原生交互</item>
     </string-array>
 
     <string-array name="found_fun1">

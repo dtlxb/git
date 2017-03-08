@@ -18,7 +18,7 @@ public class GGAPI {
     private static final String APP_SECRET = "cGYIsTyTWXGeP4frqOqmdWxRO5xmh2Pi";
 
     //正式环境
-//    private static final String WEB_URL = "http://211.144.193.162:8085";
+//    public static final String WEB_URL = "http://211.144.193.162:8085";
 //    private static final String Native_API = "http://ggservice.go-goal.cn";
 //    private static final String APP_KEY = "fShDqPXQvEAkISs";
 //    private static final String APP_SECRET = "hDNLTYXATtqBcENWVkPAxmltAvyXLGt3";

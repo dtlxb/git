@@ -1,5 +1,6 @@
 package cn.gogoal.im.common.GGOKHTTP;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -54,6 +55,11 @@ public class GGOKHTTP {
     * 直播详情
     * */
     public static final String GET_STUDIO_LIST="v1/video_studio/get_studio_list";
+
+    /**
+     * 好友列表
+     * */
+    public static final String GET_FRIEND_LIST="v1/ggm_im/get_friend_list";
 
 //--------------------------------------------------------------------------------------------------
 
@@ -128,6 +134,10 @@ public class GGOKHTTP {
         } catch (Exception e) {
             if (httpInterface != null) httpInterface.onFailure(e.toString());
         }
+    }
+
+    public static String getMessage(String responseInfo) {
+        return JSONObject.parseObject(responseInfo).getString("messaage");
     }
 
     public interface GGHttpInterface {

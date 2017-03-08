@@ -52,8 +52,12 @@ public class BridgeWebViewClient extends WebViewClient {
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
         KLog.e(url);
-        if (!view.canGoBack()) {
-            loadingDialog.show();
+        if (!view.canGoBack() && loadingDialog!=null) {
+            try {
+                loadingDialog.show();
+            }catch (Exception e){
+                KLog.e();
+            }
         }
         super.onPageStarted(view, url, favicon);
     }
