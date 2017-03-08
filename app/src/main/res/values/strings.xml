@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">GoGoal</string>
 
+    <string name="textBlank">--</string>
+
     <string name="title_message">消息</string>
     <string name="title_contacts">通讯录</string>
     <string name="title_found">Go-Goal金融终端</string>
@@ -62,5 +64,10 @@
     <string name="permissions_record_error">录音无法完成初始化,请正确授权。</string>
     <string name="str_request_record_message">请求获取录音权限</string>
     <string name="record_init_error">录音异常，无法完成初始化。</string>
+
+    <!--数据请求-->
+    <string name="nodata_hint">没有相关数据</string>
+    <string name="nomoredata_hint">没有更多数据</string>
+    <string name="net_erro_hint">数据请求出错</string>
 
 </resources>

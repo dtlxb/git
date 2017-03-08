@@ -212,10 +212,10 @@ public class FoundFragment extends BaseFragment {
 
                             //由于增加了headView,所以父Item是从1开始的
                             case 1:
-                                gridItemClick_0(position);//我的活动
+                                gridItemClick_0(position, itemPojos);//我的活动
                                 break;
                             case 2:
-                                gridItemClick_1(position);//股票投研
+                                gridItemClick_1(position, itemPojos);//股票投研
                                 break;
                             case 3:
                                 gridItemClick_2(position);//测试-股票
@@ -227,10 +227,13 @@ public class FoundFragment extends BaseFragment {
         }
 
         //我的活动
-        private void gridItemClick_0(int position) {
+        private void gridItemClick_0(int position, FoundData.ItemPojos itemPojos) {
             switch (position) {
                 case 0:
-                    startActivity(new Intent(getContext(), FunctionActivity.class));
+                    Intent intent = new Intent(getContext(), FunctionActivity.class);
+                    intent.putExtra("title", itemPojos.getItemTextDescription());
+                    intent.putExtra("type", 1);
+                    startActivity(intent);
                     break;
                 case 1:
                     startActivity(new Intent(getContext(), IMRegisterActivity.class));
@@ -252,8 +255,19 @@ public class FoundFragment extends BaseFragment {
         }
 
         //股票投研
-        private void gridItemClick_1(int position) {
-
+        private void gridItemClick_1(int position, FoundData.ItemPojos itemPojos) {
+            switch (position) {
+                case 0:
+                    Intent intent = new Intent(getContext(), FunctionActivity.class);
+                    intent.putExtra("title", itemPojos.getItemTextDescription());
+                    intent.putExtra("type", 2);
+                    startActivity(intent);
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+            }
         }
 
         //测试模块——股票
@@ -261,5 +275,4 @@ public class FoundFragment extends BaseFragment {
 
         }
     }
-
 }

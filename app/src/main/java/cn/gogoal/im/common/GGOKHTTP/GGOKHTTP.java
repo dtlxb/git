@@ -45,6 +45,16 @@ public class GGOKHTTP {
      * */
     public static final String BANNER_LIST = "v1/ad/new_list";
 
+    /**
+     * 三方登录
+     * */
+    public static final String USER_THIRDPARTYLOGIN="v1/user/thirdpartylogin";
+
+    /*
+    * 直播详情
+    * */
+    public static final String GET_STUDIO_LIST="v1/video_studio/get_studio_list";
+
 //--------------------------------------------------------------------------------------------------
 
     /**

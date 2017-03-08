@@ -62,6 +62,7 @@ import cn.gogoal.im.bean.RelaterVideoData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.PlayerUtils.CountDownTimerView;
 import cn.gogoal.im.common.PlayerUtils.PlayerControl;
@@ -134,6 +135,8 @@ public class PlayerActivity extends BaseActivity {
     //聊天对象
     private AVIMConversation imConversation;
 
+    private String live_id;
+
     private Handler mTimerHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -170,6 +173,8 @@ public class PlayerActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         setImmersive(true);
 
+        live_id = getIntent().getStringExtra("live_id");
+
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(connectionReceiver, intentFilter);
@@ -195,6 +200,31 @@ public class PlayerActivity extends BaseActivity {
 //        countDownTimer.addTime("2017-02-28 10:01:00");
 //        countDownTimer.start();
 
+        getPlayerInfo();
+    }
+
+    /*
+    * 获取直播详情
+    * */
+    private void getPlayerInfo() {
+
+        Map<String, String> param = new HashMap<>();
+        param.put("live_id", live_id);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                //JSONObject object = JSONObject.parseObject(responseInfo);
+
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.GET_STUDIO_LIST, ggHttpInterface).startGet();
     }
 
     private void getSquareConversation(String conversationId) {

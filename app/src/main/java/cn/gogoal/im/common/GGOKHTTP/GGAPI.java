@@ -11,25 +11,17 @@ import java.util.Map;
  */
 public class GGAPI {
 
-    //沙盒环境1
+    //开发环境
+    public static final String WEB_URL = "http://192.168.52.156:9000";
     private static final String Native_API = "http://ggservice.sandbox.gofund.com.cn";
-    private static final String APP_KEY = "wxeAauUegQYPsOm";
-    private static final String APP_SECRET = "QQU7zlyFvDiHzNg7cp8dfz8aRCpg2sqw";
+    private static final String APP_KEY = "HBTORVzBaGtqmGE";
+    private static final String APP_SECRET = "cGYIsTyTWXGeP4frqOqmdWxRO5xmh2Pi";
 
-    //沙盒环境2
-//  private static final String Native_API = "http://gapi.go-goal.cn";
-//  private static final String APP_KEY = "wxeAauUegQYPsOm";
-//  private static final String APP_SECRET = "QQU7zlyFvDiHzNg7cp8dfz8aRCpg2sqw";
-
-    //准正式
-//    private static final String Native_API = "http://ggservice-pre.go-goal.cn";
-//    private static final String APP_KEY = "GnbhWYzxfcbrMOd";
-//    private static final String APP_SECRET = "I7WFKwulOrcYPHu8ZeQcMFEsiwQ45ruS";
-
-    //正式
-//    private static final String Native_API = "https://ggservice.go-goal.cn";
-//    private static final String APP_KEY = "GnbhWYzxfcbrMOd";
-//    private static final String APP_SECRET = "I7WFKwulOrcYPHu8ZeQcMFEsiwQ45ruS";
+    //正式环境
+//    private static final String WEB_URL = "http://211.144.193.162:8085";
+//    private static final String Native_API = "http://ggservice.go-goal.cn";
+//    private static final String APP_KEY = "fShDqPXQvEAkISs";
+//    private static final String APP_SECRET = "hDNLTYXATtqBcENWVkPAxmltAvyXLGt3";
 
     public static String get(String api, Map<String, String> params) throws Exception {
         long timeStamp = System.currentTimeMillis() / 1000L;
