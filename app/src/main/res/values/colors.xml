@@ -51,4 +51,14 @@
     <color name="index_bar_text">@color/textColor_666666</color>
     <color name="index_bar_pressed">#33000000</color>
     <color name="index_bar_text_flag">#66000000</color>
+
+    <!--股票行情-->
+    <color name="stock_market_bg">#EFEFF4</color>
+    <color name="stock_market_divider">#F0F5FB</color>
+    <color name="stock_green">#0CB709</color>
+    <color name="stock_red">#E85043</color>
+    <color name="stock_list_more">#0095FF</color>
+    <color name="stock_text_black">#5C5C5C</color>
+    <color name="stock_text_gray">#999999</color>
+
 </resources>

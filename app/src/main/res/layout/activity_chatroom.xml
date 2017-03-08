@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".activity.ChatRoomActivity">
+    tools:context="cn.gogoal.im.activity.ChatRoomActivity">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
@@ -29,7 +29,7 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <com.gogoal.app.ui.view.SwitchImageView
+        <cn.gogoal.im.ui.view.SwitchImageView
             android:id="@+id/img_voice"
             style="@style/BottomImageStyle"
             android:contentDescription="@null"
@@ -44,7 +44,7 @@
             android:maxLines="4"
             android:visibility="gone" />
 
-        <com.gogoal.app.ui.view.VoiceButton
+        <cn.gogoal.im.ui.view.VoiceButton
             android:id="@+id/voiveView"
             android:layout_width="0dp"
             android:layout_height="40dp"

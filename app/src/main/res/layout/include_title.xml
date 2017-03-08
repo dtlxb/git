@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.gogoal.app.ui.view.XTitle xmlns:android="http://schemas.android.com/apk/res/android"
+<cn.gogoal.im.ui.view.XTitle xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/title_bar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"

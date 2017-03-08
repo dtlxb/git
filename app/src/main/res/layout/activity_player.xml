@@ -4,7 +4,7 @@
     android:id="@+id/activity_player"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.gogoal.app.activity.PlayerActivity">
+    tools:context="cn.gogoal.im.activity.PlayerActivity">
 
     <FrameLayout
         android:id="@+id/GLViewContainer"
@@ -119,7 +119,7 @@
 
     </LinearLayout>
 
-    <com.gogoal.app.common.PlayerUtils.CountDownTimerView
+    <cn.gogoal.im.common.PlayerUtils.CountDownTimerView
         android:id="@+id/countDownTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

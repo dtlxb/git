@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/fragment_chat"
-        android:name="com.gogoal.app.fragment.ChatFragment"
+        android:name="cn.gogoal.im.fragment.ChatFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
