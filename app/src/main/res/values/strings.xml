@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">GoGoal</string>
 
+    <string name="textBlank">--</string>
+
     <string name="title_message">消息</string>
     <string name="title_contacts">通讯录</string>
     <string name="title_found">Go-Goal金融终端</string>
@@ -44,6 +46,8 @@
     <string name="str_recorder_dialog_cancle">@string/str_recorder_want_cancel</string>
     <string name="str_recorder_dialog_22short">录音时间太短</string>
 
+    <string name="donot_found_wechat">未检测到微信客户端或者版本不被支持</string>
+
     <!-- 发送图片-->
     <string name="action_select">选择操作</string>
     <string name="action_select_picture">选择图片</string>
@@ -60,5 +64,10 @@
     <string name="permissions_record_error">录音无法完成初始化,请正确授权。</string>
     <string name="str_request_record_message">请求获取录音权限</string>
     <string name="record_init_error">录音异常，无法完成初始化。</string>
+
+    <!--数据请求-->
+    <string name="nodata_hint">没有相关数据</string>
+    <string name="nomoredata_hint">没有更多数据</string>
+    <string name="net_erro_hint">数据请求出错</string>
 
 </resources>

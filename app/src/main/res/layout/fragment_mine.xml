@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.gogoal.app.fragment.MineFragment">
+    tools:context="cn.gogoal.im.fragment.MineFragment">
 
     <include layout="@layout/include_title" />
 

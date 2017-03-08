@@ -36,7 +36,7 @@ task clean(type: Delete) {
 ext {
     compileSdkVersion = 25
     buildToolsVersion = "25.0.2"
-    applicationId = "com.gogoal.app"
+    applicationId = "cn.gogoal.im"
     minSdkVersion = 19
     targetSdkVersion = 23
     versionCode = 1

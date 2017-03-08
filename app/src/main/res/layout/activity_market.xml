@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:context="cn.gogoal.im.activity.stock.MarketActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!--大盘-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_market"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:spanCount="2"
+            app:layoutManager="android.support.v7.widget.GridLayoutManager"/>
+
+        <!--头条轮播-->
+        <ViewFlipper
+            android:id="@+id/flipper_ad"
+            android:layout_width="match_parent"
+            android:layout_height="45dp" />
+
+        <!--热门行业-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_hot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:spanCount="3"
+            app:layoutManager="android.support.v7.widget.GridLayoutManager"/>
+
+        <!--涨幅榜、跌幅榜、换手率、振幅榜-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_sort_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

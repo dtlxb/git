@@ -4,7 +4,7 @@
     android:id="@+id/activity_player"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.gogoal.app.activity.PlayerActivity">
+    tools:context="cn.gogoal.im.activity.PlayerActivity">
 
     <FrameLayout
         android:id="@+id/GLViewContainer"
@@ -48,7 +48,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="2016年（第十一届）中国私募基金风云榜颁奖盛典"
+                android:text="@string/textBlank"
                 android:textColor="@android:color/white"
                 android:textSize="14dp" />
 
@@ -91,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="朝阳永续"
+                android:text="@string/textBlank"
                 android:textColor="@android:color/white"
                 android:textSize="12dp" />
 
@@ -113,13 +113,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/shape_player_online_number"
-            android:text="11234人在线"
+            android:text="@string/textBlank"
             android:textColor="@android:color/white"
             android:textSize="11dp" />
 
     </LinearLayout>
 
-    <com.gogoal.app.common.PlayerUtils.CountDownTimerView
+    <cn.gogoal.im.common.PlayerUtils.CountDownTimerView
         android:id="@+id/countDownTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

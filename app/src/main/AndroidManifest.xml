@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gogoal.app">
+    package="cn.gogoal.im">
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <!-- LeanCloud基础模块（必须加入以下声明）START -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -22,7 +23,6 @@
     <uses-permission android:name="android.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <!-- iBeancon功能所需权限 -->;
     <uses-permission android:name="android.permission.BLUETOOTH"/>
@@ -32,7 +32,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
-        android:name=".base.MyApp"
+        android:name="cn.gogoal.im.base.MyApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -63,7 +63,7 @@
         <service android:name=".servise.IntentService"/>
 
         <activity
-            android:name=".activity.MainActivity"
+            android:name="cn.gogoal.im.activity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -72,38 +72,43 @@
         </activity>
 
         <activity
-            android:name=".activity.TakePhotoActivity"
+            android:name="cn.gogoal.im.activity.TakePhotoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity
-            android:name=".activity.PlayerActivity"
+            android:name="cn.gogoal.im.activity.PlayerActivity"
             android:theme="@style/TranslucentTheme"
             android:configChanges="screenSize|keyboardHidden|orientation"/>
 
         <activity
-            android:name=".activity.FunctionActivity"
+            android:name="cn.gogoal.im.activity.FunctionActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".activity.SquareChatRoomActivity"
+            android:name="cn.gogoal.im.activity.SquareChatRoomActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".activity.SingleChatRoomActivity"
+            android:name="cn.gogoal.im.activity.SingleChatRoomActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.IMRegisterActivity"
+            android:name="cn.gogoal.im.activity.IMRegisterActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".activity.ChatRoomActivity"
+        <activity android:name="cn.gogoal.im.activity.ChatRoomActivity"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"/>
 
+        <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity"/>
+
+        <uses-library android:required="false" android:name="com.google.android.maps" />
+
+        <activity android:name="cn.gogoal.im.activity.stock.MarketActivity"/>
     </application>
 
 </manifest>

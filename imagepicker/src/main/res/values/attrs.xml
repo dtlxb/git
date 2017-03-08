@@ -11,4 +11,9 @@
             <enum name="circle" value="1"/>
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="StatusBarStyle">
+        <attr name="statusBar" format="integer" />
+    </declare-styleable>
+
 </resources>
