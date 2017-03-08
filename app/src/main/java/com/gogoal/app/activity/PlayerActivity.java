@@ -51,6 +51,7 @@ import com.gogoal.app.bean.RelaterVideoData;
 import com.gogoal.app.common.AppConst;
 import com.gogoal.app.common.AppDevice;
 import com.gogoal.app.common.DialogHelp;
+import com.gogoal.app.common.GGOKHTTP.GGOKHTTP;
 import com.gogoal.app.common.IMHelpers.AVImClientManager;
 import com.gogoal.app.common.PlayerUtils.CountDownTimerView;
 import com.gogoal.app.common.PlayerUtils.PlayerControl;
@@ -195,6 +196,31 @@ public class PlayerActivity extends BaseActivity {
 //        countDownTimer.addTime("2017-02-28 10:01:00");
 //        countDownTimer.start();
 
+        getPlayerInfo();
+    }
+
+    /*
+    * 获取直播详情
+    * */
+    private void getPlayerInfo() {
+
+        Map<String, String> param = new HashMap<>();
+        param.put("live_id", "d152f024-56ff-49a7-b92e-d96107c08631");
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                //JSONObject object = JSONObject.parseObject(responseInfo);
+
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.GET_STUDIO_LIST, ggHttpInterface).startGet();
     }
 
     private void getSquareConversation(String conversationId) {
