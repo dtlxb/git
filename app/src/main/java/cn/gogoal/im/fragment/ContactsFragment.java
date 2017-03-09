@@ -2,11 +2,13 @@ package cn.gogoal.im.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -21,12 +23,16 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.adapter.ContactAdapter;
+import cn.gogoal.im.adapter.recycleviewAdapterHelper.MultiItemTypeAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.index.IndexBar;
 import cn.gogoal.im.ui.index.SuspendedDecoration;
@@ -72,13 +78,29 @@ public class ContactsFragment extends BaseFragment {
         indexBar.setmPressedShowTextView(tvConstactsFlag)//设置HintTextView
                 .setmLayoutManager(layoutManager);//设置RecyclerView的LayoutManager
 
-        List<ContactBean> contactBeanList = new ArrayList<>();
+        final List<ContactBean> contactBeanList = new ArrayList<>();
 
         getData(contactBeanList);//列表数据
 
         contactAdapter = new ContactAdapter(getContext(), contactBeanList);
 
         contactAdapter.notifyDataSetChanged();
+
+        contactAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                //单聊处理
+                Intent intent = new Intent(getContext(), SingleChatRoomActivity.class);
+                intent.putExtra("friend_id", contactBeanList.get(position).getFriend_id() + "");
+                intent.putExtra("conversation_id", contactBeanList.get(position).getConv_id());
+                startActivity(intent);
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
 
     }
 
@@ -96,7 +118,7 @@ public class ContactsFragment extends BaseFragment {
 
         Map<String, String> param = new HashMap<>();
 
-        param.put("token", String.valueOf(66));
+        param.put("token", AppConst.LEAN_CLOUD_TOKEN);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -111,16 +133,19 @@ public class ContactsFragment extends BaseFragment {
 //                Object toJSON = JSONObject.toJSON(baseBeanList);
 //                String re=toJSON.toString();
 
-                if (JSONObject.parseObject(responseInfo).getIntValue("code")==0) {
+                SPTools.saveString(AppConst.LEAN_CLOUD_TOKEN + "_Contacts", responseInfo);
+
+                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
                             responseInfo,
                             new TypeReference<BaseBeanList<ContactBean<String>>>() {
                             });
-                    List<ContactBean<String>> list=beanList.getData();
+                    List<ContactBean<String>> list = beanList.getData();
 
-                    for (ContactBean<String> bean:list){
+                    for (ContactBean<String> bean : list) {
                         bean.setContactType(ContactBean.ContactType.PERSION_ITEM);
                     }
+
                     contactBeanList.addAll(list);
 
                     SuspendedDecoration mDecoration = new SuspendedDecoration(getContext(), contactBeanList);
@@ -139,8 +164,8 @@ public class ContactsFragment extends BaseFragment {
                     rvContacts.setAdapter(contactAdapter);
 
                     KLog.e(list.get(0).toString());
-                }else {
-                    UIHelper.toastErro(getContext(),GGOKHTTP.getMessage(responseInfo));
+                } else {
+                    UIHelper.toastErro(getContext(), GGOKHTTP.getMessage(responseInfo));
                 }
             }
 

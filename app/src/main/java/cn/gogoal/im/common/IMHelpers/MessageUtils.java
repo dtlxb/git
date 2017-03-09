@@ -6,7 +6,9 @@ import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
+import com.socks.library.KLog;
 
+import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.SPTools;
 
@@ -16,23 +18,26 @@ import cn.gogoal.im.common.SPTools;
 
 public class MessageUtils {
 
-    public static void saveMessageInfo(JSONArray thisJsonArray, AVIMConversation conversation, String messageAt, AVIMMessage message, String unReadCount) {
+    public static void saveMessageInfo(JSONArray thisJsonArray, IMMessageBean imMessageBean) {
 
         JSONObject jsonObject = new JSONObject();
         if (thisJsonArray != null) {
             for (int i = 0; i < thisJsonArray.size(); i++) {
-                if (thisJsonArray.getJSONObject(i).get("conversationID").equals(conversation.getConversationId())) {
+                if (thisJsonArray.getJSONObject(i).get("conversationID").equals(imMessageBean.getConversationID())) {
                     thisJsonArray.remove(i);
                 } else {
                 }
             }
 
-            jsonObject.put("conversationID", conversation.getConversationId());
-            jsonObject.put("speakerTo", conversation.getMembers());
-            jsonObject.put("lastTime", messageAt);
-            jsonObject.put("lastMessage", message);
-            jsonObject.put("unReadCounts", unReadCount);
+            jsonObject.put("conversationID", imMessageBean.getConversationID());
+            jsonObject.put("lastTime", imMessageBean.getLastTime());
+            jsonObject.put("lastMessage", imMessageBean.getLastMessage());
+            jsonObject.put("unReadCounts", imMessageBean.getUnReadCounts());
+            jsonObject.put("nickname", imMessageBean.getNickname());
+            jsonObject.put("friend_id", imMessageBean.getFriend_id());
+            jsonObject.put("avatar", imMessageBean.getAvatar());
 
+            AVIMMessage message = imMessageBean.getLastMessage();
             //判断消息类型
             if (message instanceof AVIMImageMessage) {
                 int mWidth = ((AVIMImageMessage) message).getFileMetaData().get("width") == null ?
@@ -55,6 +60,7 @@ public class MessageUtils {
             }
 
             thisJsonArray.add(jsonObject);
+            KLog.e(jsonObject);
             SPTools.saveJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", thisJsonArray);
         } else {
 

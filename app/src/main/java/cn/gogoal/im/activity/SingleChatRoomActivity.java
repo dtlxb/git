@@ -7,7 +7,9 @@ import com.socks.library.KLog;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.fragment.ChatFragment;
 
@@ -27,11 +29,12 @@ public class SingleChatRoomActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        String memberID = this.getIntent().getExtras().getString("member_id");
-        String conversation_id = this.getIntent().getExtras().getString("conversation_id");
-        setMyTitle(memberID + "聊天窗口", false);
+        String conversation_id = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("conversation_id"), "");
+        String nickname = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("nickname"), "");
+        setMyTitle(nickname + "聊天窗口", false);
 
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
+
         //输入聊天对象ID，返回conversation对象
         getSingleConversation(conversation_id);
 
