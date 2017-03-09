@@ -36,7 +36,7 @@
 
 ################common###############
 
--keep class com.bund.ifinancing.bean.** { *; }
+-keep class cn.gogoal.im.bean.** { *; }
 -keep class android.support.design.widget.** {*;}
 -keep class android.support.v4.view.**{ *;}
 -keep class android.support.v7.view.**{ *;}
@@ -44,7 +44,7 @@
 -keep public class * extends android.support.v4.app.Fragment
 
 -dontwarn android.support.**
--dontwarn com.bund.ifinancing.bean.**
+-dontwarn cn.gogoal.im.bean.**
 -dontwarn com.tencent.**
 -dontwarn org.dom4j.**
 -dontwarn org.slf4j.**
@@ -145,9 +145,10 @@
 #
 #################webview###############
 
--keep class com.gogoal.app.base.BaseActivity  {public *;}
+-keep class cn.gogoal.im.base.BaseActivity  {public *;}
 
 -keepattributes *Annotation*
 -keepattributes *JavascriptInterface*
 
 -keepattributes *Annotation*,*Exceptions*,Signature
+-keepattributes EnclosingMethod

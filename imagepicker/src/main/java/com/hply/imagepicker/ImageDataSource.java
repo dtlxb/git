@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 
 import com.hply.imagepicker.bean.ImageFolder;
 import com.hply.imagepicker.bean.ImageItem;
@@ -125,7 +126,7 @@ public class ImageDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        System.out.println("--------");
+        Log.e("TAG",loader.getId()+"==onLoaderReset");
     }
 
     /** 所有图片加载完成的回调接口 */
