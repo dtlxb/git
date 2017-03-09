@@ -221,6 +221,7 @@ public class PlayerActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
+                KLog.json(msg);
                 UIHelper.toast(getContext(), R.string.net_erro_hint);
             }
         };

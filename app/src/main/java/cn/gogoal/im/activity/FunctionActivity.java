@@ -2,10 +2,12 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.lzyzsd.jsbridge.BridgeHandler;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.socks.library.KLog;
@@ -73,9 +75,11 @@ public class FunctionActivity extends BaseActivity {
             @Override
             public void handler(String data, ValueCallback<String> function) {
                 KLog.json(data);
-//                Intent intent = new Intent(getContext(), PlayerActivity.class);
-//                intent.putExtra("live_id", data);
-//                startActivity(intent);
+                JSONObject object = JSONObject.parseObject(data);
+
+                Intent intent = new Intent(getContext(), PlayerActivity.class);
+                intent.putExtra("live_id", object.getString("live_id"));
+                startActivity(intent);
             }
         });
 
