@@ -22,7 +22,9 @@ import com.gogoal.app.R;
 import com.gogoal.app.common.AppConst;
 import com.gogoal.app.common.AppDevice;
 import com.gogoal.app.common.ImageUtils.ImageDisplay;
+import com.gogoal.app.common.StringUtils;
 import com.gogoal.app.common.recording.MediaManager;
+import com.socks.library.KLog;
 
 import java.io.IOException;
 import java.util.List;
@@ -88,36 +90,32 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             //获取后台图片大小设置
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((LeftImageViewHolder) holder).image_user_send.getLayoutParams();
 
-            //Log.e("+++image", "MessageHeight:" + imageMessage.getHeight() + "---" + "MessageWidth:" + imageMessage.getWidth());
             setImageSize(params, imageMessage);
-            //Log.e("+++params", "paramsHeight:" + params.height + "---" + "paramsWidth:" + params.width);
 
             ((LeftImageViewHolder) holder).image_user_send.setLayoutParams(params);
 
-            ImageDisplay.loadNetImage(mContext, imageMessage.getFileUrl(), ((LeftImageViewHolder) holder).image_user_send);
+            ImageDisplay.loadNetImage(mContext, imageMessage.getAVFile().getUrl(), ((LeftImageViewHolder) holder).image_user_send);
         } else if (holder instanceof RightImageViewHolder) {
             AVIMImageMessage imageMessage = (AVIMImageMessage) messageList.get(position);
 
             //获取后台图片大小设置
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((RightImageViewHolder) holder).image_user_send.getLayoutParams();
 
-            Log.e("+++image", "MessageHeight:" + imageMessage.getHeight() + "---" + "MessageWidth:" + imageMessage.getWidth());
             setImageSize(params, imageMessage);
-            Log.e("+++params", "paramsHeight:" + params.height + "---" + "paramsWidth:" + params.width);
 
             ((RightImageViewHolder) holder).image_user_send.setLayoutParams(params);
 
-            ImageDisplay.loadNetImage(mContext, imageMessage.getFileUrl(), ((RightImageViewHolder) holder).image_user_send);
+            ImageDisplay.loadNetImage(mContext, imageMessage.getAVFile().getUrl(), ((RightImageViewHolder) holder).image_user_send);
         } else if (holder instanceof RightAudioViewHolder) {
             final AVIMAudioMessage audioMessage = (AVIMAudioMessage) messageList.get(position);
             //设置语音宽度
             ViewGroup.LayoutParams params = ((RightAudioViewHolder) holder).recorder_length.getLayoutParams();
             int mMaxItemWidth = (int) (AppDevice.getWidth(mContext) * 0.7f);
             int mMinItemWidth = (int) (AppDevice.getWidth(mContext) * 0.16f);
-            params.width = (int) (mMinItemWidth + (mMaxItemWidth / 60f) * audioMessage.getDuration());
+            params.width = (int) (mMinItemWidth + (mMaxItemWidth / 60f) * ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue());
             ((RightAudioViewHolder) holder).recorder_length.setLayoutParams(params);
             //设置语音时长
-            ((RightAudioViewHolder) holder).recorder_time.setText((int) audioMessage.getDuration() + "\"");
+            ((RightAudioViewHolder) holder).recorder_time.setText((int) ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue() + "\"");
 
             ((RightAudioViewHolder) holder).recorder_length.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -127,7 +125,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                     AnimationDrawable anim = (AnimationDrawable) ((RightAudioViewHolder) holder).animView.getBackground();
                     anim.start();
                     //播放音频
-                    MediaManager.playSound(audioMessage.getFileUrl(), new MediaPlayer.OnCompletionListener() {
+                    MediaManager.playSound(audioMessage.getAVFile().getUrl(), new MediaPlayer.OnCompletionListener() {
 
                         @Override
                         public void onCompletion(MediaPlayer mp) {
@@ -142,10 +140,10 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             final ViewGroup.LayoutParams params = ((LeftAudioViewHolder) holder).recorder_length.getLayoutParams();
             int mMaxItemWidth = (int) (AppDevice.getWidth(mContext) * 0.7f);
             int mMinItemWidth = (int) (AppDevice.getWidth(mContext) * 0.16f);
-            params.width = (int) (mMinItemWidth + (mMaxItemWidth / 60f) * audioMessage.getDuration());
+            params.width = (int) (mMinItemWidth + (mMaxItemWidth / 60f) * ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue());
             ((LeftAudioViewHolder) holder).recorder_length.setLayoutParams(params);
             //设置语音时长
-            ((LeftAudioViewHolder) holder).recorder_time.setText((int) audioMessage.getDuration() + "\"");
+            ((LeftAudioViewHolder) holder).recorder_time.setText((int) ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue() + "\"");
             //点击播放语音
             ((LeftAudioViewHolder) holder).recorder_length.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -159,7 +157,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                     AnimationDrawable anim = (AnimationDrawable) ((LeftAudioViewHolder) holder).animView.getBackground();
                     anim.start();
                     //播放音频
-                    MediaManager.playSound(audioMessage.getFileUrl(), new MediaPlayer.OnCompletionListener() {
+                    MediaManager.playSound(audioMessage.getAVFile().getUrl(), new MediaPlayer.OnCompletionListener() {
 
                         @Override
                         public void onCompletion(MediaPlayer mp) {
@@ -208,26 +206,20 @@ public class IMChatAdapter extends RecyclerView.Adapter {
      * 图片大小计算
      */
     private void setImageSize(RelativeLayout.LayoutParams params, AVIMImageMessage message) {
-        int maxWidth = (int) (AppDevice.getWidth(mContext) * 0.5);
-        int maxHeight = AppDevice.dp2px(mContext, 150);
+        int maxWidth = (int) (AppDevice.getWidth(mContext) * 0.4);
+        String rateText = "";
 
-        if (0 != message.getWidth() && message.getHeight() != 0) {
-            int dpWidth = message.getWidth();
-            int dpHeight = message.getHeight();
-
-            if (dpWidth > maxWidth && dpHeight < maxHeight) {
+        if (null != message && 0 != ((Number) message.getFileMetaData().get("height")).intValue() && ((Number) message.getFileMetaData().get("width")).intValue() != 0) {
+            int dpWidth = ((Number) message.getFileMetaData().get("width")).intValue();
+            int dpHeight = ((Number) message.getFileMetaData().get("height")).intValue();
+            if (dpWidth > maxWidth) {
                 params.width = maxWidth;
-                params.height = (dpHeight / dpWidth) * maxHeight;
-            } else if (dpHeight > maxHeight && dpWidth < maxWidth) {
-                params.height = maxHeight;
-                params.width = (dpWidth / dpHeight) * maxWidth;
-            } else if (dpHeight > maxHeight && dpWidth > maxWidth) {
-                params.height = maxHeight;
-                params.width = maxWidth;
+                rateText = StringUtils.getAnyPointFloat("%.2f", (float) maxWidth / dpWidth);
+                params.height = (int) (Float.parseFloat(rateText) * dpHeight);
+            } else if (dpWidth < maxWidth) {
+                params.width = dpWidth;
+                params.height = dpHeight;
             }
-        } else {
-            params.height = maxHeight;
-            params.width = maxWidth;
         }
 
     }

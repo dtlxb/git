@@ -70,8 +70,8 @@ dependencies {
     compile project(':imagepicker')
     compile project(':jsbridge')
     //LeanCloud实时聊天
-    compile 'cn.leancloud.android:avoscloud-sdk:v3.+'
-    compile('cn.leancloud.android:avoscloud-push:v3.+@aar') { transitive = true }
+    compile 'cn.leancloud.android:avoscloud-sdk:v3.15.9'
+    compile('cn.leancloud.android:avoscloud-push:v3.15.9@aar') { transitive = true }
     //UCloud存储
     compile project(':uFileLib')
     //阿里云播放器

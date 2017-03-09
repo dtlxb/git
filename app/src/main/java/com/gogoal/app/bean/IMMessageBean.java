@@ -54,7 +54,7 @@ public class IMMessageBean {
     }
 
     public void setLastTime(String lastTime) {
-        this.lastTime = lastTime;
+        this.lastTime = lastTime == null ? "0" : lastTime;
     }
 
     @Override

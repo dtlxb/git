@@ -88,6 +88,14 @@ public class GGOKHTTP {
      * */
     public static final String GET_CITY_DATA="v1/base/get_city_data";
 
+    /**
+     * IM发送消息
+     * token                     用户token
+     * message                   消息内容（包括文字，语音，图片...）
+     * conv_id                   对话ID
+     * */
+    public static final String CHAT_SEND_MESSAGE="v1/ggm_chat/send_message";
+
 
 
 //--------------------------------------------------------------------------------------------------

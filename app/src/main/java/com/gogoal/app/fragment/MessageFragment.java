@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Switch;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -23,8 +24,11 @@ import com.gogoal.app.bean.BaseMessage;
 import com.gogoal.app.bean.IMMessageBean;
 import com.gogoal.app.common.AppConst;
 import com.gogoal.app.common.CalendarUtils;
+import com.gogoal.app.common.IMHelpers.AVImClientManager;
 import com.gogoal.app.common.IMHelpers.MessageUtils;
 import com.gogoal.app.common.SPTools;
+import com.gogoal.app.common.UIHelper;
+import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -92,29 +96,51 @@ public class MessageFragment extends BaseFragment {
         //长按删除
         listAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                String conversation_id = IMMessageBeans.get(position).getConversationID();
-                String member_id = "";
-                Intent intent;
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, final int position) {
+                final String conversation_id = IMMessageBeans.get(position).getConversationID();
 
-                //群聊处理
-                intent = new Intent(getContext(), SquareChatRoomActivity.class);
-                intent.putExtra("conversation_id", conversation_id);
-                startActivity(intent);
+                KLog.e(conversation_id);
 
-                //单聊处理
-                /*List<String> members = new ArrayList<>();
-                intent = new Intent(getContext(), SingleChatRoomActivity.class);
-                members.clear();
-                members.addAll(IMMessageBeans.get(position).getSpeakerTo());
-                if (members.size() == 2) {
-                    if (members.contains(AppConst.LEAN_CLOUD_TOKEN)) {
-                        members.remove(AppConst.LEAN_CLOUD_TOKEN);
-                        member_id = members.get(0);
+                AVImClientManager.getInstance().findConversationById(conversation_id, new AVImClientManager.ChatJoinManager() {
+                    @Override
+                    public void joinSuccess(AVIMConversation conversation) {
+                        String chat_type = conversation.getAttribute("chat_type") == null ? "1001" : conversation.getAttribute("chat_type").toString();
+                        Intent intent;
+                        String member_id = "";
+                        switch (chat_type) {
+                            case "1001":
+                                //单聊处理
+                                List<String> members = new ArrayList<>();
+                                intent = new Intent(getContext(), SingleChatRoomActivity.class);
+                                members.clear();
+                                members.addAll(IMMessageBeans.get(position).getSpeakerTo());
+                                if (members.size() == 2) {
+                                    if (members.contains(AppConst.LEAN_CLOUD_TOKEN)) {
+                                        members.remove(AppConst.LEAN_CLOUD_TOKEN);
+                                        member_id = members.get(0);
+                                    }
+                                }
+                                intent.putExtra("member_id", member_id);
+                                intent.putExtra("conversation_id", conversation_id);
+                                startActivity(intent);
+                                break;
+                            case "1002":
+                                //群聊处理
+                                intent = new Intent(getContext(), SquareChatRoomActivity.class);
+                                intent.putExtra("conversation_id", conversation_id);
+                                startActivity(intent);
+                                break;
+                            default:
+                                break;
+                        }
                     }
-                }
-                intent.putExtra("member_id", member_id);
-                startActivity(intent);*/
+
+                    @Override
+                    public void joinFail(String error) {
+                        UIHelper.toast(getActivity(), "获取聊天房间失败");
+                    }
+                });
+
             }
 
             @Override
@@ -140,15 +166,6 @@ public class MessageFragment extends BaseFragment {
             if (null != messageBean.getLastTime()) {
                 dateStr = CalendarUtils.parseStampToDate(messageBean.getLastTime());
             }
-
-            /*if (jsonObject.get("lastMessage") instanceof AVIMTextMessage) {
-                message = ((AVIMTextMessage) jsonObject.get("lastMessage")).getText();
-            } else if (jsonObject.get("lastMessage") instanceof AVIMAudioMessage) {
-                message = "语音信息";
-            }else {
-                message = "图片信息";
-            }*/
-
             members.clear();
             members.addAll(messageBean.getSpeakerTo());
             if (members.size() > 0) {
@@ -165,13 +182,25 @@ public class MessageFragment extends BaseFragment {
             } else {
             }
 
-            Log.e("+++message", messageBean.getLastMessage() + "");
-            if (messageBean.getLastMessage() == null) {
-                message = "";
-            } else {
+            if (messageBean.getLastMessage() != null) {
                 String content = messageBean.getLastMessage().getContent();
                 JSONObject contentObject = JSON.parseObject(content);
-                message = contentObject.getString("_lctext");
+                String _lctype = contentObject.getString("_lctype");
+                switch (_lctype) {
+                    case "-1":
+                        message = contentObject.getString("_lctext");
+                        break;
+                    case "-2":
+                        message = "[图片]";
+                        break;
+                    case "-3":
+                        message = "[语音]";
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                message = "";
             }
 
             holder.setText(R.id.whose_message, speaker);
@@ -192,9 +221,10 @@ public class MessageFragment extends BaseFragment {
 
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(conversation.getConversationId())) {
-                IMMessageBeans.get(i).setLastTime(String.valueOf(conversation.getLastMessageAt().getTime()));
+                IMMessageBeans.get(i).setLastTime(String.valueOf(CalendarUtils.getCurrentTime()));
                 IMMessageBeans.get(i).setLastMessage(message);
-                MessageUtils.saveMessageInfo(jsonArray, conversation);
+                int unreadmessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts()) + 1;
+                IMMessageBeans.get(i).setUnReadCounts(unreadmessage + "");
                 isTheSame = true;
             } else {
             }
@@ -204,12 +234,12 @@ public class MessageFragment extends BaseFragment {
             IMMessageBean imMessageBean = new IMMessageBean();
             imMessageBean.setConversationID(conversation.getConversationId());
             imMessageBean.setLastMessage(message);
-            imMessageBean.setLastTime(String.valueOf(conversation.getLastMessageAt().getTime()));
+            imMessageBean.setLastTime(String.valueOf(CalendarUtils.getCurrentTime()));
             imMessageBean.setSpeakerTo(conversation.getMembers());
-            imMessageBean.setUnReadCounts("99");
+            int unRead = Integer.parseInt(imMessageBean.getUnReadCounts()) + 1;
+            imMessageBean.setUnReadCounts(unRead + "");
 
             IMMessageBeans.add(imMessageBean);
-            MessageUtils.saveMessageInfo(jsonArray, conversation);
         }
 
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
@@ -221,6 +251,7 @@ public class MessageFragment extends BaseFragment {
             });
         }
 
+        MessageUtils.saveMessageInfo(jsonArray, conversation, message);
         listAdapter.notifyDataSetChanged();
 
     }

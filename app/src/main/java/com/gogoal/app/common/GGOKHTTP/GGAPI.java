@@ -11,11 +11,10 @@ import java.util.Map;
  */
 public class GGAPI {
 
-    //开发环境
-    private static final String WEB_URL = "http://192.168.89.68:9000";
-    private static final String Native_API = "http://ggfinancing.sandbox.gofund.com.cn";
-    private static final String APP_KEY = "DXHnDEtFoMolOlc";
-    private static final String APP_SECRET = "VYL1PNeGZhFSFPcux5pLVOySPhOssOuc";
+    //沙盒环境
+    private static final String Native_API = "http://ggservice.sandbox.gofund.com.cn";
+    private static final String APP_KEY = "HBTORVzBaGtqmGE";
+    private static final String APP_SECRET = "cGYIsTyTWXGeP4frqOqmdWxRO5xmh2Pi";
 
     //正式环境
 //    private static final String WEB_URL = "http://211.144.193.162:8085";

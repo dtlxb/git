@@ -39,7 +39,6 @@ public class IMRegisterActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        login_et_username.setText("大顺聊天室");
         chat_room_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,18 +56,18 @@ public class IMRegisterActivity extends BaseActivity {
         chat_room_login.setEnabled(false);
         login_et_username.setEnabled(false);
 
-        AVImClientManager.getInstance().getClient().createConversation(Collections.<String>emptyList(), "HelloKitty PK 加菲猫", null, true, new AVIMConversationCreatedCallback() {
+        /*AVImClientManager.getInstance().getClient().createConversation(Collections.<String>emptyList(), "HelloKitty PK 加菲猫", null, true, new AVIMConversationCreatedCallback() {
             @Override
             public void done(AVIMConversation avimConversation, AVIMException e) {
                 Log.e("+++ConversationId", avimConversation.getConversationId());
                 avimConversation.getConversationId();
             }
-        });
+        });*/
 
         //单聊页面
         Intent intent = new Intent(IMRegisterActivity.this, SingleChatRoomActivity.class);
         intent.putExtra("member_id", MyId);
-        intent.putExtra("userName", MyId);
+        intent.putExtra("conversation_id", "58b61fbb5c497d00580cc05c");
 
 
         //群聊

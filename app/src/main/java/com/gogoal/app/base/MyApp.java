@@ -9,6 +9,7 @@ import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
+import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.duanqu.qupai.jni.ApplicationGlue;
 import com.gogoal.app.common.AppConst;
 import com.gogoal.app.common.IMHelpers.AVImClientManager;
@@ -43,8 +44,9 @@ public class MyApp extends Application {
         SPTools.initSharedPreferences(this);
 
         //初始化参数依次this，AppId,AppKey
-        AVOSCloud.initialize(this, "dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz", "ye24iIK6ys8IvaISMC4Bs5WK");
-        //AVOSCloud.initialize(this,"R7vH8N41V1rqJIqrlTQ1mMnR-gzGzoHsz","4iXr2Ylh1VwVyYjaxs3ufFmo");
+        //AVOSCloud.initialize(this, "dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz", "ye24iIK6ys8IvaISMC4Bs5WK");
+        //春雨Key
+        AVOSCloud.initialize(this, "R7vH8N41V1rqJIqrlTQ1mMnR-gzGzoHsz", "4iXr2Ylh1VwVyYjaxs3ufFmo");
         //启用北美节点
 //        AVOSCloud.useAVCloudUS();
         //必须在启动的时候注册 MessageHandler
