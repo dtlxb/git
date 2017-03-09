@@ -59,7 +59,6 @@ public class GGOKHTTP {
     /**
      * 好友列表
      * */
-<<<<<<< HEAD:app/src/main/java/com/gogoal/app/common/GGOKHTTP/GGOKHTTP.java
     public static final String USER_RESET_PASSWORD_NEW="v1/user/reset_password_new";
 
     /**
@@ -91,9 +90,7 @@ public class GGOKHTTP {
     public static final String CHAT_SEND_MESSAGE="v1/ggm_chat/send_message";
 
 
-=======
     public static final String GET_FRIEND_LIST="v1/ggm_im/get_friend_list";
->>>>>>> f89e65b30b76a5eef732d1c83a0d86bd2122f4a7:app/src/main/java/cn/gogoal/im/common/GGOKHTTP/GGOKHTTP.java
 
 //--------------------------------------------------------------------------------------------------
 

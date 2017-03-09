@@ -3,18 +3,12 @@ package cn.gogoal.im.common.IMHelpers;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
-<<<<<<< HEAD:app/src/main/java/com/gogoal/app/common/IMHelpers/MessageUtils.java
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
-import com.gogoal.app.common.AppConst;
-import com.gogoal.app.common.CalendarUtils;
-import com.gogoal.app.common.SPTools;
-import com.socks.library.KLog;
-=======
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.SPTools;
->>>>>>> f89e65b30b76a5eef732d1c83a0d86bd2122f4a7:app/src/main/java/cn/gogoal/im/common/IMHelpers/MessageUtils.java
 
 /**
  * Created by huangxx on 2017/2/28.
