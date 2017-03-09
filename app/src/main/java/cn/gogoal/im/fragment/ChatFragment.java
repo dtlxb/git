@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
@@ -33,8 +34,6 @@ import com.socks.library.KLog;
 import org.simple.eventbus.Subscriber;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,9 +43,13 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.IMChatAdapter;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.BaseMessage;
+import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AsyncTaskUtil;
+import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
@@ -102,7 +105,9 @@ public class ChatFragment extends BaseFragment {
     private AVIMConversation imConversation;
     private List<AVIMMessage> messageList = new ArrayList<>();
     private IMChatAdapter imChatAdapter;
+
     private JSONArray jsonArray;
+    private ContactBean contactBean;
     //语音消息处理
     private AudioRecoderUtils mAudioRecoderUtils;
     private boolean hasRecode = false;
@@ -291,7 +296,7 @@ public class ChatFragment extends BaseFragment {
         }
     }
 
-    public void sendAVIMMessage(final int messageType, Map<String, String> params, final AVIMMessage message) {
+    public void sendAVIMMessage(final int messageType, final Map<String, String> params, final AVIMMessage message) {
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -313,7 +318,11 @@ public class ChatFragment extends BaseFragment {
                         default:
                             break;
                     }
-                    MessageUtils.saveMessageInfo(jsonArray, imConversation, message);
+                    //头像暂时未保存
+                    IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), String.valueOf(CalendarUtils.getCurrentTime()),
+                            "0", contactBean.getNickname(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
+
+                    MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
                 }
             }
 
@@ -590,10 +599,16 @@ public class ChatFragment extends BaseFragment {
                         }
                         messageList.addAll(list);
 
+                        //拿到对方信息
+                        getSpeakToInfo(imConversation);
                         jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
-                        if (messageList.size() > 0) {
+                        if (messageList.size() > 0 && null != contactBean) {
                             AVIMMessage lastMessage = messageList.get(messageList.size() - 1);
-                            MessageUtils.saveMessageInfo(jsonArray, imConversation, lastMessage);
+
+                            IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), String.valueOf(CalendarUtils.getCurrentTime()),
+                                    "0", contactBean.getNickname(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), lastMessage);
+
+                            MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
                         }
 
                         imChatAdapter.notifyDataSetChanged();
@@ -601,6 +616,47 @@ public class ChatFragment extends BaseFragment {
                     }
                 }
             });
+        }
+    }
+
+    private void getSpeakToInfo(AVIMConversation conversation) {
+        String responseInfo = SPTools.getString(AppConst.LEAN_CLOUD_TOKEN + "_Contacts", "");
+        List<ContactBean> contactBeanList = new ArrayList<>();
+
+        //拿到对方
+        String speakTo = "";
+        List<String> members = new ArrayList<>();
+        members.addAll(conversation.getMembers());
+
+        if (members.size() > 0) {
+            if (members.size() == 2) {
+                if (members.contains(AppConst.LEAN_CLOUD_TOKEN)) {
+                    members.remove(AppConst.LEAN_CLOUD_TOKEN);
+                    speakTo = members.get(0);
+                }
+            } else {
+            }
+        } else {
+        }
+
+        if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+            BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
+                    responseInfo,
+                    new TypeReference<BaseBeanList<ContactBean<String>>>() {
+                    });
+            List<ContactBean<String>> list = beanList.getData();
+
+            for (ContactBean<String> bean : list) {
+                bean.setContactType(ContactBean.ContactType.PERSION_ITEM);
+            }
+
+            contactBeanList.addAll(list);
+        }
+
+        for (int i = 0; i < contactBeanList.size(); i++) {
+            if ((contactBeanList.get(i).getFriend_id() + "").equals(speakTo)) {
+                contactBean = contactBeanList.get(i);
+            }
         }
     }
 
@@ -626,7 +682,15 @@ public class ChatFragment extends BaseFragment {
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
                 imChatAdapter.addItem(message);
                 message_recycler.smoothScrollToPosition(messageList.size());
-                MessageUtils.saveMessageInfo(jsonArray, conversation, message);
+
+                //此处头像，昵称日后有数据再改
+                /*IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), String.valueOf(CalendarUtils.getCurrentTime()),
+                        "0", imConversation.getMembers(), message.getFrom(), message.getFrom(), "", message);*/
+
+                IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), String.valueOf(CalendarUtils.getCurrentTime()),
+                        "0", message.getFrom(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
+
+                MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
             }
         }
     }

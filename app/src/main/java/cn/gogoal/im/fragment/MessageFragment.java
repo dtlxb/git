@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Switch;
 
 import com.alibaba.fastjson.JSON;
@@ -37,6 +38,7 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 
@@ -106,21 +108,11 @@ public class MessageFragment extends BaseFragment {
                     public void joinSuccess(AVIMConversation conversation) {
                         String chat_type = conversation.getAttribute("chat_type") == null ? "1001" : conversation.getAttribute("chat_type").toString();
                         Intent intent;
-                        String member_id = "";
                         switch (chat_type) {
                             case "1001":
                                 //单聊处理
-                                List<String> members = new ArrayList<>();
                                 intent = new Intent(getContext(), SingleChatRoomActivity.class);
-                                members.clear();
-                                members.addAll(IMMessageBeans.get(position).getSpeakerTo());
-                                if (members.size() == 2) {
-                                    if (members.contains(AppConst.LEAN_CLOUD_TOKEN)) {
-                                        members.remove(AppConst.LEAN_CLOUD_TOKEN);
-                                        member_id = members.get(0);
-                                    }
-                                }
-                                intent.putExtra("member_id", member_id);
+                                intent.putExtra("nickname", IMMessageBeans.get(position).getNickname());
                                 intent.putExtra("conversation_id", conversation_id);
                                 startActivity(intent);
                                 break;
@@ -161,27 +153,24 @@ public class MessageFragment extends BaseFragment {
         protected void convert(ViewHolder holder, IMMessageBean messageBean, int position) {
             String dateStr = "";
             String message = "";
-            String speaker = "";
-            List<String> members = new ArrayList<String>();
+            String unRead = "";
+            View unReadTag = holder.getView(R.id.unread_tag);
+            ImageView avatarIv = holder.getView(R.id.head_image);
+
+            //未读数
+            if (messageBean.getUnReadCounts().equals("0")) {
+                unRead = "";
+                unReadTag.setVisibility(View.GONE);
+            } else {
+                unRead = "[" + messageBean.getUnReadCounts() + "条] ";
+                unReadTag.setVisibility(View.VISIBLE);
+            }
+
             if (null != messageBean.getLastTime()) {
                 dateStr = CalendarUtils.parseStampToDate(messageBean.getLastTime());
             }
-            members.clear();
-            members.addAll(messageBean.getSpeakerTo());
-            if (members.size() > 0) {
-                if (members.size() == 2) {
-                    //硬代码
-                    if (members.contains(AppConst.LEAN_CLOUD_TOKEN)) {
-                        members.remove(AppConst.LEAN_CLOUD_TOKEN);
-                        speaker = members.get(0);
-                        Log.e("+++members2", members + "");
-                    }
-                } else {
-                    speaker = "群聊房间";
-                }
-            } else {
-            }
 
+            //消息类型
             if (messageBean.getLastMessage() != null) {
                 String content = messageBean.getLastMessage().getContent();
                 JSONObject contentObject = JSON.parseObject(content);
@@ -203,8 +192,9 @@ public class MessageFragment extends BaseFragment {
                 message = "";
             }
 
-            holder.setText(R.id.whose_message, speaker);
-            holder.setText(R.id.last_message, message);
+            ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
+            holder.setText(R.id.whose_message, messageBean.getNickname());
+            holder.setText(R.id.last_message, unRead + message);
             holder.setText(R.id.last_time, dateStr);
         }
     }
@@ -218,14 +208,22 @@ public class MessageFragment extends BaseFragment {
         AVIMMessage message = (AVIMMessage) map.get("message");
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
         boolean isTheSame = false;
+        String rightNow = String.valueOf(CalendarUtils.getCurrentTime());
 
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(conversation.getConversationId())) {
-                IMMessageBeans.get(i).setLastTime(String.valueOf(CalendarUtils.getCurrentTime()));
+                IMMessageBeans.get(i).setLastTime(rightNow);
                 IMMessageBeans.get(i).setLastMessage(message);
                 int unreadmessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts()) + 1;
+                KLog.e(unreadmessage);
                 IMMessageBeans.get(i).setUnReadCounts(unreadmessage + "");
+
+                //头像暂时未保存
+                IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), String.valueOf(CalendarUtils.getCurrentTime()),
+                        "0", message.getFrom(), AppConst.LEANCLOUD_APP_ID, "", message);
+
                 isTheSame = true;
+                MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
             } else {
             }
         }
@@ -234,12 +232,16 @@ public class MessageFragment extends BaseFragment {
             IMMessageBean imMessageBean = new IMMessageBean();
             imMessageBean.setConversationID(conversation.getConversationId());
             imMessageBean.setLastMessage(message);
-            imMessageBean.setLastTime(String.valueOf(CalendarUtils.getCurrentTime()));
-            imMessageBean.setSpeakerTo(conversation.getMembers());
-            int unRead = Integer.parseInt(imMessageBean.getUnReadCounts()) + 1;
+            imMessageBean.setLastTime(rightNow);
+            imMessageBean.setNickname(message.getFrom());
+            int unRead = Integer.parseInt(imMessageBean.getUnReadCounts() == null ? "0" : imMessageBean.getUnReadCounts()) + 1;
             imMessageBean.setUnReadCounts(unRead + "");
 
+            //头像暂时未保存
+            IMMessageBean unKonwimMessageBean = new IMMessageBean(conversation.getConversationId(), String.valueOf(CalendarUtils.getCurrentTime()),
+                    "0", message.getFrom(), AppConst.LEANCLOUD_APP_ID, "", message);
             IMMessageBeans.add(imMessageBean);
+            MessageUtils.saveMessageInfo(jsonArray, unKonwimMessageBean);
         }
 
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
@@ -251,7 +253,6 @@ public class MessageFragment extends BaseFragment {
             });
         }
 
-        MessageUtils.saveMessageInfo(jsonArray, conversation, message);
         listAdapter.notifyDataSetChanged();
 
     }
