@@ -42,9 +42,9 @@ public class MainActivity extends BaseActivity {
 
         MessageFragment messageFragment = new MessageFragment();        // TAB1 消息
 
-        ContactsFragment contactsFragment = new ContactsFragment();     // TAB2 联系人
+        ContactsFragment contactsFragment = new ContactsFragment();     // TAB2 人脉
 
-        FoundFragment foundFragment = new FoundFragment();              // TAB3 发现
+        FoundFragment foundFragment = new FoundFragment();              // TAB3 投研
 
         MineFragment mineFragment = new MineFragment();                 // TAB4 我的
 
@@ -68,9 +68,6 @@ public class MainActivity extends BaseActivity {
             }
         }
 
-        KLog.e("width==="+ AppDevice.getWidth(getContext())+";Height==="+AppDevice.getHeight(getContext()));
-        KLog.e("widthDpValue==="+AppDevice.px2dp(getContext(),AppDevice.getWidth(getContext()))+
-                ";HeightDpValue==="+AppDevice.px2dp(getContext(),AppDevice.getHeight(getContext())));
     }
 
 }

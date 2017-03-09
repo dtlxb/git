@@ -21,7 +21,7 @@ public class MyConversationHandler extends AVIMConversationEventHandler {
 
     @Override
     public void onMemberJoined(AVIMClient avimClient, AVIMConversation avimConversation, List<String> list, String s) {
-        Log.e("LEAN_CLOUD", s + "加入聊天室" + avimConversation.getConversationId());
+        Log.e("LEAN_CLOUD", list + "加入聊天室" + avimConversation.getConversationId());
     }
 
     @Override

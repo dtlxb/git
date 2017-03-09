@@ -10,15 +10,24 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
+import com.socks.library.KLog;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.ContactAdapter;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.index.IndexBar;
 import cn.gogoal.im.ui.index.SuspendedDecoration;
 
@@ -35,6 +44,7 @@ public class ContactsFragment extends BaseFragment {
 
     @BindView(R.id.tv_constacts_flag)
     TextView tvConstactsFlag;
+    private ContactAdapter contactAdapter;
 
     public ContactsFragment() {
     }
@@ -46,7 +56,7 @@ public class ContactsFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle("联系人");
+        setFragmentTitle(getString(R.string.title_contacts));
 
         ViewGroup.LayoutParams tvParams = tvConstactsFlag.getLayoutParams();
         tvParams.width = AppDevice.getWidth(getContext()) / 4;
@@ -60,80 +70,134 @@ public class ContactsFragment extends BaseFragment {
 
         //indexbar初始化
         indexBar.setmPressedShowTextView(tvConstactsFlag)//设置HintTextView
-                .setNeedRealIndex(true)
                 .setmLayoutManager(layoutManager);//设置RecyclerView的LayoutManager
 
-        List<ContactBean> contactBeanList = getConstactsData();
+        List<ContactBean> contactBeanList = new ArrayList<>();
 
-        ContactAdapter contactAdapter = new ContactAdapter(getContext(), contactBeanList);
+        getData(contactBeanList);//列表数据
+
+        contactAdapter = new ContactAdapter(getContext(), contactBeanList);
 
         contactAdapter.notifyDataSetChanged();
 
-        SuspendedDecoration mDecoration = new SuspendedDecoration(getContext(), contactBeanList);
+    }
 
-        indexBar.setmSourceDatas(contactBeanList)//设置数据
-                .invalidate();
-        mDecoration.setmDatas(contactBeanList);
+    private void getData(List<ContactBean> contactBeanList) {
+        contactBeanList.add(addFunctionHead("新的朋友", R.mipmap.cache_img_contacts_0));
+        contactBeanList.add(addFunctionHead("群聊", R.mipmap.cache_img_contacts_1));
+        contactBeanList.add(addFunctionHead("标签", R.mipmap.cache_img_contacts_2));
+        contactBeanList.add(addFunctionHead("公众号", R.mipmap.cache_img_contacts_3));
+        //添加模拟好友数据
+//        contactBeanList.addAll(getConstactsData());
+        getFriendList(contactBeanList);
+    }
 
-        rvContacts.addItemDecoration(mDecoration);
-        //如果add两个，那么按照先后顺序，依次渲染。
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
-        itemDecoration.setDrawable(ContextCompat.getDrawable(getContext(),R.drawable.shape_divider_recyclerview_1px));
-        rvContacts.addItemDecoration(itemDecoration);
+    private void getFriendList(final List<ContactBean> contactBeanList) {
 
-        rvContacts.setAdapter(contactAdapter);
+        Map<String, String> param = new HashMap<>();
 
+        param.put("token", String.valueOf(66));
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+
+//                BaseBeanList<ContactBean<String>> baseBeanList=new BaseBeanList<>();
+//                baseBeanList.setData(getConstactsData());
+//                baseBeanList.setCode(0);
+//                baseBeanList.setMessage("ok");
+//
+//                Object toJSON = JSONObject.toJSON(baseBeanList);
+//                String re=toJSON.toString();
+
+                if (JSONObject.parseObject(responseInfo).getIntValue("code")==0) {
+                    BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
+                            responseInfo,
+                            new TypeReference<BaseBeanList<ContactBean<String>>>() {
+                            });
+                    List<ContactBean<String>> list=beanList.getData();
+
+                    for (ContactBean<String> bean:list){
+                        bean.setContactType(ContactBean.ContactType.PERSION_ITEM);
+                    }
+                    contactBeanList.addAll(list);
+
+                    SuspendedDecoration mDecoration = new SuspendedDecoration(getContext(), contactBeanList);
+
+                    indexBar.setmSourceDatas(contactBeanList)//设置数据
+                            .invalidate();
+                    mDecoration.setmDatas(contactBeanList);
+
+                    rvContacts.addItemDecoration(mDecoration);
+
+                    //如果add两个，那么按照先后顺序，依次渲染。
+                    DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
+                    itemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.shape_divider_recyclerview_1px));
+                    rvContacts.addItemDecoration(itemDecoration);
+
+                    rvContacts.setAdapter(contactAdapter);
+
+                    KLog.e(list.get(0).toString());
+                }else {
+                    UIHelper.toastErro(getContext(),GGOKHTTP.getMessage(responseInfo));
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                KLog.e(msg);
+                UIHelper.toastErro(getContext(), msg);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.GET_FRIEND_LIST, ggHttpInterface).startGet();
     }
 
     //==========================================临时代码段--开始，模拟数据================================
+
     /**
      * 模拟好友数据 20组英文名，10个数字名字，50组中文名
      */
-    private List<ContactBean> getConstactsData() {
+    private List<ContactBean<String>> getConstactsData() {
 
-        List<ContactBean> contacts = new ArrayList<>();
+        List<ContactBean<String>> contacts = new ArrayList<>();
 
-        contacts.add(addFunctionHead("新的朋友",R.mipmap.cache_img_contacts_0));
-        contacts.add(addFunctionHead("群聊",R.mipmap.cache_img_contacts_1));
-        contacts.add(addFunctionHead("标签",R.mipmap.cache_img_contacts_2));
-        contacts.add(addFunctionHead("公众号",R.mipmap.cache_img_contacts_3));
-
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 12; i++) {
             ContactBean<String> contactBean = new ContactBean<>();
-            contactBean.setmAccountId(String.valueOf(i));
-            contactBean.setContactType(ContactBean.ContactType.PersionItem);
-            contactBean.setmAvatar(i < 12 ? "http://hply.image.alimmdn.com/image/LolitaCheng_" + $(i) + ".jpg@!center_crop_80" : null);
-            contactBean.setmName(getEnglishName());
+            contactBean.setId(i);
+            contactBean.setContactType(ContactBean.ContactType.PERSION_ITEM);
+            contactBean.setAvatar("http://hply.image.alimmdn.com/image/LolitaCheng_" + $(i) + ".jpg@!center_crop_80");
+            contactBean.setRemark(getEnglishName());
             contacts.add(contactBean);
         }
 
         for (int i = 0; i < 10; i++) {
             ContactBean<String> contactBean = new ContactBean<>();
-            contactBean.setmAccountId(String.valueOf(i));
-            contactBean.setContactType(ContactBean.ContactType.PersionItem);
-            contactBean.setmAvatar(i < 12 ? "http://hply.image.alimmdn.com/image/LolitaCheng_" + $(i) + ".jpg" : null);
-            contactBean.setmName(String.valueOf((int) (Math.random() * 900000 + 100000)));
+            contactBean.setId(i);
+            contactBean.setContactType(ContactBean.ContactType.PERSION_ITEM);
+            contactBean.setAvatar("http://hply.image.alimmdn.com/image/LolitaCheng_" + $(i) + ".jpg");
+            contactBean.setNickname(String.valueOf((int) (Math.random() * 900000 + 100000)));
             contacts.add(contactBean);
         }
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 12; i++) {
             ContactBean<String> contactBean = new ContactBean<>();
-            contactBean.setmAccountId(String.valueOf(i));
-            contactBean.setContactType(ContactBean.ContactType.PersionItem);
-            contactBean.setmAvatar(i < 12 ? "http://hply.image.alimmdn.com/image/LolitaCheng_" + $(i) + ".jpg" : null);
-            contactBean.setmName(getChineseName());
+            contactBean.setId(i);
+            contactBean.setContactType(ContactBean.ContactType.PERSION_ITEM);
+            contactBean.setAvatar("http://hply.image.alimmdn.com/image/LolitaCheng_" + $(i) + ".jpg");
+            contactBean.setRemark(getChineseName());
             contacts.add(contactBean);
         }
 
         return contacts;
     }
 
-    private ContactBean<Integer> addFunctionHead(String name,@DrawableRes int iconId) {
+    private ContactBean<Integer> addFunctionHead(String name, @DrawableRes int iconId) {
         ContactBean<Integer> bean = new ContactBean<>();
-        bean.setmName(name);
+        bean.setRemark(name);
         bean.setBaseIndexTag("↑");
-        bean.setContactType(ContactBean.ContactType.FunctionItem);
-        bean.setmAvatar(iconId);
+        bean.setContactType(ContactBean.ContactType.FUNCTION_ITEM);
+        bean.setAvatar(iconId);
         return bean;
     }
 

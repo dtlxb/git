@@ -29,6 +29,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.FoundData;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.GGOKHTTP.GGAPI;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.permission.IPermissionListner;
@@ -100,7 +101,7 @@ public class FoundFragment extends BaseFragment {
         String[] titles = getResources().getStringArray(R.array.found_title);
 
         int[][] iconArray = {{R.mipmap.function_icon_onlive, R.mipmap.function_icon_report,
-                R.mipmap.function_icon_school, R.mipmap.function_icon_1q},
+                R.mipmap.function_icon_school, R.mipmap.function_icon_1q, R.mipmap.cache_found_js_native},
                 {R.mipmap.function_icon_improtant_report, R.mipmap.function_icon_title, R.mipmap.function_icon_news}};
 
         String[][] iconDescription = {functionArr0, functionArr1};
@@ -121,9 +122,9 @@ public class FoundFragment extends BaseFragment {
 
         //-----------------------添加测试--------------------------------
 
-        FoundData.ItemPojos itemPojos1 = new FoundData.ItemPojos("股票行情", R.mipmap.function_icon_news, "tag");
-        FoundData.ItemPojos itemPojos2 = new FoundData.ItemPojos("自选股", R.mipmap.function_icon_news, "tag");
-        FoundData.ItemPojos itemPojos3 = new FoundData.ItemPojos("个股详情", R.mipmap.function_icon_news, "tag");
+        FoundData.ItemPojos itemPojos1 = new FoundData.ItemPojos("股票行情", R.mipmap.cache_found_js_native, "tag");
+        FoundData.ItemPojos itemPojos2 = new FoundData.ItemPojos("自选股", R.mipmap.cache_found_js_native, "tag");
+        FoundData.ItemPojos itemPojos3 = new FoundData.ItemPojos("个股详情", R.mipmap.cache_found_js_native, "tag");
 
         List<FoundData.ItemPojos> listTest = new ArrayList<>();
         listTest.add(itemPojos1);
@@ -228,11 +229,12 @@ public class FoundFragment extends BaseFragment {
 
         //我的活动
         private void gridItemClick_0(int position, FoundData.ItemPojos itemPojos) {
+            Intent intent = new Intent(getContext(), FunctionActivity.class);
+            intent.putExtra("title", itemPojos.getItemTextDescription());
             switch (position) {
                 case 0:
-                    Intent intent = new Intent(getContext(), FunctionActivity.class);
-                    intent.putExtra("title", itemPojos.getItemTextDescription());
-                    intent.putExtra("type", 1);
+//                    intent.putExtra("function_url", itemPojos.getUrl());
+                    intent.putExtra("function_url", GGAPI.WEB_URL + "/live/list");
                     startActivity(intent);
                     break;
                 case 1:
@@ -250,6 +252,9 @@ public class FoundFragment extends BaseFragment {
                             UIHelper.toast(getContext(), "录音权限被拒，录音无法使用");
                         }
                     });
+                case 4:
+                    intent.putExtra("function_url","file:///android_asset/demo.html");
+                    startActivity(intent);
                     break;
             }
         }

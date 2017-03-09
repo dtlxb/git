@@ -10,7 +10,6 @@ import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
-import com.duanqu.qupai.jni.ApplicationGlue;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -43,10 +42,10 @@ public class MyApp extends Application {
         if (getApplicationInfo().packageName.equals(getMyProcessName())) {
             //TODO im初始化
             //初始化参数依次this，AppId,AppKey
-            AVOSCloud.initialize(this, AppConst.LEANCLOUD_APP_ID, AppConst.LEANCLOUD_APP_KEY);
-            //AVOSCloud.initialize(this,"hi22KV7K693uIQLX5X4ROSbs-gzGzoHsz","qTkdjmpyuVdJAearcTthBw5N");
+            AVOSCloud.initialize(this, AppConst.LEANCLOUD_APP_ID,AppConst.LEANCLOUD_APP_KEY);
+            //AVOSCloud.initialize(this, "hi22KV7K693uIQLX5X4ROSbs-gzGzoHsz", "qTkdjmpyuVdJAearcTthBw5N");
             //启用北美节点
-//          AVOSCloud.useAVCloudUS();
+            //AVOSCloud.useAVCloudUS();
             //必须在启动的时候注册 MessageHandler
             //注册默认的消息处理逻辑
             AVIMMessageManager.registerMessageHandler(AVIMMessage.class, new MyMessageHandler());
