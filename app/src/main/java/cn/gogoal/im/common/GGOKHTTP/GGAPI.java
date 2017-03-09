@@ -11,12 +11,8 @@ import java.util.Map;
  */
 public class GGAPI {
 
-<<<<<<< HEAD:app/src/main/java/com/gogoal/app/common/GGOKHTTP/GGAPI.java
-    //沙盒环境
-=======
     //开发环境
     public static final String WEB_URL = "http://192.168.52.156:9000";
->>>>>>> f89e65b30b76a5eef732d1c83a0d86bd2122f4a7:app/src/main/java/cn/gogoal/im/common/GGOKHTTP/GGAPI.java
     private static final String Native_API = "http://ggservice.sandbox.gofund.com.cn";
     private static final String APP_KEY = "HBTORVzBaGtqmGE";
     private static final String APP_SECRET = "cGYIsTyTWXGeP4frqOqmdWxRO5xmh2Pi";
