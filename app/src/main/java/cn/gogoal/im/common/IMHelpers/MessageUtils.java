@@ -6,8 +6,8 @@ import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
+
 import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.SPTools;
 
 /**
@@ -16,7 +16,7 @@ import cn.gogoal.im.common.SPTools;
 
 public class MessageUtils {
 
-    public static void saveMessageInfo(JSONArray thisJsonArray, AVIMConversation conversation, AVIMMessage message) {
+    public static void saveMessageInfo(JSONArray thisJsonArray, AVIMConversation conversation, String messageAt, AVIMMessage message, String unReadCount) {
 
         JSONObject jsonObject = new JSONObject();
         if (thisJsonArray != null) {
@@ -28,10 +28,10 @@ public class MessageUtils {
             }
 
             jsonObject.put("conversationID", conversation.getConversationId());
-            jsonObject.put("lastTime", CalendarUtils.getCurrentTime());
             jsonObject.put("speakerTo", conversation.getMembers());
+            jsonObject.put("lastTime", messageAt);
             jsonObject.put("lastMessage", message);
-            jsonObject.put("unReadCounts", 10 + "");
+            jsonObject.put("unReadCounts", unReadCount);
 
             //判断消息类型
             if (message instanceof AVIMImageMessage) {

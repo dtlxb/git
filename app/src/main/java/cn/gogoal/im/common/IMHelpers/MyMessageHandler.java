@@ -36,8 +36,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
                     } else {
                         client.close(null);
                     }
-                    sendIMMessage(message, conversation);
-                    KLog.e(conversation.getConversationId());
                 }
 
                 @Override

@@ -162,6 +162,17 @@ public class MessageFragment extends BaseFragment {
             String dateStr = "";
             String message = "";
             String speaker = "";
+            String unRead = "";
+            View unReadTag = holder.getView(R.id.unread_tag);
+
+            if (messageBean.getUnReadCounts().equals("0")) {
+                unRead = "";
+                unReadTag.setVisibility(View.GONE);
+            } else {
+                unRead = "[" + messageBean.getUnReadCounts() + "条] ";
+                unReadTag.setVisibility(View.VISIBLE);
+            }
+
             List<String> members = new ArrayList<String>();
             if (null != messageBean.getLastTime()) {
                 dateStr = CalendarUtils.parseStampToDate(messageBean.getLastTime());
@@ -174,7 +185,6 @@ public class MessageFragment extends BaseFragment {
                     if (members.contains(AppConst.LEAN_CLOUD_TOKEN)) {
                         members.remove(AppConst.LEAN_CLOUD_TOKEN);
                         speaker = members.get(0);
-                        Log.e("+++members2", members + "");
                     }
                 } else {
                     speaker = "群聊房间";
@@ -204,7 +214,7 @@ public class MessageFragment extends BaseFragment {
             }
 
             holder.setText(R.id.whose_message, speaker);
-            holder.setText(R.id.last_message, message);
+            holder.setText(R.id.last_message, unRead + message);
             holder.setText(R.id.last_time, dateStr);
         }
     }
@@ -218,14 +228,18 @@ public class MessageFragment extends BaseFragment {
         AVIMMessage message = (AVIMMessage) map.get("message");
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
         boolean isTheSame = false;
+        String rightNow = String.valueOf(CalendarUtils.getCurrentTime());
 
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(conversation.getConversationId())) {
-                IMMessageBeans.get(i).setLastTime(String.valueOf(CalendarUtils.getCurrentTime()));
+                IMMessageBeans.get(i).setLastTime(rightNow);
                 IMMessageBeans.get(i).setLastMessage(message);
                 int unreadmessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts()) + 1;
+                KLog.e(unreadmessage);
                 IMMessageBeans.get(i).setUnReadCounts(unreadmessage + "");
+
                 isTheSame = true;
+                MessageUtils.saveMessageInfo(jsonArray, conversation, rightNow, message, unreadmessage + "");
             } else {
             }
         }
@@ -234,12 +248,14 @@ public class MessageFragment extends BaseFragment {
             IMMessageBean imMessageBean = new IMMessageBean();
             imMessageBean.setConversationID(conversation.getConversationId());
             imMessageBean.setLastMessage(message);
-            imMessageBean.setLastTime(String.valueOf(CalendarUtils.getCurrentTime()));
+            imMessageBean.setLastTime(rightNow);
             imMessageBean.setSpeakerTo(conversation.getMembers());
-            int unRead = Integer.parseInt(imMessageBean.getUnReadCounts()) + 1;
+            int unRead = Integer.parseInt(imMessageBean.getUnReadCounts() == null ? "0" : imMessageBean.getUnReadCounts()) + 1;
             imMessageBean.setUnReadCounts(unRead + "");
 
+            KLog.e(unRead);
             IMMessageBeans.add(imMessageBean);
+            MessageUtils.saveMessageInfo(jsonArray, conversation, rightNow, message, unRead + "");
         }
 
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
@@ -251,7 +267,6 @@ public class MessageFragment extends BaseFragment {
             });
         }
 
-        MessageUtils.saveMessageInfo(jsonArray, conversation, message);
         listAdapter.notifyDataSetChanged();
 
     }

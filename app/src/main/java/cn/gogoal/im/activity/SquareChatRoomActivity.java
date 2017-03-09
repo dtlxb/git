@@ -24,7 +24,6 @@ import cn.gogoal.im.fragment.ChatFragment;
 public class SquareChatRoomActivity extends BaseActivity {
 
     //聊天对象
-    private AVIMConversation imConversation;
     private ChatFragment chatFragment;
 
     @Override
@@ -44,31 +43,15 @@ public class SquareChatRoomActivity extends BaseActivity {
     }
 
     private void getSquareConversation(String conversationId) {
-        AVIMConversationQuery conversationQuery = AVImClientManager.getInstance().getClient().getQuery();
-        // 根据room_id查找房间
-        conversationQuery.whereEqualTo("objectId", conversationId);
-
-        Log.e("LEAN_CLOUD", "查找聊天室" + conversationId);
-
-        // 查找聊天
-        conversationQuery.findInBackground(new AVIMConversationQueryCallback() {
+        AVImClientManager.getInstance().findConversationById(conversationId, new AVImClientManager.ChatJoinManager() {
             @Override
-            public void done(List<AVIMConversation> list, AVIMException e) {
+            public void joinSuccess(AVIMConversation conversation) {
+                joinSquare(conversation);
+            }
 
-                if (null == e) {
-                    // 查询列表取第一个
-                    if (null != list && list.size() > 0) {
-
-                        imConversation = list.get(0);
-                        joinSquare(imConversation);
-                        Log.e("LEAN_CLOUD", "search chatroom success");
-                    } else {
-                        Log.e("LEAN_CLOUD", "search chatroom fail ");
-                    }
-                } else {
-                    UIHelper.toastInCenter(SquareChatRoomActivity.this, "当前聊天房间不存在");
-                    Log.e("LEAN_CLOUD", "查询条件没有查找到聊天对象" + e.toString());
-                }
+            @Override
+            public void joinFail(String error) {
+                UIHelper.toast(SquareChatRoomActivity.this, error);
             }
         });
 
@@ -77,12 +60,12 @@ public class SquareChatRoomActivity extends BaseActivity {
     /**
      * 加入聊天室
      */
-    private void joinSquare(AVIMConversation conversation) {
+    private void joinSquare(final AVIMConversation conversation) {
         conversation.join(new AVIMConversationCallback() {
             @Override
             public void done(AVIMException e) {
                 if (e == null) {
-                    chatFragment.setConversation(imConversation);
+                    chatFragment.setConversation(conversation);
                 }
             }
         });

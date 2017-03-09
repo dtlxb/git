@@ -35,9 +35,12 @@ public class AppConst {
     public static final String REFRESH_TOKEN_URL =
             "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=%s&grant_type=refresh_token&refresh_token=%s";
 
-    public static final String LEAN_CLOUD_TOKEN = "66";
+    public static final String LEAN_CLOUD_TOKEN = "77";
     //public static final String LEAN_CLOUD_TOKEN = "比尔森007";
 
     public static final String LEAN_CLOUD_CONVERSATION_ID = "58aaa02d8d6d8100636e8be9";
+    //single_rooms
+    public static final String LEAN_CLOUD_CONVERSATION_ID_66_77 = "58b61fbb5c497d00580cc05c";
+    public static final String LEAN_CLOUD_CONVERSATION_ID_66_99 = "58be73d144d904006bf14d7f";
 
 }

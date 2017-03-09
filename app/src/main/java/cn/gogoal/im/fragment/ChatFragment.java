@@ -47,6 +47,7 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AsyncTaskUtil;
+import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
@@ -313,7 +314,8 @@ public class ChatFragment extends BaseFragment {
                         default:
                             break;
                     }
-                    MessageUtils.saveMessageInfo(jsonArray, imConversation, message);
+
+                    MessageUtils.saveMessageInfo(jsonArray, imConversation, String.valueOf(CalendarUtils.getCurrentTime()), message, 0 + "");
                 }
             }
 
@@ -593,7 +595,7 @@ public class ChatFragment extends BaseFragment {
                         jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
                         if (messageList.size() > 0) {
                             AVIMMessage lastMessage = messageList.get(messageList.size() - 1);
-                            MessageUtils.saveMessageInfo(jsonArray, imConversation, lastMessage);
+                            MessageUtils.saveMessageInfo(jsonArray, imConversation, String.valueOf(CalendarUtils.getCurrentTime()), lastMessage, 0 + "");
                         }
 
                         imChatAdapter.notifyDataSetChanged();
@@ -626,7 +628,7 @@ public class ChatFragment extends BaseFragment {
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
                 imChatAdapter.addItem(message);
                 message_recycler.smoothScrollToPosition(messageList.size());
-                MessageUtils.saveMessageInfo(jsonArray, conversation, message);
+                MessageUtils.saveMessageInfo(jsonArray, conversation, String.valueOf(CalendarUtils.getCurrentTime()), message, 0 + "");
             }
         }
     }
