@@ -36,7 +36,21 @@ public class BridgeWebViewClient extends WebViewClient {
             e.printStackTrace();
         }
 
-        if (url.startsWith(BridgeUtil.YY_RETURN_DATA)) { // 如果是返回数据
+        if (url.startsWith(BridgeUtil.YY_BRIDGE_LOADED)) {
+            if (BridgeUtil.useEvaluateJS()) {
+                BridgeUtil.webViewLoadLocalJs(view, "WebViewJavascriptBridgeGE19.js");
+            } else {
+                BridgeUtil.webViewLoadLocalJs(view, "WebViewJavascriptBridge.js");
+            }
+
+            if (webView.getStartupMessage() != null) {
+                for (Message m : webView.getStartupMessage()) {
+                    webView.dispatchMessage(m);
+                }
+                webView.setStartupMessage(null);
+            }
+            return true;
+        } else if (url.startsWith(BridgeUtil.YY_RETURN_DATA)) { // 如果是返回数据
             if (!BridgeUtil.useEvaluateJS()) {
                 webView.handlerReturnData(url);
             }
@@ -51,41 +65,41 @@ public class BridgeWebViewClient extends WebViewClient {
 
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
-        KLog.e(url);
-        if (!view.canGoBack() && loadingDialog!=null) {
+        super.onPageStarted(view, url, favicon);
+
+        if (!view.canGoBack() && loadingDialog != null) {
             try {
                 loadingDialog.show();
-            }catch (Exception e){
-                KLog.e();
+            } catch (Exception e) {
+                KLog.e(e);
             }
         }
-        super.onPageStarted(view, url, favicon);
     }
 
     @Override
     public void onPageFinished(WebView view, String url) {
-        KLog.d(url);
         super.onPageFinished(view, url);
-        if (mFinishListener!=null) {
+
+        if (mFinishListener != null) {
             try {
                 mFinishListener.onFinish(view.getUrl(), view.getTitle());
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        if (BridgeUtil.useEvaluateJS()) {
-            BridgeUtil.webViewLoadLocalJs(view, "WebViewJavascriptBridgeGE19.js");
-        } else {
-            BridgeUtil.webViewLoadLocalJs(view, "WebViewJavascriptBridge.js");
-        }
-
-        if (webView.getStartupMessage() != null) {
-            for (Message m : webView.getStartupMessage()) {
-                webView.dispatchMessage(m);
-            }
-            webView.setStartupMessage(null);
-        }
+//        if (BridgeUtil.useEvaluateJS()) {
+//            BridgeUtil.webViewLoadLocalJs(view, "WebViewJavascriptBridgeGE19.js");
+//        } else {
+//            BridgeUtil.webViewLoadLocalJs(view, "WebViewJavascriptBridge.js");
+//        }
+//
+//        if (webView.getStartupMessage() != null) {
+//            for (Message m : webView.getStartupMessage()) {
+//                webView.dispatchMessage(m);
+//            }
+//            webView.setStartupMessage(null);
+//        }
 
         if (loadingDialog.isShowing()) {
             new android.os.Handler().postDelayed(new Runnable() {
@@ -99,10 +113,10 @@ public class BridgeWebViewClient extends WebViewClient {
     }
 
     @Override
-    public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-        super.onReceivedError(view, request, error);
+    public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+        super.onReceivedError(view, errorCode, description, failingUrl);
 
-//        if (view.copyBackForwardList().getSize()==1) {
+//        if (!view.canGoBack()) {
 //            switch (Utils.getNetworkType(view.getContext())) {//获取网络状态
 //                case 0://无网络
 //                    view.loadUrl("file:///android_asset/404.html");
@@ -112,21 +126,8 @@ public class BridgeWebViewClient extends WebViewClient {
 //                    break;
 //            }
 //        }
-    }
-
-    @Override
-    public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-        super.onReceivedError(view, errorCode, description, failingUrl);
-
         if (!view.canGoBack()) {
-            switch (Utils.getNetworkType(view.getContext())) {//获取网络状态
-                case 0://无网络
-                    view.loadUrl("file:///android_asset/404.html");
-                    break;
-                default:
-                    view.loadUrl("file:///android_asset/erro.html");
-                    break;
-            }
+            view.loadUrl("file:///android_asset/404.html");
         }
     }
 }

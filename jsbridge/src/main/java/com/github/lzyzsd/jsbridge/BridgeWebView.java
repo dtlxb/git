@@ -21,48 +21,43 @@ import java.util.Map;
 public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
 
     Map<String, ValueCallback<String>> responseCallbacks = new HashMap<>();
-
-    Map<String, BridgeHandler> messageHandlers = new HashMap<>();
     BridgeHandler defaultHandler = new DefaultHandler();
-    public WebChangeListener mChangeListener;
-
-    private Dialog loadDialog;
-
-    private SystemIntentInteface mSystemIntentInteface;
-
-    public WebChangeListener getChangeListener() {
-        return mChangeListener;
+    /**
+     * @param handler
+     *            default handler,handle messages send by js without assigned handler name,
+     *            if js message has handler name, it will be handled by named handlers registered by native
+     */
+    public void setDefaultHandler(BridgeHandler handler) {
+        this.defaultHandler = handler;
     }
-
-    public void setOnWebChangeListener(WebChangeListener changeListener) {
-        if (changeListener!=null) {
-            mChangeListener = changeListener;
-        }
-    }
-
+    Map<String, BridgeHandler> messageHandlers = new HashMap<>();
     public Map<String, BridgeHandler> getMessageHandlers() {
         return messageHandlers;
     }
-
     private List<Message> startupMessage = new ArrayList<>();
-
     public List<Message> getStartupMessage() {
         return startupMessage;
     }
-
-    public SystemIntentInteface getSystemIntentInteface() {
-        return mSystemIntentInteface;
-    }
-
-    public void setSystemIntentInteface(SystemIntentInteface systemIntentInteface) {
-        mSystemIntentInteface = systemIntentInteface;
-    }
-
     public void setStartupMessage(List<Message> startupMessage) {
         this.startupMessage = startupMessage;
     }
-
     private long uniqueId = 0;
+
+    private Dialog loadDialog;
+    public Dialog getLoadingDialog() {
+        return loadDialog;
+    }
+
+    public interface SystemIntentInteface {
+        void setSystemData(String data);
+    }
+    private SystemIntentInteface mSystemIntentInteface;
+    public SystemIntentInteface getSystemIntentInteface() {
+        return mSystemIntentInteface;
+    }
+    public void setSystemIntentInteface(SystemIntentInteface systemIntentInteface) {
+        mSystemIntentInteface = systemIntentInteface;
+    }
 
     public BridgeWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -79,18 +74,8 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
         init(context);
     }
 
-    /**
-     *
-     * @param handler
-     *            default handler,handle messages send by js without assigned handler name,
-     *            if js message has handler name, it will be handled by named handlers registered by native
-     */
-    public void setDefaultHandler(BridgeHandler handler) {
-       this.defaultHandler = handler;
-    }
-
     private void init(Context context) {
-        loadDialog=Utils.getCustomLoading(context,null);
+        loadDialog = Utils.getCustomLoading(context, null);
 
         this.setVerticalScrollBarEnabled(false);
         this.setHorizontalScrollBarEnabled(false);
@@ -101,29 +86,32 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
         this.setWebViewClient(generateBridgeWebViewClient());
     }
 
-    public Dialog getLoadingDialog() {
-        return loadDialog;
+    public interface WebChangeListener {
+        void getWebInfo(String url, String title);
     }
-
+    public WebChangeListener mChangeListener;
+    public WebChangeListener getChangeListener() {
+        return mChangeListener;
+    }
+    public void setOnWebChangeListener(WebChangeListener changeListener) {
+        if (changeListener != null) {
+            mChangeListener = changeListener;
+        }
+    }
     public PageLoadFinishListener getFinishListener() {
         return new PageLoadFinishListener() {
             @Override
             public void onFinish(String url,String title) {
-                getChangeListener().getWebInfo(url,title);
+                getChangeListener().getWebInfo(url, title);
             }
         };
     }
 
-    public interface WebChangeListener {
-        void getWebInfo(String url, String title);
-    }
-
     protected BridgeWebViewClient generateBridgeWebViewClient() {
-        return new BridgeWebViewClient(this,getFinishListener());
+        return new BridgeWebViewClient(this, getFinishListener());
     }
 
     void handlerReturnData(String url) {
-
         String functionName = BridgeUtil.getFunctionFromReturnUrl(url);
         ValueCallback<String> f = responseCallbacks.get(functionName);
         String data = BridgeUtil.getDataFromReturnUrl(url);
@@ -183,6 +171,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
             loadUrl(BridgeUtil.JS_FETCH_QUEUE_FROM_JAVA, new ValueCallback<String>() {
                 @Override
                 public void onReceiveValue(String data) {
+                    KLog.e("=======" + data);
                     if (BridgeUtil.useEvaluateJS()) {
                         handleMessageGE19(data);
                     } else {
@@ -309,9 +298,5 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
      */
     public void callHandler(String handlerName, String data, ValueCallback<String> callBack) {
         doSend(handlerName, data, callBack);
-    }
-
-    public interface SystemIntentInteface{
-        void setSystemData(String data);
     }
 }
