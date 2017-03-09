@@ -18,7 +18,6 @@ import cn.gogoal.im.fragment.ChatFragment;
 public class SingleChatRoomActivity extends BaseActivity {
 
     //聊天对象
-    private AVIMConversation imConversation;
     private ChatFragment chatFragment;
 
     @Override
@@ -50,7 +49,7 @@ public class SingleChatRoomActivity extends BaseActivity {
 
             @Override
             public void joinFail(String error) {
-                UIHelper.toast(SingleChatRoomActivity.this, "获取聊天房间失败");
+                UIHelper.toast(SingleChatRoomActivity.this, error);
             }
         });
        /* conversationQuery.findInBackground(new AVIMConversationQueryCallback() {

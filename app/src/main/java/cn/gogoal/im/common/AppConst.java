@@ -8,9 +8,9 @@ package cn.gogoal.im.common;
 public class AppConst {
 
     //LeanCloud参数
-    public static final String LEANCLOUD_APP_ID="dYRQ8YfHRiILshUnfFJu2eQM-gzGzoHsz";
+    public static final String LEANCLOUD_APP_ID = "R7vH8N41V1rqJIqrlTQ1mMnR-gzGzoHsz";
 
-    public static final String LEANCLOUD_APP_KEY="ye24iIK6ys8IvaISMC4Bs5WK";
+    public static final String LEANCLOUD_APP_KEY = "4iXr2Ylh1VwVyYjaxs3ufFmo";
 
     //UCloud  UFile
     public static final String publicKey = "ucloudgcqin@go-goal.com13648682571239575500";

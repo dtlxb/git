@@ -9,6 +9,7 @@ import com.avos.avoscloud.im.v2.AVIMConversationQuery;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
+import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +42,7 @@ public class AVImClientManager {
      */
     public void open(String clientId, AVIMClientCallback callback) {
         this.clientId = clientId;
-        avimClient = AVIMClient.getInstance(clientId);
+        avimClient = AVIMClient.getInstance(clientId, clientId);
         avimClient.open(callback);
     }
 
@@ -83,17 +84,15 @@ public class AVImClientManager {
                             mChatJoinManager.joinSuccess(list.get(0));
                         }
 
-                        Log.e("FIND_CONVERSATION", "查找聊天对象成功");
+                        Log.e("FIND_CONVERSATION", "查找聊天对象成功1");
                     } else {
                         if (null != mChatJoinManager) {
-                            mChatJoinManager.joinFail("查找聊天对象失败");
+                            mChatJoinManager.joinFail("查找聊天对象失败2");
                         }
-
-                        Log.e("FIND_CONVERSATION", "查找聊天对象失败");
                     }
                 } else {
                     if (null != mChatJoinManager) {
-                        mChatJoinManager.joinFail("查找聊天对象失败");
+                        mChatJoinManager.joinFail("查找聊天对象失败3");
                     }
 
                     Log.e("FIND_CONVERSATION", "查询条件没有查找到聊天对象" + e.toString());

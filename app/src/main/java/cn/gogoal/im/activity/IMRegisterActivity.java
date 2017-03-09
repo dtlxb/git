@@ -67,7 +67,10 @@ public class IMRegisterActivity extends BaseActivity {
         //单聊页面
         Intent intent = new Intent(IMRegisterActivity.this, SingleChatRoomActivity.class);
         intent.putExtra("member_id", MyId);
-        intent.putExtra("conversation_id", "58b61fbb5c497d00580cc05c");
+        //66,77
+        //intent.putExtra("conversation_id", "58b61fbb5c497d00580cc05c");
+        //66,99
+        intent.putExtra("conversation_id", "58be73d144d904006bf14d7f");
 
 
         //群聊
