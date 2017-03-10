@@ -10,7 +10,7 @@ import java.util.List;
 
 public class IMMessageBean {
     private String conversationID;
-    private String lastTime;
+    private Long lastTime;
     private String unReadCounts;
     private String nickname;
     private String friend_id;
@@ -21,7 +21,7 @@ public class IMMessageBean {
     public IMMessageBean() {
     }
 
-    public IMMessageBean(String conversationID, String lastTime, String unReadCounts, String nickname, String friend_id, String avatar, AVIMMessage lastMessage) {
+    public IMMessageBean(String conversationID, Long lastTime, String unReadCounts, String nickname, String friend_id, String avatar, AVIMMessage lastMessage) {
         this.conversationID = conversationID;
         this.lastTime = lastTime;
         this.unReadCounts = unReadCounts;
@@ -80,19 +80,19 @@ public class IMMessageBean {
         this.unReadCounts = unReadCounts;
     }
 
-    public String getLastTime() {
+    public Long getLastTime() {
         return lastTime;
     }
 
-    public void setLastTime(String lastTime) {
-        this.lastTime = lastTime == null ? "0" : lastTime;
+    public void setLastTime(Long lastTime) {
+        this.lastTime = lastTime == null ? 0L : lastTime;
     }
 
     @Override
     public String toString() {
         return "IMMessageBean{" +
                 "conversationID='" + conversationID + '\'' +
-                ", lastTime='" + lastTime + '\'' +
+                ", lastTime=" + lastTime +
                 ", unReadCounts='" + unReadCounts + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", friend_id='" + friend_id + '\'' +
