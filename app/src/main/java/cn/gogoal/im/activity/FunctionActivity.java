@@ -8,6 +8,7 @@ import android.webkit.WebChromeClient;
 
 import com.github.lzyzsd.jsbridge.BridgeHandler;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
+import com.github.lzyzsd.jsbridge.DefaultHandler;
 import com.socks.library.KLog;
 
 import butterknife.BindView;
@@ -31,14 +32,20 @@ public class FunctionActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
 
         title = getIntent().getStringExtra("title");
-        String url=getIntent().getStringExtra("function_url");
+        String url = getIntent().getStringExtra("function_url");
 
         setMyTitle(title, true);
 
         initWebView(webView);
-
         webView.loadUrl(url);
 
+//        // H5页面跳转时获取页面title和url
+//        webView.setOnWebChangeListener(new BridgeWebView.WebChangeListener() {
+//            @Override
+//            public void getWebInfo(String url, String title) {
+//                KLog.e(url + title);
+//            }
+//        });
         //1.添加原生方法，测试弹窗
         webView.registerHandler("naviveDialog", new BridgeHandler() {
             @Override
@@ -99,6 +106,8 @@ public class FunctionActivity extends BaseActivity {
     }
 
     private void initWebView(BridgeWebView mWebView) {
+        mWebView.setDefaultHandler(new DefaultHandler());
+
         mWebView.getSettings().setBuiltInZoomControls(false);
 
         // 开启DOM缓存。
