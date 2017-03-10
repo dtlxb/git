@@ -80,7 +80,6 @@ public class MarketActivity extends BaseActivity {
         getMarketInformation();
         getMarketAd();
 
-        AppDevice.get
     }
 
     //初始化标题
