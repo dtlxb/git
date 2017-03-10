@@ -214,6 +214,29 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         return xTitle;
     }
 
+    public XTitle setMyTitle(@StringRes int titleString, boolean canBack) {
+        String title=getString(titleString);
+        XTitle xTitle = (XTitle) findViewById(R.id.title_bar);
+        xTitle.setImmersive(true);
+        if (!TextUtils.isEmpty(title)) {
+            xTitle.setTitle(title);
+            xTitle.setTitleColor(Color.BLACK);
+        }
+        if (canBack) {
+            xTitle.setLeftImageResource(R.mipmap.image_title_back_b);
+            xTitle.setLeftText("返回");
+            xTitle.setLeftTextColor(Color.BLACK);
+            xTitle.setLeftClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
+
+        return xTitle;
+    }
+
     /**
      * 初始化垂直列表的RecycleView
      *

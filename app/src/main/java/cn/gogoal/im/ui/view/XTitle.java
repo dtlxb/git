@@ -3,6 +3,7 @@ package cn.gogoal.im.ui.view;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -73,8 +74,8 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
 
     private void initView(Context context) {
         mLeftText = new TextView(context);
-        TypedValue typedValue=new TypedValue();
-        context.getTheme().resolveAttribute(android.R.attr.selectableItemBackground,typedValue,true);
+        TypedValue typedValue = new TypedValue();
+        context.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true);
         mLeftText.setBackgroundResource(typedValue.resourceId);
 
         mCenterLayout = new LinearLayout(context);
@@ -112,7 +113,9 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         addView(mDividerView, new LayoutParams(LayoutParams.MATCH_PARENT, 1));
     }
 
-    /**设置标题栏是否沉浸*/
+    /**
+     * 设置标题栏是否沉浸
+     */
     public void setImmersive(boolean immersive) {
         mImmersive = immersive;
         if (mImmersive) {
@@ -122,13 +125,17 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         }
     }
 
-    /**设置高度*/
+    /**
+     * 设置高度
+     */
     public void setHeight(int height) {
         mHeight = height;
         setMeasuredDimension(getMeasuredWidth(), mHeight);
     }
 
-    /**左边图标*/
+    /**
+     * 左边图标
+     */
     public void setLeftImageResource(int resId) {
         mLeftText.setCompoundDrawablesWithIntrinsicBounds(resId, 0, 0, 0);
     }
@@ -149,7 +156,7 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         mLeftText.setTextSize(size);
     }
 
-    public void setLeftTextColor(int color) {
+    public void setLeftTextColor(@ColorInt int color) {
         mLeftText.setTextColor(color);
     }
 
@@ -184,31 +191,37 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         mCenterLayout.setOnClickListener(l);
     }
 
-    public void setTitle(int resid) {
+    public XTitle setTitle(int resid) {
         setTitle(getResources().getString(resid));
+        return this;
     }
 
-    public void setTitleColor(int resid) {
+    public XTitle setTitleColor(@ColorInt int resid) {
         mCenterText.setTextColor(resid);
+        return this;
     }
 
-    public void setTitleSize(float size) {
+    public XTitle setTitleSize(float size) {
         mCenterText.setTextSize(size);
+        return this;
     }
 
-    public void setTitleBackground(int resid) {
+    public XTitle setTitleBackground(int resid) {
         mCenterText.setBackgroundResource(resid);
+        return this;
     }
 
-    public void setSubTitleColor(int resid) {
+    public XTitle setSubTitleColor(int resid) {
         mSubTitleText.setTextColor(resid);
+        return this;
     }
 
-    public void setSubTitleSize(float size) {
+    public XTitle setSubTitleSize(float size) {
         mSubTitleText.setTextSize(size);
+        return this;
     }
 
-    public void setCustomTitle(View titleView) {
+    public XTitle setCustomTitle(View titleView) {
         if (titleView == null) {
             mCenterText.setVisibility(View.VISIBLE);
             if (mCustomCenterView != null) {
@@ -224,31 +237,35 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
             mCenterLayout.addView(titleView, layoutParams);
             mCenterText.setVisibility(View.GONE);
         }
+        return this;
     }
 
-    public void setDivider(Drawable drawable) {
+    public XTitle setDivider(Drawable drawable) {
         mDividerView.setBackground(drawable);
+        return this;
     }
 
-    public void setDividerColor(int color) {
+    public XTitle setDividerColor(int color) {
         mDividerView.setBackgroundColor(color);
+        return this;
     }
 
-    public void setDividerHeight(int dividerHeight) {
+    public XTitle setDividerHeight(int dividerHeight) {
         mDividerView.getLayoutParams().height = dividerHeight;
+        return this;
     }
 
-    public void setActionTextColor(int colorResId) {
+    public XTitle setActionTextColor(int colorResId) {
         mActionTextColor = colorResId;
+        return this;
     }
 
     /**
-     * Function to set a click listener for Title TextView
-     *
      * @param listener the onClickListener
      */
-    public void setOnTitleClickListener(OnClickListener listener) {
+    public XTitle setOnTitleClickListener(OnClickListener listener) {
         mCenterText.setOnClickListener(listener);
+        return this;
     }
 
     @Override
@@ -262,17 +279,20 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
 
     /**
      * Adds a list of {@link Action}s.
+     *
      * @param actionList the actions to add
      */
-    public void addActions(ActionList actionList) {
+    public XTitle addActions(ActionList actionList) {
         int actions = actionList.size();
         for (int i = 0; i < actions; i++) {
             addAction(actionList.get(i));
         }
+        return this;
     }
 
     /**
      * Adds a new {@link Action}.
+     *
      * @param action the action to add
      */
     public View addAction(Action action) {
@@ -282,8 +302,9 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
 
     /**
      * Adds a new {@link Action} at the specified index.
+     *
      * @param action the action to add
-     * @param index the position at which to add the action
+     * @param index  the position at which to add the action
      */
     public View addAction(Action action, int index) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
@@ -302,17 +323,20 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
 
     /**
      * Remove a action from the action bar.
+     *
      * @param index position of action to remove
      */
-    public void removeActionAt(int index) {
+    public XTitle removeActionAt(int index) {
         mRightLayout.removeViewAt(index);
+        return this;
     }
 
     /**
      * Remove a action from the action bar.
+     *
      * @param action The action to remove
      */
-    public void removeAction(Action action) {
+    public XTitle removeAction(Action action) {
         int childCount = mRightLayout.getChildCount();
         for (int i = 0; i < childCount; i++) {
             View view = mRightLayout.getChildAt(i);
@@ -323,10 +347,10 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
                 }
             }
         }
+        return this;
     }
 
     /**
-     * Returns the number of actions currently registered with the action bar.
      * @return action count
      */
     public int getActionCount() {
@@ -339,7 +363,7 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
      * @return a view
      */
     private View inflateAction(Action action) {
-        View view = null;
+        View view ;
         if (TextUtils.isEmpty(action.getText())) {
             ImageView img = new ImageView(getContext());
             img.setImageResource(action.getDrawable());
@@ -415,6 +439,7 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
     /**
      * 计算状态栏高度高度
      * getStatusBarHeight
+     *
      * @return
      */
     public static int getStatusBarHeight() {
@@ -444,7 +469,9 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
      */
     public interface Action {
         String getText();
+
         int getDrawable();
+
         void performAction(View view);
     }
 

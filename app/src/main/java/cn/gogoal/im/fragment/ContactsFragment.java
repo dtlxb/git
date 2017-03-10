@@ -56,7 +56,7 @@ public class ContactsFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle(getString(R.string.title_contacts));
+        setFragmentTitle(R.string.title_contacts);
 
         ViewGroup.LayoutParams tvParams = tvConstactsFlag.getLayoutParams();
         tvParams.width = AppDevice.getWidth(getContext()) / 4;
@@ -101,7 +101,7 @@ public class ContactsFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
+//                KLog.e(responseInfo);
 
 //                BaseBeanList<ContactBean<String>> baseBeanList=new BaseBeanList<>();
 //                baseBeanList.setData(getConstactsData());
@@ -138,7 +138,6 @@ public class ContactsFragment extends BaseFragment {
 
                     rvContacts.setAdapter(contactAdapter);
 
-                    KLog.e(list.get(0).toString());
                 }else {
                     UIHelper.toastErro(getContext(),GGOKHTTP.getMessage(responseInfo));
                 }
