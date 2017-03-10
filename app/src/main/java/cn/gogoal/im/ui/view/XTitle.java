@@ -2,6 +2,7 @@ package cn.gogoal.im.ui.view;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.text.TextUtils;
@@ -66,7 +67,7 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         if (mImmersive) {
             mStatusBarHeight = getStatusBarHeight();
         }
-        mActionPadding = dp2px(5);
+        mActionPadding = dp2px(0);
         mOutPadding = dp2px(8);
         mHeight = dp2px(DEFAULT_TITLE_BAR_HEIGHT);
         initView(context);
@@ -105,7 +106,7 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         mSubTitleText.setGravity(Gravity.CENTER);
         mSubTitleText.setEllipsize(TextUtils.TruncateAt.END);
 
-        mRightLayout.setPadding(mOutPadding, 0, mOutPadding, 0);
+//        mRightLayout.setPadding(mOutPadding, 0, mOutPadding, 0);
 
         addView(mLeftText, layoutParams);
         addView(mCenterLayout);
@@ -116,55 +117,65 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
     /**
      * 设置标题栏是否沉浸
      */
-    public void setImmersive(boolean immersive) {
+    public XTitle setImmersive(boolean immersive) {
         mImmersive = immersive;
         if (mImmersive) {
             mStatusBarHeight = getStatusBarHeight();
         } else {
             mStatusBarHeight = 0;
         }
+        return this;
     }
+
 
     /**
      * 设置高度
      */
-    public void setHeight(int height) {
+    public XTitle setHeight(int height) {
         mHeight = height;
         setMeasuredDimension(getMeasuredWidth(), mHeight);
+        return this;
     }
 
     /**
      * 左边图标
      */
-    public void setLeftImageResource(int resId) {
+    public XTitle setLeftImageResource(int resId) {
         mLeftText.setCompoundDrawablesWithIntrinsicBounds(resId, 0, 0, 0);
+        return this;
     }
 
-    public void setLeftClickListener(OnClickListener l) {
+    public XTitle setLeftClickListener(OnClickListener l) {
         mLeftText.setOnClickListener(l);
+        return this;
     }
 
-    public void setLeftText(CharSequence title) {
+    public XTitle setLeftText(CharSequence title) {
         mLeftText.setText(title);
+        return this;
     }
 
-    public void setLeftText(int resid) {
+    public XTitle setLeftText(int resid) {
         mLeftText.setText(resid);
+        return this;
     }
 
-    public void setLeftTextSize(float size) {
+    public XTitle setLeftTextSize(float size) {
         mLeftText.setTextSize(size);
+        return this;
     }
 
-    public void setLeftTextColor(@ColorInt int color) {
+    public XTitle setLeftTextColor(@ColorInt int color) {
         mLeftText.setTextColor(color);
+        return this;
     }
 
-    public void setLeftVisible(boolean visible) {
+    public XTitle setLeftVisible(boolean visible) {
         mLeftText.setVisibility(visible ? View.VISIBLE : View.GONE);
+        return this;
     }
 
-    public void setTitle(CharSequence title) {
+    public XTitle setTitle(CharSequence title) {
         int index = title.toString().indexOf("\n");
         if (index > 0) {
             setTitle(title.subSequence(0, index), title.subSequence(index + 1, title.length()), LinearLayout.VERTICAL);
@@ -177,18 +188,21 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
                 mSubTitleText.setVisibility(View.GONE);
             }
         }
+        return this;
     }
 
-    private void setTitle(CharSequence title, CharSequence subTitle, int orientation) {
+    private XTitle setTitle(CharSequence title, CharSequence subTitle, int orientation) {
         mCenterLayout.setOrientation(orientation);
         mCenterText.setText(title);
 
         mSubTitleText.setText(subTitle);
         mSubTitleText.setVisibility(View.VISIBLE);
+        return this;
     }
 
-    public void setCenterClickListener(OnClickListener l) {
+    public XTitle setCenterClickListener(OnClickListener l) {
         mCenterLayout.setOnClickListener(l);
+        return this;
     }
 
     public XTitle setTitle(int resid) {
@@ -268,12 +282,16 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         return this;
     }
 
+//    public XTitle setOnTitleDoubleClick(ClickUtils){
+//
+//    }
+
     @Override
     public void onClick(View view) {
         final Object tag = view.getTag();
         if (tag instanceof Action) {
             final Action action = (Action) tag;
-            action.performAction(view);
+            action.actionClick(view);
         }
     }
 
@@ -301,10 +319,7 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
     }
 
     /**
-     * Adds a new {@link Action} at the specified index.
-     *
-     * @param action the action to add
-     * @param index  the position at which to add the action
+     * 添加Menu功能按钮
      */
     public View addAction(Action action, int index) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
@@ -315,16 +330,14 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
     }
 
     /**
-     * Removes all action views from this action bar
+     * 移除Menu功能按钮
      */
     public void removeAllActions() {
         mRightLayout.removeAllViews();
     }
 
     /**
-     * Remove a action from the action bar.
-     *
-     * @param index position of action to remove
+     * 移除指定位置的Menu功能按钮
      */
     public XTitle removeActionAt(int index) {
         mRightLayout.removeViewAt(index);
@@ -332,9 +345,7 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
     }
 
     /**
-     * Remove a action from the action bar.
-     *
-     * @param action The action to remove
+     * 移除指定的Menu功能按钮
      */
     public XTitle removeAction(Action action) {
         int childCount = mRightLayout.getChildCount();
@@ -351,22 +362,14 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
     }
 
     /**
-     * @return action count
-     */
-    public int getActionCount() {
-        return mRightLayout.getChildCount();
-    }
-
-    /**
      * Inflates a {@link View} with the given {@link Action}.
-     * @param action the action to inflate
-     * @return a view
      */
     private View inflateAction(Action action) {
-        View view ;
+        View view;
         if (TextUtils.isEmpty(action.getText())) {
             ImageView img = new ImageView(getContext());
-            img.setImageResource(action.getDrawable());
+            img.setBackgroundColor(Color.RED);
+            img.setImageDrawable(action.getDrawable());
             view = img;
         } else {
             TextView text = new TextView(getContext());
@@ -379,15 +382,24 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
             view = text;
         }
 
-        view.setPadding(mActionPadding, 0, mActionPadding, 0);
+        view.setPadding(dp2px(18), 0,dp2px(18), 0);
         view.setTag(action);
+
         view.setOnClickListener(this);
         return view;
     }
 
+    /**
+     * 获取action的View视图
+     * */
+    public View getViewByTitle() {
+        return mCenterLayout;
+    }
+    /**
+     * 获取action的View视图
+     * */
     public View getViewByAction(Action action) {
-        View view = findViewWithTag(action);
-        return view;
+        return findViewWithTag(action);
     }
 
     @Override
@@ -439,8 +451,6 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
     /**
      * 计算状态栏高度高度
      * getStatusBarHeight
-     *
-     * @return
      */
     public static int getStatusBarHeight() {
         return getInternalDimensionSize(Resources.getSystem(), STATUS_BAR_HEIGHT_RES_NAME);
@@ -455,35 +465,29 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         return result;
     }
 
-
-    /**
-     * A {@link LinkedList} that holds a list of {@link Action}s.
-     */
-    @SuppressWarnings("serial")
     public static class ActionList extends LinkedList<Action> {
     }
 
     /**
-     * Definition of an action that could be performed, along with a icon to
-     * show.
+     * 功能按钮接口
      */
     public interface Action {
         String getText();
 
-        int getDrawable();
+        Drawable getDrawable();
 
-        void performAction(View view);
+        void actionClick(View view);
     }
 
     public static abstract class ImageAction implements Action {
-        private int mDrawable;
+        private Drawable mDrawable;
 
-        public ImageAction(int drawable) {
+        public ImageAction(Drawable drawable) {
             mDrawable = drawable;
         }
 
         @Override
-        public int getDrawable() {
+        public Drawable getDrawable() {
             return mDrawable;
         }
 
@@ -501,8 +505,8 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         }
 
         @Override
-        public int getDrawable() {
-            return 0;
+        public Drawable getDrawable() {
+            return null;
         }
 
         @Override

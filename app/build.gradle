@@ -16,11 +16,11 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId rootProject.ext.applicationId
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
+        applicationId rootProject.ext.applicationId
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         ndk {

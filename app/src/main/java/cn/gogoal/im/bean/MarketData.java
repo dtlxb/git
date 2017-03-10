@@ -7,7 +7,7 @@ import java.util.List;
  * Staff_id 1375
  * phone 18930640263
  */
-public class HangQingData {
+public class MarketData {
 
     private StockRanklist stockRanklist;
 

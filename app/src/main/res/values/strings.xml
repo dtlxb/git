@@ -72,5 +72,6 @@
     <string name="nodata_hint">没有相关数据</string>
     <string name="nomoredata_hint">没有更多数据</string>
     <string name="net_erro_hint">数据请求出错</string>
+    <string name="default__">--</string>
 
 </resources>
