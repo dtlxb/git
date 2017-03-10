@@ -33,9 +33,10 @@ public class GGOKHTTP {
     public static final String RESET_MYSTOCKS = "v1/mystock/reset";
 
     /*
-       * param.put("fullcode", "sh000001;sz399001;sh000300;sz399006");
-       * param.put("category_type", "1");
-       * */
+    获取大盘数据
+     * param.put("fullcode", "sh000001;sz399001;sh000300;sz399006");
+     * param.put("category_type", "1");
+     * */
     public static final String APP_HQ_INFORMATION = "v1/hq/get_app_hq";
 
     /*
@@ -48,17 +49,19 @@ public class GGOKHTTP {
 
     /**
      * 三方登录
-     * */
-    public static final String USER_THIRDPARTYLOGIN="v1/user/thirdpartylogin";
+     */
+    public static final String USER_THIRDPARTYLOGIN = "v1/user/thirdpartylogin";
 
     /*
     * 直播详情
     * */
-    public static final String GET_STUDIO_LIST="v1/video_studio/get_studio_list";
+    public static final String GET_STUDIO_LIST = "v1/video_studio/get_studio_list";
 
     /**
      * 好友列表
-     * */
+     */
+    public static final String GET_FRIEND_LIST = "v1/ggm_im/get_friend_list";
+
     public static final String USER_RESET_PASSWORD_NEW="v1/user/reset_password_new";
 
     /**
@@ -88,9 +91,6 @@ public class GGOKHTTP {
      * conv_id                   对话ID
      * */
     public static final String CHAT_SEND_MESSAGE="v1/ggm_chat/send_message";
-
-
-    public static final String GET_FRIEND_LIST="v1/ggm_im/get_friend_list";
 
 //--------------------------------------------------------------------------------------------------
 

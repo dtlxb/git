@@ -58,7 +58,7 @@
     <color name="stock_green">#0CB709</color>
     <color name="stock_red">#E85043</color>
     <color name="stock_list_more">#0095FF</color>
-    <color name="stock_text_black">#5C5C5C</color>
-    <color name="stock_text_gray">#999999</color>
+    <color name="stock_text_black">#333333</color>
+    <color name="stock_text_gray">#666666</color>
 
 </resources>

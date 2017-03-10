@@ -1,4 +1,4 @@
-package cn.gogoal.im.common.wjd;
+package cn.gogoal.im.common.openServices.weixin;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,6 +14,9 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.openServices.IOpenCallback;
+import cn.gogoal.im.common.openServices.OpenUtils;
+import cn.gogoal.im.common.openServices.Share;
 
 /**
  * author wangjd on 2017/3/7 0007.
@@ -48,9 +51,9 @@ public class WechatOperator {
         return iwxapi;
     }
 
-    private IWechatCallback callback;
+    private IOpenCallback callback;
 
-    public IWechatCallback getCallback() {
+    public IOpenCallback getCallback() {
         return callback;
     }
 
@@ -66,7 +69,7 @@ public class WechatOperator {
         }
     }
 
-    public void login(IWechatCallback callback) {
+    public void login(IOpenCallback callback) {
         this.callback=callback;
 
         // 唤起微信登录授权
@@ -83,15 +86,15 @@ public class WechatOperator {
 //        }
     }
 
-    public void shareSession(Context context,Share share, IWechatCallback callback) {
+    public void shareSession(Context context, Share share, IOpenCallback callback) {
         share(context,share, SendMessageToWX.Req.WXSceneSession, callback);
     }
 
-    public void shareTimeLine(Context context,Share share, IWechatCallback callback) {
+    public void shareTimeLine(Context context,Share share, IOpenCallback callback) {
         share(context,share, SendMessageToWX.Req.WXSceneTimeline, callback);
     }
 
-    private void share(Context context,Share share, int scene, IWechatCallback callback) {
+    private void share(Context context,Share share, int scene, IOpenCallback callback) {
         this.callback=callback;
 
         //1.初始化一个WXTextObject对象,填写分享的文本内容

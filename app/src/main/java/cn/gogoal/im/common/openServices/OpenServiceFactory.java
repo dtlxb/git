@@ -1,6 +1,8 @@
-package cn.gogoal.im.common.wjd;
+package cn.gogoal.im.common.openServices;
 
 import android.content.Context;
+
+import cn.gogoal.im.common.openServices.weixin.WechatOperator;
 
 /**
  * author wangjd on 2017/3/6 0006.
@@ -9,13 +11,13 @@ import android.content.Context;
  * <p>
  * 各种三方分享三方登录工厂方法
  */
-public class ThreePartFactory {
+public class OpenServiceFactory {
 
-    Context context;
+    private Context context;
 
     //=========================微信============================
-    public static ThreePartFactory with(Context context) {
-        ThreePartFactory factory=new ThreePartFactory();
+    public static OpenServiceFactory with(Context context) {
+        OpenServiceFactory factory=new OpenServiceFactory();
         factory.context=context;
         return factory;
     }

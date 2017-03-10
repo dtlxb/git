@@ -22,6 +22,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ChatRoomActivity;
 import cn.gogoal.im.activity.FunctionActivity;
 import cn.gogoal.im.activity.IMRegisterActivity;
+import cn.gogoal.im.activity.stock.MarketActivity;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.wrapper.HeaderAndFooterWrapper;
@@ -253,7 +254,7 @@ public class FoundFragment extends BaseFragment {
                         }
                     });
                 case 4:
-                    intent.putExtra("function_url","file:///android_asset/demo.html");
+                    intent.putExtra("function_url", "file:///android_asset/demo.html");
                     startActivity(intent);
                     break;
             }
@@ -265,7 +266,7 @@ public class FoundFragment extends BaseFragment {
                 case 0:
                     Intent intent = new Intent(getContext(), FunctionActivity.class);
                     intent.putExtra("title", itemPojos.getItemTextDescription());
-                    intent.putExtra("type", 2);
+                    intent.putExtra("function_url", itemPojos.getItemTextDescription());
                     startActivity(intent);
                     break;
                 case 1:
@@ -277,7 +278,11 @@ public class FoundFragment extends BaseFragment {
 
         //测试模块——股票
         private void gridItemClick_2(int position) {
-
+            switch (position) {
+                case 0:
+                    startActivity(new Intent(getContext(), MarketActivity.class));
+                    break;
+            }
         }
     }
 }

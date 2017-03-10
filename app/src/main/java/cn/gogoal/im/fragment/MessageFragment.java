@@ -2,12 +2,12 @@ package cn.gogoal.im.fragment;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Switch;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -36,6 +36,7 @@ import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.CalendarUtils;
+import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
@@ -137,6 +138,12 @@ public class MessageFragment extends BaseFragment {
 
             @Override
             public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                DialogHelp.getSelectDialog(getActivity(), "", new String[]{"标为未读", "置顶聊天", "删除聊天"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }, false).show();
                 return false;
             }
         });
@@ -208,7 +215,7 @@ public class MessageFragment extends BaseFragment {
         AVIMMessage message = (AVIMMessage) map.get("message");
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
         boolean isTheSame = false;
-        String rightNow = String.valueOf(CalendarUtils.getCurrentTime());
+        String rightNow = String.valueOf(System.currentTimeMillis());
 
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(conversation.getConversationId())) {
@@ -219,7 +226,7 @@ public class MessageFragment extends BaseFragment {
                 IMMessageBeans.get(i).setUnReadCounts(unreadmessage + "");
 
                 //头像暂时未保存
-                IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), String.valueOf(CalendarUtils.getCurrentTime()),
+                IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), String.valueOf(System.currentTimeMillis()),
                         "0", message.getFrom(), AppConst.LEANCLOUD_APP_ID, "", message);
 
                 isTheSame = true;
@@ -238,7 +245,7 @@ public class MessageFragment extends BaseFragment {
             imMessageBean.setUnReadCounts(unRead + "");
 
             //头像暂时未保存
-            IMMessageBean unKonwimMessageBean = new IMMessageBean(conversation.getConversationId(), String.valueOf(CalendarUtils.getCurrentTime()),
+            IMMessageBean unKonwimMessageBean = new IMMessageBean(conversation.getConversationId(), String.valueOf(System.currentTimeMillis()),
                     "0", message.getFrom(), AppConst.LEANCLOUD_APP_ID, "", message);
             IMMessageBeans.add(imMessageBean);
             MessageUtils.saveMessageInfo(jsonArray, unKonwimMessageBean);

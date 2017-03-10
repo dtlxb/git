@@ -49,6 +49,7 @@ public class FunctionActivity extends BaseActivity {
 //                KLog.e(url + title);
 //            }
 //        });
+
         //1.添加原生方法，测试弹窗
         webView.registerHandler("naviveDialog", new BridgeHandler() {
             @Override

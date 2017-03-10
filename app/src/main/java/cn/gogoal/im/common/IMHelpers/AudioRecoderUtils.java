@@ -5,12 +5,11 @@ import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 
-import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.CalendarUtils;
-import cn.gogoal.im.common.MD5Utils;
-
 import java.io.File;
 import java.io.IOException;
+
+import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.MD5Utils;
 
 /**
  * Created by huangxx on 2017/3/2.
@@ -76,7 +75,7 @@ public class AudioRecoderUtils {
             //设置采样率
             mMediaRecorder.setAudioSamplingRate(8000);
 
-            String encryptyString = MD5Utils.getMD5EncryptyString(AppConst.LEAN_CLOUD_TOKEN + "_" + CalendarUtils.getCurrentTime());
+            String encryptyString = MD5Utils.getMD5EncryptyString(AppConst.LEAN_CLOUD_TOKEN + "_" + System.currentTimeMillis());
 
             filePath = FolderPath + "/" + encryptyString + ".amr";
             /* ③准备 */

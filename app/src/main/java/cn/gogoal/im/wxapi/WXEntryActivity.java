@@ -11,8 +11,8 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.common.wjd.IWechatCallback;
-import cn.gogoal.im.common.wjd.ThreePartFactory;
+import cn.gogoal.im.common.openServices.IOpenCallback;
+import cn.gogoal.im.common.openServices.OpenServiceFactory;
 import com.socks.library.KLog;
 import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
@@ -30,7 +30,7 @@ public class WXEntryActivity extends Activity{
     private static final String WEIXIN_OPENID_KEY = "wx_openid_key";
     private static final String WEIXIN_REFRESH_TOKEN_KEY = "wx_refresh_token_key";
 
-    private IWechatCallback wechatCallback;
+    private IOpenCallback wechatCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class WXEntryActivity extends Activity{
         }
         SendAuth.Resp resp = new SendAuth.Resp(intent.getExtras());
         if (resp.errCode == BaseResp.ErrCode.ERR_OK) {
-            wechatCallback= ThreePartFactory.with(getContext()).wechat().getCallback();
+            wechatCallback= OpenServiceFactory.with(getContext()).wechat().getCallback();
 
             //用户同意
             String code = resp.code;
