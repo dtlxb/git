@@ -156,14 +156,14 @@ public class ContactsFragment extends BaseFragment {
                     rvContacts.setAdapter(contactAdapter);
 
                 }else {
-                    UIHelper.toastErro(getContext(),GGOKHTTP.getMessage(responseInfo));
+                    UIHelper.toastError(getContext(),GGOKHTTP.getMessage(responseInfo));
                 }
             }
 
             @Override
             public void onFailure(String msg) {
                 KLog.e(msg);
-                UIHelper.toastErro(getContext(), msg);
+                UIHelper.toastError(getContext(), msg);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_FRIEND_LIST, ggHttpInterface).startGet();

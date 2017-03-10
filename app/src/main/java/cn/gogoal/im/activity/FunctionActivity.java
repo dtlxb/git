@@ -46,6 +46,7 @@ public class FunctionActivity extends BaseActivity {
 //                KLog.e(url + title);
 //            }
 //        });
+
         //1.添加原生方法，测试弹窗
         webView.registerHandler("naviveDialog", new BridgeHandler() {
             @Override
@@ -63,7 +64,6 @@ public class FunctionActivity extends BaseActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 function.onReceiveValue("原生点击了[是]");
-                                KLog.e("hhhhhhhhhhhhhhhhh");
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {

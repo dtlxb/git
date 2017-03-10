@@ -11,7 +11,7 @@ public class MarketData {
 
     private StockRanklist stockRanklist;
 
-    private List<HostIndustrylist> hostIndustrylist ;
+    private List<HotIndustrylist> hotIndustrylist;
 
     private List<HangQing> hangqing ;
 
@@ -23,12 +23,12 @@ public class MarketData {
         this.stockRanklist = stockRanklist;
     }
 
-    public List<HostIndustrylist> getHostIndustrylist() {
-        return hostIndustrylist;
+    public List<HotIndustrylist> getHotIndustrylist() {
+        return hotIndustrylist;
     }
 
-    public void setHostIndustrylist(List<HostIndustrylist> hostIndustrylist) {
-        this.hostIndustrylist = hostIndustrylist;
+    public void setHotIndustrylist(List<HotIndustrylist> hotIndustrylist) {
+        this.hotIndustrylist = hotIndustrylist;
     }
 
     public List<HangQing> getHangqing() {

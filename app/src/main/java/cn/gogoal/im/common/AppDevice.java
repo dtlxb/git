@@ -587,7 +587,25 @@ public class AppDevice {
      * @param packname ;
      * @return ;
      */
-    public String getAppVersion(Context context,String packname){
+    public int getAppVersionCode(Context context,String packname){
+        //包管理操作管理类
+        PackageManager pm = context.getPackageManager();
+        try {
+            PackageInfo packinfo = pm.getPackageInfo(packname, 0);
+            return packinfo.versionCode;
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+
+        }
+        return 0;
+    }
+    /**
+     * 获取程序的版本名
+     * @param context ;
+     * @param packname ;
+     * @return ;
+     */
+    public String getAppVersionName(Context context,String packname){
         //包管理操作管理类
         PackageManager pm = context.getPackageManager();
         try {

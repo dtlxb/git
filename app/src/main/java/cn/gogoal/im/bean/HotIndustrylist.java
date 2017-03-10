@@ -5,7 +5,7 @@ package cn.gogoal.im.bean;
  * Staff_id 1375
  * phone 18930640263
  */
-public class HostIndustrylist {
+public class HotIndustrylist {
     private String industry_rate;
 
     private String rate;

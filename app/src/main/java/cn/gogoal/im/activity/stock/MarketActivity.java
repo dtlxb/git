@@ -4,9 +4,13 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.alibaba.fastjson.JSONObject;
@@ -23,13 +27,19 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.BaseBeanObject;
 import cn.gogoal.im.bean.HangQing;
+import cn.gogoal.im.bean.HotIndustrylist;
 import cn.gogoal.im.bean.MarketData;
+import cn.gogoal.im.bean.StockBannerData;
 import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.ClickUtils;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.XTitle;
@@ -53,7 +63,7 @@ public class MarketActivity extends BaseActivity {
 
 //    热门行业
     @BindView(R.id.rv_hot)
-    RecyclerView rvHot;
+    RecyclerView rvHotIndustry;
 
 //    涨、跌、振、换列表
     @BindView(R.id.rv_sort_list)
@@ -68,7 +78,9 @@ public class MarketActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         iniTitle();
         getMarketInformation();
+        getMarketAd();
 
+        AppDevice.get
     }
 
     //初始化标题
@@ -121,6 +133,7 @@ public class MarketActivity extends BaseActivity {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
+                FileUtil.writeSDcard(responseInfo,"大盘行情_"+ CalendarUtils.getCurrentTime("yyyyMMddHHmmss")+".txt");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     BaseBeanObject<MarketData> marketData = JSONObject.parseObject(responseInfo, new TypeReference<BaseBeanObject<MarketData>>() {
                     });
@@ -128,7 +141,9 @@ public class MarketActivity extends BaseActivity {
                     //设置大盘
                     List<HangQing> hangqing = marketData.getData().getHangqing();
                     rvMarket.setAdapter(new MarketAdapter(hangqing));
-
+                    //设置热门行业
+                    List<HotIndustrylist> hotIndustrylist = marketData.getData().getHotIndustrylist();
+                    rvHotIndustry.setAdapter(new HotIndustryAdapter(hotIndustrylist));
 
                 } else {
                     UIHelper.toast(getContext(), JSONObject.parseObject(responseInfo).getString("message"));
@@ -137,10 +152,63 @@ public class MarketActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toastErro(getContext(), msg);
+                UIHelper.toastError(getContext(), msg);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.APP_HQ_INFORMATION, ggHttpInterface).startGet();
+    }
+
+    private void getMarketAd() {
+        Map<String, String> param = new HashMap<String, String>();
+        param.put("product", "4");
+//        if (!isRefresh) {
+//            JSONObject oldValue = PersistTool.getJsonObject("goroundData", null);
+//            if (oldValue != null) {
+//                parseGoroundData(oldValue);
+//            }
+//        }
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                if (JSONObject.parseObject(responseInfo).getIntValue("code")==0) {
+                    SPTools.saveJsonArray("marketAdData", JSONObject.parseObject(responseInfo).getJSONArray("data"));
+//                parseGoroundData(result);
+                    BaseBeanList<StockBannerData> beanListBean = JSONObject.parseObject(responseInfo, new TypeReference<BaseBeanList<StockBannerData>>() {
+                    });
+                    List<StockBannerData> bannerData = beanListBean.getData();
+                    for (int i = 0; i < bannerData.size(); i++) {
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                        TextView tView = new TextView(getContext());
+                        tView.setText(bannerData.get(i).getData().getNewstitle());
+                        tView.setSingleLine();
+                        tView.setEllipsize(android.text.TextUtils.TruncateAt.END);
+                        tView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                        tView.setTextColor(Color.BLACK);
+                        tView.setGravity(Gravity.CENTER_VERTICAL);
+                        tView.setLayoutParams(params);
+//                        tView.setOnClickListener(new StockBannerClickListener(bannerData.get(i).getTarget_url()));
+                        flipperAd.addView(tView);
+                    }
+                    flipperAd.setInAnimation(
+                            android.view.animation.AnimationUtils.loadAnimation(
+                                    getContext(), R.anim.down_to_center));
+                    flipperAd.setOutAnimation(
+                            android.view.animation.AnimationUtils.loadAnimation(
+                                    getContext(), R.anim.center_to_up));
+                    flipperAd.startFlipping();
+
+                }else {
+                    UIHelper.toastResponseError(getContext(),responseInfo);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toastError(getContext(),msg);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.BANNER_LIST, ggHttpInterface).startGet();
     }
 
     /**大盘适配器*/
@@ -152,6 +220,7 @@ public class MarketActivity extends BaseActivity {
 
         @Override
         protected void convert(ViewHolder holder, HangQing hangQing, int position) {
+            // TODO: 2017/3/10 0010 字体颜色，文字为0时
             View holderView = holder.getView(R.id.item_stock_market);
             ViewGroup.LayoutParams params = holderView.getLayoutParams();
             params.width= (AppDevice.getWidth(getContext())-AppDevice.dp2px(getContext(),1))/2;
@@ -159,6 +228,18 @@ public class MarketActivity extends BaseActivity {
             holder.setText(R.id.tv_stock_market_price, StringUtils.saveSignificand(hangQing.getPrice(),2));
             holder.setText(R.id.tv_stock_market_price_change, StringUtils.saveSignificand(hangQing.getPrice_change(),2));
             holder.setText(R.id.tv_stock_market_price_change_rate, StringUtils.saveSignificand(hangQing.getPrice_change_rate(),2)+"%");
+        }
+    }
+
+    /**热门行业数据*/
+    private class HotIndustryAdapter extends CommonAdapter<HotIndustrylist>{
+
+        public HotIndustryAdapter(List<HotIndustrylist> datas) {
+            super(MarketActivity.this, R.layout.item_stock_hotindustry, datas);
+        }
+
+        @Override
+        protected void convert(ViewHolder holder, HotIndustrylist hotIndustrylist, int position) {
         }
     }
 }

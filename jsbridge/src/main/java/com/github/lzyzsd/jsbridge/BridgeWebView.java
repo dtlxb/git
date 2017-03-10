@@ -171,7 +171,6 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
             loadUrl(BridgeUtil.JS_FETCH_QUEUE_FROM_JAVA, new ValueCallback<String>() {
                 @Override
                 public void onReceiveValue(String data) {
-                    KLog.e("=======" + data);
                     if (BridgeUtil.useEvaluateJS()) {
                         handleMessageGE19(data);
                     } else {
