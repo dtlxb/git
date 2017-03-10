@@ -131,7 +131,7 @@ public class MarketActivity extends BaseActivity {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
-                FileUtil.writeSDcard(responseInfo,"大盘行情_"+ CalendarUtils.getCurrentTime("yyyyMMddHHmmss")+".txt");
+                FileUtil.writeSDcard(responseInfo,"大盘行情_"+ CalendarUtils.getCurrentTime()+".txt");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     BaseBeanObject<MarketData> marketData = JSONObject.parseObject(responseInfo, new TypeReference<BaseBeanObject<MarketData>>() {
                     });

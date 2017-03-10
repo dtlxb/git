@@ -144,7 +144,7 @@ public class PlayerActivity extends BaseActivity {
     private List<AVIMMessage> messageList = new ArrayList<>();
     private LiveChatAdapter mLiveChatAdapter;
 
-    private static final String mURI = "rtmp://192.168.52.143:1935/hls/androidtest";
+    private String mURI = "rtmp://192.168.52.143:1935/hls/androidtest";
 
     //聊天对象
     private AVIMConversation imConversation;
@@ -248,6 +248,8 @@ public class PlayerActivity extends BaseActivity {
                     } else {
                         countDownTimer.setVisibility(View.GONE);
                     }
+
+                    mURI = data.getString("url_rtmp");
 
                 } else {
                     UIHelper.toast(getContext(), R.string.net_erro_hint);
