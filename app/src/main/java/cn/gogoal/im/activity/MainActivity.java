@@ -80,9 +80,6 @@ public class MainActivity extends BaseActivity {
             }
         }
 
-        KLog.e("width==="+ AppDevice.getWidth(getContext())+";Height==="+AppDevice.getHeight(getContext()));
-        KLog.e("widthDpValue==="+AppDevice.px2dp(getContext(),AppDevice.getWidth(getContext()))+
-                ";HeightDpValue==="+AppDevice.px2dp(getContext(),AppDevice.getHeight(getContext())));
     }
 
 }

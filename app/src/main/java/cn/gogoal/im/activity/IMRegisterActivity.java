@@ -18,6 +18,7 @@ import java.util.Collections;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 
 /**
@@ -39,7 +40,6 @@ public class IMRegisterActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        login_et_username.setText("大顺聊天室");
         chat_room_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,18 +57,21 @@ public class IMRegisterActivity extends BaseActivity {
         chat_room_login.setEnabled(false);
         login_et_username.setEnabled(false);
 
-        AVImClientManager.getInstance().getClient().createConversation(Collections.<String>emptyList(), "HelloKitty PK 加菲猫", null, true, new AVIMConversationCreatedCallback() {
+        /*AVImClientManager.getInstance().getClient().createConversation(Collections.<String>emptyList(), "HelloKitty PK 加菲猫", null, true, new AVIMConversationCreatedCallback() {
             @Override
             public void done(AVIMConversation avimConversation, AVIMException e) {
                 Log.e("+++ConversationId", avimConversation.getConversationId());
                 avimConversation.getConversationId();
             }
-        });
+        });*/
 
         //单聊页面
         Intent intent = new Intent(IMRegisterActivity.this, SingleChatRoomActivity.class);
-        intent.putExtra("member_id", MyId);
-        intent.putExtra("userName", MyId);
+        intent.putExtra("friend_id", MyId);
+        //66,77
+        intent.putExtra("conversation_id", AppConst.LEAN_CLOUD_CONVERSATION_ID_66_77);
+        //66,99
+        //intent.putExtra("conversation_id", AppConst.LEAN_CLOUD_CONVERSATION_ID_66_99);
 
 
         //群聊
