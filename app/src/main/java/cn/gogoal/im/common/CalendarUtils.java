@@ -213,6 +213,11 @@ public class CalendarUtils {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         return format.format(dateMill);
     }
+    //时间毫秒值转成yyyy-MM-dd HH:mm:ss格式
+    public static String parseDateFormatAll(long dateMill,String formatString) {
+        SimpleDateFormat format = new SimpleDateFormat(formatString, Locale.CHINA);
+        return format.format(dateMill);
+    }
 
     //date时间转成yyyy-MM-dd HH:mm:ss格式
     public static String parseDateFormatAll(Date date) {
@@ -411,7 +416,7 @@ public class CalendarUtils {
     /**
     * 获取当前时间的时间戳
     * */
-    public static long getCurrentTime(){
-        return System.currentTimeMillis();
+    public static String getCurrentTime(String formatString){
+        return parseDateFormatAll(System.currentTimeMillis(),formatString);
     }
 }

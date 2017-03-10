@@ -22,7 +22,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.common.wjd.WechatOperator;
+import cn.gogoal.im.common.openServices.weixin.WechatOperator;
 import okhttp3.Call;
 
 

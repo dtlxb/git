@@ -1,4 +1,4 @@
-package cn.gogoal.im.common.wjd;
+package cn.gogoal.im.common.openServices;
 
 import android.content.Context;
 import android.graphics.Bitmap;
