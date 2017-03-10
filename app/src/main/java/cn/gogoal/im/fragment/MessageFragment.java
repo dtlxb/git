@@ -5,10 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Switch;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -80,14 +78,13 @@ public class MessageFragment extends BaseFragment {
         if (null != jsonArray) {
             IMMessageBeans = JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class);
         }
-        Log.e("+++IMMessageBeans", IMMessageBeans + "");
 
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
             //按照时间排序
             Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
                 @Override
                 public int compare(IMMessageBean object1, IMMessageBean object2) {
-                    return Long.compare(Long.parseLong(object2.getLastTime()), Long.parseLong(object1.getLastTime()));
+                    return Long.compare(object2.getLastTime(), object1.getLastTime());
                 }
             });
         }
@@ -138,11 +135,15 @@ public class MessageFragment extends BaseFragment {
             }
 
             @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, final int position) {
                 DialogHelp.getSelectDialog(getActivity(), "", new String[]{"标为未读", "置顶聊天", "删除聊天"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        if (which == 2) {
+                            IMMessageBeans.remove(position);
+                            MessageUtils.removeMessageInfo(position);
+                            listAdapter.notifyDataSetChanged();
+                        }
                     }
                 }, false).show();
                 return false;
@@ -175,7 +176,7 @@ public class MessageFragment extends BaseFragment {
             }
 
             if (null != messageBean.getLastTime()) {
-                dateStr = CalendarUtils.parseStampToDate(messageBean.getLastTime());
+                dateStr = CalendarUtils.parseDateIMMessageFormat(messageBean.getLastTime());
             }
 
             //消息类型
@@ -216,7 +217,7 @@ public class MessageFragment extends BaseFragment {
         AVIMMessage message = (AVIMMessage) map.get("message");
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
         boolean isTheSame = false;
-        String rightNow = String.valueOf(CalendarUtils.getCurrentTime());
+        Long rightNow = CalendarUtils.getCurrentTime();
 
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(conversation.getConversationId())) {
@@ -227,7 +228,7 @@ public class MessageFragment extends BaseFragment {
                 IMMessageBeans.get(i).setUnReadCounts(unreadmessage + "");
 
                 //头像暂时未保存
-                IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), String.valueOf(CalendarUtils.getCurrentTime()),
+                IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), CalendarUtils.getCurrentTime(),
                         "0", message.getFrom(), AppConst.LEANCLOUD_APP_ID, "", message);
 
                 isTheSame = true;
@@ -246,7 +247,7 @@ public class MessageFragment extends BaseFragment {
             imMessageBean.setUnReadCounts(unRead + "");
 
             //头像暂时未保存
-            IMMessageBean unKonwimMessageBean = new IMMessageBean(conversation.getConversationId(), String.valueOf(CalendarUtils.getCurrentTime()),
+            IMMessageBean unKonwimMessageBean = new IMMessageBean(conversation.getConversationId(), CalendarUtils.getCurrentTime(),
                     "0", message.getFrom(), AppConst.LEANCLOUD_APP_ID, "", message);
             IMMessageBeans.add(imMessageBean);
             MessageUtils.saveMessageInfo(jsonArray, unKonwimMessageBean);
@@ -256,7 +257,7 @@ public class MessageFragment extends BaseFragment {
             Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
                 @Override
                 public int compare(IMMessageBean object1, IMMessageBean object2) {
-                    return Long.compare(Long.parseLong(object2.getLastTime()), Long.parseLong(object1.getLastTime()));
+                    return Long.compare(object2.getLastTime(), object1.getLastTime());
                 }
             });
         }

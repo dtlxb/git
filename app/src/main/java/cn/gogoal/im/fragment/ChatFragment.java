@@ -167,6 +167,7 @@ public class ChatFragment extends BaseFragment {
                 HashMap<String, Object> attrsMap = new HashMap<>();
                 attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
                 mTextMessage.setAttrs(attrsMap);
+                mTextMessage.setTimestamp(CalendarUtils.getCurrentTime());
                 mTextMessage.setFrom(AppConst.LEAN_CLOUD_TOKEN);
                 mTextMessage.setText(input_text.getText().toString());
 
@@ -319,7 +320,7 @@ public class ChatFragment extends BaseFragment {
                             break;
                     }
                     //头像暂时未保存
-                    IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), String.valueOf(CalendarUtils.getCurrentTime()),
+                    IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), CalendarUtils.getCurrentTime(),
                             "0", contactBean.getNickname(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
 
                     MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
@@ -354,6 +355,7 @@ public class ChatFragment extends BaseFragment {
             AVIMImageMessage mImageMessage = new AVIMImageMessage(imagefile);
             mImageMessage.setFrom(AppConst.LEAN_CLOUD_TOKEN);
             mImageMessage.setAttrs(attrsMap);
+            mImageMessage.setTimestamp(CalendarUtils.getCurrentTime());
 
             imChatAdapter.addItem(mImageMessage);
             message_recycler.smoothScrollToPosition(messageList.size());
@@ -424,6 +426,7 @@ public class ChatFragment extends BaseFragment {
                                     AVIMImageMessage mImageMessage = new AVIMImageMessage(imagefile);
                                     mImageMessage.setFrom(AppConst.LEAN_CLOUD_TOKEN);
                                     mImageMessage.setAttrs(attrsMap);
+                                    mImageMessage.setTimestamp(CalendarUtils.getCurrentTime());
 
                                     imChatAdapter.addItem(mImageMessage);
                                     message_recycler.smoothScrollToPosition(messageList.size());
@@ -550,6 +553,7 @@ public class ChatFragment extends BaseFragment {
                         KLog.e(mAudioMessage.getAVFile().getUrl());
                         mAudioMessage.setFrom(AppConst.LEAN_CLOUD_TOKEN);
                         mAudioMessage.setAttrs(attrsMap);
+                        mAudioMessage.setTimestamp(CalendarUtils.getCurrentTime());
 
                         imChatAdapter.addItem(mAudioMessage);
                         message_recycler.smoothScrollToPosition(messageList.size());
@@ -605,7 +609,7 @@ public class ChatFragment extends BaseFragment {
                         if (messageList.size() > 0 && null != contactBean) {
                             AVIMMessage lastMessage = messageList.get(messageList.size() - 1);
 
-                            IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), String.valueOf(CalendarUtils.getCurrentTime()),
+                            IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), CalendarUtils.getCurrentTime(),
                                     "0", contactBean.getNickname(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), lastMessage);
 
                             MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
@@ -687,7 +691,7 @@ public class ChatFragment extends BaseFragment {
                 /*IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), String.valueOf(CalendarUtils.getCurrentTime()),
                         "0", imConversation.getMembers(), message.getFrom(), message.getFrom(), "", message);*/
 
-                IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), String.valueOf(CalendarUtils.getCurrentTime()),
+                IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), CalendarUtils.getCurrentTime(),
                         "0", message.getFrom(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
 
                 MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
