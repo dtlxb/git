@@ -33,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alivc.player.AliVcMediaPlayer;
 import com.alivc.player.MediaPlayer;
 import com.avos.avoscloud.im.v2.AVIMConversation;
@@ -64,6 +65,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.PlayerUtils.CountDownTimerView;
 import cn.gogoal.im.common.PlayerUtils.PlayerControl;
 import cn.gogoal.im.common.PlayerUtils.StatusListener;
@@ -83,6 +85,18 @@ public class PlayerActivity extends BaseActivity {
 
     @BindView(R.id.player_recyc)
     RecyclerView recyler_chat;
+
+    //详情相关控件
+    @BindView(R.id.textTitle)
+    TextView textTitle;
+    @BindView(R.id.imgPalyer)
+    ImageView imgPalyer;
+    @BindView(R.id.textCompany)
+    TextView textCompany;
+    @BindView(R.id.textMarInter)
+    TextView textMarInter;
+    @BindView(R.id.textOnlineNumber)
+    TextView textOnlineNumber;
 
     //直播预告展示
     @BindView(R.id.countDownTimer)
@@ -136,6 +150,9 @@ public class PlayerActivity extends BaseActivity {
     private AVIMConversation imConversation;
 
     private String live_id;
+
+    //直播介绍
+    private JSONObject anchor;
 
     private Handler mTimerHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -197,9 +214,6 @@ public class PlayerActivity extends BaseActivity {
         mLiveChatAdapter = new LiveChatAdapter(PlayerActivity.this, R.layout.item_live_chat, messageList);
         recyler_chat.setAdapter(mLiveChatAdapter);
 
-//        countDownTimer.addTime("2017-02-28 10:01:00");
-//        countDownTimer.start();
-
         getPlayerInfo();
     }
 
@@ -215,8 +229,29 @@ public class PlayerActivity extends BaseActivity {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
-                //JSONObject object = JSONObject.parseObject(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONObject data = object.getJSONArray("data").getJSONObject(0);
+                    //直播详情
+                    textTitle.setText(data.getString("video_name"));
+                    ImageDisplay.loadNetImage(getContext(), data.getString("introduction_img"), imgPalyer);
+                    textCompany.setText(data.getString("朝阳永续"));
+                    textMarInter.setText(data.getString("group_name"));
+                    textOnlineNumber.setText("11234人在线");
+                    //主播介绍
+                    anchor = data.getJSONObject("anchor");
+                    //倒计时
+                    if (data.getLongValue("launch_time") > 0) {
+                        countDownTimer.setVisibility(View.VISIBLE);
+                        countDownTimer.addTime(data.getString("live_time_start"));
+                        countDownTimer.start();
+                    } else {
+                        countDownTimer.setVisibility(View.GONE);
+                    }
 
+                } else {
+                    UIHelper.toast(getContext(), R.string.net_erro_hint);
+                }
             }
 
             @Override
@@ -946,6 +981,12 @@ public class PlayerActivity extends BaseActivity {
                 TextView anchor_position = (TextView) dialogView.findViewById(R.id.anchor_position);
                 TextView anchor_achieve = (TextView) dialogView.findViewById(R.id.anchor_achieve);
                 TextView anchor_intro = (TextView) dialogView.findViewById(R.id.anchor_intro);
+
+                ImageDisplay.loadNetImage(getContext(), anchor.getString("face_url"), anchor_avatar);
+                anchor_name.setText(anchor.getString("anchor_name"));
+                anchor_position.setText(anchor.getString("organization"));
+                anchor_achieve.setText(anchor.getString("anchor_position"));
+                anchor_intro.setText(anchor.getString("anchor_introduction"));
             }
         });
 

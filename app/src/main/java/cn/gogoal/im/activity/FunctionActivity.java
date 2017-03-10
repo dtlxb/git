@@ -3,8 +3,10 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 
@@ -19,8 +21,12 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.ui.view.XTitle;
 
 public class FunctionActivity extends BaseActivity {
+
+    @BindView(R.id.title_bar)
+    XTitle title_bar;
 
     @BindView(R.id.webView)
     BridgeWebView webView;
@@ -38,7 +44,21 @@ public class FunctionActivity extends BaseActivity {
         title = getIntent().getStringExtra("title");
         String url = getIntent().getStringExtra("function_url");
 
-        setMyTitle(title, true);
+        setMyTitle(title, false);
+        //设置返回
+        title_bar.setLeftImageResource(R.mipmap.image_title_back_0);
+        title_bar.setLeftText("返回");
+        title_bar.setLeftTextColor(Color.BLACK);
+        title_bar.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (webView.canGoBack()) {
+                    webView.goBack();
+                } else {
+                    finish();
+                }
+            }
+        });
 
         initWebView(webView);
         webView.loadUrl(url);
