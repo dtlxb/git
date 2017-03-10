@@ -2,6 +2,7 @@ package cn.gogoal.im.fragment;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,6 +37,7 @@ import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.CalendarUtils;
+import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
@@ -137,6 +139,12 @@ public class MessageFragment extends BaseFragment {
 
             @Override
             public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                DialogHelp.getSelectDialog(getActivity(), "", new String[]{"标为未读", "置顶聊天", "删除聊天"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }, false).show();
                 return false;
             }
         });
