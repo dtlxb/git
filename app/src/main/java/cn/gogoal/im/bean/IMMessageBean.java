@@ -12,10 +12,48 @@ public class IMMessageBean {
     private String conversationID;
     private String lastTime;
     private String unReadCounts;
-    private List<String> speakerTo;
+    private String nickname;
+    private String friend_id;
+    private String avatar;
     //消息
     private AVIMMessage lastMessage;
 
+    public IMMessageBean() {
+    }
+
+    public IMMessageBean(String conversationID, String lastTime, String unReadCounts, String nickname, String friend_id, String avatar, AVIMMessage lastMessage) {
+        this.conversationID = conversationID;
+        this.lastTime = lastTime;
+        this.unReadCounts = unReadCounts;
+        this.nickname = nickname;
+        this.friend_id = friend_id;
+        this.avatar = avatar;
+        this.lastMessage = lastMessage;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getFriend_id() {
+        return friend_id;
+    }
+
+    public void setFriend_id(String friend_id) {
+        this.friend_id = friend_id;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public String getConversationID() {
         return conversationID;
@@ -33,13 +71,6 @@ public class IMMessageBean {
         this.lastMessage = lastMessage;
     }
 
-    public List<String> getSpeakerTo() {
-        return speakerTo;
-    }
-
-    public void setSpeakerTo(List<String> speakerTo) {
-        this.speakerTo = speakerTo;
-    }
 
     public String getUnReadCounts() {
         return unReadCounts;
@@ -63,7 +94,9 @@ public class IMMessageBean {
                 "conversationID='" + conversationID + '\'' +
                 ", lastTime='" + lastTime + '\'' +
                 ", unReadCounts='" + unReadCounts + '\'' +
-                ", speakerTo=" + speakerTo +
+                ", nickname='" + nickname + '\'' +
+                ", friend_id='" + friend_id + '\'' +
+                ", avatar='" + avatar + '\'' +
                 ", lastMessage=" + lastMessage +
                 '}';
     }

@@ -17,6 +17,7 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
+import com.socks.library.KLog;
 
 import java.util.List;
 
@@ -39,9 +40,12 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     //图片
     public static int TYPE_LEFT_IMAGE_MESSAGE = 0x03;
     public static int TYPE_RIGHT_IMAGE_MESSAGE = 0x04;
-    //cache_chat_img_voice
+    //语音
     public static int TYPE_LEFT_VOICE_MESSAGE = 0x05;
     public static int TYPE_RIGHT_VOICE_MESSAGE = 0x06;
+    //未知消息
+    public static int TYPE_LEFT_UNKONW_MESSAGE = 0x07;
+    public static int TYPE_RIGHT_UNKONW_MESSAGE = 0x08;
 
     private List<AVIMMessage> messageList;
     private Context mContext;
@@ -67,6 +71,10 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             return new LeftAudioViewHolder(mLayoutInflater.inflate(R.layout.item_left_audio, parent, false));
         } else if (viewType == TYPE_RIGHT_VOICE_MESSAGE) {
             return new RightAudioViewHolder(mLayoutInflater.inflate(R.layout.item_right_audio, parent, false));
+        } else if (viewType == TYPE_RIGHT_UNKONW_MESSAGE) {
+            return new LeftUnKonwViewHolder(mLayoutInflater.inflate(R.layout.item_right_audio, parent, false));
+        } else if (viewType == TYPE_LEFT_UNKONW_MESSAGE) {
+            return new RightUnKonwViewHolder(mLayoutInflater.inflate(R.layout.item_right_audio, parent, false));
         } else {
             return null;
         }
@@ -164,7 +172,10 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                     });
                 }
             });
-
+        } else if (holder instanceof LeftUnKonwViewHolder) {
+            AVIMMessage message = messageList.get(position);
+            ((LeftUnKonwViewHolder) holder).user_name.setText(message.getFrom());
+        } else if (holder instanceof RightUnKonwViewHolder) {
         }
     }
 
@@ -176,8 +187,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         AVIMMessage message = messageList.get(position);
-
-        if (messageList.get(position).getFrom().equals(AppConst.LEAN_CLOUD_TOKEN)) {
+        if (message.getFrom().equals(AppConst.LEAN_CLOUD_TOKEN)) {
             if (message instanceof AVIMTextMessage) {
                 return TYPE_RIGHT_TEXT_MESSAGE;
             } else if (message instanceof AVIMImageMessage) {
@@ -185,7 +195,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             } else if (message instanceof AVIMAudioMessage) {
                 return TYPE_RIGHT_VOICE_MESSAGE;
             } else {
-                return 0;
+                return TYPE_RIGHT_UNKONW_MESSAGE;
             }
         } else {
             if (message instanceof AVIMTextMessage) {
@@ -195,7 +205,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             } else if (message instanceof AVIMAudioMessage) {
                 return TYPE_LEFT_VOICE_MESSAGE;
             } else {
-                return 0;
+                return TYPE_LEFT_UNKONW_MESSAGE;
             }
         }
     }
@@ -317,6 +327,27 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             recorder_length = (FrameLayout) itemView.findViewById(R.id.recorder_length);
             animView = itemView.findViewById(R.id.recorder_anim);
             recorder_time = (TextView) itemView.findViewById(R.id.recorder_time);
+        }
+    }
+
+    private class LeftUnKonwViewHolder extends IMCHatViewHolder {
+
+        private TextView what_user_send;
+
+        public LeftUnKonwViewHolder(View itemView) {
+            super(itemView);
+            what_user_send = (TextView) itemView.findViewById(R.id.what_user_send);
+        }
+
+    }
+
+    private class RightUnKonwViewHolder extends IMCHatViewHolder {
+
+        private TextView what_user_send;
+
+        public RightUnKonwViewHolder(View itemView) {
+            super(itemView);
+            what_user_send = (TextView) itemView.findViewById(R.id.what_user_send);
         }
     }
 

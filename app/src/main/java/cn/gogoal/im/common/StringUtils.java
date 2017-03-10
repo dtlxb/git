@@ -163,9 +163,10 @@ public class StringUtils {
         return str.matches(regex);
     }
 
-    public static String re(String orderStr){
+    public static String re(String orderStr) {
         return new StringBuilder(orderStr).reverse().toString();
     }
+
     /**
      * 输入的手机号是否合法
      */
@@ -266,18 +267,24 @@ public class StringUtils {
         }
     }
 
-    /**取小数点后N位  例：format="%.2f","%.3f","%.4f"...*/
-    public static String getAnyPointFloat(String format, float floatData){
+    /**
+     * 取小数点后N位  例：format="%.2f","%.3f","%.4f"...
+     */
+    public static String getAnyPointFloat(String format, float floatData) {
         return String.format(format, floatData);
     }
 
-    /**取小数点后N位 例：format="%.2f","%.3f","%.4f"...*/
-    public static String getAnyPointDouble(String format, double doubleData){
+    /**
+     * 取小数点后N位 例：format="%.2f","%.3f","%.4f"...
+     */
+    public static String getAnyPointDouble(String format, double doubleData) {
         return String.format(format, doubleData);
     }
 
-    /**取整*/
-    public static String getIntegerData(String floatData){
+    /**
+     * 取整
+     */
+    public static String getIntegerData(String floatData) {
         return floatData.substring(0, floatData.indexOf("."));
     }
 
@@ -341,7 +348,7 @@ public class StringUtils {
      * @return {@code true}: 相等<br>{@code false}: 不相等
      */
     public static boolean equalsIgnoreCase(String a, String b) {
-        return (a .equals(b)) || (b != null) && (a.length() == b.length()) && a.regionMatches(true, 0, b, 0, b.length());
+        return (a.equals(b)) || (b != null) && (a.length() == b.length()) && a.regionMatches(true, 0, b, 0, b.length());
     }
 
     /**
@@ -388,9 +395,9 @@ public class StringUtils {
         return new String(chars);
     }
 
-    /*
-    * 除掉HTML里面所有标签
-    * */
+    /**
+     * 除掉HTML里面所有标签
+     */
     public static String removeTag(String htmlStr) {
 
         if (htmlStr == null) return "--";
@@ -419,4 +426,10 @@ public class StringUtils {
         return htmlStr;
     }
 
+    /**
+     * 取样为空防止异常处理
+     */
+    public static Object objectNullDeal(Object input, Object errorDeal) {
+        return input == null ? errorDeal : input;
+    }
 }
