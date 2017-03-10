@@ -353,7 +353,9 @@ public class AppDevice {
             view.setPadding(0, 0, 0, 0);
     }
 
-    /**隐藏软键盘*/
+    /**
+     * 隐藏软键盘
+     */
     protected void hideKeyBoard(Activity context) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
         ;
@@ -534,7 +536,9 @@ public class AppDevice {
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
 
-    /**取消全屏*/
+    /**
+     * 取消全屏
+     */
     public static void cancelFullScreen(Activity activity) {
         WindowManager.LayoutParams params = activity.getWindow()
                 .getAttributes();
@@ -546,6 +550,7 @@ public class AppDevice {
 
     /**
      * 获取当前应用程序的包名
+     *
      * @param context 上下文对象
      * @return 返回包名
      */
@@ -562,13 +567,15 @@ public class AppDevice {
         }
         return "";
     }
+
     /**
      * 获取程序 图标
-     * @param context ;
+     *
+     * @param context  ;
      * @param packname 应用包名
      * @return ;
      */
-    public Drawable getAppIcon(Context context, String packname){
+    public Drawable getAppIcon(Context context, String packname) {
         try {
             //包管理操作管理类
             PackageManager pm = context.getPackageManager();
@@ -583,11 +590,31 @@ public class AppDevice {
 
     /**
      * 获取程序的版本号
+     *
      * @param context ;
+     * @return ;
+     */
+    public static int getAppVersionCode(Context context) {
+        //包管理操作管理类
+        PackageManager pm = context.getPackageManager();
+        try {
+            PackageInfo packinfo = pm.getPackageInfo(context.getPackageName(), 0);
+            return packinfo.versionCode;
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+
+        }
+        return 0;
+    }
+
+    /**
+     * 获取程序的版本号
+     *
+     * @param context  ;
      * @param packname ;
      * @return ;
      */
-    public int getAppVersionCode(Context context,String packname){
+    public static int getAppVersionCode(Context context, String packname) {
         //包管理操作管理类
         PackageManager pm = context.getPackageManager();
         try {
@@ -599,13 +626,15 @@ public class AppDevice {
         }
         return 0;
     }
+
     /**
      * 获取程序的版本名
-     * @param context ;
+     *
+     * @param context  ;
      * @param packname ;
      * @return ;
      */
-    public String getAppVersionName(Context context,String packname){
+    public static String getAppVersionName(Context context, String packname) {
         //包管理操作管理类
         PackageManager pm = context.getPackageManager();
         try {
@@ -618,14 +647,34 @@ public class AppDevice {
         return packname;
     }
 
+    /**
+     * 获取当前程序的版本名
+     *
+     * @param context ;
+     * @return ;
+     */
+    public static String getAppVersionName(Context context) {
+        //包管理操作管理类
+        PackageManager pm = context.getPackageManager();
+        try {
+            PackageInfo packinfo = pm.getPackageInfo(context.getPackageName(), 0);
+            return packinfo.versionName;
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+
+        }
+        return context.getPackageName();
+    }
+
 
     /**
      * 获取程序的名字
-     * @param context ;
+     *
+     * @param context  ;
      * @param packname ;
      * @return ;
      */
-    public String getAppName(Context context,String packname){
+    public static String getAppName(Context context, String packname) {
         //包管理操作管理类
         PackageManager pm = context.getPackageManager();
         try {
@@ -639,11 +688,12 @@ public class AppDevice {
 
     /**
      * 获取程序的签名
-     * @param context ;
+     *
+     * @param context  ;
      * @param packname ;
      * @return ;
      */
-    public static String getAppSignature(Context context,String packname){
+    public static String getAppSignature(Context context, String packname) {
         try {
             //包管理操作管理类
             PackageManager pm = context.getPackageManager();
@@ -656,15 +706,6 @@ public class AppDevice {
 
         }
         return packname;
-    }
-    /**
-     * 获取当前展示 的Activity名称
-     * @return
-     */
-    private static String getCurrentActivityName(Context context){
-        ActivityManager activityManager=(ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        String runningActivity=activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
-        return runningActivity;
     }
 
     /**
@@ -697,11 +738,11 @@ public class AppDevice {
      * 到拨号盘
      */
     public static void openDial(Context context, String number) {
-        if (number.contains(" ")){
-            number=number.replace(" ","");
+        if (number.contains(" ")) {
+            number = number.replace(" ", "");
         }
-        if (number.contains("-")){
-            number=number.replace("-","");
+        if (number.contains("-")) {
+            number = number.replace("-", "");
         }
 
         Uri uri = Uri.parse("tel:" + number);
@@ -714,17 +755,19 @@ public class AppDevice {
      */
     public static void openCall(Activity context, String number) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(context,new String[]{Manifest.permission.CALL_PHONE},1);
-        }else {
+            ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.CALL_PHONE}, 1);
+        } else {
             Uri uri = Uri.parse("tel:" + number);
             Intent it = new Intent(Intent.ACTION_CALL, uri);
             context.startActivity(it);
         }
     }
 
-    /**获取本地保存的客服电话*/
-    public static String getOrderTel(){
-        return SPTools.getString("order_tel","400-998-7172");
+    /**
+     * 获取本地保存的客服电话
+     */
+    public static String getOrderTel() {
+        return SPTools.getString("order_tel", "400-998-7172");
     }
 
     /***
@@ -954,9 +997,9 @@ public class AppDevice {
         InputFilter filter = new InputFilter() {
             @Override
             public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-                if (source.equals(" ") || source.equals("\n\r")||source.equals("\n") || source.equals("\r")){
+                if (source.equals(" ") || source.equals("\n\r") || source.equals("\n") || source.equals("\r")) {
                     return "";
-                }else {
+                } else {
                     return null;
                 }
             }
@@ -964,7 +1007,7 @@ public class AppDevice {
         editText.setFilters(new InputFilter[]{filter});
     }
 
-    public static int getAudioDurition(String path){
+    public static int getAudioDurition(String path) {
 
         MediaPlayer mediaPlayer = new MediaPlayer();
 
@@ -982,7 +1025,7 @@ public class AppDevice {
         int duration = mediaPlayer.getDuration();
 
         mediaPlayer.release();
-        mediaPlayer=null;
+        mediaPlayer = null;
 
         return duration;
     }
