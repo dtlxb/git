@@ -6,17 +6,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.hply.imagepicker.R;
-import com.hply.imagepicker.view.SystemBarTintManager;
+import com.hply.imagepicker.view.StatusBarUtil;
 
 public class ImageBaseActivity extends AppCompatActivity {
-
-    protected SystemBarTintManager tintManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +23,10 @@ public class ImageBaseActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatus(true);
         }
-        tintManager = new SystemBarTintManager(this);
-        tintManager.setStatusBarTintEnabled(true);
-        tintManager.setStatusBarTintResource(R.color.status_bar);  //设置上方状态栏的颜色
+
+        StatusBarUtil.with(this).setColor(ContextCompat.getColor(this,R.color.status_bar));
+
+        //设置上方状态栏的颜色
     }
 
     @TargetApi(19)

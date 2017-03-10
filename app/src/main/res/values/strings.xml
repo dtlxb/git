@@ -8,6 +8,9 @@
     <string name="title_found">投研</string>
     <string name="title_mine">我的</string>
 
+    <string name="title_stock_market">股票行情</string>
+
+
     <string name="all_images">全部图片</string>
     <string name="folder_image_count">共%1$d张</string>
     <string name="preview_image_count">%1$s/%2$s</string>
@@ -69,5 +72,6 @@
     <string name="nodata_hint">没有相关数据</string>
     <string name="nomoredata_hint">没有更多数据</string>
     <string name="net_erro_hint">数据请求出错</string>
+    <string name="default__">--</string>
 
 </resources>

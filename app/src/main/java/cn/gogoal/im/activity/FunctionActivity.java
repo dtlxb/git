@@ -14,6 +14,7 @@ import com.socks.library.KLog;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 
 public class FunctionActivity extends BaseActivity {
@@ -46,6 +47,7 @@ public class FunctionActivity extends BaseActivity {
 //                KLog.e(url + title);
 //            }
 //        });
+
         //1.添加原生方法，测试弹窗
         webView.registerHandler("naviveDialog", new BridgeHandler() {
             @Override
@@ -109,6 +111,9 @@ public class FunctionActivity extends BaseActivity {
         mWebView.setDefaultHandler(new DefaultHandler());
 
         mWebView.getSettings().setBuiltInZoomControls(false);
+
+        String ua = mWebView.getSettings().getUserAgentString() + " GoGoaler/" + AppDevice.getAppVersionName(getContext());
+        mWebView.getSettings().setUserAgentString(ua);
 
         // 开启DOM缓存。
         mWebView.getSettings().setDomStorageEnabled(true);

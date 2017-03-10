@@ -1,99 +1,90 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta content="text/html; charset=utf-8" http-equiv="content-type">
-    <title>
-        Js与Java交互Demo
-    </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="full-screen" content="yes">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <title>Js与Java交互Demo</title>
     <script src="http://cdn.bootcss.com/zepto/1.2.0/zepto.min.js"></script>
 </head>
-
 <body>
-
-<p>
     <input type="button" id="enter0" value="测试弹窗" onclick="jsTestDialog();"/>
-</p>
-
-<p>
+    <br>
     <input type="button" id="enter1" value="测试数据，带回调信息" onclick="jsDialogWithCallBack();"/>
-</p>
-
-<p>
+    <br>
     <img id="imgTag"/>
-</p>
-
-<div id="div1" style="width:300px; height:200px;"></div>
-
-</body>
-
-<script>
-
-function addText(text){
-
+    <br>
+    <div id="div1" style="width:300px; height:200px;"></div>
+    <br>
+    <script>
+    function addText(text){
         $("#div1").empty();
 
         var textNode = document.createElement("p");
         textNode.innerHTML = JSON.stringify(text);
         textNode.width = 340;
         textNode.height = 220;
-
         $("#div1").append(textNode);
-    }
-
-    function jsTestDialog() {
-            window.WebViewJavascriptBridge.callHandler(
-                'naviveDialog'
-                ,"巴拉巴拉巴拉巴拉"
-                , function(responseData) {
-                    //do nothing
-                }
-            );
-    }
-
-    function jsDialogWithCallBack() {
-            window.WebViewJavascriptBridge.callHandler(
-                'naviveDialogWithCallBack'
-                ,"是否要添加数据？？？"
-                , function(responseData) {
-                        alert(responseData);
-                     console.log("回调结果==="+responseData);//responseData
-                    addText(responseData);
-                }
-            );
     }
 
     function bridgeLog(logContent) {
         //do something
     }
 
-    function connectWebViewJavascriptBridge(callback) {
+    function jsTestDialog() {
+        WebViewJavascriptBridge.callHandler('naviveDialog', "巴拉巴拉巴拉巴拉", function(res) {
+            //do nothing
+        });
+    }
+
+    function jsDialogWithCallBack() {
+        WebViewJavascriptBridge.callHandler('naviveDialogWithCallBack', "是否要添加数据？？？", function(res) {
+            alert(res);
+            console.log("回调结果==="+res);//res
+            addText(res);
+        });
+    }
+
+    function config() {
+        var iframe_ready = document.getElementById('iframe_ready');
+        if (iframe_ready) return;
+        var WVJBIframe = document.createElement('iframe');
+        WVJBIframe.id = 'iframe_ready';
+        WVJBIframe.style.display = 'none';
+        WVJBIframe.src = 'jsbridge://__bridge_loaded__/';
+        document.documentElement.appendChild(WVJBIframe);
+    }
+
+    function ready(callback) {
         if (window.WebViewJavascriptBridge) {
-            callback(WebViewJavascriptBridge)
+            callback()
         } else {
-            document.addEventListener(
-                'WebViewJavascriptBridgeReady'
-                , function() {
-                    callback(WebViewJavascriptBridge)
-                },
-                false
-            );
+            document.addEventListener('WebViewJavascriptBridgeReady', function() {
+                WebViewJavascriptBridge.init(function(message, responseCallback) {
+                    var data = {
+                        'Javascript Responds': '测试中文!'
+                    };
+                    if (typeof responseCallback != 'undefined') {
+                        responseCallback(data);
+                    }
+                    return data;
+                });
+                callback();
+            }, false);
         }
     }
 
-    connectWebViewJavascriptBridge(function(bridge) {
-        bridge.init(function(message, responseCallback) {
-            console.log('JS got a message ' + message);
-            var data = {
-                'Javascript Responds': '测试中文!'
-            };
-            console.log('JS responding with ' + data);
-            if (typeof responseCallback != 'undefined') {
-                responseCallback(data);
-            }
-            return data;
-        });
+    config();
 
-        bridge.registerHandler("methodFromJs", function(data, responseCallback) {
-                //do something 给java调用的测试方法
+    ready(function() {
+        WebViewJavascriptBridge.registerHandler("methodFromJs", function(data, responseCallback) {
+            //do something 给java调用的测试方法
             addText(data);
             var date = new Date();
             var seperator1 = "-";
@@ -107,18 +98,11 @@ function addText(text){
                 strDate = "0" + strDate;
             }
             var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-                    + " " + date.getHours() + seperator2 + date.getMinutes()
-                    + seperator2 + date.getSeconds();
-            return "当前时间:"+currentdate;
+                + " " + date.getHours() + seperator2 + date.getMinutes()
+                + seperator2 + date.getSeconds();
+            return "当前时间:" + currentdate;
         });
-
-    })
-
-
-
-
-
-
-</script>
-
+    });
+    </script>
+</body>
 </html>

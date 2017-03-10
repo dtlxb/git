@@ -2,6 +2,7 @@ package cn.gogoal.im.base;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
@@ -54,7 +55,7 @@ public abstract class BaseFragment extends Fragment implements IBase {
         return fragmentTitle;
     }
 
-    public XTitle setFragmentTitle(int titleId) {
+    public XTitle setFragmentTitle(@StringRes int titleId) {
         XTitle fragmentTitle = (XTitle) view.findViewById(R.id.title_bar);
         fragmentTitle.setTitle(getString(titleId));
         fragmentTitle.setTitleColor(Color.BLACK);

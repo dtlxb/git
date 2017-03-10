@@ -12,26 +12,26 @@ import java.util.Map;
 public class GGAPI {
 
     //开发环境
-    public static final String WEB_URL = "http://192.168.52.156:9000";
+    public static final String WEB_URL = "http://192.168.72.155:9000";
     private static final String Native_API = "http://ggservice.sandbox.gofund.com.cn";
     private static final String APP_KEY = "HBTORVzBaGtqmGE";
     private static final String APP_SECRET = "cGYIsTyTWXGeP4frqOqmdWxRO5xmh2Pi";
 
     //正式环境
 //    public static final String WEB_URL = "http://211.144.193.162:8085";
-//    private static final String Native_API = "http://ggservice.go-goal.cn";
-//    private static final String APP_KEY = "fShDqPXQvEAkISs";
-//    private static final String APP_SECRET = "hDNLTYXATtqBcENWVkPAxmltAvyXLGt3";
+//    private static final String Native_API = "https://ggservice.go-goal.cn";
+//    private static final String APP_KEY = "GnbhWYzxfcbrMOd";
+//    private static final String APP_SECRET = "I7WFKwulOrcYPHu8ZeQcMFEsiwQ45ruS";
 
     public static String get(String api, Map<String, String> params) throws Exception {
         long timeStamp = System.currentTimeMillis() / 1000L;
-        String sign = getSign(APP_KEY, APP_SECRET, Long.valueOf(timeStamp), params, api, "GET");
+        String sign = getSign(APP_KEY, APP_SECRET,timeStamp, params, api, "GET");
         String incomingParams = "";
         String url;
         if (params != null) {
             try {
                 for (Iterator e = params.keySet().iterator(); e.hasNext();
-                     incomingParams = incomingParams + url + "=" + URLEncoder.encode((String) params.get(url), "UTF-8") + "&") {
+                     incomingParams = incomingParams + url + "=" + URLEncoder.encode(params.get(url), "UTF-8") + "&") {
                     url = (String) e.next();
                 }
             } catch (UnsupportedEncodingException var9) {
@@ -49,7 +49,7 @@ public class GGAPI {
             var8.printStackTrace();
         }
 
-        if (incomingParams != null && !"".equals(incomingParams.trim())) {
+        if (!"".equals(incomingParams.trim())) {
             url = url + "&" + incomingParams;
         }
 
@@ -57,26 +57,26 @@ public class GGAPI {
         return url;
     }
 
-    public static Map<String, Object> post(String api, Map<String, String> params) throws Exception {
+    protected static Map<String, Object> post(String api, Map<String, String> params) throws Exception {
         long timeStamp = System.currentTimeMillis() / 1000L;
-        String sign = getSign(APP_KEY, APP_SECRET, Long.valueOf(timeStamp), params, api, "POST");
+        String sign = getSign(APP_KEY, APP_SECRET, timeStamp, params, api, "POST");
         params.put("app_key", APP_KEY);
         params.put("time_stamp", String.valueOf(timeStamp));
         params.put("sign", sign);
-        Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> result = new HashMap<>();
         result.put("url", Native_API + "/" + api);
         result.put("params", params);
         return result;
     }
 
     private static String getSign(String appKey, String appSecret, Long timeStamp, Map<String, String> params, String url, String requestMethod) {
-        HashMap paramsMap = new HashMap();
+        HashMap<String,String> paramsMap = new HashMap<>();
         if (params != null) {
             paramsMap.putAll(params);
         }
 
         paramsMap.put("app_key", appKey);
-        paramsMap.put("time_stamp", timeStamp);
+        paramsMap.put("time_stamp", timeStamp.toString());
         paramsMap.remove("sign");
         SignHelper.codePayValue(paramsMap);
 

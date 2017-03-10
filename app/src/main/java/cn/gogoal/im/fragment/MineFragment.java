@@ -30,8 +30,8 @@ import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
 import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.common.wjd.IWechatCallback;
-import cn.gogoal.im.common.wjd.ThreePartFactory;
+import cn.gogoal.im.common.openServices.IOpenCallback;
+import cn.gogoal.im.common.openServices.OpenServiceFactory;
 import cn.gogoal.im.ui.widget.BottomSheetListDialog;
 import cn.gogoal.im.ui.widget.BottomSheetNormalDialog;
 import cn.gogoal.im.ui.widget.EditTextDialog;
@@ -111,8 +111,8 @@ public class MineFragment extends BaseFragment {
                     public void onItemClick(BottomSheetListDialog dialog, TextView view, int position) {
                         switch (position) {
                             case 0:
-                                ThreePartFactory.with(getContext())
-                                        .wechat().login(new IWechatCallback() {
+                                OpenServiceFactory.with(getContext())
+                                        .wechat().login(new IOpenCallback() {
                                     @Override
                                     public void onFailed(String errorString) {
                                         KLog.e(errorString);

@@ -217,6 +217,7 @@ public class MessageFragment extends BaseFragment {
         AVIMMessage message = (AVIMMessage) map.get("message");
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
         boolean isTheSame = false;
+
         Long rightNow = CalendarUtils.getCurrentTime();
 
         for (int i = 0; i < IMMessageBeans.size(); i++) {

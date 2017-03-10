@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -608,6 +607,7 @@ public class ChatFragment extends BaseFragment {
                         jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
                         if (messageList.size() > 0 && null != contactBean) {
                             AVIMMessage lastMessage = messageList.get(messageList.size() - 1);
+
 
                             IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), CalendarUtils.getCurrentTime(),
                                     "0", contactBean.getNickname(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), lastMessage);

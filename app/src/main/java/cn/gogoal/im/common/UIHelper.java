@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
@@ -22,7 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.common.wjd.WechatOperator;
+import cn.gogoal.im.common.openServices.weixin.WechatOperator;
 import okhttp3.Call;
 
 
@@ -82,7 +83,7 @@ public class UIHelper {
         mToast.show();
     }
 
-    public static void toastErro(Context cont, String msg) {
+    public static void toastError(Context cont, String msg) {
         if (cont == null || msg == null) {
             return;
         }
@@ -90,6 +91,21 @@ public class UIHelper {
             mToast = Toast.makeText(cont, AppDevice.isNetworkConnected(cont) ? msg : "当前网络不可用", Toast.LENGTH_SHORT);
         } else {
             mToast.setText(msg);
+            mToast.setDuration(Toast.LENGTH_SHORT);
+        }
+        mToast.show();
+    }
+
+    public static void toastResponseError(Context cont, String response) {
+        if (cont == null || response == null) {
+            return;
+        }
+        String errorMessage = JSONObject.parseObject(response).getString("message");
+
+        if (mToast == null) {
+            mToast = Toast.makeText(cont, errorMessage, Toast.LENGTH_SHORT);
+        } else {
+            mToast.setText(errorMessage);
             mToast.setDuration(Toast.LENGTH_SHORT);
         }
         mToast.show();
