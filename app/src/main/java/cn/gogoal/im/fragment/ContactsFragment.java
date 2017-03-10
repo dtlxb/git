@@ -123,7 +123,7 @@ public class ContactsFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-//                KLog.e(responseInfo);
+                KLog.e(responseInfo);
 
                 SPTools.saveString(AppConst.LEAN_CLOUD_TOKEN + "_Contacts", responseInfo);
 
