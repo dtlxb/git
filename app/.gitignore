@@ -53,4 +53,3 @@ proguard/
 
 #NDK（NDK相关的）
 gradle/wrapper/gradle-wrapper.properties
-/src/main/java/cn/gogoal/im/common/GGOKHTTP/GGAPI.java

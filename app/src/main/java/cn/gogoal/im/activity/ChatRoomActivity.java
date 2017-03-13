@@ -28,11 +28,15 @@ import cn.gogoal.im.common.recording.Recorder;
 import cn.gogoal.im.ui.view.SwitchImageView;
 import cn.gogoal.im.ui.view.VoiceButton;
 
+import static cn.gogoal.im.base.MyApp.getContext;
+
 /**
- * author wangjd on 2017/3/2 0002.
+ * author wangjd on 2017/3/13 0013.
  * Staff_id 1375
  * phone 18930640263
+ * description:聊天室
  */
+
 public class ChatRoomActivity extends BaseActivity {
 
     @BindView(R.id.recyclerView)
@@ -146,9 +150,9 @@ public class ChatRoomActivity extends BaseActivity {
         MediaManager.release();
     }
 
-    class AudioAdapter extends CommonAdapter<Recorder> {
+    private class AudioAdapter extends CommonAdapter<Recorder> {
 
-        public AudioAdapter(List<Recorder> datas) {
+        private AudioAdapter(List<Recorder> datas) {
             super(getContext(), R.layout.item_recorder, datas);
         }
 

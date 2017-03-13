@@ -88,7 +88,7 @@ public class AppDevice {
     /**
      * 获得屏幕宽度 px
      *
-     * @return
+     * @return ;
      */
     public static int getWidth(Context context) {
         WindowManager wManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -720,6 +720,7 @@ public class AppDevice {
         intent.setDataAndType(Uri.fromFile(apkFile),
                 "application/vnd.android.package-archive");
         context.startActivity(intent);
+
     }
 
     /**

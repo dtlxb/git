@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="64dp"
     android:gravity="center"
-    android:background="@android:color/white"
+    android:background="@drawable/selector_normal_white2gray"
     android:layout_marginBottom="1dp"
     android:stretchColumns="0,1">
 
@@ -12,17 +12,15 @@
 
         <TextView
             android:id="@+id/tv_stock_market_name"
-            
             android:gravity="left"
             android:maxLines="1"
             android:paddingLeft="15dp"
             android:text="@string/default__"
             android:textColor="@color/stock_text_gray"
-            android:textSize="14sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/tv_stock_market_price_change"
-            
             android:gravity="right"
             android:maxLines="1"
             android:paddingRight="15dp"

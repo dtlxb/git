@@ -2,71 +2,82 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorTitle"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context="cn.gogoal.im.fragment.MineFragment">
 
     <include layout="@layout/include_title" />
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <TableLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:stretchColumns="0,1"
-            android:padding="10dp"
             android:orientation="vertical">
 
-            <FrameLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp">
+
                 <ImageView
-                    android:id="@+id/image_ad"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@null"
-                    android:src="@mipmap/image_found_top_ad" />
+                    android:id="@+id/img_mine_avatar"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:src="@mipmap/ic_launcher"
+                    android:contentDescription="@null" />
+
 
                 <TextView
+                    android:id="@+id/userName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="#f00"
-                    android:padding="10dp"
-                    android:text="圆角矩形处理"/>
-            </FrameLayout>
+                    android:text="USERNAME"
+                    android:layout_toEndOf="@+id/img_mine_avatar"
+                    android:layout_alignTop="@+id/img_mine_avatar"
+                    android:textColor="@color/textColor_333333"
+                    android:textSize="18sp" />
 
-            <TableRow android:layout_marginTop="10dp">
-                <Button
-                    android:id="@+id/setWatchLive"
-                    android:text="播放器" />
+                <TextView
+                    android:id="@+id/userAccount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="userAccount\nE0005678"
+                    android:layout_toEndOf="@+id/img_mine_avatar"
+                    android:layout_alignBottom="@+id/img_mine_avatar"
+                    android:textColor="@color/textColor_999999"
+                    android:textSize="14sp" />
 
-                <Button
-                    android:id="@+id/btn_upload"
-                    android:text="测试上传图片" />
 
-            </TableRow>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@null"
+                    android:src="@mipmap/img_more" />
+            </RelativeLayout>
 
-            <TableRow>
-                <Button
-                    android:id="@+id/btn_test"
-                    android:text="测试通用弹窗" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_mine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@android:color/white"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp" />
 
-                <Button android:id="@+id/btn_wechat"
-                    android:text="微信分享"/>
-            </TableRow>
+            <include layout="@layout/item_mine"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
-            <TableRow>
-                <Button
-                    android:id="@+id/btn_item_dialog"
-                    android:text="itemDialog" />
-                <Button
-                    android:id="@+id/btn_item_edit"
-                    android:text="editDialog" />
-            </TableRow>
-        </TableLayout>
-
-    </ScrollView>
 </LinearLayout>

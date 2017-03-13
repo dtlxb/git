@@ -3,32 +3,42 @@
     android:id="@+id/item_stock_hotindustry"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="1dp"
+    android:background="@drawable/selector_normal_white2gray"
     android:gravity="center"
     android:orientation="vertical"
     android:paddingBottom="10dp"
-    android:paddingTop="10dp"
-    android:background="@android:color/white"
-    android:layout_marginBottom="1dp">
+    android:paddingTop="10dp">
 
     <TextView
         android:id="@+id/tv_hot_industry_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/default__"
-        android:textSize="14sp"/>
+        android:textColor="@color/stock_text_black"
+        android:textSize="13sp" />
+
     <TextView
+        android:id="@+id/tv_hot_industry_rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/default__"
-        android:textSize="18sp"/>
+        android:textSize="18sp" />
+
     <TextView
+        android:id="@+id/tv_hot_industry_stockname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/default__"
-        android:textSize="14sp"/>
+        android:textColor="@color/stock_text_gray"
+        android:textSize="13sp" />
+
     <TextView
+        android:id="@+id/tv_hot_industry_curentPrice$rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/default__"
-        android:textSize="14sp"/>
+        android:textColor="@color/stock_text_gray"
+        android:textSize="13sp" />
+
 </LinearLayout>

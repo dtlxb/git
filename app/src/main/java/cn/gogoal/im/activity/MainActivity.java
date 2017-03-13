@@ -8,7 +8,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 
 import com.hply.imagepicker.view.StatusBarUtil;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,6 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.fragment.ContactsFragment;
 import cn.gogoal.im.fragment.FoundFragment;
 import cn.gogoal.im.fragment.MessageFragment;
@@ -67,7 +65,7 @@ public class MainActivity extends BaseActivity {
         tabFragments.add(mineFragment);
 
         SimpleFragmentPagerAdapter tabAdapter = new SimpleFragmentPagerAdapter(
-                getSupportFragmentManager(),getContext(),tabFragments, mainTabArray);
+                getSupportFragmentManager(),MainActivity.this,tabFragments, mainTabArray);
 
         vpMain.setAdapter(tabAdapter);
         vpMain.setOffscreenPageLimit(3);

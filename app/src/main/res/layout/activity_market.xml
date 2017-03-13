@@ -8,72 +8,84 @@
 
     <include layout="@layout/include_title" />
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/title_bar">
+        android:layout_below="@+id/title_bar"
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <cn.gogoal.im.ui.view.CustomNestedScrollView
+            android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <!--大盘-->
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_market"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/stock_market_divider"
-                app:layoutManager="android.support.v7.widget.GridLayoutManager"
-                app:spanCount="2" />
-
-            <!--头条轮播-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:paddingRight="15dp"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="8dp"
-                    android:adjustViewBounds="true"
-                    android:src="@mipmap/market_tips"
-                    android:contentDescription="@null" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="8dp"
-                    android:background="@color/stock_text_gray" />
-
-                <ViewFlipper
-                    android:id="@+id/flipper_ad"
+                <!--大盘-->
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_market"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:flipInterval="2000"/>
+                    android:layout_height="wrap_content"
+                    android:background="@color/stock_market_divider"
+                    app:layoutManager="android.support.v7.widget.GridLayoutManager"
+                    app:spanCount="2" />
+
+                <!--头条轮播-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingEnd="15dp"
+                    android:paddingStart="0dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="8dp"
+                        android:adjustViewBounds="true"
+                        android:contentDescription="@null"
+                        android:src="@mipmap/market_tips" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        android:background="@color/stock_text_gray" />
+
+                    <AdapterViewFlipper
+                        android:id="@+id/flipper_ad"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:autoStart="true"
+                        android:flipInterval="2000" />
+
+                </LinearLayout>
+
+                <!--热门行业-->
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_hot"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/stock_market_divider"
+                    app:layoutManager="android.support.v7.widget.GridLayoutManager"
+                    app:spanCount="3" />
+
+                <!--涨幅榜、跌幅榜、换手率、振幅榜-->
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_sort_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
             </LinearLayout>
+        </cn.gogoal.im.ui.view.CustomNestedScrollView>
 
-            <!--热门行业-->
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_hot"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="android.support.v7.widget.GridLayoutManager"
-                app:spanCount="3" />
-
-            <!--涨幅榜、跌幅榜、换手率、振幅榜-->
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_sort_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
-
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

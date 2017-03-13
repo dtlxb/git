@@ -56,6 +56,7 @@
     <color name="stock_market_bg">#EFEFF4</color>
     <color name="stock_market_divider">#F0F5FB</color>
     <color name="stock_green">#0CB709</color>
+    <color name="stockItemPress">#E2E7EC</color>
     <color name="stock_red">#E85043</color>
     <color name="stock_list_more">#0095FF</color>
     <color name="stock_text_black">#333333</color>

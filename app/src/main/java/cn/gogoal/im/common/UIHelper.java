@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.design.widget.Snackbar;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
@@ -256,6 +257,14 @@ public class UIHelper {
                     }
                 }
             });
+        }
+    }
+    public static void setRippBg(View view){
+        if (view!=null) {
+            TypedValue typedValue = new TypedValue();
+            view.getContext().getTheme().resolveAttribute(
+                    android.R.attr.selectableItemBackground,typedValue,true);
+            view.setBackgroundResource(typedValue.resourceId);
         }
     }
 }

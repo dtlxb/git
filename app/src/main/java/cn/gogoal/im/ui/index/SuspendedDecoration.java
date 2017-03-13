@@ -21,13 +21,17 @@ import cn.gogoal.im.R;
  * phone 18930640263
  */
 public class SuspendedDecoration extends RecyclerView.ItemDecoration {
+
     private List<? extends ISuspensionInterface> mDatas;
+
     private Paint mPaint;
+
     private Rect mBounds;//用于存放测量文字Rect
 
     private int mTitleHeight;//title的高
     //分组背景
     private static int COLOR_TITLE_BG;
+
     //分组字体颜色
     private static int COLOR_TITLE_FONT = Color.parseColor("#FF888888");
 
@@ -40,18 +44,18 @@ public class SuspendedDecoration extends RecyclerView.ItemDecoration {
         mDatas = datas;
         mPaint = new Paint();
         mBounds = new Rect();
+        //分组title高度
         mTitleHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, context.getResources().getDisplayMetrics());
+        //分组中字体大小
         int mTitleFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, context.getResources().getDisplayMetrics());
         mPaint.setTextSize(mTitleFontSize);
         mPaint.setAntiAlias(true);
     }
 
-
     public SuspendedDecoration setmTitleHeight(int mTitleHeight) {
         this.mTitleHeight = mTitleHeight;
         return this;
     }
-
 
     public SuspendedDecoration setColorTitleBg(int colorTitleBg) {
         COLOR_TITLE_BG = colorTitleBg;
@@ -166,7 +170,8 @@ public class SuspendedDecoration extends RecyclerView.ItemDecoration {
             c.drawText(tag, child.getPaddingLeft(),
                     parent.getPaddingTop() + mTitleHeight - (mTitleHeight / 2 - mBounds.height() / 2),
                     mPaint);
-        }catch (NullPointerException e) {
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
 
         if (flag)
