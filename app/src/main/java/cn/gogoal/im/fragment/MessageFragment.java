@@ -4,6 +4,7 @@ package cn.gogoal.im.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -41,6 +42,7 @@ import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.ui.view.XTitle;
 
 /**
  * 消息
@@ -52,6 +54,8 @@ public class MessageFragment extends BaseFragment {
     private List<IMMessageBean> IMMessageBeans = new ArrayList<>();
     private ListAdapter listAdapter;
     private JSONArray jsonArray;
+    private XTitle xTitle;
+
 
     public MessageFragment() {
     }
@@ -63,7 +67,8 @@ public class MessageFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle(R.string.title_message);
+        xTitle = setFragmentTitle(R.string.title_message);
+        initTitle();
     }
 
     @Override
@@ -73,7 +78,7 @@ public class MessageFragment extends BaseFragment {
         jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
         IMMessageBeans.clear();
 
-        initRecycleView(message_recycler, 0);
+        initRecycleView(message_recycler, R.drawable.shape_divider_recyclerview_1px);
 
         if (null != jsonArray) {
             IMMessageBeans = JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class);
@@ -150,6 +155,24 @@ public class MessageFragment extends BaseFragment {
             }
         });
 
+    }
+
+    private void initTitle() {
+        //添加action
+        XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_person)) {
+            @Override
+            public void actionClick(View view) {
+
+            }
+        };
+        XTitle.ImageAction addAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_add_message)) {
+            @Override
+            public void actionClick(View view) {
+
+            }
+        };
+        xTitle.addAction(personAction, 0);
+        xTitle.addAction(addAction, 1);
     }
 
     class ListAdapter extends CommonAdapter<IMMessageBean> {
@@ -229,7 +252,7 @@ public class MessageFragment extends BaseFragment {
                 IMMessageBeans.get(i).setUnReadCounts(unreadmessage + "");
 
                 //头像暂时未保存
-                IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), CalendarUtils.getCurrentTime(),
+                IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), message.getTimestamp(),
                         "0", message.getFrom(), AppConst.LEANCLOUD_APP_ID, "", message);
 
                 isTheSame = true;
@@ -248,7 +271,7 @@ public class MessageFragment extends BaseFragment {
             imMessageBean.setUnReadCounts(unRead + "");
 
             //头像暂时未保存
-            IMMessageBean unKonwimMessageBean = new IMMessageBean(conversation.getConversationId(), CalendarUtils.getCurrentTime(),
+            IMMessageBean unKonwimMessageBean = new IMMessageBean(conversation.getConversationId(), message.getTimestamp(),
                     "0", message.getFrom(), AppConst.LEANCLOUD_APP_ID, "", message);
             IMMessageBeans.add(imMessageBean);
             MessageUtils.saveMessageInfo(jsonArray, unKonwimMessageBean);

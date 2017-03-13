@@ -41,6 +41,7 @@ import java.util.Map;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.IMChatAdapter;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.BaseMessage;
@@ -136,15 +137,14 @@ public class ChatFragment extends BaseFragment {
                     @Override
                     public void success(List<String> uriPaths, boolean isOriginalPic) {
                         if (uriPaths != null) {
-                            //返回的图片集合不为空，执行上传操作
+                            /*//返回的图片集合不为空，执行上传操作
                             if (isOriginalPic) {
-                                doUpload(uriPaths);
                                 //批量发送至公司后台
-                                sendImageToZyyx(uriPaths);
+                                doUpload(uriPaths);
                             } else {
-                                //压缩后上传
-                                compressPhoto(uriPaths);
-                            }
+                            }*/
+                            //压缩后上传
+                            compressPhoto(uriPaths);
                         }
                     }
 
@@ -160,7 +160,6 @@ public class ChatFragment extends BaseFragment {
         send_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 //显示自己的文字消息
                 AVIMTextMessage mTextMessage = new AVIMTextMessage();
                 HashMap<String, Object> attrsMap = new HashMap<>();
@@ -319,7 +318,7 @@ public class ChatFragment extends BaseFragment {
                             break;
                     }
                     //头像暂时未保存
-                    IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), CalendarUtils.getCurrentTime(),
+                    IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), message.getTimestamp(),
                             "0", contactBean.getNickname(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
 
                     MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
@@ -333,54 +332,6 @@ public class ChatFragment extends BaseFragment {
         };
         new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
 
-    }
-
-    private void sendImageToZyyx(List<String> uriPaths) {
-        for (int i = 0; i < uriPaths.size(); i++) {
-            //图片宽高处理
-            Bitmap bitmap = BitmapFactory.decodeFile(uriPaths.get(i));
-            int width = bitmap.getWidth();
-            int height = bitmap.getHeight();
-
-            //封装一个AVfile对象
-            HashMap<String, Object> metaData = new HashMap<>();
-            metaData.put("width", width);
-            metaData.put("height", height);
-            AVFile imagefile = new AVFile("imagefile", uriPaths.get(i), metaData);
-
-            //显示自己的图片消息
-            HashMap<String, Object> attrsMap = new HashMap<>();
-            attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
-            AVIMImageMessage mImageMessage = new AVIMImageMessage(imagefile);
-            mImageMessage.setFrom(AppConst.LEAN_CLOUD_TOKEN);
-            mImageMessage.setAttrs(attrsMap);
-            mImageMessage.setTimestamp(CalendarUtils.getCurrentTime());
-
-            imChatAdapter.addItem(mImageMessage);
-            message_recycler.smoothScrollToPosition(messageList.size());
-
-            //图片消息基本信息
-            Map<Object, Object> messageMap = new HashMap<>();
-            messageMap.put("_lctype", "-2");
-            messageMap.put("_lctext", "");
-            messageMap.put("_lcattrs", AVImClientManager.getInstance().userBaseInfo());
-            messageMap.put("url", uriPaths.get(i));
-            messageMap.put("name", uriPaths.get(i));
-            messageMap.put("format", "jpg");
-            messageMap.put("height", String.valueOf(height));
-            messageMap.put("width", String.valueOf(width));
-            messageMap.put("size", "");
-
-            Map<String, String> params = new HashMap<>();
-            params.put("token", AppConst.LEAN_CLOUD_TOKEN);
-            params.put("chat_type", imConversation.getAttribute("chat_type") == null ? "1001" : imConversation.getAttribute("chat_type").toString());
-            params.put("conv_id", imConversation.getConversationId());
-            params.put("message", JSONObject.toJSON(messageMap).toString());
-            KLog.e(params);
-
-            //发送图片消息
-            sendAVIMMessage(IMAGE_MESSAGE, params, mImageMessage);
-        }
     }
 
     private void compressPhoto(List<String> uriPaths) {
@@ -398,66 +349,7 @@ public class ChatFragment extends BaseFragment {
 
                         @Override
                         public void onSuccess(final File file) {
-                            //分个上传UFile;
-                            UFileUpload.getInstance().upload(file, UFileUpload.Type.IMAGE, new UFileUpload.UploadListener() {
-                                @Override
-                                public void onUploading(int progress) {
-
-                                }
-
-                                @Override
-                                public void onSuccess(String onlineUri) {
-                                    KLog.e(file.getPath());
-                                    //图片宽高处理
-                                    Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
-                                    int width = bitmap.getWidth();
-                                    int height = bitmap.getHeight();
-
-                                    //封装一个AVfile对象
-                                    HashMap<String, Object> metaData = new HashMap<>();
-                                    metaData.put("width", width);
-                                    metaData.put("height", height);
-                                    AVFile imagefile = new AVFile("imagefile", file.getPath(), metaData);
-
-                                    //显示自己的图片消息
-                                    HashMap<String, Object> attrsMap = new HashMap<>();
-                                    attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
-                                    AVIMImageMessage mImageMessage = new AVIMImageMessage(imagefile);
-                                    mImageMessage.setFrom(AppConst.LEAN_CLOUD_TOKEN);
-                                    mImageMessage.setAttrs(attrsMap);
-                                    mImageMessage.setTimestamp(CalendarUtils.getCurrentTime());
-
-                                    imChatAdapter.addItem(mImageMessage);
-                                    message_recycler.smoothScrollToPosition(messageList.size());
-
-                                    //图片消息基本信息
-                                    Map<Object, Object> messageMap = new HashMap<>();
-                                    messageMap.put("_lctype", "-2");
-                                    messageMap.put("_lctext", "");
-                                    messageMap.put("_lcattrs", AVImClientManager.getInstance().userBaseInfo());
-                                    messageMap.put("url", onlineUri);
-                                    messageMap.put("name", file.getPath());
-                                    messageMap.put("format", "jpg");
-                                    messageMap.put("height", String.valueOf(height));
-                                    messageMap.put("width", String.valueOf(width));
-                                    messageMap.put("size", "");
-
-                                    Map<String, String> params = new HashMap<>();
-                                    params.put("token", AppConst.LEAN_CLOUD_TOKEN);
-                                    params.put("conv_id", imConversation.getConversationId());
-                                    params.put("chat_type", imConversation.getAttribute("chat_type") == null ? "1001" : imConversation.getAttribute("chat_type").toString());
-                                    params.put("message", JSONObject.toJSON(messageMap).toString());
-                                    KLog.e(params);
-
-                                    //发送图片消息
-                                    sendAVIMMessage(IMAGE_MESSAGE, params, mImageMessage);
-                                }
-
-                                @Override
-                                public void onFailed() {
-
-                                }
-                            });
+                            sendImageToZyyx(file);
                         }
 
                         @Override
@@ -468,56 +360,75 @@ public class ChatFragment extends BaseFragment {
         }
     }
 
-    private void doUpload(final List<String> uriPaths) {
-        final ProgressDialog[] waitDialog = new ProgressDialog[1];
+    private void sendImageToZyyx(final File file) {
+        KLog.e(file.getPath());
+        //图片宽高处理
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+        final int width = bitmap.getWidth();
+        final int height = bitmap.getHeight();
 
-        waitDialog[0] = DialogHelp.getWaitDialog(getContext(), "上传中...");
-        waitDialog[0].setCanceledOnTouchOutside(false);
-        waitDialog[0].show();
+        //封装一个AVfile对象
+        HashMap<String, Object> metaData = new HashMap<>();
+        metaData.put("width", width);
+        metaData.put("height", height);
+        AVFile imagefile = new AVFile("imagefile", file.getPath(), metaData);
 
+        //显示自己的图片消息
+        HashMap<String, Object> attrsMap = new HashMap<>();
+        attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
+        final AVIMImageMessage mImageMessage = new AVIMImageMessage(imagefile);
+        mImageMessage.setFrom(AppConst.LEAN_CLOUD_TOKEN);
+        mImageMessage.setAttrs(attrsMap);
+        mImageMessage.setTimestamp(CalendarUtils.getCurrentTime());
 
-        AsyncTaskUtil.doAsync(new AsyncTaskUtil.AsyncCallBack() {
+        imChatAdapter.addItem(mImageMessage);
+        message_recycler.smoothScrollToPosition(messageList.size());
+
+        //分个上传UFile;
+        UFileUpload.getInstance().upload(file, UFileUpload.Type.IMAGE, new UFileUpload.UploadListener() {
             @Override
-            public void onPreExecute() {
+            public void onUploading(int progress) {
 
             }
 
             @Override
-            public void doInBackground() {
-                UFileUpload.getInstance().upload(new File(uriPaths.get(0)), UFileUpload.Type.IMAGE, new UFileUpload.UploadListener() {
+            public void onSuccess(String onlineUri) {
 
-                    @Override
-                    public void onUploading(final int progress) {
-                        KLog.e("上传进度===" + progress);
-                    }
 
-                    @Override
-                    public void onSuccess(String onlineUri) {
-                        KLog.e("上传成功===" + onlineUri);
-                        waitDialog[0].cancel();
-                    }
+                //图片消息基本信息
+                Map<Object, Object> messageMap = new HashMap<>();
+                messageMap.put("_lctype", "-2");
+                messageMap.put("_lctext", "");
+                messageMap.put("_lcattrs", AVImClientManager.getInstance().userBaseInfo());
+                messageMap.put("url", onlineUri);
+                messageMap.put("name", file.getPath());
+                messageMap.put("format", "jpg");
+                messageMap.put("height", String.valueOf(height));
+                messageMap.put("width", String.valueOf(width));
+                messageMap.put("size", "");
 
-                    @Override
-                    public void onFailed() {
-                        KLog.e("上传失败!!!!!!");
-                    }
-                });
+                Map<String, String> params = new HashMap<>();
+                params.put("token", AppConst.LEAN_CLOUD_TOKEN);
+                params.put("conv_id", imConversation.getConversationId());
+                params.put("chat_type", imConversation.getAttribute("chat_type") == null ? "1001" : imConversation.getAttribute("chat_type").toString());
+                params.put("message", JSONObject.toJSON(messageMap).toString());
+                KLog.e(params);
+
+                //发送图片消息
+                sendAVIMMessage(IMAGE_MESSAGE, params, mImageMessage);
             }
 
             @Override
-            public void onPostExecute() {
-
+            public void onFailed() {
+                UIHelper.toast(getActivity(), "消息发送失败！");
             }
         });
+    }
 
-        /*HashMap<String, Object> attrsMap = new HashMap<String, Object>();
-        attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
-        attrsMap.put("url", AppConst.LEAN_CLOUD_TOKEN);
-        final AVIMImageMessage msg = new AVIMImageMessage();
-        msg.setAttrs(attrsMap);
-
-        imChatAdapter.addItem(msg);
-        message_recycler.smoothScrollToPosition(messageList.size());*/
+    private void doUpload(final List<String> uriPaths) {
+        for (int i = 0; i < uriPaths.size(); i++) {
+            sendImageToZyyx(new File(uriPaths.get(i)));
+        }
     }
 
     private void sendVoiceToUCloud(final String voicePath) {
@@ -529,6 +440,29 @@ public class ChatFragment extends BaseFragment {
 
             @Override
             public void doInBackground() {
+
+                //自己显示语音消息
+                HashMap<String, Object> attrsMap = new HashMap<>();
+                attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
+
+                //封装一个AVfile对象
+                HashMap<String, Object> metaData = new HashMap<>();
+                metaData.put("duration", duration);
+                AVFile Audiofile = new AVFile("Audiofile", voicePath, metaData);
+
+                final AVIMAudioMessage mAudioMessage = new AVIMAudioMessage(Audiofile);
+
+                KLog.e(mAudioMessage.getAVFile().getUrl());
+                mAudioMessage.setFrom(AppConst.LEAN_CLOUD_TOKEN);
+                mAudioMessage.setAttrs(attrsMap);
+                mAudioMessage.setTimestamp(CalendarUtils.getCurrentTime());
+
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("audio_message", mAudioMessage);
+                BaseMessage baseMessage = new BaseMessage("audio_info", map);
+                AppManager.getInstance().sendMessage("refresh_recyle", baseMessage);
+                message_recycler.smoothScrollToPosition(messageList.size());
+
                 UFileUpload.getInstance().upload(new File(voicePath), UFileUpload.Type.AUDIO, new UFileUpload.UploadListener() {
                     @Override
                     public void onUploading(int progress) {
@@ -537,25 +471,6 @@ public class ChatFragment extends BaseFragment {
 
                     @Override
                     public void onSuccess(String onlineUri) {
-
-                        //自己显示语音消息
-                        HashMap<String, Object> attrsMap = new HashMap<>();
-                        attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
-
-                        //封装一个AVfile对象
-                        HashMap<String, Object> metaData = new HashMap<>();
-                        metaData.put("duration", duration);
-                        AVFile Audiofile = new AVFile("Audiofile", voicePath, metaData);
-
-                        AVIMAudioMessage mAudioMessage = new AVIMAudioMessage(Audiofile);
-
-                        KLog.e(mAudioMessage.getAVFile().getUrl());
-                        mAudioMessage.setFrom(AppConst.LEAN_CLOUD_TOKEN);
-                        mAudioMessage.setAttrs(attrsMap);
-                        mAudioMessage.setTimestamp(CalendarUtils.getCurrentTime());
-
-                        imChatAdapter.addItem(mAudioMessage);
-                        message_recycler.smoothScrollToPosition(messageList.size());
 
                         //语音消息基本信息
                         Map<Object, Object> messageMap = new HashMap<>();
@@ -579,7 +494,7 @@ public class ChatFragment extends BaseFragment {
 
                     @Override
                     public void onFailed() {
-
+                        UIHelper.toast(getActivity(), "消息发送失败！");
                     }
                 });
             }
@@ -608,13 +523,13 @@ public class ChatFragment extends BaseFragment {
                         if (messageList.size() > 0 && null != contactBean) {
                             AVIMMessage lastMessage = messageList.get(messageList.size() - 1);
 
-
-                            IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), CalendarUtils.getCurrentTime(),
+                            IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), lastMessage.getTimestamp(),
                                     "0", contactBean.getNickname(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), lastMessage);
 
                             MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
                         }
 
+                        imChatAdapter.setChatType(imConversation.getAttribute("chat_type") == null ? "1001" : imConversation.getAttribute("chat_type").toString());
                         imChatAdapter.notifyDataSetChanged();
                         message_recycler.smoothScrollToPosition(messageList.size());
                     }
@@ -672,6 +587,12 @@ public class ChatFragment extends BaseFragment {
         }
     }
 
+    @Subscriber(tag = "refresh_recyle")
+    public void audioRefresh(BaseMessage message) {
+        AVIMAudioMessage audioMessage = (AVIMAudioMessage) message.getOthers().get("audio_message");
+        imChatAdapter.addItem(audioMessage);
+    }
+
     /**
      * 消息接收
      */
@@ -688,10 +609,7 @@ public class ChatFragment extends BaseFragment {
                 message_recycler.smoothScrollToPosition(messageList.size());
 
                 //此处头像，昵称日后有数据再改
-                /*IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), String.valueOf(CalendarUtils.getCurrentTime()),
-                        "0", imConversation.getMembers(), message.getFrom(), message.getFrom(), "", message);*/
-
-                IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), CalendarUtils.getCurrentTime(),
+                IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), message.getTimestamp(),
                         "0", message.getFrom(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
 
                 MessageUtils.saveMessageInfo(jsonArray, imMessageBean);

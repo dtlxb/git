@@ -368,7 +368,6 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         View view;
         if (TextUtils.isEmpty(action.getText())) {
             ImageView img = new ImageView(getContext());
-            img.setBackgroundColor(Color.RED);
             img.setImageDrawable(action.getDrawable());
             view = img;
         } else {

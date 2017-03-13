@@ -51,6 +51,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     private List<AVIMMessage> messageList;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
+    private String chatType;
 
     public IMChatAdapter(Context mContext, List<AVIMMessage> messageList) {
         this.mLayoutInflater = LayoutInflater.from(mContext);
@@ -86,6 +87,14 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
         AVIMMessage avimMessage = messageList.get(position);
 
+        if (chatType.equals("1001")) {
+            ((IMCHatViewHolder) holder).user_name.setVisibility(View.GONE);
+        } else if (chatType.equals("1002")) {
+            ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
+        } else {
+            ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
+        }
+
         if (holder instanceof LeftTextViewHolder) {
             AVIMTextMessage textMessage = (AVIMTextMessage) avimMessage;
             ((LeftTextViewHolder) holder).user_name.setText((String) textMessage.getAttrs().get("username"));
@@ -119,7 +128,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             setImageSize(params, imageMessage);
             ((RightImageViewHolder) holder).image_user_send.setLayoutParams(params);
             ImageDisplay.loadNetImage(mContext, imageMessage.getAVFile().getUrl(), ((RightImageViewHolder) holder).image_user_send);
-
+            KLog.e(imageMessage.getAVFile().getUrl());
             showMessageTime(position, ((RightImageViewHolder) holder).message_time);
 
         } else if (holder instanceof RightAudioViewHolder) {
@@ -129,6 +138,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             int mMaxItemWidth = (int) (AppDevice.getWidth(mContext) * 0.7f);
             int mMinItemWidth = (int) (AppDevice.getWidth(mContext) * 0.16f);
             params.width = (int) (mMinItemWidth + (mMaxItemWidth / 60f) * ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue());
+
             ((RightAudioViewHolder) holder).recorder_length.setLayoutParams(params);
             //设置语音时长
             ((RightAudioViewHolder) holder).recorder_time.setText((int) ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue() + "\"");
@@ -154,10 +164,15 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         } else if (holder instanceof LeftAudioViewHolder) {
             final AVIMAudioMessage audioMessage = (AVIMAudioMessage) avimMessage;
             //设置语音宽度
-            final ViewGroup.LayoutParams params = ((LeftAudioViewHolder) holder).recorder_length.getLayoutParams();
+            final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((LeftAudioViewHolder) holder).recorder_length.getLayoutParams();
             int mMaxItemWidth = (int) (AppDevice.getWidth(mContext) * 0.7f);
             int mMinItemWidth = (int) (AppDevice.getWidth(mContext) * 0.16f);
             params.width = (int) (mMinItemWidth + (mMaxItemWidth / 60f) * ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue());
+            if (chatType.equals("1001")) {
+                params.setMargins(0, 0, 0, 0);
+            } else if (chatType.equals("1002")) {
+                params.setMargins(0, AppDevice.dp2px(mContext, 13), 0, 0);
+            }
             ((LeftAudioViewHolder) holder).recorder_length.setLayoutParams(params);
             //设置语音时长
             ((LeftAudioViewHolder) holder).recorder_time.setText((int) ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue() + "\"");
@@ -246,6 +261,14 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
     }
 
+    public String getChatType() {
+        return chatType;
+    }
+
+    public void setChatType(String chatType) {
+        this.chatType = chatType;
+    }
+
     //消息来了
     public void addItem(AVIMMessage message) {
         messageList.add(message);
@@ -255,7 +278,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     //时间处理
     public boolean showTime(Long lastTime, Long rightNow) {
         Long timeDiffer = rightNow - lastTime;
-        KLog.e(timeDiffer);
         if (timeDiffer >= 5 * 60 * 1000) {
             return true;
         } else {
