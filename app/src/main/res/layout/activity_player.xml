@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/shape_player_market_interpre"
-                android:text="市场解读"
+                android:text="@string/textBlank"
                 android:textColor="@android:color/white"
                 android:textSize="11dp" />
 

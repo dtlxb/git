@@ -61,7 +61,7 @@
             android:id="@+id/relater_tittle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="证券投资基金课堂证券投资基金课堂证券投"
+            android:text="@string/textBlank"
             android:textColor="@color/textColor_333333"
             android:textSize="16dp" />
 
@@ -73,7 +73,7 @@
             android:drawableLeft="@mipmap/play_count"
             android:drawablePadding="6dp"
             android:gravity="center_vertical"
-            android:text="1.5万次"
+            android:text="@string/textBlank"
             android:textColor="@color/relater_play_count"
             android:textSize="12dp" />
 
@@ -88,8 +88,7 @@
                 android:layout_height="20dp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:scaleType="fitXY"
-                android:src="@mipmap/play_count" />
+                android:scaleType="fitXY" />
 
             <TextView
                 android:id="@+id/relater_name"
@@ -98,7 +97,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="3dp"
                 android:layout_toRightOf="@+id/relater_avatar"
-                android:text="孙永刚"
+                android:text="@string/textBlank"
                 android:textColor="@color/relater_play_count"
                 android:textSize="12dp" />
 
@@ -108,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="中国私募基金风云榜"
+                android:text="@string/textBlank"
                 android:textColor="@color/relater_play_count"
                 android:textSize="12dp" />
 

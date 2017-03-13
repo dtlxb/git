@@ -63,6 +63,7 @@ import cn.gogoal.im.bean.RelaterVideoData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.common.GGOKHTTP.GGAPI;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
@@ -150,9 +151,12 @@ public class PlayerActivity extends BaseActivity {
     private AVIMConversation imConversation;
 
     private String live_id;
+    private String live_type;
 
     //直播介绍
     private JSONObject anchor;
+    //直播相关视频
+    List<RelaterVideoData> videoDatas = new ArrayList<RelaterVideoData>();
 
     private Handler mTimerHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -215,6 +219,8 @@ public class PlayerActivity extends BaseActivity {
         recyler_chat.setAdapter(mLiveChatAdapter);
 
         getPlayerInfo();
+
+        getRelaterVideoInfo();
     }
 
     /*
@@ -233,11 +239,11 @@ public class PlayerActivity extends BaseActivity {
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONArray("data").getJSONObject(0);
                     //直播详情
-                    textTitle.setText(data.getString("video_name"));
-                    ImageDisplay.loadNetImage(getContext(), data.getString("introduction_img"), imgPalyer);
+                    textTitle.setText(data.getString("video_name")); //直播名称
+                    ImageDisplay.loadCircleNetImage(getContext(), data.getString("introduction_img"), imgPalyer);
                     textCompany.setText(data.getString("朝阳永续"));
-                    textMarInter.setText(data.getString("group_name"));
-                    textOnlineNumber.setText("11234人在线");
+                    textMarInter.setText(data.getString("programme_name"));
+                    textOnlineNumber.setText(data.getString("play_base") + "人在线");
                     //主播介绍
                     anchor = data.getJSONObject("anchor");
                     //倒计时
@@ -249,6 +255,7 @@ public class PlayerActivity extends BaseActivity {
                         countDownTimer.setVisibility(View.GONE);
                     }
 
+                    live_type = data.getString("live_type");
                     mURI = data.getString("url_rtmp");
 
                 } else {
@@ -928,10 +935,11 @@ public class PlayerActivity extends BaseActivity {
                 showAnchorProfiles();
                 break;
             case R.id.imgPlayerRelaterVideo: //相关视频
+
                 showRelaterVideo();
                 break;
             case R.id.imgPlayerShare: //分享
-                DialogHelp.showShareDialog(getContext(), "https://m.baidu.com", "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
+                DialogHelp.showShareDialog(getContext(), GGAPI.WEB_URL + "/live/share/" + live_id, "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
                 break;
             case R.id.imgPlayerShotCut:
                 break;
@@ -1000,9 +1008,7 @@ public class PlayerActivity extends BaseActivity {
         RecyclerView recy_relater = (RecyclerView) dialogView.findViewById(R.id.recy_relater);
         initRecycleView(recy_relater, null);
 
-        ArrayList<RelaterVideoData> data = new ArrayList<>();
-
-        RelaterVideoAdapter adapter = new RelaterVideoAdapter(getContext(), data);
+        RelaterVideoAdapter adapter = new RelaterVideoAdapter(getContext(), videoDatas);
 
         recy_relater.setAdapter(adapter);
 
@@ -1012,6 +1018,38 @@ public class PlayerActivity extends BaseActivity {
 
             }
         });
+    }
+
+    /*
+    * 获取直播相关视频
+    * */
+    private void getRelaterVideoInfo() {
+
+        Map<String, String> param = new HashMap<>();
+        param.put("video_id", live_id);
+        param.put("video_type", live_type);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    videoDatas = JSONObject.parseArray(String.valueOf(object.getJSONArray("data")), RelaterVideoData.class);
+                } else if (object.getIntValue("code") == 1001) {
+                    UIHelper.toast(getContext(), R.string.nodata_hint);
+                } else {
+                    UIHelper.toast(getContext(), R.string.net_erro_hint);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                KLog.json(msg);
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.GET_RELATED_VIDEO, ggHttpInterface).startGet();
     }
 
     class RelaterVideoAdapter extends CommonAdapter<RelaterVideoData> {
@@ -1024,6 +1062,19 @@ public class PlayerActivity extends BaseActivity {
         protected void convert(ViewHolder holder, final RelaterVideoData data, int position) {
 
             holder.setAlpha(R.id.text_playback, (float) 0.5);
+            if (data.getType() == 1) {
+                holder.setVisible(R.id.relative_player, true);
+            } else {
+                holder.setVisible(R.id.relative_player, false);
+            }
+            ImageView relater_img = holder.getView(R.id.relater_img);
+            ImageDisplay.loadNetImage(getContext(), data.getVideo_img_url(), relater_img);
+            holder.setText(R.id.relater_tittle, data.getVideo_name());
+            holder.setText(R.id.relater_play_count, data.getPlay_base() + "次");
+            ImageView relater_avatar = holder.getView(R.id.relater_avatar);
+            ImageDisplay.loadCircleNetImage(getContext(), data.getFace_url(), relater_avatar);
+            holder.setText(R.id.relater_name, data.getAnchor_name());
+            holder.setText(R.id.relater_content, data.getProgramme_name());
         }
     }
 
