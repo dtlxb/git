@@ -93,6 +93,7 @@ public class ContactsFragment extends BaseFragment {
                 Intent intent = new Intent(getContext(), SingleChatRoomActivity.class);
                 intent.putExtra("friend_id", contactBeanList.get(position).getFriend_id() + "");
                 intent.putExtra("conversation_id", contactBeanList.get(position).getConv_id());
+                intent.putExtra("nickname", contactBeanList.get(position).getNickname());
                 startActivity(intent);
             }
 

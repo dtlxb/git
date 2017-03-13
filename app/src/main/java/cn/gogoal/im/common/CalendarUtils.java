@@ -437,4 +437,12 @@ public class CalendarUtils {
     public static long getCurrentTime() {
         return System.currentTimeMillis();
     }
+
+    /**
+     * 获取当前时间的时间戳
+     */
+    public static String getCurrentTime(String originFormat) {
+        SimpleDateFormat df = new SimpleDateFormat(originFormat, Locale.CHINA);
+        return df.format(System.currentTimeMillis());
+    }
 }
