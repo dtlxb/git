@@ -48,6 +48,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
+                android:layout_gravity="center_vertical"
                 android:text="@string/textBlank"
                 android:textColor="@android:color/white"
                 android:textSize="14dp" />
@@ -82,6 +83,7 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/imgPalyer"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:background="@mipmap/player_chat" />
@@ -96,12 +98,12 @@
                 android:textSize="12dp" />
 
             <TextView
-                android:id="@+id/textMarketInterpre"
+                android:id="@+id/textMarInter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/shape_player_market_interpre"
-                android:text="市场解读"
+                android:text="@string/textBlank"
                 android:textColor="@android:color/white"
                 android:textSize="11dp" />
 
@@ -147,6 +149,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/linearPlayerChat"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

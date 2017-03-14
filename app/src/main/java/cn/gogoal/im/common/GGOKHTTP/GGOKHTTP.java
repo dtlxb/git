@@ -54,8 +54,25 @@ public class GGOKHTTP {
 
     /*
     * 直播详情
+    * live_id
     * */
     public static final String GET_STUDIO_LIST = "v1/video_studio/get_studio_list";
+
+    /*
+    * 录播详情
+    * live_id
+    * */
+    public static final String GET_RECORD_LIST = "v1/video_studio/get_record_list";
+
+    /*
+    * 相关视频
+    * video_id
+    * video_type
+    * rows
+    * */
+    public static final String GET_RELATED_VIDEO = "v1/video_studio/get_related_video";
+
+
 
     /**
      * 好友列表

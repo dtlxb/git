@@ -15,6 +15,10 @@ android {
 
     buildToolsVersion rootProject.ext.buildToolsVersion
 
+    /*dexOptions {
+        javaMaxHeapSize "4g"
+    }*/
+
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
@@ -22,9 +26,16 @@ android {
         versionName rootProject.ext.versionName
         applicationId rootProject.ext.applicationId
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+
+        manifestPlaceholders = [
+                GETUI_APP_ID    : "Kb4fbbPem39Psl4xC3ta34",
+                GETUI_APP_KEY   : "finYiVZzSaAGjpE0sTb9S4",
+                GETUI_APP_SECRET: "a6CrMypVHMArwEScTt43E4"
+        ]
 
         ndk {
-            abiFilters "armeabi", "arm64-v8a","x86"
+            abiFilters "armeabi", "armeabi-v7a", "x86_64"
         }
     }
     buildTypes {
@@ -69,7 +80,7 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     compile "com.android.support:appcompat-v7:$rootProject.ext.supportVersion"
     compile "com.android.support:design:$rootProject.ext.supportVersion"
-    /** 第三方依赖  */
+    /** 第三方依赖   */
     //微信登录、分享、支付依赖
     compile files('libs/libammsdk.jar')
     //网络请求
@@ -98,7 +109,7 @@ dependencies {
     //UCloud存储
     compile project(':uFileLib')
     //阿里云播放器
-    compile files('libs/alivc-player-2.2.0.20.jar')
+    compile files('libs/alivc-player-2.3.0.jar')
     //阿里云推流
     compile files('libs/alivc-live-record-v1.2.0.jar')
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
@@ -108,5 +119,7 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'
     compile 'top.zibin:Luban:1.0.9'
-
+    //个推
+    compile 'com.getui:sdk:2.9.5.0'
+    compile 'com.android.support:multidex:1.0.1'
 }

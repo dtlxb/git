@@ -23,6 +23,13 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <!-- iBeancon功能所需权限 -->;
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <!-- 个推3.0电子围栏功能所需权限 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:name=".base.MyApp"
         android:allowBackup="true"
@@ -43,6 +50,16 @@
             </intent-filter>
         </receiver>
         <!-- 实时通信模块 END -->
+
+        <!-- 配置SDK核心服务 -->
+        <service
+            android:name=".servise.PushService"
+            android:exported="true"
+            android:label="PushService"
+            android:process=":pushservice">
+        </service>
+
+        <service android:name=".servise.IntentService"/>
 
         <activity
             android:name="cn.gogoal.im.activity.MainActivity"
