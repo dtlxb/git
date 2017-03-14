@@ -62,8 +62,8 @@
 
         <activity
             android:name="cn.gogoal.im.activity.PlayerActivity"
-            android:theme="@style/TranslucentTheme"
-            android:configChanges="screenSize|keyboardHidden|orientation"/>
+            android:configChanges="screenSize|keyboardHidden|orientation"
+            android:theme="@style/TranslucentTheme" />
 
         <activity
             android:name="cn.gogoal.im.activity.FunctionActivity"
@@ -76,21 +76,32 @@
         <activity
             android:name="cn.gogoal.im.activity.SingleChatRoomActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <activity
             android:name="cn.gogoal.im.activity.IMRegisterActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
-        <activity android:name="cn.gogoal.im.activity.ChatRoomActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name="cn.gogoal.im.activity.IMAddFriendActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity"/>
+        <activity
+            android:name="cn.gogoal.im.activity.IMNewFrienActivity"
+            android:screenOrientation="portrait" />
 
-        <uses-library android:required="false" android:name="com.google.android.maps" />
+        <activity
+            android:name="cn.gogoal.im.activity.ChatRoomActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
 
-        <activity android:name="cn.gogoal.im.activity.stock.MarketActivity"/>
+        <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity" />
+
+        <uses-library
+            android:name="com.google.android.maps"
+            android:required="false" />
+
+        <activity android:name="cn.gogoal.im.activity.stock.MarketActivity" />
     </application>
 
 </manifest>
