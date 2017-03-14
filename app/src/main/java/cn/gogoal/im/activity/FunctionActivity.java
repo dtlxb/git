@@ -109,6 +109,7 @@ public class FunctionActivity extends BaseActivity {
 
                 Intent intent = new Intent(getContext(), PlayerActivity.class);
                 intent.putExtra("live_id", object.getString("live_id"));
+                intent.putExtra("source", object.getString("source"));
                 startActivity(intent);
             }
         });
