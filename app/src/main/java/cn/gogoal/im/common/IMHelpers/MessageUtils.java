@@ -66,4 +66,12 @@ public class MessageUtils {
 
         }
     }
+
+    public static void removeMessageInfo(int position) {
+        JSONArray jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
+        if (null != jsonArray) {
+            jsonArray.remove(position);
+        }
+        SPTools.saveJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", jsonArray);
+    }
 }

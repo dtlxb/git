@@ -9,6 +9,7 @@
     <color name="textColor_333333">#333333</color> <!--主字黑-->
     <color name="textColor_999999">#999999</color> <!--字亮灰-->
     <color name="textColor_666666">#666666</color> <!--字深灰-->
+    <color name="textColor_cccccc">#cccccc</color> <!--字背景灰-->
 
     <!--绘图涉及的颜色-->
     <color name="decision_tab">#1a79ff</color>

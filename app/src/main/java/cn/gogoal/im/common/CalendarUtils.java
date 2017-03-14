@@ -203,7 +203,7 @@ public class CalendarUtils {
     public static String parseStampToDate(String sec) {
         if (!TextUtils.isEmpty(sec)) {
             return parseDateFormatAll(Long.parseLong(sec));
-        }else {
+        } else {
             return null;
         }
     }
@@ -213,8 +213,9 @@ public class CalendarUtils {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         return format.format(dateMill);
     }
+
     //时间毫秒值转成yyyy-MM-dd HH:mm:ss格式
-    public static String parseDateFormatAll(long dateMill,String formatString) {
+    public static String parseDateFormatAll(long dateMill, String formatString) {
         SimpleDateFormat format = new SimpleDateFormat(formatString, Locale.CHINA);
         return format.format(dateMill);
     }
@@ -235,6 +236,22 @@ public class CalendarUtils {
     public static String parseDateFormat(long dateMill) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         return format.format(dateMill).substring(0, 10);
+    }
+
+    //IM消息时间显示格式
+    public static String parseDateIMMessageFormat(long dateMill) {
+
+        long diff = dateMill - getCurrentTime();
+        SimpleDateFormat format = null;
+        if (diff > year) {
+            format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        } else if (diff > day) {
+            format = new SimpleDateFormat("MM-dd", Locale.CHINA);
+        } else {
+            format = new SimpleDateFormat("HH:mm", Locale.CHINA);
+        }
+
+        return format.format(dateMill);
     }
 
     //传入一个标准的完整时间戳，返回时、分
@@ -413,10 +430,19 @@ public class CalendarUtils {
         }
         return true;
     }
+
     /**
-    * 获取当前时间的时间戳
-    * */
-    public static String getCurrentTime(String formatString){
-        return parseDateFormatAll(System.currentTimeMillis(),formatString);
+     * 获取当前时间的时间戳
+     */
+    public static long getCurrentTime() {
+        return System.currentTimeMillis();
+    }
+
+    /**
+     * 获取当前时间的时间戳
+     */
+    public static String getCurrentTime(String originFormat) {
+        SimpleDateFormat df = new SimpleDateFormat(originFormat, Locale.CHINA);
+        return df.format(System.currentTimeMillis());
     }
 }

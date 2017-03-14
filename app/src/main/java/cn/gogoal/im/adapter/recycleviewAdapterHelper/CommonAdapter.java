@@ -39,7 +39,7 @@ public abstract class CommonAdapter<T> extends MultiItemTypeAdapter<T> {
         });
     }
 
-    public Context getmContext() {
+    public Context getContext() {
         return mContext;
     }
 

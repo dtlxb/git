@@ -70,13 +70,12 @@
                 android:id="@+id/rv_mine"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:background="@android:color/white"
-                android:paddingEnd="15dp"
-                android:paddingStart="15dp" />
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@android:color/white"/>
 
             <include layout="@layout/item_mine"/>
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

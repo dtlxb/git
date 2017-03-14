@@ -3,8 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:background="@android:color/white"
+    android:background="@drawable/selector_normal_write2gray"
     android:id="@+id/item_mine"
+    android:paddingEnd="15dp"
+    android:paddingStart="15dp"
     android:orientation="horizontal">
 
     <ImageView
@@ -29,7 +31,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/img_more"
-        android:layout_margin="12dp"
         android:contentDescription="@null" />
 
 </LinearLayout>

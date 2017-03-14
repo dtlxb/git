@@ -17,12 +17,11 @@ import java.util.List;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.market.StockMarketBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
-
-import static cn.gogoal.im.base.MyApp.getContext;
 
 /**
  * author wangjd on 2017/3/13 0013.
@@ -34,7 +33,7 @@ import static cn.gogoal.im.base.MyApp.getContext;
 public class MarketAdapter extends CommonAdapter<StockMarketBean.DataBean.HangqingBean> {
 
     public MarketAdapter(List<StockMarketBean.DataBean.HangqingBean> datas) {
-        super(getContext(), R.layout.item_stock_market, datas);
+        super(MyApp.getContext(), R.layout.item_stock_market, datas);
     }
 
     @Override

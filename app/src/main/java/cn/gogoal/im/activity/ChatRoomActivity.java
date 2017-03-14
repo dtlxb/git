@@ -28,8 +28,6 @@ import cn.gogoal.im.common.recording.Recorder;
 import cn.gogoal.im.ui.view.SwitchImageView;
 import cn.gogoal.im.ui.view.VoiceButton;
 
-import static cn.gogoal.im.base.MyApp.getContext;
-
 /**
  * author wangjd on 2017/3/13 0013.
  * Staff_id 1375
@@ -153,7 +151,7 @@ public class ChatRoomActivity extends BaseActivity {
     private class AudioAdapter extends CommonAdapter<Recorder> {
 
         private AudioAdapter(List<Recorder> datas) {
-            super(getContext(), R.layout.item_recorder, datas);
+            super(ChatRoomActivity.this, R.layout.item_recorder, datas);
         }
 
         @Override

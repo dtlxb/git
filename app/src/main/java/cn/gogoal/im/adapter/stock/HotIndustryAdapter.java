@@ -12,12 +12,11 @@ import java.util.List;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.market.StockMarketBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.UIHelper;
-
-import static cn.gogoal.im.base.MyApp.getContext;
 
 /**
  * author wangjd on 2017/3/13 0013.
@@ -28,7 +27,7 @@ import static cn.gogoal.im.base.MyApp.getContext;
 public class HotIndustryAdapter extends CommonAdapter<StockMarketBean.DataBean.HostIndustrylistBean> {
 
     public HotIndustryAdapter(List<StockMarketBean.DataBean.HostIndustrylistBean> datas) {
-        super(getContext(), R.layout.item_stock_hotindustry, datas);
+        super(MyApp.getContext(), R.layout.item_stock_hotindustry, datas);
     }
 
     @Override

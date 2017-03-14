@@ -4,8 +4,8 @@ package cn.gogoal.im.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -42,6 +42,7 @@ import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.ui.view.XTitle;
 
 /**
  * 消息
@@ -53,6 +54,8 @@ public class MessageFragment extends BaseFragment {
     private List<IMMessageBean> IMMessageBeans = new ArrayList<>();
     private ListAdapter listAdapter;
     private JSONArray jsonArray;
+    private XTitle xTitle;
+
 
     public MessageFragment() {
     }
@@ -64,7 +67,8 @@ public class MessageFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle(R.string.title_message);
+        xTitle = setFragmentTitle(R.string.title_message);
+        initTitle();
     }
 
     @Override
@@ -74,19 +78,18 @@ public class MessageFragment extends BaseFragment {
         jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
         IMMessageBeans.clear();
 
-        initRecycleView(message_recycler, 0);
+        initRecycleView(message_recycler, R.drawable.shape_divider_recyclerview_1px);
 
         if (null != jsonArray) {
             IMMessageBeans = JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class);
         }
-        Log.e("+++IMMessageBeans", IMMessageBeans + "");
 
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
             //按照时间排序
             Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
                 @Override
                 public int compare(IMMessageBean object1, IMMessageBean object2) {
-                    return Long.compare(Long.parseLong(object2.getLastTime()), Long.parseLong(object1.getLastTime()));
+                    return Long.compare(object2.getLastTime(), object1.getLastTime());
                 }
             });
         }
@@ -137,17 +140,39 @@ public class MessageFragment extends BaseFragment {
             }
 
             @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, final int position) {
                 DialogHelp.getSelectDialog(getActivity(), "", new String[]{"标为未读", "置顶聊天", "删除聊天"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        if (which == 2) {
+                            IMMessageBeans.remove(position);
+                            MessageUtils.removeMessageInfo(position);
+                            listAdapter.notifyDataSetChanged();
+                        }
                     }
                 }, false).show();
                 return false;
             }
         });
 
+    }
+
+    private void initTitle() {
+        //添加action
+        XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_person)) {
+            @Override
+            public void actionClick(View view) {
+
+            }
+        };
+        XTitle.ImageAction addAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_add_message)) {
+            @Override
+            public void actionClick(View view) {
+
+            }
+        };
+        xTitle.addAction(personAction, 0);
+        xTitle.addAction(addAction, 1);
     }
 
     class ListAdapter extends CommonAdapter<IMMessageBean> {
@@ -174,7 +199,7 @@ public class MessageFragment extends BaseFragment {
             }
 
             if (null != messageBean.getLastTime()) {
-                dateStr = CalendarUtils.parseStampToDate(messageBean.getLastTime());
+                dateStr = CalendarUtils.parseDateIMMessageFormat(messageBean.getLastTime());
             }
 
             //消息类型
@@ -215,7 +240,8 @@ public class MessageFragment extends BaseFragment {
         AVIMMessage message = (AVIMMessage) map.get("message");
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
         boolean isTheSame = false;
-        String rightNow = String.valueOf(System.currentTimeMillis());
+
+        Long rightNow = CalendarUtils.getCurrentTime();
 
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(conversation.getConversationId())) {
@@ -226,7 +252,7 @@ public class MessageFragment extends BaseFragment {
                 IMMessageBeans.get(i).setUnReadCounts(unreadmessage + "");
 
                 //头像暂时未保存
-                IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), String.valueOf(System.currentTimeMillis()),
+                IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), message.getTimestamp(),
                         "0", message.getFrom(), AppConst.LEANCLOUD_APP_ID, "", message);
 
                 isTheSame = true;
@@ -245,7 +271,7 @@ public class MessageFragment extends BaseFragment {
             imMessageBean.setUnReadCounts(unRead + "");
 
             //头像暂时未保存
-            IMMessageBean unKonwimMessageBean = new IMMessageBean(conversation.getConversationId(), String.valueOf(System.currentTimeMillis()),
+            IMMessageBean unKonwimMessageBean = new IMMessageBean(conversation.getConversationId(), message.getTimestamp(),
                     "0", message.getFrom(), AppConst.LEANCLOUD_APP_ID, "", message);
             IMMessageBeans.add(imMessageBean);
             MessageUtils.saveMessageInfo(jsonArray, unKonwimMessageBean);
@@ -255,7 +281,7 @@ public class MessageFragment extends BaseFragment {
             Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
                 @Override
                 public int compare(IMMessageBean object1, IMMessageBean object2) {
-                    return Long.compare(Long.parseLong(object2.getLastTime()), Long.parseLong(object1.getLastTime()));
+                    return Long.compare(object2.getLastTime(), object1.getLastTime());
                 }
             });
         }
