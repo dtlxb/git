@@ -63,6 +63,7 @@
             android:name=".activity.PlayerActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:theme="@style/TranslucentTheme" />
+
         <activity
             android:name=".activity.FunctionActivity"
             android:screenOrientation="portrait"
@@ -85,14 +86,23 @@
 
         <activity android:name=".activity.DemoActivity"/>
 
-        <activity android:name=".wxapi.WXPayEntryActivity" />
+        <activity
+            android:name="cn.gogoal.im.activity.IMAddFriendActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="cn.gogoal.im.activity.IMNewFrienActivity"
+            android:screenOrientation="portrait" />
+
+        <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity" />
 
         <uses-library
             android:name="com.google.android.maps"
             android:required="false" />
 
         <activity android:name=".activity.stock.MarketActivity" />
-        <activity android:name=".activity.PdfDisplayActivity"></activity>
+
+        <activity android:name=".activity.PdfDisplayActivity"/>
     </application>
 
 </manifest>

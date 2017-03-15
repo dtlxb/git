@@ -49,12 +49,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_name"
-            android:background="@android:color/white"
+            android:background="@drawable/message_me_said"
             android:gravity="center_vertical"
             android:minHeight="44dp"
             android:padding="10dp"
             android:text="为什么没有人了,人呢?"
-            android:textColor="@color/textColor_333333"
+            android:textColor="@android:color/white"
             android:textSize="14sp" />
 
     </RelativeLayout>

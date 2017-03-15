@@ -22,6 +22,7 @@
     <color name="out_circle">#4b94fa</color>
 
     <color name="colorGriddivider">#e4e4e4</color>
+    <color name="colorchatGrid">#f5f5f7</color>
 
     <!--直播涉及颜色-->
     <color name="live_together">#3381e3</color>

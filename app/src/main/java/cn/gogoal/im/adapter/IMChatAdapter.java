@@ -74,9 +74,9 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         } else if (viewType == TYPE_RIGHT_VOICE_MESSAGE) {
             return new RightAudioViewHolder(mLayoutInflater.inflate(R.layout.item_right_audio, parent, false));
         } else if (viewType == TYPE_RIGHT_UNKONW_MESSAGE) {
-            return new LeftUnKonwViewHolder(mLayoutInflater.inflate(R.layout.item_right_audio, parent, false));
+            return new LeftUnKonwViewHolder(mLayoutInflater.inflate(R.layout.item_left_unknow, parent, false));
         } else if (viewType == TYPE_LEFT_UNKONW_MESSAGE) {
-            return new RightUnKonwViewHolder(mLayoutInflater.inflate(R.layout.item_right_audio, parent, false));
+            return new RightUnKonwViewHolder(mLayoutInflater.inflate(R.layout.item_right_unknow, parent, false));
         } else {
             return null;
         }

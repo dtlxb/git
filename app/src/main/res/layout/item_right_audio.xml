@@ -53,7 +53,7 @@
             android:layout_below="@+id/user_name"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/icon"
-            android:background="@drawable/adp">
+            android:background="@drawable/message_me_said">
 
             <View
                 android:id="@+id/recorder_anim"
