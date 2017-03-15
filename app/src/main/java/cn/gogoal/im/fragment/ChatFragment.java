@@ -203,7 +203,8 @@ public class ChatFragment extends BaseFragment {
                 mTextMessage.setText(etInput.getText().toString());
 
                 imChatAdapter.addItem(mTextMessage);
-                message_recycler.smoothScrollToPosition(messageList.size());
+//                message_recycler.smoothScrollToPosition(messageList.size());
+                message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
 
                 //文字消息基本信息
                 Map<Object, Object> messageMap = new HashMap<>();
@@ -410,7 +411,8 @@ public class ChatFragment extends BaseFragment {
         mImageMessage.setTimestamp(CalendarUtils.getCurrentTime());
 
         imChatAdapter.addItem(mImageMessage);
-        message_recycler.smoothScrollToPosition(messageList.size());
+//        message_recycler.smoothScrollToPosition(messageList.size());
+        message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
 
         //分个上传UFile;
         UFileUpload.getInstance().upload(file, UFileUpload.Type.IMAGE, new UFileUpload.UploadListener() {
@@ -489,7 +491,8 @@ public class ChatFragment extends BaseFragment {
                 map.put("audio_message", mAudioMessage);
                 BaseMessage baseMessage = new BaseMessage("audio_info", map);
                 AppManager.getInstance().sendMessage("refresh_recyle", baseMessage);
-                message_recycler.smoothScrollToPosition(messageList.size());
+//                message_recycler.smoothScrollToPosition(messageList.size());
+                message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
 
                 UFileUpload.getInstance().upload(new File(voicePath), UFileUpload.Type.AUDIO, new UFileUpload.UploadListener() {
                     @Override
@@ -559,7 +562,8 @@ public class ChatFragment extends BaseFragment {
 
                         imChatAdapter.setChatType(imConversation.getAttribute("chat_type") == null ? "1001" : imConversation.getAttribute("chat_type").toString());
                         imChatAdapter.notifyDataSetChanged();
-                        message_recycler.smoothScrollToPosition(messageList.size());
+//                        message_recycler.smoothScrollToPosition(messageList.size());
+                        message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
                     }
                 }
             });
@@ -703,7 +707,8 @@ public class ChatFragment extends BaseFragment {
             //判断房间一致然后做消息接收处理
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
                 imChatAdapter.addItem(message);
-                message_recycler.smoothScrollToPosition(messageList.size());
+//                message_recycler.smoothScrollToPosition(messageList.size());
+                message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
 
                 //此处头像，昵称日后有数据再改
                 IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), message.getTimestamp(),

@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -14,15 +15,23 @@
     <script src="http://cdn.bootcss.com/zepto/1.2.0/zepto.min.js"></script>
 </head>
 <body>
-    <input type="button" id="enter0" value="测试弹窗" onclick="jsTestDialog();"/>
-    <br>
-    <input type="button" id="enter1" value="测试数据，带回调信息" onclick="jsDialogWithCallBack();"/>
-    <br>
-    <img id="imgTag"/>
-    <br>
-    <div id="div1" style="width:300px; height:200px;"></div>
-    <br>
-    <script>
+
+<input type="button" id="enter0" value="测试弹窗" onclick="jsTestDialog();"/>
+
+<br>
+
+<input type="button" id="enter1" value="测试数据，带回调信息" onclick="jsDialogWithCallBack();"/>
+
+<br>
+
+<input type="button" id="enter2" value="预览PDF" onclick="jsDisplayPdf();"/>
+
+<br>
+<img id="imgTag"/>
+<br>
+<div id="div1" style="width:300px; height:200px;"></div>
+<br>
+<script>
     function addText(text){
         $("#div1").empty();
 
@@ -49,6 +58,16 @@
             console.log("回调结果==="+res);//res
             addText(res);
         });
+    }
+
+    function jsDisplayPdf() {
+       window.WebViewJavascriptBridge.callHandler(
+                'loadPdfFromWeb'
+                ,{"pdfUrl":"http://hply.file.alimmdn.com/pdf/async&modulize.pdf","title":"Js异步编程"}
+                , function(responseData) {
+                    //do nothing
+                }
+            );
     }
 
     function config() {
@@ -103,6 +122,7 @@
             return "当前时间:" + currentdate;
         });
     });
-    </script>
+
+</script>
 </body>
 </html>

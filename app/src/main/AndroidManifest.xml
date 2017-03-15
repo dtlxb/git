@@ -45,42 +45,46 @@
         <!-- 实时通信模块 END -->
 
         <activity
-            android:name="cn.gogoal.im.activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="cn.gogoal.im.activity.TakePhotoActivity"
+            android:name=".activity.TakePhotoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
-            android:name="cn.gogoal.im.activity.PlayerActivity"
+            android:name=".activity.PlayerActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:theme="@style/TranslucentTheme" />
 
         <activity
-            android:name="cn.gogoal.im.activity.FunctionActivity"
+            android:name=".activity.FunctionActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="cn.gogoal.im.activity.SquareChatRoomActivity"
+            android:name=".activity.SquareChatRoomActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="cn.gogoal.im.activity.SingleChatRoomActivity"
+            android:name=".activity.SingleChatRoomActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.IMRegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ChatRoomActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
-        <activity
-            android:name="cn.gogoal.im.activity.IMRegisterActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".activity.DemoActivity"/>
 
         <activity
             android:name="cn.gogoal.im.activity.IMAddFriendActivity"
@@ -90,18 +94,15 @@
             android:name="cn.gogoal.im.activity.IMNewFrienActivity"
             android:screenOrientation="portrait" />
 
-        <activity
-            android:name="cn.gogoal.im.activity.ChatRoomActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
-
         <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity" />
 
         <uses-library
             android:name="com.google.android.maps"
             android:required="false" />
 
-        <activity android:name="cn.gogoal.im.activity.stock.MarketActivity" />
+        <activity android:name=".activity.stock.MarketActivity" />
+
+        <activity android:name=".activity.PdfDisplayActivity"/>
     </application>
 
 </manifest>

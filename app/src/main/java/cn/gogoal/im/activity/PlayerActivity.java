@@ -1005,4 +1005,8 @@ public class PlayerActivity extends BaseActivity {
             textSend.setText(builder);
         }
     }
+
+    private PlayerActivity getContext(){
+        return PlayerActivity.this;
+    }
 }

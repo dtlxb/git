@@ -1,6 +1,7 @@
 package cn.gogoal.im.base;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.view.View;
 
 

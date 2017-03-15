@@ -8,13 +8,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -28,6 +29,8 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.permission.IPermissionListner;
 import cn.gogoal.im.ui.view.XTitle;
+
+import static cn.gogoal.im.base.MyApp.getContext;
 
 /**
  * 通用的activity页面
@@ -168,7 +171,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
      * @param recyclerView:初始化对象;
      * @param dividerId:分割线对象     : 0时为默认一条直线;int值 shape资源；null(不要分割线)
      */
-    public void initRecycleView(RecyclerView recyclerView, Integer dividerId) {
+    public static void initRecycleView(RecyclerView recyclerView, Integer dividerId) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         if (dividerId != null) {
             if (dividerId != 0x00) {
@@ -186,6 +189,19 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         }
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+    }
+
+    /**
+     * 全局的下拉刷新样式
+     */
+    public static void iniRefresh(SwipeRefreshLayout mSwipeRefreshLayout) {
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeResource(android.R.color.white);
+        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_light,
+                android.R.color.holo_red_light, android.R.color.holo_orange_light,
+                android.R.color.holo_green_light);
+        mSwipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24,AppManager.getInstance().currentActivity().getResources()
+                        .getDisplayMetrics()));
     }
 
     private ProgressDialog mDialog;
@@ -227,7 +243,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         AppManager.getInstance().finishActivity(this);
     }
 
-    public FragmentActivity getContext() {
-        return AppManager.getInstance().getCurrentActivity();
+    public BaseActivity getActivity(){
+        return this;
     }
+
 }

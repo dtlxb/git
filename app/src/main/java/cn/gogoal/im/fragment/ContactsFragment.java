@@ -84,7 +84,11 @@ public class ContactsFragment extends BaseFragment {
 
         contactAdapter = new ContactAdapter(getContext(), contactBeanList);
 
-        contactAdapter.notifyDataSetChanged();
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
+        itemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.shape_divider_recyclerview_1px));
+        rvContacts.addItemDecoration(itemDecoration);
+
+        rvContacts.setAdapter(contactAdapter);
 
         contactAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
@@ -149,12 +153,7 @@ public class ContactsFragment extends BaseFragment {
 
                     rvContacts.addItemDecoration(mDecoration);
 
-                    //如果add两个，那么按照先后顺序，依次渲染。
-                    DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
-                    itemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.shape_divider_recyclerview_1px));
-                    rvContacts.addItemDecoration(itemDecoration);
-
-                    rvContacts.setAdapter(contactAdapter);
+                    contactAdapter.notifyDataSetChanged();
 
                 }else {
                     UIHelper.toastError(getContext(),GGOKHTTP.getMessage(responseInfo));

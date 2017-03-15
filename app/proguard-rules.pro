@@ -155,7 +155,6 @@
 #=================learnCloud============================================#
 # proguard.cfg
 
--keepattributes Signature
 -dontwarn com.jcraft.jzlib.**
 -keep class com.jcraft.jzlib.**  { *;}
 
@@ -199,6 +198,8 @@
 -dontwarn okio.**
 
 
+-keepattributes *Annotation*
+-keep class sun.misc.Unsafe { *; }
 
 -dontwarn org.xbill.**
 -keep class org.xbill.** { *;}

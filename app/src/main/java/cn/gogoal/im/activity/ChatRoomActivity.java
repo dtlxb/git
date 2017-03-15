@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.socks.library.KLog;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,14 +27,17 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.recording.MediaManager;
 import cn.gogoal.im.common.recording.Recorder;
+import cn.gogoal.im.ui.keyboard.KeyboardLaunchListenLayout;
 import cn.gogoal.im.ui.view.SwitchImageView;
 import cn.gogoal.im.ui.view.VoiceButton;
 
 /**
- * author wangjd on 2017/3/2 0002.
+ * author wangjd on 2017/3/13 0013.
  * Staff_id 1375
  * phone 18930640263
+ * description:聊天室
  */
+
 public class ChatRoomActivity extends BaseActivity {
 
     @BindView(R.id.recyclerView)
@@ -59,6 +64,9 @@ public class ChatRoomActivity extends BaseActivity {
     @BindView(R.id.voiveView)
     VoiceButton voiceView;
 
+    @BindView(R.id.kayboard_layout)
+    KeyboardLaunchListenLayout kayboardLayout;
+
     private AudioAdapter mAdapter;
     private List<Recorder> mDatas = new ArrayList<>();
     private View animView;
@@ -72,6 +80,17 @@ public class ChatRoomActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
+        kayboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchListenLayout.OnKeyboardChangeListener() {
+            @Override
+            public void OnKeyboardPop(int height) {
+                KLog.e("键盘弹出:::"+height);
+            }
+
+            @Override
+            public void OnKeyboardClose() {
+                KLog.e("键盘收起");
+            }
+        });
         imgVoice.setOnSwitchListener(new SwitchImageView.OnSwitchListener() {
             @Override
             public void onSwitch(View view, int state) {
@@ -88,7 +107,7 @@ public class ChatRoomActivity extends BaseActivity {
                         AppDevice.showSoftKeyboard(etInput);
                         break;
                 }
-                imgVoice.setImageResource(state == 0 ? R.mipmap.cache_chat_img_voice : R.mipmap.cache_chat_img_keyboard);
+                imgVoice.setImageResource(state == 0 ? R.mipmap.chat_voice : R.mipmap.cache_chat_img_keyboard);
             }
         });
 
@@ -146,10 +165,10 @@ public class ChatRoomActivity extends BaseActivity {
         MediaManager.release();
     }
 
-    class AudioAdapter extends CommonAdapter<Recorder> {
+    private class AudioAdapter extends CommonAdapter<Recorder> {
 
-        public AudioAdapter(List<Recorder> datas) {
-            super(getContext(), R.layout.item_recorder, datas);
+        private AudioAdapter(List<Recorder> datas) {
+            super(ChatRoomActivity.this, R.layout.item_recorder, datas);
         }
 
         @Override
