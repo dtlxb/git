@@ -1,6 +1,7 @@
 package cn.gogoal.im.ui.view;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
@@ -10,7 +11,7 @@ import android.widget.ImageButton;
  * Staff_id 1375
  * phone 18930640263
  */
-public class SwitchImageView extends ImageButton {
+public class SwitchImageView extends AppCompatImageView {
     private int state;
     private OnSwitchListener listener;
 
