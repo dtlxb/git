@@ -1,28 +1,24 @@
 package cn.gogoal.im.fragment;
 
 import android.annotation.TargetApi;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -45,7 +41,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.jar.Manifest;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -54,7 +49,6 @@ import cn.gogoal.im.adapter.ChatFunctionAdapter;
 import cn.gogoal.im.adapter.IMChatAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.MultiItemTypeAdapter;
 import cn.gogoal.im.base.AppManager;
-import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.BaseMessage;
@@ -67,7 +61,6 @@ import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
-import cn.gogoal.im.common.IMHelpers.AudioRecoderUtils;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
 import cn.gogoal.im.common.SPTools;
@@ -92,6 +85,9 @@ public class ChatFragment extends BaseFragment {
 
     @BindView(R.id.find_more_layout)
     RelativeLayout find_more_layout;
+
+    @BindView(R.id.take_place_layout)
+    View take_place_layout;
 
     @BindView(R.id.img_voice)
     SwitchImageView imgVoice;
@@ -147,6 +143,9 @@ public class ChatFragment extends BaseFragment {
         functions_recycler.setLayoutManager(new GridLayoutManager(getContext(), 4));
         chatFunctionAdapter = new ChatFunctionAdapter(getContext(), itemPojosList);
         functions_recycler.setAdapter(chatFunctionAdapter);
+
+        keyBordHeight = SPTools.getInt("soft_keybord_height", AppDevice.dp2px(getContext(), 220));
+        setContentHeight();
 
         //多功能消息发送
         chatFunctionAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
@@ -239,22 +238,16 @@ public class ChatFragment extends BaseFragment {
                         voiceView.setVisibility(View.VISIBLE);
                         etInput.setVisibility(View.GONE);
                         imgVoice.setBackgroundResource(R.mipmap.chat_key_bord);
+                        find_more_layout.setVisibility(View.GONE);
                         break;
                     case 1:
                         voiceView.setVisibility(View.GONE);
                         etInput.setVisibility(View.VISIBLE);
                         etInput.requestFocus();
                         AppDevice.showSoftKeyboard(etInput);
-                        getSupportSoftInputHeight();
                         //软键盘高度
-                        keyBordHeight = SPTools.getInt("soft_keybord_height", AppDevice.dp2px(getContext(), 220));
-                        ViewGroup.LayoutParams layoutParams = find_more_layout.getLayoutParams();
-                        if (keyBordHeight != 0) {
-                            layoutParams.height = keyBordHeight;
-                        } else {
-                            layoutParams.height = AppDevice.dp2px(getContext(), 220);
-                        }
-                        find_more_layout.setLayoutParams(layoutParams);
+                        getSupportSoftInputHeight();
+                        find_more_layout.setVisibility(View.GONE);
                         imgVoice.setBackgroundResource(R.mipmap.chat_voice);
                         break;
                 }
@@ -306,14 +299,18 @@ public class ChatFragment extends BaseFragment {
                 break;
             case R.id.img_function:
                 if (view.getTag().equals("un_expanded")) {
-                    find_more_layout.setVisibility(View.VISIBLE);
                     etInput.clearFocus();
                     AppDevice.hideSoftKeyboard(etInput);
+                    //setTakePlaceIn(keyBordHeight);
+                    find_more_layout.setVisibility(View.VISIBLE);
+                    //setTakePlaceIn(0);
                     view.setTag("expanded");
                 } else if (view.getTag().equals("expanded")) {
                     find_more_layout.setVisibility(View.GONE);
+                    //setTakePlaceIn(keyBordHeight);
                     etInput.requestFocus();
                     AppDevice.showSoftKeyboard(etInput);
+                    //setTakePlaceIn(0);
                     view.setTag("un_expanded");
                 }
                 break;
@@ -614,6 +611,7 @@ public class ChatFragment extends BaseFragment {
 
     /**
      * 获取软件盘的高度
+     * 登录页面获取之后更改逻辑
      *
      * @return
      */
@@ -668,6 +666,21 @@ public class ChatFragment extends BaseFragment {
         } else {
             return 0;
         }
+    }
+
+    /**
+     * 设置多功能布局宽高
+     */
+    private void setContentHeight() {
+        ViewGroup.LayoutParams params = find_more_layout.getLayoutParams();
+        params.height = keyBordHeight;
+        find_more_layout.setLayoutParams(params);
+    }
+
+    private void setTakePlaceIn(int height) {
+        ViewGroup.LayoutParams params = take_place_layout.getLayoutParams();
+        params.height = height;
+        take_place_layout.setLayoutParams(params);
     }
 
     public void setConversation(AVIMConversation conversation) {
