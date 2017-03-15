@@ -6,6 +6,8 @@ import android.content.Context;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.PermissionChecker;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -61,7 +63,7 @@ public class VoiceButton extends SelectorButton implements AudioManager.AudioSta
         this(context, attrs, 0);
     }
 
-    public VoiceButton(Context context, AttributeSet attrs, int defStyle) {
+    public VoiceButton(final Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mDialogManger = new DialogManager(context);
         //TODO 判断SD卡是否存在
@@ -73,10 +75,10 @@ public class VoiceButton extends SelectorButton implements AudioManager.AudioSta
         File filesDir = context.getExternalFilesDir("recorder");
         if (filesDir != null && filesDir.exists()) {
             dir = filesDir.getPath();
-        } else {
+        } else {//程序母文件夹如果不存在，比如被用户强制删除
             dir = Environment.getExternalStorageDirectory().getPath()
                     + "Android" + File.separator + "data" + File.separator
-                    + AppDevice.getAppProcessName(context) + File.separator
+                    + context.getPackageName() + File.separator
                     + "file" + File.separator + "recorder";
         }
         mAudioManger = AudioManager.getInstance(dir);
@@ -89,7 +91,11 @@ public class VoiceButton extends SelectorButton implements AudioManager.AudioSta
                 try {
                     mAudioManger.prepareAudio();
                 }catch (Exception e){
-                    UIHelper.toast(getContext(),"设备音频硬件模块出现故障!", Toast.LENGTH_LONG);
+                    if (ContextCompat.checkSelfPermission(context,Manifest.permission.RECORD_AUDIO)== PermissionChecker.PERMISSION_GRANTED) {
+                        UIHelper.toast(getContext(), "设备音频硬件模块出现故障!", Toast.LENGTH_LONG);
+                    }else {
+                        UIHelper.toast(getContext(), "请允许App使用设备的录音权限，这在语音聊天时需要!", Toast.LENGTH_LONG);
+                    }
                 }
                 return false;
             }

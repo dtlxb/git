@@ -32,14 +32,3 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-ext {
-    compileSdkVersion = 25
-    buildToolsVersion = "25.0.2"
-    applicationId = "cn.gogoal.im"
-    minSdkVersion = 19
-    targetSdkVersion = 23
-    versionCode = 1
-    versionName = "v1.0.0(1702081042)"
-    supportVersion = '25.2.0'
-}

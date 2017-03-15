@@ -11,20 +11,21 @@ android {
         }
     }
 
-    compileSdkVersion rootProject.ext.compileSdkVersion
-
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion ANDROID_COMPILE_SDK_VERSION as int
+    buildToolsVersion ANDROID_BUILD_TOOLS_VERSION
 
     /*dexOptions {
         javaMaxHeapSize "4g"
     }*/
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
-        applicationId rootProject.ext.applicationId
+        minSdkVersion ANDROID_BUILD_MIN_SDK_VERSION as int
+        targetSdkVersion ANDROID_BUILD_TARGET_SDK_VERSION as int
+        versionCode VERSION_CODE as int
+        versionName VERSION_NAME
+
+        applicationId APP_APPLICATION_ID
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -34,10 +35,13 @@ android {
                 GETUI_APP_SECRET: "a6CrMypVHMArwEScTt43E4"
         ]
 
+        multiDexEnabled true
+
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "x86_64"
         }
     }
+
     buildTypes {
         release {
             signingConfig signingConfigs.gogoalConfig
@@ -66,21 +70,26 @@ android {
         abi {
             enable true
             reset()
-            include 'armeabi-v7a','armeabi','x86'
+            include 'armeabi-v7a', 'armeabi', 'x86'
         }
     }
 }
+
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile 'com.google.android.gms:play-services-appindexing:9.8.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:multidex:1.0.1'
-    compile "com.android.support:appcompat-v7:$rootProject.ext.supportVersion"
-    compile "com.android.support:design:$rootProject.ext.supportVersion"
-    /** 第三方依赖   */
+    compile "com.android.support:appcompat-v7:$ANDROID_SUPPORT_VERSION";
+    compile "com.android.support:design:$ANDROID_SUPPORT_VERSION";
+    compile "com.android.support:support-vector-drawable:$ANDROID_SUPPORT_VERSION";
+
+    /** 第三方依赖  */
     //微信登录、分享、支付依赖
     compile files('libs/libammsdk.jar')
     //网络请求
@@ -94,26 +103,26 @@ dependencies {
     compile 'com.github.zhaokaiqiang.klog:library:1.6.0'
     //图片框架
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    //图片手势
-    compile 'com.github.chrisbanes.photoview:library:1.2.4'
     //图像处理
     compile 'jp.wasabeef:glide-transformations:2.0.1'
     // If you want to use the GPU Filters
     compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.3.0'
+    // 约80KB,拼音转换库
+    compile 'com.github.promeg:tinypinyin:2.0.2'
+    //pdf在线预览框架-十几兆，好TM大
+    //compile 'com.github.barteksc:android-pdf-viewer:2.4.0'
     //自己库
     compile project(':imagepicker')
     compile project(':jsbridge')
     //LeanCloud实时聊天
-    compile 'cn.leancloud.android:avoscloud-sdk:v3.15.9'
     compile('cn.leancloud.android:avoscloud-push:v3.15.9@aar') { transitive = true }
+    compile 'cn.leancloud.android:avoscloud-sdk:v3.15.9'
     //UCloud存储
     compile project(':uFileLib')
     //阿里云播放器
     compile files('libs/alivc-player-2.3.0.jar')
     //阿里云推流
     compile files('libs/alivc-live-record-v1.2.0.jar')
-    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
-    compile 'com.github.promeg:tinypinyin:2.0.2'
     // 约80KB
     //鲁班压缩
     compile 'io.reactivex:rxandroid:1.2.1'

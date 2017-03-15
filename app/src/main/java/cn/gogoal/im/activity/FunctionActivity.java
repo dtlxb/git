@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.lzyzsd.jsbridge.BridgeHandler;
@@ -22,6 +23,8 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.ui.view.XTitle;
+
+import static cn.gogoal.im.base.MyApp.getContext;
 
 public class FunctionActivity extends BaseActivity {
 
@@ -114,6 +117,20 @@ public class FunctionActivity extends BaseActivity {
             }
         });
 
+        /*pdf阅读*/
+        webView.registerHandler("loadPdfFromWeb", new BridgeHandler() {
+            @Override
+            public void handler(String data, ValueCallback<String> function) {
+                if (!TextUtils.isEmpty(data)) {
+
+                    Intent intent = new Intent(FunctionActivity.this, PdfDisplayActivity.class);
+                    intent.putExtra("pdf_data", data);
+                    startActivity(intent);
+                }
+            }
+        });
+
+
     }
 
     /*@OnClick(R.id.fab)
@@ -134,23 +151,24 @@ public class FunctionActivity extends BaseActivity {
     }
 
     private void initWebView(BridgeWebView mWebView) {
+        WebSettings settings = mWebView.getSettings();
         mWebView.setDefaultHandler(new DefaultHandler());
 
-        mWebView.getSettings().setBuiltInZoomControls(false);
+        settings.setBuiltInZoomControls(false);
 
         String ua = mWebView.getSettings().getUserAgentString() + " GoGoaler/" + AppDevice.getAppVersionName(getContext());
         mWebView.getSettings().setUserAgentString(ua);
 
         // 开启DOM缓存。
-        mWebView.getSettings().setDomStorageEnabled(true);
-        mWebView.getSettings().setDatabaseEnabled(true);
-        mWebView.getSettings().setDatabasePath(getContext().getApplicationContext().getCacheDir().getAbsolutePath());
-        mWebView.getSettings().setDomStorageEnabled(true);
-        mWebView.getSettings().setAppCacheMaxSize(1024 * 1024 * 8);
+        settings.setDomStorageEnabled(true);
+        settings.setDatabaseEnabled(true);
+        settings.setDatabasePath(getApplicationContext().getCacheDir().getAbsolutePath());
+        settings.setDomStorageEnabled(true);
+        settings.setAppCacheMaxSize(1024 * 1024 * 8);
         String appCachePath = getApplicationContext().getCacheDir().getAbsolutePath();
-        mWebView.getSettings().setAppCachePath(appCachePath);
-        mWebView.getSettings().setAllowFileAccess(true);
-        mWebView.getSettings().setAppCacheEnabled(true);
+        settings.setAppCachePath(appCachePath);
+        settings.setAllowFileAccess(true);
+        settings.setAppCacheEnabled(true);
 
         mWebView.setWebChromeClient(new WebChromeClient());//启动JS弹窗
     }

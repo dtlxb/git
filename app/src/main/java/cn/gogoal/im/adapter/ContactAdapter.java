@@ -10,11 +10,10 @@ import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.bean.ContactBean;
 
 /**
- * author wangjd on 2017/3/2 0002.
+ * author wangjd on 2017/3/13 0013.
  * Staff_id 1375
  * phone 18930640263
- * <p>
- * 联系人列表适配器
+ * description:联系人列表适配器
  */
 public class ContactAdapter extends CommonAdapter<ContactBean> {
 

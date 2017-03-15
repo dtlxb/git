@@ -41,23 +41,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="2dp"
             android:layout_marginLeft="50dp"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/head_image"
+            android:ellipsize="end"
             android:lines="1"
-            android:layout_marginBottom="2dp"
             android:text="你晚饭还吃不吃了，不吃我吃了"
             android:textColor="@color/relater_play_count"
             android:textSize="14sp" />
 
         <TextView
-            android:layout_marginEnd="16dp"
             android:id="@+id/last_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:text="今天下午"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="2dp"
+            android:text="今天下午"
             android:textColor="@color/relater_play_count"
             android:textSize="12sp" />
 

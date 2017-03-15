@@ -25,4 +25,19 @@
         <item>我的活动</item>
         <item>股票投研</item>
     </string-array>
+
+    <string-array name="rank_list_arr">
+        <item>涨幅榜</item>
+        <item>跌幅榜</item>
+        <item>换手率</item>
+        <item>振幅榜</item>
+    </string-array>
+
+    <string-array name="mine_arr">
+        <item>我的直播</item>
+        <item>我的活动</item>
+        <item>我的帖子</item>
+        <item>我的收藏</item>
+        <item>我的订阅</item>
+    </string-array>
 </resources>

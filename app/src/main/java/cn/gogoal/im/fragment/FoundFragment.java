@@ -28,6 +28,7 @@ import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.wrapper.HeaderAndFooterWrapper;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.FoundData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGAPI;
@@ -147,20 +148,29 @@ public class FoundFragment extends BaseFragment {
 
             List<FoundData.ItemPojos> itemPojos = foundData.getItemPojos();
             if (itemPojos != null) {
-                if (itemPojos.size() % 3 == 2) {
+                if (itemPojos.size() % 4 == 3) {
                     FoundData.ItemPojos itemPojos1 = new FoundData.ItemPojos("", 0, "");
                     itemPojos.add(itemPojos1);
-                } else if (itemPojos.size() % 3 == 1) {
+                } else if (itemPojos.size() % 4 == 2) {
                     FoundData.ItemPojos itemPojos1 = new FoundData.ItemPojos("", 0, "");
                     itemPojos.add(itemPojos1);
 
                     FoundData.ItemPojos itemPojos2 = new FoundData.ItemPojos("", 0, "");
                     itemPojos.add(itemPojos2);
+                }else if (itemPojos.size() % 4 == 1){
+                    FoundData.ItemPojos itemPojos1 = new FoundData.ItemPojos("", 0, "");
+                    itemPojos.add(itemPojos1);
+
+                    FoundData.ItemPojos itemPojos2 = new FoundData.ItemPojos("", 0, "");
+                    itemPojos.add(itemPojos2);
+
+                    FoundData.ItemPojos itemPojos3 = new FoundData.ItemPojos("", 0, "");
+                    itemPojos.add(itemPojos3);
                 }
 
                 GridAdapter gridAdapter = new GridAdapter(itemPojos, position);
                 RecyclerView recyclerView = holder.getView(R.id.rv_grid);
-                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
                 recyclerView.setAdapter(gridAdapter);
             }
         }
@@ -171,7 +181,7 @@ public class FoundFragment extends BaseFragment {
         private int parentPosition;
 
         private GridAdapter(List<FoundData.ItemPojos> datas, int parentPosition) {
-            super(getContext(), R.layout.item_grid_foundfragment, datas);
+            super(MyApp.getContext(), R.layout.item_grid_foundfragment, datas);
             this.parentPosition = parentPosition;
         }
 
@@ -186,9 +196,9 @@ public class FoundFragment extends BaseFragment {
 
             ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
 
-            layoutParams.width = (AppDevice.getWidth(getContext()) - AppDevice.dp2px(getContext(), 4)) / 3;
+            layoutParams.width = (AppDevice.getWidth(getContext()) - AppDevice.dp2px(getContext(), 3)) / 4;
 
-            layoutParams.height = (AppDevice.getWidth(getContext()) - AppDevice.dp2px(getContext(), 4)) / 3;
+            layoutParams.height = (AppDevice.getWidth(getContext()) - AppDevice.dp2px(getContext(), 3)) / 4;
 
             view.setLayoutParams(layoutParams);
 
@@ -196,8 +206,8 @@ public class FoundFragment extends BaseFragment {
 
             ImageView imageIcon = holder.getView(R.id.iv);
             ViewGroup.LayoutParams viewParams = imageIcon.getLayoutParams();
-            viewParams.width = AppDevice.getWidth(getContext()) / 9;
-            viewParams.height = AppDevice.getWidth(getContext()) / 9;
+            viewParams.width = AppDevice.getWidth(getContext()) / 10;
+            viewParams.height = AppDevice.getWidth(getContext()) / 10;
             imageIcon.setLayoutParams(viewParams);
 
             ImageDisplay.loadResImage(getContext(), itemPojos.getIconRes(), imageIcon);
@@ -253,6 +263,7 @@ public class FoundFragment extends BaseFragment {
                             UIHelper.toast(getContext(), "录音权限被拒，录音无法使用");
                         }
                     });
+                    break;
                 case 4:
                     intent.putExtra("function_url", "file:///android_asset/demo.html");
                     startActivity(intent);

@@ -1,11 +1,13 @@
 package cn.gogoal.im.adapter.recycleviewAdapterHelper.base;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.ColorInt;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.util.Linkify;
@@ -34,28 +36,22 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         mContext = context;
         mConvertView = itemView;
-        mViews = new SparseArray<View>();
+        mViews = new SparseArray<>();
     }
 
 
     public static ViewHolder createViewHolder(Context context, View itemView) {
-        ViewHolder holder = new ViewHolder(context, itemView);
-        return holder;
+        return new ViewHolder(context, itemView);
     }
 
     public static ViewHolder createViewHolder(Context context,
                                               ViewGroup parent, int layoutId) {
-        View itemView = LayoutInflater.from(context).inflate(layoutId, parent,
-                false);
-        ViewHolder holder = new ViewHolder(context, itemView);
-        return holder;
+        return new ViewHolder(context, LayoutInflater.from(context).inflate(layoutId, parent,
+                false));
     }
 
     /**
      * 通过viewId获取控件
-     *
-     * @param viewId
-     * @return
      */
     public <T extends View> T getView(int viewId) {
         View view = mViews.get(viewId);
@@ -74,14 +70,10 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return mContext;
     }
 
-    /****以下为辅助方法*****/
+    //========以下为辅助方法===========//
 
     /**
      * 设置TextView的值
-     *
-     * @param viewId
-     * @param text
-     * @return
      */
     public ViewHolder setText(int viewId, String text) {
         TextView tv = getView(viewId);
@@ -116,7 +108,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    public ViewHolder setBackgroundColor(int viewId, int color) {
+    public ViewHolder setBackgroundColor(int viewId,@ColorInt int color) {
         View view = getView(viewId);
         view.setBackgroundColor(color);
         return this;
@@ -128,18 +120,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    public ViewHolder setTextColor(int viewId, int textColor) {
-        TextView view = getView(viewId);
-        view.setTextColor(textColor);
-        return this;
-    }
-
-    public ViewHolder setTextColorRes(int viewId, int textColorRes) {
-        TextView view = getView(viewId);
-        view.setTextColor(mContext.getResources().getColor(textColorRes));
-        return this;
-    }
-
+    @SuppressLint("ObsoleteSdkInt")
     public ViewHolder setAlpha(int viewId, float value) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             getView(viewId).setAlpha(value);

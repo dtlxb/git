@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -12,104 +13,99 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <LinearLayout
-        android:id="@+id/live_chat_bottom"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="46dp"
-        android:background="#FFFFFF"
-        android:gravity="center_vertical"
+        android:layout_height="1px"
+        android:background="#e4e4e4" />
+
+    <LinearLayout
+        android:id="@+id/flag_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#f4f4f6"
+        android:gravity="center"
         android:orientation="horizontal">
 
-        <RelativeLayout
-            android:id="@+id/voice_layout"
-            android:layout_width="60dp"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/voice_iv"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_centerInParent="true"
-                android:src="@drawable/ic_apps_black_24dp"
-                android:tag="key_bod" />
-
-        </RelativeLayout>
+        <cn.gogoal.im.ui.view.SwitchImageView
+            android:id="@+id/img_voice"
+            style="@style/BottomImageStyle"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="10dp"
+            android:background="@mipmap/chat_voice"
+            android:contentDescription="@null"
+            android:paddingLeft="5dp" />
 
         <EditText
-            android:id="@+id/live_chat_edit"
+            android:id="@+id/et_input"
             android:layout_width="0dp"
-            android:layout_height="34dp"
+            android:layout_height="37dp"
             android:layout_weight="1"
             android:background="@drawable/live_edite_border"
-            android:hint="请输入..."
-            android:paddingLeft="20dp"
-            android:textSize="14dp" />
+            android:maxLines="5"
+            android:paddingLeft="10dp" />
 
-        <Button
-            android:tag="un_pressed"
-            android:id="@+id/recode_voice"
+        <cn.gogoal.im.ui.view.VoiceButton
+            android:id="@+id/voiveView"
             android:layout_width="0dp"
-            android:layout_height="34dp"
+            android:layout_height="37dp"
             android:layout_weight="1"
-            android:background="@drawable/selector_text_border"
             android:gravity="center"
+            android:minHeight="0dp"
             android:text="按住 说话"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:normalBackgroundColor="@android:color/white"
+            app:pressedBackgroundColor="@android:color/darker_gray"
+            app:radius="4dp" />
 
-        <TextView
-            android:id="@+id/message_send"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
+        <ImageButton
+            android:id="@+id/img_emoji"
+            style="@style/BottomImageStyle"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center"
-            android:text="发送"
-            android:textColor="@color/online_number"
-            android:textSize="16sp"
-            android:visibility="gone" />
+            android:layout_marginRight="7dp"
+            android:background="@mipmap/chat_face"
+            android:contentDescription="@null" />
 
-        <RelativeLayout
-            android:tag="un_expanded"
-            android:id="@+id/expand_layout"
-            android:layout_width="60dp"
-            android:layout_height="match_parent">
+        <FrameLayout
+            android:id="@+id/flag_layout_send"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginRight="5dp">
 
-            <ImageView
-                android:id="@+id/expand_more"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_centerInParent="true"
-                android:background="@drawable/ic_add_circle_black_24dp" />
+            <ImageButton
+                android:id="@+id/img_function"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@mipmap/chat_add"
+                android:contentDescription="@null"
+                android:tag="un_expanded" />
 
-        </RelativeLayout>
-
+            <Button
+                android:id="@+id/btn_send"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:minWidth="0dp"
+                android:padding="5dp"
+                android:text="@string/send"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                android:visibility="invisible" />
+        </FrameLayout>
     </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/find_more_layout"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="0dp"
+        android:background="@color/colorchatGrid"
         android:gravity="center"
         android:visibility="gone">
 
-        <Button
-            android:id="@+id/take_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="拍照"
-            android:textColor="@color/colorTitle"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/get_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_toRightOf="@+id/take_photo"
-            android:text="照片"
-            android:textColor="@color/colorTitle"
-            android:textSize="16sp" />
-
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/functions_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </RelativeLayout>
 
 </LinearLayout>

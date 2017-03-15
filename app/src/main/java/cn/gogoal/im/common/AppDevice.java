@@ -88,7 +88,7 @@ public class AppDevice {
     /**
      * 获得屏幕宽度 px
      *
-     * @return
+     * @return ;
      */
     public static int getWidth(Context context) {
         WindowManager wManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -370,6 +370,7 @@ public class AppDevice {
      * 隐藏软键盘
      */
     public static void hideSoftKeyboard(View view) {
+        Activity mActivity = null;
         if (view == null)
             return;
         View focusView = null;
@@ -377,8 +378,8 @@ public class AppDevice {
             focusView = view;
         Context context = view.getContext();
         if (context != null && context instanceof Activity) {
-            Activity activity = ((Activity) context);
-            focusView = activity.getCurrentFocus();
+            mActivity = ((Activity) context);
+            focusView = mActivity.getCurrentFocus();
         }
 
         if (focusView != null) {
@@ -394,6 +395,7 @@ public class AppDevice {
             InputMethodManager manager = (InputMethodManager) focusView.getContext().getSystemService(INPUT_METHOD_SERVICE);
             manager.hideSoftInputFromWindow(focusView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             manager.hideSoftInputFromInputMethod(focusView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         }
     }
 
@@ -408,6 +410,7 @@ public class AppDevice {
      * 显示软键盘--VIEW
      */
     public static void showSoftKeyboard(View view) {
+        Activity mActivity = null;
         if (view == null)
             return;
         /*
@@ -422,9 +425,14 @@ public class AppDevice {
         if (!view.isFocused()) {
             view.requestFocus();
         }
+        Context context = view.getContext();
+        if (context != null && context instanceof Activity) {
+            mActivity = ((Activity) context);
+        }
         InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService(INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInput(view, 0);
         inputMethodManager.showSoftInputFromInputMethod(view.getWindowToken(), 0);
+        mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     /**
@@ -720,6 +728,7 @@ public class AppDevice {
         intent.setDataAndType(Uri.fromFile(apkFile),
                 "application/vnd.android.package-archive");
         context.startActivity(intent);
+
     }
 
     /**

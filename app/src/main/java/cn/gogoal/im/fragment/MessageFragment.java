@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
+import com.avos.avoscloud.im.v2.AVIMTypedMessage;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -26,6 +27,8 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.IMAddFriendActivity;
+import cn.gogoal.im.activity.IMNewFrienActivity;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
@@ -126,6 +129,18 @@ public class MessageFragment extends BaseFragment {
                                 intent.putExtra("conversation_id", conversation_id);
                                 startActivity(intent);
                                 break;
+                            case "1003":
+                                //直播处理
+                                intent = new Intent(getContext(), SquareChatRoomActivity.class);
+                                intent.putExtra("conversation_id", conversation_id);
+                                startActivity(intent);
+                                break;
+                            case "1004":
+                                //系统处理
+                                intent = new Intent(getContext(), IMNewFrienActivity.class);
+                                intent.putExtra("conversation_id", conversation_id);
+                                startActivity(intent);
+                                break;
                             default:
                                 break;
                         }
@@ -168,7 +183,7 @@ public class MessageFragment extends BaseFragment {
         XTitle.ImageAction addAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_add_message)) {
             @Override
             public void actionClick(View view) {
-
+                startActivity(new Intent(getActivity(), IMAddFriendActivity.class));
             }
         };
         xTitle.addAction(personAction, 0);
@@ -186,8 +201,13 @@ public class MessageFragment extends BaseFragment {
             String dateStr = "";
             String message = "";
             String unRead = "";
+            int messageType = 0;
             View unReadTag = holder.getView(R.id.unread_tag);
             ImageView avatarIv = holder.getView(R.id.head_image);
+
+            if (messageBean.getLastMessage() instanceof AVIMTypedMessage) {
+                messageType = ((AVIMTypedMessage) messageBean.getLastMessage()).getMessageType();
+            }
 
             //未读数
             if (messageBean.getUnReadCounts().equals("0")) {
@@ -223,7 +243,11 @@ public class MessageFragment extends BaseFragment {
             } else {
                 message = "";
             }
-
+            if (messageType == 2) {
+                ImageDisplay.loadResImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
+            } else {
+                ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
+            }
             ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
             holder.setText(R.id.whose_message, messageBean.getNickname());
             holder.setText(R.id.last_message, unRead + message);
