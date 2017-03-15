@@ -27,6 +27,7 @@ import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
+import com.avos.avoscloud.im.v2.AVIMTypedMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
@@ -85,9 +86,6 @@ public class ChatFragment extends BaseFragment {
 
     @BindView(R.id.find_more_layout)
     RelativeLayout find_more_layout;
-
-    @BindView(R.id.take_place_layout)
-    View take_place_layout;
 
     @BindView(R.id.img_voice)
     SwitchImageView imgVoice;
@@ -677,11 +675,6 @@ public class ChatFragment extends BaseFragment {
         find_more_layout.setLayoutParams(params);
     }
 
-    private void setTakePlaceIn(int height) {
-        ViewGroup.LayoutParams params = take_place_layout.getLayoutParams();
-        params.height = height;
-        take_place_layout.setLayoutParams(params);
-    }
 
     public void setConversation(AVIMConversation conversation) {
         if (null != conversation) {
