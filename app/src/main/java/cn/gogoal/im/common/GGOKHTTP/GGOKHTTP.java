@@ -60,7 +60,7 @@ public class GGOKHTTP {
 
     /*
     * 录播详情
-    * live_id
+    * video_id
     * */
     public static final String GET_RECORD_LIST = "v1/video_studio/get_record_list";
 
