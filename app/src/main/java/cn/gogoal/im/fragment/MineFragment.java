@@ -9,9 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +19,8 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.ImageTextBean;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.common.UserUtils;
 
 /**
  * 我的
@@ -73,15 +68,7 @@ public class MineFragment extends BaseFragment {
     void onClick(View view) {
         switch (view.getId()) {
             case R.id.item_mine:
-                UIHelper.toast(getActivity(),"设置");
-                ContactBean<String> contactBean=new ContactBean<>();
-                contactBean.setRemark("测试-备注");
-                contactBean.setNickname("测试-昵称");
-                contactBean.setAvatar("测试-头像");
-                contactBean.setContactType(ContactBean.ContactType.PERSION_ITEM);
-                contactBean.setConv_id("测试-id");
-                String friendList = UserUtils.updataFriendList(JSONObject.toJSON(contactBean).toString());
-                KLog.e(friendList);
+                UIHelper.toast(getActivity(), "设置");
                 break;
         }
     }
@@ -99,7 +86,7 @@ public class MineFragment extends BaseFragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UIHelper.toast(v.getContext(),data.getText());
+                    UIHelper.toast(v.getContext(), data.getText());
                 }
             });
         }

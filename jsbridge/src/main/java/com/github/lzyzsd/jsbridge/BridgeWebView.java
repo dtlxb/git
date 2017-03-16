@@ -1,14 +1,20 @@
 package com.github.lzyzsd.jsbridge;
 
-import android.app.Dialog;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 
+import com.github.lzyzsd.library.R;
 import com.socks.library.KLog;
 
 import java.io.UnsupportedEncodingException;
@@ -19,6 +25,21 @@ import java.util.List;
 import java.util.Map;
 
 public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
+
+    public interface WebChangeListener {
+        void getWebInfo(String url, String title);
+    }
+
+    public WebChangeListener mChangeListener;
+
+    public WebChangeListener getChangeListener() {
+        return mChangeListener;
+    }
+    public void setOnWebChangeListener(WebChangeListener changeListener) {
+        if (changeListener != null) {
+            mChangeListener = changeListener;
+        }
+    }
 
     Map<String, ValueCallback<String>> responseCallbacks = new HashMap<>();
     BridgeHandler defaultHandler = new DefaultHandler();
@@ -43,18 +64,15 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
     }
     private long uniqueId = 0;
 
-    private Dialog loadDialog;
-    public Dialog getLoadingDialog() {
-        return loadDialog;
-    }
-
     public interface SystemIntentInteface {
         void setSystemData(String data);
     }
     private SystemIntentInteface mSystemIntentInteface;
+
     public SystemIntentInteface getSystemIntentInteface() {
         return mSystemIntentInteface;
     }
+
     public void setSystemIntentInteface(SystemIntentInteface systemIntentInteface) {
         mSystemIntentInteface = systemIntentInteface;
     }
@@ -74,8 +92,12 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
         init(context);
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void init(Context context) {
-        loadDialog = Utils.getCustomLoading(context, null);
+        progressbar = new ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal);
+        progressbar.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,Utils.dp2px(context,2), Gravity.TOP));
+        progressbar.setProgressDrawable(ContextCompat.getDrawable(context,R.drawable.web_progress));
+        addView(progressbar);
 
         this.setVerticalScrollBarEnabled(false);
         this.setHorizontalScrollBarEnabled(false);
@@ -84,20 +106,27 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
             WebView.setWebContentsDebuggingEnabled(true);
         }
         this.setWebViewClient(generateBridgeWebViewClient());
+
+        this.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                if (newProgress == 100) {
+                    progressbar.setVisibility(GONE);
+                } else {
+                    if (progressbar.getVisibility() == GONE)
+                        progressbar.setVisibility(VISIBLE);
+                    progressbar.setProgress(newProgress);
+                }
+                super.onProgressChanged(view, newProgress);
+            }
+
+        });
     }
 
-    public interface WebChangeListener {
-        void getWebInfo(String url, String title);
+    public ProgressBar getProgressBar() {
+        return progressbar;
     }
-    public WebChangeListener mChangeListener;
-    public WebChangeListener getChangeListener() {
-        return mChangeListener;
-    }
-    public void setOnWebChangeListener(WebChangeListener changeListener) {
-        if (changeListener != null) {
-            mChangeListener = changeListener;
-        }
-    }
+
     public PageLoadFinishListener getFinishListener() {
         return new PageLoadFinishListener() {
             @Override
@@ -298,4 +327,8 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
     public void callHandler(String handlerName, String data, ValueCallback<String> callBack) {
         doSend(handlerName, data, callBack);
     }
+
+    //progress
+    private ProgressBar progressbar;
+
 }

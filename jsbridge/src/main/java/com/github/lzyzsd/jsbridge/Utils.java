@@ -1,19 +1,11 @@
 package com.github.lzyzsd.jsbridge;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import com.github.lzyzsd.library.R;
 
 /**
  * author wangjd on 2017/1/17 0017.
@@ -45,32 +37,6 @@ public class Utils {
     public static int dp2px(Context context,int dpValue){
         float density = context.getResources().getDisplayMetrics().density;
         return (int) (density*dpValue+0.5);
-    }
-
-    public static Dialog getCustomLoading(Context context, String dialogMsg) {
-        Dialog loadDialog = new Dialog(context,com.github.lzyzsd.library.R.style.progress_dialog);
-        loadDialog.setContentView(com.github.lzyzsd.library.R.layout.dialog_loading);
-        loadDialog.setCancelable(true);
-        Window window=loadDialog.getWindow();
-        if (window != null) {
-            WindowManager.LayoutParams attr = window.getAttributes();
-            if (attr != null) {
-                attr.width = 9*Utils.getScreemWidth(context)/20;
-                attr.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                attr.gravity = Gravity.CENTER;//设置dialog 在布局中的位置
-            }
-            window.setBackgroundDrawableResource(android.R.color.transparent);
-        }
-        TextView msg = (TextView) loadDialog.findViewById(com.github.lzyzsd.library.R.id.tv_loading_msg);
-        msg.setText(TextUtils.isEmpty(dialogMsg) ? "加载中..." : dialogMsg);
-        ProgressBar progressBar= (ProgressBar) loadDialog.findViewById(R.id.progress_loading);
-
-        ViewGroup.LayoutParams progressParams = progressBar.getLayoutParams();
-        progressParams.width=2085*Utils.getScreemWidth(context)/10000;
-        progressParams.height=1956*Utils.getScreemWidth(context)/10000;
-
-        loadDialog.setCanceledOnTouchOutside(false);
-        return loadDialog;
     }
 
     /**

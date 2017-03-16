@@ -14,8 +14,7 @@
         android:layout_height="wrap_content"
         android:contentDescription="@null"
         android:scaleType="centerCrop"
-        android:layout_marginBottom="6dp"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_marginBottom="6dp"/>
 
     <TextView
         android:id="@+id/tv"

@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 
 import com.alibaba.fastjson.JSONObject;
@@ -25,8 +24,6 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.XTitle;
-
-import static cn.gogoal.im.base.MyApp.getContext;
 
 public class FunctionActivity extends BaseActivity {
 
@@ -69,12 +66,12 @@ public class FunctionActivity extends BaseActivity {
         webView.loadUrl(url);
 
 //        // H5页面跳转时获取页面title和url
-//        webView.setOnWebChangeListener(new BridgeWebView.WebChangeListener() {
-//            @Override
-//            public void getWebInfo(String url, String title) {
-//                KLog.e(url + title);
-//            }
-//        });
+        webView.setOnWebChangeListener(new BridgeWebView.WebChangeListener() {
+            @Override
+            public void getWebInfo(String url, String title) {
+                KLog.e(url + title);
+            }
+        });
 
         //1.添加原生方法，测试弹窗
         webView.registerHandler("naviveDialog", new BridgeHandler() {
@@ -192,8 +189,6 @@ public class FunctionActivity extends BaseActivity {
         settings.setAppCachePath(appCachePath);
         settings.setAllowFileAccess(true);
         settings.setAppCacheEnabled(true);
-
-        mWebView.setWebChromeClient(new WebChromeClient());//启动JS弹窗
     }
 
     @Override
