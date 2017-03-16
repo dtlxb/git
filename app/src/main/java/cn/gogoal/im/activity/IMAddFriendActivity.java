@@ -6,10 +6,21 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.EditText;
 
+import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.IMMessageBean;
+import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.MessageUtils;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**
@@ -35,10 +46,38 @@ public class IMAddFriendActivity extends BaseActivity {
         XTitle.TextAction sendAction = new XTitle.TextAction("发送") {
             @Override
             public void actionClick(View view) {
-
+                AddFirend();
             }
         };
         titleBar.addAction(sendAction);
+    }
+
+    public void AddFirend() {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
+        params.put("friend_id", editYourMessage.getText().toString());
+        params.put("text", "你好啊！！！");
+        KLog.e(params);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                KLog.e(result.get("code"));
+                if ((int) result.get("code") == 0) {
+                    UIHelper.toast(IMAddFriendActivity.this, "添加成功!!!");
+                    editYourMessage.setText("");
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                KLog.json(msg);
+            }
+        };
+        new GGOKHTTP(params, GGOKHTTP.ADD_FRIEND, ggHttpInterface).startGet();
     }
 
 }

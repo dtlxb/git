@@ -12,7 +12,9 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.fragment.ContactsFragment;
 import cn.gogoal.im.fragment.FoundFragment;
 import cn.gogoal.im.fragment.MessageFragment;
@@ -52,7 +54,7 @@ public class MainActivity extends BaseActivity {
         tabFragments.add(mineFragment);
 
         SimpleFragmentPagerAdapter tabAdapter = new SimpleFragmentPagerAdapter(
-                getSupportFragmentManager(),MainActivity.this,tabFragments, mainTabArray);
+                getSupportFragmentManager(), MainActivity.this, tabFragments, mainTabArray);
 
         vpMain.setAdapter(tabAdapter);
         vpMain.setOffscreenPageLimit(3);
@@ -65,6 +67,37 @@ public class MainActivity extends BaseActivity {
             }
         }
 
+        tabMain.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+
+                        break;
+                    case 1:
+                        AppManager.getInstance().sendMessage("refresh_contactAdapter");
+                        break;
+                    case 2:
+
+                        break;
+                    case 3:
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
 }

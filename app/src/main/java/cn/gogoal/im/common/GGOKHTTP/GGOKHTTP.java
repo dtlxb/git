@@ -79,35 +79,43 @@ public class GGOKHTTP {
      */
     public static final String GET_FRIEND_LIST = "v1/ggm_im/get_friend_list";
 
-    public static final String USER_RESET_PASSWORD_NEW="v1/user/reset_password_new";
+    public static final String USER_RESET_PASSWORD_NEW = "v1/user/reset_password_new";
 
     /**
      * 自动登录 刷新token
-     * */
-    public static final String USER_QUICK_LOGIN="v1/user/quick_login";
+     */
+    public static final String USER_QUICK_LOGIN = "v1/user/quick_login";
 
     /**
      * 获取客服电话
-     * */
-    public static final String GET_BASE_CONFIGURE="v1/systemset/get_base_configure";
+     */
+    public static final String GET_BASE_CONFIGURE = "v1/systemset/get_base_configure";
 
     /**
      * 校验账号
-     * */
-    public static final String CHECK_ACCOUNT="v1/user/check_account";
+     */
+    public static final String CHECK_ACCOUNT = "v1/user/check_account";
 
     /**
      * 城市列表
-     * */
-    public static final String GET_CITY_DATA="v1/base/get_city_data";
+     */
+    public static final String GET_CITY_DATA = "v1/base/get_city_data";
 
     /**
      * IM发送消息
-     * token                     用户token
-     * message                   消息内容（包括文字，语音，图片...）
-     * conv_id                   对话ID
-     * */
-    public static final String CHAT_SEND_MESSAGE="v1/ggm_chat/send_message";
+     * token                        用户token
+     * message                      消息内容（包括文字，语音，图片...）
+     * conv_id                      对话ID
+     */
+    public static final String CHAT_SEND_MESSAGE = "v1/ggm_chat/send_message";
+
+    /**
+     * IM发送接收好友
+     * token                        用户token
+     * friend_id                    朋友ID
+     * text                         消息内容（包括文字，语音，图片...）
+     */
+    public static final String ADD_FRIEND = "v1/ggm_im/add_friend";
 
 //--------------------------------------------------------------------------------------------------
 
