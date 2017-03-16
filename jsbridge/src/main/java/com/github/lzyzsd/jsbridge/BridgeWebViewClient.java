@@ -103,7 +103,14 @@ public class BridgeWebViewClient extends WebViewClient {
             }
         }
 
-        hideLoadingPage();
+        new android.os.Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideLoadingPage();
+            }
+        },5000);
+
+
     }
 
     @Override

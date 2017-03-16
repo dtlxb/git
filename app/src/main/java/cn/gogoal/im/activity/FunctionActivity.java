@@ -69,7 +69,7 @@ public class FunctionActivity extends BaseActivity {
         webView.setOnWebChangeListener(new BridgeWebView.WebChangeListener() {
             @Override
             public void getWebInfo(String url, String title) {
-                KLog.e(url + title);
+//                KLog.e("url==="+url + ";title==="+title);
             }
         });
 

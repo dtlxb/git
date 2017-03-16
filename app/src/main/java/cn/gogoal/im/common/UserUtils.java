@@ -1,5 +1,6 @@
 package cn.gogoal.im.common;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.text.TextUtils;
 
@@ -7,7 +8,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
-import java.util.Iterator;
+import java.util.HashMap;
 
 /**
  * author wangjd on 2017/2/8 0008.
@@ -25,9 +26,9 @@ public class UserUtils {
         UIHelper.toast(mContext, "退出登录成功!");
     }
 
+    @SuppressLint("UseSparseArrays")
     public static String updataFriendList(String newFriendJson) {
         String responseInfo = SPTools.getString(getToken() + "_contact_beans", "");
-        KLog.e(responseInfo);
         if (TextUtils.isEmpty(newFriendJson)) {
             return null;
         }
@@ -36,24 +37,42 @@ public class UserUtils {
 
         JSONObject newObject = JSONObject.parseObject(newFriendJson);
 
-        if (!jsonArrauContain(friendList, newObject, "friend_id")) {
-            friendList.add(newObject);
+        HashMap<Integer, JSONObject> friendMap = new HashMap<>();
+
+        for (int i = 0; i < friendList.size(); i++) {
+            JSONObject object = (JSONObject) friendList.get(i);
+            friendMap.put(object.getInteger("friend_id"), object);
         }
-        jsonObject.put("data", friendList);
-        KLog.e(jsonObject.toString());
+
+        friendMap.put(newObject.getInteger("friend_id"), newObject);
+
+        jsonObject.put("data", friendMap.values());
+
         return jsonObject.toString();
     }
 
-    private static boolean jsonArrauContain(JSONArray array, JSONObject ele, String flag) {
-        Iterator<Object> iterator = array.iterator();
-
-        while (iterator.hasNext()) {
-            JSONObject object = (JSONObject) iterator.next();
-            if (object.getString(flag).equals(ele.getString(flag))) {
-                return true;
-            }
+    @SuppressLint("UseSparseArrays")
+    public static String updataFriendList(String responseInfo, String newFriendJson) {
+        if (TextUtils.isEmpty(newFriendJson)) {
+            return null;
         }
-        return false;
+        JSONObject jsonObject = JSONObject.parseObject(responseInfo);
+        JSONArray friendList = (JSONArray) jsonObject.remove("data");
+
+        JSONObject newObject = JSONObject.parseObject(newFriendJson);
+
+        HashMap<Integer, JSONObject> friendMap = new HashMap<>();
+
+        for (int i = 0; i < friendList.size(); i++) {
+            JSONObject object = (JSONObject) friendList.get(i);
+            friendMap.put(object.getInteger("friend_id"), object);
+        }
+
+        friendMap.put(newObject.getInteger("friend_id"), newObject);
+
+        jsonObject.put("data", friendMap.values());
+
+        return jsonObject.toString();
     }
 
     // TODO: 临时token
