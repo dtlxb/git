@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -39,6 +40,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.index.IndexBar;
 import cn.gogoal.im.ui.index.SuspendedDecoration;
 
@@ -89,6 +91,8 @@ public class ContactsFragment extends BaseFragment {
 
         contactAdapter = new ContactAdapter(getContext(), contactBeanList);
 
+        contactAdapter.notifyDataSetChanged();
+
         DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
         itemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.shape_divider_recyclerview_1px));
         rvContacts.addItemDecoration(itemDecoration);
@@ -119,46 +123,29 @@ public class ContactsFragment extends BaseFragment {
         contactBeanList.add(addFunctionHead("群聊", R.mipmap.cache_img_contacts_1));
         contactBeanList.add(addFunctionHead("标签", R.mipmap.cache_img_contacts_2));
         contactBeanList.add(addFunctionHead("公众号", R.mipmap.cache_img_contacts_3));
-        //添加模拟好友数据
-//        contactBeanList.addAll(getConstactsData());
-        getFriendList(contactBeanList);
+
+        String friendResponseInfo = SPTools.getString(UserUtils.getToken() + "_contact_beans", "");
+        if (TextUtils.isEmpty(friendResponseInfo)){
+            getFriendList(contactBeanList);
+        }else {
+            parseContactDatas(friendResponseInfo,contactBeanList);
+        }
     }
 
     private void getFriendList(final List<ContactBean> contactBeanList) {
 
         Map<String, String> param = new HashMap<>();
 
-        param.put("token", AppConst.LEAN_CLOUD_TOKEN);
+        param.put("token", UserUtils.getToken());
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
 
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     SPTools.saveString(AppConst.LEAN_CLOUD_TOKEN + "_contact_beans", responseInfo);
 
-                    BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
-                            responseInfo,
-                            new TypeReference<BaseBeanList<ContactBean<String>>>() {
-                            });
-                    List<ContactBean<String>> list = beanList.getData();
-
-                    for (ContactBean<String> bean : list) {
-                        bean.setContactType(ContactBean.ContactType.PERSION_ITEM);
-                    }
-
-                    contactBeanList.addAll(list);
-
-                    SuspendedDecoration mDecoration = new SuspendedDecoration(getContext(), contactBeanList);
-
-                    indexBar.setmSourceDatas(contactBeanList)//设置数据
-                            .invalidate();
-                    mDecoration.setmDatas(contactBeanList);
-
-                    rvContacts.addItemDecoration(mDecoration);
-
-                    contactAdapter.notifyDataSetChanged();
+                    parseContactDatas(responseInfo, contactBeanList);
 
                 } else {
                     UIHelper.toastError(getContext(), GGOKHTTP.getMessage(responseInfo));
@@ -172,6 +159,28 @@ public class ContactsFragment extends BaseFragment {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_FRIEND_LIST, ggHttpInterface).startGet();
+    }
+
+    private void parseContactDatas(String responseInfo, List<ContactBean> contactBeanList) {
+        BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
+                responseInfo,
+                new TypeReference<BaseBeanList<ContactBean<String>>>() {
+                });
+        List<ContactBean<String>> list = beanList.getData();
+
+        for (ContactBean<String> bean : list) {
+            bean.setContactType(ContactBean.ContactType.PERSION_ITEM);
+        }
+
+        contactBeanList.addAll(list);
+
+        SuspendedDecoration mDecoration = new SuspendedDecoration(getContext(), contactBeanList);
+
+        indexBar.setmSourceDatas(contactBeanList)//设置数据
+                .invalidate();
+        mDecoration.setmDatas(contactBeanList);
+
+        rvContacts.addItemDecoration(mDecoration);
     }
 
     private ContactBean<Integer> addFunctionHead(String name, @DrawableRes int iconId) {
