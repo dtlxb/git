@@ -149,13 +149,13 @@ public class ContactsFragment extends BaseFragment {
                 KLog.e(responseInfo);
 
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    SPTools.saveString(AppConst.LEAN_CLOUD_TOKEN + "_contact_beans", responseInfo);
-
+                    SPTools.saveString(UserUtils.getToken() + "_contact_beans", responseInfo);
                     parseContactDatas(responseInfo, contactBeanList);
 
-                    KLog.e(responseInfo);
-                } else {
-                    UIHelper.toastError(getContext(), GGOKHTTP.getMessage(responseInfo));
+                }else if (JSONObject.parseObject(responseInfo).getIntValue("code")==1001){
+                    SPTools.saveString(UserUtils.getToken() + "_contact_beans", getContext().getString(R.string.default_success));
+                }else {
+                    UIHelper.toastError(getContext(),GGOKHTTP.getMessage(responseInfo));
                 }
             }
 
