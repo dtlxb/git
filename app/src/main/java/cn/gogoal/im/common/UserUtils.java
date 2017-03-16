@@ -1,6 +1,7 @@
 package cn.gogoal.im.common;
 
 import android.app.Activity;
+import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -23,6 +24,9 @@ public class UserUtils {
 
     public static String updataFriendList(String newFriendJson) {
         String responseInfo = SPTools.getString(getToken() + "_contact_beans", "");
+        if (TextUtils.isEmpty(responseInfo)){
+            return null;
+        }
         JSONObject jsonObject = JSONObject.parseObject(responseInfo);
         JSONArray friendList = (JSONArray) jsonObject.remove("data");
         friendList.add(JSONObject.parseObject(newFriendJson));
