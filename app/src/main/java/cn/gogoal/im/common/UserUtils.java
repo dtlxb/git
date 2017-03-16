@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import java.util.Iterator;
 
@@ -26,7 +27,8 @@ public class UserUtils {
 
     public static String updataFriendList(String newFriendJson) {
         String responseInfo = SPTools.getString(getToken() + "_contact_beans", "");
-        if (TextUtils.isEmpty(responseInfo)) {
+        KLog.e(responseInfo);
+        if (TextUtils.isEmpty(newFriendJson)) {
             return null;
         }
         JSONObject jsonObject = JSONObject.parseObject(responseInfo);
@@ -34,10 +36,11 @@ public class UserUtils {
 
         JSONObject newObject = JSONObject.parseObject(newFriendJson);
 
-        if (!jsonArrauContain(friendList,newObject,"friend_id")){
+        if (!jsonArrauContain(friendList, newObject, "friend_id")) {
             friendList.add(newObject);
         }
         jsonObject.put("data", friendList);
+        KLog.e(jsonObject.toString());
         return jsonObject.toString();
     }
 

@@ -12,8 +12,9 @@ import java.util.Map;
 public class GGAPI {
 
     //开发环境
-    public static final String WEB_URL = "http://192.168.52.156:9000";
-    private static final String Native_API = "http://ggservice.sandbox.gofund.com.cn";
+    public static final String Native_API = "http://192.168.52.150:9000";
+    public static final String WEB_URL = "http://192.168.52.150:9000";
+    //private static final String Native_API = "http://ggservice.sandbox.gofund.com.cn";
     private static final String APP_KEY = "HBTORVzBaGtqmGE";
     private static final String APP_SECRET = "cGYIsTyTWXGeP4frqOqmdWxRO5xmh2Pi";
 

@@ -74,7 +74,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     String nickName = lcattrsObject.getString("nickname");
                                     String conv_id = lcattrsObject.getString("conv_id");
                                     int friend_id = lcattrsObject.getInteger("friend_id");
-
                                     ContactBean<String> contactBean = new ContactBean<>();
                                     contactBean.setRemark("");
                                     contactBean.setNickname(nickName);
@@ -82,8 +81,11 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     contactBean.setFriend_id(friend_id);
                                     contactBean.setContactType(ContactBean.ContactType.PERSION_ITEM);
                                     contactBean.setConv_id(conv_id);
+                                    KLog.e("======================"+contactBean.toString());
                                     String friendList = UserUtils.updataFriendList(JSONObject.toJSON(contactBean).toString());
+                                    KLog.e("======================"+friendList+"+++");
                                     SPTools.saveString(getToken() + "_contact_beans", friendList);
+
                                     break;
                                 case 1006:
                                     //公众号

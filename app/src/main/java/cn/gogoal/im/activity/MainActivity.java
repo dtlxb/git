@@ -14,6 +14,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.fragment.ContactsFragment;
 import cn.gogoal.im.fragment.FoundFragment;
 import cn.gogoal.im.fragment.MessageFragment;

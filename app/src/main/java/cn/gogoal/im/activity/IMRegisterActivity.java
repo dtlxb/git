@@ -20,6 +20,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.UIHelper;
 
 /**
  * Created by huangxx on 2017/2/20.
@@ -50,7 +51,7 @@ public class IMRegisterActivity extends BaseActivity {
 
     private void openClient(String MyId) {
         if (TextUtils.isEmpty(MyId)) {
-            Toast.makeText(IMRegisterActivity.this, "昵称不能为空!", Toast.LENGTH_SHORT).show();
+            UIHelper.toast(getActivity(),"昵称不能为空");
             return;
         }
 

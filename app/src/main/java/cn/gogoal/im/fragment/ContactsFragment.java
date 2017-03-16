@@ -151,6 +151,7 @@ public class ContactsFragment extends BaseFragment {
 
                     parseContactDatas(responseInfo, contactBeanList);
 
+                    KLog.e(responseInfo);
                 } else {
                     UIHelper.toastError(getContext(), GGOKHTTP.getMessage(responseInfo));
                 }
