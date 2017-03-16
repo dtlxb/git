@@ -146,6 +146,8 @@ public class ContactsFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
 
+                KLog.e(responseInfo);
+
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     SPTools.saveString(AppConst.LEAN_CLOUD_TOKEN + "_contact_beans", responseInfo);
 

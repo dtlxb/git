@@ -81,9 +81,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     contactBean.setFriend_id(friend_id);
                                     contactBean.setContactType(ContactBean.ContactType.PERSION_ITEM);
                                     contactBean.setConv_id(conv_id);
-                                    KLog.e("======================"+contactBean.toString());
-                                    String friendList = UserUtils.updataFriendList(JSONObject.toJSON(contactBean).toString());
-                                    KLog.e("======================"+friendList+"+++");
+                                    String friendList = UserUtils.updataFriendList(JSONObject.toJSONString(contactBean));
                                     SPTools.saveString(getToken() + "_contact_beans", friendList);
 
                                     break;
