@@ -1,6 +1,9 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.ContextCompat;
+import android.view.View;
 
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
@@ -12,6 +15,7 @@ import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.fragment.ChatFragment;
+import cn.gogoal.im.ui.view.XTitle;
 
 /**
  * Created by huangxx on 2017/2/21.
@@ -21,6 +25,7 @@ public class SingleChatRoomActivity extends BaseActivity {
 
     //聊天对象
     private ChatFragment chatFragment;
+    private XTitle xTitle;
 
     @Override
     public int bindLayout() {
@@ -31,13 +36,26 @@ public class SingleChatRoomActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         String conversation_id = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("conversation_id"), "");
         String nickname = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("nickname"), "");
-        setMyTitle(nickname + "聊天窗口", false);
+        xTitle = setMyTitle(nickname + "聊天窗口", true);
 
+        initAction(conversation_id);
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
 
         //输入聊天对象ID，返回conversation对象
         getSingleConversation(conversation_id);
 
+    }
+
+    private void initAction(final String conversation_id) {
+        //添加action
+        XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(SingleChatRoomActivity.this, R.mipmap.chat_person)) {
+            @Override
+            public void actionClick(View view) {
+                Intent intent=new Intent(SingleChatRoomActivity.this,IMPersonActivity.class);
+                intent.putExtra("conversation_id",conversation_id);
+                startActivity(intent);
+            }
+        };
     }
 
     public void getSingleConversation(String conversation_id) {
