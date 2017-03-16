@@ -75,7 +75,7 @@
         <activity
             android:name=".activity.SingleChatRoomActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.IMRegisterActivity"
             android:screenOrientation="portrait" />
@@ -84,7 +84,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
-        <activity android:name=".activity.DemoActivity"/>
+        <activity android:name=".activity.DemoActivity" />
 
         <activity
             android:name="cn.gogoal.im.activity.IMAddFriendActivity"
@@ -102,7 +102,7 @@
 
         <activity android:name=".activity.stock.MarketActivity" />
 
-        <activity android:name=".activity.PdfDisplayActivity"/>
+        <activity android:name=".activity.PdfDisplayActivity" />
     </application>
 
 </manifest>

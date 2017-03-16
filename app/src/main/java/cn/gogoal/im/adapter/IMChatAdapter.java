@@ -51,7 +51,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     private List<AVIMMessage> messageList;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
-    private String chatType;
+    private int chatType;
 
     public IMChatAdapter(Context mContext, List<AVIMMessage> messageList) {
         this.mLayoutInflater = LayoutInflater.from(mContext);
@@ -87,9 +87,9 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
         AVIMMessage avimMessage = messageList.get(position);
 
-        if (chatType.equals("1001")) {
+        if (chatType == 1001) {
             ((IMCHatViewHolder) holder).user_name.setVisibility(View.GONE);
-        } else if (chatType.equals("1002")) {
+        } else if (chatType == 1002) {
             ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
         } else {
             ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
@@ -168,9 +168,9 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             int mMaxItemWidth = (int) (AppDevice.getWidth(mContext) * 0.7f);
             int mMinItemWidth = (int) (AppDevice.getWidth(mContext) * 0.16f);
             params.width = (int) (mMinItemWidth + (mMaxItemWidth / 60f) * ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue());
-            if (chatType.equals("1001")) {
+            if (chatType == 1001) {
                 params.setMargins(0, 0, 0, 0);
-            } else if (chatType.equals("1002")) {
+            } else if (chatType == 1002) {
                 params.setMargins(0, AppDevice.dp2px(mContext, 13), 0, 0);
             }
             ((LeftAudioViewHolder) holder).recorder_length.setLayoutParams(params);
@@ -261,11 +261,11 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
     }
 
-    public String getChatType() {
+    public int getChatType() {
         return chatType;
     }
 
-    public void setChatType(String chatType) {
+    public void setChatType(int chatType) {
         this.chatType = chatType;
     }
 

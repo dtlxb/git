@@ -12,9 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.avos.avoscloud.im.v2.AVIMConversation;
+import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.socks.library.KLog;
+
+import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -130,9 +135,9 @@ public class ContactsFragment extends BaseFragment {
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
 
-                SPTools.saveString(AppConst.LEAN_CLOUD_TOKEN + "_Contacts", responseInfo);
-
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                    SPTools.saveString(AppConst.LEAN_CLOUD_TOKEN + "_contact_beans", responseInfo);
+
                     BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
                             responseInfo,
                             new TypeReference<BaseBeanList<ContactBean<String>>>() {
@@ -155,8 +160,8 @@ public class ContactsFragment extends BaseFragment {
 
                     contactAdapter.notifyDataSetChanged();
 
-                }else {
-                    UIHelper.toastError(getContext(),GGOKHTTP.getMessage(responseInfo));
+                } else {
+                    UIHelper.toastError(getContext(), GGOKHTTP.getMessage(responseInfo));
                 }
             }
 
@@ -177,4 +182,5 @@ public class ContactsFragment extends BaseFragment {
         bean.setAvatar(iconId);
         return bean;
     }
+
 }
