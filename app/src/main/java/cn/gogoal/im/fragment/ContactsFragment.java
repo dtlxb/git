@@ -129,7 +129,7 @@ public class ContactsFragment extends BaseFragment {
         String friendResponseInfo = SPTools.getString(UserUtils.getToken() + "_contact_beans", "");
         if (TextUtils.isEmpty(friendResponseInfo)) {
             getFriendList(contactBeanList);
-        }else if (JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()){
+        }else if (!JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()){
             parseContactDatas(friendResponseInfo, contactBeanList);
         }
     }

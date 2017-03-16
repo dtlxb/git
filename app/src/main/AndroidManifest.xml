@@ -113,6 +113,8 @@
 
         <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity" />
 
+        <activity android:name="cn.gogoal.im.wxapi.IMP" />
+
         <uses-library
             android:name="com.google.android.maps"
             android:required="false" />

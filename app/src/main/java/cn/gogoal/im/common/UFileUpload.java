@@ -30,7 +30,7 @@ public class UFileUpload {
 
     private UFileUpload() {
     }
-
+    
     private static UFileUpload instance = null;
 
     public static UFileUpload getInstance() {
