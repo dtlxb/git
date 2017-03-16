@@ -32,7 +32,6 @@ import cn.gogoal.im.adapter.recycleviewAdapterHelper.MultiItemTypeAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
@@ -131,7 +130,7 @@ public class ContactsFragment extends BaseFragment {
         KLog.e(friendResponseInfo);
         if (TextUtils.isEmpty(friendResponseInfo)) {
             getFriendList(contactBeanList);
-        } else {
+        }else if (JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()){
             parseContactDatas(friendResponseInfo, contactBeanList);
         }
     }
@@ -153,7 +152,7 @@ public class ContactsFragment extends BaseFragment {
                     parseContactDatas(responseInfo, contactBeanList);
 
                 }else if (JSONObject.parseObject(responseInfo).getIntValue("code")==1001){
-                    SPTools.saveString(UserUtils.getToken() + "_contact_beans", getContext().getString(R.string.default_success));
+                    SPTools.saveString(UserUtils.getToken() + "_contact_beans","{\"code\":0,\"data\":[],\"message\":\"成功\"}");
                 }else {
                     UIHelper.toastError(getContext(),GGOKHTTP.getMessage(responseInfo));
                 }

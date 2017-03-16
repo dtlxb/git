@@ -74,5 +74,4 @@
     <string name="net_erro_hint">数据请求出错</string>
     <string name="default__">--</string>
 
-    <string name="default_success">{"code":0,"data":[],,"message":"成功"}</string>
 </resources>
