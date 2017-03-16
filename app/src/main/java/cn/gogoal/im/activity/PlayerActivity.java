@@ -22,7 +22,6 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -33,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alivc.player.AliVcMediaPlayer;
 import com.alivc.player.MediaPlayer;
 import com.avos.avoscloud.im.v2.AVIMConversation;
@@ -62,11 +62,14 @@ import cn.gogoal.im.bean.RelaterVideoData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.common.GGOKHTTP.GGAPI;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.PlayerUtils.CountDownTimerView;
 import cn.gogoal.im.common.PlayerUtils.PlayerControl;
 import cn.gogoal.im.common.PlayerUtils.StatusListener;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.widget.BottomSheetNormalDialog;
 import cn.gogoal.im.ui.widget.EditTextDialog;
@@ -83,6 +86,20 @@ public class PlayerActivity extends BaseActivity {
 
     @BindView(R.id.player_recyc)
     RecyclerView recyler_chat;
+    @BindView(R.id.linearPlayerChat)
+    LinearLayout linearPlayerChat;
+
+    //详情相关控件
+    @BindView(R.id.textTitle)
+    TextView textTitle;
+    @BindView(R.id.imgPalyer)
+    ImageView imgPalyer;
+    @BindView(R.id.textCompany)
+    TextView textCompany;
+    @BindView(R.id.textMarInter)
+    TextView textMarInter;
+    @BindView(R.id.textOnlineNumber)
+    TextView textOnlineNumber;
 
     //直播预告展示
     @BindView(R.id.countDownTimer)
@@ -130,12 +147,16 @@ public class PlayerActivity extends BaseActivity {
     private List<AVIMMessage> messageList = new ArrayList<>();
     private LiveChatAdapter mLiveChatAdapter;
 
-    private static final String mURI = "rtmp://192.168.52.143:1935/hls/androidtest";
+    private String mURI = "rtmp://192.168.52.143:1935/hls/androidtest";
 
     //聊天对象
     private AVIMConversation imConversation;
 
     private String live_id;
+    private String source;
+
+    //直播介绍
+    private JSONObject anchor;
 
     private Handler mTimerHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -174,6 +195,7 @@ public class PlayerActivity extends BaseActivity {
         setImmersive(true);
 
         live_id = getIntent().getStringExtra("live_id");
+        source = getIntent().getStringExtra("source");
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -197,10 +219,15 @@ public class PlayerActivity extends BaseActivity {
         mLiveChatAdapter = new LiveChatAdapter(PlayerActivity.this, R.layout.item_live_chat, messageList);
         recyler_chat.setAdapter(mLiveChatAdapter);
 
-//        countDownTimer.addTime("2017-02-28 10:01:00");
-//        countDownTimer.start();
+        if (source.equals("live")) {
+            linearPlayerChat.setVisibility(View.VISIBLE);
+        } else if (source.equals("video")) {
+            linearPlayerChat.setVisibility(View.GONE);
+        }
 
         getPlayerInfo();
+
+        getRelaterVideoInfo();
     }
 
     /*
@@ -209,22 +236,55 @@ public class PlayerActivity extends BaseActivity {
     private void getPlayerInfo() {
 
         Map<String, String> param = new HashMap<>();
-        param.put("live_id", live_id);
+
+        if (source.equals("live")) {
+            param.put("live_id", live_id);
+        } else if (source.equals("video")) {
+            param.put("video_id", live_id);
+        }
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
-                //JSONObject object = JSONObject.parseObject(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONObject data = object.getJSONArray("data").getJSONObject(0);
+                    //直播详情
+                    textTitle.setText(data.getString("video_name")); //直播名称
+                    ImageDisplay.loadCircleNetImage(getContext(), data.getString("introduction_img"), imgPalyer);
+                    textCompany.setText(data.getString("朝阳永续"));
+                    textMarInter.setText(data.getString("programme_name"));
+                    textOnlineNumber.setText(data.getString("play_base") + "人在线");
+                    //主播介绍
+                    anchor = data.getJSONObject("anchor");
+                    //倒计时
+                    if (data.getLongValue("launch_time") > 0) {
+                        countDownTimer.setVisibility(View.VISIBLE);
+                        countDownTimer.addTime(data.getString("live_time_start"));
+                        countDownTimer.start();
+                    } else {
+                        countDownTimer.setVisibility(View.GONE);
+                    }
 
+                    mURI = data.getString("url_rtmp");
+
+                } else {
+                    UIHelper.toast(getContext(), R.string.net_erro_hint);
+                }
             }
 
             @Override
             public void onFailure(String msg) {
+                KLog.json(msg);
                 UIHelper.toast(getContext(), R.string.net_erro_hint);
             }
         };
-        new GGOKHTTP(param, GGOKHTTP.GET_STUDIO_LIST, ggHttpInterface).startGet();
+        if (source.equals("live")) {
+            new GGOKHTTP(param, GGOKHTTP.GET_STUDIO_LIST, ggHttpInterface).startGet();
+        } else if (source.equals("video")) {
+            new GGOKHTTP(param, GGOKHTTP.GET_RECORD_LIST, ggHttpInterface).startGet();
+        }
     }
 
     private void getSquareConversation(String conversationId) {
@@ -893,7 +953,7 @@ public class PlayerActivity extends BaseActivity {
                 showRelaterVideo();
                 break;
             case R.id.imgPlayerShare: //分享
-                DialogHelp.showShareDialog(getContext(), "https://m.baidu.com", "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
+                DialogHelp.showShareDialog(getContext(), GGAPI.WEB_URL + "/live/share/" + live_id, "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
                 break;
             case R.id.imgPlayerShotCut:
                 break;
@@ -945,41 +1005,97 @@ public class PlayerActivity extends BaseActivity {
                 TextView anchor_position = (TextView) dialogView.findViewById(R.id.anchor_position);
                 TextView anchor_achieve = (TextView) dialogView.findViewById(R.id.anchor_achieve);
                 TextView anchor_intro = (TextView) dialogView.findViewById(R.id.anchor_intro);
+
+                if (anchor != null) {
+                    ImageDisplay.loadNetImage(getContext(), anchor.getString("face_url"), anchor_avatar);
+                    anchor_name.setText(anchor.getString("anchor_name"));
+                    anchor_position.setText(anchor.getString("organization"));
+                    anchor_achieve.setText(anchor.getString("anchor_position"));
+                    anchor_intro.setText(anchor.getString("anchor_introduction"));
+                }
             }
         });
 
     }
 
     private void showRelaterVideo() {
-        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_relater_video, new LinearLayout(getContext()), false);
-
-        RecyclerView recy_relater = (RecyclerView) dialogView.findViewById(R.id.recy_relater);
-        initRecycleView(recy_relater, null);
-
-        ArrayList<RelaterVideoData> data = new ArrayList<>();
-
-        RelaterVideoAdapter adapter = new RelaterVideoAdapter(getContext(), data);
-
-        recy_relater.setAdapter(adapter);
 
         DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_relater_video, new BottomSheetNormalDialog.ViewListener() {
             @Override
             public void bindDialogView(BottomSheetNormalDialog dialog, View dialogView) {
+                RecyclerView recy_relater = (RecyclerView) dialogView.findViewById(R.id.recy_relater);
+                initRecycleView(recy_relater, null);
 
+                String data = SPTools.getString("data", null);
+
+                KLog.json(data);
+
+                List<RelaterVideoData> videoDatas = JSONObject.parseArray(data, RelaterVideoData.class);
+
+                recy_relater.setAdapter(new RelaterVideoAdapter(getContext(), videoDatas));
             }
         });
     }
 
+    /*
+    * 获取直播相关视频
+    * */
+    private void getRelaterVideoInfo() {
+
+        Map<String, String> param = new HashMap<>();
+        param.put("video_id", live_id);
+
+        if (source.equals("live")) {
+            param.put("video_type", "1");
+        } else if (source.equals("video")) {
+            param.put("video_type", "2");
+        }
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    SPTools.saveString("data", String.valueOf(object.getJSONArray("data")));
+                } else if (object.getIntValue("code") == 1001) {
+                    UIHelper.toast(getContext(), R.string.nodata_hint);
+                } else {
+                    UIHelper.toast(getContext(), R.string.net_erro_hint);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                KLog.json(msg);
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.GET_RELATED_VIDEO, ggHttpInterface).startGet();
+    }
+
     class RelaterVideoAdapter extends CommonAdapter<RelaterVideoData> {
 
-        public RelaterVideoAdapter(Context context, List<RelaterVideoData> data) {
-            super(context, R.layout.item_relater_video, data);
+        public RelaterVideoAdapter(Context context, List<RelaterVideoData> list) {
+            super(context, R.layout.item_relater_video, list);
         }
 
         @Override
         protected void convert(ViewHolder holder, final RelaterVideoData data, int position) {
 
             holder.setAlpha(R.id.text_playback, (float) 0.5);
+            if (data.getType() == 1) {
+                holder.setVisible(R.id.relative_player, true);
+            } else {
+                holder.setVisible(R.id.relative_player, false);
+            }
+            ImageView relater_img = holder.getView(R.id.relater_img);
+            ImageDisplay.loadNetImage(getContext(), data.getVideo_img_url(), relater_img);
+            holder.setText(R.id.relater_tittle, data.getVideo_name());
+            holder.setText(R.id.relater_play_count, data.getPlay_base() + "次");
+            ImageView relater_avatar = holder.getView(R.id.relater_avatar);
+            ImageDisplay.loadCircleNetImage(getContext(), data.getFace_url(), relater_avatar);
+            holder.setText(R.id.relater_name, data.getAnchor_name());
+            holder.setText(R.id.relater_content, data.getProgramme_name());
         }
     }
 

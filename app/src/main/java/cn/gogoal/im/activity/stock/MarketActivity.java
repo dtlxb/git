@@ -104,7 +104,6 @@ public class MarketActivity extends BaseActivity {
         setRecycle(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false), rvSortList);
         getMarketInformation();
         getMarketAd();
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

@@ -277,7 +277,8 @@ public class FoundFragment extends BaseFragment {
                 case 0:
                     Intent intent = new Intent(getContext(), FunctionActivity.class);
                     intent.putExtra("title", itemPojos.getItemTextDescription());
-                    intent.putExtra("function_url", itemPojos.getItemTextDescription());
+                    //intent.putExtra("function_url", itemPojos.getItemTextDescription());
+                    intent.putExtra("function_url", GGAPI.WEB_URL + "/report");
                     startActivity(intent);
                     break;
                 case 1:
