@@ -38,7 +38,7 @@ android {
         multiDexEnabled true
 
         ndk {
-            abiFilters "armeabi", "armeabi-v7a", "x86_64"
+            abiFilters "armeabi", "armeabi-v7a", "x86_64","x86"
         }
     }
 
@@ -70,7 +70,7 @@ android {
         abi {
             enable true
             reset()
-            include 'armeabi-v7a', 'armeabi', 'x86'
+            include 'armeabi-v7a', 'armeabi', 'x86','x86_64'
         }
     }
 }
