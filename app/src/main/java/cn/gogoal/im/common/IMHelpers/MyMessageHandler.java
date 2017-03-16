@@ -1,5 +1,6 @@
 package cn.gogoal.im.common.IMHelpers;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMClient;
@@ -10,11 +11,15 @@ import com.socks.library.KLog;
 
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.BaseMessage;
+import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.IMNewFriendBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.UserUtils;
 
 import java.util.HashMap;
+
+import static cn.gogoal.im.common.UserUtils.getToken;
 
 /**
  * Created by huangxx on 2017/2/20.
@@ -34,24 +39,58 @@ public class MyMessageHandler extends AVIMMessageHandler {
                     if (clientID.equals(client.getClientId())) {
                         //剔除自己消息
                         if (!message.getFrom().equals(clientID)) {
-                            //接收到消息，发送出去
-                            sendIMMessage(message, conversation);
-                            //系统消息，加好友
-                            JSONObject jsonObject;
-                            if ((int) conversation.getAttribute("chat_type") == 1004) {
-                                JSONArray jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_newFriendList", new JSONArray());
-                                jsonObject = new JSONObject();
-                                jsonObject.put("message", message);
-                                jsonObject.put("isYourFriend", false);
-                                jsonArray.add(jsonObject);
-                                SPTools.saveJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_newFriendList", jsonArray);
-                            } else if (1005 == (int) conversation.getAttribute("chat_type")) {
-                                String contatString = SPTools.getString(AppConst.LEAN_CLOUD_TOKEN + "_contact_beans", "");
-                                jsonObject = new JSONObject();
-                                jsonObject.put("message", message);
-                                SPTools.saveString(AppConst.LEAN_CLOUD_TOKEN + "_contact_beans", contatString);
+
+                            int chatType = (int) conversation.getAttribute("chat_type");
+                            switch (chatType) {
+                                case 1001:
+                                    //单聊
+                                    sendIMMessage(message, conversation);
+                                    break;
+                                case 1002:
+                                    //群聊
+                                    sendIMMessage(message, conversation);
+                                    break;
+                                case 1003:
+                                    //直播
+                                    sendIMMessage(message, conversation);
+                                    break;
+                                case 1004:
+                                    //接收到消息，发送出去
+                                    sendIMMessage(message, conversation);
+
+                                    //加好友
+                                    JSONArray jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_newFriendList", new JSONArray());
+                                    JSONObject jsonObject = new JSONObject();
+                                    jsonObject.put("message", message);
+                                    jsonObject.put("isYourFriend", false);
+                                    jsonArray.add(jsonObject);
+                                    SPTools.saveJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_newFriendList", jsonArray);
+                                    break;
+                                case 1005:
+                                    //好友更新
+                                    JSONObject contentObject = JSON.parseObject(message.getContent());
+                                    JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
+                                    String avatar = lcattrsObject.getString("avatar");
+                                    String nickName = lcattrsObject.getString("nickname");
+                                    String conv_id = lcattrsObject.getString("conv_id");
+                                    int friend_id = lcattrsObject.getInteger("friend_id");
+
+                                    ContactBean<String> contactBean = new ContactBean<>();
+                                    contactBean.setRemark("");
+                                    contactBean.setNickname(nickName);
+                                    contactBean.setAvatar(avatar);
+                                    contactBean.setFriend_id(friend_id);
+                                    contactBean.setContactType(ContactBean.ContactType.PERSION_ITEM);
+                                    contactBean.setConv_id(conv_id);
+                                    String friendList = UserUtils.updataFriendList(JSONObject.toJSON(contactBean).toString());
+                                    SPTools.saveString(getToken() + "_contact_beans", friendList);
+                                    break;
+                                case 1006:
+                                    //公众号
+                                    break;
+                                default:
+                                    break;
                             }
-                            KLog.e(conversation.getConversationId());
                         }
                     } else {
                         client.close(null);

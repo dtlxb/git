@@ -84,7 +84,7 @@ public class MessageFragment extends BaseFragment {
         initRecycleView(message_recycler, R.drawable.shape_divider_recyclerview_1px);
 
         if (null != jsonArray) {
-            IMMessageBeans = JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class);
+            IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
         }
 
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
@@ -338,7 +338,6 @@ public class MessageFragment extends BaseFragment {
             //单聊,群聊,加好友请求
             case 1001:
             case 1002:
-                break;
             case 1004:
                 break;
             //直播
@@ -355,7 +354,7 @@ public class MessageFragment extends BaseFragment {
         }
 
         //保存
-        IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), (int) conversation.getAttribute("chat_type"), message.getTimestamp(),
+        IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), chatType, message.getTimestamp(),
                 "0", nickName, AppConst.LEANCLOUD_APP_ID, avatar, message);
         MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
 

@@ -55,31 +55,5 @@ public class SingleChatRoomActivity extends BaseActivity {
                 UIHelper.toast(SingleChatRoomActivity.this, error);
             }
         });
-       /* conversationQuery.findInBackground(new AVIMConversationQueryCallback() {
-            @Override
-            public void done(List<AVIMConversation> list, AVIMException e) {
-
-                if (null == e) {
-                    if (null != list && list.size() > 0) {
-                        imConversation = list.get(0);
-                        Log.e("LEAN_CLOUD1", "find conversation success" + " : " + imConversation.getConversationId());
-                    } else {
-                        //HashMap<String, Object> attributes = new HashMap<String, Object>();
-                        //attributes.put("customConversationType", 1);
-                        avimClient.createConversation(memberList, null, null, false, true, new AVIMConversationCreatedCallback() {
-                            @Override
-                            public void done(AVIMConversation avimConversation, AVIMException e) {
-                                if (null == e) {
-                                    imConversation = avimConversation;
-                                    chatFragment.setConversation(imConversation);
-                                    Log.e("LEAN_CLOUD2", "find conversation success" + " : " + imConversation.getConversationId());
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-        });*/
-
     }
 }

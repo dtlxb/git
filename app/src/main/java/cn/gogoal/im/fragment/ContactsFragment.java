@@ -13,11 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -65,6 +62,12 @@ public class ContactsFragment extends BaseFragment {
     @Override
     public int bindLayout() {
         return R.layout.fragment_contacts;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     @Override
@@ -125,10 +128,11 @@ public class ContactsFragment extends BaseFragment {
         contactBeanList.add(addFunctionHead("公众号", R.mipmap.cache_img_contacts_3));
 
         String friendResponseInfo = SPTools.getString(UserUtils.getToken() + "_contact_beans", "");
-        if (TextUtils.isEmpty(friendResponseInfo)){
+        KLog.e(friendResponseInfo);
+        if (TextUtils.isEmpty(friendResponseInfo)) {
             getFriendList(contactBeanList);
-        }else {
-            parseContactDatas(friendResponseInfo,contactBeanList);
+        } else {
+            parseContactDatas(friendResponseInfo, contactBeanList);
         }
     }
 
@@ -192,4 +196,10 @@ public class ContactsFragment extends BaseFragment {
         return bean;
     }
 
+    @Subscriber(tag = "refresh_contactAdapter")
+    public void refreshAdapter() {
+        List<ContactBean> contactBeanList = new ArrayList<>();
+        getData(contactBeanList);//列表数据
+        contactAdapter.notifyDataSetChanged();
+    }
 }

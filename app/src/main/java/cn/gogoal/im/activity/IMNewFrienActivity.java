@@ -34,7 +34,6 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.XTitle;
 
-import static cn.gogoal.im.base.MyApp.getContext;
 
 /**
  * Created by huangxx on 2017/3/13.
@@ -115,7 +114,8 @@ public class IMNewFrienActivity extends BaseActivity {
             ImageDisplay.loadNetImage(IMNewFrienActivity.this, avatar, avatarIv);
             holder.setText(R.id.nickname, nickName);
             holder.setText(R.id.last_message, message + "\t\t" + dateStr);
-            if (mIMNewFriendBean.getYourFriend()) {
+            KLog.e(mIMNewFriendBean);
+            if (mIMNewFriendBean.getIsYourFriend()) {
                 addView.setText("已添加");
                 addView.setTextColor(ContextCompat.getColor(IMNewFrienActivity.this, R.color.relater_play_count));
                 addView.setBackgroundResource(R.color.absoluteWhite);
@@ -129,6 +129,7 @@ public class IMNewFrienActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     AddFirend(mIMNewFriendBean, firend_id, addView);
+                    addView.setClickable(false);
                 }
             });
         }
@@ -154,9 +155,14 @@ public class IMNewFrienActivity extends BaseActivity {
                         view.setText("已添加");
                         view.setTextColor(ContextCompat.getColor(IMNewFrienActivity.this, R.color.relater_play_count));
                         view.setBackgroundResource(R.color.absoluteWhite);
+                        view.setClickable(true);
 
                         for (int i = 0; i < jsonArray.size(); i++) {
-                            if (((AVIMMessage) ((JSONObject) jsonArray.get(i)).get("message")).getFrom().equals(mIMNewFriendBean.getMessage().getFrom())) {
+
+                            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                            JSONObject messageJSONObject = (JSONObject) jsonObject.get("message");
+
+                            if (messageJSONObject.getString("from").equals(mIMNewFriendBean.getMessage().getFrom())) {
                                 ((JSONObject) jsonArray.get(i)).put("isYourFriend", true);
                             }
                         }
@@ -169,6 +175,7 @@ public class IMNewFrienActivity extends BaseActivity {
             @Override
             public void onFailure(String msg) {
                 KLog.json(msg);
+                view.setClickable(true);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.ADD_FRIEND, ggHttpInterface).startGet();

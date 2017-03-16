@@ -10,11 +10,6 @@ public class IMNewFriendBean {
     AVIMMessage message;
     Boolean isYourFriend;
 
-    public IMNewFriendBean(AVIMMessage message, Boolean isYourFriend) {
-        this.message = message;
-        this.isYourFriend = isYourFriend;
-    }
-
     public AVIMMessage getMessage() {
         return message;
     }
@@ -23,11 +18,11 @@ public class IMNewFriendBean {
         this.message = message;
     }
 
-    public Boolean getYourFriend() {
+    public Boolean getIsYourFriend() {
         return isYourFriend;
     }
 
-    public void setYourFriend(Boolean yourFriend) {
+    public void setIsYourFriend(Boolean yourFriend) {
         isYourFriend = yourFriend;
     }
 
