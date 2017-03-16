@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.Iterator;
+
 /**
  * author wangjd on 2017/2/8 0008.
  * Staff_id 1375
@@ -24,15 +26,31 @@ public class UserUtils {
 
     public static String updataFriendList(String newFriendJson) {
         String responseInfo = SPTools.getString(getToken() + "_contact_beans", "");
-        if (TextUtils.isEmpty(responseInfo)){
+        if (TextUtils.isEmpty(responseInfo)) {
             return null;
         }
         JSONObject jsonObject = JSONObject.parseObject(responseInfo);
         JSONArray friendList = (JSONArray) jsonObject.remove("data");
-        friendList.add(JSONObject.parseObject(newFriendJson));
 
-        jsonObject.put("data",friendList);
+        JSONObject newObject = JSONObject.parseObject(newFriendJson);
+
+        if (!jsonArrauContain(friendList,newObject,"friend_id")){
+            friendList.add(newObject);
+        }
+        jsonObject.put("data", friendList);
         return jsonObject.toString();
+    }
+
+    private static boolean jsonArrauContain(JSONArray array, JSONObject ele, String flag) {
+        Iterator<Object> iterator = array.iterator();
+
+        while (iterator.hasNext()) {
+            JSONObject object = (JSONObject) iterator.next();
+            if (object.getString(flag).equals(ele.getString(flag))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // TODO: 临时token

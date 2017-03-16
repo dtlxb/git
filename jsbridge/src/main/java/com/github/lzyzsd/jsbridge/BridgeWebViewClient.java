@@ -1,13 +1,13 @@
 package com.github.lzyzsd.jsbridge;
 
-import android.app.Dialog;
 import android.graphics.Bitmap;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AbsoluteLayout;
+import android.widget.LinearLayout;
 
-import com.socks.library.KLog;
+import com.github.lzyzsd.library.R;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -17,7 +17,6 @@ import java.net.URLDecoder;
  */
 public class BridgeWebViewClient extends WebViewClient {
 
-    private final Dialog loadingDialog;
     private BridgeWebView webView;
 
     private PageLoadFinishListener mFinishListener;
@@ -25,7 +24,6 @@ public class BridgeWebViewClient extends WebViewClient {
     BridgeWebViewClient(BridgeWebView webView, PageLoadFinishListener mFinishListener) {
         this.webView = webView;
         this.mFinishListener = mFinishListener;
-        loadingDialog = webView.getLoadingDialog();
     }
 
     @Override
@@ -63,17 +61,34 @@ public class BridgeWebViewClient extends WebViewClient {
         }
     }
 
+    //loading
+    private View mLoadingView;
+
+    private void showLoadingPage() {
+        initLoadingPage();
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(AbsoluteLayout.LayoutParams.MATCH_PARENT, AbsoluteLayout.LayoutParams.MATCH_PARENT);
+        lp.setMargins(0, Utils.dp2px(webView.getContext(), 2), 0, 0);
+        if (webView.getChildCount() < 2) {
+            webView.addView(mLoadingView, 0, lp);
+        }
+    }
+
+    private void hideLoadingPage() {
+        if (null != webView.getChildAt(0)) {
+            webView.removeViewAt(0);
+        }
+    }
+
+    private void initLoadingPage() {
+        if (mLoadingView == null) {
+            mLoadingView = View.inflate(webView.getContext(), R.layout.web_loading, null);
+        }
+    }
+
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
         super.onPageStarted(view, url, favicon);
-
-        if (!view.canGoBack() && loadingDialog != null) {
-            try {
-                loadingDialog.show();
-            } catch (Exception e) {
-                KLog.e(e);
-            }
-        }
+        showLoadingPage();
     }
 
     @Override
@@ -88,28 +103,13 @@ public class BridgeWebViewClient extends WebViewClient {
             }
         }
 
-//        if (BridgeUtil.useEvaluateJS()) {
-//            BridgeUtil.webViewLoadLocalJs(view, "WebViewJavascriptBridgeGE19.js");
-//        } else {
-//            BridgeUtil.webViewLoadLocalJs(view, "WebViewJavascriptBridge.js");
-//        }
-//
-//        if (webView.getStartupMessage() != null) {
-//            for (Message m : webView.getStartupMessage()) {
-//                webView.dispatchMessage(m);
-//            }
-//            webView.setStartupMessage(null);
-//        }
+        new android.os.Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideLoadingPage();
+            }
+        },3000);
 
-        if (loadingDialog.isShowing()) {
-            new android.os.Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    loadingDialog.dismiss();
-                    loadingDialog.cancel();
-                }
-            }, 500);
-        }
     }
 
     @Override
