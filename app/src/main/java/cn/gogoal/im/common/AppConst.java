@@ -17,8 +17,6 @@ public class AppConst {
 
     public static final String privatekey = "27f435a8c39f515b01a3db66acbdd7ef9b37d16c";
 
-    public static final String UFILE_IMAGE_COMPRESS = "?iopcmd=thumbnail&type=1&scale=%s";
-
     //微信参数
     public static final String WEIXIN_APP_ID = "wx05acb31be27d76aa";
     public static final String WEIXIN_APP_SECRET = "cc2412a472da396eb16ea879d64613ad";

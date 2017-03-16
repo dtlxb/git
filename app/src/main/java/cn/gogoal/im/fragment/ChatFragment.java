@@ -13,11 +13,9 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.alibaba.fastjson.JSONArray;
@@ -411,7 +409,7 @@ public class ChatFragment extends BaseFragment {
         mImageMessage.setTimestamp(CalendarUtils.getCurrentTime());
 
         imChatAdapter.addItem(mImageMessage);
-        message_recycler.smoothScrollToPosition(messageList.size());
+        message_recycler.smoothScrollToPosition(messageList.size()-1);
         //message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
 
         //分个上传UFile;
@@ -491,6 +489,8 @@ public class ChatFragment extends BaseFragment {
                 map.put("audio_message", mAudioMessage);
                 BaseMessage baseMessage = new BaseMessage("audio_info", map);
                 AppManager.getInstance().sendMessage("refresh_recyle", baseMessage);
+                message_recycler.smoothScrollToPosition(messageList.size()-1);
+                //message_recycler.getLayoutManager().scrollToPosition(messageList.size() - 1);
 
                 UFileUpload.getInstance().upload(new File(voicePath), UFileUpload.Type.AUDIO, new UFileUpload.UploadListener() {
                     @Override
@@ -560,6 +560,7 @@ public class ChatFragment extends BaseFragment {
 
                         imChatAdapter.setChatType(imConversation.getAttribute("chat_type") == null ? 1001 : (int) imConversation.getAttribute("chat_type"));
                         imChatAdapter.notifyDataSetChanged();
+
                         //message_recycler.smoothScrollToPosition(messageList.size()-1);
                         message_recycler.getLayoutManager().scrollToPosition(messageList.size() - 1);
                     }

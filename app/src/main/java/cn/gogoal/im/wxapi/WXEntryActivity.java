@@ -7,12 +7,6 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
-import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.common.openServices.IOpenCallback;
-import cn.gogoal.im.common.openServices.OpenServiceFactory;
 import com.socks.library.KLog;
 import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
@@ -20,6 +14,12 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.GetBuilder;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.openServices.IOpenCallback;
+import cn.gogoal.im.common.openServices.OpenServiceFactory;
 import okhttp3.Call;
 
 // 实现IWXAPIEventHandler 接口，以便于微信事件处理的回调
@@ -91,13 +91,13 @@ public class WXEntryActivity extends Activity{
                 .build()
                 .execute(new StringCallback() {
                     @Override
-                    public void onError(Call call, Exception e) {
+                    public void onError(Call call, Exception e, int id) {
                         KLog.e("鉴权失败：" + e.getMessage());
                         WXEntryActivity.this.finish();
                     }
 
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(String response, int id) {
 //                        KLog.e(response);
                         if (JSONObject.parseObject(response).getString("errmsg").equals("ok")) {
                             // 说明 accessToken没有过期，获取用户信息
@@ -127,13 +127,13 @@ public class WXEntryActivity extends Activity{
                 .build()
                 .execute(new StringCallback() {
                     @Override
-                    public void onError(Call call, Exception e) {
+                    public void onError(Call call, Exception e, int id) {
                         KLog.e("错误信息" + e.getMessage());
                         WXEntryActivity.this.finish();
                     }
 
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(String response, int id) {
                         KLog.e("refreshAccessToken: " + response);
                         // 判断是否获取成功，成功则去获取用户信息，否则提示失败
                         processGetAccessTokenResult(response);
@@ -178,12 +178,12 @@ public class WXEntryActivity extends Activity{
         GetBuilder builder = OkHttpUtils.get();
         builder.url(tokenUrl).build().execute(new StringCallback() {
             @Override
-            public void onError(Call call, Exception e) {
+            public void onError(Call call, Exception e, int id) {
                 UIHelper.toast(getContext(), "GET ACCESS TOKENANDOPENID ERROR::" + e.getMessage());
             }
 
             @Override
-            public void onResponse(String response) {
+            public void onResponse(String response, int id) {
                 //{"access_token":"PQrnZblMXucR5YvyOI2tPJn7wcl4MA2FjnY2u6o3-BbYIbCo8Scj6KCqNda8MLLoE4ISJ8OzniEX5ylEHW2SAm1-5ghX-4GJX3st1Pi0CYc",
                 // "expires_in":7200,
                 // "refresh_token":"9zWxjda0plg8JoM6CYiYYOaH90si5tN4AF9Ovs6pF20m8SHlRxESRwWuP_QLocMnHKP5Y1PYNQUtk9Gf_j017fH4EUhes8DG-zS4mNE3R5E",
@@ -207,20 +207,36 @@ public class WXEntryActivity extends Activity{
                 .build()
                 .execute(new StringCallback() {
                     @Override
-                    public void onError(Call call, Exception e) {
+                    public void onError(Call call, Exception e, int id) {
                         KLog.e(e.getMessage());
                         WXEntryActivity.this.finish();
                     }
 
                     @Override
-                    public void onResponse(String response) {
-//                        KLog.e("微信用户信息: " + response);
+                    public void onResponse(String response, int id) {
+                        KLog.e("微信用户信息: " + response);
                         if (wechatCallback!=null){
                             wechatCallback.onSuccess(response);
                         }
                         finish();
                     }
                 });
+//                .execute(new StringCallback() {
+//                    @Override
+//                    public void onError(Call call, Exception e) {
+//                        KLog.e(e.getMessage());
+//                        WXEntryActivity.this.finish();
+//                    }
+//
+//                    @Override
+//                    public void onResponse(String response) {
+////                        KLog.e("微信用户信息: " + response);
+//                        if (wechatCallback!=null){
+//                            wechatCallback.onSuccess(response);
+//                        }
+//                        finish();
+//                    }
+//                });
     }
 
     private boolean HasInternet() {

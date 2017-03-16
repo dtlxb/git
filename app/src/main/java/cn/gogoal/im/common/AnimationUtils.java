@@ -49,7 +49,6 @@ public class AnimationUtils {
         loveBtn.startAnimation(anim2);
     }
 
-
     public RotateAnimation setLoadingAnime(ImageView refreshBtn, @DrawableRes int rotateImage) {
         refreshBtn.setImageResource(rotateImage);
         RotateAnimation animation = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF,
@@ -59,7 +58,6 @@ public class AnimationUtils {
         animation.setFillAfter(true);
         animation.setStartOffset(0);
         animation.setInterpolator(new LinearInterpolator());
-        animation.startNow();
         refreshBtn.setAnimation(animation);
         return animation;
     }
@@ -71,4 +69,5 @@ public class AnimationUtils {
             refreshView.clearAnimation();
         }
     }
+
 }

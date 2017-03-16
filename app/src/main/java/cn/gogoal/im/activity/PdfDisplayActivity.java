@@ -1,10 +1,32 @@
 package cn.gogoal.im.activity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.os.AsyncTask;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 
+import com.alibaba.fastjson.JSONObject;
+import com.github.barteksc.pdfviewer.PDFView;
+import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
+import com.hply.imagepicker.view.StatusBarUtil;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.common.FileUtil;
+import cn.gogoal.im.common.MD5Utils;
 
 /**
  * author wangjd on 2017/3/13 0013.
@@ -14,13 +36,15 @@ import cn.gogoal.im.base.BaseActivity;
 
 public class PdfDisplayActivity extends BaseActivity {
 
-//    @BindView(R.id.pdf_view)
-//    PDFView pdfView;
+    @BindView(R.id.pdf_view)
+    PDFView pdfView;
 
     /* 进度条对话框 */
     private ProgressDialog pdialog;
 
     private String pdfUrl;
+
+//    http://rlrw.bnu.edu.cn/NewsImage/2012410100744.pdf
 
     @Override
     public int bindLayout() {
@@ -29,72 +53,84 @@ public class PdfDisplayActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-//        if (StatusBarUtil.with(this).isOperableDevice()){
-//            StatusBarUtil.with(this).setStatusBarFontDark(true);
-//        }else {
-//            StatusBarUtil.with(this).setColor(Color.BLACK);
-//        }
-//        String jsonData = getIntent().getStringExtra("pdf_data");
-//        if (!TextUtils.isEmpty(jsonData)) {
-//            try {
-//                pdfUrl = JSONObject.parseObject(jsonData).getString("pdfUrl");
-//                setMyTitle(JSONObject.parseObject(jsonData).getString("title"), true);
-//                new MyLoadAsyncTask().execute(pdfUrl);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
+
+        if (StatusBarUtil.with(this).isOperableDevice()){
+            StatusBarUtil.with(this).setStatusBarFontDark(true);
+        }else {
+            StatusBarUtil.with(this).setColor(Color.BLACK);
+        }
+        String jsonData = getIntent().getStringExtra("pdf_data");
+        if (!TextUtils.isEmpty(jsonData)) {
+            try {
+                pdfUrl = JSONObject.parseObject(jsonData).getString("pdfUrl");
+                setMyTitle(JSONObject.parseObject(jsonData).getString("title"), true);
+
+                new MyLoadAsyncTask().execute(pdfUrl);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
-  /*  @Nullable
+    @Nullable
     @Override
     protected Dialog onCreateDialog(int id) {
-        *//* 实例化进度条对话框 *//*
+//         实例化进度条对话框
         pdialog = new ProgressDialog(this);
-        *//* 进度条对话框属性设置 *//*
+        pdialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (pdialog.getProgress()<95) {
+                    FileUtil.deleteDir(getExternalFilesDir("cachePdf"));
+                    finish();
+                }
+            }
+        });
+        pdialog.setCanceledOnTouchOutside(false);
+//         进度条对话框属性设置
         pdialog.setMessage("加载中...");
-        *//* 进度值最大100 *//*
+//         进度值最大100
         pdialog.setMax(100);
-        *//* 水平风格进度条 *//*
+//         水平风格进度条
         pdialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        *//* 无限循环模式 *//*
+//         无限循环模式
         pdialog.setIndeterminate(false);
-        *//* 可取消 *//*
+//         可取消
         pdialog.setCancelable(true);
-        *//* 显示对话框 *//*
+//         显示对话框
         pdialog.show();
         return pdialog;
     }
 
-    *//* 异步任务，后台处理与更新UI *//*
-    class MyLoadAsyncTask extends AsyncTask<String, String, String> {
+//     异步任务，后台处理与更新UI
+    private class MyLoadAsyncTask extends AsyncTask<String, String, String> {
 
-        *//* 后台线程 *//*
+//         后台线程
         @Override
         protected String doInBackground(String... params) {
-            *//* 所下载文件的URL *//*
+//             所下载文件的URL
             InputStream in = null;
             FileOutputStream out = null;
             try {
                 URL url = new URL(params[0]);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                *//* URL属性设置 *//*
+//                 URL属性设置
                 conn.setRequestMethod("GET");
-                *//* URL建立连接 *//*
+//                 URL建立连接
                 conn.connect();
-                *//* 下载文件的大小 *//*
+//                 下载文件的大小
                 int fileOfLength = conn.getContentLength();
-                *//* 每次下载的大小与总下载的大小 *//*
+//                 每次下载的大小与总下载的大小
                 int totallength = 0;
                 int length = 0;
-                *//* 输入流 *//*
+//                 输入流
                 in = conn.getInputStream();
-                *//* 输出流 *//*
+//                 输出流
                 out = new FileOutputStream(new File(getExternalFilesDir("cachePdf"),
                         MD5Utils.getMD5EncryptyString(pdfUrl)));//命名
 
-                *//* 缓存模式，下载文件 *//*
+//                 缓存模式，下载文件
                 byte[] buff = new byte[1024 * 1024];
                 while ((length = in.read(buff)) > 0) {
                     totallength += length;
@@ -124,17 +160,21 @@ public class PdfDisplayActivity extends BaseActivity {
             return null;
         }
 
-        *//* 预处理UI线程 *//*
+//         预处理UI线程
         @Override
         protected void onPreExecute() {
             showDialog(0);
             super.onPreExecute();
         }
 
-        *//* 结束时的UI线程 *//*
+//         结束时的UI线程
         @Override
         protected void onPostExecute(String result) {
-            dismissDialog(0);
+            try {
+                dismissDialog(0);
+            }catch (Exception e){
+
+            }
             super.onPostExecute(result);
 
             pdfView.fromFile(new File(getExternalFilesDir("cachePdf").getPath(), MD5Utils.getMD5EncryptyString(pdfUrl)))
@@ -146,7 +186,7 @@ public class PdfDisplayActivity extends BaseActivity {
 
         }
 
-        *//* 处理UI线程，会被多次调用,触发事件为publicProgress方法 *//*
+//         处理UI线程，会被多次调用,触发事件为publicProgress方法
         @Override
         protected void onProgressUpdate(String... values) {
             //进度显示
@@ -159,5 +199,19 @@ public class PdfDisplayActivity extends BaseActivity {
         super.onDestroy();
         File file = getExternalFilesDir("cachePdf");
         FileUtil.deleteDir(file);
-    }*/
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode==KeyEvent.KEYCODE_BACK){
+            if (pdialog.isShowing()){
+                pdialog.dismiss();
+                finish();
+            }
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 }

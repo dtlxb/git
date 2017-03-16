@@ -34,6 +34,8 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.XTitle;
 
+import static cn.gogoal.im.base.MyApp.getContext;
+
 /**
  * Created by huangxx on 2017/3/13.
  */

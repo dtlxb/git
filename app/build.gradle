@@ -14,6 +14,10 @@ android {
     compileSdkVersion ANDROID_COMPILE_SDK_VERSION as int
     buildToolsVersion ANDROID_BUILD_TOOLS_VERSION
 
+    /*dexOptions {
+        javaMaxHeapSize "4g"
+    }*/
+
     defaultConfig {
         minSdkVersion ANDROID_BUILD_MIN_SDK_VERSION as int
         targetSdkVersion ANDROID_BUILD_TARGET_SDK_VERSION as int
@@ -21,13 +25,20 @@ android {
         versionName VERSION_NAME
 
         applicationId APP_APPLICATION_ID
-        
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+
+        manifestPlaceholders = [
+                GETUI_APP_ID    : "Kb4fbbPem39Psl4xC3ta34",
+                GETUI_APP_KEY   : "finYiVZzSaAGjpE0sTb9S4",
+                GETUI_APP_SECRET: "a6CrMypVHMArwEScTt43E4"
+        ]
 
         multiDexEnabled true
 
         ndk {
-            abiFilters "armeabi", "arm64-v8a", "x86"
+            abiFilters "armeabi", "armeabi-v7a", "x86_64"
         }
     }
 
@@ -82,7 +93,8 @@ dependencies {
     //微信登录、分享、支付依赖
     compile files('libs/libammsdk.jar')
     //网络请求
-    compile 'com.zhy:okhttputils:2.2.1'
+//    compile 'com.zhy:okhttputils:2.2.1'
+    compile 'com.zhy:okhttputils:2.6.2'
     //消息框架
     compile 'org.simple:androideventbus:1.0.5.1'
     //注释框架
@@ -99,7 +111,7 @@ dependencies {
     // 约80KB,拼音转换库
     compile 'com.github.promeg:tinypinyin:2.0.2'
     //pdf在线预览框架-十几兆，好TM大
-    //compile 'com.github.barteksc:android-pdf-viewer:2.4.0'
+    compile 'com.github.barteksc:android-pdf-viewer:2.4.0'
     //自己库
     compile project(':imagepicker')
     compile project(':jsbridge')
@@ -109,13 +121,14 @@ dependencies {
     //UCloud存储
     compile project(':uFileLib')
     //阿里云播放器
-    compile files('libs/alivc-player-2.2.0.20.jar')
+    compile files('libs/alivc-player-2.3.0.jar')
     //阿里云推流
     compile files('libs/alivc-live-record-v1.2.0.jar')
-    // 约80KB
     //鲁班压缩
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'
     compile 'top.zibin:Luban:1.0.9'
-
+    //个推
+    compile 'com.getui:sdk:2.9.5.0'
+    compile 'com.android.support:multidex:1.0.1'
 }

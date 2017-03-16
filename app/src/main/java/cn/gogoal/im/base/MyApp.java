@@ -16,6 +16,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.MyConversationHandler;
@@ -71,7 +75,6 @@ public class MyApp extends Application {
             ApplicationGlue.initialize(this);
 
         }
-
     }
 
     /**
@@ -93,6 +96,7 @@ public class MyApp extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     public static Context getContext() {

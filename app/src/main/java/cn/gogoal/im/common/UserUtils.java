@@ -1,6 +1,10 @@
 package cn.gogoal.im.common;
 
 import android.app.Activity;
+import android.text.TextUtils;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * author wangjd on 2017/2/8 0008.
@@ -16,5 +20,23 @@ public class UserUtils {
         // TODO: 2017/2/8 0008
         mContext.finish();
         UIHelper.toast(mContext, "退出登录成功!");
+    }
+
+    public static String updataFriendList(String newFriendJson) {
+        String responseInfo = SPTools.getString(getToken() + "_contact_beans", "");
+        if (TextUtils.isEmpty(responseInfo)){
+            return null;
+        }
+        JSONObject jsonObject = JSONObject.parseObject(responseInfo);
+        JSONArray friendList = (JSONArray) jsonObject.remove("data");
+        friendList.add(JSONObject.parseObject(newFriendJson));
+
+        jsonObject.put("data",friendList);
+        return jsonObject.toString();
+    }
+
+    // TODO: 临时token
+    public static String getToken() {
+        return AppConst.LEAN_CLOUD_TOKEN;
     }
 }

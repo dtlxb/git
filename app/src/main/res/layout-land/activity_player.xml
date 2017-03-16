@@ -47,8 +47,8 @@
                 android:id="@+id/textTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="2"
                 android:text="@string/textBlank"
                 android:textColor="@android:color/white"
                 android:textSize="14dp" />
@@ -131,11 +131,11 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/player_recyc"
-        android:layout_width="250dp"
-        android:layout_height="200dp"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
         android:layout_above="@+id/functionBar"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="15dp" />
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="20dp" />
 
     <LinearLayout
         android:id="@+id/functionBar"
