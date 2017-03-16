@@ -80,15 +80,21 @@ public class MineFragment extends BaseFragment {
         }
 
         @Override
-        protected void convert(ViewHolder holder, final ImageTextBean<Integer> data, int position) {
+        protected void convert(ViewHolder holder, final ImageTextBean<Integer> data, final int position) {
             holder.setImageResource(R.id.iv_mine_item_icon, data.getIamge());
             holder.setText(R.id.tv_mine_item_text, data.getText());
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UIHelper.toast(v.getContext(), data.getText());
+
+                    switch (position) {
+                        default:
+                            UIHelper.toast(v.getContext(), data.getText());
+                            break;
+                    }
                 }
             });
         }
     }
+
 }
