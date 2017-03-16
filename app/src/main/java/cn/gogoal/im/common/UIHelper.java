@@ -233,10 +233,13 @@ public class UIHelper {
         } else {
             //下载图片，第二个参数是否缓存至内存中
             OkHttpUtils.get().url(imageUrl).build().execute(new BitmapCallback() {
-                public void onError(Call call, Exception e) {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+
                 }
 
-                public void onResponse(Bitmap bitmap) {
+                @Override
+                public void onResponse(Bitmap bitmap, int id) {
                     if (bitmap != null) {
                         Bitmap thumbBmp = Bitmap.createScaledBitmap(bitmap, 120, 120, true);
                         msg.thumbData = WXUtil.bmpToByteArray(thumbBmp, true);

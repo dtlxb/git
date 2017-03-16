@@ -1,5 +1,6 @@
 package cn.gogoal.im.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,8 +19,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
-
-import static cn.gogoal.im.base.MyApp.getContext;
+import cn.gogoal.im.common.UIHelper;
 
 public class FunctionActivity extends BaseActivity {
 
@@ -34,7 +34,7 @@ public class FunctionActivity extends BaseActivity {
     }
 
     @Override
-    public void doBusiness(Context mContext) {
+    public void doBusiness(final Context mContext) {
 
         title = getIntent().getStringExtra("title");
         String url = getIntent().getStringExtra("function_url");
@@ -95,13 +95,31 @@ public class FunctionActivity extends BaseActivity {
         /*pdf阅读*/
         webView.registerHandler("loadPdfFromWeb", new BridgeHandler() {
             @Override
-            public void handler(String data, ValueCallback<String> function) {
-                if (!TextUtils.isEmpty(data)) {
+            public void handler(final String data, ValueCallback<String> function) {
+                if (AppDevice.getNetworkType(getContext())==2 || AppDevice.getNetworkType(getContext())==3){
+                    new AlertDialog.Builder(mContext,R.style.HoloDialogStyle).setTitle("提示")
+                            .setMessage("阁下当前网络为数据流量\t是否继续?")
+                            .setPositiveButton("确定,有的是流量", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (!TextUtils.isEmpty(data)) {
+                                        Intent intent=new Intent(getContext(),PdfDisplayActivity.class);
+                                        intent.putExtra("pdf_data",data);
+                                        startActivity(intent);
+                                    }
+                                }
+                            }).setNegativeButton("取消", null).show();
 
-                    Intent intent=new Intent(FunctionActivity.this,PdfDisplayActivity.class);
-                    intent.putExtra("pdf_data",data);
-                    startActivity(intent);
+                }else if (AppDevice.getNetworkType(getContext())==1){
+                    if (!TextUtils.isEmpty(data)) {
+                        Intent intent=new Intent(getContext(),PdfDisplayActivity.class);
+                        intent.putExtra("pdf_data",data);
+                        startActivity(intent);
+                    }
+                }else {
+                    UIHelper.toastError(mContext,"跳转出错");
                 }
+
             }
         });
 
@@ -125,6 +143,9 @@ public class FunctionActivity extends BaseActivity {
         }
     }
 
+    private FunctionActivity getContext(){
+        return FunctionActivity.this;
+    }
     private void initWebView(BridgeWebView mWebView) {
         WebSettings settings = mWebView.getSettings();
         mWebView.setDefaultHandler(new DefaultHandler());

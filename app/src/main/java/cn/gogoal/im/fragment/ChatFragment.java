@@ -13,11 +13,9 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.alibaba.fastjson.JSONArray;
@@ -206,7 +204,7 @@ public class ChatFragment extends BaseFragment {
 
                 imChatAdapter.addItem(mTextMessage);
 //                message_recycler.smoothScrollToPosition(messageList.size());
-                message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
+                message_recycler.getLayoutManager().scrollToPosition(messageList.size() - 1);
 
                 //文字消息基本信息
                 Map<Object, Object> messageMap = new HashMap<>();
@@ -414,7 +412,7 @@ public class ChatFragment extends BaseFragment {
 
         imChatAdapter.addItem(mImageMessage);
 //        message_recycler.smoothScrollToPosition(messageList.size());
-        message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
+        message_recycler.getLayoutManager().scrollToPosition(messageList.size() - 1);
 
         //分个上传UFile;
         UFileUpload.getInstance().upload(file, UFileUpload.Type.IMAGE, new UFileUpload.UploadListener() {
@@ -494,7 +492,7 @@ public class ChatFragment extends BaseFragment {
                 BaseMessage baseMessage = new BaseMessage("audio_info", map);
                 AppManager.getInstance().sendMessage("refresh_recyle", baseMessage);
 //                message_recycler.smoothScrollToPosition(messageList.size());
-                message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
+                message_recycler.getLayoutManager().scrollToPosition(messageList.size() - 1);
 
                 UFileUpload.getInstance().upload(new File(voicePath), UFileUpload.Type.AUDIO, new UFileUpload.UploadListener() {
                     @Override
@@ -565,7 +563,7 @@ public class ChatFragment extends BaseFragment {
                         imChatAdapter.setChatType(imConversation.getAttribute("chat_type") == null ? "1001" : imConversation.getAttribute("chat_type").toString());
                         imChatAdapter.notifyDataSetChanged();
 //                        message_recycler.smoothScrollToPosition(messageList.size());
-                        message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
+                        message_recycler.getLayoutManager().scrollToPosition(messageList.size() - 1);
                     }
                 }
             });
@@ -715,7 +713,7 @@ public class ChatFragment extends BaseFragment {
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
                 imChatAdapter.addItem(message);
 //                message_recycler.smoothScrollToPosition(messageList.size());
-                message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
+                message_recycler.getLayoutManager().scrollToPosition(messageList.size() - 1);
 
                 //此处头像，昵称日后有数据再改
                 IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), message.getTimestamp(),

@@ -38,7 +38,7 @@ public class Utils {
     /**
      * 判断SDCard是否可用
      */
-    public static boolean existSDCard() {
+    static boolean existSDCard() {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
@@ -50,4 +50,6 @@ public class Utils {
         activity.getWindowManager().getDefaultDisplay().getMetrics(displaysMetrics);
         return displaysMetrics;
     }
+
+
 }

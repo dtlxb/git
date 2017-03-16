@@ -82,7 +82,8 @@ dependencies {
     //微信登录、分享、支付依赖
     compile files('libs/libammsdk.jar')
     //网络请求
-    compile 'com.zhy:okhttputils:2.2.1'
+//    compile 'com.zhy:okhttputils:2.2.1'
+    compile 'com.zhy:okhttputils:2.6.2'
     //消息框架
     compile 'org.simple:androideventbus:1.0.5.1'
     //注释框架
@@ -99,7 +100,7 @@ dependencies {
     // 约80KB,拼音转换库
     compile 'com.github.promeg:tinypinyin:2.0.2'
     //pdf在线预览框架-十几兆，好TM大
-    //compile 'com.github.barteksc:android-pdf-viewer:2.4.0'
+    compile 'com.github.barteksc:android-pdf-viewer:2.4.0'
     //自己库
     compile project(':imagepicker')
     compile project(':jsbridge')

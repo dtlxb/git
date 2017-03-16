@@ -114,26 +114,40 @@ public class GGOKHTTP {
 
     public void startGet() {
         try {
-            OkHttpUtils
-                    .get()
-                    .url(GGAPI.get(url, param))
+            OkHttpUtils.get()
+                    .url(GGAPI.get(url,param))
                     .build()
                     .execute(new StringCallback() {
                         @Override
-                        public void onError(Call call, Exception e) {
+                        public void onError(Call call, Exception e, int id) {
                             if (httpInterface != null) httpInterface.onFailure(e.toString());
                         }
 
                         @Override
-                        public void onResponse(String response) {
+                        public void onResponse(String response, int id) {
                             if (httpInterface != null) httpInterface.onSuccess(response);
-//                            try {
-//                                KLog.e(GGAPI.get(url, param));
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
                         }
                     });
+//            OkHttpUtils
+//                    .get()
+//                    .url(GGAPI.get(url, param))
+//                    .build()
+//                    .execute(new StringCallback() {
+//                        @Override
+//                        public void onError(Call call, Exception e) {
+//                            if (httpInterface != null) httpInterface.onFailure(e.toString());
+//                        }
+//
+//                        @Override
+//                        public void onResponse(String response) {
+//                            if (httpInterface != null) httpInterface.onSuccess(response);
+////                            try {
+////                                KLog.e(GGAPI.get(url, param));
+////                            } catch (Exception e) {
+////                                e.printStackTrace();
+////                            }
+//                        }
+//                    });
         } catch (Exception e) {
             e.printStackTrace();
             if (httpInterface != null) httpInterface.onFailure(e.toString());
@@ -146,22 +160,40 @@ public class GGOKHTTP {
             Map<String, String> params;
             posturl = GGAPI.post(url, param);
             params = (Map<String, String>) posturl.get("params");
-            OkHttpUtils
-                    .post()
+
+            OkHttpUtils.post()
                     .url(posturl.get("url").toString())
                     .params(params)
                     .build()
                     .execute(new StringCallback() {
                         @Override
-                        public void onError(Call call, Exception e) {
+                        public void onError(Call call, Exception e, int id) {
                             if (httpInterface != null) httpInterface.onFailure(e.toString());
                         }
 
                         @Override
-                        public void onResponse(String response) {
+                        public void onResponse(String response, int id) {
                             if (httpInterface != null) httpInterface.onSuccess(response);
                         }
                     });
+
+//            OkHttpUtils
+//                    .post()
+//                    .url(posturl.get("url").toString())
+//                    .params(params)
+//                    .build()
+//                    .execute(new StringCallback() {
+//                        @Override
+//                        public void onError(Call call, Exception e) {
+//                            if (httpInterface != null) httpInterface.onFailure(e.toString());
+//                        }
+//
+//                        @Override
+//                        public void onResponse(String response) {
+//                            if (httpInterface != null) httpInterface.onSuccess(response);
+//                        }
+//                    });
+
         } catch (Exception e) {
             if (httpInterface != null) httpInterface.onFailure(e.toString());
         }

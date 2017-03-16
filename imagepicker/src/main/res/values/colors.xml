@@ -5,4 +5,6 @@
     <color name="status_bar">#303135</color>
     <color name="top_bar">#9f556061</color>
     <color name="transparent">#00000000</color>
+
+    <color name="colorTitle">#f0f0f0</color>
 </resources>

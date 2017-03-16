@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:textSize="13sp"
         android:maxLines="1"
+        android:textColor="@color/textColor_666666"
         android:text="描述文字" />
 
 </LinearLayout>

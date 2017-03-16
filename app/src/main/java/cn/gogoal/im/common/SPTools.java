@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public class SPTools {
 
-  private static final String PREFERENCES_key = "yuanfang_preferences";
+  private static final String PREFERENCES_key = "gogoal_preferences";
 
   private static SharedPreferences mPreference = null;
 

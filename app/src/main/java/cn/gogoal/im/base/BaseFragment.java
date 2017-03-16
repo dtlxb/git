@@ -2,6 +2,7 @@ package cn.gogoal.im.base;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -103,4 +104,8 @@ public abstract class BaseFragment extends Fragment implements IBase {
     @Override
     public void initView(View view) {
     }
+    public int getResColor(@ColorRes int colorId){
+        return ContextCompat.getColor(getContext(),colorId);
+    }
+
 }

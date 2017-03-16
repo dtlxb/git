@@ -130,9 +130,10 @@ public class ContactsFragment extends BaseFragment {
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
 
-                SPTools.saveString(AppConst.LEAN_CLOUD_TOKEN + "_Contacts", responseInfo);
+                SPTools.saveString(AppConst.LEAN_CLOUD_TOKEN + "_contact_beans", responseInfo);
 
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+
                     BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
                             responseInfo,
                             new TypeReference<BaseBeanList<ContactBean<String>>>() {

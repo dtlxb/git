@@ -1,13 +1,9 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-
-import com.hply.imagepicker.view.StatusBarUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,15 +36,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-
-        StatusBarUtil barUtil = StatusBarUtil.with(this);
-               barUtil.setColor(ContextCompat.getColor(this,R.color.colorTitle));
-
-        if (barUtil.isOperableDevice()){
-            barUtil.setStatusBarFontDark(true);
-        }else {
-            barUtil.setColor(Color.BLACK);
-        }
 
         MessageFragment messageFragment = new MessageFragment();        // TAB1 消息
 

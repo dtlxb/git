@@ -1,9 +1,7 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSON;
@@ -67,14 +65,14 @@ public class IMNewFrienActivity extends BaseActivity {
             });
         }
 
-        listAdapter = new ListAdapter(getContext(), R.layout.item_new_friend, IMMessageBeans);
+        listAdapter = new ListAdapter(mContext, R.layout.item_new_friend, IMMessageBeans);
         newFriendList.setAdapter(listAdapter);
     }
 
 
-    class ListAdapter extends CommonAdapter<IMMessageBean> {
+    private class ListAdapter extends CommonAdapter<IMMessageBean> {
 
-        public ListAdapter(Context context, int layoutId, List<IMMessageBean> datas) {
+        private ListAdapter(Context context, int layoutId, List<IMMessageBean> datas) {
             super(context, layoutId, datas);
         }
 
