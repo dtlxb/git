@@ -89,10 +89,10 @@ public class UIHelper {
             return;
         }
         if (mToast == null) {
-            mToast = Toast.makeText(cont, AppDevice.isNetworkConnected(cont) ? msg : "当前网络不可用", Toast.LENGTH_SHORT);
+            mToast = Toast.makeText(cont, AppDevice.isNetworkConnected(cont) ? msg : "当前网络不可用", Toast.LENGTH_LONG);
         } else {
             mToast.setText(msg);
-            mToast.setDuration(Toast.LENGTH_SHORT);
+            mToast.setDuration(Toast.LENGTH_LONG);
         }
         mToast.show();
     }
@@ -104,10 +104,10 @@ public class UIHelper {
         String errorMessage = JSONObject.parseObject(response).getString("message");
 
         if (mToast == null) {
-            mToast = Toast.makeText(cont, errorMessage, Toast.LENGTH_SHORT);
+            mToast = Toast.makeText(cont, errorMessage, Toast.LENGTH_LONG);
         } else {
             mToast.setText(errorMessage);
-            mToast.setDuration(Toast.LENGTH_SHORT);
+            mToast.setDuration(Toast.LENGTH_LONG);
         }
         mToast.show();
     }

@@ -25,7 +25,6 @@ import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.avos.avoscloud.im.v2.AVIMTypedMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
@@ -58,6 +57,7 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.CalendarUtils;
+import cn.gogoal.im.common.ConversationUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
@@ -142,6 +142,7 @@ public class ChatFragment extends BaseFragment {
 
         keyBordHeight = SPTools.getInt("soft_keybord_height", AppDevice.dp2px(getContext(), 220));
         setContentHeight();
+
 
         //多功能消息发送
         chatFunctionAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
@@ -533,6 +534,8 @@ public class ChatFragment extends BaseFragment {
 
     private void getHistoryMessage() {
         if (null != imConversation) {
+
+            ConversationUtils.getInstance().test(15,imConversation);
             imConversation.queryMessages(20, new AVIMMessagesQueryCallback() {
                 @Override
                 public void done(List<AVIMMessage> list, AVIMException e) {
