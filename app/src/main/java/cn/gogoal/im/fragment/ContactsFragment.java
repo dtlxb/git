@@ -30,7 +30,6 @@ import cn.gogoal.im.adapter.recycleviewAdapterHelper.MultiItemTypeAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
@@ -137,12 +136,12 @@ public class ContactsFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
 
-                SPTools.saveString(AppConst.LEAN_CLOUD_TOKEN + "_contact_beans", responseInfo);
-
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-
+                    SPTools.saveString(UserUtils.getToken() + "_contact_beans", responseInfo);
                     parseContactDatas(responseInfo, contactBeanList);
 
+                }else if (JSONObject.parseObject(responseInfo).getIntValue("code")==1001){
+                    SPTools.saveString(UserUtils.getToken() + "_contact_beans", getContext().getString(R.string.default_success));
                 }else {
                     UIHelper.toastError(getContext(),GGOKHTTP.getMessage(responseInfo));
                 }

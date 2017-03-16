@@ -28,6 +28,7 @@ public class UserUtils {
     @SuppressLint("UseSparseArrays")
     public static String updataFriendList(String newFriendJson) {
         String responseInfo = SPTools.getString(getToken() + "_contact_beans", "");
+
         if (TextUtils.isEmpty(newFriendJson)) {
             return null;
         }
