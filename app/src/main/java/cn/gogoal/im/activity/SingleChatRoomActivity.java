@@ -38,7 +38,7 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
         String conversation_id = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("conversation_id"), "");
         String nickname = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("nickname"), "");
 
-        initTitle(nickname,conversation_id);
+        initTitle(nickname, conversation_id);
 
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
 
@@ -47,19 +47,23 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
 
     }
 
-    private void initTitle(String nickname,final String conversation_id) {
+    private void initTitle(String nickname, final String conversation_id) {
         XTitle title = setMyTitle(nickname + "聊天窗口", true);
 
         //添加action
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(SingleChatRoomActivity.this, R.mipmap.chat_person)) {
             @Override
             public void actionClick(View view) {
-                Intent intent = new Intent(SingleChatRoomActivity.this, IMPersonActivity.class);
-                Bundle mBundle = new Bundle();
-                mBundle.putSerializable("seri", contactBean);
-                mBundle.putString("conversation_id", conversation_id);
-                intent.putExtras(mBundle);
-                startActivity(intent);
+                if (null != contactBean) {
+                    Intent intent = new Intent(SingleChatRoomActivity.this, IMPersonActivity.class);
+                    Bundle mBundle = new Bundle();
+                    mBundle.putSerializable("seri", contactBean);
+                    mBundle.putString("conversation_id", conversation_id);
+                    intent.putExtras(mBundle);
+                    startActivity(intent);
+                } else {
+                    UIHelper.toast(getActivity(), "连接断开了");
+                }
             }
         };
         title.addAction(personAction, 0);
