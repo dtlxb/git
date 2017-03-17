@@ -12,7 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/absoluteWhite"
-        android:padding="23dp" />
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="22dp"
+        android:paddingTop="22dp" />
 
     <TextView
         android:id="@+id/tv_jumpto_search"
