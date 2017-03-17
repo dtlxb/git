@@ -49,12 +49,6 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
 
     private void initTitle(String nickname,final String conversation_id) {
         XTitle title = setMyTitle(nickname + "聊天窗口", true);
-        title.addAction(new XTitle.ImageAction(getResDrawable(R.mipmap.contact_person)) {
-            @Override
-            public void actionClick(View view) {
-                startActivity(new Intent(getActivity(),SearchActivity.class));
-            }
-        });
 
         //添加action
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(SingleChatRoomActivity.this, R.mipmap.chat_person)) {

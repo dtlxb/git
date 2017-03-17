@@ -15,7 +15,7 @@
         android:padding="23dp" />
 
     <TextView
-        android:id="@+id/tv_jumpto_search"
+        android:id="@+id/tv_do_search_conversation"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginTop="19dp"
