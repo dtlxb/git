@@ -153,6 +153,7 @@ public class PlayerActivity extends BaseActivity {
 
     private String live_id;
     private String source;
+    private String room_id;
 
     //直播介绍
     private JSONObject anchor;
@@ -212,10 +213,6 @@ public class PlayerActivity extends BaseActivity {
         initSurface();
 
         initRecycleView(recyler_chat, null);
-        //String conversationID = this.getIntent().getExtras().getString("conversation_id");
-        String conversationID = AppConst.LEAN_CLOUD_CONVERSATION_ID;
-
-        getSquareConversation(conversationID);
 
         mLiveChatAdapter = new LiveChatAdapter(PlayerActivity.this, R.layout.item_live_chat, messageList);
         recyler_chat.setAdapter(mLiveChatAdapter);
@@ -274,6 +271,10 @@ public class PlayerActivity extends BaseActivity {
 
                         mURI = data.getString("video_file");
                     }
+
+                    room_id = data.getString("room_id");
+
+                    getSquareConversation(room_id);
 
                     startToPlay(mURI);
 
