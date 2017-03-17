@@ -23,8 +23,7 @@
             android:layout_height="36dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/btn_cancle"
-            app:queryHint="搜索"/>
+            android:layout_toStartOf="@+id/btn_cancle"/>
 
         <TextView
             android:id="@+id/btn_cancle"

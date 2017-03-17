@@ -71,6 +71,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
     public void setStatusBar(){
         StatusBarUtil.with(BaseActivity.this).initForGogoal(false);
     }
+
     //封装运行时权限
     public static void requestRuntimePermission(String[] permissions, IPermissionListner listener) {
         mListener = listener;

@@ -3,19 +3,20 @@ package cn.gogoal.im.base;
 import android.app.Activity;
 import android.support.v4.app.FragmentActivity;
 
-import cn.gogoal.im.bean.BaseMessage;
-
 import org.simple.eventbus.EventBus;
 
-import java.util.Stack;
+import java.util.LinkedList;
+
+import cn.gogoal.im.bean.BaseMessage;
 
 /**
  * 应用程序Activity管理类：用于Activity管理和应用程序退出
  */
 public class AppManager {
 
-    private static Stack<FragmentActivity> activityStack;
-    private static AppManager instance;
+    private static LinkedList<FragmentActivity> activityStack;
+
+    private volatile static AppManager instance;
 
     private AppManager() {
     }
@@ -24,12 +25,13 @@ public class AppManager {
      * 单一实例
      */
     public static AppManager getInstance() {
-        if (instance == null) {
-            instance = new AppManager();
-        }
-
-        if (activityStack == null) {
-            activityStack = new Stack<>();
+        if (null == instance) {
+            synchronized (AppManager.class) {
+                if (null == instance) {
+                    instance = new AppManager();
+                    activityStack = new LinkedList<>();
+                }
+            }
         }
 
         return instance;
@@ -39,7 +41,7 @@ public class AppManager {
      * 获取指定的Activity
      */
     public Activity getActivity(Class<?> cls) {
-        if (activityStack != null)
+        if (activityStack != null && !activityStack.isEmpty())
             for (Activity activity : activityStack) {
                 if (activity.getClass().equals(cls)) {
                     return activity;
@@ -51,41 +53,41 @@ public class AppManager {
     /**
      * 添加Activity到堆栈
      */
-    public void addActivity(FragmentActivity activity) {
+    void addActivity(FragmentActivity activity) {
         activityStack.add(activity);
+    }
+
+    private boolean isStackEmpty() {
+        return activityStack == null || activityStack.isEmpty();
+    }
+
+    private boolean isEmpty(Activity activity) {
+        return isStackEmpty() || activity == null;
     }
 
     /**
      * 获取当前Activity（堆栈中最后一个压入的）
      */
     public Activity currentActivity() {
-        return activityStack.lastElement();
+        if (isStackEmpty()) {
+            return null;
+        }
+        return activityStack.get(activityStack.size() - 1);
     }
 
-    /**
-     * 结束当前Activity（堆栈中最后一个压入的）
-     */
-    public void finishActivity() {
-        FragmentActivity activity = activityStack.lastElement();
-        finishActivity(activity);
-    }
-
-    /**
-     * 结束指定的Activity
-     */
-    public void finishActivity(FragmentActivity activity) {
+    private void removeActivity(FragmentActivity activity) {
         if (activity != null && activityStack.contains(activity)) {
             activityStack.remove(activity);
-            activity.finish();
         }
     }
 
     /**
      * 结束指定的Activity
      */
-    public void removeActivity(FragmentActivity activity) {
-        if (activity != null && activityStack.contains(activity)) {
-            activityStack.remove(activity);
+    public void finishActivity(FragmentActivity activity) {
+        if (!isEmpty(activity)) {
+            removeActivity(activity);
+            activity.finish();
         }
     }
 
@@ -105,11 +107,10 @@ public class AppManager {
      * 结束除当前Activity之外的Activity
      */
 
-    public void finishBackActivity(FragmentActivity activity){
+    public void finishBackActivity(FragmentActivity activity) {
         for (FragmentActivity a : activityStack) {
             if (!a.getClass().equals(activity.getClass())) {
                 finishActivity(a);
-                break;
             }
         }
     }
@@ -118,21 +119,14 @@ public class AppManager {
      * 结束所有Activity
      */
     public void finishAllActivity() {
-        for (int i = 0; i < activityStack.size(); i++) {
-            if (null != activityStack.get(i)) {
-                (activityStack.get(i)).finish();
+        if (!isStackEmpty()) {
+            for (FragmentActivity activity:activityStack) {
+               activity.finish();
             }
+            activityStack.clear();
         }
-        activityStack.clear();
-
     }
 
-    public FragmentActivity getCurrentActivity(){
-        if (!activityStack.isEmpty()){
-            return activityStack.get(activityStack.size()-1);
-        }
-        return null;
-    }
     /**
      * 发送消息
      */

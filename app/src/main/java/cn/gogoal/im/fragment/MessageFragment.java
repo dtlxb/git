@@ -117,7 +117,6 @@ public class MessageFragment extends BaseFragment {
 
         message_recycler.setAdapter(listAdapter);
 
-        //长按删除
         listAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, final int position) {
@@ -169,6 +168,7 @@ public class MessageFragment extends BaseFragment {
 
             }
 
+            //长按删除
             @Override
             public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, final int position) {
                 DialogHelp.getSelectDialog(getActivity(), "", new String[]{"标为未读", "置顶聊天", "删除聊天"}, new DialogInterface.OnClickListener() {

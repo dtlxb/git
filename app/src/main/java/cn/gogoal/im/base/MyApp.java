@@ -11,10 +11,7 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.duanqu.qupai.jni.ApplicationGlue;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import com.socks.library.KLog;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -62,8 +59,10 @@ public class MyApp extends Application {
             AVImClientManager.getInstance().open(AppConst.LEAN_CLOUD_TOKEN, new AVIMClientCallback() {
                 @Override
                 public void done(AVIMClient avimClient, AVIMException e) {
+                    KLog.e(e.getAppCode()+";"+e.getMessage());
                 }
             });
+
             //TODO 注册消息接收器
 
             //阿里云推流

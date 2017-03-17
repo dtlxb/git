@@ -29,7 +29,9 @@ public class IMPersonActivity extends BaseActivity {
     RecyclerView personlistRecycler;
 
     private PersonInfoAdapter mPersonInfoAdapter;
+
     private List<ContactBean> contactBeens = new ArrayList<>();
+    private String conversationId;
 
     @Override
     public int bindLayout() {
@@ -41,6 +43,7 @@ public class IMPersonActivity extends BaseActivity {
         setMyTitle("聊天详情", true);
         initRecycleView(personlistRecycler, null);
         ContactBean contactBean = (ContactBean) getIntent().getSerializableExtra("seri");
+        conversationId = getIntent().getStringExtra("conversation_id");
         contactBeens.add(contactBean);
         //初始化
         personlistRecycler.setLayoutManager(new GridLayoutManager(this, 4));
@@ -52,7 +55,9 @@ public class IMPersonActivity extends BaseActivity {
     void function(View view) {
         switch (view.getId()) {
             case R.id.tv_do_search_conversation:
-                startActivity(new Intent(getActivity(),SearchActivity.class));
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("conversation_id",conversationId);
+                startActivity(intent);
                 break;
             case R.id.getmessage_swith:
                 break;
@@ -61,7 +66,7 @@ public class IMPersonActivity extends BaseActivity {
 
     private class PersonInfoAdapter extends CommonAdapter<ContactBean> {
 
-        public PersonInfoAdapter(Context context, int layoutId, List<ContactBean> datas) {
+        private PersonInfoAdapter(Context context, int layoutId, List<ContactBean> datas) {
             super(context, layoutId, datas);
         }
 

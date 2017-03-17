@@ -35,8 +35,8 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
 
     @Override
     public void doBusiness(Context mContext) {
-        String conversation_id = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("conversation_id"), "");
-        String nickname = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("nickname"), "");
+        String conversation_id = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("conversation_id"));
+        String nickname = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("nickname"));
 
         initTitle(nickname,conversation_id);
 
