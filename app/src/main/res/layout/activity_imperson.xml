@@ -12,10 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/absoluteWhite"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="22dp"
-        android:paddingTop="22dp" />
+        android:padding="10dp" />
 
     <TextView
         android:id="@+id/tv_do_search_conversation"
