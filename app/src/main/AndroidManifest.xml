@@ -24,8 +24,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <!-- iBeancon功能所需权限 -->;
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <!-- 个推3.0电子围栏功能所需权限 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -56,10 +56,9 @@
             android:name=".servise.PushService"
             android:exported="true"
             android:label="PushService"
-            android:process=":pushservice">
-        </service>
+            android:process=":pushservice"></service>
 
-        <service android:name=".servise.IntentService"/>
+        <service android:name=".servise.IntentService" />
 
         <activity
             android:name=".activity.MainActivity"
@@ -111,9 +110,14 @@
             android:name="cn.gogoal.im.activity.IMNewFrienActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name="cn.gogoal.im.activity.IMPersonActivity"
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".activity.SearchActivity" />
+
         <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity" />
 
-        <activity android:name=".activity.SearchActivity"/>
         <uses-library
             android:name="com.google.android.maps"
             android:required="false" />

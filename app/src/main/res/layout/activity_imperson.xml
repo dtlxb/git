@@ -1,6 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/personlist_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/absoluteWhite"
+        android:padding="23dp" />
+
+    <TextView
+        android:id="@+id/tv_jumpto_search"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="19dp"
+        android:background="@drawable/shape_text_border"
+        android:drawableRight="@mipmap/forward"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="查看聊天内容"
+        android:textColor="@color/textColor_333333"
+        android:textSize="17sp" />
+
+    <RelativeLayout
+        android:id="@+id/getmessage_swith"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="19dp"
+        android:background="@drawable/shape_text_border"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="消息免打扰"
+            android:textColor="@color/textColor_333333"
+            android:textSize="17sp" />
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@null" />
+
+    </RelativeLayout>
 
 </LinearLayout>

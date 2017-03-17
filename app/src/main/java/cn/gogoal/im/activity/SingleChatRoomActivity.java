@@ -2,6 +2,7 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
@@ -10,6 +11,7 @@ import com.socks.library.KLog;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -20,10 +22,11 @@ import cn.gogoal.im.ui.view.XTitle;
  * Created by huangxx on 2017/2/21.
  */
 
-public class SingleChatRoomActivity extends BaseActivity {
+public class SingleChatRoomActivity extends BaseActivity implements ChatFragment.MyListener {
 
     //聊天对象
     private ChatFragment chatFragment;
+    private ContactBean contactBean;
 
     @Override
     public int bindLayout() {
@@ -34,9 +37,9 @@ public class SingleChatRoomActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         String conversation_id = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("conversation_id"), "");
         String nickname = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("nickname"), "");
-        initTitle(nickname);
 
-        initAction(conversation_id);
+        initTitle(nickname,conversation_id);
+
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
 
         //输入聊天对象ID，返回conversation对象
@@ -44,7 +47,7 @@ public class SingleChatRoomActivity extends BaseActivity {
 
     }
 
-    private void initTitle(String nickname) {
+    private void initTitle(String nickname,final String conversation_id) {
         XTitle title = setMyTitle(nickname + "聊天窗口", true);
         title.addAction(new XTitle.ImageAction(getResDrawable(R.mipmap.contact_person)) {
             @Override
@@ -52,18 +55,20 @@ public class SingleChatRoomActivity extends BaseActivity {
                 startActivity(new Intent(getActivity(),SearchActivity.class));
             }
         });
-    }
 
-    private void initAction(final String conversation_id) {
         //添加action
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(SingleChatRoomActivity.this, R.mipmap.chat_person)) {
             @Override
             public void actionClick(View view) {
-                Intent intent=new Intent(SingleChatRoomActivity.this,IMPersonActivity.class);
-                intent.putExtra("conversation_id",conversation_id);
+                Intent intent = new Intent(SingleChatRoomActivity.this, IMPersonActivity.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable("seri", contactBean);
+                mBundle.putString("conversation_id", conversation_id);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         };
+        title.addAction(personAction, 0);
     }
 
     public void getSingleConversation(String conversation_id) {
@@ -81,5 +86,10 @@ public class SingleChatRoomActivity extends BaseActivity {
                 UIHelper.toast(SingleChatRoomActivity.this, error);
             }
         });
+    }
+
+    @Override
+    public void setData(ContactBean contactBean) {
+        this.contactBean = contactBean;
     }
 }

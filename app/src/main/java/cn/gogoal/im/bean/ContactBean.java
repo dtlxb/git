@@ -2,6 +2,8 @@ package cn.gogoal.im.bean;
 
 import android.text.TextUtils;
 
+import java.io.Serializable;
+
 import cn.gogoal.im.ui.index.BaseIndexPinyinBean;
 
 /**
@@ -9,7 +11,7 @@ import cn.gogoal.im.ui.index.BaseIndexPinyinBean;
  * Staff_id 1375
  * phone 18930640263
  */
-public class ContactBean<T> extends BaseIndexPinyinBean {
+public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable {
 
     private ContactType contactType;//item类型
 
@@ -93,24 +95,24 @@ public class ContactBean<T> extends BaseIndexPinyinBean {
 
     @Override
     public String getTarget() {
-        return TextUtils.isEmpty(getRemark())?
-                (TextUtils.isEmpty(getNickname())?"未命名":getNickname()):
+        return TextUtils.isEmpty(getRemark()) ?
+                (TextUtils.isEmpty(getNickname()) ? "未命名" : getNickname()) :
                 getRemark();
     }
 
     @Override
     public boolean isNeedToPinyin() {
-        return getContactType()==ContactType.PERSION_ITEM;
+        return getContactType() == ContactType.PERSION_ITEM;
     }
 
 
     @Override
     public boolean isShowSuspension() {
-        return getContactType()==ContactType.PERSION_ITEM;
+        return getContactType() == ContactType.PERSION_ITEM;
     }
 
 
-    public enum ContactType{
+    public enum ContactType {
         FUNCTION_ITEM(0), PERSION_ITEM(0);
         private int type;
 
