@@ -51,11 +51,12 @@ public class SingleChatRoomActivity extends BaseActivity {
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(SingleChatRoomActivity.this, R.mipmap.chat_person)) {
             @Override
             public void actionClick(View view) {
-                Intent intent=new Intent(SingleChatRoomActivity.this,IMPersonActivity.class);
-                intent.putExtra("conversation_id",conversation_id);
+                Intent intent = new Intent(SingleChatRoomActivity.this, IMPersonActivity.class);
+                intent.putExtra("conversation_id", conversation_id);
                 startActivity(intent);
             }
         };
+        xTitle.addAction(personAction, 0);
     }
 
     public void getSingleConversation(String conversation_id) {

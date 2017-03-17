@@ -67,7 +67,7 @@ public class IMAddFriendActivity extends BaseActivity {
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 KLog.e(result.get("code"));
                 if ((int) result.get("code") == 0) {
-                    UIHelper.toast(IMAddFriendActivity.this, "添加成功!!!");
+                    UIHelper.toast(IMAddFriendActivity.this, "好友请求发送成功!");
                     editYourMessage.setText("");
                 }
             }
