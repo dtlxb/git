@@ -233,7 +233,9 @@ public class MarketActivity extends BaseActivity {
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     SPTools.saveJsonArray("marketAdData", JSONObject.parseObject(responseInfo).getJSONArray("data"));
                     parseBannerData(responseInfo);
-                } else {
+                } else if (JSONObject.parseObject(responseInfo).getIntValue("code")==1001){
+
+                }else {
                     UIHelper.toastResponseError(getContext(), responseInfo);
                 }
             }

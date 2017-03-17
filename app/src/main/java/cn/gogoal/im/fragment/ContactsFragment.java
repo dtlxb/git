@@ -127,7 +127,6 @@ public class ContactsFragment extends BaseFragment {
         contactBeanList.add(addFunctionHead("公众号", R.mipmap.cache_img_contacts_3));
 
         String friendResponseInfo = SPTools.getString(UserUtils.getToken() + "_contact_beans", "");
-        KLog.e(friendResponseInfo);
         if (TextUtils.isEmpty(friendResponseInfo)) {
             getFriendList(contactBeanList);
         }else if (!JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()){
