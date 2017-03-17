@@ -28,6 +28,7 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
 
         manifestPlaceholders = [
                 GETUI_APP_ID    : "Kb4fbbPem39Psl4xC3ta34",
@@ -39,6 +40,14 @@ android {
 
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "x86_64","x86"
+        }
+    }
+
+    productFlavors {
+        //通用包
+        general {
+            manifestPlaceholders = [CHANNEL_NAME: "ng-tongyong"]
+            proguardFile 'proguard-rules.pro'
         }
     }
 

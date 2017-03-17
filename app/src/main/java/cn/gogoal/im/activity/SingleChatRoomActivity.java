@@ -12,7 +12,6 @@ import com.socks.library.KLog;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
-import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -27,7 +26,6 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
 
     //聊天对象
     private ChatFragment chatFragment;
-    private XTitle xTitle;
     private ContactBean contactBean;
 
     @Override
@@ -39,9 +37,9 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
     public void doBusiness(Context mContext) {
         String conversation_id = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("conversation_id"), "");
         String nickname = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("nickname"), "");
-        xTitle = setMyTitle(nickname + "聊天窗口", true);
 
-        initAction(conversation_id);
+        initTitle(nickname,conversation_id);
+
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
 
         //输入聊天对象ID，返回conversation对象
@@ -49,7 +47,9 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
 
     }
 
-    private void initAction(final String conversation_id) {
+    private void initTitle(String nickname,final String conversation_id) {
+        XTitle title = setMyTitle(nickname + "聊天窗口", true);
+
         //添加action
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(SingleChatRoomActivity.this, R.mipmap.chat_person)) {
             @Override
@@ -62,7 +62,7 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
                 startActivity(intent);
             }
         };
-        xTitle.addAction(personAction, 0);
+        title.addAction(personAction, 0);
     }
 
     public void getSingleConversation(String conversation_id) {

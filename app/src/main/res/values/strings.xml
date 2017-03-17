@@ -74,5 +74,6 @@
     <string name="nomoredata_hint">没有更多数据</string>
     <string name="net_erro_hint">数据请求出错</string>
     <string name="default__">--</string>
+    <string name="str_cancle">取消</string>
 
 </resources>

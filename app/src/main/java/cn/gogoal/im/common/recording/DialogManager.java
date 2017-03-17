@@ -61,7 +61,7 @@ public class DialogManager {
             mVoiceLevel.setVisibility(View.GONE);
             mLable.setVisibility(View.VISIBLE);
 
-            mIcon.setImageResource(R.drawable.cancel);
+            mIcon.setImageResource(R.drawable.voice_cancel);
             mLable.setText(mContext.getString(R.string.str_recorder_dialog_cancle));
             mLable.setBackgroundResource(R.drawable.shape_wechat_record_text_error);
         }

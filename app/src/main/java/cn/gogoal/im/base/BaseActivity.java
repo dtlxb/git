@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
@@ -257,5 +259,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     public int getResColor(@ColorRes int colorId){
         return ContextCompat.getColor(BaseActivity.this,colorId);
+    }
+
+    public Drawable getResDrawable(@DrawableRes int drawableid){
+        return ContextCompat.getDrawable(BaseActivity.this, drawableid);
     }
 }

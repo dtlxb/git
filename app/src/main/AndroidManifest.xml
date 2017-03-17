@@ -114,6 +114,8 @@
             android:name="cn.gogoal.im.activity.IMPersonActivity"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".activity.SearchActivity" />
+
         <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity" />
 
         <uses-library

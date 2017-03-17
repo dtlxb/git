@@ -3,15 +3,12 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
+import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,11 +60,11 @@ public class IMPersonActivity extends BaseActivity {
         return bean;
     }
 
-    @OnClick({R.id.tv_jumpto_search, R.id.getmessage_swith})
+    @OnClick({R.id.tv_do_search_conversation, R.id.getmessage_swith})
     void function(View view) {
         switch (view.getId()) {
-            case R.id.tv_jumpto_search:
-
+            case R.id.tv_do_search_conversation:
+                startActivity(new Intent(getActivity(),SearchActivity.class));
                 break;
             case R.id.getmessage_swith:
                 break;
