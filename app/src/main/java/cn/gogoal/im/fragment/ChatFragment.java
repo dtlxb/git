@@ -13,11 +13,9 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.alibaba.fastjson.JSONArray;
@@ -27,7 +25,6 @@ import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.avos.avoscloud.im.v2.AVIMTypedMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
@@ -60,6 +57,7 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.CalendarUtils;
+import cn.gogoal.im.common.ConversationUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
@@ -145,6 +143,7 @@ public class ChatFragment extends BaseFragment {
         keyBordHeight = SPTools.getInt("soft_keybord_height", AppDevice.dp2px(getContext(), 220));
         setContentHeight();
 
+
         //多功能消息发送
         chatFunctionAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
@@ -203,8 +202,8 @@ public class ChatFragment extends BaseFragment {
                 mTextMessage.setText(etInput.getText().toString());
 
                 imChatAdapter.addItem(mTextMessage);
-//                message_recycler.smoothScrollToPosition(messageList.size());
-                message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
+                message_recycler.smoothScrollToPosition(messageList.size() - 1);
+                //message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
 
                 //文字消息基本信息
                 Map<Object, Object> messageMap = new HashMap<>();
@@ -215,7 +214,7 @@ public class ChatFragment extends BaseFragment {
                 Map<String, String> params = new HashMap<>();
                 params.put("token", AppConst.LEAN_CLOUD_TOKEN);
                 params.put("conv_id", imConversation.getConversationId());
-                params.put("chat_type", imConversation.getAttribute("chat_type") == null ? "1001" : imConversation.getAttribute("chat_type").toString());
+                params.put("chat_type", String.valueOf(imConversation.getAttribute("chat_type") == null ? 1001 : (int) imConversation.getAttribute("chat_type")));
                 params.put("message", JSONObject.toJSON(messageMap).toString());
                 KLog.e(params);
 
@@ -300,16 +299,12 @@ public class ChatFragment extends BaseFragment {
                 if (view.getTag().equals("un_expanded")) {
                     etInput.clearFocus();
                     AppDevice.hideSoftKeyboard(etInput);
-                    //setTakePlaceIn(keyBordHeight);
                     find_more_layout.setVisibility(View.VISIBLE);
-                    //setTakePlaceIn(0);
                     view.setTag("expanded");
                 } else if (view.getTag().equals("expanded")) {
                     find_more_layout.setVisibility(View.GONE);
-                    //setTakePlaceIn(keyBordHeight);
                     etInput.requestFocus();
                     AppDevice.showSoftKeyboard(etInput);
-                    //setTakePlaceIn(0);
                     view.setTag("un_expanded");
                 }
                 break;
@@ -347,7 +342,7 @@ public class ChatFragment extends BaseFragment {
                             break;
                     }
                     //头像暂时未保存
-                    IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), message.getTimestamp(),
+                    IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), (int) imConversation.getAttribute("chat_type"), message.getTimestamp(),
                             "0", contactBean.getNickname(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
 
                     MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
@@ -411,8 +406,8 @@ public class ChatFragment extends BaseFragment {
         mImageMessage.setTimestamp(CalendarUtils.getCurrentTime());
 
         imChatAdapter.addItem(mImageMessage);
-//        message_recycler.smoothScrollToPosition(messageList.size());
-        message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
+        message_recycler.smoothScrollToPosition(messageList.size() - 1);
+        //message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
 
         //分个上传UFile;
         UFileUpload.getInstance().upload(file, UFileUpload.Type.IMAGE, new UFileUpload.UploadListener() {
@@ -440,7 +435,7 @@ public class ChatFragment extends BaseFragment {
                 Map<String, String> params = new HashMap<>();
                 params.put("token", AppConst.LEAN_CLOUD_TOKEN);
                 params.put("conv_id", imConversation.getConversationId());
-                params.put("chat_type", imConversation.getAttribute("chat_type") == null ? "1001" : imConversation.getAttribute("chat_type").toString());
+                params.put("chat_type", String.valueOf(imConversation.getAttribute("chat_type") == null ? 1001 : (int) imConversation.getAttribute("chat_type")));
                 params.put("message", JSONObject.toJSON(messageMap).toString());
                 KLog.e(params);
 
@@ -491,8 +486,8 @@ public class ChatFragment extends BaseFragment {
                 map.put("audio_message", mAudioMessage);
                 BaseMessage baseMessage = new BaseMessage("audio_info", map);
                 AppManager.getInstance().sendMessage("refresh_recyle", baseMessage);
-//                message_recycler.smoothScrollToPosition(messageList.size());
-                message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
+                message_recycler.smoothScrollToPosition(messageList.size() - 1);
+                //message_recycler.getLayoutManager().scrollToPosition(messageList.size() - 1);
 
                 UFileUpload.getInstance().upload(new File(voicePath), UFileUpload.Type.AUDIO, new UFileUpload.UploadListener() {
                     @Override
@@ -515,7 +510,7 @@ public class ChatFragment extends BaseFragment {
                         Map<String, String> params = new HashMap<>();
                         params.put("token", AppConst.LEAN_CLOUD_TOKEN);
                         params.put("conv_id", imConversation.getConversationId());
-                        params.put("chat_type", imConversation.getAttribute("chat_type") == null ? "1001" : imConversation.getAttribute("chat_type").toString());
+                        params.put("chat_type", String.valueOf(imConversation.getAttribute("chat_type") == null ? 1001 : (int) imConversation.getAttribute("chat_type")));
                         params.put("message", JSONObject.toJSON(messageMap).toString());
                         KLog.e(params);
 
@@ -539,6 +534,8 @@ public class ChatFragment extends BaseFragment {
 
     private void getHistoryMessage() {
         if (null != imConversation) {
+
+            ConversationUtils.getInstance().test(15,imConversation);
             imConversation.queryMessages(20, new AVIMMessagesQueryCallback() {
                 @Override
                 public void done(List<AVIMMessage> list, AVIMException e) {
@@ -554,16 +551,17 @@ public class ChatFragment extends BaseFragment {
                         if (messageList.size() > 0 && null != contactBean) {
                             AVIMMessage lastMessage = messageList.get(messageList.size() - 1);
 
-                            IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), lastMessage.getTimestamp(),
+                            IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), (int) imConversation.getAttribute("chat_type"), lastMessage.getTimestamp(),
                                     "0", contactBean.getNickname(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), lastMessage);
 
                             MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
                         }
 
-                        imChatAdapter.setChatType(imConversation.getAttribute("chat_type") == null ? "1001" : imConversation.getAttribute("chat_type").toString());
+                        imChatAdapter.setChatType(imConversation.getAttribute("chat_type") == null ? 1001 : (int) imConversation.getAttribute("chat_type"));
                         imChatAdapter.notifyDataSetChanged();
-//                        message_recycler.smoothScrollToPosition(messageList.size());
-                        message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
+
+                        //message_recycler.smoothScrollToPosition(messageList.size()-1);
+                        message_recycler.getLayoutManager().scrollToPosition(messageList.size() - 1);
                     }
                 }
             });
@@ -571,7 +569,7 @@ public class ChatFragment extends BaseFragment {
     }
 
     private void getSpeakToInfo(AVIMConversation conversation) {
-        String responseInfo = SPTools.getString(AppConst.LEAN_CLOUD_TOKEN + "_Contacts", "");
+        String responseInfo = SPTools.getString(AppConst.LEAN_CLOUD_TOKEN + "_contact_beans", "");
         List<ContactBean> contactBeanList = new ArrayList<>();
 
         //拿到对方
@@ -589,7 +587,7 @@ public class ChatFragment extends BaseFragment {
             }
         } else {
         }
-
+        KLog.e(responseInfo);
         if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
             BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
                     responseInfo,
@@ -607,6 +605,7 @@ public class ChatFragment extends BaseFragment {
         for (int i = 0; i < contactBeanList.size(); i++) {
             if ((contactBeanList.get(i).getFriend_id() + "").equals(speakTo)) {
                 contactBean = contactBeanList.get(i);
+                KLog.e(contactBean);
             }
         }
     }
@@ -692,6 +691,7 @@ public class ChatFragment extends BaseFragment {
     public void audioRefresh(BaseMessage message) {
         AVIMAudioMessage audioMessage = (AVIMAudioMessage) message.getOthers().get("audio_message");
         imChatAdapter.addItem(audioMessage);
+        message_recycler.smoothScrollToPosition(messageList.size() - 1);
     }
 
     /**
@@ -707,11 +707,10 @@ public class ChatFragment extends BaseFragment {
             //判断房间一致然后做消息接收处理
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
                 imChatAdapter.addItem(message);
-//                message_recycler.smoothScrollToPosition(messageList.size());
-                message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
+                message_recycler.smoothScrollToPosition(messageList.size() - 1);
 
                 //此处头像，昵称日后有数据再改
-                IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), message.getTimestamp(),
+                IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), (int) imConversation.getAttribute("chat_type"), message.getTimestamp(),
                         "0", message.getFrom(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
 
                 MessageUtils.saveMessageInfo(jsonArray, imMessageBean);

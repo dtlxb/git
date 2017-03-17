@@ -148,10 +148,9 @@ public class ImageDisplay {
     }
     //=====================================加载GIF图=======================================
     public static void loadGifResImage(Context context, int resId, ImageView view) {
-//        Glide.with(context).load(resId)
-//                .asGif()
-//                .into(view);
-        loadResImage(context,resId,view);
+        Glide.with(context).load(resId)
+                .asGif()
+                .into(view);
     }
 
     public static void loadGifFileImage(Context context, File fileImage, ImageView view) {

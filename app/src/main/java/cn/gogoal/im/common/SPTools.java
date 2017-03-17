@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public class SPTools {
 
-  private static final String PREFERENCES_key = "yuanfang_preferences";
+  private static final String PREFERENCES_key = "gogoal_preferences";
 
   private static SharedPreferences mPreference = null;
 
@@ -72,10 +72,11 @@ public class SPTools {
     return mPreference.getFloat(key, defaultValue);
   }
 
-  public static void saveString(String key, String value) {
+  public static String saveString(String key, String value) {
     SharedPreferences.Editor editor = mPreference.edit();
     editor.putString(key, value);
     editor.apply();
+      return key;
   }
 
   public static String getString(String key, String defaultValue) {

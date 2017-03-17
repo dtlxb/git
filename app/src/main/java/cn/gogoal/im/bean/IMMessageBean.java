@@ -10,6 +10,7 @@ import java.util.List;
 
 public class IMMessageBean {
     private String conversationID;
+    private int chatType;
     private Long lastTime;
     private String unReadCounts;
     private String nickname;
@@ -19,16 +20,6 @@ public class IMMessageBean {
     private AVIMMessage lastMessage;
 
     public IMMessageBean() {
-    }
-
-    public IMMessageBean(String conversationID, Long lastTime, String unReadCounts, String nickname, String friend_id, String avatar, AVIMMessage lastMessage) {
-        this.conversationID = conversationID;
-        this.lastTime = lastTime;
-        this.unReadCounts = unReadCounts;
-        this.nickname = nickname;
-        this.friend_id = friend_id;
-        this.avatar = avatar;
-        this.lastMessage = lastMessage;
     }
 
     public String getNickname() {
@@ -88,10 +79,19 @@ public class IMMessageBean {
         this.lastTime = lastTime == null ? 0L : lastTime;
     }
 
+    public int getChatType() {
+        return chatType;
+    }
+
+    public void setChatType(int chatType) {
+        this.chatType = chatType;
+    }
+
     @Override
     public String toString() {
         return "IMMessageBean{" +
                 "conversationID='" + conversationID + '\'' +
+                ", chatType=" + chatType +
                 ", lastTime=" + lastTime +
                 ", unReadCounts='" + unReadCounts + '\'' +
                 ", nickname='" + nickname + '\'' +
@@ -99,5 +99,16 @@ public class IMMessageBean {
                 ", avatar='" + avatar + '\'' +
                 ", lastMessage=" + lastMessage +
                 '}';
+    }
+
+    public IMMessageBean(String conversationID, int chatType, Long lastTime, String unReadCounts, String nickname, String friend_id, String avatar, AVIMMessage lastMessage) {
+        this.conversationID = conversationID;
+        this.chatType = chatType;
+        this.lastTime = lastTime;
+        this.unReadCounts = unReadCounts;
+        this.nickname = nickname;
+        this.friend_id = friend_id;
+        this.avatar = avatar;
+        this.lastMessage = lastMessage;
     }
 }

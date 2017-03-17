@@ -210,7 +210,9 @@ public class FoundFragment extends BaseFragment {
             viewParams.height = AppDevice.getWidth(getContext()) / 10;
             imageIcon.setLayoutParams(viewParams);
 
-            ImageDisplay.loadResImage(getContext(), itemPojos.getIconRes(), imageIcon);
+            if (itemPojos.getIconRes()!=0) {
+                ImageDisplay.loadResImage(getContext(), itemPojos.getIconRes(), imageIcon);
+            }
 
             final TypedValue typeValue = new TypedValue();
 

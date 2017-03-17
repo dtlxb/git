@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/absoluteWhite"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -18,7 +19,7 @@
             android:src="@mipmap/timg" />
 
         <TextView
-            android:id="@+id/whose_message"
+            android:id="@+id/nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -44,7 +45,7 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/last_time"
+            android:id="@+id/add_button"
             android:layout_width="48dp"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
@@ -52,8 +53,8 @@
             android:layout_marginEnd="15dp"
             android:background="@drawable/shape_add_friend"
             android:gravity="center"
-            android:textColor="@color/textColor_333333"
-            android:textSize="12sp" />
+            android:textColor="@color/absoluteWhite"
+            android:textSize="14sp" />
 
     </RelativeLayout>
 

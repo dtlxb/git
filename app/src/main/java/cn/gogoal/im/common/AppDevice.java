@@ -72,17 +72,17 @@ public class AppDevice {
      */
     public static int dp2px(Context context, float dpValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
+        return (int) (dpValue * scale + 0.5f * (dpValue >= 0 ? 1 : -1));
     }
 
     public static int px2dp(Context context, float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (pxValue / scale + 0.5f);
+        return (int) (pxValue / scale + 0.5f * (pxValue >= 0 ? 1 : -1));
     }
 
     public static int sp2px(Context ctx, float spValue) {
         final float scaledDensity = ctx.getResources().getDisplayMetrics().scaledDensity;
-        return (int) (spValue * scaledDensity + 0.5f);
+        return (int) (spValue * scaledDensity + 0.5f * (spValue >= 0 ? 1 : -1));
     }
 
     /**

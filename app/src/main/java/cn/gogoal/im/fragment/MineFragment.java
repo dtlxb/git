@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.socks.library.KLog;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +70,7 @@ public class MineFragment extends BaseFragment {
     void onClick(View view) {
         switch (view.getId()) {
             case R.id.item_mine:
-                UIHelper.toast(getActivity(),"设置");
+                UIHelper.toast(getActivity(), "设置");
                 break;
         }
     }
@@ -80,15 +82,21 @@ public class MineFragment extends BaseFragment {
         }
 
         @Override
-        protected void convert(ViewHolder holder, final ImageTextBean<Integer> data, int position) {
+        protected void convert(ViewHolder holder, final ImageTextBean<Integer> data, final int position) {
             holder.setImageResource(R.id.iv_mine_item_icon, data.getIamge());
             holder.setText(R.id.tv_mine_item_text, data.getText());
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UIHelper.toast(v.getContext(),data.getText());
+
+                    switch (position) {
+                        default:
+                            UIHelper.toast(v.getContext(), data.getText());
+                            break;
+                    }
                 }
             });
         }
     }
+
 }

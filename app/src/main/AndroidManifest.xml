@@ -24,8 +24,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <!-- iBeancon功能所需权限 -->;
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <!-- 个推3.0电子围栏功能所需权限 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -56,10 +56,9 @@
             android:name=".servise.PushService"
             android:exported="true"
             android:label="PushService"
-            android:process=":pushservice">
-        </service>
+            android:process=":pushservice"></service>
 
-        <service android:name=".servise.IntentService"/>
+        <service android:name=".servise.IntentService" />
 
         <activity
             android:name=".activity.MainActivity"
@@ -92,7 +91,7 @@
         <activity
             android:name=".activity.SingleChatRoomActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.IMRegisterActivity"
             android:screenOrientation="portrait" />
@@ -101,7 +100,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
-        <activity android:name=".activity.DemoActivity"/>
+        <activity android:name=".activity.DemoActivity" />
 
         <activity
             android:name="cn.gogoal.im.activity.IMAddFriendActivity"
@@ -109,6 +108,10 @@
 
         <activity
             android:name="cn.gogoal.im.activity.IMNewFrienActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="cn.gogoal.im.activity.IMPersonActivity"
             android:screenOrientation="portrait" />
 
         <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity" />
@@ -119,7 +122,7 @@
 
         <activity android:name=".activity.stock.MarketActivity" />
 
-        <activity android:name=".activity.PdfDisplayActivity"/>
+        <activity android:name=".activity.PdfDisplayActivity" />
     </application>
 
 </manifest>

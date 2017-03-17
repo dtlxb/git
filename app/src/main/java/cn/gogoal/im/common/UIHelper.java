@@ -89,10 +89,10 @@ public class UIHelper {
             return;
         }
         if (mToast == null) {
-            mToast = Toast.makeText(cont, AppDevice.isNetworkConnected(cont) ? msg : "当前网络不可用", Toast.LENGTH_SHORT);
+            mToast = Toast.makeText(cont, AppDevice.isNetworkConnected(cont) ? msg : "当前网络不可用", Toast.LENGTH_LONG);
         } else {
             mToast.setText(msg);
-            mToast.setDuration(Toast.LENGTH_SHORT);
+            mToast.setDuration(Toast.LENGTH_LONG);
         }
         mToast.show();
     }
@@ -104,10 +104,10 @@ public class UIHelper {
         String errorMessage = JSONObject.parseObject(response).getString("message");
 
         if (mToast == null) {
-            mToast = Toast.makeText(cont, errorMessage, Toast.LENGTH_SHORT);
+            mToast = Toast.makeText(cont, errorMessage, Toast.LENGTH_LONG);
         } else {
             mToast.setText(errorMessage);
-            mToast.setDuration(Toast.LENGTH_SHORT);
+            mToast.setDuration(Toast.LENGTH_LONG);
         }
         mToast.show();
     }
@@ -233,10 +233,13 @@ public class UIHelper {
         } else {
             //下载图片，第二个参数是否缓存至内存中
             OkHttpUtils.get().url(imageUrl).build().execute(new BitmapCallback() {
-                public void onError(Call call, Exception e) {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+
                 }
 
-                public void onResponse(Bitmap bitmap) {
+                @Override
+                public void onResponse(Bitmap bitmap, int id) {
                     if (bitmap != null) {
                         Bitmap thumbBmp = Bitmap.createScaledBitmap(bitmap, 120, 120, true);
                         msg.thumbData = WXUtil.bmpToByteArray(thumbBmp, true);

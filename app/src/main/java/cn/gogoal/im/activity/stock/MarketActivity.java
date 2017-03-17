@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.RotateAnimation;
 import android.widget.AdapterViewFlipper;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -85,6 +86,9 @@ public class MarketActivity extends BaseActivity {
             handler.postDelayed(this, 5000);
         }
     };
+    private RotateAnimation rotateAnimation;
+
+    private ImageView refreshButton;
 
     @Override
     public int bindLayout() {
@@ -108,11 +112,15 @@ public class MarketActivity extends BaseActivity {
                     public void run() {
                         getMarketInformation();
                         getMarketAd();
+                        if (rotateAnimation != null) {
+                            AnimationUtils.getInstance().setLoadingAnime(refreshButton, R.mipmap.loading_fresh);
+                        }
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }, 2000);
             }
         });
+
         startRefresh();
         scrollView.setOnScrollingStateChangeListener(new CustomNestedScrollView.onScrolliingStatesChangeListener() {
             public void onScrolling() {
@@ -126,9 +134,13 @@ public class MarketActivity extends BaseActivity {
 
     }
 
+    @Override
+    public void setStatusBar() {
+    }
+
     //初始化标题
     private void iniTitle() {
-        StatusBarUtil.with(this).setColor(ContextCompat.getColor(this, R.color.colorAccent));
+        StatusBarUtil.with(MarketActivity.this).setColor(getResColor(R.color.colorAccent));
         XTitle title = setMyTitle(R.string.title_stock_market, true)
                 .setTitleColor(Color.WHITE)
                 .setLeftTextColor(Color.WHITE)
@@ -140,12 +152,13 @@ public class MarketActivity extends BaseActivity {
         XTitle.ImageAction action = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.refresh_white)) {
             @Override
             public void actionClick(View view) {
-                AnimationUtils.getInstance().setLoadingAnime((ImageView) view, R.mipmap.loading_fresh);
-                UIHelper.toast(view.getContext(), "刷新");
+                rotateAnimation = AnimationUtils.getInstance().setLoadingAnime((ImageView) view, R.mipmap.loading_fresh);
+                rotateAnimation.startNow();
+                swipeRefreshLayout.setRefreshing(true);
             }
         };
 
-        title.addAction(action, 0);
+        refreshButton = (ImageView) title.addAction(action, 0);
 
         title.getViewByTitle().setOnClickListener(new ClickUtils(new ClickUtils.OnSuperClickListener() {
             @Override
@@ -220,7 +233,9 @@ public class MarketActivity extends BaseActivity {
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     SPTools.saveJsonArray("marketAdData", JSONObject.parseObject(responseInfo).getJSONArray("data"));
                     parseBannerData(responseInfo);
-                } else {
+                } else if (JSONObject.parseObject(responseInfo).getIntValue("code")==1001){
+
+                }else {
                     UIHelper.toastResponseError(getContext(), responseInfo);
                 }
             }
@@ -263,6 +278,12 @@ public class MarketActivity extends BaseActivity {
 
         StockRankAdapter rankAdapter = new StockRankAdapter(getContext(), rankLists);
         rvSortList.setAdapter(rankAdapter);
+
+        swipeRefreshLayout.setRefreshing(false);
+
+        if (refreshButton != null) {
+            AnimationUtils.getInstance().cancleLoadingAnime(rotateAnimation, refreshButton, R.mipmap.refresh_white);
+        }
     }
 
     /**

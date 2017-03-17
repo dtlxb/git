@@ -3,10 +3,13 @@ package com.hply.imagepicker.view;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Environment;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.AttributeSet;
 import android.view.View;
@@ -15,6 +18,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import com.hply.imagepicker.R;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Properties;
@@ -31,15 +39,17 @@ public class StatusBarUtil {
         return util;
     }
 
-    private StatusBarUtil(){}
+    private StatusBarUtil() {
+    }
 
     /**
      * 设置状态栏颜色
      *
      * @param color 状态栏颜色值
      */
-    public void setColor(@ColorInt int color) {
+    public StatusBarUtil setColor(@ColorInt int color) {
         setColor(color, DEFAULT_STATUS_BAR_ALPHA);
+        return this;
     }
 
     /**
@@ -581,45 +591,52 @@ public class StatusBarUtil {
         return 0xff << 24 | red << 16 | green << 8 | blue;
     }
 
-    /**设置状态栏字体图标为黑色与否*/
+    /**
+     * 设置状态栏字体图标为黑色与否
+     */
     public StatusBarUtil setStatusBarFontDark(boolean dark) {
         // 小米MIUI
-        try {
-            Window window = activity.getWindow();
-            Class clazz = activity.getWindow().getClass();
-            Class layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
-            Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
-            int darkModeFlag = field.getInt(layoutParams);
-            Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
-            if (dark) {    //状态栏亮色且黑色字体
-                extraFlagField.invoke(window, darkModeFlag, darkModeFlag);
-            } else {       //清除黑色字体
-                extraFlagField.invoke(window, 0 , darkModeFlag);
+        if (isMiUIV6()) {
+            try {
+                Window window = activity.getWindow();
+                Class clazz = activity.getWindow().getClass();
+                Class layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
+                Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
+                int darkModeFlag = field.getInt(layoutParams);
+                Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
+                if (dark) {    //状态栏亮色且黑色字体
+                    extraFlagField.invoke(window, darkModeFlag, darkModeFlag);
+                } else {       //清除黑色字体
+                    extraFlagField.invoke(window, 0, darkModeFlag);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         // 魅族FlymeUI
-        try {
-            Window window = activity.getWindow();
-            WindowManager.LayoutParams lp = window.getAttributes();
-            Field darkFlag = WindowManager.LayoutParams.class.getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON");
-            Field meizuFlags = WindowManager.LayoutParams.class.getDeclaredField("meizuFlags");
-            darkFlag.setAccessible(true);
-            meizuFlags.setAccessible(true);
-            int bit = darkFlag.getInt(null);
-            int value = meizuFlags.getInt(lp);
-            if (dark) {
-                value |= bit;
-            } else {
-                value &= ~bit;
+        if (isFlyme()) {
+            try {
+                Window window = activity.getWindow();
+                WindowManager.LayoutParams lp = window.getAttributes();
+                Field darkFlag = WindowManager.LayoutParams.class.getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON");
+                Field meizuFlags = WindowManager.LayoutParams.class.getDeclaredField("meizuFlags");
+                darkFlag.setAccessible(true);
+                meizuFlags.setAccessible(true);
+                int bit = darkFlag.getInt(null);
+                int value = meizuFlags.getInt(lp);
+                if (dark) {
+                    value |= bit;
+                } else {
+                    value &= ~bit;
+                }
+                meizuFlags.setInt(lp, value);
+                window.setAttributes(lp);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            meizuFlags.setInt(lp, value);
-            window.setAttributes(lp);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
         // android6.0+系统
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (dark) {
@@ -632,27 +649,58 @@ public class StatusBarUtil {
         return this;
     }
 
-    public boolean isOperableDevice(){
-        return isFlyme() || isMiUIV6() || Build.VERSION.SDK_INT>23;
+    public boolean isOperableDevice() {
+        return isFlyme() || isMiUIV6() || Build.VERSION.SDK_INT >= 23;
     }
 
-    /**是否是小米miui6及更高版本*/
-    private boolean isMiUIV6() {
-        try {
-            String name = new Properties().getProperty("ro.miui.ui.version.name", "");
-            if (null != name && name.length() >= 2) {
-                String str = name.substring(1, name.length());
-                int version_vode = Integer.parseInt(str);
-                return version_vode >= 6;
-            } else {
-                return false;
+    public void initForGogoal(boolean fullScreemImmersive){
+        if (!fullScreemImmersive) {
+            if (isOperableDevice()){
+                setStatusBarFontDark(true);
+                setColor(ContextCompat.getColor(activity, R.color.colorTitle));
+            }else {
+                setColor(Color.BLACK);
             }
-        } catch (final Exception e) {
-            return false;
+        }else {
+            setTranslucent(activity);
         }
     }
+    /**
+     * 是否是小米miui6及更高版本
+     */
+    private static final String KEY_MIUI_VERSION_CODE = "ro.miui.ui.version.code";
+    private static final String KEY_MIUI_VERSION_NAME = "ro.miui.ui.version.name";
+    private static final String KEY_MIUI_INTERNAL_STORAGE = "ro.miui.internal.storage";
 
-    /**是否是Flyme4及更高版本*/
+    private boolean isMiUIV6() {
+        SharedPreferences sharedPreferences = activity.getSharedPreferences("cache_miui", Context.MODE_PRIVATE);
+        //获取缓存状态
+        if (sharedPreferences.getString("isMiui", "").equals("miui")) {
+            return true;
+        }
+
+        Properties prop = new Properties();
+        try {
+            prop.load(new FileInputStream(new File(Environment.getRootDirectory(), "build.prop")));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        if (prop.getProperty(KEY_MIUI_VERSION_CODE, null) != null
+                || prop.getProperty(KEY_MIUI_VERSION_NAME, null) != null
+                || prop.getProperty(KEY_MIUI_INTERNAL_STORAGE, null) != null) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();//获取编辑器
+            editor.putString("isMiui", "miui");
+            editor.apply();//提交修改
+            return true;
+        };
+        return false;
+
+    }
+
+    /**
+     * 是否是Flyme4及更高版本
+     */
     private boolean isFlyme() {
         try {
             final Method method = Build.class.getMethod("hasSmartBar");

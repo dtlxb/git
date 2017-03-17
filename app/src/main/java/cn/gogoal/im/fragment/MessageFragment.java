@@ -84,7 +84,7 @@ public class MessageFragment extends BaseFragment {
         initRecycleView(message_recycler, R.drawable.shape_divider_recyclerview_1px);
 
         if (null != jsonArray) {
-            IMMessageBeans = JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class);
+            IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
         }
 
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
@@ -201,13 +201,9 @@ public class MessageFragment extends BaseFragment {
             String dateStr = "";
             String message = "";
             String unRead = "";
-            int messageType = 0;
+            String nickName = "";
             View unReadTag = holder.getView(R.id.unread_tag);
             ImageView avatarIv = holder.getView(R.id.head_image);
-
-            if (messageBean.getLastMessage() instanceof AVIMTypedMessage) {
-                messageType = ((AVIMTypedMessage) messageBean.getLastMessage()).getMessageType();
-            }
 
             //未读数
             if (messageBean.getUnReadCounts().equals("0")) {
@@ -218,39 +214,57 @@ public class MessageFragment extends BaseFragment {
                 unReadTag.setVisibility(View.VISIBLE);
             }
 
+            //时间
             if (null != messageBean.getLastTime()) {
                 dateStr = CalendarUtils.parseDateIMMessageFormat(messageBean.getLastTime());
             }
 
-            //消息类型
+            //SDK定义的消息类型
             if (messageBean.getLastMessage() != null) {
                 String content = messageBean.getLastMessage().getContent();
+                KLog.e(content);
                 JSONObject contentObject = JSON.parseObject(content);
                 String _lctype = contentObject.getString("_lctype");
                 switch (_lctype) {
                     case "-1":
+                        //文字
                         message = contentObject.getString("_lctext");
+                        nickName = messageBean.getNickname();
+                        ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
+
                         break;
                     case "-2":
+                        //图片
                         message = "[图片]";
+                        nickName = messageBean.getNickname();
+                        ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
+
                         break;
                     case "-3":
+                        //语音
                         message = "[语音]";
+                        nickName = messageBean.getNickname();
+                        ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
+
+                        break;
+                    case "1":
+
+                        break;
+
+                    case "2":
+                        //加好友
+                        nickName = "新的好友";
+                        message = messageBean.getNickname() + "请求添加你为好友";
+                        ImageDisplay.loadResImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
+
                         break;
                     default:
                         break;
                 }
-            } else {
-                message = "";
             }
-            if (messageType == 2) {
-                ImageDisplay.loadResImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
-            } else {
-                ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
-            }
-            ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
-            holder.setText(R.id.whose_message, messageBean.getNickname());
+
             holder.setText(R.id.last_message, unRead + message);
+            holder.setText(R.id.whose_message, nickName);
             holder.setText(R.id.last_time, dateStr);
         }
     }
@@ -266,41 +280,85 @@ public class MessageFragment extends BaseFragment {
         boolean isTheSame = false;
 
         Long rightNow = CalendarUtils.getCurrentTime();
+        int chatType = (int) conversation.getAttribute("chat_type");
+        String nickName = "";
 
+        JSONObject contentObject = JSON.parseObject(message.getContent());
+        JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
+        String _lctype = contentObject.getString("_lctype");
+        String avatar = lcattrsObject.getString("avatar");
+        switch (_lctype) {
+            case "-1":
+                //文字
+            case "-2":
+                //图片
+            case "-3":
+                //语音
+                nickName = lcattrsObject.getString("username");
+                break;
+            case "1":
+
+                break;
+
+            case "2":
+                //加好友
+                nickName = lcattrsObject.getString("nickname");
+                break;
+            default:
+                break;
+        }
+
+        KLog.e(message.getContent());
+
+        //已有的会话
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(conversation.getConversationId())) {
                 IMMessageBeans.get(i).setLastTime(rightNow);
                 IMMessageBeans.get(i).setLastMessage(message);
                 int unreadmessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts()) + 1;
-                KLog.e(unreadmessage);
                 IMMessageBeans.get(i).setUnReadCounts(unreadmessage + "");
-
-                //头像暂时未保存
-                IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), message.getTimestamp(),
-                        "0", message.getFrom(), AppConst.LEANCLOUD_APP_ID, "", message);
-
                 isTheSame = true;
-                MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
             } else {
             }
         }
 
+        //新添的会话
         if (!isTheSame) {
             IMMessageBean imMessageBean = new IMMessageBean();
             imMessageBean.setConversationID(conversation.getConversationId());
             imMessageBean.setLastMessage(message);
             imMessageBean.setLastTime(rightNow);
-            imMessageBean.setNickname(message.getFrom());
+            imMessageBean.setNickname(nickName);
+            imMessageBean.setAvatar(avatar);
             int unRead = Integer.parseInt(imMessageBean.getUnReadCounts() == null ? "0" : imMessageBean.getUnReadCounts()) + 1;
             imMessageBean.setUnReadCounts(unRead + "");
-
-            //头像暂时未保存
-            IMMessageBean unKonwimMessageBean = new IMMessageBean(conversation.getConversationId(), message.getTimestamp(),
-                    "0", message.getFrom(), AppConst.LEANCLOUD_APP_ID, "", message);
             IMMessageBeans.add(imMessageBean);
-            MessageUtils.saveMessageInfo(jsonArray, unKonwimMessageBean);
+        }
+        switch (chatType) {
+            //单聊,群聊,加好友请求
+            case 1001:
+            case 1002:
+            case 1004:
+                break;
+            //直播
+            case 1003:
+                break;
+            //操纵通讯录
+            case 1005:
+                break;
+            //公众号模块
+            case 1006:
+                break;
+            default:
+                break;
         }
 
+        //保存
+        IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), chatType, message.getTimestamp(),
+                "0", nickName, AppConst.LEANCLOUD_APP_ID, avatar, message);
+        MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
+
+        //按照时间排序
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
             Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
                 @Override

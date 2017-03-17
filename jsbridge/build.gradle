@@ -27,11 +27,9 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile "com.android.support:appcompat-v7:$ANDROID_SUPPORT_VERSION";
     testCompile 'junit:junit:4.12'
 
-    compile 'com.github.zhaokaiqiang.klog:library:1.5.0'
-
-//    compile 'com.alibaba:fastjson:1.1.56.android'
     compile 'cn.leancloud.android:fastjson:1.1.39-leancloud'
+    compile 'com.github.zhaokaiqiang.klog:library:1.6.0'
 }

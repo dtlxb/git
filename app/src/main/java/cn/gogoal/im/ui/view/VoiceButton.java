@@ -80,6 +80,11 @@ public class VoiceButton extends SelectorButton implements AudioManager.AudioSta
                     + "Android" + File.separator + "data" + File.separator
                     + context.getPackageName() + File.separator
                     + "file" + File.separator + "recorder";
+            File dirFile=new File(dir);
+
+            if (!dirFile.exists()){
+                dirFile.mkdirs();
+            }
         }
         mAudioManger = AudioManager.getInstance(dir);
         mAudioManger.setOnAudioStateListener(this);
@@ -172,6 +177,7 @@ public class VoiceButton extends SelectorButton implements AudioManager.AudioSta
                     @Override
                     public void onUserAuthorize() {
                         changeState(STATE_RECORDING);
+                        VoiceButton.this.setBackgroundColor(ContextCompat.getColor(getContext(),android.R.color.darker_gray));
                     }
 
                     @Override

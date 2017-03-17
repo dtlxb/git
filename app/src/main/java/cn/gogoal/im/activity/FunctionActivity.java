@@ -1,5 +1,6 @@
 package cn.gogoal.im.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,7 +9,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 
 import com.alibaba.fastjson.JSONObject;
@@ -22,9 +22,8 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.XTitle;
-
-import static cn.gogoal.im.base.MyApp.getContext;
 
 public class FunctionActivity extends BaseActivity {
 
@@ -42,7 +41,7 @@ public class FunctionActivity extends BaseActivity {
     }
 
     @Override
-    public void doBusiness(Context mContext) {
+    public void doBusiness(final Context mContext) {
 
         title = getIntent().getStringExtra("title");
         String url = getIntent().getStringExtra("function_url");
@@ -67,12 +66,12 @@ public class FunctionActivity extends BaseActivity {
         webView.loadUrl(url);
 
 //        // H5页面跳转时获取页面title和url
-//        webView.setOnWebChangeListener(new BridgeWebView.WebChangeListener() {
-//            @Override
-//            public void getWebInfo(String url, String title) {
-//                KLog.e(url + title);
-//            }
-//        });
+        webView.setOnWebChangeListener(new BridgeWebView.WebChangeListener() {
+            @Override
+            public void getWebInfo(String url, String title) {
+//                KLog.e("url==="+url + ";title==="+title);
+            }
+        });
 
         //1.添加原生方法，测试弹窗
         webView.registerHandler("naviveDialog", new BridgeHandler() {
@@ -119,13 +118,31 @@ public class FunctionActivity extends BaseActivity {
         /*pdf阅读*/
         webView.registerHandler("loadPdfFromWeb", new BridgeHandler() {
             @Override
-            public void handler(String data, ValueCallback<String> function) {
-                if (!TextUtils.isEmpty(data)) {
+            public void handler(final String data, ValueCallback<String> function) {
+                if (AppDevice.getNetworkType(getContext())==2 || AppDevice.getNetworkType(getContext())==3){
+                    new AlertDialog.Builder(mContext,R.style.HoloDialogStyle).setTitle("提示")
+                            .setMessage("阁下当前网络为数据流量\t是否继续?")
+                            .setPositiveButton("确定,有的是流量", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (!TextUtils.isEmpty(data)) {
+                                        Intent intent=new Intent(getContext(),PdfDisplayActivity.class);
+                                        intent.putExtra("pdf_data",data);
+                                        startActivity(intent);
+                                    }
+                                }
+                            }).setNegativeButton("取消", null).show();
 
-                    Intent intent = new Intent(FunctionActivity.this, PdfDisplayActivity.class);
-                    intent.putExtra("pdf_data", data);
-                    startActivity(intent);
+                }else if (AppDevice.getNetworkType(getContext())==1){
+                    if (!TextUtils.isEmpty(data)) {
+                        Intent intent=new Intent(getContext(),PdfDisplayActivity.class);
+                        intent.putExtra("pdf_data",data);
+                        startActivity(intent);
+                    }
+                }else {
+                    UIHelper.toastError(mContext,"跳转出错");
                 }
+
             }
         });
 
@@ -149,6 +166,9 @@ public class FunctionActivity extends BaseActivity {
         }
     }
 
+    private FunctionActivity getContext(){
+        return FunctionActivity.this;
+    }
     private void initWebView(BridgeWebView mWebView) {
         WebSettings settings = mWebView.getSettings();
         mWebView.setDefaultHandler(new DefaultHandler());
@@ -168,8 +188,6 @@ public class FunctionActivity extends BaseActivity {
         settings.setAppCachePath(appCachePath);
         settings.setAllowFileAccess(true);
         settings.setAppCacheEnabled(true);
-
-        mWebView.setWebChromeClient(new WebChromeClient());//启动JS弹窗
     }
 
     @Override

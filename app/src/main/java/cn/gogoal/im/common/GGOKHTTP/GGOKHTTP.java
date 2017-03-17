@@ -79,35 +79,43 @@ public class GGOKHTTP {
      */
     public static final String GET_FRIEND_LIST = "v1/ggm_im/get_friend_list";
 
-    public static final String USER_RESET_PASSWORD_NEW="v1/user/reset_password_new";
+    public static final String USER_RESET_PASSWORD_NEW = "v1/user/reset_password_new";
 
     /**
      * 自动登录 刷新token
-     * */
-    public static final String USER_QUICK_LOGIN="v1/user/quick_login";
+     */
+    public static final String USER_QUICK_LOGIN = "v1/user/quick_login";
 
     /**
      * 获取客服电话
-     * */
-    public static final String GET_BASE_CONFIGURE="v1/systemset/get_base_configure";
+     */
+    public static final String GET_BASE_CONFIGURE = "v1/systemset/get_base_configure";
 
     /**
      * 校验账号
-     * */
-    public static final String CHECK_ACCOUNT="v1/user/check_account";
+     */
+    public static final String CHECK_ACCOUNT = "v1/user/check_account";
 
     /**
      * 城市列表
-     * */
-    public static final String GET_CITY_DATA="v1/base/get_city_data";
+     */
+    public static final String GET_CITY_DATA = "v1/base/get_city_data";
 
     /**
      * IM发送消息
-     * token                     用户token
-     * message                   消息内容（包括文字，语音，图片...）
-     * conv_id                   对话ID
-     * */
-    public static final String CHAT_SEND_MESSAGE="v1/ggm_chat/send_message";
+     * token                        用户token
+     * message                      消息内容（包括文字，语音，图片...）
+     * conv_id                      对话ID
+     */
+    public static final String CHAT_SEND_MESSAGE = "v1/ggm_chat/send_message";
+
+    /**
+     * IM发送接收好友
+     * token                        用户token
+     * friend_id                    朋友ID
+     * text                         消息内容（包括文字，语音，图片...）
+     */
+    public static final String ADD_FRIEND = "v1/ggm_im/add_friend";
 
 //--------------------------------------------------------------------------------------------------
 
@@ -131,26 +139,40 @@ public class GGOKHTTP {
 
     public void startGet() {
         try {
-            OkHttpUtils
-                    .get()
-                    .url(GGAPI.get(url, param))
+            OkHttpUtils.get()
+                    .url(GGAPI.get(url,param))
                     .build()
                     .execute(new StringCallback() {
                         @Override
-                        public void onError(Call call, Exception e) {
+                        public void onError(Call call, Exception e, int id) {
                             if (httpInterface != null) httpInterface.onFailure(e.toString());
                         }
 
                         @Override
-                        public void onResponse(String response) {
+                        public void onResponse(String response, int id) {
                             if (httpInterface != null) httpInterface.onSuccess(response);
-//                            try {
-//                                KLog.e(GGAPI.get(url, param));
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
                         }
                     });
+//            OkHttpUtils
+//                    .get()
+//                    .url(GGAPI.get(url, param))
+//                    .build()
+//                    .execute(new StringCallback() {
+//                        @Override
+//                        public void onError(Call call, Exception e) {
+//                            if (httpInterface != null) httpInterface.onFailure(e.toString());
+//                        }
+//
+//                        @Override
+//                        public void onResponse(String response) {
+//                            if (httpInterface != null) httpInterface.onSuccess(response);
+////                            try {
+////                                KLog.e(GGAPI.get(url, param));
+////                            } catch (Exception e) {
+////                                e.printStackTrace();
+////                            }
+//                        }
+//                    });
         } catch (Exception e) {
             e.printStackTrace();
             if (httpInterface != null) httpInterface.onFailure(e.toString());
@@ -163,22 +185,40 @@ public class GGOKHTTP {
             Map<String, String> params;
             posturl = GGAPI.post(url, param);
             params = (Map<String, String>) posturl.get("params");
-            OkHttpUtils
-                    .post()
+
+            OkHttpUtils.post()
                     .url(posturl.get("url").toString())
                     .params(params)
                     .build()
                     .execute(new StringCallback() {
                         @Override
-                        public void onError(Call call, Exception e) {
+                        public void onError(Call call, Exception e, int id) {
                             if (httpInterface != null) httpInterface.onFailure(e.toString());
                         }
 
                         @Override
-                        public void onResponse(String response) {
+                        public void onResponse(String response, int id) {
                             if (httpInterface != null) httpInterface.onSuccess(response);
                         }
                     });
+
+//            OkHttpUtils
+//                    .post()
+//                    .url(posturl.get("url").toString())
+//                    .params(params)
+//                    .build()
+//                    .execute(new StringCallback() {
+//                        @Override
+//                        public void onError(Call call, Exception e) {
+//                            if (httpInterface != null) httpInterface.onFailure(e.toString());
+//                        }
+//
+//                        @Override
+//                        public void onResponse(String response) {
+//                            if (httpInterface != null) httpInterface.onSuccess(response);
+//                        }
+//                    });
+
         } catch (Exception e) {
             if (httpInterface != null) httpInterface.onFailure(e.toString());
         }

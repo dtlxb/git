@@ -16,9 +16,11 @@ import cn.gogoal.im.bean.ContactBean;
  * description:联系人列表适配器
  */
 public class ContactAdapter extends CommonAdapter<ContactBean> {
+    List<ContactBean> list;
 
     public ContactAdapter(Context context, List<ContactBean> datas) {
         super(context, R.layout.item_contacts, datas);
+        list = datas;
     }
 
     @Override
@@ -29,10 +31,15 @@ public class ContactAdapter extends CommonAdapter<ContactBean> {
 
         Object avatar = contactBean.getAvatar();
         if (avatar instanceof String) {
-            holder.setImageUrl(R.id.item_contacts_iv_icon,avatar.toString());
-        }else if (avatar instanceof Integer){
+            holder.setImageUrl(R.id.item_contacts_iv_icon, avatar.toString());
+        } else if (avatar instanceof Integer) {
             holder.setImageResource(R.id.item_contacts_iv_icon, (Integer) avatar);
         }
 
+    }
+
+    public void addItem(ContactBean contactBean) {
+        list.add(contactBean);
+        this.notifyDataSetChanged();
     }
 }

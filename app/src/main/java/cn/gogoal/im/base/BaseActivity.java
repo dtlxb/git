@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +19,8 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+
+import com.hply.imagepicker.view.StatusBarUtil;
 
 import org.simple.eventbus.EventBus;
 
@@ -53,6 +56,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
         ButterKnife.bind(this);
 
+        setStatusBar();
+
         initView(mContentView);
 
         EventBus.getDefault().register(this);
@@ -61,6 +66,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     }
 
+    public void setStatusBar(){
+        StatusBarUtil.with(BaseActivity.this).initForGogoal(false);
+    }
     //封装运行时权限
     public static void requestRuntimePermission(String[] permissions, IPermissionListner listener) {
         mListener = listener;
@@ -247,4 +255,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         return this;
     }
 
+    public int getResColor(@ColorRes int colorId){
+        return ContextCompat.getColor(BaseActivity.this,colorId);
+    }
 }
