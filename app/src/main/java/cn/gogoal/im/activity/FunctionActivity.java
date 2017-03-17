@@ -107,7 +107,6 @@ public class FunctionActivity extends BaseActivity {
         webView.registerHandler("JumpPlayerDetial", new BridgeHandler() {
             @Override
             public void handler(String data, ValueCallback<String> function) {
-                KLog.json(data);
                 JSONObject object = JSONObject.parseObject(data);
 
                 Intent intent = new Intent(getContext(), PlayerActivity.class);

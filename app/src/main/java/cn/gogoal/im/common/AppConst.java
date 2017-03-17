@@ -43,4 +43,9 @@ public class AppConst {
     public static final String LEAN_CLOUD_CONVERSATION_ID_66_77 = "58b61fbb5c497d00580cc05c";
     public static final String LEAN_CLOUD_CONVERSATION_ID_66_99 = "58be73d144d904006bf14d7f";
 
+
+    //阿里云播放器参数
+    public static final String businessId = "video_live";
+    public static final String accessKeyId = "LTAI1KypPpiBhPAx";
+    public static final String accessKeySecret = "vb0kunzWvhxV6WHrH4Znv1BeJFJ2xV";
 }
