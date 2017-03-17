@@ -4,6 +4,9 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.alivc.player.AccessKey;
+import com.alivc.player.AccessKeyCallback;
+import com.alivc.player.AliVcMediaPlayer;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMException;
@@ -12,10 +15,6 @@ import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.duanqu.qupai.jni.ApplicationGlue;
 import com.socks.library.KLog;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
@@ -73,6 +72,13 @@ public class MyApp extends Application {
             System.loadLibrary("qupai-media-jni");
             ApplicationGlue.initialize(this);
 
+            //阿里云播放器初始化
+            AliVcMediaPlayer.init(getApplicationContext(), AppConst.businessId, new AccessKeyCallback() {
+                @Override
+                public AccessKey getAccessToken() {
+                    return new AccessKey(AppConst.accessKeyId, AppConst.accessKeySecret);
+                }
+            });
         }
     }
 

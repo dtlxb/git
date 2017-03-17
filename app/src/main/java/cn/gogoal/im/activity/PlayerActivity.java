@@ -69,7 +69,6 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.PlayerUtils.CountDownTimerView;
 import cn.gogoal.im.common.PlayerUtils.PlayerControl;
 import cn.gogoal.im.common.PlayerUtils.StatusListener;
-import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.widget.BottomSheetNormalDialog;
 import cn.gogoal.im.ui.widget.EditTextDialog;
@@ -147,7 +146,7 @@ public class PlayerActivity extends BaseActivity {
     private List<AVIMMessage> messageList = new ArrayList<>();
     private LiveChatAdapter mLiveChatAdapter;
 
-    private String mURI = "rtmp://192.168.52.143:1935/hls/androidtest";
+    private String mURI;
 
     //聊天对象
     private AVIMConversation imConversation;
@@ -157,6 +156,8 @@ public class PlayerActivity extends BaseActivity {
 
     //直播介绍
     private JSONObject anchor;
+
+    private List<RelaterVideoData> videoDatas;
 
     private Handler mTimerHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -171,7 +172,7 @@ public class PlayerActivity extends BaseActivity {
                     mPlayer.seekTo(msg.arg1);
                     break;
                 case CMD_START:
-                    startToPlay();
+                    startToPlay(mURI);
                     break;
                 case CMD_STOP:
                     stop();
@@ -225,8 +226,6 @@ public class PlayerActivity extends BaseActivity {
             linearPlayerChat.setVisibility(View.GONE);
         }
 
-        getPlayerInfo();
-
         getRelaterVideoInfo();
     }
 
@@ -258,16 +257,25 @@ public class PlayerActivity extends BaseActivity {
                     textOnlineNumber.setText(data.getString("play_base") + "人在线");
                     //主播介绍
                     anchor = data.getJSONObject("anchor");
-                    //倒计时
-                    if (data.getLongValue("launch_time") > 0) {
-                        countDownTimer.setVisibility(View.VISIBLE);
-                        countDownTimer.addTime(data.getString("live_time_start"));
-                        countDownTimer.start();
-                    } else {
-                        countDownTimer.setVisibility(View.GONE);
+
+                    if (source.equals("live")) {
+                        //倒计时
+                        if (data.getLongValue("launch_time") > 0) {
+                            countDownTimer.setVisibility(View.VISIBLE);
+                            countDownTimer.addTime(data.getString("live_time_start"));
+                            countDownTimer.start();
+                        } else {
+                            countDownTimer.setVisibility(View.GONE);
+                        }
+
+                        mURI = data.getString("url_rtmp");
+
+                    } else if (source.equals("video")) {
+
+                        mURI = data.getString("video_file");
                     }
 
-                    mURI = data.getString("url_rtmp");
+                    startToPlay(mURI);
 
                 } else {
                     UIHelper.toast(getContext(), R.string.net_erro_hint);
@@ -564,7 +572,7 @@ public class PlayerActivity extends BaseActivity {
                 mPlayer.setVideoSurface(mSurfaceView.getHolder().getSurface());
             } else {
                 // 创建并启动播放器
-                startToPlay();
+                getPlayerInfo();
             }
 
             if (mPlayerControl != null)
@@ -587,13 +595,18 @@ public class PlayerActivity extends BaseActivity {
         }
     };
 
-    private boolean startToPlay() {
+    private boolean startToPlay(String mURI) {
         KLog.json("start play.");
 
         if (mPlayer == null) {
             // 初始化播放器
             mPlayer = new AliVcMediaPlayer(this, mSurfaceView);
-            mPlayer.setMediaType(MediaPlayer.MediaType.Live); //媒体类型 Live 表示直播；Vod 表示点播
+            //媒体类型 Live 表示直播；Vod 表示点播
+            if (source.equals("live")) {
+                mPlayer.setMediaType(MediaPlayer.MediaType.Live);
+            } else if (source.equals("video")) {
+                mPlayer.setMediaType(MediaPlayer.MediaType.Vod);
+            }
             mPlayer.setPreparedListener(new VideoPreparedListener());
             mPlayer.setErrorListener(new VideoErrorListener());
             mPlayer.setInfoListener(new VideoInfolistener());
@@ -606,7 +619,7 @@ public class PlayerActivity extends BaseActivity {
             mPlayer.setDefaultDecoder(1);
 
             // 重点: 在调试阶段可以使用以下方法打开native log
-            mPlayer.enableNativeLog();
+            //mPlayer.enableNativeLog();
 
             if (mPosition != 0) {
                 mPlayer.seekTo(mPosition);
@@ -615,6 +628,8 @@ public class PlayerActivity extends BaseActivity {
 
         //添加播放器地址
         mPlayer.prepareAndPlay(mURI);
+
+        KLog.e(mURI);
 
         if (mStatusListener != null)
             mStatusListener.notifyStatus(STATUS_START);
@@ -1026,12 +1041,6 @@ public class PlayerActivity extends BaseActivity {
                 RecyclerView recy_relater = (RecyclerView) dialogView.findViewById(R.id.recy_relater);
                 initRecycleView(recy_relater, null);
 
-                String data = SPTools.getString("data", null);
-
-                KLog.json(data);
-
-                List<RelaterVideoData> videoDatas = JSONObject.parseArray(data, RelaterVideoData.class);
-
                 recy_relater.setAdapter(new RelaterVideoAdapter(getContext(), videoDatas));
             }
         });
@@ -1056,7 +1065,7 @@ public class PlayerActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
-                    SPTools.saveString("data", String.valueOf(object.getJSONArray("data")));
+                    videoDatas = JSONObject.parseArray(String.valueOf(object.getJSONArray("data")), RelaterVideoData.class);
                 } else if (object.getIntValue("code") == 1001) {
                     UIHelper.toast(getContext(), R.string.nodata_hint);
                 } else {
@@ -1122,7 +1131,7 @@ public class PlayerActivity extends BaseActivity {
         }
     }
 
-    private PlayerActivity getContext(){
+    private PlayerActivity getContext() {
         return PlayerActivity.this;
     }
 }

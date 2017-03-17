@@ -43,6 +43,14 @@ android {
         }
     }
 
+    productFlavors {
+        //通用包
+        general {
+            manifestPlaceholders = [CHANNEL_NAME: "ng-tongyong"]
+            proguardFile 'proguard-rules.pro'
+        }
+    }
+
     buildTypes {
         release {
             signingConfig signingConfigs.gogoalConfig

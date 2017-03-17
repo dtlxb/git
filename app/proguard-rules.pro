@@ -203,3 +203,40 @@
 
 -dontwarn org.xbill.**
 -keep class org.xbill.** { *;}
+
+#=================alivc-player============================================#
+
+-dontwarn javax.annotation.**
+-keep class com.alibaba.**
+-keepclassmembers class com.alibaba.** {
+    *;
+}
+
+-dontobfuscate
+-ignorewarnings
+
+
+-keep class * extends com.duanqu.qupai.jni.ANativeObject
+-keep @com.duanqu.qupai.jni.AccessedByNative class *
+-keep class com.duanqu.qupai.bean.DIYOverlaySubmit
+-keepclassmembers @com.duanqu.qupai.jni.AccessedByNative class * {
+    *;
+}
+-keepclassmembers class * {
+    @com.duanqu.qupai.jni.AccessedByNative *;
+}
+-keepclassmembers class * {
+    @com.duanqu.qupai.jni.CalledByNative *;
+}
+
+-keepclasseswithmembers class * {
+    native <methods>;
+}
+
+-keepclassmembers class * {
+    native <methods>;
+}
+
+-keepclassmembers class com.duanqu.qupai.** {
+    *;
+}

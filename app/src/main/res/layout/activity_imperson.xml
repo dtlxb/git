@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/absoluteWhite"
-        android:padding="23dp" />
+        android:padding="10dp" />
 
     <TextView
         android:id="@+id/tv_do_search_conversation"
