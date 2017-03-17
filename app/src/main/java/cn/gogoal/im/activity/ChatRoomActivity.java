@@ -72,7 +72,6 @@ public class ChatRoomActivity extends BaseActivity {
     private View animView;
 
     private LinearLayoutManager layoutManager;
-
     @Override
     public int bindLayout() {
         return R.layout.activity_chatroom;
@@ -84,7 +83,7 @@ public class ChatRoomActivity extends BaseActivity {
         kayboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchListenLayout.OnKeyboardChangeListener() {
             @Override
             public void OnKeyboardPop(int height) {
-                KLog.e("键盘弹出:::" + height);
+                KLog.e("键盘弹出:::"+height);
             }
 
             @Override
@@ -112,37 +111,39 @@ public class ChatRoomActivity extends BaseActivity {
             }
         });
 
-        layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
+        layoutManager=new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false);
 
         recyclerView.setLayoutManager(layoutManager);
         voiceView.setAudioFinishRecorderListener(new VoiceButton.AudioFinishRecorderListener() {
             @Override
             public void onFinish(float seconds, String filePath) {
-                Recorder recorder = new Recorder(seconds, filePath);
+                Recorder recorder = new Recorder(seconds,filePath);
                 mDatas.add(recorder);
                 mAdapter.notifyDataSetChanged();//通知更新的内容
-                layoutManager.scrollToPosition(mAdapter.getItemCount() - 1);
+                layoutManager.scrollToPosition(mAdapter.getItemCount()-1);
             }
         });
-        mAdapter = new AudioAdapter(mDatas);
+        mAdapter=new AudioAdapter(mDatas);
         recyclerView.setAdapter(mAdapter);
     }
 
-    @OnClick({R.id.tv_jumpto_search, R.id.getmessage_swith})
+    @OnClick({R.id.img_emoji, R.id.img_function, R.id.btn_send})
     void chatClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_jumpto_search:
+            case R.id.img_emoji:
 
                 break;
-            case R.id.getmessage_swith:
+            case R.id.img_function:
+                break;
+            case R.id.btn_send:
                 break;
         }
     }
 
     @OnTextChanged(R.id.et_input)
     void onTextChanged(CharSequence s) {
-        btnSend.setVisibility(s.length() > 0 ? View.VISIBLE : View.INVISIBLE);
-        imgFunction.setVisibility(s.length() > 0 ? View.INVISIBLE : View.VISIBLE);
+        btnSend.setVisibility(s.length()>0?View.VISIBLE:View.INVISIBLE);
+        imgFunction.setVisibility(s.length()>0?View.INVISIBLE:View.VISIBLE);
     }
 
 
@@ -172,20 +173,20 @@ public class ChatRoomActivity extends BaseActivity {
 
         @Override
         protected void convert(ViewHolder holder, final Recorder recorder, final int position) {
-            holder.setText(R.id.recorder_time, Math.round(recorder.getDuration()) + "\"");
+            holder.setText(R.id.recorder_time,Math.round(recorder.getDuration())+"\"");
 
             View holderLengthView = holder.getView(R.id.recorder_length);
 
             ViewGroup.LayoutParams params = holderLengthView.getLayoutParams();
             int mMaxItemWidth = (int) (AppDevice.getWidth(getContext()) * 0.7f);
             int mMinItemWidth = (int) (AppDevice.getWidth(getContext()) * 0.16f);
-            params.width = (int) (mMinItemWidth + (mMaxItemWidth / 60f) * recorder.getDuration());
+            params.width = (int) (mMinItemWidth + (mMaxItemWidth / 60f)* recorder.getDuration());
             holderLengthView.setLayoutParams(params);
 
             holderLengthView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (animView != null) {
+                    if(animView != null) {
                         animView.setBackgroundResource(R.drawable.v_anim3);
                         animView = null;
                     }

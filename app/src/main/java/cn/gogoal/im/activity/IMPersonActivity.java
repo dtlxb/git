@@ -48,15 +48,13 @@ public class IMPersonActivity extends BaseActivity {
         personlistRecycler.setAdapter(mPersonInfoAdapter);
     }
 
-    @OnClick({R.id.img_emoji, R.id.img_function, R.id.btn_send})
-    void jumpClick(View view) {
+    @OnClick({R.id.tv_jumpto_search, R.id.getmessage_swith})
+    void function(View view) {
         switch (view.getId()) {
-            case R.id.img_emoji:
+            case R.id.tv_jumpto_search:
 
                 break;
-            case R.id.img_function:
-                break;
-            case R.id.btn_send:
+            case R.id.getmessage_swith:
                 break;
         }
     }
