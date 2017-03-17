@@ -2,6 +2,7 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
@@ -10,6 +11,7 @@ import com.socks.library.KLog;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.StringUtils;
@@ -21,11 +23,12 @@ import cn.gogoal.im.ui.view.XTitle;
  * Created by huangxx on 2017/2/21.
  */
 
-public class SingleChatRoomActivity extends BaseActivity {
+public class SingleChatRoomActivity extends BaseActivity implements ChatFragment.MyListener {
 
     //聊天对象
     private ChatFragment chatFragment;
     private XTitle xTitle;
+    private ContactBean contactBean;
 
     @Override
     public int bindLayout() {
@@ -52,7 +55,10 @@ public class SingleChatRoomActivity extends BaseActivity {
             @Override
             public void actionClick(View view) {
                 Intent intent = new Intent(SingleChatRoomActivity.this, IMPersonActivity.class);
-                intent.putExtra("conversation_id", conversation_id);
+                Bundle mBundle = new Bundle();
+                mBundle.putSerializable("seri", contactBean);
+                mBundle.putString("conversation_id", conversation_id);
+                intent.putExtras(mBundle);
                 startActivity(intent);
             }
         };
@@ -74,5 +80,10 @@ public class SingleChatRoomActivity extends BaseActivity {
                 UIHelper.toast(SingleChatRoomActivity.this, error);
             }
         });
+    }
+
+    @Override
+    public void setData(ContactBean contactBean) {
+        this.contactBean = contactBean;
     }
 }

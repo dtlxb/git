@@ -1,17 +1,23 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 
 /**
  * Created by huangxx on 2017/3/16.
@@ -23,6 +29,7 @@ public class IMPersonActivity extends BaseActivity {
     RecyclerView personlistRecycler;
 
     private PersonInfoAdapter mPersonInfoAdapter;
+    private List<ContactBean> contactBeens = new ArrayList<>();
 
     @Override
     public int bindLayout() {
@@ -32,13 +39,26 @@ public class IMPersonActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         setMyTitle("聊天详情", true);
-        initRecycleView(personlistRecycler, R.drawable.shape_divider_1px);
-
+        initRecycleView(personlistRecycler, null);
+        ContactBean contactBean = (ContactBean) getIntent().getSerializableExtra("seri");
+        contactBeens.add(contactBean);
         //初始化
-        personlistRecycler.setLayoutManager(new LinearLayoutManager(
-                IMPersonActivity.this, LinearLayoutManager.VERTICAL, false));
+        personlistRecycler.setLayoutManager(new GridLayoutManager(this, 4));
+        mPersonInfoAdapter = new PersonInfoAdapter(IMPersonActivity.this, R.layout.item_contact_info, contactBeens);
+        personlistRecycler.setAdapter(mPersonInfoAdapter);
+    }
 
+    @OnClick({R.id.img_emoji, R.id.img_function, R.id.btn_send})
+    void jumpClick(View view) {
+        switch (view.getId()) {
+            case R.id.img_emoji:
 
+                break;
+            case R.id.img_function:
+                break;
+            case R.id.btn_send:
+                break;
+        }
     }
 
     private class PersonInfoAdapter extends CommonAdapter<ContactBean> {
@@ -48,8 +68,11 @@ public class IMPersonActivity extends BaseActivity {
         }
 
         @Override
-        protected void convert(ViewHolder holder, ContactBean data, int position) {
-
+        protected void convert(ViewHolder holder, ContactBean contactBean, int position) {
+            holder.setText(R.id.contact_name, contactBean.getNickname());
+            ImageDisplay.loadNetImage(IMPersonActivity.this, (String) contactBean.getAvatar(), (ImageView) holder.getView(R.id.contact_head));
         }
     }
+
+
 }

@@ -103,6 +103,8 @@ public class ChatFragment extends BaseFragment {
     @BindView(R.id.voiveView)
     VoiceButton voiceView;
 
+    private MyListener listener;
+
     //消息类型
     private static int TEXT_MESSAGE = 1;
     private static int IMAGE_MESSAGE = 2;
@@ -118,6 +120,12 @@ public class ChatFragment extends BaseFragment {
     private JSONArray jsonArray;
     private ContactBean contactBean;
 
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        listener = (MyListener) context;
+    }
 
     @Override
     public int bindLayout() {
@@ -535,7 +543,7 @@ public class ChatFragment extends BaseFragment {
     private void getHistoryMessage() {
         if (null != imConversation) {
 
-            ConversationUtils.getInstance().test(15,imConversation);
+            ConversationUtils.getInstance().test(15, imConversation);
             imConversation.queryMessages(20, new AVIMMessagesQueryCallback() {
                 @Override
                 public void done(List<AVIMMessage> list, AVIMException e) {
@@ -605,6 +613,9 @@ public class ChatFragment extends BaseFragment {
         for (int i = 0; i < contactBeanList.size(); i++) {
             if ((contactBeanList.get(i).getFriend_id() + "").equals(speakTo)) {
                 contactBean = contactBeanList.get(i);
+                if (null != listener) {
+                    listener.setData(contactBean);
+                }
                 KLog.e(contactBean);
             }
         }
@@ -685,6 +696,11 @@ public class ChatFragment extends BaseFragment {
             //拉取历史记录(直接从LeanCloud拉取)
             getHistoryMessage();
         }
+    }
+
+    //activiy必须实现这个接口
+    public interface MyListener {
+        public void setData(ContactBean contactBean);
     }
 
     @Subscriber(tag = "refresh_recyle")
