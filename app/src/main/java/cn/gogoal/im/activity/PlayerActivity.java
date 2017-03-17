@@ -248,8 +248,8 @@ public class PlayerActivity extends BaseActivity {
                     JSONObject data = object.getJSONArray("data").getJSONObject(0);
                     //直播详情
                     textTitle.setText(data.getString("video_name")); //直播名称
-                    ImageDisplay.loadCircleNetImage(getContext(), data.getString("introduction_img"), imgPalyer);
-                    textCompany.setText(data.getString("朝阳永续"));
+                    ImageDisplay.loadCircleNetImage(getContext(), data.getString("face_url"), imgPalyer);
+                    textCompany.setText(data.getString("anchor_name"));
                     textMarInter.setText(data.getString("programme_name"));
                     textOnlineNumber.setText(data.getString("play_base") + "人在线");
                     //主播介绍
@@ -266,15 +266,14 @@ public class PlayerActivity extends BaseActivity {
                         }
 
                         mURI = data.getString("url_rtmp");
+                        room_id = data.getString("room_id");
+
+                        getSquareConversation(room_id);
 
                     } else if (source.equals("video")) {
 
                         mURI = data.getString("video_file");
                     }
-
-                    room_id = data.getString("room_id");
-
-                    getSquareConversation(room_id);
 
                     startToPlay(mURI);
 
