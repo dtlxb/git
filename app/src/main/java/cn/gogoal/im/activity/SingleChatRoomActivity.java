@@ -10,7 +10,6 @@ import com.socks.library.KLog;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -25,7 +24,6 @@ public class SingleChatRoomActivity extends BaseActivity {
 
     //聊天对象
     private ChatFragment chatFragment;
-    private XTitle xTitle;
 
     @Override
     public int bindLayout() {
@@ -36,7 +34,7 @@ public class SingleChatRoomActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         String conversation_id = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("conversation_id"), "");
         String nickname = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("nickname"), "");
-        xTitle = setMyTitle(nickname + "聊天窗口", true);
+        initTitle(nickname);
 
         initAction(conversation_id);
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
@@ -44,6 +42,16 @@ public class SingleChatRoomActivity extends BaseActivity {
         //输入聊天对象ID，返回conversation对象
         getSingleConversation(conversation_id);
 
+    }
+
+    private void initTitle(String nickname) {
+        XTitle title = setMyTitle(nickname + "聊天窗口", true);
+        title.addAction(new XTitle.ImageAction(getResDrawable(R.mipmap.contact_person)) {
+            @Override
+            public void actionClick(View view) {
+                startActivity(new Intent(getActivity(),SearchActivity.class));
+            }
+        });
     }
 
     private void initAction(final String conversation_id) {

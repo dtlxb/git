@@ -92,4 +92,14 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">#ff33b5e5</item>
     </style>
+
+    <style name="SearchEdit" parent="Base.Widget.AppCompat.SearchView">
+        <item name="queryBackground">@drawable/shape_search_activity_edit</item>
+        <item name="closeIcon">@drawable/ic_cancel_black_24dp</item>
+        <item name="voiceIcon">@null</item>
+        <item name="commitIcon">@null</item>
+        <item name="searchIcon">@null</item>
+        <item name="android:divider">@null</item>
+        <item name="iconifiedByDefault">false</item>
+    </style>
 </resources>

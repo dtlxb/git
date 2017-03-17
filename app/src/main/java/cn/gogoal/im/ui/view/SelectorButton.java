@@ -116,14 +116,14 @@ public class SelectorButton extends AppCompatButton {
 
         //set background color
         mNormalBackgroundColor = a.getColor(R.styleable.SelectorButton_normalBackgroundColor, ContextCompat.getColor(context,R.color.colorPrimary));
-        mPressedBackgroundColor = a.getColor(R.styleable.SelectorButton_pressedBackgroundColor, Color.parseColor("#999999"));
+        mPressedBackgroundColor = a.getColor(R.styleable.SelectorButton_pressedBackgroundColor, Color.parseColor("#bbbbbb"));
         mUnableBackgroundColor = a.getColor(R.styleable.SelectorButton_unableBackgroundColor, 0);
         mNormalBackground.setColor(mNormalBackgroundColor);
         mPressedBackground.setColor(mPressedBackgroundColor);
         mUnableBackground.setColor(mUnableBackgroundColor);
 
         //圆角 弧度
-        mRadius = a.getDimensionPixelSize(R.styleable.SelectorButton_radius, 0);
+        mRadius = a.getDimensionPixelSize(R.styleable.SelectorButton_radius, 5);
         mRound = a.getBoolean(R.styleable.SelectorButton_round, false);
         mNormalBackground.setCornerRadius(mRadius);
 

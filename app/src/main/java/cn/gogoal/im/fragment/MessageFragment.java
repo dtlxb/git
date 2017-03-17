@@ -14,7 +14,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.avos.avoscloud.im.v2.AVIMTypedMessage;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -57,8 +56,6 @@ public class MessageFragment extends BaseFragment {
     private List<IMMessageBean> IMMessageBeans = new ArrayList<>();
     private ListAdapter listAdapter;
     private JSONArray jsonArray;
-    private XTitle xTitle;
-
 
     public MessageFragment() {
     }
@@ -70,8 +67,26 @@ public class MessageFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        xTitle = setFragmentTitle(R.string.title_message);
         initTitle();
+    }
+
+    private void initTitle() {
+        XTitle xTitle = setFragmentTitle(R.string.title_message);
+        //添加action
+        XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_person)) {
+            @Override
+            public void actionClick(View view) {
+
+            }
+        };
+        XTitle.ImageAction addAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_add_message)) {
+            @Override
+            public void actionClick(View view) {
+                startActivity(new Intent(getActivity(), IMAddFriendActivity.class));
+            }
+        };
+        xTitle.addAction(personAction, 0);
+        xTitle.addAction(addAction, 1);
     }
 
     @Override
@@ -172,27 +187,9 @@ public class MessageFragment extends BaseFragment {
 
     }
 
-    private void initTitle() {
-        //添加action
-        XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_person)) {
-            @Override
-            public void actionClick(View view) {
+    private class ListAdapter extends CommonAdapter<IMMessageBean> {
 
-            }
-        };
-        XTitle.ImageAction addAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_add_message)) {
-            @Override
-            public void actionClick(View view) {
-                startActivity(new Intent(getActivity(), IMAddFriendActivity.class));
-            }
-        };
-        xTitle.addAction(personAction, 0);
-        xTitle.addAction(addAction, 1);
-    }
-
-    class ListAdapter extends CommonAdapter<IMMessageBean> {
-
-        public ListAdapter(Context context, int layoutId, List<IMMessageBean> datas) {
+        private ListAdapter(Context context, int layoutId, List<IMMessageBean> datas) {
             super(context, layoutId, datas);
         }
 
