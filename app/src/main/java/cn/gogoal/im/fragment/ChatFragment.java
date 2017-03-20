@@ -103,7 +103,7 @@ public class ChatFragment extends BaseFragment {
     @BindView(R.id.voiveView)
     VoiceButton voiceView;
 
-    private MyListener listener;
+//    private MyListener listener;
 
     //消息类型
     private static int TEXT_MESSAGE = 1;
@@ -124,7 +124,7 @@ public class ChatFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        listener = (MyListener) context;
+//        listener = (MyListener) context;
     }
 
     @Override
@@ -223,7 +223,7 @@ public class ChatFragment extends BaseFragment {
                 params.put("token", AppConst.LEAN_CLOUD_TOKEN);
                 params.put("conv_id", imConversation.getConversationId());
                 params.put("chat_type", String.valueOf(imConversation.getAttribute("chat_type") == null ? 1001 : (int) imConversation.getAttribute("chat_type")));
-                params.put("message", JSONObject.toJSON(messageMap).toString());
+                params.put("message", JSONObject.toJSONString(messageMap));
                 KLog.e(params);
 
                 //发送文字消息
@@ -324,7 +324,6 @@ public class ChatFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
     }
 
     public void sendAVIMMessage(final int messageType, final Map<String, String> params, final AVIMMessage message) {
@@ -350,10 +349,12 @@ public class ChatFragment extends BaseFragment {
                             break;
                     }
                     //头像暂时未保存
-                    IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), (int) imConversation.getAttribute("chat_type"), message.getTimestamp(),
-                            "0", contactBean.getNickname(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
+                    try {
+                        IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), (int) imConversation.getAttribute("chat_type"), message.getTimestamp(),
+                                "0", contactBean.getNickname(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
+                        MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
+                    }catch (Exception e){}
 
-                    MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
                 }
             }
 
@@ -573,6 +574,7 @@ public class ChatFragment extends BaseFragment {
                     }
                 }
             });
+
         }
     }
 
@@ -610,15 +612,15 @@ public class ChatFragment extends BaseFragment {
             contactBeanList.addAll(list);
         }
 
-        for (int i = 0; i < contactBeanList.size(); i++) {
-            if ((contactBeanList.get(i).getFriend_id() + "").equals(speakTo)) {
-                contactBean = contactBeanList.get(i);
-                if (null != listener) {
-                    listener.setData(contactBean);
-                }
-                KLog.e(contactBean);
-            }
-        }
+//        for (int i = 0; i < contactBeanList.size(); i++) {
+//            if ((contactBeanList.get(i).getFriend_id() + "").equals(speakTo)) {
+//                contactBean = contactBeanList.get(i);
+//                if (null != listener) {
+//                    listener.setData(contactBean);
+//                }
+//                KLog.e(contactBean);
+//            }
+//        }
     }
 
     /**
@@ -696,6 +698,10 @@ public class ChatFragment extends BaseFragment {
             //拉取历史记录(直接从LeanCloud拉取)
             getHistoryMessage();
         }
+    }
+
+    public AVIMConversation getImConversation() {
+        return imConversation;
     }
 
     //activiy必须实现这个接口

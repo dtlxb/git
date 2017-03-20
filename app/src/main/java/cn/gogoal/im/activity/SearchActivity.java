@@ -7,10 +7,8 @@ import android.support.v7.widget.SearchView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.avos.avoscloud.im.v2.AVIMConversationQuery;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.socks.library.KLog;
 
@@ -48,18 +46,22 @@ public class SearchActivity extends BaseActivity {
 
         KLog.e(conversationId);
 
-        AVIMConversationQuery query = AVImClientManager.getInstance().getClient().getQuery().whereEqualTo("objectId", conversationId);
-
-        query.findInBackground(new AVIMConversationQueryCallback() {
+        AVImClientManager.getInstance().findConversationById(conversationId, new AVImClientManager.ChatJoinManager() {
             @Override
-            public void done(List<AVIMConversation> list, AVIMException e) {
-                KLog.e(JSONObject.toJSONString(list));
-                list.get(0).queryMessagesFromCache(15, new AVIMMessagesQueryCallback() {
+            public void joinSuccess(AVIMConversation conversation) {
+                conversation.queryMessagesFromCache(1000, new AVIMMessagesQueryCallback() {
                     @Override
                     public void done(List<AVIMMessage> list, AVIMException e) {
-                        KLog.e(JSONObject.toJSONString(list));
+                        if (null!=list && !list.isEmpty()){
+                            KLog.e(JSONObject.toJSONString(list));
+                        }
                     }
                 });
+            }
+
+            @Override
+            public void joinFail(String error) {
+
             }
         });
 

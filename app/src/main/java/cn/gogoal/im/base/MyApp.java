@@ -1,5 +1,6 @@
 package cn.gogoal.im.base;
 
+import android.Manifest;
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
@@ -14,13 +15,18 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.duanqu.qupai.jni.ApplicationGlue;
-import com.socks.library.KLog;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.List;
 
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.MyConversationHandler;
 import cn.gogoal.im.common.IMHelpers.MyMessageHandler;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.permission.IPermissionListner;
 
 /**
  * author wangjd on 2017/2/8 0008.
@@ -58,12 +64,11 @@ public class MyApp extends Application {
             AVImClientManager.getInstance().open(AppConst.LEAN_CLOUD_TOKEN, new AVIMClientCallback() {
                 @Override
                 public void done(AVIMClient avimClient, AVIMException e) {
-                    KLog.e(e.getAppCode()+";"+e.getMessage());
+//                    KLog.e(e.getAppCode()+";"+e.getMessage());
                 }
             });
 
             //TODO 注册消息接收器
-
             //阿里云推流
             System.loadLibrary("gnustl_shared");
             // System.loadLibrary("ijkffmpeg");//目前使用微博的ijkffmpeg会出现1K再换wifi不重连的情况
@@ -72,14 +77,25 @@ public class MyApp extends Application {
             System.loadLibrary("qupai-media-jni");
             ApplicationGlue.initialize(this);
 
-            //阿里云播放器初始化
-            AliVcMediaPlayer.init(getApplicationContext(), AppConst.businessId, new AccessKeyCallback() {
+            BaseActivity.requestRuntimePermission(new String[]{Manifest.permission.READ_PHONE_STATE}, new IPermissionListner() {
                 @Override
-                public AccessKey getAccessToken() {
-                    return new AccessKey(AppConst.accessKeyId, AppConst.accessKeySecret);
+                public void onUserAuthorize() {
+                    //阿里云播放器初始化
+                    AliVcMediaPlayer.init(getApplicationContext(), AppConst.businessId, new AccessKeyCallback() {
+                        @Override
+                        public AccessKey getAccessToken() {
+                            return new AccessKey(AppConst.accessKeyId, AppConst.accessKeySecret);
+                        }
+                    });
+                }
+
+                @Override
+                public void onRefusedAuthorize(List<String> deniedPermissions) {
+
                 }
             });
         }
+
     }
 
     /**

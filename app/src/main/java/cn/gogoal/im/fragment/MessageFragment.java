@@ -132,6 +132,7 @@ public class MessageFragment extends BaseFragment {
                         switch (chat_type) {
                             case "1001":
                                 //单聊处理
+                                KLog.e(conversation.getConversationId());
                                 intent = new Intent(getContext(), SingleChatRoomActivity.class);
                                 intent.putExtra("nickname", IMMessageBeans.get(position).getNickname());
                                 intent.putExtra("conversation_id", conversation_id);

@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
+
     <!-- LeanCloud基础模块（必须加入以下声明）START -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
