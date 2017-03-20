@@ -9,17 +9,16 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageHandler;
 import com.socks.library.KLog;
 
+import java.util.HashMap;
+
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
-import cn.gogoal.im.bean.IMNewFriendBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
 
-import java.util.HashMap;
-
-import static cn.gogoal.im.common.UserUtils.getToken;
+import static cn.gogoal.im.common.UserUtils.getTemporaryToken;
 
 /**
  * Created by huangxx on 2017/2/20.
@@ -83,8 +82,8 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     contactBean.setConv_id(conv_id);
                                     KLog.e(JSONObject.toJSONString(contactBean));
                                     String friendList = UserUtils.updataFriendList(JSONObject.toJSONString(contactBean));
-                                    SPTools.saveString(getToken() + "_contact_beans", friendList);
-                                    KLog.e(SPTools.getString(getToken() + "_contact_beans", ""));
+                                    SPTools.saveString(getTemporaryToken() + "_contact_beans", friendList);
+                                    KLog.e(SPTools.getString(getTemporaryToken() + "_contact_beans", ""));
                                     break;
                                 case 1006:
                                     //公众号

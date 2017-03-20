@@ -18,7 +18,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -36,11 +35,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.alivc.player.AliVcMediaPlayer;
 import com.alivc.player.MediaPlayer;
 import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.avos.avoscloud.im.v2.AVIMConversationQuery;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
-import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.socks.library.KLog;
 
@@ -59,8 +56,6 @@ import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.RelaterVideoData;
-import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGAPI;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -70,6 +65,7 @@ import cn.gogoal.im.common.PlayerUtils.CountDownTimerView;
 import cn.gogoal.im.common.PlayerUtils.PlayerControl;
 import cn.gogoal.im.common.PlayerUtils.StatusListener;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.widget.BottomSheetNormalDialog;
 import cn.gogoal.im.ui.widget.EditTextDialog;
 
@@ -99,6 +95,9 @@ public class PlayerActivity extends BaseActivity {
     TextView textMarInter;
     @BindView(R.id.textOnlineNumber)
     TextView textOnlineNumber;
+
+    @BindView(R.id.liveTogether)
+    TextView liveTogether;
 
     //直播预告展示
     @BindView(R.id.countDownTimer)
@@ -224,6 +223,7 @@ public class PlayerActivity extends BaseActivity {
         }
 
         getRelaterVideoInfo();
+        getCanLiveTogether();
     }
 
     /*
@@ -268,7 +268,19 @@ public class PlayerActivity extends BaseActivity {
                         mURI = data.getString("url_rtmp");
                         room_id = data.getString("room_id");
 
-                        getSquareConversation(room_id);
+                        AVImClientManager.getInstance().findConversationById(room_id, new AVImClientManager.ChatJoinManager() {
+                            @Override
+                            public void joinSuccess(AVIMConversation conversation) {
+                                imConversation = conversation;
+                                joinSquare(imConversation);
+                            }
+
+                            @Override
+                            public void joinFail(String error) {
+                                KLog.e(room_id);
+                                UIHelper.toast(getActivity(), "获取聊天房间失败");
+                            }
+                        });
 
                     } else if (source.equals("video")) {
 
@@ -293,37 +305,6 @@ public class PlayerActivity extends BaseActivity {
         } else if (source.equals("video")) {
             new GGOKHTTP(param, GGOKHTTP.GET_RECORD_LIST, ggHttpInterface).startGet();
         }
-    }
-
-    private void getSquareConversation(String conversationId) {
-        AVIMConversationQuery conversationQuery = AVImClientManager.getInstance().getClient().getQuery();
-        // 根据room_id查找房间
-        conversationQuery.whereEqualTo("objectId", conversationId);
-
-        Log.e("LEAN_CLOUD", "查找聊天室" + conversationId);
-
-        // 查找聊天
-        conversationQuery.findInBackground(new AVIMConversationQueryCallback() {
-            @Override
-            public void done(List<AVIMConversation> list, AVIMException e) {
-
-                if (null == e) {
-                    // 查询列表取第一个
-                    if (null != list && list.size() > 0) {
-
-                        imConversation = list.get(0);
-                        joinSquare(imConversation);
-                        Log.e("LEAN_CLOUD", "search chatroom success");
-                    } else {
-                        Log.e("LEAN_CLOUD", "search chatroom fail ");
-                    }
-                } else {
-                    UIHelper.toastInCenter(PlayerActivity.this, "当前聊天房间不存在");
-                    Log.e("LEAN_CLOUD", "查询条件没有查找到聊天对象" + e.toString());
-                }
-            }
-        });
-
     }
 
     /**
@@ -987,8 +968,11 @@ public class PlayerActivity extends BaseActivity {
             public void doSend(View view, final EditText player_edit) {
 
                 if (null != imConversation) {
+
+                    //前端显示
                     HashMap<String, Object> attrsMap = new HashMap<String, Object>();
-                    attrsMap.put("username", AppConst.LEAN_CLOUD_TOKEN);
+                    attrsMap.put("username", UserUtils.getUserName());
+
                     final AVIMTextMessage msg = new AVIMTextMessage();
                     msg.setText(player_edit.getText().toString());
                     msg.setAttrs(attrsMap);
@@ -997,14 +981,33 @@ public class PlayerActivity extends BaseActivity {
                     mLiveChatAdapter.notifyDataSetChanged();
                     recyler_chat.smoothScrollToPosition(messageList.size());
 
-                    imConversation.sendMessage(msg, new AVIMConversationCallback() {
+                    //聊天内容发往后台
+                    Map<Object, Object> messageMap = new HashMap<>();
+                    messageMap.put("_lctype", "-1");
+                    messageMap.put("_lctext", player_edit.getText().toString());
+                    messageMap.put("_lcattrs", AVImClientManager.getInstance().userBaseInfo());
+
+                    HashMap<String, String> params = new HashMap<>();
+                    params.put("token", UserUtils.getToken());
+                    params.put("conv_id", imConversation.getConversationId());
+                    params.put("chat_type", "1003");
+                    params.put("message", JSONObject.toJSON(messageMap).toString());
+
+                    //发送文字消息
+                    GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
                         @Override
-                        public void done(AVIMException e) {
+                        public void onSuccess(String responseInfo) {
+                            KLog.json(responseInfo);
                             dialog.dismiss();
-                            AppDevice.hideSoftKeyboard(player_edit);
                             player_edit.setText("");
                         }
-                    });
+
+                        @Override
+                        public void onFailure(String msg) {
+                            KLog.json(msg);
+                        }
+                    };
+                    new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
                 }
             }
         });
@@ -1129,6 +1132,35 @@ public class PlayerActivity extends BaseActivity {
             builder.setSpan(Span2, username.length(), textSend.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             textSend.setText(builder);
         }
+    }
+
+    /*
+    * 获取直播相关视频
+    * */
+    private void getCanLiveTogether() {
+
+        Map<String, String> param = new HashMap<>();
+        param.put("token", UserUtils.getToken());
+        param.put("video_id", live_id);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    liveTogether.setVisibility(View.VISIBLE);
+                } else {
+                    liveTogether.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.GET_PUSH_STREAM, ggHttpInterface).startGet();
     }
 
     private PlayerActivity getContext() {

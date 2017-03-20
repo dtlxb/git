@@ -109,7 +109,8 @@
                     android:background="@drawable/shape_player_live_together"
                     android:text="@string/live_together"
                     android:textColor="@android:color/white"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 

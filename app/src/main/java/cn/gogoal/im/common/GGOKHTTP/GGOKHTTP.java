@@ -72,7 +72,20 @@ public class GGOKHTTP {
     * */
     public static final String GET_RELATED_VIDEO = "v1/video_studio/get_related_video";
 
+    /**
+     * 登录
+     * 账号
+     * 密码
+     * source=20
+     */
+    public static final String GET_USER_LOGIN = "v1/user/login";
 
+    /**
+     * 嘉宾获取直播推流地址
+     * token
+     * video_id
+     */
+    public static final String GET_PUSH_STREAM = "v1/video_studio/get_push_stream";
 
     /**
      * 好友列表
@@ -140,7 +153,7 @@ public class GGOKHTTP {
     public void startGet() {
         try {
             OkHttpUtils.get()
-                    .url(GGAPI.get(url,param))
+                    .url(GGAPI.get(url, param))
                     .build()
                     .execute(new StringCallback() {
                         @Override
