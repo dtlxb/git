@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.socks.library.KLog;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
+import cn.gogoal.im.adapter.recycleviewAdapterHelper.MultiItemTypeAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
@@ -46,10 +49,30 @@ public class IMPersonActivity extends BaseActivity {
         ContactBean contactBean = (ContactBean) getIntent().getSerializableExtra("seri");
         contactBeens.add(contactBean);
         contactBeens.add(addFunctionHead("", R.mipmap.person_add));
+
+        KLog.e(contactBeens);
         //初始化
         personlistRecycler.setLayoutManager(new GridLayoutManager(this, 5));
         mPersonInfoAdapter = new PersonInfoAdapter(IMPersonActivity.this, R.layout.item_grid_foundfragment, contactBeens);
         personlistRecycler.setAdapter(mPersonInfoAdapter);
+
+        mPersonInfoAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                if (position == contactBeens.size() - 1) {
+
+                } else {
+                    Intent intent = new Intent(IMPersonActivity.this, IMPersonDetailActivity.class);
+                    intent.putExtra("friend_id", contactBeens.get(position).getFriend_id());
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
     }
 
     private ContactBean<Integer> addFunctionHead(String name, @DrawableRes int iconId) {
@@ -64,7 +87,7 @@ public class IMPersonActivity extends BaseActivity {
     void function(View view) {
         switch (view.getId()) {
             case R.id.tv_do_search_conversation:
-                startActivity(new Intent(getActivity(),SearchActivity.class));
+                startActivity(new Intent(getActivity(), SearchActivity.class));
                 break;
             case R.id.getmessage_swith:
                 break;
