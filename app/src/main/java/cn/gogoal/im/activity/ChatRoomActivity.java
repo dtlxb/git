@@ -192,7 +192,7 @@ public class ChatRoomActivity extends BaseActivity {
                     }
                     //播放动画
                     animView = view.findViewById(R.id.recorder_anim);
-                    animView.setBackgroundResource(R.drawable.play_anim);
+                    animView.setBackgroundResource(R.drawable.right_play_anim);
                     AnimationDrawable anim = (AnimationDrawable) animView.getBackground();
                     anim.start();
                     //播放音频
