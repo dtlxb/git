@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -24,10 +24,11 @@
     <LinearLayout
         android:id="@+id/flag_bottom"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:background="#f4f4f6"
         android:gravity="center"
         android:layout_above="@+id/find_more_layout"
+        android:minHeight="50dp"
         android:orientation="horizontal">
 
         <cn.gogoal.im.ui.view.SwitchImageView
@@ -42,24 +43,31 @@
         <EditText
             android:id="@+id/et_input"
             android:layout_width="0dp"
-            android:layout_height="37dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp"
             android:layout_weight="1"
             android:background="@drawable/live_edite_border"
             android:maxLines="5"
-            android:paddingLeft="10dp" />
+            android:minHeight="36dp"
+            android:paddingBottom="6dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="8dp"
+            android:paddingTop="6dp"
+            android:textSize="14sp" />
 
         <cn.gogoal.im.ui.view.VoiceButton
             android:id="@+id/voiveView"
             android:layout_width="0dp"
-            android:layout_height="37dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="6dp"
             android:layout_weight="1"
+            android:background="@drawable/voice_button_null"
             android:gravity="center"
-            android:minHeight="0dp"
+            android:minHeight="36dp"
             android:text="按住 说话"
-            android:visibility="gone"
-            app:normalBackgroundColor="@android:color/white"
-            app:pressedBackgroundColor="@android:color/darker_gray"
-            app:radius="4dp" />
+            android:visibility="gone" />
 
         <ImageButton
             android:id="@+id/img_emoji"
@@ -118,4 +126,5 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_alignParentBottom="true"/>
+
 </RelativeLayout>

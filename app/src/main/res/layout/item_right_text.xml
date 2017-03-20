@@ -2,20 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="15dp"
     android:padding="10dp">
 
     <TextView
         android:id="@+id/message_time"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="25dp"
-        android:background="@color/textColor_cccccc"
-        android:padding="2dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/item_chat_time_bg"
+        android:gravity="center"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:text="11:00:34"
         android:textColor="@android:color/white"
-        android:textSize="12sp"
-        android:visibility="gone" />
+        android:textSize="12sp" />
 
     <ImageView
         android:id="@+id/user_head_photo"

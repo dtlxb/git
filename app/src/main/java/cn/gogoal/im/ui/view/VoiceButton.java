@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
+import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,7 +26,7 @@ import cn.gogoal.im.common.recording.AudioManager;
 import cn.gogoal.im.common.recording.DialogManager;
 
 
-public class VoiceButton extends SelectorButton implements AudioManager.AudioStateListener {
+public class VoiceButton extends AppCompatButton implements AudioManager.AudioStateListener {
 
     private static final int DISTANCE_Y_CANCEL = 50; //正常开发情况下,应该使用dp,然后将dp转换为px
 
@@ -80,9 +81,9 @@ public class VoiceButton extends SelectorButton implements AudioManager.AudioSta
                     + "Android" + File.separator + "data" + File.separator
                     + context.getPackageName() + File.separator
                     + "file" + File.separator + "recorder";
-            File dirFile=new File(dir);
+            File dirFile = new File(dir);
 
-            if (!dirFile.exists()){
+            if (!dirFile.exists()) {
                 dirFile.mkdirs();
             }
         }
@@ -95,10 +96,10 @@ public class VoiceButton extends SelectorButton implements AudioManager.AudioSta
                 mReady = true;
                 try {
                     mAudioManger.prepareAudio();
-                }catch (Exception e){
-                    if (ContextCompat.checkSelfPermission(context,Manifest.permission.RECORD_AUDIO)== PermissionChecker.PERMISSION_GRANTED) {
+                } catch (Exception e) {
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PermissionChecker.PERMISSION_GRANTED) {
                         UIHelper.toast(getContext(), "设备音频硬件模块出现故障!", Toast.LENGTH_LONG);
-                    }else {
+                    } else {
                         UIHelper.toast(getContext(), "请允许App使用设备的录音权限，这在语音聊天时需要!", Toast.LENGTH_LONG);
                     }
                 }
@@ -173,22 +174,23 @@ public class VoiceButton extends SelectorButton implements AudioManager.AudioSta
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                this.setBackgroundResource(R.drawable.voice_button_onvoice);
                 BaseActivity.requestRuntimePermission(new String[]{Manifest.permission.RECORD_AUDIO}, new IPermissionListner() {
                     @Override
                     public void onUserAuthorize() {
                         changeState(STATE_RECORDING);
-                        VoiceButton.this.setBackgroundColor(ContextCompat.getColor(getContext(),android.R.color.darker_gray));
+                        VoiceButton.this.setBackgroundColor(ContextCompat.getColor(getContext(), android.R.color.darker_gray));
                     }
 
                     @Override
                     public void onRefusedAuthorize(List<String> deniedPermissions) {
-                        UIHelper.toast(getContext(),"录音权限被拒绝,无法使用");
+                        UIHelper.toast(getContext(), "录音权限被拒绝,无法使用");
                         new android.os.Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                ((Activity)getContext()).finish();
+                                ((Activity) getContext()).finish();
                             }
-                        },1000);
+                        }, 1000);
                     }
                 });
 
@@ -204,6 +206,7 @@ public class VoiceButton extends SelectorButton implements AudioManager.AudioSta
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                this.setBackgroundResource(R.drawable.voice_button_null);
                 if (!mReady) {
                     reset();
                     return super.onTouchEvent(event);

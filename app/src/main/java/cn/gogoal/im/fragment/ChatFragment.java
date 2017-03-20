@@ -65,10 +65,13 @@ import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.recording.MediaManager;
 import cn.gogoal.im.ui.view.SwitchImageView;
 import cn.gogoal.im.ui.view.VoiceButton;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
+
+import static android.R.id.message;
 
 /**
  * Created by huangxx on 2017/2/21.
@@ -702,6 +705,18 @@ public class ChatFragment extends BaseFragment {
 
     public AVIMConversation getImConversation() {
         return imConversation;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MediaManager.pause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MediaManager.resume();
     }
 
     //activiy必须实现这个接口

@@ -112,6 +112,10 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name="cn.gogoal.im.activity.IMPersonDetailActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name="cn.gogoal.im.activity.IMPersonActivity"
             android:screenOrientation="portrait" />
 
