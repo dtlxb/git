@@ -74,14 +74,14 @@
 
         <FrameLayout
             android:id="@+id/flag_layout_send"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginRight="5dp">
 
             <ImageButton
                 android:id="@+id/img_function"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
                 android:layout_gravity="center"
                 android:background="@mipmap/chat_add"
                 android:contentDescription="@null"
@@ -89,15 +89,14 @@
 
             <Button
                 android:id="@+id/btn_send"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="50dp"
+                android:layout_height="36dp"
                 android:layout_gravity="center"
-                android:minWidth="0dp"
-                android:padding="5dp"
                 android:text="@string/send"
-                android:textColor="@color/colorPrimary"
+                android:background="@drawable/shape_text_send_bg"
+                android:textColor="@color/absoluteWhite"
                 android:textSize="16sp"
-                android:visibility="invisible" />
+                android:visibility="gone" />
         </FrameLayout>
     </LinearLayout>
 
