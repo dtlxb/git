@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMClient;
+import com.avos.avoscloud.im.v2.AVIMException;
+import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.socks.library.KLog;
 
 import java.util.HashMap;
@@ -17,6 +20,7 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 
@@ -72,9 +76,18 @@ public class LoginActivity extends BaseActivity {
                 KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
+
                     SPTools.saveJsonObject("userInfo", object.getJSONObject("data"));
                     startActivity(new Intent(getContext(), MainActivity.class));
                     finish();
+
+                    //测试代码
+                    JSONObject data = object.getJSONObject("data");
+                    AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
+                        @Override
+                        public void done(AVIMClient avimClient, AVIMException e) {
+                        }
+                    });
                 }
             }
 

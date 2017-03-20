@@ -4,6 +4,7 @@
     android:id="@+id/activity_player"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context="cn.gogoal.im.activity.PlayerActivity">
 
     <FrameLayout
@@ -110,7 +111,7 @@
                     android:text="@string/live_together"
                     android:textColor="@android:color/white"
                     android:textSize="14dp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </LinearLayout>
 

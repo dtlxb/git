@@ -96,6 +96,7 @@ public class PlayerActivity extends BaseActivity {
     @BindView(R.id.textOnlineNumber)
     TextView textOnlineNumber;
 
+    //一起直播
     @BindView(R.id.liveTogether)
     TextView liveTogether;
 
@@ -251,7 +252,6 @@ public class PlayerActivity extends BaseActivity {
                     ImageDisplay.loadCircleNetImage(getContext(), data.getString("face_url"), imgPalyer);
                     textCompany.setText(data.getString("anchor_name"));
                     textMarInter.setText(data.getString("programme_name"));
-                    textOnlineNumber.setText(data.getString("play_base") + "人在线");
                     //主播介绍
                     anchor = data.getJSONObject("anchor");
 
@@ -282,9 +282,13 @@ public class PlayerActivity extends BaseActivity {
                             }
                         });
 
+                        getOnlineCount(room_id);
+
                     } else if (source.equals("video")) {
 
                         mURI = data.getString("video_file");
+
+                        textOnlineNumber.setText("0人在线");
                     }
 
                     startToPlay(mURI);
@@ -936,7 +940,7 @@ public class PlayerActivity extends BaseActivity {
     }
 
     @OnClick({R.id.imgPlayerChat, R.id.imgPlayerProfiles, R.id.imgPlayerRelaterVideo, R.id.imgPlayerShare,
-            R.id.imgPlayerShotCut, R.id.imgPlayerClose})
+            R.id.imgPlayerShotCut, R.id.imgPlayerClose, R.id.liveTogether})
     public void setClickFunctionBar(View v) {
         switch (v.getId()) {
             case R.id.imgPlayerChat: //发消息
@@ -953,8 +957,11 @@ public class PlayerActivity extends BaseActivity {
                 break;
             case R.id.imgPlayerShotCut:
                 break;
-            case R.id.imgPlayerClose:
+            case R.id.imgPlayerClose: //退出
                 finish();
+                break;
+            case R.id.liveTogether: //一起直播
+
                 break;
         }
     }
@@ -988,7 +995,7 @@ public class PlayerActivity extends BaseActivity {
                     messageMap.put("_lcattrs", AVImClientManager.getInstance().userBaseInfo());
 
                     HashMap<String, String> params = new HashMap<>();
-                    params.put("token", UserUtils.getToken());
+                    params.put("token", UserUtils.getUserAccountId());
                     params.put("conv_id", imConversation.getConversationId());
                     params.put("chat_type", "1003");
                     params.put("message", JSONObject.toJSON(messageMap).toString());
@@ -1135,7 +1142,7 @@ public class PlayerActivity extends BaseActivity {
     }
 
     /*
-    * 获取直播相关视频
+    * 获取能否一起直播
     * */
     private void getCanLiveTogether() {
 
@@ -1161,6 +1168,33 @@ public class PlayerActivity extends BaseActivity {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_PUSH_STREAM, ggHttpInterface).startGet();
+    }
+
+    /*
+    * 获取直播在线人数
+    * */
+    private void getOnlineCount(String room_id) {
+
+        Map<String, String> param = new HashMap<>();
+        param.put("conv_id", room_id);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONObject data = object.getJSONObject("data");
+                    textOnlineNumber.setText(data.getIntValue("result") + "人在线");
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.GET_ONLINE_COUNT, ggHttpInterface).startGet();
     }
 
     private PlayerActivity getContext() {

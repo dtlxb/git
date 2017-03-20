@@ -88,6 +88,12 @@ public class GGOKHTTP {
     public static final String GET_PUSH_STREAM = "v1/video_studio/get_push_stream";
 
     /**
+     * 获取在线人数
+     * conv_id
+     */
+    public static final String GET_ONLINE_COUNT = "v1/ggm_chat/get_online_count";
+
+    /**
      * 好友列表
      */
     public static final String GET_FRIEND_LIST = "v1/ggm_im/get_friend_list";
