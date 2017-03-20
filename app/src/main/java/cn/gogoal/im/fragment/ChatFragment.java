@@ -65,6 +65,7 @@ import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.recording.MediaManager;
 import cn.gogoal.im.ui.view.SwitchImageView;
 import cn.gogoal.im.ui.view.VoiceButton;
 import top.zibin.luban.Luban;
@@ -696,6 +697,18 @@ public class ChatFragment extends BaseFragment {
             //拉取历史记录(直接从LeanCloud拉取)
             getHistoryMessage();
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MediaManager.pause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MediaManager.resume();
     }
 
     //activiy必须实现这个接口
