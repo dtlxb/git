@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@mipmap/right_voice_anime1" android:duration="300"/>
+    <item android:drawable="@mipmap/right_voice_anime2" android:duration="300"/>
+    <item android:drawable="@mipmap/right_voice_anime3" android:duration="300"/>
+</animation-list>
