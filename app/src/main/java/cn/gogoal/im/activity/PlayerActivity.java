@@ -961,7 +961,7 @@ public class PlayerActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.liveTogether: //一起直播
-
+                startActivity(new Intent(getContext(), LiveTogetherActivity.class));
                 break;
         }
     }
