@@ -20,7 +20,7 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.IMPersonSetAdapter;
 import cn.gogoal.im.adapter.NineGridImageViewAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.MultiItemTypeAdapter;
+import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
@@ -71,9 +71,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
         mPersonInfoAdapter = new IMPersonSetAdapter(IMSquareChatSetActivity.this, R.layout.item_grid_foundfragment, contactBeens);
         personlistRecycler.setAdapter(mPersonInfoAdapter);
 
-        mPersonInfoAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+        mPersonInfoAdapter.setOnItemClickListener(new OnItemClickLitener() {
             @Override
-            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+            public void onItemClick(RecyclerView.ViewHolder holder,View view, int position) {
                 if (position == contactBeens.size() - 1) {
 
                 } else {
@@ -84,7 +84,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
             }
 
             @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+            public boolean onItemLongClick(RecyclerView.ViewHolder holder,View view, int position) {
                 return false;
             }
         });
