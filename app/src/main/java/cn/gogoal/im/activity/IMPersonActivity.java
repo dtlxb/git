@@ -9,7 +9,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.content.Intent;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -20,10 +27,18 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.IMPersonSetAdapter;
+import cn.gogoal.im.adapter.NineGridImageViewAdapter;
+import cn.gogoal.im.adapter.recycleviewAdapterHelper.MultiItemTypeAdapter;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
+import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.ui.view.NineGridImageView;
 
 /**
  * Created by huangxx on 2017/3/16.
@@ -34,8 +49,7 @@ public class IMPersonActivity extends BaseActivity {
     @BindView(R.id.personlist_recycler)
     RecyclerView personlistRecycler;
 
-    private PersonInfoAdapter mPersonInfoAdapter;
-
+    private IMPersonSetAdapter mPersonInfoAdapter;
     private List<ContactBean> contactBeens = new ArrayList<>();
     private String conversationId;
 
@@ -51,6 +65,7 @@ public class IMPersonActivity extends BaseActivity {
         ContactBean contactBean = (ContactBean) getIntent().getSerializableExtra("seri");
         conversationId = getIntent().getStringExtra("conversation_id");
         contactBeens.add(contactBean);
+
         contactBeens.add(addFunctionHead("", R.mipmap.person_add));
 
         KLog.e(contactBeens);
@@ -58,7 +73,7 @@ public class IMPersonActivity extends BaseActivity {
         personlistRecycler.setLayoutManager(new GridLayoutManager(this, 5));
 //        mPersonInfoAdapter = new PersonInfoAdapter(IMPersonActivity.this, R.layout.item_grid_foundfragment, contactBeens);
 //        personlistRecycler.setAdapter(mPersonInfoAdapter);
-        mPersonInfoAdapter = new PersonInfoAdapter(IMPersonActivity.this, R.layout.item_grid_foundfragment, contactBeens);
+        mPersonInfoAdapter = new IMPersonSetAdapter(IMPersonActivity.this, R.layout.item_grid_foundfragment, contactBeens);
         personlistRecycler.setAdapter(mPersonInfoAdapter);
 
         mPersonInfoAdapter.setOnItemClickListener(new OnItemClickLitener() {
@@ -135,6 +150,5 @@ public class IMPersonActivity extends BaseActivity {
             }
         }
     }
-
 
 }

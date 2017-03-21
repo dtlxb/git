@@ -133,18 +133,25 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             final AVIMAudioMessage audioMessage = (AVIMAudioMessage) avimMessage;
             //设置语音宽度
             ViewGroup.LayoutParams params = ((RightAudioViewHolder) holder).recorder_length.getLayoutParams();
-            int mMaxItemWidth = (int) (AppDevice.getWidth(mContext) * 0.7f);
+            int mMaxItemWidth = AppDevice.getWidth(mContext) - AppDevice.dp2px(mContext, 160);
             int mMinItemWidth = (int) (AppDevice.getWidth(mContext) * 0.16f);
             params.width = (int) (mMinItemWidth + (mMaxItemWidth / 60f) * ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue());
+            if (params.width > mMaxItemWidth) {
+                params.width = mMaxItemWidth;
+            }
 
             ((RightAudioViewHolder) holder).recorder_length.setLayoutParams(params);
             //设置语音时长
-            ((RightAudioViewHolder) holder).recorder_time.setText((int) ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue() + "\"");
+            if ((int) ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue() > 60) {
+                ((RightAudioViewHolder) holder).recorder_time.setText(60 + "\"");
+            } else {
+                ((RightAudioViewHolder) holder).recorder_time.setText((int) ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue() + "\"");
+            }
             ((RightAudioViewHolder) holder).recorder_length.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //播放动画
-                    ((RightAudioViewHolder) holder).animView.setBackgroundResource(R.drawable.play_anim);
+                    ((RightAudioViewHolder) holder).animView.setBackgroundResource(R.drawable.right_play_anim);
                     AnimationDrawable anim = (AnimationDrawable) ((RightAudioViewHolder) holder).animView.getBackground();
                     anim.start();
                     //播放音频
@@ -152,7 +159,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                            ((RightAudioViewHolder) holder).animView.setBackgroundResource(R.drawable.v_anim3);
+                            ((RightAudioViewHolder) holder).animView.setBackgroundResource(R.mipmap.right_voice_anime3);
                         }
                     });
                 }
@@ -163,9 +170,12 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             final AVIMAudioMessage audioMessage = (AVIMAudioMessage) avimMessage;
             //设置语音宽度
             final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((LeftAudioViewHolder) holder).recorder_length.getLayoutParams();
-            int mMaxItemWidth = (int) (AppDevice.getWidth(mContext) * 0.7f);
+            int mMaxItemWidth = AppDevice.getWidth(mContext) - AppDevice.dp2px(mContext, 160);
             int mMinItemWidth = (int) (AppDevice.getWidth(mContext) * 0.16f);
             params.width = (int) (mMinItemWidth + (mMaxItemWidth / 60f) * ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue());
+            if (params.width > mMaxItemWidth) {
+                params.width = mMaxItemWidth;
+            }
             if (chatType == 1001) {
                 params.setMargins(0, 0, 0, 0);
             } else if (chatType == 1002) {
@@ -173,7 +183,11 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             }
             ((LeftAudioViewHolder) holder).recorder_length.setLayoutParams(params);
             //设置语音时长
-            ((LeftAudioViewHolder) holder).recorder_time.setText((int) ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue() + "\"");
+            if ((int) ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue() > 60) {
+                ((LeftAudioViewHolder) holder).recorder_time.setText(60 + "\"");
+            } else {
+                ((LeftAudioViewHolder) holder).recorder_time.setText((int) ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue() + "\"");
+            }
             //点击播放语音
             ((LeftAudioViewHolder) holder).recorder_length.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -183,7 +197,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                         ((LeftAudioViewHolder) holder).animView = null;
                     }*/
                     //播放动画
-                    ((LeftAudioViewHolder) holder).animView.setBackgroundResource(R.drawable.play_anim);
+                    ((LeftAudioViewHolder) holder).animView.setBackgroundResource(R.drawable.left_play_anim);
                     AnimationDrawable anim = (AnimationDrawable) ((LeftAudioViewHolder) holder).animView.getBackground();
                     anim.start();
                     //播放音频
@@ -191,7 +205,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                            ((LeftAudioViewHolder) holder).animView.setBackgroundResource(R.drawable.v_anim3);
+                            ((LeftAudioViewHolder) holder).animView.setBackgroundResource(R.mipmap.left_voice_anime3);
                         }
                     });
                 }

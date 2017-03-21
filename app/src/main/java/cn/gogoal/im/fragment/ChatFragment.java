@@ -45,6 +45,7 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.ChatFunctionAdapter;
 import cn.gogoal.im.adapter.IMChatAdapter;
+import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
@@ -56,6 +57,7 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.CalendarUtils;
+import cn.gogoal.im.common.ConversationUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
@@ -64,7 +66,6 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.recording.MediaManager;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 import cn.gogoal.im.ui.keyboard.KeyboardLaunchListenLayout;
 import cn.gogoal.im.ui.view.SwitchImageView;
 import cn.gogoal.im.ui.view.VoiceButton;
@@ -544,7 +545,6 @@ public class ChatFragment extends BaseFragment {
 
     private void getHistoryMessage() {
         if (null != imConversation) {
-
             imConversation.queryMessages(20, new AVIMMessagesQueryCallback() {
                 @Override
                 public void done(List<AVIMMessage> list, AVIMException e) {
@@ -555,13 +555,21 @@ public class ChatFragment extends BaseFragment {
 
                         messageList.addAll(list);
 
+                        int chatType = (int) imConversation.getAttribute("chat_type");
+                        IMMessageBean imMessageBean;
+
+                        //单聊，群聊处理
+                        if (chatType == 1001) {
+
+                        }
+
                         //拿到对方信息
                         getSpeakToInfo(imConversation);
                         jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
                         if (messageList.size() > 0 && null != contactBean) {
                             AVIMMessage lastMessage = messageList.get(messageList.size() - 1);
 
-                            IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), (int) imConversation.getAttribute("chat_type"), lastMessage.getTimestamp(),
+                            imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(),
                                     "0", contactBean.getNickname(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), lastMessage);
 
                             MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
