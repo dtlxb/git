@@ -18,7 +18,6 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
 
-import static cn.gogoal.im.common.UserUtils.getTemporaryToken;
 import static cn.gogoal.im.common.UserUtils.getToken;
 
 /**
