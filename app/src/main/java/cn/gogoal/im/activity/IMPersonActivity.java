@@ -19,11 +19,11 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.MultiItemTypeAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 
 /**
  * Created by huangxx on 2017/3/16.
@@ -61,9 +61,9 @@ public class IMPersonActivity extends BaseActivity {
         mPersonInfoAdapter = new PersonInfoAdapter(IMPersonActivity.this, R.layout.item_grid_foundfragment, contactBeens);
         personlistRecycler.setAdapter(mPersonInfoAdapter);
 
-        mPersonInfoAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+        mPersonInfoAdapter.setOnItemClickListener(new OnItemClickLitener() {
             @Override
-            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+            public void onItemClick(RecyclerView.ViewHolder holder, View view, int position) {
                 if (position == contactBeens.size() - 1) {
 
                 } else {
@@ -74,10 +74,11 @@ public class IMPersonActivity extends BaseActivity {
             }
 
             @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+            public boolean onItemLongClick(RecyclerView.ViewHolder holder, View view, int position) {
                 return false;
             }
         });
+
     }
 
     private ContactBean<Integer> addFunctionHead(String name, @DrawableRes int iconId) {

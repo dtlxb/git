@@ -57,7 +57,7 @@
             android:name=".servise.PushService"
             android:exported="true"
             android:label="PushService"
-            android:process=":pushservice"></service>
+            android:process=":pushservice"/>
 
         <service android:name=".servise.IntentService" />
 
@@ -119,7 +119,8 @@
             android:name="cn.gogoal.im.activity.IMPersonActivity"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".activity.SearchActivity" />
+        <activity android:name=".activity.SearchActivity" >
+        </activity>
 
         <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity" />
 

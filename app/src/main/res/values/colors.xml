@@ -66,4 +66,5 @@
     <color name="stock_text_black">#333333</color>
     <color name="stock_text_gray">#666666</color>
 
+    <color name="colorSearchGray">#979797</color>
 </resources>

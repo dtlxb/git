@@ -31,7 +31,6 @@ import cn.gogoal.im.activity.IMNewFrienActivity;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.MultiItemTypeAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
@@ -44,6 +43,7 @@ import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**
@@ -53,8 +53,11 @@ public class MessageFragment extends BaseFragment {
 
     @BindView(R.id.message_recycler)
     RecyclerView message_recycler;
+
     private List<IMMessageBean> IMMessageBeans = new ArrayList<>();
+
     private ListAdapter listAdapter;
+
     private JSONArray jsonArray;
 
     public MessageFragment() {
@@ -102,6 +105,8 @@ public class MessageFragment extends BaseFragment {
             IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
         }
 
+        KLog.e(IMMessageBeans.size());
+
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
             //按照时间排序
             Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
@@ -117,9 +122,9 @@ public class MessageFragment extends BaseFragment {
 
         message_recycler.setAdapter(listAdapter);
 
-        listAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+        listAdapter.setOnItemClickListener(new OnItemClickLitener() {
             @Override
-            public void onItemClick(View view, RecyclerView.ViewHolder holder, final int position) {
+            public void onItemClick(RecyclerView.ViewHolder holder,View view,  final int position) {
                 final String conversation_id = IMMessageBeans.get(position).getConversationID();
 
                 KLog.e(conversation_id);
@@ -171,7 +176,7 @@ public class MessageFragment extends BaseFragment {
 
             //长按删除
             @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, final int position) {
+            public boolean onItemLongClick(RecyclerView.ViewHolder holder,View view,  final int position) {
                 DialogHelp.getSelectDialog(getActivity(), "", new String[]{"标为未读", "置顶聊天", "删除聊天"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

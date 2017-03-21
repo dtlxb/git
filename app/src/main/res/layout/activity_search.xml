@@ -23,7 +23,7 @@
             android:layout_height="36dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/btn_cancle"/>
+            android:layout_toStartOf="@+id/btn_cancle" />
 
         <TextView
             android:id="@+id/btn_cancle"
@@ -32,17 +32,90 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="5dp"
-            android:padding="8dp"
-            android:gravity="center"
             android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:padding="8dp"
             android:text="@string/str_cancle"
             android:textSize="16sp" />
 
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_result"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent">
+
+        <!--搜索结果-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!--搜索历史记录以及一些提示部分-->
+        <LinearLayout
+            android:id="@+id/layout_no_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp">
+
+                <LinearLayout
+                    android:id="@+id/flag_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingEnd="15dp"
+                    android:paddingStart="15dp">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1px"
+                        android:layout_weight="1"
+                        android:background="@color/colorSearchGray" />
+
+                    <TextView
+                        android:id="@+id/tv_flag_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="15dp"
+                        android:textSize="14sp"
+                        android:textColor="@color/textColor_999999"
+                        android:layout_marginStart="15dp"
+                        android:text="在这里你可以搜索到" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1px"
+                        android:layout_weight="1"
+                        android:background="@color/colorSearchGray" />
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_flag_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_below="@+id/flag_layout"
+                    android:layout_marginTop="24dp"
+                    app:layoutManager="android.support.v7.widget.GridLayoutManager"
+                    app:spanCount="3">
+
+                </android.support.v7.widget.RecyclerView>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 </LinearLayout>

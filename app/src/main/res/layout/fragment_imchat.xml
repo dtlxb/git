@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<cn.gogoal.im.ui.keyboard.KeyboardLaunchListenLayout
+    android:id="@+id/chat_root_keyboard_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -36,7 +37,7 @@
             style="@style/BottomImageStyle"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="10dp"
-            android:background="@mipmap/chat_voice"
+            android:src="@mipmap/chat_voice"
             android:contentDescription="@null"
             android:paddingLeft="5dp" />
 
@@ -74,13 +75,13 @@
             style="@style/BottomImageStyle"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="7dp"
-            android:background="@mipmap/chat_face"
+            android:src="@mipmap/chat_face"
             android:contentDescription="@null" />
 
         <FrameLayout
             android:id="@+id/flag_layout_send"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginRight="5dp">
 
             <ImageButton
@@ -88,7 +89,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="@mipmap/chat_add"
+                android:src="@mipmap/chat_add"
+                android:background="@android:color/transparent"
                 android:contentDescription="@null"
                 android:tag="un_expanded" />
 
@@ -100,9 +102,10 @@
                 android:minWidth="0dp"
                 android:padding="5dp"
                 android:text="@string/send"
+                android:background="@android:color/transparent"
+                android:visibility="invisible"
                 android:textColor="@color/colorPrimary"
-                android:textSize="16sp"
-                android:visibility="invisible" />
+                android:textSize="16sp"/>
         </FrameLayout>
     </LinearLayout>
 
@@ -127,4 +130,4 @@
         android:layout_height="0dp"
         android:layout_alignParentBottom="true"/>
 
-</RelativeLayout>
+</cn.gogoal.im.ui.keyboard.KeyboardLaunchListenLayout>
