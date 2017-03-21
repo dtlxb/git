@@ -19,6 +19,7 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
 
 import static cn.gogoal.im.common.UserUtils.getTemporaryToken;
+import static cn.gogoal.im.common.UserUtils.getToken;
 
 /**
  * Created by huangxx on 2017/2/20.
@@ -80,10 +81,9 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     contactBean.setFriend_id(friend_id);
                                     contactBean.setContactType(ContactBean.ContactType.PERSION_ITEM);
                                     contactBean.setConv_id(conv_id);
-                                    KLog.e(JSONObject.toJSONString(contactBean));
                                     String friendList = UserUtils.updataFriendList(JSONObject.toJSONString(contactBean));
-                                    SPTools.saveString(getTemporaryToken() + "_contact_beans", friendList);
-                                    KLog.e(SPTools.getString(getTemporaryToken() + "_contact_beans", ""));
+                                    SPTools.saveString(getToken() + "_contact_beans", friendList);
+                                    KLog.e(SPTools.getString(getToken() + "_contact_beans", ""));
                                     break;
                                 case 1006:
                                     //公众号
