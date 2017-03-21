@@ -2,14 +2,10 @@ package cn.gogoal.im.fragment;
 
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
-
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +19,7 @@ import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ImageTextBean;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.ui.NormalItemDecoration;
 
 /**
  * 我的
@@ -50,11 +47,7 @@ public class MineFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         setFragmentTitle(getString(R.string.title_mine));
         rvMine.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-        DividerItemDecoration decoration = new DividerItemDecoration(
-                mContext, LinearLayoutManager.VERTICAL);
-        decoration.setDrawable(
-                ContextCompat.getDrawable(mContext, R.drawable.shape_normal_list_divider_1dp));
-        rvMine.addItemDecoration(decoration);
+        rvMine.addItemDecoration(new NormalItemDecoration(mContext));
         rvMine.setAdapter(new MineAdapter(mContext, iniData()));
     }
 

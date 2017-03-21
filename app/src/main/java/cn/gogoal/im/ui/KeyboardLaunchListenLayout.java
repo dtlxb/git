@@ -1,4 +1,4 @@
-package cn.gogoal.im.ui.keyboard;
+package cn.gogoal.im.ui;
 
 import android.app.Activity;
 import android.content.Context;

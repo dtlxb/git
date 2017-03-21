@@ -3,9 +3,8 @@ package cn.gogoal.im.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.DrawableRes;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -28,6 +27,7 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.adapter.ContactAdapter;
+import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
@@ -36,7 +36,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
+import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.index.IndexBar;
 import cn.gogoal.im.ui.index.SuspendedDecoration;
 
@@ -95,9 +95,7 @@ public class ContactsFragment extends BaseFragment {
 
         contactAdapter.notifyDataSetChanged();
 
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
-        itemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.shape_divider_recyclerview_1px));
-        rvContacts.addItemDecoration(itemDecoration);
+        rvContacts.addItemDecoration(new NormalItemDecoration(mContext, Color.parseColor("#D9D9D9")));
 
         rvContacts.setAdapter(contactAdapter);
 

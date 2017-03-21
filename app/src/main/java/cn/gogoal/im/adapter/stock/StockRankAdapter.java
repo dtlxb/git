@@ -9,7 +9,6 @@ package cn.gogoal.im.adapter.stock;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -25,6 +24,7 @@ import cn.gogoal.im.bean.market.StockMarketBean;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.ui.NormalItemDecoration;
 
 /**
  * author wangjd on 2017/3/13 0013.
@@ -47,9 +47,7 @@ public class StockRankAdapter extends CommonAdapter<RankList> {
         recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(new RankListAdapter(data.getBeen(), position));
 
-        DividerItemDecoration decoration = new DividerItemDecoration(context, LinearLayoutManager.VERTICAL);
-        decoration.setDrawable(ContextCompat.getDrawable(context, R.drawable.shape_divider_stock_1dp));
-        recyclerView.addItemDecoration(decoration);
+        recyclerView.addItemDecoration(new NormalItemDecoration(context));
         holder.setText(R.id.tv_stock_ranklist_title, data.getTitle());
 
         holder.setOnClickListener(R.id.head_view_market, new View.OnClickListener() {

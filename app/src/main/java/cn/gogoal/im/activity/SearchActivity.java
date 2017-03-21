@@ -5,12 +5,9 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
@@ -25,6 +22,7 @@ import java.util.List;
 
 import butterknife.BindArray;
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
@@ -32,9 +30,9 @@ import cn.gogoal.im.adapter.recycleviewAdapterHelper.wrapper.HeaderAndFooterWrap
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ImageTextBean;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.ui.NormalItemDecoration;
 
 
 /**
@@ -74,14 +72,16 @@ public class SearchActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         iniTitle();
 
-        HashSet<String> testSet=new HashSet<>();
+        HashSet<String> testSet = new HashSet<>();
         testSet.add("qwer");
         testSet.add("yruru");
         testSet.add("vsvvdfv");
         testSet.add("6456");
         testSet.add("23fsdf");
-//        for ()
-//        ArrayUtils.addSearchKeyword();
+
+        for (String s : testSet) {
+//            ArrayUtils.addSearchKeyword(s);
+        }
 
         final String conversationId = getIntent().getStringExtra("conversation_id");
 
@@ -106,35 +106,23 @@ public class SearchActivity extends BaseActivity {
             }
         });
 
-        rvFlagSearch.setAdapter(new CommonAdapter<ImageTextBean<Integer>>(getActivity(),R.layout.item_search_flag,getFlagData()) {
+        rvFlagSearch.setAdapter(new CommonAdapter<ImageTextBean<Integer>>(getActivity(), R.layout.item_search_flag, getFlagData()) {
             @Override
             protected void convert(ViewHolder holder, ImageTextBean<Integer> data, int position) {
-                holder.setImageResource(R.id.img_search_item,data.getIamge());
-                holder.setText(R.id.tv_search_item,data.getText());
+                holder.setImageResource(R.id.img_search_item, data.getIamge());
+                holder.setText(R.id.tv_search_item, data.getText());
             }
         });
 
-        CommonAdapter<String> historyAdapter = new CommonAdapter<String>(mContext, R.layout.item_search_history, ArrayUtils.getSearchList()) {
-            @Override
-            protected void convert(ViewHolder holder, String data, int position) {
+        rvHistory.addItemDecoration(new NormalItemDecoration(mContext, Color.parseColor("#eeeeee")));
 
-            }
-        };
-
-        HeaderAndFooterWrapper headerWrapper = new HeaderAndFooterWrapper(historyAdapter);
-        View headerView = LayoutInflater.from(mContext).inflate(R.layout.item_search_history, null);
-        headerView.setBackgroundColor(Color.parseColor("#f4f4f4"));
-        TextView textHead= (TextView) headerView.findViewById(R.id.tv_search_history);
-        textHead.setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) textHead.getLayoutParams();
-        params.setMargins(AppDevice.dp2px(mContext,20),AppDevice.dp2px(mContext,11),0,AppDevice.dp2px(mContext,11));
-        headerWrapper.addHeaderView(headerView);
-
-        rvHistory.setAdapter(headerWrapper);
+        setHistory();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                ArrayUtils.addSearchKeyword(searchView.getQuery().toString());
+                setHistory();
                 return false;
             }
 
@@ -144,12 +132,35 @@ public class SearchActivity extends BaseActivity {
             }
         });
 
-        searchView.setOnSearchClickListener(new View.OnClickListener() {
+    }
+
+    private HeaderAndFooterWrapper setHistory() {
+        final List<String> listHistory=ArrayUtils.jsonArr2List(ArrayUtils.getSearchList());
+
+        CommonAdapter<String> historyAdapter = new CommonAdapter<String>(getActivity(), R.layout.item_search_history, listHistory) {
+            @Override
+            protected void convert(ViewHolder holder, String data, int position) {
+                holder.setText(R.id.tv_search_history,data);
+            }
+        };
+
+        final HeaderAndFooterWrapper headerWrapper = new HeaderAndFooterWrapper(historyAdapter);
+        final View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.head_search_history, new LinearLayout(getActivity()),false);
+        headerView.findViewById(R.id.btn_clear_history).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ArrayUtils.clearHistory();
+                setHistory();
             }
         });
+
+        if (!listHistory.isEmpty()) {
+            headerWrapper.addFootView(headerView);
+        }
+
+        rvHistory.setAdapter(headerWrapper);
+
+        return headerWrapper;
     }
 
     //初始化标题
@@ -160,17 +171,39 @@ public class SearchActivity extends BaseActivity {
         et.setTypeface(iconfont);
         et.setTextSize(14);
         et.setHint(getString(R.string.str_search));
+
+//        et.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+//                    KLog.e("搜索="+searchView.getQuery());
+//                    ArrayUtils.addSearchKeyword(searchView.getQuery().toString());
+//                    setHistory();
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
     }
 
     private List<ImageTextBean<Integer>> getFlagData() {
-        int[] flagIcons={R.mipmap.img_search_flag_contact,R.mipmap.img_search_flag_group,R.mipmap.home_bottom_tab_icon_message_normal,
-                R.mipmap.img_search_flag_live,R.mipmap.img_search_flag_yanwang,R.mipmap.img_search_flag_pinpai};
-        List<ImageTextBean<Integer>> list=new ArrayList<>();
+        int[] flagIcons = {R.mipmap.img_search_flag_contact, R.mipmap.img_search_flag_group, R.mipmap.home_bottom_tab_icon_message_normal,
+                R.mipmap.img_search_flag_live, R.mipmap.img_search_flag_yanwang, R.mipmap.img_search_flag_pinpai};
+        List<ImageTextBean<Integer>> list = new ArrayList<>();
 
-        for (int i=0;i<flagIcons.length;i++){
-            list.add(new ImageTextBean<>(flagIcons[i],searchFlagArray[i]));
+        for (int i = 0; i < flagIcons.length; i++) {
+            list.add(new ImageTextBean<>(flagIcons[i], searchFlagArray[i]));
         }
         return list;
+    }
+
+    @OnClick({R.id.btn_cancle})
+    void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_cancle:
+                KLog.e(JSONObject.toJSONString(ArrayUtils.getSearchList()));
+                break;
+        }
     }
 
     /**
@@ -192,7 +225,7 @@ public class SearchActivity extends BaseActivity {
         return filteredModelList;
     }
 
-    private class SearchConversationAdapter extends CommonAdapter<IMMessageBean>{
+    private class SearchConversationAdapter extends CommonAdapter<IMMessageBean> {
 
         public SearchConversationAdapter(Context context, int layoutId, List<IMMessageBean> datas) {
             super(context, layoutId, datas);

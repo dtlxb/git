@@ -27,7 +27,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.recording.MediaManager;
 import cn.gogoal.im.common.recording.Recorder;
-import cn.gogoal.im.ui.keyboard.KeyboardLaunchListenLayout;
+import cn.gogoal.im.ui.KeyboardLaunchListenLayout;
 import cn.gogoal.im.ui.view.SwitchImageView;
 import cn.gogoal.im.ui.view.VoiceButton;
 

@@ -1,8 +1,10 @@
 package cn.gogoal.im.common;
 
+import com.alibaba.fastjson.JSONArray;
+import com.socks.library.KLog;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 
@@ -36,16 +38,34 @@ public class ArrayUtils {
         return null;
     }
 
+    public static List<String> jsonArr2List(JSONArray arr){
+        List<String> list=new ArrayList<>();
+        if (arr!=null && arr.size()>0){
+            list.addAll(arr2List(arr.toArray(new String[]{})));
+            return list;
+        }
+        return new ArrayList<>();
+    }
+
 
     /**获取搜索记录*/
-    public static List<String> getSearchList(){
-        return new ArrayList<>(SPTools.getSetData("search_history",new HashSet<String>()));
+    public static JSONArray getSearchList(){
+        JSONArray historyArray = SPTools.getJsonArray("search_history", new JSONArray());
+        if (null==historyArray || historyArray.isEmpty()){
+            return new JSONArray();
+        }
+        return historyArray;
     }
 
     /**保存单个搜索关键字到本地*/
     public static void addSearchKeyword(String keyword){
-        List<String> list=getSearchList();
-        list.add(keyword);
-        SPTools.saveSetData("search_history",new HashSet<>(list));
+        JSONArray searchList = getSearchList();
+        searchList.add(keyword);
+        KLog.e(SPTools.getJsonArray("search_history",null).toString());
+    }
+
+    /**清空搜索记录*/
+    public static void clearHistory(){
+        SPTools.clearItem("search_history");
     }
 }

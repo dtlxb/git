@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<cn.gogoal.im.ui.keyboard.KeyboardLaunchListenLayout
+<cn.gogoal.im.ui.KeyboardLaunchListenLayout
     android:id="@+id/chat_root_keyboard_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -128,4 +128,4 @@
         android:layout_height="0dp"
         android:layout_alignParentBottom="true"/>
 
-</cn.gogoal.im.ui.keyboard.KeyboardLaunchListenLayout>
+</cn.gogoal.im.ui.KeyboardLaunchListenLayout>

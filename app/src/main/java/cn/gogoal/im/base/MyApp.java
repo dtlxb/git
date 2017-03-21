@@ -47,8 +47,8 @@ public class MyApp extends Application {
 
         SPTools.initSharedPreferences(this);
 
-        //只有主进程运行的时候才需要初始化
-        if (getApplicationInfo().packageName.equals(getMyProcessName())) {
+//        //只有主进程运行的时候才需要初始化
+//        if (getApplicationInfo().packageName.equals(getMyProcessName())) {
             //TODO im初始化
             //初始化参数依次this，AppId,AppKey
             AVOSCloud.initialize(this, AppConst.LEANCLOUD_APP_ID,AppConst.LEANCLOUD_APP_KEY);
@@ -94,7 +94,7 @@ public class MyApp extends Application {
 
                 }
             });
-        }
+//        }
 
     }
 
