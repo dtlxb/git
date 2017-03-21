@@ -121,7 +121,10 @@
 
         <activity android:name=".activity.stock.MarketActivity" />
         <activity android:name=".activity.PdfDisplayActivity" />
-        <activity android:name=".activity.LiveTogetherActivity" />
+        <activity
+            android:name=".activity.LiveTogetherActivity"
+            android:configChanges="screenSize|keyboardHidden|orientation"
+            android:theme="@style/TranslucentTheme" />
     </application>
 
 </manifest>
