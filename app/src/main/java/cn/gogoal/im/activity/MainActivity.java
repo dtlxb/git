@@ -5,6 +5,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
+import com.socks.library.KLog;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +43,7 @@ public class MainActivity extends BaseActivity {
 
         MessageFragment messageFragment = new MessageFragment();        // TAB1 消息
 
-        ContactsFragment contactsFragment = new ContactsFragment();     // TAB2 人脉
+        final ContactsFragment contactsFragment = new ContactsFragment();     // TAB2 人脉
 
         FoundFragment foundFragment = new FoundFragment();              // TAB3 投研
 
@@ -75,7 +77,7 @@ public class MainActivity extends BaseActivity {
 
                         break;
                     case 1:
-                        AppManager.getInstance().sendMessage("refresh_contactAdapter");
+                        contactsFragment.refreshAdapter();
                         break;
                     case 2:
 

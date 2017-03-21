@@ -101,7 +101,7 @@ public class ContactsFragment extends BaseFragment {
 
         contactAdapter.setOnItemClickListener(new OnItemClickLitener() {
             @Override
-            public void onItemClick(RecyclerView.ViewHolder holder,View view, int position) {
+            public void onItemClick(RecyclerView.ViewHolder holder, View view, int position) {
                 //单聊处理
                 Intent intent = new Intent(getContext(), SingleChatRoomActivity.class);
                 intent.putExtra("friend_id", contactBeanList.get(position).getFriend_id() + "");
@@ -111,7 +111,7 @@ public class ContactsFragment extends BaseFragment {
             }
 
             @Override
-            public boolean onItemLongClick(RecyclerView.ViewHolder holder,View view, int position) {
+            public boolean onItemLongClick(RecyclerView.ViewHolder holder, View view, int position) {
                 return false;
             }
         });
@@ -125,9 +125,11 @@ public class ContactsFragment extends BaseFragment {
         contactBeanList.add(addFunctionHead("公众号", R.mipmap.cache_img_contacts_3));
 
         String friendResponseInfo = SPTools.getString(UserUtils.getToken() + "_contact_beans", "");
+        KLog.e(friendResponseInfo);
         if (TextUtils.isEmpty(friendResponseInfo)) {
             getFriendList(contactBeanList);
-        }else if (!JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()){
+            KLog.e(friendResponseInfo);
+        } else if (!JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()) {
             parseContactDatas(friendResponseInfo, contactBeanList);
         }
     }
@@ -148,10 +150,10 @@ public class ContactsFragment extends BaseFragment {
                     SPTools.saveString(UserUtils.getToken() + "_contact_beans", responseInfo);
                     parseContactDatas(responseInfo, contactBeanList);
 
-                }else if (JSONObject.parseObject(responseInfo).getIntValue("code")==1001){
-                    SPTools.saveString(UserUtils.getToken() + "_contact_beans","{\"code\":0,\"data\":[],\"message\":\"成功\"}");
-                }else {
-                    UIHelper.toastError(getContext(),GGOKHTTP.getMessage(responseInfo));
+                } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
+                    SPTools.saveString(UserUtils.getToken() + "_contact_beans", "{\"code\":0,\"data\":[],\"message\":\"成功\"}");
+                } else {
+                    UIHelper.toastError(getContext(), GGOKHTTP.getMessage(responseInfo));
                 }
             }
 
@@ -165,18 +167,20 @@ public class ContactsFragment extends BaseFragment {
     }
 
     private void parseContactDatas(String responseInfo, List<ContactBean> contactBeanList) {
+        List<ContactBean<String>> list = new ArrayList<>();
         BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
                 responseInfo,
                 new TypeReference<BaseBeanList<ContactBean<String>>>() {
                 });
-        List<ContactBean<String>> list = beanList.getData();
+        list.clear();
+        list.addAll(beanList.getData());
 
         for (ContactBean<String> bean : list) {
             bean.setContactType(ContactBean.ContactType.PERSION_ITEM);
         }
 
         contactBeanList.addAll(list);
-
+        KLog.e(contactBeanList);
         SuspendedDecoration mDecoration = new SuspendedDecoration(getContext(), contactBeanList);
 
         indexBar.setmSourceDatas(contactBeanList)//设置数据
@@ -195,10 +199,8 @@ public class ContactsFragment extends BaseFragment {
         return bean;
     }
 
-    @Subscriber(tag = "refresh_contactAdapter")
     public void refreshAdapter() {
         List<ContactBean> contactBeanList = new ArrayList<>();
         getData(contactBeanList);//列表数据
-        contactAdapter.notifyDataSetChanged();
     }
 }
