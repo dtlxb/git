@@ -93,6 +93,7 @@ public class SPTools {
     return mPreference.getStringSet(key, null);
   }
 
+
   public static void clear() {
     mPreference.edit().clear().apply();
   }

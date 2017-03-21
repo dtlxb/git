@@ -2,6 +2,7 @@ package cn.gogoal.im.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -33,5 +34,18 @@ public class ArrayUtils {
             return list;
         }
         return null;
+    }
+
+
+    /**获取搜索记录*/
+    public static List<String> getSearchList(){
+        return new ArrayList<>(SPTools.getSetData("search_history",new HashSet<String>()));
+    }
+
+    /**保存单个搜索关键字到本地*/
+    public static void addSearchKeyword(String keyword){
+        List<String> list=getSearchList();
+        list.add(keyword);
+        SPTools.saveSetData("search_history",new HashSet<>(list));
     }
 }

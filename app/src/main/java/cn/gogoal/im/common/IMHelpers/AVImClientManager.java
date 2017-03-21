@@ -20,10 +20,12 @@ import cn.gogoal.im.common.UserUtils;
 
 /**
  * Created by huangxx on 17/02/20.
+ *
+ * edit by wangjd:修改单利为双重校验锁模式，懒汉加锁方式的单利效率低
  */
 public class AVImClientManager {
 
-    private static AVImClientManager imClientManager;
+    private volatile static AVImClientManager imClientManager;
 
     public AVIMClient avimClient;               //< 连接server
     private String clientId;                    //< 连接serverID
@@ -31,9 +33,13 @@ public class AVImClientManager {
     private AVImClientManager() {
     }
 
-    public synchronized static AVImClientManager getInstance() {
+    public static AVImClientManager getInstance() {
         if (null == imClientManager) {
-            imClientManager = new AVImClientManager();
+            synchronized (AVImClientManager.class) {
+                if (null==imClientManager) {
+                    imClientManager = new AVImClientManager();
+                }
+            }
         }
         return imClientManager;
     }
@@ -44,7 +50,9 @@ public class AVImClientManager {
     public void open(String clientId, AVIMClientCallback callback) {
         this.clientId = clientId;
         avimClient = AVIMClient.getInstance(clientId, clientId);
+        avimClient.setMessageQueryCacheEnable(true);
         avimClient.open(callback);
+
     }
 
     public AVIMClient getClient() {
@@ -80,7 +88,7 @@ public class AVImClientManager {
             public void done(List<AVIMConversation> list, AVIMException e) {
 
                 if (null == e) {
-                    if (null != list && list.size() > 0) {
+                    if (null != list && (!list.isEmpty())) {
                         if (null != mChatJoinManager) {
                             mChatJoinManager.joinSuccess(list.get(0));
                         }
@@ -88,15 +96,15 @@ public class AVImClientManager {
                         Log.e("FIND_CONVERSATION", "查找聊天对象成功1");
                     } else {
                         if (null != mChatJoinManager) {
-                            mChatJoinManager.joinFail("查找聊天对象失败2");
+                            mChatJoinManager.joinFail("查找聊天对象失败2===");
                         }
                     }
                 } else {
                     if (null != mChatJoinManager) {
-                        mChatJoinManager.joinFail("查找聊天对象失败3");
+                        mChatJoinManager.joinFail("查找聊天对象失败3==="+e.getMessage());
                     }
 
-                    Log.e("FIND_CONVERSATION", "查询条件没有查找到聊天对象" + e.toString());
+                    KLog.e("FIND_CONVERSATION", "查询条件没有查找到聊天对象" + e.toString());
                 }
             }
         });

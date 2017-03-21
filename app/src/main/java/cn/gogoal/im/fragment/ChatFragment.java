@@ -45,7 +45,7 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.ChatFunctionAdapter;
 import cn.gogoal.im.adapter.IMChatAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.MultiItemTypeAdapter;
+import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
@@ -66,6 +66,7 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.recording.MediaManager;
+import cn.gogoal.im.ui.keyboard.KeyboardLaunchListenLayout;
 import cn.gogoal.im.ui.view.SwitchImageView;
 import cn.gogoal.im.ui.view.VoiceButton;
 import top.zibin.luban.Luban;
@@ -104,7 +105,10 @@ public class ChatFragment extends BaseFragment {
     @BindView(R.id.voiveView)
     VoiceButton voiceView;
 
-    private MyListener listener;
+    @BindView(R.id.chat_root_keyboard_layout)
+    KeyboardLaunchListenLayout keyboardLayout;
+
+//    private MyListener listener;
 
     //消息类型
     private static int TEXT_MESSAGE = 1;
@@ -121,11 +125,10 @@ public class ChatFragment extends BaseFragment {
     private JSONArray jsonArray;
     private ContactBean contactBean;
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        listener = (MyListener) context;
+//        listener = (MyListener) context;
     }
 
     @Override
@@ -154,9 +157,9 @@ public class ChatFragment extends BaseFragment {
 
 
         //多功能消息发送
-        chatFunctionAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+        chatFunctionAdapter.setOnItemClickListener(new OnItemClickLitener() {
             @Override
-            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+            public void onItemClick(RecyclerView.ViewHolder holder,View view, int position) {
                 switch (position) {
                     case 0:
                         //发照片
@@ -189,7 +192,7 @@ public class ChatFragment extends BaseFragment {
             }
 
             @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+            public boolean onItemLongClick(RecyclerView.ViewHolder holder,View view,int position) {
                 return false;
             }
         });
@@ -224,7 +227,7 @@ public class ChatFragment extends BaseFragment {
                 params.put("token", AppConst.LEAN_CLOUD_TOKEN);
                 params.put("conv_id", imConversation.getConversationId());
                 params.put("chat_type", String.valueOf(imConversation.getAttribute("chat_type") == null ? 1001 : (int) imConversation.getAttribute("chat_type")));
-                params.put("message", JSONObject.toJSON(messageMap).toString());
+                params.put("message", JSONObject.toJSONString(messageMap));
                 KLog.e(params);
 
                 //发送文字消息
@@ -276,19 +279,16 @@ public class ChatFragment extends BaseFragment {
             public void afterTextChanged(Editable editable) {
                 if (etInput.getText().toString().trim().equals("")) {
                     imgFunction.setVisibility(View.VISIBLE);
-                    btnSend.setVisibility(View.GONE);
+                    btnSend.setVisibility(View.INVISIBLE);
                 } else {
-                    imgFunction.setVisibility(View.GONE);
+                    imgFunction.setVisibility(View.INVISIBLE);
                     btnSend.setVisibility(View.VISIBLE);
                 }
             }
         });
 
-
         //录音完成发送录音
-        voiceView.setAudioFinishRecorderListener(new VoiceButton.AudioFinishRecorderListener()
-
-        {
+        voiceView.setAudioFinishRecorderListener(new VoiceButton.AudioFinishRecorderListener(){
             @Override
             public void onFinish(float seconds, String filePath) {
                 //上传UFile然后发送公司后台；
@@ -325,7 +325,6 @@ public class ChatFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
     }
 
     public void sendAVIMMessage(final int messageType, final Map<String, String> params, final AVIMMessage message) {
@@ -351,10 +350,13 @@ public class ChatFragment extends BaseFragment {
                             break;
                     }
                     //头像暂时未保存
-                    IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), (int) imConversation.getAttribute("chat_type"), message.getTimestamp(),
-                            "0", contactBean.getNickname(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
+                    try {
+                        IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), (int) imConversation.getAttribute("chat_type"), message.getTimestamp(),
+                                "0", contactBean.getNickname(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
+                        MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
+                    } catch (Exception e) {
+                    }
 
-                    MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
                 }
             }
 
@@ -543,8 +545,6 @@ public class ChatFragment extends BaseFragment {
 
     private void getHistoryMessage() {
         if (null != imConversation) {
-
-            ConversationUtils.getInstance().test(15, imConversation);
             imConversation.queryMessages(20, new AVIMMessagesQueryCallback() {
                 @Override
                 public void done(List<AVIMMessage> list, AVIMException e) {
@@ -552,7 +552,16 @@ public class ChatFragment extends BaseFragment {
                         for (int i = 0; i < list.size(); i++) {
 
                         }
+
                         messageList.addAll(list);
+
+                        int chatType = (int) imConversation.getAttribute("chat_type");
+                        IMMessageBean imMessageBean;
+
+                        //单聊，群聊处理
+                        if (chatType == 1001) {
+
+                        }
 
                         //拿到对方信息
                         getSpeakToInfo(imConversation);
@@ -560,7 +569,7 @@ public class ChatFragment extends BaseFragment {
                         if (messageList.size() > 0 && null != contactBean) {
                             AVIMMessage lastMessage = messageList.get(messageList.size() - 1);
 
-                            IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), (int) imConversation.getAttribute("chat_type"), lastMessage.getTimestamp(),
+                            imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(),
                                     "0", contactBean.getNickname(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), lastMessage);
 
                             MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
@@ -574,6 +583,7 @@ public class ChatFragment extends BaseFragment {
                     }
                 }
             });
+
         }
     }
 
@@ -611,15 +621,15 @@ public class ChatFragment extends BaseFragment {
             contactBeanList.addAll(list);
         }
 
-        for (int i = 0; i < contactBeanList.size(); i++) {
-            if ((contactBeanList.get(i).getFriend_id() + "").equals(speakTo)) {
-                contactBean = contactBeanList.get(i);
-                if (null != listener) {
-                    listener.setData(contactBean);
-                }
-                KLog.e(contactBean);
-            }
-        }
+//        for (int i = 0; i < contactBeanList.size(); i++) {
+//            if ((contactBeanList.get(i).getFriend_id() + "").equals(speakTo)) {
+//                contactBean = contactBeanList.get(i);
+//                if (null != listener) {
+//                    listener.setData(contactBean);
+//                }
+//                KLog.e(contactBean);
+//            }
+//        }
     }
 
     /**
@@ -697,6 +707,10 @@ public class ChatFragment extends BaseFragment {
             //拉取历史记录(直接从LeanCloud拉取)
             getHistoryMessage();
         }
+    }
+
+    public AVIMConversation getImConversation() {
+        return imConversation;
     }
 
     @Override

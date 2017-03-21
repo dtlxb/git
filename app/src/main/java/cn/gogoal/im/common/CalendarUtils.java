@@ -200,7 +200,7 @@ public class CalendarUtils {
     /**
      * 将时间戳转换为时间
      */
-    public static String parseStampToDate(String sec) {
+    public static String parseStingToDate(String sec) {
         if (!TextUtils.isEmpty(sec)) {
             return parseDateFormatAll(Long.parseLong(sec));
         } else {
@@ -269,7 +269,6 @@ public class CalendarUtils {
     }
 
     public static String getHourMin(long timeMillis) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         try {
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(timeMillis);
@@ -441,8 +440,13 @@ public class CalendarUtils {
     /**
      * 获取当前时间的时间戳
      */
-    public static String getCurrentTime(String originFormat) {
-        SimpleDateFormat df = new SimpleDateFormat(originFormat, Locale.CHINA);
+    public static String getCurrentTime(String format) {
+        SimpleDateFormat df = new SimpleDateFormat(format, Locale.CHINA);
         return df.format(System.currentTimeMillis());
+    }
+
+    public static String getStringDate(String format,Date date){
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat(format,Locale.CHINA);
+        return simpleDateFormat.format(date);
     }
 }

@@ -8,32 +8,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringUtils {
-
-    /**
-     * 格式化时间字符串
-     *
-     * @param tofomat
-     * @param date
-     * @return
-     */
-    public static String formatDate(String originFormat, String tofomat, String date) {
-        SimpleDateFormat df = new SimpleDateFormat(tofomat);
-        if (TextUtils.isEmpty(date)) {
-            return df.format(new Date());
-        } else {
-            SimpleDateFormat df1 = new SimpleDateFormat(originFormat);
-            try {
-                Date mdata = df1.parse(date);
-                return df.format(mdata);
-            } catch (ParseException e) {
-                return date;
-            }
-        }
-    }
 
     // 判断一个字符是否是中文
     private static boolean isChinese(char c) {
@@ -163,7 +142,7 @@ public class StringUtils {
         return str.matches(regex);
     }
 
-    public static String re(String orderStr) {
+    public static String reverseString(String orderStr) {
         return new StringBuilder(orderStr).reverse().toString();
     }
 
@@ -376,26 +355,6 @@ public class StringUtils {
     }
 
     /**
-     * 反转字符串
-     *
-     * @param s 待反转字符串
-     * @return 反转字符串
-     */
-    public static String reverse(String s) {
-        int len = s.length();
-        if (len <= 1) return s;
-        int mid = len >> 1;
-        char[] chars = s.toCharArray();
-        char c;
-        for (int i = 0; i < mid; ++i) {
-            c = chars[i];
-            chars[i] = chars[len - i - 1];
-            chars[len - i - 1] = c;
-        }
-        return new String(chars);
-    }
-
-    /**
      * 除掉HTML里面所有标签
      */
     public static String removeTag(String htmlStr) {
@@ -429,7 +388,11 @@ public class StringUtils {
     /**
      * 取样为空防止异常处理
      */
-    public static Object objectNullDeal(Object input, Object errorDeal) {
-        return input == null ? errorDeal : input;
+    public static Object objectNullDeal(Object input) {
+        return input == null ? "" : input;
+    }
+
+    public static Object objectNullDeal(Object input, Objects replace) {
+        return input == null ? replace : input;
     }
 }

@@ -28,7 +28,6 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.adapter.ContactAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.MultiItemTypeAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
@@ -37,6 +36,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 import cn.gogoal.im.ui.index.IndexBar;
 import cn.gogoal.im.ui.index.SuspendedDecoration;
 
@@ -101,9 +101,9 @@ public class ContactsFragment extends BaseFragment {
 
         rvContacts.setAdapter(contactAdapter);
 
-        contactAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+        contactAdapter.setOnItemClickListener(new OnItemClickLitener() {
             @Override
-            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+            public void onItemClick(RecyclerView.ViewHolder holder,View view, int position) {
                 //单聊处理
                 Intent intent = new Intent(getContext(), SingleChatRoomActivity.class);
                 intent.putExtra("friend_id", contactBeanList.get(position).getFriend_id() + "");
@@ -113,7 +113,7 @@ public class ContactsFragment extends BaseFragment {
             }
 
             @Override
-            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+            public boolean onItemLongClick(RecyclerView.ViewHolder holder,View view, int position) {
                 return false;
             }
         });

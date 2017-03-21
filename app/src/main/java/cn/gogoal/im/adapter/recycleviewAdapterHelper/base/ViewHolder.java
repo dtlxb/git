@@ -244,4 +244,5 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         view.setOnLongClickListener(listener);
         return this;
     }
+
 }

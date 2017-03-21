@@ -40,4 +40,13 @@
         <item>我的收藏</item>
         <item>我的订阅</item>
     </string-array>
+
+    <string-array name="search_flag">
+        <item>联系人</item>
+        <item>群组</item>
+        <item>聊天消息</item>
+        <item>Go-Goal直播</item>
+        <item>中国研网</item>
+        <item>品牌活动</item>
+    </string-array>
 </resources>

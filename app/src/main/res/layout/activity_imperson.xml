@@ -24,7 +24,7 @@
         android:gravity="center_vertical"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:text="查看聊天内容"
+        android:text="@string/im_str_look_message"
         android:textColor="@color/textColor_333333"
         android:textSize="17sp" />
 
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="消息免打扰"
+            android:text="@string/im_str_no_bother"
             android:textColor="@color/textColor_333333"
             android:textSize="17sp" />
 

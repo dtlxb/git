@@ -17,7 +17,6 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
-import com.socks.library.KLog;
 
 import java.util.List;
 
@@ -128,7 +127,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             setImageSize(params, imageMessage);
             ((RightImageViewHolder) holder).image_user_send.setLayoutParams(params);
             ImageDisplay.loadNetImage(mContext, imageMessage.getAVFile().getUrl(), ((RightImageViewHolder) holder).image_user_send);
-            KLog.e(imageMessage.getAVFile().getUrl());
             showMessageTime(position, ((RightImageViewHolder) holder).message_time);
 
         } else if (holder instanceof RightAudioViewHolder) {

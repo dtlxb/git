@@ -35,8 +35,9 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
 
     @Override
     public void doBusiness(Context mContext) {
-        String conversation_id = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("conversation_id"), "");
-        String nickname = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("nickname"), "");
+
+        String conversation_id = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("conversation_id"));
+        String nickname = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("nickname"));
 
         initTitle(nickname, conversation_id);
 
@@ -48,7 +49,7 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
     }
 
     private void initTitle(String nickname, final String conversation_id) {
-        XTitle title = setMyTitle(nickname + "聊天窗口", true);
+        XTitle title = setMyTitle(nickname, true);
 
         //添加action
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(SingleChatRoomActivity.this, R.mipmap.chat_person)) {

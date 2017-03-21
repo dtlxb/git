@@ -45,6 +45,15 @@
     <string name="str_recorder_normal">按住 说话</string>
     <string name="str_recorder_recording">松开 结束</string>
     <string name="str_recorder_want_cancel">松开手指 取消发送</string>
+    <!--聊天页面-->
+    <string name="im_str_delete">删除并退出</string>
+    <string name="im_str_square_notice">公告</string>
+    <string name="im_str_square_name">群名称</string>
+    <string name="im_str_square_code">二维码</string>
+    <string name="im_str_square_myname">我在本群昵称</string>
+    <string name="im_str_clip_hangds">鼓手</string>
+    <string name="im_str_no_bother">消息免打扰</string>
+    <string name="im_str_look_message">查看聊天内容</string>
 
     <!--聊天语音弹窗-->
     <string name="str_recorder_dialog_recording">手指上滑，取消发送</string>
@@ -77,4 +86,5 @@
     <string name="default__">--</string>
     <string name="str_cancle">取消</string>
 
+    <string name="str_search">\u0020&#xe62c; 搜索</string>
 </resources>
