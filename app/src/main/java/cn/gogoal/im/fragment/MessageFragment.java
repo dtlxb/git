@@ -307,35 +307,40 @@ public class MessageFragment extends BaseFragment {
 
         KLog.e(message.getContent());
 
-        //已有的会话
-        for (int i = 0; i < IMMessageBeans.size(); i++) {
-            if (IMMessageBeans.get(i).getConversationID().equals(conversation.getConversationId())) {
-                IMMessageBeans.get(i).setLastTime(rightNow);
-                IMMessageBeans.get(i).setLastMessage(message);
-                int unreadmessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts()) + 1;
-                IMMessageBeans.get(i).setUnReadCounts(unreadmessage + "");
-                isTheSame = true;
-            } else {
-            }
-        }
-
-        //新添的会话
-        if (!isTheSame) {
-            IMMessageBean imMessageBean = new IMMessageBean();
-            imMessageBean.setConversationID(conversation.getConversationId());
-            imMessageBean.setLastMessage(message);
-            imMessageBean.setLastTime(rightNow);
-            imMessageBean.setNickname(nickName);
-            imMessageBean.setAvatar(avatar);
-            int unRead = Integer.parseInt(imMessageBean.getUnReadCounts() == null ? "0" : imMessageBean.getUnReadCounts()) + 1;
-            imMessageBean.setUnReadCounts(unRead + "");
-            IMMessageBeans.add(imMessageBean);
-        }
         switch (chatType) {
             //单聊,群聊,加好友请求
             case 1001:
             case 1002:
             case 1004:
+                //已有的会话
+                for (int i = 0; i < IMMessageBeans.size(); i++) {
+                    if (IMMessageBeans.get(i).getConversationID().equals(conversation.getConversationId())) {
+                        IMMessageBeans.get(i).setLastTime(rightNow);
+                        IMMessageBeans.get(i).setLastMessage(message);
+                        int unreadmessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts()) + 1;
+                        IMMessageBeans.get(i).setUnReadCounts(unreadmessage + "");
+                        isTheSame = true;
+                    } else {
+                    }
+                }
+
+                //新添的会话
+                if (!isTheSame) {
+                    IMMessageBean imMessageBean = new IMMessageBean();
+                    imMessageBean.setConversationID(conversation.getConversationId());
+                    imMessageBean.setLastMessage(message);
+                    imMessageBean.setLastTime(rightNow);
+                    imMessageBean.setNickname(nickName);
+                    imMessageBean.setAvatar(avatar);
+                    int unRead = Integer.parseInt(imMessageBean.getUnReadCounts() == null ? "0" : imMessageBean.getUnReadCounts()) + 1;
+                    imMessageBean.setUnReadCounts(unRead + "");
+                    IMMessageBeans.add(imMessageBean);
+                }
+
+                //保存
+                IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), chatType, message.getTimestamp(),
+                        "0", nickName, AppConst.LEANCLOUD_APP_ID, avatar, message);
+                MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
                 break;
             //直播
             case 1003:
@@ -349,11 +354,6 @@ public class MessageFragment extends BaseFragment {
             default:
                 break;
         }
-
-        //保存
-        IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), chatType, message.getTimestamp(),
-                "0", nickName, AppConst.LEANCLOUD_APP_ID, avatar, message);
-        MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
 
         //按照时间排序
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
