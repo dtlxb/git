@@ -26,9 +26,10 @@ import static cn.gogoal.im.common.UserUtils.getToken;
  */
 
 public class MyMessageHandler extends AVIMMessageHandler {
+
     @Override
     public void onMessage(final AVIMMessage message, AVIMConversation conversation, final AVIMClient client) {
-
+        KLog.e(message.getContent());
         try {
             final String clientID = AVImClientManager.getInstance().getClientId();
 
@@ -39,8 +40,8 @@ public class MyMessageHandler extends AVIMMessageHandler {
                     if (clientID.equals(client.getClientId())) {
                         //剔除自己消息
                         if (!message.getFrom().equals(clientID)) {
-
                             int chatType = (int) conversation.getAttribute("chat_type");
+
                             switch (chatType) {
                                 case 1001:
                                     //单聊
@@ -83,7 +84,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     contactBean.setConv_id(conv_id);
                                     String friendList = UserUtils.updataFriendList(JSONObject.toJSONString(contactBean));
                                     SPTools.saveString(getToken() + "_contact_beans", friendList);
-                                    KLog.e(SPTools.getString(getToken() + "_contact_beans", ""));
 
                                     break;
                                 case 1006:

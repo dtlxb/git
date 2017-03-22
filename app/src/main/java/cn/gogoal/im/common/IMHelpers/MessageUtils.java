@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
+import com.socks.library.KLog;
 
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
@@ -58,6 +59,7 @@ public class MessageUtils {
             }
 
             thisJsonArray.add(jsonObject);
+            KLog.e(jsonObject);
             SPTools.saveJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", thisJsonArray);
         } else {
 

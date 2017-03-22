@@ -73,7 +73,6 @@ public class GGOKHTTP {
     public static final String GET_RELATED_VIDEO = "v1/video_studio/get_related_video";
 
 
-
     /**
      * 好友列表
      */
@@ -117,6 +116,13 @@ public class GGOKHTTP {
      */
     public static final String ADD_FRIEND = "v1/ggm_im/add_friend";
 
+    /**
+     * IM发送接收好友
+     * token                        用户token
+     * id_list                      朋友ID
+     */
+    public static final String CREATE_GROUP_CHAT = "v1/ggm_chat/create_group_chat";
+
 //--------------------------------------------------------------------------------------------------
 
     /**
@@ -140,7 +146,7 @@ public class GGOKHTTP {
     public void startGet() {
         try {
             OkHttpUtils.get()
-                    .url(GGAPI.get(url,param))
+                    .url(GGAPI.get(url, param))
                     .build()
                     .execute(new StringCallback() {
                         @Override
