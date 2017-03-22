@@ -84,7 +84,8 @@
         <activity
             android:name=".activity.PlayerActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
-            android:theme="@style/TranslucentTheme" />
+            android:theme="@style/TranslucentTheme"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
         <activity
             android:name=".activity.FunctionActivity"
             android:screenOrientation="portrait"
