@@ -54,7 +54,7 @@ public class LiveTogetherActivity extends BaseActivity {
     ToggleButton btn_live_push;
 
     //推流地址
-    private String pushUrl = "rtmp://video-center.alivecdn.com/yangcy/1490005066655?vhost=zbcs.go-goal.cn";
+    private String pushUrl;
     //分辨率
     private int videoResolution = AlivcMediaFormat.OUTPUT_RESOLUTION_480P;
     //横竖屏
@@ -63,7 +63,7 @@ public class LiveTogetherActivity extends BaseActivity {
     private int cameraFrontFacing = AlivcMediaFormat.CAMERA_FACING_FRONT;
     //水印
     private AlivcWatermark mWatermark = new AlivcWatermark.Builder()
-            .watermarkUrl("https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo/bd_logo1_31bdc765.png") //地址
+            .watermarkUrl("") //地址
             .paddingX(14)
             .paddingY(14)
             .site(1)
@@ -108,6 +108,10 @@ public class LiveTogetherActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         setImmersive(true);
+
+        pushUrl = getIntent().getStringExtra("pushUrl");
+
+        KLog.json(pushUrl);
 
         //检查是否有权限
         if (Build.VERSION.SDK_INT >= 23) {

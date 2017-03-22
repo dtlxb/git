@@ -64,6 +64,7 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.PlayerUtils.CountDownTimerView;
 import cn.gogoal.im.common.PlayerUtils.PlayerControl;
 import cn.gogoal.im.common.PlayerUtils.StatusListener;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.widget.BottomSheetNormalDialog;
@@ -637,7 +638,7 @@ public class PlayerActivity extends BaseActivity {
         public void onPrepared() {
             KLog.json("onPrepared");
             if (mPlayer != null) {
-                mPlayer.setVideoScalingMode(MediaPlayer.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
+                mPlayer.setVideoScalingMode(MediaPlayer.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT);
                 mTimerHandler.postDelayed(mRunnable, 1000);
                 mTimerHandler.postDelayed(mUIRunnable, 3000);
             }
@@ -961,7 +962,11 @@ public class PlayerActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.liveTogether: //一起直播
-                startActivity(new Intent(getContext(), LiveTogetherActivity.class));
+                JSONObject dataUrl = SPTools.getJsonObject("liveTogetherData", null);
+
+                Intent intent = new Intent(getContext(), LiveTogetherActivity.class);
+                intent.putExtra("pushUrl", dataUrl.getString("stream_url") + dataUrl.getString("stream_secret"));
+                startActivity(intent);
                 break;
         }
     }
@@ -1157,6 +1162,7 @@ public class PlayerActivity extends BaseActivity {
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     liveTogether.setVisibility(View.VISIBLE);
+                    SPTools.saveJsonObject("liveTogetherData", object.getJSONObject("data"));
                 } else {
                     liveTogether.setVisibility(View.GONE);
                 }
