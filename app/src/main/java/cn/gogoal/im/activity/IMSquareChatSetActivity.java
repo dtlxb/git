@@ -13,7 +13,9 @@ import com.alibaba.fastjson.TypeReference;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -24,9 +26,13 @@ import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.NineGridImageView;
 
 /**
@@ -42,6 +48,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     @BindView(R.id.iv_square_head)
     NineGridImageView iv_square_head;
     private List<String> imageList = new ArrayList<>();
+    private List<String> idList = new ArrayList<>();
 
     private IMPersonSetAdapter mPersonInfoAdapter;
     private List<ContactBean> contactBeens = new ArrayList<>();
@@ -59,9 +66,11 @@ public class IMSquareChatSetActivity extends BaseActivity {
         String responseInfo = SPTools.getString(AppConst.LEAN_CLOUD_TOKEN + "_contact_beans", "");
         contactBeens.add(contactBean);
         parseContactDatas(responseInfo);
-        for (int i = 0; i < contactBeens.size(); i++) {
+        for (int i = 0; i < contactBeens.size() - 5; i++) {
             imageList.add(contactBeens.get(i).getAvatar().toString());
+            idList.add(String.valueOf(contactBeens.get(i).getFriend_id()));
         }
+        idList.add(AppConst.LEAN_CLOUD_TOKEN);
         contactBeens.add(addFunctionHead("", R.mipmap.person_add));
         contactBeens.add(addFunctionHead("", R.mipmap.chat_reduce));
 
@@ -73,9 +82,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
         mPersonInfoAdapter.setOnItemClickListener(new OnItemClickLitener() {
             @Override
-            public void onItemClick(RecyclerView.ViewHolder holder,View view, int position) {
+            public void onItemClick(RecyclerView.ViewHolder holder, View view, int position) {
                 if (position == contactBeens.size() - 1) {
-
+                    createChatGroup();
                 } else {
                     Intent intent = new Intent(IMSquareChatSetActivity.this, IMPersonDetailActivity.class);
                     intent.putExtra("friend_id", contactBeens.get(position).getFriend_id());
@@ -84,7 +93,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
             }
 
             @Override
-            public boolean onItemLongClick(RecyclerView.ViewHolder holder,View view, int position) {
+            public boolean onItemLongClick(RecyclerView.ViewHolder holder, View view, int position) {
                 return false;
             }
         });
@@ -131,7 +140,34 @@ public class IMSquareChatSetActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.tv_do_search_conversation, R.id.getmessage_swith})
+    //创建群组
+    public void createChatGroup() {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
+        params.put("id_list", JSONObject.toJSONString(idList));
+        KLog.e(params);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                KLog.e(result.get("code"));
+                if ((int) result.get("code") == 0) {
+                    UIHelper.toast(IMSquareChatSetActivity.this, "群组创建成功!!!");
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                KLog.json(msg);
+            }
+        };
+        new GGOKHTTP(params, GGOKHTTP.CREATE_GROUP_CHAT, ggHttpInterface).startGet();
+    }
+
+    /*@OnClick({R.id.tv_do_search_conversation, R.id.getmessage_swith})
     void function(View view) {
         switch (view.getId()) {
             case R.id.tv_do_search_conversation:
@@ -142,6 +178,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
             case R.id.tv_delete_square:
                 break;
         }
-    }
+    }*/
 
 }

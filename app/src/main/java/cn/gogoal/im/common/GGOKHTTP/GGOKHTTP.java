@@ -136,6 +136,13 @@ public class GGOKHTTP {
      */
     public static final String ADD_FRIEND = "v1/ggm_im/add_friend";
 
+    /**
+     * IM发送接收好友
+     * token                        用户token
+     * id_list                      朋友ID
+     */
+    public static final String CREATE_GROUP_CHAT = "v1/ggm_chat/create_group_chat";
+
 //--------------------------------------------------------------------------------------------------
 
     /**

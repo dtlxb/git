@@ -67,6 +67,7 @@ public class ContactsFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 
+
     }
 
     @Override

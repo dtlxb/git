@@ -108,7 +108,7 @@ public class ChatFragment extends BaseFragment {
     @BindView(R.id.chat_root_keyboard_layout)
     KeyboardLaunchListenLayout keyboardLayout;
 
-//    private MyListener listener;
+    private MyListener listener;
 
     //消息类型
     private static int TEXT_MESSAGE = 1;
@@ -128,7 +128,7 @@ public class ChatFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        listener = (MyListener) context;
+        listener = (MyListener) context;
     }
 
     @Override
@@ -159,7 +159,7 @@ public class ChatFragment extends BaseFragment {
         //多功能消息发送
         chatFunctionAdapter.setOnItemClickListener(new OnItemClickLitener() {
             @Override
-            public void onItemClick(RecyclerView.ViewHolder holder,View view, int position) {
+            public void onItemClick(RecyclerView.ViewHolder holder, View view, int position) {
                 switch (position) {
                     case 0:
                         //发照片
@@ -192,7 +192,7 @@ public class ChatFragment extends BaseFragment {
             }
 
             @Override
-            public boolean onItemLongClick(RecyclerView.ViewHolder holder,View view,int position) {
+            public boolean onItemLongClick(RecyclerView.ViewHolder holder, View view, int position) {
                 return false;
             }
         });
@@ -288,7 +288,7 @@ public class ChatFragment extends BaseFragment {
         });
 
         //录音完成发送录音
-        voiceView.setAudioFinishRecorderListener(new VoiceButton.AudioFinishRecorderListener(){
+        voiceView.setAudioFinishRecorderListener(new VoiceButton.AudioFinishRecorderListener() {
             @Override
             public void onFinish(float seconds, String filePath) {
                 //上传UFile然后发送公司后台；
@@ -621,15 +621,15 @@ public class ChatFragment extends BaseFragment {
             contactBeanList.addAll(list);
         }
 
-//        for (int i = 0; i < contactBeanList.size(); i++) {
-//            if ((contactBeanList.get(i).getFriend_id() + "").equals(speakTo)) {
-//                contactBean = contactBeanList.get(i);
-//                if (null != listener) {
-//                    listener.setData(contactBean);
-//                }
-//                KLog.e(contactBean);
-//            }
-//        }
+        for (int i = 0; i < contactBeanList.size(); i++) {
+            if ((contactBeanList.get(i).getFriend_id() + "").equals(speakTo)) {
+                contactBean = contactBeanList.get(i);
+                if (null != listener) {
+                    listener.setData(contactBean);
+                }
+                KLog.e(contactBean);
+            }
+        }
     }
 
     /**
