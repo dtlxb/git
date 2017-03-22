@@ -76,23 +76,29 @@ public class LoginActivity extends BaseActivity {
                 KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
-
-                    SPTools.saveJsonObject("userInfo", object.getJSONObject("data"));
-                    startActivity(new Intent(getContext(), MainActivity.class));
-                    finish();
-
-                    //测试代码
                     JSONObject data = object.getJSONObject("data");
-                    AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
-                        @Override
-                        public void done(AVIMClient avimClient, AVIMException e) {
-                        }
-                    });
+                    if (data.getIntValue("code") == 0) {
+                        SPTools.saveJsonObject("userInfo", data);
+                        startActivity(new Intent(getContext(), MainActivity.class));
+                        finish();
+
+                        //测试代码
+                        AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
+                            @Override
+                            public void done(AVIMClient avimClient, AVIMException e) {
+                            }
+                        });
+                    } else {
+                        UIHelper.toast(getContext(), "登录失败");
+                    }
+                } else {
+                    UIHelper.toast(getContext(), "登录失败");
                 }
             }
 
             @Override
             public void onFailure(String msg) {
+                KLog.json(msg);
                 UIHelper.toast(getContext(), R.string.net_erro_hint);
             }
         };
