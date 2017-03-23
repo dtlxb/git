@@ -56,7 +56,7 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
             @Override
             public void actionClick(View view) {
                 if (null != contactBean) {
-                    Intent intent = new Intent(SingleChatRoomActivity.this, IMSquareChatSetActivity.class);
+                    Intent intent = new Intent(SingleChatRoomActivity.this, IMPersonActivity.class);
                     Bundle mBundle = new Bundle();
                     mBundle.putSerializable("seri", contactBean);
                     mBundle.putString("conversation_id", conversation_id);

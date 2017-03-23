@@ -61,11 +61,6 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
             @Override
             public void actionClick(View view) {
                 Intent intent = new Intent(SquareChatRoomActivity.this, IMSquareChatSetActivity.class);
-                /*Bundle mBundle = new Bundle();
-                //mBundle.putSerializable("seri", contactBean);
-                mBundle.putString("conversation_id", conversation_id);
-                intent.putExtras(mBundle);*/
-                KLog.e(conversation_id);
                 intent.putStringArrayListExtra("group_members", (ArrayList<String>) groupMembers);
                 intent.putExtra("conversation_id", conversation_id);
                 startActivity(intent);

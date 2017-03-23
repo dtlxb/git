@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.IMPersonSetAdapter;
 import cn.gogoal.im.adapter.NineGridImageViewAdapter;
@@ -29,10 +28,8 @@ import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
-import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
@@ -73,13 +70,18 @@ public class IMSquareChatSetActivity extends BaseActivity {
         personlistRecycler.setAdapter(mPersonInfoAdapter);
         //正式流程走完后
         conversationId = getIntent().getExtras().getString("conversation_id");
-        groupMembers = getIntent().getExtras().getStringArrayList("group_members");
+        groupMembers = new ArrayList<>();
+        if (null != getIntent().getExtras().getStringArrayList("group_members")) {
+            groupMembers.addAll(getIntent().getExtras().getStringArrayList("group_members"));
+        }
         Log.e("++++conversationId", conversationId);
         JSONArray accountArray = SPTools.getJsonArray(UserUtils.getToken() + conversationId + "_accountList_beans", null);
         //缓存中没有群信息则向后台拉取
         if (null != accountArray) {
+            Log.e("++++accountArray1", accountArray.toString());
             getAllContacts(accountArray);
         } else {
+            Log.e("++++accountArray2", accountArray.toString());
             getChatGroup(groupMembers);
         }
 

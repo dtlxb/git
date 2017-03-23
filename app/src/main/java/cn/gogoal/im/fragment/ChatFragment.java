@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
@@ -57,7 +58,6 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.CalendarUtils;
-import cn.gogoal.im.common.ConversationUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
@@ -553,11 +553,24 @@ public class ChatFragment extends BaseFragment {
     private void getHistoryMessage() {
         if (null != imConversation) {
             imConversation.queryMessages(20, new AVIMMessagesQueryCallback() {
+
                 @Override
                 public void done(List<AVIMMessage> list, AVIMException e) {
                     if (null == e) {
 
                         messageList.addAll(list);
+
+                        //加群消息特殊处理
+                        for (int i = 0; i < messageList.size(); i++) {
+                            JSONObject contentObject = JSON.parseObject(messageList.get(i).getContent());
+                            String _lctype = contentObject.getString("_lctype");
+                            if (_lctype.equals("5")) {
+                                HashMap<String, String> map = new HashMap<>();
+                                map.put("_lctext", imConversation.getName() + "加入群聊");
+                                map.put("_lctype", "5");
+                                messageList.get(i).setContent(JSON.toJSONString(map));
+                            }
+                        }
 
                         chatType = (int) imConversation.getAttribute("chat_type");
                         IMMessageBean imMessageBean = null;
@@ -706,17 +719,13 @@ public class ChatFragment extends BaseFragment {
         find_more_layout.setLayoutParams(params);
     }
 
-
+    //群会话入口
     public void setConversation(AVIMConversation conversation) {
         if (null != conversation) {
             imConversation = conversation;
             //拉取历史记录(直接从LeanCloud拉取)
             getHistoryMessage();
         }
-    }
-
-    public AVIMConversation getImConversation() {
-        return imConversation;
     }
 
     @Override
@@ -733,7 +742,7 @@ public class ChatFragment extends BaseFragment {
 
     //activiy必须实现这个接口
     public interface MyListener {
-        public void setData(ContactBean contactBean);
+        void setData(ContactBean contactBean);
     }
 
     @Subscriber(tag = "refresh_recyle")
@@ -752,7 +761,14 @@ public class ChatFragment extends BaseFragment {
             Map<String, Object> map = baseMessage.getOthers();
             AVIMMessage message = (AVIMMessage) map.get("message");
             AVIMConversation conversation = (AVIMConversation) map.get("conversation");
-
+            JSONObject contentObject = JSON.parseObject(message.getContent());
+            String _lctype = contentObject.getString("_lctype");
+            if (_lctype.equals("5")) {
+                HashMap<String, String> messagemap = new HashMap<>();
+                map.put("_lctext", imConversation.getName() + "加入群聊");
+                map.put("_lctype", "5");
+                message.setContent(JSON.toJSONString(map));
+            }
             //判断房间一致然后做消息接收处理
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
                 imChatAdapter.addItem(message);

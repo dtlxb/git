@@ -54,7 +54,8 @@
             android:background="@drawable/message_me_said"
             android:gravity="center_vertical"
             android:minHeight="44dp"
-            android:padding="10dp"
+            android:paddingLeft="9dp"
+            android:paddingRight="16dp"
             android:text="为什么没有人了,人呢?"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
