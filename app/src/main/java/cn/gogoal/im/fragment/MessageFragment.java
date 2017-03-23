@@ -145,6 +145,7 @@ public class MessageFragment extends BaseFragment {
                                 //群聊处理
                                 intent = new Intent(getContext(), SquareChatRoomActivity.class);
                                 intent.putExtra("conversation_id", conversation_id);
+                                intent.putExtra("squareName", IMMessageBeans.get(position).getNickname());
                                 startActivity(intent);
                                 break;
                             case "1003":
@@ -226,25 +227,23 @@ public class MessageFragment extends BaseFragment {
                 KLog.e(content);
                 JSONObject contentObject = JSON.parseObject(content);
                 String _lctype = contentObject.getString("_lctype");
+                nickName = messageBean.getNickname();
                 switch (_lctype) {
                     case "-1":
                         //文字
                         message = contentObject.getString("_lctext");
-                        nickName = messageBean.getNickname();
                         ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
 
                         break;
                     case "-2":
                         //图片
                         message = "[图片]";
-                        nickName = messageBean.getNickname();
                         ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
 
                         break;
                     case "-3":
                         //语音
                         message = "[语音]";
-                        nickName = messageBean.getNickname();
                         ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
 
                         break;
@@ -258,6 +257,15 @@ public class MessageFragment extends BaseFragment {
                         message = messageBean.getNickname() + "请求添加你为好友";
                         ImageDisplay.loadResImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
 
+                        break;
+                    case "3":
+
+                        break;
+                    case "4":
+
+                        break;
+                    case "5":
+                        message = nickName + "加入群聊";
                         break;
                     default:
                         break;
@@ -283,6 +291,7 @@ public class MessageFragment extends BaseFragment {
         String ConversationId = conversation.getConversationId();
         int chatType = (int) conversation.getAttribute("chat_type");
 
+
         Long rightNow = CalendarUtils.getCurrentTime();
         String nickName = "";
         String avatar = "";
@@ -298,8 +307,14 @@ public class MessageFragment extends BaseFragment {
                 avatar = lcattrsObject.getString("avatar");
                 break;
             case 1002:
-                JSONArray accountArray = JSON.parseArray(contentObject.getString("accountList"));
-                SPTools.saveJsonArray(UserUtils.getToken() + ConversationId + "_accountList_beans", accountArray);
+                //生成群聊头像
+                JSONArray accountArray = SPTools.getJsonArray(UserUtils.getToken() + ConversationId + "_accountList_beans", new JSONArray());
+                List<String> picUrls = new ArrayList<>();
+                for (int i = 0; i < (accountArray.size() < 9 ? accountArray.size() : 9); i++) {
+                    JSONObject personObject = accountArray.getJSONObject(i);
+                    picUrls.add(personObject.getString("avatar"));
+                }
+                KLog.e(picUrls);
                 break;
             case 1004:
                 break;
@@ -344,14 +359,13 @@ public class MessageFragment extends BaseFragment {
             default:
                 break;
         }
-        KLog.e(message.getContent());
 
         //已有的会话
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(ConversationId)) {
                 IMMessageBeans.get(i).setLastTime(rightNow);
                 IMMessageBeans.get(i).setLastMessage(message);
-                unreadmessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts()) + 1;
+                unreadmessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts().equals("") ? "0" : IMMessageBeans.get(i).getUnReadCounts()) + 1;
                 IMMessageBeans.get(i).setUnReadCounts(unreadmessage + "");
                 isTheSame = true;
             } else {
@@ -366,10 +380,12 @@ public class MessageFragment extends BaseFragment {
             imMessageBean.setLastTime(rightNow);
             imMessageBean.setNickname(nickName);
             imMessageBean.setAvatar(avatar);
-//            int unRead = Integer.parseInt(imMessageBean.getUnReadCounts() == null ? "0" : imMessageBean.getUnReadCounts()) + 1;
             imMessageBean.setUnReadCounts(1 + "");
             IMMessageBeans.add(imMessageBean);
         }
+
+        KLog.e(message.getContent());
+        KLog.e(chatType);
 
         //保存
         IMMessageBean imMessageBean = new IMMessageBean(ConversationId, chatType, message.getTimestamp(),

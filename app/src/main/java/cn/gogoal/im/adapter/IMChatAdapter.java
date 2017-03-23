@@ -104,6 +104,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         } else if (holder instanceof RightTextViewHolder) {
             AVIMTextMessage textMessage = (AVIMTextMessage) avimMessage;
             ((RightTextViewHolder) holder).what_user_send.setText(textMessage.getText());
+            ((RightTextViewHolder) holder).user_name.setVisibility(View.GONE);
 
             showMessageTime(position, ((RightTextViewHolder) holder).message_time);
 
@@ -121,7 +122,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
         } else if (holder instanceof RightImageViewHolder) {
             AVIMImageMessage imageMessage = (AVIMImageMessage) avimMessage;
-
+            ((RightImageViewHolder) holder).user_name.setVisibility(View.GONE);
             //获取后台图片大小设置
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((RightImageViewHolder) holder).image_user_send.getLayoutParams();
             setImageSize(params, imageMessage);
@@ -131,6 +132,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
         } else if (holder instanceof RightAudioViewHolder) {
             final AVIMAudioMessage audioMessage = (AVIMAudioMessage) avimMessage;
+            ((RightAudioViewHolder) holder).user_name.setVisibility(View.GONE);
             //设置语音宽度
             ViewGroup.LayoutParams params = ((RightAudioViewHolder) holder).recorder_length.getLayoutParams();
             int mMaxItemWidth = AppDevice.getWidth(mContext) - AppDevice.dp2px(mContext, 160);
@@ -216,6 +218,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             ((LeftUnKonwViewHolder) holder).user_name.setText(avimMessage.getFrom());
             showMessageTime(position, ((LeftUnKonwViewHolder) holder).message_time);
         } else if (holder instanceof RightUnKonwViewHolder) {
+            ((RightUnKonwViewHolder) holder).user_name.setVisibility(View.GONE);
             showMessageTime(position, ((RightUnKonwViewHolder) holder).message_time);
         }
     }

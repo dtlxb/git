@@ -5,13 +5,16 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
+import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageHandler;
+import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.socks.library.KLog;
 
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.IMNewFriendBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.SPTools;
@@ -29,18 +32,18 @@ public class MyMessageHandler extends AVIMMessageHandler {
 
     @Override
     public void onMessage(final AVIMMessage message, AVIMConversation conversation, final AVIMClient client) {
-        KLog.e(message.getContent());
+
         try {
             final String clientID = AVImClientManager.getInstance().getClientId();
 
             AVImClientManager.getInstance().findConversationById(conversation.getConversationId(), new AVImClientManager.ChatJoinManager() {
                 @Override
-                public void joinSuccess(AVIMConversation conversation) {
+                public void joinSuccess(final AVIMConversation conversation) {
                     //接收到消息，发送出去
                     if (clientID.equals(client.getClientId())) {
                         //剔除自己消息
                         if (!message.getFrom().equals(clientID)) {
-                            int chatType = (int) conversation.getAttribute("chat_type");
+                            final int chatType = (int) conversation.getAttribute("chat_type");
 
                             switch (chatType) {
                                 case 1001:
@@ -49,7 +52,34 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     break;
                                 case 1002:
                                     //群聊
-                                    sendIMMessage(message, conversation);
+                                    //更新对话
+                                    conversation.fetchInfoInBackground(new AVIMConversationCallback() {
+                                        @Override
+                                        public void done(AVIMException e) {
+                                            KLog.e(conversation.getName());
+                                            //保存
+                                            JSONObject contentObject = JSON.parseObject(message.getContent());
+                                            String _lctype = contentObject.getString("_lctype");
+                                            KLog.e(contentObject);
+                                            if ("5".equals(_lctype)) {
+                                                JSONArray messageListJsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
+                                                IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), chatType, message.getTimestamp(),
+                                                        "0", conversation.getName(), AppConst.LEANCLOUD_APP_ID, "", message);
+                                                MessageUtils.saveMessageInfo(messageListJsonArray, imMessageBean);
+
+                                                //通讯录
+                                                JSONArray accountArray = contentObject.getJSONObject("_lcattrs").getJSONArray("accountList");
+                                                if (null != accountArray) {
+                                                    SPTools.saveJsonArray(UserUtils.getToken() + conversation.getConversationId() + "_accountList_beans", accountArray);
+                                                    KLog.e(accountArray.toString());
+                                                }
+                                            } else {
+                                                //发送
+                                                sendIMMessage(message, conversation);
+                                            }
+                                        }
+                                    });
+
                                     break;
                                 case 1003:
                                     //直播

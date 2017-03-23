@@ -183,6 +183,7 @@ public class ContactsFragment extends BaseFragment {
         }
 
         contactBeanList.addAll(list);
+
         KLog.e(contactBeanList);
         SuspendedDecoration mDecoration = new SuspendedDecoration(getContext(), contactBeanList);
 

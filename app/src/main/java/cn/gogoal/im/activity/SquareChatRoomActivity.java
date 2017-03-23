@@ -8,11 +8,12 @@ import android.util.Log;
 import android.view.View;
 
 import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.avos.avoscloud.im.v2.AVIMConversationQuery;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
-import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
+import com.socks.library.KLog;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -32,6 +33,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
     //聊天对象
     private ChatFragment chatFragment;
     private ContactBean contactBean;
+    private List<String> groupMembers;
 
     @Override
     public int bindLayout() {
@@ -40,33 +42,33 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
 
     @Override
     public void doBusiness(Context mContext) {
-        String userName = this.getIntent().getExtras().getString("userName");
-        setMyTitle(userName, false);
+        String squareName = this.getIntent().getExtras().getString("squareName");
+        setMyTitle(squareName, false);
+        groupMembers = new ArrayList<>();
         final String conversationID = this.getIntent().getExtras().getString("conversation_id");
 
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
         getSquareConversation(conversationID);
 
-        initTitle(userName, conversationID);
+        initTitle(squareName, conversationID);
     }
 
-    private void initTitle(String nickname, final String conversation_id) {
-        XTitle title = setMyTitle(nickname + "(" + ")", true);
+    private void initTitle(String squareName, final String conversation_id) {
+        XTitle title = setMyTitle(squareName + "(" + ")", true);
 
         //添加action
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(SquareChatRoomActivity.this, R.mipmap.chat_person)) {
             @Override
             public void actionClick(View view) {
-                if (null != contactBean) {
-                    Intent intent = new Intent(SquareChatRoomActivity.this, IMSquareChatSetActivity.class);
-                    Bundle mBundle = new Bundle();
-                    mBundle.putSerializable("seri", contactBean);
-                    mBundle.putString("conversation_id", conversation_id);
-                    intent.putExtras(mBundle);
-                    startActivity(intent);
-                } else {
-                    UIHelper.toast(getActivity(), "连接断开了");
-                }
+                Intent intent = new Intent(SquareChatRoomActivity.this, IMSquareChatSetActivity.class);
+                /*Bundle mBundle = new Bundle();
+                //mBundle.putSerializable("seri", contactBean);
+                mBundle.putString("conversation_id", conversation_id);
+                intent.putExtras(mBundle);*/
+                KLog.e(conversation_id);
+                intent.putStringArrayListExtra("group_members", (ArrayList<String>) groupMembers);
+                intent.putExtra("conversation_id", conversation_id);
+                startActivity(intent);
             }
         };
         title.addAction(personAction, 0);
@@ -77,6 +79,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
             @Override
             public void joinSuccess(AVIMConversation conversation) {
                 joinSquare(conversation);
+                groupMembers.addAll(conversation.getMembers());
             }
 
             @Override
