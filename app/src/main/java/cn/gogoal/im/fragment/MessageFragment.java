@@ -267,6 +267,9 @@ public class MessageFragment extends BaseFragment {
                     case "5":
                         message = nickName + "加入群聊";
                         break;
+                    case "6":
+                        message = nickName + "离开本群";
+                        break;
                     default:
                         break;
                 }
@@ -355,6 +358,8 @@ public class MessageFragment extends BaseFragment {
                 break;
             case "5":
                 nickName = conversation.getName();
+                break;
+            case "6":
                 break;
             default:
                 break;

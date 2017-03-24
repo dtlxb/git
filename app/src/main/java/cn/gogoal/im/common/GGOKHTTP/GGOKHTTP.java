@@ -147,6 +147,13 @@ public class GGOKHTTP {
      */
     public static final String ADD_MEMBER = "v1/ggm_chat/add_member";
 
+    /**
+     * IM群主同意加群
+     * token                         用户token
+     * conv_id                       会话id
+     */
+    public static final String APPLY_INTO_GROUP = "v1/ggm_chat/apply_into_group";
+
 //--------------------------------------------------------------------------------------------------
 
     /**

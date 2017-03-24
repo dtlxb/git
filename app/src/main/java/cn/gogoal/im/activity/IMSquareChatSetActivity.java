@@ -32,6 +32,7 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.NineGridImageView;
@@ -92,10 +93,12 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 if (position == contactBeens.size() - 1) {
                     //createChatGroup();
                     //删除人
-                    for (int i = 0; i < idList.size(); i += 2) {
-                        idList.add(idList.get(i));
+
+                    List<String> strings = new ArrayList<String>();
+                    for (int i = 1; i < idList.size() - 2; i++) {
+                        strings.add(idList.get(i));
                     }
-                    deleteAnyone(idList);
+                    deleteAnyone(strings);
 
                 } else if (position == contactBeens.size() - 2) {
 
@@ -210,7 +213,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         new GGOKHTTP(params, GGOKHTTP.DELETE_MEMBER, ggHttpInterface).startGet();
     }
 
-    //删除群成员
+    //添加群成员
     public void addAnyone(List<String> idList) {
         Map<String, String> params = new HashMap<>();
         params.put("token", AppConst.LEAN_CLOUD_TOKEN);
