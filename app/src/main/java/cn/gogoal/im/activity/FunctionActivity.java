@@ -15,7 +15,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.lzyzsd.jsbridge.BridgeHandler;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.github.lzyzsd.jsbridge.DefaultHandler;
-import com.socks.library.KLog;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
@@ -23,8 +22,13 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.WebViewUtil;
 import cn.gogoal.im.ui.view.XTitle;
 
+/*
+* web页面
+* */
 public class FunctionActivity extends BaseActivity {
 
     @BindView(R.id.title_bar)
@@ -63,7 +67,16 @@ public class FunctionActivity extends BaseActivity {
         });
 
         initWebView(webView);
+
         webView.loadUrl(url);
+
+        //添加让web获取用户信息
+        webView.registerHandler("getUserInfo", new BridgeHandler() {
+            @Override
+            public void handler(String data, ValueCallback<String> function) {
+                function.onReceiveValue(UserUtils.getUserInfo().toJSONString());
+            }
+        });
 
 //        // H5页面跳转时获取页面title和url
         webView.setOnWebChangeListener(new BridgeWebView.WebChangeListener() {
@@ -119,28 +132,28 @@ public class FunctionActivity extends BaseActivity {
         webView.registerHandler("loadPdfFromWeb", new BridgeHandler() {
             @Override
             public void handler(final String data, ValueCallback<String> function) {
-                if (AppDevice.getNetworkType(getContext())==2 || AppDevice.getNetworkType(getContext())==3){
-                    new AlertDialog.Builder(mContext,R.style.HoloDialogStyle).setTitle("提示")
+                if (AppDevice.getNetworkType(getContext()) == 2 || AppDevice.getNetworkType(getContext()) == 3) {
+                    new AlertDialog.Builder(mContext, R.style.HoloDialogStyle).setTitle("提示")
                             .setMessage("阁下当前网络为数据流量\t是否继续?")
                             .setPositiveButton("确定,有的是流量", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (!TextUtils.isEmpty(data)) {
-                                        Intent intent=new Intent(getContext(),PdfDisplayActivity.class);
-                                        intent.putExtra("pdf_data",data);
+                                        Intent intent = new Intent(getContext(), PdfDisplayActivity.class);
+                                        intent.putExtra("pdf_data", data);
                                         startActivity(intent);
                                     }
                                 }
                             }).setNegativeButton("取消", null).show();
 
-                }else if (AppDevice.getNetworkType(getContext())==1){
+                } else if (AppDevice.getNetworkType(getContext()) == 1) {
                     if (!TextUtils.isEmpty(data)) {
-                        Intent intent=new Intent(getContext(),PdfDisplayActivity.class);
-                        intent.putExtra("pdf_data",data);
+                        Intent intent = new Intent(getContext(), PdfDisplayActivity.class);
+                        intent.putExtra("pdf_data", data);
                         startActivity(intent);
                     }
-                }else {
-                    UIHelper.toastError(mContext,"跳转出错");
+                } else {
+                    UIHelper.toastError(mContext, "跳转出错");
                 }
 
             }
@@ -166,10 +179,13 @@ public class FunctionActivity extends BaseActivity {
         }
     }
 
-    private FunctionActivity getContext(){
+    private FunctionActivity getContext() {
         return FunctionActivity.this;
     }
+
     private void initWebView(BridgeWebView mWebView) {
+        mWebView.addJavascriptInterface(new WebViewUtil(this, this), "interaction");
+
         WebSettings settings = mWebView.getSettings();
         mWebView.setDefaultHandler(new DefaultHandler());
 
