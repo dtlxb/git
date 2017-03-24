@@ -19,7 +19,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.ToggleButton;
+import android.widget.CheckBox;
 
 import com.alibaba.livecloud.live.AlivcMediaFormat;
 import com.alibaba.livecloud.live.AlivcMediaRecorder;
@@ -39,6 +39,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.common.GGOKHTTP.GGAPI;
 import cn.gogoal.im.common.PlayerUtils.DataStatistics;
 import cn.gogoal.im.common.UIHelper;
 
@@ -50,8 +52,10 @@ public class LiveTogetherActivity extends BaseActivity {
     @BindView(R.id.camera_surface)
     SurfaceView cameraSurface;
 
-    @BindView(R.id.toggle_live_push)
-    ToggleButton btn_live_push;
+    @BindView(R.id.imgPlayerChat)
+    CheckBox imgPlayerChat;
+    @BindView(R.id.imgPlayerShotCut)
+    CheckBox imgPlayerShotCut;
 
     //推流地址
     private String pushUrl;
@@ -494,11 +498,12 @@ public class LiveTogetherActivity extends BaseActivity {
         mMediaRecorder.release();
     }
 
-    @OnClick({R.id.toggle_live_push})
-    public void setToggleBtnClick(View v) {
+    @OnClick({R.id.imgPlayerChat, R.id.imgPlayerProfiles, R.id.imgPlayerRelaterVideo, R.id.imgPlayerShare,
+            R.id.imgPlayerShotCut, R.id.imgPlayerClose})
+    public void setClickFunctionBar(View v) {
         switch (v.getId()) {
-            case R.id.toggle_live_push:
-                if (btn_live_push.isChecked()) {
+            case R.id.imgPlayerChat: //发消息
+                if (imgPlayerChat.isChecked()) {
                     try {
                         mMediaRecorder.startRecord(pushUrl);
                     } catch (Exception e) {
@@ -508,6 +513,25 @@ public class LiveTogetherActivity extends BaseActivity {
                     mMediaRecorder.stopRecord();
                     isRecording = false;
                 }
+                break;
+            case R.id.imgPlayerProfiles: //主播介绍
+                //showAnchorProfiles();
+                break;
+            case R.id.imgPlayerRelaterVideo: //相关视频
+                //showRelaterVideo();
+                break;
+            case R.id.imgPlayerShare: //分享
+                DialogHelp.showShareDialog(getContext(), GGAPI.WEB_URL + "/live/share/" + "live_id", "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
+                break;
+            case R.id.imgPlayerShotCut: //切换摄像头
+                int currFacing = mMediaRecorder.switchCamera();
+                if (currFacing == AlivcMediaFormat.CAMERA_FACING_FRONT) {
+                    mMediaRecorder.addFlag(AlivcMediaFormat.FLAG_BEAUTY_ON);
+                }
+                mConfigure.put(AlivcMediaFormat.KEY_CAMERA_FACING, currFacing);
+                break;
+            case R.id.imgPlayerClose: //退出
+                finish();
                 break;
         }
     }

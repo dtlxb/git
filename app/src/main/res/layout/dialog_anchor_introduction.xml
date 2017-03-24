@@ -17,70 +17,61 @@
         android:textColor="@color/textColor_333333"
         android:textSize="14dp" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="10dp">
 
         <ImageView
             android:id="@+id/anchor_avatar"
             android:layout_width="137dp"
             android:layout_height="91dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:layout_gravity="center_vertical" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/linearMessage"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_marginLeft="13dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/anchor_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="廖冰"
-                    android:textColor="@color/textColor_333333"
-                    android:textSize="16dp" />
-
-                <TextView
-                    android:id="@+id/anchor_position"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="朝阳永续 | 董事长"
-                    android:textColor="@color/textColor_666666"
-                    android:textSize="13dp" />
-
-            </LinearLayout>
+            android:layout_toRightOf="@+id/anchor_avatar"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/anchor_achieve"
-                android:layout_width="wrap_content"
+                android:id="@+id/anchor_name"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="2006年廖冰发起中国私募基金风云榜评选活动，至今已持续十年。红马甲出身的廖冰，热爱股市，更热爱投资。"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:text="@string/textBlank"
                 android:textColor="@color/textColor_333333"
-                android:textSize="14dp" />
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/anchor_position"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:text="@string/textBlank"
+                android:textColor="@color/textColor_666666"
+                android:textSize="13dp" />
 
         </LinearLayout>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/anchor_achieve"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearMessage"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/textColor_333333"
+            android:textSize="14dp" />
 
-    <TextView
-        android:id="@+id/anchor_intro"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="朝阳永续公司董事长，2003年起，先后成立了上海朝阳永续信息技术股份有限公司、上海朝阳永续基金销售有限公司、向日葵投资有限公司。"
-        android:textColor="@color/textColor_333333"
-        android:textSize="14dp"/>
+    </RelativeLayout>
 
 </LinearLayout>

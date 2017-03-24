@@ -4,7 +4,6 @@
     android:id="@+id/activity_player"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     tools:context="cn.gogoal.im.activity.PlayerActivity">
 
     <FrameLayout
@@ -142,9 +141,9 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/player_recyc"
         android:layout_width="250dp"
-        android:layout_height="200dp"
-        android:layout_above="@+id/functionBar"
-        android:layout_marginBottom="8dp"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
         android:layout_marginLeft="15dp" />
 
     <LinearLayout
@@ -153,8 +152,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/GLViewContainer"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="10dp"
-        android:background="#00000000"
+        android:background="@drawable/shape_player_info"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -174,6 +172,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearPlayerProfiles"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -188,6 +187,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearPlayerRelaterVideo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -219,7 +219,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/imgPlayerShotCut"

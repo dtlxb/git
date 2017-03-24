@@ -25,6 +25,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -64,6 +65,7 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.PlayerUtils.CountDownTimerView;
 import cn.gogoal.im.common.PlayerUtils.PlayerControl;
 import cn.gogoal.im.common.PlayerUtils.StatusListener;
+import cn.gogoal.im.common.PlayerUtils.TextAndImage;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -84,6 +86,10 @@ public class PlayerActivity extends BaseActivity {
     RecyclerView recyler_chat;
     @BindView(R.id.linearPlayerChat)
     LinearLayout linearPlayerChat;
+    @BindView(R.id.linearPlayerProfiles)
+    LinearLayout linearPlayerProfiles;
+    @BindView(R.id.linearPlayerRelaterVideo)
+    LinearLayout linearPlayerRelaterVideo;
 
     //详情相关控件
     @BindView(R.id.textTitle)
@@ -255,6 +261,11 @@ public class PlayerActivity extends BaseActivity {
                     textMarInter.setText(data.getString("programme_name"));
                     //主播介绍
                     anchor = data.getJSONObject("anchor");
+                    if (anchor == null) {
+                        linearPlayerProfiles.setVisibility(View.GONE);
+                    } else {
+                        linearPlayerProfiles.setVisibility(View.VISIBLE);
+                    }
 
                     if (source.equals("live")) {
                         //倒计时
@@ -262,6 +273,14 @@ public class PlayerActivity extends BaseActivity {
                             countDownTimer.setVisibility(View.VISIBLE);
                             countDownTimer.addTime(data.getString("live_time_start"));
                             countDownTimer.start();
+
+                            countDownTimer.setDownCallBack(new CountDownTimerView.CountDownCallBack() {
+                                @Override
+                                public void startPlayer() {
+                                    countDownTimer.setVisibility(View.GONE);
+                                    startToPlay(mURI);
+                                }
+                            });
                         } else {
                             countDownTimer.setVisibility(View.GONE);
                         }
@@ -638,7 +657,8 @@ public class PlayerActivity extends BaseActivity {
         public void onPrepared() {
             KLog.json("onPrepared");
             if (mPlayer != null) {
-                mPlayer.setVideoScalingMode(MediaPlayer.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT);
+                //VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING  |  VIDEO_SCALING_MODE_SCALE_TO_FIT
+                mPlayer.setVideoScalingMode(MediaPlayer.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
                 mTimerHandler.postDelayed(mRunnable, 1000);
                 mTimerHandler.postDelayed(mUIRunnable, 3000);
             }
@@ -1030,19 +1050,27 @@ public class PlayerActivity extends BaseActivity {
         DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_anchor_introduction, new BottomSheetNormalDialog.ViewListener() {
             @Override
             public void bindDialogView(BottomSheetNormalDialog dialog, View dialogView) {
-                ImageView anchor_avatar = (ImageView) dialogView.findViewById(R.id.anchor_avatar);
+                final ImageView anchor_avatar = (ImageView) dialogView.findViewById(R.id.anchor_avatar);
                 TextView anchor_name = (TextView) dialogView.findViewById(R.id.anchor_name);
                 TextView anchor_position = (TextView) dialogView.findViewById(R.id.anchor_position);
-                TextView anchor_achieve = (TextView) dialogView.findViewById(R.id.anchor_achieve);
-                TextView anchor_intro = (TextView) dialogView.findViewById(R.id.anchor_intro);
+                final TextView anchor_achieve = (TextView) dialogView.findViewById(R.id.anchor_achieve);
 
-                if (anchor != null) {
-                    ImageDisplay.loadNetImage(getContext(), anchor.getString("face_url"), anchor_avatar);
-                    anchor_name.setText(anchor.getString("anchor_name"));
-                    anchor_position.setText(anchor.getString("organization"));
-                    anchor_achieve.setText(anchor.getString("anchor_position"));
-                    anchor_intro.setText(anchor.getString("anchor_introduction"));
-                }
+                ImageDisplay.loadNetImage(getContext(), anchor.getString("face_url"), anchor_avatar);
+                anchor_name.setText(anchor.getString("anchor_name"));
+                anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
+
+                anchor_achieve.setText(anchor.getString("anchor_introduction"));
+
+                final ViewTreeObserver observer = anchor_avatar.getViewTreeObserver();
+                observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        anchor_avatar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        int finalHeight = anchor_avatar.getMeasuredHeight();
+                        int finalWidth = anchor_avatar.getMeasuredWidth();
+                        TextAndImage.makeSpan(finalHeight, finalWidth, anchor_achieve);
+                    }
+                });
             }
         });
 
@@ -1081,10 +1109,13 @@ public class PlayerActivity extends BaseActivity {
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     videoDatas = JSONObject.parseArray(String.valueOf(object.getJSONArray("data")), RelaterVideoData.class);
-                } else if (object.getIntValue("code") == 1001) {
-                    UIHelper.toast(getContext(), R.string.nodata_hint);
+                    if (videoDatas == null) {
+                        linearPlayerRelaterVideo.setVisibility(View.GONE);
+                    } else {
+                        linearPlayerRelaterVideo.setVisibility(View.VISIBLE);
+                    }
                 } else {
-                    UIHelper.toast(getContext(), R.string.net_erro_hint);
+                    linearPlayerRelaterVideo.setVisibility(View.GONE);
                 }
             }
 
