@@ -20,7 +20,7 @@ public class MessageUtils {
     public static void saveMessageInfo(JSONArray thisJsonArray, IMMessageBean imMessageBean) {
 
         JSONObject jsonObject = new JSONObject();
-        if (thisJsonArray != null) {
+        if (thisJsonArray != null && imMessageBean != null) {
             for (int i = 0; i < thisJsonArray.size(); i++) {
                 if (thisJsonArray.getJSONObject(i).get("conversationID").equals(imMessageBean.getConversationID())) {
                     thisJsonArray.remove(i);

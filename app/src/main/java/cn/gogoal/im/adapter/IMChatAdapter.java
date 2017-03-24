@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
@@ -21,11 +23,11 @@ import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import java.util.List;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.StringUtils;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.recording.MediaManager;
 
 /**
@@ -46,7 +48,8 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     //未知消息
     public static int TYPE_LEFT_UNKONW_MESSAGE = 0x07;
     public static int TYPE_RIGHT_UNKONW_MESSAGE = 0x08;
-
+    //系统
+    public static int TYPE_SYSTEM_MESSAGE = 0x09;
     private List<AVIMMessage> messageList;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
@@ -76,6 +79,8 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             return new LeftUnKonwViewHolder(mLayoutInflater.inflate(R.layout.item_left_unknow, parent, false));
         } else if (viewType == TYPE_LEFT_UNKONW_MESSAGE) {
             return new RightUnKonwViewHolder(mLayoutInflater.inflate(R.layout.item_right_unknow, parent, false));
+        } else if (viewType == TYPE_SYSTEM_MESSAGE) {
+            return new ChatGroupAddViewHolder(mLayoutInflater.inflate(R.layout.item_system_notify, parent, false));
         } else {
             return null;
         }
@@ -85,15 +90,18 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
         AVIMMessage avimMessage = messageList.get(position);
+        JSONObject contentObject = JSON.parseObject(avimMessage.getContent());
+        String messageType = contentObject.getString("_lctype");
+        if (!messageType.equals("5")) {
+            if (chatType == 1001) {
+                ((IMCHatViewHolder) holder).user_name.setVisibility(View.GONE);
+            } else if (chatType == 1002) {
+                ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
+            } else {
+                ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
+            }
 
-        if (chatType == 1001) {
-            ((IMCHatViewHolder) holder).user_name.setVisibility(View.GONE);
-        } else if (chatType == 1002) {
-            ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
-        } else {
-            ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
         }
-
         if (holder instanceof LeftTextViewHolder) {
             AVIMTextMessage textMessage = (AVIMTextMessage) avimMessage;
             ((LeftTextViewHolder) holder).user_name.setText((String) textMessage.getAttrs().get("username"));
@@ -104,6 +112,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         } else if (holder instanceof RightTextViewHolder) {
             AVIMTextMessage textMessage = (AVIMTextMessage) avimMessage;
             ((RightTextViewHolder) holder).what_user_send.setText(textMessage.getText());
+            ((RightTextViewHolder) holder).user_name.setVisibility(View.GONE);
 
             showMessageTime(position, ((RightTextViewHolder) holder).message_time);
 
@@ -121,7 +130,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
         } else if (holder instanceof RightImageViewHolder) {
             AVIMImageMessage imageMessage = (AVIMImageMessage) avimMessage;
-
+            ((RightImageViewHolder) holder).user_name.setVisibility(View.GONE);
             //获取后台图片大小设置
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((RightImageViewHolder) holder).image_user_send.getLayoutParams();
             setImageSize(params, imageMessage);
@@ -131,6 +140,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
         } else if (holder instanceof RightAudioViewHolder) {
             final AVIMAudioMessage audioMessage = (AVIMAudioMessage) avimMessage;
+            ((RightAudioViewHolder) holder).user_name.setVisibility(View.GONE);
             //设置语音宽度
             ViewGroup.LayoutParams params = ((RightAudioViewHolder) holder).recorder_length.getLayoutParams();
             int mMaxItemWidth = AppDevice.getWidth(mContext) - AppDevice.dp2px(mContext, 160);
@@ -216,7 +226,13 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             ((LeftUnKonwViewHolder) holder).user_name.setText(avimMessage.getFrom());
             showMessageTime(position, ((LeftUnKonwViewHolder) holder).message_time);
         } else if (holder instanceof RightUnKonwViewHolder) {
+            ((RightUnKonwViewHolder) holder).user_name.setVisibility(View.GONE);
             showMessageTime(position, ((RightUnKonwViewHolder) holder).message_time);
+        } else if (holder instanceof ChatGroupAddViewHolder) {
+            showMessageTime(position, ((ChatGroupAddViewHolder) holder).message_time);
+            ((ChatGroupAddViewHolder) holder).message_content.setText(contentObject.getString("_lctext"));
+        } else {
+
         }
     }
 
@@ -228,26 +244,38 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         AVIMMessage message = messageList.get(position);
-        if (message.getFrom().equals(AppConst.LEAN_CLOUD_TOKEN)) {
-            if (message instanceof AVIMTextMessage) {
-                return TYPE_RIGHT_TEXT_MESSAGE;
-            } else if (message instanceof AVIMImageMessage) {
-                return TYPE_RIGHT_IMAGE_MESSAGE;
-            } else if (message instanceof AVIMAudioMessage) {
-                return TYPE_RIGHT_VOICE_MESSAGE;
-            } else {
-                return TYPE_RIGHT_UNKONW_MESSAGE;
-            }
-        } else {
-            if (message instanceof AVIMTextMessage) {
-                return TYPE_LEFT_TEXT_MESSAGE;
-            } else if (message instanceof AVIMImageMessage) {
-                return TYPE_LEFT_IMAGE_MESSAGE;
-            } else if (message instanceof AVIMAudioMessage) {
-                return TYPE_LEFT_VOICE_MESSAGE;
-            } else {
-                return TYPE_LEFT_UNKONW_MESSAGE;
-            }
+
+        JSONObject contentObject = JSON.parseObject(message.getContent());
+        String _lctype = contentObject.getString("_lctype");
+        boolean isYourSelf = message.getFrom().endsWith(UserUtils.getToken());
+
+        switch (_lctype) {
+            case "-1":
+                if (isYourSelf) {
+                    return TYPE_RIGHT_TEXT_MESSAGE;
+                } else {
+                    return TYPE_LEFT_TEXT_MESSAGE;
+                }
+            case "-2":
+                if (isYourSelf) {
+                    return TYPE_RIGHT_IMAGE_MESSAGE;
+                } else {
+                    return TYPE_LEFT_IMAGE_MESSAGE;
+                }
+            case "-3":
+                if (isYourSelf) {
+                    return TYPE_RIGHT_VOICE_MESSAGE;
+                } else {
+                    return TYPE_LEFT_VOICE_MESSAGE;
+                }
+            case "5":
+                return TYPE_SYSTEM_MESSAGE;
+            default:
+                if (isYourSelf) {
+                    return TYPE_RIGHT_UNKONW_MESSAGE;
+                } else {
+                    return TYPE_LEFT_UNKONW_MESSAGE;
+                }
         }
     }
 
@@ -426,6 +454,15 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         RightUnKonwViewHolder(View itemView) {
             super(itemView);
             what_user_send = (TextView) itemView.findViewById(R.id.what_user_send);
+        }
+    }
+
+    private class ChatGroupAddViewHolder extends IMCHatViewHolder {
+        private TextView message_content;
+
+        ChatGroupAddViewHolder(View itemView) {
+            super(itemView);
+            message_content = (TextView) itemView.findViewById(R.id.message_content);
         }
     }
 
