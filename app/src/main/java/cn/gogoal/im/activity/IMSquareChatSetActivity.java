@@ -77,11 +77,10 @@ public class IMSquareChatSetActivity extends BaseActivity {
         Log.e("++++conversationId", conversationId);
         JSONArray accountArray = SPTools.getJsonArray(UserUtils.getToken() + conversationId + "_accountList_beans", null);
         //缓存中没有群信息则向后台拉取
+        Log.e("++++accountArray", accountArray.toString());
         if (null != accountArray) {
-            Log.e("++++accountArray1", accountArray.toString());
             getAllContacts(accountArray);
         } else {
-            Log.e("++++accountArray2", accountArray.toString());
             getChatGroup(groupMembers);
         }
 
@@ -186,7 +185,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
     //删除群成员
     public void deleteAnyone(List<String> idList) {
-
         Map<String, String> params = new HashMap<>();
         params.put("token", AppConst.LEAN_CLOUD_TOKEN);
         params.put("id_list", JSONObject.toJSONString(idList));
@@ -214,7 +212,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
     //删除群成员
     public void addAnyone(List<String> idList) {
-
         Map<String, String> params = new HashMap<>();
         params.put("token", AppConst.LEAN_CLOUD_TOKEN);
         params.put("id_list", JSONObject.toJSONString(idList));

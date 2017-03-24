@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<cn.gogoal.im.ui.keyboard.KeyboardLaunchListenLayout
+<cn.gogoal.im.ui.keyboard.KeyboardLaunchListenLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/chat_root_keyboard_layout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -10,8 +9,8 @@
         android:id="@+id/message_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignBottom="@+id/view_line">
+        android:layout_alignBottom="@+id/view_line"
+        android:layout_alignParentTop="true">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -26,9 +25,9 @@
         android:id="@+id/flag_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/find_more_layout"
         android:background="#f4f4f6"
         android:gravity="center"
-        android:layout_above="@+id/find_more_layout"
         android:minHeight="50dp"
         android:orientation="horizontal">
 
@@ -37,7 +36,7 @@
             style="@style/BottomImageStyle"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="10dp"
-            android:src="@mipmap/chat_voice"
+            android:background="@mipmap/chat_voice"
             android:contentDescription="@null"
             android:paddingLeft="5dp" />
 
@@ -75,8 +74,8 @@
             style="@style/BottomImageStyle"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="7dp"
-            android:src="@mipmap/chat_face"
-            android:contentDescription="@null" />
+            android:contentDescription="@null"
+            android:src="@mipmap/chat_face" />
 
         <FrameLayout
             android:id="@+id/flag_layout_send"
@@ -89,9 +88,9 @@
                 android:layout_width="29dp"
                 android:layout_height="29dp"
                 android:layout_gravity="center"
-                android:src="@mipmap/chat_add"
                 android:background="@android:color/transparent"
                 android:contentDescription="@null"
+                android:src="@mipmap/chat_add"
                 android:tag="un_expanded" />
 
             <Button
@@ -99,11 +98,11 @@
                 android:layout_width="50dp"
                 android:layout_height="36dp"
                 android:layout_gravity="center"
-                android:text="@string/send"
                 android:background="@android:color/transparent"
-                android:visibility="invisible"
+                android:text="@string/send"
                 android:textColor="@color/colorPrimary"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:visibility="invisible" />
         </FrameLayout>
     </LinearLayout>
 
@@ -111,10 +110,10 @@
         android:id="@+id/find_more_layout"
         android:layout_width="match_parent"
         android:layout_height="220dp"
-        android:visibility="gone"
-        android:background="@color/colorchatGrid"
         android:layout_above="@+id/space"
-        android:gravity="center">
+        android:background="@color/colorchatGrid"
+        android:gravity="center"
+        android:visibility="gone">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/functions_recycler"
@@ -126,6 +125,6 @@
         android:id="@+id/space"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true" />
 
 </cn.gogoal.im.ui.keyboard.KeyboardLaunchListenLayout>
