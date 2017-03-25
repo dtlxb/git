@@ -95,9 +95,12 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     //删除人
 
                     List<String> strings = new ArrayList<String>();
-                    for (int i = 1; i < idList.size() - 2; i++) {
-                        strings.add(idList.get(i));
+                    for (int i = 0; i < idList.size() - 2; i++) {
+                        if (!idList.get(i).equals(UserUtils.getToken())) {
+                            strings.add(idList.get(i));
+                        }
                     }
+
                     deleteAnyone(strings);
 
                 } else if (position == contactBeens.size() - 2) {
@@ -197,7 +200,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 Log.e("++++responseInfo", responseInfo);
                 if ((int) result.get("code") == 0) {
@@ -207,7 +209,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                KLog.json(msg);
+                Log.e("++++responseInfo", msg);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.DELETE_MEMBER, ggHttpInterface).startGet();

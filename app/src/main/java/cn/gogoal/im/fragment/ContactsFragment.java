@@ -26,6 +26,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.IMAddFriendActivity;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.adapter.ContactAdapter;
 import cn.gogoal.im.base.BaseFragment;
@@ -105,12 +106,18 @@ public class ContactsFragment extends BaseFragment {
         contactAdapter.setOnItemClickListener(new OnItemClickLitener() {
             @Override
             public void onItemClick(RecyclerView.ViewHolder holder, View view, int position) {
+                Intent intent;
                 //单聊处理
-                Intent intent = new Intent(getContext(), SingleChatRoomActivity.class);
-                intent.putExtra("friend_id", contactBeanList.get(position).getFriend_id() + "");
-                intent.putExtra("conversation_id", contactBeanList.get(position).getConv_id());
-                intent.putExtra("nickname", contactBeanList.get(position).getNickname());
-                startActivity(intent);
+                if (position == 0) {
+                    intent = new Intent(getContext(), IMAddFriendActivity.class);
+                    startActivity(intent);
+                } else {
+                    intent = new Intent(getContext(), SingleChatRoomActivity.class);
+                    intent.putExtra("friend_id", contactBeanList.get(position).getFriend_id() + "");
+                    intent.putExtra("conversation_id", contactBeanList.get(position).getConv_id());
+                    intent.putExtra("nickname", contactBeanList.get(position).getNickname());
+                    startActivity(intent);
+                }
             }
 
             @Override
