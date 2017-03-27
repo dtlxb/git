@@ -76,8 +76,9 @@ public class IMPersonActivity extends BaseActivity {
 
         contactBeens.add(addFunctionHead("", R.mipmap.person_add));
 
-        for (int i = 0; i < contactBeens.size(); i++) {
+        for (int i = 0; i < contactBeens.size() - 1; i++) {
             imageList.add(contactBeens.get(i).getAvatar().toString());
+            KLog.e(contactBeens.get(i).getFriend_id());
             idList.add(String.valueOf(contactBeens.get(i).getFriend_id()));
         }
         idList.add(AppConst.LEAN_CLOUD_TOKEN);
