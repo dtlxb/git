@@ -81,11 +81,13 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <activity
             android:name=".activity.PlayerActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:theme="@style/TranslucentTheme"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
+
         <activity
             android:name=".activity.FunctionActivity"
             android:screenOrientation="portrait"
@@ -122,6 +124,8 @@
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".wxapi.WXPayEntryActivity" />
 
+        <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity" />
+
         <uses-library
             android:name="com.google.android.maps"
             android:required="false" />
@@ -132,6 +136,12 @@
             android:name=".activity.LiveTogetherActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:theme="@style/TranslucentTheme" />
+
+        <activity android:name=".activity.ChooseContactActivity"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name=".activity.TestActivity"/>
+
     </application>
 
 </manifest>

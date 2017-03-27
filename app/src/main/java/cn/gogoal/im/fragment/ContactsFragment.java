@@ -3,9 +3,8 @@ package cn.gogoal.im.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.DrawableRes;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -17,8 +16,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.socks.library.KLog;
 
-import org.simple.eventbus.Subscriber;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +26,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.activity.IMAddFriendActivity;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.adapter.ContactAdapter;
+import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
@@ -37,7 +35,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
+import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.index.IndexBar;
 import cn.gogoal.im.ui.index.SuspendedDecoration;
 
@@ -54,7 +52,10 @@ public class ContactsFragment extends BaseFragment {
 
     @BindView(R.id.tv_constacts_flag)
     TextView tvConstactsFlag;
+
+    private boolean added = true;
     private ContactAdapter contactAdapter;
+    private ArrayList<ContactBean> contactBeanList;
 
     public ContactsFragment() {
     }
@@ -89,17 +90,18 @@ public class ContactsFragment extends BaseFragment {
         indexBar.setmPressedShowTextView(tvConstactsFlag)//设置HintTextView
                 .setmLayoutManager(layoutManager);//设置RecyclerView的LayoutManager
 
-        final List<ContactBean> contactBeanList = new ArrayList<>();
+        contactBeanList = new ArrayList<>();
 
-        getData(contactBeanList);//列表数据
+        //添加联系人功能头部item
+        addContactHead();
+
+        getData();//联系人列表数据
 
         contactAdapter = new ContactAdapter(getContext(), contactBeanList);
 
         contactAdapter.notifyDataSetChanged();
 
-        DividerItemDecoration itemDecoration = new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
-        itemDecoration.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.shape_divider_recyclerview_1px));
-        rvContacts.addItemDecoration(itemDecoration);
+        rvContacts.addItemDecoration(new NormalItemDecoration(mContext, Color.parseColor("#D9D9D9")));
 
         rvContacts.setAdapter(contactAdapter);
 
@@ -113,7 +115,7 @@ public class ContactsFragment extends BaseFragment {
                     startActivity(intent);
                 } else {
                     intent = new Intent(getContext(), SingleChatRoomActivity.class);
-                    intent.putExtra("friend_id", contactBeanList.get(position).getFriend_id() + "");
+                    intent.putExtra("need_update", false);
                     intent.putExtra("conversation_id", contactBeanList.get(position).getConv_id());
                     intent.putExtra("nickname", contactBeanList.get(position).getNickname());
                     startActivity(intent);
@@ -128,20 +130,34 @@ public class ContactsFragment extends BaseFragment {
 
     }
 
-    private void getData(List<ContactBean> contactBeanList) {
-        contactBeanList.add(addFunctionHead("新的朋友", R.mipmap.cache_img_contacts_0));
-        contactBeanList.add(addFunctionHead("群聊", R.mipmap.cache_img_contacts_1));
-        contactBeanList.add(addFunctionHead("标签", R.mipmap.cache_img_contacts_2));
-        contactBeanList.add(addFunctionHead("公众号", R.mipmap.cache_img_contacts_3));
-
+    private void getData() {
+        //缓存的联系人请求数据
         String friendResponseInfo = SPTools.getString(UserUtils.getToken() + "_contact_beans", "");
         KLog.e(friendResponseInfo);
         if (TextUtils.isEmpty(friendResponseInfo)) {
             getFriendList(contactBeanList);
-            KLog.e(friendResponseInfo);
         } else if (!JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()) {
             parseContactDatas(friendResponseInfo, contactBeanList);
         }
+    }
+
+    /**
+     * 添加联系人列表头部
+     */
+    private void addContactHead() {
+        contactBeanList.add(addFunctionHead("新的朋友", R.mipmap.cache_img_contacts_0));
+        contactBeanList.add(addFunctionHead("群聊", R.mipmap.cache_img_contacts_1));
+        contactBeanList.add(addFunctionHead("标签", R.mipmap.cache_img_contacts_2));
+        contactBeanList.add(addFunctionHead("公众号", R.mipmap.cache_img_contacts_3));
+    }
+
+    private ContactBean<Integer> addFunctionHead(String name, @DrawableRes int iconId) {
+        ContactBean<Integer> bean = new ContactBean<>();
+        bean.setRemark(name);
+        bean.setBaseIndexTag("↑");
+        bean.setContactType(ContactBean.ContactType.FUNCTION_ITEM);
+        bean.setAvatar(iconId);
+        return bean;
     }
 
     private void getFriendList(final List<ContactBean> contactBeanList) {
@@ -192,26 +208,23 @@ public class ContactsFragment extends BaseFragment {
         contactBeanList.addAll(list);
 
         KLog.e(contactBeanList);
-        SuspendedDecoration mDecoration = new SuspendedDecoration(getContext(), contactBeanList);
+
+        SuspendedDecoration mDecoration = new SuspendedDecoration(getContext());
+
+        mDecoration.setmDatas(contactBeanList);
 
         indexBar.setmSourceDatas(contactBeanList)//设置数据
                 .invalidate();
-        mDecoration.setmDatas(contactBeanList);
 
-        rvContacts.addItemDecoration(mDecoration);
-    }
-
-    private ContactBean<Integer> addFunctionHead(String name, @DrawableRes int iconId) {
-        ContactBean<Integer> bean = new ContactBean<>();
-        bean.setRemark(name);
-        bean.setBaseIndexTag("↑");
-        bean.setContactType(ContactBean.ContactType.FUNCTION_ITEM);
-        bean.setAvatar(iconId);
-        return bean;
+        if (added) {
+            rvContacts.addItemDecoration(mDecoration);
+            added = false;
+        }
     }
 
     public void refreshAdapter() {
-        List<ContactBean> contactBeanList = new ArrayList<>();
-        getData(contactBeanList);//列表数据
+//        contactBeanList.clear();
+//        getData();//列表数据
+//        contactAdapter.notifyDataSetChanged();
     }
 }

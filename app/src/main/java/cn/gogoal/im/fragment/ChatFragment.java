@@ -66,7 +66,7 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.recording.MediaManager;
-import cn.gogoal.im.ui.keyboard.KeyboardLaunchListenLayout;
+import cn.gogoal.im.ui.KeyboardLaunchLinearLayout;
 import cn.gogoal.im.ui.view.SwitchImageView;
 import cn.gogoal.im.ui.view.VoiceButton;
 import top.zibin.luban.Luban;
@@ -106,7 +106,7 @@ public class ChatFragment extends BaseFragment {
     VoiceButton voiceView;
 
     @BindView(R.id.chat_root_keyboard_layout)
-    KeyboardLaunchListenLayout keyboardLayout;
+    KeyboardLaunchLinearLayout keyboardLayout;
 
     private MyListener listener;
     private int chatType;
@@ -121,8 +121,6 @@ public class ChatFragment extends BaseFragment {
     private IMChatAdapter imChatAdapter;
     private ChatFunctionAdapter chatFunctionAdapter;
     private List<FoundData.ItemPojos> itemPojosList;
-    private int keyBordHeight = 0;
-
     private JSONArray jsonArray;
     private ContactBean contactBean;
 
@@ -153,9 +151,34 @@ public class ChatFragment extends BaseFragment {
         chatFunctionAdapter = new ChatFunctionAdapter(getContext(), itemPojosList);
         functions_recycler.setAdapter(chatFunctionAdapter);
 
-        keyBordHeight = SPTools.getInt("soft_keybord_height", AppDevice.dp2px(getContext(), 220));
-        setContentHeight();
+//        keyBordHeight = SPTools.getInt("soft_keybord_height", AppDevice.dp2px(getmContext(), 220));
 
+        keyboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchLinearLayout.OnKeyboardChangeListener() {
+            @Override
+            public void OnKeyboardPop(int height) {
+                SPTools.saveInt("soft_keybord_height",height);
+                setContentHeight(height);
+            }
+
+            @Override
+            public void OnKeyboardClose() {
+
+            }
+        });
+
+        message_recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                KLog.e("newState======"+newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                KLog.e("dy========="+dy+",getBottom==="+recyclerView.getBottom()+",y==="+recyclerView.getY());
+            }
+        });
 
         //多功能消息发送
         chatFunctionAdapter.setOnItemClickListener(new OnItemClickLitener() {
@@ -164,7 +187,7 @@ public class ChatFragment extends BaseFragment {
                 switch (position) {
                     case 0:
                         //发照片
-                        ImageTakeUtils.getInstance().takePhoto(getContext(), 1, false, new ITakePhoto() {
+                        ImageTakeUtils.getInstance().takePhoto(getContext(), 9, false, new ITakePhoto() {
                             @Override
                             public void success(List<String> uriPaths, boolean isOriginalPic) {
                                 if (uriPaths != null) {
@@ -244,13 +267,6 @@ public class ChatFragment extends BaseFragment {
             public void onSwitch(View view, int state) {
                 switch (state) {
                     case 0:
-                        AppDevice.hideSoftKeyboard(etInput);
-                        voiceView.setVisibility(View.VISIBLE);
-                        etInput.setVisibility(View.GONE);
-                        imgVoice.setBackgroundResource(R.mipmap.chat_key_bord);
-                        find_more_layout.setVisibility(View.GONE);
-                        break;
-                    case 1:
                         voiceView.setVisibility(View.GONE);
                         etInput.setVisibility(View.VISIBLE);
                         etInput.requestFocus();
@@ -258,7 +274,14 @@ public class ChatFragment extends BaseFragment {
                         //软键盘高度
                         getSupportSoftInputHeight();
                         find_more_layout.setVisibility(View.GONE);
-                        imgVoice.setBackgroundResource(R.mipmap.chat_voice);
+                        imgVoice.setImageResource(R.mipmap.chat_voice);
+                        break;
+                    case 1:
+                        AppDevice.hideSoftKeyboard(etInput);
+                        voiceView.setVisibility(View.VISIBLE);
+                        etInput.setVisibility(View.GONE);
+                        imgVoice.setImageResource(R.mipmap.chat_key_bord);
+                        find_more_layout.setVisibility(View.GONE);
                         break;
                 }
             }
@@ -550,7 +573,7 @@ public class ChatFragment extends BaseFragment {
         });
     }
 
-    private void getHistoryMessage() {
+    private void getHistoryMessage(final boolean needUpdate) {
         if (null != imConversation) {
             imConversation.queryMessages(20, new AVIMMessagesQueryCallback() {
 
@@ -560,28 +583,34 @@ public class ChatFragment extends BaseFragment {
 
                         messageList.addAll(list);
 
-                        //加群消息特殊处理
-                        for (int i = 0; i < messageList.size(); i++) {
-                            JSONObject contentObject = JSON.parseObject(messageList.get(i).getContent());
-                            String _lctype = contentObject.getString("_lctype");
-                            if (_lctype.equals("5")) {
-                                HashMap<String, String> map = new HashMap<>();
-                                map.put("_lctext", imConversation.getName() + "加入群聊");
-                                map.put("_lctype", "5");
-                                messageList.get(i).setContent(JSON.toJSONString(map));
+                        chatType = (int) imConversation.getAttribute("chat_type");
+                        jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
+
+                        if (chatType == 1001) {
+                            //拿到对方信息
+                            getSpeakToInfo(imConversation);
+                        } else if (chatType == 1002) {
+                            //加群消息特殊处理
+                            for (int i = 0; i < messageList.size(); i++) {
+                                JSONObject contentObject = JSON.parseObject(messageList.get(i).getContent());
+                                String _lctype = contentObject.getString("_lctype");
+                                if (_lctype.equals("5") || _lctype.equals("6")) {
+                                    HashMap<String, String> map = new HashMap<>();
+                                    JSONArray accountArray = contentObject.getJSONObject("_lcattrs").getJSONArray("accountList");
+                                    String _lctext = MessageUtils.findSquarePeople(accountArray, _lctype);
+                                    KLog.e(_lctext);
+                                    map.put("_lctext", _lctext);
+                                    map.put("_lctype", _lctype);
+                                    messageList.get(i).setContent(JSON.toJSONString(map));
+                                }
                             }
                         }
 
-                        chatType = (int) imConversation.getAttribute("chat_type");
-                        IMMessageBean imMessageBean = null;
-                        jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
-
-                        //单聊，群聊处理
-                        if (messageList.size() > 0) {
+                        //单聊，群聊处理(没发消息的时候不保存)
+                        if (messageList.size() > 0 && needUpdate) {
+                            IMMessageBean imMessageBean = null;
                             AVIMMessage lastMessage = messageList.get(messageList.size() - 1);
                             if (chatType == 1001) {
-                                //拿到对方信息
-                                getSpeakToInfo(imConversation);
                                 if (null != contactBean) {
                                     //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息
                                     imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0", contactBean.getNickname(),
@@ -713,18 +742,18 @@ public class ChatFragment extends BaseFragment {
     /**
      * 设置多功能布局宽高
      */
-    private void setContentHeight() {
+    private void setContentHeight(int keyBordHeight) {
         ViewGroup.LayoutParams params = find_more_layout.getLayoutParams();
         params.height = keyBordHeight;
         find_more_layout.setLayoutParams(params);
     }
 
     //群会话入口
-    public void setConversation(AVIMConversation conversation) {
+    public void setConversation(AVIMConversation conversation, boolean needUpdate) {
         if (null != conversation) {
             imConversation = conversation;
             //拉取历史记录(直接从LeanCloud拉取)
-            getHistoryMessage();
+            getHistoryMessage(needUpdate);
         }
     }
 
@@ -763,12 +792,7 @@ public class ChatFragment extends BaseFragment {
             AVIMConversation conversation = (AVIMConversation) map.get("conversation");
             JSONObject contentObject = JSON.parseObject(message.getContent());
             String _lctype = contentObject.getString("_lctype");
-            if (_lctype.equals("5")) {
-                HashMap<String, String> messagemap = new HashMap<>();
-                map.put("_lctext", imConversation.getName() + "加入群聊");
-                map.put("_lctype", "5");
-                message.setContent(JSON.toJSONString(map));
-            }
+
             //判断房间一致然后做消息接收处理
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
                 imChatAdapter.addItem(message);
@@ -780,6 +804,16 @@ public class ChatFragment extends BaseFragment {
                             "0", message.getFrom(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
 
                 } else if (chatType == 1002) {
+                    //加人删人逻辑
+                    if (_lctype.equals("5") || _lctype.equals("6")) {
+                        JSONArray accountArray = contentObject.getJSONObject("_lcattrs").getJSONArray("accountList");
+                        String _lctext = MessageUtils.findSquarePeople(accountArray, _lctype);
+                        KLog.e(_lctext);
+                        map.put("_lctext", _lctext);
+                        map.put("_lctype", _lctype);
+                        message.setContent(JSON.toJSONString(map));
+                    }
+
                     //群对象和群头像暂时为空
                     imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
                             "0", conversation.getName(), "", "", message);

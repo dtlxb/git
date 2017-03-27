@@ -33,7 +33,7 @@ import cn.gogoal.im.common.UIHelper;
 public class MarketAdapter extends CommonAdapter<StockMarketBean.DataBean.HangqingBean> {
 
     public MarketAdapter(List<StockMarketBean.DataBean.HangqingBean> datas) {
-        super(MyApp.getContext(), R.layout.item_stock_market, datas);
+        super(MyApp.getAppContext(), R.layout.item_stock_market, datas);
     }
 
     @Override
@@ -41,13 +41,13 @@ public class MarketAdapter extends CommonAdapter<StockMarketBean.DataBean.Hangqi
         // TODO: 2017/3/10 0010 字体颜色，文字为0时
         View holderView = holder.getView(R.id.item_stock_market);
         ViewGroup.LayoutParams params = holderView.getLayoutParams();
-        params.width = (AppDevice.getWidth(getContext()) - AppDevice.dp2px(getContext(), 1)) / 2;
+        params.width = (AppDevice.getWidth(getmContext()) - AppDevice.dp2px(getmContext(), 1)) / 2;
         holderView.setLayoutParams(params);
         holder.setText(R.id.tv_stock_market_name, hangQing.getName());
 
         TextView tvPrice=holder.getView(R.id.tv_stock_market_price);
         tvPrice.setText(StringUtils.saveSignificand(hangQing.getPrice(), 2));
-        tvPrice.setTextColor(ContextCompat.getColor(getContext(),hangQing.getPrice_change()>0?R.color.stock_red:R.color.stock_green));
+        tvPrice.setTextColor(ContextCompat.getColor(getmContext(),hangQing.getPrice_change()>0?R.color.stock_red:R.color.stock_green));
 
         holder.setText(R.id.tv_stock_market_price_change, StringUtils.saveSignificand(hangQing.getPrice_change(), 2));
         holder.setText(R.id.tv_stock_market_price_change_rate, StringUtils.saveSignificand(hangQing.getPrice_change_rate(), 2) + "%");

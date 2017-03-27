@@ -3,32 +3,38 @@
     android:id="@+id/user_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="54dp"
+    android:layout_marginRight="54dp"
+    android:layout_marginTop="20dp"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/message_time"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="15dp"
-        android:layout_marginTop="20dp"
         android:background="@drawable/item_chat_time_bg"
         android:gravity="center"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
+        android:paddingBottom="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="4dp"
         android:textColor="@android:color/white"
         android:textSize="12sp" />
 
     <TextView
         android:id="@+id/message_content"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/message_time"
         android:layout_centerHorizontal="true"
         android:background="@drawable/item_chat_time_bg"
         android:gravity="center"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
+        android:paddingBottom="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="4dp"
         android:textColor="@android:color/white"
         android:textSize="12sp" />
 

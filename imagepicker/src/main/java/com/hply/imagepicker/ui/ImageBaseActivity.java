@@ -24,7 +24,7 @@ public class ImageBaseActivity extends AppCompatActivity {
             setTranslucentStatus(true);
         }
 
-        StatusBarUtil.with(this).setColor(ContextCompat.getColor(this,R.color.status_bar));
+        StatusBarUtil.with(this).setColor(ContextCompat.getColor(this, R.color.status_bar));
 
         //设置上方状态栏的颜色
     }

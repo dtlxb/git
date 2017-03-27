@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<cn.gogoal.im.ui.keyboard.KeyboardLaunchListenLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<cn.gogoal.im.ui.KeyboardLaunchLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/chat_root_keyboard_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,24 +8,19 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/message_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/view_line"
-        android:layout_alignParentTop="true">
-
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <View
         android:id="@+id/view_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_above="@+id/flag_bottom"
         android:background="#e4e4e4" />
 
     <LinearLayout
         android:id="@+id/flag_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/find_more_layout"
         android:background="#f4f4f6"
         android:gravity="center"
         android:minHeight="50dp"
@@ -38,7 +33,8 @@
             android:layout_marginRight="10dp"
             android:background="@mipmap/chat_voice"
             android:contentDescription="@null"
-            android:paddingLeft="5dp" />
+            android:paddingLeft="5dp"
+            android:src="@mipmap/chat_voice" />
 
         <EditText
             android:id="@+id/et_input"
@@ -106,6 +102,12 @@
         </FrameLayout>
     </LinearLayout>
 
+    <View
+        android:id="@+id/view_line2"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#e4e4e4" />
+
     <RelativeLayout
         android:id="@+id/find_more_layout"
         android:layout_width="match_parent"
@@ -121,10 +123,4 @@
             android:layout_height="match_parent" />
     </RelativeLayout>
 
-    <android.support.v4.widget.Space
-        android:id="@+id/space"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_alignParentBottom="true" />
-
-</cn.gogoal.im.ui.keyboard.KeyboardLaunchListenLayout>
+</cn.gogoal.im.ui.KeyboardLaunchLinearLayout>

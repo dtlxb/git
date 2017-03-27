@@ -1,11 +1,11 @@
-package cn.gogoal.im.ui.keyboard;
+package cn.gogoal.im.ui;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.ViewTreeObserver;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
  * phone 18930640263
  * description :软键盘监听布局
  */
-public class KeyboardLaunchListenLayout extends RelativeLayout {
+public class KeyboardLaunchLinearLayout extends LinearLayout {
 
     private Context mContext;
     private int mOldh = -1;
@@ -24,7 +24,7 @@ public class KeyboardLaunchListenLayout extends RelativeLayout {
     protected int mScreenHeight = 0;
     protected boolean mIsSoftKeyboardPop = false;
 
-    public KeyboardLaunchListenLayout(Context context, AttributeSet attrs) {
+    public KeyboardLaunchLinearLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

@@ -38,13 +38,14 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
 
         String conversation_id = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("conversation_id"));
         String nickname = (String) StringUtils.objectNullDeal(this.getIntent().getExtras().getString("nickname"));
+        boolean need_update = this.getIntent().getExtras().getBoolean("need_update");
 
         initTitle(nickname, conversation_id);
 
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
 
         //输入聊天对象ID，返回conversation对象
-        getSingleConversation(conversation_id);
+        getSingleConversation(conversation_id, need_update);
 
     }
 
@@ -70,14 +71,14 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
         title.addAction(personAction, 0);
     }
 
-    public void getSingleConversation(String conversation_id) {
+    public void getSingleConversation(String conversation_id, final boolean need_update) {
 
         KLog.e(conversation_id);
         //获取聊天conversation
         AVImClientManager.getInstance().findConversationById(conversation_id, new AVImClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
-                chatFragment.setConversation(conversation);
+                chatFragment.setConversation(conversation, need_update);
             }
 
             @Override

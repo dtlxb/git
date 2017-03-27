@@ -2,11 +2,15 @@ package com.github.lzyzsd.jsbridge;
 
 import android.graphics.Bitmap;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.AbsoluteLayout;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
 import com.github.lzyzsd.library.R;
 
 import java.io.UnsupportedEncodingException;
@@ -66,7 +70,7 @@ public class BridgeWebViewClient extends WebViewClient {
 
     private void showLoadingPage() {
         initLoadingPage();
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(AbsoluteLayout.LayoutParams.MATCH_PARENT, AbsoluteLayout.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
         lp.setMargins(0, Utils.dp2px(webView.getContext(), 2), 0, 0);
         if (webView.getChildCount() < 2) {
             webView.addView(mLoadingView, 0, lp);
@@ -81,7 +85,18 @@ public class BridgeWebViewClient extends WebViewClient {
 
     private void initLoadingPage() {
         if (mLoadingView == null) {
-            mLoadingView = View.inflate(webView.getContext(), R.layout.web_loading, null);
+            mLoadingView = View.inflate(
+                    webView.getContext(),
+                    R.layout.web_loading,
+                    new RelativeLayout(webView.getContext()));
+            ImageView imageView = (ImageView) mLoadingView.findViewById(R.id.image_loading);
+
+            ViewGroup.LayoutParams params = imageView.getLayoutParams();
+            params.width = 2 * Utils.getScreemWidth(webView.getContext()) / 5;
+            params.height = 4 * Utils.getScreemHeight(webView.getContext()) / 25;
+            imageView.setLayoutParams(params);
+
+            Glide.with(webView.getContext()).load(R.mipmap.web_loading).asGif().fitCenter().into(imageView);
         }
     }
 
@@ -103,13 +118,7 @@ public class BridgeWebViewClient extends WebViewClient {
             }
         }
 
-        new android.os.Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                hideLoadingPage();
-            }
-        },5000);
-
+        hideLoadingPage();
 
     }
 

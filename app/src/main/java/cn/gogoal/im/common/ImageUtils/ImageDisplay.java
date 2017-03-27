@@ -342,9 +342,11 @@ public class ImageDisplay {
                 .into(imageView);
     }
 
+
+
     /**图片下载*/
 //    public static void DownloadImage(final Context context, String url, final File saveFile){
-//        final MyHandler handler = new MyHandler(context,saveFile.getAbsolutePath());
+//        final WeakReferenceHandler handler = new WeakReferenceHandler(context,saveFile.getAbsolutePath());
 //        /**
 //         * 启动图片下载线程
 //         */
@@ -373,11 +375,11 @@ public class ImageDisplay {
 //        //启动图片下载线程
 //        new Thread(service).start();
 //    }
-//    private static class MyHandler extends Handler {
+//    private static class WeakReferenceHandler extends Handler {
 //        Context mContext;
 //        String filePath;
 //
-//        public MyHandler(Context context,String filePath) {
+//        public WeakReferenceHandler(Context context,String filePath) {
 //            this.filePath = filePath;
 //            mContext = context;
 //        }
