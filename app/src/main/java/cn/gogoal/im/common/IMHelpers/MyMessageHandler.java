@@ -61,7 +61,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                             JSONObject contentObject = JSON.parseObject(message.getContent());
                                             String _lctype = contentObject.getString("_lctype");
                                             KLog.e(contentObject);
-                                            if ("5".equals(_lctype)) {
+                                            if ("5".equals(_lctype) || "6".equals(_lctype)) {
                                                 JSONArray messageListJsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
                                                 IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), chatType, message.getTimestamp(),
                                                         "0", conversation.getName(), AppConst.LEANCLOUD_APP_ID, "", message);
