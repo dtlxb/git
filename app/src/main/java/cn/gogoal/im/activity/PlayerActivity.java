@@ -130,6 +130,8 @@ public class PlayerActivity extends BaseActivity {
     @BindView(R.id.totalDuration)
     TextView totalDuration;
 
+    private boolean mEnableUpdateProgress = true;
+
     public static final int STATUS_START = 1;
     public static final int STATUS_STOP = 2;
     public static final int STATUS_PAUSE = 3;
@@ -440,6 +442,10 @@ public class PlayerActivity extends BaseActivity {
         builder.create().show();
     }
 
+    public void setStatusListener(StatusListener listener) {
+        mStatusListener = listener;
+    }
+
     private PlayerControl.ControllerListener mController = new PlayerControl.ControllerListener() {
 
         @Override
@@ -532,7 +538,8 @@ public class PlayerActivity extends BaseActivity {
 
                     //just show the progress bar
                     if ((System.currentTimeMillis() - mLastDownTimestamp) > 200) {
-                        //mTimerHandler.postDelayed(mUIRunnable, 3000);
+                        show_progress_ui(true);
+                        mTimerHandler.postDelayed(mUIRunnable, 3000);
                         return true;
                     } else {
                         if (mPlayer != null && mPlayer.getDuration() > 0)
@@ -622,6 +629,8 @@ public class PlayerActivity extends BaseActivity {
     private boolean startToPlay(String mURI) {
         KLog.json("start play.");
 
+        resetUI();
+
         if (mPlayer == null) {
             // 初始化播放器
             mPlayer = new AliVcMediaPlayer(this, mSurfaceView);
@@ -658,11 +667,11 @@ public class PlayerActivity extends BaseActivity {
         if (mStatusListener != null)
             mStatusListener.notifyStatus(STATUS_START);
 
-        new Handler().postDelayed(new Runnable() {
+        /*new Handler().postDelayed(new Runnable() {
             public void run() {
-                //mDecoderTypeView.setText(NDKCallback.getDecoderType() == 0 ? "HardDeCoder" : "SoftDecoder");
+                mDecoderTypeView.setText(NDKCallback.getDecoderType() == 0 ? "HardDeCoder" : "SoftDecoder");
             }
-        }, 5000);
+        }, 5000);*/
         return true;
 
     }
@@ -678,7 +687,9 @@ public class PlayerActivity extends BaseActivity {
             if (mPlayer != null) {
                 //VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING  |  VIDEO_SCALING_MODE_SCALE_TO_FIT
                 mPlayer.setVideoScalingMode(MediaPlayer.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
+                update_total_duration(mPlayer.getDuration());
                 mTimerHandler.postDelayed(mRunnable, 1000);
+                show_progress_ui(true);
                 mTimerHandler.postDelayed(mUIRunnable, 3000);
             }
         }
@@ -687,15 +698,18 @@ public class PlayerActivity extends BaseActivity {
     Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            if (mPlayer != null && mPlayer.isPlaying())
-                mTimerHandler.postDelayed(this, 1000);
+            if (mPlayer != null && mPlayer.isPlaying()) {
+                update_progress(mPlayer.getCurrentPosition());
+            }
+            mTimerHandler.postDelayed(this, 1000);
+
         }
     };
 
     Runnable mUIRunnable = new Runnable() {
         @Override
         public void run() {
-
+            show_progress_ui(false);
         }
     };
 
@@ -787,6 +801,7 @@ public class PlayerActivity extends BaseActivity {
     private class VideoSeekCompletelistener implements MediaPlayer.MediaPlayerSeekCompleteListener {
 
         public void onSeekCompleted() {
+            mEnableUpdateProgress = true;
         }
     }
 
@@ -829,7 +844,6 @@ public class PlayerActivity extends BaseActivity {
     private class VideoBufferUpdatelistener implements MediaPlayer.MediaPlayerBufferingUpdateListener {
 
         public void onBufferingUpdateListener(int percent) {
-
         }
     }
 
@@ -838,47 +852,6 @@ public class PlayerActivity extends BaseActivity {
         public void onStopped() {
             KLog.json("onVideoStopped.");
         }
-    }
-
-    //start the video
-    private void start() {
-        if (mPlayer != null) {
-            isPausePlayer = false;
-            isPausedByUser = false;
-            isStopPlayer = false;
-            mPlayer.play();
-            if (mStatusListener != null) {
-                mStatusListener.notifyStatus(STATUS_RESUME);
-            }
-        }
-    }
-
-    //pause the video
-    private void pause() {
-        if (mPlayer != null) {
-            mPlayer.pause();
-            isPausePlayer = true;
-            isPausedByUser = true;
-            if (mStatusListener != null) {
-                mStatusListener.notifyStatus(STATUS_PAUSE);
-            }
-        }
-    }
-
-    //stop the video
-    private void stop() {
-        KLog.json("AudioRender: stop play");
-        if (mPlayer != null) {
-            mPlayer.stop();
-            if (mStatusListener != null)
-                mStatusListener.notifyStatus(STATUS_STOP);
-            mPlayer.destroy();
-            mPlayer = null;
-        }
-    }
-
-    public void setStatusListener(StatusListener listener) {
-        mStatusListener = listener;
     }
 
     /*
@@ -916,6 +889,49 @@ public class PlayerActivity extends BaseActivity {
         }
     }
 
+    private void update_total_duration(int ms) {
+        int var = (int) (ms / 1000.0f + 0.5f);
+        int min = var / 60;
+        int sec = var % 60;
+        totalDuration.setText("" + min + ":" + sec);
+
+
+        SeekBar sb = (SeekBar) findViewById(R.id.progress);
+        sb.setMax(ms);
+        sb.setKeyProgressIncrement(10000); //5000ms = 5sec.
+        sb.setProgress(0);
+        sb.setSecondaryProgress(0); //reset progress now.
+
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            public void onProgressChanged(SeekBar seekBar, int i, boolean fromuser) {
+                int var = (int) (i / 1000.0f + 0.5f);
+                int min = var / 60;
+                int sec = var % 60;
+                String strCur = String.format("%1$d:%2$d", min, sec);
+                currentDuration.setText(strCur);
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                mEnableUpdateProgress = false;
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int ms = seekBar.getProgress();
+                mPlayer.seekTo(ms);
+            }
+        });
+
+        return;
+    }
+
+    private void update_progress(int ms) {
+        if (mEnableUpdateProgress) {
+            mSeekBar.setProgress(ms);
+        }
+        return;
+    }
+
     /*
     * 重置UI
     * */
@@ -923,6 +939,47 @@ public class PlayerActivity extends BaseActivity {
         mSeekBar.setProgress(0);
         show_pause_ui(false);
         show_progress_ui(false);
+    }
+
+    //start the video
+    private void start() {
+        if (mPlayer != null) {
+            isPausePlayer = false;
+            isPausedByUser = false;
+            isStopPlayer = false;
+            mPlayer.play();
+            if (mStatusListener != null) {
+                mStatusListener.notifyStatus(STATUS_RESUME);
+            }
+            show_pause_ui(false);
+            show_progress_ui(false);
+        }
+    }
+
+    //pause the video
+    private void pause() {
+        if (mPlayer != null) {
+            mPlayer.pause();
+            isPausePlayer = true;
+            isPausedByUser = true;
+            if (mStatusListener != null) {
+                mStatusListener.notifyStatus(STATUS_PAUSE);
+            }
+            show_pause_ui(true);
+            show_progress_ui(true);
+        }
+    }
+
+    //stop the video
+    private void stop() {
+        KLog.json("AudioRender: stop play");
+        if (mPlayer != null) {
+            mPlayer.stop();
+            if (mStatusListener != null)
+                mStatusListener.notifyStatus(STATUS_STOP);
+            mPlayer.destroy();
+            mPlayer = null;
+        }
     }
 
     @Override
@@ -948,6 +1005,7 @@ public class PlayerActivity extends BaseActivity {
         }
 
         super.onDestroy();
+        return;
     }
 
     @Override
@@ -960,6 +1018,8 @@ public class PlayerActivity extends BaseActivity {
             if (!isPausedByUser) {
                 isPausePlayer = false;
                 mPlayer.play();
+                show_pause_ui(false);
+                show_progress_ui(false);
             }
         }
     }

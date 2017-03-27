@@ -71,12 +71,12 @@ public class FunctionActivity extends BaseActivity {
         webView.loadUrl(url);
 
         //添加让web获取用户信息
-        webView.registerHandler("getUserInfo", new BridgeHandler() {
+        /*webView.registerHandler("getUserInfo", new BridgeHandler() {
             @Override
             public void handler(String data, ValueCallback<String> function) {
                 function.onReceiveValue(UserUtils.getUserInfo().toJSONString());
             }
-        });
+        });*/
 
 //        // H5页面跳转时获取页面title和url
         webView.setOnWebChangeListener(new BridgeWebView.WebChangeListener() {

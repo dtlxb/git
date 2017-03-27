@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.webkit.JavascriptInterface;
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * js交互
  */
@@ -26,5 +28,11 @@ public class WebViewUtil {
     @JavascriptInterface
     public String getToken() {
         return UserUtils.getToken();
+    }
+
+    //添加让web获取用户信息
+    @JavascriptInterface
+    public String getUserInfo() {
+        return UserUtils.getUserInfo().toJSONString();
     }
 }
