@@ -181,7 +181,7 @@ public class FoundFragment extends BaseFragment {
         private int parentPosition;
 
         private GridAdapter(List<FoundData.ItemPojos> datas, int parentPosition) {
-            super(MyApp.getContext(), R.layout.item_grid_foundfragment, datas);
+            super(MyApp.getAppContext(), R.layout.item_grid_foundfragment, datas);
             this.parentPosition = parentPosition;
         }
 

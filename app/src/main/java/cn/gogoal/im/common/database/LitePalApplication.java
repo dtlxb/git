@@ -25,7 +25,7 @@ import cn.gogoal.im.common.database.exceptions.GlobalException;
 /**
  * Base class of LitePal to make things easier when developers need to use
  * context. When you need context, just use
- * <b>LitePalApplication.getContext()</b>. To make this function work, you need
+ * <b>LitePalApplication.getmContext()</b>. To make this function work, you need
  * to configure your AndroidManifest.xml. Specifying
  * <b>"org.litepal.LitePalApplication"</b> as the application name in your
  * &lt;application&gt; tag to enable LitePal get the context. Of course if you
@@ -68,7 +68,6 @@ public class LitePalApplication extends Application {
 	 * Get the global application context.
 	 * 
 	 * @return Application context.
-	 * @throws org.litepal.exceptions.GlobalException
 	 */
 	public static Context getContext() {
 		if (sContext == null) {

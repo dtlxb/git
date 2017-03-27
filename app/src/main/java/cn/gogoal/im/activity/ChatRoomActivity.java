@@ -178,8 +178,8 @@ public class ChatRoomActivity extends BaseActivity {
             View holderLengthView = holder.getView(R.id.recorder_length);
 
             ViewGroup.LayoutParams params = holderLengthView.getLayoutParams();
-            int mMaxItemWidth = (int) (AppDevice.getWidth(getContext()) * 0.7f);
-            int mMinItemWidth = (int) (AppDevice.getWidth(getContext()) * 0.16f);
+            int mMaxItemWidth = (int) (AppDevice.getWidth(getActivity()) * 0.7f);
+            int mMinItemWidth = (int) (AppDevice.getWidth(getActivity()) * 0.16f);
             params.width = (int) (mMinItemWidth + (mMaxItemWidth / 60f)* recorder.getDuration());
             holderLengthView.setLayoutParams(params);
 

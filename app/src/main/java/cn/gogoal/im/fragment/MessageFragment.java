@@ -90,6 +90,7 @@ public class MessageFragment extends BaseFragment {
         };
         xTitle.addAction(personAction, 0);
         xTitle.addAction(addAction, 1);
+
     }
 
     @Override
@@ -225,7 +226,7 @@ public class MessageFragment extends BaseFragment {
             //SDK定义的消息类型
             if (messageBean.getLastMessage() != null) {
                 String content = messageBean.getLastMessage().getContent();
-                KLog.e(content);
+//                KLog.e(content);
                 JSONObject contentObject = JSON.parseObject(content);
                 String _lctype = contentObject.getString("_lctype");
                 switch (_lctype) {

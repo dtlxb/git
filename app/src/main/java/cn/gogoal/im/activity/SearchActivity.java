@@ -145,7 +145,7 @@ public class SearchActivity extends BaseActivity {
         };
 
         final HeaderAndFooterWrapper headerWrapper = new HeaderAndFooterWrapper(historyAdapter);
-        final View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.head_search_history, new LinearLayout(getActivity()),false);
+        final View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.header_search_history, new LinearLayout(getActivity()),false);
         headerView.findViewById(R.id.btn_clear_history).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

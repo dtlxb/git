@@ -1,22 +1,30 @@
 package com.hply.imagepicker.view;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.util.AttributeSet;
 import android.view.SoundEffectConstants;
-import android.widget.CheckBox;
 
-public class SuperCheckBox extends CheckBox {
+import com.hply.imagepicker.R;
+
+public class SuperCheckBox extends AppCompatCheckBox {
 
     public SuperCheckBox(Context context) {
-        super(context);
+        this(context,null,0);
     }
 
     public SuperCheckBox(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs,0);
     }
 
     public SuperCheckBox(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
+        super(context, attrs, android.R.attr.checkboxStyle);
+        init(context);
+    }
+
+    private void init(Context context) {
+        this.setButtonDrawable(ContextCompat.getDrawable(context, R.drawable.selector_item_checked));
     }
 
     @Override

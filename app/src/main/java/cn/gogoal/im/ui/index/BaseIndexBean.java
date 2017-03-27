@@ -5,7 +5,7 @@ package cn.gogoal.im.ui.index;
  */
 
 public abstract class BaseIndexBean implements ISuspensionInterface {
-    private String baseIndexTag;//所属的分类（城市的汉语拼音首字母）
+    private String baseIndexTag;//所属的分类
 
     public String getBaseIndexTag() {
         return baseIndexTag;

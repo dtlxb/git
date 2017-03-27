@@ -93,8 +93,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:multidex:1.0.1'
-    compile "com.android.support:appcompat-v7:$ANDROID_SUPPORT_VERSION";
-    compile "com.android.support:design:$ANDROID_SUPPORT_VERSION";
     compile "com.android.support:support-vector-drawable:$ANDROID_SUPPORT_VERSION";
 
     /** 第三方依赖  */
@@ -110,8 +108,6 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     //日志框架
     compile 'com.github.zhaokaiqiang.klog:library:1.6.0'
-    //图片框架
-    compile 'com.github.bumptech.glide:glide:3.7.0'
     //图像处理
     compile 'jp.wasabeef:glide-transformations:2.0.1'
     // If you want to use the GPU Filters

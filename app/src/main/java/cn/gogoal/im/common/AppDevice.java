@@ -35,6 +35,7 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -48,7 +49,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
-import static cn.gogoal.im.base.MyApp.getContext;
 
 public class AppDevice {
 
@@ -395,7 +395,9 @@ public class AppDevice {
             InputMethodManager manager = (InputMethodManager) focusView.getContext().getSystemService(INPUT_METHOD_SERVICE);
             manager.hideSoftInputFromWindow(focusView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             manager.hideSoftInputFromInputMethod(focusView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+            if (null!=mActivity) {
+                mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+            }
         }
     }
 
@@ -403,7 +405,10 @@ public class AppDevice {
      * 显示软键盘--弹窗
      */
     public static void showSoftKeyboard(Dialog dialog) {
-        dialog.getWindow().setSoftInputMode(4);
+        Window window = dialog.getWindow();
+        if (window!=null) {
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }
     }
 
     /**
@@ -432,7 +437,10 @@ public class AppDevice {
         InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService(INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInput(view, 0);
         inputMethodManager.showSoftInputFromInputMethod(view.getWindowToken(), 0);
-        mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        if (null!=mActivity) {
+            Window window = mActivity.getWindow();
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        }
     }
 
     /**
@@ -1016,12 +1024,12 @@ public class AppDevice {
         editText.setFilters(new InputFilter[]{filter});
     }
 
-    public static int getAudioDurition(String path) {
+    public static int getAudioDurition(Context context,String path) {
 
         MediaPlayer mediaPlayer = new MediaPlayer();
 
         try {
-            mediaPlayer.setDataSource(getContext(), Uri.fromFile(new File(path)));
+            mediaPlayer.setDataSource(context, Uri.fromFile(new File(path)));
 
             mediaPlayer.setAudioStreamType(android.media.AudioManager.STREAM_MUSIC);
 

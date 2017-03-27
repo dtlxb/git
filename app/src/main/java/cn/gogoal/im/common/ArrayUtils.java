@@ -5,7 +5,11 @@ import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -40,7 +44,7 @@ public class ArrayUtils {
 
     public static List<String> jsonArr2List(JSONArray arr){
         List<String> list=new ArrayList<>();
-        if (arr!=null && arr.size()>0){
+        if (!isEmpty(arr)){
             list.addAll(arr2List(arr.toArray(new String[]{})));
             return list;
         }
@@ -51,7 +55,7 @@ public class ArrayUtils {
     /**获取搜索记录*/
     public static JSONArray getSearchList(){
         JSONArray historyArray = SPTools.getJsonArray("search_history", new JSONArray());
-        if (null==historyArray || historyArray.isEmpty()){
+        if (isEmpty(historyArray)){
             return new JSONArray();
         }
         return historyArray;
@@ -67,5 +71,39 @@ public class ArrayUtils {
     /**清空搜索记录*/
     public static void clearHistory(){
         SPTools.clearItem("search_history");
+    }
+
+    public static boolean isEmpty(Collection c){
+        return null==c || c.isEmpty();
+    }
+
+    /**通过map的value获取key*/
+    public static ArrayList valueGetKey(Map map, String value) {
+        Set set = map.entrySet();//新建一个不可重复的集合
+        ArrayList arr = new ArrayList<>();//新建一个集合
+        Iterator it = set.iterator();//遍历的类
+        while(it.hasNext()) {
+            Map.Entry entry = (Map.Entry)it.next();//找到所有key-value对集合
+            if(entry.getValue().equals(value)) {//通过判断是否有该value值
+                int s = (int)entry.getKey();//取得key值
+                arr.add(s);
+            }
+        }
+        return arr;
+    }
+    /**通过map的value获取key*/
+    public static <T> int valueGetKey(Map<Integer,T> map, T value) {
+        Set set = map.entrySet();//新建一个不可重复的集合
+        Iterator it = set.iterator();//遍历的类
+
+        while(it.hasNext()) {
+            Map.Entry entry = (Map.Entry)it.next();//找到所有key-value对集合
+            if(entry.getValue().equals(value)) {//通过判断是否有该value值
+                return  (int)entry.getKey();//取得key值
+
+            }
+        }
+
+        return -1;
     }
 }

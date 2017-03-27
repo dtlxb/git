@@ -29,5 +29,6 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
     compile "com.android.support:appcompat-v7:$ANDROID_SUPPORT_VERSION";
+    compile "com.android.support:design:$ANDROID_SUPPORT_VERSION";
     compile 'com.github.chrisbanes.photoview:library:1.2.4'
 }

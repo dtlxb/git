@@ -8,6 +8,7 @@ import android.os.AsyncTask;
  * phone 18930640263
  */
 public class AsyncTaskUtil {
+
     public static void doAsync(final AsyncCallBack callBack) {
         if (callBack == null) {
             return;

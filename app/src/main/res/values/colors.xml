@@ -52,6 +52,7 @@
     <color name="item_press">#D9D9D9</color>
 
     <!--快速索引bar颜色-->
+    <color name="index_bar_bg">#919091</color>
     <color name="index_bar_text">@color/textColor_666666</color>
     <color name="index_bar_pressed">#33000000</color>
     <color name="index_bar_text_flag">#66000000</color>

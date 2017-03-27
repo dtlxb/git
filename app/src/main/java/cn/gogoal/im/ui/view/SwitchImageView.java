@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.ImageButton;
 
 /**
  * author wangjd on 2017/3/3 0003.

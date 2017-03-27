@@ -9,14 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.content.Intent;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.ImageView;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -28,17 +21,10 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.adapter.IMPersonSetAdapter;
-import cn.gogoal.im.adapter.NineGridImageViewAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.MultiItemTypeAdapter;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
-import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.ui.view.NineGridImageView;
 
 /**
  * Created by huangxx on 2017/3/16.
@@ -129,15 +115,15 @@ public class IMPersonActivity extends BaseActivity {
 
             final View view = holder.getView(R.id.layout_grid);
             ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-            layoutParams.width = AppDevice.getWidth(getContext()) / 5;
-            layoutParams.height = AppDevice.getWidth(getContext()) / 4;
+            layoutParams.width = AppDevice.getWidth(getmContext()) / 5;
+            layoutParams.height = AppDevice.getWidth(getmContext()) / 4;
             view.setBackgroundColor(ContextCompat.getColor(mContext, R.color.absoluteWhite));
             view.setLayoutParams(layoutParams);
 
             AppCompatImageView imageIcon = holder.getView(R.id.iv);
             ViewGroup.LayoutParams viewParams = imageIcon.getLayoutParams();
-            viewParams.width = AppDevice.getWidth(getContext()) / 8;
-            viewParams.height = AppDevice.getWidth(getContext()) / 8;
+            viewParams.width = AppDevice.getWidth(getmContext()) / 8;
+            viewParams.height = AppDevice.getWidth(getmContext()) / 8;
             imageIcon.setLayoutParams(viewParams);
 
             Object avatar = contactBean.getAvatar();

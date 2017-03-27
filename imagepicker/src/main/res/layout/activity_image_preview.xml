@@ -1,6 +1,5 @@
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000">
@@ -9,11 +8,11 @@
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000"/>
+        android:background="#000" />
 
     <include
         android:id="@+id/top_bar"
-        layout="@layout/include_top_bar"/>
+        layout="@layout/include_top_bar" />
 
     <RelativeLayout
         android:id="@+id/bottom_bar"
@@ -24,27 +23,29 @@
         android:visibility="gone">
 
         <com.hply.imagepicker.view.SuperCheckBox
-            android:id="@+id/cb_origin"
-            style="@style/SuperCheckboxTheme"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:paddingLeft="8dp"
-            android:text="原图(3.07M)"
-            android:textColor="#FFF"/>
-
-        <com.hply.imagepicker.view.SuperCheckBox
             android:id="@+id/cb_check"
             style="@style/SuperCheckboxTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="12dp"
+            android:layout_marginLeft="12dp"
             android:drawablePadding="4dp"
             android:includeFontPadding="true"
             android:paddingLeft="8dp"
             android:text="选择"
-            android:textColor="#ffffff"/>
+            android:textColor="#ffffff" />
+
+        <com.hply.imagepicker.view.SuperCheckBox
+            android:id="@+id/cb_origin"
+            style="@style/SuperCheckboxTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:paddingLeft="8dp"
+            android:layout_alignParentRight="true"
+            android:text="原图(3.07M)"
+            android:textColor="#FFF" />
+
     </RelativeLayout>
 </RelativeLayout>

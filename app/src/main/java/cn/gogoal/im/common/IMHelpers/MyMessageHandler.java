@@ -9,15 +9,14 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageHandler;
 import com.socks.library.KLog;
 
+import java.util.HashMap;
+
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
-import cn.gogoal.im.bean.IMNewFriendBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
-
-import java.util.HashMap;
 
 import static cn.gogoal.im.common.UserUtils.getToken;
 
@@ -84,8 +83,8 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     String friendList = UserUtils.updataFriendList(JSONObject.toJSONString(contactBean));
                                     SPTools.saveString(getToken() + "_contact_beans", friendList);
                                     KLog.e(SPTools.getString(getToken() + "_contact_beans", ""));
-
                                     break;
+
                                 case 1006:
                                     //公众号
                                     break;
