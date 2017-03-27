@@ -261,9 +261,9 @@ public class PlayerActivity extends BaseActivity {
     public void setStatusBar() {
     }
 
-    /*
-                * 获取直播详情
-                * */
+    /**
+     * 获取直播详情
+     */
     private void getPlayerInfo() {
 
         Map<String, String> param = new HashMap<>();
