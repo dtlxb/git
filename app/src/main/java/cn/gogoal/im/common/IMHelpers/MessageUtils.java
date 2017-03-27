@@ -2,14 +2,17 @@ package cn.gogoal.im.common.IMHelpers;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
+import com.avos.avoscloud.okio.Buffer;
 import com.socks.library.KLog;
 
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.UserUtils;
 
 /**
  * Created by huangxx on 2017/2/28.
@@ -17,6 +20,7 @@ import cn.gogoal.im.common.SPTools;
 
 public class MessageUtils {
 
+    //消息列表：保存消息
     public static void saveMessageInfo(JSONArray thisJsonArray, IMMessageBean imMessageBean) {
 
         JSONObject jsonObject = new JSONObject();
@@ -66,6 +70,7 @@ public class MessageUtils {
         }
     }
 
+    //消息列表：移除消息
     public static void removeMessageInfo(int position) {
         JSONArray jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
         if (null != jsonArray) {
@@ -73,4 +78,39 @@ public class MessageUtils {
         }
         SPTools.saveJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", jsonArray);
     }
+
+    //群聊拉人加人(5:建群，拉人   6:踢人)
+    public static void changeSquareInfo(AVIMConversation conversation, JSONArray accountArray, String messageType) {
+        JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getToken() + conversation.getConversationId() + "_accountList_beans", new JSONArray());
+        if (null != accountArray) {
+            if (messageType.equals("5")) {
+                spAccountArray.addAll(accountArray);
+            } else if (messageType.equals("6")) {
+                spAccountArray.removeAll(accountArray);
+            }
+            KLog.e(spAccountArray.toString());
+            SPTools.saveJsonArray(UserUtils.getToken() + conversation.getConversationId() + "_accountList_beans", spAccountArray);
+        } else {
+
+        }
+    }
+
+    //从群消息提取出人名
+    public static String findSquarePeople(JSONArray accountArray, String messageType) {
+        StringBuilder mSB = new StringBuilder();
+        String ms = "";
+        for (int i = 0; i < accountArray.size(); i++) {
+            mSB.append(((JSONObject) accountArray.get(i)).getString("nickname"));
+            if (accountArray.size() > 1 && i < accountArray.size() - 1) {
+                mSB.append("、");
+            }
+        }
+        if (messageType.equals("5")) {
+            ms = "加入了群聊";
+        } else if (messageType.equals("6")) {
+            ms = "离开了群聊";
+        }
+        return mSB + ms;
+    }
+
 }

@@ -46,9 +46,10 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
         setMyTitle(squareName, false);
         groupMembers = new ArrayList<>();
         final String conversationID = this.getIntent().getExtras().getString("conversation_id");
+        boolean need_update = this.getIntent().getExtras().getBoolean("need_update");
 
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
-        getSquareConversation(conversationID);
+        getSquareConversation(conversationID, need_update);
 
         initTitle(squareName, conversationID);
     }
@@ -69,12 +70,12 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
         title.addAction(personAction, 0);
     }
 
-    private void getSquareConversation(String conversationId) {
+    private void getSquareConversation(String conversationId, final boolean need_update) {
         AVImClientManager.getInstance().findConversationById(conversationId, new AVImClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
 //                joinSquare(conversation);
-                chatFragment.setConversation(conversation);
+                chatFragment.setConversation(conversation, need_update);
                 groupMembers.addAll(conversation.getMembers());
             }
 

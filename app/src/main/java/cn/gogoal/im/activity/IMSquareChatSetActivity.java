@@ -93,7 +93,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 if (position == contactBeens.size() - 1) {
                     //createChatGroup();
                     //删除人
-
                     List<String> strings = new ArrayList<String>();
                     for (int i = 0; i < idList.size() - 2; i++) {
                         if (!idList.get(i).equals(UserUtils.getToken())) {

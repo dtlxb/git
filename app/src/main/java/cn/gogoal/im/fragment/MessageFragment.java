@@ -147,6 +147,7 @@ public class MessageFragment extends BaseFragment {
                                 intent = new Intent(getContext(), SingleChatRoomActivity.class);
                                 intent.putExtra("nickname", IMMessageBeans.get(position).getNickname());
                                 intent.putExtra("conversation_id", conversation_id);
+                                intent.putExtra("need_update", true);
                                 startActivity(intent);
                                 break;
                             case "1002":
@@ -154,6 +155,7 @@ public class MessageFragment extends BaseFragment {
                                 intent = new Intent(getContext(), SquareChatRoomActivity.class);
                                 intent.putExtra("conversation_id", conversation_id);
                                 intent.putExtra("squareName", IMMessageBeans.get(position).getNickname());
+                                intent.putExtra("need_update", true);
                                 startActivity(intent);
                                 break;
                             case "1003":
@@ -329,10 +331,19 @@ public class MessageFragment extends BaseFragment {
 
                         break;
                     case "5":
-                        message = nickName + "加入群聊";
-                        break;
                     case "6":
-                        message = nickName + "离开本群";
+                        JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
+                        JSONArray accountArray;
+                        String squareMessage;
+                        if (null != lcattrsObject && null != lcattrsObject.getJSONArray("accountList")) {
+                            accountArray = lcattrsObject.getJSONArray("accountList");
+                            squareMessage = MessageUtils.findSquarePeople(accountArray, _lctype);
+                            //群消息记录
+                            SPTools.saveString(UserUtils.getToken() + messageBean.getConversationID() + "_square_message", squareMessage);
+                        } else {
+                            squareMessage = SPTools.getString(UserUtils.getToken() + messageBean.getConversationID() + "_square_message", "");
+                        }
+                        message = squareMessage;
                         break;
                     default:
                         break;
@@ -368,36 +379,6 @@ public class MessageFragment extends BaseFragment {
         JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
         String _lctype = contentObject.getString("_lctype");
 
-        switch (chatType) {
-            //单聊,群聊,加好友请求
-            case 1001:
-                avatar = lcattrsObject.getString("avatar");
-                break;
-            case 1002:
-                //生成群聊头像
-                JSONArray accountArray = SPTools.getJsonArray(UserUtils.getToken() + ConversationId + "_accountList_beans", new JSONArray());
-                List<String> picUrls = new ArrayList<>();
-                for (int i = 0; i < (accountArray.size() < 9 ? accountArray.size() : 9); i++) {
-                    JSONObject personObject = accountArray.getJSONObject(i);
-                    picUrls.add(personObject.getString("avatar"));
-                }
-                KLog.e(picUrls);
-                break;
-            case 1004:
-                break;
-            //直播
-            case 1003:
-                break;
-            //操纵通讯录
-            case 1005:
-                break;
-            //公众号模块
-            case 1006:
-                break;
-            default:
-                break;
-        }
-
         switch (_lctype) {
             case "-1":
                 //文字
@@ -421,9 +402,38 @@ public class MessageFragment extends BaseFragment {
 
                 break;
             case "5":
-                nickName = conversation.getName();
-                break;
             case "6":
+                break;
+            default:
+                break;
+        }
+
+        switch (chatType) {
+            //单聊,群聊,加好友请求
+            case 1001:
+                avatar = lcattrsObject.getString("avatar");
+                break;
+            case 1002:
+                nickName = conversation.getName();
+                //生成群聊头像
+                JSONArray accountArray = SPTools.getJsonArray(UserUtils.getToken() + ConversationId + "_accountList_beans", new JSONArray());
+                List<String> picUrls = new ArrayList<>();
+                for (int i = 0; i < (accountArray.size() < 9 ? accountArray.size() : 9); i++) {
+                    JSONObject personObject = accountArray.getJSONObject(i);
+                    picUrls.add(personObject.getString("avatar"));
+                }
+                KLog.e(picUrls);
+                break;
+            case 1004:
+                break;
+            //直播
+            case 1003:
+                break;
+            //操纵通讯录
+            case 1005:
+                break;
+            //公众号模块
+            case 1006:
                 break;
             default:
                 break;
