@@ -573,7 +573,7 @@ public class ChatFragment extends BaseFragment {
         });
     }
 
-    private void getHistoryMessage() {
+    private void getHistoryMessage(final boolean needUpdate) {
         if (null != imConversation) {
             imConversation.queryMessages(20, new AVIMMessagesQueryCallback() {
 
@@ -583,28 +583,34 @@ public class ChatFragment extends BaseFragment {
 
                         messageList.addAll(list);
 
-                        //加群消息特殊处理
-                        for (int i = 0; i < messageList.size(); i++) {
-                            JSONObject contentObject = JSON.parseObject(messageList.get(i).getContent());
-                            String _lctype = contentObject.getString("_lctype");
-                            if (_lctype.equals("5")) {
-                                HashMap<String, String> map = new HashMap<>();
-                                map.put("_lctext", imConversation.getName() + "加入群聊");
-                                map.put("_lctype", "5");
-                                messageList.get(i).setContent(JSON.toJSONString(map));
+                        chatType = (int) imConversation.getAttribute("chat_type");
+                        jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
+
+                        if (chatType == 1001) {
+                            //拿到对方信息
+                            getSpeakToInfo(imConversation);
+                        } else if (chatType == 1002) {
+                            //加群消息特殊处理
+                            for (int i = 0; i < messageList.size(); i++) {
+                                JSONObject contentObject = JSON.parseObject(messageList.get(i).getContent());
+                                String _lctype = contentObject.getString("_lctype");
+                                if (_lctype.equals("5") || _lctype.equals("6")) {
+                                    HashMap<String, String> map = new HashMap<>();
+                                    JSONArray accountArray = contentObject.getJSONObject("_lcattrs").getJSONArray("accountList");
+                                    String _lctext = MessageUtils.findSquarePeople(accountArray, _lctype);
+                                    KLog.e(_lctext);
+                                    map.put("_lctext", _lctext);
+                                    map.put("_lctype", _lctype);
+                                    messageList.get(i).setContent(JSON.toJSONString(map));
+                                }
                             }
                         }
 
-                        chatType = (int) imConversation.getAttribute("chat_type");
-                        IMMessageBean imMessageBean = null;
-                        jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
-
-                        //单聊，群聊处理
-                        if (messageList.size() > 0) {
+                        //单聊，群聊处理(没发消息的时候不保存)
+                        if (messageList.size() > 0 && needUpdate) {
+                            IMMessageBean imMessageBean = null;
                             AVIMMessage lastMessage = messageList.get(messageList.size() - 1);
                             if (chatType == 1001) {
-                                //拿到对方信息
-                                getSpeakToInfo(imConversation);
                                 if (null != contactBean) {
                                     //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息
                                     imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0", contactBean.getNickname(),
@@ -743,11 +749,11 @@ public class ChatFragment extends BaseFragment {
     }
 
     //群会话入口
-    public void setConversation(AVIMConversation conversation) {
+    public void setConversation(AVIMConversation conversation, boolean needUpdate) {
         if (null != conversation) {
             imConversation = conversation;
             //拉取历史记录(直接从LeanCloud拉取)
-            getHistoryMessage();
+            getHistoryMessage(needUpdate);
         }
     }
 
@@ -786,12 +792,7 @@ public class ChatFragment extends BaseFragment {
             AVIMConversation conversation = (AVIMConversation) map.get("conversation");
             JSONObject contentObject = JSON.parseObject(message.getContent());
             String _lctype = contentObject.getString("_lctype");
-            if (_lctype.equals("5")) {
-                HashMap<String, String> messagemap = new HashMap<>();
-                map.put("_lctext", imConversation.getName() + "加入群聊");
-                map.put("_lctype", "5");
-                message.setContent(JSON.toJSONString(map));
-            }
+
             //判断房间一致然后做消息接收处理
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
                 imChatAdapter.addItem(message);
@@ -803,6 +804,16 @@ public class ChatFragment extends BaseFragment {
                             "0", message.getFrom(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
 
                 } else if (chatType == 1002) {
+                    //加人删人逻辑
+                    if (_lctype.equals("5") || _lctype.equals("6")) {
+                        JSONArray accountArray = contentObject.getJSONObject("_lcattrs").getJSONArray("accountList");
+                        String _lctext = MessageUtils.findSquarePeople(accountArray, _lctype);
+                        KLog.e(_lctext);
+                        map.put("_lctext", _lctext);
+                        map.put("_lctype", _lctype);
+                        message.setContent(JSON.toJSONString(map));
+                    }
+
                     //群对象和群头像暂时为空
                     imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
                             "0", conversation.getName(), "", "", message);

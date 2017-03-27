@@ -46,9 +46,10 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
         setMyTitle(squareName, false);
         groupMembers = new ArrayList<>();
         final String conversationID = this.getIntent().getExtras().getString("conversation_id");
+        boolean need_update = this.getIntent().getExtras().getBoolean("need_update");
 
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
-        getSquareConversation(conversationID);
+        getSquareConversation(conversationID, need_update);
 
         initTitle(squareName, conversationID);
     }
@@ -69,11 +70,12 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
         title.addAction(personAction, 0);
     }
 
-    private void getSquareConversation(String conversationId) {
+    private void getSquareConversation(String conversationId, final boolean need_update) {
         AVImClientManager.getInstance().findConversationById(conversationId, new AVImClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
-                joinSquare(conversation);
+//                joinSquare(conversation);
+                chatFragment.setConversation(conversation, need_update);
                 groupMembers.addAll(conversation.getMembers());
             }
 
@@ -88,7 +90,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
     /**
      * 加入聊天室
      */
-    private void joinSquare(final AVIMConversation conversation) {
+    /*private void joinSquare(final AVIMConversation conversation) {
         conversation.join(new AVIMConversationCallback() {
             @Override
             public void done(AVIMException e) {
@@ -97,8 +99,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
                 }
             }
         });
-    }
-
+    }*/
     @Override
     public void setData(ContactBean contactBean) {
         this.contactBean = contactBean;

@@ -56,32 +56,22 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                 case 1002:
                                     //群聊
                                     //更新对话
-                                    conversation.fetchInfoInBackground(new AVIMConversationCallback() {
-                                        @Override
-                                        public void done(AVIMException e) {
-                                            KLog.e(conversation.getName());
-                                            //保存
-                                            JSONObject contentObject = JSON.parseObject(message.getContent());
-                                            String _lctype = contentObject.getString("_lctype");
-                                            KLog.e(contentObject);
-                                            if ("5".equals(_lctype) || "6".equals(_lctype)) {
-                                                JSONArray messageListJsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
-                                                IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), chatType, message.getTimestamp(),
-                                                        "0", conversation.getName(), AppConst.LEANCLOUD_APP_ID, "", message);
-                                                MessageUtils.saveMessageInfo(messageListJsonArray, imMessageBean);
-
+                                    //发送
+                                    sendIMMessage(message, conversation);
+                                    final JSONObject content_object = JSON.parseObject(message.getContent());
+                                    final String _lctype = content_object.getString("_lctype");
+                                    if ("5".equals(_lctype) || "6".equals(_lctype)) {
+                                        conversation.fetchInfoInBackground(new AVIMConversationCallback() {
+                                            @Override
+                                            public void done(AVIMException e) {
                                                 //通讯录
-                                                JSONArray accountArray = contentObject.getJSONObject("_lcattrs").getJSONArray("accountList");
-                                                if (null != accountArray) {
-                                                    SPTools.saveJsonArray(UserUtils.getToken() + conversation.getConversationId() + "_accountList_beans", accountArray);
-                                                    KLog.e(accountArray.toString());
-                                                }
-                                            } else {
-                                                //发送
-                                                sendIMMessage(message, conversation);
+                                                JSONArray accountArray = content_object.getJSONObject("_lcattrs").getJSONArray("accountList");
+                                                MessageUtils.changeSquareInfo(conversation, accountArray, _lctype);
                                             }
-                                        }
-                                    });
+                                        });
+                                    } else {
+
+                                    }
 
                                     break;
                                 case 1003:

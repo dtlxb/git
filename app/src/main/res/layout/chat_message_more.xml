@@ -9,7 +9,7 @@
         android:id="@+id/find_man_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="18dp">
+        android:padding="14dp">
 
         <ImageView
             android:id="@+id/iv_find_man"
@@ -31,14 +31,14 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginLeft="14dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="14dp"
         android:background="#979797" />
 
     <RelativeLayout
         android:id="@+id/find_square_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="18dp">
+        android:padding="14dp">
 
         <ImageView
             android:id="@+id/iv_find_square"
@@ -61,14 +61,14 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginLeft="14dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="14dp"
         android:background="#979797" />
 
     <RelativeLayout
         android:id="@+id/take_square_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="18dp">
+        android:padding="14dp">
 
         <ImageView
             android:id="@+id/iv_take_square"
@@ -90,14 +90,14 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginLeft="14dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="14dp"
         android:background="#979797" />
 
     <RelativeLayout
         android:id="@+id/sweep_twocode_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="18dp">
+        android:padding="14dp">
 
         <ImageView
             android:id="@+id/iv_sweep_code"

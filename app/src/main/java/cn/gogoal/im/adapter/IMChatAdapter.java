@@ -92,7 +92,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         AVIMMessage avimMessage = messageList.get(position);
         JSONObject contentObject = JSON.parseObject(avimMessage.getContent());
         String messageType = contentObject.getString("_lctype");
-        if (!messageType.equals("5")) {
+        if (!messageType.equals("5") && !messageType.equals("6")) {
             if (chatType == 1001) {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.GONE);
             } else if (chatType == 1002) {
@@ -269,6 +269,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                     return TYPE_LEFT_VOICE_MESSAGE;
                 }
             case "5":
+            case "6":
                 return TYPE_SYSTEM_MESSAGE;
             default:
                 if (isYourSelf) {
