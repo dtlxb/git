@@ -7,8 +7,13 @@ import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -26,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.IMAddFriendActivity;
 import cn.gogoal.im.activity.IMNewFrienActivity;
@@ -37,6 +44,7 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
@@ -91,7 +99,7 @@ public class MessageFragment extends BaseFragment {
         XTitle.ImageAction addAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_add_message)) {
             @Override
             public void actionClick(View view) {
-                startActivity(new Intent(getActivity(), IMAddFriendActivity.class));
+                popuMore(view);
             }
         };
         xTitle.addAction(personAction, 0);
@@ -189,6 +197,62 @@ public class MessageFragment extends BaseFragment {
                 return false;
             }
         });
+    }
+
+    /**
+     * 点击弹窗
+     */
+    private void popuMore(View clickView) {
+        final View popuView = LayoutInflater.from(clickView.getContext()).
+                inflate(R.layout.chat_message_more,
+                        new LinearLayout(getActivity().getApplicationContext()), false);
+
+        initPopu(popuView);
+
+        PopupWindow popuWindow = new PopupWindow(popuView,
+                (int) (AppDevice.getWidth(getContext()) * 0.4), -2, //// 弹窗宽、高
+                true);// 是否获取焦点（能使用返回键能关闭而不是退出）
+        popuWindow.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.chat_popu_more));
+        popuWindow.setOutsideTouchable(true);// 点击周边可关闭
+        popuWindow.showAsDropDown(clickView, AppDevice.dp2px(getContext(), 5), AppDevice.dp2px(getContext(), 6));
+
+        AppDevice.backgroundAlpha(getActivity(), 1.0f);
+        popuWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                AppDevice.backgroundAlpha(getActivity(), 1.0f);
+            }
+        });
+    }
+
+    //初始化弹窗
+    private void initPopu(View popuView) {
+        RelativeLayout find_man_layout = (RelativeLayout) popuView.findViewById(R.id.find_man_layout);
+        RelativeLayout find_square_layout = (RelativeLayout) popuView.findViewById(R.id.find_square_layout);
+        RelativeLayout take_square_layout = (RelativeLayout) popuView.findViewById(R.id.take_square_layout);
+        RelativeLayout sweep_twocode_layout = (RelativeLayout) popuView.findViewById(R.id.sweep_twocode_layout);
+        find_man_layout.setOnClickListener(new PopuClick());
+        find_square_layout.setOnClickListener(new PopuClick());
+        take_square_layout.setOnClickListener(new PopuClick());
+        sweep_twocode_layout.setOnClickListener(new PopuClick());
+    }
+
+    //弹窗监听事件
+    private class PopuClick implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.find_man_layout:
+                    break;
+                case R.id.find_square_layout:
+                    break;
+                case R.id.take_square_layout:
+                    break;
+                case R.id.sweep_twocode_layout:
+                    break;
+            }
+        }
     }
 
     private class ListAdapter extends CommonAdapter<IMMessageBean> {
