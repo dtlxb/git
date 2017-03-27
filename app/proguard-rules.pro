@@ -208,13 +208,16 @@
 
 -dontwarn javax.annotation.**
 -keep class com.alibaba.**
+-keep class com.alivc.player.**
+-keepclassmembers class com.alivc.player.**{
+    *;
+}
 -keepclassmembers class com.alibaba.** {
     *;
 }
 
 -dontobfuscate
 -ignorewarnings
-
 
 -keep class * extends com.duanqu.qupai.jni.ANativeObject
 -keep @com.duanqu.qupai.jni.AccessedByNative class *

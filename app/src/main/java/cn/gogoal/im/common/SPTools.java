@@ -83,10 +83,11 @@ public class SPTools {
     return mPreference.getString(key, defaultValue);
   }
 
-  public static void saveSetData(String key,Set<String> siteno){
+  public static String saveSetData(String key,Set<String> siteno){
     SharedPreferences.Editor editor=mPreference.edit();
     editor.putStringSet(key,siteno);
     editor.apply();
+    return JSONObject.toJSONString(siteno);
   }
 
   public static Set<String> getSetData(String key,Set<String> defSet){

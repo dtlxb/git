@@ -381,7 +381,7 @@ public class TimesFivesBitmap {
         paintTop.setStrokeWidth(mSize);
 
         paintShadow.setStyle(Paint.Style.FILL);//实心矩形框
-        paintShadow.setColor(ContextCompat.getColor(MyApp.getContext(), R.color.time_shadow_color));
+        paintShadow.setColor(ContextCompat.getColor(MyApp.getAppContext(), R.color.time_shadow_color));
         Path time_line_path = new Path();
         Path avg_line_path = new Path();
         Path time_shadow_path = new Path();
@@ -434,9 +434,9 @@ public class TimesFivesBitmap {
                 avg_line_path.lineTo(uperBlueX, endYelloY);
                 time_shadow_path.lineTo(uperBlueX, endBlueY);
 
-                paintTop.setColor(ContextCompat.getColor(MyApp.getContext(), R.color.time_prive));
+                paintTop.setColor(ContextCompat.getColor(MyApp.getAppContext(), R.color.time_prive));
                 canvas.drawPath(time_line_path, paintTop);
-                paintTop.setColor(ContextCompat.getColor(MyApp.getContext(),R.color.time_avg_prive));
+                paintTop.setColor(ContextCompat.getColor(MyApp.getAppContext(),R.color.time_avg_prive));
                 canvas.drawPath(avg_line_path, paintTop);
             }
 
@@ -456,9 +456,9 @@ public class TimesFivesBitmap {
                     time_shadow_path.lineTo(endBlueMidStartX, mUperChartHeight);
                     time_shadow_path.close();
 
-                    paintTop.setColor(ContextCompat.getColor(MyApp.getContext(), R.color.time_prive));
+                    paintTop.setColor(ContextCompat.getColor(MyApp.getAppContext(), R.color.time_prive));
                     canvas.drawPath(time_line_path, paintTop);
-                    paintTop.setColor(ContextCompat.getColor(MyApp.getContext(), R.color.time_avg_prive));
+                    paintTop.setColor(ContextCompat.getColor(MyApp.getAppContext(), R.color.time_avg_prive));
                     canvas.drawPath(avg_line_path, paintTop);
                     canvas.drawPath(time_shadow_path, paintShadow);
 

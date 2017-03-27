@@ -66,7 +66,7 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.recording.MediaManager;
-import cn.gogoal.im.ui.keyboard.KeyboardLaunchListenLayout;
+import cn.gogoal.im.ui.KeyboardLaunchLinearLayout;
 import cn.gogoal.im.ui.view.SwitchImageView;
 import cn.gogoal.im.ui.view.VoiceButton;
 import top.zibin.luban.Luban;
@@ -106,7 +106,7 @@ public class ChatFragment extends BaseFragment {
     VoiceButton voiceView;
 
     @BindView(R.id.chat_root_keyboard_layout)
-    KeyboardLaunchListenLayout keyboardLayout;
+    KeyboardLaunchLinearLayout keyboardLayout;
 
     private MyListener listener;
     private int chatType;
@@ -121,8 +121,6 @@ public class ChatFragment extends BaseFragment {
     private IMChatAdapter imChatAdapter;
     private ChatFunctionAdapter chatFunctionAdapter;
     private List<FoundData.ItemPojos> itemPojosList;
-    private int keyBordHeight = 0;
-
     private JSONArray jsonArray;
     private ContactBean contactBean;
 
@@ -153,9 +151,34 @@ public class ChatFragment extends BaseFragment {
         chatFunctionAdapter = new ChatFunctionAdapter(getContext(), itemPojosList);
         functions_recycler.setAdapter(chatFunctionAdapter);
 
-        keyBordHeight = SPTools.getInt("soft_keybord_height", AppDevice.dp2px(getContext(), 220));
-        setContentHeight();
+//        keyBordHeight = SPTools.getInt("soft_keybord_height", AppDevice.dp2px(getmContext(), 220));
 
+        keyboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchLinearLayout.OnKeyboardChangeListener() {
+            @Override
+            public void OnKeyboardPop(int height) {
+                SPTools.saveInt("soft_keybord_height",height);
+                setContentHeight(height);
+            }
+
+            @Override
+            public void OnKeyboardClose() {
+
+            }
+        });
+
+        message_recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                KLog.e("newState======"+newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                KLog.e("dy========="+dy+",getBottom==="+recyclerView.getBottom()+",y==="+recyclerView.getY());
+            }
+        });
 
         //多功能消息发送
         chatFunctionAdapter.setOnItemClickListener(new OnItemClickLitener() {
@@ -164,7 +187,7 @@ public class ChatFragment extends BaseFragment {
                 switch (position) {
                     case 0:
                         //发照片
-                        ImageTakeUtils.getInstance().takePhoto(getContext(), 1, false, new ITakePhoto() {
+                        ImageTakeUtils.getInstance().takePhoto(getContext(), 9, false, new ITakePhoto() {
                             @Override
                             public void success(List<String> uriPaths, boolean isOriginalPic) {
                                 if (uriPaths != null) {
@@ -244,13 +267,6 @@ public class ChatFragment extends BaseFragment {
             public void onSwitch(View view, int state) {
                 switch (state) {
                     case 0:
-                        AppDevice.hideSoftKeyboard(etInput);
-                        voiceView.setVisibility(View.VISIBLE);
-                        etInput.setVisibility(View.GONE);
-                        imgVoice.setBackgroundResource(R.mipmap.chat_key_bord);
-                        find_more_layout.setVisibility(View.GONE);
-                        break;
-                    case 1:
                         voiceView.setVisibility(View.GONE);
                         etInput.setVisibility(View.VISIBLE);
                         etInput.requestFocus();
@@ -258,7 +274,14 @@ public class ChatFragment extends BaseFragment {
                         //软键盘高度
                         getSupportSoftInputHeight();
                         find_more_layout.setVisibility(View.GONE);
-                        imgVoice.setBackgroundResource(R.mipmap.chat_voice);
+                        imgVoice.setImageResource(R.mipmap.chat_voice);
+                        break;
+                    case 1:
+                        AppDevice.hideSoftKeyboard(etInput);
+                        voiceView.setVisibility(View.VISIBLE);
+                        etInput.setVisibility(View.GONE);
+                        imgVoice.setImageResource(R.mipmap.chat_key_bord);
+                        find_more_layout.setVisibility(View.GONE);
                         break;
                 }
             }
@@ -719,7 +742,7 @@ public class ChatFragment extends BaseFragment {
     /**
      * 设置多功能布局宽高
      */
-    private void setContentHeight() {
+    private void setContentHeight(int keyBordHeight) {
         ViewGroup.LayoutParams params = find_more_layout.getLayoutParams();
         params.height = keyBordHeight;
         find_more_layout.setLayoutParams(params);

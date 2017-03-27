@@ -39,9 +39,61 @@ public abstract class CommonAdapter<T> extends MultiItemTypeAdapter<T> {
         });
     }
 
-    public Context getContext() {
+    public Context getmContext() {
         return mContext;
     }
+
+    /**
+     * 获取数据集合
+     */
+    public List<T> getData() {
+        return mDatas;
+    }
+
+    /**
+     * 删除指定数据条目
+     */
+    public void removeItem(T model) {
+        removeItem(mDatas.indexOf(model));
+    }
+
+    /**
+     * 删除指定索引数据条目
+     */
+    public void removeItem(int position) {
+        mDatas.remove(position);
+        notifyItemRemoveWrapper(position);
+    }
+
+    /**
+     * 数据移除刷新
+     */
+    public final void notifyItemRemoveWrapper(int position) {
+        notifyItemRemoved(position);
+    }
+
+    /**
+     * 数据添加刷新
+     */
+    public final void notifyItemInsertedWrapper(int position) {
+        notifyItemInserted(position);
+    }
+
+    /**
+     * 在集合末尾添加数据条目
+     */
+    public void addLastItem(T model) {
+        addItem(mDatas.size(), model);
+    }
+
+    /**
+     * 在指定位置添加数据条目
+     */
+    public void addItem(int position, T model) {
+        mDatas.add(position, model);
+        notifyItemInsertedWrapper(position);
+    }
+
 
     protected abstract void convert(ViewHolder holder, T data, int position);
 

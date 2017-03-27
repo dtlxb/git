@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -212,7 +213,6 @@ public class PlayerActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        setImmersive(true);
 
         live_id = getIntent().getStringExtra("live_id");
         source = getIntent().getStringExtra("source");
@@ -239,18 +239,25 @@ public class PlayerActivity extends BaseActivity {
         mLiveChatAdapter = new LiveChatAdapter(PlayerActivity.this, R.layout.item_live_chat, messageList);
         recyler_chat.setAdapter(mLiveChatAdapter);
 
-        if (source.equals("live")) {
-            linearPlayerChat.setVisibility(View.VISIBLE);
-        } else if (source.equals("video")) {
-            linearPlayerChat.setVisibility(View.GONE);
-        }
+        if (!TextUtils.isEmpty(source)) {
 
-        getRelaterVideoInfo();
+            if (source.equals("live")) {
+                linearPlayerChat.setVisibility(View.VISIBLE);
+            } else if (source.equals("video")) {
+                linearPlayerChat.setVisibility(View.GONE);
+            }
+
+            getRelaterVideoInfo();
+        }
+    }
+
+    @Override
+    public void setStatusBar() {
     }
 
     /*
-    * 获取直播详情
-    * */
+                * 获取直播详情
+                * */
     private void getPlayerInfo() {
 
         Map<String, String> param = new HashMap<>();
@@ -1163,11 +1170,11 @@ public class PlayerActivity extends BaseActivity {
                 holder.setVisible(R.id.relative_player, false);
             }
             ImageView relater_img = holder.getView(R.id.relater_img);
-            ImageDisplay.loadNetImage(getContext(), data.getVideo_img_url(), relater_img);
+            ImageDisplay.loadNetImage(getmContext(), data.getVideo_img_url(), relater_img);
             holder.setText(R.id.relater_tittle, data.getVideo_name());
             holder.setText(R.id.relater_play_count, data.getPlay_base() + "次");
             ImageView relater_avatar = holder.getView(R.id.relater_avatar);
-            ImageDisplay.loadCircleNetImage(getContext(), data.getFace_url(), relater_avatar);
+            ImageDisplay.loadCircleNetImage(getmContext(), data.getFace_url(), relater_avatar);
             holder.setText(R.id.relater_name, data.getAnchor_name());
             holder.setText(R.id.relater_content, data.getProgramme_name());
         }
@@ -1188,8 +1195,8 @@ public class PlayerActivity extends BaseActivity {
             textSend.setText(username + msg.getText());
 
             SpannableStringBuilder builder = new SpannableStringBuilder(textSend.getText().toString());
-            ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.live_chat_level1));
-            ForegroundColorSpan Span2 = new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.textColor_333333));
+            ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getmContext(), R.color.live_chat_level1));
+            ForegroundColorSpan Span2 = new ForegroundColorSpan(ContextCompat.getColor(getmContext(), R.color.textColor_333333));
             builder.setSpan(Span1, 0, username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             builder.setSpan(Span2, username.length(), textSend.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             textSend.setText(builder);

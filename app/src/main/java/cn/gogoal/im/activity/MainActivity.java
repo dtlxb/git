@@ -14,9 +14,8 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
-import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.fragment.ContactsFragment;
 import cn.gogoal.im.fragment.FoundFragment;
 import cn.gogoal.im.fragment.MessageFragment;
@@ -41,13 +40,17 @@ public class MainActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
+        int i1 = AppDevice.getHeight(mContext) / 10;
+        KLog.e(i1);
+        KLog.e(AppDevice.px2dp(mContext,i1));
+
         MessageFragment messageFragment = new MessageFragment();        // TAB1 消息
 
         final ContactsFragment contactsFragment = new ContactsFragment();     // TAB2 人脉
 
         FoundFragment foundFragment = new FoundFragment();              // TAB3 投研
 
-        MineFragment mineFragment = new MineFragment();                 // TAB4 我的
+        final MineFragment mineFragment = new MineFragment();                 // TAB4 我的
 
         List<Fragment> tabFragments = new ArrayList<>();
         tabFragments.add(messageFragment);
@@ -61,7 +64,6 @@ public class MainActivity extends BaseActivity {
         vpMain.setAdapter(tabAdapter);
         vpMain.setOffscreenPageLimit(3);
         tabMain.setupWithViewPager(vpMain);
-
         for (int i = 0; i < mainTabArray.length; i++) {
             TabLayout.Tab tab = tabMain.getTabAt(i);
             if (tab != null) {
@@ -83,7 +85,7 @@ public class MainActivity extends BaseActivity {
 
                         break;
                     case 3:
-
+                        mineFragment.testAdd();
                         break;
                     default:
                         break;

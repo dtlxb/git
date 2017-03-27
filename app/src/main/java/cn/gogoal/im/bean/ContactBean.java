@@ -2,6 +2,8 @@ package cn.gogoal.im.bean;
 
 import android.text.TextUtils;
 
+import com.github.promeg.pinyinhelper.Pinyin;
+
 import java.io.Serializable;
 
 import cn.gogoal.im.ui.index.BaseIndexPinyinBean;
@@ -12,6 +14,16 @@ import cn.gogoal.im.ui.index.BaseIndexPinyinBean;
  * phone 18930640263
  */
 public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable {
+
+    private int tag;//预留字段，特殊处理用
+
+//    public int getTag() {
+//        return tag;
+//    }
+//
+//    public void setTag(int tag) {
+//        this.tag = tag;
+//    }
 
     private ContactType contactType;//item类型
 
@@ -86,17 +98,13 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
     }
 
     public String getmPinyin() {
-        return mPinyin;
-    }
-
-    public void setmPinyin(String mPinyin) {
-        this.mPinyin = mPinyin;
+        return Pinyin.toPinyin(getTarget().trim(),"");
     }
 
     @Override
     public String getTarget() {
-        return TextUtils.isEmpty(getRemark()) ?
-                (TextUtils.isEmpty(getNickname()) ? "未命名" : getNickname()) :
+        return isEmpty(getRemark()) ?
+                (isEmpty(getNickname()) ? "未命名" : getNickname()) :
                 getRemark();
     }
 
@@ -141,5 +149,9 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
                 ", avatar=" + avatar +
                 ", mPinyin='" + mPinyin + '\'' +
                 '}';
+    }
+
+    private boolean isEmpty(String s){
+        return null==s || TextUtils.isEmpty(s) || s.trim().replace(" ","").equals("");
     }
 }

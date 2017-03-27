@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@android:color/white">
 
-    <include layout="@layout/head_view_market"/>
+    <include layout="@layout/header_view_market"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/item_stock_rank_list"

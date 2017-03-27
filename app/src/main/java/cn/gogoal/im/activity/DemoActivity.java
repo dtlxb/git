@@ -34,7 +34,7 @@ import cn.gogoal.im.ui.widget.BottomSheetListDialog;
 import cn.gogoal.im.ui.widget.BottomSheetNormalDialog;
 import cn.gogoal.im.ui.widget.EditTextDialog;
 
-import static cn.gogoal.im.base.MyApp.getContext;
+import static cn.gogoal.im.base.MyApp.getAppContext;
 
 /**
  * author wangjd on 2017/3/13 0013.
@@ -72,7 +72,7 @@ public class DemoActivity extends BaseActivity {
     public void WatchLive(View view) {
         switch (view.getId()) {
             case R.id.setWatchLive:
-                startActivity(new Intent(getContext(), PlayerActivity.class));
+                startActivity(new Intent(getAppContext(), PlayerActivity.class));
                 break;
 
             case R.id.btn_wechat:
@@ -83,14 +83,14 @@ public class DemoActivity extends BaseActivity {
                 break;
 
             case R.id.btn_upload:
-                ImageTakeUtils.getInstance().takePhoto(getContext(),9, false, new ITakePhoto() {
+                ImageTakeUtils.getInstance().takePhoto(getAppContext(),9, false, new ITakePhoto() {
                     @Override
                     public void success(List<String> uriPaths, boolean isOriginalPic) {
                         KLog.e(uriPaths);
                         if (uriPaths != null) {
                             //返回的图片集合不为空，执行上传操作
                             doUpload(uriPaths);
-                            UIHelper.toast(getContext(),uriPaths.toString());
+                            UIHelper.toast(getAppContext(),uriPaths.toString());
                         }
                     }
 
@@ -110,7 +110,7 @@ public class DemoActivity extends BaseActivity {
                     public void onItemClick(BottomSheetListDialog dialog, TextView view, int position) {
                         switch (position) {
                             case 0:
-                                OpenServiceFactory.with(getContext())
+                                OpenServiceFactory.with(getAppContext())
                                         .wechat().login(new IOpenCallback() {
                                     @Override
                                     public void onFailed(String errorString) {
@@ -133,7 +133,7 @@ public class DemoActivity extends BaseActivity {
                                 dialog.dismiss();
                                 break;
                         }
-                        UIHelper.toast(getContext(),view.getText().toString());
+                        UIHelper.toast(getAppContext(),view.getText().toString());
                     }
                 });
 
@@ -171,7 +171,7 @@ public class DemoActivity extends BaseActivity {
     private void doUpload(final List<String> uriPaths) {
         final ProgressDialog[] waitDialog = new ProgressDialog[1];
 
-        waitDialog[0] = DialogHelp.getWaitDialog(getContext(), "上传中...");
+        waitDialog[0] = DialogHelp.getWaitDialog(getAppContext(), "上传中...");
         waitDialog[0].setCanceledOnTouchOutside(false);
         waitDialog[0].show();
 
@@ -194,7 +194,7 @@ public class DemoActivity extends BaseActivity {
                     public void onSuccess(String onlineUri) {
                         KLog.e("上传成功===" + onlineUri);
                         waitDialog[0].cancel();
-                        UIHelper.toast(getContext(), "上传成功" + onlineUri);
+                        UIHelper.toast(getAppContext(), "上传成功" + onlineUri);
                     }
 
                     @Override

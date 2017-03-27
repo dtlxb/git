@@ -37,6 +37,9 @@ public class SuspendedDecoration extends RecyclerView.ItemDecoration {
 
     private int mHeaderViewCount = 0;
 
+    public SuspendedDecoration(Context context) {
+        this(context,null);
+    }
 
     public SuspendedDecoration(Context context, List<? extends ISuspensionInterface> datas) {
         super();
@@ -51,6 +54,7 @@ public class SuspendedDecoration extends RecyclerView.ItemDecoration {
         mPaint.setTextSize(mTitleFontSize);
         mPaint.setAntiAlias(true);
     }
+
 
     public SuspendedDecoration setmTitleHeight(int mTitleHeight) {
         this.mTitleHeight = mTitleHeight;
@@ -117,6 +121,7 @@ public class SuspendedDecoration extends RecyclerView.ItemDecoration {
                 }
             }
         }
+
     }
 
     /**

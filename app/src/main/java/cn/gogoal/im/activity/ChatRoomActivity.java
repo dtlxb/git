@@ -27,7 +27,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.recording.MediaManager;
 import cn.gogoal.im.common.recording.Recorder;
-import cn.gogoal.im.ui.keyboard.KeyboardLaunchListenLayout;
+import cn.gogoal.im.ui.KeyboardLaunchListenLayout;
 import cn.gogoal.im.ui.view.SwitchImageView;
 import cn.gogoal.im.ui.view.VoiceButton;
 
@@ -178,8 +178,8 @@ public class ChatRoomActivity extends BaseActivity {
             View holderLengthView = holder.getView(R.id.recorder_length);
 
             ViewGroup.LayoutParams params = holderLengthView.getLayoutParams();
-            int mMaxItemWidth = (int) (AppDevice.getWidth(getContext()) * 0.7f);
-            int mMinItemWidth = (int) (AppDevice.getWidth(getContext()) * 0.16f);
+            int mMaxItemWidth = (int) (AppDevice.getWidth(getActivity()) * 0.7f);
+            int mMinItemWidth = (int) (AppDevice.getWidth(getActivity()) * 0.16f);
             params.width = (int) (mMinItemWidth + (mMaxItemWidth / 60f)* recorder.getDuration());
             holderLengthView.setLayoutParams(params);
 

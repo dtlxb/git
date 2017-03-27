@@ -29,15 +29,15 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean> {
 
         final View view = holder.getView(R.id.layout_grid);
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-        layoutParams.width = AppDevice.getWidth(getContext()) / 5;
-        layoutParams.height = AppDevice.getWidth(getContext()) / 4;
+        layoutParams.width = AppDevice.getWidth(getmContext()) / 5;
+        layoutParams.height = AppDevice.getWidth(getmContext()) / 4;
         view.setBackgroundColor(ContextCompat.getColor(mContext, R.color.absoluteWhite));
         view.setLayoutParams(layoutParams);
 
         ImageView imageIcon = holder.getView(R.id.iv);
         ViewGroup.LayoutParams viewParams = imageIcon.getLayoutParams();
-        viewParams.width = AppDevice.getWidth(getContext()) / 8;
-        viewParams.height = AppDevice.getWidth(getContext()) / 8;
+        viewParams.width = AppDevice.getWidth(getmContext()) / 8;
+        viewParams.height = AppDevice.getWidth(getmContext()) / 8;
         imageIcon.setLayoutParams(viewParams);
 
         Object avatar = contactBean.getAvatar();

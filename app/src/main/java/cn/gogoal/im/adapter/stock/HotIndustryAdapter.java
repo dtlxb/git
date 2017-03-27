@@ -27,14 +27,14 @@ import cn.gogoal.im.common.UIHelper;
 public class HotIndustryAdapter extends CommonAdapter<StockMarketBean.DataBean.HostIndustrylistBean> {
 
     public HotIndustryAdapter(List<StockMarketBean.DataBean.HostIndustrylistBean> datas) {
-        super(MyApp.getContext(), R.layout.item_stock_hotindustry, datas);
+        super(MyApp.getAppContext(), R.layout.item_stock_hotindustry, datas);
     }
 
     @Override
     protected void convert(ViewHolder holder, final StockMarketBean.DataBean.HostIndustrylistBean data, int position) {
 
         ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
-        params.width = (AppDevice.getWidth(getContext()) - AppDevice.dp2px(getContext(), 2)) / 3;
+        params.width = (AppDevice.getWidth(getmContext()) - AppDevice.dp2px(getmContext(), 2)) / 3;
         holder.setText(R.id.tv_hot_industry_name, data.getIndustry_name());
 
         TextView tvRate=holder.getView(R.id.tv_hot_industry_rate);
@@ -43,7 +43,7 @@ public class HotIndustryAdapter extends CommonAdapter<StockMarketBean.DataBean.H
         if (TextUtils.isEmpty(data.getIndustry_rate())){
             tvRate.setTextColor(Color.GRAY);
         }else {
-            tvRate.setTextColor(ContextCompat.getColor(getContext(),Double.parseDouble(data.getIndustry_rate()) > 0 ?
+            tvRate.setTextColor(ContextCompat.getColor(getmContext(),Double.parseDouble(data.getIndustry_rate()) > 0 ?
                     R.color.stock_red:R.color.stock_green));
         }
 

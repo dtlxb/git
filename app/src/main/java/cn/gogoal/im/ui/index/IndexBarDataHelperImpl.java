@@ -41,7 +41,7 @@ public class IndexBarDataHelperImpl implements IIndexBarDataHelper {
                     //如果c不是汉字，则返回String.valueOf(c)
                     pySb.append(Pinyin.toPinyin(target.charAt(i1)).toUpperCase());
                 }
-                indexPinyinBean.setBaseIndexPinyin(pySb.toString());//设置城市名全拼音
+                indexPinyinBean.setBaseIndexPinyin(pySb.toString());
             } else {
                 //pySb.append(indexPinyinBean.getBaseIndexPinyin());
             }

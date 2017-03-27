@@ -35,6 +35,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
     public WebChangeListener getChangeListener() {
         return mChangeListener;
     }
+
     public void setOnWebChangeListener(WebChangeListener changeListener) {
         if (changeListener != null) {
             mChangeListener = changeListener;
@@ -43,30 +44,37 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
 
     Map<String, ValueCallback<String>> responseCallbacks = new HashMap<>();
     BridgeHandler defaultHandler = new DefaultHandler();
+
     /**
-     * @param handler
-     *            default handler,handle messages send by js without assigned handler name,
-     *            if js message has handler name, it will be handled by named handlers registered by native
+     * @param handler default handler,handle messages send by js without assigned handler name,
+     *                if js message has handler name, it will be handled by named handlers registered by native
      */
     public void setDefaultHandler(BridgeHandler handler) {
         this.defaultHandler = handler;
     }
+
     Map<String, BridgeHandler> messageHandlers = new HashMap<>();
+
     public Map<String, BridgeHandler> getMessageHandlers() {
         return messageHandlers;
     }
+
     private List<Message> startupMessage = new ArrayList<>();
+
     public List<Message> getStartupMessage() {
         return startupMessage;
     }
+
     public void setStartupMessage(List<Message> startupMessage) {
         this.startupMessage = startupMessage;
     }
+
     private long uniqueId = 0;
 
     public interface SystemIntentInteface {
         void setSystemData(String data);
     }
+
     private SystemIntentInteface mSystemIntentInteface;
 
     public SystemIntentInteface getSystemIntentInteface() {
@@ -95,8 +103,8 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
     @SuppressLint("SetJavaScriptEnabled")
     private void init(Context context) {
         progressbar = new ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal);
-        progressbar.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,Utils.dp2px(context,2), Gravity.TOP));
-        progressbar.setProgressDrawable(ContextCompat.getDrawable(context,R.drawable.web_progress));
+        progressbar.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, Utils.dp2px(context, 2), Gravity.TOP));
+        progressbar.setProgressDrawable(ContextCompat.getDrawable(context, R.drawable.web_progress));
         addView(progressbar);
 
         this.setVerticalScrollBarEnabled(false);
@@ -107,7 +115,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
         }
         this.setWebViewClient(generateBridgeWebViewClient());
 
-        this.setWebChromeClient(new WebChromeClient(){
+        this.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 if (newProgress == 100) {
@@ -130,7 +138,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
     public PageLoadFinishListener getFinishListener() {
         return new PageLoadFinishListener() {
             @Override
-            public void onFinish(String url,String title) {
+            public void onFinish(String url, String title) {
                 getChangeListener().getWebInfo(url, title);
             }
         };
@@ -219,7 +227,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
         }
         // remove duplicate quotation
         if (url.startsWith("\"") && url.endsWith("\"")) {
-            url = url.substring(1, url.length()-1);
+            url = url.substring(1, url.length() - 1);
         }
         if (url.startsWith(BridgeUtil.YY_RETURN_DATA)) { // 如果是返回数据
             String data = BridgeUtil.getDataFromReturnUrl(url);
@@ -282,7 +290,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
                 } else {
                     handler = defaultHandler;
                 }
-                if (handler != null){
+                if (handler != null) {
                     handler.handler(msg.getData(), responseFunction);
                 }
             }
