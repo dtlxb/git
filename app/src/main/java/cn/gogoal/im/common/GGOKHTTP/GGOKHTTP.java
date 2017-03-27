@@ -73,7 +73,6 @@ public class GGOKHTTP {
     public static final String GET_RELATED_VIDEO = "v1/video_studio/get_related_video";
 
 
-
     /**
      * 好友列表
      */
@@ -117,6 +116,44 @@ public class GGOKHTTP {
      */
     public static final String ADD_FRIEND = "v1/ggm_im/add_friend";
 
+    /**
+     * IM发送接收好友
+     * token                        用户token
+     * id_list                      朋友ID
+     */
+    public static final String CREATE_GROUP_CHAT = "v1/ggm_chat/create_group_chat";
+
+    /**
+     * 本地没有群员缓存时拉取
+     * token                        用户token
+     * id_list                      朋友ID
+     * conv_id                      会话ID
+     */
+    public static final String GET_MEMBER_INFO = "v1/ggm_chat/get_member_info";
+
+    /**
+     * IM群踢人
+     * token                         用户token
+     * id_list                       朋友ID
+     * conv_id                       会话id
+     */
+    public static final String DELETE_MEMBER = "v1/ggm_chat/delete_member";
+
+    /**
+     * IM群加人
+     * token                         用户token
+     * id_list                       朋友ID
+     * conv_id                       会话id
+     */
+    public static final String ADD_MEMBER = "v1/ggm_chat/add_member";
+
+    /**
+     * IM群主同意加群
+     * token                         用户token
+     * conv_id                       会话id
+     */
+    public static final String APPLY_INTO_GROUP = "v1/ggm_chat/apply_into_group";
+
 //--------------------------------------------------------------------------------------------------
 
     /**
@@ -140,7 +177,7 @@ public class GGOKHTTP {
     public void startGet() {
         try {
             OkHttpUtils.get()
-                    .url(GGAPI.get(url,param))
+                    .url(GGAPI.get(url, param))
                     .build()
                     .execute(new StringCallback() {
                         @Override

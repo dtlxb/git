@@ -9,7 +9,7 @@
         android:id="@+id/message_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
     <View
         android:id="@+id/view_line"
@@ -31,6 +31,7 @@
             style="@style/BottomImageStyle"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="10dp"
+            android:background="@mipmap/chat_voice"
             android:contentDescription="@null"
             android:paddingLeft="5dp"
             android:src="@mipmap/chat_voice" />
@@ -121,11 +122,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </RelativeLayout>
-
-    <android.support.v4.widget.Space
-        android:id="@+id/space"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_alignParentBottom="true" />
 
 </cn.gogoal.im.ui.KeyboardLaunchLinearLayout>

@@ -6,8 +6,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -25,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.IMAddFriendActivity;
 import cn.gogoal.im.activity.IMNewFrienActivity;
@@ -36,6 +44,7 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
@@ -44,6 +53,9 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
+import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.badgeview.Badge;
+import cn.gogoal.im.ui.badgeview.BadgeView;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**
@@ -71,6 +83,8 @@ public class MessageFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
         initTitle();
+
+        initRecycleView(message_recycler, R.drawable.shape_divider_recyclerview_1px);
     }
 
     private void initTitle() {
@@ -85,7 +99,7 @@ public class MessageFragment extends BaseFragment {
         XTitle.ImageAction addAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_add_message)) {
             @Override
             public void actionClick(View view) {
-                startActivity(new Intent(getActivity(), IMAddFriendActivity.class));
+                popuMore(view);
             }
         };
         xTitle.addAction(personAction, 0);
@@ -96,12 +110,8 @@ public class MessageFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-
         jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
         IMMessageBeans.clear();
-
-        initRecycleView(message_recycler, R.drawable.shape_divider_recyclerview_1px);
-
         if (null != jsonArray) {
             IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
         }
@@ -117,15 +127,11 @@ public class MessageFragment extends BaseFragment {
                 }
             });
         }
-
-
         listAdapter = new ListAdapter(getContext(), R.layout.item_fragment_message, IMMessageBeans);
-
         message_recycler.setAdapter(listAdapter);
-
         listAdapter.setOnItemClickListener(new OnItemClickLitener() {
             @Override
-            public void onItemClick(RecyclerView.ViewHolder holder,View view,  final int position) {
+            public void onItemClick(RecyclerView.ViewHolder holder, View view, final int position) {
                 final String conversation_id = IMMessageBeans.get(position).getConversationID();
 
                 KLog.e(conversation_id);
@@ -148,6 +154,7 @@ public class MessageFragment extends BaseFragment {
                                 //群聊处理
                                 intent = new Intent(getContext(), SquareChatRoomActivity.class);
                                 intent.putExtra("conversation_id", conversation_id);
+                                intent.putExtra("squareName", IMMessageBeans.get(position).getNickname());
                                 startActivity(intent);
                                 break;
                             case "1003":
@@ -177,7 +184,7 @@ public class MessageFragment extends BaseFragment {
 
             //长按删除
             @Override
-            public boolean onItemLongClick(RecyclerView.ViewHolder holder,View view,  final int position) {
+            public boolean onItemLongClick(RecyclerView.ViewHolder holder, View view, final int position) {
                 DialogHelp.getSelectDialog(getActivity(), "", new String[]{"标为未读", "置顶聊天", "删除聊天"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -191,7 +198,62 @@ public class MessageFragment extends BaseFragment {
                 return false;
             }
         });
+    }
 
+    /**
+     * 点击弹窗
+     */
+    private void popuMore(View clickView) {
+        final View popuView = LayoutInflater.from(clickView.getContext()).
+                inflate(R.layout.chat_message_more,
+                        new LinearLayout(getActivity().getApplicationContext()), false);
+
+        initPopu(popuView);
+
+        PopupWindow popuWindow = new PopupWindow(popuView,
+                (int) (AppDevice.getWidth(getContext()) * 0.4), -2, //// 弹窗宽、高
+                true);// 是否获取焦点（能使用返回键能关闭而不是退出）
+        popuWindow.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.chat_popu_more));
+        popuWindow.setOutsideTouchable(true);// 点击周边可关闭
+        popuWindow.showAsDropDown(clickView, AppDevice.dp2px(getContext(), 5), AppDevice.dp2px(getContext(), 6));
+
+        AppDevice.backgroundAlpha(getActivity(), 1.0f);
+        popuWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                AppDevice.backgroundAlpha(getActivity(), 1.0f);
+            }
+        });
+    }
+
+    //初始化弹窗
+    private void initPopu(View popuView) {
+        RelativeLayout find_man_layout = (RelativeLayout) popuView.findViewById(R.id.find_man_layout);
+        RelativeLayout find_square_layout = (RelativeLayout) popuView.findViewById(R.id.find_square_layout);
+        RelativeLayout take_square_layout = (RelativeLayout) popuView.findViewById(R.id.take_square_layout);
+        RelativeLayout sweep_twocode_layout = (RelativeLayout) popuView.findViewById(R.id.sweep_twocode_layout);
+        find_man_layout.setOnClickListener(new PopuClick());
+        find_square_layout.setOnClickListener(new PopuClick());
+        take_square_layout.setOnClickListener(new PopuClick());
+        sweep_twocode_layout.setOnClickListener(new PopuClick());
+    }
+
+    //弹窗监听事件
+    private class PopuClick implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.find_man_layout:
+                    break;
+                case R.id.find_square_layout:
+                    break;
+                case R.id.take_square_layout:
+                    break;
+                case R.id.sweep_twocode_layout:
+                    break;
+            }
+        }
     }
 
     private class ListAdapter extends CommonAdapter<IMMessageBean> {
@@ -206,16 +268,17 @@ public class MessageFragment extends BaseFragment {
             String message = "";
             String unRead = "";
             String nickName = "";
-            View unReadTag = holder.getView(R.id.unread_tag);
             ImageView avatarIv = holder.getView(R.id.head_image);
-
+            Badge badge = new BadgeView(getActivity()).bindTarget(holder.getView(R.id.head_layout));
+            badge.setBadgeTextSize(10, true);
+            badge.setBadgeGravity(Gravity.TOP | Gravity.END);
             //未读数
             if (messageBean.getUnReadCounts().equals("0")) {
                 unRead = "";
-                unReadTag.setVisibility(View.GONE);
+                badge.hide(true);
             } else {
+                badge.setBadgeText(messageBean.getUnReadCounts());
                 unRead = "[" + messageBean.getUnReadCounts() + "条] ";
-                unReadTag.setVisibility(View.VISIBLE);
             }
 
             //时间
@@ -229,25 +292,23 @@ public class MessageFragment extends BaseFragment {
 //                KLog.e(content);
                 JSONObject contentObject = JSON.parseObject(content);
                 String _lctype = contentObject.getString("_lctype");
+                nickName = messageBean.getNickname();
                 switch (_lctype) {
                     case "-1":
                         //文字
                         message = contentObject.getString("_lctext");
-                        nickName = messageBean.getNickname();
                         ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
 
                         break;
                     case "-2":
                         //图片
                         message = "[图片]";
-                        nickName = messageBean.getNickname();
                         ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
 
                         break;
                     case "-3":
                         //语音
                         message = "[语音]";
-                        nickName = messageBean.getNickname();
                         ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
 
                         break;
@@ -262,12 +323,25 @@ public class MessageFragment extends BaseFragment {
                         ImageDisplay.loadResImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
 
                         break;
+                    case "3":
+
+                        break;
+                    case "4":
+
+                        break;
+                    case "5":
+                        message = nickName + "加入群聊";
+                        break;
+                    case "6":
+                        message = nickName + "离开本群";
+                        break;
                     default:
                         break;
                 }
             }
 
-            holder.setText(R.id.last_message, unRead + message);
+            //holder.setText(R.id.last_message, unRead + message);
+            holder.setText(R.id.last_message, message);
             holder.setText(R.id.whose_message, nickName);
             holder.setText(R.id.last_time, dateStr);
         }
@@ -282,72 +356,35 @@ public class MessageFragment extends BaseFragment {
         AVIMMessage message = (AVIMMessage) map.get("message");
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
         boolean isTheSame = false;
+        String ConversationId = conversation.getConversationId();
+        int chatType = (int) conversation.getAttribute("chat_type");
+
 
         Long rightNow = CalendarUtils.getCurrentTime();
-        int chatType = (int) conversation.getAttribute("chat_type");
         String nickName = "";
+        String avatar = "";
+        int unreadmessage = 0;
 
         JSONObject contentObject = JSON.parseObject(message.getContent());
         JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
         String _lctype = contentObject.getString("_lctype");
-        String avatar = lcattrsObject.getString("avatar");
-        switch (_lctype) {
-            case "-1":
-                //文字
-            case "-2":
-                //图片
-            case "-3":
-                //语音
-                nickName = lcattrsObject.getString("username");
-                break;
-            case "1":
-
-                break;
-
-            case "2":
-                //加好友
-                nickName = lcattrsObject.getString("nickname");
-                break;
-            default:
-                break;
-        }
-
-        KLog.e(message.getContent());
 
         switch (chatType) {
             //单聊,群聊,加好友请求
             case 1001:
+                avatar = lcattrsObject.getString("avatar");
+                break;
             case 1002:
+                //生成群聊头像
+                JSONArray accountArray = SPTools.getJsonArray(UserUtils.getToken() + ConversationId + "_accountList_beans", new JSONArray());
+                List<String> picUrls = new ArrayList<>();
+                for (int i = 0; i < (accountArray.size() < 9 ? accountArray.size() : 9); i++) {
+                    JSONObject personObject = accountArray.getJSONObject(i);
+                    picUrls.add(personObject.getString("avatar"));
+                }
+                KLog.e(picUrls);
+                break;
             case 1004:
-                //已有的会话
-                for (int i = 0; i < IMMessageBeans.size(); i++) {
-                    if (IMMessageBeans.get(i).getConversationID().equals(conversation.getConversationId())) {
-                        IMMessageBeans.get(i).setLastTime(rightNow);
-                        IMMessageBeans.get(i).setLastMessage(message);
-                        int unreadmessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts()) + 1;
-                        IMMessageBeans.get(i).setUnReadCounts(unreadmessage + "");
-                        isTheSame = true;
-                    } else {
-                    }
-                }
-
-                //新添的会话
-                if (!isTheSame) {
-                    IMMessageBean imMessageBean = new IMMessageBean();
-                    imMessageBean.setConversationID(conversation.getConversationId());
-                    imMessageBean.setLastMessage(message);
-                    imMessageBean.setLastTime(rightNow);
-                    imMessageBean.setNickname(nickName);
-                    imMessageBean.setAvatar(avatar);
-                    int unRead = Integer.parseInt(imMessageBean.getUnReadCounts() == null ? "0" : imMessageBean.getUnReadCounts()) + 1;
-                    imMessageBean.setUnReadCounts(unRead + "");
-                    IMMessageBeans.add(imMessageBean);
-                }
-
-                //保存
-                IMMessageBean imMessageBean = new IMMessageBean(conversation.getConversationId(), chatType, message.getTimestamp(),
-                        "0", nickName, AppConst.LEANCLOUD_APP_ID, avatar, message);
-                MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
                 break;
             //直播
             case 1003:
@@ -361,6 +398,69 @@ public class MessageFragment extends BaseFragment {
             default:
                 break;
         }
+
+        switch (_lctype) {
+            case "-1":
+                //文字
+            case "-2":
+                //图片
+            case "-3":
+                //语音
+                nickName = lcattrsObject.getString("username");
+                break;
+            case "1":
+
+                break;
+            case "2":
+                //加好友
+                nickName = lcattrsObject.getString("nickname");
+                break;
+            case "3":
+
+                break;
+            case "4":
+
+                break;
+            case "5":
+                nickName = conversation.getName();
+                break;
+            case "6":
+                break;
+            default:
+                break;
+        }
+
+        //已有的会话
+        for (int i = 0; i < IMMessageBeans.size(); i++) {
+            if (IMMessageBeans.get(i).getConversationID().equals(ConversationId)) {
+                IMMessageBeans.get(i).setLastTime(rightNow);
+                IMMessageBeans.get(i).setLastMessage(message);
+                unreadmessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts().equals("") ? "0" : IMMessageBeans.get(i).getUnReadCounts()) + 1;
+                IMMessageBeans.get(i).setUnReadCounts(unreadmessage + "");
+                isTheSame = true;
+            } else {
+            }
+        }
+
+        //新添的会话
+        if (!isTheSame) {
+            IMMessageBean imMessageBean = new IMMessageBean();
+            imMessageBean.setConversationID(ConversationId);
+            imMessageBean.setLastMessage(message);
+            imMessageBean.setLastTime(rightNow);
+            imMessageBean.setNickname(nickName);
+            imMessageBean.setAvatar(avatar);
+            imMessageBean.setUnReadCounts(1 + "");
+            IMMessageBeans.add(imMessageBean);
+        }
+
+        KLog.e(message.getContent());
+        KLog.e(chatType);
+
+        //保存
+        IMMessageBean imMessageBean = new IMMessageBean(ConversationId, chatType, message.getTimestamp(),
+                String.valueOf(unreadmessage), nickName, AppConst.LEANCLOUD_APP_ID, avatar, message);
+        MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
 
         //按照时间排序
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chat_message_more"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/find_man_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="18dp">
+
+        <ImageView
+            android:id="@+id/iv_find_man"
+            android:layout_width="20dp"
+            android:layout_height="18dp"
+            android:background="@mipmap/chat_find_man" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_toRightOf="@+id/iv_find_man"
+            android:text="找人"
+            android:textColor="@color/absoluteWhite"
+            android:textSize="17sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="20dp"
+        android:background="#979797" />
+
+    <RelativeLayout
+        android:id="@+id/find_square_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="18dp">
+
+        <ImageView
+            android:id="@+id/iv_find_square"
+            android:layout_width="20dp"
+            android:layout_height="18dp"
+            android:background="@mipmap/chat_find_square" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="14dp"
+            android:layout_toRightOf="@+id/iv_find_square"
+            android:text="找群"
+            android:textColor="@color/absoluteWhite"
+            android:textSize="17sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="20dp"
+        android:background="#979797" />
+
+    <RelativeLayout
+        android:id="@+id/take_square_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="18dp">
+
+        <ImageView
+            android:id="@+id/iv_take_square"
+            android:layout_width="20dp"
+            android:layout_height="18dp"
+            android:background="@mipmap/chat_take_square" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:layout_toRightOf="@+id/iv_take_square"
+            android:text="发起群聊"
+            android:textColor="@color/absoluteWhite"
+            android:textSize="17sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="20dp"
+        android:background="#979797" />
+
+    <RelativeLayout
+        android:id="@+id/sweep_twocode_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="18dp">
+
+        <ImageView
+            android:id="@+id/iv_sweep_code"
+            android:layout_width="20dp"
+            android:layout_height="18dp"
+            android:background="@mipmap/chat_sweep_twocode" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="14dp"
+            android:layout_toRightOf="@+id/iv_sweep_code"
+            android:text="扫一扫"
+            android:textColor="@color/absoluteWhite"
+            android:textSize="17sp" />
+    </RelativeLayout>
+</LinearLayout>

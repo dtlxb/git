@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
@@ -107,7 +108,8 @@ public class ChatFragment extends BaseFragment {
     @BindView(R.id.chat_root_keyboard_layout)
     KeyboardLaunchLinearLayout keyboardLayout;
 
-//    private MyListener listener;
+    private MyListener listener;
+    private int chatType;
 
     //消息类型
     private static int TEXT_MESSAGE = 1;
@@ -125,7 +127,7 @@ public class ChatFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        listener = (MyListener) context;
+        listener = (MyListener) context;
     }
 
     @Override
@@ -237,7 +239,6 @@ public class ChatFragment extends BaseFragment {
 
                 imChatAdapter.addItem(mTextMessage);
                 message_recycler.smoothScrollToPosition(messageList.size() - 1);
-                //message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
 
                 //文字消息基本信息
                 Map<Object, Object> messageMap = new HashMap<>();
@@ -248,7 +249,7 @@ public class ChatFragment extends BaseFragment {
                 Map<String, String> params = new HashMap<>();
                 params.put("token", AppConst.LEAN_CLOUD_TOKEN);
                 params.put("conv_id", imConversation.getConversationId());
-                params.put("chat_type", String.valueOf(imConversation.getAttribute("chat_type") == null ? 1001 : (int) imConversation.getAttribute("chat_type")));
+                params.put("chat_type", String.valueOf(chatType));
                 params.put("message", JSONObject.toJSONString(messageMap));
                 KLog.e(params);
 
@@ -372,12 +373,19 @@ public class ChatFragment extends BaseFragment {
                             break;
                     }
                     //头像暂时未保存
-                    try {
-                        IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), (int) imConversation.getAttribute("chat_type"), message.getTimestamp(),
+                    IMMessageBean imMessageBean = null;
+                    if (chatType == 1001) {
+                        imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
                                 "0", contactBean.getNickname(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
-                        MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
-                    } catch (Exception e) {
+
+                    } else if (chatType == 1002) {
+                        imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
+                                "0", imConversation.getName(), "", "", message);
+                    } else {
+
                     }
+                    MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
+
 
                 }
             }
@@ -468,7 +476,7 @@ public class ChatFragment extends BaseFragment {
                 Map<String, String> params = new HashMap<>();
                 params.put("token", AppConst.LEAN_CLOUD_TOKEN);
                 params.put("conv_id", imConversation.getConversationId());
-                params.put("chat_type", String.valueOf(imConversation.getAttribute("chat_type") == null ? 1001 : (int) imConversation.getAttribute("chat_type")));
+                params.put("chat_type", String.valueOf(chatType));
                 params.put("message", JSONObject.toJSON(messageMap).toString());
                 KLog.e(params);
 
@@ -543,7 +551,7 @@ public class ChatFragment extends BaseFragment {
                         Map<String, String> params = new HashMap<>();
                         params.put("token", AppConst.LEAN_CLOUD_TOKEN);
                         params.put("conv_id", imConversation.getConversationId());
-                        params.put("chat_type", String.valueOf(imConversation.getAttribute("chat_type") == null ? 1001 : (int) imConversation.getAttribute("chat_type")));
+                        params.put("chat_type", String.valueOf(chatType));
                         params.put("message", JSONObject.toJSON(messageMap).toString());
                         KLog.e(params);
 
@@ -568,39 +576,51 @@ public class ChatFragment extends BaseFragment {
     private void getHistoryMessage() {
         if (null != imConversation) {
             imConversation.queryMessages(20, new AVIMMessagesQueryCallback() {
+
                 @Override
                 public void done(List<AVIMMessage> list, AVIMException e) {
                     if (null == e) {
-                        for (int i = 0; i < list.size(); i++) {
-
-                        }
 
                         messageList.addAll(list);
 
-                        int chatType = (int) imConversation.getAttribute("chat_type");
-                        IMMessageBean imMessageBean;
-
-                        //单聊，群聊处理
-                        if (chatType == 1001) {
-
+                        //加群消息特殊处理
+                        for (int i = 0; i < messageList.size(); i++) {
+                            JSONObject contentObject = JSON.parseObject(messageList.get(i).getContent());
+                            String _lctype = contentObject.getString("_lctype");
+                            if (_lctype.equals("5")) {
+                                HashMap<String, String> map = new HashMap<>();
+                                map.put("_lctext", imConversation.getName() + "加入群聊");
+                                map.put("_lctype", "5");
+                                messageList.get(i).setContent(JSON.toJSONString(map));
+                            }
                         }
 
-                        //拿到对方信息
-                        getSpeakToInfo(imConversation);
+                        chatType = (int) imConversation.getAttribute("chat_type");
+                        IMMessageBean imMessageBean = null;
                         jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
-                        if (messageList.size() > 0 && null != contactBean) {
+
+                        //单聊，群聊处理
+                        if (messageList.size() > 0) {
                             AVIMMessage lastMessage = messageList.get(messageList.size() - 1);
-
-                            imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(),
-                                    "0", contactBean.getNickname(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), lastMessage);
-
+                            if (chatType == 1001) {
+                                //拿到对方信息
+                                getSpeakToInfo(imConversation);
+                                if (null != contactBean) {
+                                    //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息
+                                    imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0", contactBean.getNickname(),
+                                            String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), lastMessage);
+                                }
+                            } else if (chatType == 1002) {
+                                //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息(群对象和群头像暂时为空)
+                                imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0", imConversation.getName(),
+                                        "", "", lastMessage);
+                            }
                             MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
                         }
 
-                        imChatAdapter.setChatType(imConversation.getAttribute("chat_type") == null ? 1001 : (int) imConversation.getAttribute("chat_type"));
+                        imChatAdapter.setChatType(chatType);
                         imChatAdapter.notifyDataSetChanged();
 
-                        //message_recycler.smoothScrollToPosition(messageList.size()-1);
                         message_recycler.getLayoutManager().scrollToPosition(messageList.size() - 1);
                     }
                 }
@@ -643,15 +663,15 @@ public class ChatFragment extends BaseFragment {
             contactBeanList.addAll(list);
         }
 
-//        for (int i = 0; i < contactBeanList.size(); i++) {
-//            if ((contactBeanList.get(i).getFriend_id() + "").equals(speakTo)) {
-//                contactBean = contactBeanList.get(i);
-//                if (null != listener) {
-//                    listener.setData(contactBean);
-//                }
-//                KLog.e(contactBean);
-//            }
-//        }
+        for (int i = 0; i < contactBeanList.size(); i++) {
+            if ((contactBeanList.get(i).getFriend_id() + "").equals(speakTo)) {
+                contactBean = contactBeanList.get(i);
+                if (null != listener) {
+                    listener.setData(contactBean);
+                }
+                KLog.e(contactBean);
+            }
+        }
     }
 
     /**
@@ -722,17 +742,13 @@ public class ChatFragment extends BaseFragment {
         find_more_layout.setLayoutParams(params);
     }
 
-
+    //群会话入口
     public void setConversation(AVIMConversation conversation) {
         if (null != conversation) {
             imConversation = conversation;
             //拉取历史记录(直接从LeanCloud拉取)
             getHistoryMessage();
         }
-    }
-
-    public AVIMConversation getImConversation() {
-        return imConversation;
     }
 
     @Override
@@ -749,7 +765,7 @@ public class ChatFragment extends BaseFragment {
 
     //activiy必须实现这个接口
     public interface MyListener {
-        public void setData(ContactBean contactBean);
+        void setData(ContactBean contactBean);
     }
 
     @Subscriber(tag = "refresh_recyle")
@@ -768,15 +784,29 @@ public class ChatFragment extends BaseFragment {
             Map<String, Object> map = baseMessage.getOthers();
             AVIMMessage message = (AVIMMessage) map.get("message");
             AVIMConversation conversation = (AVIMConversation) map.get("conversation");
-
+            JSONObject contentObject = JSON.parseObject(message.getContent());
+            String _lctype = contentObject.getString("_lctype");
+            if (_lctype.equals("5")) {
+                HashMap<String, String> messagemap = new HashMap<>();
+                map.put("_lctext", imConversation.getName() + "加入群聊");
+                map.put("_lctype", "5");
+                message.setContent(JSON.toJSONString(map));
+            }
             //判断房间一致然后做消息接收处理
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
                 imChatAdapter.addItem(message);
                 message_recycler.smoothScrollToPosition(messageList.size() - 1);
-
                 //此处头像，昵称日后有数据再改
-                IMMessageBean imMessageBean = new IMMessageBean(imConversation.getConversationId(), (int) imConversation.getAttribute("chat_type"), message.getTimestamp(),
-                        "0", message.getFrom(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
+                IMMessageBean imMessageBean = null;
+                if (chatType == 1001) {
+                    imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
+                            "0", message.getFrom(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
+
+                } else if (chatType == 1002) {
+                    //群对象和群头像暂时为空
+                    imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
+                            "0", conversation.getName(), "", "", message);
+                }
 
                 MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
             }

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
+import com.socks.library.KLog;
 
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
@@ -19,7 +20,7 @@ public class MessageUtils {
     public static void saveMessageInfo(JSONArray thisJsonArray, IMMessageBean imMessageBean) {
 
         JSONObject jsonObject = new JSONObject();
-        if (thisJsonArray != null) {
+        if (thisJsonArray != null && imMessageBean != null) {
             for (int i = 0; i < thisJsonArray.size(); i++) {
                 if (thisJsonArray.getJSONObject(i).get("conversationID").equals(imMessageBean.getConversationID())) {
                     thisJsonArray.remove(i);
@@ -58,6 +59,7 @@ public class MessageUtils {
             }
 
             thisJsonArray.add(jsonObject);
+            KLog.e(jsonObject);
             SPTools.saveJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", thisJsonArray);
         } else {
 

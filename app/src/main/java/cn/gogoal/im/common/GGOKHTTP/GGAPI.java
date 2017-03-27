@@ -17,6 +17,12 @@ public class GGAPI {
     private static final String APP_KEY = "HBTORVzBaGtqmGE";
     private static final String APP_SECRET = "cGYIsTyTWXGeP4frqOqmdWxRO5xmh2Pi";
 
+    //春哥环境
+    /*public static final String WEB_URL = "http://192.168.52.150:9000";
+    private static final String Native_API = "http://192.168.52.150:9000";
+    private static final String APP_KEY = "HBTORVzBaGtqmGE";
+    private static final String APP_SECRET = "cGYIsTyTWXGeP4frqOqmdWxRO5xmh2Pi";*/
+
     //正式环境
 //    public static final String WEB_URL = "http://211.144.193.162:8085";
 //    private static final String Native_API = "https://ggservice.go-goal.cn";
@@ -25,7 +31,7 @@ public class GGAPI {
 
     public static String get(String api, Map<String, String> params) throws Exception {
         long timeStamp = System.currentTimeMillis() / 1000L;
-        String sign = getSign(APP_KEY, APP_SECRET,timeStamp, params, api, "GET");
+        String sign = getSign(APP_KEY, APP_SECRET, timeStamp, params, api, "GET");
         String incomingParams = "";
         String url;
         if (params != null) {
@@ -70,7 +76,7 @@ public class GGAPI {
     }
 
     private static String getSign(String appKey, String appSecret, Long timeStamp, Map<String, String> params, String url, String requestMethod) {
-        HashMap<String,String> paramsMap = new HashMap<>();
+        HashMap<String, String> paramsMap = new HashMap<>();
         if (params != null) {
             paramsMap.putAll(params);
         }
