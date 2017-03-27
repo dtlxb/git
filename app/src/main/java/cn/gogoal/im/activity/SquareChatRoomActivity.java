@@ -73,7 +73,8 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
         AVImClientManager.getInstance().findConversationById(conversationId, new AVImClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
-                joinSquare(conversation);
+//                joinSquare(conversation);
+                chatFragment.setConversation(conversation);
                 groupMembers.addAll(conversation.getMembers());
             }
 
@@ -88,7 +89,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
     /**
      * 加入聊天室
      */
-    private void joinSquare(final AVIMConversation conversation) {
+    /*private void joinSquare(final AVIMConversation conversation) {
         conversation.join(new AVIMConversationCallback() {
             @Override
             public void done(AVIMException e) {
@@ -97,8 +98,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
                 }
             }
         });
-    }
-
+    }*/
     @Override
     public void setData(ContactBean contactBean) {
         this.contactBean = contactBean;
