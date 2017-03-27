@@ -30,6 +30,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -103,6 +104,24 @@ public class PlayerActivity extends BaseActivity {
     //直播预告展示
     @BindView(R.id.countDownTimer)
     CountDownTimerView countDownTimer;
+
+    //缓冲控件
+    @BindView(R.id.LayoutTip)
+    LinearLayout LayoutTip;
+    //暂停
+    @BindView(R.id.LayoutPause)
+    LinearLayout LayoutPause;
+    @BindView(R.id.imgPause)
+    ImageView imgPause;
+    //进度条
+    @BindView(R.id.LayoutProgress)
+    LinearLayout LayoutProgress;
+    @BindView(R.id.currentDuration)
+    TextView currentDuration;
+    @BindView(R.id.progress)
+    SeekBar mSeekBar;
+    @BindView(R.id.totalDuration)
+    TextView totalDuration;
 
     public static final int STATUS_START = 1;
     public static final int STATUS_STOP = 2;
@@ -736,9 +755,11 @@ public class PlayerActivity extends BaseActivity {
                     break;
                 case MediaPlayer.MEDIA_INFO_BUFFERING_START: //当开始缓冲时，收到该信息
                     //pause();
+                    show_buffering_ui(true);
                     break;
                 case MediaPlayer.MEDIA_INFO_BUFFERING_END: //缓冲结束时收到该信息
                     //start();
+                    show_buffering_ui(false);
                     break;
                 case MediaPlayer.MEDIA_INFO_TRACKING_LAGGING: //
                     break;
@@ -852,6 +873,50 @@ public class PlayerActivity extends BaseActivity {
 
     public void setStatusListener(StatusListener listener) {
         mStatusListener = listener;
+    }
+
+    /*
+    * 缓冲显示
+    * */
+    private void show_buffering_ui(boolean bShowTip) {
+        LayoutTip.setVisibility(bShowTip ? View.VISIBLE : View.GONE);
+    }
+
+    /*
+    * 暂停显示
+    * */
+    private void show_pause_ui(boolean bShowPauseBtn) {
+
+        if (!bShowPauseBtn) {
+            LayoutPause.setVisibility(View.GONE);
+        } else {
+            LayoutPause.setVisibility(View.VISIBLE);
+        }
+
+        imgPause.setVisibility(bShowPauseBtn ? View.VISIBLE : View.GONE);
+
+        return;
+    }
+
+    /*
+    * 显示进度条
+    * */
+    private void show_progress_ui(boolean bShowPause) {
+
+        if (bShowPause) {
+            LayoutProgress.setVisibility(View.VISIBLE);
+        } else {
+            //LayoutProgress.setVisibility(View.GONE);
+        }
+    }
+
+    /*
+    * 重置UI
+    * */
+    private void resetUI() {
+        mSeekBar.setProgress(0);
+        show_pause_ui(false);
+        show_progress_ui(false);
     }
 
     @Override
