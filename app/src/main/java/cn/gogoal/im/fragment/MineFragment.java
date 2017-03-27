@@ -23,7 +23,6 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.ChooseContactActivity;
 import cn.gogoal.im.activity.TestActivity;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
@@ -165,10 +164,6 @@ public class MineFragment extends BaseFragment {
                 public void onClick(View v) {
                     switch (position) {
                         case 0:
-                            Intent intent = new Intent(getContext(), ChooseContactActivity.class);
-                            intent.putExtra("team_id","586656465465");
-                            intent.putExtra("is_add_team_member_mode",true);
-                            startActivityForResult(intent,10086);
                             break;
                         case 1:
                             startActivity(new Intent(getContext(),TestActivity.class));
@@ -182,13 +177,4 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        KLog.e(requestCode);
-        if (requestCode==10086){
-            ArrayList<ContactBean> friendArray = (ArrayList<ContactBean>) data.getSerializableExtra("choose_friend_array");
-            KLog.e(JSONObject.toJSONString(friendArray));
-        }
-    }
 }

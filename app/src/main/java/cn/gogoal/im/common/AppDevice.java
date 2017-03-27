@@ -35,10 +35,12 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 
 import java.io.File;
 import java.io.IOException;
@@ -96,6 +98,22 @@ public class AppDevice {
         wManager.getDefaultDisplay().getMetrics(dm);
         return dm.widthPixels;
     }
+
+    /**
+     * 代码动态控制布局中控件的宽高
+     * */
+    public static void setViewWidth$Height(View view, int height, int width){
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        if (null != params){
+            params.height=height;
+            params.width=width;
+            view.setLayoutParams(params);
+        }else {
+            FrameLayout.LayoutParams framelayoutParams=new FrameLayout.LayoutParams(width,height);
+            view.setLayoutParams(framelayoutParams);
+        }
+    }
+
 
     /**
      * 获得屏幕高度 px

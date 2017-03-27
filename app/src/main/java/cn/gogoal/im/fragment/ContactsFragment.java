@@ -53,9 +53,8 @@ public class ContactsFragment extends BaseFragment {
     @BindView(R.id.tv_constacts_flag)
     TextView tvConstactsFlag;
 
-    private boolean added=true;
+    private boolean added = true;
     private ContactAdapter contactAdapter;
-    private SuspendedDecoration mDecoration;
     private ArrayList<ContactBean> contactBeanList;
 
     public ContactsFragment() {
@@ -94,9 +93,9 @@ public class ContactsFragment extends BaseFragment {
         contactBeanList = new ArrayList<>();
 
         //添加联系人功能头部item
-        addContactHead(contactBeanList);
+        addContactHead();
 
-        getData(contactBeanList);//联系人列表数据
+        getData();//联系人列表数据
 
         contactAdapter = new ContactAdapter(getContext(), contactBeanList);
 
@@ -131,7 +130,7 @@ public class ContactsFragment extends BaseFragment {
 
     }
 
-    private void getData(List<ContactBean> contactBeanList) {
+    private void getData() {
         //缓存的联系人请求数据
         String friendResponseInfo = SPTools.getString(UserUtils.getToken() + "_contact_beans", "");
         KLog.e(friendResponseInfo);
@@ -142,8 +141,10 @@ public class ContactsFragment extends BaseFragment {
         }
     }
 
-    /**添加联系人列表头部*/
-    private void addContactHead(List<ContactBean> contactBeanList) {
+    /**
+     * 添加联系人列表头部
+     */
+    private void addContactHead() {
         contactBeanList.add(addFunctionHead("新的朋友", R.mipmap.cache_img_contacts_0));
         contactBeanList.add(addFunctionHead("群聊", R.mipmap.cache_img_contacts_1));
         contactBeanList.add(addFunctionHead("标签", R.mipmap.cache_img_contacts_2));
@@ -207,11 +208,8 @@ public class ContactsFragment extends BaseFragment {
         contactBeanList.addAll(list);
 
         KLog.e(contactBeanList);
-        SuspendedDecoration mDecoration = new SuspendedDecoration(getContext(), contactBeanList);
 
-        if (null == mDecoration) {
-            mDecoration = new SuspendedDecoration(getContext());
-        }
+        SuspendedDecoration mDecoration = new SuspendedDecoration(getContext());
 
         mDecoration.setmDatas(contactBeanList);
 
@@ -220,13 +218,13 @@ public class ContactsFragment extends BaseFragment {
 
         if (added) {
             rvContacts.addItemDecoration(mDecoration);
-            added=false;
+            added = false;
         }
     }
 
     public void refreshAdapter() {
-        contactBeanList.clear();
-        getData(contactBeanList);//列表数据
-        contactAdapter.notifyDataSetChanged();
+//        contactBeanList.clear();
+//        getData();//列表数据
+//        contactAdapter.notifyDataSetChanged();
     }
 }

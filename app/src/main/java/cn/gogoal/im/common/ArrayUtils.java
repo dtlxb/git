@@ -1,15 +1,15 @@
 package cn.gogoal.im.common;
 
+import android.util.SparseArray;
+
 import com.alibaba.fastjson.JSONArray;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -78,32 +78,57 @@ public class ArrayUtils {
     }
 
     /**通过map的value获取key*/
-    public static ArrayList valueGetKey(Map map, String value) {
-        Set set = map.entrySet();//新建一个不可重复的集合
-        ArrayList arr = new ArrayList<>();//新建一个集合
-        Iterator it = set.iterator();//遍历的类
-        while(it.hasNext()) {
-            Map.Entry entry = (Map.Entry)it.next();//找到所有key-value对集合
-            if(entry.getValue().equals(value)) {//通过判断是否有该value值
-                int s = (int)entry.getKey();//取得key值
-                arr.add(s);
+    public static <T> ArrayList valueGetKey(Map<Integer,T> map, String value) {
+        ArrayList<Integer> arr = new ArrayList<>();//新建一个集合
+        for (Map.Entry<Integer, T> entry:map.entrySet()){
+            if (entry.getValue()==value){
+                arr.add(entry.getKey());
             }
         }
         return arr;
     }
+
     /**通过map的value获取key*/
     public static <T> int valueGetKey(Map<Integer,T> map, T value) {
-        Set set = map.entrySet();//新建一个不可重复的集合
-        Iterator it = set.iterator();//遍历的类
+        for (Map.Entry<Integer,T> entry:map.entrySet()){
+            if (entry.getValue()==value){
+                return entry.getKey();
+            }
+        }
+        return -1;
+    }
 
-        while(it.hasNext()) {
-            Map.Entry entry = (Map.Entry)it.next();//找到所有key-value对集合
-            if(entry.getValue().equals(value)) {//通过判断是否有该value值
-                return  (int)entry.getKey();//取得key值
-
+    /**通过SparseArray的value获取key*/
+    public static <T> int valueGetKey(SparseArray<T> array, T value) {
+        for (int i=0;i<array.size();i++){
+            if (array.get(i)==value){
+                return array.keyAt(i);
             }
         }
 
         return -1;
     }
+
+    /**通过SparseArray的value获取key*/
+    public static <T> int valueGetKey(List<T> array, T value) {
+        for (int i=0;i<array.size();i++){
+            if (array.get(i)==value){
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    /**通过SparseArray的value获取key*/
+    public static <T> List<T> sparseArrayGetValue(SparseArray<T> array) {
+        ArrayList<T> arrayList=new ArrayList<>();
+        for (int i=0;i<array.size();i++){
+            arrayList.add(array.valueAt(i));
+        }
+
+        return arrayList;
+    }
+
+
 }

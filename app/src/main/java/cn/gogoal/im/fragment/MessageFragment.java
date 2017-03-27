@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -31,14 +30,13 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.IMAddFriendActivity;
+import cn.gogoal.im.activity.ChooseContactActivity;
 import cn.gogoal.im.activity.IMNewFrienActivity;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
+import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
@@ -52,7 +50,6 @@ import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.badgeview.Badge;
 import cn.gogoal.im.ui.badgeview.BadgeView;
@@ -208,45 +205,58 @@ public class MessageFragment extends BaseFragment {
                 inflate(R.layout.chat_message_more,
                         new LinearLayout(getActivity().getApplicationContext()), false);
 
-        initPopu(popuView);
 
         PopupWindow popuWindow = new PopupWindow(popuView,
                 (int) (AppDevice.getWidth(getContext()) * 0.4), -2, //// 弹窗宽、高
                 true);// 是否获取焦点（能使用返回键能关闭而不是退出）
+        initPopu(popuView,popuWindow);
         popuWindow.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.chat_popu_more));
         popuWindow.setOutsideTouchable(true);// 点击周边可关闭
         popuWindow.showAsDropDown(clickView, AppDevice.dp2px(getContext(), 5), AppDevice.dp2px(getContext(), 6));
 
-        AppDevice.backgroundAlpha(getActivity(), 1.0f);
+        AppDevice.backgroundAlpha(getActivity(), 0.6f);
         popuWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
                 AppDevice.backgroundAlpha(getActivity(), 1.0f);
             }
         });
+
     }
 
     //初始化弹窗
-    private void initPopu(View popuView) {
+    private void initPopu(View popuView,PopupWindow popupWindow) {
         RelativeLayout find_man_layout = (RelativeLayout) popuView.findViewById(R.id.find_man_layout);
         RelativeLayout find_square_layout = (RelativeLayout) popuView.findViewById(R.id.find_square_layout);
         RelativeLayout take_square_layout = (RelativeLayout) popuView.findViewById(R.id.take_square_layout);
         RelativeLayout sweep_twocode_layout = (RelativeLayout) popuView.findViewById(R.id.sweep_twocode_layout);
-        find_man_layout.setOnClickListener(new PopuClick());
-        find_square_layout.setOnClickListener(new PopuClick());
-        take_square_layout.setOnClickListener(new PopuClick());
-        sweep_twocode_layout.setOnClickListener(new PopuClick());
+        find_man_layout.setOnClickListener(new PopuClick(popupWindow));
+        find_square_layout.setOnClickListener(new PopuClick(popupWindow));
+        take_square_layout.setOnClickListener(new PopuClick(popupWindow));
+        sweep_twocode_layout.setOnClickListener(new PopuClick(popupWindow));
     }
 
     //弹窗监听事件
     private class PopuClick implements View.OnClickListener {
 
+        PopupWindow popupWindow;
+
+        public PopuClick(PopupWindow popupWindow) {
+            this.popupWindow = popupWindow;
+        }
+
         @Override
         public void onClick(View v) {
+            popupWindow.dismiss();
+
             switch (v.getId()) {
                 case R.id.find_man_layout:
                     break;
                 case R.id.find_square_layout:
+                    Intent intent = new Intent(getContext(), ChooseContactActivity.class);
+                    intent.putExtra("team_id","586656465465");
+                    intent.putExtra("is_add_team_member_mode",true);
+                    startActivity(intent);
                     break;
                 case R.id.take_square_layout:
                     break;

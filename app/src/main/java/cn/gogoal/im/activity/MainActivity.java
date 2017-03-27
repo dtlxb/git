@@ -70,7 +70,6 @@ public class MainActivity extends BaseActivity {
                 tab.setCustomView(tabAdapter.getTabView(i));
             }
         }
-        tabMain.getTabAt(3).select();
 
         tabMain.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
