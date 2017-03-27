@@ -9,7 +9,7 @@
         android:id="@+id/find_man_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="18dp">
+        android:padding="14dp">
 
         <ImageView
             android:id="@+id/iv_find_man"
@@ -38,7 +38,7 @@
         android:id="@+id/find_square_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="18dp">
+        android:padding="14dp">
 
         <ImageView
             android:id="@+id/iv_find_square"
@@ -68,7 +68,7 @@
         android:id="@+id/take_square_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="18dp">
+        android:padding="14dp">
 
         <ImageView
             android:id="@+id/iv_take_square"
@@ -97,7 +97,7 @@
         android:id="@+id/sweep_twocode_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="18dp">
+        android:padding="14dp">
 
         <ImageView
             android:id="@+id/iv_sweep_code"
