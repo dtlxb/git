@@ -257,13 +257,15 @@ public class ChooseContactActivity extends BaseActivity {
         final List<ContactBean> filteredModelList = new ArrayList<>();
         for (ContactBean contactBean : contactBeanList) {
 
+            final String targetZh = contactBean.getTarget().toLowerCase();//原始文本
+
+            final String targetEn = Pinyin.toPinyin(targetZh, "").toLowerCase();//
+
             final String simpleSpell = getSimpleSpell(contactBean.getTarget());
 
-            final String targetZh = contactBean.getTarget().toLowerCase();
-
-            final String reMarkEn = Pinyin.toPinyin(targetZh, "").toLowerCase();
-
-            if (targetZh.contains(query) || reMarkEn.contains(query) || simpleSpell.contains(getSimpleSpell(query))) {
+            if (targetZh.contains(query) ||
+                    targetEn.contains(query) ||
+                    simpleSpell.substring(0,getSimpleSpell(query).length()).equals(getSimpleSpell(query))) {
 
                 filteredModelList.add(contactBean);
             }
