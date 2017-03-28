@@ -4,6 +4,7 @@ package cn.gogoal.im.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -138,22 +139,25 @@ public class MessageFragment extends BaseFragment {
                     public void joinSuccess(AVIMConversation conversation) {
                         String chat_type = conversation.getAttribute("chat_type") == null ? "1001" : conversation.getAttribute("chat_type").toString();
                         Intent intent;
+                        Bundle bundle = new Bundle();
                         switch (chat_type) {
                             case "1001":
                                 //单聊处理
                                 KLog.e(conversation.getConversationId());
                                 intent = new Intent(getContext(), SingleChatRoomActivity.class);
-                                intent.putExtra("nickname", IMMessageBeans.get(position).getNickname());
-                                intent.putExtra("conversation_id", conversation_id);
-                                intent.putExtra("need_update", true);
+                                bundle.putString("conversation_id", conversation_id);
+                                bundle.putString("squareName", IMMessageBeans.get(position).getNickname());
+                                bundle.putBoolean("need_update", true);
+                                intent.putExtras(bundle);
                                 startActivity(intent);
                                 break;
                             case "1002":
                                 //群聊处理
                                 intent = new Intent(getContext(), SquareChatRoomActivity.class);
-                                intent.putExtra("conversation_id", conversation_id);
-                                intent.putExtra("squareName", IMMessageBeans.get(position).getNickname());
-                                intent.putExtra("need_update", true);
+                                bundle.putString("conversation_id", conversation_id);
+                                bundle.putString("squareName", IMMessageBeans.get(position).getNickname());
+                                bundle.putBoolean("need_update", true);
+                                intent.putExtras(bundle);
                                 startActivity(intent);
                                 break;
                             case "1003":
@@ -211,23 +215,15 @@ public class MessageFragment extends BaseFragment {
         PopupWindow popuWindow = new PopupWindow(popuView,
                 (int) (AppDevice.getWidth(getContext()) * 0.4), -2, //// 弹窗宽、高
                 true);// 是否获取焦点（能使用返回键能关闭而不是退出）
-        initPopu(popuView,popuWindow);
+        initPopu(popuView, popuWindow);
         popuWindow.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.chat_popu_more));
         popuWindow.setOutsideTouchable(true);// 点击周边可关闭
         popuWindow.showAsDropDown(clickView, AppDevice.dp2px(getContext(), 5), AppDevice.dp2px(getContext(), 6));
 
-        AppDevice.backgroundAlpha(getActivity(), 0.6f);
-        popuWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                AppDevice.backgroundAlpha(getActivity(), 1.0f);
-            }
-        });
-
     }
 
     //初始化弹窗
-    private void initPopu(View popuView,PopupWindow popupWindow) {
+    private void initPopu(View popuView, PopupWindow popupWindow) {
         RelativeLayout find_man_layout = (RelativeLayout) popuView.findViewById(R.id.find_man_layout);
         RelativeLayout find_square_layout = (RelativeLayout) popuView.findViewById(R.id.find_square_layout);
         RelativeLayout take_square_layout = (RelativeLayout) popuView.findViewById(R.id.take_square_layout);
@@ -255,12 +251,13 @@ public class MessageFragment extends BaseFragment {
                 case R.id.find_man_layout:
                     break;
                 case R.id.find_square_layout:
-                    Intent intent = new Intent(getContext(), ChooseContactActivity.class);
-                    intent.putExtra("team_id","586656465465");
-                    intent.putExtra("is_add_team_member_mode",true);
-                    startActivity(intent);
                     break;
                 case R.id.take_square_layout:
+                    Intent intent = new Intent(getContext(), ChooseContactActivity.class);
+                    Bundle mBundle = new Bundle();
+                    mBundle.putInt("square_action", AppConst.CREATE_SQUARE_ROOM_DIRECT);
+                    intent.putExtras(mBundle);
+                    startActivity(intent);
                     break;
                 case R.id.sweep_twocode_layout:
                     break;

@@ -2,6 +2,7 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -78,7 +79,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
         Log.e("++++conversationId", conversationId);
         JSONArray accountArray = SPTools.getJsonArray(UserUtils.getToken() + conversationId + "_accountList_beans", null);
         //缓存中没有群信息则向后台拉取
-        Log.e("++++accountArray", accountArray.toString());
         if (null != accountArray) {
             getAllContacts(accountArray);
         } else {
@@ -90,23 +90,31 @@ public class IMSquareChatSetActivity extends BaseActivity {
             @Override
             public void onItemClick(RecyclerView.ViewHolder holder, View view, int position) {
                 Intent intent;
+                Bundle mBundle = new Bundle();
                 if (position == contactBeens.size() - 1) {
-                    //createChatGroup();
                     //删除人
-                    List<String> strings = new ArrayList<String>();
+                    /*List<String> strings = new ArrayList<String>();
                     for (int i = 0; i < idList.size() - 2; i++) {
                         if (!idList.get(i).equals(UserUtils.getToken())) {
                             strings.add(idList.get(i));
                         }
                     }
 
-                    deleteAnyone(strings);
+                    deleteAnyone(strings);*/
+                    intent = new Intent(IMSquareChatSetActivity.this, ChooseContactActivity.class);
+                    mBundle.putInt("square_action", AppConst.SQUARE_ROOM_DELETE_ANYONE);
+                    intent.putExtras(mBundle);
+                    startActivity(intent);
 
                 } else if (position == contactBeens.size() - 2) {
-
+                    intent = new Intent(IMSquareChatSetActivity.this, ChooseContactActivity.class);
+                    mBundle.putInt("square_action", AppConst.SQUARE_ROOM_ADD_ANYONE);
+                    intent.putExtras(mBundle);
+                    startActivity(intent);
                 } else {
                     intent = new Intent(IMSquareChatSetActivity.this, IMPersonDetailActivity.class);
-                    intent.putExtra("friend_id", contactBeens.get(position).getFriend_id());
+                    mBundle.putInt("friend_id", contactBeens.get(position).getFriend_id());
+                    intent.putExtras(mBundle);
                     startActivity(intent);
                 }
             }
@@ -158,7 +166,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
         }
 
         //测试代码,没有数据的时候拉通讯录建群
-        //parseContactDatas(SPTools.getString(AppConst.LEAN_CLOUD_TOKEN + "_contact_beans", ""));
         for (int i = 0; i < contactBeens.size(); i++) {
             imageList.add(contactBeens.get(i).getAvatar().toString());
             idList.add(String.valueOf(contactBeens.get(i).getFriend_id()));
@@ -169,23 +176,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
         mPersonInfoAdapter.notifyDataSetChanged();
         KLog.e(contactBeens);
-    }
-
-    //群头像测试
-    private void parseContactDatas(String responseInfo) {
-        if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-            BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
-                    responseInfo,
-                    new TypeReference<BaseBeanList<ContactBean<String>>>() {
-                    });
-            List<ContactBean<String>> list = beanList.getData();
-
-            for (ContactBean<String> bean : list) {
-                bean.setContactType(ContactBean.ContactType.PERSION_ITEM);
-            }
-
-            contactBeens.addAll(list);
-        }
     }
 
     //删除群成员
@@ -241,7 +231,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         new GGOKHTTP(params, GGOKHTTP.ADD_MEMBER, ggHttpInterface).startGet();
     }
 
-    //拉取群组消息
+    //拉取群组信息
     public void getChatGroup(List<String> groupMembers) {
         Map<String, String> params = new HashMap<>();
         params.put("token", AppConst.LEAN_CLOUD_TOKEN);
@@ -269,34 +259,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
             }
         };
         new GGOKHTTP(params, GGOKHTTP.GET_MEMBER_INFO, ggHttpInterface).startGet();
-    }
-
-
-    //创建群组
-    public void createChatGroup() {
-
-        Map<String, String> params = new HashMap<>();
-        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
-        params.put("id_list", JSONObject.toJSONString(idList));
-        KLog.e(params);
-
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
-                if ((int) result.get("code") == 0) {
-                    UIHelper.toast(IMSquareChatSetActivity.this, "群组创建成功!!!");
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                KLog.json(msg);
-            }
-        };
-        new GGOKHTTP(params, GGOKHTTP.CREATE_GROUP_CHAT, ggHttpInterface).startGet();
     }
 
     /*@OnClick({R.id.tv_do_search_conversation, R.id.getmessage_swith})

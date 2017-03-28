@@ -2,6 +2,7 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
@@ -47,8 +48,6 @@ public class IMPersonActivity extends BaseActivity {
     private IMPersonSetAdapter mPersonInfoAdapter;
     private List<ContactBean> contactBeens = new ArrayList<>();
     private String conversationId;
-    private List<String> idList = new ArrayList<>();
-    private List<String> imageList = new ArrayList<>();
 
     @Override
     public int bindLayout() {
@@ -59,20 +58,11 @@ public class IMPersonActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         setMyTitle(R.string.title_chat_person_detial, true);
         initRecycleView(personlistRecycler, null);
-        ContactBean contactBean = (ContactBean) getIntent().getSerializableExtra("seri");
+        final ContactBean contactBean = (ContactBean) getIntent().getSerializableExtra("seri");
         conversationId = getIntent().getStringExtra("conversation_id");
-//        contactBeens.add(contactBean);
-
-        parseContactDatas(SPTools.getString(AppConst.LEAN_CLOUD_TOKEN + "_contact_beans", ""));
-
+        contactBeens.add(contactBean);
         contactBeens.add(addFunctionHead("", R.mipmap.person_add));
 
-        for (int i = 0; i < contactBeens.size() - 1; i++) {
-            imageList.add(contactBeens.get(i).getAvatar().toString());
-            KLog.e(contactBeens.get(i).getFriend_id());
-            idList.add(String.valueOf(contactBeens.get(i).getFriend_id()));
-        }
-        idList.add(AppConst.LEAN_CLOUD_TOKEN);
         KLog.e(contactBeens);
         //初始化
         personlistRecycler.setLayoutManager(new GridLayoutManager(this, 5));
@@ -82,10 +72,16 @@ public class IMPersonActivity extends BaseActivity {
         mPersonInfoAdapter.setOnItemClickListener(new OnItemClickLitener() {
             @Override
             public void onItemClick(RecyclerView.ViewHolder holder, View view, int position) {
+                Intent intent;
                 if (position == contactBeens.size() - 1) {
-                    createChatGroup(idList);
+                    intent = new Intent(IMPersonActivity.this, ChooseContactActivity.class);
+                    Bundle mBundle = new Bundle();
+                    mBundle.putInt("square_action", AppConst.CREATE_SQUARE_ROOM_BY_ONE);
+                    mBundle.putSerializable("seri", contactBean);
+                    intent.putExtras(mBundle);
+                    startActivity(intent);
                 } else {
-                    Intent intent = new Intent(IMPersonActivity.this, IMPersonDetailActivity.class);
+                    intent = new Intent(IMPersonActivity.this, IMPersonDetailActivity.class);
                     intent.putExtra("friend_id", contactBeens.get(position).getFriend_id());
                     startActivity(intent);
                 }
@@ -98,51 +94,6 @@ public class IMPersonActivity extends BaseActivity {
         });
 
     }
-
-    //群头像测试
-    private void parseContactDatas(String responseInfo) {
-        if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-            BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
-                    responseInfo,
-                    new TypeReference<BaseBeanList<ContactBean<String>>>() {
-                    });
-            List<ContactBean<String>> list = beanList.getData();
-
-            for (ContactBean<String> bean : list) {
-                bean.setContactType(ContactBean.ContactType.PERSION_ITEM);
-            }
-
-            contactBeens.addAll(list);
-        }
-    }
-
-    //创建群组
-    public void createChatGroup(List<String> idList) {
-
-        Map<String, String> params = new HashMap<>();
-        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
-        params.put("id_list", JSONObject.toJSONString(idList));
-        KLog.e(params);
-
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
-                if ((int) result.get("code") == 0) {
-                    UIHelper.toast(IMPersonActivity.this, "群组创建成功!!!");
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                KLog.json(msg);
-            }
-        };
-        new GGOKHTTP(params, GGOKHTTP.CREATE_GROUP_CHAT, ggHttpInterface).startGet();
-    }
-
 
     private ContactBean<Integer> addFunctionHead(String name, @DrawableRes int iconId) {
         ContactBean<Integer> bean = new ContactBean<>();
@@ -163,39 +114,6 @@ public class IMPersonActivity extends BaseActivity {
                 break;
             case R.id.getmessage_swith:
                 break;
-        }
-    }
-
-    private class PersonInfoAdapter extends CommonAdapter<ContactBean> {
-
-        private PersonInfoAdapter(Context context, int layoutId, List<ContactBean> datas) {
-            super(context, layoutId, datas);
-        }
-
-        @Override
-        protected void convert(ViewHolder holder, ContactBean contactBean, int position) {
-
-            final View view = holder.getView(R.id.layout_grid);
-            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-            layoutParams.width = AppDevice.getWidth(getmContext()) / 5;
-            layoutParams.height = AppDevice.getWidth(getmContext()) / 4;
-            view.setBackgroundColor(ContextCompat.getColor(mContext, R.color.absoluteWhite));
-            view.setLayoutParams(layoutParams);
-
-            AppCompatImageView imageIcon = holder.getView(R.id.iv);
-            ViewGroup.LayoutParams viewParams = imageIcon.getLayoutParams();
-            viewParams.width = AppDevice.getWidth(getmContext()) / 8;
-            viewParams.height = AppDevice.getWidth(getmContext()) / 8;
-            imageIcon.setLayoutParams(viewParams);
-
-            Object avatar = contactBean.getAvatar();
-            holder.setText(R.id.tv, contactBean.getNickname());
-
-            if (avatar instanceof String) {
-                holder.setImageUrl(R.id.iv, avatar.toString());
-            } else if (avatar instanceof Integer) {
-                holder.setImageResource(R.id.iv, (Integer) avatar);
-            }
         }
     }
 
