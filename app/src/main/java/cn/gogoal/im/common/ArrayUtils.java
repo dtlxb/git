@@ -78,25 +78,15 @@ public class ArrayUtils {
     }
 
     /**通过map的value获取key*/
-    public static <T> ArrayList valueGetKey(Map<Integer,T> map, String value) {
-        ArrayList<Integer> arr = new ArrayList<>();//新建一个集合
-        for (Map.Entry<Integer, T> entry:map.entrySet()){
+    public static <T,E> T valueGetKey(Map<E,T> map, T value) {
+        for (Map.Entry<E, T> entry:map.entrySet()){
             if (entry.getValue()==value){
-                arr.add(entry.getKey());
+                entry.getKey();
             }
         }
-        return arr;
+        return null;
     }
 
-    /**通过map的value获取key*/
-    public static <T> int valueGetKey(Map<Integer,T> map, T value) {
-        for (Map.Entry<Integer,T> entry:map.entrySet()){
-            if (entry.getValue()==value){
-                return entry.getKey();
-            }
-        }
-        return -1;
-    }
 
     /**通过SparseArray的value获取key*/
     public static <T> int valueGetKey(SparseArray<T> array, T value) {
@@ -109,16 +99,6 @@ public class ArrayUtils {
         return -1;
     }
 
-    /**通过SparseArray的value获取key*/
-    public static <T> int valueGetKey(List<T> array, T value) {
-        for (int i=0;i<array.size();i++){
-            if (array.get(i)==value){
-                return i;
-            }
-        }
-
-        return -1;
-    }
 
     /**通过SparseArray的value获取key*/
     public static <T> List<T> sparseArrayGetValue(SparseArray<T> array) {

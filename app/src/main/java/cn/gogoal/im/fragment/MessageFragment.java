@@ -255,12 +255,12 @@ public class MessageFragment extends BaseFragment {
                 case R.id.find_man_layout:
                     break;
                 case R.id.find_square_layout:
+                    break;
+                case R.id.take_square_layout:
                     Intent intent = new Intent(getContext(), ChooseContactActivity.class);
                     intent.putExtra("team_id","586656465465");
                     intent.putExtra("is_add_team_member_mode",true);
                     startActivity(intent);
-                    break;
-                case R.id.take_square_layout:
                     break;
                 case R.id.sweep_twocode_layout:
                     break;

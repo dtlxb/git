@@ -18,7 +18,7 @@ import com.hply.imagepicker.view.SuperCheckBox;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +47,12 @@ import static com.igexin.sdk.GTServiceManager.context;
  * description :${annotated}.
  */
 public class ChooseContactActivity extends BaseActivity {
+
+    private static final int FUNCTION_TYPE_BUILD = 10086;
+
+    private static final int FUNCTION_TYPE_ADD = 10010;
+
+    private static final int FUNCTION_TYPE_DEL = 10000;
 
     private ICheckItemListener<ContactBean> listener;
 
@@ -80,7 +86,7 @@ public class ChooseContactActivity extends BaseActivity {
     //标记当前模式（false表示是【创建群】，true表示【拉人进群】）
     private boolean isAddTeamMemberMode = false;
 
-    private Map<Integer, ContactBean> result = new HashMap<>();
+    private Map<Long, ContactBean> result = new LinkedHashMap<>();
 
     private SelectedAdapter selectedAdapter;
 
@@ -93,7 +99,7 @@ public class ChooseContactActivity extends BaseActivity {
 
     @Override
     public void doBusiness(final Context mContext) {
-        title=setMyTitle(R.string.title_group_chat,true);
+        title = setMyTitle(R.string.title_group_chat, true);
         textAction = initTitle();
 
         title.addAction(textAction);
@@ -120,12 +126,12 @@ public class ChooseContactActivity extends BaseActivity {
         this.setOnItemCheckListener(new ICheckItemListener<ContactBean>() {
             @Override
             public void checked(ArrayList<ContactBean> datas) {
-                if (datas.size()>=7){
-                    topListMaxWidth=rvSelectedContacts.getWidth();
+                if (datas.size() >= 7) {
+                    topListMaxWidth = rvSelectedContacts.getWidth();
                 }
                 selectedAdapter = new SelectedAdapter(new ArrayList<>(datas));
                 rvSelectedContacts.setAdapter(selectedAdapter);
-                rvSelectedContacts.getLayoutManager().scrollToPosition(datas.size()-1);
+                rvSelectedContacts.getLayoutManager().scrollToPosition(datas.size() - 1);
 
                 //更改标题数量统计
                 ((TextView) title.getViewByAction(textAction)).setText(
@@ -143,12 +149,12 @@ public class ChooseContactActivity extends BaseActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (newText.length()>0) {
+                if (newText.length() > 0) {
                     List<ContactBean> filterList = filter(UserUtils.getUserContacts(), newText);
 
                     contactAdapter.setFilter(filterList);
                     rvContacts.scrollToPosition(0);
-                }else {
+                } else {
                     contactAdapter.setFilter(UserUtils.getUserContacts());
                 }
                 return true;
@@ -161,6 +167,8 @@ public class ChooseContactActivity extends BaseActivity {
      * 初始化标题
      */
     private XTitle.TextAction initTitle() {
+        final List<String> strings = new ArrayList<>();
+
         return new XTitle.TextAction("完成") {
             @Override
             public void actionClick(View view) {
@@ -174,6 +182,11 @@ public class ChooseContactActivity extends BaseActivity {
                 bundle.putSerializable("choose_friend_array", new ArrayList<>(result.values()));
                 intent.putExtras(bundle);
                 startActivity(intent);
+
+                for (ContactBean bean : new ArrayList<>(result.values())) {
+                    strings.add(bean.getTarget());
+                }
+                KLog.e(result.size() + "++>>>" + strings.toString());
                 finish();
             }
         };
@@ -183,7 +196,7 @@ public class ChooseContactActivity extends BaseActivity {
      * 筛选逻辑
      */
     private List<ContactBean> filter(List<ContactBean> contactBeanList, String query) {
-        if (TextUtils.isEmpty(query)){
+        if (TextUtils.isEmpty(query)) {
             return null;
         }
         query = query.toLowerCase();
@@ -194,7 +207,7 @@ public class ChooseContactActivity extends BaseActivity {
 
             final String targetZh = contactBean.getTarget().toLowerCase();
 
-            final String reMarkEn = Pinyin.toPinyin(targetZh,"").toLowerCase();
+            final String reMarkEn = Pinyin.toPinyin(targetZh, "").toLowerCase();
 
             if (targetZh.contains(query) || reMarkEn.contains(query) || simpleSpell.contains(getSimpleSpell(query))) {
 
@@ -206,8 +219,8 @@ public class ChooseContactActivity extends BaseActivity {
 
     private String getSimpleSpell(String target) {
         char[] chars = target.toCharArray();
-        StringBuilder builder=new StringBuilder();
-        for (char c:chars){
+        StringBuilder builder = new StringBuilder();
+        for (char c : chars) {
             builder.append(Pinyin.toPinyin(c).charAt(0));
         }
         return builder.toString().toLowerCase();
@@ -249,7 +262,7 @@ public class ChooseContactActivity extends BaseActivity {
     private class ChooseAdapter extends CommonAdapter<ContactBean> {
 
         // 存储勾选框状态的map集合
-        private Map<Integer, Boolean> map = new HashMap<>();
+        private Map<Integer, Boolean> map = new LinkedHashMap<>();
 
         private List<ContactBean> datas;
 
@@ -260,8 +273,11 @@ public class ChooseContactActivity extends BaseActivity {
         }
 
         private void initMap() {
-            for (int i = 0; i < datas.size(); i++) {
-                map.put(i, false);
+//            for (int i = 0; i < datas.size(); i++) {
+//                map.put(i, false);
+//            }
+            for (ContactBean bean:datas){
+                map.put(bean.getFriend_id(),false);
             }
         }
 
@@ -284,12 +300,12 @@ public class ChooseContactActivity extends BaseActivity {
             holder.setImageUrl(R.id.item_contacts_iv_icon, (String) data.getAvatar());
 
             //设置Tag
-            holder.itemView.setTag(position);
+            holder.itemView.setTag(data.getFriend_id());
 
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    map.put(position, isChecked);
+                    map.put(data.getFriend_id(), isChecked);
 //                    if (isChecked){//不需要
 //                       addFriend(data,position);
 //
@@ -299,48 +315,50 @@ public class ChooseContactActivity extends BaseActivity {
                 }
             });
             // 设置CheckBox的状态
-            if (map.get(position) == null) {
-                map.put(position, false);
+            if (map.get(data.getFriend_id()) == null) {
+                map.put(data.getFriend_id(), false);
             }
-            checkBox.setChecked(map.get(position));
+            checkBox.setChecked(map.get(data.getFriend_id()));
 
             //============================================
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (checkBox.isChecked()){
+                    if (checkBox.isChecked()) {
                         removeFriends(data);
-                    }else {
-                        addFriend(data,data.getFriend_id());
+                    } else {
+                        addFriend(data,System.currentTimeMillis());
                     }
-                    setSelectItem(position);
+                    setSelectItem(data.getFriend_id());
                 }
             });
 
         }
 
-        public int positionFromData(ContactBean bean){
-                return ArrayUtils.valueGetKey(datas,bean);
-        }
-        public void setSelectItem(int position) {
-            //对当前状态取反
-            if (map.get(position)) {
-                map.put(position, false);
+//        public int positionFromData(ContactBean bean) {
+//            return bean.getFriend_id();
+//        }
+
+        public void setSelectItem(int selectItemId) {
+            //checkbox 及其Item 对当前状态取反
+            if (map.get(selectItemId)) {
+                map.put(selectItemId, false);
             } else {
-                map.put(position, true);
+                map.put(selectItemId, true);
             }
-            notifyItemChanged(position);
+//            notifyItemChanged(selectItemId);
+            notifyDataSetChanged();
         }
 
         public void setFilter(List<ContactBean> contactBeanList) {
-            if (null==datas) {
+            if (null == datas) {
                 datas = new ArrayList<>();
             }
 
             datas.clear();
 
-            if (null!=contactBeanList && !contactBeanList.isEmpty()) {
+            if (null != contactBeanList && !contactBeanList.isEmpty()) {
                 datas.addAll(contactBeanList);
             }
 
@@ -350,21 +368,21 @@ public class ChooseContactActivity extends BaseActivity {
     }
 
 
+    private void addFriend(ContactBean contactBean, long addTime) {
+        result.put(addTime, contactBean);
 
-    private void addFriend(ContactBean contactBean, int friendId){
-        result.put(friendId,contactBean);
-
-        if (listener!=null){
+        if (listener != null) {
             listener.checked(new ArrayList<>(result.values()));
         }
 
     }
 
-    private void removeFriends(ContactBean contactBean){
+    private void removeFriends(ContactBean contactBean) {
 
-        result.remove(ArrayUtils.valueGetKey(result,contactBean));
+        ContactBean remove = result.remove(valueGetKey(result, contactBean));
+        KLog.e(remove.getTarget());
 
-        if (listener!=null){
+        if (listener != null) {
             listener.checked(new ArrayList<>(result.values()));
         }
     }
@@ -387,8 +405,8 @@ public class ChooseContactActivity extends BaseActivity {
                 ImageDisplay.loadNetImage(getActivity(), data.getAvatar().toString(), ivHeader);
             }
 
-            if (result.values().size()>=7){
-                AppDevice.setViewWidth$Height(rvSelectedContacts,-2,topListMaxWidth);
+            if (result.values().size() >= 7) {
+                AppDevice.setViewWidth$Height(rvSelectedContacts, -2, topListMaxWidth);
             }
 
             holder.setOnClickListener(R.id.item_selected_contact, new View.OnClickListener() {
@@ -396,11 +414,11 @@ public class ChooseContactActivity extends BaseActivity {
                 public void onClick(View v) {
                     removeItem(data);
 
-                    contactAdapter.setSelectItem(contactAdapter.positionFromData(data));
+                    contactAdapter.setSelectItem(data.getFriend_id());
 
-                    result.remove(ArrayUtils.valueGetKey(result,data));
+                    result.remove(valueGetKey(result, data));
 
-                    if (listener!=null){
+                    if (listener != null) {
                         listener.checked(new ArrayList<>(result.values()));
                     }
 
@@ -408,6 +426,15 @@ public class ChooseContactActivity extends BaseActivity {
                 }
             });
         }
+    }
+
+    private Long valueGetKey(Map<Long,ContactBean> map,ContactBean contactBean){
+        for (Map.Entry<Long,ContactBean> entry:map.entrySet()){
+            if (entry.getValue()==contactBean){
+                return entry.getKey();
+            }
+        }
+        return -1L;
     }
 
     private interface ICheckItemListener<T> {

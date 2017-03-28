@@ -52,3 +52,4 @@ eclipsebin
 proguard/
 
 #NDK（NDK相关的）
+/gradle.properties
