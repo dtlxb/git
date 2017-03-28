@@ -69,7 +69,7 @@ public class LitePalApplication extends Application {
 	 * 
 	 * @return Application context.
 	 */
-	public static Context getContext() {
+	public static Context getAppContext() {
 		if (sContext == null) {
 			throw new GlobalException(GlobalException.APPLICATION_CONTEXT_IS_NULL);
 		}

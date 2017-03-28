@@ -44,8 +44,6 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.CustomNestedScrollView;
 import cn.gogoal.im.ui.view.XTitle;
 
-import static cn.gogoal.im.base.MyApp.getAppContext;
-
 /**
  * author wangjd on 2017/3/13 0013.
  * Staff_id 1375
@@ -99,9 +97,9 @@ public class MarketActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         iniTitle();
         iniRefresh(swipeRefreshLayout);
-        setRecycle(new GridLayoutManager(getAppContext(), 2), rvMarket);
-        setRecycle(new GridLayoutManager(getAppContext(), 3), rvHotIndustry);
-        setRecycle(new LinearLayoutManager(getAppContext(), LinearLayoutManager.VERTICAL, false), rvSortList);
+        setRecycle(new GridLayoutManager(getActivity(), 2), rvMarket);
+        setRecycle(new GridLayoutManager(getActivity(), 3), rvHotIndustry);
+        setRecycle(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false), rvSortList);
         getMarketInformation();
         getMarketAd();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -145,11 +143,11 @@ public class MarketActivity extends BaseActivity {
                 .setTitleColor(Color.WHITE)
                 .setLeftTextColor(Color.WHITE)
                 .setLeftImageResource(R.mipmap.image_title_back_255);
-        title.setBackgroundColor(ContextCompat.getColor(getAppContext(), R.color.colorAccent));
+        title.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
 
         //添加action
 
-        XTitle.ImageAction action = new XTitle.ImageAction(ContextCompat.getDrawable(getAppContext(), R.mipmap.refresh_white)) {
+        XTitle.ImageAction action = new XTitle.ImageAction(ContextCompat.getDrawable(getActivity(), R.mipmap.refresh_white)) {
             @Override
             public void actionClick(View view) {
                 rotateAnimation = AnimationUtils.getInstance().setLoadingAnime((ImageView) view, R.mipmap.loading_fresh);
@@ -163,12 +161,12 @@ public class MarketActivity extends BaseActivity {
         title.getViewByTitle().setOnClickListener(new ClickUtils(new ClickUtils.OnSuperClickListener() {
             @Override
             public void onClick(View v) {
-                UIHelper.toast(getAppContext(), "single click");
+                UIHelper.toast(getActivity(), "single click");
             }
 
             @Override
             public void onDoubleClick(View v) {
-                UIHelper.toast(getAppContext(), "double click");
+                UIHelper.toast(getActivity(), "double click");
             }
         }));
     }
@@ -208,13 +206,13 @@ public class MarketActivity extends BaseActivity {
                     SPTools.saveString("market_data", responseInfo);//缓存大盘数据
                     parseMarketData(responseInfo);
                 } else {
-                    UIHelper.toast(getAppContext(), JSONObject.parseObject(responseInfo).getString("message"));
+                    UIHelper.toast(getActivity(), JSONObject.parseObject(responseInfo).getString("message"));
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toastError(getAppContext(), msg);
+                UIHelper.toastError(getActivity(), msg);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.APP_HQ_INFORMATION, ggHttpInterface).startGet();
@@ -236,13 +234,13 @@ public class MarketActivity extends BaseActivity {
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code")==1001){
 
                 }else {
-                    UIHelper.toastResponseError(getAppContext(), responseInfo);
+                    UIHelper.toastResponseError(getActivity(), responseInfo);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toastError(getAppContext(), msg);
+                UIHelper.toastError(getActivity(), msg);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.BANNER_LIST, ggHttpInterface).startGet();
@@ -256,14 +254,14 @@ public class MarketActivity extends BaseActivity {
         StockMarketBean.DataBean marketData = stockMarketBean.getData();
 
         //设置大盘
-        MarketAdapter adapter = new MarketAdapter(marketData.getHangqing());
+        MarketAdapter adapter = new MarketAdapter(getActivity(),marketData.getHangqing());
         rvMarket.setAdapter(adapter);
 
         // 设置热门行业
-        HotIndustryAdapter hotIndustryAdapter = new HotIndustryAdapter(marketData.getHostIndustrylist());
+        HotIndustryAdapter hotIndustryAdapter = new HotIndustryAdapter(getActivity(),marketData.getHostIndustrylist());
         HeaderAndFooterWrapper headWraper = new HeaderAndFooterWrapper(hotIndustryAdapter);
 
-        View hotHeadView = LayoutInflater.from(getAppContext()).inflate(R.layout.header_view_market, new LinearLayout(getAppContext()), false);
+        View hotHeadView = LayoutInflater.from(getActivity()).inflate(R.layout.header_view_market, new LinearLayout(getActivity()), false);
         headWraper.addHeaderView(hotHeadView);
         rvHotIndustry.setAdapter(headWraper);
 
@@ -276,7 +274,7 @@ public class MarketActivity extends BaseActivity {
         rankLists.add(new RankList(rankTitles[2], marketData.getStockRanklist().getChange_list()));
         rankLists.add(new RankList(rankTitles[3], marketData.getStockRanklist().getAmplitude_list()));
 
-        StockRankAdapter rankAdapter = new StockRankAdapter(getAppContext(), rankLists);
+        StockRankAdapter rankAdapter = new StockRankAdapter(getActivity(), rankLists);
         rvSortList.setAdapter(rankAdapter);
 
         swipeRefreshLayout.setRefreshing(false);
@@ -292,8 +290,8 @@ public class MarketActivity extends BaseActivity {
     private void parseBannerData(String responseInfo) {
         List<StockMarketBanner.DataBeanX> bannerData = JSONObject.parseObject(responseInfo, StockMarketBanner.class).getData();
         flipperAd.setAdapter(new AdViewAdapter(bannerData));
-        ObjectAnimator inAnimator = ObjectAnimator.ofFloat(flipperAd, "translationY", AppDevice.dp2px(getAppContext(), 30), 0).setDuration(800);
-        ObjectAnimator outAnimator = ObjectAnimator.ofFloat(flipperAd, "translationY", 0, -AppDevice.dp2px(getAppContext(), 30)).setDuration(800);
+        ObjectAnimator inAnimator = ObjectAnimator.ofFloat(flipperAd, "translationY", AppDevice.dp2px(getActivity(), 30), 0).setDuration(800);
+        ObjectAnimator outAnimator = ObjectAnimator.ofFloat(flipperAd, "translationY", 0, -AppDevice.dp2px(getActivity(), 30)).setDuration(800);
         flipperAd.setInAnimation(inAnimator);
         flipperAd.setOutAnimation(outAnimator);
         flipperAd.startFlipping();

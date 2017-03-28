@@ -194,7 +194,7 @@ public class LitePalParser {
 	 * @throws IOException
 	 */
 	private InputStream getConfigInputStream() throws IOException {
-		AssetManager assetManager = LitePalApplication.getContext().getAssets();
+		AssetManager assetManager = LitePalApplication.getAppContext().getAssets();
 		String[] fileNames = assetManager.list("");
 		if (fileNames != null && fileNames.length > 0) {
 			for (String fileName : fileNames) {

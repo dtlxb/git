@@ -20,6 +20,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.fragment.ChatFragment;
 import cn.gogoal.im.ui.view.XTitle;
@@ -34,6 +35,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
     private ChatFragment chatFragment;
     private ContactBean contactBean;
     private List<String> groupMembers;
+    private String squareName;
 
     @Override
     public int bindLayout() {
@@ -42,11 +44,14 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
 
     @Override
     public void doBusiness(Context mContext) {
-        String squareName = this.getIntent().getExtras().getString("squareName");
-        setMyTitle(squareName, false);
+        squareName = (String) StringUtils.objectNullDeal(this.getIntent().getStringExtra("squareName"));
+        if (!squareName.equals("")) {
+            setMyTitle(squareName, false);
+        }
+
         groupMembers = new ArrayList<>();
-        final String conversationID = this.getIntent().getExtras().getString("conversation_id");
-        boolean need_update = this.getIntent().getExtras().getBoolean("need_update");
+        final String conversationID = (String) StringUtils.objectNullDeal(this.getIntent().getStringExtra("conversation_id"));
+        boolean need_update = this.getIntent().getBooleanExtra("need_update", false);
 
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
         getSquareConversation(conversationID, need_update);
@@ -77,6 +82,10 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
 //                joinSquare(conversation);
                 chatFragment.setConversation(conversation, need_update);
                 groupMembers.addAll(conversation.getMembers());
+                if (squareName.equals("")) {
+                    setMyTitle(conversation.getName(), false);
+                }
+                KLog.e(conversation.getName() + "");
             }
 
             @Override

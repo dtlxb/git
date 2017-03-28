@@ -46,7 +46,7 @@ public class SharedUtil {
      *          new version of database
 	 */
 	public static void updateVersion(String extraKeyName, int newVersion) {
-		SharedPreferences.Editor sEditor = LitePalApplication.getContext()
+		SharedPreferences.Editor sEditor = LitePalApplication.getAppContext()
 				.getSharedPreferences(LITEPAL_PREPS, Context.MODE_PRIVATE).edit();
 		if (TextUtils.isEmpty(extraKeyName)) {
 			sEditor.putInt(VERSION, newVersion);
@@ -66,7 +66,7 @@ public class SharedUtil {
 	 * @return the last database version
 	 */
 	public static int getLastVersion(String extraKeyName) {
-		SharedPreferences sPref = LitePalApplication.getContext().getSharedPreferences(
+		SharedPreferences sPref = LitePalApplication.getAppContext().getSharedPreferences(
 				LITEPAL_PREPS, Context.MODE_PRIVATE);
 		if (TextUtils.isEmpty(extraKeyName)) {
 			return sPref.getInt(VERSION, 0);
@@ -84,7 +84,7 @@ public class SharedUtil {
      * 			Pass the name of the using database usually. Pass null if it's default database.
      */
     public static void removeVersion(String extraKeyName) {
-        SharedPreferences.Editor sEditor = LitePalApplication.getContext()
+        SharedPreferences.Editor sEditor = LitePalApplication.getAppContext()
                 .getSharedPreferences(LITEPAL_PREPS, Context.MODE_PRIVATE).edit();
         if (TextUtils.isEmpty(extraKeyName)) {
             sEditor.remove(VERSION);

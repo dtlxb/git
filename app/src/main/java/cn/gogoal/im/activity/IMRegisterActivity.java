@@ -61,7 +61,7 @@ public class IMRegisterActivity extends BaseActivity {
         Intent intent = new Intent(IMRegisterActivity.this, SingleChatRoomActivity.class);
         intent.putExtra("friend_id", MyId);
         //66,77
-        intent.putExtra("conversation_id", AppConst.LEAN_CLOUD_CONVERSATION_ID_66_77);
+        //intent.putExtra("conversation_id", AppConst.LEAN_CLOUD_CONVERSATION_ID_66_77);
         //66,99
         //intent.putExtra("conversation_id", AppConst.LEAN_CLOUD_CONVERSATION_ID_66_99);
 

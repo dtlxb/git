@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item_contacts_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
-    android:paddingStart="15dp"
-    android:paddingTop="10dp"
+    android:orientation="vertical"
     android:paddingBottom="10dp"
     android:paddingEnd="10dp"
-    android:orientation="vertical">
+    android:paddingStart="15dp"
+    android:paddingTop="10dp">
 
     <TextView
         android:id="@+id/tvIndex"
@@ -18,9 +19,9 @@
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
         android:text="A"
-        android:visibility="gone"
         android:textColor="#989898"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        android:visibility="gone" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -45,9 +46,9 @@
             <TextView
                 android:id="@+id/item_contacts_tv_nickname"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
+                android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="新的朋友" />
@@ -56,11 +57,11 @@
                 android:id="@+id/check_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:focusable="false"
-                android:clickable="false"
                 android:layout_gravity="right|center_vertical"
-                android:padding="10dp" />
+                android:clickable="false"
+                android:focusable="false"
+                android:padding="10dp"
+                android:visibility="gone" />
 
         </LinearLayout>
 
