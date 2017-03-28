@@ -64,7 +64,18 @@ public class ImageDisplay {
         if (!TextUtils.isEmpty(url)) {
             Glide.with(context)
                     .load(url)
-                    .skipMemoryCache(false)
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .placeholder(R.mipmap.image_placeholder)
+                    .thumbnail(0.1f)
+                    .into(imageView);
+        }
+    }
+    public static void loadNetImage(Context context, String url, ImageView imageView,boolean skipMemoryCache) {
+        if (!TextUtils.isEmpty(url)) {
+            Glide.with(context)
+                    .load(url)
+                    .skipMemoryCache(skipMemoryCache)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .placeholder(R.mipmap.image_placeholder)
                     .thumbnail(0.1f)

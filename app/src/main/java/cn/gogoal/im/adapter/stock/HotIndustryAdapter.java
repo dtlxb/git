@@ -1,5 +1,6 @@
 package cn.gogoal.im.adapter.stock;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -12,7 +13,6 @@ import java.util.List;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
-import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.market.StockMarketBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.StockUtils;
@@ -26,15 +26,18 @@ import cn.gogoal.im.common.UIHelper;
  */
 public class HotIndustryAdapter extends CommonAdapter<StockMarketBean.DataBean.HostIndustrylistBean> {
 
-    public HotIndustryAdapter(List<StockMarketBean.DataBean.HostIndustrylistBean> datas) {
-        super(MyApp.getAppContext(), R.layout.item_stock_hotindustry, datas);
+    private Context context;
+    
+    public HotIndustryAdapter(Context context,List<StockMarketBean.DataBean.HostIndustrylistBean> datas) {
+        super(context, R.layout.item_stock_hotindustry, datas);
+        this.context=context;
     }
 
     @Override
     protected void convert(ViewHolder holder, final StockMarketBean.DataBean.HostIndustrylistBean data, int position) {
 
         ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
-        params.width = (AppDevice.getWidth(getmContext()) - AppDevice.dp2px(getmContext(), 2)) / 3;
+        params.width = (AppDevice.getWidth(context) - AppDevice.dp2px(context, 2)) / 3;
         holder.setText(R.id.tv_hot_industry_name, data.getIndustry_name());
 
         TextView tvRate=holder.getView(R.id.tv_hot_industry_rate);
@@ -43,7 +46,7 @@ public class HotIndustryAdapter extends CommonAdapter<StockMarketBean.DataBean.H
         if (TextUtils.isEmpty(data.getIndustry_rate())){
             tvRate.setTextColor(Color.GRAY);
         }else {
-            tvRate.setTextColor(ContextCompat.getColor(getmContext(),Double.parseDouble(data.getIndustry_rate()) > 0 ?
+            tvRate.setTextColor(ContextCompat.getColor(context,Double.parseDouble(data.getIndustry_rate()) > 0 ?
                     R.color.stock_red:R.color.stock_green));
         }
 

@@ -76,7 +76,7 @@ class LitePalOpenHelper extends SQLiteOpenHelper {
 	 *            downgrade the database
 	 */
 	LitePalOpenHelper(String dbName, int version) {
-		this(LitePalApplication.getContext(), dbName, null, version);
+		this(LitePalApplication.getAppContext(), dbName, null, version);
 	}
 
 	@Override

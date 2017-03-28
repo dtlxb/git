@@ -3,11 +3,11 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -20,10 +20,9 @@ import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
@@ -42,19 +41,20 @@ import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.index.IndexBar;
 import cn.gogoal.im.ui.index.SuspendedDecoration;
 import cn.gogoal.im.ui.view.XTitle;
+import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
-import static cn.gogoal.im.common.database.LitePalApplication.getContext;
-import static com.igexin.sdk.GTServiceManager.context;
 
 /**
  * author wangjd on 2017/3/27 0027.
  * Staff_id 1375
  * phone 18930640263
- * description :${annotated}.
+ * description :$好友选择——加群.
  */
 public class ChooseContactActivity extends BaseActivity {
 
     private ICheckItemListener<ContactBean> listener;
+
+    private int actionType = AppConst.SQUARE_ROOM_ADD_ANYONE;
 
     public void setOnItemCheckListener(ICheckItemListener<ContactBean> listener) {
         this.listener = listener;
@@ -81,22 +81,13 @@ public class ChooseContactActivity extends BaseActivity {
 
     private ChooseAdapter contactAdapter;
 
-    private int topListMaxWidth;
+//    private int topListMaxWidth;
 
-    //标记当前模式（false表示是【创建群】，true表示【拉人进群】）
-    private boolean isAddTeamMemberMode = false;
-
-    private Map<Integer, ContactBean> result = new HashMap<>();
+    private Map<Integer, ContactBean> result = new LinkedHashMap<>();
 
     private SelectedAdapter selectedAdapter;
 
     private List<ContactBean> mSelectedTeamMemberAccounts = new ArrayList<>();//已经在群中的成员账号
-
-    //本人
-    private ContactBean itContactBean;
-
-    //获取群操作
-    private int squareAction;
 
     @Override
     public int bindLayout() {
@@ -106,19 +97,32 @@ public class ChooseContactActivity extends BaseActivity {
     @Override
     public void doBusiness(final Context mContext) {
         title = setMyTitle(R.string.title_group_chat, true);
+
+        rvContacts.setItemAnimator(new NoAlphaItemAnimator());
+        rvSelectedContacts.setItemAnimator(new NoAlphaItemAnimator());
+
+        /**
+         * 选择好友类型：
+         * 1101.选择好友直接创建群，
+         * 1100.选择好友和单聊好友创建群，
+         * 1102.原来存在的群继续添加好友，
+         * 1103.原来存在的群中移除好友
+         * */
+//        actionType = getIntent().getIntExtra("square_action", 0);
+
+        //actionType = 1102,1103,
+        String teamId = getIntent().getStringExtra("team_Id");
+        //1100
+        ContactBean itContactBean = (ContactBean) getIntent().getSerializableExtra("seri");
+
         textAction = initTitle();
 
         title.addAction(textAction);
 
-        //获取传递值
-        String teamId = getIntent().getStringExtra("team_Id");
-        squareAction = getIntent().getIntExtra("square_action", 0);
-        itContactBean = (ContactBean) getIntent().getSerializableExtra("seri");
-
         //初始化
         LinearLayoutManager layoutManager;
         rvContacts.setLayoutManager(layoutManager = new LinearLayoutManager(
-                getContext(), LinearLayoutManager.VERTICAL, false));
+                getActivity(), LinearLayoutManager.VERTICAL, false));
 
         //indexbar初始化
         indexBar.setmPressedShowTextView(tvConstactsFlag)//设置HintTextView
@@ -126,18 +130,22 @@ public class ChooseContactActivity extends BaseActivity {
 
         AppDevice.setViewWidth$Height(tvConstactsFlag, AppDevice.getWidth(mContext) / 4, AppDevice.getWidth(mContext) / 4);
 
-        mSelectedTeamMemberAccounts = UserUtils.getFriendsInTeam(teamId);
-        showContact();//设置列表
+        mSelectedTeamMemberAccounts = UserUtils.getFriendsInTeam(teamId, actionType != AppConst.CREATE_SQUARE_ROOM_BUILD);
 
-        rvSelectedContacts.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        List<ContactBean> userContacts = UserUtils.getUserContacts(actionType != AppConst.CREATE_SQUARE_ROOM_BUILD);
 
+        showContact(userContacts);//设置列表
 
+        rvSelectedContacts.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+
+        //增减监听
         this.setOnItemCheckListener(new ICheckItemListener<ContactBean>() {
             @Override
             public void checked(ArrayList<ContactBean> datas) {
-                if (datas.size() >= 7) {
-                    topListMaxWidth = rvSelectedContacts.getWidth();
-                }
+//                if (datas.size() >= 8) {
+//                    topListMaxWidth = rvSelectedContacts.getWidth();
+//                }
+
                 selectedAdapter = new SelectedAdapter(new ArrayList<>(datas));
                 rvSelectedContacts.setAdapter(selectedAdapter);
                 rvSelectedContacts.getLayoutManager().scrollToPosition(datas.size() - 1);
@@ -159,12 +167,12 @@ public class ChooseContactActivity extends BaseActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText.length() > 0) {
-                    List<ContactBean> filterList = filter(UserUtils.getUserContacts(), newText);
+                    List<ContactBean> filterList = filter(UserUtils.getUserContacts(actionType != AppConst.CREATE_SQUARE_ROOM_BUILD), newText);
 
                     contactAdapter.setFilter(filterList);
                     rvContacts.scrollToPosition(0);
                 } else {
-                    contactAdapter.setFilter(UserUtils.getUserContacts());
+                    contactAdapter.setFilter(UserUtils.getUserContacts(actionType != AppConst.CREATE_SQUARE_ROOM_BUILD));
                 }
                 return true;
             }
@@ -176,36 +184,21 @@ public class ChooseContactActivity extends BaseActivity {
      * 初始化标题
      */
     private XTitle.TextAction initTitle() {
+
         return new XTitle.TextAction("完成") {
             @Override
             public void actionClick(View view) {
 
                 if (result.size() == 0) {
                     return;//没有选择好友时，点击确定不执行操作
-                } else {
-                    Set idSet = new HashSet();
-                    idSet.addAll(result.keySet());
-                    switch (squareAction) {
-                        case AppConst.CREATE_SQUARE_ROOM_BUILD:
-                            //加自己
-                            idSet.add(Integer.parseInt(UserUtils.getToken()));
-                            createChatGroup(idSet);
-                            break;
-                        case AppConst.CREATE_SQUARE_ROOM_BY_ONE:
-                            //加他
-                            idSet.add(itContactBean.getFriend_id());
-                            //加自己
-                            idSet.add(Integer.parseInt(UserUtils.getToken()));
-                            createChatGroup(idSet);
-                            break;
-                        case AppConst.SQUARE_ROOM_ADD_ANYONE:
-                            break;
-                        case AppConst.SQUARE_ROOM_DELETE_ANYONE:
-                            break;
-                        default:
-                            break;
-                    }
                 }
+                createChatGroup(UserUtils.getUserFriendsIdList(result.values()));
+//                KLog.e(JSONObject.toJSONString(result.values()));
+//                //回传选择结果,选择的结果
+//                Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
+//                intent.putIntegerArrayListExtra("choose_friend_array", UserUtils.getUserFriendsIdList(result.values()));
+//                startActivity(intent);
+//                finish();
             }
         };
     }
@@ -213,39 +206,41 @@ public class ChooseContactActivity extends BaseActivity {
     /**
      * 创建群组
      */
-    public void createChatGroup(Set idSet) {
+    public void createChatGroup(List<Integer> userIdList) {
 
         Map<String, String> params = new HashMap<>();
         params.put("token", AppConst.LEAN_CLOUD_TOKEN);
-        params.put("id_list", JSONObject.toJSONString(idSet));
+        params.put("id_list", JSONObject.toJSONString(userIdList));
         KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
-                if ((int) result.get("code") == 0) {
+                JSONObject resultJson = JSONObject.parseObject(responseInfo);
+                if (resultJson.getIntValue("code") == 0) {
                     UIHelper.toast(ChooseContactActivity.this, "群组创建成功!!!");
-                    if (squareAction == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
+                    if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
                         //回传选择结果,选择的结果
                         Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
-                        Bundle bundle = new Bundle();
-                        //bundle.putSerializable("choose_friend_array", new ArrayList<>(result.values()));
-                        bundle.putSerializable("conversation_id", result.getJSONObject("data").getString("conv_id"));
-                        intent.putExtras(bundle);
+                        intent.putIntegerArrayListExtra("choose_friend_array", UserUtils.getUserFriendsIdList(result.values()));
+                        intent.putExtra("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
                         startActivity(intent);
-                    } else if (squareAction == AppConst.CREATE_SQUARE_ROOM_BUILD) {
-
+                    } else if (actionType == AppConst.CREATE_SQUARE_ROOM_BUILD) {
+                        Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
+                        intent.putIntegerArrayListExtra("choose_friend_array", UserUtils.getUserFriendsIdList(result.values()));
+                        intent.putExtra("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
+                        startActivity(intent);
                     }
                     finish();
+                } else {
+                    UIHelper.toastResponseError(getActivity(), responseInfo);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                KLog.json(msg);
+                UIHelper.toastError(getActivity(), msg);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.CREATE_GROUP_CHAT, ggHttpInterface).startGet();
@@ -262,32 +257,25 @@ public class ChooseContactActivity extends BaseActivity {
         final List<ContactBean> filteredModelList = new ArrayList<>();
         for (ContactBean contactBean : contactBeanList) {
 
-            final String simpleSpell = getSimpleSpell(contactBean.getTarget());
+            final String targetZh = contactBean.getTarget().toLowerCase();//原始文本
 
-            final String targetZh = contactBean.getTarget().toLowerCase();
+            final String targetSpell = Pinyin.toPinyin(targetZh, "").toLowerCase();//
 
-            final String reMarkEn = Pinyin.toPinyin(targetZh, "").toLowerCase();
-
-            if (targetZh.contains(query) || reMarkEn.contains(query) || simpleSpell.contains(getSimpleSpell(query))) {
-
-                filteredModelList.add(contactBean);
-            }
+//            final String simpleSpell = getSimpleSpell(contactBean.getTarget());
+//
+//            if (targetZh.contains(query) ||
+//                    getSimpleSpell(targetSpell).contains(getSimpleSpell(query))||
+//                    targetSpell.substring(0,query.length()).equals(query)||
+//                    simpleSpell.substring(0,getSimpleSpell(query).length()).equals(getSimpleSpell(query))) {
+//
+//                filteredModelList.add(contactBean);
+//            }
         }
         return filteredModelList;
     }
 
-    private String getSimpleSpell(String target) {
-        char[] chars = target.toCharArray();
-        StringBuilder builder = new StringBuilder();
-        for (char c : chars) {
-            builder.append(Pinyin.toPinyin(c).charAt(0));
-        }
-        return builder.toString().toLowerCase();
-    }
 
-    private void showContact() {
-        List<ContactBean> userContacts = UserUtils.getUserContacts();
-
+    private void showContact(List<ContactBean> userContacts) {
         if (null == userContacts || userContacts.isEmpty()) {
             KLog.e("用户没有好友");
             return;
@@ -297,7 +285,7 @@ public class ChooseContactActivity extends BaseActivity {
             bean.setContactType(ContactBean.ContactType.PERSION_ITEM);
         }
 
-        SuspendedDecoration mDecoration = new SuspendedDecoration(getContext());
+        SuspendedDecoration mDecoration = new SuspendedDecoration(getActivity());
 
         mDecoration.setmDatas(userContacts);
 
@@ -316,12 +304,12 @@ public class ChooseContactActivity extends BaseActivity {
     }
 
     /**
-     * 主列表视图适配器
+     * 主列表视图适配器 ☆☆☆
      */
     private class ChooseAdapter extends CommonAdapter<ContactBean> {
 
         // 存储勾选框状态的map集合
-        private Map<Integer, Boolean> map = new HashMap<>();
+        private Map<Integer, Boolean> map = new LinkedHashMap<>();
 
         private List<ContactBean> datas;
 
@@ -332,17 +320,30 @@ public class ChooseContactActivity extends BaseActivity {
         }
 
         private void initMap() {
-            for (int i = 0; i < datas.size(); i++) {
-                map.put(i, false);
+            for (ContactBean bean : datas) {
+                map.put(bean.getFriend_id(), false);
             }
         }
 
         @Override
         protected void convert(final ViewHolder holder, final ContactBean data, final int position) {
+
+            holder.setText(R.id.item_contacts_tv_nickname, data.getTarget());
+            holder.setImageUrl(R.id.item_contacts_iv_icon, (String) data.getAvatar());
+
+            //设置Tag
+            holder.itemView.setTag(position);
+
             final SuperCheckBox checkBox = holder.getView(R.id.check_user);
             checkBox.setVisibility(View.VISIBLE);
 
-            if (isAddTeamMemberMode) {
+            if (String.valueOf(data.getFriend_id()).equals(UserUtils.getToken())) {
+                checkBox.setChecked(true);
+                holder.itemView.setClickable(false);
+                holder.itemView.setEnabled(false);
+                checkBox.setEnabled(false);
+            }
+            if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE || actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
                 //判断当前的联系人是否已经在群中，是则显示灰色勾选图标
                 if ((!ArrayUtils.isEmpty(mSelectedTeamMemberAccounts)) && mSelectedTeamMemberAccounts.contains(data)) {
                     checkBox.setChecked(true);
@@ -352,16 +353,10 @@ public class ChooseContactActivity extends BaseActivity {
                 }
             }
 
-            holder.setText(R.id.item_contacts_tv_nickname, data.getTarget());
-            holder.setImageUrl(R.id.item_contacts_iv_icon, (String) data.getAvatar());
-
-            //设置Tag
-            holder.itemView.setTag(position);
-
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    map.put(position, isChecked);
+                    map.put(data.getFriend_id(), isChecked);
 //                    if (isChecked){//不需要
 //                       addFriend(data,position);
 //
@@ -371,12 +366,10 @@ public class ChooseContactActivity extends BaseActivity {
                 }
             });
             // 设置CheckBox的状态
-            if (map.get(position) == null) {
-                map.put(position, false);
+            if (map.get(data.getFriend_id()) == null) {
+                map.put(data.getFriend_id(), false);
             }
-            checkBox.setChecked(map.get(position));
-
-            //============================================
+            checkBox.setChecked(map.get(data.getFriend_id()));
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -384,26 +377,30 @@ public class ChooseContactActivity extends BaseActivity {
                     if (checkBox.isChecked()) {
                         removeFriends(data);
                     } else {
-                        addFriend(data, data.getFriend_id());
+                        addFriend(data);
                     }
-                    setSelectItem(position);
+                    setSelectItem(data.getFriend_id(), position);
                 }
             });
 
         }
 
-        public int positionFromData(ContactBean bean) {
-            return ArrayUtils.valueGetKey(datas, bean);
+        public void setSelectItem(int selectItemId, int position) {
+            //checkbox 及其Item 对当前状态取反
+            if (map.get(selectItemId)) {
+                map.put(selectItemId, false);
+            } else {
+                map.put(selectItemId, true);
+            }
+            if (position != -1) {
+                notifyItemChanged(position);
+            } else {
+                notifyDataSetChanged();
+            }
         }
 
-        public void setSelectItem(int position) {
-            //对当前状态取反
-            if (map.get(position)) {
-                map.put(position, false);
-            } else {
-                map.put(position, true);
-            }
-            notifyItemChanged(position);
+        public int dataGetPosition(ContactBean contactBean) {
+            return datas.indexOf(contactBean);
         }
 
         public void setFilter(List<ContactBean> contactBeanList) {
@@ -423,8 +420,9 @@ public class ChooseContactActivity extends BaseActivity {
     }
 
 
-    private void addFriend(ContactBean contactBean, int friendId) {
-        result.put(friendId, contactBean);
+    private void addFriend(ContactBean contactBean) {
+        result.put(contactBean.getFriend_id(), contactBean);
+
         if (listener != null) {
             listener.checked(new ArrayList<>(result.values()));
         }
@@ -433,7 +431,7 @@ public class ChooseContactActivity extends BaseActivity {
 
     private void removeFriends(ContactBean contactBean) {
 
-        result.remove(ArrayUtils.valueGetKey(result, contactBean));
+        result.remove(valueGetKey(result, contactBean));
 
         if (listener != null) {
             listener.checked(new ArrayList<>(result.values()));
@@ -452,36 +450,63 @@ public class ChooseContactActivity extends BaseActivity {
         @Override
         protected void convert(ViewHolder holder, final ContactBean data, final int position) {
             ImageView ivHeader = holder.getView(R.id.ivHeader);
-            if (TextUtils.isEmpty(data.getAvatar().toString())) {
+            if (TextUtils.isEmpty((CharSequence) data.getAvatar())) {
                 ivHeader.setImageResource(R.mipmap.image_placeholder);
             } else {
                 ImageDisplay.loadNetImage(getActivity(), data.getAvatar().toString(), ivHeader);
             }
 
-            if (result.values().size() >= 7) {
-                AppDevice.setViewWidth$Height(rvSelectedContacts, -2, topListMaxWidth);
-            }
+//            if (result.values().size() >= 7) {
+//                AppDevice.setViewWidth$Height(rvSelectedContacts, -2, topListMaxWidth);
+//            }else {
+//                AppDevice.setViewWidth$Height(rvSelectedContacts,-2,-2);
+//            }
 
             holder.setOnClickListener(R.id.item_selected_contact, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     removeItem(data);
 
-                    contactAdapter.setSelectItem(contactAdapter.positionFromData(data));
+                    contactAdapter.setSelectItem(data.getFriend_id(), contactAdapter.dataGetPosition(data));
 
-                    result.remove(ArrayUtils.valueGetKey(result, data));
+                    result.remove(valueGetKey(result, data));
+                    result.remove(valueGetKey(result, data));
 
                     if (listener != null) {
                         listener.checked(new ArrayList<>(result.values()));
                     }
-
-                    contactAdapter.notifyDataSetChanged();
                 }
             });
         }
     }
 
+    private int valueGetKey(Map<Integer, ContactBean> map, ContactBean contactBean) {
+        for (Map.Entry<Integer, ContactBean> entry : map.entrySet()) {
+            if (entry.getValue() == contactBean) {
+                return entry.getKey();
+            }
+        }
+        return -1;
+    }
+
     private interface ICheckItemListener<T> {
         void checked(ArrayList<T> datas);
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (searchChoose.getQuery().length() > 0) {
+                searchChoose.findViewById(R.id.search_close_btn).performClick();
+                contactAdapter.setFilter(UserUtils.getUserContacts(actionType == AppConst.CREATE_SQUARE_ROOM_BUILD));
+                searchChoose.clearFocus();
+            } else {
+                finish();
+            }
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

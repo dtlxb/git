@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -90,43 +91,78 @@ public class UserUtils {
 
     /**
      * 获取用户好友列表
-     * */
-    public static List<ContactBean> getUserContacts(){
+     */
+    public static List<ContactBean> getUserContacts(boolean addMyself) {
         String contactStringRes = SPTools.getString(getToken() + "_contact_beans", "");
-        if (TextUtils.isEmpty(contactStringRes)){
+        if (TextUtils.isEmpty(contactStringRes)) {
             return null;
         }
         String contactArray = JSONObject.parseObject(contactStringRes).getJSONArray("data").toJSONString();
 
+        if (addMyself) {
+            List<ContactBean> list = JSONObject.parseArray(contactArray, ContactBean.class);
+            list.add(getMyself());
+            return list;
+        }
         return JSONObject.parseArray(contactArray, ContactBean.class);
     }
 
     /**
      * 找出当前群中自己的好友
-     *
+     * <p>
      * 获取当前群的已经加入的还友，当前群可能有的不是好友，要匹配
-     * */
-    public static List<ContactBean> getFriendsInTeam(String teamId){
+     */
+    public static List<ContactBean> getFriendsInTeam(String teamId, boolean addMyself) {
 
-        String teamsStringRes = SPTools.getString(getToken()+teamId+"_accountList_beans","");
-        if (TextUtils.isEmpty(teamsStringRes)){
-            return null;
+        String teamsStringRes = SPTools.getString(getToken() + teamId + "_accountList_beans", "");
+        if (TextUtils.isEmpty(teamsStringRes)) {
+            return new ArrayList<>();//用户没有好友,返回空集合，别返回空
         }
-        String userInTeamArray=JSONObject.parseObject(teamsStringRes).getJSONArray("data").toJSONString();
+        String userInTeamArray = JSONObject.parseObject(teamsStringRes).getJSONArray("data").toJSONString();
 
-        List<ContactBean> contacts = getUserContacts();
-        if (null==contacts || contacts.isEmpty()){
-            return null;//用户没有好友
+        List<ContactBean> contacts = getUserContacts(addMyself);
+
+        if (null == contacts || contacts.isEmpty()) {
+            return new ArrayList<>();//用户没有好友,返回空集合，别返回空
         }
         List<ContactBean> list = JSONObject.parseArray(userInTeamArray, ContactBean.class);
 
-        List<ContactBean> result=new ArrayList<>();
+        List<ContactBean> result = new ArrayList<>();
 
-        for (ContactBean bean:list){
-            if (contacts.contains(bean)){
+        for (ContactBean bean : list) {
+            if (contacts.contains(bean)) {
                 result.add(bean);
             }
         }
+        if (addMyself) {
+            result.add(getMyself());
+            return result;
+        }
+        result.remove(getMyself());
         return result;
+    }
+
+    /**
+     * 传入 好友集合 返回好友的id集合
+     */
+    public static ArrayList<Integer> getUserFriendsIdList(Collection<ContactBean> friends) {
+        ArrayList<Integer> list = new ArrayList<>();
+        for (ContactBean contactBean : friends) {
+            list.add(contactBean.getFriend_id());
+        }
+        return list;
+    }
+
+    public static ContactBean getMyself() {
+        ContactBean myself = new ContactBean();
+
+        if (!TextUtils.isEmpty(UserUtils.getToken())) {
+            myself.setContactType(ContactBean.ContactType.PERSION_ITEM);
+            myself.setNickname("我自己");
+            myself.setFriend_id(Integer.parseInt(UserUtils.getToken()));
+            myself.setAvatar("http://imagedemo.image.alimmdn.com/example.jpg@100h_100w_1e_1c?spm=a3c0d.7629140.0.0.XjrDfq&file=example.jpg@100h_100w_1e_1c");
+        }
+
+        return myself;
     }
 }
