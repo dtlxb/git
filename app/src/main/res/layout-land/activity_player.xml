@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_player"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/activity_player"
     tools:context="cn.gogoal.im.activity.PlayerActivity">
 
     <FrameLayout
@@ -20,7 +20,7 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginTop="0dp"
-        android:background="@android:color/black"
+        android:background="@color/black"
         android:padding="0dp"
         android:paddingBottom="0dp"
         android:paddingEnd="0dp"
@@ -34,32 +34,81 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp"
+            android:layout_marginLeft="10dp"
             android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="2"
-                android:text="@string/textBlank"
-                android:textColor="@android:color/white"
-                android:textSize="14dp" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="2"
+                android:background="@drawable/shape_player_info"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/textBlank"
+                    android:textColor="@android:color/white"
+                    android:textSize="14dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imgPalyer"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:background="@mipmap/player_chat" />
+
+                    <TextView
+                        android:id="@+id/textCompany"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:singleLine="true"
+                        android:text="@string/textBlank"
+                        android:textColor="@android:color/white"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/textMarInter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/shape_player_market_interpre"
+                        android:singleLine="true"
+                        android:text="@string/textBlank"
+                        android:textColor="@android:color/white"
+                        android:textSize="11dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+            =======
+            android:text="@string/textBlank"
+            android:textColor="@android:color/white"
+            android:textSize="14dp" />
+            >>>>>>> develop
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:paddingRight="10dp">
+                android:paddingRight="10dp"
+                android:paddingTop="5dp">
 
                 <TextView
                     android:id="@+id/liveTogether"
@@ -68,44 +117,10 @@
                     android:background="@drawable/shape_player_live_together"
                     android:text="@string/live_together"
                     android:textColor="@android:color/white"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"
+                    android:visibility="gone" />
 
             </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imgPalyer"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:background="@mipmap/player_chat" />
-
-            <TextView
-                android:id="@+id/textCompany"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="@string/textBlank"
-                android:textColor="@android:color/white"
-                android:textSize="12dp" />
-
-            <TextView
-                android:id="@+id/textMarInter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/shape_player_market_interpre"
-                android:text="@string/textBlank"
-                android:textColor="@android:color/white"
-                android:textSize="11dp" />
 
         </LinearLayout>
 
@@ -113,7 +128,7 @@
             android:id="@+id/textOnlineNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/shape_player_online_number"
             android:text="@string/textBlank"
             android:textColor="@android:color/white"
@@ -237,8 +252,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/GLViewContainer"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="10dp"
-        android:background="#00000000"
+        android:background="@drawable/shape_player_info"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -258,6 +272,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearPlayerProfiles"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -272,6 +287,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearPlayerRelaterVideo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -303,7 +319,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/imgPlayerShotCut"
