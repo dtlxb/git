@@ -4,6 +4,7 @@ package cn.gogoal.im.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -115,9 +116,11 @@ public class ContactsFragment extends BaseFragment {
                     startActivity(intent);
                 } else {
                     intent = new Intent(getContext(), SingleChatRoomActivity.class);
-                    intent.putExtra("need_update", false);
-                    intent.putExtra("conversation_id", contactBeanList.get(position).getConv_id());
-                    intent.putExtra("nickname", contactBeanList.get(position).getNickname());
+                    Bundle bundle = new Bundle();
+                    bundle.putString("conversation_id", contactBeanList.get(position).getConv_id());
+                    bundle.putString("nickname", contactBeanList.get(position).getNickname());
+                    bundle.putBoolean("need_update", false);
+                    intent.putExtras(bundle);
                     startActivity(intent);
                 }
             }

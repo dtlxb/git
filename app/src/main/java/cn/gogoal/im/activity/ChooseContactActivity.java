@@ -13,14 +13,17 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.promeg.pinyinhelper.Pinyin;
 import com.hply.imagepicker.view.SuperCheckBox;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
@@ -28,9 +31,12 @@ import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ArrayUtils;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.index.IndexBar;
@@ -86,6 +92,12 @@ public class ChooseContactActivity extends BaseActivity {
 
     private List<ContactBean> mSelectedTeamMemberAccounts = new ArrayList<>();//已经在群中的成员账号
 
+    //本人
+    private ContactBean itContactBean;
+
+    //获取群操作
+    private int squareAction;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_choose_contaces;
@@ -93,12 +105,15 @@ public class ChooseContactActivity extends BaseActivity {
 
     @Override
     public void doBusiness(final Context mContext) {
-        title=setMyTitle(R.string.title_group_chat,true);
+        title = setMyTitle(R.string.title_group_chat, true);
         textAction = initTitle();
 
         title.addAction(textAction);
 
+        //获取传递值
         String teamId = getIntent().getStringExtra("team_Id");
+        squareAction = getIntent().getIntExtra("square_action", 0);
+        itContactBean = (ContactBean) getIntent().getSerializableExtra("seri");
 
         //初始化
         LinearLayoutManager layoutManager;
@@ -120,12 +135,12 @@ public class ChooseContactActivity extends BaseActivity {
         this.setOnItemCheckListener(new ICheckItemListener<ContactBean>() {
             @Override
             public void checked(ArrayList<ContactBean> datas) {
-                if (datas.size()>=7){
-                    topListMaxWidth=rvSelectedContacts.getWidth();
+                if (datas.size() >= 7) {
+                    topListMaxWidth = rvSelectedContacts.getWidth();
                 }
                 selectedAdapter = new SelectedAdapter(new ArrayList<>(datas));
                 rvSelectedContacts.setAdapter(selectedAdapter);
-                rvSelectedContacts.getLayoutManager().scrollToPosition(datas.size()-1);
+                rvSelectedContacts.getLayoutManager().scrollToPosition(datas.size() - 1);
 
                 //更改标题数量统计
                 ((TextView) title.getViewByAction(textAction)).setText(
@@ -143,12 +158,12 @@ public class ChooseContactActivity extends BaseActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (newText.length()>0) {
+                if (newText.length() > 0) {
                     List<ContactBean> filterList = filter(UserUtils.getUserContacts(), newText);
 
                     contactAdapter.setFilter(filterList);
                     rvContacts.scrollToPosition(0);
-                }else {
+                } else {
                     contactAdapter.setFilter(UserUtils.getUserContacts());
                 }
                 return true;
@@ -167,23 +182,80 @@ public class ChooseContactActivity extends BaseActivity {
 
                 if (result.size() == 0) {
                     return;//没有选择好友时，点击确定不执行操作
+                } else {
+                    Set idSet = new HashSet();
+                    idSet.addAll(result.keySet());
+                    switch (squareAction) {
+                        case AppConst.CREATE_SQUARE_ROOM_DIRECT:
+                            //加自己
+                            idSet.add(Integer.parseInt(UserUtils.getToken()));
+                            createChatGroup(idSet);
+                            break;
+                        case AppConst.CREATE_SQUARE_ROOM_BY_ONE:
+                            //加他
+                            idSet.add(itContactBean.getFriend_id());
+                            //加自己
+                            idSet.add(Integer.parseInt(UserUtils.getToken()));
+                            createChatGroup(idSet);
+                            break;
+                        case AppConst.SQUARE_ROOM_ADD_ANYONE:
+                            break;
+                        case AppConst.SQUARE_ROOM_DELETE_ANYONE:
+                            break;
+                        default:
+                            break;
+                    }
                 }
-                //回传选择结果,选择的结果
-                Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("choose_friend_array", new ArrayList<>(result.values()));
-                intent.putExtras(bundle);
-                startActivity(intent);
-                finish();
             }
         };
+    }
+
+    /**
+     * 创建群组
+     */
+    public void createChatGroup(Set idSet) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
+        params.put("id_list", JSONObject.toJSONString(idSet));
+        KLog.e(params);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                KLog.e(result.get("code"));
+                if ((int) result.get("code") == 0) {
+                    UIHelper.toast(ChooseContactActivity.this, "群组创建成功!!!");
+                    if (squareAction == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
+                        //回传选择结果,选择的结果
+                        Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
+                        Bundle bundle = new Bundle();
+                        //bundle.putSerializable("choose_friend_array", new ArrayList<>(result.values()));
+                        bundle.putSerializable("conversation_id", result.getJSONObject("data").getString("conv_id"));
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    } else if (squareAction == AppConst.CREATE_SQUARE_ROOM_DIRECT) {
+
+                    }
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                KLog.json(msg);
+            }
+        };
+        new GGOKHTTP(params, GGOKHTTP.CREATE_GROUP_CHAT, ggHttpInterface).startGet();
     }
 
     /**
      * 筛选逻辑
      */
     private List<ContactBean> filter(List<ContactBean> contactBeanList, String query) {
-        if (TextUtils.isEmpty(query)){
+        if (TextUtils.isEmpty(query)) {
             return null;
         }
         query = query.toLowerCase();
@@ -194,7 +266,7 @@ public class ChooseContactActivity extends BaseActivity {
 
             final String targetZh = contactBean.getTarget().toLowerCase();
 
-            final String reMarkEn = Pinyin.toPinyin(targetZh,"").toLowerCase();
+            final String reMarkEn = Pinyin.toPinyin(targetZh, "").toLowerCase();
 
             if (targetZh.contains(query) || reMarkEn.contains(query) || simpleSpell.contains(getSimpleSpell(query))) {
 
@@ -206,8 +278,8 @@ public class ChooseContactActivity extends BaseActivity {
 
     private String getSimpleSpell(String target) {
         char[] chars = target.toCharArray();
-        StringBuilder builder=new StringBuilder();
-        for (char c:chars){
+        StringBuilder builder = new StringBuilder();
+        for (char c : chars) {
             builder.append(Pinyin.toPinyin(c).charAt(0));
         }
         return builder.toString().toLowerCase();
@@ -309,10 +381,10 @@ public class ChooseContactActivity extends BaseActivity {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (checkBox.isChecked()){
+                    if (checkBox.isChecked()) {
                         removeFriends(data);
-                    }else {
-                        addFriend(data,data.getFriend_id());
+                    } else {
+                        addFriend(data, data.getFriend_id());
                     }
                     setSelectItem(position);
                 }
@@ -320,9 +392,10 @@ public class ChooseContactActivity extends BaseActivity {
 
         }
 
-        public int positionFromData(ContactBean bean){
-                return ArrayUtils.valueGetKey(datas,bean);
+        public int positionFromData(ContactBean bean) {
+            return ArrayUtils.valueGetKey(datas, bean);
         }
+
         public void setSelectItem(int position) {
             //对当前状态取反
             if (map.get(position)) {
@@ -334,13 +407,13 @@ public class ChooseContactActivity extends BaseActivity {
         }
 
         public void setFilter(List<ContactBean> contactBeanList) {
-            if (null==datas) {
+            if (null == datas) {
                 datas = new ArrayList<>();
             }
 
             datas.clear();
 
-            if (null!=contactBeanList && !contactBeanList.isEmpty()) {
+            if (null != contactBeanList && !contactBeanList.isEmpty()) {
                 datas.addAll(contactBeanList);
             }
 
@@ -350,21 +423,19 @@ public class ChooseContactActivity extends BaseActivity {
     }
 
 
-
-    private void addFriend(ContactBean contactBean, int friendId){
-        result.put(friendId,contactBean);
-
-        if (listener!=null){
+    private void addFriend(ContactBean contactBean, int friendId) {
+        result.put(friendId, contactBean);
+        if (listener != null) {
             listener.checked(new ArrayList<>(result.values()));
         }
 
     }
 
-    private void removeFriends(ContactBean contactBean){
+    private void removeFriends(ContactBean contactBean) {
 
-        result.remove(ArrayUtils.valueGetKey(result,contactBean));
+        result.remove(ArrayUtils.valueGetKey(result, contactBean));
 
-        if (listener!=null){
+        if (listener != null) {
             listener.checked(new ArrayList<>(result.values()));
         }
     }
@@ -387,8 +458,8 @@ public class ChooseContactActivity extends BaseActivity {
                 ImageDisplay.loadNetImage(getActivity(), data.getAvatar().toString(), ivHeader);
             }
 
-            if (result.values().size()>=7){
-                AppDevice.setViewWidth$Height(rvSelectedContacts,-2,topListMaxWidth);
+            if (result.values().size() >= 7) {
+                AppDevice.setViewWidth$Height(rvSelectedContacts, -2, topListMaxWidth);
             }
 
             holder.setOnClickListener(R.id.item_selected_contact, new View.OnClickListener() {
@@ -398,9 +469,9 @@ public class ChooseContactActivity extends BaseActivity {
 
                     contactAdapter.setSelectItem(contactAdapter.positionFromData(data));
 
-                    result.remove(ArrayUtils.valueGetKey(result,data));
+                    result.remove(ArrayUtils.valueGetKey(result, data));
 
-                    if (listener!=null){
+                    if (listener != null) {
                         listener.checked(new ArrayList<>(result.values()));
                     }
 

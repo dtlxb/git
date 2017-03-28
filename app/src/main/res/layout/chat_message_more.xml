@@ -15,6 +15,8 @@
             android:id="@+id/iv_find_man"
             android:layout_width="20dp"
             android:layout_height="18dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="3dp"
             android:background="@mipmap/chat_find_man" />
 
         <TextView
@@ -44,6 +46,8 @@
             android:id="@+id/iv_find_square"
             android:layout_width="20dp"
             android:layout_height="18dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="3dp"
             android:background="@mipmap/chat_find_square" />
 
         <TextView
@@ -74,6 +78,8 @@
             android:id="@+id/iv_take_square"
             android:layout_width="20dp"
             android:layout_height="18dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="3dp"
             android:background="@mipmap/chat_take_square" />
 
         <TextView
@@ -103,6 +109,8 @@
             android:id="@+id/iv_sweep_code"
             android:layout_width="20dp"
             android:layout_height="18dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="3dp"
             android:background="@mipmap/chat_sweep_twocode" />
 
         <TextView

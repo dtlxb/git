@@ -57,6 +57,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     sendIMMessage(message, conversation);
                                     final JSONObject content_object = JSON.parseObject(message.getContent());
                                     final String _lctype = content_object.getString("_lctype");
+                                    KLog.e(content_object);
                                     if ("5".equals(_lctype) || "6".equals(_lctype)) {
                                         conversation.fetchInfoInBackground(new AVIMConversationCallback() {
                                             @Override

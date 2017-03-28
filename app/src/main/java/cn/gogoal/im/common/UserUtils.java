@@ -174,7 +174,7 @@ public class UserUtils {
      * */
     public static List<ContactBean> getFriendsInTeam(String teamId){
 
-        String teamsStringRes = SPTools.getString(getToken()+teamId+"_team_allUsers","");
+        String teamsStringRes = SPTools.getString(getToken()+teamId+"_accountList_beans","");
         if (TextUtils.isEmpty(teamsStringRes)){
             return null;
         }
