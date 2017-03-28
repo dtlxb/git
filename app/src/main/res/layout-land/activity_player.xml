@@ -121,6 +121,100 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/LayoutTip"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/text_tip"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:text="正在缓冲"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#00AA00" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LayoutPause"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="false"
+        android:layout_below="@+id/LayoutTip"
+        android:layout_centerInParent="true"
+        android:background="#00FFFFFF"
+        android:gravity="center|center_horizontal"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/imgPause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@mipmap/vp_play" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LayoutProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/functionBar"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="10dp"
+        android:background="#00000000"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/currentDuration"
+            android:layout_width="50dp"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="5dp"
+            android:background="#00FFFFFF"
+            android:gravity="right"
+            android:paddingLeft="2dp"
+            android:text="00:00"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#CCCCCC" />
+
+        <SeekBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:focusable="true"
+            android:max="100000000"
+            android:maxHeight="6dp"
+            android:minHeight="6dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:progress="0"
+            android:progressDrawable="@drawable/seekbar_style"
+            android:thumb="@mipmap/seek_thumb"
+            android:thumbOffset="1dip" />
+
+        <TextView
+            android:id="@+id/totalDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="#00FFFFFF"
+            android:clickable="false"
+            android:paddingRight="2dp"
+            android:text="00:00"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#CCCCCC" />
+    </LinearLayout>
+
     <cn.gogoal.im.common.PlayerUtils.CountDownTimerView
         android:id="@+id/countDownTimer"
         android:layout_width="wrap_content"

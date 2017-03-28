@@ -499,7 +499,7 @@ public class LiveTogetherActivity extends BaseActivity {
     }
 
     @OnClick({R.id.imgPlayerChat, R.id.imgPlayerProfiles, R.id.imgPlayerRelaterVideo, R.id.imgPlayerShare,
-            R.id.imgPlayerShotCut, R.id.imgPlayerClose})
+            R.id.imgPlayerShotCut, R.id.textPlayerClose})
     public void setClickFunctionBar(View v) {
         switch (v.getId()) {
             case R.id.imgPlayerChat: //发消息
@@ -530,7 +530,7 @@ public class LiveTogetherActivity extends BaseActivity {
                 }
                 mConfigure.put(AlivcMediaFormat.KEY_CAMERA_FACING, currFacing);
                 break;
-            case R.id.imgPlayerClose: //退出
+            case R.id.textPlayerClose: //退出
                 finish();
                 break;
         }

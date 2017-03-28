@@ -331,11 +331,15 @@ public class PlayerActivity extends BaseActivity {
 
                         getOnlineCount(room_id);
 
+                        LayoutProgress.setVisibility(View.GONE);
+
                     } else if (source.equals("video")) {
 
                         mURI = data.getString("video_file");
 
                         textOnlineNumber.setText("0人在线");
+
+                        LayoutProgress.setVisibility(View.VISIBLE);
                     }
 
                     startToPlay(mURI);

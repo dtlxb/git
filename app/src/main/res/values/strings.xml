@@ -92,5 +92,6 @@
 
     <string name="str_search">\u0020&#xe62c; 搜索</string>
     <string name="str_title_ok">确定%s</string>
+    <string name="finish_live">完成直播</string>
 
 </resources>
