@@ -186,7 +186,7 @@ public class ChooseContactActivity extends BaseActivity {
                     Set idSet = new HashSet();
                     idSet.addAll(result.keySet());
                     switch (squareAction) {
-                        case AppConst.CREATE_SQUARE_ROOM_DIRECT:
+                        case AppConst.CREATE_SQUARE_ROOM_BUILD:
                             //加自己
                             idSet.add(Integer.parseInt(UserUtils.getToken()));
                             createChatGroup(idSet);
@@ -236,7 +236,7 @@ public class ChooseContactActivity extends BaseActivity {
                         bundle.putSerializable("conversation_id", result.getJSONObject("data").getString("conv_id"));
                         intent.putExtras(bundle);
                         startActivity(intent);
-                    } else if (squareAction == AppConst.CREATE_SQUARE_ROOM_DIRECT) {
+                    } else if (squareAction == AppConst.CREATE_SQUARE_ROOM_BUILD) {
 
                     }
                     finish();

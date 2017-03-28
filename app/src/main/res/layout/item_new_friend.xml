@@ -26,7 +26,6 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="2dp"
             android:layout_toEndOf="@+id/head_image"
-            android:text="JR屎密斯"
             android:textColor="@color/textColor_333333"
             android:textSize="16sp" />
 
@@ -39,8 +38,9 @@
             android:layout_marginLeft="50dp"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/head_image"
+            android:ellipsize="end"
             android:lines="1"
-            android:text="你晚饭还吃不吃了，不吃我吃了"
+            android:paddingEnd="70dp"
             android:textColor="@color/relater_play_count"
             android:textSize="14sp" />
 

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
@@ -76,7 +77,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
         if (null != getIntent().getExtras().getStringArrayList("group_members")) {
             groupMembers.addAll(getIntent().getExtras().getStringArrayList("group_members"));
         }
-        Log.e("++++conversationId", conversationId);
         JSONArray accountArray = SPTools.getJsonArray(UserUtils.getToken() + conversationId + "_accountList_beans", null);
         //缓存中没有群信息则向后台拉取
         if (null != accountArray) {
@@ -93,22 +93,16 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 Bundle mBundle = new Bundle();
                 if (position == contactBeens.size() - 1) {
                     //删除人
-                    /*List<String> strings = new ArrayList<String>();
-                    for (int i = 0; i < idList.size() - 2; i++) {
-                        if (!idList.get(i).equals(UserUtils.getToken())) {
-                            strings.add(idList.get(i));
-                        }
-                    }
-
-                    deleteAnyone(strings);*/
                     intent = new Intent(IMSquareChatSetActivity.this, ChooseContactActivity.class);
                     mBundle.putInt("square_action", AppConst.SQUARE_ROOM_DELETE_ANYONE);
+                    mBundle.putString("conversation_id", conversationId);
                     intent.putExtras(mBundle);
                     startActivity(intent);
 
                 } else if (position == contactBeens.size() - 2) {
                     intent = new Intent(IMSquareChatSetActivity.this, ChooseContactActivity.class);
                     mBundle.putInt("square_action", AppConst.SQUARE_ROOM_ADD_ANYONE);
+                    mBundle.putString("conversation_id", conversationId);
                     intent.putExtras(mBundle);
                     startActivity(intent);
                 } else {
@@ -179,10 +173,10 @@ public class IMSquareChatSetActivity extends BaseActivity {
     }
 
     //删除群成员
-    public void deleteAnyone(List<String> idList) {
+    public void deleteAnyone(Set<Integer> idSet) {
         Map<String, String> params = new HashMap<>();
         params.put("token", AppConst.LEAN_CLOUD_TOKEN);
-        params.put("id_list", JSONObject.toJSONString(idList));
+        params.put("id_list", JSONObject.toJSONString(idSet));
         params.put("conv_id", conversationId);
         Log.e("++++params", params.toString());
 
@@ -205,10 +199,10 @@ public class IMSquareChatSetActivity extends BaseActivity {
     }
 
     //添加群成员
-    public void addAnyone(List<String> idList) {
+    public void addAnyone(Set<Integer> idSet) {
         Map<String, String> params = new HashMap<>();
         params.put("token", AppConst.LEAN_CLOUD_TOKEN);
-        params.put("id_list", JSONObject.toJSONString(idList));
+        params.put("id_list", JSONObject.toJSONString(idSet));
         params.put("conv_id", conversationId);
         KLog.e(params);
 
