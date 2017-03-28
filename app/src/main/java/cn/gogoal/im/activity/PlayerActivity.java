@@ -884,7 +884,7 @@ public class PlayerActivity extends BaseActivity {
     }
 
     /*
-    * 显示进度条
+    * 进度条显示
     * */
     private void show_progress_ui(boolean bShowPause) {
 
