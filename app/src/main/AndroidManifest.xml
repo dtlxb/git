@@ -57,7 +57,7 @@
             android:name=".servise.PushService"
             android:exported="true"
             android:label="PushService"
-            android:process=":pushservice"/>
+            android:process=":pushservice" />
 
         <service android:name=".servise.IntentService" />
 
@@ -80,7 +80,7 @@
         <activity
             android:name=".activity.PlayerActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
-            android:theme="@style/TranslucentTheme"/>
+            android:theme="@style/TranslucentTheme" />
 
         <activity
             android:name=".activity.FunctionActivity"
@@ -115,6 +115,9 @@
         <activity
             android:name="cn.gogoal.im.activity.IMPersonDetailActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="cn.gogoal.im.activity.SearchPersonSquareActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="cn.gogoal.im.activity.IMPersonActivity"
@@ -124,7 +127,7 @@
             android:name="cn.gogoal.im.activity.IMSquareChatSetActivity"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".activity.SearchActivity" >
+        <activity android:name=".activity.SearchActivity">
 
         </activity>
 
@@ -138,8 +141,9 @@
 
         <activity android:name=".activity.PdfDisplayActivity" />
 
-        <activity android:name=".activity.ChooseContactActivity"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".activity.ChooseContactActivity"
+            android:windowSoftInputMode="adjustPan" />
 
         <activity android:name=".activity.TestActivity"
             android:theme="@style/TranslucentTheme"

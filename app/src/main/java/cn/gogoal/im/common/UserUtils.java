@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
@@ -11,9 +12,11 @@ import com.socks.library.KLog;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.IMMessageBean;
 
 /**
  * author wangjd on 2017/2/8 0008.
@@ -95,7 +98,7 @@ public class UserUtils {
     public static List<ContactBean> getUserContacts() {
         String contactStringRes = SPTools.getString(getToken() + "_contact_beans", "");
         if (TextUtils.isEmpty(contactStringRes)) {
-            return null;
+            return new ArrayList<>();
         }
         String contactArray = JSONObject.parseObject(contactStringRes).getJSONArray("data").toJSONString();
 
@@ -107,20 +110,17 @@ public class UserUtils {
      * <p>
      * 获取当前群的已经加入的还友，当前群可能有的不是好友，要匹配
      */
-    public static List<ContactBean> getFriendsInTeam(String teamId) {
+    public static List<ContactBean> getFriendsInTeam(String conversationId) {
 
-        String teamsStringRes = SPTools.getString(getToken() + teamId + "_accountList_beans", "");
-        if (TextUtils.isEmpty(teamsStringRes)) {
-            return new ArrayList<>();//用户没有好友,返回空集合，别返回空
-        }
-        String userInTeamArray = JSONObject.parseObject(teamsStringRes).getJSONArray("data").toJSONString();
+        JSONArray userInTeamArray = SPTools.getJsonArray(UserUtils.getToken() + conversationId + "_accountList_beans", new JSONArray());
 
         List<ContactBean> contacts = getUserContacts();
 
         if (null == contacts || contacts.isEmpty()) {
             return new ArrayList<>();//用户没有好友,返回空集合，别返回空
         }
-        List<ContactBean> list = JSONObject.parseArray(userInTeamArray, ContactBean.class);
+        //获取我的conversationId群中的全部用户
+        List<ContactBean> list = JSON.parseArray(String.valueOf(userInTeamArray), ContactBean.class);
 
         List<ContactBean> result = new ArrayList<>();
 
@@ -135,8 +135,8 @@ public class UserUtils {
     /**
      * 传入 好友集合 返回好友的id集合
      */
-    public static ArrayList<Integer> getUserFriendsIdList(Collection<ContactBean> friends) {
-        ArrayList<Integer> list = new ArrayList<>();
+    public static HashSet<Integer> getUserFriendsIdList(Collection<ContactBean> friends) {
+        HashSet<Integer> list = new HashSet<>();
         for (ContactBean contactBean : friends) {
             list.add(contactBean.getFriend_id());
         }

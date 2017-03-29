@@ -20,6 +20,7 @@ import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +57,7 @@ public class ChooseContactActivity extends BaseActivity {
 
     private int actionType;
     private List<ContactBean> userContacts;
+    private ContactBean itContactBean;
 
     public void setOnItemCheckListener(ICheckItemListener<ContactBean> listener) {
         this.listener = listener;
@@ -114,7 +116,7 @@ public class ChooseContactActivity extends BaseActivity {
         //actionType = 1102,1103,
         String teamId = getIntent().getStringExtra("team_Id");
         //1100
-        ContactBean itContactBean = (ContactBean) getIntent().getSerializableExtra("seri");
+        itContactBean = (ContactBean) getIntent().getSerializableExtra("seri");
 
         textAction = initTitle();
 
@@ -135,7 +137,7 @@ public class ChooseContactActivity extends BaseActivity {
 
         userContacts = UserUtils.getUserContacts();
 
-        if (actionType==AppConst.CREATE_SQUARE_ROOM_BY_ONE && itContactBean!=null){
+        if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE && itContactBean != null) {
             userContacts.add(itContactBean);
         }
 
@@ -157,7 +159,8 @@ public class ChooseContactActivity extends BaseActivity {
 
                 //更改标题数量统计
                 ((TextView) title.getViewByAction(textAction)).setText(
-                        String.format(getString(R.string.str_title_ok),
+                        String.format(getString(actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE ?
+                                        R.string.str_title_del : R.string.str_title_ok),
                                 (result.size() > 0 ? "(" + result.size() + ")" : "")));
 
             }
@@ -190,14 +193,25 @@ public class ChooseContactActivity extends BaseActivity {
      */
     private XTitle.TextAction initTitle() {
 
-        return new XTitle.TextAction("完成") {
+        return new XTitle.TextAction(actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE ? "删除" : "完成") {
             @Override
             public void actionClick(View view) {
 
                 if (result.size() == 0) {
                     return;//没有选择好友时，点击确定不执行操作
                 }
-                createChatGroup(UserUtils.getUserFriendsIdList(result.values()));
+                if (actionType == AppConst.CREATE_SQUARE_ROOM_BUILD || actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
+                    createChatGroup(UserUtils.getUserFriendsIdList(result.values()));
+                } else {
+
+                    Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
+                    ArrayList<Integer> resultIdList = new ArrayList<>(UserUtils.getUserFriendsIdList(result.values()));
+                    resultIdList.add(Integer.parseInt(UserUtils.getToken()));
+                    intent.putExtra("square_action", actionType);
+                    startActivity(intent);
+                    UIHelper.toast(getActivity(), actionType == AppConst.SQUARE_ROOM_ADD_ANYONE ? "添加成功" : "移除成功");
+                    finish();
+                }
             }
         };
     }
@@ -205,7 +219,7 @@ public class ChooseContactActivity extends BaseActivity {
     /**
      * 创建群组
      */
-    public void createChatGroup(List<Integer> userIdList) {
+    public void createChatGroup(HashSet<Integer> userIdList) {
 
         Map<String, String> params = new HashMap<>();
         params.put("token", AppConst.LEAN_CLOUD_TOKEN);
@@ -218,19 +232,19 @@ public class ChooseContactActivity extends BaseActivity {
                 KLog.e(responseInfo);
                 JSONObject resultJson = JSONObject.parseObject(responseInfo);
                 if (resultJson.getIntValue("code") == 0) {
-                    UIHelper.toast(ChooseContactActivity.this, "群组创建成功!!!");
+
+                    Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
+                    ArrayList<Integer> resultIdList = new ArrayList<>(UserUtils.getUserFriendsIdList(result.values()));
+                    resultIdList.add(Integer.parseInt(UserUtils.getToken()));
+                    intent.putExtra("square_action", actionType);
+                    intent.putExtra("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
+
                     if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
-                        //回传选择结果,选择的结果
-                        Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
-                        intent.putIntegerArrayListExtra("choose_friend_array", UserUtils.getUserFriendsIdList(result.values()));
-                        intent.putExtra("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
-                        startActivity(intent);
-                    } else if (actionType == AppConst.CREATE_SQUARE_ROOM_DIRECT) {
-                        Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
-                        intent.putIntegerArrayListExtra("choose_friend_array", UserUtils.getUserFriendsIdList(result.values()));
-                        intent.putExtra("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
-                        startActivity(intent);
+                        resultIdList.add(itContactBean.getFriend_id());
+                        intent.putIntegerArrayListExtra("choose_friend_array", resultIdList);
                     }
+                    startActivity(intent);
+                    UIHelper.toast(ChooseContactActivity.this, "群组创建成功!!!");
                     finish();
                 } else {
                     UIHelper.toastResponseError(getActivity(), responseInfo);

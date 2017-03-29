@@ -34,6 +34,7 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ChooseContactActivity;
 import cn.gogoal.im.activity.IMNewFrienActivity;
+import cn.gogoal.im.activity.SearchPersonSquareActivity;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
@@ -110,9 +111,7 @@ public class MessageFragment extends BaseFragment {
         super.onResume();
         jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
         IMMessageBeans.clear();
-        if (null != jsonArray) {
-            IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
-        }
+        IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
 
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
             //按照时间排序
@@ -144,7 +143,7 @@ public class MessageFragment extends BaseFragment {
                                 KLog.e(conversation.getConversationId());
                                 intent = new Intent(getContext(), SingleChatRoomActivity.class);
                                 bundle.putString("conversation_id", conversation_id);
-                                bundle.putString("squareName", IMMessageBeans.get(position).getNickname());
+                                bundle.putString("nickname", IMMessageBeans.get(position).getNickname());
                                 bundle.putBoolean("need_update", true);
                                 intent.putExtras(bundle);
                                 startActivity(intent);
@@ -168,6 +167,14 @@ public class MessageFragment extends BaseFragment {
                                 //系统处理
                                 intent = new Intent(getContext(), IMNewFrienActivity.class);
                                 intent.putExtra("conversation_id", conversation_id);
+                                intent.putExtra("add_type", 0x01);
+                                startActivity(intent);
+                                break;
+                            case "1007":
+                                //入群申请
+                                intent = new Intent(getContext(), IMNewFrienActivity.class);
+                                intent.putExtra("conversation_id", conversation_id);
+                                intent.putExtra("add_type", 0x02);
                                 startActivity(intent);
                                 break;
                             default:
@@ -244,15 +251,21 @@ public class MessageFragment extends BaseFragment {
         @Override
         public void onClick(View v) {
             popupWindow.dismiss();
-
+            Intent intent;
             switch (v.getId()) {
                 case R.id.find_man_layout:
+                    intent = new Intent(getContext(), SearchPersonSquareActivity.class);
+                    startActivity(intent);
                     break;
                 case R.id.find_square_layout:
+                    intent = new Intent(getContext(), SearchPersonSquareActivity.class);
+                    startActivity(intent);
                     break;
                 case R.id.take_square_layout:
-                    Intent intent = new Intent(getContext(), ChooseContactActivity.class);
-                    intent.putExtra("square_action", AppConst.CREATE_SQUARE_ROOM_DIRECT);
+                    intent = new Intent(getContext(), ChooseContactActivity.class);
+                    Bundle mBundle = new Bundle();
+                    mBundle.putInt("square_action", AppConst.CREATE_SQUARE_ROOM_BUILD);
+                    intent.putExtras(mBundle);
                     startActivity(intent);
                     break;
                 case R.id.sweep_twocode_layout:
@@ -336,6 +349,7 @@ public class MessageFragment extends BaseFragment {
                         break;
                     case "5":
                     case "6":
+                        //群加人，踢人
                         JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
                         JSONArray accountArray;
                         String squareMessage;
@@ -348,6 +362,12 @@ public class MessageFragment extends BaseFragment {
                             squareMessage = SPTools.getString(UserUtils.getToken() + messageBean.getConversationID() + "_square_message", "");
                         }
                         message = squareMessage;
+                        break;
+                    case "7":
+                        //群通知
+                        nickName = "申请入群";
+                        message = messageBean.getNickname() + "请求加入" + messageBean.getFriend_id();
+                        ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
                         break;
                     default:
                         break;
@@ -373,10 +393,10 @@ public class MessageFragment extends BaseFragment {
         String ConversationId = conversation.getConversationId();
         int chatType = (int) conversation.getAttribute("chat_type");
 
-
         Long rightNow = CalendarUtils.getCurrentTime();
         String nickName = "";
         String avatar = "";
+        String friend_id = UserUtils.getToken();
         int unreadmessage = 0;
 
         JSONObject contentObject = JSON.parseObject(message.getContent());
@@ -400,13 +420,21 @@ public class MessageFragment extends BaseFragment {
                 nickName = lcattrsObject.getString("nickname");
                 break;
             case "3":
-
+                //好友加入通讯录
                 break;
             case "4":
-
+                //好友从通讯录移除
                 break;
             case "5":
+                //好友入群
+                break;
             case "6":
+                //群删除好友
+                break;
+            case "7":
+                //申请入群
+                nickName = lcattrsObject.getString("nickname");
+                friend_id = lcattrsObject.getString("group_name");
                 break;
             default:
                 break;
@@ -438,6 +466,10 @@ public class MessageFragment extends BaseFragment {
                 break;
             //公众号模块
             case 1006:
+                break;
+            //群通知
+            case 1007:
+                avatar = lcattrsObject.getString("avatar");
                 break;
             default:
                 break;
@@ -472,7 +504,7 @@ public class MessageFragment extends BaseFragment {
 
         //保存
         IMMessageBean imMessageBean = new IMMessageBean(ConversationId, chatType, message.getTimestamp(),
-                String.valueOf(unreadmessage), nickName, AppConst.LEANCLOUD_APP_ID, avatar, message);
+                String.valueOf(unreadmessage), nickName, friend_id, avatar, message);
         MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
 
         //按照时间排序

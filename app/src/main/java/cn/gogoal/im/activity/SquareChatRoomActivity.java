@@ -4,13 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6cb43ff6966c4c9061f6000ab3110c278b2da703
 import java.util.ArrayList;
 import java.util.List;
-
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
@@ -108,4 +109,5 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
     public void setData(ContactBean contactBean) {
         this.contactBean = contactBean;
     }
+
 }
