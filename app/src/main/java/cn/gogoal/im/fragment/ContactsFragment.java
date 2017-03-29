@@ -26,6 +26,8 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.IMAddFriendActivity;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
+import cn.gogoal.im.activity.SquareChatRoomActivity;
+import cn.gogoal.im.activity.SquareCollectActivity;
 import cn.gogoal.im.adapter.ContactAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 import cn.gogoal.im.base.BaseFragment;
@@ -114,6 +116,9 @@ public class ContactsFragment extends BaseFragment {
                 if (position == 0) {
                     intent = new Intent(getContext(), IMAddFriendActivity.class);
                     startActivity(intent);
+                } else if (position == 1) {
+                    intent = new Intent(getContext(), SquareCollectActivity.class);
+                    startActivity(intent);
                 } else {
                     intent = new Intent(getContext(), SingleChatRoomActivity.class);
                     Bundle bundle = new Bundle();
@@ -148,10 +153,10 @@ public class ContactsFragment extends BaseFragment {
      * 添加联系人列表头部
      */
     private void addContactHead() {
-        contactBeanList.add(addFunctionHead("新的朋友", R.mipmap.cache_img_contacts_0));
-        contactBeanList.add(addFunctionHead("群聊", R.mipmap.cache_img_contacts_1));
-        contactBeanList.add(addFunctionHead("标签", R.mipmap.cache_img_contacts_2));
-        contactBeanList.add(addFunctionHead("公众号", R.mipmap.cache_img_contacts_3));
+        contactBeanList.add(addFunctionHead("新朋友", R.mipmap.cache_img_contacts_0));
+        contactBeanList.add(addFunctionHead("我的群组", R.mipmap.cache_img_contacts_1));
+        /*contactBeanList.add(addFunctionHead("标签", R.mipmap.cache_img_contacts_2));
+        contactBeanList.add(addFunctionHead("公众号", R.mipmap.cache_img_contacts_3));*/
     }
 
     private ContactBean<Integer> addFunctionHead(String name, @DrawableRes int iconId) {

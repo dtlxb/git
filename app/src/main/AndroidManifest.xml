@@ -115,8 +115,13 @@
         <activity
             android:name="cn.gogoal.im.activity.IMPersonDetailActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name="cn.gogoal.im.activity.SearchPersonSquareActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="cn.gogoal.im.activity.SquareCollectActivity"
             android:screenOrientation="portrait" />
 
         <activity

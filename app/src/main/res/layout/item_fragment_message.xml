@@ -32,6 +32,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:lines="1"
             android:text="JR屎密斯"
             android:textColor="@color/textColor_333333"
             android:textSize="16sp" />
