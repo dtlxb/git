@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -25,13 +24,15 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.IMNewFriendBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.XTitle;
 
 
@@ -45,6 +46,10 @@ public class IMNewFrienActivity extends BaseActivity {
     private List<IMNewFriendBean> newFriendBeans = new ArrayList<>();
     private ListAdapter listAdapter;
     private JSONArray jsonArray;
+    private JSONArray messageListJsonArray;
+    private List<IMMessageBean> IMMessageBeans = new ArrayList<>();
+    private int addType;
+    private String conversationId;
     @BindView(R.id.new_friend_list)
     RecyclerView newFriendList;
 
@@ -55,11 +60,30 @@ public class IMNewFrienActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        titleBar = setMyTitle(R.string.title_newfirend, true);
-        titleBar.setLeftText(R.string.title_message);
-        initRecycleView(newFriendList, R.drawable.shape_divider_recyclerview_1px);
+        addType = getIntent().getIntExtra("add_type", 0x01);
+        conversationId = getIntent().getStringExtra("conversation_id");
+        titleBar = setMyTitle(R.string.title_message, true);
+        //未读数清零
+        messageListJsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
+        IMMessageBeans.addAll(JSON.parseArray(String.valueOf(messageListJsonArray), IMMessageBean.class));
+        IMMessageBean imMessageBean = new IMMessageBean();
+        for (int i = 0; i < IMMessageBeans.size(); i++) {
+            if (IMMessageBeans.get(i).getConversationID().equals(conversationId)) {
+                IMMessageBeans.get(i).setUnReadCounts("0");
+                imMessageBean = IMMessageBeans.get(i);
+            }
+        }
+        MessageUtils.saveMessageInfo(messageListJsonArray, imMessageBean);
 
-        jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_newFriendList", new JSONArray());
+        if (addType == 0x01) {
+            titleBar.setLeftText(R.string.title_new_friend);
+            jsonArray = SPTools.getJsonArray(UserUtils.getToken() + "_newFriendList", new JSONArray());
+        } else if (addType == 0x02) {
+            titleBar.setLeftText(R.string.title_add_group);
+            jsonArray = SPTools.getJsonArray(UserUtils.getToken() + conversationId + "_unadd_accountList_beans", new JSONArray());
+        }
+
+        initRecycleView(newFriendList, R.drawable.shape_divider_recyclerview_1px);
 
         KLog.e(jsonArray.toString());
         newFriendBeans.clear();
@@ -103,9 +127,12 @@ public class IMNewFrienActivity extends BaseActivity {
 
             //消息类型
             JSONObject contentObject = JSON.parseObject(mIMNewFriendBean.getMessage().getContent());
-            message = contentObject.getString("_lctext");
-
             JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
+            if (addType == 0x01) {
+                message = contentObject.getString("_lctext");
+            } else if (addType == 0x02) {
+                message = "请求加入" + lcattrsObject.getString("group_name");
+            }
             avatar = lcattrsObject.getString("avatar");
             final String firend_id = lcattrsObject.getString("account_id");
             nickName = lcattrsObject.getString("nickname");
@@ -116,11 +143,19 @@ public class IMNewFrienActivity extends BaseActivity {
             holder.setText(R.id.last_message, message + "\t\t" + dateStr);
             KLog.e(mIMNewFriendBean);
             if (mIMNewFriendBean.getIsYourFriend()) {
-                addView.setText("已添加");
+                if (addType == 0x01) {
+                    addView.setText("已添加");
+                } else if (addType == 0x02) {
+                    addView.setText("已通过");
+                }
                 addView.setTextColor(ContextCompat.getColor(IMNewFrienActivity.this, R.color.relater_play_count));
                 addView.setBackgroundResource(R.color.absoluteWhite);
             } else {
-                addView.setText("添加");
+                if (addType == 0x01) {
+                    addView.setText("添加");
+                } else if (addType == 0x02) {
+                    addView.setText("通过");
+                }
                 addView.setBackgroundResource(R.drawable.shape_add_friend);
                 addView.setTextColor(ContextCompat.getColor(IMNewFrienActivity.this, R.color.absoluteWhite));
             }
@@ -128,17 +163,23 @@ public class IMNewFrienActivity extends BaseActivity {
             addView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AddFirend(mIMNewFriendBean, firend_id, addView);
+                    if (addType == 0x01) {
+                        addFirend(mIMNewFriendBean, firend_id, addView);
+                    } else if (addType == 0x02) {
+                        List<String> idList = new ArrayList<>();
+                        idList.add(firend_id);
+                        agreenToGroup(mIMNewFriendBean, idList, addView);
+                    }
                     addView.setClickable(false);
                 }
             });
         }
     }
 
-    public void AddFirend(final IMNewFriendBean mIMNewFriendBean, String friend_id, final TextView view) {
+    public void addFirend(final IMNewFriendBean mIMNewFriendBean, String friend_id, final TextView view) {
 
         Map<String, String> params = new HashMap<>();
-        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
+        params.put("token", UserUtils.getToken());
         params.put("friend_id", friend_id);
         params.put("text", "你好啊！！！");
         KLog.e(params);
@@ -150,7 +191,6 @@ public class IMNewFrienActivity extends BaseActivity {
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 KLog.e(result.get("code"));
                 if ((int) result.get("code") == 0) {
-                    UIHelper.toast(IMNewFrienActivity.this, "添加成功!");
                     if (view.getText().toString().equals("添加")) {
                         view.setText("已添加");
                         view.setTextColor(ContextCompat.getColor(IMNewFrienActivity.this, R.color.relater_play_count));
@@ -167,7 +207,7 @@ public class IMNewFrienActivity extends BaseActivity {
                             }
                         }
 
-                        SPTools.saveJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_newFriendList", jsonArray);
+                        SPTools.saveJsonArray(UserUtils.getToken() + "_newFriendList", jsonArray);
                     }
                 }
             }
@@ -179,5 +219,62 @@ public class IMNewFrienActivity extends BaseActivity {
             }
         };
         new GGOKHTTP(params, GGOKHTTP.ADD_FRIEND, ggHttpInterface).startGet();
+    }
+
+    public void agreenToGroup(final IMNewFriendBean mIMNewFriendBean, List idList, final TextView view) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", UserUtils.getToken());
+        params.put("id_list", JSONObject.toJSONString(idList));
+        params.put("conv_id", conversationId);
+        KLog.e(params);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                KLog.e(result.get("code"));
+                if ((int) result.get("code") == 0) {
+                    if (view.getText().toString().equals("通过")) {
+                        view.setText("已通过");
+                        view.setTextColor(ContextCompat.getColor(IMNewFrienActivity.this, R.color.relater_play_count));
+                        view.setBackgroundResource(R.color.absoluteWhite);
+                        view.setClickable(true);
+
+                        for (int i = 0; i < jsonArray.size(); i++) {
+                            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                            JSONObject messageJSONObject = (JSONObject) jsonObject.get("message");
+
+                            if (messageJSONObject.getString("from").equals(mIMNewFriendBean.getMessage().getFrom())) {
+                                ((JSONObject) jsonArray.get(i)).put("isYourFriend", true);
+                            }
+                        }
+
+                        SPTools.saveJsonArray(UserUtils.getToken() + conversationId + "_unadd_accountList_beans", jsonArray);
+
+                        JSONObject jsonObject = new JSONObject();
+                        JSONObject contentObject = JSON.parseObject(mIMNewFriendBean.getMessage().getContent());
+                        JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
+                        jsonObject.put("_id", lcattrsObject.get("_id"));
+                        jsonObject.put("avatar", lcattrsObject.get("avatar"));
+                        jsonObject.put("nickname", lcattrsObject.get("nickname"));
+                        jsonObject.put("friend_id", lcattrsObject.get("account_id"));
+                        JSONArray accountArray = new JSONArray();
+                        accountArray.add(jsonObject);
+
+                        MessageUtils.changeSquareInfo(lcattrsObject.getString("conv_id"), accountArray, "5");
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                KLog.json(msg);
+                view.setClickable(true);
+            }
+        };
+        new GGOKHTTP(params, GGOKHTTP.ADD_MEMBER, ggHttpInterface).startGet();
     }
 }

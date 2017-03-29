@@ -80,16 +80,16 @@ public class MessageUtils {
     }
 
     //群聊拉人加人(5:建群，拉人   6:踢人)
-    public static void changeSquareInfo(AVIMConversation conversation, JSONArray accountArray, String messageType) {
-        JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getToken() + conversation.getConversationId() + "_accountList_beans", new JSONArray());
+    public static void changeSquareInfo(String conversationID, JSONArray accountArray, String messageType) {
+        JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getToken() + conversationID + "_accountList_beans", new JSONArray());
+        spAccountArray.addAll(accountArray);
         if (null != accountArray) {
             if (messageType.equals("5")) {
-                spAccountArray.addAll(accountArray);
             } else if (messageType.equals("6")) {
                 spAccountArray.removeAll(accountArray);
             }
             KLog.e(spAccountArray.toString());
-            SPTools.saveJsonArray(UserUtils.getToken() + conversation.getConversationId() + "_accountList_beans", spAccountArray);
+            SPTools.saveJsonArray(UserUtils.getToken() + conversationID + "_accountList_beans", spAccountArray);
         } else {
 
         }

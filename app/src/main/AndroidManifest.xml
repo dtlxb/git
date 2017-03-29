@@ -86,7 +86,7 @@
             android:name=".activity.PlayerActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:theme="@style/TranslucentTheme"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"/>
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
         <activity
             android:name=".activity.FunctionActivity"
@@ -115,6 +115,10 @@
             android:name=".activity.IMNewFrienActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name="cn.gogoal.im.activity.SearchPersonSquareActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".activity.IMPersonActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -123,6 +127,9 @@
 
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".wxapi.WXPayEntryActivity" />
+        <activity android:name=".activity.SearchActivity">
+
+        </activity>
 
         <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity" />
 
@@ -137,10 +144,11 @@
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:theme="@style/TranslucentTheme" />
 
-        <activity android:name=".activity.ChooseContactActivity"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".activity.ChooseContactActivity"
+            android:windowSoftInputMode="adjustPan" />
 
-        <activity android:name=".activity.TestActivity"/>
+        <activity android:name=".activity.TestActivity" />
 
     </application>
 

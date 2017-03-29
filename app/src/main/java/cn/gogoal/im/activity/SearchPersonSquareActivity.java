@@ -3,6 +3,7 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.SearchView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
@@ -16,45 +17,44 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**
- * Created by huangxx on 2017/3/13.
+ * Created by huangxx on 2017/3/28.
  */
 
-public class IMAddFriendActivity extends BaseActivity {
+public class SearchPersonSquareActivity extends BaseActivity {
 
-    XTitle titleBar;
     @BindView(R.id.edit_your_message)
     EditText editYourMessage;
 
+    XTitle xTitle;
+
     @Override
     public int bindLayout() {
-        return R.layout.activity_add_friend;
+        return R.layout.activity_search_person_square;
     }
 
     @Override
     public void doBusiness(Context mContext) {
-
-        titleBar = setMyTitle(R.string.title_add_friend, true);
-
-        titleBar.setLeftText(R.string.tv_cancle);
+        xTitle = setMyTitle(R.string.title_search_anyone, true);
+        xTitle.setLeftText(R.string.tv_cancle);
         //添加action
         XTitle.TextAction sendAction = new XTitle.TextAction("发送") {
             @Override
             public void actionClick(View view) {
-                AddFirend();
+                findSquare();
             }
         };
-        titleBar.addAction(sendAction);
+        xTitle.addAction(sendAction);
     }
 
-    public void AddFirend() {
+    public void findSquare() {
 
         Map<String, String> params = new HashMap<>();
-        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
-        params.put("friend_id", editYourMessage.getText().toString());
-        params.put("text", "你好啊！！！");
+        params.put("token", UserUtils.getToken());
+        params.put("conv_id", editYourMessage.getText().toString());
         KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
@@ -64,8 +64,9 @@ public class IMAddFriendActivity extends BaseActivity {
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 KLog.e(result.get("code"));
                 if ((int) result.get("code") == 0) {
-                    UIHelper.toast(IMAddFriendActivity.this, "好友请求发送成功!");
+                    UIHelper.toast(SearchPersonSquareActivity.this, "群申请发送成功!");
                     editYourMessage.setText("");
+                    finish();
                 }
             }
 
@@ -74,7 +75,6 @@ public class IMAddFriendActivity extends BaseActivity {
                 KLog.json(msg);
             }
         };
-        new GGOKHTTP(params, GGOKHTTP.ADD_FRIEND, ggHttpInterface).startGet();
+        new GGOKHTTP(params, GGOKHTTP.APPLY_INTO_GROUP, ggHttpInterface).startGet();
     }
-
 }

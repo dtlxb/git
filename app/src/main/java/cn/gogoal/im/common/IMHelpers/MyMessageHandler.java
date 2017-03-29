@@ -16,12 +16,8 @@ import java.util.HashMap;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
-import cn.gogoal.im.bean.IMMessageBean;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
-
-import static cn.gogoal.im.common.UserUtils.getToken;
 
 /**
  * Created by huangxx on 2017/2/20.
@@ -44,7 +40,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
                         //剔除自己消息
                         if (!message.getFrom().equals(clientID)) {
                             final int chatType = (int) conversation.getAttribute("chat_type");
-
                             switch (chatType) {
                                 case 1001:
                                     //单聊
@@ -57,14 +52,14 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     sendIMMessage(message, conversation);
                                     final JSONObject content_object = JSON.parseObject(message.getContent());
                                     final String _lctype = content_object.getString("_lctype");
-                                    KLog.e(content_object);
                                     if ("5".equals(_lctype) || "6".equals(_lctype)) {
                                         conversation.fetchInfoInBackground(new AVIMConversationCallback() {
                                             @Override
                                             public void done(AVIMException e) {
                                                 //通讯录
+                                                KLog.e(conversation.getConversationId());
                                                 JSONArray accountArray = content_object.getJSONObject("_lcattrs").getJSONArray("accountList");
-                                                MessageUtils.changeSquareInfo(conversation, accountArray, _lctype);
+                                                MessageUtils.changeSquareInfo(conversation.getConversationId(), accountArray, _lctype);
                                             }
                                         });
                                     } else {
@@ -81,12 +76,12 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     sendIMMessage(message, conversation);
 
                                     //加好友
-                                    JSONArray jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_newFriendList", new JSONArray());
+                                    JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getToken() + "_newFriendList", new JSONArray());
                                     JSONObject jsonObject = new JSONObject();
                                     jsonObject.put("message", message);
                                     jsonObject.put("isYourFriend", false);
                                     jsonArray.add(jsonObject);
-                                    SPTools.saveJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_newFriendList", jsonArray);
+                                    SPTools.saveJsonArray(UserUtils.getToken() + "_newFriendList", jsonArray);
                                     break;
                                 case 1005:
                                     //好友更新
@@ -104,12 +99,24 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     contactBean.setContactType(ContactBean.ContactType.PERSION_ITEM);
                                     contactBean.setConv_id(conv_id);
                                     String friendList = UserUtils.updataFriendList(JSONObject.toJSONString(contactBean));
-                                    SPTools.saveString(getToken() + "_contact_beans", friendList);
-                                    KLog.e(SPTools.getString(getToken() + "_contact_beans", ""));
+                                    SPTools.saveString(UserUtils.getToken() + "_contact_beans", friendList);
+                                    KLog.e(SPTools.getString(UserUtils.getToken() + "_contact_beans", ""));
                                     break;
 
                                 case 1006:
                                     //公众号
+                                    break;
+                                case 1007:
+                                    //群通知
+                                    sendIMMessage(message, conversation);
+                                    //加好友
+                                    JSONArray unAddArray = SPTools.getJsonArray(UserUtils.getToken() + conversation.getConversationId() + "_unadd_accountList_beans", new JSONArray());
+                                    JSONObject unAddjsonObject = new JSONObject();
+                                    unAddjsonObject.put("message", message);
+                                    unAddjsonObject.put("isYourFriend", false);
+                                    unAddArray.add(unAddjsonObject);
+                                    KLog.e(conversation.getConversationId());
+                                    SPTools.saveJsonArray(UserUtils.getToken() + conversation.getConversationId() + "_unadd_accountList_beans", unAddArray);
                                     break;
                                 default:
                                     break;

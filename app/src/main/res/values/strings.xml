@@ -3,6 +3,7 @@
 
     <string name="textBlank">--</string>
 
+    <!--聊天-->
     <string name="title_message">消息</string>
     <string name="title_chat_person_detial">聊天详情</string>
     <string name="title_chat_person_infos">详细资料</string>
@@ -11,6 +12,10 @@
     <string name="title_found">投研</string>
     <string name="title_mine">我的</string>
     <string name="title_group_chat">发起群聊</string>
+    <string name="title_add_friend">朋友验证</string>
+    <string name="title_search_anyone">朋友验证</string>
+    <string name="title_add_group">入群申请</string>
+    <string name="title_new_friend">新的朋友</string>
 
     <string name="title_stock_market">股票行情</string>
 

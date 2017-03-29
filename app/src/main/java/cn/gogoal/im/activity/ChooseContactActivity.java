@@ -130,9 +130,9 @@ public class ChooseContactActivity extends BaseActivity {
 
         AppDevice.setViewWidth$Height(tvConstactsFlag, AppDevice.getWidth(mContext) / 4, AppDevice.getWidth(mContext) / 4);
 
-        mSelectedTeamMemberAccounts = UserUtils.getFriendsInTeam(teamId, actionType != AppConst.CREATE_SQUARE_ROOM_DIRECT);
+        mSelectedTeamMemberAccounts = UserUtils.getFriendsInTeam(teamId, actionType != AppConst.CREATE_SQUARE_ROOM_BUILD);
 
-        List<ContactBean> userContacts = UserUtils.getUserContacts(actionType != AppConst.CREATE_SQUARE_ROOM_DIRECT);
+        List<ContactBean> userContacts = UserUtils.getUserContacts(actionType != AppConst.CREATE_SQUARE_ROOM_BUILD);
 
         showContact(userContacts);//设置列表
 
@@ -167,12 +167,12 @@ public class ChooseContactActivity extends BaseActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText.length() > 0) {
-                    List<ContactBean> filterList = filter(UserUtils.getUserContacts(actionType != AppConst.CREATE_SQUARE_ROOM_DIRECT), newText);
+                    List<ContactBean> filterList = filter(UserUtils.getUserContacts(actionType != AppConst.CREATE_SQUARE_ROOM_BUILD), newText);
 
                     contactAdapter.setFilter(filterList);
                     rvContacts.scrollToPosition(0);
                 } else {
-                    contactAdapter.setFilter(UserUtils.getUserContacts(actionType != AppConst.CREATE_SQUARE_ROOM_DIRECT));
+                    contactAdapter.setFilter(UserUtils.getUserContacts(actionType != AppConst.CREATE_SQUARE_ROOM_BUILD));
                 }
                 return true;
             }
@@ -226,7 +226,7 @@ public class ChooseContactActivity extends BaseActivity {
                         intent.putIntegerArrayListExtra("choose_friend_array", UserUtils.getUserFriendsIdList(result.values()));
                         intent.putExtra("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
                         startActivity(intent);
-                    } else if (actionType == AppConst.CREATE_SQUARE_ROOM_DIRECT) {
+                    } else if (actionType == AppConst.CREATE_SQUARE_ROOM_BUILD) {
                         Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
                         intent.putIntegerArrayListExtra("choose_friend_array", UserUtils.getUserFriendsIdList(result.values()));
                         intent.putExtra("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
@@ -259,28 +259,21 @@ public class ChooseContactActivity extends BaseActivity {
 
             final String targetZh = contactBean.getTarget().toLowerCase();//原始文本
 
-            final String targetEn = Pinyin.toPinyin(targetZh, "").toLowerCase();//
+            final String targetSpell = Pinyin.toPinyin(targetZh, "").toLowerCase();//
 
-            final String simpleSpell = getSimpleSpell(contactBean.getTarget());
-
-            if (targetZh.contains(query) ||
-                    targetEn.contains(query) ||
-                    simpleSpell.substring(0,getSimpleSpell(query).length()).equals(getSimpleSpell(query))) {
-
-                filteredModelList.add(contactBean);
-            }
+//            final String simpleSpell = getSimpleSpell(contactBean.getTarget());
+//
+//            if (targetZh.contains(query) ||
+//                    getSimpleSpell(targetSpell).contains(getSimpleSpell(query))||
+//                    targetSpell.substring(0,query.length()).equals(query)||
+//                    simpleSpell.substring(0,getSimpleSpell(query).length()).equals(getSimpleSpell(query))) {
+//
+//                filteredModelList.add(contactBean);
+//            }
         }
         return filteredModelList;
     }
 
-    private String getSimpleSpell(String target) {
-        char[] chars = target.toCharArray();
-        StringBuilder builder = new StringBuilder();
-        for (char c : chars) {
-            builder.append(Pinyin.toPinyin(c).charAt(0));
-        }
-        return builder.toString().toLowerCase();
-    }
 
     private void showContact(List<ContactBean> userContacts) {
         if (null == userContacts || userContacts.isEmpty()) {
@@ -505,7 +498,7 @@ public class ChooseContactActivity extends BaseActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (searchChoose.getQuery().length() > 0) {
                 searchChoose.findViewById(R.id.search_close_btn).performClick();
-                contactAdapter.setFilter(UserUtils.getUserContacts(actionType == AppConst.CREATE_SQUARE_ROOM_DIRECT));
+                contactAdapter.setFilter(UserUtils.getUserContacts(actionType == AppConst.CREATE_SQUARE_ROOM_BUILD));
                 searchChoose.clearFocus();
             } else {
                 finish();
@@ -515,4 +508,5 @@ public class ChooseContactActivity extends BaseActivity {
 
         return super.onKeyDown(keyCode, event);
     }
+
 }

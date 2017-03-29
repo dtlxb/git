@@ -40,7 +40,7 @@ public class AppConst {
 
     //创建群的方式
     public static final int CREATE_SQUARE_ROOM_BY_ONE = 1100;
-    public static final int CREATE_SQUARE_ROOM_DIRECT = 1101;
+    public static final int CREATE_SQUARE_ROOM_BUILD = 1101;
     //群加人删人
     public static final int SQUARE_ROOM_ADD_ANYONE = 1102;
     public static final int SQUARE_ROOM_DELETE_ANYONE = 1103;

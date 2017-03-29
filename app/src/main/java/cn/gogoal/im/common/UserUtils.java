@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.IMMessageBean;
 
 /**
  * author wangjd on 2017/2/8 0008.
@@ -178,20 +180,16 @@ public class UserUtils {
      * <p>
      * 获取当前群的已经加入的还友，当前群可能有的不是好友，要匹配
      */
-    public static List<ContactBean> getFriendsInTeam(String teamId, boolean addMyself) {
+    public static List<ContactBean> getFriendsInTeam(String conversationID, boolean addMyself) {
 
-        String teamsStringRes = SPTools.getString(getToken() + teamId + "_accountList_beans", "");
-        if (TextUtils.isEmpty(teamsStringRes)) {
-            return new ArrayList<>();//用户没有好友,返回空集合，别返回空
-        }
-        String userInTeamArray = JSONObject.parseObject(teamsStringRes).getJSONArray("data").toJSONString();
+        JSONArray userInTeamArray = SPTools.getJsonArray(UserUtils.getToken() + conversationID + "_accountList_beans", new JSONArray());
 
         List<ContactBean> contacts = getUserContacts(addMyself);
 
         if (null == contacts || contacts.isEmpty()) {
             return new ArrayList<>();//用户没有好友,返回空集合，别返回空
         }
-        List<ContactBean> list = JSONObject.parseArray(userInTeamArray, ContactBean.class);
+        List<ContactBean> list = JSON.parseArray(String.valueOf(userInTeamArray), ContactBean.class);
 
         List<ContactBean> result = new ArrayList<>();
 
