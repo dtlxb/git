@@ -2,6 +2,8 @@ package cn.gogoal.im.common;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -15,8 +17,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import cn.gogoal.im.activity.LoginActivity;
 import cn.gogoal.im.bean.ContactBean;
-import cn.gogoal.im.bean.IMMessageBean;
 
 /**
  * author wangjd on 2017/2/8 0008.
@@ -92,6 +94,14 @@ public class UserUtils {
         return AppConst.LEAN_CLOUD_TOKEN;
     }
 
+    public static boolean checkToken(Context context){
+        if (TextUtils.isEmpty(getToken())){
+            context.startActivity(new Intent(context, LoginActivity.class));
+            return false;
+        }else {
+            return true;
+        }
+    }
     /**
      * 获取用户好友列表
      */
