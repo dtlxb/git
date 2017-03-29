@@ -19,6 +19,7 @@ import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
+
 /**
  * Created by huangxx on 2017/2/20.
  */
@@ -34,7 +35,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
             AVImClientManager.getInstance().findConversationById(conversation.getConversationId(), new AVImClientManager.ChatJoinManager() {
                 @Override
                 public void joinSuccess(final AVIMConversation conversation) {
-
+                    KLog.e(message.getContent());
                     //接收到消息，发送出去
                     if (clientID.equals(client.getClientId())) {
                         //剔除自己消息
@@ -57,7 +58,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                             @Override
                                             public void done(AVIMException e) {
                                                 //通讯录
-                                                KLog.e(conversation.getConversationId());
                                                 JSONArray accountArray = content_object.getJSONObject("_lcattrs").getJSONArray("accountList");
                                                 MessageUtils.changeSquareInfo(conversation.getConversationId(), accountArray, _lctype);
                                             }
