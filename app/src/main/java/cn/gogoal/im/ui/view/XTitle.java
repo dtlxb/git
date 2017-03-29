@@ -2,7 +2,6 @@ package cn.gogoal.im.ui.view;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.text.TextUtils;
@@ -210,8 +209,8 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         return this;
     }
 
-    public XTitle setTitleColor(@ColorInt int resid) {
-        mCenterText.setTextColor(resid);
+    public XTitle setTitleColor(@ColorInt int color) {
+        mCenterText.setTextColor(color);
         return this;
     }
 
@@ -269,8 +268,8 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         return this;
     }
 
-    public XTitle setActionTextColor(int colorResId) {
-        mActionTextColor = colorResId;
+    public XTitle setActionTextColor(@ColorInt  int color) {
+        mActionTextColor = color;
         return this;
     }
 
@@ -464,6 +463,11 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         return result;
     }
 
+    public void setActionText(TextAction textaction,String text){
+        TextView view = (TextView) getViewByAction(textaction);
+        view.setText(TextUtils.isEmpty(text)?"":text);
+    }
+
     public static class ActionList extends LinkedList<Action> {
     }
 
@@ -512,5 +516,6 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         public String getText() {
             return mText;
         }
+
     }
 }

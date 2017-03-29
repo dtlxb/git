@@ -136,6 +136,7 @@ public class UserUtils {
         List<ContactBean> list = JSON.parseArray(String.valueOf(userInTeamArray), ContactBean.class);
 
         list.retainAll(contacts);
+
         return list;
     }
 
