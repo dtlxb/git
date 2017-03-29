@@ -98,7 +98,7 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
     }
 
     public String getmPinyin() {
-        return Pinyin.toPinyin(getTarget().trim(),"");
+        return Pinyin.toPinyin(getTarget().trim(), "");
     }
 
     @Override
@@ -151,7 +151,12 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
                 '}';
     }
 
-    private boolean isEmpty(String s){
-        return null==s || TextUtils.isEmpty(s) || s.trim().replace(" ","").equals("");
+    private boolean isEmpty(String s) {
+        return null == s || TextUtils.isEmpty(s) || s.trim().replace(" ", "").equals("");
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return ((ContactBean) obj).getFriend_id() == this.getFriend_id();
     }
 }

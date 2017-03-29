@@ -94,14 +94,15 @@ public class UserUtils {
         return AppConst.LEAN_CLOUD_TOKEN;
     }
 
-    public static boolean checkToken(Context context){
-        if (TextUtils.isEmpty(getToken())){
+    public static boolean checkToken(Context context) {
+        if (TextUtils.isEmpty(getToken())) {
             context.startActivity(new Intent(context, LoginActivity.class));
-            return false;
-        }else {
             return true;
+        } else {
+            return false;
         }
     }
+
     /**
      * 获取用户好友列表
      */
@@ -118,11 +119,13 @@ public class UserUtils {
     /**
      * 找出当前群中自己的好友
      * <p>
-     * 获取当前群的已经加入的还友，当前群可能有的不是好友，要匹配
+     * 获取当前群的已经加入的好友，当前群可能有的不是好友，要匹配
      */
     public static List<ContactBean> getFriendsInTeam(String conversationId) {
 
         JSONArray userInTeamArray = SPTools.getJsonArray(UserUtils.getToken() + conversationId + "_accountList_beans", new JSONArray());
+
+        KLog.e(userInTeamArray);
 
         List<ContactBean> contacts = getUserContacts();
 
@@ -132,14 +135,8 @@ public class UserUtils {
         //获取我的conversationId群中的全部用户
         List<ContactBean> list = JSON.parseArray(String.valueOf(userInTeamArray), ContactBean.class);
 
-        List<ContactBean> result = new ArrayList<>();
-
-        for (ContactBean bean : list) {
-            if (contacts.contains(bean)) {
-                result.add(bean);
-            }
-        }
-        return result;
+        list.retainAll(contacts);
+        return list;
     }
 
     /**

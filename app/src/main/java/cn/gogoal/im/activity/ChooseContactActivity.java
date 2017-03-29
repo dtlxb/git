@@ -114,7 +114,7 @@ public class ChooseContactActivity extends BaseActivity {
         actionType = getIntent().getIntExtra("square_action", 0);
 
         //actionType = 1102,1103,
-        String teamId = getIntent().getStringExtra("team_Id");
+        String teamId = getIntent().getStringExtra("conversation_id");
         //1100
         itContactBean = (ContactBean) getIntent().getSerializableExtra("seri");
 
@@ -134,6 +134,8 @@ public class ChooseContactActivity extends BaseActivity {
         AppDevice.setViewWidth$Height(tvConstactsFlag, AppDevice.getWidth(mContext) / 4, AppDevice.getWidth(mContext) / 4);
 
         mSelectedTeamMemberAccounts = UserUtils.getFriendsInTeam(teamId);
+
+        KLog.e(mSelectedTeamMemberAccounts);
 
         userContacts = UserUtils.getUserContacts();
 
@@ -243,7 +245,7 @@ public class ChooseContactActivity extends BaseActivity {
                     intent.putExtra("square_action", actionType);
                     intent.putExtra("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
 
-                    intent.putIntegerArrayListExtra("choose_friend_array",new ArrayList<>(userIdList));
+                    intent.putIntegerArrayListExtra("choose_friend_array", new ArrayList<>(userIdList));
                     startActivity(intent);
                     UIHelper.toast(ChooseContactActivity.this, "群组创建成功!!!");
                     finish();
