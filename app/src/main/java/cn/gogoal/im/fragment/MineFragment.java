@@ -12,9 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +25,9 @@ import cn.gogoal.im.activity.TestActivity;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.ImageTextBean;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.WeakReferenceHandler;
 import cn.gogoal.im.ui.NormalItemDecoration;
 
@@ -88,18 +84,6 @@ public class MineFragment extends BaseFragment {
         image.add("http://wx.qlogo.cn/mmopen/ajNVdqHZLLAMhuMfbmcumIo5YIpx6sYBIzvniatIV7Wbw1KRln4ONKjx2SLsTqib7pAhHTvvzjRTMkKMuDibWuZjA/0");
         image.add("http://wx.qlogo.cn/mmopen/PiajxSqBRaEKlabJJEx5lOHd2ric2mFPWAiaicdVmoJf77vfdPGGajtLmXUOBeFcnUMB1TkY3RZ7YeNvibE7K3TOib3w/0");
 
-    }
-
-    public void testAdd() {
-        ContactBean<String> contactBean = new ContactBean<>();
-        contactBean.setRemark("");
-        contactBean.setNickname("sdf");
-        contactBean.setAvatar("http://wx.qlogo.cn/mmopen/PiajxSqBRaEKlabJJEx5lOHd2ric2mFPWAiaicdVmoJf77vfdPGGajtLmXUOBeFcnUMB1TkY3RZ7YeNvibE7K3TOib3w/0");
-        contactBean.setFriend_id(9);
-        contactBean.setContactType(ContactBean.ContactType.PERSION_ITEM);
-        contactBean.setConv_id("33");
-        UserUtils.updataFriendList(JSONObject.toJSONString(contactBean));
-        KLog.e(JSONObject.toJSONString(contactBean));
     }
 
     private List<ImageTextBean<Integer>> iniData() {
@@ -166,7 +150,7 @@ public class MineFragment extends BaseFragment {
                         case 0:
                             break;
                         case 1:
-                            startActivity(new Intent(getContext(),TestActivity.class));
+                            startActivity(new Intent(getActivity(), TestActivity.class));
                             break;
                         default:
                             UIHelper.toast(v.getContext(), data.getText());

@@ -113,8 +113,6 @@ public class MessageFragment extends BaseFragment {
         IMMessageBeans.clear();
         IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
 
-        KLog.e(IMMessageBeans.size());
-
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
             //按照时间排序
             Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {

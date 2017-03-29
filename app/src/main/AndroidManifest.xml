@@ -150,7 +150,9 @@
             android:name=".activity.ChooseContactActivity"
             android:windowSoftInputMode="adjustPan" />
 
-        <activity android:name=".activity.TestActivity" />
+        <activity android:name=".activity.TestActivity"
+            android:theme="@style/TranslucentTheme"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
 
     </application>
 
