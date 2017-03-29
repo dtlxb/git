@@ -225,7 +225,7 @@ public class ChooseContactActivity extends BaseActivity {
     /**
      * 创建群组
      */
-    public void createChatGroup(HashSet<Integer> userIdList) {
+    public void createChatGroup(final HashSet<Integer> userIdList) {
 
         Map<String, String> params = new HashMap<>();
         params.put("token", AppConst.LEAN_CLOUD_TOKEN);
@@ -243,7 +243,7 @@ public class ChooseContactActivity extends BaseActivity {
                     intent.putExtra("square_action", actionType);
                     intent.putExtra("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
 
-                    intent.putIntegerArrayListExtra("choose_friend_array", userIdList);
+                    intent.putIntegerArrayListExtra("choose_friend_array",new ArrayList<>(userIdList));
                     startActivity(intent);
                     UIHelper.toast(ChooseContactActivity.this, "群组创建成功!!!");
                     finish();
