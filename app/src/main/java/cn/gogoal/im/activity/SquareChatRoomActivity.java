@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
@@ -51,7 +54,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
         initTitle(squareName, conversationID);
     }
 
-    private void initTitle(String squareName, final String conversation_id) {
+    private void initTitle(final String squareName, final String conversation_id) {
         XTitle title = setMyTitle(squareName + "(" + ")", true);
 
         //添加action
@@ -61,6 +64,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
                 Intent intent = new Intent(SquareChatRoomActivity.this, IMSquareChatSetActivity.class);
                 intent.putStringArrayListExtra("group_members", (ArrayList<String>) groupMembers);
                 intent.putExtra("conversation_id", conversation_id);
+                intent.putExtra("squareName", squareName);
                 startActivity(intent);
             }
         };

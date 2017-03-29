@@ -193,13 +193,55 @@
                     android:textSize="16sp" />
 
                 <Switch
-                    android:layout_width="wrap_content"
+                    android:id="@+id/bother_switch"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:background="@null" />
 
             </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/save_group"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="19dp"
+                android:background="@drawable/shape_text_border"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/im_str_save_group"
+                    android:textColor="@color/textColor_333333"
+                    android:textSize="16sp" />
+
+                <Switch
+                    android:id="@+id/save_switch"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@null" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_search_history_tv"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="19dp"
+                android:background="@drawable/shape_text_border"
+                android:drawableRight="@mipmap/forward"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/im_str_look_message"
+                android:textColor="@color/textColor_333333"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tv_delete_square"

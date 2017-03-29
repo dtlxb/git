@@ -16,6 +16,8 @@
     <string name="title_search_anyone">朋友验证</string>
     <string name="title_add_group">入群申请</string>
     <string name="title_new_friend">新的朋友</string>
+    <string name="title_square_collcet">我的群组</string>
+    <string name="square_collcet_add">添加</string>
 
     <string name="title_stock_market">股票行情</string>
 
@@ -53,12 +55,13 @@
     <string name="str_recorder_want_cancel">松开手指 取消发送</string>
     <!--聊天页面-->
     <string name="im_str_delete">删除并退出</string>
-    <string name="im_str_square_notice">公告</string>
+    <string name="im_str_square_notice">群公告</string>
     <string name="im_str_square_name">群名称</string>
-    <string name="im_str_square_code">二维码</string>
+    <string name="im_str_square_code">群二维码</string>
     <string name="im_str_square_myname">我在本群昵称</string>
     <string name="im_str_clip_hangds">鼓手</string>
     <string name="im_str_no_bother">消息免打扰</string>
+    <string name="im_str_save_group">保存到通讯录</string>
     <string name="im_str_look_message">查看聊天内容</string>
 
     <!--聊天语音弹窗-->

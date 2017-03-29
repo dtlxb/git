@@ -8,7 +8,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -51,6 +54,13 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
     @BindView(R.id.iv_square_head)
     NineGridImageView iv_square_head;
+
+    @BindView(R.id.tv_square_name)
+    TextView tvSquareName;
+
+    @BindView(R.id.save_switch)
+    Switch saveGroup;
+
     private List<String> imageList = new ArrayList<>();
     private List<String> idList = new ArrayList<>();
 
@@ -71,9 +81,12 @@ public class IMSquareChatSetActivity extends BaseActivity {
         personlistRecycler.setLayoutManager(new GridLayoutManager(this, 5));
         mPersonInfoAdapter = new IMPersonSetAdapter(IMSquareChatSetActivity.this, R.layout.item_grid_foundfragment, contactBeens);
         personlistRecycler.setAdapter(mPersonInfoAdapter);
+        groupMembers = new ArrayList<>();
         //正式流程走完后
         conversationId = getIntent().getExtras().getString("conversation_id");
-        groupMembers = new ArrayList<>();
+        final String squareName = getIntent().getExtras().getString("squareName");
+        tvSquareName.setText(squareName);
+
         if (null != getIntent().getExtras().getStringArrayList("group_members")) {
             groupMembers.addAll(getIntent().getExtras().getStringArrayList("group_members"));
         }
@@ -85,6 +98,34 @@ public class IMSquareChatSetActivity extends BaseActivity {
             getChatGroup(groupMembers);
         }
 
+        final JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getToken() + "_groups_saved", new JSONArray());
+        JSONObject thisGroup = null;
+        for (int i = 0; i < groupsArray.size(); i++) {
+            if (((JSONObject) groupsArray.get(i)).getString("conversationID").equals(conversationId)) {
+                saveGroup.setChecked(true);
+                thisGroup = (JSONObject) groupsArray.get(i);
+            }
+        }
+        //保存群
+        final JSONObject finalThisGroup = thisGroup;
+        saveGroup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    JSONObject groupObject = new JSONObject();
+                    groupObject.put("conversationID", conversationId);
+                    groupObject.put("squareName", squareName);
+                    groupObject.put("groupMembers", groupMembers.size() + "");
+                    //头像本地保存路径
+                    groupObject.put("squareAvatar", "");
+                    groupObject.put("squareDetail", "股市行情，畅所欲言");
+                    groupsArray.add(groupObject);
+                } else {
+                    groupsArray.remove(finalThisGroup);
+                }
+                SPTools.saveJsonArray(UserUtils.getToken() + "_groups_saved", groupsArray);
+            }
+        });
 
         mPersonInfoAdapter.setOnItemClickListener(new OnItemClickLitener() {
             @Override
