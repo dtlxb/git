@@ -200,12 +200,18 @@ public class ChooseContactActivity extends BaseActivity {
                 if (result.size() == 0) {
                     return;//没有选择好友时，点击确定不执行操作
                 }
-                if (actionType == AppConst.CREATE_SQUARE_ROOM_BUILD || actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
-                    createChatGroup(UserUtils.getUserFriendsIdList(result.values()));
+                HashSet<Integer> userFriendsIdList = UserUtils.getUserFriendsIdList(result.values());
+                if (actionType == AppConst.CREATE_SQUARE_ROOM_BUILD) {
+                    userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getToken()));
+                    createChatGroup(userFriendsIdList);
+                } else if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
+                    userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getToken()));
+                    userFriendsIdList.add(itContactBean.getFriend_id());
+                    createChatGroup(userFriendsIdList);
                 } else {
 
                     Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
-                    ArrayList<Integer> resultIdList = new ArrayList<>(UserUtils.getUserFriendsIdList(result.values()));
+                    ArrayList<Integer> resultIdList = new ArrayList<>(userFriendsIdList);
                     resultIdList.add(Integer.parseInt(UserUtils.getToken()));
                     intent.putExtra("square_action", actionType);
                     startActivity(intent);
@@ -234,15 +240,10 @@ public class ChooseContactActivity extends BaseActivity {
                 if (resultJson.getIntValue("code") == 0) {
 
                     Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
-                    ArrayList<Integer> resultIdList = new ArrayList<>(UserUtils.getUserFriendsIdList(result.values()));
-                    resultIdList.add(Integer.parseInt(UserUtils.getToken()));
                     intent.putExtra("square_action", actionType);
                     intent.putExtra("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
 
-                    if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
-                        resultIdList.add(itContactBean.getFriend_id());
-                        intent.putIntegerArrayListExtra("choose_friend_array", resultIdList);
-                    }
+                    intent.putIntegerArrayListExtra("choose_friend_array", userIdList);
                     startActivity(intent);
                     UIHelper.toast(ChooseContactActivity.this, "群组创建成功!!!");
                     finish();

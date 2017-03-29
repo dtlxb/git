@@ -102,7 +102,7 @@
     </style>
 
     <style name="SearchEdit" parent="Base.Widget.AppCompat.SearchView">
-        <item name="queryBackground">@drawable/shape_search_activity_edit</item>
+        <item name="queryBackground">@android:color/transparent</item>
         <item name="closeIcon">@drawable/ic_cancel_black_24dp</item>
         <item name="voiceIcon">@null</item>
         <item name="commitIcon">@null</item>
