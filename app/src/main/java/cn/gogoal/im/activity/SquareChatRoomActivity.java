@@ -2,16 +2,11 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 
 import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.avos.avoscloud.im.v2.AVIMException;
-import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.socks.library.KLog;
-
 
 import java.util.ArrayList;
 import java.util.List;

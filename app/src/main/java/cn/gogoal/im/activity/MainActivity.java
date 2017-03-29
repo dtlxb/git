@@ -85,7 +85,6 @@ public class MainActivity extends BaseActivity {
 
                         break;
                     case 3:
-                        mineFragment.testAdd();
                         break;
                     default:
                         break;
@@ -102,6 +101,7 @@ public class MainActivity extends BaseActivity {
 
             }
         });
-    }
 
+
+    }
 }

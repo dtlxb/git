@@ -92,18 +92,13 @@ public class UserUtils {
     /**
      * 获取用户好友列表
      */
-    public static List<ContactBean> getUserContacts(boolean addMyself) {
+    public static List<ContactBean> getUserContacts() {
         String contactStringRes = SPTools.getString(getToken() + "_contact_beans", "");
         if (TextUtils.isEmpty(contactStringRes)) {
             return null;
         }
         String contactArray = JSONObject.parseObject(contactStringRes).getJSONArray("data").toJSONString();
 
-        if (addMyself) {
-            List<ContactBean> list = JSONObject.parseArray(contactArray, ContactBean.class);
-            list.add(getMyself());
-            return list;
-        }
         return JSONObject.parseArray(contactArray, ContactBean.class);
     }
 
@@ -112,7 +107,7 @@ public class UserUtils {
      * <p>
      * 获取当前群的已经加入的还友，当前群可能有的不是好友，要匹配
      */
-    public static List<ContactBean> getFriendsInTeam(String teamId, boolean addMyself) {
+    public static List<ContactBean> getFriendsInTeam(String teamId) {
 
         String teamsStringRes = SPTools.getString(getToken() + teamId + "_accountList_beans", "");
         if (TextUtils.isEmpty(teamsStringRes)) {
@@ -120,7 +115,7 @@ public class UserUtils {
         }
         String userInTeamArray = JSONObject.parseObject(teamsStringRes).getJSONArray("data").toJSONString();
 
-        List<ContactBean> contacts = getUserContacts(addMyself);
+        List<ContactBean> contacts = getUserContacts();
 
         if (null == contacts || contacts.isEmpty()) {
             return new ArrayList<>();//用户没有好友,返回空集合，别返回空
@@ -134,11 +129,6 @@ public class UserUtils {
                 result.add(bean);
             }
         }
-        if (addMyself) {
-            result.add(getMyself());
-            return result;
-        }
-        result.remove(getMyself());
         return result;
     }
 
@@ -153,16 +143,4 @@ public class UserUtils {
         return list;
     }
 
-    public static ContactBean getMyself() {
-        ContactBean myself = new ContactBean();
-
-        if (!TextUtils.isEmpty(UserUtils.getToken())) {
-            myself.setContactType(ContactBean.ContactType.PERSION_ITEM);
-            myself.setNickname("我自己");
-            myself.setFriend_id(Integer.parseInt(UserUtils.getToken()));
-            myself.setAvatar("http://imagedemo.image.alimmdn.com/example.jpg@100h_100w_1e_1c?spm=a3c0d.7629140.0.0.XjrDfq&file=example.jpg@100h_100w_1e_1c");
-        }
-
-        return myself;
-    }
 }

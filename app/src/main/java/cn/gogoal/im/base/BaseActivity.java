@@ -57,7 +57,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
         setContentView(mContentView);
 
-        setStatusBar();
+//        setStatusBar();
 
         AppManager.getInstance().addActivity(this);
 
