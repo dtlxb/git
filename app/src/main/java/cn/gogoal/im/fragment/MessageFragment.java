@@ -395,7 +395,6 @@ public class MessageFragment extends BaseFragment {
         String ConversationId = conversation.getConversationId();
         int chatType = (int) conversation.getAttribute("chat_type");
 
-
         Long rightNow = CalendarUtils.getCurrentTime();
         String nickName = "";
         String avatar = "";
