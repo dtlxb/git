@@ -112,7 +112,7 @@ public class LitePal {
             if (!dbName.endsWith(Const.Config.DB_NAME_SUFFIX)) {
                 dbName = dbName + Const.Config.DB_NAME_SUFFIX;
             }
-            File dbFile = LitePalApplication.getContext().getDatabasePath(dbName);
+            File dbFile = LitePalApplication.getAppContext().getDatabasePath(dbName);
             if (dbFile.exists()) {
                 boolean result = dbFile.delete();
                 if (result) {
@@ -121,7 +121,7 @@ public class LitePal {
                 }
                 return result;
             }
-            String path = LitePalApplication.getContext().getExternalFilesDir("") + "/databases/";
+            String path = LitePalApplication.getAppContext().getExternalFilesDir("") + "/databases/";
             dbFile = new File(path + dbName);
             boolean result = dbFile.delete();
             if (result) {

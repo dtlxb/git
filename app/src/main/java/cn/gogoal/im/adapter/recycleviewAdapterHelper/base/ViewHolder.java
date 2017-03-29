@@ -91,7 +91,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     public ViewHolder setImageUrl(int viewId, String url) {
         ImageView view = getView(viewId);
         if (!TextUtils.isEmpty(url)){
-            ImageDisplay.loadNetImage(mContext,url,view);
+            ImageDisplay.loadNetImage(mContext,url,view,true);
         }
         return this;
     }

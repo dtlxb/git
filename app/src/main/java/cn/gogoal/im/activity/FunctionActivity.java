@@ -22,7 +22,6 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.WebViewUtil;
 import cn.gogoal.im.ui.view.XTitle;
 
@@ -138,20 +137,12 @@ public class FunctionActivity extends BaseActivity {
                             .setPositiveButton("确定,有的是流量", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    if (!TextUtils.isEmpty(data)) {
-                                        Intent intent = new Intent(getContext(), PdfDisplayActivity.class);
-                                        intent.putExtra("pdf_data", data);
-                                        startActivity(intent);
-                                    }
+                                    showPdf(data);
                                 }
                             }).setNegativeButton("取消", null).show();
 
                 } else if (AppDevice.getNetworkType(getContext()) == 1) {
-                    if (!TextUtils.isEmpty(data)) {
-                        Intent intent = new Intent(getContext(), PdfDisplayActivity.class);
-                        intent.putExtra("pdf_data", data);
-                        startActivity(intent);
-                    }
+                    showPdf(data);
                 } else {
                     UIHelper.toastError(mContext, "跳转出错");
                 }
@@ -160,6 +151,14 @@ public class FunctionActivity extends BaseActivity {
         });
 
 
+    }
+
+    private void showPdf(String data) {
+        if (!TextUtils.isEmpty(data)) {
+            Intent intent = new Intent(getContext(), PdfDisplayActivity.class);
+            intent.putExtra("pdf_data", data);
+            startActivity(intent);
+        }
     }
 
     /*@OnClick(R.id.fab)

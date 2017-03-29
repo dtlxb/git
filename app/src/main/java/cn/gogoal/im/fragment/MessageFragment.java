@@ -254,9 +254,7 @@ public class MessageFragment extends BaseFragment {
                     break;
                 case R.id.take_square_layout:
                     Intent intent = new Intent(getContext(), ChooseContactActivity.class);
-                    Bundle mBundle = new Bundle();
-                    mBundle.putInt("square_action", AppConst.CREATE_SQUARE_ROOM_DIRECT);
-                    intent.putExtras(mBundle);
+                    intent.putExtra("square_action", AppConst.CREATE_SQUARE_ROOM_DIRECT);
                     startActivity(intent);
                     break;
                 case R.id.sweep_twocode_layout:

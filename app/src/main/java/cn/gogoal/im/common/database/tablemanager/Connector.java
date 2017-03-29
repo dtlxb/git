@@ -95,7 +95,7 @@ public class Connector {
 		if (mLitePalHelper == null) {
 			String dbName = litePalAttr.getDbName();
 			if ("external".equalsIgnoreCase(litePalAttr.getStorage())) {
-				dbName = LitePalApplication.getContext().getExternalFilesDir("") + "/databases/" + dbName;
+				dbName = LitePalApplication.getAppContext().getExternalFilesDir("") + "/databases/" + dbName;
 			}
 			mLitePalHelper = new LitePalOpenHelper(dbName, litePalAttr.getVersion());
 		}

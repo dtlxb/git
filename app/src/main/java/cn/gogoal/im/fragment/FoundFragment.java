@@ -28,7 +28,6 @@ import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.wrapper.HeaderAndFooterWrapper;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.FoundData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGAPI;
@@ -183,7 +182,7 @@ public class FoundFragment extends BaseFragment {
         private int parentPosition;
 
         private GridAdapter(List<FoundData.ItemPojos> datas, int parentPosition) {
-            super(MyApp.getAppContext(), R.layout.item_grid_foundfragment, datas);
+            super(getActivity(), R.layout.item_grid_foundfragment, datas);
             this.parentPosition = parentPosition;
         }
 
