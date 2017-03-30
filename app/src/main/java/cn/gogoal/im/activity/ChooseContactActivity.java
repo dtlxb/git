@@ -136,6 +136,8 @@ public class ChooseContactActivity extends BaseActivity {
 
         if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE || actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
             mSelectedTeamMemberAccounts = UserUtils.getFriendsInTeam(teamId);
+        } else if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
+            mSelectedTeamMemberAccounts.add(itContactBean);
         }
 
         textAction = initTitleAction(teamId);
@@ -159,9 +161,9 @@ public class ChooseContactActivity extends BaseActivity {
 
         KLog.e(userContacts.size());
 
-        if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE && itContactBean != null) {
+        /*if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE && itContactBean != null) {
             userContacts.add(itContactBean);
-        }
+        }*/
 
         showContact();//设置列表
 
@@ -421,7 +423,7 @@ public class ChooseContactActivity extends BaseActivity {
                 holder.itemView.setEnabled(false);
                 checkBox.setEnabled(false);
             }
-            if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE || actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
+            if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE || actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE || actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
                 //判断当前的联系人是否已经在群中，是则显示灰色勾选图标
                 if ((!ArrayUtils.isEmpty(mSelectedTeamMemberAccounts)) && mSelectedTeamMemberAccounts.contains(data)) {
                     checkBox.setChecked(true);

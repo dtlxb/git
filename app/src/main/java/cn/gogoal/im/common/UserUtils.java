@@ -66,7 +66,7 @@ public class UserUtils {
     public static String getUserAvatar() {
         JSONObject user = getUserInfo();
         if (user == null) return null;
-        return user.getString("avatar");
+        return user.getString("simple_avatar");
     }
 
     /**
