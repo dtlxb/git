@@ -25,13 +25,14 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center">
+                    android:layout_height="wrap_content">
 
                     <cn.gogoal.im.ui.view.NineGridImageView
                         android:id="@+id/iv_square_head"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
+                        android:background="#ebebeb"
+                        android:layout_centerHorizontal="true"
                         app:imgGap="2dp" />
 
                     <TextView
@@ -39,7 +40,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/iv_square_head"
+                        android:layout_centerHorizontal="true"
                         android:layout_marginTop="16dp"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
                         android:textColor="@color/textColor_333333"
                         android:textSize="17dp" />
 
@@ -48,7 +54,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tv_square_name"
+                        android:layout_centerHorizontal="true"
                         android:layout_marginTop="9dp"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
                         android:textColor="@color/textColor_666666"
                         android:textSize="17dp" />
 

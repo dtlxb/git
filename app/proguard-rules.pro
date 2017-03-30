@@ -206,6 +206,8 @@
 
 #=================alivc-player============================================#
 
+-keep class com.alivc.**{*;}
+
 -dontwarn javax.annotation.**
 -keep class com.alibaba.**
 -keep class com.alivc.player.**

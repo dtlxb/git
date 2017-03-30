@@ -195,8 +195,8 @@ public class ChooseContactActivity extends BaseActivity {
                 title.setActionText(textAction,
                         String.format(getString(actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE ?
                                         R.string.str_title_del : R.string.str_title_ok),
-                                (result.size() + (actionType==AppConst.SQUARE_ROOM_DELETE_ANYONE?0:mSelectedTeamMemberAccounts.size()) > 0 ?
-                                        "(" + (result.size() + (actionType==AppConst.SQUARE_ROOM_DELETE_ANYONE?0:mSelectedTeamMemberAccounts.size())) + ")" : "")));
+                                (result.size() + (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE ? 0 : mSelectedTeamMemberAccounts.size()) > 0 ?
+                                        "(" + (result.size() + (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE ? 0 : mSelectedTeamMemberAccounts.size())) + ")" : "")));
 
             }
         });
@@ -258,12 +258,12 @@ public class ChooseContactActivity extends BaseActivity {
                     userFriendsIdList.add(itContactBean.getFriend_id());
                     createChatGroup(userFriendsIdList);
                 } else {
-                    Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
+                    Intent intent = new Intent();
                     intent.putExtra("square_action", actionType);
-                    Bundle bundle=new Bundle();
-                    bundle.putSerializable("choose_friend_array",new ArrayList<>(result.values()));
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("choose_friend_array", new ArrayList<>(result.values()));
                     intent.putExtras(bundle);
-                    startActivity(intent);
+                    setResult(actionType, intent);
                     UIHelper.toast(getActivity(), actionType == AppConst.SQUARE_ROOM_ADD_ANYONE ? "添加成功" : "移除成功");
                     finish();
                 }
@@ -291,7 +291,7 @@ public class ChooseContactActivity extends BaseActivity {
                     intent.putExtra("square_action", actionType);
                     intent.putExtra("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
 
-                    intent.putIntegerArrayListExtra("choose_friend_id_array", new ArrayList<>(userIdList));
+                    //intent.putIntegerArrayListExtra("choose_friend_id_array", new ArrayList<>(userIdList));
 
                     startActivity(intent);
 
@@ -421,7 +421,7 @@ public class ChooseContactActivity extends BaseActivity {
                 holder.itemView.setEnabled(false);
                 checkBox.setEnabled(false);
             }
-            if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE || actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
+            if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE || actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
                 //判断当前的联系人是否已经在群中，是则显示灰色勾选图标
                 if ((!ArrayUtils.isEmpty(mSelectedTeamMemberAccounts)) && mSelectedTeamMemberAccounts.contains(data)) {
                     checkBox.setChecked(true);
@@ -497,7 +497,7 @@ public class ChooseContactActivity extends BaseActivity {
         result.put(contactBean.getFriend_id(), contactBean);
 
         if (listener != null) {
-            listener.checked(new ArrayList<>(result.values()),contactBean,true);
+            listener.checked(new ArrayList<>(result.values()), contactBean, true);
         }
 
     }
@@ -507,7 +507,7 @@ public class ChooseContactActivity extends BaseActivity {
         result.remove(valueGetKey(result, contactBean));
 
         if (listener != null) {
-            listener.checked(new ArrayList<>(result.values()),contactBean,false);
+            listener.checked(new ArrayList<>(result.values()), contactBean, false);
         }
     }
 
@@ -580,7 +580,7 @@ public class ChooseContactActivity extends BaseActivity {
     }
 
     private interface ICheckItemListener<T> {
-        void checked(ArrayList<T> datas,T data , boolean isAdd);
+        void checked(ArrayList<T> datas, T data, boolean isAdd);
     }
 
     @Override
