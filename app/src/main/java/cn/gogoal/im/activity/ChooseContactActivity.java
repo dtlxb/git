@@ -235,10 +235,10 @@ public class ChooseContactActivity extends BaseActivity {
                 HashSet<Integer> userFriendsIdList = UserUtils.getUserFriendsIdList(result.values());
 
                 if (actionType == AppConst.CREATE_SQUARE_ROOM_BUILD) {
-                    userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getToken()));
+                    userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getUserAccountId()));
                     createChatGroup(userFriendsIdList);
                 } else if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
-                    userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getToken()));
+                    userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getUserAccountId()));
                     userFriendsIdList.add(itContactBean.getFriend_id());
                     createChatGroup(userFriendsIdList);
                 } else {
@@ -260,7 +260,7 @@ public class ChooseContactActivity extends BaseActivity {
      */
     public void createChatGroup(final HashSet<Integer> userIdList) {
         Map<String, String> params = new HashMap<>();
-        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
+        params.put("token", UserUtils.getToken());
         params.put("id_list", JSONObject.toJSONString(userIdList));
         KLog.e(params);
 
@@ -399,7 +399,7 @@ public class ChooseContactActivity extends BaseActivity {
             final SuperCheckBox checkBox = holder.getView(R.id.check_user);
             checkBox.setVisibility(View.VISIBLE);
 
-            if (String.valueOf(data.getFriend_id()).equals(UserUtils.getToken())) {
+            if (String.valueOf(data.getFriend_id()).equals(UserUtils.getUserAccountId())) {
                 checkBox.setChecked(true);
                 holder.itemView.setClickable(false);
                 holder.itemView.setEnabled(false);

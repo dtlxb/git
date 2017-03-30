@@ -61,9 +61,10 @@ public class SquareCollectActivity extends BaseActivity {
         xTitle.addAction(addAction);
         initRecycleView(squareRoomRecycler, R.drawable.shape_divider_recyclerview_1px);
 
-        JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getToken() + "_groups_saved", new JSONArray());
+        JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_groups_saved", new JSONArray());
+        Boolean needRefresh = SPTools.getBoolean("needRefresh", false);
         objectList = new ArrayList<>();
-        if (null == groupsArray || groupsArray.size() == 0) {
+        if (needRefresh) {
             getGroupList();
         } else {
             for (int i = 0; i < groupsArray.size(); i++) {
@@ -78,7 +79,7 @@ public class SquareCollectActivity extends BaseActivity {
     //收藏群
     public void getGroupList() {
         Map<String, String> params = new HashMap<>();
-        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
+        params.put("token", UserUtils.getToken());
         KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
@@ -92,7 +93,7 @@ public class SquareCollectActivity extends BaseActivity {
                         objectList.add((JSONObject) newGroupArray.get(i));
                     }
                     listAdapter.notifyDataSetChanged();
-                    SPTools.saveJsonArray(UserUtils.getToken() + "_groups_saved", newGroupArray);
+                    SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_groups_saved", newGroupArray);
                 }
             }
 

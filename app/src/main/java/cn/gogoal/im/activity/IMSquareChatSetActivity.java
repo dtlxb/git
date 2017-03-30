@@ -92,7 +92,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         if (null != getIntent().getExtras().getStringArrayList("group_members")) {
             groupMembers.addAll(getIntent().getExtras().getStringArrayList("group_members"));
         }
-        JSONArray accountArray = SPTools.getJsonArray(UserUtils.getToken() + conversationId + "_accountList_beans", null);
+        JSONArray accountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationId + "_accountList_beans", null);
         //缓存中没有群信息则向后台拉取
         if (null != accountArray) {
             getAllContacts(accountArray);
@@ -100,7 +100,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
             getChatGroup(groupMembers);
         }
 
-        final JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getToken() + "_groups_saved", new JSONArray());
+        final JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_groups_saved", new JSONArray());
         JSONObject thisGroup = null;
         for (int i = 0; i < groupsArray.size(); i++) {
             if (((JSONObject) groupsArray.get(i)).getString("conv_id").equals(conversationId)) {
@@ -130,7 +130,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     groupsArray.remove(finalThisGroup);
                     deleteGroup();
                 }
-                SPTools.saveJsonArray(UserUtils.getToken() + "_groups_saved", groupsArray);
+                SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_groups_saved", groupsArray);
             }
         });
 
@@ -212,7 +212,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
             imageList.add(contactBeens.get(i).getAvatar().toString());
             idList.add(String.valueOf(contactBeens.get(i).getFriend_id()));
         }
-        idList.add(AppConst.LEAN_CLOUD_TOKEN);
+        idList.add(UserUtils.getUserAccountId());
         contactBeens.add(addFunctionHead("", R.mipmap.person_add));
         contactBeens.add(addFunctionHead("", R.mipmap.chat_reduce));
 
@@ -223,7 +223,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     //删除群成员
     public void deleteAnyone(List<Integer> idSet) {
         Map<String, String> params = new HashMap<>();
-        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
+        params.put("token", UserUtils.getToken());
         params.put("id_list", JSONObject.toJSONString(idSet));
         params.put("conv_id", conversationId);
         Log.e("++++params", params.toString());
@@ -249,7 +249,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     //添加群成员
     public void addAnyone(List<Integer> idSet) {
         Map<String, String> params = new HashMap<>();
-        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
+        params.put("token", UserUtils.getToken());
         params.put("id_list", JSONObject.toJSONString(idSet));
         params.put("conv_id", conversationId);
         KLog.e(params);
@@ -276,7 +276,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     //收藏群
     public void collcetGroup() {
         Map<String, String> params = new HashMap<>();
-        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
+        params.put("token", UserUtils.getToken());
         params.put("conv_id", conversationId);
         KLog.e(params);
 
@@ -302,7 +302,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     //取消群收藏
     public void deleteGroup() {
         Map<String, String> params = new HashMap<>();
-        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
+        params.put("token", UserUtils.getToken());
         params.put("conv_id", conversationId);
         KLog.e(params);
 
@@ -328,7 +328,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     //拉取群组信息
     public void getChatGroup(List<String> groupMembers) {
         Map<String, String> params = new HashMap<>();
-        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
+        params.put("token", UserUtils.getToken());
         params.put("conv_id", conversationId);
         params.put("id_list", JSONObject.toJSONString(groupMembers));
         KLog.e(params);
@@ -342,7 +342,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 if ((int) result.get("code") == 0) {
                     if (null != result.getJSONObject("data")) {
                         getAllContacts(result.getJSONObject("data").getJSONArray("accountList"));
-                        SPTools.saveJsonArray(UserUtils.getToken() + conversationId + "_accountList_beans", result.getJSONObject("data").getJSONArray("accountList"));
+                        SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversationId + "_accountList_beans", result.getJSONObject("data").getJSONArray("accountList"));
                     }
                 }
             }

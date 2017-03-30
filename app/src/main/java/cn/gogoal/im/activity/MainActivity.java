@@ -16,6 +16,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.fragment.ContactsFragment;
 import cn.gogoal.im.fragment.FoundFragment;
 import cn.gogoal.im.fragment.MessageFragment;
@@ -42,7 +43,7 @@ public class MainActivity extends BaseActivity {
 
         int i1 = AppDevice.getHeight(mContext) / 10;
         KLog.e(i1);
-        KLog.e(AppDevice.px2dp(mContext,i1));
+        KLog.e(AppDevice.px2dp(mContext, i1));
 
         MessageFragment messageFragment = new MessageFragment();        // TAB1 消息
 
@@ -51,6 +52,10 @@ public class MainActivity extends BaseActivity {
         FoundFragment foundFragment = new FoundFragment();              // TAB3 投研
 
         final MineFragment mineFragment = new MineFragment();                 // TAB4 我的
+
+        Boolean needRefresh = getIntent().getExtras().getBoolean("isFromLogin", false);
+
+        SPTools.saveBoolean("needRefresh", needRefresh);
 
         List<Fragment> tabFragments = new ArrayList<>();
         tabFragments.add(messageFragment);

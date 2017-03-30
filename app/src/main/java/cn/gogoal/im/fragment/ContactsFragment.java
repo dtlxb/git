@@ -140,13 +140,21 @@ public class ContactsFragment extends BaseFragment {
 
     private void getData() {
         //缓存的联系人请求数据
-        String friendResponseInfo = SPTools.getString(UserUtils.getToken() + "_contact_beans", "");
+        Boolean needRefresh = SPTools.getBoolean("needRefresh", false);
+        String friendResponseInfo = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", "");
         KLog.e(friendResponseInfo);
-        if (TextUtils.isEmpty(friendResponseInfo)) {
+        if (needRefresh){
+            getFriendList(contactBeanList);
+        }else {
+            if (!JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()){
+                parseContactDatas(friendResponseInfo, contactBeanList);
+            }
+        }
+        /*if (TextUtils.isEmpty(friendResponseInfo)) {
             getFriendList(contactBeanList);
         } else if (!JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()) {
             parseContactDatas(friendResponseInfo, contactBeanList);
-        }
+        }*/
     }
 
     /**
@@ -181,11 +189,11 @@ public class ContactsFragment extends BaseFragment {
                 KLog.e(responseInfo);
 
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    SPTools.saveString(UserUtils.getToken() + "_contact_beans", responseInfo);
+                    SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", responseInfo);
                     parseContactDatas(responseInfo, contactBeanList);
 
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
-                    SPTools.saveString(UserUtils.getToken() + "_contact_beans", "{\"code\":0,\"data\":[],\"message\":\"成功\"}");
+                    SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", "{\"code\":0,\"data\":[],\"message\":\"成功\"}");
                 } else {
                     UIHelper.toastError(getContext(), GGOKHTTP.getMessage(responseInfo));
                 }

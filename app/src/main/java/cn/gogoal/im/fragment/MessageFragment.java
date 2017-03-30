@@ -54,7 +54,6 @@ import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
-import cn.gogoal.im.common.MD5Utils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -116,7 +115,7 @@ public class MessageFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
+        jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
         IMMessageBeans.clear();
         IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
 
@@ -377,9 +376,9 @@ public class MessageFragment extends BaseFragment {
                             accountArray = lcattrsObject.getJSONArray("accountList");
                             squareMessage = MessageUtils.findSquarePeople(accountArray, _lctype);
                             //群消息记录
-                            SPTools.saveString(UserUtils.getToken() + messageBean.getConversationID() + "_square_message", squareMessage);
+                            SPTools.saveString(UserUtils.getUserAccountId() + messageBean.getConversationID() + "_square_message", squareMessage);
                         } else {
-                            squareMessage = SPTools.getString(UserUtils.getToken() + messageBean.getConversationID() + "_square_message", "");
+                            squareMessage = SPTools.getString(UserUtils.getUserAccountId() + messageBean.getConversationID() + "_square_message", "");
                         }
                         message = squareMessage;
                         break;
@@ -403,7 +402,7 @@ public class MessageFragment extends BaseFragment {
 
     private void createGroupImage(final String ConversationId) {
         //群删除好友(每次删除后重新生成群头像)
-        JSONArray accountArray = SPTools.getJsonArray(UserUtils.getToken() + ConversationId + "_accountList_beans", new JSONArray());
+        JSONArray accountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + ConversationId + "_accountList_beans", new JSONArray());
         final List<String> picUrls = new ArrayList<>();
         for (int i = 0; i < (accountArray.size() < 9 ? accountArray.size() : 9); i++) {
             JSONObject personObject = accountArray.getJSONObject(i);
@@ -440,7 +439,7 @@ public class MessageFragment extends BaseFragment {
         Long rightNow = CalendarUtils.getCurrentTime();
         String nickName = "";
         final String[] avatar = {""};
-        String friend_id = UserUtils.getToken();
+        String friend_id = UserUtils.getUserAccountId();
         int unreadmessage = 0;
 
         JSONObject contentObject = JSON.parseObject(message.getContent());
@@ -494,7 +493,7 @@ public class MessageFragment extends BaseFragment {
                 KLog.e(filePath);
                 if (ImageUtils.getBitmapFile(ConversationId, filePath).equals("")) {
                     //生成群聊头像
-                    JSONArray accountArray = SPTools.getJsonArray(UserUtils.getToken() + ConversationId + "_accountList_beans", new JSONArray());
+                    JSONArray accountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + ConversationId + "_accountList_beans", new JSONArray());
                     final List<String> picUrls = new ArrayList<>();
                     for (int i = 0; i < (accountArray.size() < 9 ? accountArray.size() : 9); i++) {
                         JSONObject personObject = accountArray.getJSONObject(i);

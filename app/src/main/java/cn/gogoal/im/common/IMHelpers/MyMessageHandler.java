@@ -75,12 +75,12 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     sendIMMessage(message, conversation);
 
                                     //加好友
-                                    JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getToken() + "_newFriendList", new JSONArray());
+                                    JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_newFriendList", new JSONArray());
                                     JSONObject jsonObject = new JSONObject();
                                     jsonObject.put("message", message);
                                     jsonObject.put("isYourFriend", false);
                                     jsonArray.add(jsonObject);
-                                    SPTools.saveJsonArray(UserUtils.getToken() + "_newFriendList", jsonArray);
+                                    SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_newFriendList", jsonArray);
                                     break;
                                 case 1005:
                                     //好友更新
@@ -98,8 +98,8 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     contactBean.setContactType(ContactBean.ContactType.PERSION_ITEM);
                                     contactBean.setConv_id(conv_id);
                                     String friendList = UserUtils.updataFriendList(JSONObject.toJSONString(contactBean));
-                                    SPTools.saveString(UserUtils.getToken() + "_contact_beans", friendList);
-                                    KLog.e(SPTools.getString(UserUtils.getToken() + "_contact_beans", ""));
+                                    SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", friendList);
+                                    KLog.e(SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", ""));
                                     break;
 
                                 case 1006:
@@ -109,13 +109,12 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     //群通知
                                     sendIMMessage(message, conversation);
                                     //加好友
-                                    JSONArray unAddArray = SPTools.getJsonArray(UserUtils.getToken() + conversation.getConversationId() + "_unadd_accountList_beans", new JSONArray());
+                                    JSONArray unAddArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversation.getConversationId() + "_unadd_accountList_beans", new JSONArray());
                                     JSONObject unAddjsonObject = new JSONObject();
                                     unAddjsonObject.put("message", message);
                                     unAddjsonObject.put("isYourFriend", false);
                                     unAddArray.add(unAddjsonObject);
-                                    KLog.e(conversation.getConversationId());
-                                    SPTools.saveJsonArray(UserUtils.getToken() + conversation.getConversationId() + "_unadd_accountList_beans", unAddArray);
+                                    SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversation.getConversationId() + "_unadd_accountList_beans", unAddArray);
                                     break;
                                 default:
                                     break;

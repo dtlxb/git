@@ -16,6 +16,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**
@@ -52,7 +53,7 @@ public class IMAddFriendActivity extends BaseActivity {
     public void AddFirend() {
 
         Map<String, String> params = new HashMap<>();
-        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
+        params.put("token", UserUtils.getToken());
         params.put("friend_id", editYourMessage.getText().toString());
         params.put("text", "你好啊！！！");
         KLog.e(params);

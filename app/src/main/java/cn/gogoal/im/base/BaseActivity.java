@@ -35,6 +35,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.permission.IPermissionListner;
 import cn.gogoal.im.ui.view.XTitle;
 
@@ -77,7 +78,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         setStatusBar();
     }
 
-    public void setStatusBar(){
+    public void setStatusBar() {
         StatusBarUtil.with(BaseActivity.this).initForGogoal(false);
     }
 
@@ -220,7 +221,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
                 android.R.color.holo_red_light, android.R.color.holo_orange_light,
                 android.R.color.holo_green_light);
         mSwipeRefreshLayout.setProgressViewOffset(false, 0, (int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24,AppManager.getInstance().currentActivity().getResources()
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, AppManager.getInstance().currentActivity().getResources()
                         .getDisplayMetrics()));
     }
 
@@ -300,18 +301,19 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         AppManager.getInstance().finishActivity(this);
+        SPTools.clearItem("needRefresh");
         fixInputMethodManagerLeak(this);
     }
 
-    public BaseActivity getActivity(){
+    public BaseActivity getActivity() {
         return this;
     }
 
-    public int getResColor(@ColorRes int colorId){
-        return ContextCompat.getColor(BaseActivity.this,colorId);
+    public int getResColor(@ColorRes int colorId) {
+        return ContextCompat.getColor(BaseActivity.this, colorId);
     }
 
-    public Drawable getResDrawable(@DrawableRes int drawableid){
+    public Drawable getResDrawable(@DrawableRes int drawableid) {
         return ContextCompat.getDrawable(BaseActivity.this, drawableid);
     }
 }

@@ -104,7 +104,7 @@ public class UserUtils {
 
     @SuppressLint("UseSparseArrays")
     public static String updataFriendList(String newFriendJson) {
-        String responseInfo = SPTools.getString(getToken() + "_contact_beans", "");
+        String responseInfo = SPTools.getString(getUserAccountId() + "_contact_beans", "");
 
         if (TextUtils.isEmpty(newFriendJson)) {
             return null;
@@ -173,7 +173,7 @@ public class UserUtils {
      * 获取用户好友列表
      */
     public static List<ContactBean> getUserContacts() {
-        String contactStringRes = SPTools.getString(getToken() + "_contact_beans", "");
+        String contactStringRes = SPTools.getString(getUserAccountId() + "_contact_beans", "");
         if (TextUtils.isEmpty(contactStringRes)) {
             return new ArrayList<>();
         }
@@ -189,7 +189,7 @@ public class UserUtils {
      */
     public static List<ContactBean> getFriendsInTeam(String conversationId) {
 
-        JSONArray userInTeamArray = SPTools.getJsonArray(UserUtils.getToken() + conversationId + "_accountList_beans", new JSONArray());
+        JSONArray userInTeamArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationId + "_accountList_beans", new JSONArray());
 
         KLog.e(userInTeamArray);
 
