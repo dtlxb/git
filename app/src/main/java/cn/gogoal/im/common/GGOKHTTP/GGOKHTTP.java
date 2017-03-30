@@ -161,27 +161,27 @@ public class GGOKHTTP {
      * IM获取群列表
      * token                         用户token
      */
-    public static final String GET_GROUP_LIST = "v1/ggm_chat/get_group_list ";
+    public static final String GET_GROUP_LIST = "v1/ggm_chat/get_group_list";
 
     /**
      * IM取消收藏群
      * token                         用户token
      * conv_id                       会话id
      */
-    public static final String CANCEL_COLLECT_GROUP = "v1/ggm_chat/cancel_collect_group   ";
+    public static final String CANCEL_COLLECT_GROUP = "v1/ggm_chat/cancel_collect_group";
 
     /**
      * IM收藏群
      * token                         用户token
      * conv_id                       会话id
      */
-    public static final String COLLECT_GROUP = "v1/ggm_chat/collect_group ";
+    public static final String COLLECT_GROUP = "v1/ggm_chat/collect_group";
 
     /**
      * token                         用户token
      * keyword                       搜索关键字
      */
-    public static final String SEARCH_FRIEND = "v1/ggm_im/search_friend ";
+    public static final String SEARCH_FRIEND = "v1/ggm_im/search_friend";
 //--------------------------------------------------------------------------------------------------
 
     /**
@@ -199,7 +199,7 @@ public class GGOKHTTP {
     public GGOKHTTP(Map<String, String> param, String url, GGHttpInterface httpInterface) {
         this.param = param;
         this.httpInterface = httpInterface;
-        this.url = url;
+        this.url = url.trim().replace(" ","");
     }
 
     public void startGet() {

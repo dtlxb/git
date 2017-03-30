@@ -255,7 +255,7 @@ public class ChooseContactActivity extends BaseActivity {
                     createChatGroup(userFriendsIdList);
                 } else if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
                     userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getUserAccountId()));
-                    userFriendsIdList.add(itContactBean.getFriend_id());
+//                    userFriendsIdList.add(itContactBean.getFriend_id());
                     createChatGroup(userFriendsIdList);
                 } else {
                     Intent intent = new Intent();

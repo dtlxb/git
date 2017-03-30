@@ -54,7 +54,6 @@ import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.FoundData;
 import cn.gogoal.im.bean.IMMessageBean;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.CalendarUtils;
@@ -377,7 +376,7 @@ public class ChatFragment extends BaseFragment {
                     IMMessageBean imMessageBean = null;
                     if (chatType == 1001) {
                         imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
-                                "0", null != contactBean.getNickname() ? contactBean.getNickname() : "", String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
+                                "0", null != contactBean.getNickname() ? contactBean.getNickname() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), message);
 
                     } else if (chatType == 1002) {
                         imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
