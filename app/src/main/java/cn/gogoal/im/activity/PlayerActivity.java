@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -59,6 +60,7 @@ import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.RelaterVideoData;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGAPI;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -84,7 +86,7 @@ public class PlayerActivity extends BaseActivity {
     @BindView(R.id.GLViewContainer)
     FrameLayout frameContainer;
 
-    @BindView(R.id.player_recyc)
+    @BindView(R.id.recycPortrait)
     RecyclerView recyler_chat;
     @BindView(R.id.linearPlayerChat)
     LinearLayout linearPlayerChat;
@@ -130,6 +132,29 @@ public class PlayerActivity extends BaseActivity {
     SeekBar mSeekBar;
     @BindView(R.id.totalDuration)
     TextView totalDuration;
+
+    //横屏侧滑
+    @BindView(R.id.drawer_player)
+    DrawerLayout drawer_player;
+    @BindView(R.id.lay_right_menu)
+    FrameLayout menuLayout;
+    //主播介绍
+    @BindView(R.id.drawerLinearProfiles)
+    LinearLayout drawerLinearProfiles;
+    @BindView(R.id.anchor_avatar)
+    ImageView anchor_avatar;
+    @BindView(R.id.anchor_name)
+    TextView anchor_name;
+    @BindView(R.id.anchor_position)
+    TextView anchor_position;
+    @BindView(R.id.anchor_achieve)
+    TextView anchor_achieve;
+    //相关视频
+    @BindView(R.id.linearRelaterVideo)
+    LinearLayout linearRelaterVideo;
+    @BindView(R.id.recy_relater)
+    RecyclerView recy_relater;
+
 
     private boolean mEnableUpdateProgress = true;
 
@@ -255,6 +280,8 @@ public class PlayerActivity extends BaseActivity {
 
         getRelaterVideoInfo();
         getCanLiveTogether();
+
+        drawer_player.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     @Override
@@ -292,6 +319,25 @@ public class PlayerActivity extends BaseActivity {
                         linearPlayerProfiles.setVisibility(View.GONE);
                     } else {
                         linearPlayerProfiles.setVisibility(View.VISIBLE);
+
+                        ImageDisplay.loadNetImage(getContext(), anchor.getString("face_url"), anchor_avatar);
+                        anchor_name.setText(anchor.getString("anchor_name"));
+                        anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
+
+                        if (!anchor.getString("anchor_introduction").equals("")) {
+                            anchor_achieve.setText(anchor.getString("anchor_introduction"));
+
+                            final ViewTreeObserver observer = anchor_avatar.getViewTreeObserver();
+                            observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                                @Override
+                                public void onGlobalLayout() {
+                                    anchor_avatar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                    int finalHeight = anchor_avatar.getMeasuredHeight();
+                                    int finalWidth = anchor_avatar.getMeasuredWidth();
+                                    TextAndImage.makeSpan(finalHeight, finalWidth, anchor_achieve);
+                                }
+                            });
+                        }
                     }
 
                     if (source.equals("live")) {
@@ -1090,6 +1136,9 @@ public class PlayerActivity extends BaseActivity {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             isStopPlayer = true;
+            if (drawer_player.isDrawerOpen(menuLayout)) {
+                drawer_player.closeDrawer(menuLayout);
+            }
         }
 
         return super.onKeyDown(keyCode, event);
@@ -1103,10 +1152,30 @@ public class PlayerActivity extends BaseActivity {
                 showPlayerChat();
                 break;
             case R.id.imgPlayerProfiles: //主播介绍
-                showAnchorProfiles();
+                if (AppDevice.isLandscape(getContext())) {
+                    //drawer_player.openDrawer(Gravity.END, true);
+                    drawer_player.openDrawer(menuLayout);
+
+                    drawerLinearProfiles.setVisibility(View.VISIBLE);
+                    linearRelaterVideo.setVisibility(View.GONE);
+
+                } else {
+                    showAnchorProfiles();
+                }
                 break;
             case R.id.imgPlayerRelaterVideo: //相关视频
-                showRelaterVideo();
+                if (AppDevice.isLandscape(getContext())) {
+                    //drawer_player.openDrawer(Gravity.END, true);
+                    drawer_player.openDrawer(menuLayout);
+
+                    drawerLinearProfiles.setVisibility(View.GONE);
+                    linearRelaterVideo.setVisibility(View.VISIBLE);
+
+                    initRecycleView(recy_relater, null);
+                    recy_relater.setAdapter(new RelaterVideoAdapter(getContext(), videoDatas));
+                } else {
+                    showRelaterVideo();
+                }
                 break;
             case R.id.imgPlayerShare: //分享
                 DialogHelp.showShareDialog(getContext(), GGAPI.WEB_URL + "/live/share/" + live_id, "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
