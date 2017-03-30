@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 基础模块 END -->
 
+
     <!-- 阿里云播放器 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -57,7 +58,6 @@
             android:exported="true"
             android:label="PushService"
             android:process=":pushservice" />
-
         <service android:name=".servise.IntentService" />
 
         <activity
@@ -79,13 +79,11 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
             android:name=".activity.PlayerActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:theme="@style/TranslucentTheme"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
-
         <activity
             android:name=".activity.FunctionActivity"
             android:screenOrientation="portrait"
@@ -112,26 +110,20 @@
         <activity
             android:name=".activity.IMNewFrienActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.SearchPersonSquareActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.SquareCollectActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.IMPersonActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.IMSquareChatSetActivity"
             android:screenOrientation="portrait" />
-
         <activity android:name=".activity.SearchActivity" />
-
         <activity android:name=".wxapi.WXEntryActivity" />
-
         <activity android:name=".wxapi.WXPayEntryActivity" />
 
         <uses-library
@@ -144,16 +136,14 @@
             android:name=".activity.LiveTogetherActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
             android:theme="@style/TranslucentTheme" />
-
         <activity
             android:name=".activity.ChooseContactActivity"
             android:windowSoftInputMode="adjustPan" />
-
         <activity
             android:name=".activity.TestActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/TranslucentTheme" />
-
+        <activity android:name=".activity.LiveActivity" />
     </application>
 
 </manifest>

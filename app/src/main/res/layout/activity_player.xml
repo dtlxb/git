@@ -375,7 +375,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@android:color/white"
-            android:gravity="center_vertical"
             android:orientation="vertical"
             android:paddingBottom="10dp"
             android:paddingLeft="15dp"
@@ -392,7 +391,7 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
 
                 <ImageView
@@ -405,8 +404,8 @@
 
                 <LinearLayout
                     android:id="@+id/linearMessage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="13dp"
                     android:layout_toRightOf="@+id/anchor_avatar"
@@ -437,8 +436,8 @@
 
                 <TextView
                     android:id="@+id/anchor_achieve"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_below="@+id/linearMessage"
                     android:layout_marginTop="8dp"
                     android:textColor="@color/textColor_333333"
