@@ -31,6 +31,14 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
 
     private int friend_id;
 
+    private int account_id;
+
+    private int userId;
+
+    public int getUserId() {
+        return getFriend_id()==0?getAccount_id():getFriend_id();
+    }
+
     private String remark;//备注
 
     private String conv_id;
@@ -55,6 +63,14 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getAccount_id() {
+        return account_id;
+    }
+
+    public void setAccount_id(int account_id) {
+        this.account_id = account_id;
     }
 
     public int getFriend_id() {
@@ -104,7 +120,7 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
     @Override
     public String getTarget() {
         return isEmpty(getRemark()) ?
-                (isEmpty(getNickname()) ? "未命名" : getNickname()) :
+                (isEmpty(getNickname()) ? "--" : getNickname()) :
                 getRemark();
     }
 

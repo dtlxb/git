@@ -45,15 +45,16 @@ public class SearchPersionFragment extends BaseFragment {
     @Subscriber(tag = "SEARCH_PERSION_TAG")
     private void searchPersion(String keyword) {
         KLog.e(keyword);
-
         final Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
         param.put("keyword",keyword);
+        KLog.e("token="+UserUtils.getToken()+"&keyword="+keyword);
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                    parseAccount(responseInfo);
                 } else {
                     UIHelper.toastResponseError(getActivity(),responseInfo);
                 }
@@ -65,6 +66,11 @@ public class SearchPersionFragment extends BaseFragment {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.SEARCH_FRIEND, ggHttpInterface).startGet();
+    }
+
+    private void parseAccount(String responseInfo) {
+        JSONObject jsonObject = JSONObject.parseObject(responseInfo);
+
     }
 
 }
