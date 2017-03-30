@@ -19,10 +19,10 @@ import java.util.Map;
  */
 public class ArrayUtils {
 
-    public static String[] list2Array(List<String> list){
+    public static <T> T[] list2Array(List<T> list){
 
         if (list!=null && !list.isEmpty()){
-            String[] array=new String[list.size()];
+            T[] array = (T[]) new Object[list.size()];
 
             for (int i=0;i<list.size();i++){
                 array[i]=list.get(i);
@@ -33,8 +33,8 @@ public class ArrayUtils {
         return null;
     }
 
-    public static List<String> arr2List(String[] arr){
-        List<String> list=new ArrayList<>();
+    public static <T> List<T> arr2List(T[] arr){
+        List<T> list=new ArrayList<>();
         if (arr!=null && arr.length>0){
             list.addAll(Arrays.asList(arr));
             return list;

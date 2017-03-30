@@ -81,7 +81,7 @@ public class SearchPersionFragment extends BaseFragment {
                     wrapper.notifyDataSetChanged();
 
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
-                    
+
                 } else {
                     UIHelper.toastResponseError(getActivity(), responseInfo);
                 }

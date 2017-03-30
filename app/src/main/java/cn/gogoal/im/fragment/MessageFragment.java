@@ -418,7 +418,7 @@ public class MessageFragment extends BaseFragment {
         GroupFaceImage.getInstance(getContext(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {
-                KLog.e("跑这儿了的！！！");
+                Log.e("TAG","跑这儿了的！！！");
 //                String groupFaceImagepath = filePath.getPath() + "_" + ConversationId + ".png";
 //                KLog.e(groupFaceImagepath);
 //                ImageUtils.saveBitmapFile(mathingBitmap, groupFaceImagepath);
@@ -426,9 +426,10 @@ public class MessageFragment extends BaseFragment {
 
             @Override
             public void onError(Exception e) {
-                KLog.e(e.toString());
+                Log.e("TAG",e.toString());
             }
         });
+        KLog.e("==============================end==============================");
     }
 
     /**
