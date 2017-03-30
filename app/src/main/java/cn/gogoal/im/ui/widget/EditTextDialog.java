@@ -66,6 +66,10 @@ public class EditTextDialog extends BaseBottomDialog {
             public void onClick(View v) {
                 if (listener != null) {
                     listener.doSend(v, mEditText);
+
+                    InputMethodManager imm =
+                            (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
                 }
             }
         });

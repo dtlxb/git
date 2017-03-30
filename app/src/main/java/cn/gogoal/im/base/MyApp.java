@@ -41,8 +41,6 @@ public class MyApp extends LitePalApplication {
     public void onCreate() {
         super.onCreate();
 
-        MultiDex.install(this);
-
         app = this;
 
         SPTools.initSharedPreferences(this);

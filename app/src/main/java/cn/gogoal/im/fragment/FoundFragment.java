@@ -126,11 +126,13 @@ public class FoundFragment extends BaseFragment {
         FoundData.ItemPojos itemPojos1 = new FoundData.ItemPojos("股票行情", R.mipmap.cache_found_js_native, "tag");
         FoundData.ItemPojos itemPojos2 = new FoundData.ItemPojos("自选股", R.mipmap.cache_found_js_native, "tag");
         FoundData.ItemPojos itemPojos3 = new FoundData.ItemPojos("个股详情", R.mipmap.cache_found_js_native, "tag");
+        FoundData.ItemPojos itemPojos4 = new FoundData.ItemPojos("文字一分钟", R.mipmap.cache_found_js_native, "tag");
 
         List<FoundData.ItemPojos> listTest = new ArrayList<>();
         listTest.add(itemPojos1);
         listTest.add(itemPojos2);
         listTest.add(itemPojos3);
+        listTest.add(itemPojos4);
         datas.add(new FoundData(listTest, "测试部分"));
         return datas;
     }
@@ -156,7 +158,7 @@ public class FoundFragment extends BaseFragment {
 
                     FoundData.ItemPojos itemPojos2 = new FoundData.ItemPojos("", 0, "");
                     itemPojos.add(itemPojos2);
-                }else if (itemPojos.size() % 4 == 1){
+                } else if (itemPojos.size() % 4 == 1) {
                     FoundData.ItemPojos itemPojos1 = new FoundData.ItemPojos("", 0, "");
                     itemPojos.add(itemPojos1);
 
@@ -209,7 +211,7 @@ public class FoundFragment extends BaseFragment {
             viewParams.height = AppDevice.getWidth(getContext()) / 10;
             imageIcon.setLayoutParams(viewParams);
 
-            if (itemPojos.getIconRes()!=0) {
+            if (itemPojos.getIconRes() != 0) {
                 ImageDisplay.loadResImage(getContext(), itemPojos.getIconRes(), imageIcon);
             }
 
@@ -231,7 +233,7 @@ public class FoundFragment extends BaseFragment {
                                 gridItemClick_1(position, itemPojos);//股票投研
                                 break;
                             case 3:
-                                gridItemClick_2(position);//测试-股票
+                                gridItemClick_2(position, itemPojos);//测试-股票
                                 break;
                         }
                     }
@@ -250,7 +252,8 @@ public class FoundFragment extends BaseFragment {
                     startActivity(intent);
                     break;
                 case 1:
-                    startActivity(new Intent(getContext(), IMRegisterActivity.class));
+                    intent.putExtra("function_url", GGAPI.WEB_URL + "/research");
+                    startActivity(intent);
                     break;
                 case 2:
                     BaseActivity.requestRuntimePermission(new String[]{Manifest.permission.RECORD_AUDIO}, new IPermissionListner() {
@@ -264,6 +267,9 @@ public class FoundFragment extends BaseFragment {
                             UIHelper.toast(getContext(), "录音权限被拒，录音无法使用");
                         }
                     });
+                    break;
+                case 3:
+                    startActivity(new Intent(getContext(), IMRegisterActivity.class));
                     break;
                 case 4:
                     intent.putExtra("function_url", "file:///android_asset/demo.html");
@@ -290,10 +296,17 @@ public class FoundFragment extends BaseFragment {
         }
 
         //测试模块——股票
-        private void gridItemClick_2(int position) {
+        private void gridItemClick_2(int position, FoundData.ItemPojos itemPojos) {
             switch (position) {
                 case 0:
                     startActivity(new Intent(getContext(), MarketActivity.class));
+                    break;
+                case 3:
+                    Intent intent = new Intent(getContext(), FunctionActivity.class);
+                    intent.putExtra("title", itemPojos.getItemTextDescription());
+                    //intent.putExtra("function_url", itemPojos.getItemTextDescription());
+                    intent.putExtra("function_url", GGAPI.WEB_URL + "/text");
+                    startActivity(intent);
                     break;
             }
         }

@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
-
     <!-- LeanCloud基础模块（必须加入以下声明）START -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,7 +11,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 基础模块 END -->
-
 
     <!-- 阿里云播放器 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -24,7 +22,7 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <!-- iBeancon功能所需权限 -->;
+    <!-- iBeancon功能所需权限 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <!-- 个推3.0电子围栏功能所需权限 -->
@@ -52,6 +50,7 @@
         </receiver>
         <!-- 实时通信模块 END -->
 
+
         <!-- 配置SDK核心服务 -->
         <service
             android:name=".servise.PushService"
@@ -64,13 +63,19 @@
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.TakePhotoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -81,7 +86,8 @@
         <activity
             android:name=".activity.PlayerActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
-            android:theme="@style/TranslucentTheme" />
+            android:theme="@style/TranslucentTheme"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
         <activity
             android:name=".activity.FunctionActivity"
@@ -102,19 +108,12 @@
             android:name=".activity.ChatRoomActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-
         <activity android:name=".activity.DemoActivity" />
-
         <activity
-            android:name="cn.gogoal.im.activity.IMAddFriendActivity"
+            android:name=".activity.IMAddFriendActivity"
             android:screenOrientation="portrait" />
-
         <activity
-            android:name="cn.gogoal.im.activity.IMNewFrienActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="cn.gogoal.im.activity.IMPersonDetailActivity"
+            android:name=".activity.IMNewFrienActivity"
             android:screenOrientation="portrait" />
 
         <activity
@@ -126,13 +125,14 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="cn.gogoal.im.activity.IMPersonActivity"
+            android:name=".activity.IMPersonActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="cn.gogoal.im.activity.IMSquareChatSetActivity"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".activity.SearchActivity" />
+        <activity android:name=".wxapi.WXPayEntryActivity" />
         <activity android:name=".activity.SearchActivity">
 
         </activity>
@@ -144,16 +144,20 @@
             android:required="false" />
 
         <activity android:name=".activity.stock.MarketActivity" />
-
         <activity android:name=".activity.PdfDisplayActivity" />
+        <activity
+            android:name=".activity.LiveTogetherActivity"
+            android:configChanges="screenSize|keyboardHidden|orientation"
+            android:theme="@style/TranslucentTheme" />
 
         <activity
             android:name=".activity.ChooseContactActivity"
             android:windowSoftInputMode="adjustPan" />
 
-        <activity android:name=".activity.TestActivity"
-            android:theme="@style/TranslucentTheme"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".activity.TestActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/TranslucentTheme" />
 
     </application>
 
