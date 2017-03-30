@@ -3,6 +3,7 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -19,7 +20,6 @@ import com.hply.imagepicker.view.SuperCheckBox;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -167,25 +167,13 @@ public class ChooseContactActivity extends BaseActivity {
         //增减监听
         this.setOnItemCheckListener(new ICheckItemListener<ContactBean>() {
             @Override
-            public void checked(ArrayList<ContactBean> datas) {
-//                if (datas.size() >= 8) {
-//                    topListMaxWidth = rvSelectedContacts.getWidth();
-//                }
+            public void checked(ArrayList<ContactBean> datas,ContactBean data,boolean isAdd) {
+
                 if (actionType != AppConst.SQUARE_ROOM_DELETE_ANYONE) {
                     selectedAdapter = new SelectedAdapter(new ArrayList<>(datas));
                     rvSelectedContacts.setAdapter(selectedAdapter);
                     rvSelectedContacts.getLayoutManager().scrollToPosition(datas.size() - 1);
                 }
-
-                List<String> testString = new ArrayList<>();
-
-                Collection<ContactBean> values = result.values();
-
-                for (ContactBean bean : values) {
-                    testString.add(bean.getTarget());
-                }
-
-                KLog.e(testString.size() + ">>>>>>>>>>>>>>>>>>>>>>>>" + testString.toString());
 
                 //更改标题数量统计
                 title.setActionText(textAction,
@@ -193,13 +181,6 @@ public class ChooseContactActivity extends BaseActivity {
                                         R.string.str_title_del : R.string.str_title_ok),
                                 (result.size() + (actionType==AppConst.SQUARE_ROOM_DELETE_ANYONE?0:mSelectedTeamMemberAccounts.size()) > 0 ?
                                         "(" + (result.size() + (actionType==AppConst.SQUARE_ROOM_DELETE_ANYONE?0:mSelectedTeamMemberAccounts.size())) + ")" : "")));
-
-//                ((TextView) title.getViewByAction(textAction)).setText(
-//                        title.setActionText(textAction,
-//                                String.format(getString(actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE ?
-//                                                R.string.str_title_del : R.string.str_title_ok),
-//                                        (result.size() > 0 ? "(" + result.size() + ")" : "")));
-//                (result.size() + mSelectedTeamMemberAccounts.size() > 0 ? "(" + (result.size() + mSelectedTeamMemberAccounts.size()) + ")" : "")));
 
             }
         });
@@ -243,8 +224,6 @@ public class ChooseContactActivity extends BaseActivity {
             titleText = "完成";
         }
 
-        final List<String> test = new ArrayList<>();
-
         return new XTitle.TextAction(titleText) {
             @Override
             public void actionClick(View view) {
@@ -252,13 +231,6 @@ public class ChooseContactActivity extends BaseActivity {
                 if (result.size() == 0) {
                     return;//没有选择好友时，点击确定不执行操作
                 }
-
-                Collection<ContactBean> values = result.values();
-                for (ContactBean b : values) {
-                    test.add(b.getTarget());
-                }
-
-                KLog.e(test.size() + "=====>>>>>" + test.toString());
 
                 HashSet<Integer> userFriendsIdList = UserUtils.getUserFriendsIdList(result.values());
 
@@ -273,7 +245,9 @@ public class ChooseContactActivity extends BaseActivity {
 
                     Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
                     intent.putExtra("square_action", actionType);
-                    intent.putExtra("choose_friend_array", new ArrayList<>(result.values()));
+                    Bundle bundle=new Bundle();
+                    bundle.putSerializable("choose_friend_array",new ArrayList<>(result.values()));
+                    intent.putExtras(bundle);
                     startActivity(intent);
                     UIHelper.toast(getActivity(), actionType == AppConst.SQUARE_ROOM_ADD_ANYONE ? "添加成功" : "移除成功");
                     finish();
@@ -302,7 +276,7 @@ public class ChooseContactActivity extends BaseActivity {
                     intent.putExtra("square_action", actionType);
                     intent.putExtra("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
 
-                    intent.putIntegerArrayListExtra("choose_friend_array", new ArrayList<>(userIdList));
+                    intent.putIntegerArrayListExtra("choose_friend_id_array", new ArrayList<>(userIdList));
 
                     startActivity(intent);
 
@@ -446,12 +420,6 @@ public class ChooseContactActivity extends BaseActivity {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     map.put(data.getFriend_id(), isChecked);
-//                    if (isChecked){//不需要
-//                       addFriend(data,position);
-//
-//                    }else {
-//                        removeFriends(data);
-//                    }
                 }
             });
             // 设置CheckBox的状态
@@ -513,7 +481,7 @@ public class ChooseContactActivity extends BaseActivity {
         result.put(contactBean.getFriend_id(), contactBean);
 
         if (listener != null) {
-            listener.checked(new ArrayList<>(result.values()));
+            listener.checked(new ArrayList<>(result.values()),contactBean,true);
         }
 
     }
@@ -523,7 +491,7 @@ public class ChooseContactActivity extends BaseActivity {
         result.remove(valueGetKey(result, contactBean));
 
         if (listener != null) {
-            listener.checked(new ArrayList<>(result.values()));
+            listener.checked(new ArrayList<>(result.values()),contactBean,false);
         }
     }
 
@@ -562,7 +530,7 @@ public class ChooseContactActivity extends BaseActivity {
                     result.remove(valueGetKey(result, data));
 
                     if (listener != null) {
-                        listener.checked(new ArrayList<>(result.values()));
+                        listener.checked(new ArrayList<>(result.values()),data,false);
                     }
                 }
             });
@@ -579,7 +547,7 @@ public class ChooseContactActivity extends BaseActivity {
     }
 
     private interface ICheckItemListener<T> {
-        void checked(ArrayList<T> datas);
+        void checked(ArrayList<T> datas,T data , boolean isAdd);
     }
 
     @Override
