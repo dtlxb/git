@@ -48,8 +48,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                 case 1002:
                                     //群聊
                                     //更新对话
-                                    //发送
-                                    sendIMMessage(message, conversation);
                                     final JSONObject content_object = JSON.parseObject(message.getContent());
                                     final String _lctype = content_object.getString("_lctype");
                                     if ("5".equals(_lctype) || "6".equals(_lctype)) {
@@ -59,10 +57,12 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                                 //通讯录
                                                 JSONArray accountArray = content_object.getJSONObject("_lcattrs").getJSONArray("accountList");
                                                 MessageUtils.changeSquareInfo(conversation.getConversationId(), accountArray, _lctype);
+                                                //发送
+                                                sendIMMessage(message, conversation);
                                             }
                                         });
                                     } else {
-
+                                        sendIMMessage(message, conversation);
                                     }
 
                                     break;

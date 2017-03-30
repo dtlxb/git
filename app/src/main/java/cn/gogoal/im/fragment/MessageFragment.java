@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -261,12 +262,12 @@ public class MessageFragment extends BaseFragment {
             switch (v.getId()) {
                 case R.id.find_man_layout:
                     intent = new Intent(getContext(), SearchPersonSquareActivity.class);
-                    intent.putExtra("search_index",0);
+                    intent.putExtra("search_index", 0);
                     startActivity(intent);
                     break;
                 case R.id.find_square_layout:
                     intent = new Intent(getContext(), SearchPersonSquareActivity.class);
-                    intent.putExtra("search_index",1);
+                    intent.putExtra("search_index", 1);
                     startActivity(intent);
                     break;
                 case R.id.take_square_layout:
@@ -294,7 +295,6 @@ public class MessageFragment extends BaseFragment {
             String message = "";
             String unRead = "";
             String nickName = "";
-            String localImagePath = getActivity().getExternalFilesDir("cache").getPath() + "_" + messageBean.getConversationID() + ".png";
             int chatType = messageBean.getChatType();
             ImageView avatarIv = holder.getView(R.id.head_image);
             Badge badge = new BadgeView(getActivity()).bindTarget(holder.getView(R.id.head_layout));
@@ -404,24 +404,29 @@ public class MessageFragment extends BaseFragment {
 
     private void createGroupImage(final String ConversationId) {
         //群删除好友(每次删除后重新生成群头像)
+        KLog.e(ConversationId);
+        KLog.e(UserUtils.getUserAccountId());
         JSONArray accountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + ConversationId + "_accountList_beans", new JSONArray());
         final List<String> picUrls = new ArrayList<>();
-        for (int i = 0; i < (accountArray.size() < 9 ? accountArray.size() : 9); i++) {
+        picUrls.add(UserUtils.getUserAvatar());
+        for (int i = 0; i < accountArray.size(); i++) {
             JSONObject personObject = accountArray.getJSONObject(i);
             picUrls.add(personObject.getString("avatar"));
         }
-
+        KLog.e(picUrls);
         //九宫图拼接
         GroupFaceImage.getInstance(getContext(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {
-                String groupFaceImagepath = filePath.getPath() + "_" + ConversationId + ".png";
-                ImageUtils.saveBitmapFile(mathingBitmap, groupFaceImagepath);
+                KLog.e("跑这儿了的！！！");
+//                String groupFaceImagepath = filePath.getPath() + "_" + ConversationId + ".png";
+//                KLog.e(groupFaceImagepath);
+//                ImageUtils.saveBitmapFile(mathingBitmap, groupFaceImagepath);
             }
 
             @Override
             public void onError(Exception e) {
-
+                KLog.e(e.toString());
             }
         });
     }
@@ -447,6 +452,9 @@ public class MessageFragment extends BaseFragment {
         JSONObject contentObject = JSON.parseObject(message.getContent());
         JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
         String _lctype = contentObject.getString("_lctype");
+
+        KLog.e(message.getContent());
+        KLog.e(chatType);
 
         switch (_lctype) {
             case "-1":
@@ -492,7 +500,6 @@ public class MessageFragment extends BaseFragment {
                 break;
             case 1002:
                 nickName = conversation.getName();
-                KLog.e(filePath);
                 if (ImageUtils.getBitmapFile(ConversationId, filePath).equals("")) {
                     //生成群聊头像
                     JSONArray accountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + ConversationId + "_accountList_beans", new JSONArray());
@@ -563,9 +570,6 @@ public class MessageFragment extends BaseFragment {
             imMessageBean.setUnReadCounts(1 + "");
             IMMessageBeans.add(imMessageBean);
         }
-
-        KLog.e(message.getContent());
-        KLog.e(chatType);
 
         //保存
         IMMessageBean imMessageBean = new IMMessageBean(ConversationId, chatType, message.getTimestamp(),

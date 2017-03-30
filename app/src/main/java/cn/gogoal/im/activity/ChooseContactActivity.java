@@ -136,6 +136,8 @@ public class ChooseContactActivity extends BaseActivity {
 
         if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE || actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
             mSelectedTeamMemberAccounts = UserUtils.getFriendsInTeam(teamId);
+        } else if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
+            mSelectedTeamMemberAccounts.add(itContactBean);
         }
 
         textAction = initTitleAction(teamId);
@@ -159,9 +161,9 @@ public class ChooseContactActivity extends BaseActivity {
 
         KLog.e(userContacts.size());
 
-        if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE && itContactBean != null) {
+        /*if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE && itContactBean != null) {
             userContacts.add(itContactBean);
-        }
+        }*/
 
         showContact();//设置列表
 
@@ -170,7 +172,7 @@ public class ChooseContactActivity extends BaseActivity {
         //增减监听
         this.setOnItemCheckListener(new ICheckItemListener<ContactBean>() {
             @Override
-            public void checked(ArrayList<ContactBean> datas,ContactBean data,boolean isAdd) {
+            public void checked(ArrayList<ContactBean> datas, ContactBean data, boolean isAdd) {
                 ChooseContactActivity.this.isAdd = isAdd;
 
                 if (actionType != AppConst.SQUARE_ROOM_DELETE_ANYONE) {
@@ -179,15 +181,15 @@ public class ChooseContactActivity extends BaseActivity {
                     rvSelectedContacts.getLayoutManager().scrollToPosition(datas.size() - 1);
                 }
 
-                KLog.e("状态"+(isAdd?"+":"-")+"=======>>>>>size=="+datas.size()+"======>>>>>>>"+rvSelectedContacts.getWidth());
+                KLog.e("状态" + (isAdd ? "+" : "-") + "=======>>>>>size==" + datas.size() + "======>>>>>>>" + rvSelectedContacts.getWidth());
 
-                if (isAdd){
-                    if (datas.size()>=8)
+                if (isAdd) {
+                    if (datas.size() >= 8)
                         topListWidth = rvSelectedContacts.getWidth();
-                    AppDevice.setViewWidth$Height(searchChoose,AppDevice.getWidth(mContext)-topListWidth,-2);
-                }else {
-                    if (datas.size()>=6){
-                        AppDevice.setViewWidth$Height(searchChoose,AppDevice.getWidth(mContext)-topListWidth,-2);
+                    AppDevice.setViewWidth$Height(searchChoose, AppDevice.getWidth(mContext) - topListWidth, -2);
+                } else {
+                    if (datas.size() >= 6) {
+                        AppDevice.setViewWidth$Height(searchChoose, AppDevice.getWidth(mContext) - topListWidth, -2);
                     }
                 }
 
@@ -421,7 +423,7 @@ public class ChooseContactActivity extends BaseActivity {
                 holder.itemView.setEnabled(false);
                 checkBox.setEnabled(false);
             }
-            if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE || actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
+            if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE || actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE || actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
                 //判断当前的联系人是否已经在群中，是则显示灰色勾选图标
                 if ((!ArrayUtils.isEmpty(mSelectedTeamMemberAccounts)) && mSelectedTeamMemberAccounts.contains(data)) {
                     checkBox.setChecked(true);
@@ -520,7 +522,7 @@ public class ChooseContactActivity extends BaseActivity {
 
         public SelectedAdapter(List<ContactBean> datas) {
             super(ChooseContactActivity.this, R.layout.item_selected_contact_rv, datas);
-            this.datas=datas;
+            this.datas = datas;
         }
 
         public void setDatas(List<ContactBean> datas) {
@@ -561,7 +563,7 @@ public class ChooseContactActivity extends BaseActivity {
                     result.remove(valueGetKey(result, data));
 
                     if (listener != null) {
-                        listener.checked(new ArrayList<>(datas),data,false);
+                        listener.checked(new ArrayList<>(datas), data, false);
                     }
                 }
             });
