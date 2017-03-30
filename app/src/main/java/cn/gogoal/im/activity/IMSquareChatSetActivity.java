@@ -214,7 +214,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
         }
         idList.add(UserUtils.getUserAccountId());
         contactBeens.add(addFunctionHead("", R.mipmap.person_add));
-        contactBeens.add(addFunctionHead("", R.mipmap.chat_reduce));
+        if (conversationId.equals(UserUtils.getUserAccountId())) {
+            contactBeens.add(addFunctionHead("", R.mipmap.chat_reduce));
+        }
 
         mPersonInfoAdapter.notifyDataSetChanged();
         KLog.e(contactBeens);
