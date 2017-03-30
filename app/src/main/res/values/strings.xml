@@ -36,6 +36,9 @@
     <string name="live_together">一起直播</string>
     <string name="anchor_introduction">主播介绍</string>
 
+    <string name="no_camera_permission">没有权限使用摄像头，请开启摄像头权限</string>
+    <string name="no_record_audio_permission">没有权限使用录音，请开启录音权限</string>
+
     <!--分享-->
     <string name="share_clone">关闭</string>
     <string name="share_copy">复制链接</string>
@@ -98,5 +101,6 @@
     <string name="str_search">\u0020&#xe62c; 搜索</string>
     <string name="str_title_ok">确定%s</string>
     <string name="str_title_del">删除%s</string>
+    <string name="finish_live">完成直播</string>
 
 </resources>

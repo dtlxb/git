@@ -38,7 +38,7 @@ android {
         multiDexEnabled true
 
         ndk {
-            abiFilters "armeabi", "armeabi-v7a", "x86_64","x86"
+            abiFilters "armeabi-v7a", "armeabi", "x86_64"
         }
     }
 
@@ -78,7 +78,7 @@ android {
         abi {
             enable true
             reset()
-            include 'armeabi-v7a', 'armeabi', 'x86','x86_64'
+            include 'armeabi-v7a'
         }
     }
 }
@@ -130,5 +130,4 @@ dependencies {
     compile 'top.zibin:Luban:1.0.9'
     //个推
     compile 'com.getui:sdk:2.9.5.0'
-    compile 'com.android.support:multidex:1.0.1'
 }

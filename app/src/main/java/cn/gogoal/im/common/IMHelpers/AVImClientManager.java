@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.UserUtils;
 
 /**
  * Created by huangxx on 17/02/20.
@@ -70,8 +71,8 @@ public class AVImClientManager {
      */
     public Map<String, String> userBaseInfo() {
         Map<String, String> attr = new HashMap<>();
-        attr.put("username", AppConst.LEAN_CLOUD_TOKEN);
-        //attr.put("avatar", UserUtils.getUserAvatar());
+        attr.put("username", UserUtils.getUserName());
+        attr.put("avatar", UserUtils.getUserAvatar());
         return attr;
     }
 

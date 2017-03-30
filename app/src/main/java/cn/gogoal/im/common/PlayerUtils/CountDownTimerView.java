@@ -227,8 +227,9 @@ public class CountDownTimerView extends LinearLayout {
                                         textMinutesUnit.setText("0");
                                         textSecondsDecade.setText("0");
                                         textSecondsUnit.setText("0");
+
                                         stop();
-                                        liveTelecastTrailer.setVisibility(View.GONE);
+                                        downCallBack.startPlayer();
                                         return false;
                                     }
                                 }
@@ -327,5 +328,19 @@ public class CountDownTimerView extends LinearLayout {
             tv.setText(time + "");
             return false;
         }
+    }
+
+    CountDownCallBack downCallBack;
+
+    public CountDownCallBack getDownCallBack() {
+        return downCallBack;
+    }
+
+    public void setDownCallBack(CountDownCallBack downCallBack) {
+        this.downCallBack = downCallBack;
+    }
+
+    public interface CountDownCallBack {
+        public void startPlayer();
     }
 }
