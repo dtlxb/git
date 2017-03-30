@@ -49,4 +49,9 @@
         <item>中国研网</item>
         <item>品牌活动</item>
     </string-array>
+
+    <string-array name="searchTitle">
+        <item>找人</item>
+        <item>找群</item>
+    </string-array>
 </resources>

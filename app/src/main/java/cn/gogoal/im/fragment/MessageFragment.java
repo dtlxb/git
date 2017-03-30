@@ -255,10 +255,12 @@ public class MessageFragment extends BaseFragment {
             switch (v.getId()) {
                 case R.id.find_man_layout:
                     intent = new Intent(getContext(), SearchPersonSquareActivity.class);
+                    intent.putExtra("search_index",0);
                     startActivity(intent);
                     break;
                 case R.id.find_square_layout:
                     intent = new Intent(getContext(), SearchPersonSquareActivity.class);
+                    intent.putExtra("search_index",1);
                     startActivity(intent);
                     break;
                 case R.id.take_square_layout:

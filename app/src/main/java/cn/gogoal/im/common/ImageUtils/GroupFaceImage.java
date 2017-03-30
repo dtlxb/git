@@ -28,7 +28,7 @@ public class GroupFaceImage {
 
     private List<String> imageUrls;
 
-    private OnMatchingListener listener;
+    private OnMatchingListener matchingListener;
 
     private Context context;
 
@@ -72,8 +72,8 @@ public class GroupFaceImage {
         return instance;
     }
 
-    public void load(final OnMatchingListener listener) {
-        this.listener = listener;
+    public void load(OnMatchingListener listener) {
+        this.matchingListener = listener;
         final List<Bitmap> bitmaps = new ArrayList<>();
         if (null == imageUrls || imageUrls.isEmpty()) {
             throw new NullPointerException("图像集合不能为空");
@@ -99,11 +99,11 @@ public class GroupFaceImage {
                         bitmaps.add(myBitmap);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        listener.onError(e);
+                        matchingListener.onError(e);
                     }
                 }
 
-                listener.onSuccess(mathingBitmap(bitmaps));
+                matchingListener.onSuccess(mathingBitmap(bitmaps));
 
 //                switch (imageUrls.size()) {
 //                    case 1:
@@ -218,7 +218,7 @@ public class GroupFaceImage {
 
         Bitmap result = Bitmap.createBitmap(resultWidth, resultWidth, Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(result);
-
+        canvas.drawRGB(100,100,100);
         switch (bitmapList.size()) {
             case 1:
                 return bitmapList.get(0);
