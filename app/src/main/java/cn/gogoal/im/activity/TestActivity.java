@@ -55,6 +55,7 @@ public class TestActivity extends BaseActivity {
                 drawerLayout.setDrawerLockMode(isChecked?DrawerLayout.LOCK_MODE_LOCKED_CLOSED:DrawerLayout.LOCK_MODE_UNLOCKED);
             }
         });
+
     }
 
     @Override
