@@ -275,7 +275,7 @@ public class ChooseContactActivity extends BaseActivity {
                     intent.putExtra("square_action", actionType);
                     intent.putExtra("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
 
-                    intent.putIntegerArrayListExtra("choose_friend_array", new ArrayList<>(userIdList));
+                    intent.putIntegerArrayListExtra("choose_friend_id_array", new ArrayList<>(userIdList));
 
                     startActivity(intent);
 
