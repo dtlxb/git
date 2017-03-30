@@ -24,12 +24,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 
 /**
  * author wangjd on 2017/2/23 0023.
@@ -489,6 +491,21 @@ public class ImageUtils {
         return file;
     }
 
+    /**
+     * 拿取本地缓存去群头像
+     */
+    public static String getBitmapFile(String conversationID, File file) {
+        String bitmapPath = "";
+        String[] fileList = file.list(new MyFilter(".png"));
+        for (int i = 0; i < fileList.length; i++) {
+            String[] ImagePath = fileList[i].split("_");
+            if (ImagePath[0].equals(conversationID)) {
+                bitmapPath = fileList[i];
+            }
+        }
+        return bitmapPath;
+    }
+
     //获取图片大小
     public static long getBitmapsize(Bitmap bitmap) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
@@ -502,9 +519,9 @@ public class ImageUtils {
     public static String getImageWidth_Height(File imageFile) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        options.inSampleSize=1;
+        options.inSampleSize = 1;
         BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options); // 此时返回的bitmap为null
-        return options.outHeight+"x"+options.outWidth;
+        return options.outHeight + "x" + options.outWidth;
     }
 
     public static Bitmap imageZoom(Bitmap bitmap) {
@@ -542,6 +559,18 @@ public class ImageUtils {
         Bitmap bitmap = Bitmap.createBitmap(bgimage, 0, 0, (int) width,
                 (int) height, matrix, true);
         return bitmap;
+    }
+
+    static class MyFilter implements FilenameFilter {
+        private String type;
+
+        public MyFilter(String type) {
+            this.type = type;
+        }
+
+        public boolean accept(File dir, String name) {
+            return name.endsWith(type);
+        }
     }
 
 }

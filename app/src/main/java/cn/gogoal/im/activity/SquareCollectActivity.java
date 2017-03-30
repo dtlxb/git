@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,8 @@ import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -81,9 +84,7 @@ public class SquareCollectActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
                 Log.e("====responseInfo", responseInfo);
                 if ((int) result.get("code") == 0) {
                     JSONArray newGroupArray = (JSONArray) result.get("data");
@@ -116,7 +117,9 @@ public class SquareCollectActivity extends BaseActivity {
             timeView.setVisibility(View.GONE);
 
             KLog.e(groupObject.getString("m_size"));
+            File filePath = SquareCollectActivity.this.getExternalFilesDir("imagecache");
 
+            ImageDisplay.loadFileImage(getmContext(), new File(ImageUtils.getBitmapFile(groupObject.getString("conv_id"), filePath)), avatarIv);
             holder.setText(R.id.last_message, groupObject.getJSONObject("attr").getString("intro") == null ? groupObject.getJSONObject("attr").getString("intro") : "");
             holder.setText(R.id.whose_message, groupObject.getString("name") + "(" + groupObject.getString("m_size") + ")");
         }
