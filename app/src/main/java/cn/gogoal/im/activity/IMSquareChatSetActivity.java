@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
@@ -101,7 +102,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         final JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getToken() + "_groups_saved", new JSONArray());
         JSONObject thisGroup = null;
         for (int i = 0; i < groupsArray.size(); i++) {
-            if (((JSONObject) groupsArray.get(i)).getString("conversationID").equals(conversationId)) {
+            if (((JSONObject) groupsArray.get(i)).getString("conv_id").equals(conversationId)) {
                 saveGroup.setChecked(true);
                 thisGroup = (JSONObject) groupsArray.get(i);
             }
@@ -113,15 +114,20 @@ public class IMSquareChatSetActivity extends BaseActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     JSONObject groupObject = new JSONObject();
-                    groupObject.put("conversationID", conversationId);
-                    groupObject.put("squareName", squareName);
-                    groupObject.put("groupMembers", groupMembers.size() + "");
-                    //头像本地保存路径
-                    groupObject.put("squareAvatar", "");
-                    groupObject.put("squareDetail", "股市行情，畅所欲言");
+                    JSONObject attrObject = new JSONObject();
+                    groupObject.put("conv_id", conversationId);
+                    groupObject.put("name", squareName);
+                    groupObject.put("m_size", groupMembers.size() + "");
+
+                    attrObject.put("intro", "股市行情，畅所欲言");
+                    attrObject.put("notice", "股票有大涨趋势");
+                    groupObject.put("attr", attrObject);
+
                     groupsArray.add(groupObject);
+                    collcetGroup();
                 } else {
                     groupsArray.remove(finalThisGroup);
+                    deleteGroup();
                 }
                 SPTools.saveJsonArray(UserUtils.getToken() + "_groups_saved", groupsArray);
             }
@@ -138,14 +144,14 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     mBundle.putInt("square_action", AppConst.SQUARE_ROOM_DELETE_ANYONE);
                     mBundle.putString("conversation_id", conversationId);
                     intent.putExtras(mBundle);
-                    startActivity(intent);
+                    startActivityForResult(intent, AppConst.SQUARE_ROOM_DELETE_ANYONE);
 
                 } else if (position == contactBeens.size() - 2) {
                     intent = new Intent(IMSquareChatSetActivity.this, ChooseContactActivity.class);
                     mBundle.putInt("square_action", AppConst.SQUARE_ROOM_ADD_ANYONE);
                     mBundle.putString("conversation_id", conversationId);
                     intent.putExtras(mBundle);
-                    startActivity(intent);
+                    startActivityForResult(intent, AppConst.SQUARE_ROOM_ADD_ANYONE);
                 } else {
                     intent = new Intent(IMSquareChatSetActivity.this, IMPersonDetailActivity.class);
                     mBundle.putInt("friend_id", contactBeens.get(position).getFriend_id());
@@ -214,7 +220,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     }
 
     //删除群成员
-    public void deleteAnyone(Set<Integer> idSet) {
+    public void deleteAnyone(List<Integer> idSet) {
         Map<String, String> params = new HashMap<>();
         params.put("token", AppConst.LEAN_CLOUD_TOKEN);
         params.put("id_list", JSONObject.toJSONString(idSet));
@@ -240,7 +246,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     }
 
     //添加群成员
-    public void addAnyone(Set<Integer> idSet) {
+    public void addAnyone(List<Integer> idSet) {
         Map<String, String> params = new HashMap<>();
         params.put("token", AppConst.LEAN_CLOUD_TOKEN);
         params.put("id_list", JSONObject.toJSONString(idSet));
@@ -264,6 +270,58 @@ public class IMSquareChatSetActivity extends BaseActivity {
             }
         };
         new GGOKHTTP(params, GGOKHTTP.ADD_MEMBER, ggHttpInterface).startGet();
+    }
+
+    //收藏群
+    public void collcetGroup() {
+        Map<String, String> params = new HashMap<>();
+        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
+        params.put("conv_id", conversationId);
+        KLog.e(params);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                KLog.e(result.get("code"));
+                if ((int) result.get("code") == 0) {
+                    UIHelper.toast(IMSquareChatSetActivity.this, "群成员添加成功!!!");
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                KLog.json(msg);
+            }
+        };
+        new GGOKHTTP(params, GGOKHTTP.COLLECT_GROUP, ggHttpInterface).startGet();
+    }
+
+    //取消群收藏
+    public void deleteGroup() {
+        Map<String, String> params = new HashMap<>();
+        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
+        params.put("conv_id", conversationId);
+        KLog.e(params);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                KLog.e(result.get("code"));
+                if ((int) result.get("code") == 0) {
+                    UIHelper.toast(IMSquareChatSetActivity.this, "群成员添加成功!!!");
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                KLog.json(msg);
+            }
+        };
+        new GGOKHTTP(params, GGOKHTTP.CANCEL_COLLECT_GROUP, ggHttpInterface).startGet();
     }
 
     //拉取群组信息
@@ -294,6 +352,25 @@ public class IMSquareChatSetActivity extends BaseActivity {
             }
         };
         new GGOKHTTP(params, GGOKHTTP.GET_MEMBER_INFO, ggHttpInterface).startGet();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != 0) {
+            ArrayList<Integer> changeIdList = data.getIntegerArrayListExtra("choose_friend_array");
+            switch (requestCode) {
+                case AppConst.SQUARE_ROOM_ADD_ANYONE:
+                    //添加群成员
+                    addAnyone(changeIdList);
+                    break;
+                case AppConst.SQUARE_ROOM_DELETE_ANYONE:
+                    //删除群成员
+                    deleteAnyone(changeIdList);
+                    break;
+            }
+        }
+
     }
 
     /*@OnClick({R.id.tv_do_search_conversation, R.id.getmessage_swith})

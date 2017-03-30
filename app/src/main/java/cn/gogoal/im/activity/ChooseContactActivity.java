@@ -211,12 +211,11 @@ public class ChooseContactActivity extends BaseActivity {
                     userFriendsIdList.add(itContactBean.getFriend_id());
                     createChatGroup(userFriendsIdList);
                 } else {
-
-                    Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
                     ArrayList<Integer> resultIdList = new ArrayList<>(userFriendsIdList);
-                    resultIdList.add(Integer.parseInt(UserUtils.getToken()));
+                    Intent intent = new Intent();
+                    intent.putIntegerArrayListExtra("choose_friend_array", new ArrayList<>(resultIdList));
                     intent.putExtra("square_action", actionType);
-                    startActivity(intent);
+                    ChooseContactActivity.this.setResult(actionType, intent);
                     UIHelper.toast(getActivity(), actionType == AppConst.SQUARE_ROOM_ADD_ANYONE ? "添加成功" : "移除成功");
                     finish();
                 }
@@ -366,7 +365,7 @@ public class ChooseContactActivity extends BaseActivity {
                 holder.itemView.setEnabled(false);
                 checkBox.setEnabled(false);
             }
-            if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE || actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
+            if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE || actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
                 //判断当前的联系人是否已经在群中，是则显示灰色勾选图标
                 if ((!ArrayUtils.isEmpty(mSelectedTeamMemberAccounts)) && mSelectedTeamMemberAccounts.contains(data)) {
                     checkBox.setChecked(true);
