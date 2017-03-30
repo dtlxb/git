@@ -59,6 +59,9 @@ public class ChooseContactActivity extends BaseActivity {
     private int actionType;
     private List<ContactBean> userContacts;
     private ContactBean itContactBean;
+    private int topListWidth;
+
+    private boolean isAdd;
 
     public void setOnItemCheckListener(ICheckItemListener<ContactBean> listener) {
         this.listener = listener;
@@ -167,12 +170,25 @@ public class ChooseContactActivity extends BaseActivity {
         //增减监听
         this.setOnItemCheckListener(new ICheckItemListener<ContactBean>() {
             @Override
-            public void checked(ArrayList<ContactBean> datas, ContactBean data, boolean isAdd) {
+            public void checked(ArrayList<ContactBean> datas,ContactBean data,boolean isAdd) {
+                ChooseContactActivity.this.isAdd = isAdd;
 
                 if (actionType != AppConst.SQUARE_ROOM_DELETE_ANYONE) {
                     selectedAdapter = new SelectedAdapter(new ArrayList<>(datas));
                     rvSelectedContacts.setAdapter(selectedAdapter);
                     rvSelectedContacts.getLayoutManager().scrollToPosition(datas.size() - 1);
+                }
+
+                KLog.e("状态"+(isAdd?"+":"-")+"=======>>>>>size=="+datas.size()+"======>>>>>>>"+rvSelectedContacts.getWidth());
+
+                if (isAdd){
+                    if (datas.size()>=8)
+                        topListWidth = rvSelectedContacts.getWidth();
+                    AppDevice.setViewWidth$Height(searchChoose,AppDevice.getWidth(mContext)-topListWidth,-2);
+                }else {
+                    if (datas.size()>=6){
+                        AppDevice.setViewWidth$Height(searchChoose,AppDevice.getWidth(mContext)-topListWidth,-2);
+                    }
                 }
 
                 //更改标题数量统计
@@ -312,8 +328,8 @@ public class ChooseContactActivity extends BaseActivity {
             final String simpleSpell = getSimpleSpell(contactBean.getTarget());
 
             if (targetZh.contains(query) ||
-                    targetEn.contains(query) ||
-                    simpleSpell.substring(0, getSimpleSpell(query).length()).equals(getSimpleSpell(query))) {
+                    targetEn.startsWith(query) ||
+                    simpleSpell.contains(query)) {
 
                 filteredModelList.add(contactBean);
             }
@@ -421,6 +437,7 @@ public class ChooseContactActivity extends BaseActivity {
                     map.put(data.getFriend_id(), isChecked);
                 }
             });
+
             // 设置CheckBox的状态
             if (map.get(data.getFriend_id()) == null) {
                 map.put(data.getFriend_id(), false);
@@ -499,8 +516,15 @@ public class ChooseContactActivity extends BaseActivity {
     * */
     private class SelectedAdapter extends CommonAdapter<ContactBean> {
 
+        private List<ContactBean> datas;
+
         public SelectedAdapter(List<ContactBean> datas) {
             super(ChooseContactActivity.this, R.layout.item_selected_contact_rv, datas);
+            this.datas=datas;
+        }
+
+        public void setDatas(List<ContactBean> datas) {
+            this.datas = datas;
         }
 
         @Override
@@ -512,10 +536,18 @@ public class ChooseContactActivity extends BaseActivity {
                 ImageDisplay.loadNetImage(getActivity(), data.getAvatar().toString(), ivHeader);
             }
 
-//            if (result.values().size() >= 7) {
-//                AppDevice.setViewWidth$Height(rvSelectedContacts, -2, topListMaxWidth);
+//            if (isAdd) {
+//                if (datas.size() >=9) {//8个item宽度
+//                    AppDevice.setViewWidth$Height(rvSelectedContacts, topListWidth, -2);
+//                } else {
+//                    AppDevice.setViewWidth$Height(rvSelectedContacts, -2, -2);
+//                }
 //            }else {
-//                AppDevice.setViewWidth$Height(rvSelectedContacts,-2,-2);
+//                if (datas.size() >= 7) {
+//                    AppDevice.setViewWidth$Height(rvSelectedContacts, topListWidth, -2);
+//                } else {
+//                    AppDevice.setViewWidth$Height(rvSelectedContacts, -2, -2);
+//                }
 //            }
 
             holder.setOnClickListener(R.id.item_selected_contact, new View.OnClickListener() {
@@ -529,10 +561,12 @@ public class ChooseContactActivity extends BaseActivity {
                     result.remove(valueGetKey(result, data));
 
                     if (listener != null) {
-                        listener.checked(new ArrayList<>(result.values()), data, false);
+                        listener.checked(new ArrayList<>(datas),data,false);
                     }
                 }
             });
+
+
         }
     }
 

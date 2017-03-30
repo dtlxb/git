@@ -102,7 +102,7 @@ public class AppDevice {
     /**
      * 代码动态控制布局中控件的宽高
      * */
-    public static void setViewWidth$Height(View view, int height, int width){
+    public static void setViewWidth$Height(View view, int width, int height){
         ViewGroup.LayoutParams params = view.getLayoutParams();
         if (null != params){
             params.height=height;

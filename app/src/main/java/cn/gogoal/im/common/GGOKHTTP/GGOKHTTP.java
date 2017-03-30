@@ -98,23 +98,6 @@ public class GGOKHTTP {
      */
     public static final String GET_FRIEND_LIST = "v1/ggm_im/get_friend_list";
 
-    public static final String USER_RESET_PASSWORD_NEW = "v1/user/reset_password_new";
-
-    /**
-     * 自动登录 刷新token
-     */
-    public static final String USER_QUICK_LOGIN = "v1/user/quick_login";
-
-    /**
-     * 获取客服电话
-     */
-    public static final String GET_BASE_CONFIGURE = "v1/systemset/get_base_configure";
-
-    /**
-     * 校验账号
-     */
-    public static final String CHECK_ACCOUNT = "v1/user/check_account";
-
     /**
      * 城市列表
      */
@@ -194,6 +177,11 @@ public class GGOKHTTP {
      */
     public static final String COLLECT_GROUP = "v1/ggm_chat/collect_group ";
 
+    /**
+     * token                         用户token
+     * keyword                       搜索关键字
+     */
+    public static final String SEARCH_FRIEND = "v1/ggm_im/search_friend ";
 //--------------------------------------------------------------------------------------------------
 
     /**

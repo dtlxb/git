@@ -1152,29 +1152,35 @@ public class PlayerActivity extends BaseActivity {
                 showPlayerChat();
                 break;
             case R.id.imgPlayerProfiles: //主播介绍
-                if (AppDevice.isLandscape(getContext())) {
-                    //drawer_player.openDrawer(Gravity.END, true);
-                    drawer_player.openDrawer(menuLayout);
+                if(drawer_player.isDrawerOpen(menuLayout)) {
+                    drawer_player.closeDrawer(menuLayout);
+                }else {
+                    if (AppDevice.isLandscape(getContext())) {
+                        drawer_player.openDrawer(Gravity.END,true);
 
-                    drawerLinearProfiles.setVisibility(View.VISIBLE);
-                    linearRelaterVideo.setVisibility(View.GONE);
+                        drawerLinearProfiles.setVisibility(View.VISIBLE);
+                        linearRelaterVideo.setVisibility(View.GONE);
 
-                } else {
-                    showAnchorProfiles();
+                    } else {
+                        showAnchorProfiles();
+                    }
                 }
                 break;
             case R.id.imgPlayerRelaterVideo: //相关视频
-                if (AppDevice.isLandscape(getContext())) {
-                    //drawer_player.openDrawer(Gravity.END, true);
-                    drawer_player.openDrawer(menuLayout);
+                if(drawer_player.isDrawerOpen(menuLayout)) {
+                    drawer_player.closeDrawer(menuLayout);
+                }else {
+                    if (AppDevice.isLandscape(getContext())) {
+                        drawer_player.openDrawer(Gravity.END,true);
 
-                    drawerLinearProfiles.setVisibility(View.GONE);
-                    linearRelaterVideo.setVisibility(View.VISIBLE);
+                        drawerLinearProfiles.setVisibility(View.GONE);
+                        linearRelaterVideo.setVisibility(View.VISIBLE);
 
-                    initRecycleView(recy_relater, null);
-                    recy_relater.setAdapter(new RelaterVideoAdapter(getContext(), videoDatas));
-                } else {
-                    showRelaterVideo();
+                        initRecycleView(recy_relater, null);
+                        recy_relater.setAdapter(new RelaterVideoAdapter(getContext(), videoDatas));
+                    } else {
+                        showRelaterVideo();
+                    }
                 }
                 break;
             case R.id.imgPlayerShare: //分享

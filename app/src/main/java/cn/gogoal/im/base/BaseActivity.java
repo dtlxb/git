@@ -3,6 +3,7 @@ package cn.gogoal.im.base;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -80,6 +81,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     public void setStatusBar() {
         StatusBarUtil.with(BaseActivity.this).initForGogoal(false);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     //封装运行时权限
