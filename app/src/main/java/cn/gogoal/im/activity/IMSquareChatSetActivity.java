@@ -66,6 +66,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     private List<String> idList = new ArrayList<>();
 
     private IMPersonSetAdapter mPersonInfoAdapter;
+    NineGridImageViewAdapter<String> mAdapter;
     private List<ContactBean> contactBeens = new ArrayList<>();
     private String conversationId;
     private List<String> groupMembers;
@@ -167,7 +168,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         });
 
         //群头像
-        NineGridImageViewAdapter<String> mAdapter = new NineGridImageViewAdapter<String>() {
+        mAdapter = new NineGridImageViewAdapter<String>() {
             @Override
             public void onDisplayImage(Context context, ImageView imageView, String url) {
                 ImageDisplay.loadNetImage(context, url, imageView);
@@ -358,17 +359,24 @@ public class IMSquareChatSetActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != 0) {
-            ArrayList<Integer> changeIdList = data.getIntegerArrayListExtra("choose_friend_array");
+            List<ContactBean> changeContactBeens = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
+            List<Integer> idList = new ArrayList<>();
+            for (int i = 0; i < changeContactBeens.size(); i++) {
+                idList.add(changeContactBeens.get(i).getFriend_id());
+            }
             switch (requestCode) {
                 case AppConst.SQUARE_ROOM_ADD_ANYONE:
                     //添加群成员
-                    addAnyone(changeIdList);
+                    addAnyone(idList);
+                    contactBeens.addAll(contactBeens.size() - 2, changeContactBeens);
                     break;
                 case AppConst.SQUARE_ROOM_DELETE_ANYONE:
                     //删除群成员
-                    deleteAnyone(changeIdList);
+                    deleteAnyone(idList);
+                    contactBeens.removeAll(changeContactBeens);
                     break;
             }
+            mPersonInfoAdapter.notifyDataSetChanged();
         }
 
     }

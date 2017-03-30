@@ -167,7 +167,7 @@ public class ChooseContactActivity extends BaseActivity {
         //增减监听
         this.setOnItemCheckListener(new ICheckItemListener<ContactBean>() {
             @Override
-            public void checked(ArrayList<ContactBean> datas,ContactBean data,boolean isAdd) {
+            public void checked(ArrayList<ContactBean> datas, ContactBean data, boolean isAdd) {
 
                 if (actionType != AppConst.SQUARE_ROOM_DELETE_ANYONE) {
                     selectedAdapter = new SelectedAdapter(new ArrayList<>(datas));
@@ -179,8 +179,8 @@ public class ChooseContactActivity extends BaseActivity {
                 title.setActionText(textAction,
                         String.format(getString(actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE ?
                                         R.string.str_title_del : R.string.str_title_ok),
-                                (result.size() + (actionType==AppConst.SQUARE_ROOM_DELETE_ANYONE?0:mSelectedTeamMemberAccounts.size()) > 0 ?
-                                        "(" + (result.size() + (actionType==AppConst.SQUARE_ROOM_DELETE_ANYONE?0:mSelectedTeamMemberAccounts.size())) + ")" : "")));
+                                (result.size() + (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE ? 0 : mSelectedTeamMemberAccounts.size()) > 0 ?
+                                        "(" + (result.size() + (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE ? 0 : mSelectedTeamMemberAccounts.size())) + ")" : "")));
 
             }
         });
@@ -242,13 +242,12 @@ public class ChooseContactActivity extends BaseActivity {
                     userFriendsIdList.add(itContactBean.getFriend_id());
                     createChatGroup(userFriendsIdList);
                 } else {
-
-                    Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
+                    Intent intent = new Intent();
                     intent.putExtra("square_action", actionType);
-                    Bundle bundle=new Bundle();
-                    bundle.putSerializable("choose_friend_array",new ArrayList<>(result.values()));
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("choose_friend_array", new ArrayList<>(result.values()));
                     intent.putExtras(bundle);
-                    startActivity(intent);
+                    setResult(actionType, intent);
                     UIHelper.toast(getActivity(), actionType == AppConst.SQUARE_ROOM_ADD_ANYONE ? "添加成功" : "移除成功");
                     finish();
                 }
@@ -276,7 +275,7 @@ public class ChooseContactActivity extends BaseActivity {
                     intent.putExtra("square_action", actionType);
                     intent.putExtra("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
 
-                    intent.putIntegerArrayListExtra("choose_friend_id_array", new ArrayList<>(userIdList));
+                    //intent.putIntegerArrayListExtra("choose_friend_id_array", new ArrayList<>(userIdList));
 
                     startActivity(intent);
 
@@ -481,7 +480,7 @@ public class ChooseContactActivity extends BaseActivity {
         result.put(contactBean.getFriend_id(), contactBean);
 
         if (listener != null) {
-            listener.checked(new ArrayList<>(result.values()),contactBean,true);
+            listener.checked(new ArrayList<>(result.values()), contactBean, true);
         }
 
     }
@@ -491,7 +490,7 @@ public class ChooseContactActivity extends BaseActivity {
         result.remove(valueGetKey(result, contactBean));
 
         if (listener != null) {
-            listener.checked(new ArrayList<>(result.values()),contactBean,false);
+            listener.checked(new ArrayList<>(result.values()), contactBean, false);
         }
     }
 
@@ -530,7 +529,7 @@ public class ChooseContactActivity extends BaseActivity {
                     result.remove(valueGetKey(result, data));
 
                     if (listener != null) {
-                        listener.checked(new ArrayList<>(result.values()),data,false);
+                        listener.checked(new ArrayList<>(result.values()), data, false);
                     }
                 }
             });
@@ -547,7 +546,7 @@ public class ChooseContactActivity extends BaseActivity {
     }
 
     private interface ICheckItemListener<T> {
-        void checked(ArrayList<T> datas,T data , boolean isAdd);
+        void checked(ArrayList<T> datas, T data, boolean isAdd);
     }
 
     @Override
