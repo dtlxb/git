@@ -313,7 +313,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     //消息来了
     public void addItem(AVIMMessage message) {
         messageList.add(message);
-        this.notifyDataSetChanged();
     }
 
     //时间处理

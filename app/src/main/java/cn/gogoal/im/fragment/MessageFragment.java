@@ -76,8 +76,6 @@ public class MessageFragment extends BaseFragment {
 
     private JSONArray jsonArray;
 
-    private File filePath;
-
     public MessageFragment() {
     }
 
@@ -89,7 +87,6 @@ public class MessageFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
         initTitle();
-        filePath = getActivity().getExternalFilesDir("imagecache");
         initRecycleView(message_recycler, R.drawable.shape_divider_recyclerview_1px);
     }
 
@@ -300,6 +297,9 @@ public class MessageFragment extends BaseFragment {
             Badge badge = new BadgeView(getActivity()).bindTarget(holder.getView(R.id.head_layout));
             badge.setBadgeTextSize(10, true);
             badge.setBadgeGravity(Gravity.TOP | Gravity.END);
+
+            KLog.e(messageBean);
+
             //未读数
             if (messageBean.getUnReadCounts().equals("0")) {
                 unRead = "";
@@ -317,39 +317,31 @@ public class MessageFragment extends BaseFragment {
             //SDK定义的消息类型
             if (messageBean.getLastMessage() != null) {
                 String content = messageBean.getLastMessage().getContent();
-//                KLog.e(content);
                 JSONObject contentObject = JSON.parseObject(content);
                 String _lctype = contentObject.getString("_lctype");
                 nickName = messageBean.getNickname();
+
+                //头像设置
+                if (chatType == 1001) {
+                    ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
+                } else if (chatType == 1002) {
+                    ImageDisplay.loadFileImage(getmContext(), new File(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")), avatarIv);
+                } else if (chatType == 1004) {
+                    ImageDisplay.loadResImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
+                }
+
                 switch (_lctype) {
                     case "-1":
                         //文字
                         message = contentObject.getString("_lctext");
-                        if (chatType == 1002) {
-                            ImageDisplay.loadFileImage(getmContext(), new File(messageBean.getAvatar()), avatarIv);
-                        } else {
-                            ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
-                        }
                         break;
                     case "-2":
                         //图片
                         message = "[图片]";
-                        if (chatType == 1002) {
-                            ImageDisplay.loadFileImage(getmContext(), new File(messageBean.getAvatar()), avatarIv);
-                        } else {
-                            ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
-                        }
-
                         break;
                     case "-3":
                         //语音
                         message = "[语音]";
-                        if (chatType == 1002) {
-                            ImageDisplay.loadFileImage(getmContext(), new File(messageBean.getAvatar()), avatarIv);
-                        } else {
-                            ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
-                        }
-
                         break;
                     case "1":
 
@@ -359,8 +351,6 @@ public class MessageFragment extends BaseFragment {
                         //加好友
                         nickName = "新的好友";
                         message = messageBean.getNickname() + "请求添加你为好友";
-                        ImageDisplay.loadResImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
-
                         break;
                     case "3":
 
@@ -404,29 +394,23 @@ public class MessageFragment extends BaseFragment {
 
     private void createGroupImage(final String ConversationId) {
         //群删除好友(每次删除后重新生成群头像)
-        KLog.e(ConversationId);
-        KLog.e(UserUtils.getUserAccountId());
         JSONArray accountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + ConversationId + "_accountList_beans", new JSONArray());
         final List<String> picUrls = new ArrayList<>();
-        picUrls.add(UserUtils.getUserAvatar());
         for (int i = 0; i < accountArray.size(); i++) {
             JSONObject personObject = accountArray.getJSONObject(i);
             picUrls.add(personObject.getString("avatar"));
         }
-        KLog.e(picUrls);
+        Log.e("picUrls", picUrls.toString() + "");
         //九宫图拼接
         GroupFaceImage.getInstance(getContext(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {
-                Log.e("TAG","跑这儿了的！！！");
-//                String groupFaceImagepath = filePath.getPath() + "_" + ConversationId + ".png";
-//                KLog.e(groupFaceImagepath);
-//                ImageUtils.saveBitmapFile(mathingBitmap, groupFaceImagepath);
+                String groupFaceImageName = "_" + ConversationId + ".png";
+                ImageUtils.saveBitmapFile(mathingBitmap, "imagecache", groupFaceImageName);
             }
 
             @Override
             public void onError(Exception e) {
-                Log.e("TAG",e.toString());
             }
         });
     }
@@ -500,7 +484,7 @@ public class MessageFragment extends BaseFragment {
                 break;
             case 1002:
                 nickName = conversation.getName();
-                if (ImageUtils.getBitmapFile(ConversationId, filePath).equals("")) {
+                /*if (ImageUtils.getBitmapFilePaht(ConversationId, filePath).equals("")) {
                     //生成群聊头像
                     JSONArray accountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + ConversationId + "_accountList_beans", new JSONArray());
                     final List<String> picUrls = new ArrayList<>();
@@ -525,8 +509,8 @@ public class MessageFragment extends BaseFragment {
                     });
                 } else {
                     //缓存里取
-                    avatar[0] = ImageUtils.getBitmapFile(ConversationId, filePath);
-                }
+                    avatar[0] = ImageUtils.getBitmapFilePaht(ConversationId, filePath);
+                }*/
                 break;
             case 1004:
                 break;
@@ -567,6 +551,7 @@ public class MessageFragment extends BaseFragment {
             imMessageBean.setLastTime(rightNow);
             imMessageBean.setNickname(nickName);
             imMessageBean.setAvatar(avatar[0]);
+            imMessageBean.setChatType(chatType);
             imMessageBean.setUnReadCounts(1 + "");
             IMMessageBeans.add(imMessageBean);
         }

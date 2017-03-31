@@ -31,7 +31,7 @@
             style="@style/BottomImageStyle"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="10dp"
-            android:background="@mipmap/chat_voice"
+            android:src="@mipmap/chat_voice"
             android:contentDescription="@null"
             android:paddingLeft="5dp" />
 

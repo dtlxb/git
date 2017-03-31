@@ -31,6 +31,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
     private ContactBean contactBean;
     private List<String> groupMembers;
     private String squareName;
+    private String squareCreater;
 
     @Override
     public int bindLayout() {
@@ -47,9 +48,10 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
         groupMembers = new ArrayList<>();
         final String conversationID = (String) StringUtils.objectNullDeal(this.getIntent().getStringExtra("conversation_id"));
         boolean need_update = this.getIntent().getBooleanExtra("need_update", false);
+        int actionType = this.getIntent().getIntExtra("square_action", 0);
 
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
-        getSquareConversation(conversationID, need_update);
+        getSquareConversation(conversationID, need_update, actionType);
 
         initTitle(squareName, conversationID);
     }
@@ -64,6 +66,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
                 Intent intent = new Intent(SquareChatRoomActivity.this, IMSquareChatSetActivity.class);
                 intent.putStringArrayListExtra("group_members", (ArrayList<String>) groupMembers);
                 intent.putExtra("conversation_id", conversation_id);
+                intent.putExtra("square_creater", squareCreater);
                 intent.putExtra("squareName", squareName);
                 startActivity(intent);
             }
@@ -71,17 +74,17 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
         title.addAction(personAction, 0);
     }
 
-    private void getSquareConversation(String conversationId, final boolean need_update) {
+    private void getSquareConversation(String conversationId, final boolean need_update, final int actionType) {
         AVImClientManager.getInstance().findConversationById(conversationId, new AVImClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
-//                joinSquare(conversation);
-                chatFragment.setConversation(conversation, need_update);
+                //joinSquare(conversation);
+                chatFragment.setConversation(conversation, need_update, actionType);
                 groupMembers.addAll(conversation.getMembers());
                 if (squareName.equals("")) {
                     setMyTitle(conversation.getName(), false);
                 }
-                KLog.e(conversation.getName() + "");
+                squareCreater = conversation.getCreator();
             }
 
             @Override

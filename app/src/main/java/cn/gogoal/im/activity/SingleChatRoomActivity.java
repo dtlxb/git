@@ -78,7 +78,7 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
         AVImClientManager.getInstance().findConversationById(conversation_id, new AVImClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
-                chatFragment.setConversation(conversation, need_update);
+                chatFragment.setConversation(conversation, need_update, 0);
             }
 
             @Override
