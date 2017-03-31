@@ -2,10 +2,12 @@ package cn.gogoal.im.fragment;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -45,6 +47,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.ChooseContactActivity;
 import cn.gogoal.im.adapter.ChatFunctionAdapter;
 import cn.gogoal.im.adapter.IMChatAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
@@ -308,6 +311,13 @@ public class ChatFragment extends BaseFragment {
                 if (etInput.getText().toString().trim().equals("")) {
                     imgFunction.setVisibility(View.VISIBLE);
                     btnSend.setVisibility(View.INVISIBLE);
+                } else if (etInput.getText().toString().trim().equals("@")) {
+                    //@过后跳转加人
+                    Intent intent = new Intent(getActivity(), ChooseContactActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("square_action", AppConst.SQUARE_ROOM_AT_SOMEONE);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, AppConst.SQUARE_ROOM_AT_SOMEONE);
                 } else {
                     imgFunction.setVisibility(View.INVISIBLE);
                     btnSend.setVisibility(View.VISIBLE);
@@ -786,6 +796,24 @@ public class ChatFragment extends BaseFragment {
         message_recycler.smoothScrollToPosition(messageList.size() - 1);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != 0) {
+            if (requestCode == AppConst.SQUARE_ROOM_AT_SOMEONE) {
+                StringBuilder stringBuilder = new StringBuilder();
+
+                List<ContactBean> changeContactBeens = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
+                for (int i = 0; i < changeContactBeens.size(); i++) {
+                    stringBuilder.append("@" + changeContactBeens.get(i).getNickname() + " ");
+                }
+                etInput.setText(stringBuilder.toString());
+                etInput.setSelection(stringBuilder.toString().length() - 1);
+            }
+        }
+
+    }
+
     /**
      * 消息接收
      */
@@ -798,7 +826,6 @@ public class ChatFragment extends BaseFragment {
             JSONObject contentObject = JSON.parseObject(message.getContent());
             String _lctype = contentObject.getString("_lctype");
 
-            KLog.e(contentObject);
             KLog.e(contentObject);
             //判断房间一致然后做消息接收处理
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
