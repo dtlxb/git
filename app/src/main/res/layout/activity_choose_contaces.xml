@@ -30,6 +30,7 @@
                 android:layout_centerVertical="true" />
 
             <android.support.v7.widget.SearchView
+                style="@style/SearchEdit"
                 android:id="@+id/search_choose"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -37,11 +38,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/rv_selected_contacts"
                 android:background="@android:color/transparent"
-                app:closeIcon="@null"
-                app:defaultQueryHint="搜索"
-                app:iconifiedByDefault="false"
-                app:searchHintIcon="@null"
-                app:searchIcon="@null" />
+                app:defaultQueryHint="搜索"/>
         </RelativeLayout>
 
         <FrameLayout

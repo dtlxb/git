@@ -429,7 +429,6 @@ public class MessageFragment extends BaseFragment {
                 Log.e("TAG",e.toString());
             }
         });
-        KLog.e("==============================end==============================");
     }
 
     /**

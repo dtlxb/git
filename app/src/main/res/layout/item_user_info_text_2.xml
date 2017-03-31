@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_layout_text_2"
+    android:layout_width="match_parent"
+    android:layout_height="44dp"
+    android:background="@drawable/shape_text_border"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingEnd="15dp"
+    android:paddingStart="15dp">
+
+    <TextView
+        android:id="@+id/item_text_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go-Goal账号"
+        android:textColor="@color/textColor_666666"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/item_text_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:text="E00001234"
+        android:textColor="@color/textColor_666666"
+        android:textSize="16sp" />
+
+    <android.support.v4.widget.Space
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="1" />
+
+    <ImageView
+        android:id="@+id/img_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:visibility="gone"
+        android:src="@mipmap/img_more" />
+
+</LinearLayout>

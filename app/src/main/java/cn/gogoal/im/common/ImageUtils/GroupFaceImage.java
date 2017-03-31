@@ -78,7 +78,6 @@ public class GroupFaceImage {
 
     public void load(OnMatchingListener listener) {
         this.matchingListener = listener;
-        KLog.e("准备拼接");
         final List<Bitmap> bitmaps = new ArrayList<>();
         if (null == imageUrls || imageUrls.isEmpty()) {
             throw new NullPointerException("图像集合不能为空");
@@ -92,8 +91,6 @@ public class GroupFaceImage {
             }
 
             public void doInBackground() {
-
-                KLog.e("拼接开始");
 
                 for (int i = 0; i < imageUrls.size(); i++) {
                     try {
@@ -111,7 +108,6 @@ public class GroupFaceImage {
                 }
 
                 matchingListener.onSuccess(mathingBitmap(bitmaps));
-                KLog.e("拼成成功");
 //                switch (imageUrls.size()) {
 //                    case 1:
 //                        listener.onSuccess(bitmaps.get(0));

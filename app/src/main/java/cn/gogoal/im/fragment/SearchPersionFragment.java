@@ -1,6 +1,7 @@
 package cn.gogoal.im.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,9 +18,9 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.IMPersonDetailActivity;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.wrapper.EmptyWrapper;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -38,7 +39,8 @@ public class SearchPersionFragment extends BaseFragment {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     private ArrayList<ContactBean> searchResultList;
-    private EmptyWrapper wrapper;
+    private SearchPersionResultAdapter adapter;
+//    private EmptyWrapper wrapper;
 
     @Override
     public int bindLayout() {
@@ -52,21 +54,21 @@ public class SearchPersionFragment extends BaseFragment {
 
         searchResultList = new ArrayList<>();
 
-        SearchPersionResultAdapter adapter = new SearchPersionResultAdapter(searchResultList);
+        adapter = new SearchPersionResultAdapter(searchResultList);
 
-        wrapper = new EmptyWrapper(adapter);
+//        wrapper = new EmptyWrapper(adapter);
+//
+//        wrapper.setEmptyView(UIHelper.getEmptyView(mContext));
 
-        wrapper.setEmptyView(UIHelper.getEmptyView(mContext));
-
-        recyclerView.setAdapter(wrapper);
+        recyclerView.setAdapter(adapter);
     }
 
     @Subscriber(tag = "SEARCH_PERSION_TAG")
     private void searchPersion(String keyword) {
-        KLog.e(keyword);
+        searchResultList.clear();
         final Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
-        param.put("keyword", keyword);
+        param.put("keyword", keyword.toUpperCase());
         KLog.e("token=" + UserUtils.getToken() + "&keyword=" + keyword);
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -78,7 +80,7 @@ public class SearchPersionFragment extends BaseFragment {
                             .toJSONString(), ContactBean.class);
 
                     searchResultList.addAll(resultList);
-                    wrapper.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();
 
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
 
@@ -102,7 +104,7 @@ public class SearchPersionFragment extends BaseFragment {
         }
 
         @Override
-        protected void convert(ViewHolder holder, ContactBean data, int position) {
+        protected void convert(ViewHolder holder, final ContactBean data, int position) {
             KLog.e(JSONObject.toJSONString(data));
             holder.setText(R.id.item_tv_user_name, data.getNickname());
             try {
@@ -115,7 +117,10 @@ public class SearchPersionFragment extends BaseFragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent=new Intent(v.getContext(), IMPersonDetailActivity.class);
+                    intent.putExtra("account_id",data.getUserId());
+                    KLog.e(data.getUserId());
+                    startActivity(intent);
                 }
             });
         }

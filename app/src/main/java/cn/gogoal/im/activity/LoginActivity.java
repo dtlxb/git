@@ -42,8 +42,8 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        loginUserName.setText("e00002639");
-        loginPassWord.setText("412174");
+        loginUserName.setText("e00003645");
+        loginPassWord.setText("147258369");
     }
 
     @OnClick({R.id.login})

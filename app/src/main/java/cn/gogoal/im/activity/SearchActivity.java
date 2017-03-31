@@ -2,7 +2,6 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
@@ -121,8 +120,8 @@ public class SearchActivity extends BaseActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                ArrayUtils.addSearchKeyword(searchView.getQuery().toString());
-                setHistory();
+//                ArrayUtils.addSearchKeyword(searchView.getQuery().toString());
+//                setHistory();
                 return false;
             }
 
@@ -166,11 +165,9 @@ public class SearchActivity extends BaseActivity {
     //初始化标题
     private void iniTitle() {
         setMyTitle("查找聊天", true);
-        Typeface iconfont = Typeface.createFromAsset(getAssets(), "iconfont/search.ttf");
         SearchView.SearchAutoComplete et = (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
-        et.setTypeface(iconfont);
         et.setTextSize(14);
-        et.setHint(getString(R.string.str_search));
+        et.setHint("搜索");
 
 //        et.setOnKeyListener(new View.OnKeyListener() {
 //            @Override

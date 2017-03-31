@@ -182,6 +182,12 @@ public class GGOKHTTP {
      * keyword                       搜索关键字
      */
     public static final String SEARCH_FRIEND = "v1/ggm_im/search_friend";
+
+    /**
+     * token                         用户token
+     * account_id                    好友用户Id
+     */
+    public static final String GET_ACCOUNT_DETAIL = "v1/ggm_im/get_account_detail  ";
 //--------------------------------------------------------------------------------------------------
 
     /**
