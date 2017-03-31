@@ -106,7 +106,7 @@ public class SearchPersionFragment extends BaseFragment {
         @Override
         protected void convert(ViewHolder holder, final ContactBean data, int position) {
             KLog.e(JSONObject.toJSONString(data));
-            holder.setText(R.id.item_tv_user_name, data.getNickname());
+            holder.setText(R.id.item_tv_search_result_name, data.getNickname());
             try {
                 holder.setImageUrl(R.id.item_user_avatar, (String) data.getAvatar());
             } catch (Exception e) {

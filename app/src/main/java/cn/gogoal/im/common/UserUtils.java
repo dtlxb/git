@@ -182,6 +182,16 @@ public class UserUtils {
         return JSONObject.parseArray(contactArray, ContactBean.class);
     }
 
+    // TODO: 目前没接口，先从本地查
+    public static boolean isMyFriend(int friendId){
+        List<ContactBean> userContacts = getUserContacts();
+        for (ContactBean bean:userContacts){
+            if (bean.getUserId()==friendId){
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * 找出当前群中自己的好友
      * <p>

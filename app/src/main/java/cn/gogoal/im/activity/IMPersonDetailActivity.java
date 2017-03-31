@@ -28,6 +28,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
+import cn.gogoal.im.ui.view.SelectorButton;
 
 
 /**
@@ -39,7 +40,10 @@ public class IMPersonDetailActivity extends BaseActivity {
     @BindView(R.id.person_detail)
     RecyclerView personDetailRecycler;
 
-    private int accountId=-1;
+    private int accountId = -1;
+
+    @BindView(R.id.add_friend_button)
+    SelectorButton addFriendBtn;
 
     @Override
     public int bindLayout() {
@@ -54,9 +58,11 @@ public class IMPersonDetailActivity extends BaseActivity {
         personDetailRecycler.addItemDecoration(new NormalItemDecoration(mContext));
         accountId = getIntent().getIntExtra("account_id", -1);
 
-        if (String.valueOf(accountId).equals(UserUtils.getUserAccountId())){
-            findViewById(R.id.add_friend_button).setVisibility(View.GONE);
+        if (String.valueOf(accountId).equals(UserUtils.getUserAccountId())) {
+            addFriendBtn.setVisibility(View.GONE);
         }
+
+        addFriendBtn.setText(UserUtils.isMyFriend(accountId)?"删除好友":"添加好友");
 
         if (accountId != -1) {
             getUsernfo();
@@ -108,20 +114,25 @@ public class IMPersonDetailActivity extends BaseActivity {
     }
 
     @OnClick(R.id.add_friend_button)
-    void toAddFraeng(View view){
-        if (accountId!=-1) {
-            Intent intent = new Intent(view.getContext(), IMAddFriendActivity.class);
-            intent.putExtra("user_id", accountId);
-            startActivity(intent);
-        }else {
-            UIHelper.toast(view.getContext(),"用户Id获取失败,请重新搜索添加");
+    void toAddFraeng(View view) {
+
+        if (accountId != -1) {
+            if (UserUtils.isMyFriend(accountId)){
+                UIHelper.toast(view.getContext(),"没有删除接口");
+            }else {
+                Intent intent = new Intent(view.getContext(), IMAddFriendActivity.class);
+                intent.putExtra("user_id", accountId);
+                startActivity(intent);
+            }
+        } else {
+            UIHelper.toast(view.getContext(), "用户Id获取失败,请重试");
         }
     }
 
     private class UserInfoAdapter extends MultiItemTypeAdapter<UserInfo> {
 
         public UserInfoAdapter(List<UserInfo> datas) {
-            super(IMPersonDetailActivity.this , datas);
+            super(IMPersonDetailActivity.this, datas);
             addItemViewDelegate(new HeadItemViewDelegate());
             addItemViewDelegate(new SpaceViewDelegate());
             addItemViewDelegate(new TextViewDelegate());
@@ -182,13 +193,13 @@ public class IMPersonDetailActivity extends BaseActivity {
             holder.setText(R.id.item_text_1, info.getItemText1());
             holder.setText(R.id.item_text_2, info.getItemText2());
 
-            holder.getView(R.id.img_more).setVisibility(info.isHaveMore()? View.VISIBLE:View.GONE);
+            holder.getView(R.id.img_more).setVisibility(info.isHaveMore() ? View.VISIBLE : View.GONE);
 
             UIHelper.setRippBg(holder.itemView);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UIHelper.toast(v.getContext(),getString(R.string.str_coming_soon));
+                    UIHelper.toast(v.getContext(), getString(R.string.str_coming_soon));
                 }
             });
         }

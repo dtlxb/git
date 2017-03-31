@@ -188,6 +188,14 @@ public class GGOKHTTP {
      * account_id                    好友用户Id
      */
     public static final String GET_ACCOUNT_DETAIL = "v1/ggm_im/get_account_detail  ";
+
+    /**
+     * token                         用户token 必
+     * keyword                       好友用户Id
+     * is_recommend                  是否显示推荐
+     */
+    public static final String SEARCH_GROUP = "v1/ggm_chat/search_group";
+
 //--------------------------------------------------------------------------------------------------
 
     /**
@@ -205,7 +213,7 @@ public class GGOKHTTP {
     public GGOKHTTP(Map<String, String> param, String url, GGHttpInterface httpInterface) {
         this.param = param;
         this.httpInterface = httpInterface;
-        this.url = url.trim().replace(" ","");
+        this.url = url.trim().replace(" ", "");
     }
 
     public void startGet() {
