@@ -14,12 +14,14 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -43,6 +45,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -67,6 +71,7 @@ import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -238,6 +243,7 @@ public class ChatFragment extends BaseFragment {
                 AVIMTextMessage mTextMessage = new AVIMTextMessage();
                 HashMap<String, Object> attrsMap = new HashMap<>();
                 attrsMap.put("username", UserUtils.getUserName());
+                attrsMap.put("simple_avatar", UserUtils.getUserAvatar());
                 mTextMessage.setAttrs(attrsMap);
                 mTextMessage.setTimestamp(CalendarUtils.getCurrentTime());
                 mTextMessage.setFrom(UserUtils.getUserAccountId());
@@ -304,6 +310,7 @@ public class ChatFragment extends BaseFragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
             }
 
             @Override
@@ -322,6 +329,18 @@ public class ChatFragment extends BaseFragment {
                     imgFunction.setVisibility(View.INVISIBLE);
                     btnSend.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        etInput.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_DEL) {
+                    String backString = StringUtils.StringFilter(etInput.getText().toString());
+                    etInput.setText(backString);
+                    etInput.setSelection(backString.length());
+                }
+                return false;
             }
         });
 
@@ -448,6 +467,7 @@ public class ChatFragment extends BaseFragment {
         //显示自己的图片消息
         HashMap<String, Object> attrsMap = new HashMap<>();
         attrsMap.put("username", UserUtils.getUserName());
+        attrsMap.put("simple_avatar", UserUtils.getUserAvatar());
         final AVIMImageMessage mImageMessage = new AVIMImageMessage(imagefile);
         mImageMessage.setFrom(UserUtils.getUserAccountId());
         mImageMessage.setAttrs(attrsMap);
@@ -518,6 +538,7 @@ public class ChatFragment extends BaseFragment {
                 //自己显示语音消息
                 HashMap<String, Object> attrsMap = new HashMap<>();
                 attrsMap.put("username", UserUtils.getUserName());
+                attrsMap.put("simple_avatar", UserUtils.getUserAvatar());
 
                 //封装一个AVfile对象
                 HashMap<String, Object> metaData = new HashMap<>();
@@ -808,7 +829,7 @@ public class ChatFragment extends BaseFragment {
                     stringBuilder.append("@" + changeContactBeens.get(i).getNickname() + " ");
                 }
                 etInput.setText(stringBuilder.toString());
-                etInput.setSelection(stringBuilder.toString().length() - 1);
+                etInput.setSelection(stringBuilder.toString().length());
             }
         }
 
