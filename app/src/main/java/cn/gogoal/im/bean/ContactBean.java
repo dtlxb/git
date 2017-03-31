@@ -49,6 +49,23 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
 
     private String mPinyin;//昵称/备注的全拼
 
+    //=============================================
+    private String duty;//职务
+
+    private String org_name;//
+
+    private String email;
+
+    private String full_name;
+
+    private String gender;
+
+    private String mobile;
+
+    private String account_name;
+
+    private String department;
+
     public ContactType getContactType() {
         return contactType;
     }
@@ -117,6 +134,86 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
         return Pinyin.toPinyin(getTarget().trim(), "");
     }
 
+    public int getTag() {
+        return tag;
+    }
+
+    public void setTag(int tag) {
+        this.tag = tag;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public void setmPinyin(String mPinyin) {
+        this.mPinyin = mPinyin;
+    }
+
+    public String getDuty() {
+        return duty;
+    }
+
+    public void setDuty(String duty) {
+        this.duty = duty;
+    }
+
+    public String getOrg_name() {
+        return org_name;
+    }
+
+    public void setOrg_name(String org_name) {
+        this.org_name = org_name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFull_name() {
+        return full_name;
+    }
+
+    public void setFull_name(String full_name) {
+        this.full_name = full_name;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getAccount_name() {
+        return account_name;
+    }
+
+    public void setAccount_name(String account_name) {
+        this.account_name = account_name;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
     @Override
     public String getTarget() {
         return isEmpty(getRemark()) ?
@@ -153,17 +250,29 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
         }
     }
 
+
     @Override
     public String toString() {
         return "ContactBean{" +
-                "contactType=" + contactType +
+                "tag=" + tag +
+                ", contactType=" + contactType +
                 ", id=" + id +
                 ", friend_id=" + friend_id +
+                ", account_id=" + account_id +
+                ", userId=" + userId +
                 ", remark='" + remark + '\'' +
                 ", conv_id='" + conv_id + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", avatar=" + avatar +
                 ", mPinyin='" + mPinyin + '\'' +
+                ", duty='" + duty + '\'' +
+                ", org_name='" + org_name + '\'' +
+                ", email='" + email + '\'' +
+                ", full_name='" + full_name + '\'' +
+                ", gender='" + gender + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", account_name='" + account_name + '\'' +
+                ", department='" + department + '\'' +
                 '}';
     }
 

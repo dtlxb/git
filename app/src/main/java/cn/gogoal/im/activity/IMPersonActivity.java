@@ -68,7 +68,7 @@ public class IMPersonActivity extends BaseActivity {
                     startActivity(intent);
                 } else {
                     intent = new Intent(IMPersonActivity.this, IMPersonDetailActivity.class);
-                    intent.putExtra("friend_id", contactBeens.get(position).getFriend_id());
+                    intent.putExtra("account_id", contactBeens.get(position).getUserId());
                     startActivity(intent);
                 }
             }
