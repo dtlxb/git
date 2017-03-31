@@ -202,7 +202,7 @@ public class GroupFaceImage {
 
         Bitmap result = Bitmap.createBitmap(resultWidth, resultWidth, Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(result);
-        canvas.drawRGB(100, 100, 100);
+        canvas.drawRGB(240, 240, 240);
         switch (bitmapList.size()) {
             case 1:
                 return bitmapList.get(0);
@@ -214,7 +214,7 @@ public class GroupFaceImage {
 
                 canvas.drawBitmap(bitmapList.get(1), 0, innerWidth, null);
 
-                canvas.drawBitmap(bitmapList.get(2), innerWidth + 2, 0, null);
+                canvas.drawBitmap(bitmapList.get(2), innerWidth + 2,innerWidth, null);
 
                 return result;
 

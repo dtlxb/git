@@ -53,8 +53,10 @@ public class MineFragment extends BaseFragment {
             Glide.clear(imageAvatar);
             Bitmap bitmap = (Bitmap) message.obj;
             imageAvatar.setImageBitmap(bitmap);
+            endIndex--;
         }
     };
+    private int endIndex=9;
 
     public MineFragment() {
     }
@@ -99,34 +101,37 @@ public class MineFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.item_mine:
 
-                test(7);
+                test();
 
                 break;
         }
     }
 
-    private void test(int endIndex) {
+    private void test() {
+        if (endIndex>=1) {
+            Glide.get(getContext()).clearMemory();
 
-        Glide.get(getContext()).clearMemory();
+            GroupFaceImage.getInstance(getActivity(),
+                    image.subList(0, endIndex)
+            ).load(new GroupFaceImage.OnMatchingListener() {
+                @Override
+                public void onSuccess(Bitmap mathingBitmap) {
 
-        GroupFaceImage.getInstance(getActivity(),
-                image.subList(0,endIndex)
-        ).load(new GroupFaceImage.OnMatchingListener() {
-            @Override
-            public void onSuccess(Bitmap mathingBitmap) {
+                    Glide.get(getContext()).clearDiskCache();
 
-                Glide.get(getContext()).clearDiskCache();
+                    Message message = handler.obtainMessage();
+                    message.obj = mathingBitmap;
+                    handler.sendMessage(message);
+                }
 
-                Message message = handler.obtainMessage();
-                message.obj = mathingBitmap;
-                handler.sendMessage(message);
-            }
+                @Override
+                public void onError(Exception e) {
 
-            @Override
-            public void onError(Exception e) {
-
-            }
-        });
+                }
+            });
+        }else {
+            endIndex=9;
+        }
     }
 
     private class MineAdapter extends CommonAdapter<ImageTextBean<Integer>> {
