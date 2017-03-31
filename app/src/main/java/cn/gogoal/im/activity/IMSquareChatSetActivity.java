@@ -69,6 +69,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     NineGridImageViewAdapter<String> mAdapter;
     private List<ContactBean> contactBeens = new ArrayList<>();
     private String conversationId;
+    private String squareCreater;
     private List<String> groupMembers;
 
     @Override
@@ -86,6 +87,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         groupMembers = new ArrayList<>();
         //正式流程走完后
         conversationId = getIntent().getExtras().getString("conversation_id");
+        squareCreater = getIntent().getExtras().getString("square_creater");
         final String squareName = getIntent().getExtras().getString("squareName");
         tvSquareName.setText(squareName);
 
@@ -139,20 +141,20 @@ public class IMSquareChatSetActivity extends BaseActivity {
             public void onItemClick(RecyclerView.ViewHolder holder, View view, int position) {
                 Intent intent;
                 Bundle mBundle = new Bundle();
-                if (position == contactBeens.size() - 1) {
+                if ((position == contactBeens.size() - 2 && squareCreater.equals(UserUtils.getUserAccountId())) ||
+                        (!squareCreater.equals(UserUtils.getUserAccountId()) && position == contactBeens.size() - 1)) {
+                    intent = new Intent(IMSquareChatSetActivity.this, ChooseContactActivity.class);
+                    mBundle.putInt("square_action", AppConst.SQUARE_ROOM_ADD_ANYONE);
+                    mBundle.putString("conversation_id", conversationId);
+                    intent.putExtras(mBundle);
+                    startActivityForResult(intent, AppConst.SQUARE_ROOM_ADD_ANYONE);
+                } else if (squareCreater.equals(UserUtils.getUserAccountId()) && position == contactBeens.size() - 1) {
                     //删除人
                     intent = new Intent(IMSquareChatSetActivity.this, ChooseContactActivity.class);
                     mBundle.putInt("square_action", AppConst.SQUARE_ROOM_DELETE_ANYONE);
                     mBundle.putString("conversation_id", conversationId);
                     intent.putExtras(mBundle);
                     startActivityForResult(intent, AppConst.SQUARE_ROOM_DELETE_ANYONE);
-
-                } else if (position == contactBeens.size() - 2) {
-                    intent = new Intent(IMSquareChatSetActivity.this, ChooseContactActivity.class);
-                    mBundle.putInt("square_action", AppConst.SQUARE_ROOM_ADD_ANYONE);
-                    mBundle.putString("conversation_id", conversationId);
-                    intent.putExtras(mBundle);
-                    startActivityForResult(intent, AppConst.SQUARE_ROOM_ADD_ANYONE);
                 } else {
                     intent = new Intent(IMSquareChatSetActivity.this, IMPersonDetailActivity.class);
                     mBundle.putInt("friend_id", contactBeens.get(position).getFriend_id());
@@ -214,7 +216,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         }
         idList.add(UserUtils.getUserAccountId());
         contactBeens.add(addFunctionHead("", R.mipmap.person_add));
-        if (conversationId.equals(UserUtils.getUserAccountId())) {
+        if (squareCreater.equals(UserUtils.getUserAccountId())) {
             contactBeens.add(addFunctionHead("", R.mipmap.chat_reduce));
         }
 

@@ -120,7 +120,7 @@ public class SquareCollectActivity extends BaseActivity {
             KLog.e(groupObject.getString("m_size"));
             File filePath = SquareCollectActivity.this.getExternalFilesDir("imagecache");
 
-            ImageDisplay.loadFileImage(getmContext(), new File(ImageUtils.getBitmapFile(groupObject.getString("conv_id"), filePath)), avatarIv);
+            //ImageDisplay.loadFileImage(getmContext(), new File(ImageUtils.getBitmapFilePaht(groupObject.getString("conv_id"), filePath)), avatarIv);
             holder.setText(R.id.last_message, groupObject.getJSONObject("attr").getString("intro") == null ? groupObject.getJSONObject("attr").getString("intro") : "");
             holder.setText(R.id.whose_message, groupObject.getString("name") + "(" + groupObject.getString("m_size") + ")");
         }

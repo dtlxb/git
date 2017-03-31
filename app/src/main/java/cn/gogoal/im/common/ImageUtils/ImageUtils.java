@@ -17,6 +17,8 @@ import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 
+import com.socks.library.KLog;
+
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -32,6 +34,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
+
+import cn.gogoal.im.base.MyApp;
 
 /**
  * author wangjd on 2017/2/23 0023.
@@ -478,8 +482,9 @@ public class ImageUtils {
     /**
      * bitmap保存成本地图片
      */
-    public static File saveBitmapFile(Bitmap bitmap, String path) {
-        File file = new File(path);//将要保存图片的路径
+    public static File saveBitmapFile(Bitmap bitmap, String localFlag, String path) {
+        File filesDir = MyApp.getAppContext().getExternalFilesDir(localFlag);
+        File file = new File(filesDir, path);//将要保存图片的路径
         try {
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
@@ -494,15 +499,16 @@ public class ImageUtils {
     /**
      * 拿取本地缓存去群头像
      */
-    public static String getBitmapFile(String conversationID, File file) {
+    public static String getBitmapFilePaht(String conversationID, String localFlag) {
+        File filesDir = MyApp.getAppContext().getExternalFilesDir(localFlag);
         String bitmapPath = "";
-        String[] fileList = file.list(new MyFilter(".png"));
+        String[] fileList = filesDir.list(new MyFilter(".png"));
         for (int i = 0; i < fileList.length; i++) {
-            String[] ImagePath = fileList[i].split("_");
-            if (ImagePath[0].equals(conversationID)) {
-                bitmapPath = fileList[i];
+            if (fileList[i].equals("_" + conversationID + ".png")) {
+                bitmapPath = filesDir.getPath() + "/" + fileList[i];
             }
         }
+        KLog.e(bitmapPath);
         return bitmapPath;
     }
 

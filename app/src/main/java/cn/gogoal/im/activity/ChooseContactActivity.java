@@ -257,7 +257,7 @@ public class ChooseContactActivity extends BaseActivity {
                     createChatGroup(userFriendsIdList);
                 } else if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
                     userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getUserAccountId()));
-//                    userFriendsIdList.add(itContactBean.getFriend_id());
+                    userFriendsIdList.add(itContactBean.getFriend_id());
                     createChatGroup(userFriendsIdList);
                 } else {
                     Intent intent = new Intent();
@@ -290,11 +290,10 @@ public class ChooseContactActivity extends BaseActivity {
                 if (resultJson.getIntValue("code") == 0) {
 
                     Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
-                    intent.putExtra("square_action", actionType);
-                    intent.putExtra("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
-
-                    //intent.putIntegerArrayListExtra("choose_friend_id_array", new ArrayList<>(userIdList));
-
+                    Bundle mbundle = new Bundle();
+                    mbundle.putInt("square_action", actionType);
+                    mbundle.putString("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
+                    intent.putExtras(mbundle);
                     startActivity(intent);
 
                     UIHelper.toast(ChooseContactActivity.this, "群组创建成功!!!");

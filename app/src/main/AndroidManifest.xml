@@ -88,7 +88,7 @@
         <activity
             android:name=".activity.SquareChatRoomActivity"
 
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.SingleChatRoomActivity"
 
@@ -119,7 +119,7 @@
         </activity>
 
         <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity" />
-        <activity android:name=".activity.IMAddFriendActivity"/>
+        <activity android:name=".activity.IMAddFriendActivity" />
 
         <activity android:name=".wxapi.WXEntryActivity" />
 

@@ -37,6 +37,7 @@ public class MessageUtils {
             jsonObject.put("lastMessage", imMessageBean.getLastMessage());
             jsonObject.put("unReadCounts", imMessageBean.getUnReadCounts());
             jsonObject.put("nickname", imMessageBean.getNickname());
+            jsonObject.put("chatType", imMessageBean.getChatType());
             jsonObject.put("friend_id", imMessageBean.getFriend_id());
             jsonObject.put("avatar", imMessageBean.getAvatar());
 
@@ -100,9 +101,13 @@ public class MessageUtils {
         StringBuilder mSB = new StringBuilder();
         String ms = "";
         for (int i = 0; i < accountArray.size(); i++) {
-            mSB.append(((JSONObject) accountArray.get(i)).getString("nickname"));
-            if (accountArray.size() > 1 && i < accountArray.size() - 1) {
-                mSB.append("、");
+            JSONObject object = (JSONObject) accountArray.get(i);
+            boolean needIt = object.getString("nickname").equals(UserUtils.getUserName());
+            if (!needIt) {
+                mSB.append(object.getString("nickname"));
+                if (accountArray.size() > 1 && i < accountArray.size() - 1) {
+                    mSB.append("、");
+                }
             }
         }
         if (messageType.equals("5")) {
