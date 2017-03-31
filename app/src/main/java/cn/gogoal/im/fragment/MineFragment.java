@@ -26,7 +26,6 @@ import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ImageTextBean;
-import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.WeakReferenceHandler;
@@ -46,7 +45,6 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.item_mine)
     LinearLayout itemSetting;
 
-    private String[] testArr={"http://www.go-goal.com/sample/ACC/ftx/forum/library/NewNOFTX.gif","http://www.go-goal.com/sample/ACC/ftx/forum/library/NoPhoto.gif","http://www.go-goal.com/sample/ACC/ftx/forum/library/NOFTX.GIF","http://www.go-goal.com/sample/ACC/ftx/forum/library/NOFTX.gif"};
     final List<String> image = new ArrayList<>();
 
     private WeakReferenceHandler<MineFragment> handler = new WeakReferenceHandler<MineFragment>(Looper.getMainLooper(), this) {
@@ -101,25 +99,18 @@ public class MineFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.item_mine:
 
-                test(9);
+                test(7);
 
                 break;
         }
     }
 
     private void test(int endIndex) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        });
 
         Glide.get(getContext()).clearMemory();
 
-
         GroupFaceImage.getInstance(getActivity(),
-                ArrayUtils.arr2List(testArr)
+                image.subList(0,endIndex)
         ).load(new GroupFaceImage.OnMatchingListener() {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {

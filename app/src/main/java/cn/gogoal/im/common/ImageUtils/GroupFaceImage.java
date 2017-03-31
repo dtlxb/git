@@ -11,7 +11,6 @@ import com.socks.library.KLog;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AsyncTaskUtil;
 
 /**
@@ -22,11 +21,7 @@ import cn.gogoal.im.common.AsyncTaskUtil;
  */
 public class GroupFaceImage {
 
-    private static int height;
-
     private static int minItemH;
-
-    private volatile static GroupFaceImage instance;
 
     private List<String> imageUrls;
 
@@ -37,41 +32,27 @@ public class GroupFaceImage {
     private GroupFaceImage(Context context, List<String> imageUrls) {
         this.context = context.getApplicationContext();
         this.imageUrls = imageUrls;
-        height = AppDevice.dp2px(context, 54);
     }
 
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    /**
-     * 双重校验锁的单一实例
-     */
     public static GroupFaceImage getInstance(Context context, List<String> imageUrls) {
-        if (null == instance) {
-            synchronized (GroupFaceImage.class) {
-                if (null == instance) {
-                    instance = new GroupFaceImage(context, imageUrls);
-                    KLog.e("初始化成功");
-                    KLog.e(JSONObject.toJSONString(imageUrls));
-                    switch (imageUrls.size()) {
-                        case 1:
-                        case 2:
-                        case 3:
-                        case 4:
-                            minItemH = height / 2;
-                        case 5:
-                        case 6:
-                        case 7:
-                        case 8:
-                        case 9:
-                            minItemH = height / 3;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
+        GroupFaceImage instance = new GroupFaceImage(context, imageUrls);
+        KLog.e("初始化成功");
+        KLog.e(JSONObject.toJSONString(imageUrls));
+        switch (imageUrls.size()) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                minItemH = 144 / 2;
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+                minItemH = 144 / 3;
+                break;
+            default:
+                break;
         }
         return instance;
     }
@@ -221,7 +202,7 @@ public class GroupFaceImage {
 
         Bitmap result = Bitmap.createBitmap(resultWidth, resultWidth, Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(result);
-        canvas.drawRGB(100,100,100);
+        canvas.drawRGB(100, 100, 100);
         switch (bitmapList.size()) {
             case 1:
                 return bitmapList.get(0);
@@ -307,10 +288,10 @@ public class GroupFaceImage {
 
                 canvas.drawBitmap(bitmapList.get(3), 0, innerWidth + 2, null);
                 canvas.drawBitmap(bitmapList.get(4), innerWidth + 2, innerWidth + 2, null);
-                canvas.drawBitmap(bitmapList.get(5), 2*innerWidth + 4, innerWidth + 2, null);
+                canvas.drawBitmap(bitmapList.get(5), 2 * innerWidth + 4, innerWidth + 2, null);
 
                 canvas.drawBitmap(bitmapList.get(6), 0, innerWidth * 2 + 4, null);
-                canvas.drawBitmap(bitmapList.get(7), innerWidth +2, innerWidth * 2 + 4, null);
+                canvas.drawBitmap(bitmapList.get(7), innerWidth + 2, innerWidth * 2 + 4, null);
                 canvas.drawBitmap(bitmapList.get(8), innerWidth * 2 + 4, innerWidth * 2 + 4, null);
 
                 return result;

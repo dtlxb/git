@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -77,6 +79,7 @@ public class SearchTeamFragment extends BaseFragment {
         getRecommendGroup("");
     }
 
+    @Subscriber(tag = "SEARCH_TEAM_TAG")
     private void getRecommendGroup(String keyword) {
         dataBeanList.clear();
 
@@ -131,6 +134,8 @@ public class SearchTeamFragment extends BaseFragment {
 
             UIHelper.setRippBg(holder.itemView);
             holder.setText(R.id.item_tv_search_result_name,data.getName());
+            holder.setText(R.id.item_tv_search_result_count,
+                    String.format(getString(R.string.str_group_count),data.getM().size()));
             holder.setText(R.id.item_tv_search_result_intro,TextUtils.isEmpty(data.getAttr().getIntro())?"暂无群简介":data.getAttr().getIntro());
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -142,8 +147,7 @@ public class SearchTeamFragment extends BaseFragment {
                         in.putExtra("squareName",data.getName());
                         in.putExtra("conversation_id",data.getConv_id());
                         startActivity(in);
-                        
-                    }else {//申请加群
+                    }else {//TODO: 申请加群
 
                     }
                 }
