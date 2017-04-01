@@ -325,7 +325,11 @@ public class MessageFragment extends BaseFragment {
                 if (chatType == 1001) {
                     ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
                 } else if (chatType == 1002) {
-                    ImageDisplay.loadFileImage(getmContext(), new File(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")), avatarIv);
+                    if (ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache").equals("")) {
+                        createGroupImage(messageBean.getConversationID());
+                    } else {
+                        ImageDisplay.loadFileImage(getmContext(), new File(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")), avatarIv);
+                    }
                 } else if (chatType == 1004) {
                     ImageDisplay.loadResImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
                 }
@@ -334,6 +338,7 @@ public class MessageFragment extends BaseFragment {
                     case "-1":
                         //文字
                         message = contentObject.getString("_lctext");
+
                         break;
                     case "-2":
                         //图片
@@ -484,33 +489,6 @@ public class MessageFragment extends BaseFragment {
                 break;
             case 1002:
                 nickName = conversation.getName();
-                /*if (ImageUtils.getBitmapFilePaht(ConversationId, filePath).equals("")) {
-                    //生成群聊头像
-                    JSONArray accountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + ConversationId + "_accountList_beans", new JSONArray());
-                    final List<String> picUrls = new ArrayList<>();
-                    for (int i = 0; i < (accountArray.size() < 9 ? accountArray.size() : 9); i++) {
-                        JSONObject personObject = accountArray.getJSONObject(i);
-                        picUrls.add(personObject.getString("avatar"));
-                    }
-
-                    //九宫图拼接
-                    GroupFaceImage.getInstance(getContext(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
-                        @Override
-                        public void onSuccess(Bitmap mathingBitmap) {
-                            String groupFaceImagepath = filePath.getPath() + "_" + ConversationId + ".png";
-                            ImageUtils.saveBitmapFile(mathingBitmap, groupFaceImagepath);
-                            avatar[0] = groupFaceImagepath;
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-
-                        }
-                    });
-                } else {
-                    //缓存里取
-                    avatar[0] = ImageUtils.getBitmapFilePaht(ConversationId, filePath);
-                }*/
                 break;
             case 1004:
                 break;
