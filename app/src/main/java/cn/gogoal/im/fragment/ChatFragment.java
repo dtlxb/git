@@ -45,8 +45,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -322,6 +320,7 @@ public class ChatFragment extends BaseFragment {
                     //@过后跳转加人
                     Intent intent = new Intent(getActivity(), ChooseContactActivity.class);
                     Bundle bundle = new Bundle();
+                    bundle.putString("conversation_id", imConversation.getConversationId());
                     bundle.putInt("square_action", AppConst.SQUARE_ROOM_AT_SOMEONE);
                     intent.putExtras(bundle);
                     startActivityForResult(intent, AppConst.SQUARE_ROOM_AT_SOMEONE);
@@ -403,7 +402,6 @@ public class ChatFragment extends BaseFragment {
                     if (chatType == 1001) {
                         imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
                                 "0", null != contactBean.getNickname() ? contactBean.getNickname() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), message);
-
                     } else if (chatType == 1002) {
                         imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
                                 "0", imConversation.getName(), "", "", message);
@@ -411,7 +409,6 @@ public class ChatFragment extends BaseFragment {
 
                     }
                     MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
-
 
                 }
             }

@@ -122,7 +122,7 @@ public class ChooseContactActivity extends BaseActivity {
         actionType = getIntent().getIntExtra("square_action", 0);
 
         KLog.e(actionType);
-        //actionType = 1102,1103,
+        //actionType = 1102,1103,1104
         String teamId = getIntent().getStringExtra("conversation_id");
 
         if (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
@@ -158,7 +158,11 @@ public class ChooseContactActivity extends BaseActivity {
 
         KLog.e(mSelectedTeamMemberAccounts);
 
-        userContacts = UserUtils.getUserContacts();
+        if (actionType == AppConst.SQUARE_ROOM_AT_SOMEONE) {
+            userContacts = UserUtils.getFriendsInTeam(teamId);
+        } else {
+            userContacts = UserUtils.getUserContacts();
+        }
 
         KLog.e(userContacts.size());
 

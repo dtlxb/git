@@ -20,7 +20,7 @@ import cn.gogoal.im.common.UserUtils;
 
 /**
  * Created by huangxx on 17/02/20.
- *
+ * <p>
  * edit by wangjd:修改单利为双重校验锁模式，懒汉加锁方式的单利效率低
  */
 public class AVImClientManager {
@@ -36,7 +36,7 @@ public class AVImClientManager {
     public static AVImClientManager getInstance() {
         if (null == imClientManager) {
             synchronized (AVImClientManager.class) {
-                if (null==imClientManager) {
+                if (null == imClientManager) {
                     imClientManager = new AVImClientManager();
                 }
             }
@@ -101,7 +101,7 @@ public class AVImClientManager {
                     }
                 } else {
                     if (null != mChatJoinManager) {
-                        mChatJoinManager.joinFail("查找聊天对象失败3==="+e.getMessage());
+                        mChatJoinManager.joinFail("查找聊天对象失败3===" + e.getMessage());
                     }
 
                     KLog.e("FIND_CONVERSATION", "查询条件没有查找到聊天对象" + e.toString());

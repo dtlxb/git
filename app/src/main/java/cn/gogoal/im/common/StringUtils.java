@@ -1,6 +1,7 @@
 package cn.gogoal.im.common;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.EditText;
 
 import com.socks.library.KLog;
@@ -377,6 +378,24 @@ public class StringUtils {
         }
         KLog.e(newString);
         return newString;
+    }
+
+    /**
+     * 查询@字符串中是否含有自己
+     */
+    public static Boolean StringFilter(String str, String regEx) {
+        String newString = "";
+        Boolean haveMe = false;
+        Pattern pattern = Pattern.compile(regEx);
+        Matcher matcher = pattern.matcher(str);
+
+        while (matcher.find()) {
+            newString = matcher.group();
+            if (newString.equals("@" + UserUtils.getUserName() + " ")) {
+                haveMe = true;
+            }
+        }
+        return haveMe;
     }
 
 

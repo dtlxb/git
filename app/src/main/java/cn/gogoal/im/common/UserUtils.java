@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -16,9 +17,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import cn.gogoal.im.activity.LoginActivity;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 
 /**
  * author wangjd on 2017/2/8 0008.
@@ -183,15 +186,16 @@ public class UserUtils {
     }
 
     // TODO: 目前没接口，先从本地查
-    public static boolean isMyFriend(int friendId){
+    public static boolean isMyFriend(int friendId) {
         List<ContactBean> userContacts = getUserContacts();
-        for (ContactBean bean:userContacts){
-            if (bean.getUserId()==friendId){
+        for (ContactBean bean : userContacts) {
+            if (bean.getUserId() == friendId) {
                 return true;
             }
         }
         return false;
     }
+
     /**
      * 找出当前群中自己的好友
      * <p>
@@ -227,4 +231,46 @@ public class UserUtils {
         return list;
     }
 
+    /**
+     * 当群信息没有的时候 网上拉取
+     */
+    public static void getChatGroup(List<String> groupMembers, final String conversationId, final getSquareInfo mGetSquareInfo) {
+        Map<String, String> params = new HashMap<>();
+        params.put("token", getToken());
+        params.put("conv_id", conversationId);
+        params.put("id_list", JSONObject.toJSONString(groupMembers));
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                if ((int) result.get("code") == 0) {
+                    if (null != result.getJSONObject("data")) {
+                        if (null != mGetSquareInfo) {
+                            mGetSquareInfo.squareGetSuccess(result.getJSONObject("data"));
+                        }
+                        SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversationId + "_accountList_beans", result.getJSONObject("data").getJSONArray("accountList"));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                if (null != mGetSquareInfo) {
+                    mGetSquareInfo.squareGetFail(msg);
+                }
+            }
+        };
+        new GGOKHTTP(params, GGOKHTTP.GET_MEMBER_INFO, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 返回Conversation管理类
+     */
+    public interface getSquareInfo {
+
+        void squareGetSuccess(JSONObject object);   ///< 加入房间成功
+
+        void squareGetFail(String error);      ///< 加入房间失败
+    }
 }
