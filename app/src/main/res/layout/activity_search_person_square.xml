@@ -1,20 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<cn.gogoal.im.ui.KeyboardLaunchLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:id="@+id/root"
+    android:orientation="vertical"
+    tools:context=".activity.SearchPersonSquareActivity">
 
     <include layout="@layout/include_title" />
 
-    <EditText
-        android:id="@+id/edit_your_message"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_search_persion_team"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:hint="输入群ID"
-        android:padding="12dp"
-        android:textColor="@color/textColor_333333"
-        android:textColorHint="@color/textColor_999999"
-        android:textSize="16sp" />
-</LinearLayout>
+        android:background="@drawable/shape_bottom_line"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/colorPrimary"
+        app:tabIndicatorHeight="2dp"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabTextColor="@color/textColor_333333" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/shape_search_activity_edit"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/flag_search_icon"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_margin="10dp"
+            android:visibility="gone"
+            android:contentDescription="@null"
+            android:src="@mipmap/img_search" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/layout_2search"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:singleLine="true"
+            android:imeOptions="actionSearch"
+            android:hint="@string/str_search"
+            android:orientation="horizontal" />
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_search_persion_team"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</cn.gogoal.im.ui.KeyboardLaunchLinearLayout>

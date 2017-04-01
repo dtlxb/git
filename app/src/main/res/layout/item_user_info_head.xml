@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/head_layout"
+    android:layout_width="match_parent"
+    android:layout_height="95dp"
+    android:background="@drawable/shape_text_border"
+    android:paddingBottom="18dp"
+    android:paddingEnd="15dp"
+    android:paddingStart="15dp"
+    android:paddingTop="17dp">
+
+    <ImageView
+        android:id="@+id/image_user_info_avatar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@mipmap/timg"
+        android:contentDescription="@null" />
+
+    <TextView
+        android:id="@+id/person_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_toEndOf="@id/image_user_info_avatar"
+        android:text="古色古香"
+        android:textColor="@color/textColor_333333"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/person_mark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/image_user_info_avatar"
+        android:text="昵称: 比尔森"
+        android:textColor="@color/textColor_666666"
+        android:textSize="14sp" />
+
+</RelativeLayout>

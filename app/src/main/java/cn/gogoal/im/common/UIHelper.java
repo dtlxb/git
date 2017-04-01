@@ -7,7 +7,10 @@ import android.graphics.BitmapFactory;
 import android.support.design.widget.Snackbar;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
@@ -84,6 +87,12 @@ public class UIHelper {
         mToast.show();
     }
 
+    public static View getEmptyView(Context context){
+        View inflate = LayoutInflater.from(context).inflate(R.layout.view_no_data, new LinearLayout(context), false);
+        ImageView imageView= (ImageView) inflate.findViewById(R.id.img_no_data);
+        AppDevice.setViewWidth$Height(imageView,AppDevice.getWidth(context)/5,-2);
+        return inflate;
+    }
     public static void toastError(Context cont, String msg) {
         if (cont == null || msg == null) {
             return;

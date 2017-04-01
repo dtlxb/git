@@ -1,24 +1,28 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.SearchView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.AppCompatEditText;
+import android.text.TextUtils;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.view.XTitle;
+import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.IconFontUtils;
+import cn.gogoal.im.fragment.SearchPersionFragment;
+import cn.gogoal.im.fragment.SearchTeamFragment;
+import cn.gogoal.im.ui.KeyboardLaunchLinearLayout;
 
 /**
  * Created by huangxx on 2017/3/28.
@@ -26,10 +30,20 @@ import cn.gogoal.im.ui.view.XTitle;
 
 public class SearchPersonSquareActivity extends BaseActivity {
 
-    @BindView(R.id.edit_your_message)
-    EditText editYourMessage;
+    @BindView(R.id.root)
+    KeyboardLaunchLinearLayout keyboardLayout;
 
-    XTitle xTitle;
+    @BindArray(R.array.searchTitle)
+    String[] searchTitle;
+
+    @BindView(R.id.tab_search_persion_team)
+    TabLayout tabSearchPersionTeam;
+
+    @BindView(R.id.layout_2search)
+    AppCompatEditText layout2search;
+
+    @BindView(R.id.vp_search_persion_team)
+    ViewPager vpSearchPersionTeam;
 
     @Override
     public int bindLayout() {
@@ -38,43 +52,59 @@ public class SearchPersonSquareActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        xTitle = setMyTitle(R.string.title_search_anyone, true);
-        xTitle.setLeftText(R.string.tv_cancle);
-        //添加action
-        XTitle.TextAction sendAction = new XTitle.TextAction("发送") {
+        setMyTitle(R.string.square_collcet_add, true);
+
+        IconFontUtils.setFont(mContext, layout2search, "iconfont/search.ttf");
+
+        final int searchIndex = getIntent().getIntExtra("search_index", 0);
+
+        SearchPersionFragment persionFragment = new SearchPersionFragment();
+        SearchTeamFragment teamFragment = new SearchTeamFragment();
+
+        final Fragment[] fragments = new Fragment[]{persionFragment, teamFragment};
+
+        vpSearchPersionTeam.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
-            public void actionClick(View view) {
-                findSquare();
+            public Fragment getItem(int position) {
+                return fragments[position];
             }
-        };
-        xTitle.addAction(sendAction);
-    }
 
-    public void findSquare() {
-
-        Map<String, String> params = new HashMap<>();
-        params.put("token", UserUtils.getToken());
-        params.put("conv_id", editYourMessage.getText().toString());
-        KLog.e(params);
-
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
-            public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
-                if ((int) result.get("code") == 0) {
-                    UIHelper.toast(SearchPersonSquareActivity.this, "群申请发送成功!");
-                    editYourMessage.setText("");
-                    finish();
+            public int getCount() {
+                return searchTitle.length;
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return searchTitle[position];
+            }
+        });
+
+        tabSearchPersionTeam.setupWithViewPager(vpSearchPersionTeam);
+
+        try {
+            tabSearchPersionTeam.getTabAt(searchIndex).select();
+        } catch (NullPointerException e) {
+            KLog.e("Tab不存在");
+        }
+
+        layout2search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if (!TextUtils.isEmpty(layout2search.getText())) {
+                        if (vpSearchPersionTeam.getCurrentItem()==0) {
+                            AppManager.getInstance().sendMessage("SEARCH_PERSION_TAG", layout2search.getText().toString());
+                        }else {
+                            AppManager.getInstance().sendMessage("SEARCH_TEAM_TAG", layout2search.getText().toString());
+                        }
+                        AppDevice.hideSoftKeyboard(layout2search);
+                    }
+                    return true;
                 }
+                return false;
             }
-
-            @Override
-            public void onFailure(String msg) {
-                KLog.json(msg);
-            }
-        };
-        new GGOKHTTP(params, GGOKHTTP.APPLY_INTO_GROUP, ggHttpInterface).startGet();
+        });
     }
+
 }

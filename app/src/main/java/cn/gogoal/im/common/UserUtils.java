@@ -66,7 +66,7 @@ public class UserUtils {
     public static String getUserAvatar() {
         JSONObject user = getUserInfo();
         if (user == null) return null;
-        return user.getString("avatar");
+        return user.getString("simple_avatar");
     }
 
     /**
@@ -104,7 +104,7 @@ public class UserUtils {
 
     @SuppressLint("UseSparseArrays")
     public static String updataFriendList(String newFriendJson) {
-        String responseInfo = SPTools.getString(getToken() + "_contact_beans", "");
+        String responseInfo = SPTools.getString(getUserAccountId() + "_contact_beans", "");
 
         if (TextUtils.isEmpty(newFriendJson)) {
             return null;
@@ -173,7 +173,7 @@ public class UserUtils {
      * 获取用户好友列表
      */
     public static List<ContactBean> getUserContacts() {
-        String contactStringRes = SPTools.getString(getToken() + "_contact_beans", "");
+        String contactStringRes = SPTools.getString(getUserAccountId() + "_contact_beans", "");
         if (TextUtils.isEmpty(contactStringRes)) {
             return new ArrayList<>();
         }
@@ -182,6 +182,16 @@ public class UserUtils {
         return JSONObject.parseArray(contactArray, ContactBean.class);
     }
 
+    // TODO: 目前没接口，先从本地查
+    public static boolean isMyFriend(int friendId){
+        List<ContactBean> userContacts = getUserContacts();
+        for (ContactBean bean:userContacts){
+            if (bean.getUserId()==friendId){
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * 找出当前群中自己的好友
      * <p>
@@ -189,7 +199,7 @@ public class UserUtils {
      */
     public static List<ContactBean> getFriendsInTeam(String conversationId) {
 
-        JSONArray userInTeamArray = SPTools.getJsonArray(UserUtils.getToken() + conversationId + "_accountList_beans", new JSONArray());
+        JSONArray userInTeamArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationId + "_accountList_beans", new JSONArray());
 
         KLog.e(userInTeamArray);
 

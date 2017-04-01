@@ -18,10 +18,10 @@ public class GGAPI {
     private static final String APP_SECRET = "cGYIsTyTWXGeP4frqOqmdWxRO5xmh2Pi";
 
     //春哥环境
-//    public static final String WEB_URL = "http://192.168.52.150:9000";
-//    private static final String Native_API = "http://192.168.52.150:9000";
-//    private static final String APP_KEY = "HBTORVzBaGtqmGE";
-//    private static final String APP_SECRET = "cGYIsTyTWXGeP4frqOqmdWxRO5xmh2Pi";
+    /*public static final String WEB_URL = "http://192.168.52.150:9000";
+    private static final String Native_API = "http://192.168.52.150:9000";
+    private static final String APP_KEY = "HBTORVzBaGtqmGE";
+    private static final String APP_SECRET = "cGYIsTyTWXGeP4frqOqmdWxRO5xmh2Pi";*/
 
     //预正式环境
 //    public static final String WEB_URL = "http://192.168.52.156:9000";

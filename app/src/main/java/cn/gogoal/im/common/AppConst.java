@@ -34,16 +34,16 @@ public class AppConst {
             "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=%s&grant_type=refresh_token&refresh_token=%s";
 
     public static final String LEAN_CLOUD_TOKEN = "11";
-    //public static final String LEAN_CLOUD_TOKEN = "比尔森007";
 
     public static final String LEAN_CLOUD_CONVERSATION_ID = "58aaa02d8d6d8100636e8be9";
 
     //创建群的方式
     public static final int CREATE_SQUARE_ROOM_BY_ONE = 1100;
     public static final int CREATE_SQUARE_ROOM_BUILD = 1101;
-    //群加人删人
+    //群加人删人@人
     public static final int SQUARE_ROOM_ADD_ANYONE = 1102;
     public static final int SQUARE_ROOM_DELETE_ANYONE = 1103;
+    public static final int SQUARE_ROOM_AT_SOMEONE = 1104;
 
     //阿里云播放器参数
     public static final String businessId = "video_live";

@@ -247,7 +247,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
         JSONObject contentObject = JSON.parseObject(message.getContent());
         String _lctype = contentObject.getString("_lctype");
-        boolean isYourSelf = message.getFrom().endsWith(UserUtils.getToken());
+        boolean isYourSelf = message.getFrom().endsWith(UserUtils.getUserAccountId());
 
         switch (_lctype) {
             case "-1":
@@ -313,7 +313,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     //消息来了
     public void addItem(AVIMMessage message) {
         messageList.add(message);
-        this.notifyDataSetChanged();
     }
 
     //时间处理

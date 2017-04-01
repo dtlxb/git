@@ -17,6 +17,8 @@ import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 
+import com.socks.library.KLog;
+
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -24,12 +26,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
+
+import cn.gogoal.im.base.MyApp;
 
 /**
  * author wangjd on 2017/2/23 0023.
@@ -476,8 +482,9 @@ public class ImageUtils {
     /**
      * bitmap保存成本地图片
      */
-    public static File saveBitmapFile(Bitmap bitmap, String path) {
-        File file = new File(path);//将要保存图片的路径
+    public static File saveBitmapFile(Bitmap bitmap, String localFlag, String path) {
+        File filesDir = MyApp.getAppContext().getExternalFilesDir(localFlag);
+        File file = new File(filesDir, path);//将要保存图片的路径
         try {
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
@@ -487,6 +494,22 @@ public class ImageUtils {
             e.printStackTrace();
         }
         return file;
+    }
+
+    /**
+     * 拿取本地缓存去群头像
+     */
+    public static String getBitmapFilePaht(String conversationID, String localFlag) {
+        File filesDir = MyApp.getAppContext().getExternalFilesDir(localFlag);
+        String bitmapPath = "";
+        String[] fileList = filesDir.list(new MyFilter(".png"));
+        for (int i = 0; i < fileList.length; i++) {
+            if (fileList[i].equals("_" + conversationID + ".png")) {
+                bitmapPath = filesDir.getPath() + "/" + fileList[i];
+            }
+        }
+        KLog.e(bitmapPath);
+        return bitmapPath;
     }
 
     //获取图片大小
@@ -502,9 +525,9 @@ public class ImageUtils {
     public static String getImageWidth_Height(File imageFile) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        options.inSampleSize=1;
+        options.inSampleSize = 1;
         BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options); // 此时返回的bitmap为null
-        return options.outHeight+"x"+options.outWidth;
+        return options.outHeight + "x" + options.outWidth;
     }
 
     public static Bitmap imageZoom(Bitmap bitmap) {
@@ -542,6 +565,18 @@ public class ImageUtils {
         Bitmap bitmap = Bitmap.createBitmap(bgimage, 0, 0, (int) width,
                 (int) height, matrix, true);
         return bitmap;
+    }
+
+    static class MyFilter implements FilenameFilter {
+        private String type;
+
+        public MyFilter(String type) {
+            this.type = type;
+        }
+
+        public boolean accept(File dir, String name) {
+            return name.endsWith(type);
+        }
     }
 
 }

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -26,7 +25,6 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.IMAddFriendActivity;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
-import cn.gogoal.im.activity.SquareChatRoomActivity;
 import cn.gogoal.im.activity.SquareCollectActivity;
 import cn.gogoal.im.adapter.ContactAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
@@ -140,13 +138,21 @@ public class ContactsFragment extends BaseFragment {
 
     private void getData() {
         //缓存的联系人请求数据
-        String friendResponseInfo = SPTools.getString(UserUtils.getToken() + "_contact_beans", "");
+        Boolean needRefresh = SPTools.getBoolean("needRefresh", false);
+        String friendResponseInfo = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", "");
         KLog.e(friendResponseInfo);
-        if (TextUtils.isEmpty(friendResponseInfo)) {
+        if (needRefresh){
+            getFriendList(contactBeanList);
+        }else {
+            if (!JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()){
+                parseContactDatas(friendResponseInfo, contactBeanList);
+            }
+        }
+        /*if (TextUtils.isEmpty(friendResponseInfo)) {
             getFriendList(contactBeanList);
         } else if (!JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()) {
             parseContactDatas(friendResponseInfo, contactBeanList);
-        }
+        }*/
     }
 
     /**
@@ -181,11 +187,11 @@ public class ContactsFragment extends BaseFragment {
                 KLog.e(responseInfo);
 
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    SPTools.saveString(UserUtils.getToken() + "_contact_beans", responseInfo);
+                    SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", responseInfo);
                     parseContactDatas(responseInfo, contactBeanList);
 
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
-                    SPTools.saveString(UserUtils.getToken() + "_contact_beans", "{\"code\":0,\"data\":[],\"message\":\"成功\"}");
+                    SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", "{\"code\":0,\"data\":[],\"message\":\"成功\"}");
                 } else {
                     UIHelper.toastError(getContext(), GGOKHTTP.getMessage(responseInfo));
                 }

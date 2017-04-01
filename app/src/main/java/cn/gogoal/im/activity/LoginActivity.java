@@ -42,8 +42,8 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        loginUserName.setText("e00002638");
-        loginPassWord.setText("123456");
+        loginUserName.setText("E039065");
+        loginPassWord.setText("888888");
     }
 
     @OnClick({R.id.login})
@@ -79,9 +79,10 @@ public class LoginActivity extends BaseActivity {
                     JSONObject data = object.getJSONObject("data");
                     if (data.getIntValue("code") == 0) {
                         SPTools.saveJsonObject("userInfo", data);
-                        startActivity(new Intent(getContext(), MainActivity.class));
+                        Intent intent = new Intent(getContext(), MainActivity.class);
+                        intent.putExtra("isFromLogin", true);
+                        startActivity(intent);
                         finish();
-
                         //测试代码
                         AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
                             @Override

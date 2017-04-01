@@ -81,7 +81,7 @@
                 android:layout_height="45dp"
                 android:layout_marginTop="19dp"
                 android:background="@drawable/shape_text_border"
-                android:drawableRight="@mipmap/forward"
+                android:drawableRight="@mipmap/img_more"
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
@@ -144,7 +144,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_marginRight="16dp"
                         android:layout_marginTop="2dp"
-                        android:background="@mipmap/forward" />
+                        android:background="@mipmap/img_more" />
 
                     <ImageView
                         android:layout_width="18dp"
@@ -178,7 +178,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginRight="16dp"
-                    android:drawableRight="@mipmap/forward"
+                    android:drawableRight="@mipmap/img_more"
                     android:minWidth="42dp"
                     android:text="@string/im_str_clip_hangds"
                     android:textColor="@color/textColor_666666"
@@ -246,7 +246,7 @@
                 android:layout_height="45dp"
                 android:layout_marginTop="19dp"
                 android:background="@drawable/shape_text_border"
-                android:drawableRight="@mipmap/forward"
+                android:drawableRight="@mipmap/img_more"
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"

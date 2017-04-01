@@ -37,6 +37,7 @@ public class MessageUtils {
             jsonObject.put("lastMessage", imMessageBean.getLastMessage());
             jsonObject.put("unReadCounts", imMessageBean.getUnReadCounts());
             jsonObject.put("nickname", imMessageBean.getNickname());
+            jsonObject.put("chatType", imMessageBean.getChatType());
             jsonObject.put("friend_id", imMessageBean.getFriend_id());
             jsonObject.put("avatar", imMessageBean.getAvatar());
 
@@ -64,7 +65,7 @@ public class MessageUtils {
 
             thisJsonArray.add(jsonObject);
             KLog.e(jsonObject);
-            SPTools.saveJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", thisJsonArray);
+            SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", thisJsonArray);
         } else {
 
         }
@@ -72,16 +73,16 @@ public class MessageUtils {
 
     //消息列表：移除消息
     public static void removeMessageInfo(int position) {
-        JSONArray jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
+        JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
         if (null != jsonArray) {
             jsonArray.remove(position);
         }
-        SPTools.saveJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", jsonArray);
+        SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", jsonArray);
     }
 
     //群聊拉人加人(5:建群，拉人   6:踢人)
     public static void changeSquareInfo(String conversationID, JSONArray accountArray, String messageType) {
-        JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getToken() + conversationID + "_accountList_beans", new JSONArray());
+        JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationID + "_accountList_beans", new JSONArray());
         spAccountArray.addAll(accountArray);
         if (null != accountArray) {
             if (messageType.equals("5")) {
@@ -89,7 +90,7 @@ public class MessageUtils {
                 spAccountArray.removeAll(accountArray);
             }
             KLog.e(spAccountArray.toString());
-            SPTools.saveJsonArray(UserUtils.getToken() + conversationID + "_accountList_beans", spAccountArray);
+            SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversationID + "_accountList_beans", spAccountArray);
         } else {
 
         }
@@ -100,9 +101,13 @@ public class MessageUtils {
         StringBuilder mSB = new StringBuilder();
         String ms = "";
         for (int i = 0; i < accountArray.size(); i++) {
-            mSB.append(((JSONObject) accountArray.get(i)).getString("nickname"));
-            if (accountArray.size() > 1 && i < accountArray.size() - 1) {
-                mSB.append("、");
+            JSONObject object = (JSONObject) accountArray.get(i);
+            boolean needIt = object.getString("nickname").equals(UserUtils.getUserName());
+            if (!needIt) {
+                mSB.append(object.getString("nickname"));
+                if (accountArray.size() > 1 && i < accountArray.size() - 1) {
+                    mSB.append("、");
+                }
             }
         }
         if (messageType.equals("5")) {

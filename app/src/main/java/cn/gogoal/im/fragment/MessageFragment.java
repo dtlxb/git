@@ -4,9 +4,11 @@ package cn.gogoal.im.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,7 @@ import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -49,7 +52,9 @@ import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
+import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -82,7 +87,6 @@ public class MessageFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
         initTitle();
-
         initRecycleView(message_recycler, R.drawable.shape_divider_recyclerview_1px);
     }
 
@@ -109,7 +113,7 @@ public class MessageFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        jsonArray = SPTools.getJsonArray(AppConst.LEAN_CLOUD_TOKEN + "_conversation_beans", new JSONArray());
+        jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
         IMMessageBeans.clear();
         IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
 
@@ -255,10 +259,12 @@ public class MessageFragment extends BaseFragment {
             switch (v.getId()) {
                 case R.id.find_man_layout:
                     intent = new Intent(getContext(), SearchPersonSquareActivity.class);
+                    intent.putExtra("search_index", 0);
                     startActivity(intent);
                     break;
                 case R.id.find_square_layout:
                     intent = new Intent(getContext(), SearchPersonSquareActivity.class);
+                    intent.putExtra("search_index", 1);
                     startActivity(intent);
                     break;
                 case R.id.take_square_layout:
@@ -286,10 +292,14 @@ public class MessageFragment extends BaseFragment {
             String message = "";
             String unRead = "";
             String nickName = "";
+            int chatType = messageBean.getChatType();
             ImageView avatarIv = holder.getView(R.id.head_image);
             Badge badge = new BadgeView(getActivity()).bindTarget(holder.getView(R.id.head_layout));
             badge.setBadgeTextSize(10, true);
             badge.setBadgeGravity(Gravity.TOP | Gravity.END);
+
+            KLog.e(messageBean);
+
             //未读数
             if (messageBean.getUnReadCounts().equals("0")) {
                 unRead = "";
@@ -307,28 +317,31 @@ public class MessageFragment extends BaseFragment {
             //SDK定义的消息类型
             if (messageBean.getLastMessage() != null) {
                 String content = messageBean.getLastMessage().getContent();
-//                KLog.e(content);
                 JSONObject contentObject = JSON.parseObject(content);
                 String _lctype = contentObject.getString("_lctype");
                 nickName = messageBean.getNickname();
+
+                //头像设置
+                if (chatType == 1001) {
+                    ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
+                } else if (chatType == 1002) {
+                    ImageDisplay.loadFileImage(getmContext(), new File(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")), avatarIv);
+                } else if (chatType == 1004) {
+                    ImageDisplay.loadResImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
+                }
+
                 switch (_lctype) {
                     case "-1":
                         //文字
                         message = contentObject.getString("_lctext");
-                        ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
-
                         break;
                     case "-2":
                         //图片
                         message = "[图片]";
-                        ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
-
                         break;
                     case "-3":
                         //语音
                         message = "[语音]";
-                        ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
-
                         break;
                     case "1":
 
@@ -338,8 +351,6 @@ public class MessageFragment extends BaseFragment {
                         //加好友
                         nickName = "新的好友";
                         message = messageBean.getNickname() + "请求添加你为好友";
-                        ImageDisplay.loadResImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
-
                         break;
                     case "3":
 
@@ -357,9 +368,9 @@ public class MessageFragment extends BaseFragment {
                             accountArray = lcattrsObject.getJSONArray("accountList");
                             squareMessage = MessageUtils.findSquarePeople(accountArray, _lctype);
                             //群消息记录
-                            SPTools.saveString(UserUtils.getToken() + messageBean.getConversationID() + "_square_message", squareMessage);
+                            SPTools.saveString(UserUtils.getUserAccountId() + messageBean.getConversationID() + "_square_message", squareMessage);
                         } else {
-                            squareMessage = SPTools.getString(UserUtils.getToken() + messageBean.getConversationID() + "_square_message", "");
+                            squareMessage = SPTools.getString(UserUtils.getUserAccountId() + messageBean.getConversationID() + "_square_message", "");
                         }
                         message = squareMessage;
                         break;
@@ -381,6 +392,29 @@ public class MessageFragment extends BaseFragment {
         }
     }
 
+    private void createGroupImage(final String ConversationId) {
+        //群删除好友(每次删除后重新生成群头像)
+        JSONArray accountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + ConversationId + "_accountList_beans", new JSONArray());
+        final List<String> picUrls = new ArrayList<>();
+        for (int i = 0; i < accountArray.size(); i++) {
+            JSONObject personObject = accountArray.getJSONObject(i);
+            picUrls.add(personObject.getString("avatar"));
+        }
+        Log.e("picUrls", picUrls.toString() + "");
+        //九宫图拼接
+        GroupFaceImage.getInstance(getContext(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
+            @Override
+            public void onSuccess(Bitmap mathingBitmap) {
+                String groupFaceImageName = "_" + ConversationId + ".png";
+                ImageUtils.saveBitmapFile(mathingBitmap, "imagecache", groupFaceImageName);
+            }
+
+            @Override
+            public void onError(Exception e) {
+            }
+        });
+    }
+
     /**
      * 消息接收
      */
@@ -390,18 +424,21 @@ public class MessageFragment extends BaseFragment {
         AVIMMessage message = (AVIMMessage) map.get("message");
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
         boolean isTheSame = false;
-        String ConversationId = conversation.getConversationId();
+        final String ConversationId = conversation.getConversationId();
         int chatType = (int) conversation.getAttribute("chat_type");
 
         Long rightNow = CalendarUtils.getCurrentTime();
         String nickName = "";
-        String avatar = "";
-        String friend_id = UserUtils.getToken();
+        final String[] avatar = {""};
+        String friend_id = UserUtils.getUserAccountId();
         int unreadmessage = 0;
 
         JSONObject contentObject = JSON.parseObject(message.getContent());
         JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
         String _lctype = contentObject.getString("_lctype");
+
+        KLog.e(message.getContent());
+        KLog.e(chatType);
 
         switch (_lctype) {
             case "-1":
@@ -426,10 +463,10 @@ public class MessageFragment extends BaseFragment {
                 //好友从通讯录移除
                 break;
             case "5":
-                //好友入群
-                break;
             case "6":
-                //群删除好友
+                //好友入群
+                //群删除好友(每次删除后重新生成群头像)
+                createGroupImage(ConversationId);
                 break;
             case "7":
                 //申请入群
@@ -443,18 +480,37 @@ public class MessageFragment extends BaseFragment {
         switch (chatType) {
             //单聊,群聊,加好友请求
             case 1001:
-                avatar = lcattrsObject.getString("avatar");
+                avatar[0] = lcattrsObject.getString("avatar");
                 break;
             case 1002:
                 nickName = conversation.getName();
-                //生成群聊头像
-                JSONArray accountArray = SPTools.getJsonArray(UserUtils.getToken() + ConversationId + "_accountList_beans", new JSONArray());
-                List<String> picUrls = new ArrayList<>();
-                for (int i = 0; i < (accountArray.size() < 9 ? accountArray.size() : 9); i++) {
-                    JSONObject personObject = accountArray.getJSONObject(i);
-                    picUrls.add(personObject.getString("avatar"));
-                }
-                KLog.e(picUrls);
+                /*if (ImageUtils.getBitmapFilePaht(ConversationId, filePath).equals("")) {
+                    //生成群聊头像
+                    JSONArray accountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + ConversationId + "_accountList_beans", new JSONArray());
+                    final List<String> picUrls = new ArrayList<>();
+                    for (int i = 0; i < (accountArray.size() < 9 ? accountArray.size() : 9); i++) {
+                        JSONObject personObject = accountArray.getJSONObject(i);
+                        picUrls.add(personObject.getString("avatar"));
+                    }
+
+                    //九宫图拼接
+                    GroupFaceImage.getInstance(getContext(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
+                        @Override
+                        public void onSuccess(Bitmap mathingBitmap) {
+                            String groupFaceImagepath = filePath.getPath() + "_" + ConversationId + ".png";
+                            ImageUtils.saveBitmapFile(mathingBitmap, groupFaceImagepath);
+                            avatar[0] = groupFaceImagepath;
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+
+                        }
+                    });
+                } else {
+                    //缓存里取
+                    avatar[0] = ImageUtils.getBitmapFilePaht(ConversationId, filePath);
+                }*/
                 break;
             case 1004:
                 break;
@@ -469,7 +525,7 @@ public class MessageFragment extends BaseFragment {
                 break;
             //群通知
             case 1007:
-                avatar = lcattrsObject.getString("avatar");
+                avatar[0] = lcattrsObject.getString("avatar");
                 break;
             default:
                 break;
@@ -494,17 +550,15 @@ public class MessageFragment extends BaseFragment {
             imMessageBean.setLastMessage(message);
             imMessageBean.setLastTime(rightNow);
             imMessageBean.setNickname(nickName);
-            imMessageBean.setAvatar(avatar);
+            imMessageBean.setAvatar(avatar[0]);
+            imMessageBean.setChatType(chatType);
             imMessageBean.setUnReadCounts(1 + "");
             IMMessageBeans.add(imMessageBean);
         }
 
-        KLog.e(message.getContent());
-        KLog.e(chatType);
-
         //保存
         IMMessageBean imMessageBean = new IMMessageBean(ConversationId, chatType, message.getTimestamp(),
-                String.valueOf(unreadmessage), nickName, friend_id, avatar, message);
+                String.valueOf(unreadmessage), nickName, friend_id, avatar[0], message);
         MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
 
         //按照时间排序

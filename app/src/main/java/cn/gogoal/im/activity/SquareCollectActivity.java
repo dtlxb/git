@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,8 @@ import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -58,9 +61,10 @@ public class SquareCollectActivity extends BaseActivity {
         xTitle.addAction(addAction);
         initRecycleView(squareRoomRecycler, R.drawable.shape_divider_recyclerview_1px);
 
-        JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getToken() + "_groups_saved", new JSONArray());
+        JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_groups_saved", new JSONArray());
+        Boolean needRefresh = SPTools.getBoolean("needRefresh", false);
         objectList = new ArrayList<>();
-        if (null == groupsArray || groupsArray.size() == 0) {
+        if (needRefresh) {
             getGroupList();
         } else {
             for (int i = 0; i < groupsArray.size(); i++) {
@@ -75,15 +79,13 @@ public class SquareCollectActivity extends BaseActivity {
     //收藏群
     public void getGroupList() {
         Map<String, String> params = new HashMap<>();
-        params.put("token", AppConst.LEAN_CLOUD_TOKEN);
+        params.put("token", UserUtils.getToken());
         KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
                 Log.e("====responseInfo", responseInfo);
                 if ((int) result.get("code") == 0) {
                     JSONArray newGroupArray = (JSONArray) result.get("data");
@@ -91,7 +93,7 @@ public class SquareCollectActivity extends BaseActivity {
                         objectList.add((JSONObject) newGroupArray.get(i));
                     }
                     listAdapter.notifyDataSetChanged();
-                    SPTools.saveJsonArray(UserUtils.getToken() + "_groups_saved", newGroupArray);
+                    SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_groups_saved", newGroupArray);
                 }
             }
 
@@ -116,7 +118,9 @@ public class SquareCollectActivity extends BaseActivity {
             timeView.setVisibility(View.GONE);
 
             KLog.e(groupObject.getString("m_size"));
+            File filePath = SquareCollectActivity.this.getExternalFilesDir("imagecache");
 
+            //ImageDisplay.loadFileImage(getmContext(), new File(ImageUtils.getBitmapFilePaht(groupObject.getString("conv_id"), filePath)), avatarIv);
             holder.setText(R.id.last_message, groupObject.getJSONObject("attr").getString("intro") == null ? groupObject.getJSONObject("attr").getString("intro") : "");
             holder.setText(R.id.whose_message, groupObject.getString("name") + "(" + groupObject.getString("m_size") + ")");
         }
