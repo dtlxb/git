@@ -40,9 +40,10 @@ public class AppConst {
     //创建群的方式
     public static final int CREATE_SQUARE_ROOM_BY_ONE = 1100;
     public static final int CREATE_SQUARE_ROOM_BUILD = 1101;
-    //群加人删人
+    //群加人删人@人
     public static final int SQUARE_ROOM_ADD_ANYONE = 1102;
     public static final int SQUARE_ROOM_DELETE_ANYONE = 1103;
+    public static final int SQUARE_ROOM_AT_SOMEONE = 1104;
 
     //阿里云播放器参数
     public static final String businessId = "video_live";

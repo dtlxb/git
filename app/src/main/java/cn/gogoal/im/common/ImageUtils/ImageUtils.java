@@ -508,7 +508,6 @@ public class ImageUtils {
                 bitmapPath = filesDir.getPath() + "/" + fileList[i];
             }
         }
-        KLog.e(bitmapPath);
         return bitmapPath;
     }
 

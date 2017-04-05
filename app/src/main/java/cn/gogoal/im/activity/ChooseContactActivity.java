@@ -117,11 +117,12 @@ public class ChooseContactActivity extends BaseActivity {
          * 1100.选择好友和单聊好友创建群，
          * 1102.原来存在的群继续添加好友，
          * 1103.原来存在的群中移除好友
+         * 1104.群@人
          * */
         actionType = getIntent().getIntExtra("square_action", 0);
 
         KLog.e(actionType);
-        //actionType = 1102,1103,
+        //actionType = 1102,1103,1104
         String teamId = getIntent().getStringExtra("conversation_id");
 
         if (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
@@ -135,7 +136,7 @@ public class ChooseContactActivity extends BaseActivity {
         itContactBean = (ContactBean) getIntent().getSerializableExtra("seri");
 
         if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE || actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
-            mSelectedTeamMemberAccounts = UserUtils.getFriendsInTeam(teamId);
+            mSelectedTeamMemberAccounts.addAll(UserUtils.getFriendsInTeam(teamId));
         } else if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
             mSelectedTeamMemberAccounts.add(itContactBean);
         }
@@ -157,7 +158,11 @@ public class ChooseContactActivity extends BaseActivity {
 
         KLog.e(mSelectedTeamMemberAccounts);
 
-        userContacts = UserUtils.getUserContacts();
+        if (actionType == AppConst.SQUARE_ROOM_AT_SOMEONE) {
+            userContacts = UserUtils.getFriendsInTeam(teamId);
+        } else {
+            userContacts = UserUtils.getUserContacts();
+        }
 
         KLog.e(userContacts.size());
 
@@ -266,7 +271,7 @@ public class ChooseContactActivity extends BaseActivity {
                     bundle.putSerializable("choose_friend_array", new ArrayList<>(result.values()));
                     intent.putExtras(bundle);
                     setResult(actionType, intent);
-                    UIHelper.toast(getActivity(), actionType == AppConst.SQUARE_ROOM_ADD_ANYONE ? "添加成功" : "移除成功");
+                    //UIHelper.toast(getActivity(), actionType == AppConst.SQUARE_ROOM_ADD_ANYONE ? "添加成功" : "移除成功");
                     finish();
                 }
             }

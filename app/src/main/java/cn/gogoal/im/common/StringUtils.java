@@ -1,7 +1,10 @@
 package cn.gogoal.im.common;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.EditText;
+
+import com.socks.library.KLog;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,6 +14,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class StringUtils {
 
@@ -353,6 +357,47 @@ public class StringUtils {
         }
         return String.valueOf((char) (s.charAt(0) + 32)) + s.substring(1);
     }
+
+    /**
+     * 字符串过滤器 删除@某人（@**** ）
+     */
+    public static String StringFilter(String str) {
+        // 清除掉某人
+        //String regEx = "@*[\\S]*[ \r\n]";
+        String newString = "";
+        if (str.endsWith(" ")) {
+            int postionAt = str.lastIndexOf("@");
+            KLog.e(postionAt);
+            if (postionAt != -1) {
+                newString = str.substring(0, postionAt + 1);
+            } else {
+                newString = str;
+            }
+        } else {
+            newString = str;
+        }
+        KLog.e(newString);
+        return newString;
+    }
+
+    /**
+     * 查询@字符串中是否含有自己
+     */
+    public static Boolean StringFilter(String str, String regEx) {
+        String newString = "";
+        Boolean haveMe = false;
+        Pattern pattern = Pattern.compile(regEx);
+        Matcher matcher = pattern.matcher(str);
+
+        while (matcher.find()) {
+            newString = matcher.group();
+            if (newString.equals("@" + UserUtils.getUserName() + " ")) {
+                haveMe = true;
+            }
+        }
+        return haveMe;
+    }
+
 
     /**
      * 除掉HTML里面所有标签

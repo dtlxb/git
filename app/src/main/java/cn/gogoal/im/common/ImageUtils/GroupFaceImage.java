@@ -3,11 +3,7 @@ package cn.gogoal.im.common.ImageUtils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-
-import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.socks.library.KLog;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +32,6 @@ public class GroupFaceImage {
 
     public static GroupFaceImage getInstance(Context context, List<String> imageUrls) {
         GroupFaceImage instance = new GroupFaceImage(context, imageUrls);
-        KLog.e("初始化成功");
-        KLog.e(JSONObject.toJSONString(imageUrls));
         switch (imageUrls.size()) {
             case 1:
             case 2:

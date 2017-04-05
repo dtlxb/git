@@ -2,22 +2,26 @@ package cn.gogoal.im.fragment;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -45,6 +49,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.ChooseContactActivity;
 import cn.gogoal.im.adapter.ChatFunctionAdapter;
 import cn.gogoal.im.adapter.IMChatAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
@@ -64,6 +69,7 @@ import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -235,6 +241,7 @@ public class ChatFragment extends BaseFragment {
                 AVIMTextMessage mTextMessage = new AVIMTextMessage();
                 HashMap<String, Object> attrsMap = new HashMap<>();
                 attrsMap.put("username", UserUtils.getUserName());
+                attrsMap.put("simple_avatar", UserUtils.getUserAvatar());
                 mTextMessage.setAttrs(attrsMap);
                 mTextMessage.setTimestamp(CalendarUtils.getCurrentTime());
                 mTextMessage.setFrom(UserUtils.getUserAccountId());
@@ -301,6 +308,7 @@ public class ChatFragment extends BaseFragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
             }
 
             @Override
@@ -308,10 +316,30 @@ public class ChatFragment extends BaseFragment {
                 if (etInput.getText().toString().trim().equals("")) {
                     imgFunction.setVisibility(View.VISIBLE);
                     btnSend.setVisibility(View.INVISIBLE);
+                } else if (etInput.getText().toString().trim().equals("@") && chatType == 1002) {
+                    //@过后跳转加人
+                    Intent intent = new Intent(getActivity(), ChooseContactActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("conversation_id", imConversation.getConversationId());
+                    bundle.putInt("square_action", AppConst.SQUARE_ROOM_AT_SOMEONE);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, AppConst.SQUARE_ROOM_AT_SOMEONE);
                 } else {
                     imgFunction.setVisibility(View.INVISIBLE);
                     btnSend.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        etInput.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (chatType == 1002 && keyCode == KeyEvent.KEYCODE_DEL) {
+                    String backString = StringUtils.StringFilter(etInput.getText().toString());
+                    etInput.setText(backString);
+                    etInput.setSelection(backString.length());
+                }
+                return false;
             }
         });
 
@@ -374,7 +402,6 @@ public class ChatFragment extends BaseFragment {
                     if (chatType == 1001) {
                         imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
                                 "0", null != contactBean.getNickname() ? contactBean.getNickname() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), message);
-
                     } else if (chatType == 1002) {
                         imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
                                 "0", imConversation.getName(), "", "", message);
@@ -382,7 +409,6 @@ public class ChatFragment extends BaseFragment {
 
                     }
                     MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
-
 
                 }
             }
@@ -438,6 +464,7 @@ public class ChatFragment extends BaseFragment {
         //显示自己的图片消息
         HashMap<String, Object> attrsMap = new HashMap<>();
         attrsMap.put("username", UserUtils.getUserName());
+        attrsMap.put("simple_avatar", UserUtils.getUserAvatar());
         final AVIMImageMessage mImageMessage = new AVIMImageMessage(imagefile);
         mImageMessage.setFrom(UserUtils.getUserAccountId());
         mImageMessage.setAttrs(attrsMap);
@@ -508,6 +535,7 @@ public class ChatFragment extends BaseFragment {
                 //自己显示语音消息
                 HashMap<String, Object> attrsMap = new HashMap<>();
                 attrsMap.put("username", UserUtils.getUserName());
+                attrsMap.put("simple_avatar", UserUtils.getUserAvatar());
 
                 //封装一个AVfile对象
                 HashMap<String, Object> metaData = new HashMap<>();
@@ -526,7 +554,6 @@ public class ChatFragment extends BaseFragment {
                 BaseMessage baseMessage = new BaseMessage("audio_info", map);
                 AppManager.getInstance().sendMessage("refresh_recyle", baseMessage);
                 message_recycler.smoothScrollToPosition(messageList.size() - 1);
-                //message_recycler.getLayoutManager().scrollToPosition(messageList.size() - 1);
 
                 UFileUpload.getInstance().upload(new File(voicePath), UFileUpload.Type.AUDIO, new UFileUpload.UploadListener() {
                     @Override
@@ -786,6 +813,24 @@ public class ChatFragment extends BaseFragment {
         message_recycler.smoothScrollToPosition(messageList.size() - 1);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != 0) {
+            if (requestCode == AppConst.SQUARE_ROOM_AT_SOMEONE) {
+                StringBuilder stringBuilder = new StringBuilder();
+
+                List<ContactBean> changeContactBeens = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
+                for (int i = 0; i < changeContactBeens.size(); i++) {
+                    stringBuilder.append("@" + changeContactBeens.get(i).getNickname() + " ");
+                }
+                etInput.setText(stringBuilder.toString());
+                etInput.setSelection(stringBuilder.toString().length());
+            }
+        }
+
+    }
+
     /**
      * 消息接收
      */
@@ -798,7 +843,6 @@ public class ChatFragment extends BaseFragment {
             JSONObject contentObject = JSON.parseObject(message.getContent());
             String _lctype = contentObject.getString("_lctype");
 
-            KLog.e(contentObject);
             KLog.e(contentObject);
             //判断房间一致然后做消息接收处理
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
