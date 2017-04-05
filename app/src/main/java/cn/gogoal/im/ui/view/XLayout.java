@@ -31,7 +31,7 @@ public class XLayout extends FrameLayout {
     public final static int Error = 2;
     public final static int No_Network = 3;
     public final static int Loading = 4;
-    private int state;
+    private int state=0;
 
     private Context mContext;
     private View loadingPage;
@@ -281,7 +281,6 @@ public class XLayout extends FrameLayout {
      * @return
      */
     public XLayout setEmptyText(String text) {
-
         emptyText.setText(text);
         return this;
     }

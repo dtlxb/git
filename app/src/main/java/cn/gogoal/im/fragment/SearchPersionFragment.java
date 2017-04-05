@@ -61,11 +61,9 @@ public class SearchPersionFragment extends BaseFragment {
 
         adapter = new SearchPersionResultAdapter(searchResultList);
 
-//        wrapper = new EmptyWrapper(adapter);
-//
-//        wrapper.setEmptyView(UIHelper.getEmptyView(mContext));
-
         recyclerView.setAdapter(adapter);
+
+        xLayout.setStatus(XLayout.Success);
 
     }
 

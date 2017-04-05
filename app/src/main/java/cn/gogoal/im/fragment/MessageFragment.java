@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +33,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +46,6 @@ import cn.gogoal.im.activity.SquareChatRoomActivity;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
-import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.IMMessageBean;
@@ -472,7 +469,7 @@ public class MessageFragment extends BaseFragment {
                 String groupFaceImageName = "_" + ConversationId + ".png";
                 ImageUtils.saveBitmapFile(mathingBitmap, "imagecache", groupFaceImageName);
 
-                AppManager.getInstance().sendMessage("set_avatar", position + "");
+//                AppManager.getInstance().sendMessage("set_avatar", position + "");
             }
 
             @Override
