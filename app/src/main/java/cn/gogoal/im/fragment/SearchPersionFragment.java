@@ -63,8 +63,6 @@ public class SearchPersionFragment extends BaseFragment {
 
         recyclerView.setAdapter(adapter);
 
-        xLayout.setStatus(XLayout.Success);
-
     }
 
     @Subscriber(tag = "SEARCH_PERSION_TAG")

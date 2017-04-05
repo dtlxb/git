@@ -42,11 +42,18 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void doBusiness(final Context mContext) {
-        loginUserName.setText("E039065");
-        loginPassWord.setText("888888");
-//        loginUserName.setText("E00003645");
-//        loginPassWord.setText("147258369");
+//        loginUserName.setText("E039065");
+//        loginPassWord.setText("888888");
+        loginUserName.setText("E00003645");
+        loginPassWord.setText("147258369");
 
+        findViewById(R.id.login).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                startActivity(new Intent(mContext,DemoActivity.class));
+                return true;
+            }
+        });
     }
 
     @OnClick({R.id.login})

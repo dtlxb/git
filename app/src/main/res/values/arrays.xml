@@ -54,4 +54,11 @@
         <item>找人</item>
         <item>找群</item>
     </string-array>
+
+    <string-array name="market_tab_top">
+        <item>沪深</item>
+        <item>港股</item>
+        <item>基金</item>
+        <item>债券</item>
+    </string-array>
 </resources>

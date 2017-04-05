@@ -46,6 +46,7 @@ import cn.gogoal.im.activity.SquareChatRoomActivity;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.IMMessageBean;
@@ -469,7 +470,7 @@ public class MessageFragment extends BaseFragment {
                 String groupFaceImageName = "_" + ConversationId + ".png";
                 ImageUtils.saveBitmapFile(mathingBitmap, "imagecache", groupFaceImageName);
 
-//                AppManager.getInstance().sendMessage("set_avatar", position + "");
+                AppManager.getInstance().sendMessage("set_avatar", String.valueOf(position));
             }
 
             @Override

@@ -141,6 +141,8 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/TranslucentTheme" />
         <activity android:name=".activity.LiveActivity" />
+
+        <activity android:name=".activity.stock.NewMarketActivity"/>
     </application>
 
 </manifest>
