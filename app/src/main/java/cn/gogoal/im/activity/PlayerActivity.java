@@ -1152,11 +1152,11 @@ public class PlayerActivity extends BaseActivity {
                 showPlayerChat();
                 break;
             case R.id.imgPlayerProfiles: //主播介绍
-                if(drawer_player.isDrawerOpen(menuLayout)) {
+                if (drawer_player.isDrawerOpen(menuLayout)) {
                     drawer_player.closeDrawer(menuLayout);
-                }else {
+                } else {
                     if (AppDevice.isLandscape(getContext())) {
-                        drawer_player.openDrawer(Gravity.END,true);
+                        drawer_player.openDrawer(Gravity.END, true);
 
                         drawerLinearProfiles.setVisibility(View.VISIBLE);
                         linearRelaterVideo.setVisibility(View.GONE);
@@ -1167,11 +1167,11 @@ public class PlayerActivity extends BaseActivity {
                 }
                 break;
             case R.id.imgPlayerRelaterVideo: //相关视频
-                if(drawer_player.isDrawerOpen(menuLayout)) {
+                if (drawer_player.isDrawerOpen(menuLayout)) {
                     drawer_player.closeDrawer(menuLayout);
-                }else {
+                } else {
                     if (AppDevice.isLandscape(getContext())) {
-                        drawer_player.openDrawer(Gravity.END,true);
+                        drawer_player.openDrawer(Gravity.END, true);
 
                         drawerLinearProfiles.setVisibility(View.GONE);
                         linearRelaterVideo.setVisibility(View.VISIBLE);
@@ -1194,7 +1194,7 @@ public class PlayerActivity extends BaseActivity {
             case R.id.liveTogether: //一起直播
                 JSONObject dataUrl = SPTools.getJsonObject("liveTogetherData", null);
 
-                Intent intent = new Intent(getContext(), LiveTogetherActivity.class);
+                Intent intent = new Intent(getContext(), LiveActivity.class);
                 intent.putExtra("pushUrl", dataUrl.getString("stream_url") + dataUrl.getString("stream_secret"));
                 startActivity(intent);
                 break;

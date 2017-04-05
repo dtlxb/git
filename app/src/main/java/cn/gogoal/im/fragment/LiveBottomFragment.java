@@ -15,9 +15,9 @@ public class LiveBottomFragment extends BaseFragment {
     @BindView(R.id.iv_beauty)
     ImageView mIvBeauty;
     @BindView(R.id.iv_camera)
-    private ImageView mIvCamera;
+    ImageView mIvCamera;
     @BindView(R.id.iv_flash)
-    private ImageView mIvFlash;
+    ImageView mIvFlash;
 
     private RecorderUIClickListener mUIClickListener;
 

@@ -10,10 +10,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-/**
- * Created by apple on 2016/12/7.
- */
-
 public class HeadsetMonitor extends BroadcastReceiver {
 
     private static final String TAG = HeadsetMonitor.class.getName();

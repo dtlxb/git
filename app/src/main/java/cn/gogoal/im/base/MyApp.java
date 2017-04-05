@@ -8,12 +8,8 @@ import com.alivc.player.AccessKey;
 import com.alivc.player.AccessKeyCallback;
 import com.alivc.player.AliVcMediaPlayer;
 import com.avos.avoscloud.AVOSCloud;
-import com.avos.avoscloud.im.v2.AVIMClient;
-import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
-import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
-import com.duanqu.qupai.jni.ApplicationGlue;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,11 +17,9 @@ import java.io.FileReader;
 import java.util.List;
 
 import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.MyConversationHandler;
 import cn.gogoal.im.common.IMHelpers.MyMessageHandler;
 import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.database.LitePalApplication;
 import cn.gogoal.im.common.permission.IPermissionListner;
 
@@ -68,13 +62,6 @@ public class MyApp extends LitePalApplication {
             });*/
 
         //TODO 注册消息接收器
-        //阿里云推流
-        System.loadLibrary("gnustl_shared");
-        // System.loadLibrary("ijkffmpeg");//目前使用微博的ijkffmpeg会出现1K再换wifi不重连的情况
-        System.loadLibrary("qupai-media-thirdparty");
-        // System.loadLibrary("alivc-media-jni");
-        System.loadLibrary("qupai-media-jni");
-        ApplicationGlue.initialize(this);
 
         BaseActivity.requestRuntimePermission(new String[]{Manifest.permission.READ_PHONE_STATE}, new IPermissionListner() {
             @Override

@@ -21,6 +21,7 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.activity.TestActivity;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
@@ -56,7 +57,7 @@ public class MineFragment extends BaseFragment {
             endIndex--;
         }
     };
-    private int endIndex=9;
+    private int endIndex = 9;
 
     public MineFragment() {
     }
@@ -108,7 +109,7 @@ public class MineFragment extends BaseFragment {
     }
 
     private void test() {
-        if (endIndex>=1) {
+        if (endIndex >= 1) {
             Glide.get(getContext()).clearMemory();
 
             GroupFaceImage.getInstance(getActivity(),
@@ -129,8 +130,8 @@ public class MineFragment extends BaseFragment {
 
                 }
             });
-        }else {
-            endIndex=9;
+        } else {
+            endIndex = 9;
         }
     }
 
@@ -150,6 +151,7 @@ public class MineFragment extends BaseFragment {
                 public void onClick(View v) {
                     switch (position) {
                         case 0:
+                            startActivity(new Intent(getActivity(), LiveActivity.class));
                             break;
                         case 1:
                             startActivity(new Intent(getActivity(), TestActivity.class));

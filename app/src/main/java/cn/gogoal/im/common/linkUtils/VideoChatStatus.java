@@ -1,9 +1,5 @@
 package cn.gogoal.im.common.linkUtils;
 
-/**
- * Created by apple on 2016/12/5.
- */
-
 public enum VideoChatStatus {
     UNCHAT,              //未连麦
     INVITE_FOR_RES,      //邀请连麦成功等待对方响应
