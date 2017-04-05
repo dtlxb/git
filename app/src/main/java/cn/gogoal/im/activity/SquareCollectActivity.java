@@ -1,6 +1,7 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -22,13 +23,10 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**
@@ -36,11 +34,16 @@ import cn.gogoal.im.ui.view.XTitle;
  */
 
 public class SquareCollectActivity extends BaseActivity {
+
     @BindView(R.id.square_room_recycler)
     RecyclerView squareRoomRecycler;
+
+    @BindView(R.id.xLayout)
+    XLayout xLayout;
+
     private ListAdapter listAdapter;
-    private XTitle xTitle;
-    private List<JSONObject> objectList;
+
+    private List<JSONObject> groupList;
 
     @Override
     public int bindLayout() {
@@ -48,30 +51,35 @@ public class SquareCollectActivity extends BaseActivity {
     }
 
     @Override
-    public void doBusiness(Context mContext) {
-        xTitle = setMyTitle(R.string.title_square_collcet, true);
-        xTitle.setLeftText(R.string.tv_cancle);
+    public void doBusiness(final Context mContext) {
 
-        //添加action
-        XTitle.TextAction addAction = new XTitle.TextAction("添加") {
+        setMyTitle(R.string.title_square_collcet, true).setLeftText(R.string.tv_cancle).addAction(new XTitle.TextAction(getString(R.string.square_collcet_add)) {
             @Override
             public void actionClick(View view) {
+                Intent intent = new Intent(mContext, SearchPersonSquareActivity.class);
+                intent.putExtra("search_index",1);
+                startActivity(intent);
             }
-        };
-        xTitle.addAction(addAction);
+        });
+
+        xLayout.setEmptyText("你还没有群组\n\r赶快找到属于你的组织吧");
         initRecycleView(squareRoomRecycler, R.drawable.shape_divider_recyclerview_1px);
 
         JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_groups_saved", new JSONArray());
         Boolean needRefresh = SPTools.getBoolean("needRefresh", false);
-        objectList = new ArrayList<>();
+        groupList = new ArrayList<>();
         if (needRefresh) {
             getGroupList();
         } else {
-            for (int i = 0; i < groupsArray.size(); i++) {
-                objectList.add((JSONObject) groupsArray.get(i));
+            if (groupsArray.size()>0) {
+                for (int i = 0; i < groupsArray.size(); i++) {
+                    groupList.add((JSONObject) groupsArray.get(i));
+                }
+            }else {
+                xLayout.setStatus(XLayout.Empty);
             }
         }
-        listAdapter = new ListAdapter(SquareCollectActivity.this, R.layout.item_fragment_message, objectList);
+        listAdapter = new ListAdapter(SquareCollectActivity.this, R.layout.item_fragment_message, groupList);
         squareRoomRecycler.setAdapter(listAdapter);
 
     }
@@ -90,7 +98,7 @@ public class SquareCollectActivity extends BaseActivity {
                 if ((int) result.get("code") == 0) {
                     JSONArray newGroupArray = (JSONArray) result.get("data");
                     for (int i = 0; i < newGroupArray.size(); i++) {
-                        objectList.add((JSONObject) newGroupArray.get(i));
+                        groupList.add((JSONObject) newGroupArray.get(i));
                     }
                     listAdapter.notifyDataSetChanged();
                     SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_groups_saved", newGroupArray);

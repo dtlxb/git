@@ -112,5 +112,6 @@
     <string name="str_coming_soon">努力开发中&#8230;</string>
     <string name="str_add_friend_remark">你好，我是%s</string>
     <string name="str_group_count">(%d人)</string>
+    <string name="str_result">没有找到与%s相关的</string>
 
 </resources>

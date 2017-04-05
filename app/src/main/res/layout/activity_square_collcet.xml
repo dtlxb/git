@@ -2,20 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".activity.SquareCollectActivity">
 
     <include layout="@layout/include_title" />
 
-    <View
+    <cn.gogoal.im.ui.view.XLayout
+        android:id="@+id/xLayout"
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/textColor_666666" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/square_room_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/square_room_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
+    </cn.gogoal.im.ui.view.XLayout>
 
 </LinearLayout>

@@ -310,7 +310,7 @@ public class ChooseContactActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toastError(getActivity(), msg);
+                UIHelper.toastError(getActivity(), msg,null);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.CREATE_GROUP_CHAT, ggHttpInterface).startGet();

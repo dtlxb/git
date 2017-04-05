@@ -264,13 +264,19 @@ public class GroupFaceImage {
                 canvas.drawBitmap(bitmapList.get(6), innerWidth * 2 + 4, innerWidth * 2 + 4, null);
 
                 return result;
+
             case 8:
-                canvas.drawBitmap(bitmapList.get(0), resultWidth / 6, 0, null);
-                canvas.drawBitmap(bitmapList.get(1), resultWidth / 6 + innerWidth + 2, 0, null);
+                canvas.drawBitmap(bitmapList.get(0), innerWidth/2, 0, null);
+
+                canvas.drawBitmap(bitmapList.get(1), innerWidth/2 + 2+innerWidth ,0 , null);
 
                 canvas.drawBitmap(bitmapList.get(2), 0, innerWidth + 2, null);
                 canvas.drawBitmap(bitmapList.get(3), innerWidth + 2, innerWidth + 2, null);
                 canvas.drawBitmap(bitmapList.get(4), 2 * innerWidth + 4, innerWidth + 2, null);
+
+                canvas.drawBitmap(bitmapList.get(5), 0, innerWidth * 2 + 4, null);
+                canvas.drawBitmap(bitmapList.get(6), innerWidth + 2, innerWidth * 2 + 4, null);
+                canvas.drawBitmap(bitmapList.get(7), innerWidth * 2 + 4, innerWidth * 2 + 4, null);
 
                 return result;
 

@@ -25,4 +25,5 @@
     <dimen name="item_coantacts">55dp</dimen>
 
     <dimen name="item_dialog_list">50dp</dimen>
+
 </resources>
