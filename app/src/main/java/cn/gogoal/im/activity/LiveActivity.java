@@ -15,6 +15,7 @@ import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -58,6 +59,9 @@ public class LiveActivity extends BaseActivity {
     //连麦关闭按钮
     @BindView(R.id.imgPlayClose)
     ImageView imgPlayClose;
+    //开始直播
+    @BindView(R.id.startLive)
+    Button startLive;
 
     /*
     * 权限所需定义参数
@@ -121,6 +125,7 @@ public class LiveActivity extends BaseActivity {
     private SurfaceView mPlaySurfaceView; //连麦播放的小窗SurfaceView
     private VideoChatStatus mVideoChatStatus = VideoChatStatus.UNCHAT; //未连麦的状态
 
+    private String publishUrl = "rtmp://push-live.aliyuncs.com/DemoApp/2070bd9cd6?auth_key=1491477801-0-0-28813031e4b39a294b21f3141e09b999"; //推流播放网址
     private String mSmallDelayPlayUrl; //连麦延迟播放网址
 
     private final Handler mHandler = new Handler() {
@@ -273,7 +278,7 @@ public class LiveActivity extends BaseActivity {
             mChatHost.prepareToPublish(holder.getSurface(), 360, 640, mMediaParam);
             if (mCameraFacing == AlivcMediaFormat.CAMERA_FACING_FRONT) {
                 mChatHost.setFilterParam(mFilterMap);
-                mLiveBottomFragment.setBeautyUI(true); //更新美颜开关UI
+                //mLiveBottomFragment.setBeautyUI(true); //更新美颜开关UI
             }
         } else {
             /**
@@ -712,17 +717,79 @@ public class LiveActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.imgPreviewClose, R.id.imgPlayClose})
+    @OnClick({R.id.startLive, R.id.imgPreviewClose, R.id.imgPlayClose})
     public void closeOnClick(View v) {
         switch (v.getId()) {
-            case R.id.imgPreviewClose:
+            case R.id.startLive: //开始连麦
+                startLive.setEnabled(false);
+                changeUI2Publishing();
+                mIsLive = true;
+                mChatHost.startToPublish(publishUrl);
+                break;
+            case R.id.imgPreviewClose: //关闭直播
                 onBackPressed();
                 break;
-            case R.id.imgPlayClose:
+            case R.id.imgPlayClose: //关闭连麦
                 break;
         }
     }
 
+    /**
+     * UI切换到正在推流状态
+     */
+    private void changeUI2Publishing() {
+
+        imgPreviewClose.setVisibility(View.VISIBLE);
+
+        mLiveBottomFragment = LiveBottomFragment.newInstance();
+        mLiveBottomFragment.setRecorderUIClickListener(mUIClickListener);
+        getSupportFragmentManager().beginTransaction().replace(R.id.bottom_container, mLiveBottomFragment).commit();
+    }
+
+    /**
+     * 底部操作按钮的click事件响应
+     */
+    private LiveBottomFragment.RecorderUIClickListener mUIClickListener = new LiveBottomFragment.RecorderUIClickListener() {
+        @Override
+        public int onSwitchCamera() { //切换摄像头
+            if (mChatHost != null) {
+                mChatHost.switchCamera();
+            }
+            return -1;
+        }
+
+        @Override
+        public boolean onBeautySwitch() { // 美颜开/关
+            mPreviewSurfaceView.setZOrderOnTop(true);
+            if (mChatHost != null) {
+                if (!isBeautyOn) {
+                    mFilterMap.put(AlivcVideoChatHost.ALIVC_FILTER_PARAM_BEAUTY_ON, Boolean.toString(true));
+                } else {
+                    mFilterMap.put(AlivcVideoChatHost.ALIVC_FILTER_PARAM_BEAUTY_ON, Boolean.toString(false));
+                }
+                mChatHost.setFilterParam(mFilterMap);
+                isBeautyOn = !isBeautyOn;
+            }
+            return isBeautyOn;
+        }
+
+        @Override
+        public boolean onFlashSwitch() { // 闪光灯开/关
+            if (mChatHost != null) {
+                if (!isFlashOn) {
+                    mChatHost.setFlashOn(true);
+                } else {
+                    mChatHost.setFlashOn(false);
+                }
+                isFlashOn = !isFlashOn;
+            }
+            return isFlashOn;
+        }
+    };
+
+    /**
+     * 关闭推流直播
+     */
     public void onBackPressed() {
         if (isChatting()) {
             closeLiveChat();
