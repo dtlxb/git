@@ -394,9 +394,6 @@ public class MessageFragment extends BaseFragment {
                             squareMessage = SPTools.getString(UserUtils.getUserAccountId() + messageBean.getConversationID() + "_square_message", "");
                         }
                         message = squareMessage;
-
-                        //群头像拼接
-                        createGroupImage(messageBean.getConversationID(), position);
                         break;
                     case "7":
                         //群通知
@@ -433,7 +430,6 @@ public class MessageFragment extends BaseFragment {
      */
     @Subscriber(tag = "set_avatar")
     public void setAvatar(String code) {
-        KLog.e(code);
         listAdapter.notifyItemChanged(Integer.parseInt(code));
     }
 
@@ -447,8 +443,9 @@ public class MessageFragment extends BaseFragment {
                 @Override
                 public void squareGetSuccess(JSONObject object) {
                     JSONArray array = object.getJSONArray("accountList");
-                    if (null != array && array.size() > 0)
+                    if (null != array && array.size() > 0) {
                         getNinePic(array, ConversationId, position);
+                    }
                 }
 
                 @Override
@@ -471,7 +468,6 @@ public class MessageFragment extends BaseFragment {
             public void onSuccess(Bitmap mathingBitmap) {
                 String groupFaceImageName = "_" + ConversationId + ".png";
                 ImageUtils.saveBitmapFile(mathingBitmap, "imagecache", groupFaceImageName);
-
                 AppManager.getInstance().sendMessage("set_avatar", position + "");
             }
 
