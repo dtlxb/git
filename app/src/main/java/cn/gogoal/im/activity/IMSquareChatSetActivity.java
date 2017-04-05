@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.IMPersonSetAdapter;
 import cn.gogoal.im.adapter.NineGridImageViewAdapter;
@@ -62,6 +63,12 @@ public class IMSquareChatSetActivity extends BaseActivity {
     @BindView(R.id.team_size)
     TextView tvTeamSize;
 
+    @BindView(R.id.the_square)
+    TextView the_square;
+
+    @BindView(R.id.the_brief)
+    TextView the_brief;
+
     @BindView(R.id.save_switch)
     Switch saveGroup;
 
@@ -93,6 +100,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         squareCreater = getIntent().getExtras().getString("square_creater");
         final String squareName = getIntent().getExtras().getString("squareName");
         tvSquareName.setText(squareName);
+        the_square.setText(squareName);
 
         if (null != getIntent().getExtras().getStringArrayList("group_members")) {
             groupMembers.addAll(getIntent().getExtras().getStringArrayList("group_members"));
@@ -372,17 +380,26 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
     }
 
-    /*@OnClick({R.id.tv_do_search_conversation, R.id.getmessage_swith})
+    @OnClick({R.id.square_message_tv, R.id.tv_what_square, R.id.square_brief, R.id.save_group, R.id.tv_search_history_tv, R.id.tv_delete_square})
     void function(View view) {
         switch (view.getId()) {
-            case R.id.tv_do_search_conversation:
-                startActivity(new Intent(getActivity(), SearchActivity.class));
+            case R.id.square_message_tv:
+
                 break;
-            case R.id.getmessage_swith:
+            case R.id.tv_what_square:
+                break;
+            case R.id.square_brief:
+                break;
+            case R.id.save_group:
+                break;
+            case R.id.tv_search_history_tv:
+                startActivity(new Intent(getActivity(), SearchActivity.class));
                 break;
             case R.id.tv_delete_square:
                 break;
+            default:
+                break;
         }
-    }*/
+    }
 
 }

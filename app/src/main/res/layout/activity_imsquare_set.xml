@@ -133,11 +133,13 @@
                 android:paddingStart="15dp">
 
                 <RelativeLayout
+                    android:id="@+id/tv_what_square"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:gravity="center_vertical">
 
                     <TextView
+                        android:id="@+id/tv_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/im_str_square_name"
@@ -145,12 +147,25 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/the_square"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="65dp"
+                        android:layout_marginRight="9dp"
+                        android:layout_toLeftOf="@+id/load_more_view"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:textColor="@color/textColor_666666"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/load_more_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="16dp"
-                        android:textColor="@color/textColor_666666"
-                        android:textSize="15sp" />
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="2dp"
+                        android:background="@mipmap/img_more" />
 
                 </RelativeLayout>
 
@@ -160,6 +175,7 @@
                     android:background="@color/colorGriddivider" />
 
                 <RelativeLayout
+                    android:id="@+id/square_brief"
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:gravity="center_vertical">
@@ -167,11 +183,32 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/im_str_square_code"
+                        android:text="@string/im_str_square_brief"
                         android:textColor="@color/textColor_333333"
                         android:textSize="16sp" />
 
+                    <TextView
+                        android:id="@+id/the_brief"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="65dp"
+                        android:layout_marginRight="9dp"
+                        android:layout_toLeftOf="@+id/load_more"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:textColor="@color/textColor_666666"
+                        android:textSize="15sp" />
+
                     <ImageView
+                        android:id="@+id/load_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="2dp"
+                        android:background="@mipmap/img_more" />
+
+                    <!--<ImageView
                         android:id="@+id/expanded_more"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -185,14 +222,14 @@
                         android:layout_height="18dp"
                         android:layout_marginRight="8dp"
                         android:layout_toLeftOf="@id/expanded_more"
-                        android:background="@mipmap/timg" />
+                        android:background="@mipmap/timg" />-->
 
 
                 </RelativeLayout>
 
             </LinearLayout>
 
-            <RelativeLayout
+            <!-- <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:layout_marginTop="19dp"
@@ -218,9 +255,9 @@
                     android:textColor="@color/textColor_666666"
                     android:textSize="15sp" />
 
-            </RelativeLayout>
+            </RelativeLayout>-->
 
-            <RelativeLayout
+            <!--<RelativeLayout
                 android:id="@+id/getmessage_swith"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
@@ -245,7 +282,7 @@
                     android:layout_centerVertical="true"
                     android:background="@null" />
 
-            </RelativeLayout>
+            </RelativeLayout>-->
 
             <RelativeLayout
                 android:id="@+id/save_group"
@@ -292,7 +329,7 @@
                 android:id="@+id/tv_delete_square"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:layout_marginBottom="25dp"
+                android:layout_marginBottom="20dp"
                 android:layout_marginTop="19dp"
                 android:background="@drawable/shape_text_border"
                 android:gravity="center"
