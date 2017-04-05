@@ -3,6 +3,7 @@ package cn.gogoal.im.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
+import com.bumptech.glide.Glide;
 
 import org.simple.eventbus.Subscriber;
 
@@ -34,14 +35,19 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.RecommendBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
+import cn.gogoal.im.ui.view.XLayout;
 
 public class SearchTeamFragment extends BaseFragment {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+
+    @BindView(R.id.xLayout)
+    XLayout xLayout;
 
     private RecommendAdapter adapter;
 
@@ -55,6 +61,7 @@ public class SearchTeamFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
+
         recyclerView.addItemDecoration(new NormalItemDecoration(mContext));
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
@@ -77,41 +84,49 @@ public class SearchTeamFragment extends BaseFragment {
         recyclerView.setAdapter(wrapper);
 
         getRecommendGroup("");
+
     }
 
     @Subscriber(tag = "SEARCH_TEAM_TAG")
-    private void getRecommendGroup(String keyword) {
+    private void getRecommendGroup(final String keyword) {
         dataBeanList.clear();
-
+        xLayout.setStatus(XLayout.Loading);
         Map<String, String> map = new HashMap<>();
         map.put("token", UserUtils.getToken());
         if (!TextUtils.isEmpty(keyword)) {
             map.put("keyword", keyword);
         }
-        map.put("is_recommend", "true");
-
-        KLog.e("token=" + UserUtils.getToken() + "&");
+        map.put("is_recommend", String.valueOf(TextUtils.isEmpty(keyword)));
 
         new GGOKHTTP(map, GGOKHTTP.SEARCH_GROUP, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     RecommendBean recommendBean = JSONObject.parseObject(responseInfo, RecommendBean.class);
                     if (null!=recommendBean.getData()){
                         dataBeanList.addAll(recommendBean.getData());
                         adapter.notifyDataSetChanged();
                         wrapper.notifyDataSetChanged();
+                        xLayout.setStatus(XLayout.Success);
                     }
 
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
+                    xLayout.setStatus(XLayout.Empty);
+                    xLayout.setEmptyText(String.format(getString(R.string.str_result),keyword)+"群组");
                     UIHelper.toastResponseError(getActivity(), responseInfo);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toastError(getActivity(), msg);
+                xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
+                    @Override
+                    public void onReload(View v) {
+                        getRecommendGroup(keyword);
+                    }
+                });
+
+                UIHelper.toastError(getActivity(), msg,xLayout);
             }
         }).startGet();
     }
@@ -123,7 +138,7 @@ public class SearchTeamFragment extends BaseFragment {
         }
 
         @Override
-        protected void convert(ViewHolder holder, final RecommendBean.DataBean data, int position) {
+        protected void convert(final ViewHolder holder, final RecommendBean.DataBean data, int position) {
             TextView addView = holder.getView(R.id.btn_search_group_add);
             addView.setVisibility(View.VISIBLE);
             if (data.isIs_in()){
@@ -131,6 +146,27 @@ public class SearchTeamFragment extends BaseFragment {
                 addView.setText("已加入");
                 addView.setTextColor(Color.parseColor("#a9a9a9"));
             }
+
+            Glide.get(getContext()).clearMemory();
+
+            GroupFaceImage.getInstance(getActivity(),getImageAvatar(data.getM())
+            ).load(new GroupFaceImage.OnMatchingListener() {
+                @Override
+                public void onSuccess(final Bitmap mathingBitmap) {
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            holder.setImageBitmap(R.id.item_user_avatar,mathingBitmap);
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(Exception e) {
+
+                }
+            });
 
             UIHelper.setRippBg(holder.itemView);
             holder.setText(R.id.item_tv_search_result_name,data.getName());
@@ -154,5 +190,16 @@ public class SearchTeamFragment extends BaseFragment {
             });
 
         }
+    }
+
+    private List<String> getImageAvatar(List<RecommendBean.DataBean.MBean> datas){
+        List<String> li=new ArrayList<>();
+        if (null!=datas && !datas.isEmpty()){
+            for (RecommendBean.DataBean.MBean b:datas){
+                li.add(b.getAvatar());
+            }
+            return li;
+        }
+        return new ArrayList<>();
     }
 }

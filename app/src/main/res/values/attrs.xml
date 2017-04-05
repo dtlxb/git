@@ -70,4 +70,7 @@
 
     </declare-styleable>
 
+    <declare-styleable name="XLayout">
+        <attr name="isFirstVisible" format="boolean"></attr>
+    </declare-styleable>
 </resources>

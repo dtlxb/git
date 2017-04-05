@@ -144,7 +144,7 @@ public class FunctionActivity extends BaseActivity {
                 } else if (AppDevice.getNetworkType(getContext()) == 1) {
                     showPdf(data);
                 } else {
-                    UIHelper.toastError(mContext, "跳转出错");
+                    UIHelper.toastError(mContext, "跳转出错",null);
                 }
 
             }

@@ -5,8 +5,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
-import com.socks.library.KLog;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +13,6 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.fragment.ContactsFragment;
 import cn.gogoal.im.fragment.FoundFragment;
@@ -38,12 +35,9 @@ public class MainActivity extends BaseActivity {
     @BindArray(R.array.main_tab)
     String[] mainTabArray;
 
+
     @Override
     public void doBusiness(Context mContext) {
-
-        int i1 = AppDevice.getHeight(mContext) / 10;
-        KLog.e(i1);
-        KLog.e(AppDevice.px2dp(mContext, i1));
 
         MessageFragment messageFragment = new MessageFragment();        // TAB1 消息
 
@@ -76,10 +70,14 @@ public class MainActivity extends BaseActivity {
             }
         }
 
-        tabMain.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        vpMain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
                     case 0:
 
                         break;
@@ -97,16 +95,10 @@ public class MainActivity extends BaseActivity {
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
+            public void onPageScrollStateChanged(int state) {
+                contactsFragment.srcollShowIndexBar(state==0&&vpMain.getCurrentItem()==1);
             }
         });
-
 
     }
 }

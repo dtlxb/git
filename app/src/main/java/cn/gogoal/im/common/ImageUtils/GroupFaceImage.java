@@ -3,11 +3,7 @@ package cn.gogoal.im.common.ImageUtils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-
-import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.socks.library.KLog;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +32,6 @@ public class GroupFaceImage {
 
     public static GroupFaceImage getInstance(Context context, List<String> imageUrls) {
         GroupFaceImage instance = new GroupFaceImage(context, imageUrls);
-        KLog.e("初始化成功");
-        KLog.e(JSONObject.toJSONString(imageUrls));
         switch (imageUrls.size()) {
             case 1:
             case 2:
@@ -270,13 +264,19 @@ public class GroupFaceImage {
                 canvas.drawBitmap(bitmapList.get(6), innerWidth * 2 + 4, innerWidth * 2 + 4, null);
 
                 return result;
+
             case 8:
-                canvas.drawBitmap(bitmapList.get(0), resultWidth / 6, 0, null);
-                canvas.drawBitmap(bitmapList.get(1), resultWidth / 6 + innerWidth + 2, 0, null);
+                canvas.drawBitmap(bitmapList.get(0), innerWidth/2, 0, null);
+
+                canvas.drawBitmap(bitmapList.get(1), innerWidth/2 + 2+innerWidth ,0 , null);
 
                 canvas.drawBitmap(bitmapList.get(2), 0, innerWidth + 2, null);
                 canvas.drawBitmap(bitmapList.get(3), innerWidth + 2, innerWidth + 2, null);
                 canvas.drawBitmap(bitmapList.get(4), 2 * innerWidth + 4, innerWidth + 2, null);
+
+                canvas.drawBitmap(bitmapList.get(5), 0, innerWidth * 2 + 4, null);
+                canvas.drawBitmap(bitmapList.get(6), innerWidth + 2, innerWidth * 2 + 4, null);
+                canvas.drawBitmap(bitmapList.get(7), innerWidth * 2 + 4, innerWidth * 2 + 4, null);
 
                 return result;
 

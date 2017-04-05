@@ -67,13 +67,6 @@ public class ContactsFragment extends BaseFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-
-    }
-
-    @Override
     public void doBusiness(Context mContext) {
         setFragmentTitle(R.string.title_contacts);
 
@@ -134,6 +127,10 @@ public class ContactsFragment extends BaseFragment {
             }
         });
 
+    }
+
+    public void srcollShowIndexBar(boolean show){
+        indexBar.setVisibility(show?View.VISIBLE:View.INVISIBLE);
     }
 
     private void getData() {

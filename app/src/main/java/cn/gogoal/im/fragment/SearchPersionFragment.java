@@ -27,6 +27,8 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
+import cn.gogoal.im.ui.view.XLayout;
+
 
 /**
  * author wangjd on 2017/3/30 0030.
@@ -35,6 +37,9 @@ import cn.gogoal.im.ui.NormalItemDecoration;
  * description :${annotated}.
  */
 public class SearchPersionFragment extends BaseFragment {
+
+    @BindView(R.id.xLayout)
+    XLayout xLayout;
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -56,16 +61,16 @@ public class SearchPersionFragment extends BaseFragment {
 
         adapter = new SearchPersionResultAdapter(searchResultList);
 
-//        wrapper = new EmptyWrapper(adapter);
-//
-//        wrapper.setEmptyView(UIHelper.getEmptyView(mContext));
-
         recyclerView.setAdapter(adapter);
+
+        xLayout.setStatus(XLayout.Success);
+
     }
 
     @Subscriber(tag = "SEARCH_PERSION_TAG")
-    private void searchPersion(String keyword) {
+    private void searchPersion(final String keyword) {
         searchResultList.clear();
+        xLayout.setStatus(XLayout.Loading);
         final Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
         param.put("keyword", keyword.toUpperCase());
@@ -81,9 +86,10 @@ public class SearchPersionFragment extends BaseFragment {
 
                     searchResultList.addAll(resultList);
                     adapter.notifyDataSetChanged();
-
+                    xLayout.setStatus(XLayout.Success);
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
-
+                    xLayout.setEmptyText(String.format(getString(R.string.str_result),keyword)+"的用户");
+                    xLayout.setStatus(XLayout.Empty);
                 } else {
                     UIHelper.toastResponseError(getActivity(), responseInfo);
                 }
@@ -91,7 +97,14 @@ public class SearchPersionFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toastError(getActivity(), msg);
+                xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
+                    @Override
+                    public void onReload(View v) {
+                        searchPersion(keyword);
+                    }
+                });
+                UIHelper.toastError(getActivity(), msg,xLayout);
+
             }
         };
         new GGOKHTTP(param, GGOKHTTP.SEARCH_FRIEND, ggHttpInterface).startGet();

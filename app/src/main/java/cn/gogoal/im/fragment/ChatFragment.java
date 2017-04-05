@@ -45,8 +45,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -318,10 +316,11 @@ public class ChatFragment extends BaseFragment {
                 if (etInput.getText().toString().trim().equals("")) {
                     imgFunction.setVisibility(View.VISIBLE);
                     btnSend.setVisibility(View.INVISIBLE);
-                } else if (etInput.getText().toString().trim().equals("@")) {
+                } else if (etInput.getText().toString().trim().equals("@") && chatType == 1002) {
                     //@过后跳转加人
                     Intent intent = new Intent(getActivity(), ChooseContactActivity.class);
                     Bundle bundle = new Bundle();
+                    bundle.putString("conversation_id", imConversation.getConversationId());
                     bundle.putInt("square_action", AppConst.SQUARE_ROOM_AT_SOMEONE);
                     intent.putExtras(bundle);
                     startActivityForResult(intent, AppConst.SQUARE_ROOM_AT_SOMEONE);
@@ -335,7 +334,7 @@ public class ChatFragment extends BaseFragment {
         etInput.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_DEL) {
+                if (chatType == 1002 && keyCode == KeyEvent.KEYCODE_DEL) {
                     String backString = StringUtils.StringFilter(etInput.getText().toString());
                     etInput.setText(backString);
                     etInput.setSelection(backString.length());
@@ -403,7 +402,6 @@ public class ChatFragment extends BaseFragment {
                     if (chatType == 1001) {
                         imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
                                 "0", null != contactBean.getNickname() ? contactBean.getNickname() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), message);
-
                     } else if (chatType == 1002) {
                         imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
                                 "0", imConversation.getName(), "", "", message);
@@ -411,7 +409,6 @@ public class ChatFragment extends BaseFragment {
 
                     }
                     MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
-
 
                 }
             }
@@ -557,7 +554,6 @@ public class ChatFragment extends BaseFragment {
                 BaseMessage baseMessage = new BaseMessage("audio_info", map);
                 AppManager.getInstance().sendMessage("refresh_recyle", baseMessage);
                 message_recycler.smoothScrollToPosition(messageList.size() - 1);
-                //message_recycler.getLayoutManager().scrollToPosition(messageList.size() - 1);
 
                 UFileUpload.getInstance().upload(new File(voicePath), UFileUpload.Type.AUDIO, new UFileUpload.UploadListener() {
                     @Override

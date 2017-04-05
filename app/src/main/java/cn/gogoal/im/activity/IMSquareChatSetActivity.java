@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.IMPersonSetAdapter;
 import cn.gogoal.im.adapter.NineGridImageViewAdapter;
@@ -59,6 +60,15 @@ public class IMSquareChatSetActivity extends BaseActivity {
     @BindView(R.id.tv_square_name)
     TextView tvSquareName;
 
+    @BindView(R.id.team_size)
+    TextView tvTeamSize;
+
+    @BindView(R.id.the_square)
+    TextView the_square;
+
+    @BindView(R.id.the_brief)
+    TextView the_brief;
+
     @BindView(R.id.save_switch)
     Switch saveGroup;
 
@@ -90,9 +100,11 @@ public class IMSquareChatSetActivity extends BaseActivity {
         squareCreater = getIntent().getExtras().getString("square_creater");
         final String squareName = getIntent().getExtras().getString("squareName");
         tvSquareName.setText(squareName);
+        the_square.setText(squareName);
 
         if (null != getIntent().getExtras().getStringArrayList("group_members")) {
             groupMembers.addAll(getIntent().getExtras().getStringArrayList("group_members"));
+            tvTeamSize.setText(groupMembers.size() + "人");
         }
         JSONArray accountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationId + "_accountList_beans", null);
         //缓存中没有群信息则向后台拉取
@@ -208,7 +220,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
             JSONObject accountObject = aarray.getJSONObject(i);
             contactBeens.add(addNomoralFuns(accountObject.getString("nickname"), accountObject.getInteger("friend_id"), accountObject.getString("avatar")));
         }
-
         //测试代码,没有数据的时候拉通讯录建群
         for (int i = 0; i < contactBeens.size(); i++) {
             imageList.add(contactBeens.get(i).getAvatar().toString());
@@ -230,7 +241,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
         params.put("token", UserUtils.getToken());
         params.put("id_list", JSONObject.toJSONString(idSet));
         params.put("conv_id", conversationId);
-        Log.e("++++params", params.toString());
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -331,32 +341,17 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
     //拉取群组信息
     public void getChatGroup(List<String> groupMembers) {
-        Map<String, String> params = new HashMap<>();
-        params.put("token", UserUtils.getToken());
-        params.put("conv_id", conversationId);
-        params.put("id_list", JSONObject.toJSONString(groupMembers));
-        KLog.e(params);
-
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+        UserUtils.getChatGroup(groupMembers, conversationId, new UserUtils.getSquareInfo() {
             @Override
-            public void onSuccess(String responseInfo) {
-                Log.e("++++responseInfo", responseInfo);
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
-                if ((int) result.get("code") == 0) {
-                    if (null != result.getJSONObject("data")) {
-                        getAllContacts(result.getJSONObject("data").getJSONArray("accountList"));
-                        SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversationId + "_accountList_beans", result.getJSONObject("data").getJSONArray("accountList"));
-                    }
-                }
+            public void squareGetSuccess(JSONObject object) {
+                getAllContacts(object.getJSONArray("accountList"));
             }
 
             @Override
-            public void onFailure(String msg) {
-                KLog.json(msg);
+            public void squareGetFail(String error) {
+
             }
-        };
-        new GGOKHTTP(params, GGOKHTTP.GET_MEMBER_INFO, ggHttpInterface).startGet();
+        });
     }
 
     @Override
@@ -385,17 +380,26 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
     }
 
-    /*@OnClick({R.id.tv_do_search_conversation, R.id.getmessage_swith})
+    @OnClick({R.id.square_message_tv, R.id.tv_what_square, R.id.square_brief, R.id.save_group, R.id.tv_search_history_tv, R.id.tv_delete_square})
     void function(View view) {
         switch (view.getId()) {
-            case R.id.tv_do_search_conversation:
-                startActivity(new Intent(getActivity(), SearchActivity.class));
+            case R.id.square_message_tv:
+
                 break;
-            case R.id.getmessage_swith:
+            case R.id.tv_what_square:
+                break;
+            case R.id.square_brief:
+                break;
+            case R.id.save_group:
+                break;
+            case R.id.tv_search_history_tv:
+                startActivity(new Intent(getActivity(), SearchActivity.class));
                 break;
             case R.id.tv_delete_square:
                 break;
+            default:
+                break;
         }
-    }*/
+    }
 
 }

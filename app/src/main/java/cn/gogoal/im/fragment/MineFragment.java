@@ -102,18 +102,18 @@ public class MineFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.item_mine:
 
-                test();
+                test(0);
 
                 break;
         }
     }
 
-    private void test() {
+    private void test(int end) {
         if (endIndex >= 1) {
             Glide.get(getContext()).clearMemory();
 
             GroupFaceImage.getInstance(getActivity(),
-                    image.subList(0, endIndex)
+                    image.subList(0, end == 0 ? endIndex : end)
             ).load(new GroupFaceImage.OnMatchingListener() {
                 @Override
                 public void onSuccess(Bitmap mathingBitmap) {
