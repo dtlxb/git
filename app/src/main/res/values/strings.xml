@@ -64,6 +64,7 @@
     <string name="im_str_square_notice">群公告</string>
     <string name="im_str_square_name">群名称</string>
     <string name="im_str_square_code">群二维码</string>
+    <string name="im_str_square_brief">群简介</string>
     <string name="im_str_square_myname">我在本群昵称</string>
     <string name="im_str_clip_hangds">鼓手</string>
     <string name="im_str_no_bother">消息免打扰</string>
