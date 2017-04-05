@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.IdRes;
 import android.support.design.widget.Snackbar;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
@@ -28,6 +30,7 @@ import java.io.InputStreamReader;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.openServices.weixin.WechatOperator;
+import cn.gogoal.im.ui.view.XLayout;
 import okhttp3.Call;
 
 
@@ -87,18 +90,50 @@ public class UIHelper {
         mToast.show();
     }
 
-    public static View getEmptyView(Context context){
+    public static View getEmptyView(Context context) {
         View inflate = LayoutInflater.from(context).inflate(R.layout.view_no_data, new LinearLayout(context), false);
-        ImageView imageView= (ImageView) inflate.findViewById(R.id.img_no_data);
-        AppDevice.setViewWidth$Height(imageView,AppDevice.getWidth(context)/5,-2);
+        ImageView imageView = (ImageView) inflate.findViewById(R.id.img_no_data);
+        AppDevice.setViewWidth$Height(imageView, AppDevice.getWidth(context) / 5, -2);
         return inflate;
     }
+
+    public static void toastError(Context cont, String msg, XLayout xLayout) {
+        if (cont == null || msg == null || xLayout == null) {
+            KLog.e("执行空");
+            return;
+        }
+        if (mToast == null) {
+            KLog.e("执行错误");
+            if (AppDevice.isNetworkConnected(cont)) {
+                mToast = Toast.makeText(cont, msg, Toast.LENGTH_LONG);
+                xLayout.setStatus(XLayout.Error);
+            } else {
+                mToast = Toast.makeText(cont, "当前网络不可用", Toast.LENGTH_LONG);
+                xLayout.setStatus(XLayout.No_Network);
+            }
+        } else {
+            if (AppDevice.isNetworkConnected(cont)) {
+                mToast.setText(msg);
+                xLayout.setStatus(XLayout.Error);
+            }else {
+                mToast.setText("当前网络不可用");
+                xLayout.setStatus(XLayout.No_Network);
+            }
+            mToast.setDuration(Toast.LENGTH_LONG);
+        }
+        mToast.show();
+    }
+
     public static void toastError(Context cont, String msg) {
         if (cont == null || msg == null) {
             return;
         }
         if (mToast == null) {
-            mToast = Toast.makeText(cont, AppDevice.isNetworkConnected(cont) ? msg : "当前网络不可用", Toast.LENGTH_LONG);
+            if (AppDevice.isNetworkConnected(cont)) {
+                mToast = Toast.makeText(cont, msg, Toast.LENGTH_LONG);
+            } else {
+                mToast = Toast.makeText(cont, "当前网络不可用", Toast.LENGTH_LONG);
+            }
         } else {
             mToast.setText(msg);
             mToast.setDuration(Toast.LENGTH_LONG);
@@ -174,6 +209,10 @@ public class UIHelper {
         mSnackBar.show();
     }
 
+    public static <T extends View> T findViewById(View parent, @IdRes int id) {
+        return (T) parent.findViewById(id);
+    }
+
     /**
      * 读取raw文件夹中文本或超文本内容为字符串
      */
@@ -217,8 +256,8 @@ public class UIHelper {
      */
     public static void WXshare(int sharetType, final Context context, String url, String imageUrl, String title, String description) {
         final IWXAPI iwxapi = WechatOperator.init(context, AppConst.WEIXIN_APP_ID);
-        if (iwxapi==null){
-            UIHelper.toast(context,context.getString(R.string.donot_found_wechat));
+        if (iwxapi == null) {
+            UIHelper.toast(context, context.getString(R.string.donot_found_wechat));
             return;
         }
         final SendMessageToWX.Req req = new SendMessageToWX.Req();
@@ -271,11 +310,12 @@ public class UIHelper {
             });
         }
     }
-    public static void setRippBg(View view){
-        if (view!=null) {
+
+    public static void setRippBg(View view) {
+        if (view != null) {
             TypedValue typedValue = new TypedValue();
             view.getContext().getTheme().resolveAttribute(
-                    android.R.attr.selectableItemBackground,typedValue,true);
+                    android.R.attr.selectableItemBackground, typedValue, true);
             view.setBackgroundResource(typedValue.resourceId);
         }
     }

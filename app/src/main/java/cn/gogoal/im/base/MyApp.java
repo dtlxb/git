@@ -8,11 +8,8 @@ import com.alivc.player.AccessKey;
 import com.alivc.player.AccessKeyCallback;
 import com.alivc.player.AliVcMediaPlayer;
 import com.avos.avoscloud.AVOSCloud;
-import com.avos.avoscloud.im.v2.AVIMClient;
-import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
-import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.duanqu.qupai.jni.ApplicationGlue;
 
 import java.io.BufferedReader;
@@ -20,14 +17,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.List;
 
+import cn.gogoal.im.R;
 import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.MyConversationHandler;
 import cn.gogoal.im.common.IMHelpers.MyMessageHandler;
 import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.database.LitePalApplication;
 import cn.gogoal.im.common.permission.IPermissionListner;
+import cn.gogoal.im.ui.view.XLayout;
 
 /**
  * author wangjd on 2017/2/8 0008.
@@ -45,6 +42,22 @@ public class MyApp extends LitePalApplication {
         app = this;
 
         SPTools.initSharedPreferences(this);
+
+        XLayout.getConfig()
+                .setErrorText("出错啦~请稍后重试！")
+                .setEmptyText("抱歉，暂无数据")
+                .setNoNetworkText("无网络连接，请检查您的网络···")
+                .setErrorImage(R.mipmap.error)
+                .setEmptyImage(R.mipmap.img_no_data)
+                .setNoNetworkImage(R.mipmap.no_network)
+                .setAllTipTextColor(R.color.textColor_999999)
+                .setAllTipTextSize(14)
+                .setReloadButtonText("点我重试哦")
+                .setReloadButtonTextSize(14)
+                .setReloadButtonTextColor(R.color.textColor_999999)
+                .setReloadButtonWidthAndHeight(150,40)
+                .setAllPageBackgroundColor(android.R.color.white);
+
 
 //        //只有主进程运行的时候才需要初始化
 //        if (getApplicationInfo().packageName.equals(getMyProcessName())) {

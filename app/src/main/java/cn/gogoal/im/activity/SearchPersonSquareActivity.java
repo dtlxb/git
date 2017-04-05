@@ -22,16 +22,12 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.IconFontUtils;
 import cn.gogoal.im.fragment.SearchPersionFragment;
 import cn.gogoal.im.fragment.SearchTeamFragment;
-import cn.gogoal.im.ui.KeyboardLaunchLinearLayout;
 
 /**
  * Created by huangxx on 2017/3/28.
  */
 
 public class SearchPersonSquareActivity extends BaseActivity {
-
-    @BindView(R.id.root)
-    KeyboardLaunchLinearLayout keyboardLayout;
 
     @BindArray(R.array.searchTitle)
     String[] searchTitle;

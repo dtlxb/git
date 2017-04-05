@@ -25,6 +25,9 @@
     <color name="colorGriddivider">#e4e4e4</color>
     <color name="colorchatGrid">#f5f5f7</color>
 
+
+    <color name="colorXLayout">#9d9d9d</color>
+
     <!--直播涉及颜色-->
     <color name="live_together">#3381e3</color>
     <color name="market_interpre">#888888</color>
@@ -68,4 +71,8 @@
     <color name="stock_text_gray">#666666</color>
 
     <color name="colorSearchGray">#979797</color>
+
+    <!--<color name="base_text_color_light">#909090</color>-->
+    <!--<color name="base_loading_background">#f7f7f7</color>-->
+
 </resources>
