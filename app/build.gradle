@@ -37,9 +37,9 @@ android {
 
         multiDexEnabled true
 
-        ndk {
-            abiFilters "armeabi-v7a", "armeabi", "x86_64"
-        }
+//        ndk {
+//            abiFilters "armeabi-v7a", "armeabi", "x86_64"
+//        }
     }
 
     productFlavors {
@@ -74,6 +74,7 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
+
     splits {
         abi {
             enable true
@@ -86,18 +87,16 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "com.android.support:support-vector-drawable:$ANDROID_SUPPORT_VERSION";
-
+    compile "com.android.support:support-vector-drawable:$ANDROID_SUPPORT_VERSION"
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
     compile 'com.android.support:multidex:1.0.1'
-
-    /** 第三方依赖  */
+    /** 第三方依赖    */
     //微信登录、分享、支付依赖
     compile files('libs/libammsdk.jar')
     //网络请求
     compile 'com.zhy:okhttputils:2.6.2'
-//    compile 'com.zhy:okhttputils:2.2.1'
+    //    compile 'com.zhy:okhttputils:2.2.1'
     //消息框架
     compile 'org.simple:androideventbus:1.0.5.1'
     //注释框架
@@ -121,16 +120,14 @@ dependencies {
     compile('cn.leancloud.android:avoscloud-push:v3.15.9@aar') { transitive = true }
     //UCloud存储
     compile project(':uFileLib')
-    //阿里云播放器
-    compile files('libs/alivc-player-2.3.0.jar')
-    //阿里云推流
-    //
     //鲁班压缩
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'
     compile 'top.zibin:Luban:1.0.9'
     //个推
     compile 'com.getui:sdk:2.9.5.0'
+    //阿里云播放器
+    compile files('libs/alivc-player-2.3.0.11.jar')
     //连麦
     compile files('libs/alivc-publisher-2.0.0.24.jar')
 }

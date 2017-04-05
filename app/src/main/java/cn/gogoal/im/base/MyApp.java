@@ -4,9 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
-import com.alivc.player.AccessKey;
-import com.alivc.player.AccessKeyCallback;
-import com.alivc.player.AliVcMediaPlayer;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
@@ -85,12 +82,12 @@ public class MyApp extends LitePalApplication {
             @Override
             public void onUserAuthorize() {
                 //阿里云播放器初始化
-                AliVcMediaPlayer.init(getApplicationContext(), AppConst.businessId, new AccessKeyCallback() {
+                /*AliVcMediaPlayer.init(getApplicationContext(), AppConst.businessId, new AccessKeyCallback() {
                     @Override
                     public AccessKey getAccessToken() {
                         return new AccessKey(AppConst.accessKeyId, AppConst.accessKeySecret);
                     }
-                });
+                });*/
             }
 
             @Override
