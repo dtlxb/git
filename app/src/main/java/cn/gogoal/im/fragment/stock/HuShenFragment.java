@@ -22,6 +22,7 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.market.MarkteBean;
 import cn.gogoal.im.bean.market.StockMarketBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.XLayout;
 
@@ -111,7 +112,7 @@ public class HuShenFragment extends BaseFragment {
             public void onSuccess(String responseInfo) {
                 AppManager.getInstance().sendMessage("STOP_ANIMATION");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    markteList.clear();
+                    SPTools.saveString("MARKET_RESPONSEINFO_DATA",responseInfo);//缓存
                     reconstructData(responseInfo);
                 } else {
                     xLayout.setStatus(XLayout.Error);
@@ -139,8 +140,8 @@ public class HuShenFragment extends BaseFragment {
     }
 
     private void reconstructData(String responseInfo) {
+        markteList.clear();
         StockMarketBean.DataBean marketData = JSONObject.parseObject(responseInfo, StockMarketBean.class).getData();
-
         //大盘
         List<MarkteBean.MarketItemData> listMarket = new ArrayList<>();
         for (int i = 0; i < 4; i++) {

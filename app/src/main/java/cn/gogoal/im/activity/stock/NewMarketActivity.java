@@ -1,6 +1,7 @@
 package cn.gogoal.im.activity.stock;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -26,6 +27,7 @@ import cn.gogoal.im.fragment.stock.HKFragment;
 import cn.gogoal.im.fragment.stock.HuShenFragment;
 import cn.gogoal.im.ui.view.XTitle;
 
+import static cn.gogoal.im.fragment.stock.HuShenFragment.REFRESH_TYPE_AUTO;
 import static cn.gogoal.im.fragment.stock.HuShenFragment.REFRESH_TYPE_PARENT_BUTTON;
 
 /**
@@ -35,6 +37,9 @@ import static cn.gogoal.im.fragment.stock.HuShenFragment.REFRESH_TYPE_PARENT_BUT
  * description :行情.
  */
 public class NewMarketActivity extends BaseActivity {
+
+    private static int INTERVAL_TIME = 5000;//自动刷新间隔时间
+
     @BindView(R.id.search_market)
     AppCompatTextView searchMarket;
 
@@ -52,6 +57,8 @@ public class NewMarketActivity extends BaseActivity {
 
     private ImageView actionView;
 
+    private HuShenFragment huShenFragment;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_new_market;
@@ -60,7 +67,7 @@ public class NewMarketActivity extends BaseActivity {
     @Override
     public void doBusiness(final Context mContext) {
 
-        final HuShenFragment huShenFragment = new HuShenFragment();
+        huShenFragment = new HuShenFragment();
         final HKFragment hkFragment = new HKFragment();
         FundFragment fundFragment = new FundFragment();
         BondFragment bondFragment = new BondFragment();
@@ -106,19 +113,40 @@ public class NewMarketActivity extends BaseActivity {
     }
 
     @Subscriber(tag = "STOP_ANIMATION")
-    void stopAnimation(String msg){
-        if (rotateAnimation!=null){
-            AnimationUtils.getInstance().cancleLoadingAnime(rotateAnimation,actionView,R.mipmap.img_refresh);
-        }else {
+    void stopAnimation(String msg) {
+        if (rotateAnimation != null) {
+            AnimationUtils.getInstance().cancleLoadingAnime(rotateAnimation, actionView, R.mipmap.img_refresh);
+        } else {
             actionView.clearAnimation();
             actionView.setImageResource(R.mipmap.img_refresh);
         }
     }
 
     @Subscriber(tag = "START_ANIMATIOM")
-    void startAnimation(String msg){
+    void startAnimation(String msg) {
         rotateAnimation = AnimationUtils.getInstance().setLoadingAnime(actionView, R.mipmap.loading_fresh);
         rotateAnimation.startNow();
+    }
+
+    //定时器
+    Handler handler = new Handler();
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                handler.postDelayed(this, INTERVAL_TIME);
+                huShenFragment.setRefreshType(REFRESH_TYPE_AUTO);
+                huShenFragment.getMarketInformation();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handler.postDelayed(runnable,INTERVAL_TIME);
     }
 
     @Override
@@ -126,9 +154,9 @@ public class NewMarketActivity extends BaseActivity {
         super.onDestroy();
         try {
             rotateAnimation.cancel();
-            rotateAnimation=null;
-        }catch (Exception e){
-            rotateAnimation=null;
+            rotateAnimation = null;
+        } catch (Exception e) {
+            rotateAnimation = null;
             e.getMessage();
         }
     }
