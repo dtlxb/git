@@ -7,6 +7,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
+
+import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
 
@@ -14,14 +18,14 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.fragment.stock.BondFragment;
 import cn.gogoal.im.fragment.stock.FundFragment;
 import cn.gogoal.im.fragment.stock.HKFragment;
 import cn.gogoal.im.fragment.stock.HuShenFragment;
 import cn.gogoal.im.ui.view.XTitle;
 
-import static cn.gogoal.im.fragment.stock.HuShenFragment.REFRESH_TYPE_SWIPEREFRESH;
+import static cn.gogoal.im.fragment.stock.HuShenFragment.REFRESH_TYPE_PARENT_BUTTON;
 
 /**
  * author wangjd on 2017/4/5 0005.
@@ -43,6 +47,8 @@ public class NewMarketActivity extends BaseActivity {
     String[] marketTabTitles;
     private ArrayList<Fragment> marketFragments;
 
+    private RotateAnimation rotateAnimation;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_new_market;
@@ -52,19 +58,21 @@ public class NewMarketActivity extends BaseActivity {
     public void doBusiness(final Context mContext) {
 
         final HuShenFragment huShenFragment = new HuShenFragment();
-        HKFragment hkFragment = new HKFragment();
+        final HKFragment hkFragment = new HKFragment();
         FundFragment fundFragment = new FundFragment();
         BondFragment bondFragment = new BondFragment();
 
-        XTitle.ImageAction refreshAction = new XTitle.ImageAction(getResDrawable(R.drawable.ic_refresh_black_24dp)) {
-            @Override
-            public void actionClick(View view) {
-                UIHelper.toast(mContext, "刷新");
-                huShenFragment.setRefreshType(REFRESH_TYPE_SWIPEREFRESH);
-            }
-        };
+        setMyTitle(getString(R.string.str_market), true)
+                .addAction(
+                        new XTitle.ImageAction(getResDrawable(R.mipmap.img_refresh)) {
+                            @Override
+                            public void actionClick(View view) {
+                                huShenFragment.setRefreshType(REFRESH_TYPE_PARENT_BUTTON);
+                                rotateAnimation = AnimationUtils.getInstance().setLoadingAnime((ImageView) view, R.mipmap.loading_fresh);
+                                rotateAnimation.startNow();
+                            }
+                        });
 
-        setMyTitle(getString(R.string.str_market),true).addAction(refreshAction);
 
         marketFragments = new ArrayList<>();
 
@@ -93,4 +101,8 @@ public class NewMarketActivity extends BaseActivity {
         tablayoutMarket.setupWithViewPager(vpMarket);
     }
 
+    @Subscriber(tag = "STOP_ANIMATION")
+    void stopAnimation(String msg){
+
+    }
 }

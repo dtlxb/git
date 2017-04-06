@@ -37,9 +37,9 @@ public class HuShenFragment extends BaseFragment {
 
     public static int REFRESH_TYPE_RELOAD = 0x50012;//出错重试按钮
 
-    public static int REFRESH_TYPE_SWIPEREFRESH = 0x50012;//下拉刷新
+    public static int REFRESH_TYPE_SWIPEREFRESH = 0x50013;//下拉刷新
 
-    public static int REFRESH_TYPE_PARENT_BUTTON = 0x50013;//父activity的刷新按钮
+    public static int REFRESH_TYPE_PARENT_BUTTON = 0x50014;//父activity的刷新按钮
 
     public int refreshType = REFRESH_TYPE_RELOAD;//刷新类型
 

@@ -24,7 +24,12 @@ public class FundFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
+        commingSoon(xLayout);
+    }
+
+    private void commingSoon(XLayout xLayout){
         xLayout.setEmptyText(getString(R.string.str_coming_soon));
+        xLayout.setEmptyImage(R.mipmap.img_dev_coming_soon);
         xLayout.setStatus(XLayout.Empty);
     }
 }
