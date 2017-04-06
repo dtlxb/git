@@ -13,18 +13,14 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
-import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -33,13 +29,11 @@ import cn.gogoal.im.adapter.IMPersonSetAdapter;
 import cn.gogoal.im.adapter.NineGridImageViewAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.NineGridImageView;
@@ -84,15 +78,15 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
     @Override
     public int bindLayout() {
-        return R.layout.activity_imsquare_set;
+        return R.layout.item_imsquare_set;
     }
 
     @Override
     public void doBusiness(Context mContext) {
         setMyTitle(R.string.title_chat_person_detial, true);
         //初始化
-        personlistRecycler.setLayoutManager(new GridLayoutManager(this, 5));
-        mPersonInfoAdapter = new IMPersonSetAdapter(IMSquareChatSetActivity.this, R.layout.item_grid_foundfragment, contactBeens);
+        personlistRecycler.setLayoutManager(new GridLayoutManager(this, 6));
+        mPersonInfoAdapter = new IMPersonSetAdapter(IMSquareChatSetActivity.this, R.layout.item_square_chat_set, contactBeens);
         personlistRecycler.setAdapter(mPersonInfoAdapter);
         groupMembers = new ArrayList<>();
         //正式流程走完后
@@ -222,8 +216,10 @@ public class IMSquareChatSetActivity extends BaseActivity {
         }
         //测试代码,没有数据的时候拉通讯录建群
         for (int i = 0; i < contactBeens.size(); i++) {
-            imageList.add(contactBeens.get(i).getAvatar().toString());
-            idList.add(String.valueOf(contactBeens.get(i).getFriend_id()));
+            if (i < 4) {
+                imageList.add(contactBeens.get(i).getAvatar().toString());
+                idList.add(String.valueOf(contactBeens.get(i).getFriend_id()));
+            }
         }
         idList.add(UserUtils.getUserAccountId());
         contactBeens.add(addFunctionHead("", R.mipmap.person_add));
@@ -301,7 +297,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 KLog.e(result.get("code"));
                 if ((int) result.get("code") == 0) {
-                    UIHelper.toast(IMSquareChatSetActivity.this, "群成员添加成功!!!");
+                    UIHelper.toast(IMSquareChatSetActivity.this, "群收藏成功!!!");
                 }
             }
 
@@ -327,7 +323,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 KLog.e(result.get("code"));
                 if ((int) result.get("code") == 0) {
-                    UIHelper.toast(IMSquareChatSetActivity.this, "群成员添加成功!!!");
+                    UIHelper.toast(IMSquareChatSetActivity.this, "群已取消收藏!!!");
                 }
             }
 
@@ -380,17 +376,23 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.square_message_tv, R.id.tv_what_square, R.id.square_brief, R.id.save_group, R.id.tv_search_history_tv, R.id.tv_delete_square})
+    @OnClick({R.id.look_more_person, R.id.square_message_tv, R.id.tv_what_square, R.id.square_brief, R.id.tv_search_history_tv, R.id.tv_delete_square})
     void function(View view) {
         switch (view.getId()) {
+            case R.id.look_more_person:
+                //startActivity(new Intent(getActivity(), SearchActivity.class));
+                break;
             case R.id.square_message_tv:
-
+                Intent intent = new Intent(getActivity(), SquarePublishActivity.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putBoolean("is_creater", squareCreater.equals(UserUtils.getUserAccountId()));
+                mBundle.putString("conversation_id", conversationId);
+                intent.putExtras(mBundle);
+                startActivityForResult(intent, AppConst.SQUARE_ROOM_DELETE_ANYONE);
                 break;
             case R.id.tv_what_square:
                 break;
             case R.id.square_brief:
-                break;
-            case R.id.save_group:
                 break;
             case R.id.tv_search_history_tv:
                 startActivity(new Intent(getActivity(), SearchActivity.class));
