@@ -81,7 +81,7 @@ public class XLayout extends FrameLayout {
             throw new IllegalStateException("LoadingLayout can host only one direct child");
         }
         contentView = this.getChildAt(0);
-        if (!isFirstVisible) {
+        if (!isFirstVisible && null!=contentView) {
             contentView.setVisibility(View.GONE);
         }
         build();

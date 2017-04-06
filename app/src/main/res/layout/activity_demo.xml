@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,11 +17,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:stretchColumns="0,1"
+            android:orientation="vertical"
             android:padding="10dp"
-            android:orientation="vertical">
+            android:shrinkColumns="*"
+            android:stretchColumns="0,1,2,3">
 
             <FrameLayout>
+
                 <ImageView
                     android:id="@+id/image_ad"
                     android:layout_width="match_parent"
@@ -33,12 +36,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="#f00"
+                    android:background="#bbb"
                     android:padding="10dp"
-                    android:text="圆角矩形处理"/>
+                    android:text="圆角矩形处理"
+                    android:textColor="#fff" />
             </FrameLayout>
 
             <TableRow android:layout_marginTop="10dp">
+
                 <Button
                     android:id="@+id/setWatchLive"
                     android:text="播放器" />
@@ -50,21 +55,60 @@
             </TableRow>
 
             <TableRow>
+
                 <Button
                     android:id="@+id/btn_test"
                     android:text="测试通用弹窗" />
 
-                <Button android:id="@+id/btn_wechat"
-                    android:text="微信分享"/>
+                <Button
+                    android:id="@+id/btn_wechat"
+                    android:text="微信分享" />
             </TableRow>
 
             <TableRow>
+
                 <Button
                     android:id="@+id/btn_item_dialog"
                     android:text="itemDialog" />
+
                 <Button
                     android:id="@+id/btn_item_edit"
                     android:text="editDialog" />
+            </TableRow>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tablayout_demo"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@color/colorPrimary"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/colorPrimary"
+                app:tabTextColor="@color/textColor_333333">
+
+                <android.support.design.widget.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="沪深" />
+
+                <android.support.design.widget.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="港股" />
+
+                <android.support.design.widget.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="基金" />
+
+                <android.support.design.widget.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="债券" />
+
+            </android.support.design.widget.TabLayout>
+
+            <TableRow>
+                <android.support.v4.view.ViewPager android:id="@+id/vp_demo"
+                    />
             </TableRow>
         </TableLayout>
 

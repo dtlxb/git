@@ -67,6 +67,8 @@ import cn.gogoal.im.ui.badgeview.Badge;
 import cn.gogoal.im.ui.badgeview.BadgeView;
 import cn.gogoal.im.ui.view.XTitle;
 
+import static cn.gogoal.im.base.BaseActivity.initRecycleView;
+
 /**
  * 消息
  */
