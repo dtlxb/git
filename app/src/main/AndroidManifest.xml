@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 基础模块 END -->
 
+
     <!-- 阿里云播放器 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -29,10 +30,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <!--连麦功能所需权限-->
+    <!-- 连麦功能所需权限 -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
-    <!--release时可去掉-->
+    <!-- release时可去掉 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -82,7 +83,6 @@
             android:name=".activity.TakePhotoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
-
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".activity.PlayerActivity"
@@ -91,44 +91,29 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".activity.FunctionActivity"
-
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.SquareChatRoomActivity"
-
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.SingleChatRoomActivity"
-
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.IMRegisterActivity" />
         <activity
             android:name=".activity.ChatRoomActivity"
-
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".activity.DemoActivity" />
-
-        <activity android:name="cn.gogoal.im.activity.IMNewFrienActivity" />
-
-        <activity android:name="cn.gogoal.im.activity.IMPersonDetailActivity" />
-
+        <activity android:name=".activity.IMNewFrienActivity" />
+        <activity android:name=".activity.IMPersonDetailActivity" />
         <activity
-            android:name="cn.gogoal.im.activity.SearchPersonSquareActivity"
+            android:name=".activity.SearchPersonSquareActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-
-        <activity android:name="cn.gogoal.im.activity.SquareCollectActivity" />
-
-        <activity android:name="cn.gogoal.im.activity.IMPersonActivity" />
-
-        <activity android:name="cn.gogoal.im.activity.IMSquareChatSetActivity" />
-
-        <activity android:name=".activity.SearchActivity">
-
-        </activity>
-
-        <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity" />
+        <activity android:name=".activity.SquareCollectActivity" />
+        <activity android:name=".activity.IMPersonActivity" />
+        <activity android:name=".activity.IMSquareChatSetActivity" />
+        <activity android:name=".activity.SearchActivity"></activity>
+        <activity android:name=".wxapi.WXPayEntryActivity" />
         <activity android:name=".activity.IMAddFriendActivity" />
-
         <activity android:name=".wxapi.WXEntryActivity" />
 
         <uses-library
@@ -145,6 +130,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/TranslucentTheme" />
         <activity android:name=".activity.LiveActivity" />
+        <activity android:name=".activity.WatchLiveActivity" />
     </application>
 
 </manifest>

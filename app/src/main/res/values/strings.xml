@@ -47,6 +47,11 @@
     <string name="no_network">链接断开</string>
     <string name="video_chatting_finished">连麦结束</string>
     <string name="camera_open_failure_for_live">摄像头开启失败，无法直播</string>
+    <string name="error_stop_playing">播放出错，请退出观看！</string>
+    <string name="close_video_chatting_failed">关闭连麦失败</string>
+    <string name="camera_open_failure_for_chat">摄像头开启失败，无法连麦</string>
+    <string name="error_unknown">未知错误</string>
+    <string name="show_first_frame">显示第一帧</string>
 
     <!--权限-->
     <string name="no_camera_permission">没有权限使用摄像头，请开启摄像头权限</string>

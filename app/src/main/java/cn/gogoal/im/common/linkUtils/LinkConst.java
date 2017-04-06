@@ -27,4 +27,6 @@ public class LinkConst {
      * 超过{WatchLivePresenter#WAITING_FOR_MIX_SUCCESS_DELAY}时间还没收到Success的code，就会结束连麦
      */
     public static final int MSG_WHAT_MIX_STREAM_ERROR = 4;
+
+    public static final long INTERRUPT_DELAY = 3000;
 }

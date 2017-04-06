@@ -9,7 +9,6 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseFragment;
 
-
 public class LiveBottomFragment extends BaseFragment {
 
     @BindView(R.id.iv_beauty)

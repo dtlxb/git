@@ -23,6 +23,7 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.activity.TestActivity;
+import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseFragment;
@@ -154,6 +155,9 @@ public class MineFragment extends BaseFragment {
                             startActivity(new Intent(getActivity(), LiveActivity.class));
                             break;
                         case 1:
+                            startActivity(new Intent(getActivity(), WatchLiveActivity.class));
+                            break;
+                        case 2:
                             startActivity(new Intent(getActivity(), TestActivity.class));
                             break;
                         default:
