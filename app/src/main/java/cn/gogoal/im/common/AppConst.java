@@ -44,6 +44,10 @@ public class AppConst {
     public static final int SQUARE_ROOM_ADD_ANYONE = 1102;
     public static final int SQUARE_ROOM_DELETE_ANYONE = 1103;
     public static final int SQUARE_ROOM_AT_SOMEONE = 1104;
+    //改群名，改群简介
+    public static final int SQUARE_ROOM_EDIT_NAME = 1105;
+    public static final int SQUARE_ROOM_EDIT_BRIEF = 1106;
+    public static final int SQUARE_ROOM_EDIT_NOTICE = 1107;
 
     //阿里云播放器参数
     public static final String businessId = "video_live";

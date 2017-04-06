@@ -8,6 +8,7 @@ import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMConversationQuery;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
+import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
 import com.socks.library.KLog;
 
@@ -105,6 +106,32 @@ public class AVImClientManager {
                     }
 
                     KLog.e("FIND_CONVERSATION", "查询条件没有查找到聊天对象" + e.toString());
+                }
+            }
+        });
+    }
+
+    /**
+     * 刷新Conversation
+     */
+    public void refreshConversation(String conversationId) {
+        AVIMConversationQuery conversationQuery = avimClient.getQuery();
+        // 根据conversationId查找房间
+        conversationQuery.whereEqualTo("objectId", conversationId);
+        // 查找聊天
+        conversationQuery.findInBackground(new AVIMConversationQueryCallback() {
+            @Override
+            public void done(final List<AVIMConversation> list, AVIMException e) {
+
+                if (null == e) {
+                    if (null != list && (!list.isEmpty())) {
+                        list.get(0).fetchInfoInBackground(new AVIMConversationCallback() {
+                            @Override
+                            public void done(AVIMException e) {
+                                KLog.e(list.get(0).getConversationId());
+                            }
+                        });
+                    }
                 }
             }
         });
