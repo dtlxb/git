@@ -60,7 +60,7 @@
             android:process=":pushservice" />
         <service android:name=".servise.IntentService" />
 
-        <activity android:name=".activity.LoginActivity">
+        <activity android:name=".activity.stock.NewMarketActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -142,7 +142,7 @@
             android:theme="@style/TranslucentTheme" />
         <activity android:name=".activity.LiveActivity" />
 
-        <activity android:name=".activity.stock.NewMarketActivity"/>
+        <!--<activity android:name=".activity.stock.NewMarketActivity"/>-->
     </application>
 
 </manifest>

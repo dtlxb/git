@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/item_stock_hotindustry"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="1dp"
-    android:background="@drawable/selector_stock_item_press"
+    android:background="@drawable/selector_normal_write2gray"
     android:gravity="center"
     android:orientation="vertical"
     android:paddingBottom="10dp"
+    android:layout_marginBottom="1px"
     android:paddingTop="10dp">
-
+    <!--android:background="@drawable/selector_stock_item_press"-->
     <TextView
         android:id="@+id/tv_hot_industry_name"
         android:layout_width="wrap_content"

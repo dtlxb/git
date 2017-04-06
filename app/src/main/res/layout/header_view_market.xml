@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/head_view_market"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/selector_market_list_title_press"
     android:orientation="vertical"
     android:paddingLeft="15dp"
-    android:id="@+id/head_view_market"
     android:paddingRight="15dp">
 
     <TextView
@@ -25,4 +25,5 @@
         android:text="···"
         android:textColor="@color/stock_list_more"
         android:textSize="30sp" />
+
 </RelativeLayout>

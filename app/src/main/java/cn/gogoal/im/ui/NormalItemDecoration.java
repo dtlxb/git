@@ -19,7 +19,7 @@ public class NormalItemDecoration extends android.support.v7.widget.DividerItemD
 
     public NormalItemDecoration(Context context) {
         super(context, LinearLayoutManager.VERTICAL);
-        this.setDrawable(ContextCompat.getDrawable(context, R.drawable.shape_normal_list_divider_1dp));
+        this.setDrawable(ContextCompat.getDrawable(context, R.drawable.shape_normal_list_divider_half_dp));
     }
 
     public NormalItemDecoration(Context context, @ColorInt int color) {

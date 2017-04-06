@@ -18,6 +18,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.stock.MarketActivity;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
@@ -50,7 +51,7 @@ public class LoginActivity extends BaseActivity {
         findViewById(R.id.login).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                startActivity(new Intent(mContext,DemoActivity.class));
+                startActivity(new Intent(mContext,MarketActivity.class));
                 return true;
             }
         });

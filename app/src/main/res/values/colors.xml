@@ -22,7 +22,7 @@
     <color name="time_avg_prive">#fdc20f</color>
     <color name="out_circle">#4b94fa</color>
 
-    <color name="colorGriddivider">#e4e4e4</color>
+    <color name="colorGriddivider">#D2D2D2</color>
     <color name="colorchatGrid">#f5f5f7</color>
 
 
@@ -61,11 +61,11 @@
     <color name="index_bar_text_flag">#66000000</color>
 
     <!--股票行情-->
-    <color name="stock_market_bg">#EFEFF4</color>
-    <color name="stock_market_divider">#F0F5FB</color>
+    <color name="stock_market_bg">#f8f8f8</color>
+    <color name="stock_market_divider">#e4e4e4</color>
     <color name="stock_green">#0CB709</color>
     <color name="stockItemPress">#E2E7EC</color>
-    <color name="stock_red">#E85043</color>
+    <color name="stock_red">#f53f3f</color>
     <color name="stock_list_more">#0095FF</color>
     <color name="stock_text_black">#333333</color>
     <color name="stock_text_gray">#666666</color>
