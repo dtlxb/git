@@ -110,6 +110,10 @@
 
         <activity android:name="cn.gogoal.im.activity.SquareCollectActivity" />
 
+        <activity
+            android:name="cn.gogoal.im.activity.SquarePublishActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+
         <activity android:name="cn.gogoal.im.activity.IMPersonActivity" />
 
         <activity android:name="cn.gogoal.im.activity.IMSquareChatSetActivity" />

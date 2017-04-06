@@ -394,9 +394,6 @@ public class MessageFragment extends BaseFragment {
                             squareMessage = SPTools.getString(UserUtils.getUserAccountId() + messageBean.getConversationID() + "_square_message", "");
                         }
                         message = squareMessage;
-
-                        //群头像拼接
-//                        createGroupImage(messageBean.getConversationID(), position);
                         break;
                     case "7":
                         //群通知
@@ -472,7 +469,7 @@ public class MessageFragment extends BaseFragment {
                 String groupFaceImageName = "_" + ConversationId + ".png";
                 ImageUtils.saveBitmapFile(mathingBitmap, "imagecache", groupFaceImageName);
 
-                AppManager.getInstance().sendMessage("set_avatar", String.valueOf(position));
+                AppManager.getInstance().sendMessage("set_avatar", position + "");
             }
 
             @Override

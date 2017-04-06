@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.fragment.stock.BondFragment;
@@ -49,6 +50,8 @@ public class NewMarketActivity extends BaseActivity {
 
     private RotateAnimation rotateAnimation;
 
+    private ImageView actionView;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_new_market;
@@ -62,14 +65,15 @@ public class NewMarketActivity extends BaseActivity {
         FundFragment fundFragment = new FundFragment();
         BondFragment bondFragment = new BondFragment();
 
-        setMyTitle(getString(R.string.str_market), true)
+        actionView = (ImageView) setMyTitle(getString(R.string.str_market), true)
                 .addAction(
                         new XTitle.ImageAction(getResDrawable(R.mipmap.img_refresh)) {
                             @Override
                             public void actionClick(View view) {
                                 huShenFragment.setRefreshType(REFRESH_TYPE_PARENT_BUTTON);
-                                rotateAnimation = AnimationUtils.getInstance().setLoadingAnime((ImageView) view, R.mipmap.loading_fresh);
-                                rotateAnimation.startNow();
+                                huShenFragment.getMarketInformation();
+
+                                AppManager.getInstance().sendMessage("START_ANIMATIOM");
                             }
                         });
 
@@ -103,6 +107,29 @@ public class NewMarketActivity extends BaseActivity {
 
     @Subscriber(tag = "STOP_ANIMATION")
     void stopAnimation(String msg){
+        if (rotateAnimation!=null){
+            AnimationUtils.getInstance().cancleLoadingAnime(rotateAnimation,actionView,R.mipmap.img_refresh);
+        }else {
+            actionView.clearAnimation();
+            actionView.setImageResource(R.mipmap.img_refresh);
+        }
+    }
 
+    @Subscriber(tag = "START_ANIMATIOM")
+    void startAnimation(String msg){
+        rotateAnimation = AnimationUtils.getInstance().setLoadingAnime(actionView, R.mipmap.loading_fresh);
+        rotateAnimation.startNow();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            rotateAnimation.cancel();
+            rotateAnimation=null;
+        }catch (Exception e){
+            rotateAnimation=null;
+            e.getMessage();
+        }
     }
 }

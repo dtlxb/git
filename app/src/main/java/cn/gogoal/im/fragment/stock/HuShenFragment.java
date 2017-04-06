@@ -4,9 +4,9 @@ import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +16,7 @@ import java.util.Map;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.MarketAdapter;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.market.MarkteBean;
@@ -52,6 +53,10 @@ public class HuShenFragment extends BaseFragment {
     @BindView(R.id.swiperefreshlayout)
     SwipeRefreshLayout refreshLayout;
 
+    private MarketAdapter adapter;
+
+    private ArrayList<MarkteBean> markteList=new ArrayList<>();
+
     public void setRefreshType(int refreshType) {
         this.refreshType = refreshType;
     }
@@ -65,6 +70,10 @@ public class HuShenFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         BaseActivity.initRecycleView(rvMarket, null);
         BaseActivity.iniRefresh(refreshLayout);
+
+        adapter = new MarketAdapter(getActivity(), markteList);
+
+        rvMarket.setAdapter(adapter);
 
         getMarketInformation();
 
@@ -87,25 +96,29 @@ public class HuShenFragment extends BaseFragment {
     /**
      * 获取[大盘]、[热门行业]、[涨跌振换]列表
      */
-    private void getMarketInformation() {
+    public void getMarketInformation() {
+
+        AppManager.getInstance().sendMessage("START_ANIMATIOM");
+
         if (refreshType==REFRESH_TYPE_RELOAD) {
             xLayout.setStatus(XLayout.Loading);//loading
         }
-
-        KLog.e(refreshType);
-
         final Map<String, String> param = new HashMap<>();
         param.put("fullcode", "sh000001;sz399001;sh000300;sz399006");
         param.put("category_type", "1");
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                AppManager.getInstance().sendMessage("STOP_ANIMATION");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                    markteList.clear();
                     reconstructData(responseInfo);
                 } else {
                     xLayout.setStatus(XLayout.Error);
+                    if (refreshType==REFRESH_TYPE_PARENT_BUTTON || refreshType==REFRESH_TYPE_SWIPEREFRESH){
+                        UIHelper.toast(getContext(),"行情数据更新出错\r\n"+JSONObject.parseObject(responseInfo).getString("message"), Toast.LENGTH_LONG);
+                    }
                     refreshType=REFRESH_TYPE_RELOAD;
-                    UIHelper.toast(getActivity(), JSONObject.parseObject(responseInfo).getString("message"));
                 }
             }
 
@@ -113,6 +126,7 @@ public class HuShenFragment extends BaseFragment {
             public void onFailure(String msg) {
                 refreshType=REFRESH_TYPE_RELOAD;
                 UIHelper.toastError(getActivity(), msg, xLayout);
+                AppManager.getInstance().sendMessage("STOP_ANIMATION");
                 xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
                     @Override
                     public void onReload(View v) {
@@ -126,8 +140,6 @@ public class HuShenFragment extends BaseFragment {
 
     private void reconstructData(String responseInfo) {
         StockMarketBean.DataBean marketData = JSONObject.parseObject(responseInfo, StockMarketBean.class).getData();
-
-        List<MarkteBean> markteList = new ArrayList<>();//重构后的数据源
 
         //大盘
         List<MarkteBean.MarketItemData> listMarket = new ArrayList<>();
@@ -166,10 +178,15 @@ public class HuShenFragment extends BaseFragment {
         markteList.add(new MarkteBean("跌幅榜", addRankList(marketData.getStockRanklist().getDown_list())));
         markteList.add(new MarkteBean("换手率", addRankList(marketData.getStockRanklist().getChange_list())));
         markteList.add(new MarkteBean("振幅榜", addRankList(marketData.getStockRanklist().getAmplitude_list())));
-        xLayout.setStatus(XLayout.Success);
 
-        KLog.file("TAG", getContext().getExternalFilesDir("json"), "重构数据.txt", JSONObject.toJSONString(markteList));
-        rvMarket.setAdapter(new MarketAdapter(getActivity(), markteList));
+        xLayout.setStatus(XLayout.Success);
+        AppManager.getInstance().sendMessage("STOP_ANIMATION");
+
+        adapter.notifyDataSetChanged();
+
+        if (refreshType==REFRESH_TYPE_PARENT_BUTTON || refreshType==REFRESH_TYPE_SWIPEREFRESH){
+            UIHelper.toast(getContext(),"行情数据更新成功");
+        }
     }
 
     private List<MarkteBean.MarketItemData> addRankList(List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> list) {

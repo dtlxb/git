@@ -23,8 +23,12 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.view.XTitle;
@@ -57,7 +61,7 @@ public class SquareCollectActivity extends BaseActivity {
             @Override
             public void actionClick(View view) {
                 Intent intent = new Intent(mContext, SearchPersonSquareActivity.class);
-                intent.putExtra("search_index",1);
+                intent.putExtra("search_index", 1);
                 startActivity(intent);
             }
         });
@@ -67,19 +71,23 @@ public class SquareCollectActivity extends BaseActivity {
 
         JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_groups_saved", new JSONArray());
         Boolean needRefresh = SPTools.getBoolean("needRefresh", false);
+        KLog.e(groupsArray.toString());
+
         groupList = new ArrayList<>();
         if (needRefresh) {
             getGroupList();
         } else {
-            if (groupsArray.size()>0) {
+            if (groupsArray.size() > 0) {
                 for (int i = 0; i < groupsArray.size(); i++) {
                     groupList.add((JSONObject) groupsArray.get(i));
                 }
-            }else {
+                xLayout.setStatus(XLayout.Success);
+            } else {
                 xLayout.setStatus(XLayout.Empty);
             }
         }
-        listAdapter = new ListAdapter(SquareCollectActivity.this, R.layout.item_fragment_message, groupList);
+        KLog.e(groupList);
+        listAdapter = new ListAdapter(SquareCollectActivity.this, R.layout.item_square_collect, groupList);
         squareRoomRecycler.setAdapter(listAdapter);
 
     }
@@ -88,6 +96,7 @@ public class SquareCollectActivity extends BaseActivity {
     public void getGroupList() {
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
+        xLayout.setStatus(XLayout.Loading);
         KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
@@ -100,6 +109,7 @@ public class SquareCollectActivity extends BaseActivity {
                     for (int i = 0; i < newGroupArray.size(); i++) {
                         groupList.add((JSONObject) newGroupArray.get(i));
                     }
+                    xLayout.setStatus(XLayout.Success);
                     listAdapter.notifyDataSetChanged();
                     SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_groups_saved", newGroupArray);
                 }
@@ -108,6 +118,7 @@ public class SquareCollectActivity extends BaseActivity {
             @Override
             public void onFailure(String msg) {
                 KLog.json(msg);
+                UIHelper.toastError(getActivity(), msg, xLayout);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.GET_GROUP_LIST, ggHttpInterface).startGet();
@@ -123,14 +134,15 @@ public class SquareCollectActivity extends BaseActivity {
         protected void convert(ViewHolder holder, JSONObject groupObject, int position) {
             ImageView avatarIv = holder.getView(R.id.head_image);
             TextView timeView = holder.getView(R.id.last_time);
-            timeView.setVisibility(View.GONE);
+            TextView nameView = holder.getView(R.id.whose_message);
 
-            KLog.e(groupObject.getString("m_size"));
-            File filePath = SquareCollectActivity.this.getExternalFilesDir("imagecache");
+            KLog.e(groupObject.toString());
 
-            //ImageDisplay.loadFileImage(getmContext(), new File(ImageUtils.getBitmapFilePaht(groupObject.getString("conv_id"), filePath)), avatarIv);
-            holder.setText(R.id.last_message, groupObject.getJSONObject("attr").getString("intro") == null ? groupObject.getJSONObject("attr").getString("intro") : "");
-            holder.setText(R.id.whose_message, groupObject.getString("name") + "(" + groupObject.getString("m_size") + ")");
+            ImageDisplay.loadFileImage(getmContext(), new File(ImageUtils.getBitmapFilePaht(groupObject.getString("conv_id"), "imagecache")), avatarIv);
+            holder.setText(R.id.last_message, groupObject.getJSONObject("attr").getString("intro") != null ? groupObject.getJSONObject("attr").getString("intro") : "");
+            nameView.setMaxWidth(AppDevice.getWidth(getActivity()) - 130);
+            nameView.setText(groupObject.getString("name"));
+            timeView.setText("(" + groupObject.getString("m_size") + ")");
         }
     }
 

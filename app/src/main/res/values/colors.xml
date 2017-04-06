@@ -11,6 +11,7 @@
     <color name="textColor_999999">#999999</color> <!--字亮灰-->
     <color name="textColor_666666">#666666</color> <!--字深灰-->
     <color name="textColor_cccccc">#cccccc</color> <!--字背景灰-->
+    <color name="textColor_b2b2b2">#b2b2b2</color> <!--字背景灰-->
 
     <!--绘图涉及的颜色-->
     <color name="decision_tab">#1a79ff</color>
@@ -21,6 +22,7 @@
     <color name="time_prive">#1a79ff</color>
     <color name="time_avg_prive">#fdc20f</color>
     <color name="out_circle">#4b94fa</color>
+    <color name="square_man_tag">#72b2f2</color>
 
     <color name="colorGriddivider">#D2D2D2</color>
     <color name="colorchatGrid">#f5f5f7</color>
