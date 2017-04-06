@@ -211,6 +211,12 @@ public class GGOKHTTP {
      */
     public static final String UPDATE_GROUP_INFO = "v1/ ggm_chat/update_group_info";
 
+    /**
+     * token                         用户token
+     * friend_id                    好友用户Id
+     */
+    public static final String del_friend = "v1/ggm_im/del_friend  ";
+
 //--------------------------------------------------------------------------------------------------
 
     /**

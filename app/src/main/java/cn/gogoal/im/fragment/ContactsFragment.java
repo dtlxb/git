@@ -2,16 +2,20 @@ package cn.gogoal.im.fragment;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.socks.library.KLog;
@@ -24,6 +28,7 @@ import java.util.Map;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.IMAddFriendActivity;
+import cn.gogoal.im.activity.IMNewFrienActivity;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.activity.SquareCollectActivity;
 import cn.gogoal.im.adapter.ContactAdapter;
@@ -32,7 +37,9 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -105,7 +112,8 @@ public class ContactsFragment extends BaseFragment {
                 Intent intent;
                 //单聊处理
                 if (position == 0) {
-                    intent = new Intent(getContext(), IMAddFriendActivity.class);
+                    intent = new Intent(getContext(), IMNewFrienActivity.class);
+                    intent.putExtra("add_type", 0x01);
                     startActivity(intent);
                 } else if (position == 1) {
                     intent = new Intent(getContext(), SquareCollectActivity.class);
@@ -122,15 +130,39 @@ public class ContactsFragment extends BaseFragment {
             }
 
             @Override
-            public boolean onItemLongClick(RecyclerView.ViewHolder holder, View view, int position) {
+            public boolean onItemLongClick(RecyclerView.ViewHolder holder, View view, final int position) {
+                if (position > 1) {
+                    DialogHelp.getSelectDialog(getActivity(), "", new String[]{"删除联系人"}, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            deleteFriend(contactBeanList.get(position).getFriend_id());
+                            String string = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", null);
+                            //清除缓存中的这个人
+                            if (string != null && !(string.equals(""))) {
+                                JSONObject jsonObject = JSON.parseObject(string);
+                                if (jsonObject.get("data") != null) {
+                                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                    if (null != jsonArray) {
+                                        jsonArray.remove(position - 2);
+                                    }
+                                    jsonObject.put("data", jsonArray);
+                                    SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", JSON.toJSONString(jsonObject));
+                                }
+                            }
+                            //刷新列表
+                            contactBeanList.remove(position);
+                            contactAdapter.notifyDataSetChanged();
+                        }
+                    }, false).show();
+                }
                 return false;
             }
         });
 
     }
 
-    public void srcollShowIndexBar(boolean show){
-        indexBar.setVisibility(show?View.VISIBLE:View.INVISIBLE);
+    public void srcollShowIndexBar(boolean show) {
+        indexBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
     private void getData() {
@@ -138,10 +170,10 @@ public class ContactsFragment extends BaseFragment {
         Boolean needRefresh = SPTools.getBoolean("needRefresh", false);
         String friendResponseInfo = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", "");
         KLog.e(friendResponseInfo);
-        if (needRefresh){
+        if (needRefresh) {
             getFriendList(contactBeanList);
-        }else {
-            if (!JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()){
+        } else {
+            if (!JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()) {
                 parseContactDatas(friendResponseInfo, contactBeanList);
             }
         }
@@ -169,6 +201,27 @@ public class ContactsFragment extends BaseFragment {
         bean.setContactType(ContactBean.ContactType.FUNCTION_ITEM);
         bean.setAvatar(iconId);
         return bean;
+    }
+
+    private void deleteFriend(int friendID) {
+        Map<String, String> param = new HashMap<>();
+        param.put("token", UserUtils.getToken());
+        param.put("friend_id", String.valueOf(friendID));
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                    UIHelper.toast(getActivity(), "此人删除成功");
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.del_friend, ggHttpInterface).startGet();
     }
 
     private void getFriendList(final List<ContactBean> contactBeanList) {
