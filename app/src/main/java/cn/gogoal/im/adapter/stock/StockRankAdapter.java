@@ -78,7 +78,7 @@ public class StockRankAdapter extends CommonAdapter<RankList> {
             switch (parentPosition) {
                 case 0:
                 case 1:
-                    tvRate.setText(StockUtils.plusMinus(String.valueOf(data.getRate())));
+                    tvRate.setText(StockUtils.plusMinus(data.getRate()));
                     tvRate.setTextColor(ContextCompat.getColor(context, data.getRate() > 0 ? R.color.stock_red : R.color.stock_green));
                     break;
                 case 2://换手率

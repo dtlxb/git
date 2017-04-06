@@ -195,7 +195,12 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
      * @param dividerId:分割线对象     : 0时为默认一条直线;int值 shape资源；null(不要分割线)
      */
     public static void initRecycleView(RecyclerView recyclerView, Integer dividerId) {
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setNestedScrollingEnabled(false);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(MyApp.getAppContext());
+        layoutManager.setSmoothScrollbarEnabled(true);
+        layoutManager.setAutoMeasureEnabled(true);
         if (dividerId != null) {
             if (dividerId != 0x00) {
                 try {

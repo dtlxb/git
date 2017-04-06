@@ -8,6 +8,8 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.util.Linkify;
@@ -79,6 +81,16 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv = getView(viewId);
 //        防止空指针
         tv.setText(TextUtils.isEmpty(text)?"":text);
+        return this;
+    }
+
+    /**
+     * 设置TextView的颜色值
+     */
+    public ViewHolder setTextColor(int viewId, @ColorRes int color) {
+        TextView tv = getView(viewId);
+//        防止空指针
+        tv.setTextColor(ContextCompat.getColor(getContext(),color));
         return this;
     }
 

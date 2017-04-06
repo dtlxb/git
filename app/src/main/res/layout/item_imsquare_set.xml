@@ -60,6 +60,7 @@
                         android:lines="1"
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp"
+                        android:text="暂无群简介"
                         android:textColor="@color/textColor_666666"
                         android:textSize="17dp" />
 
@@ -74,10 +75,14 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
+                    android:id="@+id/look_more_person"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/absoluteWhite"
-                    android:padding="15dp">
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="15dp">
 
                     <TextView
                         android:id="@+id/team_size"
@@ -150,9 +155,9 @@
                         android:id="@+id/the_square"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
                         android:layout_marginLeft="65dp"
-                        android:layout_marginRight="9dp"
-                        android:layout_toLeftOf="@+id/load_more_view"
+                        android:layout_marginRight="25dp"
                         android:ellipsize="end"
                         android:lines="1"
                         android:textColor="@color/textColor_666666"
@@ -171,7 +176,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="1px"
+                    android:layout_height="0.5dp"
                     android:background="@color/colorGriddivider" />
 
                 <RelativeLayout
@@ -191,9 +196,9 @@
                         android:id="@+id/the_brief"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
                         android:layout_marginLeft="65dp"
-                        android:layout_marginRight="9dp"
-                        android:layout_toLeftOf="@+id/load_more"
+                        android:layout_marginRight="25dp"
                         android:ellipsize="end"
                         android:lines="1"
                         android:textColor="@color/textColor_666666"

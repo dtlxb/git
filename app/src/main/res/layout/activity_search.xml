@@ -99,7 +99,7 @@
 
                         <View
                             android:layout_width="0dp"
-                            android:layout_height="1px"
+                            android:layout_height="0.5dp"
                             android:layout_weight="1"
                             android:background="@color/colorSearchGray" />
 
@@ -115,7 +115,7 @@
 
                         <View
                             android:layout_width="0dp"
-                            android:layout_height="1px"
+                            android:layout_height="0.5dp"
                             android:layout_weight="1"
                             android:background="@color/colorSearchGray" />
                     </LinearLayout>

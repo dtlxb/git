@@ -92,13 +92,11 @@ public class StockUtils {
         return flag;
     }
 
-    public static String plusMinus(String rate) {
-        if (TextUtils.isEmpty(rate) ) {
-            return "--";
-        }else if (Double.parseDouble(rate)==0){
+    public static String plusMinus(double rate) {
+        if (rate==0){
             return "--";
         }
-        return (Double.parseDouble(rate)>0?"+":"") +
+        return (rate>0?"+":"") +
                 StringUtils.saveSignificand(rate, 2) + "%";
     }
 

@@ -17,6 +17,7 @@
     <string name="title_new_friend">新的朋友</string>
     <string name="title_square_collcet">我的群组</string>
     <string name="square_collcet_add">添加</string>
+    <string name="square_publish_create">创建</string>
 
     <string name="title_stock_market">股票行情</string>
 
@@ -131,5 +132,6 @@
     <string name="str_add_friend_remark">你好，我是%s</string>
     <string name="str_group_count">(%d人)</string>
     <string name="str_result">没有找到与%s相关的</string>
+    <string name="str_market">行情</string>
 
 </resources>

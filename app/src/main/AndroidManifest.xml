@@ -108,11 +108,14 @@
         <activity
             android:name=".activity.SearchPersonSquareActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".activity.SquareCollectActivity" />
-        <activity android:name=".activity.IMPersonActivity" />
-        <activity android:name=".activity.IMSquareChatSetActivity" />
-        <activity android:name=".activity.SearchActivity"></activity>
-        <activity android:name=".wxapi.WXPayEntryActivity" />
+        <activity android:name="cn.gogoal.im.activity.SquareCollectActivity" />
+        <activity
+            android:name="cn.gogoal.im.activity.SquarePublishActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity android:name="cn.gogoal.im.activity.IMPersonActivity" />
+        <activity android:name="cn.gogoal.im.activity.IMSquareChatSetActivity" />
+        <activity android:name=".activity.SearchActivity" />
+        <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity" />
         <activity android:name=".activity.IMAddFriendActivity" />
         <activity android:name=".wxapi.WXEntryActivity" />
 
@@ -131,6 +134,7 @@
             android:theme="@style/TranslucentTheme" />
         <activity android:name=".activity.LiveActivity" />
         <activity android:name=".activity.WatchLiveActivity" />
+        <activity android:name=".activity.stock.NewMarketActivity" />
     </application>
 
 </manifest>

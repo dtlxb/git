@@ -4,15 +4,17 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
+import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.socks.library.KLog;
 
 import java.util.LinkedList;
 
@@ -366,7 +368,7 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
     private View inflateAction(Action action) {
         View view;
         if (TextUtils.isEmpty(action.getText())) {
-            ImageView img = new ImageView(getContext());
+            AppCompatImageView img = new AppCompatImageView(getContext());
             img.setImageDrawable(action.getDrawable());
             view = img;
         } else {
@@ -465,6 +467,7 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
 
     public void setActionText(TextAction textaction,String text){
         TextView view = (TextView) getViewByAction(textaction);
+        KLog.e(view);
         view.setText(TextUtils.isEmpty(text)?"":text);
     }
 

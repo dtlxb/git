@@ -206,35 +206,35 @@ public class StockMarketBean {
              * industry_name : 家用电器
              */
 
-            private String industry_rate;
-            private String rate;
-            private String current_price;
+            private double industry_rate;
+            private double rate;
+            private double current_price;
             private String stock_code;
             private String stock_name;
             private String industry_code;
             private String industry_name;
 
-            public String getIndustry_rate() {
+            public double getIndustry_rate() {
                 return industry_rate;
             }
 
-            public void setIndustry_rate(String industry_rate) {
+            public void setIndustry_rate(double industry_rate) {
                 this.industry_rate = industry_rate;
             }
 
-            public String getRate() {
+            public double getRate() {
                 return rate;
             }
 
-            public void setRate(String rate) {
+            public void setRate(double rate) {
                 this.rate = rate;
             }
 
-            public String getCurrent_price() {
+            public double getCurrent_price() {
                 return current_price;
             }
 
-            public void setCurrent_price(String current_price) {
+            public void setCurrent_price(double current_price) {
                 this.current_price = current_price;
             }
 

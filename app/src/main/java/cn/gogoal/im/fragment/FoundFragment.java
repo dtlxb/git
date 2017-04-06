@@ -1,15 +1,9 @@
 package cn.gogoal.im.fragment;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -19,21 +13,14 @@ import java.util.List;
 import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.ChatRoomActivity;
-import cn.gogoal.im.activity.FunctionActivity;
-import cn.gogoal.im.activity.IMRegisterActivity;
-import cn.gogoal.im.activity.stock.MarketActivity;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.MainAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.wrapper.HeaderAndFooterWrapper;
-import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.FoundData;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.GGOKHTTP.GGAPI;
-import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.common.permission.IPermissionListner;
+
+import static cn.gogoal.im.base.BaseActivity.initRecycleView;
 
 /**
  * 应用
@@ -67,6 +54,7 @@ public class FoundFragment extends BaseFragment {
         List<FoundData> datas = getFunctionDatas();//模拟数据
 
 //      KLog.e(JSONObject.toJSON(datas).toString());
+
 
         HeaderAndFooterWrapper wraper = addHeadImage(datas);
 
@@ -137,178 +125,4 @@ public class FoundFragment extends BaseFragment {
         return datas;
     }
 
-    private class MainAdapter extends CommonAdapter<FoundData> {
-
-        private MainAdapter(Context context, int layoutId, List<FoundData> datas) {
-            super(context, layoutId, datas);
-        }
-
-        @Override
-        protected void convert(ViewHolder holder, FoundData foundData, int position) {
-            holder.setText(R.id.tv_title, foundData.getTitle());
-
-            List<FoundData.ItemPojos> itemPojos = foundData.getItemPojos();
-            if (itemPojos != null) {
-                if (itemPojos.size() % 4 == 3) {
-                    FoundData.ItemPojos itemPojos1 = new FoundData.ItemPojos("", 0, "");
-                    itemPojos.add(itemPojos1);
-                } else if (itemPojos.size() % 4 == 2) {
-                    FoundData.ItemPojos itemPojos1 = new FoundData.ItemPojos("", 0, "");
-                    itemPojos.add(itemPojos1);
-
-                    FoundData.ItemPojos itemPojos2 = new FoundData.ItemPojos("", 0, "");
-                    itemPojos.add(itemPojos2);
-                } else if (itemPojos.size() % 4 == 1) {
-                    FoundData.ItemPojos itemPojos1 = new FoundData.ItemPojos("", 0, "");
-                    itemPojos.add(itemPojos1);
-
-                    FoundData.ItemPojos itemPojos2 = new FoundData.ItemPojos("", 0, "");
-                    itemPojos.add(itemPojos2);
-
-                    FoundData.ItemPojos itemPojos3 = new FoundData.ItemPojos("", 0, "");
-                    itemPojos.add(itemPojos3);
-                }
-
-                GridAdapter gridAdapter = new GridAdapter(itemPojos, position);
-                RecyclerView recyclerView = holder.getView(R.id.rv_grid);
-                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
-                recyclerView.setAdapter(gridAdapter);
-            }
-        }
-    }
-
-    private class GridAdapter extends CommonAdapter<FoundData.ItemPojos> {
-
-        private int parentPosition;
-
-        private GridAdapter(List<FoundData.ItemPojos> datas, int parentPosition) {
-            super(getActivity(), R.layout.item_grid_foundfragment, datas);
-            this.parentPosition = parentPosition;
-        }
-
-        @Override
-        protected void convert(ViewHolder holder, final FoundData.ItemPojos itemPojos, final int position) {
-
-            final View view = holder.getView(R.id.layout_grid);
-
-            if (TextUtils.isEmpty(itemPojos.getUrl())) {
-                view.setEnabled(false);
-            }
-
-            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-
-            layoutParams.width = (AppDevice.getWidth(getContext()) - AppDevice.dp2px(getContext(), 3)) / 4;
-
-            layoutParams.height = (AppDevice.getWidth(getContext()) - AppDevice.dp2px(getContext(), 3)) / 4;
-
-            view.setLayoutParams(layoutParams);
-
-            holder.setText(R.id.tv, itemPojos.getItemTextDescription());
-
-            ImageView imageIcon = holder.getView(R.id.iv);
-            ViewGroup.LayoutParams viewParams = imageIcon.getLayoutParams();
-            viewParams.width = AppDevice.getWidth(getContext()) / 10;
-            viewParams.height = AppDevice.getWidth(getContext()) / 10;
-            imageIcon.setLayoutParams(viewParams);
-
-            if (itemPojos.getIconRes() != 0) {
-                ImageDisplay.loadResImage(getContext(), itemPojos.getIconRes(), imageIcon);
-            }
-
-            final TypedValue typeValue = new TypedValue();
-
-            getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, typeValue, true);
-
-            holder.setOnClickListener(R.id.layout_grid, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!TextUtils.isEmpty(itemPojos.getUrl())) {//由于增加了headView,所以父Item是从1开始的
-                        switch (parentPosition) {
-
-                            //由于增加了headView,所以父Item是从1开始的
-                            case 1:
-                                gridItemClick_0(position, itemPojos);//我的活动
-                                break;
-                            case 2:
-                                gridItemClick_1(position, itemPojos);//股票投研
-                                break;
-                            case 3:
-                                gridItemClick_2(position, itemPojos);//测试-股票
-                                break;
-                        }
-                    }
-                }
-            });
-        }
-
-        //我的活动
-        private void gridItemClick_0(int position, FoundData.ItemPojos itemPojos) {
-            Intent intent = new Intent(getContext(), FunctionActivity.class);
-            intent.putExtra("title", itemPojos.getItemTextDescription());
-            switch (position) {
-                case 0:
-//                    intent.putExtra("function_url", itemPojos.getUrl());
-                    intent.putExtra("function_url", GGAPI.WEB_URL + "/live/list");
-                    startActivity(intent);
-                    break;
-                case 1:
-                    intent.putExtra("function_url", GGAPI.WEB_URL + "/research");
-                    startActivity(intent);
-                    break;
-                case 2:
-                    BaseActivity.requestRuntimePermission(new String[]{Manifest.permission.RECORD_AUDIO}, new IPermissionListner() {
-                        @Override
-                        public void onUserAuthorize() {
-                            startActivity(new Intent(getContext(), ChatRoomActivity.class));
-                        }
-
-                        @Override
-                        public void onRefusedAuthorize(List<String> deniedPermissions) {
-                            UIHelper.toast(getContext(), "录音权限被拒，录音无法使用");
-                        }
-                    });
-                    break;
-                case 3:
-                    startActivity(new Intent(getContext(), IMRegisterActivity.class));
-                    break;
-                case 4:
-                    intent.putExtra("function_url", "file:///android_asset/demo.html");
-                    startActivity(intent);
-                    break;
-            }
-        }
-
-        //股票投研
-        private void gridItemClick_1(int position, FoundData.ItemPojos itemPojos) {
-            switch (position) {
-                case 0:
-                    Intent intent = new Intent(getContext(), FunctionActivity.class);
-                    intent.putExtra("title", itemPojos.getItemTextDescription());
-                    //intent.putExtra("function_url", itemPojos.getItemTextDescription());
-                    intent.putExtra("function_url", GGAPI.WEB_URL + "/report");
-                    startActivity(intent);
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-            }
-        }
-
-        //测试模块——股票
-        private void gridItemClick_2(int position, FoundData.ItemPojos itemPojos) {
-            switch (position) {
-                case 0:
-                    startActivity(new Intent(getContext(), MarketActivity.class));
-                    break;
-                case 3:
-                    Intent intent = new Intent(getContext(), FunctionActivity.class);
-                    intent.putExtra("title", itemPojos.getItemTextDescription());
-                    //intent.putExtra("function_url", itemPojos.getItemTextDescription());
-                    intent.putExtra("function_url", GGAPI.WEB_URL + "/text");
-                    startActivity(intent);
-                    break;
-            }
-        }
-    }
 }

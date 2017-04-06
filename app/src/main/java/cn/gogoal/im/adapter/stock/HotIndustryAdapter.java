@@ -3,7 +3,6 @@ package cn.gogoal.im.adapter.stock;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -38,15 +37,16 @@ public class HotIndustryAdapter extends CommonAdapter<StockMarketBean.DataBean.H
 
         ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
         params.width = (AppDevice.getWidth(context) - AppDevice.dp2px(context, 2)) / 3;
+
         holder.setText(R.id.tv_hot_industry_name, data.getIndustry_name());
 
         TextView tvRate=holder.getView(R.id.tv_hot_industry_rate);
         tvRate.setText(StockUtils.plusMinus(data.getIndustry_rate()));
 
-        if (TextUtils.isEmpty(data.getIndustry_rate())){
+        if (data.getIndustry_rate()==0){
             tvRate.setTextColor(Color.GRAY);
         }else {
-            tvRate.setTextColor(ContextCompat.getColor(context,Double.parseDouble(data.getIndustry_rate()) > 0 ?
+            tvRate.setTextColor(ContextCompat.getColor(context,data.getIndustry_rate() > 0 ?
                     R.color.stock_red:R.color.stock_green));
         }
 

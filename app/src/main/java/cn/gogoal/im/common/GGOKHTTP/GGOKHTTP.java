@@ -196,6 +196,27 @@ public class GGOKHTTP {
      */
     public static final String SEARCH_GROUP = "v1/ggm_chat/search_group";
 
+    /**
+     * token                         用户token
+     * conv_id                       会话id
+     */
+    public static final String GET_GROUP_INFO = "v1/ggm_chat/get_group_info";
+
+    /**
+     * token                         用户token
+     * conv_id                       会话id
+     * group_name                    更改群名
+     * group_notice                  更改群公告
+     * group_intro                   更改群简介
+     */
+    public static final String UPDATE_GROUP_INFO = "v1/ ggm_chat/update_group_info";
+
+    /**
+     * token                         用户token
+     * friend_id                    好友用户Id
+     */
+    public static final String del_friend = "v1/ggm_im/del_friend  ";
+
 //--------------------------------------------------------------------------------------------------
 
     /**

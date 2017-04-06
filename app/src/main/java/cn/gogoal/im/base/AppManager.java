@@ -131,7 +131,7 @@ public class AppManager {
      * 发送消息
      */
     public void sendMessage(String tag) {
-        EventBus.getDefault().post(new BaseMessage(), tag);
+        sendMessage(tag,"");
     }
 
     public void sendMessage(String tag, String code) {
