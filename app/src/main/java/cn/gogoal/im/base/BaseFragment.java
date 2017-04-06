@@ -48,6 +48,7 @@ public abstract class BaseFragment extends Fragment implements IBase {
 
     public XTitle setFragmentTitle(String title) {
         XTitle fragmentTitle = (XTitle) view.findViewById(R.id.title_bar);
+        fragmentTitle.setVisibility(View.VISIBLE);
         if (!TextUtils.isEmpty(title)) {
             fragmentTitle.setTitle(title);
             fragmentTitle.setTitleColor(Color.BLACK);

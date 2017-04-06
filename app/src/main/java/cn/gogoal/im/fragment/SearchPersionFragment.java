@@ -49,7 +49,7 @@ public class SearchPersionFragment extends BaseFragment {
 
     @Override
     public int bindLayout() {
-        return R.layout.fragment_search_persion;
+        return R.layout.layout_normal_list_without_refresh;
     }
 
     @Override

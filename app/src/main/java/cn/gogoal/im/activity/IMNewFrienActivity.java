@@ -26,7 +26,6 @@ import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.IMNewFriendBean;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
@@ -50,12 +49,12 @@ public class IMNewFrienActivity extends BaseActivity {
     private List<IMMessageBean> IMMessageBeans = new ArrayList<>();
     private int addType;
     private String conversationId;
-    @BindView(R.id.new_friend_list)
+    @BindView(R.id.recyclerView)
     RecyclerView newFriendList;
 
     @Override
     public int bindLayout() {
-        return R.layout.activity_im_newfriend;
+        return R.layout.layout_normal_list_without_refresh;
     }
 
     @Override

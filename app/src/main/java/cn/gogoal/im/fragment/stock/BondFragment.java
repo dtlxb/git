@@ -20,7 +20,7 @@ public class BondFragment extends BaseFragment {
 
     @Override
     public int bindLayout() {
-        return R.layout.fragment_bond;
+        return R.layout.layout_normal_list_without_refresh;
     }
 
     @Override

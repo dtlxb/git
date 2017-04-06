@@ -147,6 +147,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     public XTitle setMyTitle(String title, boolean canBack) {
         XTitle xTitle = (XTitle) findViewById(R.id.title_bar);
+        xTitle.setVisibility(View.VISIBLE);
         if (!TextUtils.isEmpty(title)) {
             xTitle.setTitle(title);
             xTitle.setTitleColor(Color.BLACK);

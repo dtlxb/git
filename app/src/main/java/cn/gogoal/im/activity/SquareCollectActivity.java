@@ -39,7 +39,7 @@ import cn.gogoal.im.ui.view.XTitle;
 
 public class SquareCollectActivity extends BaseActivity {
 
-    @BindView(R.id.square_room_recycler)
+    @BindView(R.id.recyclerView)
     RecyclerView squareRoomRecycler;
 
     @BindView(R.id.xLayout)
@@ -51,7 +51,7 @@ public class SquareCollectActivity extends BaseActivity {
 
     @Override
     public int bindLayout() {
-        return R.layout.activity_square_collcet;
+        return R.layout.layout_normal_list_without_refresh;
     }
 
     @Override

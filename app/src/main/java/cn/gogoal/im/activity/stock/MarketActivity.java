@@ -1,92 +1,63 @@
 package cn.gogoal.im.activity.stock;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Handler;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.view.animation.RotateAnimation;
-import android.widget.AdapterViewFlipper;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-import com.alibaba.fastjson.JSONObject;
-import com.hply.imagepicker.view.StatusBarUtil;
+import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
+import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.wrapper.HeaderAndFooterWrapper;
-import cn.gogoal.im.adapter.stock.AdViewAdapter;
-import cn.gogoal.im.adapter.stock.HotIndustryAdapter;
-import cn.gogoal.im.adapter.stock.MarketAdapter;
-import cn.gogoal.im.adapter.stock.StockRankAdapter;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.market.RankList;
-import cn.gogoal.im.bean.market.StockMarketBanner;
-import cn.gogoal.im.bean.market.StockMarketBean;
 import cn.gogoal.im.common.AnimationUtils;
-import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.ClickUtils;
-import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.ui.view.CustomNestedScrollView;
+import cn.gogoal.im.fragment.stock.BondFragment;
+import cn.gogoal.im.fragment.stock.FundFragment;
+import cn.gogoal.im.fragment.stock.HKFragment;
+import cn.gogoal.im.fragment.stock.HuShenFragment;
 import cn.gogoal.im.ui.view.XTitle;
 
+import static cn.gogoal.im.fragment.stock.HuShenFragment.REFRESH_TYPE_AUTO;
+import static cn.gogoal.im.fragment.stock.HuShenFragment.REFRESH_TYPE_PARENT_BUTTON;
+
 /**
- * author wangjd on 2017/3/13 0013.
+ * author wangjd on 2017/4/5 0005.
  * Staff_id 1375
  * phone 18930640263
- * description:行情
+ * description :行情.
  */
-
 public class MarketActivity extends BaseActivity {
 
-    // 大盘
-    @BindView(R.id.rv_market)
-    RecyclerView rvMarket;
+    private static int INTERVAL_TIME = 5000;//自动刷新间隔时间
 
-    //广告
-    @BindView(R.id.flipper_ad)
-    AdapterViewFlipper flipperAd;
+    @BindView(R.id.search_market)
+    AppCompatTextView searchMarket;
 
-    //热门行业
-    @BindView(R.id.rv_hot)
-    RecyclerView rvHotIndustry;
+    @BindView(R.id.tablayout_market)
+    TabLayout tablayoutMarket;
 
-    // 涨、跌、振、换列表
-    @BindView(R.id.rv_sort_list)
-    RecyclerView rvSortList;
+    @BindView(R.id.vp_market)
+    ViewPager vpMarket;
 
-    @BindView(R.id.swipeRefreshLayout)
-    SwipeRefreshLayout swipeRefreshLayout;
+    @BindArray(R.array.market_tab_top)
+    String[] marketTabTitles;
+    private ArrayList<Fragment> marketFragments;
 
-    @BindView(R.id.nestedScrollView)
-    CustomNestedScrollView scrollView;
-
-    private Handler handler = new Handler();
-    private Runnable runnable = new Runnable() {
-        public void run() {
-            getMarketInformation();
-            getMarketAd();
-//                KLog.e(StockUtils.getCurrentTime("HH:mm:ss"));
-            handler.postDelayed(this, 5000);
-        }
-    };
     private RotateAnimation rotateAnimation;
 
-    private ImageView refreshButton;
+    private ImageView actionView;
+
+    private HuShenFragment huShenFragment;
 
     @Override
     public int bindLayout() {
@@ -94,212 +65,99 @@ public class MarketActivity extends BaseActivity {
     }
 
     @Override
-    public void doBusiness(Context mContext) {
-        iniTitle();
-        iniRefresh(swipeRefreshLayout);
-        setRecycle(new GridLayoutManager(getActivity(), 2), rvMarket);
-        setRecycle(new GridLayoutManager(getActivity(), 3), rvHotIndustry);
-        setRecycle(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false), rvSortList);
-        getMarketInformation();
-        getMarketAd();
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+    public void doBusiness(final Context mContext) {
+
+        huShenFragment = new HuShenFragment();
+        final HKFragment hkFragment = new HKFragment();
+        FundFragment fundFragment = new FundFragment();
+        BondFragment bondFragment = new BondFragment();
+
+        actionView = (ImageView) setMyTitle(getString(R.string.str_market), true)
+                .addAction(
+                        new XTitle.ImageAction(getResDrawable(R.mipmap.img_refresh)) {
+                            @Override
+                            public void actionClick(View view) {
+                                huShenFragment.setRefreshType(REFRESH_TYPE_PARENT_BUTTON);
+                                huShenFragment.getMarketInformation();
+
+                                AppManager.getInstance().sendMessage("START_ANIMATIOM");
+                            }
+                        });
+
+
+        marketFragments = new ArrayList<>();
+
+        marketFragments.add(huShenFragment);
+        marketFragments.add(hkFragment);
+        marketFragments.add(fundFragment);
+        marketFragments.add(bondFragment);
+
+        vpMarket.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
-            public void onRefresh() {
-                new android.os.Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getMarketInformation();
-                        getMarketAd();
-                        if (rotateAnimation != null) {
-                            AnimationUtils.getInstance().setLoadingAnime(refreshButton, R.mipmap.loading_fresh);
-                        }
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 2000);
+            public Fragment getItem(int position) {
+                return marketFragments.get(position);
+            }
+
+            @Override
+            public int getCount() {
+                return marketFragments.size();
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return marketTabTitles[position];
             }
         });
-
-        startRefresh();
-        scrollView.setOnScrollingStateChangeListener(new CustomNestedScrollView.onScrolliingStatesChangeListener() {
-            public void onScrolling() {
-                stopRefresh();
-            }
-
-            public void stopScrolling() {
-                startRefresh();
-            }
-        });
-
+        vpMarket.setOffscreenPageLimit(3);
+        tablayoutMarket.setupWithViewPager(vpMarket);
     }
+
+    @Subscriber(tag = "STOP_ANIMATION")
+    void stopAnimation(String msg) {
+        if (rotateAnimation != null) {
+            AnimationUtils.getInstance().cancleLoadingAnime(rotateAnimation, actionView, R.mipmap.img_refresh);
+        } else {
+            actionView.clearAnimation();
+            actionView.setImageResource(R.mipmap.img_refresh);
+        }
+    }
+
+    @Subscriber(tag = "START_ANIMATIOM")
+    void startAnimation(String msg) {
+        rotateAnimation = AnimationUtils.getInstance().setLoadingAnime(actionView, R.mipmap.img_loading_refresh);
+        rotateAnimation.startNow();
+    }
+
+    //定时器
+    Handler handler = new Handler();
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                handler.postDelayed(this, INTERVAL_TIME);
+                huShenFragment.setRefreshType(REFRESH_TYPE_AUTO);
+                huShenFragment.getMarketInformation();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     @Override
-    public void setStatusBar() {
-    }
-
-    //初始化标题
-    private void iniTitle() {
-        StatusBarUtil.with(MarketActivity.this).setColor(getResColor(R.color.colorAccent));
-        XTitle title = setMyTitle(R.string.title_stock_market, true)
-                .setTitleColor(Color.WHITE)
-                .setLeftTextColor(Color.WHITE)
-                .setLeftImageResource(R.mipmap.image_title_back_255);
-        title.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
-
-        //添加action
-
-        XTitle.ImageAction action = new XTitle.ImageAction(ContextCompat.getDrawable(getActivity(), R.mipmap.refresh_white)) {
-            @Override
-            public void actionClick(View view) {
-                rotateAnimation = AnimationUtils.getInstance().setLoadingAnime((ImageView) view, R.mipmap.loading_fresh);
-                rotateAnimation.startNow();
-                swipeRefreshLayout.setRefreshing(true);
-            }
-        };
-
-        refreshButton = (ImageView) title.addAction(action, 0);
-
-        title.getViewByTitle().setOnClickListener(new ClickUtils(new ClickUtils.OnSuperClickListener() {
-            @Override
-            public void onClick(View v) {
-                UIHelper.toast(getActivity(), "single click");
-            }
-
-            @Override
-            public void onDoubleClick(View v) {
-                UIHelper.toast(getActivity(), "double click");
-            }
-        }));
-    }
-
-    private void startRefresh() {
-        handler.removeCallbacks(runnable);
-        handler.postDelayed(runnable, 1000);
-    }
-
-    private void stopRefresh() {
-        handler.removeCallbacks(runnable);
-    }
-
-    private void setRecycle(RecyclerView.LayoutManager layoutManager, RecyclerView recyclerView) {
-        if (layoutManager instanceof LinearLayoutManager) {
-            ((LinearLayoutManager) layoutManager).setSmoothScrollbarEnabled(true);
-        }
-        layoutManager.setAutoMeasureEnabled(true);
-
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setNestedScrollingEnabled(false);
-    }
-
-    /**
-     * 获取[大盘]、[热门行业]、[涨跌振换]列表
-     */
-    private void getMarketInformation() {
-        final Map<String, String> param = new HashMap<>();
-        param.put("fullcode", "sh000001;sz399001;sh000300;sz399006");
-        param.put("category_type", "1");
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-//                KLog.e(responseInfo);
-                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    SPTools.saveString("market_data", responseInfo);//缓存大盘数据
-                    parseMarketData(responseInfo);
-                } else {
-                    UIHelper.toast(getActivity(), JSONObject.parseObject(responseInfo).getString("message"));
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                UIHelper.toastError(getActivity(), msg);
-            }
-        };
-        new GGOKHTTP(param, GGOKHTTP.APP_HQ_INFORMATION, ggHttpInterface).startGet();
-    }
-
-    /**
-     * 跑马灯数据解析
-     */
-    private void getMarketAd() {
-        Map<String, String> param = new HashMap<String, String>();
-        param.put("product", "4");
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-//                KLog.e(responseInfo);
-                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    SPTools.saveJsonArray("marketAdData", JSONObject.parseObject(responseInfo).getJSONArray("data"));
-                    parseBannerData(responseInfo);
-                } else if (JSONObject.parseObject(responseInfo).getIntValue("code")==1001){
-
-                }else {
-                    UIHelper.toastResponseError(getActivity(), responseInfo);
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                UIHelper.toastError(getActivity(), msg);
-            }
-        };
-        new GGOKHTTP(param, GGOKHTTP.BANNER_LIST, ggHttpInterface).startGet();
-    }
-
-    /**
-     * 大盘数据解析
-     */
-    private void parseMarketData(String responseInfo) {
-        StockMarketBean stockMarketBean = JSONObject.parseObject(responseInfo, StockMarketBean.class);
-        StockMarketBean.DataBean marketData = stockMarketBean.getData();
-
-        //设置大盘
-        MarketAdapter adapter = new MarketAdapter(getActivity(),marketData.getHangqing());
-        rvMarket.setAdapter(adapter);
-
-        // 设置热门行业
-        HotIndustryAdapter hotIndustryAdapter = new HotIndustryAdapter(getActivity(),marketData.getHostIndustrylist());
-        HeaderAndFooterWrapper headWraper = new HeaderAndFooterWrapper(hotIndustryAdapter);
-
-        View hotHeadView = LayoutInflater.from(getActivity()).inflate(R.layout.header_view_market, new LinearLayout(getActivity()), false);
-        headWraper.addHeaderView(hotHeadView);
-        rvHotIndustry.setAdapter(headWraper);
-
-        //设置[涨跌振换]列表
-        String[] rankTitles = getResources().getStringArray(R.array.rank_list_arr);
-        List<RankList> rankLists = new ArrayList<>();
-
-        rankLists.add(new RankList(rankTitles[0], marketData.getStockRanklist().getIncrease_list()));
-        rankLists.add(new RankList(rankTitles[1], marketData.getStockRanklist().getDown_list()));
-        rankLists.add(new RankList(rankTitles[2], marketData.getStockRanklist().getChange_list()));
-        rankLists.add(new RankList(rankTitles[3], marketData.getStockRanklist().getAmplitude_list()));
-
-        StockRankAdapter rankAdapter = new StockRankAdapter(getActivity(), rankLists);
-        rvSortList.setAdapter(rankAdapter);
-
-        swipeRefreshLayout.setRefreshing(false);
-
-        if (refreshButton != null) {
-            AnimationUtils.getInstance().cancleLoadingAnime(rotateAnimation, refreshButton, R.mipmap.refresh_white);
-        }
-    }
-
-    /**
-     * 跑马灯广告数据解析
-     */
-    private void parseBannerData(String responseInfo) {
-        List<StockMarketBanner.DataBeanX> bannerData = JSONObject.parseObject(responseInfo, StockMarketBanner.class).getData();
-        flipperAd.setAdapter(new AdViewAdapter(bannerData));
-        ObjectAnimator inAnimator = ObjectAnimator.ofFloat(flipperAd, "translationY", AppDevice.dp2px(getActivity(), 30), 0).setDuration(800);
-        ObjectAnimator outAnimator = ObjectAnimator.ofFloat(flipperAd, "translationY", 0, -AppDevice.dp2px(getActivity(), 30)).setDuration(800);
-        flipperAd.setInAnimation(inAnimator);
-        flipperAd.setOutAnimation(outAnimator);
-        flipperAd.startFlipping();
+    protected void onResume() {
+        super.onResume();
+        handler.postDelayed(runnable,INTERVAL_TIME);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopRefresh();
+        try {
+            rotateAnimation.cancel();
+            rotateAnimation = null;
+        } catch (Exception e) {
+            rotateAnimation = null;
+            e.getMessage();
+        }
     }
 }

@@ -74,7 +74,7 @@ import static cn.gogoal.im.base.BaseActivity.initRecycleView;
  */
 public class MessageFragment extends BaseFragment {
 
-    @BindView(R.id.message_recycler)
+    @BindView(R.id.recyclerView)
     RecyclerView message_recycler;
 
     private List<IMMessageBean> IMMessageBeans = new ArrayList<>();
@@ -90,7 +90,7 @@ public class MessageFragment extends BaseFragment {
 
     @Override
     public int bindLayout() {
-        return R.layout.fragment_message;
+        return R.layout.layout_normal_list_without_refresh;
     }
 
     @Override

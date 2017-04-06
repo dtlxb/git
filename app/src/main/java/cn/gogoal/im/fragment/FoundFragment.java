@@ -23,11 +23,11 @@ import cn.gogoal.im.common.UIHelper;
 import static cn.gogoal.im.base.BaseActivity.initRecycleView;
 
 /**
- * 应用
+ * 投研
  */
 public class FoundFragment extends BaseFragment {
 
-    @BindView(R.id.rv_found)
+    @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
     @BindArray(R.array.found_fun0)
@@ -42,7 +42,7 @@ public class FoundFragment extends BaseFragment {
 
     @Override
     public int bindLayout() {
-        return R.layout.fragment_found;
+        return R.layout.layout_normal_list_without_refresh;
     }
 
     @Override

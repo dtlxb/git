@@ -17,7 +17,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ChatRoomActivity;
 import cn.gogoal.im.activity.FunctionActivity;
 import cn.gogoal.im.activity.IMRegisterActivity;
-import cn.gogoal.im.activity.stock.NewMarketActivity;
+import cn.gogoal.im.activity.stock.MarketActivity;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseActivity;
@@ -199,7 +199,7 @@ public class MainAdapter extends CommonAdapter<FoundData> {
         private void gridItemClick_2(int position, FoundData.ItemPojos itemPojos) {
             switch (position) {
                 case 0:
-                    context.startActivity(new Intent(context, NewMarketActivity.class));
+                    context.startActivity(new Intent(context, MarketActivity.class));
                     break;
                 case 3:
                     Intent intent = new Intent(context, FunctionActivity.class);

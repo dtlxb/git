@@ -2,10 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    tools:context=".activity.SquareCollectActivity">
+    android:orientation="vertical">
+
+    <!--通用列表布局——title+list+下拉刷新-->
 
     <include layout="@layout/include_title" />
 
@@ -16,7 +15,7 @@
         android:layout_weight="1">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/square_room_recycler"
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
