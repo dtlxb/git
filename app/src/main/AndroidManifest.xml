@@ -110,6 +110,8 @@
 
         <activity android:name="cn.gogoal.im.activity.SquareCollectActivity" />
 
+        <activity android:name="cn.gogoal.im.activity.OfficialAccountsActivity" />
+
         <activity android:name="cn.gogoal.im.activity.EditSquareBriefActivity" />
 
         <activity
@@ -148,7 +150,7 @@
             android:theme="@style/TranslucentTheme" />
         <activity android:name=".activity.LiveActivity" />
 
-        <activity android:name=".activity.stock.NewMarketActivity"/>
+        <activity android:name=".activity.stock.NewMarketActivity" />
     </application>
 
 </manifest>

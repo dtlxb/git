@@ -35,6 +35,8 @@ public class MyMessageHandler extends AVIMMessageHandler {
                 @Override
                 public void joinSuccess(final AVIMConversation conversation) {
                     KLog.e(message.getContent());
+                    KLog.e(conversation.getName());
+                    KLog.e(conversation.getConversationId());
                     //接收到消息，发送出去
                     if (clientID.equals(client.getClientId())) {
                         //剔除自己消息
@@ -104,6 +106,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
 
                                 case 1006:
                                     //公众号
+                                    sendIMMessage(message, conversation);
                                     break;
                                 case 1007:
                                     //群通知

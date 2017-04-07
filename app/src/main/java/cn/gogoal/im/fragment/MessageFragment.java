@@ -40,6 +40,7 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ChooseContactActivity;
 import cn.gogoal.im.activity.IMNewFrienActivity;
+import cn.gogoal.im.activity.OfficialAccountsActivity;
 import cn.gogoal.im.activity.SearchPersonSquareActivity;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
@@ -126,7 +127,7 @@ public class MessageFragment extends BaseFragment {
         jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
         IMMessageBeans.clear();
         IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
-
+        KLog.e(IMMessageBeans);
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
             //按照时间排序
             Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
@@ -148,11 +149,11 @@ public class MessageFragment extends BaseFragment {
                 AVImClientManager.getInstance().findConversationById(conversation_id, new AVImClientManager.ChatJoinManager() {
                     @Override
                     public void joinSuccess(AVIMConversation conversation) {
-                        String chat_type = conversation.getAttribute("chat_type") == null ? "1001" : conversation.getAttribute("chat_type").toString();
+                        int chat_type = (int) conversation.getAttribute("chat_type");
                         Intent intent;
                         Bundle bundle = new Bundle();
                         switch (chat_type) {
-                            case "1001":
+                            case 1001:
                                 //单聊处理
                                 intent = new Intent(getContext(), SingleChatRoomActivity.class);
                                 bundle.putString("conversation_id", conversation_id);
@@ -161,7 +162,7 @@ public class MessageFragment extends BaseFragment {
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                                 break;
-                            case "1002":
+                            case 1002:
                                 //群聊处理
                                 intent = new Intent(getContext(), SquareChatRoomActivity.class);
                                 bundle.putString("conversation_id", conversation_id);
@@ -170,20 +171,26 @@ public class MessageFragment extends BaseFragment {
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                                 break;
-                            case "1003":
+                            case 1003:
                                 //直播处理
                                 intent = new Intent(getContext(), SquareChatRoomActivity.class);
                                 intent.putExtra("conversation_id", conversation_id);
                                 startActivity(intent);
                                 break;
-                            case "1004":
+                            case 1004:
                                 //系统处理
                                 intent = new Intent(getContext(), IMNewFrienActivity.class);
                                 intent.putExtra("conversation_id", conversation_id);
                                 intent.putExtra("add_type", 0x01);
                                 startActivity(intent);
                                 break;
-                            case "1007":
+                            case 1006:
+                                //公众号(直播)
+                                intent = new Intent(getContext(), OfficialAccountsActivity.class);
+                                intent.putExtra("conversation_id", conversation_id);
+                                startActivity(intent);
+                                break;
+                            case 1007:
                                 //入群申请
                                 intent = new Intent(getContext(), IMNewFrienActivity.class);
                                 intent.putExtra("conversation_id", conversation_id);
@@ -197,7 +204,7 @@ public class MessageFragment extends BaseFragment {
 
                     @Override
                     public void joinFail(String error) {
-                        UIHelper.toast(getActivity(), "获取聊天房间失败");
+                        UIHelper.toast(getActivity(), error);
                     }
                 });
 
@@ -334,19 +341,19 @@ public class MessageFragment extends BaseFragment {
                 nickName = messageBean.getNickname();
 
                 //头像设置
-                if (chatType == 1001) {
-                    ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
-                } else if (chatType == 1002) {
+                if (chatType == 1002) {
                     if (lcattrsObject != null) {
                         squareMessageFrom = (lcattrsObject.get("username")) == null ? "" : lcattrsObject.getString("username");
                     }
                     if (ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache").equals("")) {
-                        createGroupImage(messageBean.getConversationID(), position);
+                        //createGroupImage(messageBean.getConversationID(), position);
                     } else {
                         ImageDisplay.loadFileImage(getmContext(), new File(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")), avatarIv);
                     }
                 } else if (chatType == 1004) {
                     ImageDisplay.loadResImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
+                } else {
+                    ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
                 }
 
                 switch (_lctype) {
@@ -400,6 +407,9 @@ public class MessageFragment extends BaseFragment {
                         nickName = "申请入群";
                         message = messageBean.getNickname() + "请求加入" + messageBean.getFriend_id();
                         ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
+                        break;
+                    case "9":
+                        message = "公众号消息";
                         break;
                     default:
                         break;
@@ -534,6 +544,11 @@ public class MessageFragment extends BaseFragment {
                 //申请入群
                 nickName = lcattrsObject.getString("nickname");
                 friend_id = lcattrsObject.getString("group_name");
+                break;
+            case "9":
+                //公众号
+                avatar = (String) conversation.getAttribute("avatar");
+                nickName = conversation.getName();
                 break;
             default:
                 break;
