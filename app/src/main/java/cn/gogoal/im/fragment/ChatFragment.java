@@ -644,6 +644,7 @@ public class ChatFragment extends BaseFragment {
                                 imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0", imConversation.getName(),
                                         "", "", lastMessage);
                             }
+                            KLog.e(imConversation.getName());
                             MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
                         }
 

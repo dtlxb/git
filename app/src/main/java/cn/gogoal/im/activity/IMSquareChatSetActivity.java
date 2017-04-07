@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -63,6 +64,12 @@ public class IMSquareChatSetActivity extends BaseActivity {
     @BindView(R.id.the_brief)
     TextView the_brief;
 
+    @BindView(R.id.the_square_notice)
+    TextView the_square_notice;
+
+    @BindView(R.id.square_message_tv)
+    RelativeLayout the_notice;
+
     @BindView(R.id.save_switch)
     Switch saveGroup;
 
@@ -75,6 +82,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     private String conversationId;
     private String squareCreater;
     private List<String> groupMembers;
+    private String squareName;
 
     @Override
     public int bindLayout() {
@@ -92,7 +100,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         //正式流程走完后
         conversationId = getIntent().getExtras().getString("conversation_id");
         squareCreater = getIntent().getExtras().getString("square_creater");
-        final String squareName = getIntent().getExtras().getString("squareName");
+        squareName = getIntent().getExtras().getString("squareName");
         tvSquareName.setText(squareName);
         the_square.setText(squareName);
 
@@ -187,7 +195,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 return super.generateImageView(context);
             }
         };
-
+        getGroupInfo();
         iv_square_head.setAdapter(mAdapter);
         iv_square_head.setImagesData(imageList);
     }
@@ -350,49 +358,70 @@ public class IMSquareChatSetActivity extends BaseActivity {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != 0) {
-            List<ContactBean> changeContactBeens = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
-            List<Integer> idList = new ArrayList<>();
-            for (int i = 0; i < changeContactBeens.size(); i++) {
-                idList.add(changeContactBeens.get(i).getFriend_id());
-            }
-            switch (requestCode) {
-                case AppConst.SQUARE_ROOM_ADD_ANYONE:
-                    //添加群成员
-                    addAnyone(idList);
-                    contactBeens.addAll(contactBeens.size() - 2, changeContactBeens);
-                    break;
-                case AppConst.SQUARE_ROOM_DELETE_ANYONE:
-                    //删除群成员
-                    deleteAnyone(idList);
-                    contactBeens.removeAll(changeContactBeens);
-                    break;
-            }
-            mPersonInfoAdapter.notifyDataSetChanged();
-        }
+    //拉取群详情
+    public void getGroupInfo() {
+        Map<String, String> params = new HashMap<>();
+        params.put("token", UserUtils.getToken());
+        params.put("conv_id", conversationId);
+        KLog.e(params);
 
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                Log.e("=====notice", responseInfo);
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                the_square.setText(((JSONObject) result.get("data")).get("name") == null ? "" : ((JSONObject) result.get("data")).getString("name"));
+                if ((int) result.get("code") == 0) {
+                    JSONObject jsonObject = (JSONObject) ((JSONObject) result.get("data")).get("attr");
+                    the_brief.setText(jsonObject.get("intro") == null ? "" : jsonObject.getString("intro"));
+                    the_square_notice.setText(jsonObject.get("notice") == null ? "" : jsonObject.getString("notice"));
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+            }
+        };
+        new GGOKHTTP(params, GGOKHTTP.GET_GROUP_INFO, ggHttpInterface).startGet();
     }
 
     @OnClick({R.id.look_more_person, R.id.square_message_tv, R.id.tv_what_square, R.id.square_brief, R.id.tv_search_history_tv, R.id.tv_delete_square})
     void function(View view) {
+        Intent intent;
         switch (view.getId()) {
             case R.id.look_more_person:
                 //startActivity(new Intent(getActivity(), SearchActivity.class));
                 break;
             case R.id.square_message_tv:
-                Intent intent = new Intent(getActivity(), SquarePublishActivity.class);
+                //群公告
+                intent = new Intent(getActivity(), EditSquareBriefActivity.class);
                 Bundle mBundle = new Bundle();
                 mBundle.putBoolean("is_creater", squareCreater.equals(UserUtils.getUserAccountId()));
                 mBundle.putString("conversation_id", conversationId);
+                mBundle.putBoolean("is_notice", true);
                 intent.putExtras(mBundle);
-                startActivityForResult(intent, AppConst.SQUARE_ROOM_DELETE_ANYONE);
+                startActivityForResult(intent, AppConst.SQUARE_ROOM_EDIT_NOTICE);
                 break;
             case R.id.tv_what_square:
+                //群名称
+                if (squareCreater.equals(UserUtils.getUserAccountId())) {
+                    intent = new Intent(getActivity(), EditSquareNameActivity.class);
+                    Bundle nameBundle = new Bundle();
+                    nameBundle.putString("square_name", squareName);
+                    nameBundle.putString("conversation_id", conversationId);
+                    nameBundle.putBoolean("is_notice", false);
+                    intent.putExtras(nameBundle);
+                    startActivityForResult(intent, AppConst.SQUARE_ROOM_EDIT_NAME);
+                }
                 break;
             case R.id.square_brief:
+                //群简介
+                intent = new Intent(getActivity(), EditSquareBriefActivity.class);
+                Bundle briefBundle = new Bundle();
+                briefBundle.putBoolean("is_creater", squareCreater.equals(UserUtils.getUserAccountId()));
+                briefBundle.putString("conversation_id", conversationId);
+                intent.putExtras(briefBundle);
+                startActivityForResult(intent, AppConst.SQUARE_ROOM_EDIT_BRIEF);
                 break;
             case R.id.tv_search_history_tv:
                 startActivity(new Intent(getActivity(), SearchActivity.class));
@@ -404,4 +433,49 @@ public class IMSquareChatSetActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != 0) {
+
+            switch (requestCode) {
+                case AppConst.SQUARE_ROOM_ADD_ANYONE:
+                    List<ContactBean> addContactBeens = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
+                    List<Integer> addIdList = new ArrayList<>();
+                    for (int i = 0; i < addContactBeens.size(); i++) {
+                        addIdList.add(addContactBeens.get(i).getFriend_id());
+                    }
+                    //添加群成员
+                    addAnyone(addIdList);
+                    contactBeens.addAll(contactBeens.size() - 2, addContactBeens);
+                    mPersonInfoAdapter.notifyDataSetChanged();
+                    break;
+                case AppConst.SQUARE_ROOM_DELETE_ANYONE:
+                    List<ContactBean> changeContactBeens = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
+                    List<Integer> idList = new ArrayList<>();
+                    for (int i = 0; i < changeContactBeens.size(); i++) {
+                        idList.add(changeContactBeens.get(i).getFriend_id());
+                    }
+                    //删除群成员
+                    deleteAnyone(idList);
+                    contactBeens.removeAll(changeContactBeens);
+                    mPersonInfoAdapter.notifyDataSetChanged();
+                    break;
+                case AppConst.SQUARE_ROOM_EDIT_NAME:
+                    String correctedSquareName = data.getStringExtra("corrected_square_name");
+                    tvSquareName.setText(correctedSquareName);
+                    the_square.setText(correctedSquareName);
+                    break;
+                case AppConst.SQUARE_ROOM_EDIT_BRIEF:
+                    String stringBrief = data.getStringExtra("group_intro");
+                    the_brief.setText(stringBrief);
+                    break;
+                case AppConst.SQUARE_ROOM_EDIT_NOTICE:
+                    String stringNotice = data.getStringExtra("group_notice");
+                    the_square_notice.setText(stringNotice);
+                    break;
+            }
+        }
+
+    }
 }

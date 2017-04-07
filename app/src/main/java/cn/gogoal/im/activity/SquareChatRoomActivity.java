@@ -57,7 +57,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
     }
 
     private void initTitle(final String squareName, final String conversation_id) {
-        XTitle title = setMyTitle(squareName + "(" + ")", true);
+        XTitle title = setMyTitle(squareName, true);
 
         //添加action
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(SquareChatRoomActivity.this, R.mipmap.chat_person)) {

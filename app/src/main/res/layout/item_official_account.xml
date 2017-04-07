@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="25dp"
+    android:background="@drawable/official_message_bg"
+    android:orientation="vertical"
+    android:paddingBottom="14dp"
+    android:paddingTop="16dp">
+
+    <TextView
+        android:id="@+id/official_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="最新直播"
+        android:textColor="@color/textColor_333333"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/official_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="16dp"
+        android:adjustViewBounds="true" />
+
+    <TextView
+        android:id="@+id/official_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:lineSpacingExtra="2dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="最新直播最新直播最新直播最新直播最新直播最新直播最新直播最新直播"
+        android:textColor="@color/textColor_333333"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/official_allinfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
+        android:lineSpacingExtra="2dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="最新直播最新直播最新直播最新直播最新直播最新直播最新直播最新直播"
+        android:textColor="@color/textColor_666666"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/official_brief"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="2dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="最新直播最新直播最新直播最新直播最新直播最新直播最新直播最新直播"
+        android:textColor="@color/textColor_666666"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:background="#e5e5e5" />
+
+    <TextView
+        android:id="@+id/look_more"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@mipmap/img_more"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="14dp"
+        android:text="查看详情"
+        android:textColor="@color/textColor_333333"
+        android:textSize="16sp" />
+
+</LinearLayout>
