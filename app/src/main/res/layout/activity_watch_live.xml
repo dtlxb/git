@@ -58,6 +58,14 @@
 
     </LinearLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycPortrait"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="65dp"
+        android:layout_marginLeft="15dp" />
+
     <FrameLayout
         android:id="@+id/bottom_container"
         android:layout_width="match_parent"

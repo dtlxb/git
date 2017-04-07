@@ -125,7 +125,7 @@ public class LiveActivity extends BaseActivity {
     private SurfaceView mPlaySurfaceView; //连麦播放的小窗SurfaceView
     private VideoChatStatus mVideoChatStatus = VideoChatStatus.UNCHAT; //未连麦的状态
 
-    private String publishUrl = "rtmp://push-live.aliyuncs.com/DemoApp/2070bd9cd6?auth_key=1491477801-0-0-28813031e4b39a294b21f3141e09b999"; //推流播放网址
+    private String publishUrl = "rtmp://video-center.alivecdn.com/microphone/dave?vhost=zbmo.go-goal.cn"; //推流播放网址
     private String mSmallDelayPlayUrl; //连麦延迟播放网址
 
     private final Handler mHandler = new Handler() {

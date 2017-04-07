@@ -1230,7 +1230,7 @@ public class PlayerActivity extends BaseActivity {
                     messageMap.put("_lcattrs", AVImClientManager.getInstance().userBaseInfo());
 
                     HashMap<String, String> params = new HashMap<>();
-                    params.put("token", UserUtils.getUserAccountId());
+                    params.put("token", UserUtils.getToken());
                     params.put("conv_id", imConversation.getConversationId());
                     params.put("chat_type", "1003");
                     params.put("message", JSONObject.toJSON(messageMap).toString());

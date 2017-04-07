@@ -133,7 +133,9 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/TranslucentTheme" />
         <activity android:name=".activity.LiveActivity" />
-        <activity android:name=".activity.WatchLiveActivity" />
+        <activity
+            android:name=".activity.WatchLiveActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.stock.NewMarketActivity" />
     </application>
 

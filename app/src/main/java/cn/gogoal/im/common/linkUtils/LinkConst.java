@@ -28,5 +28,12 @@ public class LinkConst {
      */
     public static final int MSG_WHAT_MIX_STREAM_ERROR = 4;
 
+
+    /**
+     * 播放器使用
+     */
     public static final long INTERRUPT_DELAY = 3000;
+
+    public static final int STATUS_NOT_AGREE = 2;
+    public static final int STATUS_AGREE = 1;
 }
