@@ -53,7 +53,6 @@ public class AVImClientManager {
         avimClient = AVIMClient.getInstance(clientId, clientId);
         avimClient.setMessageQueryCacheEnable(true);
         avimClient.open(callback);
-
     }
 
     public AVIMClient getClient() {
@@ -129,6 +128,7 @@ public class AVImClientManager {
                             @Override
                             public void done(AVIMException e) {
                                 KLog.e(list.get(0).getConversationId());
+                                KLog.e(list.get(0).getName());
                             }
                         });
                     }

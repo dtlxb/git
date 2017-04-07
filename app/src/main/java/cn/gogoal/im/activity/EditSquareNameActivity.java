@@ -82,6 +82,7 @@ public class EditSquareNameActivity extends BaseActivity {
                 if ((int) result.get("code") == 0) {
                     UIHelper.toast(getActivity(), "群名称修改成功");
                     //刷新conversation
+                    KLog.e(conversationID);
                     AVImClientManager.getInstance().refreshConversation(conversationID);
                     JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
                     for (int i = 0; i < jsonArray.size(); i++) {
