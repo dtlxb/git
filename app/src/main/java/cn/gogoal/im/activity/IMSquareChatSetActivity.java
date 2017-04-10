@@ -29,6 +29,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.IMPersonSetAdapter;
 import cn.gogoal.im.adapter.NineGridImageViewAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppConst;
@@ -258,6 +259,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                         SPTools.clearItem(UserUtils.getUserAccountId() + conversationId + "_accountList_beans");
                         MessageUtils.removeByID(conversationId);
                         finish();
+                        AppManager.getInstance().finishActivity(SquareChatRoomActivity.class);
                     } else {
                         UIHelper.toast(IMSquareChatSetActivity.this, "群成员删除成功");
                     }
