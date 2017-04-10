@@ -19,8 +19,8 @@ import java.util.Map;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.IMPersonDetailActivity;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -109,14 +109,14 @@ public class SearchPersionFragment extends BaseFragment {
         new GGOKHTTP(param, GGOKHTTP.SEARCH_FRIEND, ggHttpInterface).startGet();
     }
 
-    private class SearchPersionResultAdapter extends CommonAdapter<ContactBean> {
+    private class SearchPersionResultAdapter extends CommonAdapter<ContactBean,BaseViewHolder> {
 
         SearchPersionResultAdapter(List<ContactBean> datas) {
             super(SearchPersionFragment.this.getContext(), R.layout.item_search_type_persion, datas);
         }
 
         @Override
-        protected void convert(ViewHolder holder, final ContactBean data, int position) {
+        protected void convert(BaseViewHolder holder, final ContactBean data, int position) {
             KLog.e(JSONObject.toJSONString(data));
             holder.setText(R.id.item_tv_search_result_name, data.getNickname());
             try {

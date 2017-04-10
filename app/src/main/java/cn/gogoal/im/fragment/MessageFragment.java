@@ -46,9 +46,9 @@ import cn.gogoal.im.activity.OfficialAccountsActivity;
 import cn.gogoal.im.activity.SearchPersonSquareActivity;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
+import cn.gogoal.im.adapter.baseAdapter.listener.OnItemClickListener;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
@@ -145,9 +145,9 @@ public class MessageFragment extends BaseFragment {
         }
         listAdapter = new ListAdapter(getContext(), R.layout.item_fragment_message, IMMessageBeans);
         message_recycler.setAdapter(listAdapter);
-        listAdapter.setOnItemClickListener(new OnItemClickLitener() {
+        listAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(RecyclerView.ViewHolder holder, View view, final int position) {
+            public void onItemClick(CommonAdapter adapter, View view, final int position) {
                 final String conversation_id = IMMessageBeans.get(position).getConversationID();
 
                 KLog.e(conversation_id);
@@ -213,12 +213,13 @@ public class MessageFragment extends BaseFragment {
                         UIHelper.toast(getActivity(), error);
                     }
                 });
-
             }
 
-            //长按删除
+        });
+
+        listAdapter.setOnItemLongClickListener(new CommonAdapter.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(RecyclerView.ViewHolder holder, View view, final int position) {
+            public boolean onItemLongClick(CommonAdapter adapter, View view, final int position) {
                 DialogHelp.getSelectDialog(getActivity(), "", new String[]{"标为未读", "置顶聊天", "删除聊天"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -302,14 +303,14 @@ public class MessageFragment extends BaseFragment {
         }
     }
 
-    private class ListAdapter extends CommonAdapter<IMMessageBean> {
+    private class ListAdapter extends CommonAdapter<IMMessageBean,BaseViewHolder> {
 
         private ListAdapter(Context context, int layoutId, List<IMMessageBean> datas) {
             super(context, layoutId, datas);
         }
 
         @Override
-        protected void convert(ViewHolder holder, IMMessageBean messageBean, int position) {
+        protected void convert(BaseViewHolder holder, IMMessageBean messageBean, int position) {
             String dateStr = "";
             String message = "";
             String unRead = "";
@@ -354,7 +355,7 @@ public class MessageFragment extends BaseFragment {
                     if (ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache").equals("")) {
                         createGroupImage(messageBean.getConversationID(), position);
                     } else {
-                        ImageDisplay.loadFileImage(getmContext(), new File(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")), avatarIv);
+                        ImageDisplay.loadFileImage(getActivity(), new File(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")), avatarIv);
                     }
                 } else if (chatType == 1004) {
                     ImageDisplay.loadResImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);

@@ -8,8 +8,8 @@ import android.widget.ImageView;
 import java.util.List;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.FoundData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
@@ -18,7 +18,7 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
  * Created by huangxx on 2017/3/14.
  */
 
-public class ChatFunctionAdapter extends CommonAdapter<FoundData.ItemPojos> {
+public class ChatFunctionAdapter extends CommonAdapter<FoundData.ItemPojos,BaseViewHolder> {
 
     private Context mContex;
 
@@ -28,7 +28,7 @@ public class ChatFunctionAdapter extends CommonAdapter<FoundData.ItemPojos> {
     }
 
     @Override
-    protected void convert(ViewHolder holder, FoundData.ItemPojos data, int position) {
+    protected void convert(BaseViewHolder holder, FoundData.ItemPojos data, int position) {
         View view = holder.getView(R.id.layout_grid);
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
 

@@ -21,8 +21,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.recording.MediaManager;
@@ -165,14 +165,14 @@ public class ChatRoomActivity extends BaseActivity {
         MediaManager.release();
     }
 
-    private class AudioAdapter extends CommonAdapter<Recorder> {
+    private class AudioAdapter extends CommonAdapter<Recorder,BaseViewHolder> {
 
         private AudioAdapter(List<Recorder> datas) {
-            super(ChatRoomActivity.this, R.layout.item_recorder, datas);
+            super(R.layout.item_recorder, datas);
         }
 
         @Override
-        protected void convert(ViewHolder holder, final Recorder recorder, final int position) {
+        protected void convert(BaseViewHolder holder, final Recorder recorder, final int position) {
             holder.setText(R.id.recorder_time,Math.round(recorder.getDuration())+"\"");
 
             View holderLengthView = holder.getView(R.id.recorder_length);

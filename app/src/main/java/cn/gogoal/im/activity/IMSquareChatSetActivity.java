@@ -28,7 +28,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.IMPersonSetAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
+import cn.gogoal.im.adapter.baseAdapter.listener.OnItemClickListener;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
@@ -148,9 +149,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
             }
         });
 
-        mPersonInfoAdapter.setOnItemClickListener(new OnItemClickLitener() {
+        mPersonInfoAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(RecyclerView.ViewHolder holder, View view, int position) {
+            public void onItemClick(CommonAdapter adapter, View view, int position) {
                 Intent intent;
                 Bundle mBundle = new Bundle();
                 if (position == contactBeens.size() - 2 && squareCreater.equals(UserUtils.getUserAccountId())) {
@@ -172,11 +173,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     intent.putExtras(mBundle);
                     startActivity(intent);
                 }
-            }
-
-            @Override
-            public boolean onItemLongClick(RecyclerView.ViewHolder holder, View view, int position) {
-                return false;
             }
         });
         ImageDisplay.loadFileImage(IMSquareChatSetActivity.this, new File(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")), iv_square_head);

@@ -1,12 +1,14 @@
 package cn.gogoal.im.bean;
 
+import cn.gogoal.im.adapter.baseAdapter.entity.MultiItemEntity;
+
 /**
  * author wangjd on 2017/3/31 0031.
  * Staff_id 1375
  * phone 18930640263
  * description :用户详情页实体.
  */
-public class UserInfo {
+public class UserInfo implements MultiItemEntity{
     private String avatar;//头像
     private String fullName;//真实姓名
     private String nickName;//昵称
@@ -14,24 +16,19 @@ public class UserInfo {
     private String itemText1;//文本1 key
     private String itemText2;//文本2 value
 
-    private ItemType itemType;//数据在列表中类型
     private boolean haveMore;//是否显示更多箭头
 
-    public UserInfo(ItemType itemType) {
-        this.itemType = itemType;
-    }
-
-    public UserInfo(ItemType itemType, String avatar, String fullName, String nickName) {
+    public UserInfo(int itemType,String avatar, String fullName, String nickName) {
+        this.itemType=itemType;
         this.avatar = avatar;
         this.fullName = fullName;
         this.nickName = nickName;
-        this.itemType = itemType;
     }
 
-    public UserInfo(ItemType itemType, boolean haveMore,String itemText1, String itemText2) {
+    public UserInfo(int itemType,boolean haveMore,String itemText1, String itemText2) {
+        this.itemType=itemType;
         this.itemText1 = itemText1;
         this.itemText2 = itemText2;
-        this.itemType = itemType;
         this.haveMore = haveMore;
     }
 
@@ -75,14 +72,6 @@ public class UserInfo {
         this.itemText2 = itemText2;
     }
 
-    public ItemType getItemType() {
-        return itemType;
-    }
-
-    public void setItemType(ItemType itemType) {
-        this.itemType = itemType;
-    }
-
     public boolean isHaveMore() {
         return haveMore;
     }
@@ -91,20 +80,22 @@ public class UserInfo {
         this.haveMore = haveMore;
     }
 
-    public enum ItemType {
-        HEAD(10086), TEXT(10010), SPACE(10001);
-        private int type;
+    public static final int HEAD = 1;
+    public static final int SPACE = 2;
+    public static final int TEXT_ITEM_2 = 3;
 
-        ItemType(int type) {
-            this.type = type;
-        }
+    private int itemType;
 
-        public int getType() {
-            return type;
-        }
+    public UserInfo(int itemType, String content) {
+        this.itemType = itemType;
+    }
 
-        public void setType(int type) {
-            this.type = type;
-        }
+    public UserInfo(int itemType) {
+        this.itemType = itemType;
+    }
+
+    @Override
+    public int getItemType() {
+        return itemType;
     }
 }

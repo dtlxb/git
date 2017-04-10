@@ -17,9 +17,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.MultiItemTypeAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ItemViewDelegate;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseInfo;
 import cn.gogoal.im.bean.ContactBean;
@@ -62,7 +61,7 @@ public class IMPersonDetailActivity extends BaseActivity {
             addFriendBtn.setVisibility(View.GONE);
         }
 
-        addFriendBtn.setText(UserUtils.isMyFriend(accountId)?"删除好友":"添加好友");
+        addFriendBtn.setText(UserUtils.isMyFriend(accountId) ? "删除好友" : "添加好友");
 
         if (accountId != -1) {
             getUsernfo();
@@ -83,19 +82,19 @@ public class IMPersonDetailActivity extends BaseActivity {
 
                     List<UserInfo> infos = new ArrayList<>();
 
-                    infos.add(new UserInfo(UserInfo.ItemType.HEAD,
+                    infos.add(new UserInfo(UserInfo.HEAD,
                             (String) contactBean.getAvatar(), contactBean.getFull_name(), contactBean.getNickname()));
 
-                    infos.add(new UserInfo(UserInfo.ItemType.SPACE));
-                    infos.add(new UserInfo(UserInfo.ItemType.TEXT, false, "地区", "--"));
-                    infos.add(new UserInfo(UserInfo.ItemType.TEXT, false, "公司", contactBean.getOrg_name()));
-                    infos.add(new UserInfo(UserInfo.ItemType.TEXT, false, "职位", contactBean.getDuty()));
-                    infos.add(new UserInfo(UserInfo.ItemType.SPACE));
-                    infos.add(new UserInfo(UserInfo.ItemType.TEXT, false, "个人描述", contactBean.getDuty()));
-                    infos.add(new UserInfo(UserInfo.ItemType.SPACE));
-                    infos.add(new UserInfo(UserInfo.ItemType.TEXT, true, "研网活动(5)", ""));
-                    infos.add(new UserInfo(UserInfo.ItemType.TEXT, true, "参加活动活动(4)", ""));
-                    infos.add(new UserInfo(cn.gogoal.im.bean.UserInfo.ItemType.TEXT, true, "加入群组(3)", ""));
+                    infos.add(new UserInfo(UserInfo.SPACE));
+                    infos.add(new UserInfo(UserInfo.TEXT_ITEM_2, false, "地区", "--"));
+                    infos.add(new UserInfo(UserInfo.TEXT_ITEM_2, false, "公司", contactBean.getOrg_name()));
+                    infos.add(new UserInfo(UserInfo.TEXT_ITEM_2, false, "职位", contactBean.getDuty()));
+                    infos.add(new UserInfo(UserInfo.SPACE));
+                    infos.add(new UserInfo(UserInfo.TEXT_ITEM_2, false, "个人描述", contactBean.getDuty()));
+                    infos.add(new UserInfo(UserInfo.SPACE));
+                    infos.add(new UserInfo(UserInfo.TEXT_ITEM_2, true, "研网活动(5)", ""));
+                    infos.add(new UserInfo(UserInfo.TEXT_ITEM_2, true, "参加活动活动(4)", ""));
+                    infos.add(new UserInfo(cn.gogoal.im.bean.UserInfo.TEXT_ITEM_2, true, "加入群组(3)", ""));
 
                     personDetailRecycler.setAdapter(new UserInfoAdapter(infos));
 
@@ -118,9 +117,9 @@ public class IMPersonDetailActivity extends BaseActivity {
     void toAddFraeng(View view) {
 
         if (accountId != -1) {
-            if (UserUtils.isMyFriend(accountId)){
-                UIHelper.toast(view.getContext(),"没有删除接口");
-            }else {
+            if (UserUtils.isMyFriend(accountId)) {
+                UIHelper.toast(view.getContext(), "没有删除接口");
+            } else {
                 Intent intent = new Intent(view.getContext(), IMAddFriendActivity.class);
                 intent.putExtra("user_id", accountId);
                 startActivity(intent);
@@ -130,79 +129,42 @@ public class IMPersonDetailActivity extends BaseActivity {
         }
     }
 
-    private class UserInfoAdapter extends MultiItemTypeAdapter<UserInfo> {
+    private class UserInfoAdapter extends BaseMultiItemQuickAdapter<UserInfo, BaseViewHolder> {
 
-        public UserInfoAdapter(List<UserInfo> datas) {
-            super(IMPersonDetailActivity.this, datas);
-            addItemViewDelegate(new HeadItemViewDelegate());
-            addItemViewDelegate(new SpaceViewDelegate());
-            addItemViewDelegate(new TextViewDelegate());
+        public UserInfoAdapter(List<UserInfo> data) {
+            super(data);
+            addItemType(UserInfo.HEAD, R.layout.item_user_info_head);
+            addItemType(UserInfo.SPACE, R.layout.layout_sapce_15dp);
+            addItemType(UserInfo.TEXT_ITEM_2, R.layout.item_user_info_text_2);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder holder, UserInfo data, int position) {
+
+            switch (holder.getItemViewType()) {
+                case UserInfo.HEAD:
+                    holder.setImageUrl(R.id.image_user_info_avatar, data.getAvatar());
+                    holder.setText(R.id.person_name, data.getFullName());
+                    holder.setText(R.id.person_mark, data.getNickName());
+                    break;
+                case UserInfo.SPACE:
+                    break;
+                case UserInfo.TEXT_ITEM_2:
+                    holder.setText(R.id.item_text_1, data.getItemText1());
+                    holder.setText(R.id.item_text_2, data.getItemText2());
+
+                    holder.getView(R.id.img_more).setVisibility(data.isHaveMore() ? View.VISIBLE : View.GONE);
+
+                    UIHelper.setRippBg(holder.itemView);
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            UIHelper.toast(v.getContext(), getString(R.string.str_coming_soon));
+                        }
+                    });
+                    break;
+            }
         }
     }
 
-    private class HeadItemViewDelegate implements ItemViewDelegate<UserInfo> {
-
-        @Override
-        public int getItemViewLayoutId() {
-            return R.layout.item_user_info_head;
-        }
-
-        @Override
-        public boolean isForViewType(UserInfo item, int position) {
-            return item.getItemType() == UserInfo.ItemType.HEAD;
-        }
-
-        @Override
-        public void convert(ViewHolder holder, UserInfo info, int position) {
-            holder.setImageUrl(R.id.image_user_info_avatar, info.getAvatar());
-            holder.setText(R.id.person_name, info.getFullName());
-            holder.setText(R.id.person_mark, info.getNickName());
-        }
-    }
-
-    private class SpaceViewDelegate implements ItemViewDelegate<UserInfo> {
-
-        @Override
-        public int getItemViewLayoutId() {
-            return R.layout.layout_sapce_15dp;
-        }
-
-        @Override
-        public boolean isForViewType(UserInfo item, int position) {
-            return item.getItemType() == UserInfo.ItemType.SPACE;
-        }
-
-        @Override
-        public void convert(ViewHolder holder, UserInfo info, int position) {
-        }
-    }
-
-    private class TextViewDelegate implements ItemViewDelegate<UserInfo> {
-
-        @Override
-        public int getItemViewLayoutId() {
-            return R.layout.item_user_info_text_2;
-        }
-
-        @Override
-        public boolean isForViewType(UserInfo item, int position) {
-            return item.getItemType() == UserInfo.ItemType.TEXT;
-        }
-
-        @Override
-        public void convert(ViewHolder holder, final UserInfo info, int position) {
-            holder.setText(R.id.item_text_1, info.getItemText1());
-            holder.setText(R.id.item_text_2, info.getItemText2());
-
-            holder.getView(R.id.img_more).setVisibility(info.isHaveMore() ? View.VISIBLE : View.GONE);
-
-            UIHelper.setRippBg(holder.itemView);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    UIHelper.toast(v.getContext(), getString(R.string.str_coming_soon));
-                }
-            });
-        }
-    }
 }

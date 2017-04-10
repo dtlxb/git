@@ -30,8 +30,8 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.EditMyStockActivity;
 import cn.gogoal.im.activity.stock.MyStockNewsActivity;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.adapter.stock.MyStockMarketAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
@@ -335,7 +335,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("my_stock_edit", myStockDatas);
                 intent.putExtras(bundle);
-                startActivityForResult(intent, 0x1314184);
+                startActivityForResult(intent, 7);
                 break;
             case R.id.tv_mystock_news:
                 intentNews(0);
@@ -369,14 +369,14 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         rotateAnimation.startNow();
     }
 
-    private class MyStockAdapter extends CommonAdapter<MyStockData> {
+    private class MyStockAdapter extends CommonAdapter<MyStockData,BaseViewHolder> {
 
         private MyStockAdapter(List<MyStockData> datas) {
-            super(getActivity(), R.layout.item_my_stock, datas);
+            super(R.layout.item_my_stock, datas);
         }
 
         @Override
-        protected void convert(ViewHolder holder, MyStockData data, int position) {
+        protected void convert(BaseViewHolder holder, MyStockData data, int position) {
             holder.setText(R.id.tv_mystock_stockname, data.getStock_name());
             holder.setText(R.id.tv_mystock_stockcode, data.getStock_code());
 
@@ -405,7 +405,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 0x1314184) {
+        if (requestCode == 7) {
             List<MyStockData> myStockdata = (List<MyStockData>) data.getSerializableExtra("my_stock_edit");
             myStockDatas.clear();
             myStockDatas.addAll(myStockdata);

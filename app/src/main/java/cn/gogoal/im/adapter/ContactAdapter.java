@@ -5,8 +5,8 @@ import android.content.Context;
 import java.util.List;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.ContactBean;
 
 /**
@@ -15,16 +15,16 @@ import cn.gogoal.im.bean.ContactBean;
  * phone 18930640263
  * description:联系人列表适配器
  */
-public class ContactAdapter extends CommonAdapter<ContactBean> {
+public class ContactAdapter extends CommonAdapter<ContactBean,BaseViewHolder> {
     List<ContactBean> list;
 
     public ContactAdapter(Context context, List<ContactBean> datas) {
-        super(context, R.layout.item_contacts, datas);
+        super(R.layout.item_contacts, datas);
         list = datas;
     }
 
     @Override
-    protected void convert(ViewHolder holder, ContactBean contactBean, int position) {
+    protected void convert(BaseViewHolder holder, ContactBean contactBean, int position) {
         holder.setText(R.id.item_contacts_tv_nickname, contactBean.getTarget());
 
         holder.itemView.setBackgroundResource(R.drawable.selector_normal_write2gray);
@@ -42,4 +42,5 @@ public class ContactAdapter extends CommonAdapter<ContactBean> {
         list.add(contactBean);
         this.notifyDataSetChanged();
     }
+
 }

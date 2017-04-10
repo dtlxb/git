@@ -7,13 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.socks.library.KLog;
-
 import java.util.List;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.UserUtils;
@@ -22,19 +20,22 @@ import cn.gogoal.im.common.UserUtils;
  * Created by huangxx on 2017/3/20.
  */
 
-public class IMPersonSetAdapter extends CommonAdapter<ContactBean> {
+public class IMPersonSetAdapter extends CommonAdapter<ContactBean,BaseViewHolder> {
 
-    public IMPersonSetAdapter(Context context, int layoutId, List<ContactBean> datas) {
-        super(context, layoutId, datas);
+    private Context context;
+
+    public IMPersonSetAdapter(Context context,int layoutId,List<ContactBean> datas) {
+        super(layoutId, datas);
+        this.context=context;
     }
 
     @Override
-    protected void convert(ViewHolder holder, ContactBean contactBean, int position) {
+    protected void convert(BaseViewHolder holder, ContactBean contactBean, int position) {
 
         final View view = holder.getView(R.id.layout_grid);
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-        layoutParams.width = AppDevice.getWidth(getmContext()) / 6;
-        layoutParams.height = AppDevice.getWidth(getmContext()) / 4;
+        layoutParams.width = AppDevice.getWidth(context) / 6;
+        layoutParams.height = AppDevice.getWidth(context) / 4;
         view.setBackgroundColor(ContextCompat.getColor(mContext, R.color.absoluteWhite));
         view.setLayoutParams(layoutParams);
 
@@ -43,9 +44,9 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean> {
         TextView squareManTag = holder.getView(R.id.square_man_tag);
         ViewGroup.LayoutParams viewParams = imageIcon.getLayoutParams();
         ViewGroup.LayoutParams nameParams = personName.getLayoutParams();
-        viewParams.width = AppDevice.getWidth(getmContext()) / 8;
-        viewParams.height = AppDevice.getWidth(getmContext()) / 8;
-        nameParams.width = AppDevice.getWidth(getmContext()) / 8;
+        viewParams.width = AppDevice.getWidth(context) / 8;
+        viewParams.height = AppDevice.getWidth(context) / 8;
+        nameParams.width = AppDevice.getWidth(context) / 8;
         imageIcon.setLayoutParams(viewParams);
         personName.setLayoutParams(nameParams);
 

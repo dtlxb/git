@@ -3,7 +3,6 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,8 +19,8 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -124,21 +123,21 @@ public class SquareCollectActivity extends BaseActivity {
         new GGOKHTTP(params, GGOKHTTP.GET_GROUP_LIST, ggHttpInterface).startGet();
     }
 
-    private class ListAdapter extends CommonAdapter<JSONObject> {
+    private class ListAdapter extends CommonAdapter<JSONObject,BaseViewHolder> {
 
         private ListAdapter(Context context, int layoutId, List<JSONObject> datas) {
             super(context, layoutId, datas);
         }
 
         @Override
-        protected void convert(ViewHolder holder, JSONObject groupObject, int position) {
+        protected void convert(BaseViewHolder holder, JSONObject groupObject, int position) {
             ImageView avatarIv = holder.getView(R.id.head_image);
             TextView timeView = holder.getView(R.id.last_time);
             TextView nameView = holder.getView(R.id.whose_message);
 
             KLog.e(groupObject.toString());
 
-            ImageDisplay.loadFileImage(getmContext(), new File(ImageUtils.getBitmapFilePaht(groupObject.getString("conv_id"), "imagecache")), avatarIv);
+            ImageDisplay.loadFileImage(getActivity(), new File(ImageUtils.getBitmapFilePaht(groupObject.getString("conv_id"), "imagecache")), avatarIv);
             holder.setText(R.id.last_message, groupObject.getJSONObject("attr").getString("intro") != null ? groupObject.getJSONObject("attr").getString("intro") : "");
             nameView.setMaxWidth(AppDevice.getWidth(getActivity()) - 130);
             nameView.setText(groupObject.getString("name"));

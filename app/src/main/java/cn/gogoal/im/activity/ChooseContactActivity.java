@@ -28,8 +28,8 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppConst;
@@ -390,7 +390,7 @@ public class ChooseContactActivity extends BaseActivity {
     /**
      * 主列表视图适配器 ☆☆☆
      */
-    private class ChooseAdapter extends CommonAdapter<ContactBean> {
+    private class ChooseAdapter extends CommonAdapter<ContactBean,BaseViewHolder> {
 
         // 存储勾选框状态的map集合
         private Map<Integer, Boolean> map = new LinkedHashMap<>();
@@ -398,7 +398,7 @@ public class ChooseContactActivity extends BaseActivity {
         private List<ContactBean> datas;
 
         ChooseAdapter(List<ContactBean> datas) {
-            super(ChooseContactActivity.this, R.layout.item_contacts, datas);
+            super(R.layout.item_contacts, datas);
             this.datas = datas;
             initMap();
         }
@@ -410,7 +410,7 @@ public class ChooseContactActivity extends BaseActivity {
         }
 
         @Override
-        protected void convert(final ViewHolder holder, final ContactBean data, final int position) {
+        protected void convert(final BaseViewHolder holder, final ContactBean data, final int position) {
 
             holder.setText(R.id.item_contacts_tv_nickname, data.getTarget());
             holder.setImageUrl(R.id.item_contacts_iv_icon, (String) data.getAvatar());
@@ -520,12 +520,12 @@ public class ChooseContactActivity extends BaseActivity {
     /*
     * 已选列表适配器
     * */
-    private class SelectedAdapter extends CommonAdapter<ContactBean> {
+    private class SelectedAdapter extends CommonAdapter<ContactBean,BaseViewHolder> {
 
         private List<ContactBean> datas;
 
         public SelectedAdapter(List<ContactBean> datas) {
-            super(ChooseContactActivity.this, R.layout.item_selected_contact_rv, datas);
+            super(R.layout.item_selected_contact_rv, datas);
             this.datas = datas;
         }
 
@@ -534,7 +534,7 @@ public class ChooseContactActivity extends BaseActivity {
         }
 
         @Override
-        protected void convert(ViewHolder holder, final ContactBean data, final int position) {
+        protected void convert(BaseViewHolder holder, final ContactBean data, final int position) {
             ImageView ivHeader = holder.getView(R.id.ivHeader);
             if (TextUtils.isEmpty((CharSequence) data.getAvatar())) {
                 ivHeader.setImageResource(R.mipmap.image_placeholder);
@@ -608,7 +608,7 @@ public class ChooseContactActivity extends BaseActivity {
     /**
      * 删除好友列表
      */
-    private class DeleteAdapter extends CommonAdapter<ContactBean> {
+    private class DeleteAdapter extends CommonAdapter<ContactBean,BaseViewHolder> {
 
         // 存储勾选框状态的map集合
         private Map<Integer, Boolean> map = new HashMap<>();
@@ -619,7 +619,7 @@ public class ChooseContactActivity extends BaseActivity {
         private List<ContactBean> datas;
 
         private DeleteAdapter(List<ContactBean> datas) {
-            super(getActivity(), R.layout.item_contacts, datas);
+            super(R.layout.item_contacts, datas);
             this.datas = datas;
             initMap();
         }
@@ -631,7 +631,7 @@ public class ChooseContactActivity extends BaseActivity {
         }
 
         @Override
-        protected void convert(ViewHolder holder, final ContactBean data, final int position) {
+        protected void convert(BaseViewHolder holder, final ContactBean data, final int position) {
             holder.setText(R.id.item_contacts_tv_nickname, data.getTarget());
             holder.setImageUrl(R.id.item_contacts_iv_icon, (String) data.getAvatar());
 
