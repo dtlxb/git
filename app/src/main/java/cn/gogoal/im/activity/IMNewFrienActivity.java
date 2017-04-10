@@ -1,6 +1,7 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -82,7 +83,7 @@ public class IMNewFrienActivity extends BaseActivity {
             jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationId + "_unadd_accountList_beans", new JSONArray());
         }
 
-        initRecycleView(newFriendList, R.drawable.shape_divider_recyclerview_1px);
+        initRecycleView(newFriendList, R.drawable.shape_divider_1px);
 
         KLog.e(jsonArray.toString());
         newFriendBeans.clear();
@@ -148,7 +149,7 @@ public class IMNewFrienActivity extends BaseActivity {
                     addView.setText("已通过");
                 }
                 addView.setTextColor(ContextCompat.getColor(IMNewFrienActivity.this, R.color.relater_play_count));
-                addView.setBackgroundResource(R.color.absoluteWhite);
+                addView.setBackgroundColor(Color.WHITE);
             } else {
                 if (addType == 0x01) {
                     addView.setText("添加");

@@ -3,8 +3,8 @@ package cn.gogoal.im.fragment;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -17,8 +17,7 @@ import cn.gogoal.im.adapter.MainAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.wrapper.HeaderAndFooterWrapper;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.FoundData;
-import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.ui.view.XLayout;
 
 import static cn.gogoal.im.base.BaseActivity.initRecycleView;
 
@@ -26,6 +25,9 @@ import static cn.gogoal.im.base.BaseActivity.initRecycleView;
  * 投研
  */
 public class FoundFragment extends BaseFragment {
+
+    @BindView(R.id.xLayout)
+    XLayout xLayout;
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -47,14 +49,12 @@ public class FoundFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle(R.string.title_found);
+        xLayout.setStatus(XLayout.Success);
 
-        initRecycleView(recyclerView, R.drawable.shape_divider_10dp);
+        setFragmentTitle(R.string.title_found);
+        initRecycleView(recyclerView, R.drawable.shape_divider_15dp);
 
         List<FoundData> datas = getFunctionDatas();//模拟数据
-
-//      KLog.e(JSONObject.toJSON(datas).toString());
-
 
         HeaderAndFooterWrapper wraper = addHeadImage(datas);
 
@@ -64,21 +64,9 @@ public class FoundFragment extends BaseFragment {
     @NonNull
     private HeaderAndFooterWrapper addHeadImage(List<FoundData> datas) {
         HeaderAndFooterWrapper wraper = new HeaderAndFooterWrapper(new MainAdapter(getContext(), R.layout.item_foundfragment, datas));
-        ImageView imageHead = new ImageView(getContext());
-        imageHead.setAdjustViewBounds(true);
+        View headView = LayoutInflater.from(getContext()).inflate(R.layout.header_touyan,new LinearLayout(getContext()),false);
 
-        LinearLayout.LayoutParams headParams = new LinearLayout.LayoutParams(AppDevice.getWidth(getContext()),
-                AppDevice.getWidth(getContext()) * 120 / 375);
-
-        imageHead.setLayoutParams(headParams);
-        imageHead.setImageResource(R.mipmap.image_found_top_ad);
-        imageHead.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UIHelper.toast(getContext(), "单页广告图");
-            }
-        });
-        wraper.addHeaderView(imageHead);
+        wraper.addHeaderView(headView);
         return wraper;
     }
 

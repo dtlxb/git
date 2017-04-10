@@ -2,9 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <!--通用列表布局——title+list+下拉刷新-->
+    <!--通用列表布局——title+list+无刷新，纯展示-->
 
     <include layout="@layout/include_title" />
 
@@ -17,7 +18,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
     </cn.gogoal.im.ui.view.XLayout>
 

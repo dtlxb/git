@@ -67,7 +67,7 @@ public class SquareCollectActivity extends BaseActivity {
         });
 
         xLayout.setEmptyText("你还没有群组\n\r赶快找到属于你的组织吧");
-        initRecycleView(squareRoomRecycler, R.drawable.shape_divider_recyclerview_1px);
+        initRecycleView(squareRoomRecycler, R.drawable.shape_divider_1px);
 
         JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_groups_saved", new JSONArray());
         Boolean needRefresh = SPTools.getBoolean("needRefresh", false);

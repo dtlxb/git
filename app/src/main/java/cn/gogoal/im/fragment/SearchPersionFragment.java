@@ -43,6 +43,7 @@ public class SearchPersionFragment extends BaseFragment {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+
     private ArrayList<ContactBean> searchResultList;
     private SearchPersionResultAdapter adapter;
 //    private EmptyWrapper wrapper;

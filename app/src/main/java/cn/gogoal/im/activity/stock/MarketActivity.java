@@ -27,18 +27,18 @@ import cn.gogoal.im.fragment.stock.HKFragment;
 import cn.gogoal.im.fragment.stock.HuShenFragment;
 import cn.gogoal.im.ui.view.XTitle;
 
-import static cn.gogoal.im.fragment.stock.HuShenFragment.REFRESH_TYPE_AUTO;
-import static cn.gogoal.im.fragment.stock.HuShenFragment.REFRESH_TYPE_PARENT_BUTTON;
+import static cn.gogoal.im.common.AppConst.REFRESH_TYPE_AUTO;
+import static cn.gogoal.im.common.AppConst.REFRESH_TYPE_PARENT_BUTTON;
 
 /**
- * author wangjd on 2017/4/5 0005.
- * Staff_id 1375
- * phone 18930640263
- * description :行情.
+ * Author wangjd on 2017/4/5 0005.
+ * EmployeeNumber : 1375
+ * Phone : 18930640263
+ * Description : 行情
  */
 public class MarketActivity extends BaseActivity {
 
-    private static int INTERVAL_TIME = 5000;//自动刷新间隔时间
+    private static int INTERVAL_TIME = 15000;//自动刷新间隔时间
 
     @BindView(R.id.search_market)
     AppCompatTextView searchMarket;
@@ -51,6 +51,7 @@ public class MarketActivity extends BaseActivity {
 
     @BindArray(R.array.market_tab_top)
     String[] marketTabTitles;
+
     private ArrayList<Fragment> marketFragments;
 
     private RotateAnimation rotateAnimation;
@@ -128,7 +129,7 @@ public class MarketActivity extends BaseActivity {
         rotateAnimation.startNow();
     }
 
-    //定时器
+    //定时刷新
     Handler handler = new Handler();
     Runnable runnable = new Runnable() {
         @Override
@@ -147,6 +148,12 @@ public class MarketActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         handler.postDelayed(runnable,INTERVAL_TIME);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        handler.removeCallbacks(runnable);
     }
 
     @Override

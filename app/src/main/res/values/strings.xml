@@ -16,6 +16,9 @@
     <string name="title_add_group">入群申请</string>
     <string name="title_new_friend">新的朋友</string>
     <string name="title_square_collcet">我的群组</string>
+    <string name="title_my_stock">自选</string>
+    <string name="title_mtstock_news">自选股资讯</string>
+
     <string name="square_collcet_add">添加</string>
     <string name="square_publish_create">创建</string>
 
@@ -115,5 +118,13 @@
     <string name="str_group_count">(%d人)</string>
     <string name="str_result">没有找到与%s相关的</string>
     <string name="str_market">行情</string>
+    <string name="str_search_hint">请输入股票代码/名称/拼音</string>
 
+    <string name="mystock_sort_price_normal">最新价&#xe679;</string>
+    <string name="mystock_sort_price_up">最新价&#xe6b4;</string>
+    <string name="mystock_sort_price_down">最新价&#xe6b6;</string>
+
+    <string name="mystock_sort_rate_normal">涨跌幅&#xe679;</string>
+    <string name="mystock_sort_rate_up">涨跌幅&#xe6b4;</string>
+    <string name="mystock_sort_rate_down">涨跌幅&#xe6b6;</string>
 </resources>

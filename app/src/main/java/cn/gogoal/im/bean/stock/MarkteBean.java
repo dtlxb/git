@@ -1,4 +1,4 @@
-package cn.gogoal.im.bean.market;
+package cn.gogoal.im.bean.stock;
 
 import java.util.List;
 

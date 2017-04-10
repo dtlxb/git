@@ -65,6 +65,7 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.badgeview.Badge;
 import cn.gogoal.im.ui.badgeview.BadgeView;
+import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.view.XTitle;
 
 import static cn.gogoal.im.base.BaseActivity.initRecycleView;
@@ -73,6 +74,9 @@ import static cn.gogoal.im.base.BaseActivity.initRecycleView;
  * 消息
  */
 public class MessageFragment extends BaseFragment {
+
+    @BindView(R.id.xLayout)
+    XLayout xLayout;
 
     @BindView(R.id.recyclerView)
     RecyclerView message_recycler;
@@ -95,9 +99,10 @@ public class MessageFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
+        xLayout.setStatus(XLayout.Success);
         initTitle();
         groupMembers = new ArrayList<>();
-        initRecycleView(message_recycler, R.drawable.shape_divider_recyclerview_1px);
+        initRecycleView(message_recycler, R.drawable.shape_divider_1px);
     }
 
     private void initTitle() {
@@ -222,7 +227,7 @@ public class MessageFragment extends BaseFragment {
     }
 
     /**
-     * 点击弹窗
+     * TODO 点击弹窗
      */
     private void popuMore(View clickView) {
         final View popuView = LayoutInflater.from(clickView.getContext()).

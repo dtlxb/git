@@ -38,6 +38,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.permission.IPermissionListner;
+import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.XTitle;
 
 import static cn.gogoal.im.base.MyApp.getAppContext;
@@ -170,6 +171,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
     public XTitle setMyTitle(@StringRes int titleString, boolean canBack) {
         String title = getString(titleString);
         XTitle xTitle = (XTitle) findViewById(R.id.title_bar);
+        xTitle.setVisibility(View.VISIBLE);
         if (!TextUtils.isEmpty(title)) {
             xTitle.setTitle(title);
             xTitle.setTitleColor(Color.BLACK);
@@ -196,12 +198,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
      * @param dividerId:分割线对象     : 0时为默认一条直线;int值 shape资源；null(不要分割线)
      */
     public static void initRecycleView(RecyclerView recyclerView, Integer dividerId) {
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setNestedScrollingEnabled(false);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(MyApp.getAppContext());
-        layoutManager.setSmoothScrollbarEnabled(true);
-        layoutManager.setAutoMeasureEnabled(true);
         if (dividerId != null) {
             if (dividerId != 0x00) {
                 try {
@@ -212,8 +209,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
                     throw new IllegalArgumentException("initRecycleView(RecyclerView,Integer)第二个参数必须是一个分割线shape资源或者填0或者null");
                 }
             } else {
-                DividerItemDecoration itemDecoration = new DividerItemDecoration(getAppContext(), LinearLayoutManager.VERTICAL);
-                recyclerView.addItemDecoration(itemDecoration);
+                recyclerView.addItemDecoration(new NormalItemDecoration(getAppContext()));
             }
         }
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

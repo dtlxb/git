@@ -15,6 +15,10 @@
 
     <style name="TranslucentTheme" parent="AppTheme"/>
 
+    <style name="AppBarLayoutStyle" parent="Base.Widget.Design.AppBarLayout">
+        <item name="android:background">@color/colorchatGrid</item>
+    </style>
+    
     <style name="MainTabStyle" parent="Base.Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@android:color/transparent</item>
         <item name="tabIndicatorHeight">0dp</item>
@@ -122,4 +126,5 @@
         <item name="android:divider">@null</item>
         <item name="iconifiedByDefault">false</item>
     </style>
+
 </resources>

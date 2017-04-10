@@ -19,12 +19,17 @@ import cn.gogoal.im.adapter.MarketAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.bean.market.MarkteBean;
-import cn.gogoal.im.bean.market.StockMarketBean;
+import cn.gogoal.im.bean.stock.MarkteBean;
+import cn.gogoal.im.bean.stock.StockMarketBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.XLayout;
+
+import static cn.gogoal.im.common.AppConst.REFRESH_TYPE_PARENT_BUTTON;
+import static cn.gogoal.im.common.AppConst.REFRESH_TYPE_RELOAD;
+import static cn.gogoal.im.common.AppConst.REFRESH_TYPE_SWIPEREFRESH;
 
 
 /**
@@ -34,14 +39,6 @@ import cn.gogoal.im.ui.view.XLayout;
  * description :沪深.
  */
 public class HuShenFragment extends BaseFragment {
-
-    public static int REFRESH_TYPE_AUTO = 0x50011;//自动刷新
-
-    public static int REFRESH_TYPE_RELOAD = 0x50012;//出错重试按钮
-
-    public static int REFRESH_TYPE_SWIPEREFRESH = 0x50013;//下拉刷新
-
-    public static int REFRESH_TYPE_PARENT_BUTTON = 0x50014;//父activity的刷新按钮
 
     public int refreshType = REFRESH_TYPE_RELOAD;//刷新类型
 
@@ -56,7 +53,7 @@ public class HuShenFragment extends BaseFragment {
 
     private MarketAdapter adapter;
 
-    private ArrayList<MarkteBean> markteList=new ArrayList<>();
+    private ArrayList<MarkteBean> markteList = new ArrayList<>();
 
     public void setRefreshType(int refreshType) {
         this.refreshType = refreshType;
@@ -81,15 +78,9 @@ public class HuShenFragment extends BaseFragment {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshType=REFRESH_TYPE_SWIPEREFRESH;
-
-                new android.os.Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getMarketInformation();
-                        refreshLayout.setRefreshing(false);
-                    }
-                }, 1000);
+                refreshType = REFRESH_TYPE_SWIPEREFRESH;
+                getMarketInformation();
+                refreshLayout.setRefreshing(false);
             }
         });
     }
@@ -101,9 +92,10 @@ public class HuShenFragment extends BaseFragment {
 
         AppManager.getInstance().sendMessage("START_ANIMATIOM");
 
-        if (refreshType==REFRESH_TYPE_RELOAD) {
+        if (refreshType == REFRESH_TYPE_RELOAD) {
             xLayout.setStatus(XLayout.Loading);//loading
         }
+
         final Map<String, String> param = new HashMap<>();
         param.put("fullcode", "sh000001;sz399001;sh000300;sz399006");
         param.put("category_type", "1");
@@ -112,20 +104,21 @@ public class HuShenFragment extends BaseFragment {
             public void onSuccess(String responseInfo) {
                 AppManager.getInstance().sendMessage("STOP_ANIMATION");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    SPTools.saveString("MARKET_RESPONSEINFO_DATA",responseInfo);//缓存
+                    SPTools.saveString("MARKET_RESPONSEINFO_DATA", responseInfo);//缓存
                     reconstructData(responseInfo);
                 } else {
                     xLayout.setStatus(XLayout.Error);
-                    if (refreshType==REFRESH_TYPE_PARENT_BUTTON || refreshType==REFRESH_TYPE_SWIPEREFRESH){
-                        UIHelper.toast(getContext(),"行情数据更新出错\r\n"+JSONObject.parseObject(responseInfo).getString("message"), Toast.LENGTH_LONG);
+                    if (refreshType == REFRESH_TYPE_PARENT_BUTTON || refreshType == REFRESH_TYPE_SWIPEREFRESH) {
+                        UIHelper.toast(getContext(), "行情数据更新出错\r\n" + JSONObject.parseObject(responseInfo).getString("message"), Toast.LENGTH_LONG);
+                        AppManager.getInstance().sendMessage("STOP_ANIMATION");
                     }
-                    refreshType=REFRESH_TYPE_RELOAD;
+                    refreshType = REFRESH_TYPE_RELOAD;
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                refreshType=REFRESH_TYPE_RELOAD;
+                refreshType = REFRESH_TYPE_RELOAD;
                 UIHelper.toastError(getActivity(), msg, xLayout);
                 AppManager.getInstance().sendMessage("STOP_ANIMATION");
                 xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
@@ -151,9 +144,10 @@ public class HuShenFragment extends BaseFragment {
                     hangqingBean.getPrice(),
                     hangqingBean.getPrice_change(),
                     hangqingBean.getPrice_change_rate(), 0, null, null,
-                    hangqingBean.getPrice_change() > 0 ? R.color.stock_red : R.color.stock_green);
+                    StockUtils.getStockRateColor(hangqingBean.getPrice_change()));
             listMarket.add(itemData);
         }
+
         markteList.add(new MarkteBean("大盘数据", listMarket));
 
         //热门行业
@@ -168,7 +162,7 @@ public class HuShenFragment extends BaseFragment {
                     industrylistBean.getIndustry_rate(),
                     industrylistBean.getStock_name(),
                     industrylistBean.getStock_code(),
-                    (industrylistBean.getIndustry_rate() > 0 ? R.color.stock_red : R.color.stock_green)
+                    StockUtils.getStockRateColor(industrylistBean.getIndustry_rate())
             );
             listHotIndestry.add(itemData);
         }
@@ -185,8 +179,8 @@ public class HuShenFragment extends BaseFragment {
 
         adapter.notifyDataSetChanged();
 
-        if (refreshType==REFRESH_TYPE_PARENT_BUTTON || refreshType==REFRESH_TYPE_SWIPEREFRESH){
-            UIHelper.toast(getContext(),"行情数据更新成功");
+        if (refreshType == REFRESH_TYPE_PARENT_BUTTON || refreshType == REFRESH_TYPE_SWIPEREFRESH) {
+            UIHelper.toast(getContext(), "行情数据更新成功");
         }
     }
 
@@ -201,8 +195,7 @@ public class HuShenFragment extends BaseFragment {
                     0,
                     list.get(i).getStock_name(),
                     list.get(i).getStock_code(),
-                    (list.get(i).getRate() > 0 ? R.color.stock_red : R.color.stock_green)
-
+                    StockUtils.getStockRateColor(list.get(i).getRate())
             );
             increase.add(itemData);
         }

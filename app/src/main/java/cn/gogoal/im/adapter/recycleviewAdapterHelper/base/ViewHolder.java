@@ -80,17 +80,24 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     public ViewHolder setText(int viewId, String text) {
         TextView tv = getView(viewId);
 //        防止空指针
-        tv.setText(TextUtils.isEmpty(text)?"":text);
+        tv.setText(TextUtils.isEmpty(text) ? "" : text);
         return this;
     }
 
     /**
      * 设置TextView的颜色值
      */
-    public ViewHolder setTextColor(int viewId, @ColorRes int color) {
+    public ViewHolder setTextColor(int viewId, @ColorInt int color) {
         TextView tv = getView(viewId);
-//        防止空指针
-        tv.setTextColor(ContextCompat.getColor(getContext(),color));
+        tv.setTextColor(color);
+        return this;
+    }
+    /**
+     * 设置TextView的颜色值
+     */
+    public ViewHolder setTextResColor(int viewId, @ColorRes int colorId) {
+        TextView tv = getView(viewId);
+        tv.setTextColor(ContextCompat.getColor(mContext,colorId));
         return this;
     }
 
@@ -102,8 +109,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     public ViewHolder setImageUrl(int viewId, String url) {
         ImageView view = getView(viewId);
-        if (!TextUtils.isEmpty(url)){
-            ImageDisplay.loadNetImage(mContext,url,view,true);
+        if (!TextUtils.isEmpty(url)) {
+            ImageDisplay.loadNetImage(mContext, url, view, true);
         }
         return this;
     }
@@ -120,7 +127,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    public ViewHolder setBackgroundColor(int viewId,@ColorInt int color) {
+    public ViewHolder setBackgroundColor(int viewId, @ColorInt int color) {
         View view = getView(viewId);
         view.setBackgroundColor(color);
         return this;

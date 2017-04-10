@@ -719,7 +719,7 @@ public class StatusBarUtil {
         if (!fullScreemImmersive) {
             if (isOperableDevice()) {
                 setStatusBarFontDark(true);
-                setColor(ContextCompat.getColor(activity, R.color.colorTitle));
+                setColor(ContextCompat.getColor(activity, R.color.colorPrimaryDark));
             } else {
                 setColor(Color.BLACK);
             }
