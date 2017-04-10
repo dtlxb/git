@@ -31,7 +31,6 @@ import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XTitle;
 
 
-
 /**
  * Created by huangxx on 2017/4/6.
  */
@@ -133,6 +132,12 @@ public class EditSquareBriefActivity extends BaseActivity {
                 text = "清空";
             }
 
+            if (isNotice) {
+                tvNoInfo.setText("暂无群公告\n群公告适用于发布群规、群活动等信息");
+            } else {
+                tvNoInfo.setText("暂无群简介\n群简介综合群性质，创建时间等信息");
+            }
+
             XTitle.TextAction textAction = new XTitle.TextAction(text) {
                 @Override
                 public void actionClick(View view) {
@@ -151,9 +156,9 @@ public class EditSquareBriefActivity extends BaseActivity {
             rightAction = (TextView) xTitle.getViewByAction(textAction);
         } else {
             if (isNotice) {
-                tvNoInfo.setText("暂无群公告\n群公告适用于发布群规、群活动等信息");
+                tvNoInfo.setText("暂无群公告");
             } else {
-                tvNoInfo.setText("暂无群简介\n群简介综合群性质，创建时间等信息");
+                tvNoInfo.setText("暂无群简介");
             }
             buttonEdit.setVisibility(View.GONE);
             etGroupInfo.clearFocus();

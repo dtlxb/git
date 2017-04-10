@@ -70,7 +70,7 @@ public class SquareCollectActivity extends BaseActivity {
         initRecycleView(squareRoomRecycler, R.drawable.shape_divider_1px);
 
         JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_groups_saved", new JSONArray());
-        Boolean needRefresh = SPTools.getBoolean("needRefresh", false);
+        Boolean needRefresh = SPTools.getBoolean("squareNeedRefresh", false);
         KLog.e(groupsArray.toString());
 
         groupList = new ArrayList<>();
@@ -103,7 +103,7 @@ public class SquareCollectActivity extends BaseActivity {
             @Override
             public void onSuccess(String responseInfo) {
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                Log.e("====responseInfo", responseInfo);
+                SPTools.clearItem("squareNeedRefresh");
                 if ((int) result.get("code") == 0) {
                     JSONArray newGroupArray = (JSONArray) result.get("data");
                     for (int i = 0; i < newGroupArray.size(); i++) {

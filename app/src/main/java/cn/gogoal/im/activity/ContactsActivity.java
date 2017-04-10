@@ -1,4 +1,4 @@
-package cn.gogoal.im.fragment;
+package cn.gogoal.im.activity;
 
 
 import android.content.Context;
@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -27,19 +26,14 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.IMAddFriendActivity;
-import cn.gogoal.im.activity.IMNewFrienActivity;
-import cn.gogoal.im.activity.SingleChatRoomActivity;
-import cn.gogoal.im.activity.SquareCollectActivity;
 import cn.gogoal.im.adapter.ContactAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
-import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -50,7 +44,7 @@ import cn.gogoal.im.ui.index.SuspendedDecoration;
 /**
  * 联系人
  */
-public class ContactsFragment extends BaseFragment {
+public class ContactsActivity extends BaseActivity {
 
     @BindView(R.id.rv_contacts)
     RecyclerView rvContacts;
@@ -65,27 +59,29 @@ public class ContactsFragment extends BaseFragment {
     private ContactAdapter contactAdapter;
     private ArrayList<ContactBean> contactBeanList;
 
-    public ContactsFragment() {
+    public ContactsActivity() {
     }
 
     @Override
     public int bindLayout() {
-        return R.layout.fragment_contacts;
+        return R.layout.activity_contacts;
     }
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle(R.string.title_contacts);
+        setMyTitle(R.string.title_contacts, true);
 
         ViewGroup.LayoutParams tvParams = tvConstactsFlag.getLayoutParams();
-        tvParams.width = AppDevice.getWidth(getContext()) / 4;
-        tvParams.height = AppDevice.getWidth(getContext()) / 4;
+        tvParams.width = AppDevice.getWidth(getActivity()) / 4;
+        tvParams.height = AppDevice.getWidth(getActivity()) / 4;
         tvConstactsFlag.setLayoutParams(tvParams);
+        Boolean needRefresh = SPTools.getBoolean("contactsNeedRefresh", false);
+        KLog.e(needRefresh);
 
         //初始化
         LinearLayoutManager layoutManager;
         rvContacts.setLayoutManager(layoutManager = new LinearLayoutManager(
-                getContext(), LinearLayoutManager.VERTICAL, false));
+                getActivity(), LinearLayoutManager.VERTICAL, false));
 
         //indexbar初始化
         indexBar.setmPressedShowTextView(tvConstactsFlag)//设置HintTextView
@@ -96,9 +92,9 @@ public class ContactsFragment extends BaseFragment {
         //添加联系人功能头部item
         addContactHead();
 
-        getData();//联系人列表数据
+        getData(needRefresh);//联系人列表数据
 
-        contactAdapter = new ContactAdapter(getContext(), contactBeanList);
+        contactAdapter = new ContactAdapter(getActivity(), contactBeanList);
 
         contactAdapter.notifyDataSetChanged();
 
@@ -112,14 +108,14 @@ public class ContactsFragment extends BaseFragment {
                 Intent intent;
                 //单聊处理
                 if (position == 0) {
-                    intent = new Intent(getContext(), IMNewFrienActivity.class);
+                    intent = new Intent(getActivity(), IMNewFrienActivity.class);
                     intent.putExtra("add_type", 0x01);
                     startActivity(intent);
                 } else if (position == 1) {
-                    intent = new Intent(getContext(), SquareCollectActivity.class);
+                    intent = new Intent(getActivity(), SquareCollectActivity.class);
                     startActivity(intent);
                 } else {
-                    intent = new Intent(getContext(), SingleChatRoomActivity.class);
+                    intent = new Intent(getActivity(), SingleChatRoomActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("conversation_id", contactBeanList.get(position).getConv_id());
                     bundle.putString("nickname", contactBeanList.get(position).getNickname());
@@ -165,11 +161,9 @@ public class ContactsFragment extends BaseFragment {
         indexBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
-    private void getData() {
+    private void getData(Boolean needRefresh) {
         //缓存的联系人请求数据
-        Boolean needRefresh = SPTools.getBoolean("needRefresh", false);
         String friendResponseInfo = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", "");
-        KLog.e(friendResponseInfo);
         if (needRefresh) {
             getFriendList(contactBeanList);
         } else {
@@ -177,11 +171,6 @@ public class ContactsFragment extends BaseFragment {
                 parseContactDatas(friendResponseInfo, contactBeanList);
             }
         }
-        /*if (TextUtils.isEmpty(friendResponseInfo)) {
-            getFriendList(contactBeanList);
-        } else if (!JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()) {
-            parseContactDatas(friendResponseInfo, contactBeanList);
-        }*/
     }
 
     /**
@@ -235,7 +224,7 @@ public class ContactsFragment extends BaseFragment {
             public void onSuccess(String responseInfo) {
 
                 KLog.e(responseInfo);
-
+                SPTools.clearItem("contactsNeedRefresh");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", responseInfo);
                     parseContactDatas(responseInfo, contactBeanList);
@@ -243,14 +232,14 @@ public class ContactsFragment extends BaseFragment {
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
                     SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", "{\"code\":0,\"data\":[],\"message\":\"成功\"}");
                 } else {
-                    UIHelper.toastError(getContext(), GGOKHTTP.getMessage(responseInfo));
+                    UIHelper.toastError(getActivity(), GGOKHTTP.getMessage(responseInfo));
                 }
             }
 
             @Override
             public void onFailure(String msg) {
                 KLog.e(msg);
-                UIHelper.toastError(getContext(), msg);
+                UIHelper.toastError(getActivity(), msg);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_FRIEND_LIST, ggHttpInterface).startGet();
@@ -273,7 +262,7 @@ public class ContactsFragment extends BaseFragment {
 
         KLog.e(contactBeanList);
 
-        SuspendedDecoration mDecoration = new SuspendedDecoration(getContext());
+        SuspendedDecoration mDecoration = new SuspendedDecoration(getActivity());
 
         mDecoration.setmDatas(contactBeanList);
 
@@ -284,11 +273,5 @@ public class ContactsFragment extends BaseFragment {
             rvContacts.addItemDecoration(mDecoration);
             added = false;
         }
-    }
-
-    public void refreshAdapter() {
-//        contactBeanList.clear();
-//        getData();//列表数据
-//        contactAdapter.notifyDataSetChanged();
     }
 }

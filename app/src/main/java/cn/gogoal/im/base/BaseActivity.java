@@ -3,6 +3,8 @@ package cn.gogoal.im.base;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -25,9 +27,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.avos.avoscloud.im.v2.AVIMClient;
+import com.avos.avoscloud.im.v2.AVIMClientEventHandler;
+import com.avos.avoscloud.im.v2.callback.AVIMClientStatusCallback;
 import com.hply.imagepicker.view.StatusBarUtil;
+import com.socks.library.KLog;
 
 import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -35,6 +42,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.LoginActivity;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.permission.IPermissionListner;
@@ -300,12 +308,26 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         }
     }
 
+    /**
+     * IM挤人逻辑
+     */
+    @Subscriber(tag = "show_client_status")
+    public void imClientLoad(String msg) {
+        DialogHelp.getMessageDialog(getActivity(), "此账号已经在其他设备登录，点击确定跳转登录页面，重新登录。", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+                finish();
+            }
+        }).show();
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         AppManager.getInstance().finishActivity(this);
-        SPTools.clearItem("needRefresh");
         fixInputMethodManagerLeak(this);
     }
 
