@@ -97,6 +97,8 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     @BindView(R.id.flag_layout)
     ViewGroup flagLayout;
 
+    private int errorPadding=0;
+
     private List<StockMarketBean.DataBean.HangqingBean> myStockMarketDatas = new ArrayList<>();
     private MyStockMarketAdapter myStockMarketAdapter;
 
@@ -149,6 +151,18 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             @Override
             public void onReload(View v) {
                 getMyStockData(AppConst.REFRESH_TYPE_FIRST);
+            }
+        });
+
+        searchMarket.post(new Runnable() {
+            @Override
+            public void run() {
+                if (searchMarket.getBottom() > 0) {
+                    errorPadding=(AppDevice.getHeight(getContext()) - searchMarket.getBottom())/ 3;
+                    KLog.e("errorPadding="+errorPadding+
+                            ";height="+AppDevice.getHeight(getContext())+
+                    ";bottom="+searchMarket.getBottom());
+                }
             }
         });
     }
@@ -250,9 +264,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
+                    xLayout.setPadding(0,0,0,0);
                     myStockDatas.clear();
                     myStockDatas.addAll(JSONObject.parseObject(responseInfo, MyStockBean.class).getData());
                     myStockAdapter.notifyDataSetChanged();
@@ -268,15 +282,20 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     }
 
                 } else if (code == 1001) {
+                    xLayout.setPadding(0,errorPadding,0,0);
                     xLayout.setStatus(XLayout.Empty);
                 } else {
                     xLayout.setStatus(XLayout.Error);
+                    xLayout.setPadding(0,0,0,0);
+                    refreshLayout.setRefreshing(false);
                     UIHelper.toastResponseError(getActivity(), responseInfo);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
+                xLayout.setPadding(0,errorPadding,0,0);
+                refreshLayout.setRefreshing(false);
                 UIHelper.toastError(getActivity(), msg, xLayout);
             }
         };

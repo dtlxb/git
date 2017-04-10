@@ -87,6 +87,10 @@ public class XLayout extends FrameLayout {
         build();
     }
 
+    public View getEmptyView(){
+        return emptyPage;
+    }
+
     private void build() {
 
         if (mConfig.loadingView == null) {
@@ -560,7 +564,6 @@ public class XLayout extends FrameLayout {
      * @return
      */
     public View getGlobalLoadingPage() {
-
         return loadingPage;
     }
 
