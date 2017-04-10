@@ -58,7 +58,7 @@ public class MyStockMarketAdapter extends BaseAdapter {
         }else {
             holder= (ViewHolder) convertView.getTag();
         }
-        holder.tvMarketName.setText(datas.get(position).getName().charAt(0)+""+datas.get(position).getName().charAt(1));
+        holder.tvMarketName.setText(datas.get(position).getName().charAt(0)+"");
         holder.tvMarketPrice.setText(StringUtils.saveSignificand(datas.get(position).getPrice(),2));
         holder.tvMarketPriceChange$Rate.setText(StringUtils.saveSignificand(datas.get(position).getPriceChange(),2)
                 +"\u3000"+ StockUtils.plusMinus(datas.get(position).getRate()));
