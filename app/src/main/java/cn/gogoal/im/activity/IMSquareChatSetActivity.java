@@ -33,6 +33,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
@@ -240,7 +241,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     }
 
     //删除群成员
-    public void deleteAnyone(List<Integer> idSet) {
+    public void deleteAnyone(final List<Integer> idSet) {
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
         params.put("id_list", JSONObject.toJSONString(idSet));
@@ -250,9 +251,16 @@ public class IMSquareChatSetActivity extends BaseActivity {
             @Override
             public void onSuccess(String responseInfo) {
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                Log.e("++++responseInfo", responseInfo);
                 if ((int) result.get("code") == 0) {
-                    UIHelper.toast(IMSquareChatSetActivity.this, "群成员删除成功!!!");
+                    if (idSet.size() == 1 && idSet.get(0) == (Integer.parseInt(UserUtils.getUserAccountId()))) {
+                        UIHelper.toast(IMSquareChatSetActivity.this, "退群并删除群成功");
+                        //群列表删除
+                        SPTools.clearItem(UserUtils.getUserAccountId() + conversationId + "_accountList_beans");
+                        MessageUtils.removeByID(conversationId);
+                        finish();
+                    } else {
+                        UIHelper.toast(IMSquareChatSetActivity.this, "群成员删除成功");
+                    }
                 }
             }
 
@@ -427,6 +435,10 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 startActivity(new Intent(getActivity(), SearchActivity.class));
                 break;
             case R.id.tv_delete_square:
+                //删除并退出群
+                List<Integer> quitList = new ArrayList<>();
+                quitList.add(Integer.parseInt(UserUtils.getUserAccountId()));
+                deleteAnyone(quitList);
                 break;
             default:
                 break;
