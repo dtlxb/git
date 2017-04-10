@@ -41,7 +41,6 @@
                     android:layout_marginTop="16dp"
                     android:gravity="center"
                     android:lineSpacingExtra="10dp"
-                    android:text="暂无群公告\n群公告适用于。。。。。。。。。"
                     android:textColor="@color/colorXLayout"
                     android:textSize="18sp" />
 
@@ -119,8 +118,7 @@
                 android:text="编辑"
                 android:textColor="@color/absoluteWhite"
                 android:textSize="18sp"
-                android:visibility="gone"
-                app:normalBackgroundColor="@color/colorPrimary"
+                app:normalBackgroundColor="@color/stock_red"
                 app:pressedBackgroundColor="#f68d8d"
                 app:radius="8dp" />
         </LinearLayout>

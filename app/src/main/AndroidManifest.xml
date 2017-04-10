@@ -99,8 +99,6 @@
             android:name=".activity.SearchPersonSquareActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".activity.SquareCollectActivity" />
-        <activity
-            android:name=".activity.SquarePublishActivity"/>
 
         <activity android:name="cn.gogoal.im.activity.OfficialAccountsActivity" />
 
@@ -139,6 +137,8 @@
         <activity android:name=".activity.stock.MarketDetialActivity" />
 
         <activity android:name=".activity.stock.MyStockNewsActivity"/>
+
+        <activity android:name=".activity.ContactsActivity"/>
 
         <!--<activity android:name=".activity.Test2Activity"></activity>-->
     </application>

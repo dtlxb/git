@@ -39,6 +39,7 @@ import java.util.Map;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ChooseContactActivity;
+import cn.gogoal.im.activity.ContactsActivity;
 import cn.gogoal.im.activity.IMNewFrienActivity;
 import cn.gogoal.im.activity.OfficialAccountsActivity;
 import cn.gogoal.im.activity.SearchPersonSquareActivity;
@@ -112,7 +113,7 @@ public class MessageFragment extends BaseFragment {
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_person)) {
             @Override
             public void actionClick(View view) {
-
+                startActivity(new Intent(getActivity(),ContactsActivity.class));
             }
         };
         XTitle.ImageAction addAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_add_message)) {
@@ -351,7 +352,7 @@ public class MessageFragment extends BaseFragment {
                         squareMessageFrom = (lcattrsObject.get("username")) == null ? "" : lcattrsObject.getString("username");
                     }
                     if (ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache").equals("")) {
-                        //createGroupImage(messageBean.getConversationID(), position);
+                        createGroupImage(messageBean.getConversationID(), position);
                     } else {
                         ImageDisplay.loadFileImage(getmContext(), new File(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")), avatarIv);
                     }

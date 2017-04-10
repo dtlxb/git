@@ -419,7 +419,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     Bundle nameBundle = new Bundle();
                     nameBundle.putString("square_name", squareName);
                     nameBundle.putString("conversation_id", conversationId);
-                    nameBundle.putBoolean("is_notice", false);
                     intent.putExtras(nameBundle);
                     startActivityForResult(intent, AppConst.SQUARE_ROOM_EDIT_NAME);
                 }
@@ -430,6 +429,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 Bundle briefBundle = new Bundle();
                 briefBundle.putBoolean("is_creater", squareCreater.equals(UserUtils.getUserAccountId()));
                 briefBundle.putString("conversation_id", conversationId);
+                briefBundle.putBoolean("is_notice", false);
                 intent.putExtras(briefBundle);
                 startActivityForResult(intent, AppConst.SQUARE_ROOM_EDIT_BRIEF);
                 break;

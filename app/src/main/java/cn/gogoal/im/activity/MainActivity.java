@@ -17,7 +17,6 @@ import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.fragment.ContactsFragment;
 import cn.gogoal.im.fragment.FoundFragment;
 import cn.gogoal.im.fragment.MessageFragment;
 import cn.gogoal.im.fragment.MineFragment;
@@ -50,7 +49,7 @@ public class MainActivity extends BaseActivity {
 
         MyStockFragment myStockFragment = new MyStockFragment();                //自选股
 
-        final ContactsFragment contactsFragment = new ContactsFragment();     // TAB2 人脉
+//        final ContactsActivity contactsFragment = new ContactsActivity();     // TAB2 人脉
 
         FoundFragment foundFragment = new FoundFragment();                      // TAB3 投研
 
@@ -58,16 +57,15 @@ public class MainActivity extends BaseActivity {
 
         final MineFragment mineFragment = new MineFragment();                 // TAB4 我的
 
-        Boolean needRefresh = getIntent().getExtras().getBoolean("isFromLogin", false);
-
-        SPTools.saveBoolean("needRefresh", needRefresh);
+        Boolean needRefresh = getIntent().getBooleanExtra("isFromLogin", false);
+        SPTools.saveBoolean("contactsNeedRefresh", needRefresh);
+        SPTools.saveBoolean("squareNeedRefresh", needRefresh);
 
         List<Fragment> tabFragments = new ArrayList<>();
         tabFragments.add(messageFragment);
         tabFragments.add(myStockFragment);
         tabFragments.add(foundFragment);
-        tabFragments.add(contactsFragment);
-//        tabFragments.add(socialContactFragment);
+        tabFragments.add(socialContactFragment);
         tabFragments.add(mineFragment);
 
         SimpleFragmentPagerAdapter tabAdapter = new SimpleFragmentPagerAdapter(
@@ -95,7 +93,6 @@ public class MainActivity extends BaseActivity {
 
                         break;
                     case 1:
-                        contactsFragment.refreshAdapter();
                         break;
                     case 2:
 
@@ -109,7 +106,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                contactsFragment.srcollShowIndexBar(state == 0 && vpMain.getCurrentItem() == 1);
+//                contactsFragment.srcollShowIndexBar(state == 0 && vpMain.getCurrentItem() == 1);
             }
         });
 

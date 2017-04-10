@@ -66,14 +66,12 @@ public class IMNewFrienActivity extends BaseActivity {
         //未读数清零
         messageListJsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
         IMMessageBeans.addAll(JSON.parseArray(String.valueOf(messageListJsonArray), IMMessageBean.class));
-        IMMessageBean imMessageBean = new IMMessageBean();
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(conversationId)) {
                 IMMessageBeans.get(i).setUnReadCounts("0");
-                imMessageBean = IMMessageBeans.get(i);
+                MessageUtils.saveMessageInfo(messageListJsonArray, IMMessageBeans.get(i));
             }
         }
-        MessageUtils.saveMessageInfo(messageListJsonArray, imMessageBean);
 
         if (addType == 0x01) {
             titleBar.setLeftText(R.string.title_new_friend);
