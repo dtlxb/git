@@ -25,6 +25,13 @@ public class GGOKHTTP {
     public static final String APP_HQ_INFORMATION = "v1/hq/get_app_hq";
 
     /*
+     *获取大盘部分数据
+     * param.put("fullcode", "sh000001;sz399001;sh000300;sz399006");
+     * param.put("category_type", "1");
+     * */
+    public static final String APP_HQ_GET = "v1/hq/get";
+
+    /*
        * 获取热门行业
        * params category_type 分类类型
        * */

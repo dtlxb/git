@@ -59,7 +59,7 @@
             android:process=":pushservice" />
         <service android:name=".servise.IntentService" />
 
-        <activity android:name=".activity.Test2Activity">
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

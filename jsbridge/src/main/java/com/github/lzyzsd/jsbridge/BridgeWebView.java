@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.lzyzsd.library.BuildConfig.DEBUG;
+
 public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
 
     public interface WebChangeListener {
@@ -110,7 +112,7 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
         this.setVerticalScrollBarEnabled(false);
         this.setHorizontalScrollBarEnabled(false);
         this.getSettings().setJavaScriptEnabled(true);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WebView.setWebContentsDebuggingEnabled(true);
         }
         this.setWebViewClient(generateBridgeWebViewClient());
