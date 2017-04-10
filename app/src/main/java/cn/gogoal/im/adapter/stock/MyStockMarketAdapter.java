@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.bean.stock.MarkteBean;
+import cn.gogoal.im.bean.stock.StockMarketBean;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -24,10 +24,10 @@ import cn.gogoal.im.common.UIHelper;
 
 public class MyStockMarketAdapter extends BaseAdapter {
 
-    private List<MarkteBean.MarketItemData> datas;
+    private List<StockMarketBean.DataBean.HangqingBean> datas;
 
-    public MyStockMarketAdapter(List<MarkteBean.MarketItemData> datas) {
-        this.datas = datas;
+    public MyStockMarketAdapter(List<StockMarketBean.DataBean.HangqingBean> datas) {
+        this.datas=datas;
     }
 
     @Override
@@ -58,13 +58,15 @@ public class MyStockMarketAdapter extends BaseAdapter {
         }else {
             holder= (ViewHolder) convertView.getTag();
         }
-        holder.tvMarketName.setText(datas.get(position).getName().charAt(0)+"");
-        holder.tvMarketPrice.setText(StringUtils.saveSignificand(datas.get(position).getPrice(),2));
-        holder.tvMarketPriceChange$Rate.setText(StringUtils.saveSignificand(datas.get(position).getPriceChange(),2)
-                +"\u3000"+ StockUtils.plusMinus(datas.get(position).getRate()));
 
-        holder.tvMarketPrice.setTextColor(ContextCompat.getColor(parent.getContext(),datas.get(position).getPriceColor()));
-        holder.tvMarketPriceChange$Rate.setTextColor(ContextCompat.getColor(parent.getContext(),datas.get(position).getPriceColor()));
+        holder.tvMarketName.setText(String.valueOf(datas.get(position).getName().charAt(0)));
+        holder.tvMarketPrice.setText(StringUtils.saveSignificand(datas.get(position).getPrice(),2));
+        holder.tvMarketPriceChange$Rate.setText(StringUtils.saveSignificand(datas.get(position).getPrice_change(),2)
+                +"\u3000"+ StockUtils.plusMinus(datas.get(position).getPrice_change_rate()));
+
+        int rateColor = StockUtils.getStockRateColor(datas.get(position).getPrice_change_rate());
+        holder.tvMarketPrice.setTextColor(ContextCompat.getColor(parent.getContext(),rateColor));
+        holder.tvMarketPriceChange$Rate.setTextColor(ContextCompat.getColor(parent.getContext(),rateColor));
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
