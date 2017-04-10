@@ -139,17 +139,17 @@ public class WatchLiveActivity extends BaseActivity {
 
     //播放地址
     //private String mPlayUrl = "http://ggliveo.oss-cn-hangzhou.aliyuncs.com/ggVod/Act-ss-mp4-hd/xiaoceshi.mp4";
-    private String mPlayUrl = "rtmp://zbmo.go-goal.cn/microphone/dave";
+    private String mPlayUrl = "rtmp://zbmo.go-goal.cn/microphone/dave_mix";
     //推送地址
     private String mPushUrl;
     //连麦延迟播放网址
-    private String mSmallDelayPlayUrl;
+    private String mSmallDelayPlayUrl = "rtmp://zbmo.go-goal.cn/microphone/dave";
 
     //聊天对象
     private List<AVIMMessage> messageList = new ArrayList<>();
     private LiveChatAdapter mLiveChatAdapter;
     private AVIMConversation imConversation;
-    private String room_id = "58e5e7085c497d0064ae7c05";
+    private String room_id;
 
     private Handler mHandler = new Handler() {
         @Override
