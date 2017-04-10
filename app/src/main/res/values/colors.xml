@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#ED1B1B</color>
-    <color name="colorPrimaryDark">@color/colorTitle</color>
     <color name="colorAccent">#38ADFF</color>
-    <color name="colorRedBg">#F53F3F</color>
 
     <color name="absoluteWhite">#ffffff</color>
 
@@ -64,11 +62,12 @@
     <color name="index_bar_text_flag">#66000000</color>
 
     <!--股票行情-->
-    <color name="stock_market_bg">#f8f8f8</color>
+    <color name="stock_market_bg">#f4f4f4</color>
     <color name="stock_market_divider">#e4e4e4</color>
-    <color name="stock_green">#0CB709</color>
     <color name="stockItemPress">#E2E7EC</color>
+    <color name="stock_green">#0CB709</color>
     <color name="stock_red">#f53f3f</color>
+    <color name="stock_gray">#dfdfdf</color>
     <color name="stock_list_more">#0095FF</color>
     <color name="stock_text_black">#333333</color>
     <color name="stock_text_gray">#666666</color>

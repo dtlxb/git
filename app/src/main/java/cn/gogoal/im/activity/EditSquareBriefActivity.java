@@ -3,7 +3,6 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -26,12 +25,12 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.view.XLayout;
+import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XTitle;
+
+
 
 /**
  * Created by huangxx on 2017/4/6.
@@ -40,7 +39,7 @@ import cn.gogoal.im.ui.view.XTitle;
 public class EditSquareBriefActivity extends BaseActivity {
 
     @BindView(R.id.button_edit)
-    TextView buttonEdit;
+    SelectorButton buttonEdit;
     @BindView(R.id.tv_published_brief)
     TextView tvPublishedBrief;
     @BindView(R.id.et_group_info)

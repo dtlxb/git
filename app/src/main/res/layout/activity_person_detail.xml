@@ -25,7 +25,7 @@
         android:text="添加好友"
         android:textColor="@color/absoluteWhite"
         android:textSize="18sp"
-        app:normalBackgroundColor="@color/colorRedBg"
+        app:normalBackgroundColor="@color/colorPrimary"
         app:pressedBackgroundColor="#f68d8d"
         app:radius="8dp" />
 </LinearLayout>

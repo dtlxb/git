@@ -19,7 +19,7 @@ public class FundFragment extends BaseFragment {
 
     @Override
     public int bindLayout() {
-        return R.layout.fragment_fund;
+        return R.layout.layout_normal_list_without_refresh;
     }
 
     @Override

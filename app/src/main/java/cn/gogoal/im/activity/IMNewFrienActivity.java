@@ -1,6 +1,7 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -26,7 +27,6 @@ import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.IMNewFriendBean;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
@@ -50,12 +50,12 @@ public class IMNewFrienActivity extends BaseActivity {
     private List<IMMessageBean> IMMessageBeans = new ArrayList<>();
     private int addType;
     private String conversationId;
-    @BindView(R.id.new_friend_list)
+    @BindView(R.id.recyclerView)
     RecyclerView newFriendList;
 
     @Override
     public int bindLayout() {
-        return R.layout.activity_im_newfriend;
+        return R.layout.layout_normal_list_without_refresh;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class IMNewFrienActivity extends BaseActivity {
             jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationId + "_unadd_accountList_beans", new JSONArray());
         }
 
-        initRecycleView(newFriendList, R.drawable.shape_divider_recyclerview_1px);
+        initRecycleView(newFriendList, R.drawable.shape_divider_1px);
 
         KLog.e(jsonArray.toString());
         newFriendBeans.clear();
@@ -149,7 +149,7 @@ public class IMNewFrienActivity extends BaseActivity {
                     addView.setText("已通过");
                 }
                 addView.setTextColor(ContextCompat.getColor(IMNewFrienActivity.this, R.color.relater_play_count));
-                addView.setBackgroundResource(R.color.absoluteWhite);
+                addView.setBackgroundColor(Color.WHITE);
             } else {
                 if (addType == 0x01) {
                     addView.setText("添加");

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:id="@+id/item_mystock"
+    android:paddingBottom="10dp"
+    android:background="@drawable/shape_bottom_line"
+    android:paddingTop="10dp">
+
+    <LinearLayout
+        android:id="@+id/flag_layout"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:layout_toStartOf="@+id/tv_mystock_price"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_mystock_stockname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/default__"
+            android:textColor="@color/textColor_333333"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_mystock_stockcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/default__"
+            android:textColor="#b2b2b2"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_mystock_price"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/tv_mystock_rate"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:text="@string/default__"
+        android:textColor="@color/textColor_333333"
+        android:textSize="16sp"
+        app:layout_widthPercent="25%" />
+
+    <TextView
+        android:id="@+id/tv_mystock_rate"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:text="@string/default__"
+        android:textColor="@color/textColor_333333"
+        android:textSize="16sp"
+        app:layout_widthPercent="25%" />
+</android.support.percent.PercentRelativeLayout>

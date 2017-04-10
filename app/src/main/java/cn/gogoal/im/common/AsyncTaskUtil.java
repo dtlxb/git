@@ -14,7 +14,6 @@ public class AsyncTaskUtil {
             return;
         }
         new AsyncTask<Void, Void, Void>() {
-
             @Override
             protected void onPreExecute() {
                 callBack.onPreExecute();

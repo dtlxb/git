@@ -85,6 +85,7 @@ public class IMPersonDetailActivity extends BaseActivity {
 
                     infos.add(new UserInfo(UserInfo.ItemType.HEAD,
                             (String) contactBean.getAvatar(), contactBean.getFull_name(), contactBean.getNickname()));
+
                     infos.add(new UserInfo(UserInfo.ItemType.SPACE));
                     infos.add(new UserInfo(UserInfo.ItemType.TEXT, false, "地区", "--"));
                     infos.add(new UserInfo(UserInfo.ItemType.TEXT, false, "公司", contactBean.getOrg_name()));

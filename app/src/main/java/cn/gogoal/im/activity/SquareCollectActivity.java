@@ -39,7 +39,7 @@ import cn.gogoal.im.ui.view.XTitle;
 
 public class SquareCollectActivity extends BaseActivity {
 
-    @BindView(R.id.square_room_recycler)
+    @BindView(R.id.recyclerView)
     RecyclerView squareRoomRecycler;
 
     @BindView(R.id.xLayout)
@@ -51,7 +51,7 @@ public class SquareCollectActivity extends BaseActivity {
 
     @Override
     public int bindLayout() {
-        return R.layout.activity_square_collcet;
+        return R.layout.layout_normal_list_without_refresh;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class SquareCollectActivity extends BaseActivity {
         });
 
         xLayout.setEmptyText("你还没有群组\n\r赶快找到属于你的组织吧");
-        initRecycleView(squareRoomRecycler, R.drawable.shape_divider_recyclerview_1px);
+        initRecycleView(squareRoomRecycler, R.drawable.shape_divider_1px);
 
         JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_groups_saved", new JSONArray());
         Boolean needRefresh = SPTools.getBoolean("needRefresh", false);

@@ -7,4 +7,5 @@
     <color name="transparent">#00000000</color>
 
     <color name="colorTitle">#f0f0f0</color>
+    <color name="colorPrimaryDark">@android:color/white</color>
 </resources>

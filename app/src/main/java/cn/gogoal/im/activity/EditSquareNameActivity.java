@@ -23,7 +23,6 @@ import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**

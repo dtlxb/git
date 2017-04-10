@@ -3,7 +3,9 @@ package cn.gogoal.im.common.ImageUtils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+
 import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +19,13 @@ import cn.gogoal.im.common.AsyncTaskUtil;
  */
 public class GroupFaceImage {
 
-    private static int minItemH;
+    private static final int INNER_DIVIDER = 5;//间距单元
 
-    private List<String> imageUrls;
+    private static final int BITMAP_CANVAS = INNER_DIVIDER * 37;//画布大小，没所谓
+
+    private static int minItemH;//每个小头像宽高
+
+    private List<String> imageUrls;//头像url集合
 
     private OnMatchingListener matchingListener;
 
@@ -32,21 +38,24 @@ public class GroupFaceImage {
 
     public static GroupFaceImage getInstance(Context context, List<String> imageUrls) {
         GroupFaceImage instance = new GroupFaceImage(context, imageUrls);
-        switch (imageUrls.size()) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-                minItemH = 144 / 2;
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-                minItemH = 144 / 3;
-                break;
-            default:
-                break;
+        if (null != imageUrls) {
+            switch (imageUrls.size()) {
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    minItemH = (BITMAP_CANVAS-3*INNER_DIVIDER)/2;
+                    break;
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                    minItemH = (BITMAP_CANVAS-4*INNER_DIVIDER)/3;
+                    break;
+                default:
+                    break;
+            }
         }
         return instance;
     }
@@ -58,7 +67,7 @@ public class GroupFaceImage {
             throw new NullPointerException("图像集合不能为空");
         }
         if (imageUrls.size() > 9) {
-            imageUrls = imageUrls.subList(0, 9);
+            imageUrls = imageUrls.subList(0, 9);//最多只取前九张
         }
 
         AsyncTaskUtil.doAsync(new AsyncTaskUtil.AsyncCallBack() {
@@ -66,7 +75,6 @@ public class GroupFaceImage {
             }
 
             public void doInBackground() {
-
                 for (int i = 0; i < imageUrls.size(); i++) {
                     try {
                         Bitmap myBitmap = Glide.with(context)
@@ -81,7 +89,6 @@ public class GroupFaceImage {
                         matchingListener.onError(e);
                     }
                 }
-
                 matchingListener.onSuccess(mathingBitmap(bitmaps));
 //                switch (imageUrls.size()) {
 //                    case 1:
@@ -135,164 +142,112 @@ public class GroupFaceImage {
             }
 
             public void onPostExecute() {
-
             }
         });
-
-    }
-
-    private Bitmap addHorizontalBitmap(Bitmap first, Bitmap second) {
-        int width = first.getWidth() + second.getWidth();
-        int height = Math.max(first.getHeight(), second.getHeight());
-        Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(result);
-        canvas.drawBitmap(first, 0, 0, null);
-        canvas.drawBitmap(second, first.getWidth(), 0, null);
-        return result;
-    }
-
-    private Bitmap addHorizontalBitmap(Bitmap first, Bitmap second, Bitmap third) {
-        Bitmap bitmapNewFirst = addHorizontalBitmap(first, second);
-        int width = bitmapNewFirst.getWidth() + third.getWidth();
-        int height = Math.max(bitmapNewFirst.getHeight(), third.getHeight());
-        Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(result);
-        canvas.drawBitmap(bitmapNewFirst, 0, 0, null);
-        canvas.drawBitmap(third, bitmapNewFirst.getWidth(), 0, null);
-        return result;
-    }
-
-    private Bitmap addVerticalBitmap(Bitmap first, Bitmap second) {
-        int width = Math.max(first.getWidth(), second.getWidth());
-        int height = first.getHeight() + second.getHeight();
-        Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(result);
-        canvas.drawBitmap(first, 0, 0, null);
-        canvas.drawBitmap(second, 0, first.getHeight(), null);
-        return result;
-    }
-
-    private Bitmap addVerticalBitmap(Bitmap first, Bitmap second, Bitmap third) {
-        Bitmap bitmapNewFirst = addVerticalBitmap(first, second);
-        int width = Math.max(bitmapNewFirst.getWidth(), third.getWidth());
-        int height = bitmapNewFirst.getHeight() + third.getHeight();
-        Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(result);
-        canvas.drawBitmap(bitmapNewFirst, 0, 0, null);
-        canvas.drawBitmap(third, 0, bitmapNewFirst.getHeight(), null);
-        return result;
     }
 
     public Bitmap mathingBitmap(List<Bitmap> bitmapList) {
         if (null == bitmapList || bitmapList.isEmpty()) {
             return null;
         }
-        int innerWidth = bitmapList.get(0).getWidth();
-        int resultWidth = bitmapList.size() == 1 ?
-                2 * innerWidth :
-                (bitmapList.size() >= 5 ?
-                        (3 * innerWidth + 4) :
-                        (2 * innerWidth + 2));
-
-        Bitmap result = Bitmap.createBitmap(resultWidth, resultWidth, Bitmap.Config.RGB_565);
+        Bitmap result = Bitmap.createBitmap(BITMAP_CANVAS, BITMAP_CANVAS, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(result);
-        canvas.drawRGB(240, 240, 240);
+        canvas.drawRGB(219, 223, 224);//绘制背景颜色
         switch (bitmapList.size()) {
             case 1:
-                return bitmapList.get(0);
+                canvas.drawBitmap(bitmapList.get(0), 10 * INNER_DIVIDER, 10 * INNER_DIVIDER, null);
+                return result;
             case 2:
-                return addHorizontalBitmap(bitmapList.get(0), bitmapList.get(1));
+                canvas.drawBitmap(bitmapList.get(0), INNER_DIVIDER, 10 * INNER_DIVIDER, null);
+                canvas.drawBitmap(bitmapList.get(1), 19 * INNER_DIVIDER, 10 * INNER_DIVIDER, null);
+                return result;
             case 3:
+                canvas.drawBitmap(bitmapList.get(0), 10 * INNER_DIVIDER, INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(0), resultWidth / 4, 0, null);
+                canvas.drawBitmap(bitmapList.get(1), INNER_DIVIDER, 19 * INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(1), 0, innerWidth, null);
-
-                canvas.drawBitmap(bitmapList.get(2), innerWidth + 2,innerWidth, null);
+                canvas.drawBitmap(bitmapList.get(2), 19 * INNER_DIVIDER, 19 * INNER_DIVIDER, null);
 
                 return result;
 
             case 4:
-                canvas.drawBitmap(bitmapList.get(0), 0, 0, null);
+                canvas.drawBitmap(bitmapList.get(0), INNER_DIVIDER, INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(1), innerWidth + 2, 0, null);
+                canvas.drawBitmap(bitmapList.get(1), 19 * INNER_DIVIDER, INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(2), 0, innerWidth + 2, null);
+                canvas.drawBitmap(bitmapList.get(2), INNER_DIVIDER, 19 * INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(2), innerWidth + 2, innerWidth + 2, null);
+                canvas.drawBitmap(bitmapList.get(3), 19 * INNER_DIVIDER, 19 * INNER_DIVIDER, null);
 
                 return result;
 
             case 5:
-                canvas.drawBitmap(bitmapList.get(0), resultWidth / 6, resultWidth / 6, null);
+                canvas.drawBitmap(bitmapList.get(0), 7 * INNER_DIVIDER, 7 * INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(1), resultWidth / 6 + 2 + innerWidth, resultWidth / 6, null);
+                canvas.drawBitmap(bitmapList.get(1), 19 * INNER_DIVIDER, 7 * INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(2), 0, resultWidth / 6 + innerWidth + 2, null);
+                canvas.drawBitmap(bitmapList.get(2), INNER_DIVIDER, 19 * INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(3), innerWidth + 2, resultWidth / 6 + innerWidth + 2, null);
+                canvas.drawBitmap(bitmapList.get(3), 13 * INNER_DIVIDER, 19 * INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(4), 2 * innerWidth + 4, resultWidth / 6 + innerWidth + 2, null);
+                canvas.drawBitmap(bitmapList.get(4), 25 * INNER_DIVIDER, 19 * INNER_DIVIDER, null);
 
                 return result;
 
             case 6:
-                canvas.drawBitmap(bitmapList.get(0), 0, resultWidth / 6, null);
+                canvas.drawBitmap(bitmapList.get(0), INNER_DIVIDER, 7 * INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(1), 2 + innerWidth, resultWidth / 6, null);
+                canvas.drawBitmap(bitmapList.get(1), 13 * INNER_DIVIDER, 7 * INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(2), 4 + 2 * innerWidth, resultWidth / 6, null);
+                canvas.drawBitmap(bitmapList.get(2), 25 * INNER_DIVIDER, 7 * INNER_DIVIDER, null);
 
+                canvas.drawBitmap(bitmapList.get(3), INNER_DIVIDER, 19 * INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(3), 0, resultWidth / 6 + innerWidth + 2, null);
+                canvas.drawBitmap(bitmapList.get(4), 13 * INNER_DIVIDER, 19 * INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(4), innerWidth + 2, resultWidth / 6 + innerWidth + 2, null);
-
-                canvas.drawBitmap(bitmapList.get(5), 2 * innerWidth + 4, resultWidth / 6 + innerWidth + 2, null);
+                canvas.drawBitmap(bitmapList.get(5), 25 * INNER_DIVIDER, 19 * INNER_DIVIDER, null);
 
                 return result;
 
             case 7:
-                canvas.drawBitmap(bitmapList.get(0), innerWidth, 0, null);
+                canvas.drawBitmap(bitmapList.get(0), 13 * INNER_DIVIDER, INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(1), 0, innerWidth + 2, null);
-                canvas.drawBitmap(bitmapList.get(2), innerWidth + 2, innerWidth + 2, null);
-                canvas.drawBitmap(bitmapList.get(3), 2 * innerWidth + 4, innerWidth + 2, null);
+                canvas.drawBitmap(bitmapList.get(1), INNER_DIVIDER, 13 * INNER_DIVIDER, null);
+                canvas.drawBitmap(bitmapList.get(2), 13 * INNER_DIVIDER, 13 * INNER_DIVIDER, null);
+                canvas.drawBitmap(bitmapList.get(3), 25 * INNER_DIVIDER, 13 * INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(4), 0, innerWidth * 2 + 4, null);
-                canvas.drawBitmap(bitmapList.get(5), innerWidth + 2, innerWidth * 2 + 4, null);
-                canvas.drawBitmap(bitmapList.get(6), innerWidth * 2 + 4, innerWidth * 2 + 4, null);
+                canvas.drawBitmap(bitmapList.get(4), INNER_DIVIDER, 25 * INNER_DIVIDER, null);
+                canvas.drawBitmap(bitmapList.get(5), 13 * INNER_DIVIDER, 25 * INNER_DIVIDER, null);
+                canvas.drawBitmap(bitmapList.get(6), 25 * INNER_DIVIDER, 25 * INNER_DIVIDER, null);
 
                 return result;
 
             case 8:
-                canvas.drawBitmap(bitmapList.get(0), innerWidth/2, 0, null);
+                canvas.drawBitmap(bitmapList.get(0), 7 * INNER_DIVIDER, INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(1), innerWidth/2 + 2+innerWidth ,0 , null);
+                canvas.drawBitmap(bitmapList.get(1), 19 * INNER_DIVIDER, INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(2), 0, innerWidth + 2, null);
-                canvas.drawBitmap(bitmapList.get(3), innerWidth + 2, innerWidth + 2, null);
-                canvas.drawBitmap(bitmapList.get(4), 2 * innerWidth + 4, innerWidth + 2, null);
+                canvas.drawBitmap(bitmapList.get(2), INNER_DIVIDER, 13 * INNER_DIVIDER, null);
+                canvas.drawBitmap(bitmapList.get(3), 13 * INNER_DIVIDER, 13 * INNER_DIVIDER, null);
+                canvas.drawBitmap(bitmapList.get(4), 25 * INNER_DIVIDER, 13 * INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(5), 0, innerWidth * 2 + 4, null);
-                canvas.drawBitmap(bitmapList.get(6), innerWidth + 2, innerWidth * 2 + 4, null);
-                canvas.drawBitmap(bitmapList.get(7), innerWidth * 2 + 4, innerWidth * 2 + 4, null);
-
+                canvas.drawBitmap(bitmapList.get(5), INNER_DIVIDER, 25 * INNER_DIVIDER, null);
+                canvas.drawBitmap(bitmapList.get(5), 13 * INNER_DIVIDER, 25 * INNER_DIVIDER, null);
+                canvas.drawBitmap(bitmapList.get(7), 25 * INNER_DIVIDER, 25 * INNER_DIVIDER, null);
                 return result;
 
             case 9:
+                canvas.drawBitmap(bitmapList.get(0), INNER_DIVIDER, INNER_DIVIDER, null);
+                canvas.drawBitmap(bitmapList.get(1), 13 * INNER_DIVIDER, INNER_DIVIDER, null);
+                canvas.drawBitmap(bitmapList.get(2), 25 * INNER_DIVIDER, INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(0), 0, 0, null);
-                canvas.drawBitmap(bitmapList.get(1), innerWidth, 0, null);
-                canvas.drawBitmap(bitmapList.get(2), 2 * innerWidth + 4, 0, null);
+                canvas.drawBitmap(bitmapList.get(3), INNER_DIVIDER, 13 * INNER_DIVIDER, null);
+                canvas.drawBitmap(bitmapList.get(4), 13 * INNER_DIVIDER, 13 * INNER_DIVIDER, null);
+                canvas.drawBitmap(bitmapList.get(5), 25 * INNER_DIVIDER, 13 * INNER_DIVIDER, null);
 
-                canvas.drawBitmap(bitmapList.get(3), 0, innerWidth + 2, null);
-                canvas.drawBitmap(bitmapList.get(4), innerWidth + 2, innerWidth + 2, null);
-                canvas.drawBitmap(bitmapList.get(5), 2 * innerWidth + 4, innerWidth + 2, null);
-
-                canvas.drawBitmap(bitmapList.get(6), 0, innerWidth * 2 + 4, null);
-                canvas.drawBitmap(bitmapList.get(7), innerWidth + 2, innerWidth * 2 + 4, null);
-                canvas.drawBitmap(bitmapList.get(8), innerWidth * 2 + 4, innerWidth * 2 + 4, null);
+                canvas.drawBitmap(bitmapList.get(6), INNER_DIVIDER, 25 * INNER_DIVIDER, null);
+                canvas.drawBitmap(bitmapList.get(7), 13 * INNER_DIVIDER, 25 * INNER_DIVIDER, null);
+                canvas.drawBitmap(bitmapList.get(8), 25 * INNER_DIVIDER, 25 * INNER_DIVIDER, null);
 
                 return result;
 

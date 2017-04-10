@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 基础模块 END -->
 
-
     <!-- 阿里云播放器 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -60,7 +59,7 @@
             android:process=":pushservice" />
         <service android:name=".servise.IntentService" />
 
-        <activity android:name=".activity.LoginActivity">
+        <activity android:name=".activity.Test2Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -74,7 +73,6 @@
             android:name=".activity.TakePhotoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
-
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".activity.PlayerActivity"
@@ -83,32 +81,26 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".activity.FunctionActivity"
-
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.SquareChatRoomActivity"
-
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.SingleChatRoomActivity"
-
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.IMRegisterActivity" />
         <activity
             android:name=".activity.ChatRoomActivity"
-
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".activity.DemoActivity" />
-
-        <activity android:name="cn.gogoal.im.activity.IMNewFrienActivity" />
-
-        <activity android:name="cn.gogoal.im.activity.IMPersonDetailActivity" />
-
+        <activity android:name=".activity.IMNewFrienActivity" />
+        <activity android:name=".activity.IMPersonDetailActivity" />
         <activity
-            android:name="cn.gogoal.im.activity.SearchPersonSquareActivity"
+            android:name=".activity.SearchPersonSquareActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-
-        <activity android:name="cn.gogoal.im.activity.SquareCollectActivity" />
+        <activity android:name=".activity.SquareCollectActivity" />
+        <activity
+            android:name=".activity.SquarePublishActivity"/>
 
         <activity android:name="cn.gogoal.im.activity.OfficialAccountsActivity" />
 
@@ -117,25 +109,17 @@
         <activity
             android:name="cn.gogoal.im.activity.EditSquareNameActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-
-        <activity android:name="cn.gogoal.im.activity.IMPersonActivity" />
-
-        <activity android:name="cn.gogoal.im.activity.IMSquareChatSetActivity" />
-
-        <activity android:name=".activity.SearchActivity">
-
-        </activity>
-
-        <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity" />
+        <activity android:name=".activity.IMPersonActivity" />
+        <activity android:name=".activity.IMSquareChatSetActivity" />
+        <activity android:name=".activity.SearchActivity"/>
+        <activity android:name=".wxapi.WXPayEntryActivity" />
         <activity android:name=".activity.IMAddFriendActivity" />
-
         <activity android:name=".wxapi.WXEntryActivity" />
 
         <uses-library
             android:name="com.google.android.maps"
             android:required="false" />
 
-        <activity android:name=".activity.stock.MarketActivity" />
         <activity android:name=".activity.PdfDisplayActivity" />
         <activity
             android:name=".activity.LiveTogetherActivity"
@@ -150,7 +134,13 @@
             android:theme="@style/TranslucentTheme" />
         <activity android:name=".activity.LiveActivity" />
 
-        <activity android:name=".activity.stock.NewMarketActivity" />
+         <activity android:name=".activity.stock.MarketActivity"/>
+
+        <activity android:name=".activity.stock.MarketDetialActivity" />
+
+        <activity android:name=".activity.stock.MyStockNewsActivity"/>
+
+        <!--<activity android:name=".activity.Test2Activity"></activity>-->
     </application>
 
 </manifest>

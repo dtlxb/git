@@ -43,13 +43,14 @@ public class SearchPersionFragment extends BaseFragment {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+
     private ArrayList<ContactBean> searchResultList;
     private SearchPersionResultAdapter adapter;
 //    private EmptyWrapper wrapper;
 
     @Override
     public int bindLayout() {
-        return R.layout.fragment_search_persion;
+        return R.layout.layout_normal_list_without_refresh;
     }
 
     @Override

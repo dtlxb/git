@@ -108,9 +108,11 @@ public class AppManager {
      */
 
     public void finishBackActivity(FragmentActivity activity) {
-        for (FragmentActivity a : activityStack) {
-            if (!a.getClass().equals(activity.getClass())) {
-                finishActivity(a);
+        if (null!=activityStack && !activityStack.isEmpty()) {
+            for (FragmentActivity a : activityStack) {
+                if (!a.getClass().equals(activity.getClass())) {
+                    finishActivity(a);
+                }
             }
         }
     }
