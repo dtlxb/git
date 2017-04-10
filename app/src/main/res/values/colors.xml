@@ -50,6 +50,7 @@
     <color name="live_chat_level1">#ee514d</color>
     <color name="live_chat_level2">#1d8fe1</color>
     <color name="live_chat_level3">#31b48d</color>
+    <color name="complete_text">#ee2626</color>
 
     <!--封装通用底部列表弹窗颜色-->
     <color name="item_press">#D9D9D9</color>

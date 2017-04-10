@@ -114,19 +114,44 @@
 
             </LinearLayout>
 
-            <TextView
+            <RelativeLayout
                 android:id="@+id/square_message_tv"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="44dp"
                 android:layout_marginTop="19dp"
                 android:background="@drawable/shape_text_border"
-                android:drawableRight="@mipmap/img_more"
                 android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:text="@string/im_str_square_notice"
-                android:textColor="@color/textColor_333333"
-                android:textSize="16sp" />
+                android:paddingLeft="16dp">
+
+                <TextView
+                    android:id="@+id/tv_square_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/im_str_square_notice"
+                    android:textColor="@color/textColor_333333"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/the_square_notice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="65dp"
+                    android:layout_marginRight="30dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:textColor="@color/textColor_666666"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@mipmap/img_more" />
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/person_base_info"
@@ -157,7 +182,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_marginLeft="65dp"
-                        android:layout_marginRight="25dp"
+                        android:layout_marginRight="30dp"
                         android:ellipsize="end"
                         android:lines="1"
                         android:textColor="@color/textColor_666666"
@@ -195,7 +220,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_marginLeft="65dp"
-                        android:layout_marginRight="25dp"
+                        android:layout_marginRight="30dp"
                         android:ellipsize="end"
                         android:lines="1"
                         android:textColor="@color/textColor_666666"
