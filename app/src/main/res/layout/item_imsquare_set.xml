@@ -27,13 +27,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <cn.gogoal.im.ui.view.NineGridImageView
+                    <ImageView
                         android:id="@+id/iv_square_head"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
-                        android:layout_centerHorizontal="true"
-                        android:background="#ebebeb"
-                        app:imgGap="2dp" />
+                        android:layout_centerHorizontal="true" />
 
                     <TextView
                         android:id="@+id/tv_square_name"
@@ -199,7 +197,7 @@
 
                 </RelativeLayout>
 
-                <include layout="@layout/include_line"/>
+                <include layout="@layout/include_line" />
 
                 <RelativeLayout
                     android:id="@+id/square_brief"
