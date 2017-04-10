@@ -4,18 +4,18 @@ package cn.gogoal.im.bean;
  * author wangjd on 2017/3/31 0031.
  * Staff_id 1375
  * phone 18930640263
- * description :${annotated}.
+ * description :用户详情页实体.
  */
 public class UserInfo {
-    private String avatar;
-    private String fullName;
-    private String nickName;
+    private String avatar;//头像
+    private String fullName;//真实姓名
+    private String nickName;//昵称
 
-    private String itemText1;
-    private String itemText2;
+    private String itemText1;//文本1 key
+    private String itemText2;//文本2 value
 
-    private ItemType itemType;
-    private boolean haveMore;
+    private ItemType itemType;//数据在列表中类型
+    private boolean haveMore;//是否显示更多箭头
 
     public UserInfo(ItemType itemType) {
         this.itemType = itemType;

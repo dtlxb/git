@@ -56,7 +56,7 @@ public class SearchTeamFragment extends BaseFragment {
 
     @Override
     public int bindLayout() {
-        return R.layout.fragment_search_team;
+        return R.layout.layout_normal_list_without_refresh;
     }
 
     @Override

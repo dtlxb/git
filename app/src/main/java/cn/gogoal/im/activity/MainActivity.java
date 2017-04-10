@@ -5,6 +5,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
+import com.socks.library.KLog;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +16,13 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.ContactsFragment;
 import cn.gogoal.im.fragment.FoundFragment;
 import cn.gogoal.im.fragment.MessageFragment;
 import cn.gogoal.im.fragment.MineFragment;
+import cn.gogoal.im.fragment.MyStockFragment;
+import cn.gogoal.im.fragment.SocialContactFragment;
 
 public class MainActivity extends BaseActivity {
 
@@ -39,11 +44,17 @@ public class MainActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
-        MessageFragment messageFragment = new MessageFragment();        // TAB1 消息
+        KLog.e(UserUtils.getToken());
+
+        MessageFragment messageFragment = new MessageFragment();                // TAB1 消息
+
+        MyStockFragment myStockFragment = new MyStockFragment();                //自选股
 
         final ContactsFragment contactsFragment = new ContactsFragment();     // TAB2 人脉
 
-        FoundFragment foundFragment = new FoundFragment();              // TAB3 投研
+        FoundFragment foundFragment = new FoundFragment();                      // TAB3 投研
+
+        SocialContactFragment socialContactFragment = new SocialContactFragment();//社交
 
         final MineFragment mineFragment = new MineFragment();                 // TAB4 我的
 
@@ -53,8 +64,10 @@ public class MainActivity extends BaseActivity {
 
         List<Fragment> tabFragments = new ArrayList<>();
         tabFragments.add(messageFragment);
-        tabFragments.add(contactsFragment);
+        tabFragments.add(myStockFragment);
         tabFragments.add(foundFragment);
+        tabFragments.add(contactsFragment);
+//        tabFragments.add(socialContactFragment);
         tabFragments.add(mineFragment);
 
         SimpleFragmentPagerAdapter tabAdapter = new SimpleFragmentPagerAdapter(
@@ -96,7 +109,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                contactsFragment.srcollShowIndexBar(state==0&&vpMain.getCurrentItem()==1);
+                contactsFragment.srcollShowIndexBar(state == 0 && vpMain.getCurrentItem() == 1);
             }
         });
 

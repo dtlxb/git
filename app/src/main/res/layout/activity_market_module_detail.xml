@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/stock_market_bg"
+        android:paddingBottom="8dp"
+        android:paddingEnd="15dp"
+        android:paddingStart="15dp"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:id="@+id/tv_header_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/default__"
+            android:textColor="@color/textColor_333333"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_header_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/default__"
+            android:textColor="@color/textColor_333333"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_header_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:text="@string/default__"
+            android:textColor="@color/textColor_333333"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <cn.gogoal.im.ui.view.XLayout
+        android:id="@+id/xLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swiperefreshlayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </cn.gogoal.im.ui.view.XLayout>
+
+</LinearLayout>

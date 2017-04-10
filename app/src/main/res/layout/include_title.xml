@@ -5,4 +5,5 @@
     android:layout_height="?attr/actionBarSize"
     android:layout_alignParentTop="true"
     android:layout_gravity="top"
-    android:background="@drawable/shape_title" />
+    android:visibility="gone"
+    android:background="@drawable/shape_bottom_line" />

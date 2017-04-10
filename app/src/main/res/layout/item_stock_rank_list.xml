@@ -2,13 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/item_stock_rank_list"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="50dp"
     android:background="@drawable/selector_normal_write2gray"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
-    android:paddingTop="5dp"
-    android:layout_marginBottom="1px"
-    android:paddingBottom="5dp">
+    android:layout_marginBottom="1px">
 
     <LinearLayout
         android:layout_width="wrap_content"

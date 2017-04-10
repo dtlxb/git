@@ -17,7 +17,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ChatRoomActivity;
 import cn.gogoal.im.activity.FunctionActivity;
 import cn.gogoal.im.activity.IMRegisterActivity;
-import cn.gogoal.im.activity.stock.NewMarketActivity;
+import cn.gogoal.im.activity.stock.MarketActivity;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseActivity;
@@ -89,19 +89,11 @@ public class MainAdapter extends CommonAdapter<FoundData> {
         @Override
         protected void convert(ViewHolder holder, final FoundData.ItemPojos itemPojos, final int position) {
 
-            final View view = holder.getView(R.id.layout_grid);
-
             if (TextUtils.isEmpty(itemPojos.getUrl())) {
-                view.setEnabled(false);
+                holder.itemView.setEnabled(false);
             }
 
-            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-
-            layoutParams.width = (AppDevice.getWidth(context) - AppDevice.dp2px(context, 3)) / 4;
-
-            layoutParams.height = (AppDevice.getWidth(context) - AppDevice.dp2px(context, 3)) / 4;
-
-            view.setLayoutParams(layoutParams);
+            AppDevice.setViewWidth$Height(holder.itemView,(AppDevice.getWidth(context) - 3) / 4,(AppDevice.getWidth(context) - 3) / 4);
 
             holder.setText(R.id.tv, itemPojos.getItemTextDescription());
 
@@ -198,8 +190,8 @@ public class MainAdapter extends CommonAdapter<FoundData> {
         //测试模块——股票
         private void gridItemClick_2(int position, FoundData.ItemPojos itemPojos) {
             switch (position) {
-                case 0:
-                    context.startActivity(new Intent(context, NewMarketActivity.class));
+                case 0://行情
+                    context.startActivity(new Intent(context, MarketActivity.class));
                     break;
                 case 3:
                     Intent intent = new Intent(context, FunctionActivity.class);

@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 基础模块 END -->
 
-
     <!-- 阿里云播放器 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -109,6 +108,8 @@
             android:name=".activity.SearchPersonSquareActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name="cn.gogoal.im.activity.SquareCollectActivity" />
+        <activity android:name=".activity.SquareCollectActivity" />
+        <activity android:name=".activity.SquarePublishActivity" />
         <activity android:name="cn.gogoal.im.activity.OfficialAccountsActivity" />
         <activity android:name="cn.gogoal.im.activity.EditSquareBriefActivity" />
         <activity
@@ -118,6 +119,10 @@
         <activity android:name="cn.gogoal.im.activity.IMSquareChatSetActivity" />
         <activity android:name=".activity.SearchActivity" />
         <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity" />
+        <activity android:name=".activity.IMPersonActivity" />
+        <activity android:name=".activity.IMSquareChatSetActivity" />
+        <activity android:name=".activity.SearchActivity" />
+        <activity android:name=".wxapi.WXPayEntryActivity" />
         <activity android:name=".activity.IMAddFriendActivity" />
         <activity android:name=".wxapi.WXEntryActivity" />
 
@@ -125,7 +130,6 @@
             android:name="com.google.android.maps"
             android:required="false" />
 
-        <activity android:name=".activity.stock.MarketActivity" />
         <activity android:name=".activity.PdfDisplayActivity" />
         <activity
             android:name=".activity.ChooseContactActivity"
@@ -139,6 +143,14 @@
             android:name=".activity.WatchLiveActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.stock.NewMarketActivity" />
+
+        <activity android:name=".activity.stock.MarketActivity" />
+
+        <activity android:name=".activity.stock.MarketDetialActivity" />
+
+        <activity android:name=".activity.stock.MyStockNewsActivity" />
+
+        <!--<activity android:name=".activity.Test2Activity"></activity>-->
     </application>
 
 </manifest>

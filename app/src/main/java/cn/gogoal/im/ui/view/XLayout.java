@@ -31,7 +31,7 @@ public class XLayout extends FrameLayout {
     public final static int Error = 2;
     public final static int No_Network = 3;
     public final static int Loading = 4;
-    private int state=0;
+    private int state = Success;
 
     private Context mContext;
     private View loadingPage;
@@ -60,7 +60,7 @@ public class XLayout extends FrameLayout {
         super(context, attrs);
         this.mContext = context;
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.XLayout);
-        isFirstVisible = a.getBoolean(R.styleable.XLayout_isFirstVisible, false);
+        isFirstVisible = a.getBoolean(R.styleable.XLayout_isFirstVisible, true);
         a.recycle();
     }
 
@@ -81,7 +81,7 @@ public class XLayout extends FrameLayout {
             throw new IllegalStateException("LoadingLayout can host only one direct child");
         }
         contentView = this.getChildAt(0);
-        if (!isFirstVisible && null!=contentView) {
+        if (!isFirstVisible && null != contentView) {
             contentView.setVisibility(View.GONE);
         }
         build();
@@ -89,9 +89,9 @@ public class XLayout extends FrameLayout {
 
     private void build() {
 
-        if(mConfig.loadingView==null){
+        if (mConfig.loadingView == null) {
             loadingPage = LayoutInflater.from(mContext).inflate(mConfig.loadingLayoutId, null);
-        }else {
+        } else {
             loadingPage = mConfig.loadingView;
         }
         errorPage = LayoutInflater.from(mContext).inflate(R.layout.widget_error_page, null);
@@ -112,9 +112,9 @@ public class XLayout extends FrameLayout {
         emptyImg = UIHelper.findViewById(emptyPage, R.id.empty_img);
         networkImg = UIHelper.findViewById(networkPage, R.id.no_network_img);
 
-        AppDevice.setViewWidth$Height(errorImg,AppDevice.getWidth(getContext())/5, LayoutParams.WRAP_CONTENT);
-        AppDevice.setViewWidth$Height(emptyImg,AppDevice.getWidth(getContext())/5, LayoutParams.WRAP_CONTENT);
-        AppDevice.setViewWidth$Height(networkImg,AppDevice.getWidth(getContext())/5, LayoutParams.WRAP_CONTENT);
+        AppDevice.setViewWidth$Height(errorImg, AppDevice.getWidth(getContext()) / 5, LayoutParams.WRAP_CONTENT);
+        AppDevice.setViewWidth$Height(emptyImg, AppDevice.getWidth(getContext()) / 5, LayoutParams.WRAP_CONTENT);
+        AppDevice.setViewWidth$Height(networkImg, AppDevice.getWidth(getContext()) / 5, LayoutParams.WRAP_CONTENT);
 
         errorReloadBtn = UIHelper.findViewById(errorPage, R.id.error_reload_btn);
         networkReloadBtn = UIHelper.findViewById(networkPage, R.id.no_network_reload_btn);
@@ -580,7 +580,6 @@ public class XLayout extends FrameLayout {
      * @return
      */
     public static Config getConfig() {
-
         return mConfig;
     }
 
@@ -608,7 +607,6 @@ public class XLayout extends FrameLayout {
         int backgroundColor = R.color.colorchatGrid;
 
         public Config setErrorText(@NonNull String text) {
-
             errorStr = text;
             return mConfig;
         }
@@ -620,13 +618,11 @@ public class XLayout extends FrameLayout {
         }
 
         public Config setNoNetworkText(@NonNull String text) {
-
             netwrokStr = text;
             return mConfig;
         }
 
         public Config setReloadButtonText(@NonNull String text) {
-
             reloadBtnStr = text;
             return mConfig;
         }
@@ -704,9 +700,9 @@ public class XLayout extends FrameLayout {
             return mConfig;
         }
 
-        public Config setLoadingPageView(View view){
+        public Config setLoadingPageView(View view) {
 
-            this.loadingView  = view;
+            this.loadingView = view;
             return mConfig;
         }
 

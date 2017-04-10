@@ -2,8 +2,9 @@
 <resources>
     <string-array name="main_tab">
         <item>消息</item>
-        <item>人脉</item>
+        <item>自选</item>
         <item>投研</item>
+        <item>人脉</item>
         <item>我的</item>
     </string-array>
 
@@ -61,4 +62,11 @@
         <item>基金</item>
         <item>债券</item>
     </string-array>
+
+    <string-array name="mystock_news_title">
+        <item>新闻</item>
+        <item>公告</item>
+        <item>研报</item>
+    </string-array>
+
 </resources>

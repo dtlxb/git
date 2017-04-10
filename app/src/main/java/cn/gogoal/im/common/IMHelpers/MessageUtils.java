@@ -80,6 +80,18 @@ public class MessageUtils {
         SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", jsonArray);
     }
 
+    //根据conversationID移除
+    public static void removeByID(String conv_id) {
+        JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
+        for (int i = 0; i < jsonArray.size(); i++) {
+            if (jsonArray.getJSONObject(i).get("conversationID").equals(conv_id)) {
+                jsonArray.remove(i);
+            } else {
+            }
+        }
+        SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", jsonArray);
+    }
+
     //群聊拉人加人(5:建群，拉人   6:踢人)
     public static void changeSquareInfo(String conversationID, JSONArray accountArray, String messageType) {
         JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationID + "_accountList_beans", new JSONArray());

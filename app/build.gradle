@@ -84,14 +84,14 @@ android {
     }
 }
 
-
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "com.android.support:support-vector-drawable:$ANDROID_SUPPORT_VERSION"
+    compile "com.android.support:support-vector-drawable:$ANDROID_SUPPORT_VERSION";
+    compile "com.android.support:percent:$ANDROID_SUPPORT_VERSION";
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
-    compile 'com.android.support:multidex:1.0.1'
-    /** 第三方依赖    */
+
+    /** 第三方依赖  */
     //微信登录、分享、支付依赖
     compile files('libs/libammsdk.jar')
     //网络请求
@@ -116,8 +116,8 @@ dependencies {
     compile project(':imagepicker')
     compile project(':jsbridge')
     //LeanCloud实时聊天
-    compile 'cn.leancloud.android:avoscloud-sdk:v3.15.9'
     compile('cn.leancloud.android:avoscloud-push:v3.15.9@aar') { transitive = true }
+    compile 'cn.leancloud.android:avoscloud-sdk:v3.15.9'
     //UCloud存储
     compile project(':uFileLib')
     //鲁班压缩

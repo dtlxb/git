@@ -17,6 +17,32 @@ public class GGOKHTTP {
 //-----------------------------------//DATA-API//----------------------------------------------
 //                                  ////////////
 
+    /*
+    获取大盘数据
+     * param.put("fullcode", "sh000001;sz399001;sh000300;sz399006");
+     * param.put("category_type", "1");
+     * */
+    public static final String APP_HQ_INFORMATION = "v1/hq/get_app_hq";
+
+    /*
+       * 获取热门行业
+       * params category_type 分类类型
+       * */
+    public static final String GET_HOT_INDUSTRY = "v1/industry/hot_industry_rank_list";
+
+    /*
+       * 指定 热门行业 的 股票列表
+       * params category_type 分类类型
+       * */
+    public static final String GET_HOT_INDUSTRY_DETAIL_LIST = "v1/industry/hot_industry_detail_list";
+
+    /*
+   * 获取[涨跌换振]行业
+   * type 跌涨类型
+   * channel 股票类型
+   * */
+    public static final String STOCK_RANK_LIST = "v1/stock/stock_rank_list";
+
     /**
      * 获取自选股列表
      * params token 用户令牌
@@ -32,20 +58,19 @@ public class GGOKHTTP {
      */
     public static final String RESET_MYSTOCKS = "v1/mystock/reset";
 
-    /*
-    获取大盘数据
-     * param.put("fullcode", "sh000001;sz399001;sh000300;sz399006");
-     * param.put("category_type", "1");
+    /**
+     * 个股新闻、公告、投资者互动
+     * params stock_code=002285&
+     * params type=2
      * */
-    public static final String APP_HQ_INFORMATION = "v1/hq/get_app_hq";
+    public static final String GET_STOCK_NEWS = "v1/news/get_stock_news";
 
     /*
-     * 跑马灯 和 轮播图
-     * param.put("product", "4");跑马灯
-     *
-     * 不传参为轮播图
+     *个股研报
+     * params token=4aece3232ba149c7a0328faa8ec938aa&
+     * params first_class=公司报告
      * */
-    public static final String BANNER_LIST = "v1/ad/new_list";
+    public static final String REPORT_LIST = "v1/report/list";
 
     /**
      * 三方登录

@@ -45,7 +45,7 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return titles.length;
+        return fragments.size();
     }
 
     @Override
@@ -66,12 +66,15 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
 //                    }
                 break;
             case 1:
-                imageView.setImageResource(R.drawable.selector_icon_main_tab_contact);
+                imageView.setImageResource(R.drawable.selector_icon_main_tab_my_stock);
                 break;
             case 2:
                 imageView.setImageResource(R.drawable.selector_icon_main_tab_function);
                 break;
             case 3:
+                imageView.setImageResource(R.drawable.selector_icon_main_tab_contact);
+                break;
+            case 4:
                 imageView.setImageResource(R.drawable.selector_icon_main_tab_mine);
                 break;
         }
