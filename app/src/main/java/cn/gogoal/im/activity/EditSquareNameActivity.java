@@ -47,6 +47,7 @@ public class EditSquareNameActivity extends BaseActivity {
         String squareName = getIntent().getStringExtra("square_name");
         conversationID = getIntent().getStringExtra("conversation_id");
         editSquareName.setText(squareName);
+        editSquareName.setSelection(squareName.length());
         xTitle = setMyTitle("群名称", true);
         XTitle.TextAction action = new XTitle.TextAction("完成") {
             @Override

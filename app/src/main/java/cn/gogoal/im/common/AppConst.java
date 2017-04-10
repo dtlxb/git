@@ -38,6 +38,8 @@ public class AppConst {
     public static final String LEAN_CLOUD_CONVERSATION_ID = "58aaa02d8d6d8100636e8be9";
 
     //关于刷新的一些类型，抗干扰
+    public static final int REFRESH_TYPE_FIRST = 0x50010;            //首次进入刷新
+
     public static final int REFRESH_TYPE_AUTO = 0x50011;            //自动刷新
 
     public static final int REFRESH_TYPE_RELOAD = 0x50012;          //出错重试按钮

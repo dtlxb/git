@@ -147,7 +147,7 @@ public class MyStockTabNewsFragment extends BaseFragment {
                     xLayout.setStatus(XLayout.Success);
 
                     if (refreshType==AppConst.REFRESH_TYPE_SWIPEREFRESH) {
-                        UIHelper.toast(getActivity(),"更新数据成功");
+                        UIHelper.toast(getActivity(),getString(R.string.str_refresh_ok));
                     }
                 } else if (code == 1001) {
                     xLayout.setStatus(XLayout.Error);

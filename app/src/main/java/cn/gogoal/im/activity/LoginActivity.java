@@ -47,11 +47,15 @@ public class LoginActivity extends BaseActivity {
 //        loginPassWord.setText("888888");
         loginUserName.setText("E00002638");
         loginPassWord.setText("123456");
+//        loginUserName.setText("E00003645");
+//        loginPassWord.setText("147258369");
+//        loginUserName.setText("E00002639");
+//        loginPassWord.setText("412174");
 
         findViewById(R.id.login).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                startActivity(new Intent(mContext,MarketActivity.class));
+                startActivity(new Intent(mContext, MarketActivity.class));
                 return true;
             }
         });
@@ -100,6 +104,7 @@ public class LoginActivity extends BaseActivity {
                             public void done(AVIMClient avimClient, AVIMException e) {
                             }
                         });
+
                     } else {
                         UIHelper.toast(getContext(), "登录失败");
                     }

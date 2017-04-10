@@ -34,7 +34,7 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
         super(fm);
         this.fragments = fragments;
         this.titles = titles;
-        this.context=context;
+        this.context = context;
 
     }
 
@@ -54,7 +54,7 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
     }
 
     public View getTabView(int position) {
-        ViewGroup view = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.tab_layout_item,new LinearLayout(context),false);
+        ViewGroup view = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.tab_layout_item, new LinearLayout(context), false);
         TextView tv = (TextView) view.findViewById(R.id.tv_main_tab);
         ImageView imageView = (ImageView) view.findViewById(R.id.img_main_tab);
         switch (position) {
@@ -72,7 +72,7 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
                 imageView.setImageResource(R.drawable.selector_icon_main_tab_function);
                 break;
             case 3:
-                imageView.setImageResource(R.drawable.selector_icon_main_tab_contact);
+                imageView.setImageResource(R.drawable.selector_icon_main_tab_social_contact);
                 break;
             case 4:
                 imageView.setImageResource(R.drawable.selector_icon_main_tab_mine);

@@ -138,11 +138,10 @@
     <string name="str_market">行情</string>
     <string name="str_search_hint">请输入股票代码/名称/拼音</string>
 
-    <string name="mystock_sort_price_normal">最新价&#xe679;</string>
-    <string name="mystock_sort_price_up">最新价&#xe6b4;</string>
-    <string name="mystock_sort_price_down">最新价&#xe6b6;</string>
+    <string name="mystock_sort_normal">%s&#xe679;</string>
+    <string name="mystock_sort_up">%s&#xe6b4;</string>
+    <string name="mystock_sort_down">%s&#xe6b6;</string>
+    <string name="str_add_my_stock">添加自选股</string>
+    <string name="str_refresh_ok">更新数据成功！</string>
 
-    <string name="mystock_sort_rate_normal">涨跌幅&#xe679;</string>
-    <string name="mystock_sort_rate_up">涨跌幅&#xe6b4;</string>
-    <string name="mystock_sort_rate_down">涨跌幅&#xe6b6;</string>
 </resources>

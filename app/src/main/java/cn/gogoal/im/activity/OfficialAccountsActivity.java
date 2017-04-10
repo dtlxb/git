@@ -68,14 +68,12 @@ public class OfficialAccountsActivity extends BaseActivity {
         JSONArray messageListJsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
         List<IMMessageBean> iMMessageBeans = new ArrayList<>();
         iMMessageBeans.addAll(JSON.parseArray(String.valueOf(messageListJsonArray), IMMessageBean.class));
-        IMMessageBean imMessageBean = new IMMessageBean();
         for (int i = 0; i < iMMessageBeans.size(); i++) {
             if (iMMessageBeans.get(i).getConversationID().equals(conversationID)) {
                 iMMessageBeans.get(i).setUnReadCounts("0");
-                imMessageBean = iMMessageBeans.get(i);
+                MessageUtils.saveMessageInfo(messageListJsonArray, iMMessageBeans.get(i));
             }
         }
-        MessageUtils.saveMessageInfo(messageListJsonArray, imMessageBean);
     }
 
     private void getAllMessages(String conversationID) {
