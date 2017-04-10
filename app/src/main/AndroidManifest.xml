@@ -150,7 +150,7 @@
 
         <activity android:name=".activity.stock.MyStockNewsActivity" />
 
-        <activity android:name=".activity.ContactsActivity"/>
+        <activity android:name=".activity.ContactsActivity" />
 
         <!--<activity android:name=".activity.Test2Activity"></activity>-->
     </application>
