@@ -33,6 +33,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -89,7 +90,7 @@ public class MessageFragment extends BaseFragment {
 
     private JSONArray jsonArray;
 
-    private List<String> groupMembers;
+    private Map<String, List<String>> gruopMemberMap = new HashMap<>();
 
     public MessageFragment() {
     }
@@ -103,7 +104,6 @@ public class MessageFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         xLayout.setStatus(XLayout.Success);
         initTitle();
-        groupMembers = new ArrayList<>();
         initRecycleView(message_recycler, R.drawable.shape_divider_1px);
     }
 
@@ -113,7 +113,7 @@ public class MessageFragment extends BaseFragment {
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_person)) {
             @Override
             public void actionClick(View view) {
-                startActivity(new Intent(getActivity(),ContactsActivity.class));
+                startActivity(new Intent(getActivity(), ContactsActivity.class));
             }
         };
         XTitle.ImageAction addAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_add_message)) {
@@ -429,7 +429,7 @@ public class MessageFragment extends BaseFragment {
                     sb.setSpan(fcs, 0, 7, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                     messageTv.setText(sb);
                 } else {
-                    messageTv.setText(squareMessageFrom + ":" +
+                    messageTv.setText(squareMessageFrom.endsWith("") ? message : squareMessageFrom + ":" +
                             message);
                 }
             } else {
@@ -453,22 +453,54 @@ public class MessageFragment extends BaseFragment {
     private void createGroupImage(final String ConversationId, final int position) {
         //群删除好友(每次删除后重新生成群头像)
         JSONArray accountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + ConversationId + "_accountList_beans", new JSONArray());
+        List<String> memberList = new ArrayList<>();
+        if (null != gruopMemberMap.get(ConversationId)) {
+            memberList.addAll(gruopMemberMap.get(ConversationId));
+        }
+
         if (null != accountArray && accountArray.size() > 0) {
             getNinePic(accountArray, ConversationId, position);
         } else {
-            UserUtils.getChatGroup(groupMembers, ConversationId, new UserUtils.getSquareInfo() {
-                @Override
-                public void squareGetSuccess(JSONObject object) {
-                    JSONArray array = object.getJSONArray("accountList");
-                    if (null != array && array.size() > 0)
-                        getNinePic(array, ConversationId, position);
-                }
+            //如果不存在则先找这个会话
+            if (memberList == null || memberList.size() == 0) {
+                AVImClientManager.getInstance().findConversationById(ConversationId, new AVImClientManager.ChatJoinManager() {
+                    @Override
+                    public void joinSuccess(AVIMConversation conversation) {
+                        UserUtils.getChatGroup(conversation.getMembers(), ConversationId, new UserUtils.getSquareInfo() {
+                            @Override
+                            public void squareGetSuccess(JSONObject object) {
+                                JSONArray array = object.getJSONArray("accountList");
+                                if (null != array && array.size() > 0)
+                                    getNinePic(array, ConversationId, position);
+                            }
 
-                @Override
-                public void squareGetFail(String error) {
+                            @Override
+                            public void squareGetFail(String error) {
 
-                }
-            });
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void joinFail(String error) {
+
+                    }
+                });
+            } else {
+                UserUtils.getChatGroup(memberList, ConversationId, new UserUtils.getSquareInfo() {
+                    @Override
+                    public void squareGetSuccess(JSONObject object) {
+                        JSONArray array = object.getJSONArray("accountList");
+                        if (null != array && array.size() > 0)
+                            getNinePic(array, ConversationId, position);
+                    }
+
+                    @Override
+                    public void squareGetFail(String error) {
+
+                    }
+                });
+            }
         }
     }
 
@@ -502,8 +534,7 @@ public class MessageFragment extends BaseFragment {
         Map<String, Object> map = baseMessage.getOthers();
         AVIMMessage message = (AVIMMessage) map.get("message");
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
-        groupMembers.clear();
-        groupMembers.addAll(conversation.getMembers());
+        gruopMemberMap.put(conversation.getConversationId(), conversation.getMembers());
         boolean isTheSame = false;
         final String ConversationId = conversation.getConversationId();
         int chatType = (int) conversation.getAttribute("chat_type");

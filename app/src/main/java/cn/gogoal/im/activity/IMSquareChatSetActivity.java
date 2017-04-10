@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +28,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.IMPersonSetAdapter;
-import cn.gogoal.im.adapter.NineGridImageViewAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
@@ -36,10 +36,10 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.view.NineGridImageView;
 
 /**
  * Created by huangxx on 2017/3/20.
@@ -52,7 +52,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     RecyclerView personlistRecycler;
 
     @BindView(R.id.iv_square_head)
-    NineGridImageView iv_square_head;
+    ImageView iv_square_head;
 
     @BindView(R.id.tv_square_name)
     TextView tvSquareName;
@@ -75,11 +75,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     @BindView(R.id.save_switch)
     Switch saveGroup;
 
-    private List<String> imageList = new ArrayList<>();
-    private List<String> idList = new ArrayList<>();
-
     private IMPersonSetAdapter mPersonInfoAdapter;
-    NineGridImageViewAdapter<String> mAdapter;
     private List<ContactBean> contactBeens = new ArrayList<>();
     private String conversationId;
     private String squareCreater;
@@ -157,8 +153,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
             public void onItemClick(RecyclerView.ViewHolder holder, View view, int position) {
                 Intent intent;
                 Bundle mBundle = new Bundle();
-                if ((position == contactBeens.size() - 2 && squareCreater.equals(UserUtils.getUserAccountId())) ||
-                        (!squareCreater.equals(UserUtils.getUserAccountId()) && position == contactBeens.size() - 1)) {
+                if (position == contactBeens.size() - 2 && squareCreater.equals(UserUtils.getUserAccountId())) {
                     intent = new Intent(IMSquareChatSetActivity.this, ChooseContactActivity.class);
                     mBundle.putInt("square_action", AppConst.SQUARE_ROOM_ADD_ANYONE);
                     mBundle.putString("conversation_id", conversationId);
@@ -184,22 +179,8 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 return false;
             }
         });
-
-        //群头像
-        mAdapter = new NineGridImageViewAdapter<String>() {
-            @Override
-            public void onDisplayImage(Context context, ImageView imageView, String url) {
-                ImageDisplay.loadNetImage(context, url, imageView);
-            }
-
-            @Override
-            public ImageView generateImageView(Context context) {
-                return super.generateImageView(context);
-            }
-        };
+        ImageDisplay.loadFileImage(IMSquareChatSetActivity.this, new File(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")), iv_square_head);
         getGroupInfo();
-        iv_square_head.setAdapter(mAdapter);
-        iv_square_head.setImagesData(imageList);
     }
 
     private ContactBean<Integer> addFunctionHead(String name, @DrawableRes int iconId) {
@@ -225,18 +206,29 @@ public class IMSquareChatSetActivity extends BaseActivity {
             contactBeens.add(addNomoralFuns(accountObject.getString("nickname"), accountObject.getInteger("friend_id"), accountObject.getString("avatar")));
         }
         //测试代码,没有数据的时候拉通讯录建群
-        for (int i = 0; i < contactBeens.size(); i++) {
-            if (i < 4) {
-                imageList.add(contactBeens.get(i).getAvatar().toString());
-                idList.add(String.valueOf(contactBeens.get(i).getFriend_id()));
+        KLog.e(contactBeens.size());
+        List<ContactBean> newContactBean = new ArrayList<>();
+        int size;
+        size = contactBeens.size();
+        if (squareCreater.equals(UserUtils.getUserAccountId())) {
+            if (contactBeens.size() > 4) {
+                size = 4;
+            }
+        } else {
+            if (contactBeens.size() > 6) {
+                size = 6;
             }
         }
-        idList.add(UserUtils.getUserAccountId());
-        contactBeens.add(addFunctionHead("", R.mipmap.person_add));
+
+        for (int i = 0; i < size; i++) {
+            newContactBean.add(contactBeens.get(i));
+        }
+        contactBeens.clear();
+        contactBeens.addAll(newContactBean);
         if (squareCreater.equals(UserUtils.getUserAccountId())) {
+            contactBeens.add(addFunctionHead("", R.mipmap.person_add));
             contactBeens.add(addFunctionHead("", R.mipmap.chat_reduce));
         }
-
         mPersonInfoAdapter.notifyDataSetChanged();
         KLog.e(contactBeens);
     }
