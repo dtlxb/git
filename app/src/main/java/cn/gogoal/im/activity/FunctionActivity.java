@@ -119,10 +119,14 @@ public class FunctionActivity extends BaseActivity {
             @Override
             public void handler(String data, ValueCallback<String> function) {
                 JSONObject object = JSONObject.parseObject(data);
+                Intent intent = null;
+                if (object.getString("source").equals("live")) {
+                    intent = new Intent(getContext(), WatchLiveActivity.class);
+                } else if (object.getString("source").equals("video")) {
+                    intent = new Intent(getContext(), PlayerActivity.class);
+                }
 
-                Intent intent = new Intent(getContext(), PlayerActivity.class);
                 intent.putExtra("live_id", object.getString("live_id"));
-                intent.putExtra("source", object.getString("source"));
                 startActivity(intent);
             }
         });
@@ -144,7 +148,7 @@ public class FunctionActivity extends BaseActivity {
                 } else if (AppDevice.getNetworkType(getContext()) == 1) {
                     showPdf(data);
                 } else {
-                    UIHelper.toastError(mContext, "跳转出错",null);
+                    UIHelper.toastError(mContext, "跳转出错", null);
                 }
 
             }

@@ -151,6 +151,8 @@ public class WatchLiveActivity extends BaseActivity {
     private AVIMConversation imConversation;
     private String room_id;
 
+    private String live_id;
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -182,6 +184,14 @@ public class WatchLiveActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+
+        live_id = getIntent().getStringExtra("live_id");
+
+        if (live_id.equals("887a1170-e034-4386-98fb-3b710fb37fbd")) {
+            mPlayUrl = "rtmp://zbmo.go-goal.cn/microphone/ios911_mix";
+        } else if (live_id.equals("cf68d632-b488-42fe-8142-07bc645d4229")) {
+            mPlayUrl = "rtmp://zbmo.go-goal.cn/microphone/dave_mix";
+        }
 
         if (Build.VERSION.SDK_INT >= 23) {
             permissionCheck();

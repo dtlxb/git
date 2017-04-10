@@ -23,13 +23,14 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.activity.TestActivity;
-import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
 import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ImageTextBean;
+import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.WeakReferenceHandler;
 import cn.gogoal.im.ui.NormalItemDecoration;
 
@@ -152,12 +153,13 @@ public class MineFragment extends BaseFragment {
                 public void onClick(View v) {
                     switch (position) {
                         case 0:
-                            startActivity(new Intent(getActivity(), LiveActivity.class));
+                            if (UserUtils.getUserAccountId().equals("348635")) {
+                                startActivity(new Intent(getActivity(), LiveActivity.class));
+                            } else {
+                                DialogHelp.getMessageDialog(getContext(), "您暂时没有权限直播，请联系客服申请！").show();
+                            }
                             break;
                         case 1:
-                            startActivity(new Intent(getActivity(), WatchLiveActivity.class));
-                            break;
-                        case 2:
                             startActivity(new Intent(getActivity(), TestActivity.class));
                             break;
                         default:
