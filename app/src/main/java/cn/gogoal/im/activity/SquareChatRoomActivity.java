@@ -50,11 +50,11 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
         int actionType = this.getIntent().getIntExtra("square_action", 0);
 
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
-        getSquareConversation(conversationID, need_update, actionType);
-
         if (!squareName.equals("")) {
             initTitle(squareName, conversationID);
         }
+        getSquareConversation(conversationID, need_update, actionType);
+
     }
 
     @Override
@@ -88,7 +88,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
                 chatFragment.setConversation(conversation, need_update, actionType);
                 groupMembers.addAll(conversation.getMembers());
                 if (squareName.equals("")) {
-                    initTitle(squareName, conversation.getConversationId());
+                    initTitle(conversation.getName(), conversation.getConversationId());
                 }
                 squareCreater = conversation.getCreator();
             }
@@ -116,6 +116,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
     }*/
     @Subscriber(tag = "correct_square_name")
     private void correctName(String msg) {
+        //群改名字
         if (null != msg) {
             xTitle.setTitle(msg);
         }

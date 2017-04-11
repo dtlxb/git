@@ -20,13 +20,15 @@ import cn.gogoal.im.common.UserUtils;
  * Created by huangxx on 2017/3/20.
  */
 
-public class IMPersonSetAdapter extends CommonAdapter<ContactBean,BaseViewHolder> {
+public class IMPersonSetAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
 
     private Context context;
+    private int chatTytpe;
 
-    public IMPersonSetAdapter(Context context,int layoutId,List<ContactBean> datas) {
+    public IMPersonSetAdapter(int chatTytpe, Context context, int layoutId, List<ContactBean> datas) {
         super(layoutId, datas);
-        this.context=context;
+        this.context = context;
+        this.chatTytpe = chatTytpe;
     }
 
     @Override
@@ -58,7 +60,7 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean,BaseViewHolder
         } else if (avatar instanceof Integer) {
             holder.setImageResource(R.id.iv, (Integer) avatar);
         }
-        if (String.valueOf(contactBean.getFriend_id()).equals(UserUtils.getUserAccountId())) {
+        if (String.valueOf(contactBean.getFriend_id()).equals(UserUtils.getUserAccountId()) && chatTytpe == 1002) {
             squareManTag.setVisibility(View.VISIBLE);
         } else {
             squareManTag.setVisibility(View.GONE);

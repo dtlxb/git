@@ -239,7 +239,7 @@ public class ChatFragment extends BaseFragment {
                 AVIMTextMessage mTextMessage = new AVIMTextMessage();
                 HashMap<String, Object> attrsMap = new HashMap<>();
                 attrsMap.put("username", UserUtils.getUserName());
-                attrsMap.put("simple_avatar", UserUtils.getUserAvatar());
+                attrsMap.put("avatar", UserUtils.getUserAvatar());
                 mTextMessage.setAttrs(attrsMap);
                 mTextMessage.setTimestamp(CalendarUtils.getCurrentTime());
                 mTextMessage.setFrom(UserUtils.getUserAccountId());
@@ -400,8 +400,10 @@ public class ChatFragment extends BaseFragment {
                     //头像暂时未保存
                     IMMessageBean imMessageBean = null;
                     if (chatType == 1001) {
-                        imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
-                                "0", null != contactBean.getNickname() ? contactBean.getNickname() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), message);
+                        if (null != contactBean) {
+                            imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
+                                    "0", null != contactBean.getNickname() ? contactBean.getNickname() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), message);
+                        }
                     } else if (chatType == 1002) {
                         imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
                                 "0", imConversation.getName(), "", "", message);
@@ -499,7 +501,7 @@ public class ChatFragment extends BaseFragment {
         //显示自己的图片消息
         HashMap<String, Object> attrsMap = new HashMap<>();
         attrsMap.put("username", UserUtils.getUserName());
-        attrsMap.put("simple_avatar", UserUtils.getUserAvatar());
+        attrsMap.put("avatar", UserUtils.getUserAvatar());
         final AVIMImageMessage mImageMessage = new AVIMImageMessage(imagefile);
         mImageMessage.setFrom(UserUtils.getUserAccountId());
         mImageMessage.setAttrs(attrsMap);
@@ -570,7 +572,7 @@ public class ChatFragment extends BaseFragment {
                 //自己显示语音消息
                 HashMap<String, Object> attrsMap = new HashMap<>();
                 attrsMap.put("username", UserUtils.getUserName());
-                attrsMap.put("simple_avatar", UserUtils.getUserAvatar());
+                attrsMap.put("avatar", UserUtils.getUserAvatar());
 
                 //封装一个AVfile对象
                 HashMap<String, Object> metaData = new HashMap<>();
@@ -643,7 +645,7 @@ public class ChatFragment extends BaseFragment {
 
                         messageList.addAll(list);
                         jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
-
+                        KLog.e(messageList.get(list.size() - 1).getContent());
                         if (chatType == 1001) {
                             //拿到对方信息
                             getSpeakToInfo(imConversation);
@@ -661,7 +663,6 @@ public class ChatFragment extends BaseFragment {
                                     messageList.get(i).setContent(JSON.toJSONString(map));
                                 }
                             }
-                            KLog.e(messageList);
                         }
 
                         //单聊，群聊处理(没发消息的时候不保存)

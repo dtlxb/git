@@ -26,8 +26,7 @@
         android:layout_height="44dp"
         android:layout_alignBottom="@+id/user_layout"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/message_time"
-        android:background="@mipmap/timg" />
+        android:layout_below="@+id/message_time" />
 
     <RelativeLayout
         android:id="@+id/user_layout"

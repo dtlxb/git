@@ -1,6 +1,7 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
 
 import java.io.File;
@@ -21,9 +23,12 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
+import cn.gogoal.im.adapter.baseAdapter.listener.OnItemClickListener;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
@@ -47,6 +52,7 @@ public class SquareCollectActivity extends BaseActivity {
     private ListAdapter listAdapter;
 
     private List<JSONObject> groupList;
+    private JSONArray groupsArray;
 
     @Override
     public int bindLayout() {
@@ -68,7 +74,7 @@ public class SquareCollectActivity extends BaseActivity {
         xLayout.setEmptyText("你还没有群组\n\r赶快找到属于你的组织吧");
         initRecycleView(squareRoomRecycler, R.drawable.shape_divider_1px);
 
-        JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_groups_saved", new JSONArray());
+        groupsArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_groups_saved", new JSONArray());
         Boolean needRefresh = SPTools.getBoolean("squareNeedRefresh", false);
         KLog.e(groupsArray.toString());
 
@@ -89,9 +95,59 @@ public class SquareCollectActivity extends BaseActivity {
         listAdapter = new ListAdapter(SquareCollectActivity.this, R.layout.item_square_collect, groupList);
         squareRoomRecycler.setAdapter(listAdapter);
 
+        listAdapter.setOnItemLongClickListener(new CommonAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(CommonAdapter adapter, View view, final int position) {
+                DialogHelp.getSelectDialog(getActivity(), "", new String[]{"标为未读", "置顶聊天", "删除聊天"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 2) {
+                            JSONObject jsonObject = groupList.get(position);
+                            deleteGroup(jsonObject.getString("conv_id"));
+
+                            groupsArray.remove(position);
+                            groupList.remove(position);
+                            SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_groups_saved", groupsArray);
+                            listAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }, false).show();
+                return false;
+            }
+        });
+
     }
 
-    //收藏群
+    //取消群收藏
+    public void deleteGroup(String conversationId) {
+        Map<String, String> params = new HashMap<>();
+        params.put("token", UserUtils.getToken());
+        params.put("conv_id", conversationId);
+        xLayout.setStatus(XLayout.Loading);
+        KLog.e(params);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                KLog.e(result.get("code"));
+                if ((int) result.get("code") == 0) {
+                    xLayout.setStatus(XLayout.Success);
+                    UIHelper.toast(SquareCollectActivity.this, "群已取消收藏!!!");
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                xLayout.setStatus(XLayout.Error);
+                KLog.json(msg);
+            }
+        };
+        new GGOKHTTP(params, GGOKHTTP.CANCEL_COLLECT_GROUP, ggHttpInterface).startGet();
+    }
+
+    //收藏群列表
     public void getGroupList() {
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
@@ -123,7 +179,7 @@ public class SquareCollectActivity extends BaseActivity {
         new GGOKHTTP(params, GGOKHTTP.GET_GROUP_LIST, ggHttpInterface).startGet();
     }
 
-    private class ListAdapter extends CommonAdapter<JSONObject,BaseViewHolder> {
+    private class ListAdapter extends CommonAdapter<JSONObject, BaseViewHolder> {
 
         private ListAdapter(Context context, int layoutId, List<JSONObject> datas) {
             super(context, layoutId, datas);

@@ -53,7 +53,7 @@ public class IMPersonActivity extends BaseActivity {
         KLog.e(contactBeens);
         //初始化
         personlistRecycler.setLayoutManager(new GridLayoutManager(this, 5));
-        mPersonInfoAdapter = new IMPersonSetAdapter(IMPersonActivity.this, R.layout.item_grid_foundfragment, contactBeens);
+        mPersonInfoAdapter = new IMPersonSetAdapter(1001, IMPersonActivity.this, R.layout.item_square_chat_set, contactBeens);
         personlistRecycler.setAdapter(mPersonInfoAdapter);
 
         mPersonInfoAdapter.setOnItemClickListener(new OnItemClickListener() {
