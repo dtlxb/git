@@ -39,12 +39,30 @@
     <string name="origin">原图</string>
     <string name="origin_size">原图(%1$s)</string>
 
-    <!--直播-->
+    <!--直播连麦-->
     <string name="live_together">一起直播</string>
     <string name="anchor_introduction">主播介绍</string>
+    <string name="invite_timeout_tip">对方长时间未响应，已取消连麦邀请</string>
+    <string name="inviting_process_timeout">超时未处理，已经自动拒绝对方的连麦邀请</string>
+    <string name="mix_stream_timeout_tip">由于长时间未连麦成功，已自动结束连麦</string>
+    <string name="no_inviting_for_response">当前没有连麦邀请</string>
+    <string name="close_chat_failed_for_new_chat">当前连麦关闭失败，无法开启新的连麦</string>
+    <string name="network_busy">当前网络状况不佳</string>
+    <string name="no_network">链接断开</string>
+    <string name="video_chatting_finished">连麦结束</string>
+    <string name="camera_open_failure_for_live">摄像头开启失败，无法直播</string>
+    <string name="error_stop_playing">播放出错，请退出观看！</string>
+    <string name="close_video_chatting_failed">关闭连麦失败</string>
+    <string name="camera_open_failure_for_chat">摄像头开启失败，无法连麦</string>
+    <string name="error_unknown">未知错误</string>
+    <string name="show_first_frame">显示第一帧</string>
 
+    <!--权限-->
     <string name="no_camera_permission">没有权限使用摄像头，请开启摄像头权限</string>
     <string name="no_record_audio_permission">没有权限使用录音，请开启录音权限</string>
+    <string name="no_read_phone_state_permission">没有读取用户数据的权限，请开启该权限</string>
+    <string name="no_write_external_storage_permission">没有文件写权限，请开启该权限</string>
+    <string name="no_read_external_storage_permission">没有文件读权限，请开启该权限</string>
 
     <!--分享-->
     <string name="share_clone">关闭</string>

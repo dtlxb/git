@@ -145,6 +145,19 @@ public class AppDevice {
     }
 
     /**
+     * 判断当前是否有网络
+     */
+    public static boolean hasNetwork(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        return isConnected;
+    }
+
+    /**
      * 屏幕添加灰色蒙版
      */
     public static void backgroundAlpha(Activity context, float bgAlpha) {

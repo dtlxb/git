@@ -18,7 +18,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -206,7 +205,6 @@ public class PlayerActivity extends BaseActivity {
     private AVIMConversation imConversation;
 
     private String live_id;
-    private String source;
     private String room_id;
 
     //直播介绍
@@ -250,7 +248,6 @@ public class PlayerActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
 
         live_id = getIntent().getStringExtra("live_id");
-        source = getIntent().getStringExtra("source");
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -270,14 +267,6 @@ public class PlayerActivity extends BaseActivity {
         mLiveChatAdapter = new LiveChatAdapter(PlayerActivity.this, R.layout.item_live_chat, messageList);
         recyler_chat.setAdapter(mLiveChatAdapter);
 
-        if (!TextUtils.isEmpty(source)) {
-            if (source.equals("live")) {
-                linearPlayerChat.setVisibility(View.VISIBLE);
-            } else if (source.equals("video")) {
-                linearPlayerChat.setVisibility(View.GONE);
-            }
-        }
-
         getRelaterVideoInfo();
         getCanLiveTogether();
 
@@ -295,11 +284,8 @@ public class PlayerActivity extends BaseActivity {
 
         Map<String, String> param = new HashMap<>();
 
-        if (source.equals("live")) {
-            param.put("live_id", live_id);
-        } else if (source.equals("video")) {
-            param.put("video_id", live_id);
-        }
+        //param.put("live_id", live_id);
+        param.put("video_id", live_id);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -339,10 +325,8 @@ public class PlayerActivity extends BaseActivity {
                             });
                         }
                     }
-
-                    if (source.equals("live")) {
-                        //倒计时
-                        if (data.getLongValue("launch_time") > 0) {
+                    //倒计时
+                        /*if (data.getLongValue("launch_time") > 0) {
                             countDownTimer.setVisibility(View.VISIBLE);
                             countDownTimer.addTime(data.getString("live_time_start"));
                             countDownTimer.start();
@@ -377,16 +361,14 @@ public class PlayerActivity extends BaseActivity {
 
                         getOnlineCount(room_id);
 
-                        LayoutProgress.setVisibility(View.GONE);
+                        LayoutProgress.setVisibility(View.GONE);*/
 
-                    } else if (source.equals("video")) {
 
-                        mURI = data.getString("video_file");
+                    mURI = data.getString("video_file");
 
-                        textOnlineNumber.setText("0人在线");
+                    textOnlineNumber.setText("0人在线");
 
-                        LayoutProgress.setVisibility(View.VISIBLE);
-                    }
+                    LayoutProgress.setVisibility(View.VISIBLE);
 
                     startToPlay(mURI);
 
@@ -401,11 +383,9 @@ public class PlayerActivity extends BaseActivity {
                 UIHelper.toast(getContext(), R.string.net_erro_hint);
             }
         };
-        if (source.equals("live")) {
-            new GGOKHTTP(param, GGOKHTTP.GET_STUDIO_LIST, ggHttpInterface).startGet();
-        } else if (source.equals("video")) {
-            new GGOKHTTP(param, GGOKHTTP.GET_RECORD_LIST, ggHttpInterface).startGet();
-        }
+
+        //new GGOKHTTP(param, GGOKHTTP.GET_STUDIO_LIST, ggHttpInterface).startGet();
+        new GGOKHTTP(param, GGOKHTTP.GET_RECORD_LIST, ggHttpInterface).startGet();
     }
 
     /**
@@ -691,11 +671,7 @@ public class PlayerActivity extends BaseActivity {
             // 初始化播放器
             mPlayer = new AliVcMediaPlayer(this, mSurfaceView);
             //媒体类型 Live 表示直播；Vod 表示点播
-            if (source.equals("live")) {
-                mPlayer.setMediaType(MediaPlayer.MediaType.Live);
-            } else if (source.equals("video")) {
-                mPlayer.setMediaType(MediaPlayer.MediaType.Vod);
-            }
+            mPlayer.setMediaType(MediaPlayer.MediaType.Vod);
             mPlayer.setPreparedListener(new VideoPreparedListener());
             mPlayer.setErrorListener(new VideoErrorListener());
             mPlayer.setInfoListener(new VideoInfolistener());
@@ -1152,11 +1128,11 @@ public class PlayerActivity extends BaseActivity {
                 showPlayerChat();
                 break;
             case R.id.imgPlayerProfiles: //主播介绍
-                if(drawer_player.isDrawerOpen(menuLayout)) {
+                if (drawer_player.isDrawerOpen(menuLayout)) {
                     drawer_player.closeDrawer(menuLayout);
-                }else {
+                } else {
                     if (AppDevice.isLandscape(getContext())) {
-                        drawer_player.openDrawer(Gravity.END,true);
+                        drawer_player.openDrawer(Gravity.END, true);
 
                         drawerLinearProfiles.setVisibility(View.VISIBLE);
                         linearRelaterVideo.setVisibility(View.GONE);
@@ -1167,11 +1143,11 @@ public class PlayerActivity extends BaseActivity {
                 }
                 break;
             case R.id.imgPlayerRelaterVideo: //相关视频
-                if(drawer_player.isDrawerOpen(menuLayout)) {
+                if (drawer_player.isDrawerOpen(menuLayout)) {
                     drawer_player.closeDrawer(menuLayout);
-                }else {
+                } else {
                     if (AppDevice.isLandscape(getContext())) {
-                        drawer_player.openDrawer(Gravity.END,true);
+                        drawer_player.openDrawer(Gravity.END, true);
 
                         drawerLinearProfiles.setVisibility(View.GONE);
                         linearRelaterVideo.setVisibility(View.VISIBLE);
@@ -1194,7 +1170,7 @@ public class PlayerActivity extends BaseActivity {
             case R.id.liveTogether: //一起直播
                 JSONObject dataUrl = SPTools.getJsonObject("liveTogetherData", null);
 
-                Intent intent = new Intent(getContext(), LiveTogetherActivity.class);
+                Intent intent = new Intent(getContext(), LiveActivity.class);
                 intent.putExtra("pushUrl", dataUrl.getString("stream_url") + dataUrl.getString("stream_secret"));
                 startActivity(intent);
                 break;
@@ -1230,7 +1206,7 @@ public class PlayerActivity extends BaseActivity {
                     messageMap.put("_lcattrs", AVImClientManager.getInstance().userBaseInfo());
 
                     HashMap<String, String> params = new HashMap<>();
-                    params.put("token", UserUtils.getUserAccountId());
+                    params.put("token", UserUtils.getToken());
                     params.put("conv_id", imConversation.getConversationId());
                     params.put("chat_type", "1003");
                     params.put("message", JSONObject.toJSON(messageMap).toString());
@@ -1307,11 +1283,8 @@ public class PlayerActivity extends BaseActivity {
         Map<String, String> param = new HashMap<>();
         param.put("video_id", live_id);
 
-        if (source.equals("live")) {
-            param.put("video_type", "1");
-        } else if (source.equals("video")) {
-            param.put("video_type", "2");
-        }
+        //param.put("video_type", "1");
+        param.put("video_type", "2");
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override

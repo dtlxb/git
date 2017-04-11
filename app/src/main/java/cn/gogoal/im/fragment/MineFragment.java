@@ -21,13 +21,16 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.activity.TestActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ImageTextBean;
+import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.WeakReferenceHandler;
 import cn.gogoal.im.ui.NormalItemDecoration;
 
@@ -56,7 +59,7 @@ public class MineFragment extends BaseFragment {
             endIndex--;
         }
     };
-    private int endIndex=9;
+    private int endIndex = 9;
 
     public MineFragment() {
     }
@@ -108,11 +111,11 @@ public class MineFragment extends BaseFragment {
     }
 
     private void test(int end) {
-        if (endIndex>=1) {
+        if (endIndex >= 1) {
             Glide.get(getContext()).clearMemory();
 
             GroupFaceImage.getInstance(getActivity(),
-                    image.subList(0, end==0?endIndex:end)
+                    image.subList(0, end == 0 ? endIndex : end)
             ).load(new GroupFaceImage.OnMatchingListener() {
                 @Override
                 public void onSuccess(Bitmap mathingBitmap) {
@@ -129,8 +132,8 @@ public class MineFragment extends BaseFragment {
 
                 }
             });
-        }else {
-            endIndex=9;
+        } else {
+            endIndex = 9;
         }
     }
 
@@ -150,6 +153,11 @@ public class MineFragment extends BaseFragment {
                 public void onClick(View v) {
                     switch (position) {
                         case 0:
+                            if (UserUtils.getUserAccountId().equals("348635")) {
+                                startActivity(new Intent(getActivity(), LiveActivity.class));
+                            } else {
+                                DialogHelp.getMessageDialog(getContext(), "您暂时没有权限直播，请联系客服申请！").show();
+                            }
                             break;
                         case 1:
                             startActivity(new Intent(getActivity(), TestActivity.class));
