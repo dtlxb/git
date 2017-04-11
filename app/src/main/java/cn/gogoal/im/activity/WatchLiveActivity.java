@@ -49,8 +49,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -269,14 +269,14 @@ public class WatchLiveActivity extends BaseActivity {
         }
     }
 
-    class LiveChatAdapter extends CommonAdapter<AVIMMessage> {
+    class LiveChatAdapter extends CommonAdapter<AVIMMessage, BaseViewHolder> {
 
         public LiveChatAdapter(Context context, int layoutId, List<AVIMMessage> datas) {
             super(context, layoutId, datas);
         }
 
         @Override
-        protected void convert(ViewHolder holder, AVIMMessage message, int position) {
+        protected void convert(BaseViewHolder holder, AVIMMessage message, int position) {
             AVIMTextMessage msg = (AVIMTextMessage) message;
 
             KLog.json(msg.toString());
@@ -287,8 +287,8 @@ public class WatchLiveActivity extends BaseActivity {
             textSend.setText(username + msg.getText());
 
             SpannableStringBuilder builder = new SpannableStringBuilder(textSend.getText().toString());
-            ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getmContext(), R.color.live_chat_level1));
-            ForegroundColorSpan Span2 = new ForegroundColorSpan(ContextCompat.getColor(getmContext(), R.color.textColor_333333));
+            ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.live_chat_level1));
+            ForegroundColorSpan Span2 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.textColor_333333));
             builder.setSpan(Span1, 0, username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             builder.setSpan(Span2, username.length(), textSend.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             textSend.setText(builder);
