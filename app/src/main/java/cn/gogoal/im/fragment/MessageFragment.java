@@ -257,13 +257,9 @@ public class MessageFragment extends BaseFragment {
     //初始化弹窗
     private void initPopu(View popuView, PopupWindow popupWindow) {
         RelativeLayout find_man_layout = (RelativeLayout) popuView.findViewById(R.id.find_man_layout);
-        RelativeLayout find_square_layout = (RelativeLayout) popuView.findViewById(R.id.find_square_layout);
         RelativeLayout take_square_layout = (RelativeLayout) popuView.findViewById(R.id.take_square_layout);
-        RelativeLayout sweep_twocode_layout = (RelativeLayout) popuView.findViewById(R.id.sweep_twocode_layout);
         find_man_layout.setOnClickListener(new PopuClick(popupWindow));
-        find_square_layout.setOnClickListener(new PopuClick(popupWindow));
         take_square_layout.setOnClickListener(new PopuClick(popupWindow));
-        sweep_twocode_layout.setOnClickListener(new PopuClick(popupWindow));
     }
 
     //弹窗监听事件
@@ -285,11 +281,6 @@ public class MessageFragment extends BaseFragment {
                     intent.putExtra("search_index", 0);
                     startActivity(intent);
                     break;
-                case R.id.find_square_layout:
-                    intent = new Intent(getContext(), SearchPersonSquareActivity.class);
-                    intent.putExtra("search_index", 1);
-                    startActivity(intent);
-                    break;
                 case R.id.take_square_layout:
                     intent = new Intent(getContext(), ChooseContactActivity.class);
                     Bundle mBundle = new Bundle();
@@ -297,13 +288,11 @@ public class MessageFragment extends BaseFragment {
                     intent.putExtras(mBundle);
                     startActivity(intent);
                     break;
-                case R.id.sweep_twocode_layout:
-                    break;
             }
         }
     }
 
-    private class ListAdapter extends CommonAdapter<IMMessageBean,BaseViewHolder> {
+    private class ListAdapter extends CommonAdapter<IMMessageBean, BaseViewHolder> {
 
         private ListAdapter(Context context, int layoutId, List<IMMessageBean> datas) {
             super(context, layoutId, datas);
@@ -415,8 +404,16 @@ public class MessageFragment extends BaseFragment {
                         message = messageBean.getNickname() + "请求加入" + messageBean.getFriend_id();
                         ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
                         break;
+                    case "8":
+                        //群公告,群简介
+                        message = contentObject.getString("_lctext");
+                        break;
                     case "9":
                         message = "公众号消息";
+                        break;
+                    case "11":
+                        //股票消息
+                        message = "发来一条股票消息";
                         break;
                     default:
                         break;
@@ -583,10 +580,18 @@ public class MessageFragment extends BaseFragment {
                 nickName = lcattrsObject.getString("nickname");
                 friend_id = lcattrsObject.getString("group_name");
                 break;
+            case "8":
+                //群公告,群简介
+                nickName = lcattrsObject.getString("nickname");
+                friend_id = lcattrsObject.getString("group_name");
+                break;
             case "9":
                 //公众号
                 avatar = (String) conversation.getAttribute("avatar");
                 nickName = conversation.getName();
+                break;
+            case "11":
+                //股票消息
                 break;
             default:
                 break;

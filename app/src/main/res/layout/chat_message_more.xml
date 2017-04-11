@@ -29,7 +29,13 @@
             android:textSize="17sp" />
     </RelativeLayout>
 
-    <include layout="@layout/include_line"/>
+    <View
+        android:id="@+id/include_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/colorGriddivider" />
 
     <RelativeLayout
         android:id="@+id/take_square_layout"

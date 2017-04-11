@@ -368,8 +368,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 Log.e("=====notice", responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                the_square.setText(((JSONObject) result.get("data")).get("name") == null ? "" : ((JSONObject) result.get("data")).getString("name"));
                 if ((int) result.get("code") == 0) {
+                    the_square.setText(((JSONObject) result.get("data")).get("name") == null ? "" : ((JSONObject) result.get("data")).getString("name"));
+                    tvSquareName.setText(((JSONObject) result.get("data")).get("name") == null ? "" : ((JSONObject) result.get("data")).getString("name"));
                     JSONObject jsonObject = (JSONObject) ((JSONObject) result.get("data")).get("attr");
                     the_brief.setText(jsonObject.get("intro") == null ? "" : jsonObject.getString("intro"));
                     the_square_notice.setText(jsonObject.get("notice") == null ? "" : jsonObject.getString("notice"));

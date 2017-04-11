@@ -120,9 +120,10 @@ public class ChatFragment extends BaseFragment {
     private int chatType;
 
     //消息类型
-    private static int TEXT_MESSAGE = 1;
-    private static int IMAGE_MESSAGE = 2;
-    private static int AUDIO_MESSAGE = 3;
+    private static int TEXT_MESSAGE = -1;
+    private static int IMAGE_MESSAGE = -2;
+    private static int AUDIO_MESSAGE = -3;
+    private static int STOCK_MESSAGE = 11;
 
     private AVIMConversation imConversation;
     private List<AVIMMessage> messageList = new ArrayList<>();
@@ -148,7 +149,7 @@ public class ChatFragment extends BaseFragment {
 
         BaseActivity.initRecycleView(message_recycler, null);
 
-        imChatAdapter = new IMChatAdapter(getContext(), messageList);
+        imChatAdapter = new IMChatAdapter(getActivity(), messageList);
         message_recycler.setAdapter(imChatAdapter);
 
         //多功能消息框
@@ -218,6 +219,8 @@ public class ChatFragment extends BaseFragment {
                         });
                         break;
                     case 1:
+                        //跳转股票页面发送股票
+                        sendStockMessage();
                         break;
                     default:
                         break;
@@ -383,11 +386,13 @@ public class ChatFragment extends BaseFragment {
                 KLog.e(result.get("code"));
                 if ((int) result.get("code") == 0) {
                     switch (messageType) {
-                        case 1:
+                        case -1:
                             break;
-                        case 2:
+                        case -2:
                             break;
-                        case 3:
+                        case -3:
+                            break;
+                        case 11:
                             break;
                         default:
                             break;
@@ -441,6 +446,41 @@ public class ChatFragment extends BaseFragment {
                         }
                     }).launch();
         }
+    }
+
+    private void sendStockMessage() {
+        //股票消息(消息type:11,加上stockCode,stockName);
+        AVIMMessage mStockMessage = new AVIMMessage();
+        mStockMessage.setTimestamp(CalendarUtils.getCurrentTime());
+        mStockMessage.setFrom(UserUtils.getUserAccountId());
+
+        //添加股票信息
+        Map<String, String> lcattrsMap = new HashMap<>();
+        lcattrsMap = AVImClientManager.getInstance().userBaseInfo();
+        lcattrsMap.put("stockCode", "601107");
+        lcattrsMap.put("stockName", "四川成渝");
+
+        //消息基本信息
+        Map<Object, Object> messageMap = new HashMap<>();
+        messageMap.put("_lctype", "11");
+        messageMap.put("_lctext", "股票消息");
+        messageMap.put("_lcattrs", lcattrsMap);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", UserUtils.getToken());
+        params.put("conv_id", imConversation.getConversationId());
+        params.put("chat_type", String.valueOf(chatType));
+        params.put("message", JSONObject.toJSONString(messageMap));
+        KLog.e(params);
+
+        mStockMessage.setContent(JSONObject.toJSONString(messageMap));
+        imChatAdapter.addItem(mStockMessage);
+        imChatAdapter.notifyItemInserted(messageList.size() - 1);
+        message_recycler.smoothScrollToPosition(messageList.size() - 1);
+
+        etInput.setText("");
+        //发送股票消息
+        sendAVIMMessage(STOCK_MESSAGE, params, mStockMessage);
     }
 
     private void sendImageToZyyx(final File file) {

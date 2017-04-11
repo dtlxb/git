@@ -8,6 +8,8 @@ import android.view.View;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
     //聊天对象
     private ChatFragment chatFragment;
     private ContactBean contactBean;
+    XTitle xTitle;
     private List<String> groupMembers;
     private String squareName;
     private String squareCreater;
@@ -41,10 +44,6 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
     @Override
     public void doBusiness(Context mContext) {
         squareName = (String) StringUtils.objectNullDeal(this.getIntent().getStringExtra("squareName"));
-        if (!squareName.equals("")) {
-            setMyTitle(squareName, false);
-        }
-
         groupMembers = new ArrayList<>();
         final String conversationID = (String) StringUtils.objectNullDeal(this.getIntent().getStringExtra("conversation_id"));
         boolean need_update = this.getIntent().getBooleanExtra("need_update", false);
@@ -53,11 +52,18 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
         getSquareConversation(conversationID, need_update, actionType);
 
-        initTitle(squareName, conversationID);
+        if (!squareName.equals("")) {
+            initTitle(squareName, conversationID);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void initTitle(final String squareName, final String conversation_id) {
-        XTitle title = setMyTitle(squareName, true);
+        xTitle = setMyTitle(squareName, true);
 
         //添加action
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(SquareChatRoomActivity.this, R.mipmap.chat_person)) {
@@ -71,7 +77,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
                 startActivity(intent);
             }
         };
-        title.addAction(personAction, 0);
+        xTitle.addAction(personAction, 0);
     }
 
     private void getSquareConversation(String conversationId, final boolean need_update, final int actionType) {
@@ -82,7 +88,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
                 chatFragment.setConversation(conversation, need_update, actionType);
                 groupMembers.addAll(conversation.getMembers());
                 if (squareName.equals("")) {
-                    setMyTitle(conversation.getName(), false);
+                    initTitle(squareName, conversation.getConversationId());
                 }
                 squareCreater = conversation.getCreator();
             }
@@ -108,6 +114,13 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
             }
         });
     }*/
+    @Subscriber(tag = "correct_square_name")
+    private void correctName(String msg) {
+        if (null != msg) {
+            xTitle.setTitle(msg);
+        }
+    }
+
     @Override
     public void setData(ContactBean contactBean) {
         this.contactBean = contactBean;

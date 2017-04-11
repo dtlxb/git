@@ -55,7 +55,6 @@
             android:minHeight="44dp"
             android:paddingLeft="16dp"
             android:paddingRight="9dp"
-            android:text="为什么没有人了发快递数量"
             android:textColor="@color/textColor_333333"
             android:textSize="14sp" />
 
