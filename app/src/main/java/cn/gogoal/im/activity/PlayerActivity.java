@@ -55,8 +55,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.RelaterVideoData;
@@ -1338,14 +1338,14 @@ public class PlayerActivity extends BaseActivity {
         new GGOKHTTP(param, GGOKHTTP.GET_RELATED_VIDEO, ggHttpInterface).startGet();
     }
 
-    class RelaterVideoAdapter extends CommonAdapter<RelaterVideoData> {
+    class RelaterVideoAdapter extends CommonAdapter<RelaterVideoData,BaseViewHolder> {
 
         public RelaterVideoAdapter(Context context, List<RelaterVideoData> list) {
-            super(context, R.layout.item_relater_video, list);
+            super(R.layout.item_relater_video, list);
         }
 
         @Override
-        protected void convert(ViewHolder holder, final RelaterVideoData data, int position) {
+        protected void convert(BaseViewHolder holder, final RelaterVideoData data, int position) {
 
             holder.setAlpha(R.id.text_playback, (float) 0.5);
             if (data.getType() == 1) {
@@ -1354,24 +1354,24 @@ public class PlayerActivity extends BaseActivity {
                 holder.setVisible(R.id.relative_player, false);
             }
             ImageView relater_img = holder.getView(R.id.relater_img);
-            ImageDisplay.loadNetImage(getmContext(), data.getVideo_img_url(), relater_img);
+            ImageDisplay.loadNetImage(getActivity(), data.getVideo_img_url(), relater_img);
             holder.setText(R.id.relater_tittle, data.getVideo_name());
             holder.setText(R.id.relater_play_count, data.getPlay_base() + "次");
             ImageView relater_avatar = holder.getView(R.id.relater_avatar);
-            ImageDisplay.loadCircleNetImage(getmContext(), data.getFace_url(), relater_avatar);
+            ImageDisplay.loadCircleNetImage(getActivity(), data.getFace_url(), relater_avatar);
             holder.setText(R.id.relater_name, data.getAnchor_name());
             holder.setText(R.id.relater_content, data.getProgramme_name());
         }
     }
 
-    class LiveChatAdapter extends CommonAdapter<AVIMMessage> {
+    class LiveChatAdapter extends CommonAdapter<AVIMMessage,BaseViewHolder> {
 
         public LiveChatAdapter(Context context, int layoutId, List<AVIMMessage> datas) {
             super(context, layoutId, datas);
         }
 
         @Override
-        protected void convert(ViewHolder holder, AVIMMessage message, int position) {
+        protected void convert(BaseViewHolder holder, AVIMMessage message, int position) {
             AVIMTextMessage msg = (AVIMTextMessage) message;
             String username = msg.getAttrs().get("username") + ": ";
 
@@ -1379,8 +1379,8 @@ public class PlayerActivity extends BaseActivity {
             textSend.setText(username + msg.getText());
 
             SpannableStringBuilder builder = new SpannableStringBuilder(textSend.getText().toString());
-            ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getmContext(), R.color.live_chat_level1));
-            ForegroundColorSpan Span2 = new ForegroundColorSpan(ContextCompat.getColor(getmContext(), R.color.textColor_333333));
+            ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.live_chat_level1));
+            ForegroundColorSpan Span2 = new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.textColor_333333));
             builder.setSpan(Span1, 0, username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             builder.setSpan(Span2, username.length(), textSend.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             textSend.setText(builder);

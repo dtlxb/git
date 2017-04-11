@@ -22,8 +22,8 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.IMNewFriendBean;
@@ -104,14 +104,14 @@ public class IMNewFrienActivity extends BaseActivity {
     }
 
 
-    class ListAdapter extends CommonAdapter<IMNewFriendBean> {
+    class ListAdapter extends CommonAdapter<IMNewFriendBean,BaseViewHolder> {
 
         public ListAdapter(Context context, int layoutId, List<IMNewFriendBean> datas) {
-            super(context, layoutId, datas);
+            super(layoutId, datas);
         }
 
         @Override
-        protected void convert(ViewHolder holder, final IMNewFriendBean mIMNewFriendBean, int position) {
+        protected void convert(BaseViewHolder holder, final IMNewFriendBean mIMNewFriendBean, int position) {
             String dateStr = "";
             String message = "";
             String avatar = "";

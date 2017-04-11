@@ -28,9 +28,8 @@ import java.util.Map;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.wrapper.HeaderAndFooterWrapper;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.RecommendBean;
 import cn.gogoal.im.common.AppDevice;
@@ -52,7 +51,6 @@ public class SearchTeamFragment extends BaseFragment {
     private RecommendAdapter adapter;
 
     private ArrayList<RecommendBean.DataBean> dataBeanList;
-    private HeaderAndFooterWrapper wrapper;
 
     @Override
     public int bindLayout() {
@@ -68,7 +66,6 @@ public class SearchTeamFragment extends BaseFragment {
         dataBeanList=new ArrayList<>();
         adapter=new RecommendAdapter(dataBeanList);
 
-        wrapper=new HeaderAndFooterWrapper(adapter);
         TextView headView= new TextView(mContext);
         LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -79,9 +76,9 @@ public class SearchTeamFragment extends BaseFragment {
         headView.setTextColor(getResColor(R.color.textColor_333333));
         headView.setText("推荐");
         headView.setLayoutParams(params);
-        wrapper.addHeaderView(headView);
+        adapter.addHeaderView(headView);
 
-        recyclerView.setAdapter(wrapper);
+        recyclerView.setAdapter(adapter);
 
         getRecommendGroup("");
 
@@ -106,7 +103,7 @@ public class SearchTeamFragment extends BaseFragment {
                     if (null!=recommendBean.getData()){
                         dataBeanList.addAll(recommendBean.getData());
                         adapter.notifyDataSetChanged();
-                        wrapper.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                         xLayout.setStatus(XLayout.Success);
                     }
 
@@ -131,14 +128,14 @@ public class SearchTeamFragment extends BaseFragment {
         }).startGet();
     }
 
-    private class RecommendAdapter extends CommonAdapter<RecommendBean.DataBean>{
+    private class RecommendAdapter extends CommonAdapter<RecommendBean.DataBean,BaseViewHolder> {
 
         RecommendAdapter(List<RecommendBean.DataBean> datas) {
             super(getActivity(), R.layout.item_search_type_persion, datas);
         }
 
         @Override
-        protected void convert(final ViewHolder holder, final RecommendBean.DataBean data, int position) {
+        protected void convert(final BaseViewHolder holder, final RecommendBean.DataBean data, int position) {
             TextView addView = holder.getView(R.id.btn_search_group_add);
             addView.setVisibility(View.VISIBLE);
             if (data.isIs_in()){

@@ -27,7 +27,8 @@ import java.util.Map;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.ContactAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
+import cn.gogoal.im.adapter.baseAdapter.listener.OnItemClickListener;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
@@ -102,9 +103,9 @@ public class ContactsActivity extends BaseActivity {
 
         rvContacts.setAdapter(contactAdapter);
 
-        contactAdapter.setOnItemClickListener(new OnItemClickLitener() {
+        contactAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(RecyclerView.ViewHolder holder, View view, int position) {
+            public void onItemClick(CommonAdapter adapter, View view, int position) {
                 Intent intent;
                 //单聊处理
                 if (position == 0) {
@@ -124,9 +125,11 @@ public class ContactsActivity extends BaseActivity {
                     startActivity(intent);
                 }
             }
+        });
 
+        contactAdapter.setOnItemLongClickListener(new CommonAdapter.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(RecyclerView.ViewHolder holder, View view, final int position) {
+            public boolean onItemLongClick(CommonAdapter adapter, View view,final int position) {
                 if (position > 1) {
                     DialogHelp.getSelectDialog(getActivity(), "", new String[]{"删除联系人"}, new DialogInterface.OnClickListener() {
                         @Override

@@ -1,7 +1,6 @@
 package cn.gogoal.im.fragment;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.MainAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.wrapper.HeaderAndFooterWrapper;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.FoundData;
 import cn.gogoal.im.ui.view.XLayout;
@@ -56,19 +54,13 @@ public class FoundFragment extends BaseFragment {
 
         List<FoundData> datas = getFunctionDatas();//模拟数据
 
-        HeaderAndFooterWrapper wraper = addHeadImage(datas);
-
-        recyclerView.setAdapter(wraper);
-    }
-
-    @NonNull
-    private HeaderAndFooterWrapper addHeadImage(List<FoundData> datas) {
-        HeaderAndFooterWrapper wraper = new HeaderAndFooterWrapper(new MainAdapter(getContext(), R.layout.item_foundfragment, datas));
+        MainAdapter mainAdapter = new MainAdapter(getContext(), R.layout.item_foundfragment, datas);
         View headView = LayoutInflater.from(getContext()).inflate(R.layout.header_touyan,new LinearLayout(getContext()),false);
+        mainAdapter.addHeaderView(headView);
 
-        wraper.addHeaderView(headView);
-        return wraper;
+        recyclerView.setAdapter(mainAdapter);
     }
+
 
     /**
      * 模拟数据，后续可以简单修改变成服务端请求数据

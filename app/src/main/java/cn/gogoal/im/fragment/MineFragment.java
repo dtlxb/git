@@ -22,8 +22,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.TestActivity;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ImageTextBean;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
@@ -134,14 +134,14 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-    private class MineAdapter extends CommonAdapter<ImageTextBean<Integer>> {
+    private class MineAdapter extends CommonAdapter<ImageTextBean<Integer>,BaseViewHolder> {
 
         private MineAdapter(Context context, List<ImageTextBean<Integer>> datas) {
             super(context, R.layout.item_mine, datas);
         }
 
         @Override
-        protected void convert(ViewHolder holder, final ImageTextBean<Integer> data, final int position) {
+        protected void convert(BaseViewHolder holder, final ImageTextBean<Integer> data, final int position) {
             holder.setImageResource(R.id.iv_mine_item_icon, data.getIamge());
             holder.setText(R.id.tv_mine_item_text, data.getText());
 

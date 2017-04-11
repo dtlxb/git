@@ -50,7 +50,8 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ChooseContactActivity;
 import cn.gogoal.im.adapter.ChatFunctionAdapter;
 import cn.gogoal.im.adapter.IMChatAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.OnItemClickLitener;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
+import cn.gogoal.im.adapter.baseAdapter.listener.OnItemClickListener;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
@@ -189,9 +190,9 @@ public class ChatFragment extends BaseFragment {
         });
 
         //多功能消息发送
-        chatFunctionAdapter.setOnItemClickListener(new OnItemClickLitener() {
+        chatFunctionAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(RecyclerView.ViewHolder holder, View view, int position) {
+            public void onItemClick(CommonAdapter adapter, View view, int position) {
                 switch (position) {
                     case 0:
                         //发照片
@@ -221,11 +222,6 @@ public class ChatFragment extends BaseFragment {
                     default:
                         break;
                 }
-            }
-
-            @Override
-            public boolean onItemLongClick(RecyclerView.ViewHolder holder, View view, int position) {
-                return false;
             }
         });
 

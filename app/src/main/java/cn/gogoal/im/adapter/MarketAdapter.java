@@ -11,8 +11,8 @@ import java.util.List;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.stock.MarketDetialActivity;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.stock.MarkteBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.StockUtils;
@@ -25,7 +25,7 @@ import cn.gogoal.im.common.UIHelper;
  * phone 18930640263
  * description :行情整体适配器.
  */
-public class MarketAdapter extends CommonAdapter<MarkteBean> {
+public class MarketAdapter extends CommonAdapter<MarkteBean,BaseViewHolder> {
 
     private Context context;
 
@@ -35,7 +35,7 @@ public class MarketAdapter extends CommonAdapter<MarkteBean> {
     }
 
     @Override
-    protected void convert(ViewHolder holder, final MarkteBean data, final int position) {
+    protected void convert(BaseViewHolder holder, final MarkteBean data, final int position) {
         RecyclerView recyclerView = holder.getView(R.id.item_stock_rank_list);
 
         recyclerView.setTag(position);
@@ -99,14 +99,14 @@ public class MarketAdapter extends CommonAdapter<MarkteBean> {
     /**
      * 大盘部分
      */
-    private class GridMarketAdapter extends CommonAdapter<MarkteBean.MarketItemData> {
+    private class GridMarketAdapter extends CommonAdapter<MarkteBean.MarketItemData,BaseViewHolder> {
 
         private GridMarketAdapter(List<MarkteBean.MarketItemData> datas) {
             super(context, R.layout.item_stock_market, datas);
         }
 
         @Override
-        protected void convert(ViewHolder holder, final MarkteBean.MarketItemData data, int position) {
+        protected void convert(BaseViewHolder holder, final MarkteBean.MarketItemData data, int position) {
             holder.itemView.setTag(position);
             AppDevice.setViewWidth$Height(holder.itemView, (AppDevice.getWidth(context) - 1) / 2, -2);
 
@@ -130,14 +130,14 @@ public class MarketAdapter extends CommonAdapter<MarkteBean> {
     /**
      * 热门行业部分
      */
-    private class GridHotIndustryAdapter extends CommonAdapter<MarkteBean.MarketItemData> {
+    private class GridHotIndustryAdapter extends CommonAdapter<MarkteBean.MarketItemData,BaseViewHolder> {
 
         private GridHotIndustryAdapter(List<MarkteBean.MarketItemData> datas) {
             super(context, R.layout.item_stock_hotindustry, datas);
         }
 
         @Override
-        protected void convert(ViewHolder holder, final MarkteBean.MarketItemData data, int position) {
+        protected void convert(BaseViewHolder holder, final MarkteBean.MarketItemData data, int position) {
             holder.itemView.setTag(position);
             AppDevice.setViewWidth$Height(holder.itemView, (AppDevice.getWidth(context) - 2) / 3, -2);
             holder.setText(R.id.tv_hot_industry_name, data.getName());
@@ -164,7 +164,7 @@ public class MarketAdapter extends CommonAdapter<MarkteBean> {
     /**
      * [涨跌振换]部分
      */
-    private class RankListAdapter extends CommonAdapter<MarkteBean.MarketItemData> {
+    private class RankListAdapter extends CommonAdapter<MarkteBean.MarketItemData,BaseViewHolder> {
 
         private int typePostion;
 
@@ -174,7 +174,7 @@ public class MarketAdapter extends CommonAdapter<MarkteBean> {
         }
 
         @Override
-        protected void convert(ViewHolder holder, MarkteBean.MarketItemData data, int position) {
+        protected void convert(BaseViewHolder holder, MarkteBean.MarketItemData data, int position) {
             holder.itemView.setTag(position);
 
             holder.setText(R.id.tv_stock_ranklist_stockName, data.getStockName());

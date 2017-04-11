@@ -18,8 +18,8 @@ import cn.gogoal.im.activity.ChatRoomActivity;
 import cn.gogoal.im.activity.FunctionActivity;
 import cn.gogoal.im.activity.IMRegisterActivity;
 import cn.gogoal.im.activity.stock.MarketActivity;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.FoundData;
 import cn.gogoal.im.common.AppDevice;
@@ -34,7 +34,7 @@ import cn.gogoal.im.common.permission.IPermissionListner;
  * phone 18930640263
  * description :投研-主适配器.
  */
-public class MainAdapter extends CommonAdapter<FoundData> {
+public class MainAdapter extends CommonAdapter<FoundData,BaseViewHolder> {
 
     private Context context;
     public MainAdapter(Context context, int layoutId, List<FoundData> datas) {
@@ -43,7 +43,7 @@ public class MainAdapter extends CommonAdapter<FoundData> {
     }
 
     @Override
-    protected void convert(ViewHolder holder, FoundData foundData, int position) {
+    protected void convert(BaseViewHolder holder, FoundData foundData, int position) {
         holder.setText(R.id.tv_title, foundData.getTitle());
 
         List<FoundData.ItemPojos> itemPojos = foundData.getItemPojos();
@@ -75,7 +75,7 @@ public class MainAdapter extends CommonAdapter<FoundData> {
         }
     }
 
-    private class GridAdapter extends CommonAdapter<FoundData.ItemPojos> {
+    private class GridAdapter extends CommonAdapter<FoundData.ItemPojos,BaseViewHolder> {
 
         private int parentPosition;
 
@@ -87,7 +87,7 @@ public class MainAdapter extends CommonAdapter<FoundData> {
         }
 
         @Override
-        protected void convert(ViewHolder holder, final FoundData.ItemPojos itemPojos, final int position) {
+        protected void convert(BaseViewHolder holder, final FoundData.ItemPojos itemPojos, final int position) {
 
             if (TextUtils.isEmpty(itemPojos.getUrl())) {
                 holder.itemView.setEnabled(false);

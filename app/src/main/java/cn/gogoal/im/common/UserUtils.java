@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -244,12 +243,14 @@ public class UserUtils {
             @Override
             public void onSuccess(String responseInfo) {
                 JSONObject result = JSONObject.parseObject(responseInfo);
+                KLog.e(responseInfo);
                 if ((int) result.get("code") == 0) {
                     if (null != result.getJSONObject("data")) {
                         if (null != mGetSquareInfo) {
                             mGetSquareInfo.squareGetSuccess(result.getJSONObject("data"));
                         }
-                        SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversationId + "_accountList_beans", result.getJSONObject("data").getJSONArray("accountList"));
+                        SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversationId + "_accountList_beans",
+                                result.getJSONObject("data").getJSONArray("accountList"));
                     }
                 }
             }

@@ -8,7 +8,6 @@ import android.widget.EditText;
 
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMClient;
-import com.avos.avoscloud.im.v2.AVIMClientEventHandler;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.socks.library.KLog;
@@ -46,10 +45,10 @@ public class LoginActivity extends BaseActivity {
     public void doBusiness(final Context mContext) {
         /*loginUserName.setText("E039065");
         loginPassWord.setText("888888");*/
-        /*loginUserName.setText("E00003645");
-        loginPassWord.setText("147258369");*/
-        loginUserName.setText("E00002639");
-        loginPassWord.setText("412174");
+        loginUserName.setText("E00003645");
+        loginPassWord.setText("147258369");
+//        loginUserName.setText("E00002639");
+//        loginPassWord.setText("412174");
 
         findViewById(R.id.login).setOnLongClickListener(new View.OnLongClickListener() {
             @Override

@@ -140,6 +140,7 @@
 
         <activity android:name=".activity.ContactsActivity"/>
 
+        <activity android:name=".activity.EditMyStockActivity"/>
         <!--<activity android:name=".activity.Test2Activity"></activity>-->
     </application>
 

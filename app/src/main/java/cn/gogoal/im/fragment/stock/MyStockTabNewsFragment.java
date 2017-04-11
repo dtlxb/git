@@ -20,8 +20,8 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.MyStockTabBean;
@@ -206,14 +206,14 @@ public class MyStockTabNewsFragment extends BaseFragment {
         new GGOKHTTP(param, GGOKHTTP.REPORT_LIST, ggHttpInterface).startGet();
     }
 
-    private class MyStockNewsAdapter extends CommonAdapter<MyStockTabBean> {
+    private class MyStockNewsAdapter extends CommonAdapter<MyStockTabBean,BaseViewHolder> {
 
         private MyStockNewsAdapter(List<MyStockTabBean> datas) {
             super(getActivity(), R.layout.item_mystock_news, datas);
         }
 
         @Override
-        protected void convert(ViewHolder holder, MyStockTabBean data, int position) {
+        protected void convert(BaseViewHolder holder, MyStockTabBean data, int position) {
             TextView tvNewsTitle = holder.getView(R.id.tv_mystock_news_title);
             if (parentIndex != 2) {
                 tvNewsTitle.setMaxLines(1);

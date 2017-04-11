@@ -16,8 +16,8 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.CommonAdapter;
-import cn.gogoal.im.adapter.recycleviewAdapterHelper.base.ViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.stock.HotIndustryBean;
 import cn.gogoal.im.bean.stock.RankListStockBean;
@@ -263,14 +263,15 @@ public class MarketDetialActivity extends BaseActivity {
         }).startGet();
     }
 
-    private class RankAdapter extends CommonAdapter<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> {
+    private class RankAdapter extends CommonAdapter<StockMarketBean.DataBean.StockRanklistBean.StockRankBean
+            ,BaseViewHolder> {
 
         RankAdapter(List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> datas) {
             super(getActivity(), R.layout.item_stock_rank_list, datas);
         }
 
         @Override
-        protected void convert(ViewHolder holder,
+        protected void convert(BaseViewHolder holder,
                                StockMarketBean.DataBean.StockRanklistBean.StockRankBean data, int position) {
 
             holder.setText(R.id.tv_stock_ranklist_stockName, data.getStock_name());
@@ -297,7 +298,7 @@ public class MarketDetialActivity extends BaseActivity {
     /**
      * 热门行业大模块及子模块列表适配器
      */
-    private class IndustryAdapter extends CommonAdapter<HotIndustryBean.DataBean> {
+    private class IndustryAdapter extends CommonAdapter<HotIndustryBean.DataBean,BaseViewHolder> {
 
         private List<HotIndustryBean.DataBean> datas;
 
@@ -307,7 +308,7 @@ public class MarketDetialActivity extends BaseActivity {
         }
 
         @Override
-        protected void convert(ViewHolder holder, final HotIndustryBean.DataBean data, int position) {
+        protected void convert(BaseViewHolder holder, final HotIndustryBean.DataBean data, int position) {
 
             if (moduleType == MODULE_TYPE_TITLE_HOT_INDUSTRY) {
                 holder.setText(R.id.tv_stock_ranklist_stockName, data.getIndustry_name());
