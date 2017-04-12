@@ -19,6 +19,8 @@ import java.util.List;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.IMHelpers.MyClientEventHandler;
 import cn.gogoal.im.common.IMHelpers.MyConversationHandler;
 import cn.gogoal.im.common.IMHelpers.MyMessageHandler;
 import cn.gogoal.im.common.SPTools;
@@ -55,7 +57,7 @@ public class MyApp extends LitePalApplication {
                 .setReloadButtonText("点我重试哦")
                 .setReloadButtonTextSize(14)
                 .setReloadButtonTextColor(R.color.textColor_999999)
-                .setReloadButtonWidthAndHeight(150,40)
+                .setReloadButtonWidthAndHeight(150, 40)
                 .setAllPageBackgroundColor(android.R.color.white);
 
 
@@ -71,7 +73,8 @@ public class MyApp extends LitePalApplication {
         //注册默认的消息处理逻辑
         AVIMMessageManager.registerMessageHandler(AVIMMessage.class, new MyMessageHandler());
         AVIMMessageManager.setConversationEventHandler(new MyConversationHandler());
-
+        //相互踢监听
+        AVImClientManager.setEventHandler();
         //连接服务器
             /*AVImClientManager.getInstance().open(UserUtils.getUserAccountId(), new AVIMClientCallback() {
                 @Override

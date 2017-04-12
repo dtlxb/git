@@ -66,6 +66,11 @@ public class AVImClientManager {
         return clientId;
     }
 
+    //设置互相怼监听
+    public static void setEventHandler() {
+        getInstance().getClient().setClientEventHandler(new MyClientEventHandler());
+    }
+
     /**
      * 返回用户的基本信息头像，昵称
      */
