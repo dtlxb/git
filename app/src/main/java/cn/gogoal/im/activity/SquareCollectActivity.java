@@ -3,6 +3,7 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -95,6 +96,22 @@ public class SquareCollectActivity extends BaseActivity {
         listAdapter = new ListAdapter(SquareCollectActivity.this, R.layout.item_square_collect, groupList);
         squareRoomRecycler.setAdapter(listAdapter);
 
+        //短按跳转
+        listAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(CommonAdapter adapter, View view, int position) {
+                //群聊处理
+                Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("conversation_id", groupList.get(position).getString("conv_id"));
+                bundle.putString("squareName", groupList.get(position).getString("name"));
+                bundle.putBoolean("need_update", false);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        //长按删除
         listAdapter.setOnItemLongClickListener(new CommonAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(CommonAdapter adapter, View view, final int position) {
