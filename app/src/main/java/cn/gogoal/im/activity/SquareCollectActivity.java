@@ -3,6 +3,7 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -13,6 +14,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
+
+import org.simple.eventbus.Subscriber;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,10 +28,14 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.adapter.baseAdapter.listener.OnItemClickListener;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
@@ -207,15 +214,84 @@ public class SquareCollectActivity extends BaseActivity {
             ImageView avatarIv = holder.getView(R.id.head_image);
             TextView timeView = holder.getView(R.id.last_time);
             TextView nameView = holder.getView(R.id.whose_message);
-
+            nameView.setMaxWidth(AppDevice.getWidth(getActivity()) - AppDevice.dp2px(getActivity(), 120));
             KLog.e(groupObject.toString());
-
-            ImageDisplay.loadFileImage(getActivity(), new File(ImageUtils.getBitmapFilePaht(groupObject.getString("conv_id"), "imagecache")), avatarIv);
+            if (ImageUtils.getBitmapFilePaht(groupObject.getString("conv_id"), "imagecache").equals("")) {
+                JSONArray accountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + groupObject.getString("conv_id") + "_accountList_beans", null);
+                if (null == accountArray) {
+                    getNicePicture(groupObject.getString("conv_id"), position);
+                } else {
+                    List<String> urls = new ArrayList<>();
+                    for (int i = 0; i < accountArray.size(); i++) {
+                        JSONObject accountObject = accountArray.getJSONObject(i);
+                        urls.add(accountObject.getString("avatar"));
+                    }
+                    getNicePicture(urls, groupObject.getString("conv_id"), String.valueOf(position));
+                }
+            } else {
+                ImageDisplay.loadFileImage(getActivity(), new File(ImageUtils.getBitmapFilePaht(groupObject.getString("conv_id"), "imagecache")), avatarIv);
+            }
             holder.setText(R.id.last_message, groupObject.getJSONObject("attr").getString("intro") != null ? groupObject.getJSONObject("attr").getString("intro") : "");
-            nameView.setMaxWidth(AppDevice.getWidth(getActivity()) - 130);
             nameView.setText(groupObject.getString("name"));
             timeView.setText("(" + groupObject.getString("m_size") + ")");
         }
+    }
+
+    private void getNicePicture(final String ConversationId, final int position) {
+        AVImClientManager.getInstance().findConversationById(ConversationId, new AVImClientManager.ChatJoinManager() {
+            @Override
+            public void joinSuccess(AVIMConversation conversation) {
+                UserUtils.getChatGroup(conversation.getMembers(), ConversationId, new UserUtils.getSquareInfo() {
+                    @Override
+                    public void squareGetSuccess(JSONObject object) {
+                        JSONArray array = object.getJSONArray("accountList");
+                        if (null != array && array.size() > 0) {
+                            List<String> urls = new ArrayList<>();
+                            for (int i = 0; i < array.size(); i++) {
+                                JSONObject accountObject = array.getJSONObject(i);
+                                urls.add(accountObject.getString("avatar"));
+                            }
+                            getNicePicture(urls, ConversationId, String.valueOf(position));
+                        }
+                    }
+
+                    @Override
+                    public void squareGetFail(String error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void joinFail(String error) {
+
+            }
+        });
+    }
+
+    //生成九宫图
+    private void getNicePicture(List<String> picUrls, final String conversationId, final String positon) {
+        GroupFaceImage.getInstance(getActivity(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
+            @Override
+            public void onSuccess(Bitmap mathingBitmap) {
+                String groupFaceImageName = "_" + conversationId + ".png";
+                ImageUtils.saveBitmapFile(mathingBitmap, "imagecache", groupFaceImageName);
+                AppManager.getInstance().sendMessage("set_squarecollcet_avatar", positon);
+            }
+
+            @Override
+            public void onError(Exception e) {
+            }
+        });
+    }
+
+    /**
+     * 群头像
+     */
+    @Subscriber(tag = "set_squarecollcet_avatar")
+    public void setAvatar(String code) {
+        KLog.e(code);
+        listAdapter.notifyItemChanged(Integer.parseInt(code));
     }
 
 }

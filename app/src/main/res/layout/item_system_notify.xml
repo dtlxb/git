@@ -3,9 +3,10 @@
     android:id="@+id/user_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="15dp"
     android:layout_marginLeft="54dp"
     android:layout_marginRight="54dp"
-    android:layout_marginTop="20dp"
+    android:layout_marginTop="15dp"
     android:orientation="vertical">
 
     <TextView
@@ -13,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/item_chat_time_bg"
         android:gravity="center"
         android:paddingBottom="4dp"

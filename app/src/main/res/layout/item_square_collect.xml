@@ -16,8 +16,7 @@
             android:id="@+id/head_image"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/timg" />
+            android:scaleType="fitXY" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -35,7 +34,6 @@
             android:layout_marginTop="2dp"
             android:ellipsize="end"
             android:lines="1"
-            android:text="JR屎密斯JR屎密斯"
             android:textColor="@color/textColor_333333"
             android:textSize="16sp" />
 
@@ -48,7 +46,6 @@
             android:layout_marginBottom="1dp"
             android:layout_marginEnd="16dp"
             android:layout_toRightOf="@+id/whose_message"
-            android:text="今天下午"
             android:textColor="@color/textColor_666666"
             android:textSize="14sp" />
 
@@ -60,7 +57,6 @@
             android:layout_marginBottom="2dp"
             android:ellipsize="end"
             android:lines="1"
-            android:text="你晚饭还吃不吃了，不吃我吃了"
             android:textColor="@color/relater_play_count"
             android:textSize="14sp" />
 
