@@ -86,7 +86,7 @@
         <activity
             android:name=".activity.PlayerActivity"
             android:configChanges="screenSize|keyboardHidden|orientation"
-            android:theme="@style/TranslucentTheme"
+
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".activity.FunctionActivity"
@@ -152,7 +152,7 @@
 
         <activity android:name=".activity.ContactsActivity" />
 
-        <activity android:name=".activity.EditMyStockActivity"/>
+        <activity android:name=".activity.EditMyStockActivity" />
         <!--<activity android:name=".activity.Test2Activity"></activity>-->
     </application>
 

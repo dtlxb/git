@@ -230,6 +230,7 @@ public class WatchLiveActivity extends BaseActivity {
             }
         });
 
+        initRecycleView(recyler_chat, null);
         mLiveChatAdapter = new LiveChatAdapter(this, R.layout.item_live_chat, messageList);
         recyler_chat.setAdapter(mLiveChatAdapter);
     }
@@ -880,5 +881,31 @@ public class WatchLiveActivity extends BaseActivity {
         }
 
         //TODO:通知服务端，退出观看
+    }
+
+    /*
+    * 获取直播在线人数
+    * */
+    private void getOnlineCount(String room_id) {
+
+        Map<String, String> param = new HashMap<>();
+        param.put("conv_id", room_id);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONObject data = object.getJSONObject("data");
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(WatchLiveActivity.this, R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.GET_ONLINE_COUNT, ggHttpInterface).startGet();
     }
 }
