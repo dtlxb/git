@@ -577,10 +577,9 @@ public class MessageFragment extends BaseFragment {
                 break;
             case "2":
                 //加好友
-                nickName = lcattrsObject.getString("nickname");
-                break;
             case "3":
                 //好友加入通讯录
+                nickName = lcattrsObject.getString("nickname");
                 break;
             case "4":
                 //好友从通讯录移除

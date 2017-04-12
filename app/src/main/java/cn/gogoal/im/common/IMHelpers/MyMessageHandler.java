@@ -102,7 +102,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     String conv_id = lcattrsObject.getString("conv_id");
                                     int friend_id = lcattrsObject.getInteger("friend_id");
                                     ContactBean<String> contactBean = new ContactBean<>();
-                                    contactBean.setRemark("");
                                     contactBean.setNickname(nickName);
                                     contactBean.setAvatar(avatar);
                                     contactBean.setFriend_id(friend_id);

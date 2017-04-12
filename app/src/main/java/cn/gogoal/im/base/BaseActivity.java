@@ -316,8 +316,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         DialogHelp.getMessageDialog(getActivity(), "此账号已经在其他设备登录，点击确定跳转登录页面，重新登录。", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                AppManager.getInstance().finishAllActivity();
                 startActivity(new Intent(getActivity(), LoginActivity.class));
-                finish();
             }
         }).show();
     }
