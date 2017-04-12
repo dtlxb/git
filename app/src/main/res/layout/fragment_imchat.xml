@@ -31,9 +31,9 @@
             style="@style/BottomImageStyle"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="10dp"
-            android:src="@mipmap/chat_voice"
             android:contentDescription="@null"
-            android:paddingLeft="5dp" />
+            android:paddingLeft="5dp"
+            android:src="@mipmap/chat_voice" />
 
         <EditText
             android:id="@+id/et_input"
