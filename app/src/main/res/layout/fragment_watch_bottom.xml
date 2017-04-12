@@ -5,55 +5,105 @@
     android:layout_height="match_parent"
     android:background="@color/player_info">
 
-    <ImageView
-        android:id="@+id/iv_comment"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:scaleType="fitCenter"
-        android:src="@mipmap/icon_live_comment" />
+    <LinearLayout
+        android:id="@+id/functionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/shape_player_info"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-    <!--<ImageView
-        android:id="@+id/iv_call_anchor"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/iv_comment"
-        android:background="@drawable/oval_icon_black_background"
-        android:padding="7dp"
-        android:src="@mipmap/icon_live_mic" />-->
+        <LinearLayout
+            android:id="@+id/linearPlayerChat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
 
-    <ImageView
-        android:id="@+id/iv_beauty"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/iv_comment"
-        android:src="@mipmap/icon_live_beauty_checked_normal"
-        android:visibility="gone" />
+            <ImageView
+                android:id="@+id/imgPlayerChat"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/player_chat" />
 
-    <ImageView
-        android:id="@+id/iv_camera"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/iv_beauty"
-        android:src="@mipmap/icon_live_camera_normal"
-        android:visibility="gone" />
+        </LinearLayout>
 
-    <ImageView
-        android:id="@+id/iv_flash"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/iv_camera"
-        android:src="@mipmap/icon_live_share_normal"
-        android:visibility="gone" />
+        <LinearLayout
+            android:id="@+id/linearPlayerProfiles"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imgPlayerProfiles"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/player_profiles" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearPlayerRelaterVideo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imgPlayerRelaterVideo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/player_related_video" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imgPlayerShare"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/player_share" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearPlayerShotCut"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imgPlayerShotCut"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/player_shot_cut" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imgPlayerClose"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/player_close" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/player_linear"

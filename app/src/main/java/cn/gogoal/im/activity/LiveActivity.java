@@ -8,17 +8,26 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
+import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.Button;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.livecloud.live.AlivcMediaFormat;
 import com.alivc.player.MediaPlayer;
 import com.alivc.publisher.IMediaPublisher;
@@ -26,42 +35,74 @@ import com.alivc.publisher.MediaConstants;
 import com.alivc.publisher.MediaError;
 import com.alivc.videochat.AlivcVideoChatHost;
 import com.alivc.videochat.IVideoChatHost;
+import com.avos.avoscloud.im.v2.AVIMConversation;
+import com.avos.avoscloud.im.v2.AVIMException;
+import com.avos.avoscloud.im.v2.AVIMMessage;
+import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
+import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.socks.library.KLog;
 
+import org.simple.eventbus.Subscriber;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.BaseMessage;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.PlayerUtils.CountDownTimerView;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.linkUtils.ConnectivityMonitor;
 import cn.gogoal.im.common.linkUtils.HeadsetMonitor;
 import cn.gogoal.im.common.linkUtils.LinkConst;
 import cn.gogoal.im.common.linkUtils.VideoChatStatus;
-import cn.gogoal.im.fragment.LiveBottomFragment;
+import cn.gogoal.im.fragment.WatchBottomFragment;
 
 /*
 * 推流直播页面
 * */
 public class LiveActivity extends BaseActivity {
 
+    @BindView(R.id.root_container)
+    FrameLayout mRootContainer;
+
     //推流预览的SurfaceView
     @BindView(R.id.surfaceLive)
     SurfaceView mPreviewSurfaceView;
-    //推流关闭按钮
-    @BindView(R.id.imgPreviewClose)
-    ImageView imgPreviewClose;
     //连麦显示
     @BindView(R.id.parter_view_container)
     LinearLayout mParterViewContainer;
     //连麦关闭按钮
     @BindView(R.id.imgPlayClose)
     ImageView imgPlayClose;
-    //开始直播
-    @BindView(R.id.startLive)
-    Button startLive;
+
+    //详情相关控件
+    @BindView(R.id.textTitle)
+    TextView textTitle;
+    @BindView(R.id.imgPalyer)
+    ImageView imgPalyer;
+    @BindView(R.id.textCompany)
+    TextView textCompany;
+    @BindView(R.id.textMarInter)
+    TextView textMarInter;
+    @BindView(R.id.textOnlineNumber)
+    TextView textOnlineNumber;
+    //倒计时
+    @BindView(R.id.countDownTimer)
+    CountDownTimerView countDownTimer;
+    //聊天显示列表
+    @BindView(R.id.recycPortrait)
+    RecyclerView recyler_chat;
 
     /*
     * 权限所需定义参数
@@ -117,8 +158,6 @@ public class LiveActivity extends BaseActivity {
     private ConnectivityMonitor mConnectivityMonitor = new ConnectivityMonitor();
     private HeadsetMonitor mHeadsetMonitor = new HeadsetMonitor();
 
-    private LiveBottomFragment mLiveBottomFragment;
-
     private int mPreviewWidth = 0;
     private int mPreviewHeight = 0;
 
@@ -128,6 +167,19 @@ public class LiveActivity extends BaseActivity {
     private String publishUrl = "rtmp://video-center.alivecdn.com/microphone/dave?vhost=zbmo.go-goal.cn"; //推流播放网址
     private String mSmallDelayPlayUrl; //连麦延迟播放网址
 
+    //聊天对象
+    private List<AVIMMessage> messageList = new ArrayList<>();
+    private WatchLiveActivity.LiveChatAdapter mLiveChatAdapter;
+    private AVIMConversation imConversation;
+    private String room_id;
+
+    private String live_id;
+
+    //弹窗
+    private JSONObject anchor;
+
+    private WatchBottomFragment mBottomFragment;
+
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -136,18 +188,18 @@ public class LiveActivity extends BaseActivity {
                 case LinkConst.MSG_WHAT_INVITE_CHAT_TIMEOUT://连麦响应超时
                     if (mVideoChatStatus == VideoChatStatus.INVITE_FOR_RES) {
                         mVideoChatStatus = VideoChatStatus.UNCHAT;
-                        UIHelper.toast(LiveActivity.this, R.string.invite_timeout_tip); //提醒：对方长时间未响应，已取消连麦邀请
+                        UIHelper.toast(getContext(), R.string.invite_timeout_tip); //提醒：对方长时间未响应，已取消连麦邀请
                     }
                     break;
                 case LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT:
                     feedbackInviting(false);  //自动反馈不同意连麦
-                    UIHelper.toast(LiveActivity.this, R.string.inviting_process_timeout); //提醒超时未处理，已经自动拒绝对方的连麦邀请
+                    UIHelper.toast(getContext(), R.string.inviting_process_timeout); //提醒超时未处理，已经自动拒绝对方的连麦邀请
                     break;
                 case LinkConst.MSG_WHAT_MIX_STREAM_TIMEOUT:
                 case LinkConst.MSG_WHAT_MIX_STREAM_ERROR:
                     //直接结束连麦
                     closeLiveChat();
-                    UIHelper.toast(LiveActivity.this, R.string.mix_stream_timeout_tip); //提示等待混流超时
+                    UIHelper.toast(getContext(), R.string.mix_stream_timeout_tip); //提示等待混流超时
 
             }
         }
@@ -161,6 +213,10 @@ public class LiveActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
+        live_id = getIntent().getStringExtra("live_id");
+
+        live_id = "cf68d632-b488-42fe-8142-07bc645d4229";
+
         if (permissionCheck()) {
             // 更新权限状态
             mHasPermission = true;
@@ -168,7 +224,7 @@ public class LiveActivity extends BaseActivity {
             if (Build.VERSION.SDK_INT >= 23) {
                 ActivityCompat.requestPermissions(this, permissionManifest, PERMISSION_REQUEST_CODE);
             } else {
-                UIHelper.toast(LiveActivity.this, noPermissionTip[mNoPermissionIndex]);
+                UIHelper.toast(getContext(), noPermissionTip[mNoPermissionIndex]);
                 finish();
             }
         }
@@ -190,7 +246,138 @@ public class LiveActivity extends BaseActivity {
         initRecorder();
 
         mHeadsetMonitor.setHeadsetStatusChangedListener(new LivePresenter());
+
+        getPlayerInfo();
     }
+
+    /**
+     * 加入聊天室
+     */
+    private void joinSquare(AVIMConversation conversation) {
+        conversation.join(new AVIMConversationCallback() {
+            @Override
+            public void done(AVIMException e) {
+                if (e == null) {
+
+                }
+            }
+        });
+    }
+
+    /**
+     * 消息接收
+     */
+    @Subscriber(tag = "IM_Message")
+    public void handleMessage(BaseMessage baseMessage) {
+        if (null != imConversation && null != baseMessage) {
+            Map<String, Object> map = baseMessage.getOthers();
+            AVIMMessage message = (AVIMMessage) map.get("message");
+            AVIMConversation conversation = (AVIMConversation) map.get("conversation");
+
+            KLog.json(message.toString());
+
+            //判断房间一致然后做消息接收处理
+            if (imConversation.getConversationId().equals(conversation.getConversationId())) {
+                messageList.add(message);
+                mLiveChatAdapter.notifyDataSetChanged();
+                recyler_chat.smoothScrollToPosition(messageList.size());
+            }
+        }
+    }
+
+    class LiveChatAdapter extends CommonAdapter<AVIMMessage, BaseViewHolder> {
+
+        public LiveChatAdapter(Context context, int layoutId, List<AVIMMessage> datas) {
+            super(context, layoutId, datas);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder holder, AVIMMessage message, int position) {
+            AVIMTextMessage msg = (AVIMTextMessage) message;
+
+            KLog.json(msg.toString());
+
+            String username = msg.getAttrs().get("username") + ": ";
+
+            TextView textSend = holder.getView(R.id.text_you_send);
+            textSend.setText(username + msg.getText());
+
+            SpannableStringBuilder builder = new SpannableStringBuilder(textSend.getText().toString());
+            ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.live_chat_level1));
+            ForegroundColorSpan Span2 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.textColor_333333));
+            builder.setSpan(Span1, 0, username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder.setSpan(Span2, username.length(), textSend.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            textSend.setText(builder);
+        }
+    }
+
+    private WatchBottomFragment.RecorderUIClickListener mUIClickListener = new WatchBottomFragment.RecorderUIClickListener() {
+
+        @Override
+        public void onSendComment(final EditText player_edit) {
+            //发送评论
+            if (null != imConversation) {
+                //前端显示
+                HashMap<String, Object> attrsMap = new HashMap<String, Object>();
+                attrsMap.put("username", UserUtils.getUserName());
+
+                final AVIMTextMessage msg = new AVIMTextMessage();
+                msg.setText(player_edit.getText().toString());
+                msg.setAttrs(attrsMap);
+
+                messageList.add(msg);
+                mLiveChatAdapter.notifyDataSetChanged();
+                recyler_chat.smoothScrollToPosition(messageList.size());
+
+                //聊天内容发往后台
+                Map<Object, Object> messageMap = new HashMap<>();
+                messageMap.put("_lctype", "-1");
+                messageMap.put("_lctext", player_edit.getText().toString());
+                messageMap.put("_lcattrs", AVImClientManager.getInstance().userBaseInfo());
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("token", UserUtils.getToken());
+                params.put("conv_id", imConversation.getConversationId());
+                params.put("chat_type", "1003");
+                params.put("message", JSONObject.toJSON(messageMap).toString());
+
+                //发送文字消息
+                GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+                    @Override
+                    public void onSuccess(String responseInfo) {
+                        KLog.json(responseInfo);
+                        player_edit.setText("");
+                        player_edit.setVisibility(View.GONE);
+                        InputMethodManager imm =
+                                (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(player_edit.getWindowToken(), 0);
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        KLog.json(msg);
+                    }
+                };
+                new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
+            }
+        }
+
+        @Override
+        public int onswitchCamera() {
+            if (mChatHost != null) {
+                mChatHost.switchCamera();
+            }
+            return -1;
+        }
+
+        @Override
+        public void onFinish() {
+            //finish();
+            onBackPressed();
+        }
+
+
+    };
 
     /**
      * 权限检查（适配6.0以上手机）
@@ -224,7 +411,7 @@ public class LiveActivity extends BaseActivity {
                         int toastTip = noPermissionTip[i];
                         mNoPermissionIndex = i;
                         if (toastTip != 0) {
-                            UIHelper.toast(LiveActivity.this, toastTip);
+                            UIHelper.toast(getContext(), toastTip);
                             hasPermission = false;
                             finish();
                         }
@@ -287,7 +474,7 @@ public class LiveActivity extends BaseActivity {
              */
             if (Build.VERSION.SDK_INT < 23) {
                 if (mNoPermissionIndex >= 0 && mNoPermissionIndex < noPermissionTip.length) {
-                    UIHelper.toast(LiveActivity.this, noPermissionTip[mNoPermissionIndex]);
+                    UIHelper.toast(getContext(), noPermissionTip[mNoPermissionIndex]);
                 }
                 finish();
             } else {
@@ -320,7 +507,7 @@ public class LiveActivity extends BaseActivity {
             }
             mHandler.removeMessages(LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT); //移除倒计时的消息
         } else {
-            UIHelper.toast(LiveActivity.this, R.string.no_inviting_for_response); //当前没有连麦邀请需要反馈
+            UIHelper.toast(getContext(), R.string.no_inviting_for_response); //当前没有连麦邀请需要反馈
         }
     }
 
@@ -538,20 +725,20 @@ public class LiveActivity extends BaseActivity {
             KLog.d("Live stream connection error-->" + what);
             switch (what) {
                 case MediaError.ALIVC_ERR_PUBLISHER_NETWORK_POOR:
-                    UIHelper.toast(LiveActivity.this, R.string.network_busy);
+                    UIHelper.toast(getContext(), R.string.network_busy);
                     break;
                 case MediaError.ALIVC_ERR_PLAYER_NO_NETWORK:
-                    UIHelper.toast(LiveActivity.this, R.string.no_network);
+                    UIHelper.toast(getContext(), R.string.no_network);
                     break;
                 case MediaError.ALIVC_ERR_PLAYER_READ_PACKET_TIMEOUT:
-                    UIHelper.toast(LiveActivity.this, R.string.network_busy);
+                    UIHelper.toast(getContext(), R.string.network_busy);
                     break;
                 case MediaError.ALIVC_ERR_PLAYER_INVALID_INPUTFILE:
                 case MediaError.ALIVC_ERR_PLAYER_NO_MEMORY:
                 case MediaError.ALIVC_ERR_PLAYER_INVALID_CODEC:
                 case MediaError.ALIVC_ERR_PLAYER_NO_SURFACEVIEW:
                     //超时等状态需要提示连麦结束
-                    UIHelper.toast(LiveActivity.this, R.string.video_chatting_finished);
+                    UIHelper.toast(getContext(), R.string.video_chatting_finished);
                     abortChat(true);
                     break;
                 case MediaError.ALIVC_ERR_PLAYER_TIMEOUT:
@@ -568,7 +755,7 @@ public class LiveActivity extends BaseActivity {
                     }
                     break;
                 case MediaError.ALIVC_ERR_PUBLISHER_VIDEO_CAPTURE_DISABLED: //摄像头开启失败
-                    UIHelper.toast(LiveActivity.this, R.string.camera_open_failure_for_live);
+                    UIHelper.toast(getContext(), R.string.camera_open_failure_for_live);
                     finish();
                     break;
                 case MediaError.ALIVC_ERR_PUBLISHER_ENCODE_AUDIO_FAILED:
@@ -611,7 +798,7 @@ public class LiveActivity extends BaseActivity {
 
                     break;
                 case MediaError.ALIVC_INFO_PUBLISH_RECONNECT_FAILURE:
-                    UIHelper.toast(LiveActivity.this, R.string.network_busy);
+                    UIHelper.toast(getContext(), R.string.network_busy);
                     break;
                 case MediaError.ALIVC_INFO_PUBLISH_RECONNECT_START:
                     break;
@@ -717,75 +904,22 @@ public class LiveActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.startLive, R.id.imgPreviewClose, R.id.imgPlayClose})
+    @OnClick({R.id.imgPlayClose})
     public void closeOnClick(View v) {
         switch (v.getId()) {
-            case R.id.startLive: //开始连麦
-                startLive.setEnabled(false);
-                changeUI2Publishing();
+            /*case R.id.startLive: //开始连麦
+                *//*startLive.setEnabled(false);
+                changeUI2Publishing();*//*
                 mIsLive = true;
                 mChatHost.startToPublish(publishUrl);
                 break;
             case R.id.imgPreviewClose: //关闭直播
-                onBackPressed();
-                break;
+
+                break;*/
             case R.id.imgPlayClose: //关闭连麦
                 break;
         }
     }
-
-    /**
-     * UI切换到正在推流状态
-     */
-    private void changeUI2Publishing() {
-
-        imgPreviewClose.setVisibility(View.VISIBLE);
-
-        mLiveBottomFragment = LiveBottomFragment.newInstance();
-        mLiveBottomFragment.setRecorderUIClickListener(mUIClickListener);
-        getSupportFragmentManager().beginTransaction().replace(R.id.bottom_container, mLiveBottomFragment).commit();
-    }
-
-    /**
-     * 底部操作按钮的click事件响应
-     */
-    private LiveBottomFragment.RecorderUIClickListener mUIClickListener = new LiveBottomFragment.RecorderUIClickListener() {
-        @Override
-        public int onSwitchCamera() { //切换摄像头
-            if (mChatHost != null) {
-                mChatHost.switchCamera();
-            }
-            return -1;
-        }
-
-        @Override
-        public boolean onBeautySwitch() { // 美颜开/关
-            mPreviewSurfaceView.setZOrderOnTop(true);
-            if (mChatHost != null) {
-                if (!isBeautyOn) {
-                    mFilterMap.put(AlivcVideoChatHost.ALIVC_FILTER_PARAM_BEAUTY_ON, Boolean.toString(true));
-                } else {
-                    mFilterMap.put(AlivcVideoChatHost.ALIVC_FILTER_PARAM_BEAUTY_ON, Boolean.toString(false));
-                }
-                mChatHost.setFilterParam(mFilterMap);
-                isBeautyOn = !isBeautyOn;
-            }
-            return isBeautyOn;
-        }
-
-        @Override
-        public boolean onFlashSwitch() { // 闪光灯开/关
-            if (mChatHost != null) {
-                if (!isFlashOn) {
-                    mChatHost.setFlashOn(true);
-                } else {
-                    mChatHost.setFlashOn(false);
-                }
-                isFlashOn = !isFlashOn;
-            }
-            return isFlashOn;
-        }
-    };
 
     /**
      * 关闭推流直播
@@ -802,5 +936,116 @@ public class LiveActivity extends BaseActivity {
         }
 
         finish();
+    }
+
+    /**
+     * 获取直播详情
+     */
+    private void getPlayerInfo() {
+
+        Map<String, String> param = new HashMap<>();
+
+        param.put("live_id", live_id);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONObject data = object.getJSONArray("data").getJSONObject(0);
+                    //直播详情
+                    textTitle.setText(data.getString("video_name")); //直播名称
+                    ImageDisplay.loadCircleNetImage(getContext(), data.getString("face_url"), imgPalyer);
+                    textCompany.setText(data.getString("anchor_name"));
+                    textMarInter.setText(data.getString("programme_name"));
+                    //主播介绍
+                    anchor = data.getJSONObject("anchor");
+
+                    //倒计时
+                    if (data.getLongValue("launch_time") > 0) {
+                        countDownTimer.setVisibility(View.VISIBLE);
+                        countDownTimer.addTime(data.getString("live_time_start"));
+                        countDownTimer.start();
+
+                        countDownTimer.setDownCallBack(new CountDownTimerView.CountDownCallBack() {
+                            @Override
+                            public void startPlayer() {
+                                countDownTimer.setVisibility(View.GONE);
+
+                            }
+                        });
+                    } else {
+                        countDownTimer.setVisibility(View.GONE);
+                    }
+
+                    //mPlayUrl = data.getString("url_rtmp");
+                    room_id = data.getString("room_id");
+
+                    /*AVImClientManager.getInstance().findConversationById(room_id, new AVImClientManager.ChatJoinManager() {
+                        @Override
+                        public void joinSuccess(AVIMConversation conversation) {
+                            imConversation = conversation;
+                            joinSquare(imConversation);
+                        }
+
+                        @Override
+                        public void joinFail(String error) {
+                            KLog.e(room_id);
+                            UIHelper.toast(getActivity(), "获取聊天房间失败");
+                        }
+                    });*/
+
+                    getOnlineCount(room_id);
+
+                    mBottomFragment = WatchBottomFragment.newInstance(live_id, String.valueOf(anchor), 0);
+                    mBottomFragment.setRecordUIClickListener(mUIClickListener);
+                    mBottomFragment.setActivityRootView(mRootContainer);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.bottom_container, mBottomFragment).commit();
+
+                } else {
+                    UIHelper.toast(getContext(), R.string.net_erro_hint);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                KLog.json(msg);
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+
+        new GGOKHTTP(param, GGOKHTTP.GET_STUDIO_LIST, ggHttpInterface).startGet();
+    }
+
+    /*
+    * 获取直播在线人数
+    * */
+    private void getOnlineCount(String room_id) {
+
+        Map<String, String> param = new HashMap<>();
+        param.put("conv_id", room_id);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONObject data = object.getJSONObject("data");
+                    textOnlineNumber.setText(data.getIntValue("result") + "人在线");
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.GET_ONLINE_COUNT, ggHttpInterface).startGet();
+    }
+
+    private LiveActivity getContext() {
+        return LiveActivity.this;
     }
 }

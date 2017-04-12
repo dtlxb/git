@@ -55,6 +55,8 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.PlayerUtils.CountDownTimerView;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.linkUtils.ConnectivityMonitor;
@@ -70,6 +72,7 @@ public class WatchLiveActivity extends BaseActivity {
 
     @BindView(R.id.root_container)
     FrameLayout mRootContainer;
+
     //推流预览的SurfaceView
     @BindView(R.id.preview_surface_view)
     SurfaceView mPreviewSurfaceView;
@@ -79,6 +82,20 @@ public class WatchLiveActivity extends BaseActivity {
     //播放关闭按钮
     @BindView(R.id.iv_abort_chat)
     ImageView mIvChatClose;
+    //详情相关控件
+    @BindView(R.id.textTitle)
+    TextView textTitle;
+    @BindView(R.id.imgPalyer)
+    ImageView imgPalyer;
+    @BindView(R.id.textCompany)
+    TextView textCompany;
+    @BindView(R.id.textMarInter)
+    TextView textMarInter;
+    @BindView(R.id.textOnlineNumber)
+    TextView textOnlineNumber;
+    //倒计时
+    @BindView(R.id.countDownTimer)
+    CountDownTimerView countDownTimer;
     //缓冲控件
     @BindView(R.id.LayoutTip)
     LinearLayout LayoutTip;
@@ -130,8 +147,6 @@ public class WatchLiveActivity extends BaseActivity {
     private boolean mIsPublishPaused = false;
     private boolean isDestoyed = false; //activity是否销毁了，如果销毁了，则关闭连麦时就不需要做UI提醒了
 
-    private WatchBottomFragment mBottomFragment;
-
     private String mIMFailedMessage;
     private ConnectivityMonitor mConnectivityMonitor = new ConnectivityMonitor();
     private HeadsetMonitor mHeadsetMonitor = new HeadsetMonitor();
@@ -153,6 +168,11 @@ public class WatchLiveActivity extends BaseActivity {
 
     private String live_id;
 
+    //弹窗
+    private JSONObject anchor;
+
+    private WatchBottomFragment mBottomFragment;
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -163,11 +183,11 @@ public class WatchLiveActivity extends BaseActivity {
                  */
                 case LinkConst.MSG_WHAT_INVITE_CHAT_TIMEOUT://连麦响应超时
                     mChatStatus = VideoChatStatus.UNCHAT;
-                    UIHelper.toast(WatchLiveActivity.this, R.string.invite_timeout_tip); //提醒：对方长时间未响应，已取消连麦邀请
+                    UIHelper.toast(getContext(), R.string.invite_timeout_tip); //提醒：对方长时间未响应，已取消连麦邀请
                     break;
                 case LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT:
                     feedbackInvite(LinkConst.STATUS_NOT_AGREE); //自动反馈不同意连麦
-                    UIHelper.toast(WatchLiveActivity.this, R.string.inviting_process_timeout); //提醒超时未处理，已经自动拒绝对方的连麦邀请
+                    UIHelper.toast(getContext(), R.string.inviting_process_timeout); //提醒超时未处理，已经自动拒绝对方的连麦邀请
                     break;
                 case LinkConst.MSG_WHAT_MIX_STREAM_ERROR:
                     if (isChatting()) {
@@ -188,7 +208,7 @@ public class WatchLiveActivity extends BaseActivity {
         live_id = getIntent().getStringExtra("live_id");
 
         if (live_id.equals("887a1170-e034-4386-98fb-3b710fb37fbd")) {
-            mPlayUrl = "rtmp://zbmo.go-goal.cn/microphone/ios911_mix";
+            mPlayUrl = "rtmp://zbmo.go-goal.cn/microphone/348628_mix";
         } else if (live_id.equals("cf68d632-b488-42fe-8142-07bc645d4229")) {
             mPlayUrl = "rtmp://zbmo.go-goal.cn/microphone/dave_mix";
         }
@@ -196,11 +216,6 @@ public class WatchLiveActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= 23) {
             permissionCheck();
         }
-
-        mBottomFragment = WatchBottomFragment.newInstance();
-        mBottomFragment.setRecordUIClickListener(mUIClickListener);
-        mBottomFragment.setActivityRootView(mRootContainer);
-        getSupportFragmentManager().beginTransaction().replace(R.id.bottom_container, mBottomFragment).commit();
 
         mMediaParam.put(MediaConstants.PUBLISHER_PARAM_ORIGINAL_BITRATE, "" + 800000);
         mMediaParam.put(MediaConstants.PUBLISHER_PARAM_MIN_BITRATE, "" + 600000);
@@ -216,23 +231,11 @@ public class WatchLiveActivity extends BaseActivity {
 
         mHeadsetMonitor.setHeadsetStatusChangedListener(new WatchLivePresenter());
 
-        AVImClientManager.getInstance().findConversationById(room_id, new AVImClientManager.ChatJoinManager() {
-            @Override
-            public void joinSuccess(AVIMConversation conversation) {
-                imConversation = conversation;
-                joinSquare(imConversation);
-            }
-
-            @Override
-            public void joinFail(String error) {
-                KLog.e(room_id);
-                UIHelper.toast(getActivity(), "获取聊天房间失败");
-            }
-        });
-
         initRecycleView(recyler_chat, null);
         mLiveChatAdapter = new LiveChatAdapter(this, R.layout.item_live_chat, messageList);
         recyler_chat.setAdapter(mLiveChatAdapter);
+
+        getPlayerInfo();
     }
 
     /**
@@ -328,7 +331,7 @@ public class WatchLiveActivity extends BaseActivity {
 
             mHandler.removeMessages(LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT); //移除倒计时的消息
         } else {
-            UIHelper.toast(WatchLiveActivity.this, R.string.no_inviting_for_response); //当前没有连麦邀请需要反馈
+            UIHelper.toast(getContext(), R.string.no_inviting_for_response); //当前没有连麦邀请需要反馈
         }
     }
 
@@ -357,7 +360,7 @@ public class WatchLiveActivity extends BaseActivity {
                     if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                         int toastTip = noPermissionTip[i];
                         if (toastTip != 0) {
-                            UIHelper.toast(WatchLiveActivity.this, toastTip);
+                            UIHelper.toast(getContext(), toastTip);
                         }
                     }
                 }
@@ -417,8 +420,7 @@ public class WatchLiveActivity extends BaseActivity {
         }
 
         @Override
-        public int onSwitchCamera() {
-            //切换摄像头
+        public int onswitchCamera() {
             if (mChatParter != null) {
                 mChatParter.switchCamera();
             }
@@ -426,25 +428,13 @@ public class WatchLiveActivity extends BaseActivity {
         }
 
         @Override
-        public boolean onBeautySwitch() {
-            //开启/关闭美颜
-            if (mChatParter != null) {
-                mFilterMap.put(AlivcVideoChatParter.ALIVC_FILTER_PARAM_BEAUTY_ON, Boolean.toString(!isBeautyOn));
-                mChatParter.setFilterParam(mFilterMap);
-                isBeautyOn = !isBeautyOn;
-            }
-            return isBeautyOn;
+        public void onFinish() {
+            //finish();
+            isPlaying = false;
+            onBackPressed();
         }
 
-        @Override
-        public boolean onFlashSwitch() {
-            //开启／关闭闪光灯
-            if (mChatParter != null) {
-                mChatParter.setFlashOn(!isFlashOn);
-                isFlashOn = !isFlashOn;
-            }
-            return isFlashOn;
-        }
+
     };
 
     /**
@@ -487,7 +477,7 @@ public class WatchLiveActivity extends BaseActivity {
                 case MediaError.ALIVC_ERR_PLAYER_READ_PACKET_TIMEOUT:
                 case MediaError.ALIVC_ERR_PLAYER_NO_NETWORK:
                 case MediaError.ALIVC_ERR_PLAYER_UNKNOW:
-                    UIHelper.toast(WatchLiveActivity.this, R.string.error_stop_playing);
+                    UIHelper.toast(getContext(), R.string.error_stop_playing);
                     //如果正在连麦则结束连麦
                     if (isChatting()) {
                         closeVideoCall();
@@ -509,7 +499,7 @@ public class WatchLiveActivity extends BaseActivity {
                     break;
                 case MediaError.ALIVC_ERR_PUBLISHER_VIDEO_CAPTURE_DISABLED:
                     if (isChatting()) {
-                        UIHelper.toast(WatchLiveActivity.this, R.string.camera_open_failure_for_chat);
+                        UIHelper.toast(getContext(), R.string.camera_open_failure_for_chat);
                         closeVideoCall();
                     }
                     break;
@@ -522,10 +512,10 @@ public class WatchLiveActivity extends BaseActivity {
                 case MediaError.ALIVC_ERR_PUBLISHER_ENCODE_VIDEO_FAILED:
                 case MediaError.ALIVC_ERR_PUBLISHER_VIDEO_ENCODER_INIT_FAILED:
                 case MediaError.ALIVC_ERR_PUBLISHER_ILLEGAL_ARGUMENT:
-                    UIHelper.toast(WatchLiveActivity.this, R.string.network_busy);
+                    UIHelper.toast(getContext(), R.string.network_busy);
                     break;
                 default:
-                    UIHelper.toast(WatchLiveActivity.this, R.string.error_unknown);
+                    UIHelper.toast(getContext(), R.string.error_unknown);
             }
             return true;
         }
@@ -562,7 +552,7 @@ public class WatchLiveActivity extends BaseActivity {
                     break;
                 case MediaError.ALIVC_INFO_PLAYER_FIRST_FRAME_RENDERED:
                     // 首帧显示时间
-                    UIHelper.toast(WatchLiveActivity.this, R.string.show_first_frame);
+                    UIHelper.toast(getContext(), R.string.show_first_frame);
                     if (!isChatting()) {
                         //计算首帧耗时
                         KLog.e("首帧耗时: " + (System.currentTimeMillis() - mStartTime) + "ms");
@@ -796,7 +786,7 @@ public class WatchLiveActivity extends BaseActivity {
         }
         mIvChatClose.setVisibility(View.GONE);
         KLog.e("mIvChatClose setVisibility gone");
-        mBottomFragment.hideRecordView();
+        //mBottomFragment.hideRecordView();
         shouldOffLine = true; //表示在surfaceChanged时需要调用真正的offlineChat，来结束连麦
     }
 
@@ -805,7 +795,7 @@ public class WatchLiveActivity extends BaseActivity {
      */
     public void closeVideoChatSmallView() {
         mIvChatClose.setVisibility(View.GONE);
-        mBottomFragment.hideRecordView();
+        //mBottomFragment.hideRecordView();
     }
 
     /**
@@ -824,19 +814,6 @@ public class WatchLiveActivity extends BaseActivity {
             LayoutTip.setVisibility(View.VISIBLE);
         }
     };
-
-    @OnClick({R.id.img_close, R.id.iv_abort_chat})
-    public void closeOnClick(View v) {
-        switch (v.getId()) {
-            case R.id.img_close: //关闭推流
-                isPlaying = false;
-                onBackPressed();
-                break;
-            case R.id.iv_abort_chat: //关闭播放
-
-                break;
-        }
-    }
 
     @Override
     protected void onResume() {
@@ -883,6 +860,95 @@ public class WatchLiveActivity extends BaseActivity {
         //TODO:通知服务端，退出观看
     }
 
+    @OnClick({R.id.iv_abort_chat})
+    public void setClickFunctionBar(View v) {
+        switch (v.getId()) {
+            case R.id.iv_abort_chat: //关闭播放
+
+                break;
+        }
+    }
+
+    /**
+     * 获取直播详情
+     */
+    private void getPlayerInfo() {
+
+        Map<String, String> param = new HashMap<>();
+
+        param.put("live_id", live_id);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONObject data = object.getJSONArray("data").getJSONObject(0);
+                    //直播详情
+                    textTitle.setText(data.getString("video_name")); //直播名称
+                    ImageDisplay.loadCircleNetImage(getContext(), data.getString("face_url"), imgPalyer);
+                    textCompany.setText(data.getString("anchor_name"));
+                    textMarInter.setText(data.getString("programme_name"));
+                    //主播介绍
+                    anchor = data.getJSONObject("anchor");
+
+                    //倒计时
+                    if (data.getLongValue("launch_time") > 0) {
+                        countDownTimer.setVisibility(View.VISIBLE);
+                        countDownTimer.addTime(data.getString("live_time_start"));
+                        countDownTimer.start();
+
+                        countDownTimer.setDownCallBack(new CountDownTimerView.CountDownCallBack() {
+                            @Override
+                            public void startPlayer() {
+                                countDownTimer.setVisibility(View.GONE);
+
+                            }
+                        });
+                    } else {
+                        countDownTimer.setVisibility(View.GONE);
+                    }
+
+                    mPlayUrl = data.getString("url_rtmp");
+                    room_id = data.getString("room_id");
+
+                    /*AVImClientManager.getInstance().findConversationById(room_id, new AVImClientManager.ChatJoinManager() {
+                        @Override
+                        public void joinSuccess(AVIMConversation conversation) {
+                            imConversation = conversation;
+                            joinSquare(imConversation);
+                        }
+
+                        @Override
+                        public void joinFail(String error) {
+                            KLog.e(room_id);
+                            UIHelper.toast(getActivity(), "获取聊天房间失败");
+                        }
+                    });*/
+
+                    getOnlineCount(room_id);
+
+                    mBottomFragment = WatchBottomFragment.newInstance(live_id, String.valueOf(anchor), 1);
+                    mBottomFragment.setRecordUIClickListener(mUIClickListener);
+                    mBottomFragment.setActivityRootView(mRootContainer);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.bottom_container, mBottomFragment).commit();
+
+                } else {
+                    UIHelper.toast(getContext(), R.string.net_erro_hint);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                KLog.json(msg);
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+
+        new GGOKHTTP(param, GGOKHTTP.GET_STUDIO_LIST, ggHttpInterface).startGet();
+    }
+
     /*
     * 获取直播在线人数
     * */
@@ -898,14 +964,19 @@ public class WatchLiveActivity extends BaseActivity {
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
+                    textOnlineNumber.setText(data.getIntValue("result") + "人在线");
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toast(WatchLiveActivity.this, R.string.net_erro_hint);
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_ONLINE_COUNT, ggHttpInterface).startGet();
+    }
+
+    private WatchLiveActivity getContext() {
+        return WatchLiveActivity.this;
     }
 }

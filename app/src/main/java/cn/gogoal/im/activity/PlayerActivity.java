@@ -235,45 +235,10 @@ public class PlayerActivity extends BaseActivity {
                     if (anchor == null) {
                         linearPlayerProfiles.setVisibility(View.GONE);
                     } else {
+                        showAnchorProfiles();
+                        showAnchorProfilesLand();
                         linearPlayerProfiles.setVisibility(View.VISIBLE);
                     }
-                    //倒计时
-                        /*if (data.getLongValue("launch_time") > 0) {
-                            countDownTimer.setVisibility(View.VISIBLE);
-                            countDownTimer.addTime(data.getString("live_time_start"));
-                            countDownTimer.start();
-
-                            countDownTimer.setDownCallBack(new CountDownTimerView.CountDownCallBack() {
-                                @Override
-                                public void startPlayer() {
-                                    countDownTimer.setVisibility(View.GONE);
-                                    startToPlay(mURI);
-                                }
-                            });
-                        } else {
-                            countDownTimer.setVisibility(View.GONE);
-                        }
-
-                        mURI = data.getString("url_rtmp");
-                        room_id = data.getString("room_id");
-
-                        AVImClientManager.getInstance().findConversationById(room_id, new AVImClientManager.ChatJoinManager() {
-                            @Override
-                            public void joinSuccess(AVIMConversation conversation) {
-                                imConversation = conversation;
-                                joinSquare(imConversation);
-                            }
-
-                            @Override
-                            public void joinFail(String error) {
-                                KLog.e(room_id);
-                                UIHelper.toast(getActivity(), "获取聊天房间失败");
-                            }
-                        });
-
-                        getOnlineCount(room_id);
-
-                        LayoutProgress.setVisibility(View.GONE);*/
 
                     mURI = data.getString("video_file");
 
@@ -282,9 +247,6 @@ public class PlayerActivity extends BaseActivity {
                     LayoutProgress.setVisibility(View.VISIBLE);
 
                     startToPlay(mURI);
-
-                    showAnchorProfiles();
-                    showAnchorProfilesLand();
 
                 } else {
                     UIHelper.toast(getContext(), R.string.net_erro_hint);
@@ -298,7 +260,6 @@ public class PlayerActivity extends BaseActivity {
             }
         };
 
-        //new GGOKHTTP(param, GGOKHTTP.GET_STUDIO_LIST, ggHttpInterface).startGet();
         new GGOKHTTP(param, GGOKHTTP.GET_RECORD_LIST, ggHttpInterface).startGet();
     }
 
@@ -1096,8 +1057,6 @@ public class PlayerActivity extends BaseActivity {
 
         Map<String, String> param = new HashMap<>();
         param.put("video_id", live_id);
-
-        //param.put("video_type", "1");
         param.put("video_type", "2");
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {

@@ -90,7 +90,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     public void setStatusBar() {
         StatusBarUtil.with(BaseActivity.this).initForGogoal(false);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     //封装运行时权限
