@@ -469,6 +469,15 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 List<Integer> quitList = new ArrayList<>();
                 quitList.add(Integer.parseInt(UserUtils.getUserAccountId()));
                 deleteAnyone(quitList);
+                //查看是收藏这个群了然后删除
+                JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_groups_saved", new JSONArray());
+                for (int i = 0; i < groupsArray.size(); i++) {
+                    JSONObject object = (JSONObject) groupsArray.get(i);
+                    if (object.get("conv_id").equals(conversationId)) {
+                        groupsArray.remove(i);
+                        SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_groups_saved", groupsArray);
+                    }
+                }
                 break;
             default:
                 break;
