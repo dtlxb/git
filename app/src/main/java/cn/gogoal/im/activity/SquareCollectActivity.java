@@ -167,6 +167,7 @@ public class SquareCollectActivity extends BaseActivity {
                     xLayout.setStatus(XLayout.Success);
                     listAdapter.notifyDataSetChanged();
                     SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_groups_saved", newGroupArray);
+                    groupsArray.addAll(newGroupArray);
                 }
             }
 

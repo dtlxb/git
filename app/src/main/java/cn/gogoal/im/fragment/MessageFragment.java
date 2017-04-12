@@ -85,6 +85,8 @@ public class MessageFragment extends BaseFragment {
     @BindView(R.id.recyclerView)
     RecyclerView message_recycler;
 
+    private XTitle xTitle;
+
     private List<IMMessageBean> IMMessageBeans = new ArrayList<>();
 
     private ListAdapter listAdapter;
@@ -110,7 +112,7 @@ public class MessageFragment extends BaseFragment {
     }
 
     private void initTitle() {
-        XTitle xTitle = setFragmentTitle(R.string.title_message);
+        xTitle = setFragmentTitle(R.string.title_message);
         //添加action
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_person)) {
             @Override
@@ -218,8 +220,6 @@ public class MessageFragment extends BaseFragment {
             }
 
         });
-        KLog.e(SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray()).toString());
-        KLog.e(IMMessageBeans.toString());
         listAdapter.setOnItemLongClickListener(new CommonAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(CommonAdapter adapter, View view, final int position) {
@@ -525,6 +525,18 @@ public class MessageFragment extends BaseFragment {
             public void onError(Exception e) {
             }
         });
+    }
+
+    /**
+     * 判断client连接状态
+     */
+    @Subscriber(tag = "connection_status")
+    public void clientStatus(String msg) {
+        if (msg.equals("connection_paused")) {
+            xTitle.setTitle(R.string.title_status);
+        } else if (msg.equals("connection_resume")) {
+            xTitle.setTitle(R.string.title_message);
+        }
     }
 
     /**

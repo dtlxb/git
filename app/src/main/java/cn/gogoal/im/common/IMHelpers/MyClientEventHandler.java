@@ -13,12 +13,12 @@ public class MyClientEventHandler extends AVIMClientEventHandler {
 
     @Override
     public void onConnectionPaused(AVIMClient avimClient) {
-
+        AppManager.getInstance().sendMessage("connection_status", "connection_paused");
     }
 
     @Override
     public void onConnectionResume(AVIMClient avimClient) {
-
+        AppManager.getInstance().sendMessage("connection_status", "connection_resume");
     }
 
     @Override
