@@ -242,8 +242,6 @@ public class PlayerActivity extends BaseActivity {
 
                     textOnlineNumber.setText("0人在线");
 
-                    LayoutProgress.setVisibility(View.VISIBLE);
-
                     startToPlay(mURI);
 
                 } else {
@@ -757,7 +755,7 @@ public class PlayerActivity extends BaseActivity {
         if (bShowPause) {
             LayoutProgress.setVisibility(View.VISIBLE);
         } else {
-            //LayoutProgress.setVisibility(View.GONE);
+            LayoutProgress.setVisibility(View.GONE);
         }
     }
 
@@ -997,18 +995,21 @@ public class PlayerActivity extends BaseActivity {
         anchor_name.setText(anchor.getString("anchor_name"));
         anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
 
-        anchor_achieve.setText(anchor.getString("anchor_introduction"));
 
-        final ViewTreeObserver observer = anchor_avatar.getViewTreeObserver();
-        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                anchor_avatar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                int finalHeight = anchor_avatar.getMeasuredHeight();
-                int finalWidth = anchor_avatar.getMeasuredWidth();
-                TextAndImage.makeSpan(finalHeight, finalWidth, anchor_achieve);
-            }
-        });
+        if (anchor.getString("anchor_introduction") != null) {
+            anchor_achieve.setText(anchor.getString("anchor_introduction"));
+
+            final ViewTreeObserver observer = anchor_avatar.getViewTreeObserver();
+            observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    anchor_avatar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    int finalHeight = anchor_avatar.getMeasuredHeight();
+                    int finalWidth = anchor_avatar.getMeasuredWidth();
+                    TextAndImage.makeSpan(finalHeight, finalWidth, anchor_achieve);
+                }
+            });
+        }
     }
 
     private void showAnchorProfilesLand() {
