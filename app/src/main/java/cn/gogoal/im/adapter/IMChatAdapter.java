@@ -99,7 +99,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
 
         AVIMMessage avimMessage = messageList.get(position);
         JSONObject contentObject = JSON.parseObject(avimMessage.getContent());
