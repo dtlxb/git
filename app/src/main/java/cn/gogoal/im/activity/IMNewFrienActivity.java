@@ -207,11 +207,13 @@ public class IMNewFrienActivity extends BaseActivity {
                         String string = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", null);
                         JSONArray contactsJsonArray = null;
                         JSONObject contactjsonObject;
-                        if (null != string && !string.equals("")) {
+                        if (null != string) {
                             contactjsonObject = JSON.parseObject(string);
+                            KLog.e(contactjsonObject);
                             if (null != contactjsonObject.get("data")) {
                                 contactsJsonArray = contactjsonObject.getJSONArray("data");
                                 contactsJsonArray.add(newObject);
+                                KLog.e(contactsJsonArray);
                             }
                         } else {
                             contactsJsonArray = new JSONArray();
