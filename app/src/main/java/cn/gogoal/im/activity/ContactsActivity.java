@@ -144,8 +144,11 @@ public class ContactsActivity extends BaseActivity {
                                 if (jsonObject.get("data") != null) {
                                     JSONArray jsonArray = jsonObject.getJSONArray("data");
                                     KLog.e(jsonArray.toString());
-                                    if (null != jsonArray) {
-                                        jsonArray.remove(position - 2);
+                                    for (int i = 0; i < jsonArray.size(); i++) {
+                                        JSONObject thisObject = (JSONObject) jsonArray.get(i);
+                                        if (thisObject.getInteger("friend_id") == contactBeanList.get(position).getFriend_id()) {
+                                            jsonArray.remove(jsonArray.get(i));
+                                        }
                                     }
                                     jsonObject.put("data", jsonArray);
                                     KLog.e(jsonObject);

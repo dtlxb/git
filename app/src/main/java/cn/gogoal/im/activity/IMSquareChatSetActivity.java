@@ -176,7 +176,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     startActivityForResult(intent, AppConst.SQUARE_ROOM_DELETE_ANYONE);
                 } else {
                     intent = new Intent(IMSquareChatSetActivity.this, IMPersonDetailActivity.class);
-                    mBundle.putInt("friend_id", contactBeens.get(position).getFriend_id());
+                    mBundle.putInt("account_id", contactBeens.get(position).getFriend_id());
                     intent.putExtras(mBundle);
                     startActivity(intent);
                 }

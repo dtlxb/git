@@ -220,6 +220,34 @@ public class UserUtils {
     }
 
     /**
+     * 找出当前群中自己的好友
+     * <p>
+     * 获取当前群的已经加入的好友，当前群可能有的不是好友，要匹配
+     */
+    public static List<ContactBean> getOthersInTeam(String conversationId) {
+
+        JSONArray userInTeamArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationId + "_accountList_beans", new JSONArray());
+
+        KLog.e(userInTeamArray);
+        //获取我的conversationId群中的全部用户
+        List<ContactBean> list = JSON.parseArray(String.valueOf(userInTeamArray), ContactBean.class);
+
+        ContactBean mySelfBean = new ContactBean();
+
+        mySelfBean.setFriend_id(Integer.parseInt(getUserAccountId()));
+        mySelfBean.setNickname(getUserName());
+        mySelfBean.setAvatar(getUserAvatar());
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getFriend_id() == mySelfBean.getFriend_id()) {
+                list.remove(i);
+            }
+        }
+        KLog.e(list);
+        return list;
+    }
+
+    /**
      * 传入 好友集合 返回好友的id集合
      */
     public static HashSet<Integer> getUserFriendsIdList(Collection<ContactBean> friends) {

@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.promeg.pinyinhelper.Pinyin;
 import com.hply.imagepicker.view.SuperCheckBox;
@@ -37,6 +38,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -129,13 +131,13 @@ public class ChooseContactActivity extends BaseActivity {
             rvDel.setVisibility(View.VISIBLE);
             rvDel.addItemDecoration(new NormalItemDecoration(mContext));
             rvDel.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-            rvDel.setAdapter(new DeleteAdapter(UserUtils.getFriendsInTeam(teamId)));
+            rvDel.setAdapter(new DeleteAdapter(UserUtils.getOthersInTeam(teamId)));
         }
 
         //1100
         itContactBean = (ContactBean) getIntent().getSerializableExtra("seri");
 
-        if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE || actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
+        if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE) {
             mSelectedTeamMemberAccounts.addAll(UserUtils.getFriendsInTeam(teamId));
         } else if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
             mSelectedTeamMemberAccounts.add(itContactBean);
@@ -164,8 +166,6 @@ public class ChooseContactActivity extends BaseActivity {
             userContacts = UserUtils.getUserContacts();
         }
 
-        KLog.e(userContacts.size());
-
         /*if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE && itContactBean != null) {
             userContacts.add(itContactBean);
         }*/
@@ -173,6 +173,7 @@ public class ChooseContactActivity extends BaseActivity {
         showContact();//设置列表
 
         rvSelectedContacts.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+
 
         //增减监听
         this.setOnItemCheckListener(new ICheckItemListener<ContactBean>() {
@@ -310,7 +311,7 @@ public class ChooseContactActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toastError(getActivity(), msg,null);
+                UIHelper.toastError(getActivity(), msg, null);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.CREATE_GROUP_CHAT, ggHttpInterface).startGet();
@@ -370,7 +371,7 @@ public class ChooseContactActivity extends BaseActivity {
                 .invalidate();
 
         rvContacts.addItemDecoration(mDecoration);
-
+        KLog.e(userContacts);
         contactAdapter = new ChooseAdapter(userContacts);
 
         contactAdapter.notifyDataSetChanged();
@@ -390,7 +391,7 @@ public class ChooseContactActivity extends BaseActivity {
     /**
      * 主列表视图适配器 ☆☆☆
      */
-    private class ChooseAdapter extends CommonAdapter<ContactBean,BaseViewHolder> {
+    private class ChooseAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
 
         // 存储勾选框状态的map集合
         private Map<Integer, Boolean> map = new LinkedHashMap<>();
@@ -427,7 +428,7 @@ public class ChooseContactActivity extends BaseActivity {
                 holder.itemView.setEnabled(false);
                 checkBox.setEnabled(false);
             }
-            if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE || actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE || actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
+            if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE || actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
                 //判断当前的联系人是否已经在群中，是则显示灰色勾选图标
                 if ((!ArrayUtils.isEmpty(mSelectedTeamMemberAccounts)) && mSelectedTeamMemberAccounts.contains(data)) {
                     checkBox.setChecked(true);
@@ -520,7 +521,7 @@ public class ChooseContactActivity extends BaseActivity {
     /*
     * 已选列表适配器
     * */
-    private class SelectedAdapter extends CommonAdapter<ContactBean,BaseViewHolder> {
+    private class SelectedAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
 
         private List<ContactBean> datas;
 
@@ -563,7 +564,6 @@ public class ChooseContactActivity extends BaseActivity {
 
                     contactAdapter.setSelectItem(data.getFriend_id(), contactAdapter.dataGetPosition(data));
 
-                    result.remove(valueGetKey(result, data));
                     result.remove(valueGetKey(result, data));
 
                     if (listener != null) {
@@ -608,7 +608,7 @@ public class ChooseContactActivity extends BaseActivity {
     /**
      * 删除好友列表
      */
-    private class DeleteAdapter extends CommonAdapter<ContactBean,BaseViewHolder> {
+    private class DeleteAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
 
         // 存储勾选框状态的map集合
         private Map<Integer, Boolean> map = new HashMap<>();

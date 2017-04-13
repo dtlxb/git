@@ -24,6 +24,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.ui.KeyboardLaunchListenLayout;
 
 /**
  * 登录页
@@ -36,6 +37,9 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.loginPassWord)
     EditText loginPassWord;
 
+    @BindView(R.id.chat_root_keyboard_layout)
+    KeyboardLaunchListenLayout keyboardLayout;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_login;
@@ -43,15 +47,15 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void doBusiness(final Context mContext) {
-        
+
         loginUserName.setText("E00002638");
         loginPassWord.setText("123456");
         /*loginUserName.setText("E039065");
         loginPassWord.setText("888888");
-        loginUserName.setText("E00003645");
-        loginPassWord.setText("147258369");
         loginUserName.setText("E010399");
         loginPassWord.setText("198122");
+        loginUserName.setText("E00003645");
+        loginPassWord.setText("147258369");
         loginUserName.setText("E00002639");
         loginPassWord.setText("412174");*/
 
@@ -60,6 +64,19 @@ public class LoginActivity extends BaseActivity {
             public boolean onLongClick(View v) {
                 startActivity(new Intent(mContext, MarketActivity.class));
                 return true;
+            }
+        });
+
+        //保存键盘高度
+        keyboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchListenLayout.OnKeyboardChangeListener() {
+            @Override
+            public void OnKeyboardPop(int height) {
+                SPTools.saveInt("soft_keybord_height", height);
+            }
+
+            @Override
+            public void OnKeyboardClose() {
+
             }
         });
     }

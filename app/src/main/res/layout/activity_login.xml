@@ -1,69 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<cn.gogoal.im.ui.KeyboardLaunchListenLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chat_root_keyboard_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="#efefef"
-    android:orientation="vertical"
     tools:context=".activity.LoginActivity">
 
-    <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="80dp"
-        android:src="@mipmap/icon_share_gogoal"
-        android:contentDescription="@null" />
-
-    <TextView
-        android:id="@+id/login_tv_title"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="15dp"
-        android:text="Go-Goal"
-        android:textSize="16sp" />
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/loginUserName"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@android:color/white"
-        android:gravity="center_vertical"
-        android:hint="go-goal账号"
-        android:lines="1"
-        android:paddingLeft="30dp"
-        android:singleLine="true"
-        android:textColor="#898989" />
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="80dp"
+            android:contentDescription="@null"
+            android:src="@mipmap/icon_share_gogoal" />
 
-    <EditText
-        android:id="@+id/loginPassWord"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="5dp"
-        android:background="@android:color/white"
-        android:gravity="center_vertical"
-        android:hint="请输入密码"
-        android:inputType="textPassword"
-        android:lines="1"
-        android:paddingLeft="30dp"
-        android:singleLine="true"
-        android:textColor="#898989" />
+        <TextView
+            android:id="@+id/login_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="15dp"
+            android:text="Go-Goal"
+            android:textSize="16sp" />
 
-    <Button
-        android:id="@+id/login"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="60dp"
-        android:background="@drawable/login_btn_bg"
-        android:text="登录"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
-</LinearLayout>
+        <EditText
+            android:id="@+id/loginUserName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:hint="go-goal账号"
+            android:lines="1"
+            android:paddingLeft="30dp"
+            android:singleLine="true"
+            android:textColor="#898989" />
+
+        <EditText
+            android:id="@+id/loginPassWord"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp"
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:hint="请输入密码"
+            android:inputType="textPassword"
+            android:lines="1"
+            android:paddingLeft="30dp"
+            android:singleLine="true"
+            android:textColor="#898989" />
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="60dp"
+            android:background="@drawable/login_btn_bg"
+            android:text="登录"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+</cn.gogoal.im.ui.KeyboardLaunchListenLayout>

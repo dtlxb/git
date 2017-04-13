@@ -1,6 +1,7 @@
 package cn.gogoal.im.common;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Dialog;
@@ -30,6 +31,7 @@ import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -41,6 +43,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+
+import com.socks.library.KLog;
 
 import java.io.File;
 import java.io.IOException;
@@ -101,15 +105,15 @@ public class AppDevice {
 
     /**
      * 代码动态控制布局中控件的宽高
-     * */
-    public static void setViewWidth$Height(View view, int width, int height){
+     */
+    public static void setViewWidth$Height(View view, int width, int height) {
         ViewGroup.LayoutParams params = view.getLayoutParams();
-        if (null != params){
-            params.height=height;
-            params.width=width;
+        if (null != params) {
+            params.height = height;
+            params.width = width;
             view.setLayoutParams(params);
-        }else {
-            FrameLayout.LayoutParams framelayoutParams=new FrameLayout.LayoutParams(width,height);
+        } else {
+            FrameLayout.LayoutParams framelayoutParams = new FrameLayout.LayoutParams(width, height);
             view.setLayoutParams(framelayoutParams);
         }
     }
@@ -389,7 +393,6 @@ public class AppDevice {
      */
     protected void hideKeyBoard(Activity context) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
-        ;
         if (inputMethodManager == null) return;
         boolean active = inputMethodManager.isActive();
         if (active) {
@@ -401,17 +404,11 @@ public class AppDevice {
      * 隐藏软键盘
      */
     public static void hideSoftKeyboard(View view) {
-        Activity mActivity = null;
         if (view == null)
             return;
         View focusView = null;
         if (view instanceof EditText)
             focusView = view;
-        Context context = view.getContext();
-        if (context != null && context instanceof Activity) {
-            mActivity = ((Activity) context);
-            focusView = mActivity.getCurrentFocus();
-        }
 
         if (focusView != null) {
                 /*
@@ -426,7 +423,33 @@ public class AppDevice {
             InputMethodManager manager = (InputMethodManager) focusView.getContext().getSystemService(INPUT_METHOD_SERVICE);
             manager.hideSoftInputFromWindow(focusView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             manager.hideSoftInputFromInputMethod(focusView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            if (null!=mActivity) {
+        }
+    }
+
+    /**
+     * 隐藏软键盘(更改弹起方式)
+     */
+    public static void hideSoftChangeMethod(View view) {
+        Activity mActivity = null;
+        if (view == null)
+            return;
+        View focusView = null;
+        if (view instanceof EditText)
+            focusView = view;
+        Context context = view.getContext();
+        if (context != null && context instanceof Activity) {
+            mActivity = ((Activity) context);
+            focusView = mActivity.getCurrentFocus();
+        }
+
+        if (focusView != null) {
+            if (focusView.isFocused()) {
+                focusView.clearFocus();
+            }
+            InputMethodManager manager = (InputMethodManager) focusView.getContext().getSystemService(INPUT_METHOD_SERVICE);
+            manager.hideSoftInputFromWindow(focusView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            manager.hideSoftInputFromInputMethod(focusView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            if (null != mActivity) {
                 mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
             }
         }
@@ -437,7 +460,7 @@ public class AppDevice {
      */
     public static void showSoftKeyboard(Dialog dialog) {
         Window window = dialog.getWindow();
-        if (window!=null) {
+        if (window != null) {
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
     }
@@ -446,7 +469,6 @@ public class AppDevice {
      * 显示软键盘--VIEW
      */
     public static void showSoftKeyboard(View view) {
-        Activity mActivity = null;
         if (view == null)
             return;
         /*
@@ -461,6 +483,25 @@ public class AppDevice {
         if (!view.isFocused()) {
             view.requestFocus();
         }
+        InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(view, 0);
+        inputMethodManager.showSoftInputFromInputMethod(view.getWindowToken(), 0);
+    }
+
+    /**
+     * 显示软键盘--VIEW
+     */
+    public static void showSoftChangeMethod(View view) {
+        Activity mActivity = null;
+        if (view == null)
+            return;
+        if (!view.isFocusable())
+            view.setFocusable(true);
+        if (!view.isFocusableInTouchMode())
+            view.setFocusableInTouchMode(true);
+        if (!view.isFocused()) {
+            view.requestFocus();
+        }
         Context context = view.getContext();
         if (context != null && context instanceof Activity) {
             mActivity = ((Activity) context);
@@ -468,7 +509,7 @@ public class AppDevice {
         InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService(INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInput(view, 0);
         inputMethodManager.showSoftInputFromInputMethod(view.getWindowToken(), 0);
-        if (null!=mActivity) {
+        if (null != mActivity) {
             Window window = mActivity.getWindow();
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         }
@@ -1055,7 +1096,7 @@ public class AppDevice {
         editText.setFilters(new InputFilter[]{filter});
     }
 
-    public static int getAudioDurition(Context context,String path) {
+    public static int getAudioDurition(Context context, String path) {
 
         MediaPlayer mediaPlayer = new MediaPlayer();
 
