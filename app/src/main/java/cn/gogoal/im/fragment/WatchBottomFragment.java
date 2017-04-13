@@ -79,12 +79,11 @@ public class WatchBottomFragment extends BaseFragment {
     private PopupWindowHelper anchorHelperLand;
     private PopupWindowHelper relaterHelper;
 
-    public static final WatchBottomFragment newInstance(String live_id, String anchor, int type) {
+    public static final WatchBottomFragment newInstance(String live_id, String anchor) {
         WatchBottomFragment wbf = new WatchBottomFragment();
         Bundle bundle = new Bundle();
         bundle.putString("live_id", live_id);
         bundle.putString("anchor", anchor);
-        bundle.putInt("type", type);
         wbf.setArguments(bundle);
         return wbf;
     }
@@ -99,13 +98,6 @@ public class WatchBottomFragment extends BaseFragment {
 
         live_id = getArguments().getString("live_id");
         anchor = JSONObject.parseObject(getArguments().getString("anchor"));
-        type = getArguments().getInt("type");
-
-        if (type == 0) {
-            linearPlayerShotCut.setVisibility(View.VISIBLE);
-        } else {
-            linearPlayerShotCut.setVisibility(View.GONE);
-        }
 
         if (anchor == null) {
             linearPlayerProfiles.setVisibility(View.GONE);
@@ -141,7 +133,6 @@ public class WatchBottomFragment extends BaseFragment {
                 }
             }
         });
-
     }
 
 
@@ -149,9 +140,19 @@ public class WatchBottomFragment extends BaseFragment {
         this.activityRootView = activityRootView;
     }
 
+    public void setType(int type) {
+        this.type = type;
+    }
+
     @Override
     public void onResume() {
         super.onResume();
+
+        if (type == 0) {
+            linearPlayerShotCut.setVisibility(View.VISIBLE);
+        } else {
+            linearPlayerShotCut.setVisibility(View.GONE);
+        }
 
         //添加layout大小发生改变监听器
         activityRootView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {

@@ -60,6 +60,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.PlayerUtils.CountDownTimerView;
+import cn.gogoal.im.common.PlayerUtils.MyDownTimer;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.linkUtils.ConnectivityMonitor;
@@ -103,6 +104,9 @@ public class LiveActivity extends BaseActivity {
     //聊天显示列表
     @BindView(R.id.recycPortrait)
     RecyclerView recyler_chat;
+    //直播开始倒数
+    @BindView(R.id.textCount)
+    TextView textCount;
 
     /*
     * 权限所需定义参数
@@ -180,6 +184,9 @@ public class LiveActivity extends BaseActivity {
 
     private WatchBottomFragment mBottomFragment;
 
+    //倒数数
+    private MyDownTimer downTimer;
+
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -250,6 +257,28 @@ public class LiveActivity extends BaseActivity {
         mHeadsetMonitor.setHeadsetStatusChangedListener(new LivePresenter());
 
         getPlayerInfo();
+
+        downTimer();
+    }
+
+    // 初始化计时器
+    private void downTimer() {
+
+        downTimer = new MyDownTimer(4, new MyDownTimer.Runner() {
+            @Override
+            public void run(long sec) {
+                textCount.setVisibility(View.VISIBLE);
+                textCount.setText("" + sec);
+            }
+
+            @Override
+            public void finish() {
+                textCount.setVisibility(View.GONE);
+
+                mIsLive = true;
+                mChatHost.startToPublish(publishUrl);
+            }
+        });
     }
 
     /**
@@ -909,15 +938,6 @@ public class LiveActivity extends BaseActivity {
     @OnClick({R.id.imgPlayClose})
     public void closeOnClick(View v) {
         switch (v.getId()) {
-            /*case R.id.startLive: //开始连麦
-                *//*startLive.setEnabled(false);
-                changeUI2Publishing();*//*
-                mIsLive = true;
-                mChatHost.startToPublish(publishUrl);
-                break;
-            case R.id.imgPreviewClose: //关闭直播
-
-                break;*/
             case R.id.imgPlayClose: //关闭连麦
                 break;
         }
@@ -979,6 +999,8 @@ public class LiveActivity extends BaseActivity {
                         });
                     } else {
                         countDownTimer.setVisibility(View.GONE);
+
+                        downTimer.start();
                     }
 
                     //mPlayUrl = data.getString("url_rtmp");
@@ -1000,9 +1022,10 @@ public class LiveActivity extends BaseActivity {
 
                     getOnlineCount(room_id);
 
-                    mBottomFragment = WatchBottomFragment.newInstance(live_id, String.valueOf(anchor), 0);
+                    mBottomFragment = WatchBottomFragment.newInstance(live_id, String.valueOf(anchor));
                     mBottomFragment.setRecordUIClickListener(mUIClickListener);
                     mBottomFragment.setActivityRootView(mRootContainer);
+                    mBottomFragment.setType(0);
                     getSupportFragmentManager().beginTransaction().replace(R.id.bottom_container, mBottomFragment).commit();
 
                 } else {
