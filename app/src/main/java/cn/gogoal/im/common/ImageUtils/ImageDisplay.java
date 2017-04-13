@@ -67,7 +67,7 @@ public class ImageDisplay {
                     .dontAnimate().dontTransform()
                     .skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .placeholder(R.mipmap.image_placeholder)
+//                    .placeholder(R.mipmap.image_placeholder)
                     .thumbnail(0.1f)
                     .into(imageView);
         }

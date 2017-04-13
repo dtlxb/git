@@ -8,14 +8,19 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -80,11 +85,16 @@ import cn.gogoal.im.ui.view.VoiceButton;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 /**
  * Created by huangxx on 2017/2/21.
  */
 
 public class ChatFragment extends BaseFragment {
+
+    @BindView(R.id.message_swipe)
+    SwipeRefreshLayout message_swipe;
 
     @BindView(R.id.message_list)
     RecyclerView message_recycler;
@@ -101,8 +111,8 @@ public class ChatFragment extends BaseFragment {
     @BindView(R.id.et_input)
     EditText etInput;
 
-    @BindView(R.id.img_emoji)
-    ImageButton imgEmoji;
+    /*@BindView(R.id.img_emoji)
+    ImageButton imgEmoji;*/
 
     @BindView(R.id.img_function)
     ImageButton imgFunction;
@@ -147,6 +157,7 @@ public class ChatFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
 
+        BaseActivity.iniRefresh(message_swipe);
         BaseActivity.initRecycleView(message_recycler, null);
 
         imChatAdapter = new IMChatAdapter(getActivity(), messageList);
@@ -160,7 +171,8 @@ public class ChatFragment extends BaseFragment {
         chatFunctionAdapter = new ChatFunctionAdapter(getContext(), itemPojosList);
         functions_recycler.setAdapter(chatFunctionAdapter);
 
-//        keyBordHeight = SPTools.getInt("soft_keybord_height", AppDevice.dp2px(getmContext(), 220));
+        int keyBordHeight = SPTools.getInt("soft_keybord_height", AppDevice.dp2px(getActivity(), 220));
+        setContentHeight(keyBordHeight);
 
         keyboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchLinearLayout.OnKeyboardChangeListener() {
             @Override
@@ -176,17 +188,19 @@ public class ChatFragment extends BaseFragment {
             }
         });
 
-        message_recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        //消息下拉刷新
+        message_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                KLog.e("newState======" + newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                KLog.e("dy=========" + dy + ",getBottom===" + recyclerView.getBottom() + ",y===" + recyclerView.getY());
+            public void onRefresh() {
+                imConversation.queryMessages(messageList.get(0).getMessageId(), messageList.get(0).getTimestamp(), 15, new AVIMMessagesQueryCallback() {
+                    @Override
+                    public void done(List<AVIMMessage> list, AVIMException e) {
+                        messageList.addAll(0, list);
+                        imChatAdapter.notifyItemRangeInserted(0, list.size());
+                        //message_recycler.smoothScrollToPosition(list);
+                        message_swipe.setRefreshing(false);
+                    }
+                });
             }
         });
 
@@ -226,6 +240,20 @@ public class ChatFragment extends BaseFragment {
                         break;
                 }
             }
+        });
+
+        message_recycler.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                //更改键盘弹起效果(下次顶起来)
+                InputMethodManager manager = (InputMethodManager) etInput.getContext().getSystemService(INPUT_METHOD_SERVICE);
+                manager.hideSoftInputFromWindow(etInput.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+                find_more_layout.setVisibility(View.GONE);
+                return false;
+            }
+
         });
 
 
@@ -280,14 +308,14 @@ public class ChatFragment extends BaseFragment {
                         voiceView.setVisibility(View.GONE);
                         etInput.setVisibility(View.VISIBLE);
                         etInput.requestFocus();
-                        AppDevice.showSoftKeyboard(etInput);
-                        //软键盘高度
-                        getSupportSoftInputHeight();
+                        //更改键盘弹起效果(下次顶起来)
+                        AppDevice.showSoftChangeMethod(etInput);
                         find_more_layout.setVisibility(View.GONE);
                         imgVoice.setImageResource(R.mipmap.chat_voice);
                         break;
                     case 1:
-                        AppDevice.hideSoftKeyboard(etInput);
+                        //更改键盘弹起效果(下次不顶)
+                        AppDevice.hideSoftChangeMethod(etInput);
                         voiceView.setVisibility(View.VISIBLE);
                         etInput.setVisibility(View.GONE);
                         imgVoice.setImageResource(R.mipmap.chat_key_bord);
@@ -352,26 +380,26 @@ public class ChatFragment extends BaseFragment {
     }
 
     //输入框内元素点击事件
-    @OnClick({R.id.img_emoji, R.id.img_function, R.id.btn_send})
+    @OnClick({R.id.img_function})
     void chatClick(View view) {
         switch (view.getId()) {
-            case R.id.img_emoji:
-
-                break;
             case R.id.img_function:
+                find_more_layout.setVisibility(View.VISIBLE);
+                getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+                KLog.e(view.getTag());
                 if (view.getTag().equals("un_expanded")) {
                     etInput.clearFocus();
-                    AppDevice.hideSoftKeyboard(etInput);
-                    find_more_layout.setVisibility(View.VISIBLE);
+                    InputMethodManager manager = (InputMethodManager) etInput.getContext().getSystemService(INPUT_METHOD_SERVICE);
+                    manager.hideSoftInputFromWindow(etInput.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     view.setTag("expanded");
                 } else if (view.getTag().equals("expanded")) {
-                    find_more_layout.setVisibility(View.GONE);
                     etInput.requestFocus();
-                    AppDevice.showSoftKeyboard(etInput);
+                    InputMethodManager inputMethodManager = (InputMethodManager) etInput.getContext().getSystemService(INPUT_METHOD_SERVICE);
+                    inputMethodManager.showSoftInput(etInput, 0);
                     view.setTag("un_expanded");
                 }
                 break;
-            case R.id.btn_send:
+            default:
                 break;
         }
     }
@@ -735,65 +763,6 @@ public class ChatFragment extends BaseFragment {
                 }
                 KLog.e(contactBean);
             }
-        }
-    }
-
-    /**
-     * 获取软件盘的高度
-     * 登录页面获取之后更改逻辑
-     *
-     * @return
-     */
-    private int getSupportSoftInputHeight() {
-        Rect r = new Rect();
-        /**
-         * decorView是window中的最顶层view，可以从window中通过getDecorView获取到decorView。
-         * 通过decorView获取到程序显示的区域，包括标题栏，但不包括状态栏。
-         */
-        getActivity().getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
-        //获取屏幕的高度
-        int screenHeight = getActivity().getWindow().getDecorView().getRootView().getHeight();
-        //计算软件盘的高度
-        int softInputHeight = screenHeight - r.bottom;
-
-        /**
-         * 某些Android版本下，没有显示软键盘时减出来的高度总是144，而不是零，
-         * 这是因为高度是包括了虚拟按键栏的(例如华为系列)，所以在API Level高于20时，
-         * 我们需要减去底部虚拟按键栏的高度（如果有的话）
-         */
-        if (Build.VERSION.SDK_INT >= 20) {
-            // When SDK Level >= 20 (Android L), the softInputHeight will contain the height of softButtonsBar (if has)
-            softInputHeight = softInputHeight - getSoftButtonsBarHeight();
-        }
-
-        if (softInputHeight < 0) {
-            KLog.e("EmotionKeyboard--Warning: value of softInputHeight is below zero!");
-        }
-        //存一份到本地
-        if (softInputHeight > 0) {
-            SPTools.saveInt("soft_keybord_height", softInputHeight);
-        }
-        return softInputHeight;
-    }
-
-    /**
-     * 底部虚拟按键栏的高度
-     *
-     * @return
-     */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private int getSoftButtonsBarHeight() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        //这个方法获取可能不是真实屏幕的高度
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int usableHeight = metrics.heightPixels;
-        //获取当前屏幕的真实高度
-        getActivity().getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
-        int realHeight = metrics.heightPixels;
-        if (realHeight > usableHeight) {
-            return realHeight - usableHeight;
-        } else {
-            return 0;
         }
     }
 

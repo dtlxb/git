@@ -43,6 +43,7 @@ import cn.gogoal.im.activity.ChooseContactActivity;
 import cn.gogoal.im.activity.ContactsActivity;
 import cn.gogoal.im.activity.IMNewFrienActivity;
 import cn.gogoal.im.activity.OfficialAccountsActivity;
+import cn.gogoal.im.activity.SearchActivity;
 import cn.gogoal.im.activity.SearchPersonSquareActivity;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
@@ -68,7 +69,7 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.badgeview.Badge;
 import cn.gogoal.im.ui.badgeview.BadgeView;
-import cn.gogoal.im.ui.view.XLayout;
+import cn.gogoal.im.ui.view.DrawableCenterTextView;
 import cn.gogoal.im.ui.view.XTitle;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
@@ -79,8 +80,8 @@ import static cn.gogoal.im.base.BaseActivity.initRecycleView;
  */
 public class MessageFragment extends BaseFragment {
 
-    @BindView(R.id.xLayout)
-    XLayout xLayout;
+    @BindView(R.id.tv_to_search)
+    DrawableCenterTextView tv_to_search;
 
     @BindView(R.id.recyclerView)
     RecyclerView message_recycler;
@@ -100,12 +101,11 @@ public class MessageFragment extends BaseFragment {
 
     @Override
     public int bindLayout() {
-        return R.layout.layout_normal_list_without_refresh;
+        return R.layout.fragment_message;
     }
 
     @Override
     public void doBusiness(Context mContext) {
-        xLayout.setStatus(XLayout.Success);
         initTitle();
         initRecycleView(message_recycler, R.drawable.shape_divider_1px);
         message_recycler.setItemAnimator(new NoAlphaItemAnimator());
@@ -223,7 +223,7 @@ public class MessageFragment extends BaseFragment {
         listAdapter.setOnItemLongClickListener(new CommonAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(CommonAdapter adapter, View view, final int position) {
-                DialogHelp.getSelectDialog(getActivity(), "", new String[]{"标为未读", "置顶聊天", "删除聊天"}, new DialogInterface.OnClickListener() {
+                DialogHelp.getSelectDialog(getActivity(), "", new String[]{"删除聊天"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == 2) {
@@ -233,6 +233,13 @@ public class MessageFragment extends BaseFragment {
                     }
                 }, false).show();
                 return false;
+            }
+        });
+        tv_to_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
             }
         });
     }
