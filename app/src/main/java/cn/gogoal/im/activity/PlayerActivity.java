@@ -214,8 +214,6 @@ public class PlayerActivity extends BaseActivity {
     private void getPlayerInfo() {
 
         Map<String, String> param = new HashMap<>();
-
-        //param.put("live_id", live_id);
         param.put("video_id", live_id);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {

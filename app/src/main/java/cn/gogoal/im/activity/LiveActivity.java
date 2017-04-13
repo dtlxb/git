@@ -241,13 +241,6 @@ public class LiveActivity extends BaseActivity {
         mPreviewSurfaceView.getHolder().addCallback(mPreviewCallback);
         mPreviewSurfaceView.setOnTouchListener(mOnTouchListener);
 
-        //TODO:开始直播按钮
-        /*CreateLiveFragment createLiveFragment = new CreateLiveFragment();
-        createLiveFragment.setPendingPublishListener(mPendingPublishListener);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.root_container, createLiveFragment)
-                .commit();*/
-
         //对焦，缩放
         mDetector = new GestureDetector(this, mGestureDetector);
         mScaleDetector = new ScaleGestureDetector(this, mScaleGestureListener);
@@ -403,7 +396,6 @@ public class LiveActivity extends BaseActivity {
 
         @Override
         public void onFinish() {
-            //finish();
             onBackPressed();
         }
 
