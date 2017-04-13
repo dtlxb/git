@@ -215,7 +215,9 @@ public class LiveActivity extends BaseActivity {
 
         live_id = getIntent().getStringExtra("live_id");
 
-        live_id = "cf68d632-b488-42fe-8142-07bc645d4229";
+        //live_id = "cf68d632-b488-42fe-8142-07bc645d4229";
+
+        KLog.json(live_id);
 
         if (permissionCheck()) {
             // 更新权限状态

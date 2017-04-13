@@ -154,7 +154,17 @@ public class FunctionActivity extends BaseActivity {
             }
         });
 
-
+        //添加发起直播填写信息中的页面跳转
+        webView.registerHandler("applyComplete", new BridgeHandler() {
+            @Override
+            public void handler(String data, ValueCallback<String> function) {
+                JSONObject object = JSONObject.parseObject(data);
+                Intent intent = new Intent(getContext(), LiveActivity.class);
+                intent.putExtra("live_id", object.getString("live_id"));
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void showPdf(String data) {

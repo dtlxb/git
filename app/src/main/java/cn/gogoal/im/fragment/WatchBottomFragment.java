@@ -255,7 +255,7 @@ public class WatchBottomFragment extends BaseFragment {
         anchor_name.setText(anchor.getString("anchor_name"));
         anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
 
-        if (!anchor.getString("anchor_introduction").equals("")) {
+        if (anchor.getString("anchor_introduction") != null) {
             anchor_achieve.setText(anchor.getString("anchor_introduction"));
 
             final ViewTreeObserver observer = anchor_avatar.getViewTreeObserver();
