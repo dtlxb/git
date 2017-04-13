@@ -28,9 +28,9 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.RelaterVideoData;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
-import cn.gogoal.im.common.GGOKHTTP.GGAPI;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.PlayerUtils.TextAndImage;
@@ -197,7 +197,7 @@ public class WatchBottomFragment extends BaseFragment {
                 }
                 break;
             case R.id.imgPlayerShare:
-                DialogHelp.showShareDialog(getActivity(), GGAPI.WEB_URL + "/live/share/" + live_id, "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
+                DialogHelp.showShareDialog(getActivity(), AppConst.GG_LIVE_SHARE + live_id + "?live", "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
 
                 break;
             case R.id.imgPlayerShotCut:

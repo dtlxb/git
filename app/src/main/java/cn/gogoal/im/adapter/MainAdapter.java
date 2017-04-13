@@ -22,8 +22,8 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.FoundData;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.GGOKHTTP.GGAPI;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.permission.IPermissionListner;
@@ -34,12 +34,13 @@ import cn.gogoal.im.common.permission.IPermissionListner;
  * phone 18930640263
  * description :投研-主适配器.
  */
-public class MainAdapter extends CommonAdapter<FoundData,BaseViewHolder> {
+public class MainAdapter extends CommonAdapter<FoundData, BaseViewHolder> {
 
     private Context context;
+
     public MainAdapter(Context context, int layoutId, List<FoundData> datas) {
         super(context, layoutId, datas);
-        this.context=context;
+        this.context = context;
     }
 
     @Override
@@ -68,21 +69,22 @@ public class MainAdapter extends CommonAdapter<FoundData,BaseViewHolder> {
                 itemPojos.add(itemPojos3);
             }
 
-            GridAdapter gridAdapter = new GridAdapter(context,itemPojos, position);
+            GridAdapter gridAdapter = new GridAdapter(context, itemPojos, position);
             RecyclerView recyclerView = holder.getView(R.id.rv_grid);
             recyclerView.setLayoutManager(new GridLayoutManager(context, 4));
             recyclerView.setAdapter(gridAdapter);
         }
     }
 
-    private class GridAdapter extends CommonAdapter<FoundData.ItemPojos,BaseViewHolder> {
+    private class GridAdapter extends CommonAdapter<FoundData.ItemPojos, BaseViewHolder> {
 
         private int parentPosition;
 
         private Context context;
-        private GridAdapter(Context context,List<FoundData.ItemPojos> datas, int parentPosition) {
+
+        private GridAdapter(Context context, List<FoundData.ItemPojos> datas, int parentPosition) {
             super(context, R.layout.item_grid_foundfragment, datas);
-            this.context=context;
+            this.context = context;
             this.parentPosition = parentPosition;
         }
 
@@ -93,7 +95,7 @@ public class MainAdapter extends CommonAdapter<FoundData,BaseViewHolder> {
                 holder.itemView.setEnabled(false);
             }
 
-            AppDevice.setViewWidth$Height(holder.itemView,(AppDevice.getWidth(context) - 3) / 4,(AppDevice.getWidth(context) - 3) / 4);
+            AppDevice.setViewWidth$Height(holder.itemView, (AppDevice.getWidth(context) - 3) / 4, (AppDevice.getWidth(context) - 3) / 4);
 
             holder.setText(R.id.tv, itemPojos.getItemTextDescription());
 
@@ -140,11 +142,11 @@ public class MainAdapter extends CommonAdapter<FoundData,BaseViewHolder> {
             switch (position) {
                 case 0:
 //                    intent.putExtra("function_url", itemPojos.getUrl());
-                    intent.putExtra("function_url", GGAPI.WEB_URL + "/live/list");
+                    intent.putExtra("function_url", AppConst.GG_LIVE_LIST);
                     context.startActivity(intent);
                     break;
                 case 1:
-                    intent.putExtra("function_url", GGAPI.WEB_URL + "/research");
+                    intent.putExtra("function_url", AppConst.GG_RESEARCH);
                     context.startActivity(intent);
                     break;
                 case 2:
@@ -177,7 +179,7 @@ public class MainAdapter extends CommonAdapter<FoundData,BaseViewHolder> {
                     Intent intent = new Intent(context, FunctionActivity.class);
                     intent.putExtra("title", itemPojos.getItemTextDescription());
                     //intent.putExtra("function_url", itemPojos.getItemTextDescription());
-                    intent.putExtra("function_url", GGAPI.WEB_URL + "/report");
+                    intent.putExtra("function_url", AppConst.GG_REPORT);
                     context.startActivity(intent);
                     break;
                 case 1:
@@ -197,7 +199,7 @@ public class MainAdapter extends CommonAdapter<FoundData,BaseViewHolder> {
                     Intent intent = new Intent(context, FunctionActivity.class);
                     intent.putExtra("title", itemPojos.getItemTextDescription());
                     //intent.putExtra("function_url", itemPojos.getItemTextDescription());
-                    intent.putExtra("function_url", GGAPI.WEB_URL + "/text");
+                    intent.putExtra("function_url", AppConst.GG_TEXT);
                     context.startActivity(intent);
                     break;
             }

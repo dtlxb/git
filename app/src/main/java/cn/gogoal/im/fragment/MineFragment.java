@@ -32,8 +32,8 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ImageTextBean;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.DialogHelp;
-import cn.gogoal.im.common.GGOKHTTP.GGAPI;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.UIHelper;
@@ -198,7 +198,7 @@ public class MineFragment extends BaseFragment {
                         } else {
                             Intent intent = new Intent(getActivity(), FunctionActivity.class);
                             intent.putExtra("title", "GoGoal");
-                            intent.putExtra("function_url", GGAPI.WEB_URL + "/live/apply");
+                            intent.putExtra("function_url", AppConst.GG_LIVE_APPLY);
                             startActivity(intent);
                         }
                     } else {
