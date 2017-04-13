@@ -28,7 +28,6 @@ import com.socks.library.KLog;
 import java.util.List;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
@@ -104,7 +103,9 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
         AVIMMessage avimMessage = messageList.get(position);
         JSONObject contentObject = JSON.parseObject(avimMessage.getContent());
+        JSONObject lcattrsObject = (JSONObject) contentObject.get("_lcattrs");
         String messageType = contentObject.getString("_lctype");
+        KLog.e(messageType);
         if (!messageType.equals("5") && !messageType.equals("6") && !messageType.equals("8")) {
             if (chatType == 1001) {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.GONE);
@@ -113,7 +114,8 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             } else {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
             }
-
+            ImageDisplay.loadNetImage(mContext, (String) lcattrsObject.get("avatar"), ((IMCHatViewHolder) holder).user_head_photo);
+        } else {
         }
         if (holder instanceof LeftTextViewHolder) {
             AVIMTextMessage textMessage = (AVIMTextMessage) avimMessage;
@@ -236,7 +238,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
             showMessageTime(position, ((LeftAudioViewHolder) holder).message_time);
         } else if (holder instanceof LeftStockViewHolder) {
-            JSONObject lcattrsObject = (JSONObject) contentObject.get("_lcattrs");
             if (null != lcattrsObject) {
                 String stockCode = lcattrsObject.getString("stockCode");
                 SpannableStringBuilder stringBuilder = new SpannableStringBuilder("$ " + stockCode + " " + lcattrsObject.getString("stockName"));
@@ -249,7 +250,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
             showMessageTime(position, ((LeftStockViewHolder) holder).message_time);
         } else if (holder instanceof RightStockViewHolder) {
-            JSONObject lcattrsObject = (JSONObject) contentObject.get("_lcattrs");
             if (null != lcattrsObject) {
                 String stockCode = lcattrsObject.getString("stockCode");
                 SpannableStringBuilder stringBuilder = new SpannableStringBuilder("$ " + stockCode + " " + lcattrsObject.getString("stockName"));

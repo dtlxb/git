@@ -2,6 +2,7 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
+
+import org.simple.eventbus.Subscriber;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
+import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
@@ -57,6 +61,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
     @BindView(R.id.tv_square_name)
     TextView tvSquareName;
+
+    @BindView(R.id.tv_square_detail)
+    TextView tvSquareDetail;
 
     @BindView(R.id.team_size)
     TextView tvTeamSize;
@@ -93,7 +100,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         setMyTitle(R.string.title_chat_person_detial, true);
         //初始化
         personlistRecycler.setLayoutManager(new GridLayoutManager(this, 6));
-        mPersonInfoAdapter = new IMPersonSetAdapter(IMSquareChatSetActivity.this, R.layout.item_square_chat_set, contactBeens);
+        mPersonInfoAdapter = new IMPersonSetAdapter(1002, IMSquareChatSetActivity.this, R.layout.item_square_chat_set, contactBeens);
         personlistRecycler.setAdapter(mPersonInfoAdapter);
         groupMembers = new ArrayList<>();
         //正式流程走完后
@@ -175,7 +182,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 }
             }
         });
-        ImageDisplay.loadFileImage(IMSquareChatSetActivity.this, new File(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")), iv_square_head);
+        if (!ImageUtils.getBitmapFilePaht(conversationId, "imagecache").equals("")) {
+            ImageDisplay.loadFileImage(IMSquareChatSetActivity.this, new File(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")), iv_square_head);
+        }
         getGroupInfo();
     }
 
@@ -197,9 +206,14 @@ public class IMSquareChatSetActivity extends BaseActivity {
     }
 
     private void getAllContacts(JSONArray aarray) {
+        List<String> urls = new ArrayList<>();
         for (int i = 0; i < aarray.size(); i++) {
             JSONObject accountObject = aarray.getJSONObject(i);
             contactBeens.add(addNomoralFuns(accountObject.getString("nickname"), accountObject.getInteger("friend_id"), accountObject.getString("avatar")));
+            urls.add(accountObject.getString("avatar"));
+        }
+        if (ImageUtils.getBitmapFilePaht(conversationId, "imagecache").equals("")) {
+            getNicePicture(urls);
         }
         //测试代码,没有数据的时候拉通讯录建群
         KLog.e(contactBeens.size());
@@ -227,6 +241,30 @@ public class IMSquareChatSetActivity extends BaseActivity {
         }
         mPersonInfoAdapter.notifyDataSetChanged();
         KLog.e(contactBeens);
+    }
+
+    //生成九宫图
+    private void getNicePicture(List<String> picUrls) {
+        GroupFaceImage.getInstance(getActivity(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
+            @Override
+            public void onSuccess(Bitmap mathingBitmap) {
+                String groupFaceImageName = "_" + conversationId + ".png";
+                ImageUtils.saveBitmapFile(mathingBitmap, "imagecache", groupFaceImageName);
+                AppManager.getInstance().sendMessage("set_square_avatar");
+            }
+
+            @Override
+            public void onError(Exception e) {
+            }
+        });
+    }
+
+    /**
+     * 群头像
+     */
+    @Subscriber(tag = "set_square_avatar")
+    public void setAvatar(String msg) {
+        ImageDisplay.loadFileImage(IMSquareChatSetActivity.this, new File(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")), iv_square_head);
     }
 
     //删除群成员
@@ -373,6 +411,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     tvSquareName.setText(((JSONObject) result.get("data")).get("name") == null ? "" : ((JSONObject) result.get("data")).getString("name"));
                     JSONObject jsonObject = (JSONObject) ((JSONObject) result.get("data")).get("attr");
                     the_brief.setText(jsonObject.get("intro") == null ? "" : jsonObject.getString("intro"));
+                    tvSquareDetail.setText(jsonObject.get("intro") == null ? "" : jsonObject.getString("intro"));
                     the_square_notice.setText(jsonObject.get("notice") == null ? "" : jsonObject.getString("notice"));
                 }
             }
@@ -430,6 +469,15 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 List<Integer> quitList = new ArrayList<>();
                 quitList.add(Integer.parseInt(UserUtils.getUserAccountId()));
                 deleteAnyone(quitList);
+                //查看是收藏这个群了然后删除
+                JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_groups_saved", new JSONArray());
+                for (int i = 0; i < groupsArray.size(); i++) {
+                    JSONObject object = (JSONObject) groupsArray.get(i);
+                    if (object.get("conv_id").equals(conversationId)) {
+                        groupsArray.remove(i);
+                        SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_groups_saved", groupsArray);
+                    }
+                }
                 break;
             default:
                 break;
@@ -450,7 +498,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     }
                     //添加群成员
                     addAnyone(addIdList);
+                    //插在删人加人图片前
                     contactBeens.addAll(contactBeens.size() - 2, addContactBeens);
+                    tvTeamSize.setText((contactBeens.size() - 2) + "人");
                     mPersonInfoAdapter.notifyDataSetChanged();
                     break;
                 case AppConst.SQUARE_ROOM_DELETE_ANYONE:
@@ -462,6 +512,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     //删除群成员
                     deleteAnyone(idList);
                     contactBeens.removeAll(changeContactBeens);
+                    tvTeamSize.setText((contactBeens.size() - 2) + "人");
                     mPersonInfoAdapter.notifyDataSetChanged();
                     break;
                 case AppConst.SQUARE_ROOM_EDIT_NAME:
@@ -472,6 +523,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 case AppConst.SQUARE_ROOM_EDIT_BRIEF:
                     String stringBrief = data.getStringExtra("group_intro");
                     the_brief.setText(stringBrief);
+                    tvSquareDetail.setText(stringBrief);
                     break;
                 case AppConst.SQUARE_ROOM_EDIT_NOTICE:
                     String stringNotice = data.getStringExtra("group_notice");

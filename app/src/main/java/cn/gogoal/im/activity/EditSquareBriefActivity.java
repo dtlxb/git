@@ -153,9 +153,6 @@ public class EditSquareBriefActivity extends BaseActivity {
                         rightAction.setText("发布");
                     } else if (((TextView) view).getText().toString().equals("发布")) {
                         publishInfo();
-                        if (!etGroupInfo.getText().toString().equals("")) {
-                            sendStockMessage(etGroupInfo.getText().toString());
-                        }
                     } else if (((TextView) view).getText().toString().equals("清空")) {
                         etGroupInfo.setText("");
                     }
@@ -176,47 +173,6 @@ public class EditSquareBriefActivity extends BaseActivity {
         }
     }
 
-    //发送群消息
-    private void sendStockMessage(String messageText) {
-        //股票消息(消息type:8,加上公告信息);
-
-        //添加公告信息
-        Map<String, String> lcattrsMap = new HashMap<>();
-        lcattrsMap = AVImClientManager.getInstance().userBaseInfo();
-
-        //消息基本信息
-        Map<Object, Object> messageMap = new HashMap<>();
-        messageMap.put("_lctype", "8");
-        messageMap.put("_lctext", messageText);
-        messageMap.put("_lcattrs", lcattrsMap);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("token", UserUtils.getToken());
-        params.put("conv_id", conversationID);
-        params.put("chat_type", "1002");
-        params.put("message", JSONObject.toJSONString(messageMap));
-        KLog.e(params);
-
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
-                if ((int) result.get("code") == 0) {
-
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                KLog.json(msg);
-            }
-        };
-        new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
-    }
-
-
     //拉取群公告
     public void getGroupInfo() {
         Map<String, String> params = new HashMap<>();
@@ -231,15 +187,11 @@ public class EditSquareBriefActivity extends BaseActivity {
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if ((int) result.get("code") == 0) {
                     JSONObject jsonObject = (JSONObject) ((JSONObject) result.get("data")).get("attr");
-                    if (null != jsonObject.get("intro") || null != jsonObject.get("notice")) {
+                    if ((isNotice && null != jsonObject.get("notice")) || (!isNotice && null != jsonObject.get("intro"))) {
                         loadPb.setVisibility(View.GONE);
                         noInfoLayout.setVisibility(View.GONE);
                         editLayout.setVisibility(View.VISIBLE);
-                        if (isNotice) {
-                            etGroupInfo.setText(jsonObject.getString("notice"));
-                        } else {
-                            etGroupInfo.setText(jsonObject.getString("intro"));
-                        }
+                        etGroupInfo.setText(isNotice ? jsonObject.getString("notice") : jsonObject.getString("intro"));
                         initTitle(0x02);
                     } else {
                         loadPb.setVisibility(View.GONE);

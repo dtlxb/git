@@ -118,8 +118,13 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         initMarketBanner(mContext);
         initSortTitle(mContext);
         initRecyclerView(mContext);
-        getMyStockData(AppConst.REFRESH_TYPE_FIRST);
-        getMarketLittle();
+
+        try {
+            //getMyStockData(AppConst.REFRESH_TYPE_FIRST);
+            //getMarketLittle();
+        }catch (Exception e){
+            e.getMessage();
+        }
 
         initXLayout();
 
@@ -127,7 +132,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             @Override
             public void onRefresh() {
                 startAnimation();//刷新按钮动画
-                getMyStockData(AppConst.REFRESH_TYPE_SWIPEREFRESH);
+                //getMyStockData(AppConst.REFRESH_TYPE_SWIPEREFRESH);
                 getMarketLittle();
 
             }
@@ -137,7 +142,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             @Override
             public void onClick(View v) {
                 startAnimation();
-                getMyStockData(AppConst.REFRESH_TYPE_PARENT_BUTTON);
+                //getMyStockData(AppConst.REFRESH_TYPE_PARENT_BUTTON);
                 getMarketLittle();
             }
         });
@@ -150,7 +155,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
             @Override
             public void onReload(View v) {
-                getMyStockData(AppConst.REFRESH_TYPE_FIRST);
+                //getMyStockData(AppConst.REFRESH_TYPE_FIRST);
             }
         });
 
@@ -227,7 +232,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     } else if (sortType == 1) {
                         return Double.valueOf(o1.getPrice()).compareTo(o2.getPrice());
                     } else {
-                        getMyStockData(AppConst.REFRESH_TYPE_PARENT_BUTTON);
+                        //getMyStockData(AppConst.REFRESH_TYPE_PARENT_BUTTON);
                         return 0;
                     }
                 } else if (view.getId() == R.id.tv_mystock_rate) {
@@ -237,7 +242,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     } else if (sortType == 1) {
                         return Double.valueOf(o1.getChange_rate()).compareTo(o2.getChange_rate());
                     } else {
-                        getMyStockData(AppConst.REFRESH_TYPE_PARENT_BUTTON);
+                        //getMyStockData(AppConst.REFRESH_TYPE_PARENT_BUTTON);
                         return 0;
                     }
                 }

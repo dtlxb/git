@@ -129,23 +129,28 @@ public class ContactsActivity extends BaseActivity {
 
         contactAdapter.setOnItemLongClickListener(new CommonAdapter.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(CommonAdapter adapter, View view,final int position) {
+            public boolean onItemLongClick(CommonAdapter adapter, View view, final int position) {
                 if (position > 1) {
                     DialogHelp.getSelectDialog(getActivity(), "", new String[]{"删除联系人"}, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             deleteFriend(contactBeanList.get(position).getFriend_id());
                             String string = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", null);
+                            KLog.e(string);
                             //清除缓存中的这个人
                             if (string != null && !(string.equals(""))) {
                                 JSONObject jsonObject = JSON.parseObject(string);
+                                KLog.e(jsonObject.toString());
                                 if (jsonObject.get("data") != null) {
                                     JSONArray jsonArray = jsonObject.getJSONArray("data");
+                                    KLog.e(jsonArray.toString());
                                     if (null != jsonArray) {
                                         jsonArray.remove(position - 2);
                                     }
                                     jsonObject.put("data", jsonArray);
+                                    KLog.e(jsonObject);
                                     SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", JSON.toJSONString(jsonObject));
+                                    KLog.e(SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", ""));
                                 }
                             }
                             //刷新列表

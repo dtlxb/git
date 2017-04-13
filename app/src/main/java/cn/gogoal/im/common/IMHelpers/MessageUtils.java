@@ -72,11 +72,15 @@ public class MessageUtils {
     }
 
     //消息列表：移除消息
-    public static void removeMessageInfo(int position) {
+    public static void removeMessageInfo(String conversationID) {
         JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
-        if (null != jsonArray) {
-            jsonArray.remove(position);
+        KLog.e(conversationID);
+        for (int i = 0; i < jsonArray.size(); i++) {
+            if (((JSONObject) jsonArray.get(i)).getString("conversationID").equals(conversationID)) {
+                jsonArray.remove(jsonArray.get(i));
+            }
         }
+        KLog.e(jsonArray);
         SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", jsonArray);
     }
 

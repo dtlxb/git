@@ -3,6 +3,7 @@ package cn.gogoal.im.common.IMHelpers;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
@@ -11,13 +12,18 @@ import com.avos.avoscloud.im.v2.AVIMMessageHandler;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.socks.library.KLog;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import cn.gogoal.im.base.AppManager;
+import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
+
+import static android.R.id.message;
 
 /**
  * Created by huangxx on 2017/2/20.
@@ -37,6 +43,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                     KLog.e(message.getContent());
                     KLog.e(conversation.getName());
                     KLog.e(conversation.getConversationId());
+
                     //接收到消息，发送出去
                     if (clientID.equals(client.getClientId())) {
                         //剔除自己消息
@@ -45,7 +52,9 @@ public class MyMessageHandler extends AVIMMessageHandler {
                             switch (chatType) {
                                 case 1001:
                                     //单聊
-                                    sendIMMessage(message, conversation);
+                                    //if (isYourFriend(message)) {
+                                        sendIMMessage(message, conversation);
+                                    //}
                                     break;
                                 case 1002:
                                     //群聊
@@ -93,7 +102,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     String conv_id = lcattrsObject.getString("conv_id");
                                     int friend_id = lcattrsObject.getInteger("friend_id");
                                     ContactBean<String> contactBean = new ContactBean<>();
-                                    contactBean.setRemark("");
                                     contactBean.setNickname(nickName);
                                     contactBean.setAvatar(avatar);
                                     contactBean.setFriend_id(friend_id);
@@ -138,6 +146,32 @@ public class MyMessageHandler extends AVIMMessageHandler {
             client.close(null);
         }
 
+    }
+
+    private boolean isYourFriend(AVIMMessage message) {
+        boolean isFriend = false;
+
+        JSONObject thiscontentObject = JSON.parseObject(message.getContent());
+        JSONObject thislcattrsObject = JSON.parseObject(thiscontentObject.getString("_lcattrs"));
+        int Friend_id = thislcattrsObject.getInteger("friend_id");
+
+        String responseInfo = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", "");
+        if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+            BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
+                    responseInfo,
+                    new TypeReference<BaseBeanList<ContactBean<String>>>() {
+                    });
+            List<ContactBean<String>> list = beanList.getData();
+
+            for (int i = 0; i < list.size(); i++) {
+                if (Friend_id == list.get(i).getFriend_id()) {
+                    isFriend = true;
+                }
+            }
+
+        }
+
+        return isFriend;
     }
 
 

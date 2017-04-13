@@ -53,7 +53,7 @@ public class IMPersonActivity extends BaseActivity {
         KLog.e(contactBeens);
         //初始化
         personlistRecycler.setLayoutManager(new GridLayoutManager(this, 5));
-        mPersonInfoAdapter = new IMPersonSetAdapter(IMPersonActivity.this, R.layout.item_grid_foundfragment, contactBeens);
+        mPersonInfoAdapter = new IMPersonSetAdapter(1001, IMPersonActivity.this, R.layout.item_square_chat_set, contactBeens);
         personlistRecycler.setAdapter(mPersonInfoAdapter);
 
         mPersonInfoAdapter.setOnItemClickListener(new OnItemClickListener() {
@@ -85,7 +85,7 @@ public class IMPersonActivity extends BaseActivity {
         return bean;
     }
 
-    @OnClick({R.id.tv_do_search_conversation, R.id.getmessage_swith})
+    @OnClick({R.id.tv_do_search_conversation})
     void function(View view) {
         switch (view.getId()) {
             case R.id.tv_do_search_conversation:
@@ -94,7 +94,9 @@ public class IMPersonActivity extends BaseActivity {
                 startActivity(intent);
                 startActivity(new Intent(getActivity(), SearchActivity.class));
                 break;
-            case R.id.getmessage_swith:
+            /*case R.id.getmessage_swith:
+                break;*/
+            default:
                 break;
         }
     }

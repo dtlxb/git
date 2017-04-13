@@ -70,6 +70,7 @@ import cn.gogoal.im.ui.badgeview.Badge;
 import cn.gogoal.im.ui.badgeview.BadgeView;
 import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.view.XTitle;
+import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
 import static cn.gogoal.im.base.BaseActivity.initRecycleView;
 
@@ -83,6 +84,8 @@ public class MessageFragment extends BaseFragment {
 
     @BindView(R.id.recyclerView)
     RecyclerView message_recycler;
+
+    private XTitle xTitle;
 
     private List<IMMessageBean> IMMessageBeans = new ArrayList<>();
 
@@ -105,10 +108,11 @@ public class MessageFragment extends BaseFragment {
         xLayout.setStatus(XLayout.Success);
         initTitle();
         initRecycleView(message_recycler, R.drawable.shape_divider_1px);
+        message_recycler.setItemAnimator(new NoAlphaItemAnimator());
     }
 
     private void initTitle() {
-        XTitle xTitle = setFragmentTitle(R.string.title_message);
+        xTitle = setFragmentTitle(R.string.title_message);
         //添加action
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_person)) {
             @Override
@@ -216,7 +220,6 @@ public class MessageFragment extends BaseFragment {
             }
 
         });
-
         listAdapter.setOnItemLongClickListener(new CommonAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(CommonAdapter adapter, View view, final int position) {
@@ -224,9 +227,8 @@ public class MessageFragment extends BaseFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == 2) {
-                            IMMessageBeans.remove(position);
-                            MessageUtils.removeMessageInfo(position);
-                            listAdapter.notifyDataSetChanged();
+                            MessageUtils.removeMessageInfo(IMMessageBeans.get(position).getConversationID());
+                            listAdapter.removeItem(position);
                         }
                     }
                 }, false).show();
@@ -308,17 +310,18 @@ public class MessageFragment extends BaseFragment {
             int chatType = messageBean.getChatType();
             ImageView avatarIv = holder.getView(R.id.head_image);
             TextView messageTv = holder.getView(R.id.last_message);
-            Badge badge = new BadgeView(getActivity()).bindTarget(holder.getView(R.id.head_layout));
-            badge.setBadgeTextSize(10, true);
-            badge.setBadgeGravity(Gravity.TOP | Gravity.END);
 
             KLog.e(messageBean);
 
             //未读数
             if (messageBean.getUnReadCounts().equals("0")) {
                 unRead = "";
-                badge.hide(true);
+                /*KLog.e("走这儿了的！！！");
+                badge.hide(true);*/
             } else {
+                Badge badge = new BadgeView(getActivity()).bindTarget(holder.getView(R.id.head_layout));
+                badge.setBadgeTextSize(10, true);
+                badge.setBadgeGravity(Gravity.TOP | Gravity.END);
                 badge.setBadgeText(messageBean.getUnReadCounts());
                 unRead = "[" + messageBean.getUnReadCounts() + "条] ";
             }
@@ -525,6 +528,18 @@ public class MessageFragment extends BaseFragment {
     }
 
     /**
+     * 判断client连接状态
+     */
+    @Subscriber(tag = "connection_status")
+    public void clientStatus(String msg) {
+        if (msg.equals("connection_paused")) {
+            xTitle.setTitle(R.string.title_status);
+        } else if (msg.equals("connection_resume")) {
+            xTitle.setTitle(R.string.title_message);
+        }
+    }
+
+    /**
      * 消息接收
      */
     @Subscriber(tag = "IM_Message")
@@ -562,10 +577,9 @@ public class MessageFragment extends BaseFragment {
                 break;
             case "2":
                 //加好友
-                nickName = lcattrsObject.getString("nickname");
-                break;
             case "3":
                 //好友加入通讯录
+                nickName = lcattrsObject.getString("nickname");
                 break;
             case "4":
                 //好友从通讯录移除
@@ -632,7 +646,6 @@ public class MessageFragment extends BaseFragment {
                 unreadmessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts().equals("") ? "0" : IMMessageBeans.get(i).getUnReadCounts()) + 1;
                 IMMessageBeans.get(i).setUnReadCounts(unreadmessage + "");
                 isTheSame = true;
-            } else {
             }
         }
 
@@ -666,7 +679,6 @@ public class MessageFragment extends BaseFragment {
         }
 
         listAdapter.notifyDataSetChanged();
-
     }
 
 }
