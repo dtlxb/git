@@ -12,7 +12,6 @@ import com.avos.avoscloud.im.v2.AVIMMessageHandler;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.socks.library.KLog;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,8 +21,6 @@ import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
-
-import static android.R.id.message;
 
 /**
  * Created by huangxx on 2017/2/20.
@@ -40,9 +37,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
             AVImClientManager.getInstance().findConversationById(conversation.getConversationId(), new AVImClientManager.ChatJoinManager() {
                 @Override
                 public void joinSuccess(final AVIMConversation conversation) {
-                    KLog.e(message.getContent());
-                    KLog.e(conversation.getName());
-                    KLog.e(conversation.getConversationId());
 
                     //接收到消息，发送出去
                     if (clientID.equals(client.getClientId())) {

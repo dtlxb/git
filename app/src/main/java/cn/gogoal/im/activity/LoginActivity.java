@@ -51,14 +51,14 @@ public class LoginActivity extends BaseActivity {
         /*loginUserName.setText("E00020190");
         loginPassWord.setText("955202");*/
         /*loginUserName.setText("E039065");
-        loginPassWord.setText("888888");
+        loginPassWord.setText("888888");*/
         loginUserName.setText("E00003645");
         loginPassWord.setText("147258369");
-        loginUserName.setText("E00002639");
+        /*loginUserName.setText("E00002639");
         loginPassWord.setText("412174");*/
 
-        loginUserName.setText("E00002638");
-        loginPassWord.setText("123456");
+//        loginUserName.setText("E00002638");
+//        loginPassWord.setText("123456");
 
         findViewById(R.id.login).setOnLongClickListener(new View.OnLongClickListener() {
             @Override

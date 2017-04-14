@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
-
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -77,7 +74,7 @@ public class MyStockMarketAdapter extends BaseAdapter {
             holder.tvMarketPriceChange$Rate.setTextColor(ContextCompat.getColor(parent.getContext(),rateColor));
         }catch (Exception e){
             e.getMessage();
-            KLog.e(JSONObject.toJSONString(datas));
+//            KLog.e(JSONObject.toJSONString(datas));
         }
 
 

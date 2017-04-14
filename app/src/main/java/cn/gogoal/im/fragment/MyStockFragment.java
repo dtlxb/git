@@ -123,12 +123,13 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
         refreshAll(AppConst.REFRESH_TYPE_FIRST);//请求
 
+        handler.postDelayed(runnable,INTERVAL_TIME);
+
         initXLayout();
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh() {refreshAll(AppConst.REFRESH_TYPE_SWIPEREFRESH);
-            }
+            public void onRefresh() {refreshAll(AppConst.REFRESH_TYPE_SWIPEREFRESH);}
         });
 
         imgMystockRefresh.setOnClickListener(new View.OnClickListener() {
@@ -269,7 +270,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             public void onSuccess(String responseInfo) {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
-                    handler.postDelayed(runnable,INTERVAL_TIME);
+
                     xLayout.setPadding(0,0,0,0);
                     myStockDatas.clear();
                     myStockDatas.addAll(JSONObject.parseObject(responseInfo, MyStockBean.class).getData());
