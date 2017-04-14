@@ -561,7 +561,6 @@ public class ChatFragment extends BaseFragment {
                 messageMap.put("format", "jpg");
                 messageMap.put("height", String.valueOf(height));
                 messageMap.put("width", String.valueOf(width));
-                messageMap.put("size", "");
 
                 Map<String, String> params = new HashMap<>();
                 params.put("token", UserUtils.getToken());
