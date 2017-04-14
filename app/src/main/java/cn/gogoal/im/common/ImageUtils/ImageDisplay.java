@@ -6,6 +6,7 @@ import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -70,6 +71,24 @@ public class ImageDisplay {
 //                    .placeholder(R.mipmap.image_placeholder)
                     .thumbnail(0.1f)
                     .into(imageView);
+        }
+    }
+
+    public static void loadNetImage(Context context, String url, ImageView imageView,int placeholdeer) {
+        if (!TextUtils.isEmpty(url)) {
+            DrawableRequestBuilder<String> builder = Glide.with(context)
+                    .load(url)
+                    .dontAnimate().dontTransform()
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+//                    .placeholder(R.mipmap.image_placeholder)
+                    .thumbnail(0.1f);
+
+            if (placeholdeer==0){
+                builder.into(imageView);
+            }else {
+                builder.placeholder(R.mipmap.image_placeholder).into(imageView);
+            }
         }
     }
 

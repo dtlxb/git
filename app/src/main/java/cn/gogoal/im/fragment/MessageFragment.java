@@ -359,7 +359,7 @@ public class MessageFragment extends BaseFragment {
                 } else if (chatType == 1004) {
                     ImageDisplay.loadResImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
                 } else {
-                    ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
+                    ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv, 0);
                 }
 
                 switch (_lctype) {
@@ -412,7 +412,7 @@ public class MessageFragment extends BaseFragment {
                         //群通知
                         nickName = "申请入群";
                         message = messageBean.getNickname() + "请求加入" + messageBean.getFriend_id();
-                        ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
+                        ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv, 0);
                         break;
                     case "8":
                         //群公告,群简介

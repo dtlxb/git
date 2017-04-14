@@ -3,6 +3,7 @@ package cn.gogoal.im.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.hardware.camera2.params.BlackLevelPattern;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -57,6 +58,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.PlayerUtils.CountDownTimerView;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.linkUtils.ConnectivityMonitor;
@@ -205,8 +207,8 @@ public class WatchLiveActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
-        live_id = getIntent().getStringExtra("live_id");
-
+        //live_id = getIntent().getStringExtra("live_id");
+        live_id = "cf68d632-b488-42fe-8142-07bc645d4229";
         if (live_id.equals("887a1170-e034-4386-98fb-3b710fb37fbd")) {
             mPlayUrl = "rtmp://zbmo.go-goal.cn/microphone/348628_mix";
         } else if (live_id.equals("cf68d632-b488-42fe-8142-07bc645d4229")) {
@@ -241,8 +243,23 @@ public class WatchLiveActivity extends BaseActivity {
     /**
      * 加入聊天室
      */
-    private void joinSquare(AVIMConversation conversation) {
+    private void joinSquare(final AVIMConversation conversation) {
         conversation.join(new AVIMConversationCallback() {
+            @Override
+            public void done(AVIMException e) {
+                if (e == null) {
+                    //拉取群通讯录
+                    getChatGroupInfos(conversation);
+                }
+            }
+        });
+    }
+
+    /**
+     * 退出聊天室
+     */
+    private void quiteSquare(AVIMConversation conversation) {
+        conversation.quit(new AVIMConversationCallback() {
             @Override
             public void done(AVIMException e) {
                 if (e == null) {
@@ -250,27 +267,6 @@ public class WatchLiveActivity extends BaseActivity {
                 }
             }
         });
-    }
-
-    /**
-     * 消息接收
-     */
-    @Subscriber(tag = "IM_Message")
-    public void handleMessage(BaseMessage baseMessage) {
-        if (null != imConversation && null != baseMessage) {
-            Map<String, Object> map = baseMessage.getOthers();
-            AVIMMessage message = (AVIMMessage) map.get("message");
-            AVIMConversation conversation = (AVIMConversation) map.get("conversation");
-
-            KLog.json(message.toString());
-
-            //判断房间一致然后做消息接收处理
-            if (imConversation.getConversationId().equals(conversation.getConversationId())) {
-                messageList.add(message);
-                mLiveChatAdapter.notifyDataSetChanged();
-                recyler_chat.smoothScrollToPosition(messageList.size());
-            }
-        }
     }
 
     class LiveChatAdapter extends CommonAdapter<AVIMMessage, BaseViewHolder> {
@@ -395,7 +391,7 @@ public class WatchLiveActivity extends BaseActivity {
                 HashMap<String, String> params = new HashMap<>();
                 params.put("token", UserUtils.getToken());
                 params.put("conv_id", imConversation.getConversationId());
-                params.put("chat_type", "1003");
+                params.put("chat_type", "1009");
                 params.put("message", JSONObject.toJSON(messageMap).toString());
 
                 //发送文字消息
@@ -404,7 +400,7 @@ public class WatchLiveActivity extends BaseActivity {
                     public void onSuccess(String responseInfo) {
                         KLog.json(responseInfo);
                         player_edit.setText("");
-                        player_edit.setVisibility(View.GONE);
+                        //player_edit.setVisibility(View.GONE);
                         InputMethodManager imm =
                                 (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(player_edit.getWindowToken(), 0);
@@ -432,8 +428,10 @@ public class WatchLiveActivity extends BaseActivity {
             //finish();
             isPlaying = false;
             onBackPressed();
+            if (null != imConversation) {
+                quiteSquare(imConversation);
+            }
         }
-
 
     };
 
@@ -913,7 +911,9 @@ public class WatchLiveActivity extends BaseActivity {
                     mPlayUrl = data.getString("url_rtmp");
                     room_id = data.getString("room_id");
 
-                    /*AVImClientManager.getInstance().findConversationById(room_id, new AVImClientManager.ChatJoinManager() {
+                    KLog.e(room_id);
+
+                    AVImClientManager.getInstance().findConversationById(room_id, new AVImClientManager.ChatJoinManager() {
                         @Override
                         public void joinSuccess(AVIMConversation conversation) {
                             imConversation = conversation;
@@ -922,10 +922,9 @@ public class WatchLiveActivity extends BaseActivity {
 
                         @Override
                         public void joinFail(String error) {
-                            KLog.e(room_id);
                             UIHelper.toast(getActivity(), "获取聊天房间失败");
                         }
-                    });*/
+                    });
 
                     getOnlineCount(room_id);
 
@@ -979,5 +978,45 @@ public class WatchLiveActivity extends BaseActivity {
 
     private WatchLiveActivity getContext() {
         return WatchLiveActivity.this;
+    }
+
+    //获取群通讯录
+    private void getChatGroupInfos(final AVIMConversation conversation) {
+        UserUtils.getChatGroup(conversation.getMembers(), conversation.getConversationId(), new UserUtils.getSquareInfo() {
+            @Override
+            public void squareGetSuccess(JSONObject object) {
+                if (null != object.getJSONArray("accountList")) {
+                    //缓存群通讯录
+                    SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversation.getConversationId() + "live_group_beans", object.getJSONArray("accountList"));
+                }
+            }
+
+            @Override
+            public void squareGetFail(String error) {
+
+            }
+        });
+    }
+
+    /**
+     * 消息接收
+     */
+    @Subscriber(tag = "Live_Message")
+    public void handleMessage(BaseMessage baseMessage) {
+
+        if (null != imConversation && null != baseMessage) {
+            Map<String, Object> map = baseMessage.getOthers();
+            AVIMMessage message = (AVIMMessage) map.get("message");
+            AVIMConversation conversation = (AVIMConversation) map.get("conversation");
+
+            KLog.json(message.toString());
+
+            //判断房间一致然后做消息接收处理
+            if (imConversation.getConversationId().equals(conversation.getConversationId())) {
+                messageList.add(message);
+                mLiveChatAdapter.notifyDataSetChanged();
+                recyler_chat.smoothScrollToPosition(messageList.size());
+            }
+        }
     }
 }
