@@ -232,7 +232,7 @@ public class WatchLiveActivity extends BaseActivity {
         mHeadsetMonitor.setHeadsetStatusChangedListener(new WatchLivePresenter());
 
         initRecycleView(recyler_chat, null);
-        mLiveChatAdapter = new LiveChatAdapter(this, R.layout.item_live_chat, messageList);
+        mLiveChatAdapter = new LiveChatAdapter(R.layout.item_live_chat, messageList);
         recyler_chat.setAdapter(mLiveChatAdapter);
 
         getPlayerInfo();
@@ -275,8 +275,8 @@ public class WatchLiveActivity extends BaseActivity {
 
     class LiveChatAdapter extends CommonAdapter<AVIMMessage, BaseViewHolder> {
 
-        public LiveChatAdapter(Context context, int layoutId, List<AVIMMessage> datas) {
-            super(context, layoutId, datas);
+        public LiveChatAdapter(int layoutId, List<AVIMMessage> datas) {
+            super(layoutId, datas);
         }
 
         @Override
