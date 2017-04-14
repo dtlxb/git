@@ -10,7 +10,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:text="沪"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="10dp"
         android:textColor="@color/textColor_333333"
@@ -29,7 +28,6 @@
             android:id="@+id/tv_mystock_market_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3215.41"
             android:textColor="@color/stock_red"
             android:textSize="24sp" />
 
@@ -37,7 +35,6 @@
             android:id="@+id/tv_mystock_market_pricechange$rate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2.83\u300000.9%"
             android:textColor="@color/stock_red"
             android:textSize="14sp" />
 

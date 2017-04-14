@@ -72,6 +72,12 @@ public class GGOKHTTP {
   * */
     public static final String MYSTOCK_ADD = "v1/mystock/add";
 
+    /*
+  * 获取搜索框的筛选内容
+  * params key
+  * */
+    public static final String GET_STOCKS = "v1/stock/get_stocks";
+
     /**
      * 获取五日分时数据
      * params stock_code 股票代码

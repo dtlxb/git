@@ -82,12 +82,12 @@ public class AppConst {
      * webView地址
      */
     //开发环境
-//    public static final String WEB_URL = "http://192.168.72.155:9000";
-    public static final String WEB_URL = "http://192.168.52.156:9000";
+//    public static final String WEB_URL = "http://192.168.72.155:9000/#";
+    public static final String WEB_URL = "http://192.168.52.156:9000/#";
     //预正式环境
-//    public static final String WEB_URL = "http://192.168.52.156:9000";
+//    public static final String WEB_URL = "http://192.168.52.156:9000/#";
     //正式环境
-//    public static final String WEB_URL = "http://211.144.193.162:8085";
+//    public static final String WEB_URL = "http://211.144.193.162:8085/#";
 
     //直播分享
     public static final String GG_LIVE_SHARE = WEB_URL + "/live/share/";

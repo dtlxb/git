@@ -34,7 +34,7 @@ public class MyStockData implements Serializable {
     private int stock_sort;
     private String stock_name;
     private String change_value;
-    private double price;
+    private String price;
     private String change_rate;
     private int stock_type;
 
@@ -118,11 +118,11 @@ public class MyStockData implements Serializable {
         this.change_value = change_value;
     }
 
-    public double getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 

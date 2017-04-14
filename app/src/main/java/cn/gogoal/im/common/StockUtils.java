@@ -130,6 +130,43 @@ public class StockUtils {
                 StringUtils.saveSignificand(rate, 2) +(percent?"%":"");
     }
 
+    /**
+     * 获取搜索历史
+     *
+     * @return
+     */
+    public static JSONArray getSearchedStocks() {
+        return SPTools.getJsonArray("ggSearchedStock", new JSONArray());
+    }
+
+    /**
+     * 添加单个股票搜索历史
+     *
+     * @return
+     */
+    public static void addSearchedStock(JSONObject stock) {
+        JSONArray stocks = getSearchedStocks();
+        if (stocks == null) {
+            stocks = new JSONArray();
+        }
+        for (int i = 0; i < stocks.size(); i++) {
+            if (stock.getString("stock_code").equals(((JSONObject) stocks.get(i)).getString("stock_code")) || i > 5) {
+                stocks.remove(i);
+            }
+        }
+        stocks.add(0, stock);
+        savaSearchedStocks(stocks);
+    }
+
+    /**
+     * 股票搜索历史
+     *
+     * @param jsonArray
+     */
+    public static void savaSearchedStocks(JSONArray jsonArray) {
+        SPTools.saveJsonArray("ggSearchedStock", jsonArray);
+    }
+
     public static int getStockRateColor(String rateOrPriceString) {
         if (TextUtils.isEmpty(rateOrPriceString)) {
             return R.color.stock_gray;

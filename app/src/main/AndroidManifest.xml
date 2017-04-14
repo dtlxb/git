@@ -155,6 +155,7 @@
         <activity android:name=".activity.copy.CommentActivity"/>
         <activity android:name=".activity.copy.StockDetailMarketIndexActivity"/>
 
+        <activity android:name=".activity.copy.StockSearchActivity"/>
     </application>
 
 </manifest>

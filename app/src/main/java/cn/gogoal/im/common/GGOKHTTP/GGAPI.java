@@ -12,9 +12,9 @@ import java.util.Map;
 public class GGAPI {
 
     //开发环境
-    private static final String Native_API = "http://ggservice.sandbox.gofund.com.cn";
-    private static final String APP_KEY = "HBTORVzBaGtqmGE";
-    private static final String APP_SECRET = "cGYIsTyTWXGeP4frqOqmdWxRO5xmh2Pi";
+//    private static final String Native_API = "http://ggservice.sandbox.gofund.com.cn";
+//    private static final String APP_KEY = "HBTORVzBaGtqmGE";
+//    private static final String APP_SECRET = "cGYIsTyTWXGeP4frqOqmdWxRO5xmh2Pi";
 
     //春哥环境
 //    private static final String Native_API = "http://192.168.52.150:9000";
@@ -27,9 +27,9 @@ public class GGAPI {
 //    private static final String APP_SECRET = "IAUrGs71hQd5ogBfqSokrvLIclNk9BFG";
 
     //正式环境
-//    private static final String Native_API = "https://ggservice.go-goal.cn";
-//    private static final String APP_KEY = "GnbhWYzxfcbrMOd";
-//    private static final String APP_SECRET = "I7WFKwulOrcYPHu8ZeQcMFEsiwQ45ruS";
+    private static final String Native_API = "https://ggservice.go-goal.cn";
+    private static final String APP_KEY = "GnbhWYzxfcbrMOd";
+    private static final String APP_SECRET = "I7WFKwulOrcYPHu8ZeQcMFEsiwQ45ruS";
 
     public static String get(String api, Map<String, String> params) throws Exception {
         long timeStamp = System.currentTimeMillis() / 1000L;

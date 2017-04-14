@@ -123,12 +123,13 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
         refreshAll(AppConst.REFRESH_TYPE_FIRST);//请求
 
+        handler.postDelayed(runnable,INTERVAL_TIME);
+
         initXLayout();
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh() {refreshAll(AppConst.REFRESH_TYPE_SWIPEREFRESH);
-            }
+            public void onRefresh() {refreshAll(AppConst.REFRESH_TYPE_SWIPEREFRESH);}
         });
 
         imgMystockRefresh.setOnClickListener(new View.OnClickListener() {
@@ -145,6 +146,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     private void refreshAll(int refreshType){
         startAnimation();//刷新按钮动画
         getMyStockData(refreshType);
+        getMarketLittle();
         getMarketLittle();
     }
 
@@ -225,9 +227,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 if (view.getId() == R.id.tv_mystock_price) {
                     tvMystockRate.setViewStateNormal();
                     if (sortType == -1) {
-                        return Double.valueOf(o2.getPrice()).compareTo(o1.getPrice());
+                        return StringUtils.getStockDouble(o2.getPrice()).compareTo(StringUtils.getStockDouble(o1.getPrice()));
                     } else if (sortType == 1) {
-                        return Double.valueOf(o1.getPrice()).compareTo(o2.getPrice());
+                        return StringUtils.getStockDouble(o1.getPrice()).compareTo(StringUtils.getStockDouble(o2.getPrice()));
                     } else {
                         getMyStockData(AppConst.REFRESH_TYPE_PARENT_BUTTON);
                         return 0;
@@ -268,7 +270,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             public void onSuccess(String responseInfo) {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
-                    handler.postDelayed(runnable,INTERVAL_TIME);
+
                     xLayout.setPadding(0,0,0,0);
                     myStockDatas.clear();
                     myStockDatas.addAll(JSONObject.parseObject(responseInfo, MyStockBean.class).getData());

@@ -173,7 +173,7 @@ public class LiveActivity extends BaseActivity {
 
     //聊天对象
     private List<AVIMMessage> messageList = new ArrayList<>();
-    private WatchLiveActivity.LiveChatAdapter mLiveChatAdapter;
+    private LiveChatAdapter mLiveChatAdapter;
     private AVIMConversation imConversation;
     private String room_id;
 
@@ -249,6 +249,10 @@ public class LiveActivity extends BaseActivity {
 
         mHeadsetMonitor.setHeadsetStatusChangedListener(new LivePresenter());
 
+        initRecycleView(recyler_chat, null);
+        mLiveChatAdapter = new LiveChatAdapter(R.layout.item_live_chat, messageList);
+        recyler_chat.setAdapter(mLiveChatAdapter);
+
         getPlayerInfo();
 
         downTimer();
@@ -311,8 +315,8 @@ public class LiveActivity extends BaseActivity {
 
     class LiveChatAdapter extends CommonAdapter<AVIMMessage, BaseViewHolder> {
 
-        public LiveChatAdapter(Context context, int layoutId, List<AVIMMessage> datas) {
-            super(context, layoutId, datas);
+        public LiveChatAdapter(int layoutId, List<AVIMMessage> datas) {
+            super(layoutId, datas);
         }
 
         @Override
