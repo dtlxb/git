@@ -23,7 +23,7 @@ public class ChatFunctionAdapter extends CommonAdapter<FoundData.ItemPojos,BaseV
     private Context mContex;
 
     public ChatFunctionAdapter(Context context, List<FoundData.ItemPojos> datas) {
-        super(context, R.layout.item_chat_function, datas);
+        super(R.layout.item_chat_function, datas);
         this.mContex = context;
     }
 

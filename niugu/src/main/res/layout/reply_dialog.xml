@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/text_size_10"
+    android:layout_marginBottom="5dp">
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/search_stock_edit_shape"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="top"
+        android:hint="请输入评论"
+        android:maxLength="300"
+        android:padding="5dp"
+        android:singleLine="false"
+        android:textColor="@color/text_color_normal"
+        android:textColorHint="@color/text_color_light"
+        android:textSize="@dimen/text_size_16"/>
+
+    <TextView
+        android:id="@+id/reply_publish"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/editText1"
+        android:layout_gravity="right"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/news_content_edit_shape"
+        android:gravity="center"
+        android:text="发布"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/text_size_18" />
+
+</RelativeLayout>

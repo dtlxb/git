@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="3dp"
+    android:paddingBottom="3dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/stock_new_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="8dp"
+        android:singleLine="true"
+        android:text="--"
+        android:textColor="@color/decision_title"
+        android:textSize="@dimen/text_size_17" />
+
+    <TextView
+        android:id="@+id/stock_new_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:ellipsize="end"
+        android:lines="2"
+        android:text="--"
+        android:textColor="@color/decision_news"
+        android:textSize="@dimen/text_size_14"
+
+        />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/stock_new_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="--"
+            android:textColor="@color/decision_author"
+            android:textSize="@dimen/text_size_10" />
+
+        <TextView
+            android:id="@+id/stock_new_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/stock_new_name"
+            android:text="--"
+            android:textColor="@color/decision_author"
+            android:textSize="@dimen/text_size_10" />
+
+        <TextView
+            android:id="@+id/stock_new_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="5dp"
+            android:text="--"
+            android:textColor="@color/decision_time"
+            android:textSize="@dimen/text_size_10" />
+
+    </RelativeLayout>
+
+</LinearLayout>

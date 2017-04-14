@@ -6,10 +6,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.List;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.copy.StockDetailMarketIndexActivity;
 import cn.gogoal.im.activity.stock.MarketDetialActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
@@ -17,7 +19,6 @@ import cn.gogoal.im.bean.stock.MarkteBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
-import cn.gogoal.im.common.UIHelper;
 
 /**
  * author wangjd on 2017/4/5 0005.
@@ -25,12 +26,12 @@ import cn.gogoal.im.common.UIHelper;
  * phone 18930640263
  * description :行情整体适配器.
  */
-public class MarketAdapter extends CommonAdapter<MarkteBean,BaseViewHolder> {
+public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
 
     private Context context;
 
     public MarketAdapter(Context context, List<MarkteBean> datas) {
-        super(context, R.layout.item_stock_rank, datas);
+        super(R.layout.item_stock_rank, datas);
         this.context = context;
     }
 
@@ -99,16 +100,18 @@ public class MarketAdapter extends CommonAdapter<MarkteBean,BaseViewHolder> {
     /**
      * 大盘部分
      */
-    private class GridMarketAdapter extends CommonAdapter<MarkteBean.MarketItemData,BaseViewHolder> {
+    private class GridMarketAdapter extends CommonAdapter<MarkteBean.MarketItemData, BaseViewHolder> {
 
         private GridMarketAdapter(List<MarkteBean.MarketItemData> datas) {
-            super(context, R.layout.item_stock_market, datas);
+            super(R.layout.item_stock_market, datas);
         }
 
         @Override
         protected void convert(BaseViewHolder holder, final MarkteBean.MarketItemData data, int position) {
             holder.itemView.setTag(position);
-            AppDevice.setViewWidth$Height(holder.itemView, (AppDevice.getWidth(context) - 1) / 2, -2);
+            ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+            params.width = (AppDevice.getWidth(context) - 1) / 2;
+            holder.itemView.setLayoutParams(params);
 
             holder.setText(R.id.tv_stock_market_name, data.getName());
             holder.setText(R.id.tv_stock_market_price_change, StringUtils.saveSignificand(data.getPriceChange(), 2));
@@ -121,7 +124,10 @@ public class MarketAdapter extends CommonAdapter<MarkteBean,BaseViewHolder> {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UIHelper.toast(v.getContext(), data.getName());
+                    Intent intent = new Intent(context, StockDetailMarketIndexActivity.class);
+                    intent.putExtra("stockName", data.getName());
+                    intent.putExtra("stockCode", data.getCode());
+                    context.startActivity(intent);
                 }
             });
         }
@@ -130,22 +136,25 @@ public class MarketAdapter extends CommonAdapter<MarkteBean,BaseViewHolder> {
     /**
      * 热门行业部分
      */
-    private class GridHotIndustryAdapter extends CommonAdapter<MarkteBean.MarketItemData,BaseViewHolder> {
+    private class GridHotIndustryAdapter extends CommonAdapter<MarkteBean.MarketItemData, BaseViewHolder> {
 
         private GridHotIndustryAdapter(List<MarkteBean.MarketItemData> datas) {
-            super(context, R.layout.item_stock_hotindustry, datas);
+            super(R.layout.item_stock_hotindustry, datas);
         }
 
         @Override
         protected void convert(BaseViewHolder holder, final MarkteBean.MarketItemData data, int position) {
             holder.itemView.setTag(position);
-            AppDevice.setViewWidth$Height(holder.itemView, (AppDevice.getWidth(context) - 2) / 3, -2);
+            ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+            params.width = (AppDevice.getWidth(context) - 2) / 3;
+            holder.itemView.setLayoutParams(params);
+
             holder.setText(R.id.tv_hot_industry_name, data.getName());
-            holder.setText(R.id.tv_hot_industry_rate, StockUtils.plusMinus(data.getIndustryRate()));
+            holder.setText(R.id.tv_hot_industry_rate, StockUtils.plusMinus(data.getIndustryRate(), true));
             holder.setTextResColor(R.id.tv_hot_industry_rate, data.getPriceColor() == 0 ? R.color.textColor_333333 : data.getPriceColor());
             holder.setText(R.id.tv_hot_industry_stockname, data.getStockName());
             holder.setText(R.id.tv_hot_industry_curentPrice$rate,
-                    StringUtils.saveSignificand(data.getPrice(), 2) + " " + StockUtils.plusMinus(data.getRate()));
+                    StringUtils.saveSignificand(data.getPrice(), 2) + " " + StockUtils.plusMinus(data.getRate(), true));
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -164,17 +173,17 @@ public class MarketAdapter extends CommonAdapter<MarkteBean,BaseViewHolder> {
     /**
      * [涨跌振换]部分
      */
-    private class RankListAdapter extends CommonAdapter<MarkteBean.MarketItemData,BaseViewHolder> {
+    private class RankListAdapter extends CommonAdapter<MarkteBean.MarketItemData, BaseViewHolder> {
 
         private int typePostion;
 
         private RankListAdapter(List<MarkteBean.MarketItemData> datas, int typePostion) {
-            super(context, R.layout.item_stock_rank_list, datas);
+            super(R.layout.item_stock_rank_list, datas);
             this.typePostion = typePostion;
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, MarkteBean.MarketItemData data, int position) {
+        protected void convert(BaseViewHolder holder, final MarkteBean.MarketItemData data, int position) {
             holder.itemView.setTag(position);
 
             holder.setText(R.id.tv_stock_ranklist_stockName, data.getStockName());
@@ -185,11 +194,12 @@ public class MarketAdapter extends CommonAdapter<MarkteBean,BaseViewHolder> {
             switch (typePostion) {
                 case 2:
                 case 3:
-                    holder.setText(R.id.tv_stock_ranklist_rate, StockUtils.plusMinus(data.getRate()));
-                    holder.setTextResColor(R.id.tv_stock_ranklist_rate,data.getPriceColor());
+                    holder.setText(R.id.tv_stock_ranklist_rate, StockUtils.plusMinus(data.getRate(), true));
+                    holder.setTextResColor(R.id.tv_stock_ranklist_rate, data.getPriceColor());
                     break;
                 case 4://换手率
-                    holder.setText(R.id.tv_stock_ranklist_rate, StringUtils.saveSignificand(data.getRate() * 100, 2) + "%");
+                    holder.setText(R.id.tv_stock_ranklist_rate, StringUtils.saveSignificand(
+                            StringUtils.getStockDouble(data.getRate()) * 100, 2) + "%");
                     break;
                 case 5://振幅榜
                     holder.setText(R.id.tv_stock_ranklist_rate, StringUtils.saveSignificand(data.getRate(), 2) + "%");
@@ -199,7 +209,7 @@ public class MarketAdapter extends CommonAdapter<MarkteBean,BaseViewHolder> {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO 个股
+                    StockUtils.go2StockDetail(context,data.getCode(),data.getStockName());
                 }
             });
         }

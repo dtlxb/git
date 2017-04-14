@@ -13,7 +13,7 @@ import cn.gogoal.im.ui.index.BaseIndexPinyinBean;
  * Staff_id 1375
  * phone 18930640263
  */
-public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable {
+public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable{
 
     private int tag;//预留字段，特殊处理用
 

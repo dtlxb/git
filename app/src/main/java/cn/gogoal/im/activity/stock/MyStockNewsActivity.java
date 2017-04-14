@@ -41,7 +41,7 @@ public class MyStockNewsActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        setMyTitle(R.string.title_mtstock_news,true);
+        setMyTitle(getIntent().getStringExtra("news_title"), true);
 
         int index = getIntent().getIntExtra("showTabIndex", 0);//展示tab的index
 
@@ -66,7 +66,7 @@ public class MyStockNewsActivity extends BaseActivity {
         tabs.setupWithViewPager(pager);
         try {
             tabs.getTabAt(index).select();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
     }

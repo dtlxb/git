@@ -28,7 +28,6 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.ContactAdapter;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.adapter.baseAdapter.listener.OnItemClickListener;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
@@ -101,7 +100,7 @@ public class ContactsActivity extends BaseActivity {
 
         rvContacts.setAdapter(contactAdapter);
 
-        contactAdapter.setOnItemClickListener(new OnItemClickListener() {
+        contactAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(CommonAdapter adapter, View view, int position) {
                 Intent intent;

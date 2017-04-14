@@ -14,9 +14,9 @@ import com.socks.library.KLog;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 import cn.gogoal.im.activity.LoginActivity;
 import cn.gogoal.im.bean.ContactBean;
@@ -38,6 +38,9 @@ public class UserUtils {
         return user.getString("token");
     }
 
+    public static String getUserId(){
+        return "";
+    }
     /**
      * 获取用户ID
      *
@@ -250,8 +253,8 @@ public class UserUtils {
     /**
      * 传入 好友集合 返回好友的id集合
      */
-    public static HashSet<Integer> getUserFriendsIdList(Collection<ContactBean> friends) {
-        HashSet<Integer> list = new HashSet<>();
+    public static TreeSet<Integer> getUserFriendsIdList(Collection<ContactBean> friends) {
+        TreeSet<Integer> list = new TreeSet<>();
         for (ContactBean contactBean : friends) {
             list.add(contactBean.getFriend_id());
         }
@@ -271,7 +274,6 @@ public class UserUtils {
             @Override
             public void onSuccess(String responseInfo) {
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(responseInfo);
                 if ((int) result.get("code") == 0) {
                     if (null != result.getJSONObject("data")) {
                         if (null != mGetSquareInfo) {

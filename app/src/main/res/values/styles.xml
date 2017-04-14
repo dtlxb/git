@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:overScrollMode">never</item>
         <item name="android:fadingEdgeLength">0dp</item>
@@ -13,12 +13,27 @@
         <item name="searchViewStyle">@style/NormalSearchView</item>
     </style>
 
+    <style name="NormaltabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@color/colorPrimary</item>
+        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabSelectedTextColor">@color/colorPrimary</item>
+        <item name="tabGravity">fill</item>
+        <item name="tabMode">fixed</item>
+        <item name="tabTextAppearance">@style/NormalTabItem</item>
+    </style>
+
+    <style name="NormalTabItem" parent="">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/textColor_333333</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
     <style name="TranslucentTheme" parent="AppTheme"/>
 
     <style name="AppBarLayoutStyle" parent="Base.Widget.Design.AppBarLayout">
         <item name="android:background">@color/colorchatGrid</item>
     </style>
-    
+
     <style name="MainTabStyle" parent="Base.Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@android:color/transparent</item>
         <item name="tabIndicatorHeight">0dp</item>
@@ -26,6 +41,10 @@
         <item name="tabPaddingEnd">12dp</item>
         <item name="tabTextAppearance">@style/MainTabItem</item>
         <item name="tabSelectedTextColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="GGCheckBox" parent="Base.Widget.AppCompat.CompoundButton.CheckBox">
+
     </style>
 
     <style name="MainTabItem" parent="TextAppearance.Design.Tab">

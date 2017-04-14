@@ -27,10 +27,8 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.adapter.baseAdapter.listener.OnItemClickListener;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -103,7 +101,7 @@ public class SquareCollectActivity extends BaseActivity {
         squareRoomRecycler.setAdapter(listAdapter);
 
         //短按跳转
-        listAdapter.setOnItemClickListener(new OnItemClickListener() {
+        listAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(CommonAdapter adapter, View view, int position) {
                 //群聊处理
@@ -206,7 +204,7 @@ public class SquareCollectActivity extends BaseActivity {
     private class ListAdapter extends CommonAdapter<JSONObject, BaseViewHolder> {
 
         private ListAdapter(Context context, int layoutId, List<JSONObject> datas) {
-            super(context, layoutId, datas);
+            super(layoutId, datas);
         }
 
         @Override

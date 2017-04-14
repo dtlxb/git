@@ -42,6 +42,67 @@ public class GGOKHTTP {
        * params category_type 分类类型
        * */
     public static final String GET_HOT_INDUSTRY_DETAIL_LIST = "v1/industry/hot_industry_detail_list";
+    /**
+     * 得到个股图表数据
+     * params stock_code 股票代码
+     * <p/>
+     * (选填，默认为最近6个月)
+     * params start_date 开始时间
+     * params end_date 结束时间
+     */
+    public static final String GET_CHARTS_DATA = "v1/dm/get_charts_data";
+
+    /**
+     * 获取股票K线详情
+     * params stock_code 股票代码
+     * params Kline_type k线类型
+     * avg_line_type 平均线类型
+     * right_type 右边类型
+     */
+    public static final String STOCK_K_LINE = "v1/stock/kline";
+
+    /*
+  * 自选股的添加
+  * params token=4967b285a82244d296b807a8fea9bc77&
+  * params group_id=22&
+  * params stock_code=600001&
+  * params stock_class=333&
+  * params source=54&
+  * params group_class=1
+  * */
+    public static final String MYSTOCK_ADD = "v1/mystock/add";
+
+    /**
+     * 获取五日分时数据
+     * params stock_code 股票代码
+     * params day 天数
+     */
+    public static final String STOCK_MINUTE = "v1/stock/minute";
+
+    /*
+  * 股票详情1
+  * params fullcode=sh600519
+  * */
+    public static final String GET_HQ = "v1/hq/get";
+    /*
+    * 大盘详情
+    * fullcode=sh000001
+    * day=5
+    * */
+    public static final String GET_HQ_MINUTE = "v1/hq/index_minute";
+    /*
+    * 大盘K线
+    * fullcode=sh000001
+    * day=5
+    * */
+    public static final String GET_HQ_KLINE = "v1/hq/index_kline";
+
+    /*
+  *研报看点
+  *params stock_code=600048&
+  *params keyword=风险提示
+  * */
+    public static final String REPORT_RM = "v1/report/rm";
 
     /*
    * 获取[涨跌换振]行业
@@ -69,7 +130,7 @@ public class GGOKHTTP {
      * 个股新闻、公告、投资者互动
      * params stock_code=002285&
      * params type=2
-     * */
+     */
     public static final String GET_STOCK_NEWS = "v1/news/get_stock_news";
 
     /*
@@ -78,6 +139,173 @@ public class GGOKHTTP {
      * params first_class=公司报告
      * */
     public static final String REPORT_LIST = "v1/report/list";
+
+    /*
+  * 股票详情1
+  * params stock_code=600519
+  * */
+    public static final String ONE_STOCK_DETAIL = "v1/stock/data";
+
+    /**
+     * 获取指定日期之前的指定个交易日
+     * 选填
+     * date：结束日期 默认当天(yyyy-MM-dd)
+     * count：获取几个交易日
+     */
+    public static final String GET_SOME_EXCHANGEDATE = "v1/stock/get_some_exchangedate";
+    /**
+     * 获取股票分时交易明细
+     * params stock_code 股票代码
+     * params limit  从现在开始limit分钟内的交易数据*
+     */
+    public static final String GET_STOCK_TIME_DETIAL = "v1/hq/get_transaction";
+
+    /*
+   * 获取个股一分钟情况
+   * stock_code 股票代码
+   * */
+    public static final String DM_GET_IMG = "v1/dm/get_img";
+    /**
+     * 一致预期EPS
+     */
+    public static final String DM_GET_EPS = "v1/dm/get_eps";
+    /**
+     * 一致预期净利润
+     */
+    public static final String DM_GET_PE = "v1/dm/get_profit";
+    /**
+     * 一直预期估值波动带
+     */
+    public static final String DM_GET_ROE_BASE = "v1/dm/get_eps_base";
+    public static final String DM_GET_ROE_RANG = "v1/dm/get_pe_range";
+
+    /*
+      * 自选股的删除
+      * params token=4967b285a82244d296b807a8fea9bc77
+      * params stock_code=600001
+      * */
+    public static final String MYSTOCK_DELETE = "v1/mystock/delete";
+
+    /**
+     * 是否已收藏
+     * params target_id 目标id
+     * params type 目标类型
+     * params token 用户令牌
+     */
+    public static final String FAVOR_IS_FAVORED = "v1/favor/is_favored";
+
+    /**
+     * 取消收藏
+     * params target_id 目标id
+     * params type 目标类型
+     * params token 用户令牌
+     */
+    public static final String FAVOR_DELETE = "v1/favor/delete";
+
+    /**
+     * 添加收藏
+     * params target_id 目标id
+     * params type 目标类型
+     * params token 用户令牌
+     */
+    public static final String FAVOR_ADD = "v1/favor/add";
+
+    /**
+     * 头条推荐列表
+     */
+    public static final String RECOMMEND_HEADLINES = "v1/news/get_recommend_headlines_list";
+
+    /**
+     * 点赞
+     * params token
+     * params target_id
+     * params type
+     * <p/>
+     * 评论点赞
+     * params target_id: 评论id
+     * params type=20
+     */
+    public static final String PRAISE_ADD = "v1/praise/add";
+
+    /**
+     * 热点聚焦-新闻列表
+     * params keyword
+     * params page
+     * params rows
+     */
+    public static final String FOCUS_TOPIC_SEARCH_NEWS = "v1/focus_topic/search_news";
+
+    /**
+     * 热点聚焦-行业报告列表
+     * params base_auth 1
+     * params keyword
+     * params page
+     * params rows
+     */
+    public static final String FOCUS_TOPIC_SEARCH_INDUSTRY_REPORT = "v1/focus_topic/search_industry_report";
+
+    /**
+     * 删除我的评论
+     * params token 用户令牌
+     * params id 评论ID
+     */
+    public static final String COMMENT_DELETE = "v1/comment/delete";
+
+    /**
+     * 添加分享次数
+     * params type 功能模块
+     * params target_id：被分享内容的id
+     * params token：用户令牌  可选
+     */
+    public static final String SHARE_ADD = "v1/share/add";
+
+    /* * 评论-添加
+    params theme_id
+    * params type
+    * params content
+    * params token
+    */
+    public static final String COMMENT_ADD = "v1/comment/add";
+
+
+    /*
+ * 记录热门搜索数据
+ * params token(可选）,type, stock_code,stock_name,insert_date
+ * */
+    public static final String STOCK_SAVE_HOTS = "v1/stock/save_hots";
+
+    /*
+    * 热门搜索
+    * params page ,rows，getcount（可选），type (必选，类别：1 代表股票）
+    * */
+    public static final String STOCK_GET_HOTS = "v1/stock/get_hots";
+
+    /*
+    * 股票评论
+    * params stock_code  page  rows  get_count
+    * */
+    public static final String STOCKCOMMENT_LIST = "v1/stockcomment/list";
+
+    /*
+    * 股票评论添加
+    * params token  stock_code  content  二级评论 parent_id
+    * */
+    public static final String STOCKCOMMENT_ADD = "v1/stockcomment/add";
+
+    /*
+    * 股票评论删除
+    * params token  id
+    * */
+    public static final String STOCKCOMMENT_DELETE = "v1/stockcomment/delete";
+
+    /**
+     * 评论列表
+     * params theme_id 主题id
+     * params type 类型
+     * params get_count 是否获得总数 0 1
+     * params get_father_son=1
+     */
+    public static final String COMMENT_LIST = "v1/comment/list";
 
     /**
      * 三方登录

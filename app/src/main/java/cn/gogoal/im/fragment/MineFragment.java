@@ -148,7 +148,7 @@ public class MineFragment extends BaseFragment {
     private class MineAdapter extends CommonAdapter<ImageTextBean<Integer>, BaseViewHolder> {
 
         private MineAdapter(Context context, List<ImageTextBean<Integer>> datas) {
-            super(context, R.layout.item_mine, datas);
+            super(R.layout.item_mine, datas);
         }
 
         @Override

@@ -1,0 +1,611 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:autofit="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:wheel="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/relative_header"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:background="@color/header_gray">
+
+        <LinearLayout
+            android:id="@+id/btnBack"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="返回"
+                android:textColor="@color/title_base_button_text_color"
+                android:textSize="@dimen/text_size_14" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textHeadTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="5dp"
+            android:text="爱使股份（600652）"
+            android:textColor="@color/main_head_title"
+            android:textSize="@dimen/text_size_16" />
+
+        <TextView
+            android:id="@+id/text_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textHeadTitle"
+            android:layout_centerHorizontal="true"
+            android:text="-- -- --"
+            android:textColor="@color/main_head_title"
+            android:textSize="10dp" />
+
+        <!--<Button
+            android:id="@+id/btnChoose"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_toLeftOf="@+id/btnRefresh"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/stock_optional"/>-->
+
+        <ImageView
+            android:id="@+id/btnRefresh"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/refresh_white" />
+
+    </RelativeLayout>
+
+    <in.srain.cube.views.ptr.PtrClassicFrameLayout xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fragment_rotate_header_with_view_group_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        cube_ptr:ptr_duration_to_close="200"
+        cube_ptr:ptr_duration_to_close_header="1000"
+        cube_ptr:ptr_keep_header_when_refresh="true"
+        cube_ptr:ptr_pull_to_fresh="false"
+        cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+        cube_ptr:ptr_resistance="1.7">
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:descendantFocusability="blocksDescendants"
+            android:overScrollMode="never">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:id="@+id/linear_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp"
+                    android:background="@color/header_gray">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.2">
+
+                        <hply.com.niugu.autofixtext.AutofitTextView
+                            android:id="@+id/stock_price"
+                            android:layout_width="150dp"
+                            android:layout_height="55dp"
+                            android:layout_centerHorizontal="true"
+                            android:gravity="top|center_horizontal"
+                            android:singleLine="true"
+                            android:text="--"
+                            android:textColor="@color/main_head_title"
+                            android:textSize="@dimen/text_size_48"
+                            autofit:minTextSize="@dimen/text_size_8" />
+
+                        <LinearLayout
+                            android:layout_width="150dp"
+                            android:layout_height="50dp"
+                            android:layout_below="@+id/stock_price"
+                            android:layout_centerHorizontal="true">
+
+                            <hply.com.niugu.autofixtext.AutofitTextView
+                                android:id="@+id/stock_detail_tv1"
+                                android:layout_width="75dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="top"
+                                android:gravity="bottom|left"
+                                android:singleLine="true"
+                                android:text="--"
+                                android:textColor="@color/main_head_title"
+                                android:textSize="@dimen/text_size_20"
+                                autofit:minTextSize="@dimen/text_size_5" />
+
+                            <hply.com.niugu.autofixtext.AutofitTextView
+                                android:id="@+id/stock_detail_tv2"
+                                android:layout_width="75dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="top"
+                                android:gravity="bottom|right"
+                                android:singleLine="true"
+                                android:text="--"
+                                android:textColor="@color/main_head_title"
+                                android:textSize="@dimen/text_size_20"
+                                autofit:minTextSize="@dimen/text_size_5" />
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:paddingBottom="10dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="45dp"
+                                android:layout_gravity="top"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/textView1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="今开"
+                                    android:textColor="@color/main_head_title"
+                                    android:textSize="@dimen/text_size_11" />
+
+                                <hply.com.niugu.autofixtext.AutofitTextView
+                                    android:id="@+id/stock_start"
+                                    android:layout_width="85dp"
+                                    android:layout_height="30dp"
+                                    android:text="--"
+                                    android:textColor="@color/main_head_title"
+                                    android:textSize="@dimen/text_size_16"
+                                    autofit:minTextSize="@dimen/text_size_5" />
+
+                            </LinearLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="45dp">
+
+                                <TextView
+                                    android:id="@+id/textView3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_above="@+id/stock_volume"
+                                    android:text="成交量"
+                                    android:textColor="@color/main_head_title"
+                                    android:textSize="@dimen/text_size_11" />
+
+                                <hply.com.niugu.autofixtext.AutofitTextView
+                                    android:id="@+id/stock_volume"
+                                    android:layout_width="85dp"
+                                    android:layout_height="30dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentLeft="true"
+                                    android:singleLine="true"
+                                    android:text="--"
+                                    android:textColor="@color/main_head_title"
+                                    android:textSize="@dimen/text_size_16"
+                                    autofit:minTextSize="@dimen/text_size_8" />
+
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="45dp"
+                                android:layout_gravity="top"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/textView2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="昨收"
+                                    android:textColor="@color/main_head_title"
+                                    android:textSize="@dimen/text_size_11" />
+
+                                <hply.com.niugu.autofixtext.AutofitTextView
+                                    android:id="@+id/stock_close"
+                                    android:layout_width="80dp"
+                                    android:layout_height="30dp"
+                                    android:text="--"
+                                    android:textColor="@color/main_head_title"
+                                    android:textSize="@dimen/text_size_16"
+                                    autofit:minTextSize="@dimen/text_size_6" />
+
+                            </LinearLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="45dp">
+
+                                <TextView
+                                    android:id="@+id/textView4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_above="@+id/stock_amplitude"
+                                    android:text="振幅"
+                                    android:textColor="@color/main_head_title"
+                                    android:textSize="@dimen/text_size_11" />
+
+                                <TextView
+                                    android:id="@+id/stock_amplitude"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="30dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentLeft="true"
+                                    android:text="--"
+                                    android:textColor="@color/main_head_title"
+                                    android:textSize="@dimen/text_size_16" />
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentTop="true"
+                                android:text="最   高"
+                                android:textColor="@color/text_color_word"
+                                android:textSize="@dimen/text_size_12" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentLeft="true"
+                                android:text="涨家数"
+                                android:textColor="@color/text_color_word"
+                                android:textSize="@dimen/text_size_12" />
+
+                            <hply.com.niugu.autofixtext.AutofitTextView
+                                android:id="@+id/stock_detail_tv3"
+                                android:layout_width="70dp"
+                                android:layout_height="18dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentTop="true"
+                                android:gravity="right"
+                                android:text="--"
+                                android:textColor="@color/text_color_number"
+                                android:textSize="@dimen/text_size_12"
+                                autofit:minTextSize="@dimen/text_size_4" />
+
+                            <TextView
+                                android:id="@+id/stock_detail_tv4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentRight="true"
+                                android:text="--"
+                                android:textColor="@color/text_color_number"
+                                android:textSize="@dimen/text_size_12" />
+
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="18dp"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentTop="true"
+                                android:text="最   低"
+                                android:textColor="@color/text_color_word"
+                                android:textSize="@dimen/text_size_12" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentLeft="true"
+                                android:text="平家数"
+                                android:textColor="@color/text_color_word"
+                                android:textSize="@dimen/text_size_12" />
+
+                            <hply.com.niugu.autofixtext.AutofitTextView
+                                android:id="@+id/stock_detail_tv5"
+                                android:layout_width="70dp"
+                                android:layout_height="18dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentTop="true"
+                                android:gravity="right"
+                                android:text="--"
+                                android:textColor="@color/text_color_number"
+                                android:textSize="@dimen/text_size_12"
+                                autofit:minTextSize="@dimen/text_size_4" />
+
+                            <TextView
+                                android:id="@+id/stock_detail_tv6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentRight="true"
+                                android:text="--"
+                                android:textColor="@color/text_color_number"
+                                android:textSize="@dimen/text_size_12" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="18dp"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentTop="true"
+                                android:text="成交额"
+                                android:textColor="@color/text_color_word"
+                                android:textSize="@dimen/text_size_12" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentLeft="true"
+                                android:text="跌家数"
+                                android:textColor="@color/text_color_word"
+                                android:textSize="@dimen/text_size_12" />
+
+                            <TextView
+                                android:id="@+id/stock_detail_tv7"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentTop="true"
+                                android:text="--"
+                                android:textColor="@color/text_color_number"
+                                android:textSize="@dimen/text_size_12" />
+
+                            <TextView
+                                android:id="@+id/stock_detail_tv8"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentRight="true"
+                                android:text="--"
+                                android:textColor="@color/text_color_number"
+                                android:textSize="@dimen/text_size_12" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <include layout="@layout/line_space_line" />
+
+                <include
+                    android:id="@+id/market_stock_detail1"
+                    layout="@layout/fragment_stock_detail_charts"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp" />
+
+                <include layout="@layout/line_space_line" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/Kline_item_bg"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/tv_increase_layout"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_increase"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:gravity="center_horizontal"
+                            android:text="涨幅榜"
+                            android:textColor="@color/red"
+                            android:textSize="@dimen/text_size_15" />
+
+                        <TextView
+                            android:id="@+id/tv_line_increase"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginLeft="35dp"
+                            android:layout_marginRight="35dp"
+                            android:background="@color/red" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/tv_drop_layout"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_drop"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:gravity="center_horizontal"
+                            android:text="跌幅榜"
+                            android:textColor="@color/text_color_tab"
+                            android:textSize="@dimen/text_size_15" />
+
+                        <TextView
+                            android:id="@+id/tv_line_drop"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginLeft="35dp"
+                            android:layout_marginRight="35dp"
+                            android:background="@color/red"
+                            android:visibility="gone" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/tv_turnover_layout"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_turnover"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:gravity="center_horizontal"
+                            android:text="换手率"
+                            android:textColor="@color/text_color_tab"
+                            android:textSize="@dimen/text_size_15" />
+
+                        <TextView
+                            android:id="@+id/tv_line_turnover"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginLeft="35dp"
+                            android:layout_marginRight="35dp"
+                            android:background="@color/red"
+                            android:visibility="gone" />
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/load_animation_change"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp">
+
+                    <hply.com.niugu.ProgressWheel
+                        android:id="@+id/progress_wheel"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_centerInParent="true"
+                        wheel:matProg_barColor="#5588FF"
+                        wheel:matProg_progressIndeterminate="true" />
+
+                </RelativeLayout>
+
+                <hply.com.niugu.view.InnerListView
+                    android:id="@+id/stock_lv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+                <LinearLayout
+                    android:id="@+id/stock_no_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/no_data_image"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="暂无相关数据"
+                        android:textColor="@color/header_gray"
+                        android:textSize="@dimen/text_size_12" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </in.srain.cube.views.ptr.PtrClassicFrameLayout>
+
+</LinearLayout>

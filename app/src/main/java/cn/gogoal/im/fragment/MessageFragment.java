@@ -49,7 +49,6 @@ import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.adapter.baseAdapter.listener.OnItemClickListener;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
@@ -137,7 +136,6 @@ public class MessageFragment extends BaseFragment {
         jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
         IMMessageBeans.clear();
         IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
-        KLog.e(IMMessageBeans);
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
             //按照时间排序
             Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
@@ -147,9 +145,9 @@ public class MessageFragment extends BaseFragment {
                 }
             });
         }
-        listAdapter = new ListAdapter(getContext(), R.layout.item_fragment_message, IMMessageBeans);
+        listAdapter = new ListAdapter(R.layout.item_fragment_message, IMMessageBeans);
         message_recycler.setAdapter(listAdapter);
-        listAdapter.setOnItemClickListener(new OnItemClickListener() {
+        listAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(CommonAdapter adapter, View view, final int position) {
                 final String conversation_id = IMMessageBeans.get(position).getConversationID();
@@ -303,8 +301,8 @@ public class MessageFragment extends BaseFragment {
 
     private class ListAdapter extends CommonAdapter<IMMessageBean, BaseViewHolder> {
 
-        private ListAdapter(Context context, int layoutId, List<IMMessageBean> datas) {
-            super(context, layoutId, datas);
+        private ListAdapter(int layoutId, List<IMMessageBean> datas) {
+            super(layoutId, datas);
         }
 
         @Override
@@ -317,8 +315,6 @@ public class MessageFragment extends BaseFragment {
             int chatType = messageBean.getChatType();
             ImageView avatarIv = holder.getView(R.id.head_image);
             TextView messageTv = holder.getView(R.id.last_message);
-
-            KLog.e(messageBean);
 
             //未读数
             if (messageBean.getUnReadCounts().equals("0")) {
@@ -567,8 +563,6 @@ public class MessageFragment extends BaseFragment {
         JSONObject contentObject = JSON.parseObject(message.getContent());
         JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
         String _lctype = contentObject.getString("_lctype");
-
-        KLog.e(message.getContent());
 
         switch (_lctype) {
             case "-1":

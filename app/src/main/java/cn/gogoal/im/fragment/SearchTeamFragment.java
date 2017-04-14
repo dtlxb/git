@@ -131,7 +131,7 @@ public class SearchTeamFragment extends BaseFragment {
     private class RecommendAdapter extends CommonAdapter<RecommendBean.DataBean,BaseViewHolder> {
 
         RecommendAdapter(List<RecommendBean.DataBean> datas) {
-            super(getActivity(), R.layout.item_search_type_persion, datas);
+            super(R.layout.item_search_type_persion, datas);
         }
 
         @Override

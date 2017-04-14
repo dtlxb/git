@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line"/>
+
+    <LinearLayout
+        android:id="@+id/footer_one"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/gray_white"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_head_iv"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/my_header_image"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/default_avatar"/>
+
+        <LinearLayout
+            android:id="@+id/news_content_reply"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="7.5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="7.5dp"
+            android:layout_weight="5"
+            android:background="@drawable/news_content_edit_shape">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/reply_pencil"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="12dp"
+                android:gravity="center_vertical"
+                android:text="我来说两句"
+                android:textColor="#949393"
+                android:textSize="@dimen/text_size_15"/>
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/comments_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="12dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/reply_count"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#949393"
+                android:textSize="@dimen/text_size_18"/>
+
+            <LinearLayout
+                android:id="@+id/shopping_cart_num_bg"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:background="@drawable/reply_msgs"
+                    android:scaleType="center"
+                    android:gravity="center"/>
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

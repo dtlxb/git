@@ -27,11 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.avos.avoscloud.im.v2.AVIMClient;
-import com.avos.avoscloud.im.v2.AVIMClientEventHandler;
-import com.avos.avoscloud.im.v2.callback.AVIMClientStatusCallback;
 import com.hply.imagepicker.view.StatusBarUtil;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
@@ -44,7 +40,6 @@ import butterknife.ButterKnife;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.LoginActivity;
 import cn.gogoal.im.common.DialogHelp;
-import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.permission.IPermissionListner;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.XTitle;
@@ -163,7 +158,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         }
         if (canBack) {
             xTitle.setLeftImageResource(R.mipmap.image_title_back_0);
-            xTitle.setLeftText("返回");
+            xTitle.setLeftText(getString(R.string.str_title_back));
             xTitle.setLeftTextColor(Color.BLACK);
             xTitle.setLeftClickListener(new View.OnClickListener() {
                 @Override

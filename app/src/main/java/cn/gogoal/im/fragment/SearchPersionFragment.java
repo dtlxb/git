@@ -112,7 +112,7 @@ public class SearchPersionFragment extends BaseFragment {
     private class SearchPersionResultAdapter extends CommonAdapter<ContactBean,BaseViewHolder> {
 
         SearchPersionResultAdapter(List<ContactBean> datas) {
-            super(SearchPersionFragment.this.getContext(), R.layout.item_search_type_persion, datas);
+            super(R.layout.item_search_type_persion, datas);
         }
 
         @Override

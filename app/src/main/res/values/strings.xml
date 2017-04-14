@@ -19,6 +19,7 @@
     <string name="title_square_collcet">我的群组</string>
     <string name="title_my_stock">自选</string>
     <string name="title_mtstock_news">自选股资讯</string>
+    <string name="title_stock_news">个股资讯</string>
 
     <string name="square_collcet_add">添加</string>
     <string name="square_publish_create">创建</string>
@@ -41,7 +42,7 @@
     <string name="origin_size">原图(%1$s)</string>
 
     <!--直播连麦-->
-    <string name="live_together">一起直播</string>
+    <string name="live_together">邀请连麦</string>
     <string name="anchor_introduction">主播介绍</string>
     <string name="invite_timeout_tip">对方长时间未响应，已取消连麦邀请</string>
     <string name="inviting_process_timeout">超时未处理，已经自动拒绝对方的连麦邀请</string>
@@ -144,5 +145,6 @@
     <string name="mystock_sort_down">%s&#xe6b6;</string>
     <string name="str_add_my_stock">添加自选股</string>
     <string name="str_refresh_ok">更新数据成功！</string>
+    <string name="str_title_back">返回</string>
 
 </resources>

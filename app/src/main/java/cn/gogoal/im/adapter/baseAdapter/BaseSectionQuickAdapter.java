@@ -6,7 +6,6 @@ import java.util.List;
 
 import cn.gogoal.im.adapter.baseAdapter.entity.SectionEntity;
 
-
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */

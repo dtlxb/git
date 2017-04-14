@@ -65,10 +65,12 @@ public class ImageDisplay {
         if (!TextUtils.isEmpty(url)) {
             Glide.with(context)
                     .load(url)
+                    .dontAnimate()
+                    .dontTransform()
                     .dontAnimate().dontTransform()
                     .skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
-//                    .placeholder(R.mipmap.image_placeholder)
+                    .placeholder(R.mipmap.image_placeholder)
                     .thumbnail(0.1f)
                     .into(imageView);
         }
@@ -84,11 +86,25 @@ public class ImageDisplay {
 //                    .placeholder(R.mipmap.image_placeholder)
                     .thumbnail(0.1f);
 
-            if (placeholdeer==0){
+            if (placeholdeer == 0) {
                 builder.into(imageView);
-            }else {
+            } else {
                 builder.placeholder(R.mipmap.image_placeholder).into(imageView);
             }
+        }
+    }
+    public static void loadChartImage(Context context, String url, ImageView imageView) {
+        if (!TextUtils.isEmpty(url)) {
+            DrawableRequestBuilder<String> builder = Glide.with(context)
+                    .load(url)
+                    .dontAnimate()
+                    .dontTransform()
+                    .skipMemoryCache(true)
+                    .dontAnimate()
+                    .dontTransform()
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT);
+            builder.into(imageView);
+
         }
     }
 

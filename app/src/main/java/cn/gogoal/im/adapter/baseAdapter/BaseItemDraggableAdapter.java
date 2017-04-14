@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -12,13 +13,8 @@ import java.util.Collections;
 import java.util.List;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.baseAdapter.listener.OnItemDragListener;
-import cn.gogoal.im.adapter.baseAdapter.listener.OnItemSwipeListener;
 
 
-/**
- * Created by luoxw on 2016/7/13.
- */
 public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> extends CommonAdapter<T, K> {
 
     private static final int NO_TOGGLE_VIEW = 0;
@@ -102,6 +98,7 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
                 public boolean onLongClick(View v) {
                     if (mItemTouchHelper != null && itemDragEnabled) {
                         mItemTouchHelper.startDrag((RecyclerView.ViewHolder) v.getTag(R.id.BaseQuickAdapter_viewholder_support));
+                        v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                     }
                     return true;
                 }
@@ -163,7 +160,6 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
 
     /**
      * <p>Enable swipe items.</p>
-     * You should attach {@link ItemTouchHelper} which construct with {@link ItemDragAndSwipeCallback} to the Recycler when you enable this.
      */
     public void enableSwipeItem() {
         itemSwipeEnabled = true;

@@ -1,8 +1,5 @@
 package cn.gogoal.im.adapter.baseAdapter.entity;
 
-/**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- */
 public abstract class SectionEntity<T> {
     public boolean isHeader;
     public T t;
