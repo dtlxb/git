@@ -55,7 +55,7 @@ public class HotIndustryBean {
          * industry_name : 国防军工
          */
 
-        private double industry_rate;
+        private String industry_rate;
         private double rate;
         private String current_price;
         private String stock_code;
@@ -72,11 +72,11 @@ public class HotIndustryBean {
             this.stock_type = stock_type;
         }
 
-        public double getIndustry_rate() {
+        public String getIndustry_rate() {
             return industry_rate;
         }
 
-        public void setIndustry_rate(double industry_rate) {
+        public void setIndustry_rate(String industry_rate) {
             this.industry_rate = industry_rate;
         }
 

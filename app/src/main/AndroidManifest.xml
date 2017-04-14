@@ -140,8 +140,17 @@
 
         <activity android:name=".activity.ContactsActivity"/>
 
-        <activity android:name=".activity.EditMyStockActivity"/>
+        <activity android:name=".activity.stock.EditMyStockActivity"/>
+        <activity android:name=".activity.stock.StockDetailActivity"/>
         <!--<activity android:name=".activity.Test2Activity"></activity>-->
+
+        <activity android:name=".activity.copy.CopyStockDetailActivity"/>
+        <activity android:name=".activity.copy.NewsContentActivity"/>
+        <activity android:name=".activity.copy.StockDetailChartsActivity"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".activity.copy.CommentActivity"/>
+        <activity android:name=".activity.copy.StockDetailMarketIndexActivity"/>
+
     </application>
 
 </manifest>

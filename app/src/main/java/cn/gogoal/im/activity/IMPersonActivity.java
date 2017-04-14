@@ -18,7 +18,6 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.IMPersonSetAdapter;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.adapter.baseAdapter.listener.OnItemClickListener;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppConst;
@@ -56,7 +55,7 @@ public class IMPersonActivity extends BaseActivity {
         mPersonInfoAdapter = new IMPersonSetAdapter(IMPersonActivity.this, R.layout.item_grid_foundfragment, contactBeens);
         personlistRecycler.setAdapter(mPersonInfoAdapter);
 
-        mPersonInfoAdapter.setOnItemClickListener(new OnItemClickListener() {
+        mPersonInfoAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(CommonAdapter adapter, View view, int position) {
                 Intent intent;

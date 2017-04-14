@@ -34,9 +34,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
             AVImClientManager.getInstance().findConversationById(conversation.getConversationId(), new AVImClientManager.ChatJoinManager() {
                 @Override
                 public void joinSuccess(final AVIMConversation conversation) {
-                    KLog.e(message.getContent());
-                    KLog.e(conversation.getName());
-                    KLog.e(conversation.getConversationId());
                     //接收到消息，发送出去
                     if (clientID.equals(client.getClientId())) {
                         //剔除自己消息

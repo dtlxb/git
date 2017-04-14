@@ -8,7 +8,6 @@ import java.util.List;
 
 import cn.gogoal.im.adapter.baseAdapter.entity.MultiItemEntity;
 
-
 /**
  * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
  */
@@ -28,7 +27,7 @@ public abstract class BaseMultiItemQuickAdapter<T extends MultiItemEntity, K ext
      * @param data    A new list is created out of this one to avoid mutable list
      */
     public BaseMultiItemQuickAdapter( List<T> data) {
-        super( data);
+        super(data);
     }
 
     @Override

@@ -81,7 +81,7 @@ public class MarketActivity extends BaseActivity {
                                 huShenFragment.setRefreshType(REFRESH_TYPE_PARENT_BUTTON);
                                 huShenFragment.getMarketInformation();
 
-                                AppManager.getInstance().sendMessage("START_ANIMATIOM");
+                                AppManager.getInstance().sendMessage("START_MARKET_ANIMATIOM");
                             }
                         });
 
@@ -113,7 +113,7 @@ public class MarketActivity extends BaseActivity {
         tablayoutMarket.setupWithViewPager(vpMarket);
     }
 
-    @Subscriber(tag = "STOP_ANIMATION")
+    @Subscriber(tag = "STOP_MARKET_ANIMATION")
     void stopAnimation(String msg) {
         if (rotateAnimation != null) {
             AnimationUtils.getInstance().cancleLoadingAnime(rotateAnimation, actionView, R.mipmap.img_refresh);
@@ -123,7 +123,7 @@ public class MarketActivity extends BaseActivity {
         }
     }
 
-    @Subscriber(tag = "START_ANIMATIOM")
+    @Subscriber(tag = "START_MARKET_ANIMATIOM")
     void startAnimation(String msg) {
         rotateAnimation = AnimationUtils.getInstance().setLoadingAnime(actionView, R.mipmap.img_loading_refresh);
         rotateAnimation.startNow();

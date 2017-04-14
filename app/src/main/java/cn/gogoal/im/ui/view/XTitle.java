@@ -236,6 +236,11 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         return this;
     }
 
+    public XTitle setSubTitleSize(int unit,float size) {
+        mSubTitleText.setTextSize(TypedValue.COMPLEX_UNIT_SP,size);
+        return this;
+    }
+
     public XTitle setCustomTitle(View titleView) {
         if (titleView == null) {
             mCenterText.setVisibility(View.VISIBLE);

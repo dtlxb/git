@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="3dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="3dp"
+    android:paddingTop="4dp">
+
+    <TextView
+        android:id="@+id/comment_sons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="名字:支持股票上市"
+        android:textColor="@color/footer_text_color_selected"
+        android:textSize="@dimen/text_size_15" />
+
+</LinearLayout>

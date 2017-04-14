@@ -3,6 +3,7 @@ package cn.gogoal.im.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,7 +29,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.EditMyStockActivity;
+import cn.gogoal.im.activity.stock.EditMyStockActivity;
 import cn.gogoal.im.activity.stock.MyStockNewsActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
@@ -105,6 +106,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     private ArrayList<MyStockData> myStockDatas = new ArrayList<>();
     private MyStockAdapter myStockAdapter;
     private RotateAnimation rotateAnimation;
+    private static final long INTERVAL_TIME=10000;
 
     @Override
     public int bindLayout() {
@@ -118,18 +120,14 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         initMarketBanner(mContext);
         initSortTitle(mContext);
         initRecyclerView(mContext);
-        getMyStockData(AppConst.REFRESH_TYPE_FIRST);
-        getMarketLittle();
+
+        refreshAll(AppConst.REFRESH_TYPE_FIRST);//请求
 
         initXLayout();
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh() {
-                startAnimation();//刷新按钮动画
-                getMyStockData(AppConst.REFRESH_TYPE_SWIPEREFRESH);
-                getMarketLittle();
-
+            public void onRefresh() {refreshAll(AppConst.REFRESH_TYPE_SWIPEREFRESH);
             }
         });
 
@@ -141,6 +139,13 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 getMarketLittle();
             }
         });
+
+    }
+
+    private void refreshAll(int refreshType){
+        startAnimation();//刷新按钮动画
+        getMyStockData(refreshType);
+        getMarketLittle();
     }
 
     private void initXLayout() {
@@ -159,9 +164,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             public void run() {
                 if (searchMarket.getBottom() > 0) {
                     errorPadding=(AppDevice.getHeight(getContext()) - searchMarket.getBottom())/ 3;
-                    KLog.e("errorPadding="+errorPadding+
-                            ";height="+AppDevice.getHeight(getContext())+
-                    ";bottom="+searchMarket.getBottom());
                 }
             }
         });
@@ -169,7 +171,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
     //init
     private void initMarketBanner(Context mContext) {
-        myStockMarketAdapter = new MyStockMarketAdapter(myStockMarketDatas);
+        myStockMarketAdapter = new MyStockMarketAdapter(getContext(),myStockMarketDatas);
         flipperBanner.setAdapter(myStockMarketAdapter);
 //        ObjectAnimator inAnimator = ObjectAnimator.ofFloat(flipperBanner, "translationY", AppDevice.dp2px(mContext, 70), 0).setDuration(900);
 //        ObjectAnimator outAnimator = ObjectAnimator.ofFloat(flipperBanner, "translationY", 0, -AppDevice.dp2px(mContext, 70)).setDuration(900);
@@ -233,9 +235,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 } else if (view.getId() == R.id.tv_mystock_rate) {
                     tvMystockPrice.setViewStateNormal();
                     if (sortType == -1) {
-                        return Double.valueOf(o2.getChange_rate()).compareTo(o1.getChange_rate());
+                        return StringUtils.getStockDouble(o2.getChange_rate()).compareTo(StringUtils.getStockDouble(o1.getChange_rate()));
                     } else if (sortType == 1) {
-                        return Double.valueOf(o1.getChange_rate()).compareTo(o2.getChange_rate());
+                        return StringUtils.getStockDouble(o1.getChange_rate()).compareTo(StringUtils.getStockDouble(o2.getChange_rate()));
                     } else {
                         getMyStockData(AppConst.REFRESH_TYPE_PARENT_BUTTON);
                         return 0;
@@ -266,6 +268,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             public void onSuccess(String responseInfo) {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
+                    handler.postDelayed(runnable,INTERVAL_TIME);
                     xLayout.setPadding(0,0,0,0);
                     myStockDatas.clear();
                     myStockDatas.addAll(JSONObject.parseObject(responseInfo, MyStockBean.class).getData());
@@ -351,6 +354,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
     private void intentNews(int index) {
         Intent intent = new Intent(getActivity(), MyStockNewsActivity.class);
+        intent.putExtra("news_title",getString(R.string.title_mtstock_news));
         intent.putExtra("showTabIndex", index);
         startActivity(intent);
     }
@@ -376,7 +380,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, MyStockData data, int position) {
+        protected void convert(BaseViewHolder holder, final MyStockData data, int position) {
             holder.setText(R.id.tv_mystock_stockname, data.getStock_name());
             holder.setText(R.id.tv_mystock_stockcode, data.getStock_code());
 
@@ -387,25 +391,54 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             priceView.setClickable(false);
 
             priceView.setText(StringUtils.saveSignificand(data.getPrice(), 2));
-            rateView.setText(StockUtils.plusMinus(data.getChange_rate()));
 
-            rateView.setTextColor(ContextCompat.getColor(getActivity(),
-                    StockUtils.getStockRateColor(data.getChange_rate())));
+            if (data.getStock_type()==1) {
+                rateView.setText(StockUtils.plusMinus(data.getChange_rate(),true));
+                rateView.setTextColor(ContextCompat.getColor(getActivity(),
+                        StockUtils.getStockRateColor(data.getChange_rate())));
+            }else {
+                rateView.setText(StockUtils.getStockStatus(data.getStock_type()));
+                rateView.setTextColor(getResColor(R.color.stock_gray));
+            }
+
             UIHelper.setRippBg(holder.itemView);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    StockUtils.go2StockDetail(v.getContext(),
+                            data.getStock_code(),data.getStock_name());
                 }
             });
         }
     }
 
+    //定时刷新
+    Handler handler = new Handler();
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                handler.postDelayed(this, INTERVAL_TIME);
+                refreshAll(AppConst.REFRESH_TYPE_AUTO);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+//        handler.postDelayed(runnable,INTERVAL_TIME);
+    };
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        handler.removeCallbacks(runnable);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 7) {
+        if (requestCode == 7 && data!=null) {
             List<MyStockData> myStockdata = (List<MyStockData>) data.getSerializableExtra("my_stock_edit");
             myStockDatas.clear();
             myStockDatas.addAll(myStockdata);

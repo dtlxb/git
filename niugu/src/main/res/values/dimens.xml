@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--//////////////////////////////////Niugu///////////////////////////////////////-->
+    <!-- UI统一设置 -->
+    <dimen name="title_height">48.0dp</dimen>
+    <dimen name="title_btn_width">50.0dp</dimen>
+
+    <dimen name="text_large">30dp</dimen>
+    <dimen name="text_max">18dp</dimen>
+    <dimen name="text_med">15dp</dimen>
+    <dimen name="text_min">13dp</dimen>
+
+    <dimen name="margin_min">5dp</dimen>
+    <dimen name="margin_med">10dp</dimen>
+    <dimen name="margin_max">15dp</dimen>
+    <dimen name="margin_large">30dp</dimen>
+    <dimen name="margin_large_more">35dp</dimen>
+
+
+    <!-- 通用 -->
+    <dimen name="text_size_60">60.0dp</dimen>
+    <dimen name="text_size_59">59.0dp</dimen>
+    <dimen name="text_size_58">58.0dp</dimen>
+    <dimen name="text_size_57">57.0dp</dimen>
+    <dimen name="text_size_56">56.0dp</dimen>
+    <dimen name="text_size_55">55.0dp</dimen>
+    <dimen name="text_size_54">54.0dp</dimen>
+    <dimen name="text_size_53">53.0dp</dimen>
+    <dimen name="text_size_52">52.0dp</dimen>
+    <dimen name="text_size_51">51.0dp</dimen>
+    <dimen name="text_size_50">50.0dp</dimen>
+    <dimen name="text_size_49">49.0dp</dimen>
+    <dimen name="text_size_48">48.0dp</dimen>
+    <dimen name="text_size_47">47.0dp</dimen>
+    <dimen name="text_size_46">46.0dp</dimen>
+    <dimen name="text_size_45">45.0dp</dimen>
+    <dimen name="text_size_44">44.0dp</dimen>
+    <dimen name="text_size_43">43.0dp</dimen>
+    <dimen name="text_size_42">42.0dp</dimen>
+    <dimen name="text_size_41">41.0dp</dimen>
+    <dimen name="text_size_40">40.0dp</dimen>
+    <dimen name="text_size_39">39.0dp</dimen>
+    <dimen name="text_size_38">38.0dp</dimen>
+    <dimen name="text_size_37">37.0dp</dimen>
+    <dimen name="text_size_36">36.0dp</dimen>
+    <dimen name="text_size_35">35.0dp</dimen>
+    <dimen name="text_size_34">34.0dp</dimen>
+    <dimen name="text_size_33">33.0dp</dimen>
+    <dimen name="text_size_32">32.0dp</dimen>
+    <dimen name="text_size_31">31.0dp</dimen>
+    <dimen name="text_size_30">30.0dp</dimen>
+    <dimen name="text_size_29">29.0dp</dimen>
+    <dimen name="text_size_28">28.0dp</dimen>
+    <dimen name="text_size_27">27.0dp</dimen>
+    <dimen name="text_size_26">26.0dp</dimen>
+    <dimen name="text_size_25">25.0dp</dimen>
+    <dimen name="text_size_24">24.0dp</dimen>
+    <dimen name="text_size_23">23.0dp</dimen>
+    <dimen name="text_size_22">22.0dp</dimen>
+    <dimen name="text_size_21">21.0dp</dimen>
+    <dimen name="text_size_20">20.0dp</dimen>
+    <dimen name="text_size_19">19.0dp</dimen>
+    <dimen name="text_size_18">18.0dp</dimen>
+    <dimen name="text_size_17">17.0dp</dimen>
+    <dimen name="text_size_16">16.0dp</dimen>
+    <dimen name="text_size_15">15.0dp</dimen>
+    <dimen name="text_size_14">14.0dp</dimen>
+    <dimen name="text_size_13">13.0dp</dimen>
+    <dimen name="text_size_12">12.0dp</dimen>
+    <dimen name="text_size_11">11.0dp</dimen>
+    <dimen name="text_size_10">10.0dp</dimen>
+    <dimen name="text_size_9">9.0dp</dimen>
+    <dimen name="text_size_8">8.0dp</dimen>
+    <dimen name="text_size_7">7.0dp</dimen>
+    <dimen name="text_size_6">6.0dp</dimen>
+    <dimen name="text_size_5">5.0dp</dimen>
+    <dimen name="text_size_4">4.0dp</dimen>
+    <dimen name="text_size_3">3.0dp</dimen>
+    <dimen name="text_size_2">2.0dp</dimen>
+    <dimen name="text_size_1">1.0dp</dimen>
+    <dimen name="space_30">30.0dp</dimen>
+    <dimen name="space_29">29.0dp</dimen>
+    <dimen name="space_28">28.0dp</dimen>
+    <dimen name="space_27">27.0dp</dimen>
+    <dimen name="space_26">26.0dp</dimen>
+    <dimen name="space_25">25.0dp</dimen>
+    <dimen name="space_24">24.0dp</dimen>
+    <dimen name="space_23">23.0dp</dimen>
+    <dimen name="space_22">22.0dp</dimen>
+    <dimen name="space_21">21.0dp</dimen>
+    <dimen name="space_20">20.0dp</dimen>
+    <dimen name="space_19">19.0dp</dimen>
+    <dimen name="space_18">18.0dp</dimen>
+    <dimen name="space_17">17.0dp</dimen>
+    <dimen name="space_16">16.0dp</dimen>
+    <dimen name="space_15">15.0dp</dimen>
+    <dimen name="space_14">14.0dp</dimen>
+    <dimen name="space_13">13.0dp</dimen>
+    <dimen name="space_12">12.0dp</dimen>
+    <dimen name="space_11">11.0dp</dimen>
+    <dimen name="space_10">10.0dp</dimen>
+    <dimen name="space_9">9.0dp</dimen>
+    <dimen name="space_8">8.0dp</dimen>
+    <dimen name="space_7">7.0dp</dimen>
+    <dimen name="space_6">6.0dp</dimen>
+    <dimen name="space_5">5.0dp</dimen>
+    <dimen name="space_4">4.0dp</dimen>
+    <dimen name="space_3">0.0dp</dimen>
+    <dimen name="space_2">2.0dp</dimen>
+    <dimen name="space_1">0.0dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="rdbDetailRadius">3dp</dimen>
+
+    <dimen name="data1minItemHeight">40dp</dimen>
+    <dimen name="hvItemWidth">80dip</dimen>
+</resources>

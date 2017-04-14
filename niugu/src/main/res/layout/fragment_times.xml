@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <hply.com.niugu.LandScapeChartView
+        android:id="@+id/times_view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/space_5"
+        android:layout_marginRight="@dimen/space_5"
+        android:layout_weight="4" />
+
+    <LinearLayout
+        android:id="@+id/layout_price"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <!--交易模块-->
+        <LinearLayout
+            android:id="@+id/linear_treat"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.2"
+            android:orientation="vertical">
+            <!--卖5-->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/time_charts_sell5_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="卖5"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_sell5_price"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/time_charts_sell5_tv"
+                    android:gravity="right"
+                    android:text="22.59"
+
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_sell5_volume"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="3366"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+            </RelativeLayout>
+            <!--卖4-->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/time_charts_sell4_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="卖4"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_sell4_price"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/time_charts_sell4_tv"
+                    android:gravity="right"
+                    android:text="21.59"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_sell4_volume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="3366"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+            </RelativeLayout>
+            <!--卖3-->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+
+                    android:id="@+id/time_charts_sell3_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="卖3"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+
+                    android:id="@+id/time_charts_sell3_price"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/time_charts_sell3_tv"
+                    android:gravity="right"
+                    android:text="21.59"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_sell3_volume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="3366"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+            </RelativeLayout>
+            <!--卖2-->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/time_charts_sell2_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="卖2"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_sell2_price"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/time_charts_sell2_tv"
+                    android:gravity="right"
+                    android:text="21.59"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_sell2_volume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="3366"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+            </RelativeLayout>
+            <!--卖1-->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/time_charts_sell1_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="卖1"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_sell1_price"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/time_charts_sell1_tv"
+                    android:gravity="right"
+                    android:text="21.59"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_sell1_volume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="3366"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_chart" />
+            <!--买1-->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/time_charts_buy1_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="买1"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_buy1_price"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/time_charts_buy1_tv"
+                    android:gravity="right"
+                    android:text="21.59"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_buy1_volume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="3366"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+            </RelativeLayout>
+            <!--买2-->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/time_charts_buy2_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="买2"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_buy2_price"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/time_charts_buy2_tv"
+                    android:gravity="right"
+                    android:text="21.59"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12"
+
+                    />
+
+                <TextView
+                    android:id="@+id/time_charts_buy2_volume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="3366"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+            </RelativeLayout>
+            <!--买3-->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/time_charts_buy3_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="买3"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_buy3_price"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/time_charts_buy3_tv"
+                    android:gravity="right"
+                    android:text="21.59"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_buy3_volume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="3366"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+            </RelativeLayout>
+            <!--买4-->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/time_charts_buy4_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="买4"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_buy4_price"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/time_charts_buy4_tv"
+                    android:gravity="right"
+                    android:text="21.59"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_buy4_volume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="3366"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+            </RelativeLayout>
+            <!--买5-->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/time_charts_buy5_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="买5"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_buy5_price"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/time_charts_buy5_tv"
+                    android:gravity="right"
+                    android:text="21.59"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+                <TextView
+                    android:id="@+id/time_charts_buy5_volume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="3366"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_12" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <!--明细-->
+        <ListView
+            android:id="@+id/lsvDetial"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:id="@+id/tvLsvNoData"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/no_data_image" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="暂无交易数据" />
+
+        </LinearLayout>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rdb_detail_wudang"
+                style="@style/DetailRdbStyle"
+                android:background="@drawable/selector_rdb_detial_left"
+                android:checked="true"
+                android:text="五档" />
+
+            <RadioButton
+                android:id="@+id/rdb_detail_mingxi"
+                style="@style/DetailRdbStyle"
+                android:background="@drawable/selector_rdb_detial_right"
+                android:text="明细" />
+        </RadioGroup>
+
+    </LinearLayout>
+</LinearLayout>

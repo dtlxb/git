@@ -90,7 +90,7 @@ public class HuShenFragment extends BaseFragment {
      */
     public void getMarketInformation() {
 
-        AppManager.getInstance().sendMessage("START_ANIMATIOM");
+        AppManager.getInstance().sendMessage("START_MARKET_ANIMATIOM");
 
         if (refreshType == REFRESH_TYPE_RELOAD) {
             xLayout.setStatus(XLayout.Loading);//loading
@@ -102,15 +102,17 @@ public class HuShenFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                AppManager.getInstance().sendMessage("STOP_ANIMATION");
+                AppManager.getInstance().sendMessage("STOP_MARKET_ANIMATION");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     SPTools.saveString("MARKET_RESPONSEINFO_DATA", responseInfo);//缓存
                     reconstructData(responseInfo);
                 } else {
                     xLayout.setStatus(XLayout.Error);
+                    String errorMsg = JSONObject.parseObject(responseInfo).getString("message");
+                    xLayout.setEmptyText(errorMsg);
                     if (refreshType == REFRESH_TYPE_PARENT_BUTTON || refreshType == REFRESH_TYPE_SWIPEREFRESH) {
-                        UIHelper.toast(getContext(), "行情数据更新出错\r\n" + JSONObject.parseObject(responseInfo).getString("message"), Toast.LENGTH_LONG);
-                        AppManager.getInstance().sendMessage("STOP_ANIMATION");
+                        UIHelper.toast(getContext(), "行情数据更新出错\r\n" + errorMsg, Toast.LENGTH_LONG);
+                        AppManager.getInstance().sendMessage("STOP_MARKET_ANIMATION");
                     }
                     refreshType = REFRESH_TYPE_RELOAD;
                 }
@@ -120,7 +122,8 @@ public class HuShenFragment extends BaseFragment {
             public void onFailure(String msg) {
                 refreshType = REFRESH_TYPE_RELOAD;
                 UIHelper.toastError(getActivity(), msg, xLayout);
-                AppManager.getInstance().sendMessage("STOP_ANIMATION");
+                AppManager.getInstance().sendMessage("STOP_MARKET_ANIMATION");
+                xLayout.setEmptyText(msg);
                 xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
                     @Override
                     public void onReload(View v) {
@@ -143,7 +146,7 @@ public class HuShenFragment extends BaseFragment {
                     hangqingBean.getName(),
                     hangqingBean.getPrice(),
                     hangqingBean.getPrice_change(),
-                    hangqingBean.getPrice_change_rate(), 0, null, null,
+                    hangqingBean.getPrice_change_rate(),"", null, hangqingBean.getFullcode(),
                     StockUtils.getStockRateColor(hangqingBean.getPrice_change()));
             listMarket.add(itemData);
         }
@@ -157,7 +160,7 @@ public class HuShenFragment extends BaseFragment {
             MarkteBean.MarketItemData itemData = new MarkteBean.MarketItemData(
                     industrylistBean.getIndustry_name(),
                     industrylistBean.getCurrent_price(),
-                    0,
+                    "",
                     industrylistBean.getRate(),
                     industrylistBean.getIndustry_rate(),
                     industrylistBean.getStock_name(),
@@ -175,7 +178,7 @@ public class HuShenFragment extends BaseFragment {
         markteList.add(new MarkteBean("振幅榜", addRankList(marketData.getStockRanklist().getAmplitude_list())));
 
         xLayout.setStatus(XLayout.Success);
-        AppManager.getInstance().sendMessage("STOP_ANIMATION");
+        AppManager.getInstance().sendMessage("STOP_MARKET_ANIMATION");
 
         adapter.notifyDataSetChanged();
 
@@ -190,9 +193,9 @@ public class HuShenFragment extends BaseFragment {
             MarkteBean.MarketItemData itemData = new MarkteBean.MarketItemData(
                     null,
                     list.get(i).getCurrent_price(),
-                    0,
+                    "",
                     list.get(i).getRate(),
-                    0,
+                    "",
                     list.get(i).getStock_name(),
                     list.get(i).getStock_code(),
                     StockUtils.getStockRateColor(list.get(i).getRate())

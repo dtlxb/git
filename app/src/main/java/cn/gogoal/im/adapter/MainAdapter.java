@@ -38,7 +38,7 @@ public class MainAdapter extends CommonAdapter<FoundData,BaseViewHolder> {
 
     private Context context;
     public MainAdapter(Context context, int layoutId, List<FoundData> datas) {
-        super(context, layoutId, datas);
+        super(layoutId, datas);
         this.context=context;
     }
 
@@ -81,7 +81,7 @@ public class MainAdapter extends CommonAdapter<FoundData,BaseViewHolder> {
 
         private Context context;
         private GridAdapter(Context context,List<FoundData.ItemPojos> datas, int parentPosition) {
-            super(context, R.layout.item_grid_foundfragment, datas);
+            super(R.layout.item_grid_foundfragment, datas);
             this.context=context;
             this.parentPosition = parentPosition;
         }
@@ -93,7 +93,10 @@ public class MainAdapter extends CommonAdapter<FoundData,BaseViewHolder> {
                 holder.itemView.setEnabled(false);
             }
 
-            AppDevice.setViewWidth$Height(holder.itemView,(AppDevice.getWidth(context) - 3) / 4,(AppDevice.getWidth(context) - 3) / 4);
+            ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+            params.width = (AppDevice.getWidth(context) - 3) / 4;
+            params.height = (AppDevice.getWidth(context) - 3) / 4;
+            holder.itemView.setLayoutParams(params);
 
             holder.setText(R.id.tv, itemPojos.getItemTextDescription());
 

@@ -126,7 +126,7 @@ public class SquareCollectActivity extends BaseActivity {
     private class ListAdapter extends CommonAdapter<JSONObject,BaseViewHolder> {
 
         private ListAdapter(Context context, int layoutId, List<JSONObject> datas) {
-            super(context, layoutId, datas);
+            super(layoutId, datas);
         }
 
         @Override

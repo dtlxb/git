@@ -6,6 +6,7 @@ import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -64,6 +65,8 @@ public class ImageDisplay {
         if (!TextUtils.isEmpty(url)) {
             Glide.with(context)
                     .load(url)
+                    .dontAnimate()
+                    .dontTransform()
                     .skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .placeholder(R.mipmap.image_placeholder)
@@ -71,7 +74,44 @@ public class ImageDisplay {
                     .into(imageView);
         }
     }
-    public static void loadNetImage(Context context, String url, ImageView imageView,boolean skipMemoryCache) {
+
+    public static void loadNetImage(Context context, String url, ImageView imageView, int needPlaceholder) {
+        if (!TextUtils.isEmpty(url)) {
+            DrawableRequestBuilder<String> builder = Glide.with(context)
+                    .load(url)
+                    .dontAnimate()
+                    .dontTransform()
+                    .skipMemoryCache(true)
+                    .dontAnimate()
+                    .dontTransform()
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .thumbnail(0.1f);
+            if (needPlaceholder == 0x00) {
+                builder.into(imageView);
+            } else {
+                builder.placeholder(R.mipmap.image_placeholder);
+                builder.into(imageView);
+            }
+
+        }
+    }
+
+    public static void loadChartImage(Context context, String url, ImageView imageView) {
+        if (!TextUtils.isEmpty(url)) {
+            DrawableRequestBuilder<String> builder = Glide.with(context)
+                    .load(url)
+                    .dontAnimate()
+                    .dontTransform()
+                    .skipMemoryCache(true)
+                    .dontAnimate()
+                    .dontTransform()
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT);
+            builder.into(imageView);
+
+        }
+    }
+
+    public static void loadNetImage(Context context, String url, ImageView imageView, boolean skipMemoryCache) {
         if (!TextUtils.isEmpty(url)) {
             Glide.with(context)
                     .load(url)
@@ -126,37 +166,39 @@ public class ImageDisplay {
     /**
      * @param context 上下文对象
      * @param radius  圆角矩形角度
-     * @param res      图片资源res
-     * */
-    public static void loadRoundedRectangleImage(Context context,ImageView imageView,int radius,@DrawableRes int res){
+     * @param res     图片资源res
+     */
+    public static void loadRoundedRectangleImage(Context context, ImageView imageView, int radius, @DrawableRes int res) {
         Glide.with(context)
                 .load(res)
-                .bitmapTransform(new RoundedCornersTransformation(context,radius,0))
+                .bitmapTransform(new RoundedCornersTransformation(context, radius, 0))
+                .into(imageView);
+    }
+
+    /**
+     * @param context  上下文对象
+     * @param radius   圆角矩形角度
+     * @param imageUrl 图片url地址
+     */
+    public static void loadRoundedRectangleImage(Context context, ImageView imageView, int radius, String imageUrl) {
+        Glide.with(context)
+                .load(imageUrl)
+                .bitmapTransform(new RoundedCornersTransformation(context, radius, 0))
                 .into(imageView);
     }
 
     /**
      * @param context   上下文对象
      * @param radius    圆角矩形角度
-     * @param imageUrl  图片url地址
-     * */
-    public static void loadRoundedRectangleImage(Context context,ImageView imageView,int radius,String imageUrl){
-        Glide.with(context)
-                .load(imageUrl)
-                .bitmapTransform(new RoundedCornersTransformation(context,radius,0))
-                .into(imageView);
-    }
-    /**
-     * @param context   上下文对象
-     * @param radius    圆角矩形角度
-     * @param imageFile  磁盘图片
-     * */
-    public static void loadRoundedRectangleImage(Context context,ImageView imageView,int radius,File imageFile){
+     * @param imageFile 磁盘图片
+     */
+    public static void loadRoundedRectangleImage(Context context, ImageView imageView, int radius, File imageFile) {
         Glide.with(context)
                 .load(Uri.fromFile(imageFile))
-                .bitmapTransform(new RoundedCornersTransformation(context,radius,0))
+                .bitmapTransform(new RoundedCornersTransformation(context, radius, 0))
                 .into(imageView);
     }
+
     //=====================================加载GIF图=======================================
     public static void loadGifResImage(Context context, int resId, ImageView view) {
         Glide.with(context).load(resId)
@@ -290,8 +332,11 @@ public class ImageDisplay {
     }
 
     //=========================================头像图片处理=======================================
-    /**头像图片很小，禁用图片缓存，方便用户修改后实时刷新，防止残留*/
-    public static void loadResAvatar(Context context,int resId,ImageView imageView){
+
+    /**
+     * 头像图片很小，禁用图片缓存，方便用户修改后实时刷新，防止残留
+     */
+    public static void loadResAvatar(Context context, int resId, ImageView imageView) {
         Glide.with(context)
                 .load(resId)
                 .skipMemoryCache(true)//禁止内存缓存
@@ -299,7 +344,8 @@ public class ImageDisplay {
                 .bitmapTransform(new CropCircleTransformation(context))
                 .into(imageView);
     }
-    public static void loadNetAvatar(Context context,String url,ImageView imageView){
+
+    public static void loadNetAvatar(Context context, String url, ImageView imageView) {
         Glide.with(context)
                 .load(url)
                 .skipMemoryCache(true)//禁止内存缓存
@@ -307,6 +353,7 @@ public class ImageDisplay {
                 .bitmapTransform(new CropCircleTransformation(context))
                 .into(imageView);
     }
+
     /*加圆圈——资源图*/
 //    public static void loadResAvatarWithBorder(Context context,int resId,ImageView imageView){
 //        BorderView borderView=new BorderView(context,imageView);
@@ -319,7 +366,7 @@ public class ImageDisplay {
 //                .into(imageView);
 //    }
     /*加圆圈——网络图*/
-    public static void loadNetAvatarWithBorder(Context context,String url,ImageView imageView){
+    public static void loadNetAvatarWithBorder(Context context, String url, ImageView imageView) {
         Glide.with(context)
                 .load(url)
                 .skipMemoryCache(true)//禁止内存缓存
@@ -329,30 +376,36 @@ public class ImageDisplay {
     }
 
 
-    /**图片模糊处理*/
-    public static void BlurImage(Context context,String url,ImageView imageView){
+    /**
+     * 图片模糊处理
+     */
+    public static void BlurImage(Context context, String url, ImageView imageView) {
         Glide.with(context)
                 .load(url)
                 .bitmapTransform(new BlurTransformation(context))
-                .into(imageView);
-    }
-    /**图片马赛克处理*/
-    public static void mosaicImage(Context context,String url,ImageView imageView){
-        Glide.with(context)
-                .load(url)
-                .bitmapTransform(new BlurTransformation(context))
-                .bitmapTransform(new PixelationFilterTransformation(context,10))
                 .into(imageView);
     }
 
-    /**图片灰度、黑白处理*/
-    public static void GrayImage(Context context,String url,ImageView imageView){
+    /**
+     * 图片马赛克处理
+     */
+    public static void mosaicImage(Context context, String url, ImageView imageView) {
+        Glide.with(context)
+                .load(url)
+                .bitmapTransform(new BlurTransformation(context))
+                .bitmapTransform(new PixelationFilterTransformation(context, 10))
+                .into(imageView);
+    }
+
+    /**
+     * 图片灰度、黑白处理
+     */
+    public static void GrayImage(Context context, String url, ImageView imageView) {
         Glide.with(context)
                 .load(url)
                 .bitmapTransform(new GrayscaleTransformation(context))
                 .into(imageView);
     }
-
 
 
     /**图片下载*/
@@ -410,7 +463,9 @@ public class ImageDisplay {
 //        }
 //    }
 
-    /**网络图片加载的监听接口*/
+    /**
+     * 网络图片加载的监听接口
+     */
     private interface LoadNetImageListener {
         void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation);
 

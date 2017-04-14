@@ -129,4 +129,6 @@ dependencies {
     compile 'top.zibin:Luban:1.0.9'
     //个推
     compile 'com.getui:sdk:2.9.5.0'
+    //牛股
+    compile project(':niugu')
 }

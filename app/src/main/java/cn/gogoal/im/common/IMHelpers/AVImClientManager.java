@@ -1,7 +1,6 @@
 package cn.gogoal.im.common.IMHelpers;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
@@ -16,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.UserUtils;
 
 /**
@@ -79,6 +77,9 @@ public class AVImClientManager {
     // 查找聊天室
     public void findConversationById(String conversationId, final ChatJoinManager mChatJoinManager) {
 
+        if (avimClient==null){
+            return;
+        }
         AVIMConversationQuery conversationQuery = avimClient.getQuery();
         // 根据conversationId查找房间
         conversationQuery.whereEqualTo("objectId", conversationId);
@@ -92,8 +93,6 @@ public class AVImClientManager {
                         if (null != mChatJoinManager) {
                             mChatJoinManager.joinSuccess(list.get(0));
                         }
-
-                        Log.e("FIND_CONVERSATION", "查找聊天对象成功1");
                     } else {
                         if (null != mChatJoinManager) {
                             mChatJoinManager.joinFail("查找聊天对象失败2===");
@@ -103,8 +102,6 @@ public class AVImClientManager {
                     if (null != mChatJoinManager) {
                         mChatJoinManager.joinFail("查找聊天对象失败3===" + e.getMessage());
                     }
-
-                    KLog.e("FIND_CONVERSATION", "查询条件没有查找到聊天对象" + e.toString());
                 }
             }
         });

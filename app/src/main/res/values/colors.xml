@@ -62,17 +62,20 @@
     <color name="index_bar_text_flag">#66000000</color>
 
     <!--股票行情-->
-    <color name="stock_market_bg">#f4f4f4</color>
+    <color name="stock_market_bg">#f8f8f8</color>
     <color name="stock_market_divider">#e4e4e4</color>
     <color name="stockItemPress">#E2E7EC</color>
     <color name="stock_green">#0CB709</color>
     <color name="stock_red">#f53f3f</color>
-    <color name="stock_gray">#dfdfdf</color>
+    <color name="stock_gray">#A6A9AD</color>
     <color name="stock_list_more">#0095FF</color>
     <color name="stock_text_black">#333333</color>
     <color name="stock_text_gray">#666666</color>
 
     <color name="colorSearchGray">#979797</color>
+
+    <!--0.8透明度白色-->
+    <color name="color0_8White">#ccffffff</color>
 
     <!--<color name="base_text_color_light">#909090</color>-->
     <!--<color name="base_loading_background">#f7f7f7</color>-->

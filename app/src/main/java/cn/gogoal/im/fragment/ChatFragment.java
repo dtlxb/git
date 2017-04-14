@@ -51,7 +51,6 @@ import cn.gogoal.im.activity.ChooseContactActivity;
 import cn.gogoal.im.adapter.ChatFunctionAdapter;
 import cn.gogoal.im.adapter.IMChatAdapter;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.adapter.baseAdapter.listener.OnItemClickListener;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
@@ -190,7 +189,7 @@ public class ChatFragment extends BaseFragment {
         });
 
         //多功能消息发送
-        chatFunctionAdapter.setOnItemClickListener(new OnItemClickListener() {
+        chatFunctionAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(CommonAdapter adapter, View view, int position) {
                 switch (position) {
