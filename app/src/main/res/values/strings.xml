@@ -41,7 +41,7 @@
     <string name="origin_size">原图(%1$s)</string>
 
     <!--直播连麦-->
-    <string name="live_together">一起直播</string>
+    <string name="live_together">邀请连麦</string>
     <string name="anchor_introduction">主播介绍</string>
     <string name="invite_timeout_tip">对方长时间未响应，已取消连麦邀请</string>
     <string name="inviting_process_timeout">超时未处理，已经自动拒绝对方的连麦邀请</string>

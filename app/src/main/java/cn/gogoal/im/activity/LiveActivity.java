@@ -927,9 +927,11 @@ public class LiveActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.imgPlayClose})
+    @OnClick({R.id.liveTogether, R.id.imgPlayClose})
     public void closeOnClick(View v) {
         switch (v.getId()) {
+            case R.id.liveTogether: //邀请连麦
+                break;
             case R.id.imgPlayClose: //关闭连麦
                 break;
         }

@@ -65,7 +65,8 @@
             android:paddingRight="10dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/shape_player_info"
@@ -114,6 +115,26 @@
                         android:textSize="11dp" />
 
                 </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:id="@+id/liveTogether"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_player_live_together"
+                    android:text="@string/live_together"
+                    android:textColor="@android:color/white"
+                    android:textSize="14dp"
+                    android:visibility="visible" />
 
             </LinearLayout>
 
