@@ -8,14 +8,19 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -79,11 +84,16 @@ import cn.gogoal.im.ui.view.VoiceButton;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 /**
  * Created by huangxx on 2017/2/21.
  */
 
 public class ChatFragment extends BaseFragment {
+
+    @BindView(R.id.message_swipe)
+    SwipeRefreshLayout message_swipe;
 
     @BindView(R.id.message_list)
     RecyclerView message_recycler;
@@ -100,8 +110,8 @@ public class ChatFragment extends BaseFragment {
     @BindView(R.id.et_input)
     EditText etInput;
 
-    @BindView(R.id.img_emoji)
-    ImageButton imgEmoji;
+    /*@BindView(R.id.img_emoji)
+    ImageButton imgEmoji;*/
 
     @BindView(R.id.img_function)
     ImageButton imgFunction;
@@ -119,9 +129,10 @@ public class ChatFragment extends BaseFragment {
     private int chatType;
 
     //消息类型
-    private static int TEXT_MESSAGE = 1;
-    private static int IMAGE_MESSAGE = 2;
-    private static int AUDIO_MESSAGE = 3;
+    private static int TEXT_MESSAGE = -1;
+    private static int IMAGE_MESSAGE = -2;
+    private static int AUDIO_MESSAGE = -3;
+    private static int STOCK_MESSAGE = 11;
 
     private AVIMConversation imConversation;
     private List<AVIMMessage> messageList = new ArrayList<>();
@@ -145,9 +156,10 @@ public class ChatFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
 
+        BaseActivity.iniRefresh(message_swipe);
         BaseActivity.initRecycleView(message_recycler, null);
 
-        imChatAdapter = new IMChatAdapter(getContext(), messageList);
+        imChatAdapter = new IMChatAdapter(getActivity(), messageList);
         message_recycler.setAdapter(imChatAdapter);
 
         //多功能消息框
@@ -158,7 +170,8 @@ public class ChatFragment extends BaseFragment {
         chatFunctionAdapter = new ChatFunctionAdapter(getContext(), itemPojosList);
         functions_recycler.setAdapter(chatFunctionAdapter);
 
-//        keyBordHeight = SPTools.getInt("soft_keybord_height", AppDevice.dp2px(getmContext(), 220));
+        int keyBordHeight = SPTools.getInt("soft_keybord_height", AppDevice.dp2px(getActivity(), 220));
+        setContentHeight(keyBordHeight);
 
         keyboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchLinearLayout.OnKeyboardChangeListener() {
             @Override
@@ -174,17 +187,19 @@ public class ChatFragment extends BaseFragment {
             }
         });
 
-        message_recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        //消息下拉刷新
+        message_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                KLog.e("newState======" + newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                KLog.e("dy=========" + dy + ",getBottom===" + recyclerView.getBottom() + ",y===" + recyclerView.getY());
+            public void onRefresh() {
+                imConversation.queryMessages(messageList.get(0).getMessageId(), messageList.get(0).getTimestamp(), 15, new AVIMMessagesQueryCallback() {
+                    @Override
+                    public void done(List<AVIMMessage> list, AVIMException e) {
+                        messageList.addAll(0, list);
+                        imChatAdapter.notifyItemRangeInserted(0, list.size());
+                        //message_recycler.smoothScrollToPosition(list);
+                        message_swipe.setRefreshing(false);
+                    }
+                });
             }
         });
 
@@ -217,11 +232,27 @@ public class ChatFragment extends BaseFragment {
                         });
                         break;
                     case 1:
+                        //跳转股票页面发送股票
+                        sendStockMessage();
                         break;
                     default:
                         break;
                 }
             }
+        });
+
+        message_recycler.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                //更改键盘弹起效果(下次顶起来)
+                InputMethodManager manager = (InputMethodManager) etInput.getContext().getSystemService(INPUT_METHOD_SERVICE);
+                manager.hideSoftInputFromWindow(etInput.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+                find_more_layout.setVisibility(View.GONE);
+                return false;
+            }
+
         });
 
 
@@ -235,7 +266,7 @@ public class ChatFragment extends BaseFragment {
                 AVIMTextMessage mTextMessage = new AVIMTextMessage();
                 HashMap<String, Object> attrsMap = new HashMap<>();
                 attrsMap.put("username", UserUtils.getUserName());
-                attrsMap.put("simple_avatar", UserUtils.getUserAvatar());
+                attrsMap.put("avatar", UserUtils.getUserAvatar());
                 mTextMessage.setAttrs(attrsMap);
                 mTextMessage.setTimestamp(CalendarUtils.getCurrentTime());
                 mTextMessage.setFrom(UserUtils.getUserAccountId());
@@ -276,14 +307,14 @@ public class ChatFragment extends BaseFragment {
                         voiceView.setVisibility(View.GONE);
                         etInput.setVisibility(View.VISIBLE);
                         etInput.requestFocus();
-                        AppDevice.showSoftKeyboard(etInput);
-                        //软键盘高度
-                        getSupportSoftInputHeight();
+                        //更改键盘弹起效果(下次顶起来)
+                        AppDevice.showSoftChangeMethod(etInput);
                         find_more_layout.setVisibility(View.GONE);
                         imgVoice.setImageResource(R.mipmap.chat_voice);
                         break;
                     case 1:
-                        AppDevice.hideSoftKeyboard(etInput);
+                        //更改键盘弹起效果(下次不顶)
+                        AppDevice.hideSoftChangeMethod(etInput);
                         voiceView.setVisibility(View.VISIBLE);
                         etInput.setVisibility(View.GONE);
                         imgVoice.setImageResource(R.mipmap.chat_key_bord);
@@ -348,26 +379,26 @@ public class ChatFragment extends BaseFragment {
     }
 
     //输入框内元素点击事件
-    @OnClick({R.id.img_emoji, R.id.img_function, R.id.btn_send})
+    @OnClick({R.id.img_function})
     void chatClick(View view) {
         switch (view.getId()) {
-            case R.id.img_emoji:
-
-                break;
             case R.id.img_function:
+                find_more_layout.setVisibility(View.VISIBLE);
+                getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+                KLog.e(view.getTag());
                 if (view.getTag().equals("un_expanded")) {
                     etInput.clearFocus();
-                    AppDevice.hideSoftKeyboard(etInput);
-                    find_more_layout.setVisibility(View.VISIBLE);
+                    InputMethodManager manager = (InputMethodManager) etInput.getContext().getSystemService(INPUT_METHOD_SERVICE);
+                    manager.hideSoftInputFromWindow(etInput.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     view.setTag("expanded");
                 } else if (view.getTag().equals("expanded")) {
-                    find_more_layout.setVisibility(View.GONE);
                     etInput.requestFocus();
-                    AppDevice.showSoftKeyboard(etInput);
+                    InputMethodManager inputMethodManager = (InputMethodManager) etInput.getContext().getSystemService(INPUT_METHOD_SERVICE);
+                    inputMethodManager.showSoftInput(etInput, 0);
                     view.setTag("un_expanded");
                 }
                 break;
-            case R.id.btn_send:
+            default:
                 break;
         }
     }
@@ -382,11 +413,13 @@ public class ChatFragment extends BaseFragment {
                 KLog.e(result.get("code"));
                 if ((int) result.get("code") == 0) {
                     switch (messageType) {
-                        case 1:
+                        case -1:
                             break;
-                        case 2:
+                        case -2:
                             break;
-                        case 3:
+                        case -3:
+                            break;
+                        case 11:
                             break;
                         default:
                             break;
@@ -394,8 +427,10 @@ public class ChatFragment extends BaseFragment {
                     //头像暂时未保存
                     IMMessageBean imMessageBean = null;
                     if (chatType == 1001) {
-                        imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
-                                "0", null != contactBean.getNickname() ? contactBean.getNickname() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), message);
+                        if (null != contactBean) {
+                            imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
+                                    "0", null != contactBean.getNickname() ? contactBean.getNickname() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), message);
+                        }
                     } else if (chatType == 1002) {
                         imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
                                 "0", imConversation.getName(), "", "", message);
@@ -442,6 +477,41 @@ public class ChatFragment extends BaseFragment {
         }
     }
 
+    private void sendStockMessage() {
+        //股票消息(消息type:11,加上stockCode,stockName);
+        AVIMMessage mStockMessage = new AVIMMessage();
+        mStockMessage.setTimestamp(CalendarUtils.getCurrentTime());
+        mStockMessage.setFrom(UserUtils.getUserAccountId());
+
+        //添加股票信息
+        Map<String, String> lcattrsMap = new HashMap<>();
+        lcattrsMap = AVImClientManager.getInstance().userBaseInfo();
+        lcattrsMap.put("stockCode", "601107");
+        lcattrsMap.put("stockName", "四川成渝");
+
+        //消息基本信息
+        Map<Object, Object> messageMap = new HashMap<>();
+        messageMap.put("_lctype", "11");
+        messageMap.put("_lctext", "股票消息");
+        messageMap.put("_lcattrs", lcattrsMap);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", UserUtils.getToken());
+        params.put("conv_id", imConversation.getConversationId());
+        params.put("chat_type", String.valueOf(chatType));
+        params.put("message", JSONObject.toJSONString(messageMap));
+        KLog.e(params);
+
+        mStockMessage.setContent(JSONObject.toJSONString(messageMap));
+        imChatAdapter.addItem(mStockMessage);
+        imChatAdapter.notifyItemInserted(messageList.size() - 1);
+        message_recycler.smoothScrollToPosition(messageList.size() - 1);
+
+        etInput.setText("");
+        //发送股票消息
+        sendAVIMMessage(STOCK_MESSAGE, params, mStockMessage);
+    }
+
     private void sendImageToZyyx(final File file) {
         KLog.e(file.getPath());
         //图片宽高处理
@@ -458,7 +528,7 @@ public class ChatFragment extends BaseFragment {
         //显示自己的图片消息
         HashMap<String, Object> attrsMap = new HashMap<>();
         attrsMap.put("username", UserUtils.getUserName());
-        attrsMap.put("simple_avatar", UserUtils.getUserAvatar());
+        attrsMap.put("avatar", UserUtils.getUserAvatar());
         final AVIMImageMessage mImageMessage = new AVIMImageMessage(imagefile);
         mImageMessage.setFrom(UserUtils.getUserAccountId());
         mImageMessage.setAttrs(attrsMap);
@@ -490,7 +560,6 @@ public class ChatFragment extends BaseFragment {
                 messageMap.put("format", "jpg");
                 messageMap.put("height", String.valueOf(height));
                 messageMap.put("width", String.valueOf(width));
-                messageMap.put("size", "");
 
                 Map<String, String> params = new HashMap<>();
                 params.put("token", UserUtils.getToken());
@@ -529,7 +598,7 @@ public class ChatFragment extends BaseFragment {
                 //自己显示语音消息
                 HashMap<String, Object> attrsMap = new HashMap<>();
                 attrsMap.put("username", UserUtils.getUserName());
-                attrsMap.put("simple_avatar", UserUtils.getUserAvatar());
+                attrsMap.put("avatar", UserUtils.getUserAvatar());
 
                 //封装一个AVfile对象
                 HashMap<String, Object> metaData = new HashMap<>();
@@ -602,7 +671,7 @@ public class ChatFragment extends BaseFragment {
 
                         messageList.addAll(list);
                         jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
-
+                        KLog.e(messageList.get(list.size() - 1).getContent());
                         if (chatType == 1001) {
                             //拿到对方信息
                             getSpeakToInfo(imConversation);
@@ -620,7 +689,6 @@ public class ChatFragment extends BaseFragment {
                                     messageList.get(i).setContent(JSON.toJSONString(map));
                                 }
                             }
-                            KLog.e(messageList);
                         }
 
                         //单聊，群聊处理(没发消息的时候不保存)
@@ -693,65 +761,6 @@ public class ChatFragment extends BaseFragment {
                 }
                 KLog.e(contactBean);
             }
-        }
-    }
-
-    /**
-     * 获取软件盘的高度
-     * 登录页面获取之后更改逻辑
-     *
-     * @return
-     */
-    private int getSupportSoftInputHeight() {
-        Rect r = new Rect();
-        /**
-         * decorView是window中的最顶层view，可以从window中通过getDecorView获取到decorView。
-         * 通过decorView获取到程序显示的区域，包括标题栏，但不包括状态栏。
-         */
-        getActivity().getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
-        //获取屏幕的高度
-        int screenHeight = getActivity().getWindow().getDecorView().getRootView().getHeight();
-        //计算软件盘的高度
-        int softInputHeight = screenHeight - r.bottom;
-
-        /**
-         * 某些Android版本下，没有显示软键盘时减出来的高度总是144，而不是零，
-         * 这是因为高度是包括了虚拟按键栏的(例如华为系列)，所以在API Level高于20时，
-         * 我们需要减去底部虚拟按键栏的高度（如果有的话）
-         */
-        if (Build.VERSION.SDK_INT >= 20) {
-            // When SDK Level >= 20 (Android L), the softInputHeight will contain the height of softButtonsBar (if has)
-            softInputHeight = softInputHeight - getSoftButtonsBarHeight();
-        }
-
-        if (softInputHeight < 0) {
-            KLog.e("EmotionKeyboard--Warning: value of softInputHeight is below zero!");
-        }
-        //存一份到本地
-        if (softInputHeight > 0) {
-            SPTools.saveInt("soft_keybord_height", softInputHeight);
-        }
-        return softInputHeight;
-    }
-
-    /**
-     * 底部虚拟按键栏的高度
-     *
-     * @return
-     */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private int getSoftButtonsBarHeight() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        //这个方法获取可能不是真实屏幕的高度
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int usableHeight = metrics.heightPixels;
-        //获取当前屏幕的真实高度
-        getActivity().getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
-        int realHeight = metrics.heightPixels;
-        if (realHeight > usableHeight) {
-            return realHeight - usableHeight;
-        } else {
-            return 0;
         }
     }
 

@@ -146,4 +146,20 @@
         <item name="iconifiedByDefault">false</item>
     </style>
 
+    <!--popupWindow-->
+    <style name="AnimationUpPopup">
+        <item name="android:windowEnterAnimation">@anim/grow_fade_in_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/shrink_fade_out_from_bottom</item>
+    </style>
+
+    <style name="AnimationFromButtom" >
+        <item name="android:windowEnterAnimation">@anim/drop_down_form_bottom</item>
+        <item name="android:windowExitAnimation">@anim/hide_to_bottom</item>
+    </style>
+
+    <style name="AnimationFromRight" >
+        <item name="android:windowEnterAnimation">@anim/drop_down_from_right</item>
+        <item name="android:windowExitAnimation">@anim/hide_to_right</item>
+    </style>
+
 </resources>

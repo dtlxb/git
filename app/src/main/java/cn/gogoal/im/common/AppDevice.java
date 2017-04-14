@@ -1,6 +1,7 @@
 package cn.gogoal.im.common;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Dialog;
@@ -30,6 +31,7 @@ import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -42,6 +44,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+
+import com.socks.library.KLog;
 
 import java.io.File;
 import java.io.IOException;
@@ -122,6 +126,7 @@ public class AppDevice {
         if (null != params) {
             params.height = height;
             params.width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            params.width = width;
             view.setLayoutParams(params);
         } else {
             FrameLayout.LayoutParams framelayoutParams = new FrameLayout.LayoutParams(width, height);
@@ -157,6 +162,19 @@ public class AppDevice {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         return ni != null && ni.isConnectedOrConnecting();
+    }
+
+    /**
+     * 判断当前是否有网络
+     */
+    public static boolean hasNetwork(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        return isConnected;
     }
 
     /**
@@ -391,7 +409,6 @@ public class AppDevice {
      */
     protected void hideKeyBoard(Activity context) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
-        ;
         if (inputMethodManager == null) return;
         boolean active = inputMethodManager.isActive();
         if (active) {
@@ -403,6 +420,32 @@ public class AppDevice {
      * 隐藏软键盘
      */
     public static void hideSoftKeyboard(View view) {
+        if (view == null)
+            return;
+        View focusView = null;
+        if (view instanceof EditText)
+            focusView = view;
+
+        if (focusView != null) {
+                /*
+                if (focusView.isFocusable()) {
+                    focusView.setFocusable(false);
+                    focusView.setFocusable(true);
+                }
+                */
+            if (focusView.isFocused()) {
+                focusView.clearFocus();
+            }
+            InputMethodManager manager = (InputMethodManager) focusView.getContext().getSystemService(INPUT_METHOD_SERVICE);
+            manager.hideSoftInputFromWindow(focusView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            manager.hideSoftInputFromInputMethod(focusView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+    /**
+     * 隐藏软键盘(更改弹起方式)
+     */
+    public static void hideSoftChangeMethod(View view) {
         Activity mActivity = null;
         if (view == null)
             return;
@@ -416,12 +459,6 @@ public class AppDevice {
         }
 
         if (focusView != null) {
-                /*
-                if (focusView.isFocusable()) {
-                    focusView.setFocusable(false);
-                    focusView.setFocusable(true);
-                }
-                */
             if (focusView.isFocused()) {
                 focusView.clearFocus();
             }
@@ -448,7 +485,6 @@ public class AppDevice {
      * 显示软键盘--VIEW
      */
     public static void showSoftKeyboard(View view) {
-        Activity mActivity = null;
         if (view == null)
             return;
         /*
@@ -456,6 +492,25 @@ public class AppDevice {
                 Context.INPUT_METHOD_SERVICE)).showSoftInput(view,
                 InputMethodManager.SHOW_FORCED);
         */
+        if (!view.isFocusable())
+            view.setFocusable(true);
+        if (!view.isFocusableInTouchMode())
+            view.setFocusableInTouchMode(true);
+        if (!view.isFocused()) {
+            view.requestFocus();
+        }
+        InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(view, 0);
+        inputMethodManager.showSoftInputFromInputMethod(view.getWindowToken(), 0);
+    }
+
+    /**
+     * 显示软键盘--VIEW
+     */
+    public static void showSoftChangeMethod(View view) {
+        Activity mActivity = null;
+        if (view == null)
+            return;
         if (!view.isFocusable())
             view.setFocusable(true);
         if (!view.isFocusableInTouchMode())

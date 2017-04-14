@@ -475,7 +475,13 @@ public class GGOKHTTP {
      * token                         用户token
      * friend_id                    好友用户Id
      */
-    public static final String del_friend = "v1/ggm_im/del_friend  ";
+    public static final String del_friend = "v1/ggm_im/del_friend";
+
+    /**
+     * token                         用户token
+     * product_line                  产品线
+     */
+    public static final String VIDEO_MOBILE = "v1/video_mobile/valid_ user_live_auth";
 
 //--------------------------------------------------------------------------------------------------
 

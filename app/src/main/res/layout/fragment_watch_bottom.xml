@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relative_player"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/player_info">
+
+    <LinearLayout
+        android:id="@+id/functionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/linearPlayerChat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imgPlayerChat"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/player_chat" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearPlayerProfiles"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imgPlayerProfiles"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/player_profiles" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearPlayerRelaterVideo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imgPlayerRelaterVideo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/player_related_video" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imgPlayerShare"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/player_share" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearPlayerShotCut"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imgPlayerShotCut"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/player_shot_cut" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imgPlayerClose"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/player_close" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/player_linear"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/et_comment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="center_vertical|left"
+            android:hint="@string/player_edit"
+            android:imeOptions="actionSend"
+            android:paddingLeft="12dp"
+            android:singleLine="true"
+            android:textColor="@color/textColor_333333"
+            android:textColorHint="@color/edit_hint"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/send_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/send"
+            android:textColor="@color/send_text"
+            android:textSize="16dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</RelativeLayout>

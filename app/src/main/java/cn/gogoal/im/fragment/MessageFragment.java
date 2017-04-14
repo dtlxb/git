@@ -43,6 +43,7 @@ import cn.gogoal.im.activity.ChooseContactActivity;
 import cn.gogoal.im.activity.ContactsActivity;
 import cn.gogoal.im.activity.IMNewFrienActivity;
 import cn.gogoal.im.activity.OfficialAccountsActivity;
+import cn.gogoal.im.activity.SearchActivity;
 import cn.gogoal.im.activity.SearchPersonSquareActivity;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
@@ -67,8 +68,9 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.badgeview.Badge;
 import cn.gogoal.im.ui.badgeview.BadgeView;
-import cn.gogoal.im.ui.view.XLayout;
+import cn.gogoal.im.ui.view.DrawableCenterTextView;
 import cn.gogoal.im.ui.view.XTitle;
+import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
 import static cn.gogoal.im.base.BaseActivity.initRecycleView;
 
@@ -77,11 +79,13 @@ import static cn.gogoal.im.base.BaseActivity.initRecycleView;
  */
 public class MessageFragment extends BaseFragment {
 
-    @BindView(R.id.xLayout)
-    XLayout xLayout;
+    @BindView(R.id.tv_to_search)
+    DrawableCenterTextView tv_to_search;
 
     @BindView(R.id.recyclerView)
     RecyclerView message_recycler;
+
+    private XTitle xTitle;
 
     private List<IMMessageBean> IMMessageBeans = new ArrayList<>();
 
@@ -96,18 +100,18 @@ public class MessageFragment extends BaseFragment {
 
     @Override
     public int bindLayout() {
-        return R.layout.layout_normal_list_without_refresh;
+        return R.layout.fragment_message;
     }
 
     @Override
     public void doBusiness(Context mContext) {
-        xLayout.setStatus(XLayout.Success);
         initTitle();
         initRecycleView(message_recycler, R.drawable.shape_divider_1px);
+        message_recycler.setItemAnimator(new NoAlphaItemAnimator());
     }
 
     private void initTitle() {
-        XTitle xTitle = setFragmentTitle(R.string.title_message);
+        xTitle = setFragmentTitle(R.string.title_message);
         //添加action
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_person)) {
             @Override
@@ -214,21 +218,26 @@ public class MessageFragment extends BaseFragment {
             }
 
         });
-
         listAdapter.setOnItemLongClickListener(new CommonAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(CommonAdapter adapter, View view, final int position) {
-                DialogHelp.getSelectDialog(getActivity(), "", new String[]{"标为未读", "置顶聊天", "删除聊天"}, new DialogInterface.OnClickListener() {
+                DialogHelp.getSelectDialog(getActivity(), "", new String[]{"删除聊天"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == 2) {
-                            IMMessageBeans.remove(position);
-                            MessageUtils.removeMessageInfo(position);
-                            listAdapter.notifyDataSetChanged();
+                            MessageUtils.removeMessageInfo(IMMessageBeans.get(position).getConversationID());
+                            listAdapter.removeItem(position);
                         }
                     }
                 }, false).show();
                 return false;
+            }
+        });
+        tv_to_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -255,13 +264,9 @@ public class MessageFragment extends BaseFragment {
     //初始化弹窗
     private void initPopu(View popuView, PopupWindow popupWindow) {
         RelativeLayout find_man_layout = (RelativeLayout) popuView.findViewById(R.id.find_man_layout);
-        RelativeLayout find_square_layout = (RelativeLayout) popuView.findViewById(R.id.find_square_layout);
         RelativeLayout take_square_layout = (RelativeLayout) popuView.findViewById(R.id.take_square_layout);
-        RelativeLayout sweep_twocode_layout = (RelativeLayout) popuView.findViewById(R.id.sweep_twocode_layout);
         find_man_layout.setOnClickListener(new PopuClick(popupWindow));
-        find_square_layout.setOnClickListener(new PopuClick(popupWindow));
         take_square_layout.setOnClickListener(new PopuClick(popupWindow));
-        sweep_twocode_layout.setOnClickListener(new PopuClick(popupWindow));
     }
 
     //弹窗监听事件
@@ -283,11 +288,6 @@ public class MessageFragment extends BaseFragment {
                     intent.putExtra("search_index", 0);
                     startActivity(intent);
                     break;
-                case R.id.find_square_layout:
-                    intent = new Intent(getContext(), SearchPersonSquareActivity.class);
-                    intent.putExtra("search_index", 1);
-                    startActivity(intent);
-                    break;
                 case R.id.take_square_layout:
                     intent = new Intent(getContext(), ChooseContactActivity.class);
                     Bundle mBundle = new Bundle();
@@ -295,13 +295,11 @@ public class MessageFragment extends BaseFragment {
                     intent.putExtras(mBundle);
                     startActivity(intent);
                     break;
-                case R.id.sweep_twocode_layout:
-                    break;
             }
         }
     }
 
-    private class ListAdapter extends CommonAdapter<IMMessageBean,BaseViewHolder> {
+    private class ListAdapter extends CommonAdapter<IMMessageBean, BaseViewHolder> {
 
         private ListAdapter(int layoutId, List<IMMessageBean> datas) {
             super(layoutId, datas);
@@ -317,15 +315,16 @@ public class MessageFragment extends BaseFragment {
             int chatType = messageBean.getChatType();
             ImageView avatarIv = holder.getView(R.id.head_image);
             TextView messageTv = holder.getView(R.id.last_message);
-            Badge badge = new BadgeView(getActivity()).bindTarget(holder.getView(R.id.head_layout));
-            badge.setBadgeTextSize(10, true);
-            badge.setBadgeGravity(Gravity.TOP | Gravity.END);
 
             //未读数
             if (messageBean.getUnReadCounts().equals("0")) {
                 unRead = "";
-                badge.hide(true);
+                /*KLog.e("走这儿了的！！！");
+                badge.hide(true);*/
             } else {
+                Badge badge = new BadgeView(getActivity()).bindTarget(holder.getView(R.id.head_layout));
+                badge.setBadgeTextSize(10, true);
+                badge.setBadgeGravity(Gravity.TOP | Gravity.END);
                 badge.setBadgeText(messageBean.getUnReadCounts());
                 unRead = "[" + messageBean.getUnReadCounts() + "条] ";
             }
@@ -411,8 +410,16 @@ public class MessageFragment extends BaseFragment {
                         message = messageBean.getNickname() + "请求加入" + messageBean.getFriend_id();
                         ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv);
                         break;
+                    case "8":
+                        //群公告,群简介
+                        message = contentObject.getString("_lctext");
+                        break;
                     case "9":
                         message = "公众号消息";
+                        break;
+                    case "11":
+                        //股票消息
+                        message = "发来一条股票消息";
                         break;
                     default:
                         break;
@@ -524,6 +531,18 @@ public class MessageFragment extends BaseFragment {
     }
 
     /**
+     * 判断client连接状态
+     */
+    @Subscriber(tag = "connection_status")
+    public void clientStatus(String msg) {
+        if (msg.equals("connection_paused")) {
+            xTitle.setTitle(R.string.title_status);
+        } else if (msg.equals("connection_resume")) {
+            xTitle.setTitle(R.string.title_message);
+        }
+    }
+
+    /**
      * 消息接收
      */
     @Subscriber(tag = "IM_Message")
@@ -559,10 +578,9 @@ public class MessageFragment extends BaseFragment {
                 break;
             case "2":
                 //加好友
-                nickName = lcattrsObject.getString("nickname");
-                break;
             case "3":
                 //好友加入通讯录
+                nickName = lcattrsObject.getString("nickname");
                 break;
             case "4":
                 //好友从通讯录移除
@@ -577,10 +595,18 @@ public class MessageFragment extends BaseFragment {
                 nickName = lcattrsObject.getString("nickname");
                 friend_id = lcattrsObject.getString("group_name");
                 break;
+            case "8":
+                //群公告,群简介
+                nickName = lcattrsObject.getString("nickname");
+                friend_id = lcattrsObject.getString("group_name");
+                break;
             case "9":
                 //公众号
                 avatar = (String) conversation.getAttribute("avatar");
                 nickName = conversation.getName();
+                break;
+            case "11":
+                //股票消息
                 break;
             default:
                 break;
@@ -621,7 +647,6 @@ public class MessageFragment extends BaseFragment {
                 unreadmessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts().equals("") ? "0" : IMMessageBeans.get(i).getUnReadCounts()) + 1;
                 IMMessageBeans.get(i).setUnReadCounts(unreadmessage + "");
                 isTheSame = true;
-            } else {
             }
         }
 
@@ -655,7 +680,6 @@ public class MessageFragment extends BaseFragment {
         }
 
         listAdapter.notifyDataSetChanged();
-
     }
 
 }

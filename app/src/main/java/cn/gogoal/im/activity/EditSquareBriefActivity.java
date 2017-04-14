@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.socks.library.KLog;
 
 import java.util.HashMap;
@@ -24,8 +25,12 @@ import java.util.Map;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XTitle;
@@ -72,14 +77,15 @@ public class EditSquareBriefActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         final InputMethodManager inputMethodManager = (InputMethodManager) EditSquareBriefActivity.this.getSystemService(INPUT_METHOD_SERVICE);
-        xTitle = setMyTitle(R.string.im_str_square_brief, true);
         isCreater = getIntent().getBooleanExtra("is_creater", false);
         conversationID = getIntent().getStringExtra("conversation_id");
         isNotice = getIntent().getBooleanExtra("is_notice", false);
         if (isNotice) {
+            xTitle = setMyTitle(R.string.im_str_square_notice, true);
             tvCount.setVisibility(View.GONE);
             etGroupInfo.setFilters(new InputFilter[]{new InputFilter.LengthFilter(200)});
         } else {
+            xTitle = setMyTitle(R.string.im_str_square_brief, true);
             tvCount.setVisibility(View.VISIBLE);
             etGroupInfo.setFilters(new InputFilter[]{new InputFilter.LengthFilter(50)});
         }
@@ -181,15 +187,11 @@ public class EditSquareBriefActivity extends BaseActivity {
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if ((int) result.get("code") == 0) {
                     JSONObject jsonObject = (JSONObject) ((JSONObject) result.get("data")).get("attr");
-                    if (jsonObject.get("intro") != null) {
+                    if ((isNotice && null != jsonObject.get("notice")) || (!isNotice && null != jsonObject.get("intro"))) {
                         loadPb.setVisibility(View.GONE);
                         noInfoLayout.setVisibility(View.GONE);
                         editLayout.setVisibility(View.VISIBLE);
-                        if (isNotice) {
-                            etGroupInfo.setText(jsonObject.getString("notice"));
-                        } else {
-                            etGroupInfo.setText(jsonObject.getString("intro"));
-                        }
+                        etGroupInfo.setText(isNotice ? jsonObject.getString("notice") : jsonObject.getString("intro"));
                         initTitle(0x02);
                     } else {
                         loadPb.setVisibility(View.GONE);

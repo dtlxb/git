@@ -5,11 +5,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/message_list"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/message_swipe"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/message_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <View
         android:id="@+id/view_line"
@@ -31,9 +38,9 @@
             style="@style/BottomImageStyle"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="10dp"
-            android:src="@mipmap/chat_voice"
             android:contentDescription="@null"
-            android:paddingLeft="5dp" />
+            android:paddingLeft="5dp"
+            android:src="@mipmap/chat_voice" />
 
         <EditText
             android:id="@+id/et_input"
@@ -70,7 +77,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="7dp"
             android:contentDescription="@null"
-            android:src="@mipmap/chat_face" />
+            android:src="@mipmap/chat_face"
+            android:visibility="gone" />
 
         <FrameLayout
             android:id="@+id/flag_layout_send"

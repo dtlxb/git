@@ -67,6 +67,7 @@ public class ImageDisplay {
                     .load(url)
                     .dontAnimate()
                     .dontTransform()
+                    .dontAnimate().dontTransform()
                     .skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
                     .placeholder(R.mipmap.image_placeholder)

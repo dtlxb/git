@@ -1,9 +1,13 @@
 package cn.gogoal.im.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +23,7 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
+import com.socks.library.KLog;
 
 import java.util.List;
 
@@ -45,11 +50,14 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     //语音
     public static int TYPE_LEFT_VOICE_MESSAGE = 0x05;
     public static int TYPE_RIGHT_VOICE_MESSAGE = 0x06;
+    //股票
+    public static int TYPE_LEFT_STOCK_MESSAGE = 0x07;
+    public static int TYPE_RIGHT_STOCK_MESSAGE = 0x08;
     //未知消息
-    public static int TYPE_LEFT_UNKONW_MESSAGE = 0x07;
-    public static int TYPE_RIGHT_UNKONW_MESSAGE = 0x08;
+    public static int TYPE_LEFT_UNKONW_MESSAGE = 0x09;
+    public static int TYPE_RIGHT_UNKONW_MESSAGE = 0x10;
     //系统
-    public static int TYPE_SYSTEM_MESSAGE = 0x09;
+    public static int TYPE_SYSTEM_MESSAGE = 0x11;
     private List<AVIMMessage> messageList;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
@@ -75,6 +83,10 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             return new LeftAudioViewHolder(mLayoutInflater.inflate(R.layout.item_left_audio, parent, false));
         } else if (viewType == TYPE_RIGHT_VOICE_MESSAGE) {
             return new RightAudioViewHolder(mLayoutInflater.inflate(R.layout.item_right_audio, parent, false));
+        } else if (viewType == TYPE_RIGHT_STOCK_MESSAGE) {
+            return new RightStockViewHolder(mLayoutInflater.inflate(R.layout.item_right_text, parent, false));
+        } else if (viewType == TYPE_LEFT_STOCK_MESSAGE) {
+            return new LeftStockViewHolder(mLayoutInflater.inflate(R.layout.item_left_text, parent, false));
         } else if (viewType == TYPE_RIGHT_UNKONW_MESSAGE) {
             return new LeftUnKonwViewHolder(mLayoutInflater.inflate(R.layout.item_left_unknow, parent, false));
         } else if (viewType == TYPE_LEFT_UNKONW_MESSAGE) {
@@ -87,12 +99,14 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
 
         AVIMMessage avimMessage = messageList.get(position);
         JSONObject contentObject = JSON.parseObject(avimMessage.getContent());
+        JSONObject lcattrsObject = (JSONObject) contentObject.get("_lcattrs");
         String messageType = contentObject.getString("_lctype");
-        if (!messageType.equals("5") && !messageType.equals("6")) {
+        KLog.e(messageType);
+        if (!messageType.equals("5") && !messageType.equals("6") && !messageType.equals("8")) {
             if (chatType == 1001) {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.GONE);
             } else if (chatType == 1002) {
@@ -100,7 +114,8 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             } else {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
             }
-
+            ImageDisplay.loadNetImage(mContext, (String) lcattrsObject.get("avatar"), ((IMCHatViewHolder) holder).user_head_photo);
+        } else {
         }
         if (holder instanceof LeftTextViewHolder) {
             AVIMTextMessage textMessage = (AVIMTextMessage) avimMessage;
@@ -222,6 +237,30 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             });
 
             showMessageTime(position, ((LeftAudioViewHolder) holder).message_time);
+        } else if (holder instanceof LeftStockViewHolder) {
+            if (null != lcattrsObject) {
+                String stockCode = lcattrsObject.getString("stockCode");
+                SpannableStringBuilder stringBuilder = new SpannableStringBuilder("$ " + stockCode + " " + lcattrsObject.getString("stockName"));
+                ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor("#f53f3f")); // 设置字体颜色
+                stringBuilder.setSpan(fcs, 2, stockCode.length() + 2, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+                ((LeftStockViewHolder) holder).what_user_send.setText(stringBuilder);
+                ((LeftStockViewHolder) holder).user_name.setText(lcattrsObject.getString("username"));
+            }
+
+            showMessageTime(position, ((LeftStockViewHolder) holder).message_time);
+        } else if (holder instanceof RightStockViewHolder) {
+            if (null != lcattrsObject) {
+                String stockCode = lcattrsObject.getString("stockCode");
+                SpannableStringBuilder stringBuilder = new SpannableStringBuilder("$ " + stockCode + " " + lcattrsObject.getString("stockName"));
+                ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor("#f53f3f")); // 设置字体颜色
+                stringBuilder.setSpan(fcs, 2, stockCode.length() + 2, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+                ((RightStockViewHolder) holder).what_user_send.setText(stringBuilder);
+                ((RightStockViewHolder) holder).user_name.setVisibility(View.GONE);
+            }
+
+            showMessageTime(position, ((RightStockViewHolder) holder).message_time);
         } else if (holder instanceof LeftUnKonwViewHolder) {
             ((LeftUnKonwViewHolder) holder).user_name.setText(avimMessage.getFrom());
             showMessageTime(position, ((LeftUnKonwViewHolder) holder).message_time);
@@ -248,7 +287,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         JSONObject contentObject = JSON.parseObject(message.getContent());
         String _lctype = contentObject.getString("_lctype");
         boolean isYourSelf = message.getFrom().endsWith(UserUtils.getUserAccountId());
-
+        KLog.e(contentObject);
         switch (_lctype) {
             case "-1":
                 if (isYourSelf) {
@@ -270,7 +309,14 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 }
             case "5":
             case "6":
+            case "8":
                 return TYPE_SYSTEM_MESSAGE;
+            case "11":
+                if (isYourSelf) {
+                    return TYPE_RIGHT_STOCK_MESSAGE;
+                } else {
+                    return TYPE_LEFT_STOCK_MESSAGE;
+                }
             default:
                 if (isYourSelf) {
                     return TYPE_RIGHT_UNKONW_MESSAGE;
@@ -434,6 +480,28 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             animView = itemView.findViewById(R.id.recorder_anim);
             recorder_time = (TextView) itemView.findViewById(R.id.recorder_time);
         }
+    }
+
+    private class RightStockViewHolder extends IMCHatViewHolder {
+
+        private TextView what_user_send;
+
+        RightStockViewHolder(View itemView) {
+            super(itemView);
+            what_user_send = (TextView) itemView.findViewById(R.id.what_user_send);
+        }
+    }
+
+    private class LeftStockViewHolder extends IMCHatViewHolder {
+
+        private TextView what_user_send;
+
+        LeftStockViewHolder(View itemView) {
+            super(itemView);
+            user_name = (TextView) itemView.findViewById(R.id.user_name);
+            what_user_send = (TextView) itemView.findViewById(R.id.what_user_send);
+        }
+
     }
 
     private class LeftUnKonwViewHolder extends IMCHatViewHolder {

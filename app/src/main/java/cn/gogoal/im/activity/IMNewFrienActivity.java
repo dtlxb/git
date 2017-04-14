@@ -104,7 +104,7 @@ public class IMNewFrienActivity extends BaseActivity {
     }
 
 
-    class ListAdapter extends CommonAdapter<IMNewFriendBean,BaseViewHolder> {
+    class ListAdapter extends CommonAdapter<IMNewFriendBean, BaseViewHolder> {
 
         public ListAdapter(Context context, int layoutId, List<IMNewFriendBean> datas) {
             super(layoutId, datas);
@@ -195,6 +195,7 @@ public class IMNewFrienActivity extends BaseActivity {
                         view.setBackgroundResource(R.color.absoluteWhite);
                         view.setClickable(true);
 
+                        //列表缓存
                         for (int i = 0; i < jsonArray.size(); i++) {
 
                             JSONObject jsonObject = (JSONObject) jsonArray.get(i);

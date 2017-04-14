@@ -28,7 +28,7 @@
         android:textColor="@color/textColor_333333"
         android:textSize="17sp" />
 
-    <RelativeLayout
+   <!-- <RelativeLayout
         android:id="@+id/getmessage_swith"
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -52,6 +52,6 @@
             android:layout_centerVertical="true"
             android:background="@null" />
 
-    </RelativeLayout>
+    </RelativeLayout>-->
 
 </LinearLayout>

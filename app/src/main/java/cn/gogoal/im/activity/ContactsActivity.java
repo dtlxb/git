@@ -75,8 +75,6 @@ public class ContactsActivity extends BaseActivity {
         tvParams.width = AppDevice.getWidth(getActivity()) / 4;
         tvParams.height = AppDevice.getWidth(getActivity()) / 4;
         tvConstactsFlag.setLayoutParams(tvParams);
-        Boolean needRefresh = SPTools.getBoolean("contactsNeedRefresh", false);
-        KLog.e(needRefresh);
 
         //初始化
         LinearLayoutManager layoutManager;
@@ -92,7 +90,7 @@ public class ContactsActivity extends BaseActivity {
         //添加联系人功能头部item
         addContactHead();
 
-        getData(needRefresh);//联系人列表数据
+        getData();//联系人列表数据
 
         contactAdapter = new ContactAdapter(getActivity(), contactBeanList);
 
@@ -128,23 +126,31 @@ public class ContactsActivity extends BaseActivity {
 
         contactAdapter.setOnItemLongClickListener(new CommonAdapter.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(CommonAdapter adapter, View view,final int position) {
+            public boolean onItemLongClick(CommonAdapter adapter, View view, final int position) {
                 if (position > 1) {
                     DialogHelp.getSelectDialog(getActivity(), "", new String[]{"删除联系人"}, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             deleteFriend(contactBeanList.get(position).getFriend_id());
                             String string = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", null);
+                            KLog.e(string);
                             //清除缓存中的这个人
                             if (string != null && !(string.equals(""))) {
                                 JSONObject jsonObject = JSON.parseObject(string);
+                                KLog.e(jsonObject.toString());
                                 if (jsonObject.get("data") != null) {
                                     JSONArray jsonArray = jsonObject.getJSONArray("data");
-                                    if (null != jsonArray) {
-                                        jsonArray.remove(position - 2);
+                                    KLog.e(jsonArray.toString());
+                                    for (int i = 0; i < jsonArray.size(); i++) {
+                                        JSONObject thisObject = (JSONObject) jsonArray.get(i);
+                                        if (thisObject.getInteger("friend_id") == contactBeanList.get(position).getFriend_id()) {
+                                            jsonArray.remove(jsonArray.get(i));
+                                        }
                                     }
                                     jsonObject.put("data", jsonArray);
+                                    KLog.e(jsonObject);
                                     SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", JSON.toJSONString(jsonObject));
+                                    KLog.e(SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", ""));
                                 }
                             }
                             //刷新列表
@@ -163,10 +169,10 @@ public class ContactsActivity extends BaseActivity {
         indexBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
-    private void getData(Boolean needRefresh) {
+    private void getData() {
         //缓存的联系人请求数据
         String friendResponseInfo = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", "");
-        if (needRefresh) {
+        if (friendResponseInfo.equals("")) {
             getFriendList(contactBeanList);
         } else {
             if (!JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()) {
@@ -226,7 +232,6 @@ public class ContactsActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
 
                 KLog.e(responseInfo);
-                SPTools.clearItem("contactsNeedRefresh");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", responseInfo);
                     parseContactDatas(responseInfo, contactBeanList);

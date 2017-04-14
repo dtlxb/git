@@ -5,17 +5,23 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
+import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.FoundFragment;
 import cn.gogoal.im.fragment.MessageFragment;
@@ -58,8 +64,12 @@ public class MainActivity extends BaseActivity {
         final MineFragment mineFragment = new MineFragment();                 // TAB4 我的
 
         Boolean needRefresh = getIntent().getBooleanExtra("isFromLogin", false);
-        SPTools.saveBoolean("contactsNeedRefresh", needRefresh);
         SPTools.saveBoolean("squareNeedRefresh", needRefresh);
+
+        if (needRefresh) {
+            //拉取好友列表
+            getFriendList();
+        }
 
         List<Fragment> tabFragments = new ArrayList<>();
         tabFragments.add(messageFragment);
@@ -112,5 +122,33 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+    }
+
+    private void getFriendList() {
+
+        Map<String, String> param = new HashMap<>();
+
+        param.put("token", UserUtils.getToken());
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+
+                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                    SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", responseInfo);
+                } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
+                    SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", "{\"code\":0,\"data\":[],\"message\":\"成功\"}");
+                } else {
+                    UIHelper.toastError(getActivity(), GGOKHTTP.getMessage(responseInfo));
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                KLog.e(msg);
+                UIHelper.toastError(getActivity(), msg);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.GET_FRIEND_LIST, ggHttpInterface).startGet();
     }
 }

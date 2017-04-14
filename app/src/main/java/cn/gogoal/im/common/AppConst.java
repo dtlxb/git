@@ -64,7 +64,6 @@ public class AppConst {
     public static final String businessId = "video_live";
     public static final String accessKeyId = "LTAI1KypPpiBhPAx";
     public static final String accessKeySecret = "vb0kunzWvhxV6WHrH4Znv1BeJFJ2xV";
-
     //正式用
     public static final String WEB_DAMIN = "http://ggmobile.go-goal.cn/";
     public static final int RESULT_OK = 0;
@@ -79,4 +78,27 @@ public class AppConst {
     public static final int UPDATE_DISCUSS = 8;
     public static final int SUCESSACTIVITY_FINSH = 9;
     public static final int REFRESH_KLINE_DATA = 10;
+    /**
+     * webView地址
+     */
+    //开发环境
+//    public static final String WEB_URL = "http://192.168.72.155:9000";
+    public static final String WEB_URL = "http://192.168.52.156:9000";
+    //预正式环境
+//    public static final String WEB_URL = "http://192.168.52.156:9000";
+    //正式环境
+//    public static final String WEB_URL = "http://211.144.193.162:8085";
+
+    //直播分享
+    public static final String GG_LIVE_SHARE = WEB_URL + "/live/share/";
+    //发起直播填写信息
+    public static final String GG_LIVE_APPLY = WEB_URL + "/live/apply";
+    //直播录播列表
+    public static final String GG_LIVE_LIST = WEB_URL + "/live/list";
+    //中国研网
+    public static final String GG_RESEARCH = WEB_URL + "/research";
+    //精要研报
+    public static final String GG_REPORT = WEB_URL + "/report";
+    //文字一分钟
+    public static final String GG_TEXT = WEB_URL + "/text";
 }

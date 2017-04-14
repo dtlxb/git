@@ -16,6 +16,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -92,6 +93,7 @@ public class EditSquareNameActivity extends BaseActivity {
                         }
                     }
                     SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", jsonArray);
+                    AppManager.getInstance().sendMessage("correct_square_name", editSquareName.getText().toString());
                 } else {
                     UIHelper.toast(getActivity(), "群名称修改失败");
                 }

@@ -23,7 +23,6 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.FoundData;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.GGOKHTTP.GGAPI;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.permission.IPermissionListner;
@@ -142,12 +141,9 @@ public class MainAdapter extends CommonAdapter<FoundData,BaseViewHolder> {
             intent.putExtra("title", itemPojos.getItemTextDescription());
             switch (position) {
                 case 0:
-//                    intent.putExtra("function_url", itemPojos.getUrl());
-                    intent.putExtra("function_url", GGAPI.WEB_URL + "/live/list");
                     context.startActivity(intent);
                     break;
                 case 1:
-                    intent.putExtra("function_url", GGAPI.WEB_URL + "/research");
                     context.startActivity(intent);
                     break;
                 case 2:
@@ -179,8 +175,6 @@ public class MainAdapter extends CommonAdapter<FoundData,BaseViewHolder> {
                 case 0:
                     Intent intent = new Intent(context, FunctionActivity.class);
                     intent.putExtra("title", itemPojos.getItemTextDescription());
-                    //intent.putExtra("function_url", itemPojos.getItemTextDescription());
-                    intent.putExtra("function_url", GGAPI.WEB_URL + "/report");
                     context.startActivity(intent);
                     break;
                 case 1:
@@ -200,7 +194,6 @@ public class MainAdapter extends CommonAdapter<FoundData,BaseViewHolder> {
                     Intent intent = new Intent(context, FunctionActivity.class);
                     intent.putExtra("title", itemPojos.getItemTextDescription());
                     //intent.putExtra("function_url", itemPojos.getItemTextDescription());
-                    intent.putExtra("function_url", GGAPI.WEB_URL + "/text");
                     context.startActivity(intent);
                     break;
             }
