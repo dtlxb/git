@@ -13,22 +13,16 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,16 +32,8 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.alivc.player.AliVcMediaPlayer;
 import com.alivc.player.MediaPlayer;
-import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.avos.avoscloud.im.v2.AVIMException;
-import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
-import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.socks.library.KLog;
 
-import org.simple.eventbus.Subscriber;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,23 +44,17 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.RelaterVideoData;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
-import cn.gogoal.im.common.GGOKHTTP.GGAPI;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.PlayerUtils.CountDownTimerView;
 import cn.gogoal.im.common.PlayerUtils.PlayerControl;
 import cn.gogoal.im.common.PlayerUtils.StatusListener;
 import cn.gogoal.im.common.PlayerUtils.TextAndImage;
-import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.widget.BottomSheetNormalDialog;
-import cn.gogoal.im.ui.widget.EditTextDialog;
+import cn.gogoal.im.ui.widget.PopupWindowHelper;
 
 /**
  * Created by dave.
@@ -86,10 +66,6 @@ public class PlayerActivity extends BaseActivity {
     @BindView(R.id.GLViewContainer)
     FrameLayout frameContainer;
 
-    @BindView(R.id.recycPortrait)
-    RecyclerView recyler_chat;
-    @BindView(R.id.linearPlayerChat)
-    LinearLayout linearPlayerChat;
     @BindView(R.id.linearPlayerProfiles)
     LinearLayout linearPlayerProfiles;
     @BindView(R.id.linearPlayerRelaterVideo)
@@ -106,14 +82,6 @@ public class PlayerActivity extends BaseActivity {
     TextView textMarInter;
     @BindView(R.id.textOnlineNumber)
     TextView textOnlineNumber;
-
-    //一起直播
-    @BindView(R.id.liveTogether)
-    TextView liveTogether;
-
-    //直播预告展示
-    @BindView(R.id.countDownTimer)
-    CountDownTimerView countDownTimer;
 
     //缓冲控件
     @BindView(R.id.LayoutTip)
@@ -132,28 +100,6 @@ public class PlayerActivity extends BaseActivity {
     SeekBar mSeekBar;
     @BindView(R.id.totalDuration)
     TextView totalDuration;
-
-    //横屏侧滑
-    @BindView(R.id.drawer_player)
-    DrawerLayout drawer_player;
-    @BindView(R.id.lay_right_menu)
-    FrameLayout menuLayout;
-    //主播介绍
-    @BindView(R.id.drawerLinearProfiles)
-    LinearLayout drawerLinearProfiles;
-    @BindView(R.id.anchor_avatar)
-    ImageView anchor_avatar;
-    @BindView(R.id.anchor_name)
-    TextView anchor_name;
-    @BindView(R.id.anchor_position)
-    TextView anchor_position;
-    @BindView(R.id.anchor_achieve)
-    TextView anchor_achieve;
-    //相关视频
-    @BindView(R.id.linearRelaterVideo)
-    LinearLayout linearRelaterVideo;
-    @BindView(R.id.recy_relater)
-    RecyclerView recy_relater;
 
 
     private boolean mEnableUpdateProgress = true;
@@ -197,22 +143,17 @@ public class PlayerActivity extends BaseActivity {
     //视频播放位置
     private int mPosition = 0;
     private int mVolumn = 50;
-    private List<AVIMMessage> messageList = new ArrayList<>();
-    private LiveChatAdapter mLiveChatAdapter;
 
     private String mURI;
 
-    //聊天对象
-    private AVIMConversation imConversation;
-
     private String live_id;
-    private String source;
-    private String room_id;
 
-    //直播介绍
+    //弹窗
     private JSONObject anchor;
-
     private List<RelaterVideoData> videoDatas;
+    private PopupWindowHelper anchorHelper;
+    private PopupWindowHelper anchorHelperLand;
+    private PopupWindowHelper relaterHelper;
 
     private Handler mTimerHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -250,7 +191,6 @@ public class PlayerActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
 
         live_id = getIntent().getStringExtra("live_id");
-        source = getIntent().getStringExtra("source");
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -265,27 +205,7 @@ public class PlayerActivity extends BaseActivity {
 
         initSurface();
 
-        initRecycleView(recyler_chat, null);
-
-        mLiveChatAdapter = new LiveChatAdapter(PlayerActivity.this, R.layout.item_live_chat, messageList);
-        recyler_chat.setAdapter(mLiveChatAdapter);
-
-        if (!TextUtils.isEmpty(source)) {
-            if (source.equals("live")) {
-                linearPlayerChat.setVisibility(View.VISIBLE);
-            } else if (source.equals("video")) {
-                linearPlayerChat.setVisibility(View.GONE);
-            }
-        }
-
         getRelaterVideoInfo();
-        getCanLiveTogether();
-
-        drawer_player.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-    }
-
-    @Override
-    public void setStatusBar() {
     }
 
     /**
@@ -294,12 +214,7 @@ public class PlayerActivity extends BaseActivity {
     private void getPlayerInfo() {
 
         Map<String, String> param = new HashMap<>();
-
-        if (source.equals("live")) {
-            param.put("live_id", live_id);
-        } else if (source.equals("video")) {
-            param.put("video_id", live_id);
-        }
+        param.put("video_id", live_id);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -318,75 +233,14 @@ public class PlayerActivity extends BaseActivity {
                     if (anchor == null) {
                         linearPlayerProfiles.setVisibility(View.GONE);
                     } else {
+                        showAnchorProfiles();
+                        showAnchorProfilesLand();
                         linearPlayerProfiles.setVisibility(View.VISIBLE);
-
-                        ImageDisplay.loadNetImage(getContext(), anchor.getString("face_url"), anchor_avatar);
-                        anchor_name.setText(anchor.getString("anchor_name"));
-                        anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
-
-                        if (!anchor.getString("anchor_introduction").equals("")) {
-                            anchor_achieve.setText(anchor.getString("anchor_introduction"));
-
-                            final ViewTreeObserver observer = anchor_avatar.getViewTreeObserver();
-                            observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                                @Override
-                                public void onGlobalLayout() {
-                                    anchor_avatar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                                    int finalHeight = anchor_avatar.getMeasuredHeight();
-                                    int finalWidth = anchor_avatar.getMeasuredWidth();
-                                    TextAndImage.makeSpan(finalHeight, finalWidth, anchor_achieve);
-                                }
-                            });
-                        }
                     }
 
-                    if (source.equals("live")) {
-                        //倒计时
-                        if (data.getLongValue("launch_time") > 0) {
-                            countDownTimer.setVisibility(View.VISIBLE);
-                            countDownTimer.addTime(data.getString("live_time_start"));
-                            countDownTimer.start();
+                    mURI = data.getString("video_file");
 
-                            countDownTimer.setDownCallBack(new CountDownTimerView.CountDownCallBack() {
-                                @Override
-                                public void startPlayer() {
-                                    countDownTimer.setVisibility(View.GONE);
-                                    startToPlay(mURI);
-                                }
-                            });
-                        } else {
-                            countDownTimer.setVisibility(View.GONE);
-                        }
-
-                        mURI = data.getString("url_rtmp");
-                        room_id = data.getString("room_id");
-
-                        AVImClientManager.getInstance().findConversationById(room_id, new AVImClientManager.ChatJoinManager() {
-                            @Override
-                            public void joinSuccess(AVIMConversation conversation) {
-                                imConversation = conversation;
-                                joinSquare(imConversation);
-                            }
-
-                            @Override
-                            public void joinFail(String error) {
-                                KLog.e(room_id);
-                                UIHelper.toast(getActivity(), "获取聊天房间失败");
-                            }
-                        });
-
-                        getOnlineCount(room_id);
-
-                        LayoutProgress.setVisibility(View.GONE);
-
-                    } else if (source.equals("video")) {
-
-                        mURI = data.getString("video_file");
-
-                        textOnlineNumber.setText("0人在线");
-
-                        LayoutProgress.setVisibility(View.VISIBLE);
-                    }
+                    textOnlineNumber.setText("0人在线");
 
                     startToPlay(mURI);
 
@@ -401,44 +255,8 @@ public class PlayerActivity extends BaseActivity {
                 UIHelper.toast(getContext(), R.string.net_erro_hint);
             }
         };
-        if (source.equals("live")) {
-            new GGOKHTTP(param, GGOKHTTP.GET_STUDIO_LIST, ggHttpInterface).startGet();
-        } else if (source.equals("video")) {
-            new GGOKHTTP(param, GGOKHTTP.GET_RECORD_LIST, ggHttpInterface).startGet();
-        }
-    }
 
-    /**
-     * 加入聊天室
-     */
-    private void joinSquare(AVIMConversation conversation) {
-        conversation.join(new AVIMConversationCallback() {
-            @Override
-            public void done(AVIMException e) {
-                if (e == null) {
-
-                }
-            }
-        });
-    }
-
-    /**
-     * 消息接收
-     */
-    @Subscriber(tag = "IM_Message")
-    public void handleMessage(BaseMessage baseMessage) {
-        if (null != imConversation && null != baseMessage) {
-            Map<String, Object> map = baseMessage.getOthers();
-            AVIMMessage message = (AVIMMessage) map.get("message");
-            AVIMConversation conversation = (AVIMConversation) map.get("conversation");
-
-            //判断房间一致然后做消息接收处理
-            if (imConversation.getConversationId().equals(conversation.getConversationId())) {
-                messageList.add(message);
-                mLiveChatAdapter.notifyDataSetChanged();
-                recyler_chat.smoothScrollToPosition(messageList.size());
-            }
-        }
+        new GGOKHTTP(param, GGOKHTTP.GET_RECORD_LIST, ggHttpInterface).startGet();
     }
 
     /**
@@ -691,11 +509,7 @@ public class PlayerActivity extends BaseActivity {
             // 初始化播放器
             mPlayer = new AliVcMediaPlayer(this, mSurfaceView);
             //媒体类型 Live 表示直播；Vod 表示点播
-            if (source.equals("live")) {
-                mPlayer.setMediaType(MediaPlayer.MediaType.Live);
-            } else if (source.equals("video")) {
-                mPlayer.setMediaType(MediaPlayer.MediaType.Vod);
-            }
+            mPlayer.setMediaType(MediaPlayer.MediaType.Vod);
             mPlayer.setPreparedListener(new VideoPreparedListener());
             mPlayer.setErrorListener(new VideoErrorListener());
             mPlayer.setInfoListener(new VideoInfolistener());
@@ -941,7 +755,7 @@ public class PlayerActivity extends BaseActivity {
         if (bShowPause) {
             LayoutProgress.setVisibility(View.VISIBLE);
         } else {
-            //LayoutProgress.setVisibility(View.GONE);
+            LayoutProgress.setVisibility(View.GONE);
         }
     }
 
@@ -1136,167 +950,103 @@ public class PlayerActivity extends BaseActivity {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             isStopPlayer = true;
-            if (drawer_player.isDrawerOpen(menuLayout)) {
-                drawer_player.closeDrawer(menuLayout);
-            }
         }
 
         return super.onKeyDown(keyCode, event);
     }
 
-    @OnClick({R.id.imgPlayerChat, R.id.imgPlayerProfiles, R.id.imgPlayerRelaterVideo, R.id.imgPlayerShare,
-            R.id.imgPlayerShotCut, R.id.imgPlayerClose, R.id.liveTogether})
+    @OnClick({R.id.imgPlayerProfiles, R.id.imgPlayerRelaterVideo, R.id.imgPlayerShare,
+            R.id.imgPlayerClose})
     public void setClickFunctionBar(View v) {
         switch (v.getId()) {
-            case R.id.imgPlayerChat: //发消息
-                showPlayerChat();
-                break;
             case R.id.imgPlayerProfiles: //主播介绍
-                if(drawer_player.isDrawerOpen(menuLayout)) {
-                    drawer_player.closeDrawer(menuLayout);
-                }else {
-                    if (AppDevice.isLandscape(getContext())) {
-                        drawer_player.openDrawer(Gravity.END,true);
-
-                        drawerLinearProfiles.setVisibility(View.VISIBLE);
-                        linearRelaterVideo.setVisibility(View.GONE);
-
-                    } else {
-                        showAnchorProfiles();
-                    }
+                if (AppDevice.isLandscape(getContext())) {
+                    anchorHelperLand.showFromRight(v);
+                } else {
+                    anchorHelper.showFromBottom(v);
                 }
                 break;
             case R.id.imgPlayerRelaterVideo: //相关视频
-                if(drawer_player.isDrawerOpen(menuLayout)) {
-                    drawer_player.closeDrawer(menuLayout);
-                }else {
-                    if (AppDevice.isLandscape(getContext())) {
-                        drawer_player.openDrawer(Gravity.END,true);
-
-                        drawerLinearProfiles.setVisibility(View.GONE);
-                        linearRelaterVideo.setVisibility(View.VISIBLE);
-
-                        initRecycleView(recy_relater, null);
-                        recy_relater.setAdapter(new RelaterVideoAdapter(getContext(), videoDatas));
-                    } else {
-                        showRelaterVideo();
-                    }
+                if (AppDevice.isLandscape(getContext())) {
+                    relaterHelper.showFromRight(v);
+                } else {
+                    relaterHelper.showFromBottom(v);
                 }
                 break;
             case R.id.imgPlayerShare: //分享
-                DialogHelp.showShareDialog(getContext(), GGAPI.WEB_URL + "/live/share/" + live_id, "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
-                break;
-            case R.id.imgPlayerShotCut:
+                DialogHelp.showShareDialog(getContext(), AppConst.GG_LIVE_SHARE + live_id + "?video", "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
                 break;
             case R.id.imgPlayerClose: //退出
                 finish();
                 break;
-            case R.id.liveTogether: //一起直播
-                JSONObject dataUrl = SPTools.getJsonObject("liveTogetherData", null);
-
-                Intent intent = new Intent(getContext(), LiveTogetherActivity.class);
-                intent.putExtra("pushUrl", dataUrl.getString("stream_url") + dataUrl.getString("stream_secret"));
-                startActivity(intent);
-                break;
         }
     }
 
-    private void showPlayerChat() {
-        final EditTextDialog dialog = new EditTextDialog();
-        dialog.show(getContext().getSupportFragmentManager());
+    private void showAnchorProfiles() {
+        View anchorIntroduction = LayoutInflater.from(this).inflate(R.layout.dialog_anchor_introduction, null);
+        anchorHelper = new PopupWindowHelper(anchorIntroduction);
 
-        dialog.setOnSendButtonClick(new EditTextDialog.OnSendMessageListener() {
-            @Override
-            public void doSend(View view, final EditText player_edit) {
+        final ImageView anchor_avatar = (ImageView) anchorIntroduction.findViewById(R.id.anchor_avatar);
+        TextView anchor_name = (TextView) anchorIntroduction.findViewById(R.id.anchor_name);
+        TextView anchor_position = (TextView) anchorIntroduction.findViewById(R.id.anchor_position);
+        final TextView anchor_achieve = (TextView) anchorIntroduction.findViewById(R.id.anchor_achieve);
 
-                if (null != imConversation) {
+        ImageDisplay.loadNetImage(getContext(), anchor.getString("face_url"), anchor_avatar);
+        anchor_name.setText(anchor.getString("anchor_name"));
+        anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
 
-                    //前端显示
-                    HashMap<String, Object> attrsMap = new HashMap<String, Object>();
-                    attrsMap.put("username", UserUtils.getUserName());
 
-                    final AVIMTextMessage msg = new AVIMTextMessage();
-                    msg.setText(player_edit.getText().toString());
-                    msg.setAttrs(attrsMap);
+        if (anchor.getString("anchor_introduction") != null) {
+            anchor_achieve.setText(anchor.getString("anchor_introduction"));
 
-                    messageList.add(msg);
-                    mLiveChatAdapter.notifyDataSetChanged();
-                    recyler_chat.smoothScrollToPosition(messageList.size());
-
-                    //聊天内容发往后台
-                    Map<Object, Object> messageMap = new HashMap<>();
-                    messageMap.put("_lctype", "-1");
-                    messageMap.put("_lctext", player_edit.getText().toString());
-                    messageMap.put("_lcattrs", AVImClientManager.getInstance().userBaseInfo());
-
-                    HashMap<String, String> params = new HashMap<>();
-                    params.put("token", UserUtils.getUserAccountId());
-                    params.put("conv_id", imConversation.getConversationId());
-                    params.put("chat_type", "1003");
-                    params.put("message", JSONObject.toJSON(messageMap).toString());
-
-                    //发送文字消息
-                    GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-                        @Override
-                        public void onSuccess(String responseInfo) {
-                            KLog.json(responseInfo);
-                            dialog.dismiss();
-                            player_edit.setText("");
-                        }
-
-                        @Override
-                        public void onFailure(String msg) {
-                            KLog.json(msg);
-                        }
-                    };
-                    new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
+            final ViewTreeObserver observer = anchor_avatar.getViewTreeObserver();
+            observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    anchor_avatar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    int finalHeight = anchor_avatar.getMeasuredHeight();
+                    int finalWidth = anchor_avatar.getMeasuredWidth();
+                    TextAndImage.makeSpan(finalHeight, finalWidth, anchor_achieve);
                 }
-            }
-        });
+            });
+        }
     }
 
-    private void showAnchorProfiles() {
+    private void showAnchorProfilesLand() {
+        View anchorIntroduction = LayoutInflater.from(this).inflate(R.layout.dialog_anchor_introduction_land, null);
+        anchorHelperLand = new PopupWindowHelper(anchorIntroduction);
 
-        DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_anchor_introduction, new BottomSheetNormalDialog.ViewListener() {
+        final ImageView anchor_avatar = (ImageView) anchorIntroduction.findViewById(R.id.anchor_avatar);
+        TextView anchor_name = (TextView) anchorIntroduction.findViewById(R.id.anchor_name);
+        TextView anchor_position = (TextView) anchorIntroduction.findViewById(R.id.anchor_position);
+        final TextView anchor_achieve = (TextView) anchorIntroduction.findViewById(R.id.anchor_achieve);
+
+        ImageDisplay.loadNetImage(getContext(), anchor.getString("face_url"), anchor_avatar);
+        anchor_name.setText(anchor.getString("anchor_name"));
+        anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
+
+        anchor_achieve.setText(anchor.getString("anchor_introduction"));
+
+        final ViewTreeObserver observer = anchor_avatar.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public void bindDialogView(BottomSheetNormalDialog dialog, View dialogView) {
-                final ImageView anchor_avatar = (ImageView) dialogView.findViewById(R.id.anchor_avatar);
-                TextView anchor_name = (TextView) dialogView.findViewById(R.id.anchor_name);
-                TextView anchor_position = (TextView) dialogView.findViewById(R.id.anchor_position);
-                final TextView anchor_achieve = (TextView) dialogView.findViewById(R.id.anchor_achieve);
-
-                ImageDisplay.loadNetImage(getContext(), anchor.getString("face_url"), anchor_avatar);
-                anchor_name.setText(anchor.getString("anchor_name"));
-                anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
-
-                anchor_achieve.setText(anchor.getString("anchor_introduction"));
-
-                final ViewTreeObserver observer = anchor_avatar.getViewTreeObserver();
-                observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        anchor_avatar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        int finalHeight = anchor_avatar.getMeasuredHeight();
-                        int finalWidth = anchor_avatar.getMeasuredWidth();
-                        TextAndImage.makeSpan(finalHeight, finalWidth, anchor_achieve);
-                    }
-                });
+            public void onGlobalLayout() {
+                anchor_avatar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int finalHeight = anchor_avatar.getMeasuredHeight();
+                int finalWidth = anchor_avatar.getMeasuredWidth();
+                TextAndImage.makeSpan(finalHeight, finalWidth, anchor_achieve);
             }
         });
-
     }
 
     private void showRelaterVideo() {
+        View relaterVideo = LayoutInflater.from(this).inflate(R.layout.dialog_relater_video, null);
+        relaterHelper = new PopupWindowHelper(relaterVideo);
 
-        DialogHelp.getBottomSheelNormalDialog(getContext(), R.layout.dialog_relater_video, new BottomSheetNormalDialog.ViewListener() {
-            @Override
-            public void bindDialogView(BottomSheetNormalDialog dialog, View dialogView) {
-                RecyclerView recy_relater = (RecyclerView) dialogView.findViewById(R.id.recy_relater);
-                initRecycleView(recy_relater, null);
+        RecyclerView recy_relater = (RecyclerView) relaterVideo.findViewById(R.id.recy_relater);
+        initRecycleView(recy_relater, null);
 
-                recy_relater.setAdapter(new RelaterVideoAdapter(getContext(), videoDatas));
-            }
-        });
+        recy_relater.setAdapter(new RelaterVideoAdapter(getContext(), videoDatas));
     }
 
     /*
@@ -1306,12 +1056,7 @@ public class PlayerActivity extends BaseActivity {
 
         Map<String, String> param = new HashMap<>();
         param.put("video_id", live_id);
-
-        if (source.equals("live")) {
-            param.put("video_type", "1");
-        } else if (source.equals("video")) {
-            param.put("video_type", "2");
-        }
+        param.put("video_type", "2");
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -1323,6 +1068,7 @@ public class PlayerActivity extends BaseActivity {
                         linearPlayerRelaterVideo.setVisibility(View.GONE);
                     } else {
                         linearPlayerRelaterVideo.setVisibility(View.VISIBLE);
+                        showRelaterVideo();
                     }
                 } else {
                     linearPlayerRelaterVideo.setVisibility(View.GONE);
@@ -1338,7 +1084,7 @@ public class PlayerActivity extends BaseActivity {
         new GGOKHTTP(param, GGOKHTTP.GET_RELATED_VIDEO, ggHttpInterface).startGet();
     }
 
-    class RelaterVideoAdapter extends CommonAdapter<RelaterVideoData,BaseViewHolder> {
+    class RelaterVideoAdapter extends CommonAdapter<RelaterVideoData, BaseViewHolder> {
 
         public RelaterVideoAdapter(Context context, List<RelaterVideoData> list) {
             super(R.layout.item_relater_video, list);
@@ -1362,86 +1108,6 @@ public class PlayerActivity extends BaseActivity {
             holder.setText(R.id.relater_name, data.getAnchor_name());
             holder.setText(R.id.relater_content, data.getProgramme_name());
         }
-    }
-
-    class LiveChatAdapter extends CommonAdapter<AVIMMessage,BaseViewHolder> {
-
-        public LiveChatAdapter(Context context, int layoutId, List<AVIMMessage> datas) {
-            super(context, layoutId, datas);
-        }
-
-        @Override
-        protected void convert(BaseViewHolder holder, AVIMMessage message, int position) {
-            AVIMTextMessage msg = (AVIMTextMessage) message;
-            String username = msg.getAttrs().get("username") + ": ";
-
-            TextView textSend = holder.getView(R.id.text_you_send);
-            textSend.setText(username + msg.getText());
-
-            SpannableStringBuilder builder = new SpannableStringBuilder(textSend.getText().toString());
-            ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.live_chat_level1));
-            ForegroundColorSpan Span2 = new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.textColor_333333));
-            builder.setSpan(Span1, 0, username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            builder.setSpan(Span2, username.length(), textSend.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            textSend.setText(builder);
-        }
-    }
-
-    /*
-    * 获取能否一起直播
-    * */
-    private void getCanLiveTogether() {
-
-        Map<String, String> param = new HashMap<>();
-        param.put("token", UserUtils.getToken());
-        param.put("video_id", live_id);
-
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
-                JSONObject object = JSONObject.parseObject(responseInfo);
-                if (object.getIntValue("code") == 0) {
-                    liveTogether.setVisibility(View.VISIBLE);
-                    SPTools.saveJsonObject("liveTogetherData", object.getJSONObject("data"));
-                } else {
-                    liveTogether.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                UIHelper.toast(getContext(), R.string.net_erro_hint);
-            }
-        };
-        new GGOKHTTP(param, GGOKHTTP.GET_PUSH_STREAM, ggHttpInterface).startGet();
-    }
-
-    /*
-    * 获取直播在线人数
-    * */
-    private void getOnlineCount(String room_id) {
-
-        Map<String, String> param = new HashMap<>();
-        param.put("conv_id", room_id);
-
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
-                JSONObject object = JSONObject.parseObject(responseInfo);
-                if (object.getIntValue("code") == 0) {
-                    JSONObject data = object.getJSONObject("data");
-                    textOnlineNumber.setText(data.getIntValue("result") + "人在线");
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                UIHelper.toast(getContext(), R.string.net_erro_hint);
-            }
-        };
-        new GGOKHTTP(param, GGOKHTTP.GET_ONLINE_COUNT, ggHttpInterface).startGet();
     }
 
     private PlayerActivity getContext() {

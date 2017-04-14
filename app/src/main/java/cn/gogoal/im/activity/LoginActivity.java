@@ -2,9 +2,7 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
@@ -22,12 +20,10 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.stock.MarketActivity;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.ui.KeyboardLaunchLinearLayout;
 import cn.gogoal.im.ui.KeyboardLaunchListenLayout;
 
 /**
@@ -51,14 +47,16 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void doBusiness(final Context mContext) {
+
+        loginUserName.setText("E00002638");
+        loginPassWord.setText("123456");
         /*loginUserName.setText("E039065");
         loginPassWord.setText("888888");
         loginUserName.setText("E010399");
-        loginPassWord.setText("198122");*/
+        loginPassWord.setText("198122");
         loginUserName.setText("E00003645");
         loginPassWord.setText("147258369");
-
-        /*loginUserName.setText("E00002639");
+        loginUserName.setText("E00002639");
         loginPassWord.setText("412174");*/
 
         findViewById(R.id.login).setOnLongClickListener(new View.OnLongClickListener() {

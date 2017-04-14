@@ -12,22 +12,32 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.FunctionActivity;
+import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.activity.TestActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ImageTextBean;
+import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.WeakReferenceHandler;
 import cn.gogoal.im.ui.NormalItemDecoration;
 
@@ -56,7 +66,7 @@ public class MineFragment extends BaseFragment {
             endIndex--;
         }
     };
-    private int endIndex=9;
+    private int endIndex = 9;
 
     public MineFragment() {
     }
@@ -108,11 +118,11 @@ public class MineFragment extends BaseFragment {
     }
 
     private void test(int end) {
-        if (endIndex>=1) {
+        if (endIndex >= 1) {
             Glide.get(getContext()).clearMemory();
 
             GroupFaceImage.getInstance(getActivity(),
-                    image.subList(0, end==0?endIndex:end)
+                    image.subList(0, end == 0 ? endIndex : end)
             ).load(new GroupFaceImage.OnMatchingListener() {
                 @Override
                 public void onSuccess(Bitmap mathingBitmap) {
@@ -129,12 +139,12 @@ public class MineFragment extends BaseFragment {
 
                 }
             });
-        }else {
-            endIndex=9;
+        } else {
+            endIndex = 9;
         }
     }
 
-    private class MineAdapter extends CommonAdapter<ImageTextBean<Integer>,BaseViewHolder> {
+    private class MineAdapter extends CommonAdapter<ImageTextBean<Integer>, BaseViewHolder> {
 
         private MineAdapter(Context context, List<ImageTextBean<Integer>> datas) {
             super(context, R.layout.item_mine, datas);
@@ -150,6 +160,7 @@ public class MineFragment extends BaseFragment {
                 public void onClick(View v) {
                     switch (position) {
                         case 0:
+                            getUserValid();
                             break;
                         case 1:
                             startActivity(new Intent(getActivity(), TestActivity.class));
@@ -161,6 +172,49 @@ public class MineFragment extends BaseFragment {
                 }
             });
         }
+    }
+
+    /*
+    * 能否发起直播
+    * */
+    private void getUserValid() {
+
+        Map<String, String> param = new HashMap<>();
+        param.put("token", UserUtils.getToken());
+        //param.put("product_line", "4");
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONObject data = object.getJSONObject("data");
+                    if (data.getIntValue("code") == 1) {
+                        if (data.getString("live_id") != null) {
+                            Intent intent = new Intent(getContext(), LiveActivity.class);
+                            intent.putExtra("live_id", data.getString("live_id"));
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(getActivity(), FunctionActivity.class);
+                            intent.putExtra("title", "GoGoal");
+                            intent.putExtra("function_url", AppConst.GG_LIVE_APPLY);
+                            startActivity(intent);
+                        }
+                    } else {
+                        DialogHelp.getMessageDialog(getContext(), "您暂时没有权限直播，请联系客服申请！").show();
+                    }
+                } else {
+                    UIHelper.toast(getContext(), R.string.net_erro_hint);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.VIDEO_MOBILE, ggHttpInterface).startGet();
     }
 
 }
