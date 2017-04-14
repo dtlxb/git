@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/search_history_stockName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/search_history_grid_item_background"
+        android:gravity="center"
+        android:text="--"
+        android:textColor="@color/search_history_grid_item"
+        android:textSize="@dimen/text_size_15"/>
+
+</LinearLayout>

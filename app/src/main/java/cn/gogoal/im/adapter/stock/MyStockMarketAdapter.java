@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
+
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -63,14 +66,20 @@ public class MyStockMarketAdapter extends BaseAdapter {
             holder= (ViewHolder) convertView.getTag();
         }
 
-        holder.tvMarketName.setText(String.valueOf(datas.get(position).getName().charAt(0)));
-        holder.tvMarketPrice.setText(StringUtils.saveSignificand(datas.get(position).getPrice(),2));
-        holder.tvMarketPriceChange$Rate.setText(StringUtils.saveSignificand(datas.get(position).getPrice_change(),2)
-                +"\u3000"+ StockUtils.plusMinus(datas.get(position).getPrice_change_rate(),true));
+        try {
+            holder.tvMarketName.setText(String.valueOf(datas.get(position).getName().charAt(0)));
+            holder.tvMarketPrice.setText(StringUtils.saveSignificand(datas.get(position).getPrice(),2));
+            holder.tvMarketPriceChange$Rate.setText(StringUtils.saveSignificand(datas.get(position).getPrice_change(),2)
+                    +"\u3000"+ StockUtils.plusMinus(datas.get(position).getPrice_change_rate(),true));
 
-        int rateColor = StockUtils.getStockRateColor(datas.get(position).getPrice_change_rate());
-        holder.tvMarketPrice.setTextColor(ContextCompat.getColor(parent.getContext(),rateColor));
-        holder.tvMarketPriceChange$Rate.setTextColor(ContextCompat.getColor(parent.getContext(),rateColor));
+            int rateColor = StockUtils.getStockRateColor(datas.get(position).getPrice_change_rate());
+            holder.tvMarketPrice.setTextColor(ContextCompat.getColor(parent.getContext(),rateColor));
+            holder.tvMarketPriceChange$Rate.setTextColor(ContextCompat.getColor(parent.getContext(),rateColor));
+        }catch (Exception e){
+            e.getMessage();
+            KLog.e(JSONObject.toJSONString(datas));
+        }
+
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

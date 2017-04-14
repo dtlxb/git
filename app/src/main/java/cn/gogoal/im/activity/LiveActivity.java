@@ -312,7 +312,7 @@ public class LiveActivity extends BaseActivity {
     class LiveChatAdapter extends CommonAdapter<AVIMMessage, BaseViewHolder> {
 
         public LiveChatAdapter(Context context, int layoutId, List<AVIMMessage> datas) {
-            super(context, layoutId, datas);
+            super(layoutId, datas);
         }
 
         @Override

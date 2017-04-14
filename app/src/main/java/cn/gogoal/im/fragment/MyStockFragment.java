@@ -146,6 +146,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         startAnimation();//刷新按钮动画
         getMyStockData(refreshType);
         getMarketLittle();
+        getMarketLittle();
     }
 
     private void initXLayout() {
@@ -225,9 +226,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 if (view.getId() == R.id.tv_mystock_price) {
                     tvMystockRate.setViewStateNormal();
                     if (sortType == -1) {
-                        return Double.valueOf(o2.getPrice()).compareTo(o1.getPrice());
+                        return StringUtils.getStockDouble(o2.getPrice()).compareTo(StringUtils.getStockDouble(o1.getPrice()));
                     } else if (sortType == 1) {
-                        return Double.valueOf(o1.getPrice()).compareTo(o2.getPrice());
+                        return StringUtils.getStockDouble(o1.getPrice()).compareTo(StringUtils.getStockDouble(o2.getPrice()));
                     } else {
                         getMyStockData(AppConst.REFRESH_TYPE_PARENT_BUTTON);
                         return 0;
