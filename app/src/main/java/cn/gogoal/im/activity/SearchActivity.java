@@ -223,7 +223,7 @@ public class SearchActivity extends BaseActivity {
     private class SearchConversationAdapter extends CommonAdapter<IMMessageBean,BaseViewHolder> {
 
         public SearchConversationAdapter(Context context, int layoutId, List<IMMessageBean> datas) {
-            super(context, layoutId, datas);
+            super(layoutId, datas);
         }
 
         @Override

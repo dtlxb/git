@@ -1,5 +1,7 @@
 package cn.gogoal.im.adapter.stock;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +12,10 @@ import android.widget.TextView;
 import java.util.List;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.copy.StockDetailMarketIndexActivity;
 import cn.gogoal.im.bean.stock.StockMarketBean;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
-import cn.gogoal.im.common.UIHelper;
 
 /**
  * author wangjd on 2017/3/13 0013.
@@ -26,8 +28,10 @@ public class MyStockMarketAdapter extends BaseAdapter {
 
     private List<StockMarketBean.DataBean.HangqingBean> datas;
 
-    public MyStockMarketAdapter(List<StockMarketBean.DataBean.HangqingBean> datas) {
+    private Context context;
+    public MyStockMarketAdapter(Context context,List<StockMarketBean.DataBean.HangqingBean> datas) {
         this.datas=datas;
+        this.context=context;
     }
 
     @Override
@@ -62,7 +66,7 @@ public class MyStockMarketAdapter extends BaseAdapter {
         holder.tvMarketName.setText(String.valueOf(datas.get(position).getName().charAt(0)));
         holder.tvMarketPrice.setText(StringUtils.saveSignificand(datas.get(position).getPrice(),2));
         holder.tvMarketPriceChange$Rate.setText(StringUtils.saveSignificand(datas.get(position).getPrice_change(),2)
-                +"\u3000"+ StockUtils.plusMinus(datas.get(position).getPrice_change_rate()));
+                +"\u3000"+ StockUtils.plusMinus(datas.get(position).getPrice_change_rate(),true));
 
         int rateColor = StockUtils.getStockRateColor(datas.get(position).getPrice_change_rate());
         holder.tvMarketPrice.setTextColor(ContextCompat.getColor(parent.getContext(),rateColor));
@@ -71,7 +75,10 @@ public class MyStockMarketAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UIHelper.toast(v.getContext(),datas.get(position).getName());
+                Intent intent = new Intent(context, StockDetailMarketIndexActivity.class);
+                intent.putExtra("stockName", datas.get(position).getName());
+                intent.putExtra("stockCode", datas.get(position).getFullcode());
+                context.startActivity(intent);
             }
         });
 

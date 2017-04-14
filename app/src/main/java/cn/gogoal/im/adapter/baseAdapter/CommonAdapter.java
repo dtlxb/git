@@ -51,7 +51,6 @@ import cn.gogoal.im.adapter.baseAdapter.animation.SlideInBottomAnimation;
 import cn.gogoal.im.adapter.baseAdapter.animation.SlideInLeftAnimation;
 import cn.gogoal.im.adapter.baseAdapter.animation.SlideInRightAnimation;
 import cn.gogoal.im.adapter.baseAdapter.entity.IExpandable;
-import cn.gogoal.im.adapter.baseAdapter.listener.OnItemClickListener;
 import cn.gogoal.im.adapter.baseAdapter.loadmore.LoadMoreView;
 import cn.gogoal.im.adapter.baseAdapter.loadmore.SimpleLoadMoreView;
 import cn.gogoal.im.adapter.baseAdapter.util.MultiTypeDelegate;
@@ -120,6 +119,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
     private boolean mHeadAndEmptyEnable;
     private boolean mFootAndEmptyEnable;
 
+    protected static final String TAG = CommonAdapter.class.getSimpleName();
     protected Context mContext;
     protected int mLayoutResId;
     protected LayoutInflater mLayoutInflater;
@@ -385,12 +385,6 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
             this.mLayoutResId = layoutResId;
         }
     }
-    public CommonAdapter(Context context,int layoutResId, List<T> data) {
-        this.mData = data == null ? new ArrayList<T>() : data;
-        if (layoutResId != 0) {
-            this.mLayoutResId = layoutResId;
-        }
-    }
 
     public CommonAdapter(List<T> data) {
         this(0, data);
@@ -507,15 +501,6 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
         if (dataSize == size) {
             notifyDataSetChanged();
         }
-    }
-
-    /**
-     * Get the data of list
-     *
-     * @return
-     */
-    public List<T> getData() {
-        return mData;
     }
 
     /**
@@ -785,8 +770,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
 
         switch (viewType) {
             case 0:
-
-                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()),holder.getAdapterPosition());
+                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()),positions);
                 break;
             case LOADING_VIEW:
                 mLoadMoreView.convert(holder);
@@ -798,7 +782,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
             case FOOTER_VIEW:
                 break;
             default:
-                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()),holder.getAdapterPosition());
+                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()),positions);
                 break;
         }
     }
@@ -1397,8 +1381,11 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
 
     /**
      * Implement this method and use the helper to adapt the view to the given item.
+     *
+     * @param holder A fully initialized helper.
+     * @param data   The item that needs to be displayed.
      */
-    protected abstract void convert(K holder, T data,int position);
+    protected abstract void convert(K holder, T data, int position);
 
     /**
      * get the specific view by position,e.g. getViewByPosition(2, R.id.textView)
@@ -1559,7 +1546,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
     }
 
     public void expandAll() {
-        for (int i = mData.size() - 1; i >=0; i--) {
+        for (int i = mData.size() - 1; i >= 0; i--) {
             expandAll(i, false, false);
         }
     }
@@ -1749,6 +1736,25 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
         boolean onItemLongClick(CommonAdapter adapter, View view, int position);
     }
 
+
+    /**
+     * Interface definition for a callback to be invoked when an item in this
+     * RecyclerView itemView has been clicked.
+     */
+    public interface OnItemClickListener {
+
+        /**
+         * Callback method to be invoked when an item in this RecyclerView has
+         * been clicked.
+         *
+         * @param adapter  the adpater
+         * @param view     The itemView within the RecyclerView that was clicked (this
+         *                 will be a view provided by the adapter)
+         * @param position The position of the view in the adapter.
+         */
+        void onItemClick(CommonAdapter adapter, View view, int position);
+    }
+
     /**
      * Register a callback to be invoked when an item in this RecyclerView has
      * been clicked.
@@ -1822,6 +1828,13 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
     @Nullable
     public final OnItemChildLongClickListener getmOnItemChildLongClickListener() {
         return mOnItemChildLongClickListener;
+    }
+
+    /**
+     * 获取数据集合
+     */
+    public List<T> getData() {
+        return mData;
     }
 
     /**

@@ -5,11 +5,6 @@ import android.support.annotation.LayoutRes;
 
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 
-
-/**
- * Created by BlingBling on 2016/11/11.
- */
-
 public abstract class LoadMoreView {
 
     public static final int STATUS_DEFAULT = 1;
@@ -91,30 +86,26 @@ public abstract class LoadMoreView {
      *
      * @return
      */
-    public abstract @LayoutRes
-    int getLayoutId();
+    public abstract @LayoutRes int getLayoutId();
 
     /**
      * loading view
      *
      * @return
      */
-    protected abstract @IdRes
-    int getLoadingViewId();
+    protected abstract @IdRes int getLoadingViewId();
 
     /**
      * load fail view
      *
      * @return
      */
-    protected abstract @IdRes
-    int getLoadFailViewId();
+    protected abstract @IdRes int getLoadFailViewId();
 
     /**
      * load end view, you can return 0
      *
      * @return
      */
-    protected abstract @IdRes
-    int getLoadEndViewId();
+    protected abstract @IdRes int getLoadEndViewId();
 }

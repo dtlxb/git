@@ -19,6 +19,7 @@
     <string name="title_square_collcet">我的群组</string>
     <string name="title_my_stock">自选</string>
     <string name="title_mtstock_news">自选股资讯</string>
+    <string name="title_stock_news">个股资讯</string>
 
     <string name="square_collcet_add">添加</string>
     <string name="square_publish_create">创建</string>
@@ -144,5 +145,6 @@
     <string name="mystock_sort_down">%s&#xe6b6;</string>
     <string name="str_add_my_stock">添加自选股</string>
     <string name="str_refresh_ok">更新数据成功！</string>
+    <string name="str_title_back">返回</string>
 
 </resources>

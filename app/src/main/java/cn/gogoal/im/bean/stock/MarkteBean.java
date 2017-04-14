@@ -36,15 +36,15 @@ public class MarkteBean {
     public static class MarketItemData {
         private String name;            //11    21
         private double price;          //12    24_0     33
-        private double priceChange;   //13
-        private double rate;           //14    24_1     34
+        private String priceChange;   //13
+        private String rate;           //14    24_1     34
 
-        private double industryRate;  //22
+        private String industryRate;  //22
         private String stockName;      //23    31
         private String code;           //32
         private int priceColor;//颜色字段
 
-        public MarketItemData(String name, double price, double priceChange, double rate, double industryRate, String stockName, String code, int priceColor) {
+        public MarketItemData(String name, double price, String priceChange, String rate, String industryRate, String stockName, String code, int priceColor) {
             this.name = name;
             this.price = price;
             this.priceChange = priceChange;
@@ -71,27 +71,27 @@ public class MarkteBean {
             this.price = price;
         }
 
-        public double getPriceChange() {
+        public String getPriceChange() {
             return priceChange;
         }
 
-        public void setPriceChange(double priceChange) {
+        public void setPriceChange(String priceChange) {
             this.priceChange = priceChange;
         }
 
-        public double getRate() {
+        public String getRate() {
             return rate;
         }
 
-        public void setRate(double rate) {
+        public void setRate(String rate) {
             this.rate = rate;
         }
 
-        public double getIndustryRate() {
+        public String getIndustryRate() {
             return industryRate;
         }
 
-        public void setIndustryRate(double industryRate) {
+        public void setIndustryRate(String industryRate) {
             this.industryRate = industryRate;
         }
 

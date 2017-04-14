@@ -6,6 +6,7 @@ import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -64,12 +65,50 @@ public class ImageDisplay {
         if (!TextUtils.isEmpty(url)) {
             Glide.with(context)
                     .load(url)
+                    .dontAnimate()
+                    .dontTransform()
                     .dontAnimate().dontTransform()
                     .skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
-//                    .placeholder(R.mipmap.image_placeholder)
+                    .placeholder(R.mipmap.image_placeholder)
                     .thumbnail(0.1f)
                     .into(imageView);
+        }
+    }
+
+    public static void loadNetImage(Context context, String url, ImageView imageView, int needPlaceholder) {
+        if (!TextUtils.isEmpty(url)) {
+            DrawableRequestBuilder<String> builder = Glide.with(context)
+                    .load(url)
+                    .dontAnimate()
+                    .dontTransform()
+                    .skipMemoryCache(true)
+                    .dontAnimate()
+                    .dontTransform()
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .thumbnail(0.1f);
+            if (needPlaceholder == 0x00) {
+                builder.into(imageView);
+            } else {
+                builder.placeholder(R.mipmap.image_placeholder);
+                builder.into(imageView);
+            }
+
+        }
+    }
+
+    public static void loadChartImage(Context context, String url, ImageView imageView) {
+        if (!TextUtils.isEmpty(url)) {
+            DrawableRequestBuilder<String> builder = Glide.with(context)
+                    .load(url)
+                    .dontAnimate()
+                    .dontTransform()
+                    .skipMemoryCache(true)
+                    .dontAnimate()
+                    .dontTransform()
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT);
+            builder.into(imageView);
+
         }
     }
 

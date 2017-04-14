@@ -8,10 +8,6 @@ import android.view.View;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseItemDraggableAdapter;
 
-
-/**
- * Created by luoxw on 2016/6/20.
- */
 public class ItemDragAndSwipeCallback extends ItemTouchHelper.Callback {
 
 //    private static final String TAG = ItemDragAndSwipeCallback.class.getSimpleName();

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@color/white">
+
+    <hply.com.niugu.view.KChartsView
+        android:id="@+id/k_charts_view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <RadioGroup
+        android:id="@+id/authority_blog"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="2dp"
+        android:background="@drawable/rect_shape"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <RadioButton
+            android:id="@+id/no_authority"
+            style="@style/FuQuanRdbStyle"
+            android:checked="true"
+            android:text="不复权" />
+
+
+        <RadioButton
+            android:id="@+id/before_authority"
+            style="@style/FuQuanRdbStyle"
+            android:text="前复权" />
+
+
+        <RadioButton
+            android:id="@+id/after_authority"
+            style="@style/FuQuanRdbStyle"
+            android:text="后复权" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:background="@color/gray" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:text="成交量"
+            android:textColor="@color/piechart_bule"
+            android:textSize="@dimen/text_size_14" />
+
+    </RadioGroup>
+</LinearLayout>

@@ -267,12 +267,12 @@ public class MarketDetialActivity extends BaseActivity {
             ,BaseViewHolder> {
 
         RankAdapter(List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> datas) {
-            super(getActivity(), R.layout.item_stock_rank_list, datas);
+            super(R.layout.item_stock_rank_list, datas);
         }
 
         @Override
         protected void convert(BaseViewHolder holder,
-                               StockMarketBean.DataBean.StockRanklistBean.StockRankBean data, int position) {
+                               final StockMarketBean.DataBean.StockRanklistBean.StockRankBean data, int position) {
 
             holder.setText(R.id.tv_stock_ranklist_stockName, data.getStock_name());
             holder.setText(R.id.tv_stock_ranklist_stockCode, data.getStock_code());
@@ -282,16 +282,25 @@ public class MarketDetialActivity extends BaseActivity {
             switch (listType) {
                 case 0:
                 case 1:
-                    holder.setText(R.id.tv_stock_ranklist_rate, StockUtils.plusMinus(data.getRate()));
+                    holder.setText(R.id.tv_stock_ranklist_rate, StockUtils.plusMinus(data.getRate(),true));
                     holder.setTextResColor(R.id.tv_stock_ranklist_rate, StockUtils.getStockRateColor(data.getRate()));
                     break;
                 case 2://换手率
-                    holder.setText(R.id.tv_stock_ranklist_rate, StringUtils.saveSignificand(data.getRate() * 100, 2) + "%");
+                    holder.setText(R.id.tv_stock_ranklist_rate, StringUtils.saveSignificand(
+                            StringUtils.getStockDouble(data.getRate()) * 100, 2) + "%");
                     break;
                 case 3://振幅榜
                     holder.setText(R.id.tv_stock_ranklist_rate, StringUtils.saveSignificand(data.getRate(), 2) + "%");
                     break;
             }
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    StockUtils.go2StockDetail(getActivity(),
+                            data.getStock_code(),data.getStock_name());
+                }
+            });
         }
     }
 
@@ -303,7 +312,7 @@ public class MarketDetialActivity extends BaseActivity {
         private List<HotIndustryBean.DataBean> datas;
 
         private IndustryAdapter(List<HotIndustryBean.DataBean> datas) {
-            super(getActivity(), R.layout.item_stock_rank_list, datas);
+            super(R.layout.item_stock_rank_list, datas);
             this.datas = datas;
         }
 
@@ -316,7 +325,7 @@ public class MarketDetialActivity extends BaseActivity {
 
                 TextView rateView = holder.getView(R.id.tv_stock_ranklist_currentPrice);
 
-                rateView.setText(StockUtils.plusMinus(data.getIndustry_rate()));// TODO: 2017/4/7 0007
+                rateView.setText(StockUtils.plusMinus(""+StringUtils.getStockDouble(data.getIndustry_rate()),true));// TODO: 2017/4/7 0007
 
                 holder.setText(R.id.tv_stock_ranklist_rate, data.getStock_name());
 
@@ -342,9 +351,9 @@ public class MarketDetialActivity extends BaseActivity {
 
                 if (data.getStock_type() == 1) { //股票状态正常
                     holder.setText(R.id.tv_stock_ranklist_currentPrice, StringUtils.saveSignificand(data.getCurrent_price(), 2));
-                    rateView.setText(StockUtils.plusMinus(data.getRate()));
+                    rateView.setText(StockUtils.plusMinus(""+data.getRate(),true));
 
-                    rateView.setTextColor(getResColor(StockUtils.getStockRateColor(data.getRate())));
+                    rateView.setTextColor(getResColor(StockUtils.getStockRateColor(""+data.getRate())));
 
                     holder.setTextResColor(R.id.tv_stock_ranklist_currentPrice, R.color.textColor_333333);
                 } else { //股票退市，停牌等异常
@@ -352,12 +361,15 @@ public class MarketDetialActivity extends BaseActivity {
                     rateView.setText("--");                                     //涨跌幅
                     rateView.setTextColor(getResColor(R.color.stock_gray));
                     holder.setTextResColor(R.id.tv_stock_ranklist_currentPrice, R.color.stock_gray);
+
+
                 }
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //TODO 个股
+                        StockUtils.go2StockDetail(getActivity(),
+                                data.getStock_code(),data.getStock_name());
                     }
                 });
             }

@@ -91,6 +91,8 @@ public class MainActivity extends BaseActivity {
             }
         }
 
+        tabMain.getTabAt(1).select();
+
         vpMain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

@@ -22,10 +22,11 @@ import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
@@ -37,6 +38,7 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.ICheckItemListener;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
@@ -178,7 +180,7 @@ public class ChooseContactActivity extends BaseActivity {
         //增减监听
         this.setOnItemCheckListener(new ICheckItemListener<ContactBean>() {
             @Override
-            public void checked(ArrayList<ContactBean> datas, ContactBean data, boolean isAdd) {
+            public void checked(Set<ContactBean> datas, ContactBean data, boolean isAdd) {
                 ChooseContactActivity.this.isAdd = isAdd;
 
                 if (actionType != AppConst.SQUARE_ROOM_DELETE_ANYONE) {
@@ -256,7 +258,7 @@ public class ChooseContactActivity extends BaseActivity {
                     return;//没有选择好友时，点击确定不执行操作
                 }
 
-                HashSet<Integer> userFriendsIdList = UserUtils.getUserFriendsIdList(result.values());
+                TreeSet<Integer> userFriendsIdList = UserUtils.getUserFriendsIdList(result.values());
 
                 if (actionType == AppConst.CREATE_SQUARE_ROOM_BUILD) {
                     userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getUserAccountId()));
@@ -282,7 +284,7 @@ public class ChooseContactActivity extends BaseActivity {
     /**
      * 创建群组
      */
-    public void createChatGroup(final HashSet<Integer> userIdList) {
+    public void createChatGroup(final TreeSet<Integer> userIdList) {
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
         params.put("id_list", JSONObject.toJSONString(userIdList));
@@ -504,7 +506,7 @@ public class ChooseContactActivity extends BaseActivity {
         result.put(contactBean.getFriend_id(), contactBean);
 
         if (listener != null) {
-            listener.checked(new ArrayList<>(result.values()), contactBean, true);
+            listener.checked(ArrayUtils.mapValue2Set(result), contactBean, true);
         }
 
     }
@@ -514,7 +516,7 @@ public class ChooseContactActivity extends BaseActivity {
         result.remove(valueGetKey(result, contactBean));
 
         if (listener != null) {
-            listener.checked(new ArrayList<>(result.values()), contactBean, false);
+            listener.checked(ArrayUtils.mapValue2Set(result), contactBean, false);
         }
     }
 
@@ -567,7 +569,7 @@ public class ChooseContactActivity extends BaseActivity {
                     result.remove(valueGetKey(result, data));
 
                     if (listener != null) {
-                        listener.checked(new ArrayList<>(datas), data, false);
+                        listener.checked(ArrayUtils.mapValue2Set(result), data, false);
                     }
                 }
             });
@@ -583,10 +585,6 @@ public class ChooseContactActivity extends BaseActivity {
             }
         }
         return -1;
-    }
-
-    private interface ICheckItemListener<T> {
-        void checked(ArrayList<T> datas, T data, boolean isAdd);
     }
 
     @Override

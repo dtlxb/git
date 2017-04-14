@@ -8,7 +8,7 @@
     android:paddingBottom="15dp"
     android:layout_marginBottom="1px"
     android:background="@drawable/selector_normal_write2gray"
-    android:stretchColumns="0,1">
+    android:stretchColumns="0">
     <!--android:background="@drawable/selector_stock_item_press"-->
     <TableRow android:gravity="center">
         <TextView
@@ -22,7 +22,7 @@
 
         <TextView
             android:id="@+id/tv_stock_market_price_change"
-            android:gravity="right"
+            android:gravity="center_vertical"
             android:maxLines="1"
             android:paddingRight="15dp"
             android:text="@string/default__"
@@ -41,8 +41,7 @@
             android:textSize="20sp" />
         <TextView
             android:id="@+id/tv_stock_market_price_change_rate"
-            
-            android:gravity="right"
+            android:gravity="center_vertical"
             android:maxLines="1"
             android:paddingRight="15dp"
             android:text="@string/default__"

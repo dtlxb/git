@@ -1,0 +1,60 @@
+<resources>
+    <style name="TabLayoutTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!--app中所有“点击查看更多”按钮样式-->
+    <style name="btnLoadMoreStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:text">点击查看更多</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">@drawable/selector_loadmore_btn</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+    </style>
+
+    <style name="main_head_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_19</item>
+        <item name="android:textColor">@color/head_text</item>
+        <item name="android:shadowColor">@color/main_head_title_shadow_color</item>
+    </style>
+
+    <style name="popwin_anim_style">
+        <item name="android:windowEnterAnimation">@anim/push_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/push_bottom_out</item>
+    </style>
+
+    <!--五档明细的RadioButtonStyle-->
+    <style name="DetailRdbStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:textColor">@drawable/selector_rdb_detial_text</item>
+        <item name="android:button">@null</item>
+    </style>
+    <!--图表放大后复权的RadioButtonStyle-->
+    <style name="FuQuanRdbStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@drawable/selector_rdb_fuquan_text</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@null</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
+
+    <style name="progress">
+        <item name="android:windowBackground">@color/progress_background</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+</resources>

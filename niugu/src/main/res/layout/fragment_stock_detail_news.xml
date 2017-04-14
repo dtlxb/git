@@ -1,0 +1,32 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <hply.com.niugu.view.InnerListView
+            android:id="@+id/news_lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="@null"
+            android:divider="@null"
+            android:drawSelectorOnTop="true" />
+
+        <ProgressBar
+            android:id="@+id/mProgress"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:indeterminateDuration="800"
+            android:visibility="visible" />
+        />
+    </FrameLayout>
+
+    <include layout="@layout/stock_no_data" />
+
+</FrameLayout>

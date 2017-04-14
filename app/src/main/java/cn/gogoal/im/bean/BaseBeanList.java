@@ -7,7 +7,7 @@ import java.util.List;
  * Staff_id 1375
  * phone 18930640263
  */
-public class BaseBeanList<T> {
+public class BaseBeanList<T>{
 
     private String message;
 

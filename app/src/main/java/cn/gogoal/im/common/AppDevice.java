@@ -43,6 +43,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.socks.library.KLog;
 
@@ -57,6 +58,10 @@ import java.util.UUID;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class AppDevice {
+
+    public static final int DPI480P = 480;
+    public static final int DPI720P = 720;
+    public static final int DPI1080P = 1080;
 
     // 手机网络类型
     private static final int NETTYPE_WIFI = 0x01;
@@ -103,6 +108,16 @@ public class AppDevice {
         return dm.widthPixels;
     }
 
+    private static long  lastClickTime;
+    public synchronized static boolean isFastClick() {
+        long time = System.currentTimeMillis();
+        if (time - lastClickTime < 500) {
+            return true;
+        }
+        lastClickTime = time;
+        return false;
+    }
+
     /**
      * 代码动态控制布局中控件的宽高
      */
@@ -110,6 +125,7 @@ public class AppDevice {
         ViewGroup.LayoutParams params = view.getLayoutParams();
         if (null != params) {
             params.height = height;
+            params.width = LinearLayout.LayoutParams.WRAP_CONTENT;
             params.width = width;
             view.setLayoutParams(params);
         } else {

@@ -155,16 +155,16 @@ public class StockMarketBean {
                  * stock_name : N道道全
                  */
 
-                private double rate;
+                private String rate;
                 private double current_price;
                 private String stock_code;
                 private String stock_name;
 
-                public double getRate() {
+                public String getRate() {
                     return rate;
                 }
 
-                public void setRate(double rate) {
+                public void setRate(String rate) {
                     this.rate = rate;
                 }
 
@@ -206,27 +206,27 @@ public class StockMarketBean {
              * industry_name : 家用电器
              */
 
-            private double industry_rate;
-            private double rate;
+            private String industry_rate;
+            private String rate;
             private double current_price;
             private String stock_code;
             private String stock_name;
             private String industry_code;
             private String industry_name;
 
-            public double getIndustry_rate() {
+            public String getIndustry_rate() {
                 return industry_rate;
             }
 
-            public void setIndustry_rate(double industry_rate) {
+            public void setIndustry_rate(String industry_rate) {
                 this.industry_rate = industry_rate;
             }
 
-            public double getRate() {
+            public String getRate() {
                 return rate;
             }
 
-            public void setRate(double rate) {
+            public void setRate(String rate) {
                 this.rate = rate;
             }
 
@@ -311,8 +311,8 @@ public class StockMarketBean {
             private String name;
             private double open_price;
             private double price;
-            private double price_change;
-            private double price_change_rate;
+            private String price_change;
+            private String price_change_rate;
             private int rose;
             private String source;
             private String stage;
@@ -420,19 +420,19 @@ public class StockMarketBean {
                 this.price = price;
             }
 
-            public double getPrice_change() {
+            public String getPrice_change() {
                 return price_change;
             }
 
-            public void setPrice_change(double price_change) {
+            public void setPrice_change(String price_change) {
                 this.price_change = price_change;
             }
 
-            public double getPrice_change_rate() {
+            public String getPrice_change_rate() {
                 return price_change_rate;
             }
 
-            public void setPrice_change_rate(double price_change_rate) {
+            public void setPrice_change_rate(String price_change_rate) {
                 this.price_change_rate = price_change_rate;
             }
 

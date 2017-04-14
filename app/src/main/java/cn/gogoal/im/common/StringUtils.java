@@ -1,7 +1,6 @@
 package cn.gogoal.im.common;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.EditText;
 
 import com.socks.library.KLog;
@@ -14,7 +13,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 public class StringUtils {
 
@@ -234,12 +232,35 @@ public class StringUtils {
         return Character.toUpperCase(lastCode) == checkCodeList[idSum % 11];
     }
 
+    public static Double getStockDouble(String value){
+        if (TextUtils.isEmpty(value)){
+            return 0.0d;
+        }
+        return Double.parseDouble(value);
+    }
+
+    public static String getStockDouble(String value,int unit){
+        return saveSignificand(getStockDouble(value),unit);
+    }
     /**
      * 保留有效数字
      */
     public static String saveSignificand(double doubleData, int significand) {
         String result = String.format("%." + significand + "f", doubleData);
         return result;
+    }
+    /**
+     * 保留2有效数字
+     */
+    public static String save2Significand(double doubleData) {
+        return saveSignificand(doubleData,2);
+    }
+
+    /**
+     * 保留2有效数字
+     */
+    public static String save2Significand(String doubleData) {
+        return saveSignificand(doubleData,2);
     }
 
     public static String saveSignificand(String strDoubleData, int significand) {

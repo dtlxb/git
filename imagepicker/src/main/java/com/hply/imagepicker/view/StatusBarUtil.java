@@ -658,7 +658,7 @@ public class StatusBarUtil {
      */
     public StatusBarUtil setStatusBarFontDark( boolean dark) {
         // 小米MIUI
-        if (isMiUIV6(activity)) {
+        if (isMiUIV6()) {
             try {
                 Window window = activity.getWindow();
                 Class clazz = activity.getWindow().getClass();
@@ -712,7 +712,7 @@ public class StatusBarUtil {
     }
 
     public boolean isOperableDevice() {
-        return isFlyme() || isMiUIV6(activity) || Build.VERSION.SDK_INT >= 23;
+        return isFlyme() || isMiUIV6() || Build.VERSION.SDK_INT >= 23;
     }
 
     public void initForGogoal( boolean fullScreemImmersive) {
@@ -731,11 +731,11 @@ public class StatusBarUtil {
     /**
      * 是否是小米miui6及更高版本
      */
-    private final String KEY_MIUI_VERSION_CODE = "ro.miui.ui.version.code";
-    private final String KEY_MIUI_VERSION_NAME = "ro.miui.ui.version.name";
-    private final String KEY_MIUI_INTERNAL_STORAGE = "ro.miui.internal.storage";
+    private static final String KEY_MIUI_VERSION_CODE = "ro.miui.ui.version.code";
+    private static final String KEY_MIUI_VERSION_NAME = "ro.miui.ui.version.name";
+    private static final String KEY_MIUI_INTERNAL_STORAGE = "ro.miui.internal.storage";
 
-    private boolean isMiUIV6(Activity activity) {
+    public boolean isMiUIV6() {
         SharedPreferences sharedPreferences = activity.getSharedPreferences("cache_miui", Context.MODE_PRIVATE);
         //获取缓存状态
         if (sharedPreferences.getString("isMiui", "").equals("miui")) {

@@ -63,6 +63,8 @@ public class MyStockTabNewsFragment extends BaseFragment {
 
     private List<MyStockTabBean> stockNewsDatas = new ArrayList<>();
 
+    private int type;//类型，是我的自选股中的，还是个股中的
+
     public static Fragment getInstance(int position) {
         MyStockTabNewsFragment fragment = new MyStockTabNewsFragment();
         Bundle bundle = new Bundle();
@@ -78,10 +80,22 @@ public class MyStockTabNewsFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext) {
+            @Override
+            public boolean canScrollVertically() {
+                return true;
+            }
+        };
+
+        layoutManager.setSmoothScrollbarEnabled(true);
+        layoutManager.setAutoMeasureEnabled(true);
+
+        rvNews.setHasFixedSize(true);
+        rvNews.setNestedScrollingEnabled(false);
         parentIndex = getArguments().getInt("position");
         newsAdapter = new MyStockNewsAdapter(stockNewsDatas);
         rvNews.addItemDecoration(new NormalItemDecoration(mContext));
-        rvNews.setLayoutManager(new LinearLayoutManager(mContext));
+        rvNews.setLayoutManager(layoutManager);
         BaseActivity.iniRefresh(swiperefreshlayout);
         rvNews.setAdapter(newsAdapter);
         switch (parentIndex) {
@@ -118,7 +132,7 @@ public class MyStockTabNewsFragment extends BaseFragment {
     /**
      * 请求[新闻][公告]
      */
-    private void getStockNews(int type, final int page) {
+    private void getStockNews(final int type, final int page) {
         stockNewsDatas.clear();
         if (refreshType != AppConst.REFRESH_TYPE_SWIPEREFRESH) {
             xLayout.setStatus(XLayout.Loading);
@@ -135,19 +149,19 @@ public class MyStockTabNewsFragment extends BaseFragment {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     JSONArray jsonArray = JSONObject.parseObject(responseInfo).getJSONArray("data");
-                    for (int i=0;i<jsonArray.size();i++){
-                        JSONObject object= (JSONObject) jsonArray.get(i);
+                    for (int i = 0; i < jsonArray.size(); i++) {
+                        JSONObject object = (JSONObject) jsonArray.get(i);
                         stockNewsDatas.add(new MyStockTabBean(object.getString("title"),
-                                ((JSONObject)object.getJSONArray("stock").get(0)).getString("stock_code"),
-                                ((JSONObject)object.getJSONArray("stock").get(0)).getString("stock_name"),
-                                object.getString("date"),String.valueOf(object.getIntValue("origin_id"))));
+                                ((JSONObject) object.getJSONArray("stock").get(0)).getString("stock_code"),
+                                ((JSONObject) object.getJSONArray("stock").get(0)).getString("stock_name"),
+                                object.getString("date"), String.valueOf(object.getIntValue("origin_id"))));
                     }
                     newsAdapter.notifyDataSetChanged();
                     swiperefreshlayout.setRefreshing(false);
                     xLayout.setStatus(XLayout.Success);
 
-                    if (refreshType==AppConst.REFRESH_TYPE_SWIPEREFRESH) {
-                        UIHelper.toast(getActivity(),getString(R.string.str_refresh_ok));
+                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+                        UIHelper.toast(getActivity(), getString(R.string.str_refresh_ok));
                     }
                 } else if (code == 1001) {
                     xLayout.setStatus(XLayout.Error);
@@ -166,7 +180,7 @@ public class MyStockTabNewsFragment extends BaseFragment {
     private void getYanBaoDatas(final int page) {
         final Map<String, String> param = new HashMap<>();
         param.put("summary_auth", "1");
-        param.put("stock_code",StockUtils.getMyStockString());
+        param.put("stock_code", StockUtils.getMyStockString());
         param.put("token", UserUtils.getToken());
         param.put("first_class", "公司报告");
         param.put("page", page + "");
@@ -175,41 +189,42 @@ public class MyStockTabNewsFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                int code=JSONObject.parseObject(responseInfo).getIntValue("code");
-                if (code==0){
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                if (code == 0) {
                     JSONArray array = JSONObject.parseObject(responseInfo).getJSONArray("data");
-                    for (int i=0;i<array.size();i++){
-                        JSONObject object= (JSONObject) array.get(i);
-                          stockNewsDatas.add(new MyStockTabBean(object.getString("report_title"),
-                                  object.getString("stock_code"),
-                                  object.getString("stock_name"),
-                                  object.getString("create_date"),
-                                  object.getString("guid")));
+                    for (int i = 0; i < array.size(); i++) {
+                        JSONObject object = (JSONObject) array.get(i);
+                        stockNewsDatas.add(new MyStockTabBean(object.getString("report_title"),
+                                object.getString("stock_code"),
+                                object.getString("stock_name"),
+                                object.getString("create_date"),
+                                object.getString("guid")));
                     }
                     newsAdapter.notifyDataSetChanged();
                     swiperefreshlayout.setRefreshing(false);
                     xLayout.setStatus(XLayout.Success);
-                    if (refreshType==AppConst.REFRESH_TYPE_SWIPEREFRESH) {
-                        UIHelper.toast(getActivity(),"更新数据成功");
+                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+                        UIHelper.toast(getActivity(), "更新数据成功");
                     }
-                }else if (code==1001){
+                } else if (code == 1001) {
 
-                }else {
+                } else {
 
                 }
             }
+
             @Override
             public void onFailure(String msg) {
-                UIHelper.toastError(getActivity(),msg,xLayout);
+                UIHelper.toastError(getActivity(), msg, xLayout);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.REPORT_LIST, ggHttpInterface).startGet();
     }
 
-    private class MyStockNewsAdapter extends CommonAdapter<MyStockTabBean,BaseViewHolder> {
+    private class MyStockNewsAdapter extends CommonAdapter<MyStockTabBean, BaseViewHolder> {
 
         private MyStockNewsAdapter(List<MyStockTabBean> datas) {
-            super(getActivity(), R.layout.item_mystock_news, datas);
+            super(R.layout.item_mystock_news, datas);
         }
 
         @Override

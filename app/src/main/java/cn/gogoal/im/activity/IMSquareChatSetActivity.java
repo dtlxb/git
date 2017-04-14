@@ -32,7 +32,6 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.IMPersonSetAdapter;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.adapter.baseAdapter.listener.OnItemClickListener;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
@@ -156,7 +155,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
             }
         });
 
-        mPersonInfoAdapter.setOnItemClickListener(new OnItemClickListener() {
+        mPersonInfoAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(CommonAdapter adapter, View view, int position) {
                 Intent intent;

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+    <color name="colorPrimary">@color/main_header_bg</color>
+    <color name="colorPrimaryDark">@color/main_header_bg</color>
+    <!--accent-->
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="status_bar_bg">#4b5ea2</color>
+    <color name="main_header_bg">#4b5ea2</color>
+    <color name="main_header_bg_dark">#884b5ea2</color>
+    <color name="light_blue">#2d91d7</color>
+    <color name="main_footer_bg">#f5f5f5</color>
+    <color name="main_bg">#f0f5fb</color>
+    <color name="Kline_item_bg">#f4f8fc</color>
+
+    <!--我的页面颜色-->
+    <color name="my_header">#445c95</color>
+    <color name="line">#c7c7c7</color>
+    <color name="news_line">#a9a9a8</color>
+    <color name="interval">#f0eff5</color>
+
+    <!-- 底栏字体颜色 -->
+    <color name="footer_text_color_normal">#343434</color>
+    <color name="footer_text_color_selected">#4785E2</color>
+
+    <color name="text_color_normal">#444444</color>
+    <color name="text_color_dark">#555555</color>
+    <color name="text_color_light">#a4a3a9</color>
+    <color name="text_color_tab">#57585a</color>
+
+    <color name="list_divider_color">#fefefe</color>
+
+    <color name="headline_stock">#517eaf</color>
+    <color name="headline_num">#949393</color>
+    <color name="leble_color">#c9c9c9</color>
+    <color name="mystock_add_color">#d9d9d9</color>
+
+    <color name="stocklist_bg">#fefefe</color>
+    <color name="stock_red">#f14958</color>
+    <color name="stock_green">#1ebf61</color>
+
+    <color name="mystock_news_green">#a1d36e</color>
+    <color name="mystock_news_red">#d43c33</color>
+
+    <color name="stock_add_text_color">#1068e3</color>
+
+    <color name="bg_bar">#383838</color>
+    <color name="DataDiag_text_bg">#4d4d4d</color>
+    <color name="transparent">#00000000</color>
+    <color name="transparent2">#30000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="gray">#808080</color>
+    <color name="red">#FF0000</color>
+    <color name="gold">#FFD700</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="green">#008000</color>
+    <color name="blue">#0000FF</color>
+    <color name="purple">#800080</color>
+    <color name="pink">#FFC0CB</color>
+    <color name="orange">#FFA500</color>
+    <color name="yellow_lemon">#FFFACD</color>
+    <color name="gray_light">#DFDFDF</color>
+    <color name="gray_white">#f6f6f6</color>
+    <color name="gray_slate">#708090</color>
+    <color name="blue_light">#0083FF</color>
+    <!-- 股票数值紫色 -->
+    <color name="pupler">#8F1F8F</color>
+    <!-- 头部文字颜色 -->
+    <color name="background_color">#ffffffff</color>
+    <color name="head_text">#0e5986</color>
+    <color name="main_head_title">#ffffff</color>
+    <color name="main_head_title_shadow_color">#ffffffff</color>
+    <color name="company_name_color">#959595</color>
+    <color name="title_base_button_text_color">#ffffff</color>
+    <color name="list_view_bg">#efefef</color>
+
+    <color name="card_color_red">#fa8282</color>
+    <color name="card_color_orange">#ff8048</color>
+    <color name="card_color_yellow">#ffd237</color>
+    <color name="card_color_green">#abbf4f</color>
+    <color name="card_color_blue">#55b3da</color>
+    <color name="card_color_purple">#ae7fc7</color>
+
+    <!-- 通用 -->
+    <color name="color_text_grey">#49596b</color>
+    <color name="futures_green">#ff40ab5e</color>
+    <color name="futures_red">#d13939</color>
+    <color name="color_login">#292c35</color>
+    <color name="color_white">#ffffff</color>
+    <color name="color_yellow">#fece00</color>
+    <color name="color_grey">#919aac</color>
+    <color name="color_blue">#04d6fc</color>
+    <color name="color_black">#20242b</color>
+    <color name="color_text_value_grey">#8e9aab</color>
+    <color name="color_cell_grey">#d7dbe2</color>
+    <color name="color_yubibao_asset_bg">#e6eaf0</color>
+    <color name="color_red1">#ef3f2f</color>
+    <color name="color_red">#d13a38</color>
+
+    <!--daiwei-->
+    <color name="whitesmoke">#f5f5f5</color>
+    <!--market页面-->
+    <color name="dark_theme_black">#302F2F</color>
+    <color name="stock_green_market">#0cb709</color>
+    <color name="stock_red_market">#e85043</color>
+    <color name="login_button_red">#eb5240</color>
+
+    <!--股票详情页面-->
+    <color name="header_red">#f14a56</color>
+    <color name="header_green">#0eb70a</color>
+    <color name="header_gray">#a6a9ad</color>
+    <color name="text_color_word">#999999</color>
+    <color name="text_color_number">#222222</color>
+    <color name="line_color">#e4e4e4</color>
+    <color name="space_color">#efeff4</color>
+
+    <color name="gainsboro">#dcdcdc</color>
+
+    <!-- 图表 -->
+    <color name="charts_gray">#707f8c</color>
+    <color name="charts_red">#f24957</color>
+    <color name="charts_green">#1dbf60</color>
+    <color name="font_blue">#1a79ff</color>
+    <color name="chart_text_color">#546980</color>
+    <color name="guide_dot_color">#5da3fb</color>
+
+    <color name="weixin_text">#9ea2ab</color>
+
+    <color name="progress_background">#20000000</color>
+
+    <color name="decision_search">#445c95</color>
+    <color name="decision_tab">#1a79ff</color>
+    <color name="decision_title">#333333</color>
+    <color name="decision_news">#636363</color>
+    <color name="decision_author">#7e9cc1</color>
+    <color name="decision_time">#949393</color>
+
+    <color name="piechart_red">#ed605a</color>
+    <color name="piechart_yellow">#eeaf3e</color>
+    <color name="piechart_bule">#419be9</color>
+    <color name="piechart_green">#61da9d</color>
+
+    <color name="barchart_gray">#a6a6a6</color>
+
+    <color name="timeschart_line">#77adfb</color>
+    <color name="timeschart_showdaw">#e3efff</color>
+    <color name="timeschart_centerline">#4798fc</color>
+
+    <color name="popupwindow_bg">#1a7ba4</color>
+    <color name="popupwindow_btn_bg">#bf106990</color>
+    <color name="popupwindow_btn_border">#1d5d78</color>
+    <color name="popupwindow_wihte">#78ffffff</color>
+    <color name="popupwindow_top_line">#206e90</color>
+    <color name="popupwindow_bottom_line">#52a8cc</color>
+    <color name="popupwindow_edittext_bg">#1a7196</color>
+    <color name="popupwindow_edittext_border">#052d3e</color>
+
+    <!--投资日历-->
+    <color name="calendar_header_bg">#fd9e26</color>
+    <color name="calendar_tab_color">#f24957</color>
+    <color name="calendar_line_color">#e4e4e4</color>
+    <color name="bar_bg_color">#55e4e4e4</color>
+    <color name="calendar_title_color">#2d91d7</color>
+
+    <color name="marketcompare_stockcode">#a8a8a8</color>
+    <color name="marketcompare_stockavg">#ed605a</color>
+    <color name="marketcompare_chooseitem">#fff0c5</color>
+
+    <!--股票搜索-->
+    <color name="search_back">#4993e7</color>
+    <color name="search_history">#8d8d8d</color>
+    <color name="search_space">#f1f0f5</color>
+    <color name="search_history_grid_item">#787878</color>
+    <color name="search_stock_key">#f33d2a</color>
+    <color name="hotsearch_list_number1">#e42b18</color>
+    <color name="hotsearch_list_number2">#ff7100</color>
+    <color name="hotsearch_list_number3">#ffb900</color>
+    <color name="out_circle">#4b94fa</color>
+
+    <color name="mystock_news_list_item">#9f9fa9</color>
+
+    <color name="stock_detail_bottom">#939393</color>
+
+    <color name="tittle_background">#FF503F</color>
+    <color name="interactive_date">#acacac</color>
+    <color name="questioner_name">#ff7022</color>
+
+    <color name="tabSelected">@color/red</color>
+    <color name="tabUnSelected">#000000</color>
+    <color name="tabSelected_word1min">#457DD7</color>
+    <color name="tabUnSelected_word1min">#858585</color>
+    <color name="background_tab_pressed">#6633B5E5</color>
+
+    <color name="time_prive">#1a79ff</color>
+    <color name="time_avg_prive">#fdc20f</color>
+
+    <color name="rdbDetialChecked">#008CEE</color>
+    <color name="rdbDetialUnChecked">#CEDDED</color>
+
+
+    <color name="alertdialog_line">#c6c6c6</color>
+    <color name="actionsheet_blue">#037BFF</color>
+    <color name="actionsheet_red">#FD4A2E</color>
+    <color name="actionsheet_gray">#8F8F8F</color>
+
+    <!--数据一分钟Activity 数据表格字体颜色-->
+    <color name="profit_type_0">#459CF9</color>
+    <color name="profit_type_1">#000000</color>
+    <color name="profit_type_2">#E9473E</color>
+    <color name="profit_type_3">#0EB70A</color>
+    <color name="profit_type_4">#B447B4</color>
+    <color name="profit_type_5">@color/profit_type_3</color>
+    <color name="profit_type_6">@color/profit_type_2</color>
+    <color name="profit_type_7">@color/profit_type_2</color>
+
+    <color name="btn_load_more">#1aaa</color>
+</resources>

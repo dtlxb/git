@@ -1,15 +1,16 @@
 package cn.gogoal.im.common;
 
-import android.util.SparseArray;
-
 import com.alibaba.fastjson.JSONArray;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+
+import cn.gogoal.im.bean.ContactBean;
 
 
 /**
@@ -87,28 +88,20 @@ public class ArrayUtils {
         return null;
     }
 
-
-    /**通过SparseArray的value获取key*/
-    public static <T> int valueGetKey(SparseArray<T> array, T value) {
-        for (int i=0;i<array.size();i++){
-            if (array.get(i)==value){
-                return array.keyAt(i);
+    private int valueGetKey(Map<Integer, ContactBean> map, ContactBean contactBean) {
+        for (Map.Entry<Integer, ContactBean> entry : map.entrySet()) {
+            if (entry.getValue() == contactBean) {
+                return entry.getKey();
             }
         }
-
         return -1;
     }
 
-
-    /**通过SparseArray的value获取key*/
-    public static <T> List<T> sparseArrayGetValue(SparseArray<T> array) {
-        ArrayList<T> arrayList=new ArrayList<>();
-        for (int i=0;i<array.size();i++){
-            arrayList.add(array.valueAt(i));
+    public static <K,E> LinkedHashSet mapValue2Set(Map<K,E> map){
+        LinkedHashSet<E> set=new LinkedHashSet<>();
+        for (Map.Entry<K,E> entry:map.entrySet()){
+            set.add(entry.getValue());
         }
-
-        return arrayList;
+        return set;
     }
-
-
 }

@@ -25,7 +25,6 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.text.util.Linkify;
 import android.util.SparseArray;
 import android.view.View;
@@ -42,12 +41,9 @@ import android.widget.TextView;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
+import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 
-
-/**
- * https://github.com/CymChad/BaseRecyclerViewAdapterHelper
- */
 public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     /**
@@ -118,14 +114,19 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     public BaseViewHolder setImageUrl(int viewId, String imageUrl) {
         ImageView view = getView(viewId);
-        if (!TextUtils.isEmpty(imageUrl)) {
-            ImageDisplay.loadNetImage(convertView.getContext(), imageUrl, view);
-        }
+        ImageDisplay.loadNetImage(convertView.getContext(),imageUrl,view);
         return this;
     }
+
+    public BaseViewHolder setImageUrl(int viewId, String imageUrl,boolean skipMemoryCache) {
+        ImageView view = getView(viewId);
+        ImageDisplay.loadNetImage(convertView.getContext(),imageUrl,view,skipMemoryCache);
+        return this;
+    }
+
     public BaseViewHolder setTextResColor(int viewId, @ColorRes int colorId) {
         TextView view = getView(viewId);
-        view.setTextColor(ContextCompat.getColor(convertView.getContext(),colorId));
+        view.setTextColor(ContextCompat.getColor(MyApp.getAppContext(),colorId));
         return this;
     }
 
@@ -350,7 +351,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @param listener The on click listener;
      * @return The BaseViewHolder for chaining.
      */
-//    @Deprecated
+    @Deprecated
     public BaseViewHolder setOnClickListener(int viewId, View.OnClickListener listener) {
         View view = getView(viewId);
         view.setOnClickListener(listener);

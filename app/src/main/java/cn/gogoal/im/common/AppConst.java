@@ -64,7 +64,20 @@ public class AppConst {
     public static final String businessId = "video_live";
     public static final String accessKeyId = "LTAI1KypPpiBhPAx";
     public static final String accessKeySecret = "vb0kunzWvhxV6WHrH4Znv1BeJFJ2xV";
-
+    //正式用
+    public static final String WEB_DAMIN = "http://ggmobile.go-goal.cn/";
+    public static final int RESULT_OK = 0;
+    public static final int MAX_PAGE = 50;
+    public static final int DISS_XCHART_DATA = 1;
+    public static final int DISPLAY_XCHART_TIME_DATA = 2;
+    public static final int XCHART_FLING = 3;
+    public static final int FINSH_WECHARTLONGIN = 4;
+    public static final int DISPLAY_FIVEDAYXCHART_TIME_DATA = 5;
+    public static final int DISPLAY_XCHART_K_DATA = 6;
+    public static final int DISS_PROGRESSBAR = 7;
+    public static final int UPDATE_DISCUSS = 8;
+    public static final int SUCESSACTIVITY_FINSH = 9;
+    public static final int REFRESH_KLINE_DATA = 10;
     /**
      * webView地址
      */

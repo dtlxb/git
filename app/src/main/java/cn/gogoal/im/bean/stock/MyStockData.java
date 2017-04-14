@@ -8,7 +8,7 @@ import java.io.Serializable;
  * phone 18930640263
  * description :${annotated}.
  */
-public class MyStockData implements Serializable{
+public class MyStockData implements Serializable {
     /**
      * group_id : 137269
      * date : 2016-10-13 17:50:46
@@ -24,6 +24,7 @@ public class MyStockData implements Serializable{
      * stock_type : 1
      */
 
+    private boolean check;
     private int group_id;
     private String date;
     private int remind_headlines;
@@ -32,10 +33,18 @@ public class MyStockData implements Serializable{
     private String stock_code;
     private int stock_sort;
     private String stock_name;
-    private double change_value;
+    private String change_value;
     private double price;
-    private double change_rate;
+    private String change_rate;
     private int stock_type;
+
+    public boolean isCheck() {
+        return check;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
+    }
 
     public int getGroup_id() {
         return group_id;
@@ -101,11 +110,11 @@ public class MyStockData implements Serializable{
         this.stock_name = stock_name;
     }
 
-    public double getChange_value() {
+    public String getChange_value() {
         return change_value;
     }
 
-    public void setChange_value(double change_value) {
+    public void setChange_value(String change_value) {
         this.change_value = change_value;
     }
 
@@ -117,11 +126,11 @@ public class MyStockData implements Serializable{
         this.price = price;
     }
 
-    public double getChange_rate() {
+    public String getChange_rate() {
         return change_rate;
     }
 
-    public void setChange_rate(double change_rate) {
+    public void setChange_rate(String change_rate) {
         this.change_rate = change_rate;
     }
 
@@ -131,5 +140,10 @@ public class MyStockData implements Serializable{
 
     public void setStock_type(int stock_type) {
         this.stock_type = stock_type;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof MyStockData) && ((MyStockData) obj).getStock_code().equalsIgnoreCase(this.getStock_code());
     }
 }
