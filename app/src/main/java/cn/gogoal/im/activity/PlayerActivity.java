@@ -208,6 +208,11 @@ public class PlayerActivity extends BaseActivity {
         getRelaterVideoInfo();
     }
 
+    @Override
+    public void setStatusBar() {
+
+    }
+
     /**
      * 获取直播详情
      */
