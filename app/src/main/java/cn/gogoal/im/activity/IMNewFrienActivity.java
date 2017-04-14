@@ -195,36 +195,6 @@ public class IMNewFrienActivity extends BaseActivity {
                         view.setBackgroundResource(R.color.absoluteWhite);
                         view.setClickable(true);
 
-                        //通讯录添加此人
-                        JSONObject newObject = new JSONObject();
-                        JSONObject contentObject = JSON.parseObject(mIMNewFriendBean.getMessage().getContent());
-                        JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
-                        newObject.put("conv_id", mIMNewFriendBean.getMessage().getConversationId());
-                        newObject.put("avatar", lcattrsObject.get("avatar"));
-                        newObject.put("nickname", lcattrsObject.get("nickname"));
-                        newObject.put("friend_id", lcattrsObject.get("account_id"));
-
-                        String string = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", null);
-                        JSONArray contactsJsonArray = null;
-                        JSONObject contactjsonObject;
-                        if (null != string) {
-                            contactjsonObject = JSON.parseObject(string);
-                            KLog.e(contactjsonObject);
-                            if (null != contactjsonObject.get("data")) {
-                                contactsJsonArray = contactjsonObject.getJSONArray("data");
-                                contactsJsonArray.add(newObject);
-                                KLog.e(contactsJsonArray);
-                            }
-                        } else {
-                            contactsJsonArray = new JSONArray();
-                            contactsJsonArray.add(newObject);
-                            contactjsonObject = new JSONObject();
-                        }
-                        contactjsonObject.put("data", contactsJsonArray);
-                        contactjsonObject.put("code", 0);
-                        contactjsonObject.put("message", "成功");
-                        SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", JSON.toJSONString(contactjsonObject));
-
                         //列表缓存
                         for (int i = 0; i < jsonArray.size(); i++) {
 

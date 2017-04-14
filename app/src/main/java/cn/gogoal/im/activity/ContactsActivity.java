@@ -76,8 +76,6 @@ public class ContactsActivity extends BaseActivity {
         tvParams.width = AppDevice.getWidth(getActivity()) / 4;
         tvParams.height = AppDevice.getWidth(getActivity()) / 4;
         tvConstactsFlag.setLayoutParams(tvParams);
-        Boolean needRefresh = SPTools.getBoolean("contactsNeedRefresh", false);
-        KLog.e(needRefresh);
 
         //初始化
         LinearLayoutManager layoutManager;
@@ -93,7 +91,7 @@ public class ContactsActivity extends BaseActivity {
         //添加联系人功能头部item
         addContactHead();
 
-        getData(needRefresh);//联系人列表数据
+        getData();//联系人列表数据
 
         contactAdapter = new ContactAdapter(getActivity(), contactBeanList);
 
@@ -172,10 +170,10 @@ public class ContactsActivity extends BaseActivity {
         indexBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
-    private void getData(Boolean needRefresh) {
+    private void getData() {
         //缓存的联系人请求数据
         String friendResponseInfo = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", "");
-        if (needRefresh) {
+        if (friendResponseInfo.equals("")) {
             getFriendList(contactBeanList);
         } else {
             if (!JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()) {
@@ -235,7 +233,6 @@ public class ContactsActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
 
                 KLog.e(responseInfo);
-                SPTools.clearItem("contactsNeedRefresh");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", responseInfo);
                     parseContactDatas(responseInfo, contactBeanList);
