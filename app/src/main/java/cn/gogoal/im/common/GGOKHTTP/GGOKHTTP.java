@@ -504,6 +504,12 @@ public class GGOKHTTP {
      */
     public static final String GET_AD_LIST = "v1/ggm_ad/get_ad_list";
 
+    /**
+     * token                         用户token
+     * live_title                    直播标题
+     * live_large_img                直播封面图片
+     */
+    public static final String ADD_LIVE_VIDEO = "v1/video_mobile/add_live_video";
 
 //--------------------------------------------------------------------------------------------------
 
