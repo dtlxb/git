@@ -76,27 +76,23 @@ public class ImageDisplay {
         }
     }
 
-    public static void loadNetImage(Context context, String url, ImageView imageView, int needPlaceholder) {
+    public static void loadNetImage(Context context, String url, ImageView imageView,int placeholdeer) {
         if (!TextUtils.isEmpty(url)) {
             DrawableRequestBuilder<String> builder = Glide.with(context)
                     .load(url)
-                    .dontAnimate()
-                    .dontTransform()
+                    .dontAnimate().dontTransform()
                     .skipMemoryCache(true)
-                    .dontAnimate()
-                    .dontTransform()
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
+//                    .placeholder(R.mipmap.image_placeholder)
                     .thumbnail(0.1f);
-            if (needPlaceholder == 0x00) {
+
+            if (placeholdeer == 0) {
                 builder.into(imageView);
             } else {
-                builder.placeholder(R.mipmap.image_placeholder);
-                builder.into(imageView);
+                builder.placeholder(R.mipmap.image_placeholder).into(imageView);
             }
-
         }
     }
-
     public static void loadChartImage(Context context, String url, ImageView imageView) {
         if (!TextUtils.isEmpty(url)) {
             DrawableRequestBuilder<String> builder = Glide.with(context)

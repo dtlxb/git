@@ -47,7 +47,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                 case 1001:
                                     //单聊
                                     //if (isYourFriend(message)) {
-                                        sendIMMessage(message, conversation);
+                                    sendIMMessage(message, conversation);
                                     //}
                                     break;
                                 case 1002:
@@ -121,6 +121,10 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     unAddArray.add(unAddjsonObject);
                                     SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversation.getConversationId() + "_unadd_accountList_beans", unAddArray);
                                     break;
+                                case 1009:
+                                    //直播消息
+                                    sendIMMessage(message, conversation);
+                                    break;
                                 default:
                                     break;
                             }
@@ -173,8 +177,9 @@ public class MyMessageHandler extends AVIMMessageHandler {
         HashMap<String, Object> map = new HashMap<>();
         map.put("message", message);
         map.put("conversation", conversation);
+        int chatType = (int) conversation.getAttribute("chat_type");
 
         BaseMessage baseMessage = new BaseMessage("IM_Info", map);
-        AppManager.getInstance().sendMessage("IM_Message", baseMessage);
+        AppManager.getInstance().sendMessage(chatType == 1009 ? "Live_Message" : "IM_Message", baseMessage);
     }
 }
