@@ -38,8 +38,9 @@
 
         <ImageView
             android:id="@+id/imgPlayClose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="fitXY"
             android:layout_gravity="right"
             android:clickable="true"
             android:focusable="true"
