@@ -59,6 +59,11 @@ public class AppConst {
     public static final int SQUARE_ROOM_EDIT_NAME = 1105;
     public static final int SQUARE_ROOM_EDIT_BRIEF = 1106;
     public static final int SQUARE_ROOM_EDIT_NOTICE = 1107;
+    //直播连麦
+    public static final int LIVE_CONTACT_SOMEBODY = 1108;
+    //一般群缓存，直播群缓存(通讯录)
+    public static final int CHAT_GROUP_CONTACT_BEANS = 1109;
+    public static final int LIVE_GROUP_CONTACT_BEANS = 1110;
 
     //阿里云播放器参数
     public static final String businessId = "video_live";

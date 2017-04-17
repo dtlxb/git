@@ -66,9 +66,9 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="2"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="2"
                 android:background="@drawable/shape_player_info"
                 android:orientation="vertical">
 
@@ -170,12 +170,12 @@
         android:text="0"
         android:textColor="@android:color/white"
         android:textSize="15dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycPortrait"
-        android:layout_width="150dp"
-        android:layout_height="100dp"
+        android:layout_width="250dp"
+        android:layout_height="200dp"
         android:layout_gravity="bottom"
         android:layout_marginBottom="65dp"
         android:layout_marginLeft="15dp" />

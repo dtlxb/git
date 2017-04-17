@@ -129,11 +129,12 @@ public class ChooseContactActivity extends BaseActivity {
         //actionType = 1102,1103,1104
         String teamId = getIntent().getStringExtra("conversation_id");
 
-        if (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
+        if (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE || actionType == AppConst.LIVE_CONTACT_SOMEBODY) {
             rvDel.setVisibility(View.VISIBLE);
             rvDel.addItemDecoration(new NormalItemDecoration(mContext));
             rvDel.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-            rvDel.setAdapter(new DeleteAdapter(UserUtils.getOthersInTeam(teamId)));
+            //rvDel.setAdapter(new DeleteAdapter(UserUtils.getOthersInTeam(teamId, actionType)));
+            rvDel.setAdapter(new DeleteAdapter(UserUtils.getUserContacts()));
         }
 
         //1100
@@ -246,6 +247,8 @@ public class ChooseContactActivity extends BaseActivity {
             title.setTitle("移除聊天成员");
         } else if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE) {
             titleText = String.format(getString(R.string.str_title_ok), UserUtils.getFriendsInTeam(teamId).size() > 0 ? "(" + mSelectedTeamMemberAccounts.size() + ")" : "");
+        } else if (actionType == AppConst.LIVE_CONTACT_SOMEBODY) {
+            titleText = "";
         } else {
             titleText = "完成";
         }
@@ -645,6 +648,7 @@ public class ChooseContactActivity extends BaseActivity {
                     map.put(data.getFriend_id(), isChecked);
                 }
             });
+
             // 设置CheckBox的状态
             if (map.get(data.getFriend_id()) == null) {
                 map.put(data.getFriend_id(), false);
@@ -654,12 +658,23 @@ public class ChooseContactActivity extends BaseActivity {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (checkBox.isChecked()) {
-                        removeFriends(data);
+                    if (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
+                        if (checkBox.isChecked()) {
+                            removeFriends(data);
+                        } else {
+                            addFriend(data);
+                        }
+                        setSelectItem(data.getFriend_id(), position);
                     } else {
-                        addFriend(data);
+                        checkBox.setChecked(true);
+                        Intent intent = new Intent();
+                        intent.putExtra("square_action", actionType);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("choose_connect_livebean", data);
+                        intent.putExtras(bundle);
+                        setResult(actionType, intent);
+                        finish();
                     }
-                    setSelectItem(data.getFriend_id(), position);
                 }
             });
 

@@ -470,7 +470,7 @@ public class MessageFragment extends BaseFragment {
                 AVImClientManager.getInstance().findConversationById(ConversationId, new AVImClientManager.ChatJoinManager() {
                     @Override
                     public void joinSuccess(AVIMConversation conversation) {
-                        UserUtils.getChatGroup(conversation.getMembers(), ConversationId, new UserUtils.getSquareInfo() {
+                        UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, conversation.getMembers(), ConversationId, new UserUtils.getSquareInfo() {
                             @Override
                             public void squareGetSuccess(JSONObject object) {
                                 JSONArray array = object.getJSONArray("accountList");
@@ -491,7 +491,7 @@ public class MessageFragment extends BaseFragment {
                     }
                 });
             } else {
-                UserUtils.getChatGroup(memberList, ConversationId, new UserUtils.getSquareInfo() {
+                UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, memberList, ConversationId, new UserUtils.getSquareInfo() {
                     @Override
                     public void squareGetSuccess(JSONObject object) {
                         JSONArray array = object.getJSONArray("accountList");
