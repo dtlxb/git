@@ -489,6 +489,13 @@ public class GGOKHTTP {
      */
     public static final String VIDEO_MOBILE = "v1/video_mobile/valid_ user_live_auth";
 
+    /**
+     * token                         用户token
+     * live_title                    直播标题
+     * live_large_img                直播封面图片
+     */
+    public static final String ADD_LIVE_VIDEO = "v1/video_mobile/add_live_video";
+
 //--------------------------------------------------------------------------------------------------
 
     /**
