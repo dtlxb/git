@@ -1,8 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:wheel="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg"
+    android:background="@android:color/white"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
@@ -18,18 +18,18 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@drawable/search_stock_edit_shape"
             android:gravity="center"
+            android:background="@drawable/shape_search_activity_edit"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="6dp"
+                android:layout_margin="8dp"
                 android:src="@drawable/search_gray" />
 
             <android.support.v7.widget.SearchView
@@ -37,12 +37,10 @@
                 android:id="@+id/search_edit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@null"
                 android:drawableRight="@drawable/cancel_phone"
-                android:hint="@string/stock_fund_plate"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
+                app:defaultQueryHint="@string/stock_fund_plate"
                 android:singleLine="true"
+
                 android:textColorHint="@color/text_color_light"
                 android:textSize="@dimen/text_size_11"/>
 
@@ -52,8 +50,8 @@
             android:id="@+id/back_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
             android:text="取消"
+            android:padding="12dp"
             android:textColor="@color/search_back"
             android:textSize="@dimen/text_size_15" />
 
@@ -145,12 +143,10 @@
                     android:textColor="@color/search_history"
                     android:textSize="@dimen/text_size_13" />
 
-                <com.go_goal.com.ui.view.InnerListView
+                <hply.com.niugu.view.InnerListView
                     android:id="@+id/search_hot_list"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                </com.go_goal.com.ui.view.InnerListView>
+                    android:layout_height="match_parent"/>
 
             </LinearLayout>
 
@@ -165,8 +161,8 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_centerInParent="true"
-                    wheel:matProg_barColor="#5588FF"
-                    wheel:matProg_progressIndeterminate="true" />
+                    app:matProg_barColor="#5588FF"
+                    app:matProg_progressIndeterminate="true" />
 
             </RelativeLayout>
 

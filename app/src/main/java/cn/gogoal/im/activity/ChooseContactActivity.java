@@ -133,8 +133,7 @@ public class ChooseContactActivity extends BaseActivity {
             rvDel.setVisibility(View.VISIBLE);
             rvDel.addItemDecoration(new NormalItemDecoration(mContext));
             rvDel.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-            //rvDel.setAdapter(new DeleteAdapter(UserUtils.getOthersInTeam(teamId, actionType)));
-            rvDel.setAdapter(new DeleteAdapter(UserUtils.getUserContacts()));
+            rvDel.setAdapter(new DeleteAdapter(UserUtils.getOthersInTeam(teamId, actionType)));
         }
 
         //1100

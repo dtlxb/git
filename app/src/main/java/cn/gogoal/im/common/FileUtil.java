@@ -3,11 +3,15 @@ package cn.gogoal.im.common;
 import android.os.Environment;
 import android.text.TextUtils;
 
+import com.socks.library.KLog;
+
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Locale;
+
+import cn.gogoal.im.base.MyApp;
 
 /**
  * Created by Administrator on 2017/1/15 0015.
@@ -35,10 +39,12 @@ public class FileUtil {
         }
     }
 
+    public static void writeRequestResponse(String response){
+        KLog.file("TAG", MyApp.getAppContext().getExternalFilesDir("json"),"json_"+CalendarUtils.getCurrentTime("yyyyMMddHHmmss")+".txt",response);
+    }
+
     /**
      * 关闭流
-     *
-     * @param closeables
      */
     public static void closeIO(Closeable... closeables) {
         if (null == closeables || closeables.length <= 0) {
