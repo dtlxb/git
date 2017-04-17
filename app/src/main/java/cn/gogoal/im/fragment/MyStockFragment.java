@@ -29,6 +29,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.copy.StockSearchActivity;
 import cn.gogoal.im.activity.stock.EditMyStockActivity;
 import cn.gogoal.im.activity.stock.MyStockNewsActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
@@ -135,9 +136,14 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         imgMystockRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startAnimation();
-                getMyStockData(AppConst.REFRESH_TYPE_PARENT_BUTTON);
-                getMarketLittle();
+                refreshAll(AppConst.REFRESH_TYPE_PARENT_BUTTON);
+            }
+        });
+
+        searchMarket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), StockSearchActivity.class));
             }
         });
 
@@ -146,7 +152,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     private void refreshAll(int refreshType){
         startAnimation();//刷新按钮动画
         getMyStockData(refreshType);
-        getMarketLittle();
         getMarketLittle();
     }
 
@@ -282,7 +287,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     xLayout.setStatus(XLayout.Success);
                     refreshLayout.setRefreshing(false);
                     stopAnimation();
-                    if (loadType != AppConst.REFRESH_TYPE_FIRST) {
+                    if (loadType == AppConst.REFRESH_TYPE_SWIPEREFRESH || loadType==AppConst.REFRESH_TYPE_PARENT_BUTTON) {
                         UIHelper.toast(getActivity(), getString(R.string.str_refresh_ok));
                     }
 

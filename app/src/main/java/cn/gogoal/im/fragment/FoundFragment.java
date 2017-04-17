@@ -1,23 +1,44 @@
 package cn.gogoal.im.fragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.MainAdapter;
+import cn.gogoal.im.activity.copy.StockSearchActivity;
+import cn.gogoal.im.adapter.SectionAdapter;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.bean.FoundData;
+import cn.gogoal.im.bean.BannerBean;
+import cn.gogoal.im.bean.SectionTouYanData;
+import cn.gogoal.im.bean.TouYan;
+import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.view.DrawableCenterTextView;
 import cn.gogoal.im.ui.view.XLayout;
-
-import static cn.gogoal.im.base.BaseActivity.initRecycleView;
 
 /**
  * 投研
@@ -36,8 +57,15 @@ public class FoundFragment extends BaseFragment {
     @BindArray(R.array.found_fun1)
     String[] functionArr1;
 
-    public FoundFragment() {
+    /**投研适配器、数据集*/
+    private SectionAdapter sectionAdapter;
+    private List<SectionTouYanData> dataList = new ArrayList<>();
 
+    /**banner适配器和数据集*/
+    private List<BannerBean.Banner> bannerImageUrls;
+    private BannerAdapter bannerAdapter;
+
+    public FoundFragment() {
     }
 
     @Override
@@ -50,59 +78,192 @@ public class FoundFragment extends BaseFragment {
         xLayout.setStatus(XLayout.Success);
 
         setFragmentTitle(R.string.title_found);
-        initRecycleView(recyclerView, R.drawable.shape_divider_15dp);
+        iniRecyclerView();
 
-        List<FoundData> datas = getFunctionDatas();//模拟数据
+        getBannerImage();
+        getTouyan();
 
-        MainAdapter mainAdapter = new MainAdapter(getContext(), R.layout.item_foundfragment, datas);
-        View headView = LayoutInflater.from(getContext()).inflate(R.layout.header_touyan,new LinearLayout(getContext()),false);
-        mainAdapter.addHeaderView(headView);
-
-        recyclerView.setAdapter(mainAdapter);
     }
 
+    private void getBannerImage() {
+        final View bannerView = creatBannerView();
+        sectionAdapter.addHeaderView(bannerView);
 
-    /**
-     * 模拟数据，后续可以简单修改变成服务端请求数据
-     */
-    private List<FoundData> getFunctionDatas() {
 
-        String[] titles = getResources().getStringArray(R.array.found_title);
+        Map<String, String> map = new HashMap<>();
+        map.put("ad_position", "7");
+        new GGOKHTTP(map, GGOKHTTP.GET_AD_LIST, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
 
-        int[][] iconArray = {{R.mipmap.function_icon_onlive, R.mipmap.function_icon_report,
-                R.mipmap.function_icon_school, R.mipmap.function_icon_1q, R.mipmap.cache_found_js_native},
-                {R.mipmap.function_icon_improtant_report, R.mipmap.function_icon_title, R.mipmap.function_icon_news}};
+                int code=JSONObject.parseObject(responseInfo).getIntValue("code");
 
-        String[][] iconDescription = {functionArr0, functionArr1};
+                if (code == 0) {
+                    bannerImageUrls.addAll(JSONObject.parseObject(responseInfo, BannerBean.class).getData());
+                    bannerAdapter.notifyDataSetChanged();
+                } else {
+                    BannerBean.Banner spaceBanner=new BannerBean.Banner();
+                    spaceBanner.setImage("");
+                    bannerImageUrls.add(spaceBanner);
+                    bannerAdapter.notifyDataSetChanged();
+                }
 
-        List<FoundData> datas = new ArrayList<>();
-
-        for (int i = 0; i < iconArray.length; i++) {
-
-            List<FoundData.ItemPojos> itemPojoses = new ArrayList<>();
-
-            for (int j = 0; j < iconArray[i].length; j++) {
-                itemPojoses.add(new FoundData.ItemPojos(iconDescription[i][j], iconArray[i][j], "https://m.baidu.com"));
             }
 
+            @Override
+            public void onFailure(String msg) {
 
-            datas.add(new FoundData(itemPojoses, titles[i]));
-        }
-
-        //-----------------------添加测试--------------------------------
-
-        FoundData.ItemPojos itemPojos1 = new FoundData.ItemPojos("股票行情", R.mipmap.cache_found_js_native, "tag");
-        FoundData.ItemPojos itemPojos2 = new FoundData.ItemPojos("自选股", R.mipmap.cache_found_js_native, "tag");
-        FoundData.ItemPojos itemPojos3 = new FoundData.ItemPojos("个股详情", R.mipmap.cache_found_js_native, "tag");
-        FoundData.ItemPojos itemPojos4 = new FoundData.ItemPojos("文字一分钟", R.mipmap.cache_found_js_native, "tag");
-
-        List<FoundData.ItemPojos> listTest = new ArrayList<>();
-        listTest.add(itemPojos1);
-        listTest.add(itemPojos2);
-        listTest.add(itemPojos3);
-        listTest.add(itemPojos4);
-        datas.add(new FoundData(listTest, "测试部分"));
-        return datas;
+            }
+        }).startGet();
     }
 
+    @NonNull
+    /**动态创建banner视图*/
+    private View creatBannerView() {
+        LinearLayout bannerView = new LinearLayout(getContext());
+        final ViewPager bannerPager = new ViewPager(getContext());
+        LinearLayout.LayoutParams root=new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        bannerView.setOrientation(LinearLayout.VERTICAL);
+        bannerView.setBackgroundResource(R.drawable.shape_line_bottom);
+        bannerView.setLayoutParams(root);
+
+        bannerPager.setId(R.id.banner_pager_id);
+        bannerImageUrls =new ArrayList<>();
+        bannerAdapter=new BannerAdapter(bannerImageUrls);
+        bannerPager.setAdapter(bannerAdapter);
+        LinearLayout.LayoutParams pagerParams = new LinearLayout.LayoutParams(
+                AppDevice.getWidth(getContext()),
+                235 * AppDevice.getWidth(getContext()) / 740);
+        bannerView.addView(bannerPager,0,pagerParams);
+
+        DrawableCenterTextView searchView = new DrawableCenterTextView(getContext());
+        searchView.setGravity(Gravity.CENTER_VERTICAL);
+        LinearLayout.LayoutParams searchParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, AppDevice.dp2px(getContext(), 35));
+        searchParams.setMargins(AppDevice.dp2px(getContext(), 10), AppDevice.dp2px(getContext(), 10),
+                AppDevice.dp2px(getContext(), 10), AppDevice.dp2px(getContext(), 10));
+        searchView.setBackgroundResource(R.drawable.shape_search_activity_edit);
+        searchView.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getContext(), R.mipmap.img_search)
+                , null, null, null);
+        searchView.setCompoundDrawablePadding(AppDevice.dp2px(getContext(),5));
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), StockSearchActivity.class));
+            }
+        });
+        searchView.setText("股票代码/名称/拼音");
+        searchView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        searchView.setId(R.id.banner_search_id);
+        bannerView.addView(searchView,1,searchParams);
+        return bannerView;
+    }
+
+    private void iniRecyclerView() {
+        recyclerView.setBackgroundColor(getResColor(R.color.stock_market_bg));
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
+        sectionAdapter = new SectionAdapter(getContext(), dataList);
+
+        recyclerView.setAdapter(sectionAdapter);
+
+    }
+
+    private void getTouyan() {
+        Map<String, String> map = new HashMap<>();
+        map.put("token", UserUtils.getToken());
+
+        new GGOKHTTP(map, GGOKHTTP.GET_TOUYAN_LIST, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                if (code == 0) {
+                    List<TouYan.DataBean> touYanList = JSONObject.parseObject(responseInfo, TouYan.class).getData();
+                    for (int i = 0; i < touYanList.size(); i++) {
+                        TouYan.DataBean dataBean = touYanList.get(i);
+                        dataList.add(new SectionTouYanData(true, dataBean.getTitle()));
+                        List<TouYan.DataBean.Item> itemList = dataBean.getDatas();
+                        for (TouYan.DataBean.Item item : itemList) {
+                            dataList.add(new SectionTouYanData(item));
+                        }
+
+                        TouYan.DataBean.Item spaceItem = creatSpaceItem();
+
+                        if (itemList.size() % 4 == 1) {
+                            dataList.add(new SectionTouYanData(spaceItem));
+                            dataList.add(new SectionTouYanData(spaceItem));
+                            dataList.add(new SectionTouYanData(spaceItem));
+                        } else if (itemList.size() % 4 == 2) {
+                            dataList.add(new SectionTouYanData(spaceItem));
+                            dataList.add(new SectionTouYanData(spaceItem));
+                        } else if (itemList.size() % 4 == 3) {
+                            dataList.add(new SectionTouYanData(spaceItem));
+                        }
+                    }
+                    sectionAdapter.notifyDataSetChanged();
+                } else if (code == 1001) {
+
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toastError(getActivity(), msg, xLayout);
+            }
+        }).startGet();
+    }
+
+    @NonNull
+    private TouYan.DataBean.Item creatSpaceItem() {
+        TouYan.DataBean.Item spaceItem = new TouYan.DataBean.Item();
+        spaceItem.setDesc("");
+        spaceItem.setIconUrl("");
+        spaceItem.setIsShow(0);
+        spaceItem.setPosition(0);
+        spaceItem.setType(0);
+        return spaceItem;
+    }
+
+    private class BannerAdapter extends PagerAdapter{
+
+        private List<BannerBean.Banner> imageUrls;
+
+        public BannerAdapter(List<BannerBean.Banner> imageUrls) {
+            this.imageUrls = imageUrls;
+        }
+
+        @Override
+        public int getCount() {
+            return imageUrls==null?0:imageUrls.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return object==view;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, final int position) {
+            ImageView view=new ImageView(container.getContext());
+            view.setAdjustViewBounds(true);
+            ImageDisplay.loadNetImage(container.getContext(),imageUrls.get(position).getImage(),view);
+            container.addView(view);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UIHelper.toast(v.getContext(),"banner::"+position);
+                }
+            });
+            return view;
+        }
+    }
 }

@@ -14,7 +14,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/shape_bottom_line">
+        android:background="@drawable/shape_line_bottom">
 
         <TextView
             android:id="@+id/tv_mystock_edit"

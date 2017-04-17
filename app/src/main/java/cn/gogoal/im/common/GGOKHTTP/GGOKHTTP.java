@@ -489,6 +489,22 @@ public class GGOKHTTP {
      */
     public static final String VIDEO_MOBILE = "v1/video_mobile/valid_ user_live_auth";
 
+    /**
+     *
+     * 投研板块
+     *
+     * token                         用户token
+     */
+    public static final String GET_TOUYAN_LIST = "v1/ggm_icon/get_icon_list";
+
+    /**
+     * banner
+     *
+     * ad_position=7类型
+     */
+    public static final String GET_AD_LIST = "v1/ggm_ad/get_ad_list";
+
+
 //--------------------------------------------------------------------------------------------------
 
     /**

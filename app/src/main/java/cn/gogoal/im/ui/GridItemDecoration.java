@@ -1,52 +1,46 @@
 package cn.gogoal.im.ui;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.support.annotation.ColorInt;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.LayoutManager;
+import android.support.v7.widget.RecyclerView.State;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
-/**
- * author wangjd on 2017/4/12 0012.
- * Staff_id 1375
- * phone 18930640263
- * description :${annotated}.
- */
 public class GridItemDecoration extends RecyclerView.ItemDecoration {
 
     private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
-    private Drawable mHovDivider;
-    private Drawable mVerDivider;
+    private Drawable mDivider;
 
-    public GridItemDecoration(Context context, Drawable mHovDivider, Drawable mVerDivider) {
-        final TypedArray a = context.obtainStyledAttributes(ATTRS);
-        if (mHovDivider != null) {
-            this.mHovDivider = mHovDivider;
-        } else {
-            this.mHovDivider = a.getDrawable(0);
-        }
-        if (mVerDivider != null) {
-            this.mVerDivider = mVerDivider;
-        } else {
-            this.mVerDivider = a.getDrawable(0);
-        }
-        a.recycle();
+    public GridItemDecoration(Context context,@ColorInt int color) {
+        GradientDrawable drawable=new GradientDrawable();
+        drawable.setColor(color);
+        drawable.setSize(-1, 1);
+        mDivider = drawable;
+    }
+
+    public GridItemDecoration(Drawable drawable) {
+        mDivider = drawable;
     }
 
     @Override
-    public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+    public void onDraw(Canvas c, RecyclerView parent, State state) {
+
         drawHorizontal(c, parent);
         drawVertical(c, parent);
+
     }
 
     private int getSpanCount(RecyclerView parent) {
         // 列数
         int spanCount = -1;
-        RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
+        LayoutManager layoutManager = parent.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
 
             spanCount = ((GridLayoutManager) layoutManager).getSpanCount();
@@ -65,11 +59,11 @@ public class GridItemDecoration extends RecyclerView.ItemDecoration {
                     .getLayoutParams();
             final int left = child.getLeft() - params.leftMargin;
             final int right = child.getRight() + params.rightMargin
-                    + mHovDivider.getIntrinsicWidth();
+                    + mDivider.getIntrinsicWidth();
             final int top = child.getBottom() + params.bottomMargin;
-            final int bottom = top + mHovDivider.getIntrinsicHeight();
-            mHovDivider.setBounds(left, top, right, bottom);
-            mHovDivider.draw(c);
+            final int bottom = top + mDivider.getIntrinsicHeight();
+            mDivider.setBounds(left, top, right, bottom);
+            mDivider.draw(c);
         }
     }
 
@@ -83,19 +77,16 @@ public class GridItemDecoration extends RecyclerView.ItemDecoration {
             final int top = child.getTop() - params.topMargin;
             final int bottom = child.getBottom() + params.bottomMargin;
             final int left = child.getRight() + params.rightMargin;
-            final int right = left + mVerDivider.getIntrinsicWidth();
+            final int right = left + mDivider.getIntrinsicWidth();
 
-            mVerDivider.setBounds(left, top, right, bottom);
-            mVerDivider.draw(c);
+            mDivider.setBounds(left, top, right, bottom);
+            mDivider.draw(c);
         }
     }
 
-    /**
-     * 是否是边缘
-     */
     private boolean isLastColum(RecyclerView parent, int pos, int spanCount,
                                 int childCount) {
-        RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
+        LayoutManager layoutManager = parent.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
             if ((pos + 1) % spanCount == 0)// 如果是最后一列，则不需要绘制右边
             {
@@ -120,7 +111,7 @@ public class GridItemDecoration extends RecyclerView.ItemDecoration {
 
     private boolean isLastRaw(RecyclerView parent, int pos, int spanCount,
                               int childCount) {
-        RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
+        LayoutManager layoutManager = parent.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
             childCount = childCount - childCount % spanCount;
             if (pos >= childCount)// 如果是最后一行，则不需要绘制底部
@@ -146,19 +137,20 @@ public class GridItemDecoration extends RecyclerView.ItemDecoration {
         return false;
     }
 
-
     @Override
-    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+    public void getItemOffsets(Rect outRect, int itemPosition,
+                               RecyclerView parent) {
         int spanCount = getSpanCount(parent);
-        int itemPosition = parent.getChildLayoutPosition(view);
         int childCount = parent.getAdapter().getItemCount();
-        if (isLastRaw(parent, itemPosition, spanCount, childCount)) {// 如果是最后一行，则不需要绘制底部
-            outRect.set(0, 0, mVerDivider.getIntrinsicWidth(), 0);
-        } else if (isLastColum(parent, itemPosition, spanCount, childCount)) {// 如果是最后一列，则不需要绘制右边
-            outRect.set(0, 0, 0, mHovDivider.getIntrinsicHeight());
+        if (isLastRaw(parent, itemPosition, spanCount, childCount))// 如果是最后一行，则不需要绘制底部
+        {
+            outRect.set(0, 0, mDivider.getIntrinsicWidth(), 0);
+        } else if (isLastColum(parent, itemPosition, spanCount, childCount))// 如果是最后一列，则不需要绘制右边
+        {
+            outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
         } else {
-            outRect.set(0, 0, mHovDivider.getIntrinsicWidth(),
-                    mVerDivider.getIntrinsicHeight());
+            outRect.set(0, 0, mDivider.getIntrinsicWidth(),
+                    mDivider.getIntrinsicHeight());
         }
     }
 }

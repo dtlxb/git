@@ -6,4 +6,4 @@
     android:layout_alignParentTop="true"
     android:layout_gravity="top"
     android:visibility="gone"
-    android:background="@drawable/shape_bottom_line" />
+    android:background="@drawable/shape_line_bottom" />

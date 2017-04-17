@@ -115,6 +115,11 @@ public class StockSearchActivity extends BaseActivity {
 
     //数据初始化
     private void init() {
+        ((SearchView.SearchAutoComplete) searchStock.findViewById(R.id.search_src_text)).
+                setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+        ((SearchView.SearchAutoComplete) searchStock.findViewById(R.id.search_src_text)).
+                setGravity(Gravity.CENTER_VERTICAL);
+
         back_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
