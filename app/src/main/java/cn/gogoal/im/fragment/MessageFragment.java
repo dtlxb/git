@@ -519,7 +519,7 @@ public class MessageFragment extends BaseFragment {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {
                 String groupFaceImageName = "_" + ConversationId + ".png";
-                ImageUtils.saveBitmapFile(mathingBitmap, "imagecache", groupFaceImageName);
+                ImageUtils.cacheBitmapFile(mathingBitmap, "imagecache", groupFaceImageName);
 
                 AppManager.getInstance().sendMessage("set_avatar", position + "");
             }

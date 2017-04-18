@@ -158,6 +158,7 @@
         <activity android:name=".activity.copy.StockSearchActivity"/>
 
         <activity android:name=".activity.EditMyInfoActivity"/>
+        <activity android:name=".activity.ImageDetailActivity"/>
     </application>
 
 </manifest>

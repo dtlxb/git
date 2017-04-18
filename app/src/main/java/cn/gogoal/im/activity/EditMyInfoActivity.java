@@ -1,17 +1,13 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.hply.imagepicker.ITakePhoto;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindArray;
@@ -21,13 +17,10 @@ import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.UserInfo;
-import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
-import cn.gogoal.im.ui.widget.BottomSheetListDialog;
 
 /**
  * author wangjd on 2017/4/18 0018.
@@ -64,7 +57,7 @@ public class EditMyInfoActivity extends BaseActivity {
     }
 
     private void iniListDatas() {
-        String[] userInfoValue = {UserUtils.getUserName(), UserUtils.getNickname(), UserUtils.getPhoneNumber(),
+        String[] userInfoValue = {UserUtils.getNickname(), UserUtils.getUserName(), UserUtils.getPhoneNumber(),
                 UserUtils.getorgName(), UserUtils.getDuty(), UserUtils.getOrganizationAddress()};
         editInfos.add(new UserInfo(UserInfo.HEAD, UserUtils.getUserAvatar()));
         for (int i = 0; i < edidInfoArray.length; i++) {
@@ -79,9 +72,6 @@ public class EditMyInfoActivity extends BaseActivity {
 
     private class MyInfoAdapter extends BaseMultiItemQuickAdapter<UserInfo, BaseViewHolder> {
 
-        ArrayList<String> selectedPhoto = new ArrayList<>(Arrays.asList(
-                new String[]{"拍照", "从手机相册选择", "保存图片"}));
-
         private MyInfoAdapter(List<UserInfo> data) {
             super(data);
             addItemType(UserInfo.HEAD, R.layout.header_rv_edit_my_info);
@@ -90,7 +80,7 @@ public class EditMyInfoActivity extends BaseActivity {
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, UserInfo data, int position) {
+        protected void convert(BaseViewHolder holder, UserInfo data, final int position) {
 
             switch (holder.getItemViewType()) {
                 case UserInfo.HEAD:
@@ -101,48 +91,45 @@ public class EditMyInfoActivity extends BaseActivity {
                     holder.getView(R.id.header_edit_my_info).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DialogHelp.getBottomSheetListDialog(getActivity(), selectedPhoto, new BottomSheetListDialog.DialogItemClick() {
-                                @Override
-                                public void onItemClick(BottomSheetListDialog dialog, TextView view, int position) {
-                                    dialog.dismiss();
-                                    switch (position) {
-                                        case 0:
-                                            ImageTakeUtils.getInstance().takePhoto(getActivity(), 1, true, new ITakePhoto() {
-                                                @Override
-                                                public void success(List<String> uriPaths, boolean isOriginalPic) {
-                                                    KLog.e(uriPaths.get(0));
-                                                }
-
-                                                @Override
-                                                public void error() {
-
-                                                }
-                                            });
-                                            break;
-                                        case 1:
-                                            break;
-                                        case 2:
-                                            break;
-                                        case 3:
-                                            break;
-                                    }
-                                }
-                            });
+                            Intent intent = new Intent(v.getContext(), ImageDetailActivity.class);
+                            intent.putExtra("account_Id",UserUtils.getUserAccountId());
+                            startActivity(intent);
                         }
                     });
                     break;
                 case UserInfo.SPACE:
                     break;
                 case UserInfo.TEXT_ITEM_2:
+
+                    View itemView = holder.getView(R.id.item_rv_edit_my_info);
+
+                    itemView.setClickable(!data.getItemKey().equals("Go-Goal账号"));
+                    itemView.setEnabled(!data.getItemKey().equals("Go-Goal账号"));
+
                     holder.setText(R.id.tv_info_key, data.getItemKey());
                     holder.setText(R.id.tv_info_value, data.getItemValue());
 
                     holder.getView(R.id.flag_img_more).setVisibility(data.isHaveMore() ? View.VISIBLE : View.GONE);
 
-                    holder.getView(R.id.item_rv_edit_my_info).setOnClickListener(new View.OnClickListener() {
+                    itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            UIHelper.toast(v.getContext(), getString(R.string.str_coming_soon));
+                            UIHelper.toast(v.getContext(), getString(R.string.str_coming_soon) + "::" + position);
+                            switch (position) {
+                                case 1://姓名、昵称
+                                    break;
+                                case 2://不支持修改
+                                    break;
+                                case 3://手机号，暂不支持修改
+                                    UIHelper.toast(v.getContext(), getString(R.string.str_coming_soon) + "::" + position);
+                                    break;
+                                case 4://公司
+                                    break;
+                                case 5://职位
+                                    break;
+                                case 6://工作地区
+                                    break;
+                            }
                         }
                     });
                     break;

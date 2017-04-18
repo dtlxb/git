@@ -273,7 +273,7 @@ public class SquareCollectActivity extends BaseActivity {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {
                 String groupFaceImageName = "_" + conversationId + ".png";
-                ImageUtils.saveBitmapFile(mathingBitmap, "imagecache", groupFaceImageName);
+                ImageUtils.cacheBitmapFile(mathingBitmap, "imagecache", groupFaceImageName);
                 AppManager.getInstance().sendMessage("set_squarecollcet_avatar", positon);
             }
 

@@ -71,7 +71,6 @@ public class MineFragment extends BaseFragment {
     private WeakReferenceHandler<MineFragment> handler = new WeakReferenceHandler<MineFragment>(Looper.getMainLooper(), this) {
         @Override
         protected void handleMessage(MineFragment fragment, Message message) {
-//            Bitmap bitmap = (Bitmap) message.obj;
         }
     };
 

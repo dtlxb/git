@@ -58,9 +58,7 @@ public class UserUtils {
      * @return
      */
     public static String getUserName() {
-        JSONObject user = getUserInfo();
-        if (user == null) return null;
-        return user.getString("full_name");
+        return getGoGoalId();
     }
 
     /**
@@ -93,7 +91,7 @@ public class UserUtils {
     public static String getPhoneNumber() {
         JSONObject user = getUserInfo();
         if (user == null) return null;
-        return user.getString("mobile");
+        return TextUtils.isEmpty(user.getString("mobile"))?"未设置":user.getString("mobile");
     }
 
     /**
