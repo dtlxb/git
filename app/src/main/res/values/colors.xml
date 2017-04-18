@@ -84,4 +84,7 @@
     <!--<color name="base_text_color_light">#909090</color>-->
     <!--<color name="base_loading_background">#f7f7f7</color>-->
 
+    <color name="create_live_bg">#171717</color>
+    <color name="shape_create_bg">#1a1a1a</color>
+
 </resources>

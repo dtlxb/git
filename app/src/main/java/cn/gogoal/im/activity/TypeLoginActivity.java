@@ -15,6 +15,8 @@ import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.socks.library.KLog;
 
+import org.w3c.dom.Text;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +45,9 @@ public class TypeLoginActivity extends BaseActivity {
 
     @BindView(R.id.login_edite_code)
     XEditText loginPassWord;
+
+    @BindView(R.id.forget_code)
+    TextView forgetCode;
 
     @BindView(R.id.login_keyboard_layout)
     KeyboardLaunchListenLayout keyboardLayout;
@@ -124,11 +129,16 @@ public class TypeLoginActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.login_button})
+    @OnClick({R.id.login_button, R.id.forget_code})
     public void setLogin(View view) {
         switch (view.getId()) {
             case R.id.login_button:
                 Login();
+                break;
+            case R.id.forget_code:
+                startActivity(new Intent(getActivity(), RigisterActivity.class));
+                break;
+            default:
                 break;
         }
     }

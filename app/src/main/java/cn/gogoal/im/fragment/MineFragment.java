@@ -25,7 +25,7 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.FunctionActivity;
+import cn.gogoal.im.activity.CreateLiveActivity;
 import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.activity.TestActivity;
 import cn.gogoal.im.activity.WatchLiveActivity;
@@ -33,7 +33,6 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ImageTextBean;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
@@ -200,10 +199,7 @@ public class MineFragment extends BaseFragment {
                             intent.putExtra("live_id", data.getString("live_id"));
                             startActivity(intent);
                         } else {
-                            Intent intent = new Intent(getActivity(), FunctionActivity.class);
-                            intent.putExtra("title", "GoGoal");
-                            intent.putExtra("function_url", AppConst.GG_LIVE_APPLY);
-                            startActivity(intent);
+                            startActivity(new Intent(getActivity(), CreateLiveActivity.class));
                         }
                     } else {
                         DialogHelp.getMessageDialog(getContext(), "您暂时没有权限直播，请联系客服申请！").show();

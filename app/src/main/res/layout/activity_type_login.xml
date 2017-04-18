@@ -58,7 +58,6 @@
             android:id="@+id/login_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="25dp"
@@ -70,6 +69,18 @@
             app:normalBackgroundColor="@color/colorPrimary"
             app:pressedBackgroundColor="#f68d8d"
             app:radius="4dp" />
+
+        <TextView
+            android:id="@+id/forget_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="21dp"
+            android:gravity="end"
+            android:text="忘记密码"
+            android:textColor="@color/textColor_666666"
+            android:textSize="15dp" />
 
     </LinearLayout>
 
