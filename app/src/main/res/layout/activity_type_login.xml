@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.gogoal.im.ui.KeyboardLaunchListenLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_keyboard_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/absoluteWhite"
+    tools:context=".activity.TypeLoginActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/include_title" />
+
+        <EditText
+            android:id="@+id/login_edite_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="108dp"
+            android:background="@drawable/login_edit_border"
+            android:drawableLeft="@mipmap/icon_number"
+            android:drawablePadding="9dp"
+            android:hint="Go-Goal账号"
+            android:paddingBottom="16dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="16dp"
+            android:textColor="@color/textColor_333333"
+            android:textSize="15sp" />
+
+        <cn.gogoal.im.ui.view.XEditText
+            android:id="@+id/login_edite_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/login_edit_border"
+            android:drawableLeft="@mipmap/icon_code"
+            android:drawablePadding="9dp"
+            android:drawableRight="@mipmap/icon_visible"
+            android:hint="请输入密码"
+            android:inputType="textPassword"
+            android:lines="1"
+            android:paddingBottom="16dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="11dp"
+            android:paddingTop="16dp"
+            android:textColor="@color/textColor_333333"
+            android:textSize="15sp" />
+
+        <cn.gogoal.im.ui.view.SelectorButton
+            android:id="@+id/login_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="25dp"
+            android:lines="1"
+            android:padding="15dp"
+            android:text="登  录"
+            android:textColor="@color/absoluteWhite"
+            android:textSize="17sp"
+            app:normalBackgroundColor="@color/colorPrimary"
+            app:pressedBackgroundColor="#f68d8d"
+            app:radius="4dp" />
+
+    </LinearLayout>
+
+</cn.gogoal.im.ui.KeyboardLaunchListenLayout>

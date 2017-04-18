@@ -41,7 +41,7 @@
     <application
         android:name=".base.MyApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/login_gogoal"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -68,7 +68,7 @@
             android:process=":pushservice" />
         <service android:name=".servise.IntentService" />
 
-        <activity android:name=".activity.LoginActivity">
+        <activity android:name=".activity.TypeLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -78,6 +78,11 @@
         <activity
             android:name=".activity.MainActivity"
             android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".activity.RigisterActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
         <activity
             android:name=".activity.TakePhotoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -144,18 +149,19 @@
 
         <activity android:name=".activity.ContactsActivity" />
 
-        <activity android:name=".activity.stock.EditMyStockActivity"/>
-        <activity android:name=".activity.stock.StockDetailActivity"/>
+        <activity android:name=".activity.stock.EditMyStockActivity" />
+        <activity android:name=".activity.stock.StockDetailActivity" />
         <!--<activity android:name=".activity.Test2Activity"></activity>-->
 
-        <activity android:name=".activity.copy.CopyStockDetailActivity"/>
-        <activity android:name=".activity.copy.NewsContentActivity"/>
-        <activity android:name=".activity.copy.StockDetailChartsActivity"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".activity.copy.CommentActivity"/>
-        <activity android:name=".activity.copy.StockDetailMarketIndexActivity"/>
+        <activity android:name=".activity.copy.CopyStockDetailActivity" />
+        <activity android:name=".activity.copy.NewsContentActivity" />
+        <activity
+            android:name=".activity.copy.StockDetailChartsActivity"
+            android:screenOrientation="landscape" />
+        <activity android:name=".activity.copy.CommentActivity" />
+        <activity android:name=".activity.copy.StockDetailMarketIndexActivity" />
 
-        <activity android:name=".activity.copy.StockSearchActivity"/>
+        <activity android:name=".activity.copy.StockSearchActivity" />
     </application>
 
 </manifest>

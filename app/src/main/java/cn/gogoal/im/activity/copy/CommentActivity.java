@@ -37,7 +37,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.LoginActivity;
+import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.adapter.copy.CommentListAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
@@ -269,7 +269,7 @@ public class CommentActivity extends BaseActivity implements View.OnClickListene
               };
               new GGOKHTTP(param, GGOKHTTP.COMMENT_DELETE, ggHttpInterface).startGet();
             } else {
-              startActivity(new Intent(CommentActivity.this, LoginActivity.class));
+              startActivity(new Intent(CommentActivity.this, TypeLoginActivity.class));
             }
           }
         });
@@ -534,7 +534,7 @@ public class CommentActivity extends BaseActivity implements View.OnClickListene
         if (UserUtils.isLogin()) {
           if (!AppDevice.isFastClick()) operateFavor();
         } else {
-          startActivity(new Intent(getActivity(),LoginActivity.class));
+          startActivity(new Intent(getActivity(),TypeLoginActivity.class));
         }
         break;
       case R.id.thumb_up:
@@ -549,7 +549,7 @@ public class CommentActivity extends BaseActivity implements View.OnClickListene
         if (UserUtils.isLogin()) {
           showCustomDialog(null, false, -1001);
         } else {
-          startActivity(new Intent(CommentActivity.this, LoginActivity.class));
+          startActivity(new Intent(CommentActivity.this, TypeLoginActivity.class));
         }
         break;
     }

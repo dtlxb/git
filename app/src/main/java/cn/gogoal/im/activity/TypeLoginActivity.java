@@ -2,9 +2,12 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.renderscript.ScriptGroup;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMClient;
@@ -18,36 +21,44 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.stock.MarketActivity;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.KeyboardLaunchListenLayout;
+import cn.gogoal.im.ui.view.XEditText;
+import cn.gogoal.im.ui.view.XTitle;
 
 /**
- * 登录页
+ * Created by huangxx on 2017/4/17.
  */
-public class LoginActivity extends BaseActivity {
 
-    @BindView(R.id.loginUserName)
+public class TypeLoginActivity extends BaseActivity {
+
+    private XTitle xTitle;
+
+    @BindView(R.id.login_edite_name)
     EditText loginUserName;
 
-    @BindView(R.id.loginPassWord)
-    EditText loginPassWord;
+    @BindView(R.id.login_edite_code)
+    XEditText loginPassWord;
 
-    @BindView(R.id.chat_root_keyboard_layout)
+    @BindView(R.id.login_keyboard_layout)
     KeyboardLaunchListenLayout keyboardLayout;
 
     @Override
     public int bindLayout() {
-        return R.layout.activity_login;
+        return R.layout.activity_type_login;
     }
 
     @Override
-    public void doBusiness(final Context mContext) {
+    public void doBusiness(Context mContext) {
+        initTitle();
+        initLoginInfo();
+    }
 
+    private void initLoginInfo() {
         /*loginUserName.setText("E00020190");
         loginPassWord.setText("955202");*/
 
@@ -69,13 +80,7 @@ public class LoginActivity extends BaseActivity {
         /*loginUserName.setText("E010399");
         loginPassWord.setText("198122");*/
 
-        findViewById(R.id.login).setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                startActivity(new Intent(mContext, MarketActivity.class));
-                return true;
-            }
-        });
+        loginUserName.setSelection(loginUserName.getText().length());
 
         //保存键盘高度
         keyboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchListenLayout.OnKeyboardChangeListener() {
@@ -91,22 +96,49 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.login})
+    private void initTitle() {
+        xTitle = setMyTitle(R.string.str_login_in, true);
+        //添加action
+        XTitle.TextAction rigisterAction = new XTitle.TextAction("注册") {
+            @Override
+            public void actionClick(View view) {
+                startActivity(new Intent(getActivity(), RigisterActivity.class));
+            }
+        };
+        xTitle.addAction(rigisterAction, 0);
+        TextView rigisterView = (TextView) xTitle.getViewByAction(rigisterAction);
+        rigisterView.setTextColor(getResColor(R.color.colorPrimary));
+
+        // 密码可见监听
+        loginPassWord.setDrawableRightListener(new XEditText.DrawableRightListener() {
+            @Override
+            public void onDrawableRightClick(View view) {
+
+                if (loginPassWord.getInputType() == 0x81) {
+                    loginPassWord.setInputType(0x90);
+                } else if (loginPassWord.getInputType() == 0x90) {
+                    loginPassWord.setInputType(0x81);
+                }
+                loginPassWord.setSelection(loginPassWord.getText().length());
+            }
+        });
+    }
+
+    @OnClick({R.id.login_button})
     public void setLogin(View view) {
         switch (view.getId()) {
-            case R.id.login:
+            case R.id.login_button:
                 Login();
                 break;
         }
     }
 
     private void Login() {
-
         String name = loginUserName.getText().toString();
         String word = loginPassWord.getText().toString();
 
         if (TextUtils.isEmpty(word) || TextUtils.isEmpty(name)) {
-            UIHelper.toast(LoginActivity.this, "用户名或密码不能为空");
+            UIHelper.toast(TypeLoginActivity.this, R.string.str_login_edit_null);
             return;
         }
 
@@ -124,11 +156,11 @@ public class LoginActivity extends BaseActivity {
                     JSONObject data = object.getJSONObject("data");
                     if (data.getIntValue("code") == 0) {
                         SPTools.saveJsonObject("userInfo", data);
-                        Intent intent = new Intent(getContext(), MainActivity.class);
+                        Intent intent = new Intent(TypeLoginActivity.this, MainActivity.class);
                         intent.putExtra("isFromLogin", true);
                         startActivity(intent);
                         finish();
-                        //测试代码
+                        //测试代码(登录IM)
                         AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
                             @Override
                             public void done(AVIMClient avimClient, AVIMException e) {
@@ -136,23 +168,19 @@ public class LoginActivity extends BaseActivity {
                         });
 
                     } else {
-                        UIHelper.toast(getContext(), "登录失败");
+                        UIHelper.toast(TypeLoginActivity.this, R.string.str_login_error);
                     }
                 } else {
-                    UIHelper.toast(getContext(), "登录失败");
+                    UIHelper.toast(TypeLoginActivity.this, R.string.str_login_error);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
                 KLog.json(msg);
-                UIHelper.toast(getContext(), R.string.net_erro_hint);
+                UIHelper.toast(TypeLoginActivity.this, R.string.net_erro_hint);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_USER_LOGIN, ggHttpInterface).startGet();
-    }
-
-    private LoginActivity getContext() {
-        return LoginActivity.this;
     }
 }
