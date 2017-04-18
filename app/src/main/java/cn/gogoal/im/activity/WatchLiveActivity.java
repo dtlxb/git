@@ -3,7 +3,6 @@ package cn.gogoal.im.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.hardware.camera2.params.BlackLevelPattern;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -26,6 +25,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alivc.player.MediaPlayer;
 import com.alivc.publisher.IMediaPublisher;
@@ -34,9 +35,7 @@ import com.alivc.publisher.MediaError;
 import com.alivc.videochat.AlivcVideoChatParter;
 import com.alivc.videochat.IVideoChatParter;
 import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.socks.library.KLog;
 
@@ -59,7 +58,6 @@ import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.PlayerUtils.CountDownTimerView;
-import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.linkUtils.ConnectivityMonitor;
@@ -156,12 +154,11 @@ public class WatchLiveActivity extends BaseActivity {
     private boolean shouldOffLine = false; //surfaceChange时是否应该结束连麦
 
     //播放地址
-    //private String mPlayUrl = "http://ggliveo.oss-cn-hangzhou.aliyuncs.com/ggVod/Act-ss-mp4-hd/xiaoceshi.mp4";
-    private String mPlayUrl = "rtmp://zbmo.go-goal.cn/microphone/dave_mix";
+    private String mPlayUrl;
     //推送地址
     private String mPushUrl;
     //连麦延迟播放网址
-    private String mSmallDelayPlayUrl = "rtmp://zbmo.go-goal.cn/microphone/dave";
+    private String mSmallDelayPlayUrl;
 
     //聊天对象
     private List<AVIMMessage> messageList = new ArrayList<>();
@@ -209,12 +206,7 @@ public class WatchLiveActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
 
         //live_id = getIntent().getStringExtra("live_id");
-        live_id = "cf68d632-b488-42fe-8142-07bc645d4229";
-        if (live_id.equals("887a1170-e034-4386-98fb-3b710fb37fbd")) {
-            mPlayUrl = "rtmp://zbmo.go-goal.cn/microphone/348628_mix";
-        } else if (live_id.equals("cf68d632-b488-42fe-8142-07bc645d4229")) {
-            mPlayUrl = "rtmp://zbmo.go-goal.cn/microphone/dave_mix";
-        }
+        live_id = "caa485d9-de8e-4f1a-ab6d-448070b8de99";
 
         if (Build.VERSION.SDK_INT >= 23) {
             permissionCheck();
@@ -237,8 +229,6 @@ public class WatchLiveActivity extends BaseActivity {
         initRecycleView(recyler_chat, null);
         mLiveChatAdapter = new LiveChatAdapter(R.layout.item_live_chat, messageList);
         recyler_chat.setAdapter(mLiveChatAdapter);
-
-        getPlayerInfo();
     }
 
     /**
@@ -251,6 +241,7 @@ public class WatchLiveActivity extends BaseActivity {
         ChatGroupHelper.addAnyone(idList, conversation.getConversationId(), new ChatGroupHelper.chatGroupManager() {
             @Override
             public void groupActionSuccess(JSONObject object) {
+
             }
 
             @Override
@@ -288,21 +279,40 @@ public class WatchLiveActivity extends BaseActivity {
 
         @Override
         protected void convert(BaseViewHolder holder, AVIMMessage message, int position) {
-            AVIMTextMessage msg = (AVIMTextMessage) message;
-
-            KLog.json(msg.toString());
-
-            String username = msg.getAttrs().get("username") + ": ";
-
             TextView textSend = holder.getView(R.id.text_you_send);
-            textSend.setText(username + msg.getText());
+            if (null != message) {
+                JSONObject contentObject = JSON.parseObject(message.getContent());
+                JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
+                String _lctype = contentObject.getString("_lctype");
+                String username = "";
+                String textString = "";
+                if (_lctype.equals("-1")) {
+                    username = lcattrsObject.getString("username") + ": ";
+                    textString = username + contentObject.getString("_lctext");
+                } else if (_lctype.equals("5") || _lctype.equals("6")) {
+                    if (null != lcattrsObject.get("accountList")) {
+                        JSONArray jsonArray = lcattrsObject.getJSONArray("accountList");
+                        if (jsonArray.size() > 0) {
+                            username = ((JSONObject) jsonArray.get(0)).getString("nickname");
+                        }
+                        if (_lctype.equals("5")) {
+                            textString = (username + "加入直播聊天室");
+                        } else {
+                            textString = (username + "离开直播聊天室");
+                        }
+                    }
+                } else {
 
-            SpannableStringBuilder builder = new SpannableStringBuilder(textSend.getText().toString());
-            ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.live_chat_level1));
-            ForegroundColorSpan Span2 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.textColor_333333));
-            builder.setSpan(Span1, 0, username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            builder.setSpan(Span2, username.length(), textSend.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            textSend.setText(builder);
+                }
+                textSend.setText(textString);
+
+                SpannableStringBuilder builder = new SpannableStringBuilder(textSend.getText().toString());
+                ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.live_chat_level1));
+                ForegroundColorSpan Span2 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.textColor_333333));
+                builder.setSpan(Span1, 0, username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(Span2, username.length(), textSend.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                textSend.setText(builder);
+            }
         }
     }
 
@@ -554,6 +564,7 @@ public class WatchLiveActivity extends BaseActivity {
                     synchronized (isCaching) {
                         if (isCaching) {
                             mHandler.removeCallbacks(mShowInterruptRun);
+                            LayoutTip.setVisibility(View.GONE);
                             // 结束缓冲
                             isCaching = false;
                         }
@@ -598,7 +609,7 @@ public class WatchLiveActivity extends BaseActivity {
 
             if (mPlaySurfaceStatus == SurfaceStatus.UNINITED) {
                 mPlaySurfaceStatus = SurfaceStatus.CREATED;
-                startToPlay(mPlaySurfaceView);
+                getPlayerInfo();
                 KLog.e("Player surface status is created");
             } else if (mPlaySurfaceStatus == SurfaceStatus.DESTROYED) {
                 mPlaySurfaceStatus = SurfaceStatus.RECREATED;
@@ -678,8 +689,9 @@ public class WatchLiveActivity extends BaseActivity {
      * 开始直播播放（大窗）
      *
      * @param surfaceView
+     * @param mPlayUrl
      */
-    public void startToPlay(final SurfaceView surfaceView) {
+    public void startToPlay(String mPlayUrl, final SurfaceView surfaceView) {
         if (mChatParter == null) {
             initPlayer();
         }
@@ -867,6 +879,10 @@ public class WatchLiveActivity extends BaseActivity {
         }
 
         //TODO:通知服务端，退出观看
+
+        if (null != imConversation) {
+            quiteSquare(imConversation);
+        }
     }
 
     @OnClick({R.id.iv_abort_chat})
@@ -919,10 +935,10 @@ public class WatchLiveActivity extends BaseActivity {
                         countDownTimer.setVisibility(View.GONE);
                     }
 
-                    mPlayUrl = data.getString("url_rtmp");
+                    mPlayUrl = data.getString("url_rtmp") + "_mix";
                     room_id = data.getString("room_id");
 
-                    KLog.e(room_id);
+                    startToPlay(mPlayUrl, mPlaySurfaceView);
 
                     AVImClientManager.getInstance().findConversationById(room_id, new AVImClientManager.ChatJoinManager() {
                         @Override

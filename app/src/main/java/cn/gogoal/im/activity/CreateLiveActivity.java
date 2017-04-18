@@ -163,8 +163,9 @@ public class CreateLiveActivity extends BaseActivity {
                     JSONObject data = object.getJSONObject("data");
                     if (data.getIntValue("code") == 1) {
                         if (data.getString("liveId") != null) {
+                            finish();
                             Intent intent = new Intent(getContext(), LiveActivity.class);
-                            intent.putExtra("liveId", data.getString("live_id"));
+                            intent.putExtra("live_id", data.getString("liveId"));
                             startActivity(intent);
                         } else {
                             UIHelper.toast(getContext(), "创建直播失败");

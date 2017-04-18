@@ -175,7 +175,7 @@ public class LiveActivity extends BaseActivity {
     private SurfaceView mPlaySurfaceView; //连麦播放的小窗SurfaceView
     private VideoChatStatus mVideoChatStatus = VideoChatStatus.UNCHAT; //未连麦的状态
 
-    private String publishUrl = "rtmp://video-center.alivecdn.com/microphone/dave?vhost=zbmo.go-goal.cn"; //推流播放网址
+    private String publishUrl; //推流播放网址
     private String mSmallDelayPlayUrl; //连麦延迟播放网址
 
     //聊天对象
@@ -232,10 +232,6 @@ public class LiveActivity extends BaseActivity {
 
         live_id = getIntent().getStringExtra("live_id");
 
-        //live_id = "cf68d632-b488-42fe-8142-07bc645d4229";
-
-        KLog.json(live_id);
-
         if (permissionCheck()) {
             // 更新权限状态
             mHasPermission = true;
@@ -282,8 +278,10 @@ public class LiveActivity extends BaseActivity {
             public void finish() {
                 textCount.setVisibility(View.GONE);
 
-                mIsLive = true;
-                mChatHost.startToPublish(publishUrl);
+                if (mChatHost != null) {
+                    mIsLive = true;
+                    mChatHost.startToPublish(publishUrl);
+                }
             }
         });
     }
@@ -433,9 +431,6 @@ public class LiveActivity extends BaseActivity {
 
         @Override
         public void onFinish() {
-            if (null != imConversation) {
-                quiteSquare(imConversation);
-            }
             onBackPressed();
         }
 
@@ -964,6 +959,10 @@ public class LiveActivity extends BaseActivity {
             mChatHost.finishPublishing();
             mIsLive = false;
         }
+
+        if (null != imConversation) {
+            quiteSquare(imConversation);
+        }
     }
 
     @OnClick({R.id.liveTogether, R.id.imgPlayClose})
@@ -977,12 +976,6 @@ public class LiveActivity extends BaseActivity {
                         getChatGroupInfos(imConversation);
                     }
                 });
-
-                Intent intent = new Intent(LiveActivity.this, ChooseContactActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("square_action", AppConst.LIVE_CONTACT_SOMEBODY);
-                intent.putExtras(bundle);
-                startActivityForResult(intent, AppConst.LIVE_CONTACT_SOMEBODY);
                 break;
             case R.id.imgPlayClose: //关闭连麦
                 break;
@@ -1049,7 +1042,7 @@ public class LiveActivity extends BaseActivity {
                         downTimer.start();
                     }
 
-                    //mPlayUrl = data.getString("url_rtmp");
+                    publishUrl = data.getString("stream_url");
                     room_id = data.getString("room_id");
 
                     AVImClientManager.getInstance().findConversationById(room_id, new AVImClientManager.ChatJoinManager() {
@@ -1125,7 +1118,17 @@ public class LiveActivity extends BaseActivity {
         UserUtils.getChatGroup(AppConst.LIVE_GROUP_CONTACT_BEANS, conversation.getMembers(), conversation.getConversationId(), new UserUtils.getSquareInfo() {
             @Override
             public void squareGetSuccess(JSONObject object) {
-
+                KLog.json(object.toJSONString());
+                JSONArray accountList = object.getJSONArray("accountList");
+                if (accountList.size() >= 2) {
+                    Intent intent = new Intent(LiveActivity.this, ChooseContactActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("square_action", AppConst.LIVE_CONTACT_SOMEBODY);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, AppConst.LIVE_CONTACT_SOMEBODY);
+                } else {
+                    UIHelper.toast(getContext(), "暂时没有观众观看");
+                }
             }
 
             @Override
@@ -1142,6 +1145,7 @@ public class LiveActivity extends BaseActivity {
             if (requestCode == AppConst.LIVE_CONTACT_SOMEBODY) {
                 mContactBean = (ContactBean) data.getSerializableExtra("choose_connect_livebean");
                 KLog.e(mContactBean);
+
             }
         }
     }

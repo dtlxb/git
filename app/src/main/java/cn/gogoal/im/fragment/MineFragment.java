@@ -26,13 +26,14 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.CreateLiveActivity;
+import cn.gogoal.im.activity.FunctionActivity;
 import cn.gogoal.im.activity.LiveActivity;
-import cn.gogoal.im.activity.TestActivity;
 import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ImageTextBean;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
@@ -163,10 +164,13 @@ public class MineFragment extends BaseFragment {
                             getUserValid();
                             break;
                         case 1:
-                            startActivity(new Intent(getActivity(), TestActivity.class));
+                            startActivity(new Intent(getActivity(), WatchLiveActivity.class));
                             break;
                         case 2:
-                            startActivity(new Intent(getActivity(), WatchLiveActivity.class));
+                            Intent intent = new Intent(getActivity(), FunctionActivity.class);
+                            intent.putExtra("title", "直播列表");
+                            intent.putExtra("function_url", AppConst.GG_LIVE_LIST);
+                            startActivity(intent);
                             break;
                         default:
                             UIHelper.toast(v.getContext(), data.getText());
@@ -184,7 +188,6 @@ public class MineFragment extends BaseFragment {
 
         Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
-        //param.put("product_line", "4");
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
