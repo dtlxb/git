@@ -38,7 +38,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.LoginActivity;
+import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.permission.IPermissionListner;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -312,7 +312,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 AppManager.getInstance().finishAllActivity();
-                startActivity(new Intent(getActivity(), LoginActivity.class));
+                startActivity(new Intent(getActivity(), TypeLoginActivity.class));
             }
         }).show();
     }

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
-import cn.gogoal.im.activity.LoginActivity;
+import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 
@@ -102,7 +102,7 @@ public class UserUtils {
     public static void logout(Activity mContext) {
         SPTools.clear();
         SPTools.saveBoolean("notFristTime", true);
-//        mContext.startActivity(new Intent(mContext, LoginActivity.class));
+//        mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
         // TODO: 2017/2/8 0008
         mContext.finish();
         UIHelper.toast(mContext, "退出登录成功!");
@@ -168,7 +168,7 @@ public class UserUtils {
 
     public static boolean checkToken(Context context) {
         if (TextUtils.isEmpty(getToken())) {
-            context.startActivity(new Intent(context, LoginActivity.class));
+            context.startActivity(new Intent(context, TypeLoginActivity.class));
             return true;
         } else {
             return false;
