@@ -63,8 +63,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
         setContentView(mContentView);
 
-//        setStatusBar();
-
         AppManager.getInstance().addActivity(this);
 
         ButterKnife.bind(this);
@@ -80,11 +78,11 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
     @Override
     public void setContentView(View view) {
         super.setContentView(mContentView);
-        setStatusBar();
+        setStatusBar(false);
     }
 
-    public void setStatusBar() {
-        StatusBarUtil.with(BaseActivity.this).initForGogoal(false);
+    public void setStatusBar(boolean light) {
+        StatusBarUtil.with(BaseActivity.this).initForGogoal(light);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 

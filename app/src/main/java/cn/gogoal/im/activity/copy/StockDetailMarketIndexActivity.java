@@ -370,7 +370,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
     }
 
     @Override
-    public void setStatusBar() {
+    public void setStatusBar(boolean light) {
     }
 
     private void setStatusColor(int header_gray) {

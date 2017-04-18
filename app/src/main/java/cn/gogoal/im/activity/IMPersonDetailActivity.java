@@ -133,9 +133,9 @@ public class IMPersonDetailActivity extends BaseActivity {
 
         public UserInfoAdapter(List<UserInfo> data) {
             super(data);
-            addItemType(UserInfo.HEAD, R.layout.item_user_info_head);
+            addItemType(UserInfo.HEAD, R.layout.header_rv_item_user_info);
             addItemType(UserInfo.SPACE, R.layout.layout_sapce_15dp);
-            addItemType(UserInfo.TEXT_ITEM_2, R.layout.item_user_info_text_2);
+            addItemType(UserInfo.TEXT_ITEM_2, R.layout.item_type_user_info);
         }
 
         @Override
@@ -150,10 +150,10 @@ public class IMPersonDetailActivity extends BaseActivity {
                 case UserInfo.SPACE:
                     break;
                 case UserInfo.TEXT_ITEM_2:
-                    holder.setText(R.id.item_text_1, data.getItemText1());
-                    holder.setText(R.id.item_text_2, data.getItemText2());
+                    holder.setText(R.id.item_text_1, data.getItemKey());
+                    holder.setText(R.id.item_text_2, data.getItemValue());
 
-                    holder.getView(R.id.img_more).setVisibility(data.isHaveMore() ? View.VISIBLE : View.GONE);
+                    holder.getView(R.id.flag_img_more).setVisibility(data.isHaveMore() ? View.VISIBLE : View.GONE);
 
                     UIHelper.setRippBg(holder.itemView);
                     holder.itemView.setOnClickListener(new View.OnClickListener() {

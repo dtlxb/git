@@ -9,14 +9,29 @@ import cn.gogoal.im.adapter.baseAdapter.entity.MultiItemEntity;
  * description :用户详情页实体.
  */
 public class UserInfo implements MultiItemEntity{
+    public static final int HEAD = 1;
+    public static final int SPACE = 2;
+    public static final int TEXT_ITEM_2 = 3;
+
+    private int itemType;
+
     private String avatar;//头像
     private String fullName;//真实姓名
     private String nickName;//昵称
 
-    private String itemText1;//文本1 key
-    private String itemText2;//文本2 value
+    private String itemKey;//文本1 key
+    private String itemValue;//文本2 value
 
     private boolean haveMore;//是否显示更多箭头
+
+    public UserInfo(int itemType) {
+        this.itemType = itemType;
+    }
+
+    public UserInfo(int itemType,String avatar) {
+        this.itemType = itemType;
+        this.avatar=avatar;
+    }
 
     public UserInfo(int itemType,String avatar, String fullName, String nickName) {
         this.itemType=itemType;
@@ -25,10 +40,10 @@ public class UserInfo implements MultiItemEntity{
         this.nickName = nickName;
     }
 
-    public UserInfo(int itemType,boolean haveMore,String itemText1, String itemText2) {
+    public UserInfo(int itemType,boolean haveMore,String itemKey, String itemValue) {
         this.itemType=itemType;
-        this.itemText1 = itemText1;
-        this.itemText2 = itemText2;
+        this.itemKey = itemKey;
+        this.itemValue = itemValue;
         this.haveMore = haveMore;
     }
 
@@ -56,20 +71,20 @@ public class UserInfo implements MultiItemEntity{
         this.nickName = nickName;
     }
 
-    public String getItemText1() {
-        return itemText1;
+    public String getItemKey() {
+        return itemKey;
     }
 
-    public void setItemText1(String itemText1) {
-        this.itemText1 = itemText1;
+    public void setItemKey(String itemKey) {
+        this.itemKey = itemKey;
     }
 
-    public String getItemText2() {
-        return itemText2;
+    public String getItemValue() {
+        return itemValue;
     }
 
-    public void setItemText2(String itemText2) {
-        this.itemText2 = itemText2;
+    public void setItemValue(String itemValue) {
+        this.itemValue = itemValue;
     }
 
     public boolean isHaveMore() {
@@ -78,20 +93,6 @@ public class UserInfo implements MultiItemEntity{
 
     public void setHaveMore(boolean haveMore) {
         this.haveMore = haveMore;
-    }
-
-    public static final int HEAD = 1;
-    public static final int SPACE = 2;
-    public static final int TEXT_ITEM_2 = 3;
-
-    private int itemType;
-
-    public UserInfo(int itemType, String content) {
-        this.itemType = itemType;
-    }
-
-    public UserInfo(int itemType) {
-        this.itemType = itemType;
     }
 
     @Override

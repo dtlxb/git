@@ -367,8 +367,9 @@ public class ImageDisplay {
         Glide.with(context)
                 .load(url)
                 .skipMemoryCache(true)//禁止内存缓存
+                .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)//禁止内存缓存
-                .bitmapTransform(new CropCircleTransformation(context))
+                .bitmapTransform(new BorderCircleTransformation(context))
                 .into(imageView);
     }
 

@@ -48,11 +48,11 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void doBusiness(final Context mContext) {
 
-        loginUserName.setText("E00020190");
-        loginPassWord.setText("955202");
+//        loginUserName.setText("E00020190");
+//        loginPassWord.setText("955202");
 
-        /*loginUserName.setText("E00003645");
-        loginPassWord.setText("147258369");*/
+        loginUserName.setText("E00003645");
+        loginPassWord.setText("147258369");
 
         /*loginUserName.setText("E00002639");
         loginPassWord.setText("412174");*/

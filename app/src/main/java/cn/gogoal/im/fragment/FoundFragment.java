@@ -77,7 +77,7 @@ public class FoundFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         xLayout.setStatus(XLayout.Success);
 
-        setFragmentTitle(R.string.title_found);
+        setFragmentTitle(R.string.title_found).setImmersive(true);
         iniRecyclerView();
 
         getBannerImage();

@@ -209,7 +209,7 @@ public class PlayerActivity extends BaseActivity {
     }
 
     @Override
-    public void setStatusBar() {
+    public void setStatusBar(boolean light) {
 
     }
 

@@ -135,7 +135,7 @@ public class StockDetailActivity extends BaseActivity {
     }
 
     @Override
-    public void setStatusBar() {
+    public void setStatusBar(boolean light) {
         StatusBarUtil.with(this).setColor(getResColor(R.color.stock_green));
     }
 

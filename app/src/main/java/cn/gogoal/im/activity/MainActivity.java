@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hply.imagepicker.view.StatusBarUtil;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -18,15 +19,14 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.FoundFragment;
 import cn.gogoal.im.fragment.MessageFragment;
-import cn.gogoal.im.fragment.MineFragment;
 import cn.gogoal.im.fragment.MyStockFragment;
+import cn.gogoal.im.fragment.MineFragment;
 import cn.gogoal.im.fragment.SocialContactFragment;
 
 public class MainActivity extends BaseActivity {
@@ -36,6 +36,7 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.tab_main)
     TabLayout tabMain;
+    private StatusBarUtil barUtil;
 
     @Override
     public int bindLayout() {
@@ -91,7 +92,9 @@ public class MainActivity extends BaseActivity {
             }
         }
 
-        tabMain.getTabAt(1).select();
+        tabMain.getTabAt(4).select();
+
+        barUtil = StatusBarUtil.with(MainActivity.this);
 
         vpMain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -100,6 +103,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
+                barUtil.setStatusBarFontDark(position!=4);
                 switch (position) {
                     case 0:
 
@@ -110,6 +114,9 @@ public class MainActivity extends BaseActivity {
 
                         break;
                     case 3:
+                        break;
+                    case 4:
+                        barUtil.setStatusBarFontDark(false);
                         break;
                     default:
                         break;
@@ -122,6 +129,11 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+    }
+
+    @Override
+    public void setStatusBar(boolean light) {
+        StatusBarUtil.with(MainActivity.this).setTranslucentForImageViewInFragment(null);
     }
 
     private void getFriendList() {

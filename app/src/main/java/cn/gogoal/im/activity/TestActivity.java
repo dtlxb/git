@@ -59,7 +59,7 @@ public class TestActivity extends BaseActivity {
     }
 
     @Override
-    public void setStatusBar() {
+    public void setStatusBar(boolean light) {
         toolbar= (Toolbar) findViewById(R.id.toolbar);
 
         if (drawerLayout!=null) {

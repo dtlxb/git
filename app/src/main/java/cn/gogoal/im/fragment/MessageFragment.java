@@ -111,7 +111,7 @@ public class MessageFragment extends BaseFragment {
     }
 
     private void initTitle() {
-        xTitle = setFragmentTitle(R.string.title_message);
+        xTitle = setFragmentTitle(R.string.title_message).setImmersive(true);
         //添加action
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_person)) {
             @Override
