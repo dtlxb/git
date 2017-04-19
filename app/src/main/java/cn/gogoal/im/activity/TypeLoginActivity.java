@@ -2,6 +2,7 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -122,15 +123,22 @@ public class TypeLoginActivity extends BaseActivity {
         loginPassWord.setDrawableRightListener(new XEditText.DrawableRightListener() {
             @Override
             public void onDrawableRightClick(View view) {
+                Drawable drawableRight = null;
+                Drawable drawableLeft = getResDrawable(R.mipmap.icon_code);
                 if (view.getTag().equals("false")) {
-                    loginPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    //drawableRight = getResDrawable(R.mipmap.login_eye_open);
+                    ((XEditText) view).setTransformationMethod(PasswordTransformationMethod.getInstance());
                     view.setTag("true");
                 } else if (view.getTag().equals("true")) {
-                    loginPassWord.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    //drawableRight = getResDrawable(R.mipmap.login_eye_closed);
+                    ((XEditText) view).setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                     view.setTag("false");
                 }
-                loginPassWord.requestFocus();
-                loginPassWord.setSelection(loginPassWord.getText().length());
+                /*drawableRight.setBounds(0, 0, drawableRight.getMinimumWidth(), drawableRight.getMinimumHeight());
+                drawableLeft.setBounds(0, 0, drawableLeft.getMinimumWidth(), drawableLeft.getMinimumHeight());
+                ((XEditText) view).setCompoundDrawablesRelative(drawableLeft, null, drawableRight, null);*/
+                //view.requestFocus();
+                //loginPassWord.setSelection(loginPassWord.getText().length());
             }
         });
     }

@@ -3,6 +3,7 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.text.method.HideReturnsTransformationMethod;
@@ -153,14 +154,22 @@ public class RigisterActivity extends BaseActivity {
 
         @Override
         public void onDrawableRightClick(View view) {
+            Drawable drawableRight = null;
+            Drawable drawableLeft = getResDrawable(R.mipmap.icon_code);
+
             if (view.getTag().equals("false")) {
                 ((XEditText) view).setTransformationMethod(PasswordTransformationMethod.getInstance());
+                drawableRight = getResDrawable(R.mipmap.login_eye_open);
                 view.setTag("true");
             } else if (view.getTag().equals("true")) {
                 ((XEditText) view).setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                drawableRight = getResDrawable(R.mipmap.login_eye_closed);
                 view.setTag("false");
             }
 
+            drawableRight.setBounds(0, 0, drawableRight.getMinimumWidth(), drawableRight.getMinimumHeight());
+            drawableLeft.setBounds(0, 0, drawableLeft.getMinimumWidth(), drawableLeft.getMinimumHeight());
+            ((XEditText) view).setCompoundDrawablesRelative(drawableLeft, null, drawableRight, null);
             view.requestFocus();
             ((XEditText) view).setSelection(editCode.getText().length());
         }

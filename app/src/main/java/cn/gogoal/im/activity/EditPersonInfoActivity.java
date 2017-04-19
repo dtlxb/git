@@ -122,7 +122,7 @@ public class EditPersonInfoActivity extends BaseActivity {
     @OnClick({R.id.login_cofirm, R.id.layout_person_headpic})
     void function(View view) {
         switch (view.getId()) {
-            case R.id.login_button:
+            case R.id.login_cofirm:
                 editPersonInfos();
                 break;
             case R.id.layout_person_headpic:
