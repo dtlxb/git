@@ -33,7 +33,7 @@ public class ImageTakeUtils {
     }
 
     public void takePhoto(Context context,int limit,boolean canCrop,ITakePhoto takePhotoListener){
-        takePhoto(context,limit,canCrop,200,takePhotoListener);
+        takePhoto(context,limit,canCrop,1000,takePhotoListener);
     }
 
     public void takePhoto(Context context,int limit,boolean canCrop,int canCropSize,ITakePhoto takePhotoListener){
