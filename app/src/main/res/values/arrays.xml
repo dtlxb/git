@@ -35,11 +35,13 @@
     </string-array>
 
     <string-array name="mine_arr">
-        <item>我的直播</item>
-        <item>我的活动</item>
-        <item>我的帖子</item>
-        <item>我的收藏</item>
-        <item>我的订阅</item>
+        <item>专属顾问</item>
+        <item>邀请好友</item>
+        <item>会务</item>
+        <item>直播</item>
+        <item>路演</item>
+        <item>隐私策略</item>
+        <item>设置</item>
     </string-array>
 
     <string-array name="search_flag">
@@ -99,5 +101,14 @@
         <item>EPS变动图</item>
         <item>净利润变动图</item>
         <item>估值波动带</item>
+    </string-array>
+
+    <string-array name="edit_info_key">
+        <item>姓名</item>
+        <item>Go-Goal账号</item>
+        <item>手机号</item>
+        <item>公司</item>
+        <item>职位</item>
+        <item>工作地区</item>
     </string-array>
 </resources>

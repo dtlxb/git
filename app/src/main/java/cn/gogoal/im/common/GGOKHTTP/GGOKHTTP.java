@@ -365,11 +365,6 @@ public class GGOKHTTP {
     public static final String GET_FRIEND_LIST = "v1/ggm_im/get_friend_list";
 
     /**
-     * 城市列表
-     */
-    public static final String GET_CITY_DATA = "v1/base/get_city_data";
-
-    /**
      * IM发送消息
      * token                        用户token
      * message                      消息内容（包括文字，语音，图片...）

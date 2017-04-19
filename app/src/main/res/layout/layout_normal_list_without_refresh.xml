@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
     android:fitsSystemWindows="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
     <!--通用列表布局——title+list+无刷新，纯展示-->
@@ -14,10 +16,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+        </RelativeLayout>
 
     </cn.gogoal.im.ui.view.XLayout>
 

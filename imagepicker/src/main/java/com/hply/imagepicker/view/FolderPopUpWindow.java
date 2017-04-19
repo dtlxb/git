@@ -7,7 +7,6 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -27,7 +26,6 @@ public class FolderPopUpWindow extends PopupWindow implements View.OnClickListen
 
     public FolderPopUpWindow(Context context, BaseAdapter adapter) {
         super(context);
-
         final View view = View.inflate(context, R.layout.pop_folder, null);
         masker = view.findViewById(R.id.masker);
         masker.setOnClickListener(this);
@@ -43,10 +41,10 @@ public class FolderPopUpWindow extends PopupWindow implements View.OnClickListen
         setOutsideTouchable(true);
         setBackgroundDrawable(new ColorDrawable(0));
         setAnimationStyle(0);
-        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+        view.post(new Runnable() {
             @Override
-            public void onGlobalLayout() {
-                view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+            public void run() {
                 int maxHeight = view.getHeight() * 6 / 8;
                 int realHeight = listView.getHeight();
                 ViewGroup.LayoutParams listParams = listView.getLayoutParams();
@@ -58,6 +56,7 @@ public class FolderPopUpWindow extends PopupWindow implements View.OnClickListen
                 enterAnimator();
             }
         });
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_layout_simple_image_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_normal_write2gray"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingBottom="20dp"
+    android:paddingTop="20dp">
+
+    <Button
+        android:id="@+id/btn_mine_friend_dynamic"
+        style="@style/MineRadioButtonStyle"
+        android:drawableTop="@mipmap/img_mine_friend_dynamic"
+        android:text="好友动态" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:background="@color/wx_share_line" />
+
+    <Button
+        android:id="@+id/btn_mine_group_chat"
+        style="@style/MineRadioButtonStyle"
+        android:drawableTop="@mipmap/img_mine_friend_dynamic"
+        android:text="群组" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:background="@color/wx_share_line" />
+
+    <Button
+        android:id="@+id/btn_mine_twice_persion"
+        style="@style/MineRadioButtonStyle"
+        android:drawableTop="@mipmap/img_mine_friend_dynamic"
+        android:text="二度人脉" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:background="@color/wx_share_line" />
+
+    <Button
+        android:id="@+id/btn_mine_my_visitor"
+        style="@style/MineRadioButtonStyle"
+        android:drawableTop="@mipmap/img_mine_friend_dynamic"
+        android:text="谁看过我" />
+</LinearLayout>

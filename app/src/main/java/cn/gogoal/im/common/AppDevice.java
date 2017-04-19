@@ -1,7 +1,6 @@
 package cn.gogoal.im.common;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Dialog;
@@ -16,6 +15,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -31,9 +31,9 @@ import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -44,8 +44,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-
-import com.socks.library.KLog;
 
 import java.io.File;
 import java.io.IOException;
@@ -118,6 +116,15 @@ public class AppDevice {
         return false;
     }
 
+    public static int getDefaultActionBarSize(Context mContext){
+        TypedValue typedValue = new TypedValue();
+        mContext.getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true);
+        int[] attribute = new int[] { android.R.attr.actionBarSize };
+        TypedArray array = mContext.obtainStyledAttributes(typedValue.resourceId, attribute);
+        int titleHeight = array.getDimensionPixelSize(0 /* index */, -1 /* default size */);
+        array.recycle();
+        return titleHeight;
+    }
     /**
      * 代码动态控制布局中控件的宽高
      */

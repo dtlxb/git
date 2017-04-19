@@ -102,7 +102,7 @@ public class UFileUpload {
         String date = "";
 
         String key_name = MyApp.getAppContext().getString(R.string.app_name) + "_" +
-                MD5Utils.getMD5EncryptyString(file.getPath()) +
+                MD5Utils.getMD5EncryptyString32(file.getPath()) +
                 file.getPath().substring(file.getPath().lastIndexOf('.'))+
                 (type==UFileUpload.Type.IMAGE ? "@"+ImageUtils.getImageWidth_Height(file):"");
 

@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -51,6 +52,10 @@ import static cn.gogoal.im.base.MyApp.getAppContext;
  */
 public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
     private View mContentView;
 
     private static IPermissionListner mListener;
@@ -62,8 +67,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         mContentView = LayoutInflater.from(this).inflate(bindLayout(), null);
 
         setContentView(mContentView);
-
-//        setStatusBar();
 
         AppManager.getInstance().addActivity(this);
 
@@ -80,11 +83,11 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
     @Override
     public void setContentView(View view) {
         super.setContentView(mContentView);
-        setStatusBar();
+        setStatusBar(false);
     }
 
-    public void setStatusBar() {
-        StatusBarUtil.with(BaseActivity.this).initForGogoal(false);
+    public void setStatusBar(boolean light) {
+        StatusBarUtil.with(BaseActivity.this).initForGogoal(light);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
@@ -266,8 +269,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     /**
      * 修复输入法内存泄露
-     *
-     * @param destContext
      */
     public static void fixInputMethodManagerLeak(Context destContext) {
         if (destContext == null) {
@@ -314,7 +315,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
                 AppManager.getInstance().finishAllActivity();
                 startActivity(new Intent(getActivity(), TypeLoginActivity.class));
             }
-        }).show();
+        }).setCancelable(false)
+                .show();
     }
 
 

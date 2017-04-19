@@ -16,6 +16,7 @@ import cn.gogoal.im.R;
  * Staff_id 1375
  * phone 18930640263
  *
+ * 底部弹出是dialog
  */
 public class BottomSheetListDialog extends BaseBottomDialog {
 

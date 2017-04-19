@@ -6,12 +6,12 @@
     android:background="@android:color/white"
     android:orientation="vertical">
 
-    <ImageView
+    <cn.gogoal.im.ui.view.AutoScrollViewPager
+        android:id="@+id/vp_fund_banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:contentDescription="@null"
-        android:src="@mipmap/image_found_top_ad" />
+        android:contentDescription="@null"/>
 
     <cn.gogoal.im.ui.view.DrawableCenterTextView
         android:id="@+id/tv_to_search"
@@ -25,10 +25,10 @@
         android:background="@drawable/shape_touyan_top_search_view"
         android:drawableLeft="@mipmap/img_search"
         android:drawablePadding="5dp"
-        android:minHeight="0dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:gravity="center_vertical"
+        android:minHeight="0dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
         android:text="@string/str_search_hint"
         android:textColor="#92a0ad" />
 

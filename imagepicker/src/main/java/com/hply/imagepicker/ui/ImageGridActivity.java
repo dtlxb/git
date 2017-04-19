@@ -113,7 +113,7 @@ public class ImageGridActivity extends ImageBaseActivity implements ImageDataSou
         if (id == R.id.btn_ok) {
             Intent intent = new Intent();
             intent.putExtra(ImagePicker.EXTRA_RESULT_ITEMS, imagePicker.getSelectedImages());
-            intent.putExtra(ImagePreviewActivity.ISORIGIN,isOrigin);
+            intent.putExtra(ImagePreviewActivity.ISORIGIN, isOrigin);
             setResult(ImagePicker.RESULT_CODE_ITEMS, intent);  //多选不允许裁剪裁剪，返回数据
             finish();
         } else if (id == R.id.btn_dir) {
@@ -197,7 +197,7 @@ public class ImageGridActivity extends ImageBaseActivity implements ImageDataSou
             } else {
                 Intent intent = new Intent();
                 intent.putExtra(ImagePicker.EXTRA_RESULT_ITEMS, imagePicker.getSelectedImages());
-                intent.putExtra(ImagePreviewActivity.ISORIGIN,isOrigin);
+                intent.putExtra(ImagePreviewActivity.ISORIGIN, isOrigin);
                 setResult(ImagePicker.RESULT_CODE_ITEMS, intent);   //单选不需要裁剪，返回数据
                 finish();
             }
@@ -207,7 +207,7 @@ public class ImageGridActivity extends ImageBaseActivity implements ImageDataSou
     @Override
     public void onImageSelected(int position, ImageItem item, boolean isAdd) {
         if (imagePicker.getSelectImageCount() > 0) {
-            mBtnOk.setText(getString(R.string.select_complete, imagePicker.getSelectImageCount(), imagePicker.getSelectLimit()));
+            mBtnOk.setText("完成(" + imagePicker.getSelectImageCount() + "/" + imagePicker.getSelectLimit() + ")");
             mBtnOk.setEnabled(true);
             mBtnPre.setEnabled(true);
         } else {
@@ -215,7 +215,7 @@ public class ImageGridActivity extends ImageBaseActivity implements ImageDataSou
             mBtnOk.setEnabled(false);
             mBtnPre.setEnabled(false);
         }
-        mBtnPre.setText(getResources().getString(R.string.preview_count, imagePicker.getSelectImageCount()));
+        mBtnPre.setText("预览("+imagePicker.getSelectImageCount()+")");
         mImageGridAdapter.notifyDataSetChanged();
     }
 
@@ -232,7 +232,7 @@ public class ImageGridActivity extends ImageBaseActivity implements ImageDataSou
                     //什么都不做
                 } else {
                     //说明是从裁剪页面过来的数据，直接返回就可以
-                    data.putExtra(ImagePreviewActivity.ISORIGIN,true);
+                    data.putExtra(ImagePreviewActivity.ISORIGIN, true);
                     setResult(ImagePicker.RESULT_CODE_ITEMS, data);
                     finish();
                 }
@@ -252,7 +252,7 @@ public class ImageGridActivity extends ImageBaseActivity implements ImageDataSou
                 } else {
                     Intent intent = new Intent();
                     intent.putExtra(ImagePicker.EXTRA_RESULT_ITEMS, imagePicker.getSelectedImages());
-                    intent.putExtra(ImagePreviewActivity.ISORIGIN,isOrigin);
+                    intent.putExtra(ImagePreviewActivity.ISORIGIN, isOrigin);
                     setResult(ImagePicker.RESULT_CODE_ITEMS, intent);   //单选不需要裁剪，返回数据
                     finish();
                 }

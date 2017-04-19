@@ -128,7 +128,7 @@ public class PdfDisplayActivity extends BaseActivity {
                 in = conn.getInputStream();
 //                 输出流
                 out = new FileOutputStream(new File(getExternalFilesDir("cachePdf"),
-                        MD5Utils.getMD5EncryptyString(pdfUrl)));//命名
+                        MD5Utils.getMD5EncryptyString32(pdfUrl)));//命名
 
 //                 缓存模式，下载文件
                 byte[] buff = new byte[1024 * 1024];
@@ -177,7 +177,7 @@ public class PdfDisplayActivity extends BaseActivity {
             }
             super.onPostExecute(result);
 
-            pdfView.fromFile(new File(getExternalFilesDir("cachePdf").getPath(), MD5Utils.getMD5EncryptyString(pdfUrl)))
+            pdfView.fromFile(new File(getExternalFilesDir("cachePdf").getPath(), MD5Utils.getMD5EncryptyString32(pdfUrl)))
                     .defaultPage(0)
                     .enableAnnotationRendering(true)
                     .scrollHandle(new DefaultScrollHandle(PdfDisplayActivity.this))
