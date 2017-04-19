@@ -1166,7 +1166,7 @@ public class LiveActivity extends BaseActivity {
     }
 
     /*
-    * 获取直播在线人数
+    * 直播邀请连麦
     * */
     private void sendLiveInvite(String invitee_id) {
 
@@ -1213,7 +1213,7 @@ public class LiveActivity extends BaseActivity {
             AVIMMessage message = (AVIMMessage) map.get("message");
             AVIMConversation conversation = (AVIMConversation) map.get("conversation");
 
-            KLog.json(message.getContent());
+            KLog.e(message.getContent());
             int chatType = (int) conversation.getAttribute("chat_type");
 
             if (imConversation.getConversationId().equals(conversation.getConversationId()) && chatType == 1009) {
@@ -1223,7 +1223,7 @@ public class LiveActivity extends BaseActivity {
                 recyler_chat.smoothScrollToPosition(messageList.size());
             } else if (chatType == 1008) {
                 //连麦动作处理
-
+                KLog.e(baseMessage);
             }
         }
     }

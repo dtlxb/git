@@ -39,4 +39,7 @@ public class LinkConst {
 
     public static final int STATUS_NOT_AGREE = 2;
     public static final int STATUS_AGREE = 1;
+
+    public static final int INVITE_TYPE_WATCHER = 1;
+    public static final int INVITE_TYPE_ANCHOR = 2;
 }

@@ -61,6 +61,10 @@
     <string name="not_allow_repeat_call">已经发送过连麦邀请了，请不要重复发送</string>
     <string name="invite_succeed">发起连麦成功，请等待对方响应</string>
     <string name="invite_failed">发起连麦失败</string>
+    <string name="received_calling">收到主播的连麦邀请</string>
+    <string name="video_callling_message">是否同意连麦？</string>
+    <string name="not_agree">不同意</string>
+    <string name="agree">同意</string>
 
     <!--权限-->
     <string name="no_camera_permission">没有权限使用摄像头，请开启摄像头权限</string>
