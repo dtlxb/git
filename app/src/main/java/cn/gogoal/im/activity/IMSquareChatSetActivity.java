@@ -37,6 +37,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
@@ -146,10 +147,30 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     groupObject.put("attr", attrObject);
 
                     groupsArray.add(groupObject);
-                    collcetGroup();
+                    ChatGroupHelper.collcetGroup(conversationId, new ChatGroupHelper.chatGroupManager() {
+                        @Override
+                        public void groupActionSuccess(JSONObject object) {
+                            UIHelper.toast(IMSquareChatSetActivity.this, "群收藏成功!!!");
+                        }
+
+                        @Override
+                        public void groupActionFail(String error) {
+
+                        }
+                    });
                 } else {
                     groupsArray.remove(finalThisGroup);
-                    deleteGroup();
+                    ChatGroupHelper.deleteGroup(conversationId, new ChatGroupHelper.chatGroupManager() {
+                        @Override
+                        public void groupActionSuccess(JSONObject object) {
+                            UIHelper.toast(IMSquareChatSetActivity.this, "群已取消收藏!!!");
+                        }
+
+                        @Override
+                        public void groupActionFail(String error) {
+
+                        }
+                    });
                 }
                 SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_groups_saved", groupsArray);
             }
@@ -266,121 +287,23 @@ public class IMSquareChatSetActivity extends BaseActivity {
         ImageDisplay.loadFileImage(IMSquareChatSetActivity.this, new File(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")), iv_square_head);
     }
 
-    //删除群成员
-    public void deleteAnyone(final List<Integer> idSet) {
-        Map<String, String> params = new HashMap<>();
-        params.put("token", UserUtils.getToken());
-        params.put("id_list", JSONObject.toJSONString(idSet));
-        params.put("conv_id", conversationId);
-
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                if ((int) result.get("code") == 0) {
-                    if (idSet.size() == 1 && idSet.get(0) == (Integer.parseInt(UserUtils.getUserAccountId()))) {
-                        UIHelper.toast(IMSquareChatSetActivity.this, "退群并删除群成功");
-                        //群列表删除
-                        SPTools.clearItem(UserUtils.getUserAccountId() + conversationId + "_accountList_beans");
-                        MessageUtils.removeByID(conversationId);
-                        finish();
-                        AppManager.getInstance().finishActivity(SquareChatRoomActivity.class);
-                    } else {
-                        UIHelper.toast(IMSquareChatSetActivity.this, "群成员删除成功");
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                Log.e("++++responseInfo", msg);
-            }
-        };
-        new GGOKHTTP(params, GGOKHTTP.DELETE_MEMBER, ggHttpInterface).startGet();
-    }
-
-    //添加群成员
-    public void addAnyone(List<Integer> idSet) {
-        Map<String, String> params = new HashMap<>();
-        params.put("token", UserUtils.getToken());
-        params.put("id_list", JSONObject.toJSONString(idSet));
-        params.put("conv_id", conversationId);
-        KLog.e(params);
-
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
-                if ((int) result.get("code") == 0) {
-                    UIHelper.toast(IMSquareChatSetActivity.this, "群成员添加成功!!!");
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                KLog.json(msg);
-            }
-        };
-        new GGOKHTTP(params, GGOKHTTP.ADD_MEMBER, ggHttpInterface).startGet();
-    }
-
-    //收藏群
-    public void collcetGroup() {
-        Map<String, String> params = new HashMap<>();
-        params.put("token", UserUtils.getToken());
-        params.put("conv_id", conversationId);
-        KLog.e(params);
-
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
-                if ((int) result.get("code") == 0) {
-                    UIHelper.toast(IMSquareChatSetActivity.this, "群收藏成功!!!");
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                KLog.json(msg);
-            }
-        };
-        new GGOKHTTP(params, GGOKHTTP.COLLECT_GROUP, ggHttpInterface).startGet();
-    }
-
-    //取消群收藏
-    public void deleteGroup() {
-        Map<String, String> params = new HashMap<>();
-        params.put("token", UserUtils.getToken());
-        params.put("conv_id", conversationId);
-        KLog.e(params);
-
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
-                if ((int) result.get("code") == 0) {
-                    UIHelper.toast(IMSquareChatSetActivity.this, "群已取消收藏!!!");
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                KLog.json(msg);
-            }
-        };
-        new GGOKHTTP(params, GGOKHTTP.CANCEL_COLLECT_GROUP, ggHttpInterface).startGet();
+    //删除群成员后
+    public void afterDeleteAnyone(List<Integer> idList) {
+        if (idList.size() == 1 && idList.get(0) == (Integer.parseInt(UserUtils.getUserAccountId()))) {
+            UIHelper.toast(IMSquareChatSetActivity.this, "退群并删除群成功");
+            //群列表删除
+            SPTools.clearItem(UserUtils.getUserAccountId() + conversationId + "_accountList_beans");
+            MessageUtils.removeByID(conversationId);
+            finish();
+            AppManager.getInstance().finishActivity(SquareChatRoomActivity.class);
+        } else {
+            UIHelper.toast(IMSquareChatSetActivity.this, "群成员删除成功");
+        }
     }
 
     //拉取群组信息
     public void getChatGroup(List<String> groupMembers) {
-        UserUtils.getChatGroup(groupMembers, conversationId, new UserUtils.getSquareInfo() {
+        UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, groupMembers, conversationId, new UserUtils.getSquareInfo() {
             @Override
             public void squareGetSuccess(JSONObject object) {
                 getAllContacts(object.getJSONArray("accountList"));
@@ -465,9 +388,19 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 break;
             case R.id.tv_delete_square:
                 //删除并退出群
-                List<Integer> quitList = new ArrayList<>();
+                final List<Integer> quitList = new ArrayList<>();
                 quitList.add(Integer.parseInt(UserUtils.getUserAccountId()));
-                deleteAnyone(quitList);
+                ChatGroupHelper.deleteAnyone(quitList, conversationId, new ChatGroupHelper.chatGroupManager() {
+                    @Override
+                    public void groupActionSuccess(JSONObject object) {
+                        afterDeleteAnyone(quitList);
+                    }
+
+                    @Override
+                    public void groupActionFail(String error) {
+
+                    }
+                });
                 //查看是收藏这个群了然后删除
                 JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_groups_saved", new JSONArray());
                 for (int i = 0; i < groupsArray.size(); i++) {
@@ -479,7 +412,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 }
                 break;
             default:
-                break;
         }
     }
 
@@ -496,7 +428,17 @@ public class IMSquareChatSetActivity extends BaseActivity {
                         addIdList.add(addContactBeens.get(i).getFriend_id());
                     }
                     //添加群成员
-                    addAnyone(addIdList);
+                    ChatGroupHelper.addAnyone(addIdList, conversationId, new ChatGroupHelper.chatGroupManager() {
+                        @Override
+                        public void groupActionSuccess(JSONObject object) {
+                            UIHelper.toast(IMSquareChatSetActivity.this, "群成员添加成功!!!");
+                        }
+
+                        @Override
+                        public void groupActionFail(String error) {
+
+                        }
+                    });
                     //插在删人加人图片前
                     contactBeens.addAll(contactBeens.size() - 2, addContactBeens);
                     tvTeamSize.setText((contactBeens.size() - 2) + "人");
@@ -504,12 +446,22 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     break;
                 case AppConst.SQUARE_ROOM_DELETE_ANYONE:
                     List<ContactBean> changeContactBeens = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
-                    List<Integer> idList = new ArrayList<>();
+                    final List<Integer> idList = new ArrayList<>();
                     for (int i = 0; i < changeContactBeens.size(); i++) {
                         idList.add(changeContactBeens.get(i).getFriend_id());
                     }
                     //删除群成员
-                    deleteAnyone(idList);
+                    ChatGroupHelper.deleteAnyone(idList, conversationId, new ChatGroupHelper.chatGroupManager() {
+                        @Override
+                        public void groupActionSuccess(JSONObject object) {
+                            afterDeleteAnyone(idList);
+                        }
+
+                        @Override
+                        public void groupActionFail(String error) {
+
+                        }
+                    });
                     contactBeens.removeAll(changeContactBeens);
                     tvTeamSize.setText((contactBeens.size() - 2) + "人");
                     mPersonInfoAdapter.notifyDataSetChanged();

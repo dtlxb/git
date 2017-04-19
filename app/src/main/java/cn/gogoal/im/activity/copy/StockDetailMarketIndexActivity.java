@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hply.imagepicker.view.StatusBarUtil;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -746,8 +745,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
     private void InitList(final String stockCode) {
         final Map<String, String> param = new HashMap<String, String>();
         param.put("fullcode", stockCode);
-
-        KLog.e(stockCode);
 
         GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override

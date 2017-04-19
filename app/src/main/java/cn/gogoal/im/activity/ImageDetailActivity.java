@@ -68,7 +68,6 @@ public class ImageDetailActivity extends BaseActivity {
 
         if (isEditMyAvatar) {
             imageUrls.add(UserUtils.getUserAvatar());
-            imageUrls.add("http://img.shu163.com/uploadfiles/wallpaper/2010/6/2010063006111517.jpg");
         } else {
             imageUrls.clear();
             imageUrls.addAll(null /*如果是别的预览情况，就传入别的图片集合*/);
@@ -90,6 +89,7 @@ public class ImageDetailActivity extends BaseActivity {
         vpImageDetail.setOffscreenPageLimit(imageUrls.size());
     }
 
+    /**其他类型图片预览 弹窗*/
     private void saveImageDialog() {
         DialogHelp.getBottomSheetListDialog(getActivity(), new ArrayList<>(Arrays.asList(
                 new String[]{"保存图片", "举报"})), new BottomSheetListDialog.DialogItemClick() {
@@ -102,12 +102,12 @@ public class ImageDetailActivity extends BaseActivity {
                                 imageUrls.get(vpImageDetail.getCurrentItem()), new DownloadCallBack() {
                                     @Override
                                     public void success() {
-                                        UIHelper.toast(getActivity(),"图片已成功下载到相册");
+                                        UIHelper.toast(getActivity(), "图片已成功下载到相册");
                                     }
 
                                     @Override
                                     public void error(String errorMsg) {
-                                        UIHelper.toast(getActivity(),"图片载出错::"+errorMsg);
+                                        UIHelper.toast(getActivity(), "图片载出错::" + errorMsg);
                                     }
                                 });
                         break;
@@ -118,9 +118,10 @@ public class ImageDetailActivity extends BaseActivity {
         });
     }
 
+    /**头像预览 弹窗*/
     private void editDialogClick() {
         DialogHelp.getBottomSheetListDialog(getActivity(), new ArrayList<>(Arrays.asList(
-                new String[]{"拍照", "从手机相册选择", "保存图片"})), new BottomSheetListDialog.DialogItemClick() {
+                new String[]{"更换头像","保存图片"})), new BottomSheetListDialog.DialogItemClick() {
             @Override
             public void onItemClick(BottomSheetListDialog dialog, TextView view, int position) {
                 dialog.dismiss();
@@ -130,6 +131,7 @@ public class ImageDetailActivity extends BaseActivity {
                             @Override
                             public void success(List<String> uriPaths, boolean isOriginalPic) {
                                 KLog.e(uriPaths.get(0));
+
                             }
 
                             @Override
@@ -139,20 +141,6 @@ public class ImageDetailActivity extends BaseActivity {
                         });
                         break;
                     case 1:
-                        break;
-                    case 2:
-                        DownloadUtils.downloadPicture(getActivity(),
-                                imageUrls.get(vpImageDetail.getCurrentItem()), new DownloadCallBack() {
-                                    @Override
-                                    public void success() {
-                                        UIHelper.toast(getActivity(),"图片已成功下载到相册");
-                                    }
-
-                                    @Override
-                                    public void error(String errorMsg) {
-                                        UIHelper.toast(getActivity(),"图片载出错::"+errorMsg);
-                                    }
-                                });
                         break;
                 }
             }

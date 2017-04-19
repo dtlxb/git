@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 基础模块 END -->
 
+
     <!-- 阿里云播放器 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -41,7 +42,7 @@
     <application
         android:name=".base.MyApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/login_gogoal"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -68,7 +69,7 @@
             android:process=":pushservice" />
         <service android:name=".servise.IntentService" />
 
-        <activity android:name=".activity.LoginActivity">
+        <activity android:name=".activity.TypeLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -78,6 +79,11 @@
         <activity
             android:name=".activity.MainActivity"
             android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".activity.RigisterActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
         <activity
             android:name=".activity.TakePhotoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -106,16 +112,16 @@
         <activity
             android:name=".activity.SearchPersonSquareActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name="cn.gogoal.im.activity.SquareCollectActivity" />
-        <activity android:name="cn.gogoal.im.activity.OfficialAccountsActivity" />
-        <activity android:name="cn.gogoal.im.activity.EditSquareBriefActivity" />
+        <activity android:name=".activity.SquareCollectActivity" />
+        <activity android:name=".activity.OfficialAccountsActivity" />
+        <activity android:name=".activity.EditSquareBriefActivity" />
         <activity
-            android:name="cn.gogoal.im.activity.EditSquareNameActivity"
+            android:name=".activity.EditSquareNameActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name="cn.gogoal.im.activity.IMPersonActivity" />
-        <activity android:name="cn.gogoal.im.activity.IMSquareChatSetActivity" />
+        <activity android:name=".activity.IMPersonActivity" />
+        <activity android:name=".activity.IMSquareChatSetActivity" />
         <activity android:name=".activity.SearchActivity" />
-        <activity android:name="cn.gogoal.im.wxapi.WXPayEntryActivity" />
+        <activity android:name=".wxapi.WXPayEntryActivity" />
         <activity android:name=".activity.IMAddFriendActivity" />
         <activity android:name=".wxapi.WXEntryActivity" />
 
@@ -135,18 +141,13 @@
         <activity
             android:name=".activity.WatchLiveActivity"
             android:windowSoftInputMode="adjustResize" />
-
         <activity android:name=".activity.stock.MarketActivity" />
-
         <activity android:name=".activity.stock.MarketDetialActivity" />
-
         <activity android:name=".activity.stock.MyStockNewsActivity" />
-
         <activity android:name=".activity.ContactsActivity" />
-
-        <activity android:name=".activity.stock.EditMyStockActivity"/>
-        <activity android:name=".activity.stock.StockDetailActivity"/>
-        <!--<activity android:name=".activity.Test2Activity"></activity>-->
+        <activity android:name=".activity.stock.EditMyStockActivity" />
+        <activity android:name=".activity.stock.StockDetailActivity" />
+        <!-- <activity android:name=".activity.Test2Activity"></activity> -->
 
         <activity android:name=".activity.copy.CopyStockDetailActivity"/>
         <activity android:name=".activity.copy.NewsContentActivity"/>
@@ -159,6 +160,7 @@
 
         <activity android:name=".activity.EditMyInfoActivity"/>
         <activity android:name=".activity.ImageDetailActivity"/>
+        <activity android:name=".activity.CreateLiveActivity" />
     </application>
 
 </manifest>

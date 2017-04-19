@@ -29,6 +29,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -239,7 +240,7 @@ public class SquareCollectActivity extends BaseActivity {
         AVImClientManager.getInstance().findConversationById(ConversationId, new AVImClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
-                UserUtils.getChatGroup(conversation.getMembers(), ConversationId, new UserUtils.getSquareInfo() {
+                UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, conversation.getMembers(), ConversationId, new UserUtils.getSquareInfo() {
                     @Override
                     public void squareGetSuccess(JSONObject object) {
                         JSONArray array = object.getJSONArray("accountList");

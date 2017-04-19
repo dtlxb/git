@@ -56,6 +56,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.PlayerUtils.CountDownTimerView;
 import cn.gogoal.im.common.SPTools;
@@ -243,14 +244,18 @@ public class WatchLiveActivity extends BaseActivity {
     /**
      * 加入聊天室
      */
-    private void joinSquare(final AVIMConversation conversation) {
-        conversation.join(new AVIMConversationCallback() {
+    private void joinSquare(AVIMConversation conversation) {
+        List<Integer> idList = new ArrayList<>();
+
+        idList.add(Integer.parseInt(UserUtils.getUserAccountId()));
+        ChatGroupHelper.addAnyone(idList, conversation.getConversationId(), new ChatGroupHelper.chatGroupManager() {
             @Override
-            public void done(AVIMException e) {
-                if (e == null) {
-                    //拉取群通讯录
-                    getChatGroupInfos(conversation);
-                }
+            public void groupActionSuccess(JSONObject object) {
+            }
+
+            @Override
+            public void groupActionFail(String error) {
+
             }
         });
     }
@@ -259,12 +264,18 @@ public class WatchLiveActivity extends BaseActivity {
      * 退出聊天室
      */
     private void quiteSquare(AVIMConversation conversation) {
-        conversation.quit(new AVIMConversationCallback() {
-            @Override
-            public void done(AVIMException e) {
-                if (e == null) {
+        List<Integer> idList = new ArrayList<>();
 
-                }
+        idList.add(Integer.parseInt(UserUtils.getUserAccountId()));
+        ChatGroupHelper.deleteAnyone(idList, conversation.getConversationId(), new ChatGroupHelper.chatGroupManager() {
+            @Override
+            public void groupActionSuccess(JSONObject object) {
+
+            }
+
+            @Override
+            public void groupActionFail(String error) {
+
             }
         });
     }
@@ -980,24 +991,6 @@ public class WatchLiveActivity extends BaseActivity {
         return WatchLiveActivity.this;
     }
 
-    //获取群通讯录
-    private void getChatGroupInfos(final AVIMConversation conversation) {
-        UserUtils.getChatGroup(conversation.getMembers(), conversation.getConversationId(), new UserUtils.getSquareInfo() {
-            @Override
-            public void squareGetSuccess(JSONObject object) {
-                if (null != object.getJSONArray("accountList")) {
-                    //缓存群通讯录
-                    SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversation.getConversationId() + "live_group_beans", object.getJSONArray("accountList"));
-                }
-            }
-
-            @Override
-            public void squareGetFail(String error) {
-
-            }
-        });
-    }
-
     /**
      * 消息接收
      */
@@ -1009,13 +1002,17 @@ public class WatchLiveActivity extends BaseActivity {
             AVIMMessage message = (AVIMMessage) map.get("message");
             AVIMConversation conversation = (AVIMConversation) map.get("conversation");
 
-            KLog.json(message.toString());
+            KLog.json(message.getContent());
+            int chatType = (int) conversation.getAttribute("chat_type");
 
-            //判断房间一致然后做消息接收处理
-            if (imConversation.getConversationId().equals(conversation.getConversationId())) {
+            if (imConversation.getConversationId().equals(conversation.getConversationId()) && chatType == 1009) {
+                //Live消息处理
                 messageList.add(message);
                 mLiveChatAdapter.notifyDataSetChanged();
                 recyler_chat.smoothScrollToPosition(messageList.size());
+            } else if (chatType == 1010) {
+                //连麦动作处理
+
             }
         }
     }

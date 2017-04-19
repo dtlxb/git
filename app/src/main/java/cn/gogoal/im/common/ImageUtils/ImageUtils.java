@@ -503,7 +503,7 @@ public class ImageUtils {
             try {
                 MediaStore.Images.Media.insertImage(MyApp.getAppContext().getContentResolver(),
                         parentDir, name, null);
-            } catch (FileNotFoundException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             // 最后通知图库更新
@@ -511,7 +511,7 @@ public class ImageUtils {
                     Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
                     Uri.parse("file://" + parentDir+File.separator+name)));
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return file;

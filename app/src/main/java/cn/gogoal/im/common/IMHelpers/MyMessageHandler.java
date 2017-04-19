@@ -125,6 +125,10 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     //直播消息
                                     sendIMMessage(message, conversation);
                                     break;
+                                case 1010:
+                                    //直播消息
+                                    sendIMMessage(message, conversation);
+                                    break;
                                 default:
                                     break;
                             }
@@ -180,6 +184,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
         int chatType = (int) conversation.getAttribute("chat_type");
 
         BaseMessage baseMessage = new BaseMessage("IM_Info", map);
-        AppManager.getInstance().sendMessage(chatType == 1009 ? "Live_Message" : "IM_Message", baseMessage);
+        AppManager.getInstance().sendMessage((chatType == 1009 || chatType == 1010) ? "Live_Message" : "IM_Message", baseMessage);
     }
 }

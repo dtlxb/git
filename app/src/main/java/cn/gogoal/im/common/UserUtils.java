@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
-import cn.gogoal.im.activity.LoginActivity;
+import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 
@@ -38,9 +38,10 @@ public class UserUtils {
         return user.getString("token");
     }
 
-    public static String getUserId(){
+    public static String getUserId() {
         return "";
     }
+
     /**
      * 获取用户ID
      *
@@ -165,7 +166,7 @@ public class UserUtils {
     public static void logout(Activity mContext) {
         SPTools.clear();
         SPTools.saveBoolean("notFristTime", true);
-//        mContext.startActivity(new Intent(mContext, LoginActivity.class));
+//        mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
         // TODO: 2017/2/8 0008
         mContext.finish();
         UIHelper.toast(mContext, "退出登录成功!");
@@ -231,7 +232,7 @@ public class UserUtils {
 
     public static boolean checkToken(Context context) {
         if (TextUtils.isEmpty(getToken())) {
-            context.startActivity(new Intent(context, LoginActivity.class));
+            context.startActivity(new Intent(context, TypeLoginActivity.class));
             return true;
         } else {
             return false;
@@ -288,12 +289,16 @@ public class UserUtils {
 
     /**
      * 找出当前群中自己的好友
-     * <p>
-     * 获取当前群的已经加入的好友，当前群可能有的不是好友，要匹配
      */
-    public static List<ContactBean> getOthersInTeam(String conversationId) {
+    public static List<ContactBean> getOthersInTeam(String conversationId, int fromWhere) {
+        JSONArray userInTeamArray = null;
+        if (fromWhere == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
+            userInTeamArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationId + "_accountList_beans", new JSONArray());
+        } else if (fromWhere == AppConst.LIVE_CONTACT_SOMEBODY) {
+            userInTeamArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationId + "_live_group_beans", new JSONArray());
+        } else {
 
-        JSONArray userInTeamArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationId + "_accountList_beans", new JSONArray());
+        }
 
         KLog.e(userInTeamArray);
         //获取我的conversationId群中的全部用户
@@ -328,23 +333,30 @@ public class UserUtils {
     /**
      * 当群信息没有的时候 网上拉取
      */
-    public static void getChatGroup(List<String> groupMembers, final String conversationId, final getSquareInfo mGetSquareInfo) {
+    public static void getChatGroup(final int type, List<String> groupMembers, final String conversationId, final getSquareInfo mGetSquareInfo) {
         Map<String, String> params = new HashMap<>();
         params.put("token", getToken());
         params.put("conv_id", conversationId);
         params.put("id_list", JSONObject.toJSONString(groupMembers));
+        KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
                 JSONObject result = JSONObject.parseObject(responseInfo);
+                KLog.e(responseInfo);
                 if ((int) result.get("code") == 0) {
                     if (null != result.getJSONObject("data")) {
                         if (null != mGetSquareInfo) {
                             mGetSquareInfo.squareGetSuccess(result.getJSONObject("data"));
                         }
-                        SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversationId + "_accountList_beans",
-                                result.getJSONObject("data").getJSONArray("accountList"));
+                        if (type == AppConst.CHAT_GROUP_CONTACT_BEANS) {
+                            SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversationId + "_accountList_beans",
+                                    result.getJSONObject("data").getJSONArray("accountList"));
+                        } else if (type == AppConst.LIVE_GROUP_CONTACT_BEANS) {
+                            //缓存群通讯录
+                            SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversationId + "_live_group_beans", result.getJSONObject("data").getJSONArray("accountList"));
+                        }
                     }
                 }
             }

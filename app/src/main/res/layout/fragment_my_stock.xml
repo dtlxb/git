@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
+    android:fitsSystemWindows="true"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
@@ -20,10 +23,12 @@
             <TextView
                 android:id="@+id/tv_mystock_edit"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_centerVertical="true"
-                android:padding="15dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
                 android:text="编辑"
+                android:gravity="center"
                 android:textColor="@color/textColor_333333"
                 android:textSize="18sp" />
 
@@ -39,12 +44,13 @@
             <ImageView
                 android:id="@+id/img_mystock_refresh"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:padding="15dp"
+                android:layout_height="match_parent"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
                 android:src="@mipmap/img_refresh"
-                android:contentDescription="@null" />
+                android:contentDescription="@null"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true" />
         </RelativeLayout>
     </RelativeLayout>
 

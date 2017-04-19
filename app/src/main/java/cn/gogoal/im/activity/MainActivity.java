@@ -20,13 +20,14 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.MD5Utils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.fragment.FoundFragment;
+import cn.gogoal.im.fragment.InvestmentResearchFragment;
 import cn.gogoal.im.fragment.MessageFragment;
-import cn.gogoal.im.fragment.MyStockFragment;
 import cn.gogoal.im.fragment.MineFragment;
+import cn.gogoal.im.fragment.MyStockFragment;
 import cn.gogoal.im.fragment.SocialContactFragment;
 
 public class MainActivity extends BaseActivity {
@@ -50,15 +51,17 @@ public class MainActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
+        KLog.e(MD5Utils.getMD5EncryptyString16("123456abcdefg"));
+        KLog.e(MD5Utils.getMD5EncryptyString32("123456abcdefg"));
+
         KLog.e(UserUtils.getToken());
 
         MessageFragment messageFragment = new MessageFragment();                // TAB1 消息
 
         MyStockFragment myStockFragment = new MyStockFragment();                //自选股
 
-//        final ContactsActivity contactsFragment = new ContactsActivity();     // TAB2 人脉
-
-        FoundFragment foundFragment = new FoundFragment();                      // TAB3 投研
+//        FoundFragment foundFragment = new FoundFragment();                      // TAB3 投研
+        InvestmentResearchFragment foundFragment = new InvestmentResearchFragment();                      // TAB3 投研
 
         SocialContactFragment socialContactFragment = new SocialContactFragment();//社交
 
@@ -103,7 +106,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                barUtil.setStatusBarFontDark(position!=4);
+                barUtil.setStatusBarFontDark(position != 4);
                 switch (position) {
                     case 0:
 

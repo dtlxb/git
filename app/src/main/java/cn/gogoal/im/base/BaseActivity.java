@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,7 +39,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.LoginActivity;
+import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.permission.IPermissionListner;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -50,6 +51,10 @@ import static cn.gogoal.im.base.MyApp.getAppContext;
  * 通用的activity页面
  */
 public abstract class BaseActivity extends AppCompatActivity implements IBase {
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     private View mContentView;
 
@@ -264,8 +269,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     /**
      * 修复输入法内存泄露
-     *
-     * @param destContext
      */
     public static void fixInputMethodManagerLeak(Context destContext) {
         if (destContext == null) {
@@ -310,9 +313,10 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 AppManager.getInstance().finishAllActivity();
-                startActivity(new Intent(getActivity(), LoginActivity.class));
+                startActivity(new Intent(getActivity(), TypeLoginActivity.class));
             }
-        }).show();
+        }).setCancelable(false)
+                .show();
     }
 
 

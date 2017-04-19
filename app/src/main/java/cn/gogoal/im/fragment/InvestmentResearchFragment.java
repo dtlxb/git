@@ -16,14 +16,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.copy.StockSearchActivity;
@@ -38,35 +36,27 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
-import cn.gogoal.im.ui.view.XLayout;
 
 /**
- * 投研
+ * author wangjd on 2017/4/19 0019.
+ * Staff_id 1375
+ * phone 18930640263
+ * description :投研
+ * <p>
+ * investment research
  */
-public class FoundFragment extends BaseFragment {
-
-    @BindView(R.id.xLayout)
-    XLayout xLayout;
-
+public class InvestmentResearchFragment extends BaseFragment {
     @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
+    RecyclerView mRecyclerView;
 
-    @BindArray(R.array.found_fun0)
-    String[] functionArr0;
-
-    @BindArray(R.array.found_fun1)
-    String[] functionArr1;
-
-    /**投研适配器、数据集*/
+    private List<SectionTouYanData> mData;
     private SectionAdapter sectionAdapter;
-    private List<SectionTouYanData> dataList = new ArrayList<>();
 
-    /**banner适配器和数据集*/
+    /**
+     * banner适配器和数据集
+     */
     private List<BannerBean.Banner> bannerImageUrls;
     private BannerAdapter bannerAdapter;
-
-    public FoundFragment() {
-    }
 
     @Override
     public int bindLayout() {
@@ -75,35 +65,35 @@ public class FoundFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        xLayout.setStatus(XLayout.Success);
-
-        setFragmentTitle(R.string.title_found).setImmersive(true);
-        iniRecyclerView();
+        setFragmentTitle("投研");
+        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,
+                StaggeredGridLayoutManager.VERTICAL));
+        mData = new ArrayList<>();
+        sectionAdapter = new SectionAdapter(getActivity(), mData);
+        mRecyclerView.setAdapter(sectionAdapter);
 
         getBannerImage();
-        getTouyan();
 
+        getTouYan();
     }
 
     private void getBannerImage() {
         final View bannerView = creatBannerView();
         sectionAdapter.addHeaderView(bannerView);
 
-
         Map<String, String> map = new HashMap<>();
         map.put("ad_position", "7");
         new GGOKHTTP(map, GGOKHTTP.GET_AD_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
 
-                int code=JSONObject.parseObject(responseInfo).getIntValue("code");
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
 
                 if (code == 0) {
                     bannerImageUrls.addAll(JSONObject.parseObject(responseInfo, BannerBean.class).getData());
                     bannerAdapter.notifyDataSetChanged();
                 } else {
-                    BannerBean.Banner spaceBanner=new BannerBean.Banner();
+                    BannerBean.Banner spaceBanner = new BannerBean.Banner();
                     spaceBanner.setImage("");
                     bannerImageUrls.add(spaceBanner);
                     bannerAdapter.notifyDataSetChanged();
@@ -123,7 +113,7 @@ public class FoundFragment extends BaseFragment {
     private View creatBannerView() {
         LinearLayout bannerView = new LinearLayout(getContext());
         final ViewPager bannerPager = new ViewPager(getContext());
-        LinearLayout.LayoutParams root=new LinearLayout.LayoutParams(
+        LinearLayout.LayoutParams root = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
         );
         bannerView.setOrientation(LinearLayout.VERTICAL);
@@ -131,13 +121,13 @@ public class FoundFragment extends BaseFragment {
         bannerView.setLayoutParams(root);
 
         bannerPager.setId(R.id.banner_pager_id);
-        bannerImageUrls =new ArrayList<>();
-        bannerAdapter=new BannerAdapter(bannerImageUrls);
+        bannerImageUrls = new ArrayList<>();
+        bannerAdapter = new BannerAdapter(bannerImageUrls);
         bannerPager.setAdapter(bannerAdapter);
         LinearLayout.LayoutParams pagerParams = new LinearLayout.LayoutParams(
                 AppDevice.getWidth(getContext()),
                 235 * AppDevice.getWidth(getContext()) / 740);
-        bannerView.addView(bannerPager,0,pagerParams);
+        bannerView.addView(bannerPager, 0, pagerParams);
 
         DrawableCenterTextView searchView = new DrawableCenterTextView(getContext());
         searchView.setGravity(Gravity.CENTER_VERTICAL);
@@ -148,7 +138,7 @@ public class FoundFragment extends BaseFragment {
         searchView.setBackgroundResource(R.drawable.shape_search_activity_edit);
         searchView.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getContext(), R.mipmap.img_search)
                 , null, null, null);
-        searchView.setCompoundDrawablePadding(AppDevice.dp2px(getContext(),5));
+        searchView.setCompoundDrawablePadding(AppDevice.dp2px(getContext(), 5));
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,20 +148,12 @@ public class FoundFragment extends BaseFragment {
         searchView.setText("股票代码/名称/拼音");
         searchView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         searchView.setId(R.id.banner_search_id);
-        bannerView.addView(searchView,1,searchParams);
+        bannerView.addView(searchView, 1, searchParams);
         return bannerView;
     }
 
-    private void iniRecyclerView() {
-        recyclerView.setBackgroundColor(getResColor(R.color.stock_market_bg));
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
-        sectionAdapter = new SectionAdapter(getContext(), dataList);
-
-        recyclerView.setAdapter(sectionAdapter);
-
-    }
-
-    private void getTouyan() {
+    public void getTouYan() {
+        mData.clear();
         Map<String, String> map = new HashMap<>();
         map.put("token", UserUtils.getToken());
 
@@ -183,23 +165,23 @@ public class FoundFragment extends BaseFragment {
                     List<TouYan.DataBean> touYanList = JSONObject.parseObject(responseInfo, TouYan.class).getData();
                     for (int i = 0; i < touYanList.size(); i++) {
                         TouYan.DataBean dataBean = touYanList.get(i);
-                        dataList.add(new SectionTouYanData(true, dataBean.getTitle()));
+                        mData.add(new SectionTouYanData(true, dataBean.getTitle()));
                         List<TouYan.DataBean.Item> itemList = dataBean.getDatas();
                         for (TouYan.DataBean.Item item : itemList) {
-                            dataList.add(new SectionTouYanData(item));
+                            mData.add(new SectionTouYanData(item));
                         }
 
                         TouYan.DataBean.Item spaceItem = creatSpaceItem();
 
                         if (itemList.size() % 4 == 1) {
-                            dataList.add(new SectionTouYanData(spaceItem));
-                            dataList.add(new SectionTouYanData(spaceItem));
-                            dataList.add(new SectionTouYanData(spaceItem));
+                            mData.add(new SectionTouYanData(spaceItem));
+                            mData.add(new SectionTouYanData(spaceItem));
+                            mData.add(new SectionTouYanData(spaceItem));
                         } else if (itemList.size() % 4 == 2) {
-                            dataList.add(new SectionTouYanData(spaceItem));
-                            dataList.add(new SectionTouYanData(spaceItem));
+                            mData.add(new SectionTouYanData(spaceItem));
+                            mData.add(new SectionTouYanData(spaceItem));
                         } else if (itemList.size() % 4 == 3) {
-                            dataList.add(new SectionTouYanData(spaceItem));
+                            mData.add(new SectionTouYanData(spaceItem));
                         }
                     }
                     sectionAdapter.notifyDataSetChanged();
@@ -212,9 +194,9 @@ public class FoundFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toastError(getActivity(), msg, xLayout);
             }
         }).startGet();
+
     }
 
     @NonNull
@@ -228,7 +210,7 @@ public class FoundFragment extends BaseFragment {
         return spaceItem;
     }
 
-    private class BannerAdapter extends PagerAdapter{
+    private class BannerAdapter extends PagerAdapter {
 
         private List<BannerBean.Banner> imageUrls;
 
@@ -238,12 +220,12 @@ public class FoundFragment extends BaseFragment {
 
         @Override
         public int getCount() {
-            return imageUrls==null?0:imageUrls.size();
+            return imageUrls == null ? 0 : imageUrls.size();
         }
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return object==view;
+            return object == view;
         }
 
         @Override
@@ -253,14 +235,14 @@ public class FoundFragment extends BaseFragment {
 
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
-            ImageView view=new ImageView(container.getContext());
+            ImageView view = new ImageView(container.getContext());
             view.setAdjustViewBounds(true);
-            ImageDisplay.loadNetImage(container.getContext(),imageUrls.get(position).getImage(),view);
+            ImageDisplay.loadNetImage(container.getContext(), imageUrls.get(position).getImage(), view);
             container.addView(view);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UIHelper.toast(v.getContext(),"banner::"+position);
+                    UIHelper.toast(v.getContext(), "banner::" + position);
                 }
             });
             return view;

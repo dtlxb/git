@@ -36,14 +36,14 @@ public class DownloadUtils {
 
             Bitmap bitmap= (Bitmap) map.get(10086);
 
-            String url= (String) map.get(10010);
+            String name= (String) map.get(10010);
 
             if (bitmap == null) {
                 if (callBack != null) {
                     callBack.error("bitmap is null");
                 }
             } else {
-                ImageUtils.saveBitmapFile(bitmap, dirs, MD5Utils.getMD5EncryptyString(url) + ".png");
+                ImageUtils.saveBitmapFile(bitmap, dirs,name + ".png");
                 if (callBack != null) {
                     callBack.success();
                 }
@@ -83,7 +83,7 @@ public class DownloadUtils {
                     Message message = handler.obtainMessage();
                     SparseArray<Object> map=new SparseArray<>();
                     map.put(10086,myBitmap);
-                    map.put(10010,imageUrl);
+                    map.put(10010,MD5Utils.getMD5EncryptyString32(imageUrl));
                     message.obj = map;
                     handler.sendMessage(message);
 

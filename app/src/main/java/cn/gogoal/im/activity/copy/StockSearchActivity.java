@@ -20,6 +20,9 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hply.imagepicker.view.StatusBarUtil;
+import com.socks.library.KLog;
+
+import org.simple.eventbus.Subscriber;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,7 +41,6 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import hply.com.niugu.ConstantUtils;
 import hply.com.niugu.DeviceUtil;
 import hply.com.niugu.bean.HistorySearchData;
 import hply.com.niugu.bean.HotSearchStockBean;
@@ -102,6 +104,9 @@ public class StockSearchActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+
+        KLog.e(JSONObject.toJSONString(list_history));
+
         StatusBarUtil barUtil=StatusBarUtil.with(this);
 
         barUtil.setStatusBarFontDark(true);
@@ -169,8 +174,12 @@ public class StockSearchActivity extends BaseActivity {
                         stockJson.put("stockName", stockname);
                         stockJson.put("stockCode", stockcode);
                         SPTools.saveJsonObject("searchedStock", stockJson);
-                        setResult(ConstantUtils.RESULT_OK, intent);
-                        finish();
+                        StockUtils.go2StockDetail(getActivity(),stockcode,stockname);
+//                        setResult(ConstantUtils.RESULT_OK, intent);
+//                        finish();
+                        HistorySearchData data=new HistorySearchData(stockname,stockcode);
+                        StockUtils.addSearchedStock(JSONObject.parseObject(JSONObject.toJSONString(data)));
+                        InitHotList();
                         break;
                     case 1:
                         InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -279,11 +288,12 @@ public class StockSearchActivity extends BaseActivity {
     }
 
     //历史搜索
+    @Subscriber(tag = "updata_search_history")
     private void InitHistoryList() {
-        if (!StockUtils.getMyStockSet().isEmpty()) {
+        if (!StockUtils.getSearchedStocks().isEmpty()) {
             search_history.setVisibility(View.VISIBLE);
             JSONArray data = StockUtils.getSearchedStocks();
-            ArrayList<HistorySearchData> info = new ArrayList<HistorySearchData>();
+            ArrayList<HistorySearchData> info = new ArrayList<>();
             int j = data.size() > 6 ? 6 : data.size();
             for (int i = 0; i < j; i++) {
                 JSONObject stockData = data.getJSONObject(i);
