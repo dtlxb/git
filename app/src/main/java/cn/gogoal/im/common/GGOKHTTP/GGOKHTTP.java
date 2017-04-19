@@ -511,6 +511,13 @@ public class GGOKHTTP {
      */
     public static final String ADD_LIVE_VIDEO = "v1/video_mobile/add_live_video";
 
+    /**
+     * 直播邀请连麦
+     * token
+     * invitee_id
+     */
+    public static final String VIDEOCALL_INVITE = "v1/ggm_videocall/invite";
+
 //--------------------------------------------------------------------------------------------------
 
     /**

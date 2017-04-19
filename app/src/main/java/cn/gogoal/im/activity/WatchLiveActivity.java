@@ -205,8 +205,7 @@ public class WatchLiveActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
-        //live_id = getIntent().getStringExtra("live_id");
-        live_id = "caa485d9-de8e-4f1a-ab6d-448070b8de99";
+        live_id = getIntent().getStringExtra("live_id");
 
         if (Build.VERSION.SDK_INT >= 23) {
             permissionCheck();
@@ -1013,22 +1012,23 @@ public class WatchLiveActivity extends BaseActivity {
     @Subscriber(tag = "Live_Message")
     public void handleMessage(BaseMessage baseMessage) {
 
+
         if (null != imConversation && null != baseMessage) {
             Map<String, Object> map = baseMessage.getOthers();
             AVIMMessage message = (AVIMMessage) map.get("message");
             AVIMConversation conversation = (AVIMConversation) map.get("conversation");
 
-            KLog.json(message.getContent());
             int chatType = (int) conversation.getAttribute("chat_type");
+
+            KLog.e(message.getContent());
 
             if (imConversation.getConversationId().equals(conversation.getConversationId()) && chatType == 1009) {
                 //Live消息处理
                 messageList.add(message);
                 mLiveChatAdapter.notifyDataSetChanged();
                 recyler_chat.smoothScrollToPosition(messageList.size());
-            } else if (chatType == 1010) {
+            } else if (chatType == 1008) {
                 //连麦动作处理
-
             }
         }
     }

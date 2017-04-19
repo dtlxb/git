@@ -84,6 +84,9 @@ public class LiveActivity extends BaseActivity {
     @BindView(R.id.root_container)
     FrameLayout mRootContainer;
 
+    //邀请连麦
+    @BindView(R.id.liveTogether)
+    TextView liveTogether;
     //推流预览的SurfaceView
     @BindView(R.id.surfaceLive)
     SurfaceView mPreviewSurfaceView;
@@ -206,6 +209,7 @@ public class LiveActivity extends BaseActivity {
                     if (mVideoChatStatus == VideoChatStatus.INVITE_FOR_RES) {
                         mVideoChatStatus = VideoChatStatus.UNCHAT;
                         UIHelper.toast(getContext(), R.string.invite_timeout_tip); //提醒：对方长时间未响应，已取消连麦邀请
+                        liveTogether.setEnabled(true);
                     }
                     break;
                 case LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT:
@@ -884,12 +888,15 @@ public class LiveActivity extends BaseActivity {
         mHeadsetMonitor.register(this); //注册对耳机状态的监听
 
         if (mPreviewSurfaceStatus != SurfaceStatus.DESTROYED) {
-            KLog.e("LiveActivity-->previewSurface and playSurface all is null");
-            resumePublishStream(null, mPlaySurfaceView);
-        } else {
-            //恢复推流
-            KLog.e("LiveActivity-->previewSurface is null, playSurface isn't null");
-            resumePublishStream(null, mPlaySurfaceView);
+            KLog.e("LiveActivity -->chatHost.resume(), onResume");
+            if (mPlayerSurfaceStatus != SurfaceStatus.DESTROYED) {
+                KLog.e("LiveActivity-->previewSurface and playSurface all is null");
+                resumePublishStream(null, mPlaySurfaceView);
+            } else {
+                //恢复推流
+                KLog.e("LiveActivity-->previewSurface is null, playSurface isn't null");
+                resumePublishStream(null, mPlaySurfaceView);
+            }
         }
     }
 
@@ -1124,6 +1131,7 @@ public class LiveActivity extends BaseActivity {
                     Intent intent = new Intent(LiveActivity.this, ChooseContactActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putInt("square_action", AppConst.LIVE_CONTACT_SOMEBODY);
+                    bundle.putString("conversation_id", conversation.getConversationId());
                     intent.putExtras(bundle);
                     startActivityForResult(intent, AppConst.LIVE_CONTACT_SOMEBODY);
                 } else {
@@ -1145,9 +1153,54 @@ public class LiveActivity extends BaseActivity {
             if (requestCode == AppConst.LIVE_CONTACT_SOMEBODY) {
                 mContactBean = (ContactBean) data.getSerializableExtra("choose_connect_livebean");
                 KLog.e(mContactBean);
+                if (mVideoChatStatus == VideoChatStatus.UNCHAT) {
+                    sendLiveInvite(String.valueOf(mContactBean.getFriend_id()));
+                    mVideoChatStatus = VideoChatStatus.INVITE_FOR_RES;
+                } else {
+                    UIHelper.toast(getContext(), R.string.not_allow_repeat_call);
+                }
 
+                liveTogether.setEnabled(false);
             }
         }
+    }
+
+    /*
+    * 获取直播在线人数
+    * */
+    private void sendLiveInvite(String invitee_id) {
+
+        Map<String, String> param = new HashMap<>();
+        param.put("token", UserUtils.getToken());
+        param.put("invitee_id", invitee_id);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONObject data = object.getJSONObject("data");
+                    if (data.getBooleanValue("success")) {
+                        //倒计时，10s后未收到回复，自动认为对方决绝。
+                        mHandler.sendEmptyMessageDelayed(LinkConst.MSG_WHAT_INVITE_CHAT_TIMEOUT, LinkConst.INVITE_CHAT_TIMEOUT_DELAY);
+                        mVideoChatStatus = VideoChatStatus.INVITE_FOR_RES;
+                        UIHelper.toast(getContext(), R.string.invite_succeed);
+                        liveTogether.setEnabled(false);
+                    } else {
+                        UIHelper.toast(getContext(), R.string.invite_failed);
+                        mVideoChatStatus = VideoChatStatus.UNCHAT;
+                        liveTogether.setEnabled(true);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.VIDEOCALL_INVITE, ggHttpInterface).startGet();
     }
 
     /**
@@ -1168,7 +1221,7 @@ public class LiveActivity extends BaseActivity {
                 messageList.add(message);
                 mLiveChatAdapter.notifyDataSetChanged();
                 recyler_chat.smoothScrollToPosition(messageList.size());
-            } else if (chatType == 1010) {
+            } else if (chatType == 1008) {
                 //连麦动作处理
 
             }
