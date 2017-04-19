@@ -559,7 +559,7 @@ public class MessageFragment extends BaseFragment {
         int unreadmessage = 0;
 
         JSONObject contentObject = JSON.parseObject(message.getContent());
-        JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
+        JSONObject lcattrsObject = contentObject.getJSONObject("_lcattrs");
         String _lctype = contentObject.getString("_lctype");
 
         switch (_lctype) {

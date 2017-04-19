@@ -92,7 +92,7 @@ public class UserUtils {
     public static String getPhoneNumber() {
         JSONObject user = getUserInfo();
         if (user == null) return null;
-        return TextUtils.isEmpty(user.getString("mobile"))?"未设置":user.getString("mobile");
+        return TextUtils.isEmpty(user.getString("mobile")) ? "未设置" : user.getString("mobile");
     }
 
     /**
@@ -115,6 +115,15 @@ public class UserUtils {
         JSONObject user = getUserInfo();
         if (user == null) return null;
         return user.getString("simple_avatar");
+    }
+
+    /**
+     * 判断用户是否第一次登录
+     *
+     * @return
+     */
+    public static Boolean isFirstLogin() {
+        return SPTools.getBoolean("isFirstLogin", false);
     }
 
     /**

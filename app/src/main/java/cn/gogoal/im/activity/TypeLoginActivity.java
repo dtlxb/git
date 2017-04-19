@@ -3,6 +3,8 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,6 +27,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.KeyboardLaunchListenLayout;
 import cn.gogoal.im.ui.view.XEditText;
 import cn.gogoal.im.ui.view.XTitle;
@@ -119,12 +122,14 @@ public class TypeLoginActivity extends BaseActivity {
         loginPassWord.setDrawableRightListener(new XEditText.DrawableRightListener() {
             @Override
             public void onDrawableRightClick(View view) {
-
-                if (loginPassWord.getInputType() == 0x81) {
-                    loginPassWord.setInputType(0x90);
-                } else if (loginPassWord.getInputType() == 0x90) {
-                    loginPassWord.setInputType(0x81);
+                if (view.getTag().equals("false")) {
+                    loginPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    view.setTag("true");
+                } else if (view.getTag().equals("true")) {
+                    loginPassWord.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    view.setTag("false");
                 }
+                loginPassWord.requestFocus();
                 loginPassWord.setSelection(loginPassWord.getText().length());
             }
         });
@@ -137,9 +142,10 @@ public class TypeLoginActivity extends BaseActivity {
                 Login();
                 break;
             case R.id.forget_code:
-                Intent intent = new Intent(getActivity(), RigisterActivity.class);
+                /*Intent intent = new Intent(getActivity(), RigisterActivity.class);
                 intent.putExtra("action_type", AppConst.LOGIN_FIND_CODE);
-                startActivity(intent);
+                startActivityForResult(intent, AppConst.LOGIN_FIND_CODE);*/
+                startActivity(new Intent(getActivity(), EditPersonInfoActivity.class));
                 break;
             default:
                 break;
@@ -168,8 +174,14 @@ public class TypeLoginActivity extends BaseActivity {
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
                     if (data.getIntValue("code") == 0) {
+                        Intent intent;
                         SPTools.saveJsonObject("userInfo", data);
-                        Intent intent = new Intent(TypeLoginActivity.this, MainActivity.class);
+                        if (UserUtils.isFirstLogin()) {
+                            intent = new Intent(TypeLoginActivity.this, MainActivity.class);
+                        } else {
+                            intent = new Intent(TypeLoginActivity.this, EditPersonInfoActivity.class);
+                            SPTools.saveBoolean("isFirstLogin", true);
+                        }
                         intent.putExtra("isFromLogin", true);
                         startActivity(intent);
                         finish();
@@ -195,5 +207,16 @@ public class TypeLoginActivity extends BaseActivity {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_USER_LOGIN, ggHttpInterface).startGet();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 0) {
+            if (requestCode == AppConst.LOGIN_FIND_CODE) {
+                loginPassWord.setText("");
+                loginUserName.requestFocus();
+            }
+        }
     }
 }
