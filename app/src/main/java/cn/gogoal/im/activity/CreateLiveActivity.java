@@ -55,7 +55,6 @@ public class CreateLiveActivity extends BaseActivity {
                 imgLive,
                 AppDevice.dp2px(mContext, 5),//圆角弧度
                 R.mipmap.gogoal);
-
     }
 
     @OnClick({R.id.imgClose, R.id.imgLive, R.id.btnStartLive, R.id.textAgreement})
@@ -65,7 +64,7 @@ public class CreateLiveActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.imgLive: //设置直播封面图片
-                ImageTakeUtils.getInstance().takePhoto(getContext(), 1, true, new ITakePhoto() {
+                ImageTakeUtils.getInstance().takePhoto(getContext(), 1, true, 750, new ITakePhoto() {
                     @Override
                     public void success(List<String> uriPaths, boolean isOriginalPic) {
                         if (uriPaths != null) {

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -999,7 +1000,6 @@ public class WatchLiveActivity extends BaseActivity {
 
                 switch (lcattrs.getString("code")) {
                     case "invite":
-                        KLog.e("收到连麦邀请");
                         showFeedbackChooseDialog();
                         //更新当前连麦状态为收到邀请等待反馈状态
                         mChatStatus = VideoChatStatus.RECEIVED_INVITE;
@@ -1055,7 +1055,6 @@ public class WatchLiveActivity extends BaseActivity {
 
             Map<String, String> param = new HashMap<>();
             param.put("token", UserUtils.getToken());
-            param.put("invitee_id", UserUtils.getUserAccountId());
             if (status == 1) {
                 param.put("feedback_result", "true");
             } else if (status == 2) {
@@ -1067,9 +1066,17 @@ public class WatchLiveActivity extends BaseActivity {
                 public void onSuccess(String responseInfo) {
                     KLog.e(responseInfo);
                     JSONObject object = JSONObject.parseObject(responseInfo);
-                    if (object.getIntValue("code") == 0) {
-                        JSONObject data = object.getJSONObject("data");
-
+                    JSONObject data = object.getJSONObject("data");
+                    if (object.getIntValue("code") == 0 && data.getBooleanValue("success")) {
+                        if (data.getBooleanValue("result")) {
+                            //缓存推流URL和主播的短延迟播放URL
+                            mPushUrl = data.getString("push_stream_url");
+                            mSmallDelayPlayUrl = data.getString("short_play_url");
+                            //开始连麦
+                            startLaunchChat();
+                        } else {
+                            mChatStatus = VideoChatStatus.UNCHAT;
+                        }
                     }
                 }
 
@@ -1080,28 +1087,51 @@ public class WatchLiveActivity extends BaseActivity {
             };
             new GGOKHTTP(param, GGOKHTTP.VIDEOCALL_FEEDBACK, ggHttpInterface).startGet();
 
-            //TODO:连麦结果
-            /*if (status == LinkConst.STATUS_AGREE
-                    && result != null) {
-                //缓存推流URL和主播的短延迟播放URL
-                mPushUrl = result.getRtmpUrl();
-                mSmallDelayPlayUrl = result.getInviteePlayUrl();
-                //隐藏弹窗
-
-                //开始连麦
-                //startLaunchChat();
-            } else if (status == LinkConst.STATUS_AGREE) {
-                KLog.e("Feedback Result is Null");
-            } else { //不同意
-                //隐藏弹窗
-
-                mChatStatus = VideoChatStatus.UNCHAT; //更新当前连麦状态为未连麦状态
-            }*/
-
-            mHandler.removeMessages(LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT); //移除倒计时的消息
+            //移除倒计时的消息
+            mHandler.removeMessages(LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT);
         } else {
             UIHelper.toast(getContext(), R.string.no_inviting_for_response); //当前没有连麦邀请需要反馈
         }
+    }
+
+    /**
+     * 开始连麦
+     */
+    private void startLaunchChat() {
+        //更新当前连麦状态为开始推流并尝试混流，等待混流成功
+        mChatStatus = VideoChatStatus.TRY_MIX;
+
+        changePlayViewToChatMode();
+
+        //注意： 这里推流输出视频尺寸必须是360 * 640
+        mChatParter.onlineChat(mPushUrl, 360, 640,
+                mPreviewSurfaceView.getHolder().getSurface(), mMediaParam, mSmallDelayPlayUrl);
+
+    }
+
+    /**
+     * UI层从普通播放模式更改到连麦模式
+     */
+    public void changePlayViewToChatMode() {
+        if (mPlaySurfaceView != null) {
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mPlaySurfaceView.getLayoutParams();
+            final Resources resources = getResources();
+            if (layoutParams == null) {
+                layoutParams = new FrameLayout.LayoutParams(resources.getDimensionPixelSize(R.dimen.chat_play_window_width),
+                        resources.getDimensionPixelSize(R.dimen.chat_play_window_height));
+            } else {
+                layoutParams.width = resources.getDimensionPixelSize(R.dimen.chat_play_window_width);
+                layoutParams.height = resources.getDimensionPixelSize(R.dimen.chat_play_window_height);
+            }
+
+            layoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+            layoutParams.rightMargin = resources.getDimensionPixelSize(R.dimen.chat_play_window_right_margin);
+            layoutParams.bottomMargin = resources.getDimensionPixelSize(R.dimen.chat_play_window_bottom_margin);
+            mPlaySurfaceView.setLayoutParams(layoutParams);
+        }
+
+        mIvChatClose.setVisibility(View.VISIBLE);
+        mPreviewSurfaceView.setVisibility(View.VISIBLE);
     }
 
     private WatchLiveActivity getContext() {

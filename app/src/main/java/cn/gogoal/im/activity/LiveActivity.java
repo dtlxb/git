@@ -213,7 +213,7 @@ public class LiveActivity extends BaseActivity {
                     }
                     break;
                 case LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT:
-                    feedbackInviting(false);  //自动反馈不同意连麦
+                    //feedbackInviting(false);  //自动反馈不同意连麦
                     UIHelper.toast(getContext(), R.string.inviting_process_timeout); //提醒超时未处理，已经自动拒绝对方的连麦邀请
                     break;
                 case LinkConst.MSG_WHAT_MIX_STREAM_TIMEOUT:
@@ -221,7 +221,6 @@ public class LiveActivity extends BaseActivity {
                     //直接结束连麦
                     closeLiveChat();
                     UIHelper.toast(getContext(), R.string.mix_stream_timeout_tip); //提示等待混流超时
-
             }
         }
     };
@@ -526,7 +525,6 @@ public class LiveActivity extends BaseActivity {
             mChatHost.prepareToPublish(holder.getSurface(), 360, 640, mMediaParam);
             if (mCameraFacing == AlivcMediaFormat.CAMERA_FACING_FRONT) {
                 mChatHost.setFilterParam(mFilterMap);
-                //mLiveBottomFragment.setBeautyUI(true); //更新美颜开关UI
             }
         } else {
             /**
@@ -548,27 +546,6 @@ public class LiveActivity extends BaseActivity {
                 };
                 mHandler.postDelayed(mPermissionRun, PERMISSION_DELAY);
             }
-        }
-    }
-
-    /**
-     * 反馈连麦邀请
-     *
-     * @param isAgree
-     */
-    public void feedbackInviting(boolean isAgree) {
-        if (mVideoChatStatus == VideoChatStatus.RECEIVED_INVITE) {
-            if (isAgree) {
-                //TODO:同意连麦
-
-            } else {
-                //TODO:不同意连麦
-
-                mVideoChatStatus = VideoChatStatus.UNCHAT; //更新连麦状态为未连麦状态
-            }
-            mHandler.removeMessages(LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT); //移除倒计时的消息
-        } else {
-            UIHelper.toast(getContext(), R.string.no_inviting_for_response); //当前没有连麦邀请需要反馈
         }
     }
 
@@ -1179,20 +1156,19 @@ public class LiveActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
-                if (object.getIntValue("code") == 0) {
-                    JSONObject data = object.getJSONObject("data");
-                    if (data.getBooleanValue("success")) {
-                        //倒计时，10s后未收到回复，自动认为对方决绝。
-                        mHandler.sendEmptyMessageDelayed(LinkConst.MSG_WHAT_INVITE_CHAT_TIMEOUT, LinkConst.INVITE_CHAT_TIMEOUT_DELAY);
-                        mVideoChatStatus = VideoChatStatus.INVITE_FOR_RES;
-                        UIHelper.toast(getContext(), R.string.invite_succeed);
-                        liveTogether.setEnabled(false);
-                    } else {
-                        UIHelper.toast(getContext(), R.string.invite_failed);
-                        mVideoChatStatus = VideoChatStatus.UNCHAT;
-                        liveTogether.setEnabled(true);
-                    }
+                JSONObject data = object.getJSONObject("data");
+                if (object.getIntValue("code") == 0 && data.getBooleanValue("success")) {
+                    //倒计时，10s后未收到回复，自动认为对方决绝。
+                    mHandler.sendEmptyMessageDelayed(LinkConst.MSG_WHAT_INVITE_CHAT_TIMEOUT, LinkConst.INVITE_CHAT_TIMEOUT_DELAY);
+                    mVideoChatStatus = VideoChatStatus.INVITE_FOR_RES;
+                    UIHelper.toast(getContext(), R.string.invite_succeed);
+                    liveTogether.setEnabled(false);
+                } else {
+                    UIHelper.toast(getContext(), R.string.invite_failed);
+                    mVideoChatStatus = VideoChatStatus.UNCHAT;
+                    liveTogether.setEnabled(true);
                 }
+
             }
 
             @Override
@@ -1223,7 +1199,27 @@ public class LiveActivity extends BaseActivity {
                 recyler_chat.smoothScrollToPosition(messageList.size());
             } else if (chatType == 1008) {
                 //连麦动作处理
-                KLog.e(baseMessage);
+                JSONObject content = JSONObject.parseObject(message.getContent());
+                JSONObject lcattrs = content.getJSONObject("_lcattrs");
+
+                switch (lcattrs.getString("code")) {
+                    case "feedback":
+                        boolean feedback_result = lcattrs.getBooleanValue("feedback_result");
+                        feedbackInviteResult(feedback_result);
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     * 邀请连麦反馈
+     */
+    private void feedbackInviteResult(boolean feedback_result) {
+        if (feedback_result) {
+            mHandler.removeMessages(LinkConst.MSG_WHAT_INVITE_CHAT_TIMEOUT); //移除邀请等待响应超时倒计时的消息
+            if (mVideoChatStatus == VideoChatStatus.INVITE_FOR_RES) {
+                
             }
         }
     }

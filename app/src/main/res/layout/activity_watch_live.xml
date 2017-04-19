@@ -107,10 +107,10 @@
 
     <ImageView
         android:id="@+id/iv_abort_chat"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_gravity="bottom|right"
-        android:layout_marginBottom="190dp"
+        android:layout_marginBottom="170dp"
         android:layout_marginRight="20dp"
         android:clickable="true"
         android:focusable="true"

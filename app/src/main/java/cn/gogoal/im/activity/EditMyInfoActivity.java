@@ -7,8 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindArray;
 import butterknife.BindView;
@@ -17,6 +22,8 @@ import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.UserInfo;
+import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -92,7 +99,7 @@ public class EditMyInfoActivity extends BaseActivity {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(v.getContext(), ImageDetailActivity.class);
-                            intent.putExtra("account_Id",UserUtils.getUserAccountId());
+                            intent.putExtra("account_Id", UserUtils.getUserAccountId());
                             startActivity(intent);
                         }
                     });
@@ -128,6 +135,7 @@ public class EditMyInfoActivity extends BaseActivity {
                                 case 5://职位
                                     break;
                                 case 6://工作地区
+                                    getUserValid();
                                     break;
                             }
                         }
@@ -135,6 +143,49 @@ public class EditMyInfoActivity extends BaseActivity {
                     break;
             }
         }
+    }
+
+    /*
+    * 能否发起直播
+    * */
+    private void getUserValid() {
+
+        Map<String, String> param = new HashMap<>();
+        param.put("token", UserUtils.getToken());
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONObject data = object.getJSONObject("data");
+                    if (data.getIntValue("code") == 1) {
+                        if (data.getString("live_id") != null) {
+                            Intent intent = new Intent(getContext(), LiveActivity.class);
+                            intent.putExtra("live_id", data.getString("live_id"));
+                            startActivity(intent);
+                        } else {
+                            startActivity(new Intent(getActivity(), CreateLiveActivity.class));
+                        }
+                    } else {
+                        DialogHelp.getMessageDialog(getContext(), "您暂时没有权限直播，请联系客服申请！").show();
+                    }
+                } else {
+                    UIHelper.toast(getContext(), R.string.net_erro_hint);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.VIDEO_MOBILE, ggHttpInterface).startGet();
+    }
+
+    public EditMyInfoActivity getContext() {
+        return EditMyInfoActivity.this;
     }
 
 }
