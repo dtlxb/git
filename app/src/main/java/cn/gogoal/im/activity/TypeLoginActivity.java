@@ -24,6 +24,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.SPTools;
@@ -102,12 +103,14 @@ public class TypeLoginActivity extends BaseActivity {
     }
 
     private void initTitle() {
-        xTitle = setMyTitle(R.string.str_login_in, true);
+        xTitle = setMyTitle(R.string.str_login_in, false);
         //添加action
         XTitle.TextAction rigisterAction = new XTitle.TextAction("注册") {
             @Override
             public void actionClick(View view) {
-                startActivity(new Intent(getActivity(), RigisterActivity.class));
+                Intent intent = new Intent(getActivity(), RigisterActivity.class);
+                intent.putExtra("action_type", AppConst.LOGIN_RIGIST_NUMBER);
+                startActivity(intent);
             }
         };
         xTitle.addAction(rigisterAction, 0);
@@ -136,7 +139,9 @@ public class TypeLoginActivity extends BaseActivity {
                 Login();
                 break;
             case R.id.forget_code:
-                startActivity(new Intent(getActivity(), RigisterActivity.class));
+                Intent intent = new Intent(getActivity(), RigisterActivity.class);
+                intent.putExtra("action_type", AppConst.LOGIN_FIND_CODE);
+                startActivity(intent);
                 break;
             default:
                 break;

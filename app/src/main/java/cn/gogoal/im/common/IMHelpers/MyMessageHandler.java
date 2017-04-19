@@ -121,11 +121,11 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     unAddArray.add(unAddjsonObject);
                                     SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversation.getConversationId() + "_unadd_accountList_beans", unAddArray);
                                     break;
-                                case 1009:
+                                case 1008:
                                     //直播消息
                                     sendIMMessage(message, conversation);
                                     break;
-                                case 1010:
+                                case 1009:
                                     //直播消息
                                     sendIMMessage(message, conversation);
                                     break;
@@ -184,6 +184,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
         int chatType = (int) conversation.getAttribute("chat_type");
 
         BaseMessage baseMessage = new BaseMessage("IM_Info", map);
-        AppManager.getInstance().sendMessage((chatType == 1009 || chatType == 1010) ? "Live_Message" : "IM_Message", baseMessage);
+        AppManager.getInstance().sendMessage((chatType == 1009 || chatType == 1008) ? "Live_Message" : "IM_Message", baseMessage);
     }
 }

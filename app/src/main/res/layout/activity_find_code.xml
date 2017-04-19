@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/absoluteWhite"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="29dp"
+        android:text="验证成功，请设置新密码"
+        android:textColor="@color/textColor_999999" />
+
+    <EditText
+        android:id="@+id/edit_new_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/login_edit_border"
+        android:drawableLeft="@mipmap/icon_code"
+        android:drawablePadding="9dp"
+        android:hint="密码(6-16位，包含数字和字母)"
+        android:inputType="phone"
+        android:paddingBottom="16dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="14dp"
+        android:textColor="@color/textColor_333333"
+        android:textColorHint="@color/textColor_999999"
+        android:textSize="15sp" />
+
+    <EditText
+        android:id="@+id/edit_confirm_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/login_edit_border"
+        android:drawableLeft="@mipmap/icon_code"
+        android:drawablePadding="9dp"
+        android:hint="确认密码"
+        android:inputType="phone"
+        android:paddingBottom="16dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="14dp"
+        android:textColor="@color/textColor_333333"
+        android:textColorHint="@color/textColor_999999"
+        android:textSize="15sp" />
+
+    <cn.gogoal.im.ui.view.SelectorButton
+        android:id="@+id/login_cofirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="25dp"
+        android:lines="1"
+        android:padding="15dp"
+        android:text="确  定"
+        android:textColor="@color/absoluteWhite"
+        android:textSize="17sp"
+        app:normalBackgroundColor="@color/colorPrimary"
+        app:pressedBackgroundColor="#f68d8d"
+        app:radius="4dp" />
+</LinearLayout>
