@@ -224,10 +224,8 @@ public class MessageFragment extends BaseFragment {
                 DialogHelp.getSelectDialog(getActivity(), "", new String[]{"删除聊天"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (which == 2) {
-                            MessageUtils.removeMessageInfo(IMMessageBeans.get(position).getConversationID());
-                            listAdapter.removeItem(position);
-                        }
+                        MessageUtils.removeMessageInfo(IMMessageBeans.get(position).getConversationID());
+                        listAdapter.removeItem(position);
                     }
                 }, false).show();
                 return false;

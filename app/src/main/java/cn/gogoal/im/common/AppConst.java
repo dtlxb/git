@@ -64,7 +64,9 @@ public class AppConst {
     //一般群缓存，直播群缓存(通讯录)
     public static final int CHAT_GROUP_CONTACT_BEANS = 1109;
     public static final int LIVE_GROUP_CONTACT_BEANS = 1110;
-
+    //登录验证，注册
+    public static final int LOGIN_FIND_CODE = 1111;
+    public static final int LOGIN_RIGIST_NUMBER = 1112;
     //阿里云播放器参数
     public static final String businessId = "video_live";
     public static final String accessKeyId = "LTAI1KypPpiBhPAx";

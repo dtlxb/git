@@ -485,16 +485,15 @@ public class GGOKHTTP {
     public static final String VIDEO_MOBILE = "v1/video_mobile/valid_ user_live_auth";
 
     /**
-     *
      * 投研板块
-     *
+     * <p>
      * token                         用户token
      */
     public static final String GET_TOUYAN_LIST = "v1/ggm_icon/get_icon_list";
 
     /**
      * banner
-     *
+     * <p>
      * ad_position=7类型
      */
     public static final String GET_AD_LIST = "v1/ggm_ad/get_ad_list";
@@ -516,6 +515,24 @@ public class GGOKHTTP {
      * live_large_img                直播封面图片
      */
     public static final String ADD_LIVE_VIDEO = "v1/video_mobile/add_live_video";
+
+    /**
+     * token                         用户token
+     * mobile                        手机号
+     */
+    public static final String SEND_CAPTCHA = "v1/ggm_im/send_captcha";
+
+    /**
+     * phone                         手机号
+     * source                        来源=20
+     */
+    public static final String MOBILE_SEND_CAPTCHA = "v1/mobile/send_captcha";
+
+    /**
+     * token                         用户token
+     * mobile                        手机号
+     */
+    public static final String USER_REGISTER = "v1/user/register";
 
 //--------------------------------------------------------------------------------------------------
 

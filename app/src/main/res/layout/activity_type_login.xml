@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/absoluteWhite"
+    android:fitsSystemWindows="true"
     tools:context=".activity.TypeLoginActivity">
 
     <LinearLayout
@@ -21,16 +22,17 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="108dp"
+            android:layout_marginTop="50dp"
             android:background="@drawable/login_edit_border"
             android:drawableLeft="@mipmap/icon_number"
             android:drawablePadding="9dp"
-            android:hint="Go-Goal账号"
+            android:hint="Go-Goal账号/手机号"
             android:paddingBottom="16dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="16dp"
             android:textColor="@color/textColor_333333"
+            android:textColorHint="@color/textColor_999999"
             android:textSize="15sp" />
 
         <cn.gogoal.im.ui.view.XEditText
@@ -52,6 +54,7 @@
             android:paddingRight="11dp"
             android:paddingTop="16dp"
             android:textColor="@color/textColor_333333"
+            android:textColorHint="@color/textColor_999999"
             android:textSize="15sp" />
 
         <cn.gogoal.im.ui.view.SelectorButton
