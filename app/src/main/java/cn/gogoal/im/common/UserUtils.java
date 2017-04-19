@@ -118,6 +118,7 @@ public class UserUtils {
     }
 
     /**
+<<<<<<< HEAD
      * 更新用户信息
      */
     public static void updataLocalUserInfo(JSONObject userInfo) {
@@ -172,7 +173,13 @@ public class UserUtils {
                 }
             }
         }).startGet();
-
+    }
+     /* 判断用户是否第一次登录
+     *
+     * @return
+     */
+    public static Boolean isFirstLogin() {
+        return SPTools.getBoolean("isFirstLogin", false);
     }
 
     /**

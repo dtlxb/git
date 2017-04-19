@@ -3,10 +3,15 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
@@ -21,15 +26,11 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.PlayerUtils.MyDownTimer;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XEditText;
 import cn.gogoal.im.ui.view.XTitle;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by huangxx on 2017/4/17.
@@ -49,6 +50,9 @@ public class RigisterActivity extends BaseActivity {
     //密码
     @BindView(R.id.edit_code)
     XEditText editCode;
+    //验证密码
+    @BindView(R.id.valid_edit_code)
+    XEditText validEditCode;
 
     @BindView(R.id.tv_get_code)
     TextView tvGetCode;
@@ -62,7 +66,11 @@ public class RigisterActivity extends BaseActivity {
     @BindView(R.id.login_button)
     SelectorButton loginButton;
 
-    int actionType;
+    private int actionType;
+
+    private Handler handler;
+
+    private myDrawableRightListener drawableRightListener;
 
     @Override
     public int bindLayout() {
@@ -80,29 +88,35 @@ public class RigisterActivity extends BaseActivity {
     private void initTitle() {
         if (actionType == AppConst.LOGIN_FIND_CODE) {
             loginLayout.setVisibility(View.GONE);
-            loginButton.setText(R.string.str_code_confirm);
-            editCode.setVisibility(View.GONE);
-            xTitle = setMyTitle(R.string.str_login_confirm, true);
+            validEditCode.setVisibility(View.VISIBLE);
+            xTitle = setMyTitle(R.string.str_correct_code, true);
         } else {
             loginLayout.setVisibility(View.VISIBLE);
-            loginButton.setText(R.string.str_login_sure);
-            editCode.setVisibility(View.VISIBLE);
+            validEditCode.setVisibility(View.GONE);
             xTitle = setMyTitle(R.string.str_login_register, true);
         }
 
         // 密码可见监听
-        editCode.setDrawableRightListener(new XEditText.DrawableRightListener() {
-            @Override
-            public void onDrawableRightClick(View view) {
+        drawableRightListener = new myDrawableRightListener();
+        editCode.setDrawableRightListener(drawableRightListener);
+        validEditCode.setDrawableRightListener(drawableRightListener);
 
-                if (editCode.getInputType() == 0x81) {
-                    editCode.setInputType(0x90);
-                } else if (editCode.getInputType() == 0x90) {
-                    editCode.setInputType(0x81);
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case 0x01:
+                        RigisterActivity.this.finish();
+                        break;
+                    case 0x02:
+                        RigisterActivity.this.finish();
+                        break;
+                    default:
+                        break;
                 }
-                editCode.setSelection(editCode.getText().length());
             }
-        });
+        };
     }
 
     @OnClick({R.id.edit_phone_number, R.id.edit_pase_code, R.id.edit_code, R.id.tv_get_code, R.id.tv_login, R.id.login_button})
@@ -125,13 +139,31 @@ public class RigisterActivity extends BaseActivity {
                 if (actionType == AppConst.LOGIN_RIGIST_NUMBER) {
                     rigisterNow();
                 } else if (actionType == AppConst.LOGIN_FIND_CODE) {
-                    startActivity(new Intent(RigisterActivity.this, FindCodeActivity.class));
+                    //显示更改成功5s后自动跳转登录页面
+                    correctPassCode();
                 }
                 break;
             default:
                 break;
         }
 
+    }
+
+    private class myDrawableRightListener implements XEditText.DrawableRightListener {
+
+        @Override
+        public void onDrawableRightClick(View view) {
+            if (view.getTag().equals("false")) {
+                ((XEditText) view).setTransformationMethod(PasswordTransformationMethod.getInstance());
+                view.setTag("true");
+            } else if (view.getTag().equals("true")) {
+                ((XEditText) view).setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                view.setTag("false");
+            }
+
+            view.requestFocus();
+            ((XEditText) view).setSelection(editCode.getText().length());
+        }
     }
 
     //获取验证码
@@ -149,19 +181,18 @@ public class RigisterActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
+                tvGetCode.setEnabled(true);
+                tvGetCode.setTextColor(getResColor(R.color.colorPrimary));
                 if (result.getIntValue("code") == 0) {
                     JSONObject data = result.getJSONObject("data");
                     int code = data.getInteger("code");
                     if (code == 0) {
                         downTimer.start();
                     } else {
-                        tvGetCode.setEnabled(true);
-                        tvGetCode.setTextColor(getResColor(R.color.colorPrimary));
                         UIHelper.toast(RigisterActivity.this, "短信发送失败！");
                     }
                 } else {
-                    tvGetCode.setEnabled(true);
-                    tvGetCode.setTextColor(getResColor(R.color.colorPrimary));
+
                     UIHelper.toast(RigisterActivity.this, "短信发送失败！");
                 }
             }
@@ -177,8 +208,50 @@ public class RigisterActivity extends BaseActivity {
 
     }
 
+    private void correctPassCode() {
+        if (!UIHelper.GGPhoneNumber(editPhoneNumber.getText().toString().trim(), RigisterActivity.this)
+                || !UIHelper.GGCode(editPaseCode.getText().toString().trim(), RigisterActivity.this)
+                || !codeIsTheSame(editCode.getText().toString().trim(), validEditCode.getText().toString().trim()))
+            return;
+        loginLayout.setEnabled(false);
+
+        final Map<String, String> params = new HashMap<>();
+        params.put("captcha", editPaseCode.getText().toString());
+        params.put("new_pwd", validEditCode.getText().toString());
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                loginLayout.setEnabled(true);
+                if (result.getIntValue("code") == 0) {
+                    JSONObject data = result.getJSONObject("data");
+                    boolean success = data.getBoolean("success");
+                    if (success) {
+                        UIHelper.toastInCenter(RigisterActivity.this, "密码重置成功,将自动跳转登录页面", Toast.LENGTH_LONG);
+                        handler.sendEmptyMessageDelayed(0x01, 2000);
+                    } else {
+                        UIHelper.toast(RigisterActivity.this, "验证码失效，请重新获取验证码");
+                    }
+                } else {
+                    UIHelper.toast(RigisterActivity.this, "密码重置失败");
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                loginLayout.setEnabled(true);
+                UIHelper.toast(RigisterActivity.this, R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(params, GGOKHTTP.RESET_PASSWORD_BY_MOBILE, ggHttpInterface).startGet();
+
+    }
+
     private void rigisterNow() {
-        if (!UIHelper.GGPhoneNumber(editPhoneNumber.getText().toString().trim(), RigisterActivity.this) || !UIHelper.GGCode(editPaseCode.getText().toString().trim(), RigisterActivity.this))
+        if (!UIHelper.GGPhoneNumber(editPhoneNumber.getText().toString().trim(), RigisterActivity.this)
+                || !UIHelper.GGCode(editPaseCode.getText().toString().trim(), RigisterActivity.this))
             return;
         final Map<String, String> params = new HashMap<>();
         params.put("phone", editPhoneNumber.getText().toString().trim());
@@ -199,8 +272,8 @@ public class RigisterActivity extends BaseActivity {
                     JSONObject data = result.getJSONObject("data");
                     int dataCode = data.getInteger("code");
                     if (dataCode == 0) {
-                        startActivity(new Intent(RigisterActivity.this, EditPersonInfoActivity.class));
-                        finish();
+                        UIHelper.toastInCenter(RigisterActivity.this, "注册成功,将自动跳转登录页面", Toast.LENGTH_LONG);
+                        handler.sendEmptyMessageDelayed(0x02, 2000);
                     } else if (dataCode == 3) {
                         //账号已存在
                         DialogHelp.getConfirmDialog(RigisterActivity.this, "该手机号已注册，请直接登录", new DialogInterface.OnClickListener() {
@@ -230,6 +303,15 @@ public class RigisterActivity extends BaseActivity {
             }
         };
         new GGOKHTTP(params, GGOKHTTP.USER_REGISTER, ggHttpInterface).startGet();
+    }
+
+    private boolean codeIsTheSame(String code1, String code2) {
+        if (code1.equals(code2)) {
+            return true;
+        } else {
+            UIHelper.toast(RigisterActivity.this, "两次密码不一致");
+            return false;
+        }
     }
 
     // 初始化计时器

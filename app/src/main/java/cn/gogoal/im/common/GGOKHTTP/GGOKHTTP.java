@@ -498,22 +498,10 @@ public class GGOKHTTP {
      */
     public static final String GET_AD_LIST = "v1/ggm_ad/get_ad_list";
 
-    /**
-<<<<<<< HEAD
-     "  avatar",
-     "  name",
-     "  company",
-     "  duty",
-     "  province",
-     "  city"
-     */
-    public static final String UPDATE_ACCOUNT_INFO = "v1/ggm_im/update_account_info ";
-
-
-     /* token                         用户token
-     * live_title                    直播标题
-     * live_large_img                直播封面图片
-     */
+    /* token                         用户token
+    * live_title                    直播标题
+    * live_large_img                直播封面图片
+    */
     public static final String ADD_LIVE_VIDEO = "v1/video_mobile/add_live_video";
 
     /**
@@ -533,6 +521,23 @@ public class GGOKHTTP {
      * mobile                        手机号
      */
     public static final String USER_REGISTER = "v1/user/register";
+
+    /**
+     * captcha                       验证码
+     * new_pwd                       新密码
+     */
+    public static final String RESET_PASSWORD_BY_MOBILE = "v1/ggm_im/reset_password_by_mobile";
+
+    /**
+     * token                         用户token
+     * avatar                        头像
+     * name                          名称
+     * company                       公司
+     * duty                          职位
+     * province                      省份
+     * city                          城市
+     */
+    public static final String UPDATE_ACCOUNT_INFO = "v1/ggm_im/update_account_info";
 
 //--------------------------------------------------------------------------------------------------
 

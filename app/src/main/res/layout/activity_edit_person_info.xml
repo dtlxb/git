@@ -1,100 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
+    android:background="@color/absoluteWhite"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="78dp"
-        android:layout_height="78dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="39dp"
-        android:layout_marginTop="39dp" />
+    <include layout="@layout/include_title" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/login_edit_border"
-        android:orientation="horizontal"
-        android:paddingBottom="16dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="16dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="姓名 "
-            android:textColor="@color/textColor_333333"
-            android:textSize="16sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical">
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:background="@null"
-            android:hint="真实姓名"
-            android:textSize="15sp" />
+            <FrameLayout
+                android:id="@+id/layout_person_headpic"
+                android:layout_width="87dp"
+                android:layout_height="87dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="39dp"
+                android:layout_marginTop="39dp">
 
-    </LinearLayout>
+                <ImageView
+                    android:id="@+id/image_person_headpic"
+                    android:layout_width="78dp"
+                    android:layout_height="78dp"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/login_gogoal" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/login_edit_border"
-        android:orientation="horizontal"
-        android:paddingBottom="16dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="16dp">
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="19dp"
+                    android:layout_gravity="end|bottom"
+                    android:layout_marginBottom="12dp"
+                    android:src="@mipmap/icon_camara" />
+            </FrameLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="公司 "
-            android:textColor="@color/textColor_333333"
-            android:textSize="16sp" />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:background="@null"
-            android:hint="公司全称"
-            android:textSize="15sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_edit_border"
+                android:orientation="horizontal"
+                android:paddingBottom="16dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="16dp">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="姓名 "
+                    android:textColor="@color/textColor_333333"
+                    android:textSize="16sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/login_edit_border"
-        android:orientation="horizontal"
-        android:paddingBottom="16dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="16dp">
+                <EditText
+                    android:id="@+id/edit_person_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:background="@null"
+                    android:hint="真实姓名"
+                    android:lines="1"
+                    android:textSize="15sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="职位 "
-            android:textColor="@color/textColor_333333"
-            android:textSize="16sp" />
+            </LinearLayout>
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:background="@null"
-            android:hint="职位名称"
-            android:textSize="15sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/login_edit_border"
+                android:orientation="horizontal"
+                android:paddingBottom="16dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="16dp">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="公司 "
+                    android:textColor="@color/textColor_333333"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/edit_company_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:background="@null"
+                    android:hint="公司全称"
+                    android:lines="1"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/login_edit_border"
+                android:orientation="horizontal"
+                android:paddingBottom="16dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="职位 "
+                    android:textColor="@color/textColor_333333"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/edit_job_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:background="@null"
+                    android:hint="职位名称"
+                    android:lines="1"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <cn.gogoal.im.ui.view.SelectorButton
+                android:id="@+id/login_cofirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:lines="1"
+                android:padding="15dp"
+                android:text="完  成"
+                android:textColor="@color/absoluteWhite"
+                android:textSize="17sp"
+                app:normalBackgroundColor="@color/colorPrimary"
+                app:pressedBackgroundColor="#f68d8d"
+                app:radius="4dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

@@ -53,6 +53,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="11dp"
             android:paddingTop="16dp"
+            android:tag="false"
             android:textColor="@color/textColor_333333"
             android:textColorHint="@color/textColor_999999"
             android:textSize="15sp" />
