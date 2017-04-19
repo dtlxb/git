@@ -2,6 +2,7 @@ package cn.gogoal.im.common.ImageUtils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,8 +18,6 @@ import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 
-import com.socks.library.KLog;
-
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -33,7 +32,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.List;
 
 import cn.gogoal.im.base.MyApp;
 
@@ -482,15 +480,38 @@ public class ImageUtils {
     /**
      * bitmap保存成本地图片
      */
-    public static File saveBitmapFile(Bitmap bitmap, String localFlag, String path) {
-        File filesDir = MyApp.getAppContext().getExternalFilesDir(localFlag);
-        File file = new File(filesDir, path);//将要保存图片的路径
+    public static File cacheBitmapFile(Bitmap bitmap, String localFlag, String name) {
+        return saveBitmapFile(bitmap,MyApp.getAppContext().getExternalFilesDir(localFlag).getPath(),name);
+    }
+
+    /**
+     * bitmap保存成本地图片
+     */
+    public static File saveBitmapFile(Bitmap bitmap, String parentDir,String name) {
+        File dir=new File(parentDir);
+        if (!dir.exists()){
+            dir.mkdirs();
+        }
+        File file = new File(dir,name);//将要保存图片的绝对路径全名
         try {
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
             bos.flush();
             bos.close();
-        } catch (IOException e) {
+
+            // 其次把文件插入到系统图库
+            try {
+                MediaStore.Images.Media.insertImage(MyApp.getAppContext().getContentResolver(),
+                        parentDir, name, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            // 最后通知图库更新
+            MyApp.getAppContext().sendBroadcast(new Intent(
+                    Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                    Uri.parse("file://" + parentDir+File.separator+name)));
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return file;

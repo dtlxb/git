@@ -2,8 +2,6 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.renderscript.ScriptGroup;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -16,8 +14,6 @@ import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.socks.library.KLog;
-
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,23 +64,25 @@ public class TypeLoginActivity extends BaseActivity {
     }
 
     private void initLoginInfo() {
+//        loginUserName.setText("E00020190");
+//        loginPassWord.setText("955202");
         /*loginUserName.setText("E00020190");
         loginPassWord.setText("955202");*/
 
-        /*loginUserName.setText("E00003645");
-        loginPassWord.setText("147258369");*/
+//        loginUserName.setText("E00003645");
+//        loginPassWord.setText("147258369");
 
         /*loginUserName.setText("E00002639");
         loginPassWord.setText("412174");*/
 
-        /*loginUserName.setText("E00003645");
-        loginPassWord.setText("147258369");*/
+        loginUserName.setText("E00003645");
+        loginPassWord.setText("147258369");
 
         /*loginUserName.setText("E00002639");
         loginPassWord.setText("412174");*/
 
-        loginUserName.setText("E00002638");
-        loginPassWord.setText("123456");
+       /* loginUserName.setText("E00002638");
+        loginPassWord.setText("123456");*/
 
         /*loginUserName.setText("E010399");
         loginPassWord.setText("198122");*/

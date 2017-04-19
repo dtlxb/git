@@ -2,6 +2,7 @@ package cn.gogoal.im.common;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 
 /**
  * author wangjd on 2016/12/15 0015.
@@ -12,8 +13,21 @@ import java.security.NoSuchAlgorithmException;
 public class MD5Utils {
     private static final char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-    public static String getMD5EncryptyString(String originalString){
-        return bytes2HexString(encryptMD5(originalString.getBytes()));
+    /**32位md5加密*/
+    public static String getMD5EncryptyString32(String data){
+        return bytes2HexString(encryptMD5(data.getBytes())).toUpperCase(Locale.ENGLISH);
+    }
+
+    /**16位md5加密*/
+    public static String getMD5EncryptyString16(String data) {
+        return encryptMD5ToString(data.getBytes()).toUpperCase(Locale.ENGLISH);
+    }
+
+    /**
+     * MD5加密
+     */
+    private static String encryptMD5ToString(byte[] data) {
+        return bytes2HexString(encryptMD5(data));
     }
 
     //二进制流md5加密

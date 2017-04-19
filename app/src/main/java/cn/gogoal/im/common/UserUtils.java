@@ -59,9 +59,51 @@ public class UserUtils {
      * @return
      */
     public static String getUserName() {
+        return getGoGoalId();
+    }
+
+    /**
+     * 获取用户名
+     *
+     * @return
+     */
+    public static String getGoGoalId() {
+        JSONObject user = getUserInfo();
+        if (user == null) return null;
+        return user.getString("account_name");
+    }
+
+    /**
+     * 获取用户名
+     *
+     * @return
+     */
+    public static String getNickname() {
         JSONObject user = getUserInfo();
         if (user == null) return null;
         return user.getString("nickname");
+    }
+
+    /**
+     * 获取手机号
+     *
+     * @return
+     */
+    public static String getPhoneNumber() {
+        JSONObject user = getUserInfo();
+        if (user == null) return null;
+        return TextUtils.isEmpty(user.getString("mobile")) ? "未设置" : user.getString("mobile");
+    }
+
+    /**
+     * 获取工作地点
+     *
+     * @return
+     */
+    public static String getOrganizationAddress() {
+        JSONObject user = getUserInfo();
+        if (user == null) return null;
+        return user.getString("organization_address");
     }
 
     /**
@@ -82,6 +124,28 @@ public class UserUtils {
      */
     public static Boolean isFirstLogin() {
         return SPTools.getBoolean("isFirstLogin", false);
+    }
+
+    /**
+     * 获取职务
+     *
+     * @return
+     */
+    public static String getDuty() {
+        JSONObject user = getUserInfo();
+        if (user == null) return null;
+        return user.getString("duty");
+    }
+
+    /**
+     * 获取组织信息
+     *
+     * @return
+     */
+    public static String getorgName() {
+        JSONObject user = getUserInfo();
+        if (user == null) return null;
+        return user.getString("organization_name");
     }
 
     /**

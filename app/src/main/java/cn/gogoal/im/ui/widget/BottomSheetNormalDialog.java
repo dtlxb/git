@@ -9,6 +9,8 @@ import android.view.View;
  * author wangjd on 2017/2/28 0028.
  * Staff_id 1375
  * phone 18930640263
+ *
+ * 通用，布局dialog
  */
 public class BottomSheetNormalDialog extends BaseBottomDialog {
 

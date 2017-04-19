@@ -3,39 +3,32 @@ package cn.gogoal.im.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Looper;
 import android.os.Message;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-
-import com.alibaba.fastjson.JSONObject;
-import com.bumptech.glide.Glide;
-import com.socks.library.KLog;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.CreateLiveActivity;
-import cn.gogoal.im.activity.LiveActivity;
-import cn.gogoal.im.activity.TestActivity;
-import cn.gogoal.im.activity.WatchLiveActivity;
+import cn.gogoal.im.activity.EditMyInfoActivity;
+import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
-import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.bean.ImageTextBean;
-import cn.gogoal.im.common.DialogHelp;
-import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
+import cn.gogoal.im.bean.MineItem;
+import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.WeakReferenceHandler;
@@ -52,21 +45,34 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.img_mine_avatar)
     ImageView imageAvatar;
 
-    @BindView(R.id.item_mine)
-    LinearLayout itemSetting;
+    @BindView(R.id.main_tv_toolbar_title)
+    TextView mTitleText;
 
-    final List<String> image = new ArrayList<>();
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindView(R.id.tv_mine_userName)
+    TextView tvMineUserName;
+
+    @BindView(R.id.tv_mine_introduction)
+    TextView tvMineIntroduction;
+
+    @BindView(R.id.app_bar_layout)
+    AppBarLayout appBarLayout;
+
+    @BindView(R.id.layout_head)
+    RelativeLayout relativeLayout;
+
+
+    private MineAdapter mineAdapter;
+
+    private List<MineItem> mineItems;
 
     private WeakReferenceHandler<MineFragment> handler = new WeakReferenceHandler<MineFragment>(Looper.getMainLooper(), this) {
         @Override
         protected void handleMessage(MineFragment fragment, Message message) {
-            Glide.clear(imageAvatar);
-            Bitmap bitmap = (Bitmap) message.obj;
-            imageAvatar.setImageBitmap(bitmap);
-            endIndex--;
         }
     };
-    private int endIndex = 9;
 
     public MineFragment() {
     }
@@ -81,140 +87,95 @@ public class MineFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle(getString(R.string.title_mine));
+        iniheadInfo(mContext);
         rvMine.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         rvMine.addItemDecoration(new NormalItemDecoration(mContext));
-        rvMine.setAdapter(new MineAdapter(mContext, iniData()));
-
-        image.add("http://wx.qlogo.cn/mmopen/80ZltqkYFOb4h4anTRINWvjKlnsRJUAQibW13cNsplFcU7Cb1XbYKUxbUKia9TeAHntNcEWN7Sqv4Rqa8wpdCeYpJ3KO0bnzIw/0");
-        image.add("http://hackfile.ufile.ucloud.cn/avatar_1_500%C3%97500.jpg");
-        image.add("http://wx.qlogo.cn/mmopen/KicTFAbRPtbEh0AlDp80uZwQNgLgj7L9jtvV5MS2tic4QbRD5RIdfAP6AUzwZxf3RFEJ9NuLO8Lt1sHPxnPUSajOecVtgZ100w/0");
-        image.add("http://wx.qlogo.cn/mmopen/B3tJFu5Es25YBrHcTDtqrnicufZ5fGRficO2rKh0da2l8Uysv3F7kZ7icicbiaCD8w84jbAonRFyWmia0ChtN52ugMUBcH0OcUkMEw/0");
-        image.add("http://wx.qlogo.cn/mmopen/w8nankfwONibXcBrZOIUrKU1icZYVyFa5LC7Y1MiaIjB8wmDxxxjuWGCmJE8oY3FMljDe6TCiapvpxPBnibUK7E0tarIxKJdMUJHc/0");
-        image.add("http://wx.qlogo.cn/mmopen/ibdcYntS4HaY3F9bIUSb5VgXafVDTxGOM4GlXiceqdUrpyEPib4wkHVyD6dImNs2IntswxxTQmulfVgGAdibKSQqdA/0");
-        image.add("http://wx.qlogo.cn/mmopen/w8nankfwON861nzpic7ufwUfTtmUDdhVHWc2OOLfEe7h9ibC7oXNZInaUyicjn8QRYZwPKeia0m9bXic18gFJMRBGvzTDsB0SY73d/0");
-        image.add("http://wx.qlogo.cn/mmopen/ajNVdqHZLLAMhuMfbmcumIo5YIpx6sYBIzvniatIV7Wbw1KRln4ONKjx2SLsTqib7pAhHTvvzjRTMkKMuDibWuZjA/0");
-        image.add("http://wx.qlogo.cn/mmopen/PiajxSqBRaEKlabJJEx5lOHd2ric2mFPWAiaicdVmoJf77vfdPGGajtLmXUOBeFcnUMB1TkY3RZ7YeNvibE7K3TOib3w/0");
+        initDatas();
+        rvMine.setAdapter(mineAdapter);
 
     }
 
-    private List<ImageTextBean<Integer>> iniData() {
-        List<ImageTextBean<Integer>> list = new ArrayList<>();
-        for (String con : mineTitle) {
-            list.add(new ImageTextBean<>(R.mipmap.image_placeholder, con));
+    private void iniheadInfo(Context mContext) {
+        AppDevice.setViewWidth$Height(imageAvatar, 4 * AppDevice.getWidth(mContext) / 25, 3 * AppDevice.getWidth(mContext) / 13);
+        AppDevice.setViewWidth$Height(toolbar,AppDevice.getWidth(mContext),
+                AppDevice.getStatusBarHeight(mContext)+AppDevice.getDefaultActionBarSize(mContext));
+
+        FrameLayout.LayoutParams params= (FrameLayout.LayoutParams) relativeLayout.getLayoutParams();
+        params.setMargins(0,AppDevice.getStatusBarHeight(mContext)+AppDevice.getDefaultActionBarSize(mContext),0,
+                AppDevice.dp2px(mContext,20));
+
+        //设置头像
+        ImageDisplay.loadNetAvatarWithBorder(mContext, UserUtils.getUserAvatar(), imageAvatar);
+        toolbar.setPadding(0,AppDevice.getStatusBarHeight(mContext),0,0);
+        tvMineUserName.setText(UserUtils.getUserName());
+        tvMineIntroduction.setText(UserUtils.getDuty()+" "+UserUtils.getorgName());
+
+//        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+//            @Override
+//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//                int halfScroll = appBarLayout.getTotalScrollRange() / 2;
+//                int offSetAbs = Math.abs(verticalOffset);
+//                float percentage;
+//                if (offSetAbs < halfScroll) {
+//                    mTitleText.setText("");
+//                    percentage = 1 - (float) offSetAbs / (float) halfScroll;
+//                } else {
+//                    mTitleText.setText("个人中心");
+//                    percentage = (float) (offSetAbs - halfScroll) / (float) halfScroll;
+//                }
+//                mTitleText.setAlpha(percentage);
+//
+//            }
+//        });
+
+        relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), EditMyInfoActivity.class));
+            }
+        });
+    }
+
+    private void initDatas() {
+        mineItems = new ArrayList<>();
+        mineItems.add(new MineItem(MineItem.HEAD));
+        for (int i = 0; i < mineTitle.length; i++) {
+            int iconId = getResources().getIdentifier("img_mine_item_" + i, "mipmap", getActivity().getPackageName());
+            mineItems.add(new MineItem(MineItem.ICON_TEXT_ITEM, iconId, mineTitle[i]));
         }
-        return list;
+        mineItems.add(1,new MineItem(MineItem.SPACE));
+        mineItems.add(4,new MineItem(MineItem.SPACE));
+        mineItems.add(8,new MineItem(MineItem.SPACE));
+        mineAdapter = new MineAdapter(mineItems);
     }
 
-    @OnClick({R.id.item_mine})
-    void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.item_mine:
-
-                test(0);
-
-                break;
-        }
+    @OnClick(R.id.img_my_qrcode)
+    void onClick(View view){
+        UIHelper.toast(view.getContext(),"二维码");
     }
 
-    private void test(int end) {
-        if (endIndex >= 1) {
-            Glide.get(getContext()).clearMemory();
+    private class MineAdapter extends BaseMultiItemQuickAdapter<MineItem, BaseViewHolder> {
 
-            GroupFaceImage.getInstance(getActivity(),
-                    image.subList(0, end == 0 ? endIndex : end)
-            ).load(new GroupFaceImage.OnMatchingListener() {
-                @Override
-                public void onSuccess(Bitmap mathingBitmap) {
-
-                    Glide.get(getContext()).clearDiskCache();
-
-                    Message message = handler.obtainMessage();
-                    message.obj = mathingBitmap;
-                    handler.sendMessage(message);
-                }
-
-                @Override
-                public void onError(Exception e) {
-
-                }
-            });
-        } else {
-            endIndex = 9;
-        }
-    }
-
-    private class MineAdapter extends CommonAdapter<ImageTextBean<Integer>, BaseViewHolder> {
-
-        private MineAdapter(Context context, List<ImageTextBean<Integer>> datas) {
-            super(R.layout.item_mine, datas);
+        private MineAdapter(List<MineItem> data) {
+            super(data);
+            addItemType(MineItem.HEAD, R.layout.item_type_mine_middle);
+            addItemType(MineItem.SPACE, R.layout.layout_sapce_15dp);
+            addItemType(MineItem.ICON_TEXT_ITEM, R.layout.item_type_mine_icon_text);
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, final ImageTextBean<Integer> data, final int position) {
-            holder.setImageResource(R.id.iv_mine_item_icon, data.getIamge());
-            holder.setText(R.id.tv_mine_item_text, data.getText());
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    switch (position) {
-                        case 0:
-                            getUserValid();
-                            break;
-                        case 1:
-                            startActivity(new Intent(getActivity(), TestActivity.class));
-                            break;
-                        case 2:
-                            startActivity(new Intent(getActivity(), WatchLiveActivity.class));
-                            break;
-                        default:
-                            UIHelper.toast(v.getContext(), data.getText());
-                            break;
-                    }
-                }
-            });
+        protected void convert(BaseViewHolder holder, MineItem data, int position) {
+            switch (holder.getItemViewType()) {
+                case MineItem.HEAD:
+                    break;
+                case MineItem.SPACE:
+                    break;
+                case MineItem.ICON_TEXT_ITEM:
+                    holder.setText(R.id.item_text_normal, data.getItemText());
+                    holder.setImageResource(R.id.item_img_normal, data.getIconRes());
+                    break;
+            }
         }
-    }
-
-    /*
-    * 能否发起直播
-    * */
-    private void getUserValid() {
-
-        Map<String, String> param = new HashMap<>();
-        param.put("token", UserUtils.getToken());
-        //param.put("product_line", "4");
-
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
-                JSONObject object = JSONObject.parseObject(responseInfo);
-                if (object.getIntValue("code") == 0) {
-                    JSONObject data = object.getJSONObject("data");
-                    if (data.getIntValue("code") == 1) {
-                        if (data.getString("live_id") != null) {
-                            Intent intent = new Intent(getContext(), LiveActivity.class);
-                            intent.putExtra("live_id", data.getString("live_id"));
-                            startActivity(intent);
-                        } else {
-                            startActivity(new Intent(getActivity(), CreateLiveActivity.class));
-                        }
-                    } else {
-                        DialogHelp.getMessageDialog(getContext(), "您暂时没有权限直播，请联系客服申请！").show();
-                    }
-                } else {
-                    UIHelper.toast(getContext(), R.string.net_erro_hint);
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                UIHelper.toast(getContext(), R.string.net_erro_hint);
-            }
-        };
-        new GGOKHTTP(param, GGOKHTTP.VIDEO_MOBILE, ggHttpInterface).startGet();
     }
 
 }

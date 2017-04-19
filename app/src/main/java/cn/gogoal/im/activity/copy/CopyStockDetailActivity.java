@@ -379,7 +379,7 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
     }
 
     @Override
-    public void setStatusBar() {
+    public void setStatusBar(boolean light) {
     }
 
     /***/

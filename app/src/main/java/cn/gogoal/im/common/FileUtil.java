@@ -43,6 +43,10 @@ public class FileUtil {
         KLog.file("TAG", MyApp.getAppContext().getExternalFilesDir("json"),"json_"+CalendarUtils.getCurrentTime("yyyyMMddHHmmss")+".txt",response);
     }
 
+    public static void writeRequestResponse(String name,String response){
+        KLog.file("TAG", MyApp.getAppContext().getExternalFilesDir("json"),"json_"+name+".txt",response);
+    }
+
     /**
      * 关闭流
      */

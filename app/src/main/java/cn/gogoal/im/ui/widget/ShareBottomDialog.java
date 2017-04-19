@@ -11,6 +11,8 @@ import cn.gogoal.im.common.ShareOnClick;
  * author wangjd on 2017/2/28 0028.
  * Staff_id 1375
  * phone 18930640263
+ *
+ * 分享
  */
 public class ShareBottomDialog extends BaseBottomDialog {
 

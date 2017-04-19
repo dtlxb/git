@@ -76,6 +76,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--authorities="你的包名+fileprovider" -->
+        <provider
+            android:authorities="cn.gogoal.im.fileprovider"
+            android:name="android.support.v4.content.FileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths"/>
+        </provider>
+
         <activity
             android:name=".activity.MainActivity"
             android:windowSoftInputMode="adjustPan" />
@@ -151,14 +163,17 @@
         <activity android:name=".activity.stock.StockDetailActivity" />
         <!-- <activity android:name=".activity.Test2Activity"></activity> -->
 
-        <activity android:name=".activity.copy.CopyStockDetailActivity" />
-        <activity android:name=".activity.copy.NewsContentActivity" />
-        <activity
-            android:name=".activity.copy.StockDetailChartsActivity"
-            android:screenOrientation="landscape" />
-        <activity android:name=".activity.copy.CommentActivity" />
-        <activity android:name=".activity.copy.StockDetailMarketIndexActivity" />
-        <activity android:name=".activity.copy.StockSearchActivity" />
+        <activity android:name=".activity.copy.CopyStockDetailActivity"/>
+        <activity android:name=".activity.copy.NewsContentActivity"/>
+        <activity android:name=".activity.copy.StockDetailChartsActivity"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".activity.copy.CommentActivity"/>
+        <activity android:name=".activity.copy.StockDetailMarketIndexActivity"/>
+
+        <activity android:name=".activity.copy.StockSearchActivity"/>
+
+        <activity android:name=".activity.EditMyInfoActivity"/>
+        <activity android:name=".activity.ImageDetailActivity"/>
         <activity android:name=".activity.CreateLiveActivity" />
     </application>
 

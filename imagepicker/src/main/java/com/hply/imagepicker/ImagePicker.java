@@ -1,12 +1,18 @@
 package com.hply.imagepicker;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 
 import com.hply.imagepicker.bean.ImageFolder;
 import com.hply.imagepicker.bean.ImageItem;
@@ -230,12 +236,45 @@ public class ImagePicker {
      * 拍照的方法
      */
     public void takePicture(Activity activity, int requestCode) {
+        if (activity == null) {
+            return;
+        }
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, requestCode);
+        } else {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            if (intent.resolveActivity(activity.getPackageManager()) != null) {
+                if (Utils.existSDCard()) {
+                    takeImageFile = new File(
+                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath()
+                                    + File.separator + "camera/");
+                }else takeImageFile = Environment.getDataDirectory();
+                takeImageFile = createFile(takeImageFile, "IMG_", ".jpg");
+                if (takeImageFile != null) {
+                    // 默认情况下，即不需要指定intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                    // 照相机有自己默认的存储路径，拍摄的照片将返回一个缩略图。如果想访问原始图片，
+                    // 可以通过dat extra能够得到原始图片位置。即，如果指定了目标uri，data就没有数据，
+                    // 如果没有指定uri，则data就返回有数据！
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, getUriForFile(activity, takeImageFile));
+//                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse("file://" + takeImageFile.getAbsolutePath()));
+                }
+            }
+            activity.startActivityForResult(intent, requestCode);
+        }
+
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
-            if (Utils.existSDCard())
-                takeImageFile = new File(Environment.getExternalStorageDirectory(), "/DCIM/camera/");
-            else takeImageFile = Environment.getDataDirectory();
+            if (Utils.existSDCard()) {
+                takeImageFile = new File(
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath()
+                                + File.separator + "camera/");
+            }else takeImageFile = Environment.getDataDirectory();
             takeImageFile = createFile(takeImageFile, "IMG_", ".jpg");
             if (takeImageFile != null) {
                 // 默认情况下，即不需要指定intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
@@ -246,6 +285,19 @@ public class ImagePicker {
             }
         }
         activity.startActivityForResult(takePictureIntent, requestCode);
+    }
+
+    private Uri getUriForFile(Activity context, File file) {
+        if (context == null || file == null) {
+            throw new NullPointerException();
+        }
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= 24) {
+            uri = FileProvider.getUriForFile(context.getApplicationContext(), context.getPackageName()+".fileprovider", file);
+        } else {
+            uri = Uri.fromFile(file);
+        }
+        return uri;
     }
 
     /**

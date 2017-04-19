@@ -101,6 +101,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
     private int errorPadding=0;
 
+    @BindView(R.id.layout_title)
+    ViewGroup layoutTitle;
+
     private List<StockMarketBean.DataBean.HangqingBean> myStockMarketDatas = new ArrayList<>();
     private MyStockMarketAdapter myStockMarketAdapter;
 
@@ -117,6 +120,11 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     @Override
     public void doBusiness(final Context mContext) {
         BaseActivity.iniRefresh(refreshLayout);
+
+        AppDevice.setViewWidth$Height(layoutTitle, ViewGroup.LayoutParams.MATCH_PARENT,
+                AppDevice.getDefaultActionBarSize(mContext)+AppDevice.getStatusBarHeight(mContext));
+
+        layoutTitle.setPadding(0,AppDevice.getStatusBarHeight(mContext),0,0);
 
         initMarketBanner(mContext);
         initSortTitle(mContext);

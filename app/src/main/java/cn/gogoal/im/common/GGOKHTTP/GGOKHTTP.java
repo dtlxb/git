@@ -365,11 +365,6 @@ public class GGOKHTTP {
     public static final String GET_FRIEND_LIST = "v1/ggm_im/get_friend_list";
 
     /**
-     * 城市列表
-     */
-    public static final String GET_CITY_DATA = "v1/base/get_city_data";
-
-    /**
      * IM发送消息
      * token                        用户token
      * message                      消息内容（包括文字，语音，图片...）
@@ -504,7 +499,18 @@ public class GGOKHTTP {
     public static final String GET_AD_LIST = "v1/ggm_ad/get_ad_list";
 
     /**
-     * token                         用户token
+<<<<<<< HEAD
+     "  avatar",
+     "  name",
+     "  company",
+     "  duty",
+     "  province",
+     "  city"
+     */
+    public static final String UPDATE_ACCOUNT_INFO = "v1/ggm_im/update_account_info ";
+
+
+     /* token                         用户token
      * live_title                    直播标题
      * live_large_img                直播封面图片
      */

@@ -109,6 +109,9 @@ public class ImageGridAdapter extends BaseAdapter {
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
+
+            final int selectLimit = imagePicker.getSelectLimit();
+
             final ImageItem imageItem = getItem(position);
 
             holder.ivThumb.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +124,6 @@ public class ImageGridAdapter extends BaseAdapter {
             holder.cbCheck.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int selectLimit = imagePicker.getSelectLimit();
                     if (holder.cbCheck.isChecked() && mSelectedImages.size() >= selectLimit) {
                         Toast.makeText(mActivity.getApplicationContext(), mActivity.getString(R.string.select_limit, selectLimit), Toast.LENGTH_SHORT).show();
                         holder.cbCheck.setChecked(false);
