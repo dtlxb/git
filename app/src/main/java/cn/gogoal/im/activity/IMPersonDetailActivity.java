@@ -22,7 +22,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseInfo;
 import cn.gogoal.im.bean.ContactBean;
-import cn.gogoal.im.bean.UserInfo;
+import cn.gogoal.im.bean.UserDetailInfo;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -80,21 +80,21 @@ public class IMPersonDetailActivity extends BaseActivity {
 
                     ContactBean contactBean = JSONObject.parseObject(responseInfo, BaseInfo.class).getData();
 
-                    List<UserInfo> infos = new ArrayList<>();
+                    List<UserDetailInfo> infos = new ArrayList<>();
 
-                    infos.add(new UserInfo(UserInfo.HEAD,
+                    infos.add(new UserDetailInfo(UserDetailInfo.HEAD,
                             (String) contactBean.getAvatar(), contactBean.getFull_name(), contactBean.getNickname()));
 
-                    infos.add(new UserInfo(UserInfo.SPACE));
-                    infos.add(new UserInfo(UserInfo.TEXT_ITEM_2, false, "地区", "--"));
-                    infos.add(new UserInfo(UserInfo.TEXT_ITEM_2, false, "公司", contactBean.getOrg_name()));
-                    infos.add(new UserInfo(UserInfo.TEXT_ITEM_2, false, "职位", contactBean.getDuty()));
-                    infos.add(new UserInfo(UserInfo.SPACE));
-                    infos.add(new UserInfo(UserInfo.TEXT_ITEM_2, false, "个人描述", contactBean.getDuty()));
-                    infos.add(new UserInfo(UserInfo.SPACE));
-                    infos.add(new UserInfo(UserInfo.TEXT_ITEM_2, true, "研网活动(5)", ""));
-                    infos.add(new UserInfo(UserInfo.TEXT_ITEM_2, true, "参加活动活动(4)", ""));
-                    infos.add(new UserInfo(cn.gogoal.im.bean.UserInfo.TEXT_ITEM_2, true, "加入群组(3)", ""));
+                    infos.add(new UserDetailInfo(UserDetailInfo.SPACE));
+                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, false, "地区", "--"));
+                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, false, "公司", contactBean.getOrg_name()));
+                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, false, "职位", contactBean.getDuty()));
+                    infos.add(new UserDetailInfo(UserDetailInfo.SPACE));
+                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, false, "个人描述", contactBean.getDuty()));
+                    infos.add(new UserDetailInfo(UserDetailInfo.SPACE));
+                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, true, "研网活动(5)", ""));
+                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, true, "参加活动活动(4)", ""));
+                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, true, "加入群组(3)", ""));
 
                     personDetailRecycler.setAdapter(new UserInfoAdapter(infos));
 
@@ -129,27 +129,27 @@ public class IMPersonDetailActivity extends BaseActivity {
         }
     }
 
-    private class UserInfoAdapter extends BaseMultiItemQuickAdapter<UserInfo, BaseViewHolder> {
+    private class UserInfoAdapter extends BaseMultiItemQuickAdapter<UserDetailInfo, BaseViewHolder> {
 
-        public UserInfoAdapter(List<UserInfo> data) {
+        public UserInfoAdapter(List<UserDetailInfo> data) {
             super(data);
-            addItemType(UserInfo.HEAD, R.layout.header_rv_item_user_info);
-            addItemType(UserInfo.SPACE, R.layout.layout_sapce_15dp);
-            addItemType(UserInfo.TEXT_ITEM_2, R.layout.item_type_user_info);
+            addItemType(UserDetailInfo.HEAD, R.layout.header_rv_item_user_info);
+            addItemType(UserDetailInfo.SPACE, R.layout.layout_sapce_15dp);
+            addItemType(UserDetailInfo.TEXT_ITEM_2, R.layout.item_type_user_info);
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, UserInfo data, int position) {
+        protected void convert(BaseViewHolder holder, UserDetailInfo data, int position) {
 
             switch (holder.getItemViewType()) {
-                case UserInfo.HEAD:
+                case UserDetailInfo.HEAD:
                     holder.setImageUrl(R.id.image_user_info_avatar, data.getAvatar());
                     holder.setText(R.id.person_name, data.getFullName());
                     holder.setText(R.id.person_mark, data.getNickName());
                     break;
-                case UserInfo.SPACE:
+                case UserDetailInfo.SPACE:
                     break;
-                case UserInfo.TEXT_ITEM_2:
+                case UserDetailInfo.TEXT_ITEM_2:
                     holder.setText(R.id.item_text_1, data.getItemKey());
                     holder.setText(R.id.item_text_2, data.getItemValue());
 

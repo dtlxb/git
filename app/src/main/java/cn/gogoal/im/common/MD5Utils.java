@@ -20,7 +20,7 @@ public class MD5Utils {
 
     /**16位md5加密*/
     public static String getMD5EncryptyString16(String data) {
-        return encryptMD5ToString(data.getBytes()).toUpperCase(Locale.ENGLISH);
+        return getMD5EncryptyString32(data).substring(8,24);
     }
 
     /**

@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.UserInfo;
+import cn.gogoal.im.bean.UserDetailInfo;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -30,7 +32,7 @@ import cn.gogoal.im.ui.NormalItemDecoration;
  */
 public class EditMyInfoActivity extends BaseActivity {
 
-    private List<UserInfo> editInfos;
+    private List<UserDetailInfo> editInfos;
     private MyInfoAdapter myInfoAdapter;
 
     @BindView(R.id.rv_my_info)
@@ -59,10 +61,10 @@ public class EditMyInfoActivity extends BaseActivity {
     private void iniListDatas() {
         String[] userInfoValue = {UserUtils.getNickname(), UserUtils.getUserName(), UserUtils.getPhoneNumber(),
                 UserUtils.getorgName(), UserUtils.getDuty(), UserUtils.getOrganizationAddress()};
-        editInfos.add(new UserInfo(UserInfo.HEAD, UserUtils.getUserAvatar()));
+        editInfos.add(new UserDetailInfo(UserDetailInfo.HEAD, UserUtils.getUserAvatar()));
         for (int i = 0; i < edidInfoArray.length; i++) {
-            editInfos.add(new UserInfo(
-                    UserInfo.TEXT_ITEM_2,
+            editInfos.add(new UserDetailInfo(
+                    UserDetailInfo.TEXT_ITEM_2,
                     !edidInfoArray[i].equals("Go-Goal账号"),
                     edidInfoArray[i],
                     userInfoValue[i]));
@@ -70,20 +72,20 @@ public class EditMyInfoActivity extends BaseActivity {
         myInfoAdapter.notifyDataSetChanged();
     }
 
-    private class MyInfoAdapter extends BaseMultiItemQuickAdapter<UserInfo, BaseViewHolder> {
+    private class MyInfoAdapter extends BaseMultiItemQuickAdapter<UserDetailInfo, BaseViewHolder> {
 
-        private MyInfoAdapter(List<UserInfo> data) {
+        private MyInfoAdapter(List<UserDetailInfo> data) {
             super(data);
-            addItemType(UserInfo.HEAD, R.layout.header_rv_edit_my_info);
-            addItemType(UserInfo.SPACE, R.layout.layout_sapce_15dp);
-            addItemType(UserInfo.TEXT_ITEM_2, R.layout.item_rv_edit_my_info);
+            addItemType(UserDetailInfo.HEAD, R.layout.header_rv_edit_my_info);
+            addItemType(UserDetailInfo.SPACE, R.layout.layout_sapce_15dp);
+            addItemType(UserDetailInfo.TEXT_ITEM_2, R.layout.item_rv_edit_my_info);
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, UserInfo data, final int position) {
+        protected void convert(BaseViewHolder holder, UserDetailInfo data, final int position) {
 
             switch (holder.getItemViewType()) {
-                case UserInfo.HEAD:
+                case UserDetailInfo.HEAD:
                     ImageDisplay.loadNetAvatarWithBorder(getActivity(),
                             data.getAvatar(),
                             (ImageView) holder.getView(R.id.image_user_info_avatar));
@@ -97,9 +99,9 @@ public class EditMyInfoActivity extends BaseActivity {
                         }
                     });
                     break;
-                case UserInfo.SPACE:
+                case UserDetailInfo.SPACE:
                     break;
-                case UserInfo.TEXT_ITEM_2:
+                case UserDetailInfo.TEXT_ITEM_2:
 
                     View itemView = holder.getView(R.id.item_rv_edit_my_info);
 
@@ -135,6 +137,13 @@ public class EditMyInfoActivity extends BaseActivity {
                     break;
             }
         }
+    }
+
+    @Subscriber(tag = "updata_cache_avatar")
+    void updataCacheAvatar(String newAvatarUrl){
+        editInfos.remove(0);
+        editInfos.add(0,new UserDetailInfo(UserDetailInfo.HEAD, newAvatarUrl));
+        myInfoAdapter.notifyItemChanged(0);
     }
 
 }

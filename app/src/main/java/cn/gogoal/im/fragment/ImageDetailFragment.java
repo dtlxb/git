@@ -3,11 +3,12 @@ package cn.gogoal.im.fragment;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.bumptech.glide.Glide;
+import org.simple.eventbus.Subscriber;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import uk.co.senab.photoview.PhotoView;
 
 /**
@@ -40,7 +41,7 @@ public class ImageDetailFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        Glide.with(getActivity()).load(imageUrl).into(image);
+        ImageDisplay.loadNetImage(getActivity(),imageUrl,image);
     }
 
     public static ImageDetailFragment getInstance(String imageUrl) {
@@ -49,5 +50,10 @@ public class ImageDetailFragment extends BaseFragment {
         bundl.putString(IMAGE_URL, imageUrl);
         fragment.setArguments(bundl);
         return fragment;
+    }
+
+    @Subscriber(tag = "updata_cache_avatar")
+    void updataCacheAvatar(String newAvatarUrl){
+        ImageDisplay.loadNetImage(getActivity(),newAvatarUrl,image);
     }
 }
