@@ -50,6 +50,22 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable{
     private String mPinyin;//昵称/备注的全拼
 
     //=============================================
+    private String phone;
+    private String simple_avatar;
+    private String token;
+    private int parent_account_id;
+    private int login_type;
+    private int is_parent_account;
+    private int login_id;
+    private int code;
+    private int account_status;
+    private String photo;
+    private int organization_id;
+    private String organization_name;
+    private String organization_address;
+    private String weibo;
+    private int is_tc_org;
+
     private String duty;//职务
 
     private String org_name;//
@@ -214,6 +230,126 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable{
         this.department = department;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getSimple_avatar() {
+        return simple_avatar;
+    }
+
+    public void setSimple_avatar(String simple_avatar) {
+        this.simple_avatar = simple_avatar;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public int getParent_account_id() {
+        return parent_account_id;
+    }
+
+    public void setParent_account_id(int parent_account_id) {
+        this.parent_account_id = parent_account_id;
+    }
+
+    public int getLogin_type() {
+        return login_type;
+    }
+
+    public void setLogin_type(int login_type) {
+        this.login_type = login_type;
+    }
+
+    public int getIs_parent_account() {
+        return is_parent_account;
+    }
+
+    public void setIs_parent_account(int is_parent_account) {
+        this.is_parent_account = is_parent_account;
+    }
+
+    public int getLogin_id() {
+        return login_id;
+    }
+
+    public void setLogin_id(int login_id) {
+        this.login_id = login_id;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public int getAccount_status() {
+        return account_status;
+    }
+
+    public void setAccount_status(int account_status) {
+        this.account_status = account_status;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public int getOrganization_id() {
+        return organization_id;
+    }
+
+    public void setOrganization_id(int organization_id) {
+        this.organization_id = organization_id;
+    }
+
+    public String getOrganization_name() {
+        return organization_name;
+    }
+
+    public void setOrganization_name(String organization_name) {
+        this.organization_name = organization_name;
+    }
+
+    public String getOrganization_address() {
+        return organization_address;
+    }
+
+    public void setOrganization_address(String organization_address) {
+        this.organization_address = organization_address;
+    }
+
+    public String getWeibo() {
+        return weibo;
+    }
+
+    public void setWeibo(String weibo) {
+        this.weibo = weibo;
+    }
+
+    public int getIs_tc_org() {
+        return is_tc_org;
+    }
+
+    public void setIs_tc_org(int is_tc_org) {
+        this.is_tc_org = is_tc_org;
+    }
+
     @Override
     public String getTarget() {
         return isEmpty(getRemark()) ?
@@ -265,6 +401,21 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable{
                 ", nickname='" + nickname + '\'' +
                 ", avatar=" + avatar +
                 ", mPinyin='" + mPinyin + '\'' +
+                ", phone='" + phone + '\'' +
+                ", simple_avatar='" + simple_avatar + '\'' +
+                ", token='" + token + '\'' +
+                ", parent_account_id=" + parent_account_id +
+                ", login_type=" + login_type +
+                ", is_parent_account=" + is_parent_account +
+                ", login_id=" + login_id +
+                ", code=" + code +
+                ", account_status=" + account_status +
+                ", photo='" + photo + '\'' +
+                ", organization_id=" + organization_id +
+                ", organization_name='" + organization_name + '\'' +
+                ", organization_address='" + organization_address + '\'' +
+                ", weibo='" + weibo + '\'' +
+                ", is_tc_org=" + is_tc_org +
                 ", duty='" + duty + '\'' +
                 ", org_name='" + org_name + '\'' +
                 ", email='" + email + '\'' +

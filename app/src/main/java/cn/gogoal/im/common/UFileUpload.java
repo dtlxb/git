@@ -6,8 +6,6 @@ import com.socks.library.KLog;
 
 import java.io.File;
 
-import cn.gogoal.im.R;
-import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.ucloud.ufilesdk.Callback;
 import cn.ucloud.ufilesdk.UFileRequest;
@@ -101,8 +99,8 @@ public class UFileUpload {
 
         String date = "";
 
-        String key_name = MyApp.getAppContext().getString(R.string.app_name) + "_" +
-                MD5Utils.getMD5EncryptyString32(file.getPath()) +
+        String key_name = "gogoal"+File.separator+"avatar"+File.separator+"ucloud_"+
+                MD5Utils.getMD5EncryptyString16(file.getPath()) +
                 file.getPath().substring(file.getPath().lastIndexOf('.'))+
                 (type==UFileUpload.Type.IMAGE ? "@"+ImageUtils.getImageWidth_Height(file):"");
 
