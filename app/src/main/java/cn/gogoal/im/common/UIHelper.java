@@ -115,7 +115,7 @@ public class UIHelper {
             if (AppDevice.isNetworkConnected(cont)) {
                 mToast.setText(msg);
                 xLayout.setStatus(XLayout.Error);
-            }else {
+            } else {
                 mToast.setText("当前网络不可用");
                 xLayout.setStatus(XLayout.No_Network);
             }
@@ -309,6 +309,35 @@ public class UIHelper {
                 }
             });
         }
+    }
+
+    //验证是否手机号
+    public static boolean GGPhoneNumber(String string, Context ctx) {
+
+        if (string.length() < 11) {
+
+            UIHelper.toast(ctx, "手机号长度不足11位");
+            return false;
+        }
+
+        if (!StringUtils.checkPhoneString(string)) {
+
+            UIHelper.toast(ctx, "手机号输入不合法");
+            return false;
+        }
+
+        return true;
+    }
+
+    //验证是否手机号
+    public static boolean GGCode(String string, Context ctx) {
+
+        if (string.length() == 0) {
+
+            UIHelper.toast(ctx, "验证码不能为空");
+            return false;
+        }
+        return true;
     }
 
     public static void setRippBg(View view) {

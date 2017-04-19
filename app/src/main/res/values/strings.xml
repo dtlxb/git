@@ -145,9 +145,17 @@
     <string name="mystock_sort_down">%s&#xe6b6;</string>
     <string name="str_add_my_stock">添加自选股</string>
     <string name="str_refresh_ok">更新数据成功！</string>
+    <string name="str_account_exit">该手机号已注册，请直接登录</string>
     <string name="str_title_back">返回</string>
     <string name="str_login_in">登录</string>
+    <string name="str_login_register">注册</string>
+    <string name="str_login_sure">确  定</string>
+    <string name="str_login_confirm">信息验证</string>
+    <string name="str_rigister_error">注册失败</string>
+    <string name="str_code_confirm">验  证</string>
+    <string name="str_correct_code">重置密码</string>
     <string name="str_login_error">登录失败</string>
     <string name="str_login_edit_null">用户名或密码不能为空</string>
+    <string name="str_edit_person_info">个人信息</string>
 
 </resources>

@@ -25,7 +25,7 @@ public class MyDownTimer extends CountDownTimer {
         if (run != null) {
             run.run(second);
             second--;
-        };
+        }
     }
 
     @Override
@@ -34,7 +34,7 @@ public class MyDownTimer extends CountDownTimer {
         if (run != null) {
             run.finish();
             second = cache;
-        };
+        }
     }
 
     public interface Runner {
