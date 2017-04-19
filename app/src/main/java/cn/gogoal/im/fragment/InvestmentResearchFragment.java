@@ -66,6 +66,7 @@ public class InvestmentResearchFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
         setFragmentTitle("投研");
+        mRecyclerView.setBackgroundColor(getResColor(R.color.stock_market_bg));
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,
                 StaggeredGridLayoutManager.VERTICAL));
         mData = new ArrayList<>();
