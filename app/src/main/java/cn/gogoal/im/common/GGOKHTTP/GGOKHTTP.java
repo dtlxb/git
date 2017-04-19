@@ -528,6 +528,23 @@ public class GGOKHTTP {
      */
     public static final String USER_REGISTER = "v1/user/register";
 
+    /**
+     * captcha                       验证码
+     * new_pwd                       新密码
+     */
+    public static final String RESET_PASSWORD_BY_MOBILE = "v1/ggm_im/reset_password_by_mobile";
+
+    /**
+     * token                         用户token
+     * avatar                        头像
+     * name                          名称
+     * company                       公司
+     * duty                          职位
+     * province                      省份
+     * city                          城市
+     */
+    public static final String UPDATE_ACCOUNT_INFO = "v1/ggm_im/update_account_info";
+
 //--------------------------------------------------------------------------------------------------
 
     /**

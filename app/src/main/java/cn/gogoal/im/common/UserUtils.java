@@ -76,6 +76,15 @@ public class UserUtils {
     }
 
     /**
+     * 判断用户是否第一次登录
+     *
+     * @return
+     */
+    public static Boolean isFirstLogin() {
+        return SPTools.getBoolean("isFirstLogin", false);
+    }
+
+    /**
      * 是否登陆状态
      */
     public static boolean isLogin() {
