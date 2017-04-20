@@ -28,9 +28,9 @@ public class XEditText extends AppCompatEditText{
     /**普通类型*/
     private static final int TYPE_NORMAL = -1;
     /**自带清除功能的类型*/
-    private static final int TYPE_CAN_CLEAR = 0;
+    public static final int TYPE_CAN_CLEAR = 0;
     /**自带密码查看功能的类型*/
-    private static final int TYPE_CAN_WATCH_PWD = 1;
+    public static final int TYPE_CAN_WATCH_PWD = 1;
 
 
     /**
@@ -233,6 +233,13 @@ public class XEditText extends AppCompatEditText{
         return super.onTouchEvent(event);
     }
 
+    public int getFuncType() {
+        return funcType;
+    }
+
+    public void setFuncType(int funcType) {
+        this.funcType = funcType;
+    }
 
     /**
      * 设置右侧图标的显示与隐藏，调用setCompoundDrawables为EditText绘制上去

@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -87,6 +88,8 @@ public class InvestmentResearchFragment extends BaseFragment {
         new GGOKHTTP(map, GGOKHTTP.GET_AD_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+
+                KLog.e(responseInfo);
 
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
 

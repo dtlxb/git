@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
@@ -64,6 +65,7 @@ public class TypeLoginActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         initTitle();
+        loginPassWord.setInputType(InputType.TYPE_CLASS_TEXT);
         UIHelper.passwordToggle(loginPassWord,chToggle);
         initLoginInfo();
     }

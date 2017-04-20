@@ -10,11 +10,11 @@ import cn.gogoal.im.adapter.baseAdapter.entity.MultiItemEntity;
  */
 public class MineItem implements MultiItemEntity {
 
-    public static final int HEAD = 1;
+    public static final int TYPE_HEAD = 1;
 
-    public static final int SPACE = 2;
+    public static final int TYPE_SPACE = 2;
 
-    public static final int ICON_TEXT_ITEM = 3;
+    public static final int TYPE_ICON_TEXT_ITEM = 3;
 
     private int itemType;
 
