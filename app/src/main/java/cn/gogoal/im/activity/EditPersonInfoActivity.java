@@ -114,17 +114,6 @@ public class EditPersonInfoActivity extends BaseActivity {
                         waitDialog.dismiss();
                         imageUri = onlineUri;
                         UIHelper.toast(getActivity(), "修改成功");
-<<<<<<< HEAD
-=======
-                        AppManager.getInstance().sendMessage("updata_cache_avatar",
-                                onlineUri);
-                        KLog.e("ufile图片外链::" + onlineUri);
-//                                                    http://hackfile.ufile.ucloud.cn/GoGoal_3E21A216416826E307F2805796BE0C55.jpg@1000x1000
-                        UserUtils.updataLocalUserInfo("simple_avatar", onlineUri);
-                        Map<String, String> map = new HashMap<String, String>();
-                        map.put("avatar", onlineUri);
-                        new UserUtils().updataNetUserInfo(map,null);
->>>>>>> 5e073e6e42ed40408bc4b0c99558c71dbb16819d
                     }
 
                     @Override
