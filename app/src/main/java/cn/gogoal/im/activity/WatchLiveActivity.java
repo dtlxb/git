@@ -553,7 +553,6 @@ public class WatchLiveActivity extends BaseActivity {
                 case MediaError.ALIVC_INFO_PUBLISH_DISPLAY_FIRST_FRAME:
                     //预览首帧渲染完成
                     if (isChatting()) {//如果是正在连麦的状态，则首帧渲染完后需要通知UI层隐藏【正在连麦】的view
-                        //mView.hideChattingView();
                     }
                     break;
                 case MediaError.ALIVC_INFO_PUBLISH_NETWORK_GOOD:
