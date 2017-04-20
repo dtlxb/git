@@ -41,7 +41,6 @@ public class EditTextWithEye extends FrameLayout {
         //得到相应控件
         editText = (SearchView) findViewById(R.id.edittext);
         etInput = (SearchView.SearchAutoComplete) editText.findViewById(R.id.search_src_text);
-        //etInput.setInputType(InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         etInput.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         etInput.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         button = (ImageView) findViewById(R.id.imagebutton);

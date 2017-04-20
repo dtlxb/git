@@ -74,11 +74,11 @@ public class TypeLoginActivity extends BaseActivity {
 //        loginUserName.setText("E00003645");
 //        loginPassWord.setText("147258369");
 
-        /*loginUserName.setText("E00002639");
-        loginPassWord.setText("412174");*/
+        loginUserName.setText("E00002639");
+        loginPassWord.setEditTextText("412174");
 
-        loginUserName.setText("E00003645");
-        loginPassWord.setEditTextText("147258369");
+        /*loginUserName.setText("E00003645");
+        loginPassWord.setEditTextText("147258369");*/
 
         /*loginUserName.setText("E00002639");
         loginPassWord.setText("412174");*/
@@ -152,10 +152,9 @@ public class TypeLoginActivity extends BaseActivity {
                 Login();
                 break;
             case R.id.forget_code:
-                /*Intent intent = new Intent(getActivity(), RigisterActivity.class);
+                Intent intent = new Intent(getActivity(), RigisterActivity.class);
                 intent.putExtra("action_type", AppConst.LOGIN_FIND_CODE);
-                startActivityForResult(intent, AppConst.LOGIN_FIND_CODE);*/
-                startActivity(new Intent(getActivity(), EditPersonInfoActivity.class));
+                startActivityForResult(intent, AppConst.LOGIN_FIND_CODE);
                 break;
             default:
                 break;

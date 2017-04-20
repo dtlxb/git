@@ -145,7 +145,7 @@ public class UserUtils {
     /**
      * 发请求更新用户信息
      */
-    public void updataNetUserInfo(Map<String, String> map, final UpdataListener updataListener) {
+    public static void updataNetUserInfo(Map<String, String> map, final UpdataListener updataListener) {
 //        Map<String, String> map = new HashMap<>();
 //        map.put("avatar", "7");
 //        map.put("name", "7");
@@ -153,14 +153,14 @@ public class UserUtils {
 //        map.put("duty", "7");
 //        map.put("province", "7");
 //        map.put("city", "7");
-        map.put("token",UserUtils.getToken());
+        map.put("token", UserUtils.getToken());
 
         KLog.e(map.toString());
         new GGOKHTTP(map, GGOKHTTP.UPDATE_ACCOUNT_INFO, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
-                JSONObject data = JSONObject.parseObject(responseInfo).getJSONObject("data");
+                JSONObject data = JSONObject.parseObject(responseInfo);
                 if (data.getIntValue("code") == 0) {
                     updataListener.success(responseInfo);
                 } else {
@@ -178,10 +178,11 @@ public class UserUtils {
             }
         }).startGet();
     }
-     /* 判断用户是否第一次登录
-     *
-     * @return
-     */
+
+    /* 判断用户是否第一次登录
+    *
+    * @return
+    */
     public static Boolean isFirstLogin() {
         return SPTools.getBoolean("isFirstLogin", false);
     }

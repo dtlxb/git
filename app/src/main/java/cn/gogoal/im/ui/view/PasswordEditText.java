@@ -49,7 +49,7 @@ public class PasswordEditText extends LinearLayoutCompat {
         etPassword = (SearchView) findViewById(R.id.et_password);
         etInput = (EditText) etPassword.findViewById(R.id.search_src_text);
 
-        checkBoxPassword.setButtonDrawable(ContextCompat.getDrawable(context,R.mipmap.icon_visible));
+        checkBoxPassword.setButtonDrawable(ContextCompat.getDrawable(context,R.mipmap.login_eye_closed));
 
     }
 }

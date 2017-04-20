@@ -272,7 +272,7 @@ public class MessageFragment extends BaseFragment {
 
         PopupWindow popupWindow;
 
-        public PopuClick(PopupWindow popupWindow) {
+        PopuClick(PopupWindow popupWindow) {
             this.popupWindow = popupWindow;
         }
 
