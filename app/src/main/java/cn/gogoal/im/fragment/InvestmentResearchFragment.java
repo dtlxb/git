@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -87,6 +88,8 @@ public class InvestmentResearchFragment extends BaseFragment {
         new GGOKHTTP(map, GGOKHTTP.GET_AD_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+
+                KLog.e(responseInfo);
 
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
 
@@ -215,7 +218,7 @@ public class InvestmentResearchFragment extends BaseFragment {
 
         private List<BannerBean.Banner> imageUrls;
 
-        public BannerAdapter(List<BannerBean.Banner> imageUrls) {
+        private BannerAdapter(List<BannerBean.Banner> imageUrls) {
             this.imageUrls = imageUrls;
         }
 
@@ -238,6 +241,7 @@ public class InvestmentResearchFragment extends BaseFragment {
         public Object instantiateItem(ViewGroup container, final int position) {
             ImageView view = new ImageView(container.getContext());
             view.setAdjustViewBounds(true);
+            view.setScaleType(ImageView.ScaleType.CENTER_CROP);
             ImageDisplay.loadNetImage(container.getContext(), imageUrls.get(position).getImage(), view);
             container.addView(view);
             view.setOnClickListener(new View.OnClickListener() {

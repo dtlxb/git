@@ -4,15 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Looper;
 import android.os.Message;
-import android.support.design.widget.AppBarLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -46,11 +46,8 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.img_mine_avatar)
     ImageView imageAvatar;
 
-    @BindView(R.id.main_tv_toolbar_title)
+    @BindView(R.id.tv_mine_title)
     TextView mTitleText;
-
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
 
     @BindView(R.id.tv_mine_userName)
     TextView tvMineUserName;
@@ -58,12 +55,14 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.tv_mine_introduction)
     TextView tvMineIntroduction;
 
-    @BindView(R.id.app_bar_layout)
-    AppBarLayout appBarLayout;
+    @BindView(R.id.scrollView_mine)
+    NestedScrollView scrollView;
 
-    @BindView(R.id.layout_head)
-    RelativeLayout relativeLayout;
-
+    /**
+     * 用户信息头部
+     */
+    @BindView(R.id.layout_user_head)
+    ViewGroup layoutHead;
 
     private MineAdapter mineAdapter;
 
@@ -89,96 +88,106 @@ public class MineFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
         iniheadInfo(mContext);
-        rvMine.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-        rvMine.addItemDecoration(new NormalItemDecoration(mContext));
+        initRecycler(mContext);
         initDatas();
         rvMine.setAdapter(mineAdapter);
+    }
 
+    private void initRecycler(Context mContext) {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
+        layoutManager.setSmoothScrollbarEnabled(true);
+        layoutManager.setAutoMeasureEnabled(true);
+        rvMine.setLayoutManager(layoutManager);
+        rvMine.setHasFixedSize(true);
+        rvMine.setNestedScrollingEnabled(false);
+        rvMine.addItemDecoration(new NormalItemDecoration(mContext));
     }
 
     private void iniheadInfo(Context mContext) {
         AppDevice.setViewWidth$Height(imageAvatar, 4 * AppDevice.getWidth(mContext) / 25, 3 * AppDevice.getWidth(mContext) / 13);
-        AppDevice.setViewWidth$Height(toolbar, AppDevice.getWidth(mContext),
-                AppDevice.getStatusBarHeight(mContext) + AppDevice.getDefaultActionBarSize(mContext));
-
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) relativeLayout.getLayoutParams();
-        params.setMargins(0, AppDevice.getStatusBarHeight(mContext) + AppDevice.getDefaultActionBarSize(mContext), 0,
-                AppDevice.dp2px(mContext, 20));
 
         //设置头像
         ImageDisplay.loadNetAvatarWithBorder(mContext, UserUtils.getUserAvatar(), imageAvatar);
-        toolbar.setPadding(0, AppDevice.getStatusBarHeight(mContext), 0, 0);
         tvMineUserName.setText(UserUtils.getUserName());
         tvMineIntroduction.setText(UserUtils.getDuty() + " " + UserUtils.getorgName());
 
-//        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-//            @Override
-//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-//                int halfScroll = appBarLayout.getTotalScrollRange() / 2;
-//                int offSetAbs = Math.abs(verticalOffset);
-//                float percentage;
-//                if (offSetAbs < halfScroll) {
-//                    mTitleText.setText("");
-//                    percentage = 1 - (float) offSetAbs / (float) halfScroll;
-//                } else {
-//                    mTitleText.setText("个人中心");
-//                    percentage = (float) (offSetAbs - halfScroll) / (float) halfScroll;
-//                }
-//                mTitleText.setAlpha(percentage);
-//
-//            }
-//        });
-
-        relativeLayout.setOnClickListener(new View.OnClickListener() {
+        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), EditMyInfoActivity.class));
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (oldScrollY < AppDevice.dp2px(getContext(), 150)) {
+                    mTitleText.setAlpha(scrollY * 1.0f / AppDevice.dp2px(getContext(), 150));
+                    layoutHead.setAlpha(1 - scrollY * 1.0f / AppDevice.dp2px(getContext(), 150));
+                }
             }
         });
+
     }
 
     private void initDatas() {
         mineItems = new ArrayList<>();
-        mineItems.add(new MineItem(MineItem.HEAD));
+        mineItems.add(new MineItem(MineItem.TYPE_HEAD));
         for (int i = 0; i < mineTitle.length; i++) {
             int iconId = getResources().getIdentifier("img_mine_item_" + i, "mipmap", getActivity().getPackageName());
-            mineItems.add(new MineItem(MineItem.ICON_TEXT_ITEM, iconId, mineTitle[i]));
+            mineItems.add(new MineItem(MineItem.TYPE_ICON_TEXT_ITEM, iconId, mineTitle[i]));
         }
-        mineItems.add(1, new MineItem(MineItem.SPACE));
-        mineItems.add(4, new MineItem(MineItem.SPACE));
-        mineItems.add(8, new MineItem(MineItem.SPACE));
+        mineItems.add(1, new MineItem(MineItem.TYPE_SPACE));
+        mineItems.add(4, new MineItem(MineItem.TYPE_SPACE));
+        mineItems.add(8, new MineItem(MineItem.TYPE_SPACE));
+        mineItems.add(new MineItem(MineItem.TYPE_SPACE));
+        mineItems.add(new MineItem(MineItem.TYPE_ICON_TEXT_ITEM, R.mipmap.cache_found_js_native, "测试1"));
+        mineItems.add(new MineItem(MineItem.TYPE_ICON_TEXT_ITEM, R.mipmap.cache_found_js_native, "测试2"));
+        mineItems.add(new MineItem(MineItem.TYPE_ICON_TEXT_ITEM, R.mipmap.cache_found_js_native, "测试3"));
+        mineItems.add(new MineItem(MineItem.TYPE_ICON_TEXT_ITEM, R.mipmap.cache_found_js_native, "测试4"));
         mineAdapter = new MineAdapter(mineItems);
     }
 
-    @OnClick(R.id.img_my_qrcode)
+    @OnClick({R.id.img_my_qrcode, R.id.layout_user_head})
     void onClick(View view) {
-        UIHelper.toast(view.getContext(), "二维码");
+        switch (view.getId()) {
+            case R.id.img_my_qrcode:
+                UIHelper.toast(view.getContext(), "二维码");
+                break;
+            case R.id.layout_user_head:
+                startActivity(new Intent(view.getContext(), EditMyInfoActivity.class));
+                break;
+        }
     }
 
     @Subscriber(tag = "updata_cache_avatar")
-    void updataCacheAvatar(String newAvatarUrl){
+    void updataCacheAvatar(String newAvatarUrl) {
+        KLog.e(newAvatarUrl);
         ImageDisplay.loadNetAvatarWithBorder(getContext(), UserUtils.getUserAvatar(), imageAvatar);
+        KLog.e("更新头像执行");
     }
 
     private class MineAdapter extends BaseMultiItemQuickAdapter<MineItem, BaseViewHolder> {
 
         private MineAdapter(List<MineItem> data) {
             super(data);
-            addItemType(MineItem.HEAD, R.layout.item_type_mine_middle);
-            addItemType(MineItem.SPACE, R.layout.layout_sapce_15dp);
-            addItemType(MineItem.ICON_TEXT_ITEM, R.layout.item_type_mine_icon_text);
+            addItemType(MineItem.TYPE_HEAD, R.layout.item_type_mine_middle);
+            addItemType(MineItem.TYPE_SPACE, R.layout.layout_sapce_15dp);
+            addItemType(MineItem.TYPE_ICON_TEXT_ITEM, R.layout.item_type_mine_icon_text);
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, MineItem data, int position) {
+        protected void convert(BaseViewHolder holder, MineItem data, final int position) {
             switch (holder.getItemViewType()) {
-                case MineItem.HEAD:
+                case MineItem.TYPE_HEAD:
                     break;
-                case MineItem.SPACE:
+                case MineItem.TYPE_SPACE:
                     break;
-                case MineItem.ICON_TEXT_ITEM:
+                case MineItem.TYPE_ICON_TEXT_ITEM:
                     holder.setText(R.id.item_text_normal, data.getItemText());
                     holder.setImageResource(R.id.item_img_normal, data.getIconRes());
+
+                    holder.getView(R.id.item_layout_simple_image_text).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            switch (position) {
+
+                            }
+                        }
+                    });
                     break;
             }
         }

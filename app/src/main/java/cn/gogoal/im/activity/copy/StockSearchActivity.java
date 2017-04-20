@@ -107,7 +107,7 @@ public class StockSearchActivity extends BaseActivity {
 
         KLog.e(JSONObject.toJSONString(list_history));
 
-        StatusBarUtil barUtil=StatusBarUtil.with(this);
+        StatusBarUtil barUtil = StatusBarUtil.with(this);
 
         barUtil.setStatusBarFontDark(true);
 
@@ -121,7 +121,7 @@ public class StockSearchActivity extends BaseActivity {
     //数据初始化
     private void init() {
         ((SearchView.SearchAutoComplete) searchStock.findViewById(R.id.search_src_text)).
-                setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         ((SearchView.SearchAutoComplete) searchStock.findViewById(R.id.search_src_text)).
                 setGravity(Gravity.CENTER_VERTICAL);
 
@@ -162,11 +162,12 @@ public class StockSearchActivity extends BaseActivity {
         mlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SearchStockData stock = list.get(position);
+                String stockname = stock.getStock_name();
+                String stockcode = stock.getStock_code();
+                KLog.e(num);
                 switch (num) {
                     case 0:
-                        SearchStockData stock = list.get(position);
-                        String stockname = stock.getStock_name();
-                        String stockcode = stock.getStock_code();
                         Intent intent = new Intent();
                         intent.putExtra("stockName", stockname);
                         intent.putExtra("stockCode", stockcode);
@@ -174,10 +175,10 @@ public class StockSearchActivity extends BaseActivity {
                         stockJson.put("stockName", stockname);
                         stockJson.put("stockCode", stockcode);
                         SPTools.saveJsonObject("searchedStock", stockJson);
-                        StockUtils.go2StockDetail(getActivity(),stockcode,stockname);
+                        StockUtils.go2StockDetail(getActivity(), stockcode, stockname);
 //                        setResult(ConstantUtils.RESULT_OK, intent);
 //                        finish();
-                        HistorySearchData data=new HistorySearchData(stockname,stockcode);
+                        HistorySearchData data = new HistorySearchData(stockname, stockcode);
                         StockUtils.addSearchedStock(JSONObject.parseObject(JSONObject.toJSONString(data)));
                         InitHotList();
                         break;
@@ -185,15 +186,23 @@ public class StockSearchActivity extends BaseActivity {
                         InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
-                        StockUtils.go2StockDetail(getActivity(),list.get(position).getStock_code(),
-                                list.get(position).getStock_name());
+                        StockUtils.go2StockDetail(getActivity(), stockcode, stockname);
 
                         JSONObject historyStock = new JSONObject();
-                        historyStock.put("stock_name", list.get(position).getStock_name());
-                        historyStock.put("stock_code", list.get(position).getStock_code());
+                        historyStock.put("stock_name", stockname);
+                        historyStock.put("stock_code", stockcode);
                         StockUtils.addStock2MyStock(historyStock);
 
-                        InitSaveHots(list.get(position).getStock_name(), list.get(position).getStock_code());
+                        InitSaveHots(stockname, stockcode);
+                        break;
+                    case 2:
+                        Intent intent1 = new Intent();
+                        intent1.putExtra("stock_name", stockname);
+                        intent1.putExtra("stock_code", stockcode);
+                        setResult(0x01, intent1);
+                        finish();
+                        break;
+                    default:
                         break;
                 }
             }
@@ -202,10 +211,20 @@ public class StockSearchActivity extends BaseActivity {
         search_history_grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                StockUtils.go2StockDetail(getActivity(),list_history.get(position).getStock_code(),
-                        list_history.get(position).getStock_name());
                 InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                String stockname = list_history.get(position).getStock_name();
+                String stockcode = list_history.get(position).getStock_code();
+                if (num == 2) {
+                    Intent intent1 = new Intent();
+                    intent1.putExtra("stock_name", stockname);
+                    intent1.putExtra("stock_code", stockcode);
+                    setResult(0x01, intent1);
+                    finish();
+                } else {
+                    StockUtils.go2StockDetail(getActivity(), stockcode,
+                            stockname);
+                }
             }
         });
 
@@ -224,14 +243,23 @@ public class StockSearchActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                String stockname = list_hot.get(position).getStock_name();
+                String stockcode = list_hot.get(position).getStock_code();
+                if (num == 2) {
+                    Intent intent1 = new Intent();
+                    intent1.putExtra("stock_name", stockname);
+                    intent1.putExtra("stock_code", stockcode);
+                    setResult(0x01, intent1);
+                    finish();
+                } else {
+                    StockUtils.go2StockDetail(getActivity(), list_hot.get(position).getStock_code(),
+                            list_hot.get(position).getStock_name());
 
-                StockUtils.go2StockDetail(getActivity(),list_hot.get(position).getStock_code(),
-                        list_hot.get(position).getStock_name());
-
-                JSONObject historyStock = new JSONObject();
-                historyStock.put("stock_name", list_hot.get(position).getStock_name());
-                historyStock.put("stock_code", list_hot.get(position).getStock_code());
-                StockUtils.addStock2MyStock(historyStock);
+                    JSONObject historyStock = new JSONObject();
+                    historyStock.put("stock_name", stockname);
+                    historyStock.put("stock_code", stockcode);
+                    StockUtils.addStock2MyStock(historyStock);
+                }
             }
         });
     }
@@ -281,7 +309,7 @@ public class StockSearchActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toastError(getActivity(),msg);
+                UIHelper.toastError(getActivity(), msg);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_STOCKS, ggHttpInterface).startGet();
@@ -339,7 +367,7 @@ public class StockSearchActivity extends BaseActivity {
             @Override
             public void onFailure(String msg) {
                 load_animation.setVisibility(View.GONE);
-                UIHelper.toastError(getApplicationContext(),msg);
+                UIHelper.toastError(getApplicationContext(), msg);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.STOCK_GET_HOTS, ggHttpInterface).startGet();

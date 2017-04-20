@@ -6,10 +6,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.IdRes;
 import android.support.design.widget.Snackbar;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -30,6 +34,7 @@ import java.io.InputStreamReader;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.openServices.weixin.WechatOperator;
+import cn.gogoal.im.ui.view.XEditText;
 import cn.gogoal.im.ui.view.XLayout;
 import okhttp3.Call;
 
@@ -329,12 +334,22 @@ public class UIHelper {
         return true;
     }
 
-    //验证是否手机号
+    //验证验证码
     public static boolean GGCode(String string, Context ctx) {
 
         if (string.length() == 0) {
 
             UIHelper.toast(ctx, "验证码不能为空");
+            return false;
+        }
+        return true;
+    }
+
+    //验证密码是否6-16位的数字，字母
+    public static boolean isGGPassWord(String string, Context ctx) {
+        //String regex = "^([a-z]|[A-Z]|[0-9]){6,16}$";
+        if (string.length() < 6 || string.length() > 16) {
+            UIHelper.toast(ctx, "密码格式错误");
             return false;
         }
         return true;
@@ -347,5 +362,27 @@ public class UIHelper {
                     android.R.attr.selectableItemBackground, typedValue, true);
             view.setBackgroundResource(typedValue.resourceId);
         }
+    }
+
+    public static void passwordToggle(final XEditText etPsw, final CheckBox chToggle){
+        etPsw.setTransformationMethod(PasswordTransformationMethod
+                .getInstance());  //以密文显示
+
+        chToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    etPsw.setTransformationMethod(HideReturnsTransformationMethod
+                            .getInstance());  //密码以明文显示
+                    etPsw.setSelection(etPsw.getText().length());
+//                    chToggle.setButtonDrawable(ContextCompat.getDrawable(context, R.mipmap.img_psw_eye_open));
+                } else {
+                    etPsw.setTransformationMethod(PasswordTransformationMethod
+                            .getInstance());  //以密文显示
+                    etPsw.setSelection(etPsw.getText().length());
+//                    chToggle.setButtonDrawable(ContextCompat.getDrawable(context, R.mipmap.img_psw_eye_closed));
+                }
+            }
+        });
     }
 }

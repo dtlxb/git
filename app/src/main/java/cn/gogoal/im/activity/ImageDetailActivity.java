@@ -25,6 +25,7 @@ import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.DownloadCallBack;
 import cn.gogoal.im.common.DownloadUtils;
 import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -128,7 +129,6 @@ public class ImageDetailActivity extends BaseActivity {
                     case 0://更换头像
                         //打开相机、相册
                         openCamera();
-
                         break;
                     case 1://保存图片
                         DownloadUtils.downloadPicture(getActivity(),
@@ -189,22 +189,13 @@ public class ImageDetailActivity extends BaseActivity {
                         UIHelper.toast(getActivity(), "修改成功");
                         AppManager.getInstance().sendMessage("updata_cache_avatar",
                                 onlineUri);
-                        KLog.e("ufile图片外链::" + onlineUri);
-//                                                    http://hackfile.ufile.ucloud.cn/GoGoal_3E21A216416826E307F2805796BE0C55.jpg@1000x1000
                         UserUtils.updataLocalUserInfo("simple_avatar", onlineUri);
-                        Map<String, String> map = new HashMap<String, String>();
-                        map.put("avatar", onlineUri);
-                        UserUtils.updataNetUserInfo(map, new UserUtils.UpdataListener() {
-                            @Override
-                            public void success(String responce) {
-                                KLog.e(responce);
-                            }
 
-                            @Override
-                            public void failed(String errorMsg) {
+                        KLog.e(UserUtils.getUserAvatar());
 
-                            }
-                        });
+                        Map<String, String> map = new HashMap<>();
+                        map.put("avatar", StringUtils.decodeUrl(onlineUri));
+                        new UserUtils().updataNetUserInfo(map, null);
                     }
 
                     @Override

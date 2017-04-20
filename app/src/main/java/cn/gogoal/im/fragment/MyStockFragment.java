@@ -121,11 +121,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     public void doBusiness(final Context mContext) {
         BaseActivity.iniRefresh(refreshLayout);
 
-        AppDevice.setViewWidth$Height(layoutTitle, ViewGroup.LayoutParams.MATCH_PARENT,
-                AppDevice.getDefaultActionBarSize(mContext)+AppDevice.getStatusBarHeight(mContext));
-
-        layoutTitle.setPadding(0,AppDevice.getStatusBarHeight(mContext),0,0);
-
         initMarketBanner(mContext);
         initSortTitle(mContext);
         initRecyclerView(mContext);

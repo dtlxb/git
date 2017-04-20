@@ -36,7 +36,8 @@ public class UFileSDK {
      * @param bucket bucket bucket name
      */
     public UFileSDK(String bucket) {
-        this.defaultUrl = "http://" + bucket + ".ufile.ucloud.cn";//使用默认域名后缀
+//        this.defaultUrl = "http://" + bucket + ".ufile.ucloud.cn";//使用默认域名后缀
+        this.defaultUrl = "http://" + bucket + ".ufile.ucloud.com.cn";//使用默认域名后缀
     }
 
     /**

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--//////////////////////////////////Niugu///////////////////////////////////////-->
-    <!-- UI统一设置 -->
-    <dimen name="title_height">48.0dp</dimen>
     <dimen name="title_btn_width">50.0dp</dimen>
 
     <dimen name="text_large">30dp</dimen>

@@ -1,11 +1,13 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.text.TextUtils;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -35,7 +37,6 @@ import cn.gogoal.im.ui.view.XTitle;
 /**
  * Created by huangxx on 2017/4/17.
  */
-
 public class TypeLoginActivity extends BaseActivity {
 
     private XTitle xTitle;
@@ -45,6 +46,9 @@ public class TypeLoginActivity extends BaseActivity {
 
     @BindView(R.id.login_edite_code)
     XEditText loginPassWord;
+
+    @BindView(R.id.checkbox_psw)
+    CheckBox chToggle;
 
     @BindView(R.id.forget_code)
     TextView forgetCode;
@@ -60,6 +64,8 @@ public class TypeLoginActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         initTitle();
+        loginPassWord.setInputType(InputType.TYPE_CLASS_TEXT);
+        UIHelper.passwordToggle(loginPassWord, chToggle);
         initLoginInfo();
     }
 
@@ -73,7 +79,7 @@ public class TypeLoginActivity extends BaseActivity {
 //        loginPassWord.setText("147258369");
 
         /*loginUserName.setText("E00002639");
-        loginPassWord.setText("412174");*/
+        loginPassWord.setEditTextText("412174");*/
 
         /*loginUserName.setText("E00003645");
         loginPassWord.setText("147258369");*/
@@ -104,6 +110,14 @@ public class TypeLoginActivity extends BaseActivity {
     }
 
     private void initTitle() {
+
+        new AlertDialog.Builder(getActivity()).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
         xTitle = setMyTitle(R.string.str_login_in, false);
         //添加action
         XTitle.TextAction rigisterAction = new XTitle.TextAction("注册") {
@@ -117,22 +131,6 @@ public class TypeLoginActivity extends BaseActivity {
         xTitle.addAction(rigisterAction, 0);
         TextView rigisterView = (TextView) xTitle.getViewByAction(rigisterAction);
         rigisterView.setTextColor(getResColor(R.color.colorPrimary));
-
-        // 密码可见监听
-        loginPassWord.setDrawableRightListener(new XEditText.DrawableRightListener() {
-            @Override
-            public void onDrawableRightClick(View view) {
-                if (view.getTag().equals("false")) {
-                    loginPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                    view.setTag("true");
-                } else if (view.getTag().equals("true")) {
-                    loginPassWord.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                    view.setTag("false");
-                }
-                loginPassWord.requestFocus();
-                loginPassWord.setSelection(loginPassWord.getText().length());
-            }
-        });
     }
 
     @OnClick({R.id.login_button, R.id.forget_code})
@@ -142,10 +140,9 @@ public class TypeLoginActivity extends BaseActivity {
                 Login();
                 break;
             case R.id.forget_code:
-                /*Intent intent = new Intent(getActivity(), RigisterActivity.class);
+                Intent intent = new Intent(getActivity(), RigisterActivity.class);
                 intent.putExtra("action_type", AppConst.LOGIN_FIND_CODE);
-                startActivityForResult(intent, AppConst.LOGIN_FIND_CODE);*/
-                startActivity(new Intent(getActivity(), EditPersonInfoActivity.class));
+                startActivityForResult(intent, AppConst.LOGIN_FIND_CODE);
                 break;
             default:
                 break;
@@ -160,6 +157,9 @@ public class TypeLoginActivity extends BaseActivity {
             UIHelper.toast(TypeLoginActivity.this, R.string.str_login_edit_null);
             return;
         }
+
+        if (UIHelper.isGGPassWord(word, getActivity()))
+            return;
 
         Map<String, String> param = new HashMap<>();
         param.put("login_name", name);
@@ -185,12 +185,17 @@ public class TypeLoginActivity extends BaseActivity {
                         intent.putExtra("isFromLogin", true);
                         startActivity(intent);
                         finish();
-                        //测试代码(登录IM)
-                        AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
-                            @Override
-                            public void done(AVIMClient avimClient, AVIMException e) {
-                            }
-                        });
+
+                        try {
+                            //测试代码(登录IM)
+                            AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
+                                @Override
+                                public void done(AVIMClient avimClient, AVIMException e) {
+                                }
+                            });
+                        } catch (Exception e) {
+                            //TODO crash,自己改
+                        }
 
                     } else {
                         UIHelper.toast(TypeLoginActivity.this, R.string.str_login_error);

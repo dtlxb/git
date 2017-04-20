@@ -13,6 +13,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
@@ -25,6 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -53,6 +55,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ChooseContactActivity;
+import cn.gogoal.im.activity.copy.StockSearchActivity;
 import cn.gogoal.im.adapter.ChatFunctionAdapter;
 import cn.gogoal.im.adapter.IMChatAdapter;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
@@ -91,6 +94,8 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
  */
 
 public class ChatFragment extends BaseFragment {
+
+    private final static int GET_STOCK = 0x01;
 
     @BindView(R.id.message_swipe)
     SwipeRefreshLayout message_swipe;
@@ -233,7 +238,11 @@ public class ChatFragment extends BaseFragment {
                         break;
                     case 1:
                         //跳转股票页面发送股票
-                        sendStockMessage();
+                        Intent intent = new Intent(getActivity(), StockSearchActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("num", 2);
+                        intent.putExtras(bundle);
+                        startActivityForResult(intent, GET_STOCK);
                         break;
                     default:
                         break;
@@ -477,7 +486,7 @@ public class ChatFragment extends BaseFragment {
         }
     }
 
-    private void sendStockMessage() {
+    private void sendStockMessage(String stockCode, String stockName) {
         //股票消息(消息type:11,加上stockCode,stockName);
         AVIMMessage mStockMessage = new AVIMMessage();
         mStockMessage.setTimestamp(CalendarUtils.getCurrentTime());
@@ -486,8 +495,8 @@ public class ChatFragment extends BaseFragment {
         //添加股票信息
         Map<String, String> lcattrsMap = new HashMap<>();
         lcattrsMap = AVImClientManager.getInstance().userBaseInfo();
-        lcattrsMap.put("stockCode", "601107");
-        lcattrsMap.put("stockName", "四川成渝");
+        lcattrsMap.put("stockCode", stockCode);
+        lcattrsMap.put("stockName", stockName);
 
         //消息基本信息
         Map<Object, Object> messageMap = new HashMap<>();
@@ -830,6 +839,11 @@ public class ChatFragment extends BaseFragment {
                 }
                 etInput.setText(stringBuilder.toString());
                 etInput.setSelection(stringBuilder.toString().length());
+            } else if (requestCode == GET_STOCK) {
+                find_more_layout.setVisibility(View.GONE);
+                if (!TextUtils.isEmpty(data.getStringExtra("stock_name")) && !TextUtils.isEmpty(data.getStringExtra("stock_code"))) {
+                    sendStockMessage(data.getStringExtra("stock_name"), data.getStringExtra("stock_code"));
+                }
             }
         }
 
