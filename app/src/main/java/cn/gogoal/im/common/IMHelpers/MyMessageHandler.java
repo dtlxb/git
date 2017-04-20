@@ -73,7 +73,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     } else {
                                         //更新群通讯录
                                         ChatGroupHelper.upDataGroupContactInfo(conversation.getConversationId(), Integer.parseInt(message.getFrom()),
-                                                lcattrsGroup.getString("avatar"), lcattrsGroup.getString("username"), lcattrsGroup.getString("conv_id"));
+                                                lcattrsGroup.getString("avatar"), lcattrsGroup.getString("username"));
                                         sendIMMessage(message, conversation);
                                     }
 
