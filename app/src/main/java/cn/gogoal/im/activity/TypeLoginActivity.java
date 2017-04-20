@@ -158,7 +158,7 @@ public class TypeLoginActivity extends BaseActivity {
             return;
         }
 
-        if (UIHelper.isGGPassWord(word, getActivity()))
+        if (!UIHelper.isGGPassWord(word, getActivity()))
             return;
 
         Map<String, String> param = new HashMap<>();
@@ -185,18 +185,16 @@ public class TypeLoginActivity extends BaseActivity {
                         intent.putExtra("isFromLogin", true);
                         startActivity(intent);
                         finish();
-
+                        //登录IM
                         try {
-                            //测试代码(登录IM)
                             AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
                                 @Override
                                 public void done(AVIMClient avimClient, AVIMException e) {
                                 }
                             });
-                        } catch (Exception e) {
-                            //TODO crash,自己改
+                        } catch (Exception ignored) {
+                            KLog.e(ignored.toString());
                         }
-
                     } else {
                         UIHelper.toast(TypeLoginActivity.this, R.string.str_login_error);
                     }

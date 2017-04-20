@@ -842,7 +842,7 @@ public class ChatFragment extends BaseFragment {
             } else if (requestCode == GET_STOCK) {
                 find_more_layout.setVisibility(View.GONE);
                 if (!TextUtils.isEmpty(data.getStringExtra("stock_name")) && !TextUtils.isEmpty(data.getStringExtra("stock_code"))) {
-                    sendStockMessage(data.getStringExtra("stock_name"), data.getStringExtra("stock_code"));
+                    sendStockMessage(data.getStringExtra("stock_code"), data.getStringExtra("stock_name"));
                 }
             }
         }

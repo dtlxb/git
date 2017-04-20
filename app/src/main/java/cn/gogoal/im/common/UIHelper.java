@@ -349,7 +349,7 @@ public class UIHelper {
     public static boolean isGGPassWord(String string, Context ctx) {
         //String regex = "^([a-z]|[A-Z]|[0-9]){6,16}$";
         if (string.length() < 6 || string.length() > 16) {
-            UIHelper.toast(ctx, "密码格式错误");
+            UIHelper.toast(ctx, "密码必须为6-16位,包含数字和字母");
             return false;
         }
         return true;
@@ -364,7 +364,7 @@ public class UIHelper {
         }
     }
 
-    public static void passwordToggle(final XEditText etPsw, final CheckBox chToggle){
+    public static void passwordToggle(final XEditText etPsw, final CheckBox chToggle) {
         etPsw.setTransformationMethod(PasswordTransformationMethod
                 .getInstance());  //以密文显示
 
@@ -384,5 +384,6 @@ public class UIHelper {
                 }
             }
         });
+
     }
 }
