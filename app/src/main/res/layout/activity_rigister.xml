@@ -24,7 +24,7 @@
             <EditText
                 android:id="@+id/edit_phone_number"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/login_edit_border"
                 android:drawableLeft="@mipmap/icon_number"
@@ -32,10 +32,8 @@
                 android:hint="手机号"
                 android:inputType="phone"
                 android:lines="1"
-                android:paddingBottom="16dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:paddingTop="16dp"
                 android:textColor="@color/textColor_333333"
                 android:textColorHint="@color/textColor_999999"
                 android:textSize="15sp" />
@@ -73,16 +71,17 @@
                 <cn.gogoal.im.ui.view.XEditText
                     android:id="@+id/edit_code"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
+                    android:digits="0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
                     android:drawableLeft="@mipmap/icon_code"
                     android:drawablePadding="7dp"
                     android:hint="密码(6-16位，包含数字和字母)"
-                    android:paddingBottom="16dp"
+                    android:inputType="textPassword"
+                    android:maxLength="16"
                     android:paddingEnd="7dp"
                     android:paddingStart="10dp"
-                    android:paddingTop="16dp"
                     android:textColor="@color/textColor_333333"
                     android:textColorHint="@color/textColor_999999"
                     android:textSize="15sp"
@@ -92,7 +91,8 @@
                     android:id="@+id/checkbox_psw"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:button="@drawable/selector_psw" />
+                    android:button="@drawable/selector_psw"
+                    android:checked="false" />
 
             </LinearLayout>
 
@@ -119,6 +119,7 @@
                  android:visibility="gone" />-->
 
             <LinearLayout
+                android:id="@+id/layout_valid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -131,16 +132,17 @@
                 <cn.gogoal.im.ui.view.XEditText
                     android:id="@+id/valid_edit_code"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
+                    android:digits="0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
                     android:drawableLeft="@mipmap/icon_code"
                     android:drawablePadding="7dp"
                     android:hint="确认密码"
-                    android:paddingBottom="16dp"
+                    android:inputType="numberPassword"
+                    android:maxLength="16"
                     android:paddingEnd="7dp"
                     android:paddingStart="10dp"
-                    android:paddingTop="16dp"
                     android:textColor="@color/textColor_333333"
                     android:textColorHint="@color/textColor_999999"
                     android:textSize="15sp"
@@ -163,7 +165,7 @@
                 <EditText
                     android:id="@+id/edit_pase_code"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_marginRight="16dp"
                     android:layout_weight="5"
                     android:background="@drawable/login_edit_border"
@@ -171,10 +173,8 @@
                     android:drawablePadding="9dp"
                     android:hint="验证码"
                     android:lines="1"
-                    android:paddingBottom="14dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:paddingTop="15dp"
                     android:textColor="@color/textColor_333333"
                     android:textColorHint="@color/textColor_999999"
                     android:textSize="15sp" />
@@ -182,14 +182,12 @@
                 <TextView
                     android:id="@+id/tv_get_code"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_weight="3"
                     android:background="@drawable/login_edit_red_border"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:lines="1"
-                    android:paddingBottom="16dp"
-                    android:paddingTop="16dp"
                     android:text="获取验证码"
                     android:textColor="@color/colorPrimary"
                     android:textSize="15sp" />
@@ -200,10 +198,9 @@
             <cn.gogoal.im.ui.view.SelectorButton
                 android:id="@+id/login_button"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_marginTop="25dp"
                 android:lines="1"
-                android:padding="15dp"
                 android:text="确  定"
                 android:textColor="@color/absoluteWhite"
                 android:textSize="17sp"

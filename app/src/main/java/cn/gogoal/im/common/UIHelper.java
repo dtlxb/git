@@ -334,12 +334,22 @@ public class UIHelper {
         return true;
     }
 
-    //验证是否手机号
+    //验证验证码
     public static boolean GGCode(String string, Context ctx) {
 
         if (string.length() == 0) {
 
             UIHelper.toast(ctx, "验证码不能为空");
+            return false;
+        }
+        return true;
+    }
+
+    //验证密码是否6-16位的数字，字母
+    public static boolean isGGPassWord(String string, Context ctx) {
+        //String regex = "^([a-z]|[A-Z]|[0-9]){6,16}$";
+        if (string.length() < 6 || string.length() > 16) {
+            UIHelper.toast(ctx, "密码格式错误");
             return false;
         }
         return true;
@@ -354,7 +364,7 @@ public class UIHelper {
         }
     }
 
-    public static void passwordToggle(final EditText etPsw, final CheckBox chToggle){
+    public static void passwordToggle(final EditText etPsw, final CheckBox chToggle) {
         chToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
