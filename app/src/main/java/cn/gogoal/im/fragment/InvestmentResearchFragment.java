@@ -215,7 +215,7 @@ public class InvestmentResearchFragment extends BaseFragment {
 
         private List<BannerBean.Banner> imageUrls;
 
-        public BannerAdapter(List<BannerBean.Banner> imageUrls) {
+        private BannerAdapter(List<BannerBean.Banner> imageUrls) {
             this.imageUrls = imageUrls;
         }
 
@@ -238,6 +238,7 @@ public class InvestmentResearchFragment extends BaseFragment {
         public Object instantiateItem(ViewGroup container, final int position) {
             ImageView view = new ImageView(container.getContext());
             view.setAdjustViewBounds(true);
+            view.setScaleType(ImageView.ScaleType.CENTER_CROP);
             ImageDisplay.loadNetImage(container.getContext(), imageUrls.get(position).getImage(), view);
             container.addView(view);
             view.setOnClickListener(new View.OnClickListener() {

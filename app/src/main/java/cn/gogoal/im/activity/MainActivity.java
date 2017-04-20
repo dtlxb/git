@@ -120,6 +120,7 @@ public class MainActivity extends BaseActivity {
                         break;
                     case 4:
                         barUtil.setStatusBarFontDark(false);
+                        barUtil.setColor(getResColor(R.color.colorMineHead));
                         break;
                     default:
                         break;
@@ -134,10 +135,10 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    @Override
-    public void setStatusBar(boolean light) {
-        StatusBarUtil.with(MainActivity.this).setTranslucentForImageViewInFragment(null);
-    }
+//    @Override
+//    public void setStatusBar(boolean light) {
+//        StatusBarUtil.with(MainActivity.this).setTranslucentForImageViewInFragment(null);
+//    }
 
     private void getFriendList() {
 
