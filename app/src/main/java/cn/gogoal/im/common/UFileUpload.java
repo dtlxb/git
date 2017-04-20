@@ -5,6 +5,8 @@ import android.util.Base64;
 import com.socks.library.KLog;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.ucloud.ufilesdk.Callback;
@@ -101,8 +103,7 @@ public class UFileUpload {
 
         String key_name = "gogoal"+File.separator+"avatar"+File.separator+"ucloud_"+
                 MD5Utils.getMD5EncryptyString16(file.getPath()) +
-                file.getPath().substring(file.getPath().lastIndexOf('.'))+
-                (type==UFileUpload.Type.IMAGE ? "@"+ImageUtils.getImageWidth_Height(file):"");
+                file.getPath().substring(file.getPath().lastIndexOf('.'));
 
         String authorization = getAuthorization(http_method, content_md5, content_type, date, bucket, key_name);
         final UFileRequest request = new UFileRequest();
@@ -111,6 +112,7 @@ public class UFileUpload {
         request.setContentMD5(content_md5);
         request.setContentType(content_type);
 
+//        http://hackfile.ufile.ucloud.com.cn
         uFileSDK.putFile(request, file, key_name, new Callback() {
             @Override
             public void onSuccess(org.json.JSONObject response) {
@@ -124,11 +126,20 @@ public class UFileUpload {
 
             @Override
             public void onFail(org.json.JSONObject response) {
-                KLog.i("onFail " + response);
+                KLog.e("onFail " + response);
                 listener.onFailed();
             }
         });
 
+    }
+
+    private String decode(String separator) {
+        try {
+            return URLDecoder.decode(separator,"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "/";
     }
 
     /**

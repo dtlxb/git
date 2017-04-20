@@ -12,11 +12,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import java.util.ArrayList;
+
 import cn.gogoal.im.ui.widget.BottomSheetListDialog;
 import cn.gogoal.im.ui.widget.BottomSheetNormalDialog;
 import cn.gogoal.im.ui.widget.ShareBottomDialog;
-
-import java.util.ArrayList;
 
 
 /**
@@ -74,6 +74,8 @@ public class DialogHelp {
         builder.setMessage(Html.fromHtml(message));
         builder.setPositiveButton("确定", onClickListener);
         builder.setNegativeButton("取消", null);
+
+        builder.create().dismiss();
         return builder;
     }
 
