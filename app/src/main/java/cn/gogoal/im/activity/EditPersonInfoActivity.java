@@ -3,6 +3,8 @@ package cn.gogoal.im.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -62,6 +64,8 @@ public class EditPersonInfoActivity extends BaseActivity {
     @BindView(R.id.login_cofirm)
     SelectorButton loginCofirm;
 
+    private String imageUri;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_edit_person_info;
@@ -71,46 +75,6 @@ public class EditPersonInfoActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         initTitle();
         ImageDisplay.loadResAvatar(EditPersonInfoActivity.this, R.mipmap.login_gogoal, imagePersonHeadpic);
-    }
-
-    private void editPersonInfos() {
-        final Map<String, String> params = new HashMap<>();
-        params.put("token", UserUtils.getToken());
-        params.put("avatar", "20");
-        params.put("name", editPersonName.getText().toString());
-        params.put("company", editCompanyName.getText().toString());
-        params.put("duty", editJobName.getText().toString());
-        loginCofirm.setEnabled(false);
-
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                loginCofirm.setEnabled(true);
-                if (result.getIntValue("code") == 0) {
-                    JSONObject data = result.getJSONObject("data");
-                    boolean success = data.getBoolean("success");
-                    if (success) {
-                        UIHelper.toast(EditPersonInfoActivity.this, "资料修改成功！");
-                        Intent intent = new Intent(EditPersonInfoActivity.this, MainActivity.class);
-                        intent.putExtra("isFromLogin", true);
-                        startActivity(intent);
-                    } else {
-                        UIHelper.toast(EditPersonInfoActivity.this, "资料修改失败！");
-                    }
-                } else {
-                    UIHelper.toast(EditPersonInfoActivity.this, "资料修改失败！");
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                loginCofirm.setEnabled(true);
-                UIHelper.toast(EditPersonInfoActivity.this, R.string.net_erro_hint);
-            }
-        };
-        new GGOKHTTP(params, GGOKHTTP.UPDATE_ACCOUNT_INFO, ggHttpInterface).startGet();
     }
 
     private void initTitle() {
@@ -150,7 +114,10 @@ public class EditPersonInfoActivity extends BaseActivity {
                     @Override
                     public void onSuccess(String onlineUri) {
                         waitDialog.dismiss();
+                        imageUri = onlineUri;
                         UIHelper.toast(getActivity(), "修改成功");
+<<<<<<< HEAD
+=======
                         AppManager.getInstance().sendMessage("updata_cache_avatar",
                                 onlineUri);
                         KLog.e("ufile图片外链::" + onlineUri);
@@ -159,6 +126,7 @@ public class EditPersonInfoActivity extends BaseActivity {
                         Map<String, String> map = new HashMap<String, String>();
                         map.put("avatar", onlineUri);
                         new UserUtils().updataNetUserInfo(map,null);
+>>>>>>> 5b277265800c32d5000f566956a20d92edee3b18
                     }
 
                     @Override
@@ -175,7 +143,7 @@ public class EditPersonInfoActivity extends BaseActivity {
             public void success(List<String> uriPaths, boolean isOriginalPic) {
                 if (uriPaths != null && (!uriPaths.isEmpty())) {
                     File chooseAvatar = new File(uriPaths.get(0));
-                    ImageDisplay.loadNetAvatar(getActivity(),uriPaths.get(0),imagePersonHeadpic);
+                    ImageDisplay.loadNetAvatar(getActivity(), uriPaths.get(0), imagePersonHeadpic);
                     uploadAvatar(chooseAvatar);
                 }
             }
@@ -200,7 +168,6 @@ public class EditPersonInfoActivity extends BaseActivity {
                     case 0:
                         //打开相机
                         //openCamera();
-
                         break;
                     case 1:
                         //从手机相册中选择
@@ -215,7 +182,54 @@ public class EditPersonInfoActivity extends BaseActivity {
     void function(View view) {
         switch (view.getId()) {
             case R.id.login_cofirm:
-                editPersonInfos();
+                //资料上传后台
+                Map<String, String> map = new HashMap<>();
+                if (!imageUri.equals("")) {
+                    UserUtils.updataLocalUserInfo("simple_avatar", imageUri);
+                    map.put("avatar", imageUri);
+                }
+                if (!TextUtils.isEmpty(editPersonName.getText().toString())) {
+                    UserUtils.updataLocalUserInfo("nickname", editPersonName.getText().toString());
+                    map.put("name", editPersonName.getText().toString());
+                }
+                if (!TextUtils.isEmpty(editCompanyName.getText().toString())) {
+                    UserUtils.updataLocalUserInfo("organization_name", imageUri);
+                    map.put("company", editCompanyName.getText().toString());
+                }
+                if (!TextUtils.isEmpty(editJobName.getText().toString())) {
+                    UserUtils.updataLocalUserInfo("duty", editJobName.getText().toString());
+                    map.put("duty", editJobName.getText().toString());
+                }
+                loginCofirm.setClickable(false);
+                UserUtils.updataNetUserInfo(map, new UserUtils.UpdataListener() {
+                    @Override
+                    public void success(String responce) {
+                        JSONObject result = JSONObject.parseObject(responce);
+                        loginCofirm.setClickable(true);
+                        if (result.getIntValue("code") == 0) {
+                            JSONObject data = result.getJSONObject("data");
+                            boolean success = data.getBoolean("success");
+                            if (success) {
+                                UIHelper.toast(EditPersonInfoActivity.this, "资料修改成功！");
+                                Intent intent = new Intent(EditPersonInfoActivity.this, MainActivity.class);
+                                intent.putExtra("isFromLogin", true);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                UIHelper.toast(EditPersonInfoActivity.this, "资料修改失败！");
+                            }
+                        } else {
+                            UIHelper.toast(EditPersonInfoActivity.this, "资料修改失败！");
+                        }
+                    }
+
+                    @Override
+                    public void failed(String errorMsg) {
+                        loginCofirm.setClickable(true);
+                        UIHelper.toast(EditPersonInfoActivity.this, R.string.net_erro_hint);
+                    }
+                });
+
                 break;
             case R.id.layout_person_headpic:
                 /*Intent intent = new Intent(getActivity(), ImageDetailActivity.class);
