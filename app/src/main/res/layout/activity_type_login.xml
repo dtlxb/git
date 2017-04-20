@@ -12,51 +12,61 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="end"
         android:orientation="vertical">
 
         <include layout="@layout/include_title" />
 
-        <EditText
-            android:id="@+id/login_edite_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/login_edit_border"
-            android:drawableLeft="@mipmap/icon_number"
-            android:drawablePadding="9dp"
-            android:hint="Go-Goal账号/手机号"
-            android:paddingBottom="16dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="16dp"
-            android:textColor="@color/textColor_333333"
-            android:textColorHint="@color/textColor_999999"
-            android:textSize="15sp" />
-
         <cn.gogoal.im.ui.view.XEditText
-            android:id="@+id/login_edite_code"
+            android:id="@+id/login_edite_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="25dp"
             android:background="@drawable/login_edit_border"
-            android:drawableLeft="@mipmap/icon_code"
-            android:drawablePadding="9dp"
-            android:drawableRight="@mipmap/icon_visible"
-            android:hint="请输入密码"
-            android:inputType="textPassword"
-            android:lines="1"
-            android:paddingBottom="16dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="11dp"
-            android:paddingTop="16dp"
-            android:tag="false"
-            android:textColor="@color/textColor_333333"
-            android:textColorHint="@color/textColor_999999"
-            android:textSize="15sp" />
+            android:drawableLeft="@mipmap/icon_number"
+            android:drawablePadding="7dp"
+            android:hint="Go-Goal账号/手机号"
+            android:paddingBottom="15dp"
+            android:paddingEnd="7dp"
+            android:paddingStart="10dp"
+            android:paddingTop="15dp"
+            app:funcType="canClear"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="25dp"
+            android:paddingEnd="7dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/login_edit_border">
+
+            <cn.gogoal.im.ui.view.XEditText
+                android:id="@+id/login_edite_code"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/icon_code"
+                android:drawablePadding="7dp"
+                android:hint="请输入密码"
+                android:background="@android:color/transparent"
+                android:paddingBottom="15dp"
+                android:paddingEnd="7dp"
+                android:paddingStart="10dp"
+                android:paddingTop="15dp"
+                app:funcType="canClear"/>
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/checkbox_psw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/selector_psw"/>
+
+        </LinearLayout>
 
         <cn.gogoal.im.ui.view.SelectorButton
             android:id="@+id/login_button"
@@ -76,12 +86,10 @@
 
         <TextView
             android:id="@+id/forget_code"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="21dp"
             android:gravity="end"
+            android:padding="20dp"
             android:text="忘记密码"
             android:textColor="@color/textColor_666666"
             android:textSize="15dp" />

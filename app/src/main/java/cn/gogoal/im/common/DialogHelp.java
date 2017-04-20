@@ -110,6 +110,7 @@ public class DialogHelp {
         builder.setMessage(message);
         builder.setPositiveButton(okString, onOkClickListener);
         builder.setNegativeButton(cancleString, onCancleClickListener);
+
         return builder;
     }
 

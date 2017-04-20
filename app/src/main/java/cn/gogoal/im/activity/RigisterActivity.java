@@ -2,11 +2,8 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -70,8 +67,6 @@ public class RigisterActivity extends BaseActivity {
 
     private Handler handler;
 
-    private myDrawableRightListener drawableRightListener;
-
     @Override
     public int bindLayout() {
         return R.layout.activity_rigister;
@@ -96,10 +91,6 @@ public class RigisterActivity extends BaseActivity {
             xTitle = setMyTitle(R.string.str_login_register, true);
         }
 
-        // 密码可见监听
-        drawableRightListener = new myDrawableRightListener();
-        editCode.setDrawableRightListener(drawableRightListener);
-        validEditCode.setDrawableRightListener(drawableRightListener);
 
         handler = new Handler() {
             @Override
@@ -147,23 +138,6 @@ public class RigisterActivity extends BaseActivity {
                 break;
         }
 
-    }
-
-    private class myDrawableRightListener implements XEditText.DrawableRightListener {
-
-        @Override
-        public void onDrawableRightClick(View view) {
-            if (view.getTag().equals("false")) {
-                ((XEditText) view).setTransformationMethod(PasswordTransformationMethod.getInstance());
-                view.setTag("true");
-            } else if (view.getTag().equals("true")) {
-                ((XEditText) view).setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                view.setTag("false");
-            }
-
-            view.requestFocus();
-            ((XEditText) view).setSelection(editCode.getText().length());
-        }
     }
 
     //获取验证码

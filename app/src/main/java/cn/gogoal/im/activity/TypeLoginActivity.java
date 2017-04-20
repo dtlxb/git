@@ -1,11 +1,12 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -46,6 +47,9 @@ public class TypeLoginActivity extends BaseActivity {
     @BindView(R.id.login_edite_code)
     XEditText loginPassWord;
 
+    @BindView(R.id.checkbox_psw)
+    CheckBox chToggle;
+
     @BindView(R.id.forget_code)
     TextView forgetCode;
 
@@ -60,6 +64,7 @@ public class TypeLoginActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         initTitle();
+        UIHelper.passwordToggle(loginPassWord,chToggle);
         initLoginInfo();
     }
 
@@ -104,6 +109,14 @@ public class TypeLoginActivity extends BaseActivity {
     }
 
     private void initTitle() {
+
+        new AlertDialog.Builder(getActivity()).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
         xTitle = setMyTitle(R.string.str_login_in, false);
         //添加action
         XTitle.TextAction rigisterAction = new XTitle.TextAction("注册") {
@@ -118,21 +131,28 @@ public class TypeLoginActivity extends BaseActivity {
         TextView rigisterView = (TextView) xTitle.getViewByAction(rigisterAction);
         rigisterView.setTextColor(getResColor(R.color.colorPrimary));
 
-        // 密码可见监听
+        /*// 密码可见监听
         loginPassWord.setDrawableRightListener(new XEditText.DrawableRightListener() {
             @Override
             public void onDrawableRightClick(View view) {
+                Drawable drawableRight = null;
+                Drawable drawableLeft = getResDrawable(R.mipmap.icon_code);
                 if (view.getTag().equals("false")) {
-                    loginPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    //drawableRight = getResDrawable(R.mipmap.login_eye_open);
+                    ((XEditText) view).setTransformationMethod(PasswordTransformationMethod.getInstance());
                     view.setTag("true");
                 } else if (view.getTag().equals("true")) {
-                    loginPassWord.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    //drawableRight = getResDrawable(R.mipmap.login_eye_closed);
+                    ((XEditText) view).setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                     view.setTag("false");
                 }
-                loginPassWord.requestFocus();
-                loginPassWord.setSelection(loginPassWord.getText().length());
+                *//*drawableRight.setBounds(0, 0, drawableRight.getMinimumWidth(), drawableRight.getMinimumHeight());
+                drawableLeft.setBounds(0, 0, drawableLeft.getMinimumWidth(), drawableLeft.getMinimumHeight());
+                ((XEditText) view).setCompoundDrawablesRelative(drawableLeft, null, drawableRight, null);*//*
+                //view.requestFocus();
+                //loginPassWord.setSelection(loginPassWord.getText().length());
             }
-        });
+        });*/
     }
 
     @OnClick({R.id.login_button, R.id.forget_code})

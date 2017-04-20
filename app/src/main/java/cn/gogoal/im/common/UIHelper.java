@@ -6,10 +6,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.IdRes;
 import android.support.design.widget.Snackbar;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -347,5 +352,24 @@ public class UIHelper {
                     android.R.attr.selectableItemBackground, typedValue, true);
             view.setBackgroundResource(typedValue.resourceId);
         }
+    }
+
+    public static void passwordToggle(final EditText etPsw, final CheckBox chToggle){
+        chToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    etPsw.setTransformationMethod(HideReturnsTransformationMethod
+                            .getInstance());  //密码以明文显示
+                    etPsw.setSelection(etPsw.getText().length());
+//                    chToggle.setButtonDrawable(ContextCompat.getDrawable(context, R.mipmap.img_psw_eye_open));
+                } else {
+                    etPsw.setTransformationMethod(PasswordTransformationMethod
+                            .getInstance());  //以密文显示
+                    etPsw.setSelection(etPsw.getText().length());
+//                    chToggle.setButtonDrawable(ContextCompat.getDrawable(context, R.mipmap.img_psw_eye_closed));
+                }
+            }
+        });
     }
 }
