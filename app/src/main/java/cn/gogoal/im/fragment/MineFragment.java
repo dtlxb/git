@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,6 +153,11 @@ public class MineFragment extends BaseFragment {
     @OnClick(R.id.img_my_qrcode)
     void onClick(View view) {
         UIHelper.toast(view.getContext(), "二维码");
+    }
+
+    @Subscriber(tag = "updata_cache_avatar")
+    void updataCacheAvatar(String newAvatarUrl){
+        ImageDisplay.loadNetAvatarWithBorder(getContext(), UserUtils.getUserAvatar(), imageAvatar);
     }
 
     private class MineAdapter extends BaseMultiItemQuickAdapter<MineItem, BaseViewHolder> {

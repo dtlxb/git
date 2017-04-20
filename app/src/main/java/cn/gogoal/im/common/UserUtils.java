@@ -118,7 +118,63 @@ public class UserUtils {
     }
 
     /**
-     * 判断用户是否第一次登录
+<<<<<<< HEAD
+     * 更新用户信息
+     */
+    public static void updataLocalUserInfo(JSONObject userInfo) {
+        if (null != userInfo) {
+            SPTools.clearItem("userInfo");
+            SPTools.saveString("userInfo", userInfo.toJSONString());
+        }
+    }
+
+    /**
+     * 更新用户指定字段信息
+     */
+    public static void updataLocalUserInfo(String key, String newValue) {
+        JSONObject user = getUserInfo();
+        if (user == null) {
+            return;
+        }
+        if (user.containsKey(key)) {
+            user.remove(key);
+            user.put(key, newValue);
+        }
+    }
+
+    /**
+     * 发请求更新用户信息
+     */
+    public static void updataNetUserInfo(Map<String, String> map, final UpdataListener updataListener) {
+//        Map<String, String> map = new HashMap<>();
+//        map.put("avatar", "7");
+//        map.put("name", "7");
+//        map.put("company", "7");
+//        map.put("duty", "7");
+//        map.put("province", "7");
+//        map.put("city", "7");
+        new GGOKHTTP(map, GGOKHTTP.UPDATE_ACCOUNT_INFO, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                if (code == 0) {
+                    updataListener.success(responseInfo);
+                } else {
+                    if (updataListener != null) {
+                        updataListener.failed(JSONObject.parseObject(responseInfo).getString("message"));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                if (updataListener != null) {
+                    updataListener.failed(msg);
+                }
+            }
+        }).startGet();
+    }
+     /* 判断用户是否第一次登录
      *
      * @return
      */
@@ -388,5 +444,14 @@ public class UserUtils {
         void squareGetSuccess(JSONObject object);   ///< 加入房间成功
 
         void squareGetFail(String error);      ///< 加入房间失败
+    }
+
+    /**
+     * 发请求更新用户信息回调
+     */
+    public interface UpdataListener {
+        void success(String responseInfo);
+
+        void failed(String errorMsg);
     }
 }
