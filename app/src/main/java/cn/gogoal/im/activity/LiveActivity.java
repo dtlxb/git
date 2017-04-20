@@ -1070,7 +1070,7 @@ public class LiveActivity extends BaseActivity {
                             @Override
                             public void startPlayer() {
                                 countDownTimer.setVisibility(View.GONE);
-
+                                downTimer.start();
                             }
                         });
                     } else {

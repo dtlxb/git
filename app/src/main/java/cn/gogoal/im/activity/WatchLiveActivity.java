@@ -940,6 +940,8 @@ public class WatchLiveActivity extends BaseActivity {
                     //主播介绍
                     anchor = data.getJSONObject("anchor");
 
+                    mPlayUrl = data.getString("url_rtmp");
+
                     //倒计时
                     if (data.getLongValue("launch_time") > 0) {
                         countDownTimer.setVisibility(View.VISIBLE);
@@ -950,17 +952,16 @@ public class WatchLiveActivity extends BaseActivity {
                             @Override
                             public void startPlayer() {
                                 countDownTimer.setVisibility(View.GONE);
-
+                                startToPlay(mPlayUrl, mPlaySurfaceView);
                             }
                         });
                     } else {
                         countDownTimer.setVisibility(View.GONE);
                     }
 
-                    mPlayUrl = data.getString("url_rtmp");
-                    room_id = data.getString("room_id");
-
                     startToPlay(mPlayUrl, mPlaySurfaceView);
+
+                    room_id = data.getString("room_id");
 
                     AVImClientManager.getInstance().findConversationById(room_id, new AVImClientManager.ChatJoinManager() {
                         @Override
