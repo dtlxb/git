@@ -799,7 +799,7 @@ public class WatchLiveActivity extends BaseActivity {
         }
         mIvChatClose.setVisibility(View.GONE);
         KLog.e("mIvChatClose setVisibility gone");
-        mBottomFragment.setType(1);
+        mBottomFragment.hideCameraView();
         shouldOffLine = true; //表示在surfaceChanged时需要调用真正的offlineChat，来结束连麦
     }
 
@@ -808,7 +808,7 @@ public class WatchLiveActivity extends BaseActivity {
      */
     public void closeVideoChatSmallView() {
         mIvChatClose.setVisibility(View.GONE);
-        mBottomFragment.setType(1);
+        mBottomFragment.hideCameraView();
     }
 
     /**
@@ -1207,7 +1207,7 @@ public class WatchLiveActivity extends BaseActivity {
 
         mIvChatClose.setVisibility(View.VISIBLE);
         mPreviewSurfaceView.setVisibility(View.VISIBLE);
-        mBottomFragment.setType(0);
+        mBottomFragment.showCameraView();
     }
 
     /**
