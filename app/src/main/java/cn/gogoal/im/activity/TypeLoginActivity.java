@@ -65,8 +65,8 @@ public class TypeLoginActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         initTitle();
-        chToggle.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        UIHelper.passwordToggle(loginPassWord, chToggle);
+        loginPassWord.setInputType(InputType.TYPE_CLASS_TEXT);
+        UIHelper.passwordToggle(loginPassWord,chToggle);
         initLoginInfo();
     }
 

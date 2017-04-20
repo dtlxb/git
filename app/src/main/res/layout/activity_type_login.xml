@@ -69,7 +69,8 @@
                 android:id="@+id/checkbox_psw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:button="@drawable/selector_psw" />
+                android:checked="false"
+                android:button="@drawable/selector_psw"/>
 
         </LinearLayout>
 

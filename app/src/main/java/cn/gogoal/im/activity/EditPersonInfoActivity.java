@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -28,7 +27,6 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.DialogHelp;
-import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
 import cn.gogoal.im.common.UFileUpload;
@@ -116,6 +114,17 @@ public class EditPersonInfoActivity extends BaseActivity {
                         waitDialog.dismiss();
                         imageUri = onlineUri;
                         UIHelper.toast(getActivity(), "修改成功");
+<<<<<<< HEAD
+=======
+                        AppManager.getInstance().sendMessage("updata_cache_avatar",
+                                onlineUri);
+                        KLog.e("ufile图片外链::" + onlineUri);
+//                                                    http://hackfile.ufile.ucloud.cn/GoGoal_3E21A216416826E307F2805796BE0C55.jpg@1000x1000
+                        UserUtils.updataLocalUserInfo("simple_avatar", onlineUri);
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("avatar", onlineUri);
+                        new UserUtils().updataNetUserInfo(map,null);
+>>>>>>> 5e073e6e42ed40408bc4b0c99558c71dbb16819d
                     }
 
                     @Override
