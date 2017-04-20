@@ -95,7 +95,7 @@ public class MainActivity extends BaseActivity {
             }
         }
 
-        tabMain.getTabAt(4).select();
+        tabMain.getTabAt(2).select();
 
         barUtil = StatusBarUtil.with(MainActivity.this);
 
