@@ -317,6 +317,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
             }
         }).setCancelable(false)
                 .show();
+
     }
 
 

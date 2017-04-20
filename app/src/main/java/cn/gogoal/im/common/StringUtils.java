@@ -5,6 +5,8 @@ import android.widget.EditText;
 
 import com.socks.library.KLog;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -128,6 +130,15 @@ public class StringUtils {
         }
     }
 
+    public static String decodeUrl(String urlString) {
+        try {
+            return URLDecoder.decode(urlString, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return urlString;
+        }
+    }
+
     /**
      * 判断字符串是否有顺序
      */
@@ -232,16 +243,17 @@ public class StringUtils {
         return Character.toUpperCase(lastCode) == checkCodeList[idSum % 11];
     }
 
-    public static Double getStockDouble(String value){
-        if (TextUtils.isEmpty(value)){
+    public static Double getStockDouble(String value) {
+        if (TextUtils.isEmpty(value)) {
             return 0.0d;
         }
         return Double.parseDouble(value);
     }
 
-    public static String getStockDouble(String value,int unit){
-        return saveSignificand(getStockDouble(value),unit);
+    public static String getStockDouble(String value, int unit) {
+        return saveSignificand(getStockDouble(value), unit);
     }
+
     /**
      * 保留有效数字
      */
@@ -249,18 +261,19 @@ public class StringUtils {
         String result = String.format("%." + significand + "f", doubleData);
         return result;
     }
+
     /**
      * 保留2有效数字
      */
     public static String save2Significand(double doubleData) {
-        return saveSignificand(doubleData,2);
+        return saveSignificand(doubleData, 2);
     }
 
     /**
      * 保留2有效数字
      */
     public static String save2Significand(String doubleData) {
-        return saveSignificand(doubleData,2);
+        return saveSignificand(doubleData, 2);
     }
 
     public static String saveSignificand(String strDoubleData, int significand) {
