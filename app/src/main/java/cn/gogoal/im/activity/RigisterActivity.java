@@ -195,8 +195,8 @@ public class RigisterActivity extends BaseActivity {
         if (!UIHelper.GGPhoneNumber(editPhoneNumber.getText().toString().trim(), RigisterActivity.this)
                 || !UIHelper.GGCode(editPaseCode.getText().toString().trim(), RigisterActivity.this)
                 || !codeIsTheSame(editCode.getText().toString().trim(), validEditCode.getText().toString().trim())
-                || UIHelper.isGGPassWord(editCode.getText().toString().trim(), getActivity())
-                || UIHelper.isGGPassWord(validEditCode.getText().toString().trim(), getActivity()))
+                || !UIHelper.isGGPassWord(editCode.getText().toString().trim(), getActivity())
+                || !UIHelper.isGGPassWord(validEditCode.getText().toString().trim(), getActivity()))
             return;
         loginLayout.setEnabled(false);
 
@@ -236,7 +236,8 @@ public class RigisterActivity extends BaseActivity {
 
     private void rigisterNow() {
         if (!UIHelper.GGPhoneNumber(editPhoneNumber.getText().toString().trim(), RigisterActivity.this)
-                || !UIHelper.GGCode(editPaseCode.getText().toString().trim(), RigisterActivity.this))
+                || !UIHelper.GGCode(editPaseCode.getText().toString().trim(), RigisterActivity.this)
+                || !UIHelper.isGGPassWord(editCode.getText().toString().trim(), getActivity()))
             return;
         final Map<String, String> params = new HashMap<>();
         params.put("phone", editPhoneNumber.getText().toString().trim());

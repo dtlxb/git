@@ -66,7 +66,7 @@ public class TypeLoginActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         initTitle();
         loginPassWord.setInputType(InputType.TYPE_CLASS_TEXT);
-        UIHelper.passwordToggle(loginPassWord,chToggle);
+        UIHelper.passwordToggle(loginPassWord, chToggle);
         initLoginInfo();
     }
 
@@ -161,7 +161,7 @@ public class TypeLoginActivity extends BaseActivity {
             return;
         }
 
-        if (UIHelper.isGGPassWord(word, getActivity()))
+        if (!UIHelper.isGGPassWord(word, getActivity()))
             return;
 
         Map<String, String> param = new HashMap<>();
