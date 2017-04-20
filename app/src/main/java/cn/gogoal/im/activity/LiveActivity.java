@@ -202,9 +202,7 @@ public class LiveActivity extends BaseActivity {
     //连麦者
     private ContactBean mContactBean;
 
-    private AlertDialog.Builder mFeedbackResultDialog;
     private AlertDialog mChatCloseConfirmDialog;
-    private AlertDialog.Builder mChatCloseNotifyDialog;
 
     private final Handler mHandler = new Handler() {
         @Override
@@ -620,6 +618,7 @@ public class LiveActivity extends BaseActivity {
         }
         imgPlayClose.setVisibility(View.GONE);
         mParterViewContainer.setVisibility(View.GONE);
+        liveTogether.setEnabled(true);
     }
 
     private SurfaceHolder.Callback mPlayCallback = new SurfaceHolder.Callback() {
@@ -1002,11 +1001,13 @@ public class LiveActivity extends BaseActivity {
                             //结束连麦
                             abortChat(true); //停止客户端连麦拉流播放
                             closeLiveChat(); //通知APP Server结束连麦，调用REST API
+                            liveTogether.setEnabled(true);
                             break;
                         case DialogInterface.BUTTON_NEGATIVE: //取消
                             mChatCloseConfirmDialog.dismiss();
                             break;
                     }
+                    mChatCloseConfirmDialog = null;
                 }
             };
             dialog = DialogHelp.getConfirmDialog(getContext(), getString(R.string.close_video_call_title),
@@ -1291,24 +1292,23 @@ public class LiveActivity extends BaseActivity {
             //同意连麦
             //如果当前是已经发送邀请，等待对方反馈的状态，则处理这个消息，否则视为无效的消息，不作处理
             if (mVideoChatStatus == VideoChatStatus.INVITE_FOR_RES) {
-                showFeedbackResultDialog(true);
                 mVideoChatStatus = VideoChatStatus.TRY_MIX;
             }
         } else {
             //不同意连麦
             //如果当前是已经发送邀请，等待对方反馈的状态，则处理这个消息，否则视为无效的消息，不作处理
             if (mVideoChatStatus == VideoChatStatus.INVITE_FOR_RES) {
-                showFeedbackResultDialog(false);
                 mVideoChatStatus = VideoChatStatus.UNCHAT;
             }
         }
+        showFeedbackResultDialog(feedback_result);
     }
 
     /**
      * 邀请连麦结果显示
      */
     private void showFeedbackResultDialog(boolean isAgree) {
-        String message;
+        String message = null;
         if (isAgree) {
             message = getString(R.string.agree_message);
         } else {
@@ -1316,12 +1316,8 @@ public class LiveActivity extends BaseActivity {
             message = getString(R.string.not_agree_message);
         }
 
-        if (mFeedbackResultDialog == null) {
-            mFeedbackResultDialog = DialogHelp.getMessageDialog(getActivity(), message);
-            mFeedbackResultDialog.setCancelable(false);
-        }
-        mFeedbackResultDialog.setTitle(R.string.title_video_call_response);
-        mFeedbackResultDialog.show();
+        DialogHelp.getMessageDialog(getActivity(), message).setCancelable(false)
+                .setTitle(R.string.title_video_call_response).show();
     }
 
     /**
@@ -1366,11 +1362,7 @@ public class LiveActivity extends BaseActivity {
             mChatCloseConfirmDialog.dismiss();
         }
 
-        if (mChatCloseNotifyDialog == null) {
-            mChatCloseNotifyDialog = DialogHelp.getMessageDialog(getActivity(), getString(R.string.close_video_call_notify_message));
-            mChatCloseNotifyDialog.setCancelable(false);
-        }
-        mChatCloseNotifyDialog.setTitle(R.string.close_video_call_title);
-        mChatCloseNotifyDialog.show();
+        DialogHelp.getMessageDialog(getActivity(), getString(R.string.close_video_call_notify_message))
+                .setCancelable(false).setTitle(R.string.close_video_call_title).show();
     }
 }

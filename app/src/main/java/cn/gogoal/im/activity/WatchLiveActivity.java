@@ -179,7 +179,6 @@ public class WatchLiveActivity extends BaseActivity {
 
     private AlertDialog mFeedbackChooseDialog;
     private AlertDialog mChatCloseConfirmDialog;
-    private AlertDialog.Builder mChatCloseNotifyDialog;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -195,6 +194,7 @@ public class WatchLiveActivity extends BaseActivity {
                     break;
                 case LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT:
                     mFeedbackChooseDialog.dismiss();
+                    mFeedbackChooseDialog = null;
                     feedbackInvite(LinkConst.STATUS_NOT_AGREE); //自动反馈不同意连麦
                     UIHelper.toast(getContext(), R.string.inviting_process_timeout); //提醒超时未处理，已经自动拒绝对方的连麦邀请
                     break;
@@ -904,6 +904,7 @@ public class WatchLiveActivity extends BaseActivity {
                             mChatCloseConfirmDialog.dismiss();
                             break;
                     }
+                    mChatCloseConfirmDialog = null;
                 }
             };
             dialog = DialogHelp.getConfirmDialog(getContext(), getString(R.string.close_video_call_title),
@@ -1105,6 +1106,8 @@ public class WatchLiveActivity extends BaseActivity {
                             feedbackInvite(LinkConst.STATUS_NOT_AGREE);
                             break;
                     }
+
+                    mFeedbackChooseDialog = null;
                 }
             };
             dialog = DialogHelp.getConfirmDialog(getContext(), getString(R.string.received_calling),
@@ -1130,9 +1133,9 @@ public class WatchLiveActivity extends BaseActivity {
 
             Map<String, String> param = new HashMap<>();
             param.put("token", UserUtils.getToken());
-            if (status == 1) {
+            if (status == LinkConst.STATUS_AGREE) {
                 param.put("feedback_result", "true");
-            } else if (status == 2) {
+            } else if (status == LinkConst.STATUS_NOT_AGREE) {
                 param.put("feedback_result", "false");
             }
 
@@ -1218,12 +1221,8 @@ public class WatchLiveActivity extends BaseActivity {
             mChatCloseConfirmDialog.dismiss();
         }
 
-        if (mChatCloseNotifyDialog == null) {
-            mChatCloseNotifyDialog = DialogHelp.getMessageDialog(getActivity(), getString(R.string.close_video_call_notify_message));
-            mChatCloseNotifyDialog.setCancelable(false);
-        }
-        mChatCloseNotifyDialog.setTitle(R.string.close_video_call_title);
-        mChatCloseNotifyDialog.show();
+        DialogHelp.getMessageDialog(getActivity(), getString(R.string.close_video_call_notify_message))
+                .setCancelable(false).setTitle(R.string.close_video_call_title).show();
     }
 
     private WatchLiveActivity getContext() {
