@@ -66,7 +66,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionTouYanData, B
         if (TextUtils.isEmpty(item.getIconUrl())){
             itemIcon.setImageDrawable(ContextCompat.getDrawable(context,android.R.color.transparent));
         }else {
-            ImageDisplay.loadNetImage(context, item.getIconUrl(), itemIcon);
+            ImageDisplay.loadNetImage(context, item.getIconUrl(), itemIcon,true);
         }
 
         final LinearLayout.LayoutParams imageParams = (LinearLayout.LayoutParams) itemIcon.getLayoutParams();

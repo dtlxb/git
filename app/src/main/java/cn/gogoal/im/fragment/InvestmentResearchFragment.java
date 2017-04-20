@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.TypedValue;
@@ -36,7 +35,10 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.view.AutoScrollViewPager;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
+
+import static cn.gogoal.im.R.id.banner_pager_id;
 
 /**
  * author wangjd on 2017/4/19 0019.
@@ -81,6 +83,9 @@ public class InvestmentResearchFragment extends BaseFragment {
 
     private void getBannerImage() {
         final View bannerView = creatBannerView();
+        final AutoScrollViewPager bannerPager= (AutoScrollViewPager)
+                bannerView.findViewById(R.id.banner_pager_id);
+
         sectionAdapter.addHeaderView(bannerView);
 
         Map<String, String> map = new HashMap<>();
@@ -95,6 +100,13 @@ public class InvestmentResearchFragment extends BaseFragment {
 
                 if (code == 0) {
                     bannerImageUrls.addAll(JSONObject.parseObject(responseInfo, BannerBean.class).getData());
+//                    if (bannerImageUrls.size()<0){
+//                        bannerPager.startAutoScroll(1500);
+//                        bannerPager.showIndicator(true);
+//                    }else {
+//                        bannerPager.stopAutoScroll();
+//                        bannerPager.showIndicator(false);
+//                    }
                     bannerAdapter.notifyDataSetChanged();
                 } else {
                     BannerBean.Banner spaceBanner = new BannerBean.Banner();
@@ -116,7 +128,7 @@ public class InvestmentResearchFragment extends BaseFragment {
     /**动态创建banner视图*/
     private View creatBannerView() {
         LinearLayout bannerView = new LinearLayout(getContext());
-        final ViewPager bannerPager = new ViewPager(getContext());
+        final AutoScrollViewPager bannerPager = new AutoScrollViewPager(getContext());
         LinearLayout.LayoutParams root = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
         );
@@ -124,7 +136,7 @@ public class InvestmentResearchFragment extends BaseFragment {
         bannerView.setBackgroundResource(R.drawable.shape_line_bottom);
         bannerView.setLayoutParams(root);
 
-        bannerPager.setId(R.id.banner_pager_id);
+        bannerPager.setId(banner_pager_id);
         bannerImageUrls = new ArrayList<>();
         bannerAdapter = new BannerAdapter(bannerImageUrls);
         bannerPager.setAdapter(bannerAdapter);

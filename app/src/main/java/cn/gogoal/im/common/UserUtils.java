@@ -4,13 +4,17 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.socks.library.KLog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,8 +23,10 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import cn.gogoal.im.activity.TypeLoginActivity;
+import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.ImageUtils.ImageUtils;
 
 /**
  * author wangjd on 2017/2/8 0008.
@@ -117,6 +123,45 @@ public class UserUtils {
         return user.getString("simple_avatar");
     }
 
+    public static void cacheUserAvatar() {
+        //设置头像、并缓存
+        try {
+            Bitmap myBitmap = Glide.with(MyApp.getAppContext())
+                    .load(UserUtils.getUserAvatar())
+                    .asBitmap() //必须
+                    .centerCrop()
+                    .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                    .get();
+            ImageUtils.cacheBitmapFile(myBitmap, "avatar", "avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()) + ".png");
+        } catch (Exception e) {
+            KLog.e("缓存头像出错");//缓存出错只能去下载通道
+            DownloadUtils.getInstance(MyApp.getAppContext().getExternalFilesDir("avatar").getAbsolutePath()).downloadPicture(
+                    MyApp.getAppContext(),
+                    UserUtils.getUserAvatar(),
+                    "avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()), null);
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取用户本地缓存头像
+     */
+    public static File getUserCacheAvatar() {
+        File file = new File(MyApp.getAppContext().getExternalFilesDir("avatar"),
+                "avatar_" + MD5Utils.getMD5EncryptyString16(getUserAvatar()) + ".png");
+
+        if (file.exists()) {
+            return file;
+        }else {
+            getUserCacheAvatar();
+        }
+        return null;
+    }
+
+    public static String getUserAvatarCacheAbsolutePath(){
+        return MyApp.getAppContext().getExternalFilesDir("avatar")+File.separator+
+                "avatar_"+MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar())+".png";
+    }
     /**
      * 更新用户信息
      */
@@ -184,7 +229,7 @@ public class UserUtils {
     * @return
     */
     public static Boolean isFirstLogin() {
-        return SPTools.getBoolean("isFirstLogin", false);
+        return SPTools.getBoolean("isFirstLogin", true);
     }
 
     /**

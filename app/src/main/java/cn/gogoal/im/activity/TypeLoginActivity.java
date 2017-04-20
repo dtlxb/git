@@ -141,6 +141,7 @@ public class TypeLoginActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.login_button:
                 Login();
+//                startActivity(new Intent(TypeLoginActivity.this,MainActivity.class));
                 break;
             case R.id.forget_code:
                 Intent intent = new Intent(getActivity(), RigisterActivity.class);
@@ -180,15 +181,13 @@ public class TypeLoginActivity extends BaseActivity {
                         Intent intent;
                         SPTools.saveJsonObject("userInfo", data);
                         if (UserUtils.isFirstLogin()) {
-                            intent = new Intent(TypeLoginActivity.this, MainActivity.class);
-                        } else {
                             intent = new Intent(TypeLoginActivity.this, EditPersonInfoActivity.class);
-                            SPTools.saveBoolean("isFirstLogin", true);
+                            SPTools.saveBoolean("isFirstLogin", false);
+                        } else {
+                            intent = new Intent(TypeLoginActivity.this, MainActivity.class);
                         }
                         intent.putExtra("isFromLogin", true);
                         startActivity(intent);
-                        finish();
-
                         try {
                             //测试代码(登录IM)
                             AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
@@ -200,6 +199,8 @@ public class TypeLoginActivity extends BaseActivity {
                             //TODO crash,自己改
                         }
 
+                        finish();
+
                     } else {
                         UIHelper.toast(TypeLoginActivity.this, R.string.str_login_error);
                     }
@@ -210,8 +211,8 @@ public class TypeLoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                KLog.json(msg);
-                UIHelper.toast(TypeLoginActivity.this, R.string.net_erro_hint);
+                KLog.e(msg);
+                UIHelper.toastError(TypeLoginActivity.this, msg);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_USER_LOGIN, ggHttpInterface).startGet();

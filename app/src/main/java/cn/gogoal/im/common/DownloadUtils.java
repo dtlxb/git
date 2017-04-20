@@ -1,11 +1,12 @@
 package cn.gogoal.im.common;
 
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.SparseArray;
 
 import com.bumptech.glide.Glide;
@@ -26,24 +27,25 @@ public class DownloadUtils {
 
     private static DownloadCallBack callBack;
 
-    private static String dirs = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+    public static final String DEFAULT_DOWNLOAD_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
             .getAbsolutePath() + File.separator + "GoGoal";
+    private static String dirs;
 
     private static Handler handler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            SparseArray<Object> map= (SparseArray<Object>) msg.obj;
+            SparseArray<Object> map = (SparseArray<Object>) msg.obj;
 
-            Bitmap bitmap= (Bitmap) map.get(10086);
+            Bitmap bitmap = (Bitmap) map.get(10086);
 
-            String name= (String) map.get(10010);
+            String name = (String) map.get(10010);
 
             if (bitmap == null) {
                 if (callBack != null) {
                     callBack.error("bitmap is null");
                 }
             } else {
-                ImageUtils.saveBitmapFile(bitmap, dirs,name + ".png");
+                ImageUtils.saveBitmapFile(bitmap, new File(dirs), name + ".png");
                 if (callBack != null) {
                     callBack.success();
                 }
@@ -53,13 +55,26 @@ public class DownloadUtils {
     };
 
     private DownloadUtils(String dir) {
-        dirs = dir;
+        if (TextUtils.isEmpty(dir)) {
+            dirs = DEFAULT_DOWNLOAD_PATH;
+        } else {
+            dirs = dir;
+        }
+    }
+
+    public static DownloadUtils getInstance(String dir) {
+        return new DownloadUtils(dir);
     }
 
     /**
      * 下载图片
+     *
+     * @param context   上下文对象;
+     * @param imageUrl  下载图片地址;
+     * @param saveName  下载保存的名字，如果传null或者"",就以图片地址生成16位md5码作为图片名
+     * @param mCallBack 下载回调，成功与否
      */
-    public static void downloadPicture(final Activity context, final String imageUrl, final DownloadCallBack mCallBack) {
+    public void downloadPicture(final Context context, final String imageUrl, final String saveName, final DownloadCallBack mCallBack) {
         callBack = mCallBack;
 
         KLog.e(imageUrl);
@@ -81,9 +96,13 @@ public class DownloadUtils {
                             .get();
 
                     Message message = handler.obtainMessage();
-                    SparseArray<Object> map=new SparseArray<>();
-                    map.put(10086,myBitmap);
-                    map.put(10010,MD5Utils.getMD5EncryptyString32(imageUrl));
+                    SparseArray<Object> map = new SparseArray<>();
+                    map.put(10086, myBitmap);
+                    if (TextUtils.isEmpty(saveName)) {
+                        map.put(10010, MD5Utils.getMD5EncryptyString16(imageUrl));
+                    } else {
+                        map.put(10010, saveName);
+                    }
                     message.obj = map;
                     handler.sendMessage(message);
 

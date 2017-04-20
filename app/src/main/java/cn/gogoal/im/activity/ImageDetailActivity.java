@@ -131,8 +131,8 @@ public class ImageDetailActivity extends BaseActivity {
                         openCamera();
                         break;
                     case 1://保存图片
-                        DownloadUtils.downloadPicture(getActivity(),
-                                imageUrls.get(vpImageDetail.getCurrentItem()), new DownloadCallBack() {
+                        DownloadUtils.getInstance(DownloadUtils.DEFAULT_DOWNLOAD_PATH).downloadPicture(getActivity(),
+                                imageUrls.get(vpImageDetail.getCurrentItem()),null, new DownloadCallBack() {
                                     @Override
                                     public void success() {
                                         UIHelper.toast(getActivity(), "图片已成功下载到相册");

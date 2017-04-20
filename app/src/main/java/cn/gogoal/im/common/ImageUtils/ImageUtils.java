@@ -481,18 +481,17 @@ public class ImageUtils {
      * bitmap保存成本地图片
      */
     public static File cacheBitmapFile(Bitmap bitmap, String localFlag, String name) {
-        return saveBitmapFile(bitmap,MyApp.getAppContext().getExternalFilesDir(localFlag).getPath(),name);
+        return saveBitmapFile(bitmap,MyApp.getAppContext().getExternalFilesDir(localFlag),name);
     }
 
     /**
      * bitmap保存成本地图片
      */
-    public static File saveBitmapFile(Bitmap bitmap, String parentDir,String name) {
-        File dir=new File(parentDir);
-        if (!dir.exists()){
-            dir.mkdirs();
+    public static File saveBitmapFile(Bitmap bitmap, File parentDir,String name) {
+        if (!parentDir.exists()){
+            parentDir.mkdirs();
         }
-        File file = new File(dir,name);//将要保存图片的绝对路径全名
+        File file = new File(parentDir,name);//将要保存图片的绝对路径全名
         try {
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
@@ -502,7 +501,7 @@ public class ImageUtils {
             // 其次把文件插入到系统图库
             try {
                 MediaStore.Images.Media.insertImage(MyApp.getAppContext().getContentResolver(),
-                        parentDir, name, null);
+                        parentDir.getPath(), name, null);
             } catch (Exception e) {
                 e.printStackTrace();
             }
