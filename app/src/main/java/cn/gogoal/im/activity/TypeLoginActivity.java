@@ -135,28 +135,6 @@ public class TypeLoginActivity extends BaseActivity {
         TextView rigisterView = (TextView) xTitle.getViewByAction(rigisterAction);
         rigisterView.setTextColor(getResColor(R.color.colorPrimary));
 
-        /*// 密码可见监听
-        loginPassWord.setDrawableRightListener(new XEditText.DrawableRightListener() {
-            @Override
-            public void onDrawableRightClick(View view) {
-                Drawable drawableRight = null;
-                Drawable drawableLeft = getResDrawable(R.mipmap.icon_code);
-                if (view.getTag().equals("false")) {
-                    //drawableRight = getResDrawable(R.mipmap.login_eye_open);
-                    ((XEditText) view).setTransformationMethod(PasswordTransformationMethod.getInstance());
-                    view.setTag("true");
-                } else if (view.getTag().equals("true")) {
-                    //drawableRight = getResDrawable(R.mipmap.login_eye_closed);
-                    ((XEditText) view).setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                    view.setTag("false");
-                }
-                *//*drawableRight.setBounds(0, 0, drawableRight.getMinimumWidth(), drawableRight.getMinimumHeight());
-                drawableLeft.setBounds(0, 0, drawableLeft.getMinimumWidth(), drawableLeft.getMinimumHeight());
-                ((XEditText) view).setCompoundDrawablesRelative(drawableLeft, null, drawableRight, null);*//*
-                //view.requestFocus();
-                //loginPassWord.setSelection(loginPassWord.getText().length());
-            }
-        });*/
     }
 
     @OnClick({R.id.login_button, R.id.forget_code})
@@ -208,12 +186,17 @@ public class TypeLoginActivity extends BaseActivity {
                         intent.putExtra("isFromLogin", true);
                         startActivity(intent);
                         finish();
-                        //测试代码(登录IM)
-                        AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
-                            @Override
-                            public void done(AVIMClient avimClient, AVIMException e) {
-                            }
-                        });
+
+                        try {
+                            //测试代码(登录IM)
+                            AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
+                                @Override
+                                public void done(AVIMClient avimClient, AVIMException e) {
+                                }
+                            });
+                        }catch (Exception e){
+                            //TODO crash,自己改
+                        }
 
                     } else {
                         UIHelper.toast(TypeLoginActivity.this, R.string.str_login_error);

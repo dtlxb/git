@@ -1,60 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/scrollView_mine"
+    android:orientation="vertical"
     tools:context="cn.gogoal.im.fragment.MineFragment">
 
-    <LinearLayout
-        android:id="@+id/app_bar_layout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="vertical">
+        android:layout_height="@dimen/titlebar_size"
+        android:background="@color/colorMineHead">
+
+        <TextView
+            android:id="@+id/tv_mine_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:alpha="0.0"
+            android:text="个人中心"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/img_my_qrcode"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
+            android:src="@mipmap/img_qr_code" />
+    </RelativeLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scrollView_mine"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/flag_layout_head"
+            android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorMineHead"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/titlebar_size">
-
-                <TextView
-                    android:id="@+id/tv_mine_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:alpha="0.0"
-                    android:text="个人中心"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp" />
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/img_my_qrcode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:paddingEnd="20dp"
-                    android:paddingStart="20dp"
-                    android:src="@mipmap/img_qr_code" />
-            </RelativeLayout>
-
 
             <RelativeLayout
                 android:id="@+id/layout_user_head"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginStart="15dp"
-                android:orientation="vertical">
+                android:layout_height="130dp"
+                android:background="@color/colorMineHead"
+                android:orientation="vertical"
+                android:paddingStart="15dp"
+                android:paddingEnd="20dp">
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/img_mine_avatar"
@@ -99,20 +98,19 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="20dp"
                     app:srcCompat="@mipmap/img_more_255" />
 
             </RelativeLayout>
 
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_mine"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_mine"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-    </LinearLayout>
-
-</android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>
