@@ -66,7 +66,7 @@ public class TypeLoginActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         initTitle();
         loginPassWord.setInputType(InputType.TYPE_CLASS_TEXT);
-        UIHelper.passwordToggle(loginPassWord,chToggle);
+        UIHelper.passwordToggle(loginPassWord, chToggle);
         initLoginInfo();
     }
 
@@ -82,13 +82,8 @@ public class TypeLoginActivity extends BaseActivity {
         /*loginUserName.setText("E00002639");
         loginPassWord.setEditTextText("412174");*/
 
-        /*loginUserName.setText("E00003645");
-        loginPassWord.setEditTextText("147258369");*/
-        loginUserName.setText("E00003645");
-        loginPassWord.setText("147258369");
-
-        /*loginUserName.setText("E00002639");
-        loginPassWord.setText("412174");*/
+        loginUserName.setText("E00002639");
+        loginPassWord.setText("412174");
 
        /* loginUserName.setText("E00002638");
         loginPassWord.setText("123456");*/
@@ -141,7 +136,6 @@ public class TypeLoginActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.login_button:
                 Login();
-//                startActivity(new Intent(TypeLoginActivity.this,MainActivity.class));
                 break;
             case R.id.forget_code:
                 Intent intent = new Intent(getActivity(), RigisterActivity.class);
@@ -162,7 +156,7 @@ public class TypeLoginActivity extends BaseActivity {
             return;
         }
 
-        if (UIHelper.isGGPassWord(word, getActivity()))
+        if (!UIHelper.isGGPassWord(word, getActivity()))
             return;
 
         Map<String, String> param = new HashMap<>();
@@ -181,26 +175,24 @@ public class TypeLoginActivity extends BaseActivity {
                         Intent intent;
                         SPTools.saveJsonObject("userInfo", data);
                         if (UserUtils.isFirstLogin()) {
-                            intent = new Intent(TypeLoginActivity.this, EditPersonInfoActivity.class);
-                            SPTools.saveBoolean("isFirstLogin", false);
-                        } else {
                             intent = new Intent(TypeLoginActivity.this, MainActivity.class);
+                        } else {
+                            intent = new Intent(TypeLoginActivity.this, EditPersonInfoActivity.class);
+                            SPTools.saveBoolean("isFirstLogin", true);
                         }
                         intent.putExtra("isFromLogin", true);
                         startActivity(intent);
+                        finish();
+                        //登录IM
                         try {
-                            //测试代码(登录IM)
                             AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
                                 @Override
                                 public void done(AVIMClient avimClient, AVIMException e) {
                                 }
                             });
-                        }catch (Exception e){
-                            //TODO crash,自己改
+                        } catch (Exception ignored) {
+                            KLog.e(ignored.toString());
                         }
-
-                        finish();
-
                     } else {
                         UIHelper.toast(TypeLoginActivity.this, R.string.str_login_error);
                     }
@@ -211,8 +203,8 @@ public class TypeLoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                KLog.e(msg);
-                UIHelper.toastError(TypeLoginActivity.this, msg);
+                KLog.json(msg);
+                UIHelper.toast(TypeLoginActivity.this, R.string.net_erro_hint);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_USER_LOGIN, ggHttpInterface).startGet();

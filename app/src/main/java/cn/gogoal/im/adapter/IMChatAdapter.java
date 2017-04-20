@@ -1,6 +1,7 @@
 package cn.gogoal.im.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
@@ -28,6 +29,7 @@ import com.socks.library.KLog;
 import java.util.List;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
@@ -103,7 +105,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
         AVIMMessage avimMessage = messageList.get(position);
         JSONObject contentObject = JSON.parseObject(avimMessage.getContent());
-        JSONObject lcattrsObject = (JSONObject) contentObject.get("_lcattrs");
+        final JSONObject lcattrsObject = (JSONObject) contentObject.get("_lcattrs");
         String messageType = contentObject.getString("_lctype");
         KLog.e(messageType);
         if (!messageType.equals("5") && !messageType.equals("6") && !messageType.equals("8")) {
@@ -239,25 +241,46 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             showMessageTime(position, ((LeftAudioViewHolder) holder).message_time);
         } else if (holder instanceof LeftStockViewHolder) {
             if (null != lcattrsObject) {
-                String stockCode = lcattrsObject.getString("stockCode");
+                final String stockCode = lcattrsObject.getString("stockCode");
                 SpannableStringBuilder stringBuilder = new SpannableStringBuilder("$ " + stockCode + " " + lcattrsObject.getString("stockName"));
                 ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor("#f53f3f")); // 设置字体颜色
                 stringBuilder.setSpan(fcs, 2, stockCode.length() + 2, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
                 ((LeftStockViewHolder) holder).what_user_send.setText(stringBuilder);
                 ((LeftStockViewHolder) holder).user_name.setText(lcattrsObject.getString("username"));
+
+                ((LeftStockViewHolder) holder).what_user_send.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, CopyStockDetailActivity.class);
+                        intent.putExtra("stock_code", stockCode);
+                        intent.putExtra("stock_name", lcattrsObject.getString("stockName"));
+                        mContext.startActivity(intent);
+                    }
+                });
             }
 
             showMessageTime(position, ((LeftStockViewHolder) holder).message_time);
         } else if (holder instanceof RightStockViewHolder) {
             if (null != lcattrsObject) {
-                String stockCode = lcattrsObject.getString("stockCode");
+                final String stockCode = lcattrsObject.getString("stockCode");
                 SpannableStringBuilder stringBuilder = new SpannableStringBuilder("$ " + stockCode + " " + lcattrsObject.getString("stockName"));
                 ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor("#f53f3f")); // 设置字体颜色
                 stringBuilder.setSpan(fcs, 2, stockCode.length() + 2, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
                 ((RightStockViewHolder) holder).what_user_send.setText(stringBuilder);
                 ((RightStockViewHolder) holder).user_name.setVisibility(View.GONE);
+
+                ((RightStockViewHolder) holder).what_user_send.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, CopyStockDetailActivity.class);
+                        intent.putExtra("stock_code", stockCode);
+                        intent.putExtra("stock_name", lcattrsObject.getString("stockName"));
+                        mContext.startActivity(intent);
+                    }
+                });
+
             }
 
             showMessageTime(position, ((RightStockViewHolder) holder).message_time);

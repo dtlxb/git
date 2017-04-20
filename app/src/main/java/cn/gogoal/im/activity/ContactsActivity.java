@@ -131,28 +131,10 @@ public class ContactsActivity extends BaseActivity {
                     DialogHelp.getSelectDialog(getActivity(), "", new String[]{"删除联系人"}, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            //服务器中清除
                             deleteFriend(contactBeanList.get(position).getFriend_id());
-                            String string = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", null);
-                            KLog.e(string);
-                            //清除缓存中的这个人
-                            if (string != null && !(string.equals(""))) {
-                                JSONObject jsonObject = JSON.parseObject(string);
-                                KLog.e(jsonObject.toString());
-                                if (jsonObject.get("data") != null) {
-                                    JSONArray jsonArray = jsonObject.getJSONArray("data");
-                                    KLog.e(jsonArray.toString());
-                                    for (int i = 0; i < jsonArray.size(); i++) {
-                                        JSONObject thisObject = (JSONObject) jsonArray.get(i);
-                                        if (thisObject.getInteger("friend_id") == contactBeanList.get(position).getFriend_id()) {
-                                            jsonArray.remove(jsonArray.get(i));
-                                        }
-                                    }
-                                    jsonObject.put("data", jsonArray);
-                                    KLog.e(jsonObject);
-                                    SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", JSON.toJSONString(jsonObject));
-                                    KLog.e(SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", ""));
-                                }
-                            }
+                            //缓存中清除
+                            UserUtils.deleteContactsSomeone(contactBeanList.get(position).getFriend_id());
                             //刷新列表
                             contactBeanList.remove(position);
                             contactAdapter.notifyDataSetChanged();

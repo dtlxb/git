@@ -10,6 +10,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -39,6 +41,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.RigisterActivity;
 import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.permission.IPermissionListner;
@@ -60,6 +63,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     private static IPermissionListner mListener;
 
+    private Handler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +82,14 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         EventBus.getDefault().register(this);
 
         doBusiness(this);
+
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                BaseActivity.this.finish();
+            }
+        };
 
     }
 
@@ -309,7 +322,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
      */
     @Subscriber(tag = "show_client_status")
     public void imClientLoad(String msg) {
-        DialogHelp.getMessageDialog(getActivity(), "此账号已经在其他设备登录，点击\"确定\"跳转登录页面，重新登录。", new DialogInterface.OnClickListener() {
+        DialogHelp.getMessageDialog(getActivity(), "此账号已经在其他设备登录，点击\"确定\"跳转登录页面，或5秒后自动跳转登录页面，重新登录。", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 AppManager.getInstance().finishAllActivity();
@@ -318,6 +331,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         }).setCancelable(false)
                 .show();
 
+        handler.sendEmptyMessageDelayed(0x01, 5000);
     }
 
 
