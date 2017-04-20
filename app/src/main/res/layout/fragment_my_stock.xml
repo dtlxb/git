@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:focusableInTouchMode="true"
     android:focusable="true"
-    android:fitsSystemWindows="true"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
@@ -13,7 +12,7 @@
     <RelativeLayout
         android:id="@+id/layout_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/titlebar_size"
         android:background="@drawable/shape_line_bottom">
 
         <RelativeLayout

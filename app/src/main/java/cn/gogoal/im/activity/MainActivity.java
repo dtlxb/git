@@ -95,7 +95,7 @@ public class MainActivity extends BaseActivity {
             }
         }
 
-        tabMain.getTabAt(4).select();
+        tabMain.getTabAt(2).select();
 
         barUtil = StatusBarUtil.with(MainActivity.this);
 
@@ -107,23 +107,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onPageSelected(int position) {
                 barUtil.setStatusBarFontDark(position != 4);
-                switch (position) {
-                    case 0:
-
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        barUtil.setStatusBarFontDark(false);
-                        break;
-                    default:
-                        break;
-                }
+                barUtil.setColor(position == 4?getResColor(R.color.colorMineHead):getResColor(android.R.color.white));
             }
 
             @Override
@@ -134,10 +118,10 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    @Override
-    public void setStatusBar(boolean light) {
-        StatusBarUtil.with(MainActivity.this).setTranslucentForImageViewInFragment(null);
-    }
+//    @Override
+//    public void setStatusBar(boolean light) {
+//        StatusBarUtil.with(MainActivity.this).setTranslucentForImageViewInFragment(null);
+//    }
 
     private void getFriendList() {
 

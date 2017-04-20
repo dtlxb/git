@@ -112,23 +112,23 @@ public class MineFragment extends BaseFragment {
         tvMineUserName.setText(UserUtils.getUserName());
         tvMineIntroduction.setText(UserUtils.getDuty()+" "+UserUtils.getorgName());
 
-//        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-//            @Override
-//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-//                int halfScroll = appBarLayout.getTotalScrollRange() / 2;
-//                int offSetAbs = Math.abs(verticalOffset);
-//                float percentage;
-//                if (offSetAbs < halfScroll) {
-//                    mTitleText.setText("");
-//                    percentage = 1 - (float) offSetAbs / (float) halfScroll;
-//                } else {
-//                    mTitleText.setText("个人中心");
-//                    percentage = (float) (offSetAbs - halfScroll) / (float) halfScroll;
-//                }
-//                mTitleText.setAlpha(percentage);
-//
-//            }
-//        });
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                int halfScroll = appBarLayout.getTotalScrollRange() / 2;
+                int offSetAbs = Math.abs(verticalOffset);
+                float percentage;
+                if (offSetAbs < halfScroll) {
+                    mTitleText.setText("");
+                    percentage = 1 - (float) offSetAbs / (float) halfScroll;
+                } else {
+                    mTitleText.setText("个人中心");
+                    percentage = (float) (offSetAbs - halfScroll) / (float) halfScroll;
+                }
+                mTitleText.setAlpha(percentage);
+
+            }
+        });
 
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override

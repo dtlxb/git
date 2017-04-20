@@ -5,9 +5,11 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="cn.gogoal.im.activity.MainActivity">
 
     <android.support.v4.view.ViewPager
+        android:fitsSystemWindows="true"
         android:id="@+id/vp_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

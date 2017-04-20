@@ -195,17 +195,7 @@ public class ImageDetailActivity extends BaseActivity {
 
                         Map<String, String> map = new HashMap<>();
                         map.put("avatar", StringUtils.decodeUrl(onlineUri));
-                        new UserUtils().updataNetUserInfo(map, new UserUtils.UpdataListener() {
-                            @Override
-                            public void success(String responce) {
-                                KLog.e(responce);
-                            }
-
-                            @Override
-                            public void failed(String errorMsg) {
-                                KLog.e(errorMsg);
-                            }
-                        });
+                        new UserUtils().updataNetUserInfo(map, null);
                     }
 
                     @Override
