@@ -20,7 +20,7 @@
         <cn.gogoal.im.ui.view.XEditText
             android:id="@+id/login_edite_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="25dp"
@@ -28,37 +28,42 @@
             android:drawableLeft="@mipmap/icon_number"
             android:drawablePadding="7dp"
             android:hint="Go-Goal账号/手机号"
-            android:paddingBottom="15dp"
             android:paddingEnd="7dp"
             android:paddingStart="10dp"
-            android:paddingTop="15dp"
-            app:funcType="canClear"/>
+            android:textColor="@color/textColor_333333"
+            android:textColorHint="@color/textColor_999999"
+            android:textSize="15sp"
+            app:funcType="canClear" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="25dp"
-            android:paddingEnd="7dp"
+            android:background="@drawable/login_edit_border"
             android:gravity="center_vertical"
-            android:background="@drawable/login_edit_border">
+            android:orientation="horizontal"
+            android:paddingEnd="7dp">
 
             <cn.gogoal.im.ui.view.XEditText
                 android:id="@+id/login_edite_code"
                 android:layout_width="0dp"
+                android:layout_height="50dp"
                 android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
                 android:drawableLeft="@mipmap/icon_code"
                 android:drawablePadding="7dp"
                 android:hint="请输入密码"
-                android:background="@android:color/transparent"
-                android:paddingBottom="15dp"
+                android:digits="0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+                android:maxLength="16"
+                android:inputType="numberPassword"
                 android:paddingEnd="7dp"
                 android:paddingStart="10dp"
-                android:paddingTop="15dp"
-                app:funcType="canClear"/>
+                android:textColor="@color/textColor_333333"
+                android:textColorHint="@color/textColor_999999"
+                android:textSize="15sp"
+                app:funcType="canClear" />
 
             <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/checkbox_psw"
@@ -72,12 +77,11 @@
         <cn.gogoal.im.ui.view.SelectorButton
             android:id="@+id/login_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="25dp"
             android:lines="1"
-            android:padding="15dp"
             android:text="登  录"
             android:textColor="@color/absoluteWhite"
             android:textSize="17sp"

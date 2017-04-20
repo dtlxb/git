@@ -134,7 +134,6 @@ public class TypeLoginActivity extends BaseActivity {
         xTitle.addAction(rigisterAction, 0);
         TextView rigisterView = (TextView) xTitle.getViewByAction(rigisterAction);
         rigisterView.setTextColor(getResColor(R.color.colorPrimary));
-
     }
 
     @OnClick({R.id.login_button, R.id.forget_code})
@@ -161,6 +160,9 @@ public class TypeLoginActivity extends BaseActivity {
             UIHelper.toast(TypeLoginActivity.this, R.string.str_login_edit_null);
             return;
         }
+
+        if (UIHelper.isGGPassWord(word, getActivity()))
+            return;
 
         Map<String, String> param = new HashMap<>();
         param.put("login_name", name);

@@ -5,7 +5,9 @@ import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,9 +49,15 @@ public class RigisterActivity extends BaseActivity {
     //密码
     @BindView(R.id.edit_code)
     XEditText editCode;
+    @BindView(R.id.checkbox_psw)
+    CheckBox chToggle;
     //验证密码
+    @BindView(R.id.layout_valid)
+    LinearLayout layoutValid;
     @BindView(R.id.valid_edit_code)
     XEditText validEditCode;
+    @BindView(R.id.checkbox_valid_psw)
+    CheckBox toggleValid;
 
     @BindView(R.id.tv_get_code)
     TextView tvGetCode;
@@ -75,7 +83,8 @@ public class RigisterActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         actionType = getIntent().getIntExtra("action_type", -1);
-
+        UIHelper.passwordToggle(editCode, chToggle);
+        UIHelper.passwordToggle(validEditCode, toggleValid);
         initTitle();
         timeCounter();
     }
@@ -83,11 +92,11 @@ public class RigisterActivity extends BaseActivity {
     private void initTitle() {
         if (actionType == AppConst.LOGIN_FIND_CODE) {
             loginLayout.setVisibility(View.GONE);
-            validEditCode.setVisibility(View.VISIBLE);
+            layoutValid.setVisibility(View.VISIBLE);
             xTitle = setMyTitle(R.string.str_correct_code, true);
         } else {
             loginLayout.setVisibility(View.VISIBLE);
-            validEditCode.setVisibility(View.GONE);
+            layoutValid.setVisibility(View.GONE);
             xTitle = setMyTitle(R.string.str_login_register, true);
         }
 
@@ -185,7 +194,9 @@ public class RigisterActivity extends BaseActivity {
     private void correctPassCode() {
         if (!UIHelper.GGPhoneNumber(editPhoneNumber.getText().toString().trim(), RigisterActivity.this)
                 || !UIHelper.GGCode(editPaseCode.getText().toString().trim(), RigisterActivity.this)
-                || !codeIsTheSame(editCode.getText().toString().trim(), validEditCode.getText().toString().trim()))
+                || !codeIsTheSame(editCode.getText().toString().trim(), validEditCode.getText().toString().trim())
+                || UIHelper.isGGPassWord(editCode.getText().toString().trim(), getActivity())
+                || UIHelper.isGGPassWord(validEditCode.getText().toString().trim(), getActivity()))
             return;
         loginLayout.setEnabled(false);
 
