@@ -158,11 +158,11 @@ public class RigisterActivity extends BaseActivity {
             Drawable drawableLeft = getResDrawable(R.mipmap.icon_code);
 
             if (view.getTag().equals("false")) {
-                ((XEditText) view).setTransformationMethod(PasswordTransformationMethod.getInstance());
+                ((XEditText) view).setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                 drawableRight = getResDrawable(R.mipmap.login_eye_open);
                 view.setTag("true");
             } else if (view.getTag().equals("true")) {
-                ((XEditText) view).setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                ((XEditText) view).setTransformationMethod(PasswordTransformationMethod.getInstance());
                 drawableRight = getResDrawable(R.mipmap.login_eye_closed);
                 view.setTag("false");
             }

@@ -53,7 +53,7 @@ public class XEditText extends EditText {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
-            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_DOWN:
                 if (mRightListener != null) {
                     Drawable drawableRight = getCompoundDrawables()[DRAWABLE_RIGHT];
                     if (drawableRight != null && event.getRawX() >= (getRight() - 2 * drawableRight.getBounds().width())) {

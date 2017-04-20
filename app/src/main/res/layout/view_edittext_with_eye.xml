@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/login_edit_border"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:id="@+id/layout_lock"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:descendantFocusability="blocksDescendants"
+        android:paddingLeft="10dp"
+        android:tag="false">
+
+        <ImageView
+            android:id="@+id/image_lock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@color/absoluteWhite"
+            android:src="@mipmap/icon_code" />
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.SearchView
+        android:id="@+id/edittext"
+        style="@style/NormalSearchView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="8"
+        android:background="@color/absoluteWhite"
+        android:lines="1"
+        android:textColor="@color/textColor_333333"
+        app:defaultQueryHint="请输入密码" />
+
+
+    <RelativeLayout
+        android:id="@+id/layout_eye"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:descendantFocusability="blocksDescendants"
+        android:paddingRight="10dp"
+        android:tag="false">
+
+        <ImageView
+            android:id="@+id/imagebutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@color/absoluteWhite"
+            android:src="@mipmap/login_eye_closed" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

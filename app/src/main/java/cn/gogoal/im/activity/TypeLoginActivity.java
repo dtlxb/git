@@ -30,6 +30,7 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.KeyboardLaunchListenLayout;
+import cn.gogoal.im.ui.view.EditTextWithEye;
 import cn.gogoal.im.ui.view.XEditText;
 import cn.gogoal.im.ui.view.XTitle;
 
@@ -45,7 +46,7 @@ public class TypeLoginActivity extends BaseActivity {
     EditText loginUserName;
 
     @BindView(R.id.login_edite_code)
-    XEditText loginPassWord;
+    EditTextWithEye loginPassWord;
 
     @BindView(R.id.forget_code)
     TextView forgetCode;
@@ -77,7 +78,7 @@ public class TypeLoginActivity extends BaseActivity {
         loginPassWord.setText("412174");*/
 
         loginUserName.setText("E00003645");
-        loginPassWord.setText("147258369");
+        loginPassWord.setEditTextText("147258369");
 
         /*loginUserName.setText("E00002639");
         loginPassWord.setText("412174");*/
@@ -119,7 +120,8 @@ public class TypeLoginActivity extends BaseActivity {
         TextView rigisterView = (TextView) xTitle.getViewByAction(rigisterAction);
         rigisterView.setTextColor(getResColor(R.color.colorPrimary));
 
-        // 密码可见监听
+        loginPassWord.setEditTextHint("请输入密码");
+        /*// 密码可见监听
         loginPassWord.setDrawableRightListener(new XEditText.DrawableRightListener() {
             @Override
             public void onDrawableRightClick(View view) {
@@ -134,13 +136,13 @@ public class TypeLoginActivity extends BaseActivity {
                     ((XEditText) view).setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                     view.setTag("false");
                 }
-                /*drawableRight.setBounds(0, 0, drawableRight.getMinimumWidth(), drawableRight.getMinimumHeight());
+                *//*drawableRight.setBounds(0, 0, drawableRight.getMinimumWidth(), drawableRight.getMinimumHeight());
                 drawableLeft.setBounds(0, 0, drawableLeft.getMinimumWidth(), drawableLeft.getMinimumHeight());
-                ((XEditText) view).setCompoundDrawablesRelative(drawableLeft, null, drawableRight, null);*/
+                ((XEditText) view).setCompoundDrawablesRelative(drawableLeft, null, drawableRight, null);*//*
                 //view.requestFocus();
                 //loginPassWord.setSelection(loginPassWord.getText().length());
             }
-        });
+        });*/
     }
 
     @OnClick({R.id.login_button, R.id.forget_code})
@@ -162,7 +164,7 @@ public class TypeLoginActivity extends BaseActivity {
 
     private void Login() {
         String name = loginUserName.getText().toString();
-        String word = loginPassWord.getText().toString();
+        String word = loginPassWord.getEditTextText();
 
         if (TextUtils.isEmpty(word) || TextUtils.isEmpty(name)) {
             UIHelper.toast(TypeLoginActivity.this, R.string.str_login_edit_null);
@@ -222,7 +224,7 @@ public class TypeLoginActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 0) {
             if (requestCode == AppConst.LOGIN_FIND_CODE) {
-                loginPassWord.setText("");
+                loginPassWord.setEditTextText("");
                 loginUserName.requestFocus();
             }
         }
