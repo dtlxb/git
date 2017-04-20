@@ -9,9 +9,11 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -55,11 +57,12 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.tv_mine_introduction)
     TextView tvMineIntroduction;
 
-    @BindView(R.id.layout_user_head)
-    RelativeLayout relativeLayout;
-
     @BindView(R.id.scrollView_mine)
     NestedScrollView scrollView;
+
+    /**用户信息头部*/
+    @BindView(R.id.layout_user_head)
+    ViewGroup layoutHead;
 
     private MineAdapter mineAdapter;
 
@@ -108,17 +111,13 @@ public class MineFragment extends BaseFragment {
         tvMineUserName.setText(UserUtils.getUserName());
         tvMineIntroduction.setText(UserUtils.getDuty() + " " + UserUtils.getorgName());
 
-        relativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), EditMyInfoActivity.class));
-            }
-        });
-
         scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//                KLog.i(oldScrollY);
+                if (oldScrollY<AppDevice.dp2px(getContext(),150)){
+                    mTitleText.setAlpha(scrollY*1.0f/AppDevice.dp2px(getContext(),150));
+                    layoutHead.setAlpha(1-scrollY*1.0f/AppDevice.dp2px(getContext(),150));
+                }
             }
         });
 
@@ -142,14 +141,23 @@ public class MineFragment extends BaseFragment {
         mineAdapter = new MineAdapter(mineItems);
     }
 
-    @OnClick(R.id.img_my_qrcode)
+    @OnClick({R.id.img_my_qrcode, R.id.layout_user_head})
     void onClick(View view) {
-        UIHelper.toast(view.getContext(), "二维码");
+        switch (view.getId()) {
+            case R.id.img_my_qrcode:
+                UIHelper.toast(view.getContext(), "二维码");
+                break;
+            case R.id.layout_user_head:
+                startActivity(new Intent(view.getContext(), EditMyInfoActivity.class));
+                break;
+        }
     }
 
     @Subscriber(tag = "updata_cache_avatar")
     void updataCacheAvatar(String newAvatarUrl) {
+        KLog.e(newAvatarUrl);
         ImageDisplay.loadNetAvatarWithBorder(getContext(), UserUtils.getUserAvatar(), imageAvatar);
+        KLog.e("更新头像执行");
     }
 
     private class MineAdapter extends BaseMultiItemQuickAdapter<MineItem, BaseViewHolder> {
@@ -175,7 +183,7 @@ public class MineFragment extends BaseFragment {
                     holder.getView(R.id.item_layout_simple_image_text).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            switch (position){
+                            switch (position) {
 
                             }
                         }
