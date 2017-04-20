@@ -524,21 +524,6 @@ public class GGOKHTTP {
     public static final String USER_REGISTER = "v1/user/register";
 
     /**
-     * 直播邀请连麦
-     * token
-     * invitee_id
-     */
-    public static final String VIDEOCALL_INVITE = "v1/ggm_videocall/invite";
-
-    /**
-     * 直播邀请连麦
-     * token
-     * invitee_id
-     * feedback_result
-     */
-    public static final String VIDEOCALL_FEEDBACK = "v1/ggm_videocall/feedback";
-
-    /**
      * captcha                       验证码
      * new_pwd                       新密码
      */
@@ -554,6 +539,27 @@ public class GGOKHTTP {
      * city                          城市
      */
     public static final String UPDATE_ACCOUNT_INFO = "v1/ggm_im/update_account_info";
+
+    /**
+     * 直播邀请连麦
+     * token
+     * invitee_id
+     */
+    public static final String VIDEOCALL_INVITE = "v1/ggm_videocall/invite";
+
+    /**
+     * 直播连麦反馈
+     * token
+     * invitee_id
+     * feedback_result
+     */
+    public static final String VIDEOCALL_FEEDBACK = "v1/ggm_videocall/feedback";
+
+    /**
+     * 直播连麦关闭
+     * token
+     */
+    public static final String VIDEOCALL_CLOSE = "v1/ggm_videocall/close";
 
 //--------------------------------------------------------------------------------------------------
 

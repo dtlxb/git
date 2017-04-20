@@ -177,7 +177,9 @@ public class WatchLiveActivity extends BaseActivity {
 
     private WatchBottomFragment mBottomFragment;
 
-    private AlertDialog.Builder mFeedbackChooseDialog;
+    private AlertDialog mFeedbackChooseDialog;
+    private AlertDialog mChatCloseConfirmDialog;
+    private AlertDialog.Builder mChatCloseNotifyDialog;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -192,6 +194,7 @@ public class WatchLiveActivity extends BaseActivity {
                     UIHelper.toast(getContext(), R.string.invite_timeout_tip); //提醒：对方长时间未响应，已取消连麦邀请
                     break;
                 case LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT:
+                    mFeedbackChooseDialog.dismiss();
                     feedbackInvite(LinkConst.STATUS_NOT_AGREE); //自动反馈不同意连麦
                     UIHelper.toast(getContext(), R.string.inviting_process_timeout); //提醒超时未处理，已经自动拒绝对方的连麦邀请
                     break;
@@ -734,13 +737,33 @@ public class WatchLiveActivity extends BaseActivity {
      * 结束连麦
      */
     public void closeVideoCall() {
+        Map<String, String> param = new HashMap<>();
+        param.put("token", UserUtils.getToken());
 
-//        KLog.e("Close video chat failed");
-//        UIHelper.toast(WatchLiveActivity.this, R.string.close_video_chatting_failed);
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                JSONObject data = object.getJSONObject("data");
+                if (object.getIntValue("code") == 0 && data.getBooleanValue("result")) {
+                    //调用api结束连麦成功
+                    if (isChatting()) {
+                        abortChat(true);
+                    }
+                } else {
+                    //显示结束连麦失败的
+                    KLog.e("Close video chat failed");
+                    UIHelper.toast(WatchLiveActivity.this, R.string.close_video_chatting_failed);
+                }
+            }
 
-        if (isChatting()) {
-            abortChat(true);
-        }
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.VIDEOCALL_CLOSE, ggHttpInterface).startGet();
     }
 
     /**
@@ -776,7 +799,7 @@ public class WatchLiveActivity extends BaseActivity {
         }
         mIvChatClose.setVisibility(View.GONE);
         KLog.e("mIvChatClose setVisibility gone");
-        //mBottomFragment.hideRecordView();
+        mBottomFragment.setType(1);
         shouldOffLine = true; //表示在surfaceChanged时需要调用真正的offlineChat，来结束连麦
     }
 
@@ -785,7 +808,7 @@ public class WatchLiveActivity extends BaseActivity {
      */
     public void closeVideoChatSmallView() {
         mIvChatClose.setVisibility(View.GONE);
-        //mBottomFragment.hideRecordView();
+        mBottomFragment.setType(1);
     }
 
     /**
@@ -858,9 +881,38 @@ public class WatchLiveActivity extends BaseActivity {
     public void setClickFunctionBar(View v) {
         switch (v.getId()) {
             case R.id.iv_abort_chat: //关闭播放
-
+                showChatCloseConfirmDialog();
                 break;
         }
+    }
+
+    /**
+     * 显示结束连麦确认的dialog
+     */
+    private void showChatCloseConfirmDialog() {
+        AlertDialog.Builder dialog = null;
+        if (mChatCloseConfirmDialog == null) {
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    switch (i) {
+                        case DialogInterface.BUTTON_POSITIVE: //确定
+                            //结束连麦
+                            closeVideoCall();
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE: //取消
+                            mChatCloseConfirmDialog.dismiss();
+                            break;
+                    }
+                }
+            };
+            dialog = DialogHelp.getConfirmDialog(getContext(), getString(R.string.close_video_call_title),
+                    getString(R.string.close_video_call_confirm_message), getString(R.string.sure),
+                    getString(R.string.cancel), listener, listener);
+            dialog.setCancelable(false);
+        }
+
+        mChatCloseConfirmDialog = dialog.show();
     }
 
     /**
@@ -1007,6 +1059,29 @@ public class WatchLiveActivity extends BaseActivity {
                         mHandler.sendEmptyMessageDelayed(LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT,
                                 LinkConst.INVITE_CHAT_TIMEOUT_DELAY);
                         break;
+                    case "mixresult":
+                        //混流失败
+                        if (isChatting()) {
+                            UIHelper.toast(getContext(), R.string.merge_stream_failed);
+                            closeVideoCall();
+                        }
+                        break;
+                    case "close":
+                        //对方关闭连麦
+                        if (isChatting()) {
+                            //中断连麦推流
+                            abortChat(true);
+                            //显示对方结束连麦的UI提示
+                            showChatCloseNotifyUI();
+                        } else if (mChatStatus == VideoChatStatus.RECEIVED_INVITE) {
+                            //如果当前是收到邀请还未处理的状态，则需要隐藏邀请反馈选择的dialog
+                            if (mFeedbackChooseDialog != null && mFeedbackChooseDialog.isShowing()) {
+                                mFeedbackChooseDialog.dismiss();
+                            }
+                            UIHelper.toast(getContext(), R.string.video_chatting_timeout);
+                            mChatStatus = VideoChatStatus.UNCHAT;
+                        }
+                        break;
 
                 }
             }
@@ -1017,7 +1092,7 @@ public class WatchLiveActivity extends BaseActivity {
      * 显示直播邀请结果选择的Dialog
      */
     private void showFeedbackChooseDialog() {
-
+        AlertDialog.Builder dialog = null;
         if (mFeedbackChooseDialog == null) {
             DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                 @Override
@@ -1032,13 +1107,13 @@ public class WatchLiveActivity extends BaseActivity {
                     }
                 }
             };
-            mFeedbackChooseDialog = DialogHelp.getConfirmDialog(getContext(), getString(R.string.received_calling),
+            dialog = DialogHelp.getConfirmDialog(getContext(), getString(R.string.received_calling),
                     getString(R.string.video_callling_message), getString(R.string.agree),
                     getString(R.string.not_agree), listener, listener);
-            mFeedbackChooseDialog.setCancelable(false);
+            dialog.setCancelable(false);
         }
 
-        mFeedbackChooseDialog.show();
+        mFeedbackChooseDialog = dialog.show();
     }
 
     /**
@@ -1112,7 +1187,7 @@ public class WatchLiveActivity extends BaseActivity {
     /**
      * UI层从普通播放模式更改到连麦模式
      */
-    public void changePlayViewToChatMode() {
+    private void changePlayViewToChatMode() {
         if (mPlaySurfaceView != null) {
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mPlaySurfaceView.getLayoutParams();
             final Resources resources = getResources();
@@ -1132,6 +1207,23 @@ public class WatchLiveActivity extends BaseActivity {
 
         mIvChatClose.setVisibility(View.VISIBLE);
         mPreviewSurfaceView.setVisibility(View.VISIBLE);
+        mBottomFragment.setType(0);
+    }
+
+    /**
+     * 显示连麦关闭的通知Dialog
+     */
+    private void showChatCloseNotifyUI() {
+        if (mChatCloseConfirmDialog != null && mChatCloseConfirmDialog.isShowing()) {
+            mChatCloseConfirmDialog.dismiss();
+        }
+
+        if (mChatCloseNotifyDialog == null) {
+            mChatCloseNotifyDialog = DialogHelp.getMessageDialog(getActivity(), getString(R.string.close_video_call_notify_message));
+            mChatCloseNotifyDialog.setCancelable(false);
+        }
+        mChatCloseNotifyDialog.setTitle(R.string.close_video_call_title);
+        mChatCloseNotifyDialog.show();
     }
 
     private WatchLiveActivity getContext() {

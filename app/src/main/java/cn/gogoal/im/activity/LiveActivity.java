@@ -2,8 +2,10 @@ package cn.gogoal.im.activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,11 +14,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
@@ -62,6 +66,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
@@ -188,17 +193,18 @@ public class LiveActivity extends BaseActivity {
     private String room_id;
 
     private String live_id;
-
     //弹窗
     private JSONObject anchor;
 
     private WatchBottomFragment mBottomFragment;
-
     //倒数数
     private MyDownTimer downTimer;
-
     //连麦者
     private ContactBean mContactBean;
+
+    private AlertDialog.Builder mFeedbackResultDialog;
+    private AlertDialog mChatCloseConfirmDialog;
+    private AlertDialog.Builder mChatCloseNotifyDialog;
 
     private final Handler mHandler = new Handler() {
         @Override
@@ -553,22 +559,37 @@ public class LiveActivity extends BaseActivity {
      * 调用结束连麦的REST API
      */
     public void closeLiveChat() {
-        //TODO:结束回调
+        Map<String, String> param = new HashMap<>();
+        param.put("token", UserUtils.getToken());
 
-        /*//显示结束连麦失败的
-        KLog.e("Close chatting failed");
-        UIHelper.toast(LiveActivity.this, R.string.close_chat_failed_for_new_chat);*/
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                JSONObject data = object.getJSONObject("data");
+                if (object.getIntValue("code") == 0 && data.getBooleanValue("result")) {
+                    //调用api结束连麦成功
+                    abortChat(true);
+                } else {
+                    //显示结束连麦失败的
+                    KLog.e("Close chatting failed");
+                    UIHelper.toast(LiveActivity.this, R.string.close_chat_failed_for_new_chat);
+                }
+            }
 
-        //调用SDK结束连麦成功
-        abortChat(true);
-
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.VIDEOCALL_CLOSE, ggHttpInterface).startGet();
     }
 
     /**
      * 终止连麦
      */
     public void abortChat(boolean isShowUI) {
-
         if (mChatHost != null && isChatting()) {
             KLog.d("LiveActivity-->mChatHost.abortChat()");
             mChatHost.abortChat();
@@ -962,8 +983,39 @@ public class LiveActivity extends BaseActivity {
                 });
                 break;
             case R.id.imgPlayClose: //关闭连麦
+                showChatCloseConfirmDialog();
                 break;
         }
+    }
+
+    /**
+     * 显示确认结束连麦的dialog
+     */
+    private void showChatCloseConfirmDialog() {
+        AlertDialog.Builder dialog = null;
+        if (mChatCloseConfirmDialog == null) {
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    switch (i) {
+                        case DialogInterface.BUTTON_POSITIVE: //确定
+                            //结束连麦
+                            abortChat(true); //停止客户端连麦拉流播放
+                            closeLiveChat(); //通知APP Server结束连麦，调用REST API
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE: //取消
+                            mChatCloseConfirmDialog.dismiss();
+                            break;
+                    }
+                }
+            };
+            dialog = DialogHelp.getConfirmDialog(getContext(), getString(R.string.close_video_call_title),
+                    getString(R.string.close_video_call_confirm_message), getString(R.string.sure),
+                    getString(R.string.cancel), listener, listener);
+            dialog.setCancelable(false);
+        }
+
+        mChatCloseConfirmDialog = dialog.show();
     }
 
     /**
@@ -1207,6 +1259,23 @@ public class LiveActivity extends BaseActivity {
                         boolean feedback_result = lcattrs.getBooleanValue("feedback_result");
                         feedbackInviteResult(feedback_result);
                         break;
+                    case "mixresult":
+                        //混流成功
+                        mSmallDelayPlayUrl = lcattrs.getString("short_play_url");
+                        getMergeStreamSuccess();
+                        break;
+                    case "close":
+                        //对方关闭连麦
+                        if (mIsRequestCloseChat) { //主动请求关闭连麦的情况下，需要忽略再次收到的连麦关闭消息
+                            mIsRequestCloseChat = false;
+                            return;
+                        }
+
+                        if (isChatting()) {
+                            abortChat(true);
+                            showChatCloseNotifyDialog();
+                        }
+                        break;
                 }
             }
         }
@@ -1216,11 +1285,92 @@ public class LiveActivity extends BaseActivity {
      * 邀请连麦反馈
      */
     private void feedbackInviteResult(boolean feedback_result) {
+        //移除邀请等待响应超时倒计时的消息
+        mHandler.removeMessages(LinkConst.MSG_WHAT_INVITE_CHAT_TIMEOUT);
         if (feedback_result) {
-            mHandler.removeMessages(LinkConst.MSG_WHAT_INVITE_CHAT_TIMEOUT); //移除邀请等待响应超时倒计时的消息
+            //同意连麦
+            //如果当前是已经发送邀请，等待对方反馈的状态，则处理这个消息，否则视为无效的消息，不作处理
             if (mVideoChatStatus == VideoChatStatus.INVITE_FOR_RES) {
-                
+                showFeedbackResultDialog(true);
+                mVideoChatStatus = VideoChatStatus.TRY_MIX;
+            }
+        } else {
+            //不同意连麦
+            //如果当前是已经发送邀请，等待对方反馈的状态，则处理这个消息，否则视为无效的消息，不作处理
+            if (mVideoChatStatus == VideoChatStatus.INVITE_FOR_RES) {
+                showFeedbackResultDialog(false);
+                mVideoChatStatus = VideoChatStatus.UNCHAT;
             }
         }
+    }
+
+    /**
+     * 邀请连麦结果显示
+     */
+    private void showFeedbackResultDialog(boolean isAgree) {
+        String message;
+        if (isAgree) {
+            message = getString(R.string.agree_message);
+        } else {
+            liveTogether.setEnabled(true);
+            message = getString(R.string.not_agree_message);
+        }
+
+        if (mFeedbackResultDialog == null) {
+            mFeedbackResultDialog = DialogHelp.getMessageDialog(getActivity(), message);
+            mFeedbackResultDialog.setCancelable(false);
+        }
+        mFeedbackResultDialog.setTitle(R.string.title_video_call_response);
+        mFeedbackResultDialog.show();
+    }
+
+    /**
+     * 混流成功处理
+     */
+    private void getMergeStreamSuccess() {
+        //如果当前是开始混流并且等待混流成功的状态，则处理这条消息，否则视为无效的消息，不作处理
+        if (mVideoChatStatus == VideoChatStatus.TRY_MIX) {
+            mVideoChatStatus = VideoChatStatus.MIX_SUCC;
+            showLaunchChatUI();
+        }
+    }
+
+    /**
+     * 进行连麦播放（小窗播放连麦对方的短延时播放地址）
+     * * 这里需要新创建一个SurfaceView，并且绑定mPlayCallback
+     * * 注意：播放时每次都需要一个新的SurfaceView，让原来的SurfaceView解绑mPlayCallback,
+     * 然后绑定到新创建的SurfaceView
+     */
+    private void showLaunchChatUI() {
+        mParterViewContainer.setBackgroundColor(Color.rgb(0, 0, 0));
+        mPlaySurfaceView = new SurfaceView(this);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT);
+        params.gravity = Gravity.CENTER;
+        mPlaySurfaceView.setLayoutParams(params);
+        mParterViewContainer.removeAllViews();
+        mParterViewContainer.addView(mPlaySurfaceView);
+        mPlaySurfaceView.setZOrderMediaOverlay(true);
+        mPlayerSurfaceStatus = SurfaceStatus.UNINITED;
+        mPlaySurfaceView.getHolder().addCallback(mPlayCallback);
+
+        mParterViewContainer.setVisibility(View.VISIBLE);
+        imgPlayClose.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 显示连麦关闭的通知Dialog
+     */
+    private void showChatCloseNotifyDialog() {
+        if (mChatCloseConfirmDialog != null && mChatCloseConfirmDialog.isShowing()) {
+            mChatCloseConfirmDialog.dismiss();
+        }
+
+        if (mChatCloseNotifyDialog == null) {
+            mChatCloseNotifyDialog = DialogHelp.getMessageDialog(getActivity(), getString(R.string.close_video_call_notify_message));
+            mChatCloseNotifyDialog.setCancelable(false);
+        }
+        mChatCloseNotifyDialog.setTitle(R.string.close_video_call_title);
+        mChatCloseNotifyDialog.show();
     }
 }
