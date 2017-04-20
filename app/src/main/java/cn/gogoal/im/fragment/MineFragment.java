@@ -1,6 +1,5 @@
 package cn.gogoal.im.fragment;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Looper;
@@ -36,7 +35,6 @@ import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.WeakReferenceHandler;
 import cn.gogoal.im.ui.NormalItemDecoration;
 
-
 /**
  * 我的
  */
@@ -60,7 +58,9 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.scrollView_mine)
     NestedScrollView scrollView;
 
-    /**用户信息头部*/
+    /**
+     * 用户信息头部
+     */
     @BindView(R.id.layout_user_head)
     ViewGroup layoutHead;
 
@@ -114,9 +114,9 @@ public class MineFragment extends BaseFragment {
         scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (oldScrollY<AppDevice.dp2px(getContext(),150)){
-                    mTitleText.setAlpha(scrollY*1.0f/AppDevice.dp2px(getContext(),150));
-                    layoutHead.setAlpha(1-scrollY*1.0f/AppDevice.dp2px(getContext(),150));
+                if (oldScrollY < AppDevice.dp2px(getContext(), 150)) {
+                    mTitleText.setAlpha(scrollY * 1.0f / AppDevice.dp2px(getContext(), 150));
+                    layoutHead.setAlpha(1 - scrollY * 1.0f / AppDevice.dp2px(getContext(), 150));
                 }
             }
         });

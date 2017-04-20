@@ -144,6 +144,20 @@ public class WatchBottomFragment extends BaseFragment {
         this.type = type;
     }
 
+    /**
+     * 显示推流时相关的操作UI（切换摄像头）
+     */
+    public void showCameraView() {
+        linearPlayerShotCut.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 隐藏推流时相关的操作UI（切换摄像头）
+     */
+    public void hideCameraView() {
+        linearPlayerShotCut.setVisibility(View.GONE);
+    }
+
     @Override
     public void onResume() {
         super.onResume();

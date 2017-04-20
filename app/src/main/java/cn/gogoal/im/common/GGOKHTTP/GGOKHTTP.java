@@ -498,10 +498,11 @@ public class GGOKHTTP {
      */
     public static final String GET_AD_LIST = "v1/ggm_ad/get_ad_list";
 
-    /* token                         用户token
-    * live_title                    直播标题
-    * live_large_img                直播封面图片
-    */
+    /**
+     * token                         用户token
+     * live_title                    直播标题
+     * live_large_img                直播封面图片
+     */
     public static final String ADD_LIVE_VIDEO = "v1/video_mobile/add_live_video";
 
     /**
@@ -538,6 +539,27 @@ public class GGOKHTTP {
      * city                          城市
      */
     public static final String UPDATE_ACCOUNT_INFO = "v1/ggm_im/update_account_info";
+
+    /**
+     * 直播邀请连麦
+     * token
+     * invitee_id
+     */
+    public static final String VIDEOCALL_INVITE = "v1/ggm_videocall/invite";
+
+    /**
+     * 直播连麦反馈
+     * token
+     * invitee_id
+     * feedback_result
+     */
+    public static final String VIDEOCALL_FEEDBACK = "v1/ggm_videocall/feedback";
+
+    /**
+     * 直播连麦关闭
+     * token
+     */
+    public static final String VIDEOCALL_CLOSE = "v1/ggm_videocall/close";
 
 //--------------------------------------------------------------------------------------------------
 

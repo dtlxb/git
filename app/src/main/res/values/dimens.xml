@@ -17,4 +17,10 @@
 
     <dimen name="item_dialog_list">50dp</dimen>
 
+    <!--直播使用-->
+    <dimen name="chat_play_window_width">90dp</dimen>
+    <dimen name="chat_play_window_height">120dp</dimen>
+    <dimen name="chat_play_window_right_margin">20dp</dimen>
+    <dimen name="chat_play_window_bottom_margin">70dp</dimen>
+
 </resources>
