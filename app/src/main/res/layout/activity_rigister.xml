@@ -37,9 +37,10 @@
                 android:paddingRight="10dp"
                 android:paddingTop="16dp"
                 android:textColor="@color/textColor_333333"
+                android:textColorHint="@color/textColor_999999"
                 android:textSize="15sp" />
 
-            <cn.gogoal.im.ui.view.XEditText
+            <!--<cn.gogoal.im.ui.view.XEditText
                 android:id="@+id/edit_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -57,28 +58,101 @@
                 android:paddingTop="16dp"
                 android:tag="false"
                 android:textColor="@color/textColor_333333"
-                android:textSize="15sp" />
+                android:textColorHint="@color/textColor_999999"
+                android:textSize="15sp" />-->
 
-            <cn.gogoal.im.ui.view.XEditText
-                android:id="@+id/valid_edit_code"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/login_edit_border"
-                android:drawableLeft="@mipmap/icon_code"
-                android:drawablePadding="9dp"
-                android:drawableRight="@mipmap/img_psw_eye_closed"
-                android:hint="确认密码"
-                android:inputType="textPassword"
-                android:lines="1"
-                android:paddingBottom="16dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="11dp"
-                android:paddingTop="16dp"
-                android:tag="false"
-                android:textColor="@color/textColor_333333"
-                android:textSize="15sp"
-                android:visibility="gone" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingEnd="7dp">
+
+                <cn.gogoal.im.ui.view.XEditText
+                    android:id="@+id/edit_code"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:drawableLeft="@mipmap/icon_code"
+                    android:drawablePadding="7dp"
+                    android:hint="密码(6-16位，包含数字和字母)"
+                    android:paddingBottom="16dp"
+                    android:paddingEnd="7dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/textColor_333333"
+                    android:textColorHint="@color/textColor_999999"
+                    android:textSize="15sp"
+                    app:funcType="canClear" />
+
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/checkbox_psw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/selector_psw" />
+
+            </LinearLayout>
+
+            <!-- <cn.gogoal.im.ui.view.XEditText
+                 android:id="@+id/valid_edit_code"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="20dp"
+                 android:background="@drawable/login_edit_border"
+                 android:drawableLeft="@mipmap/icon_code"
+                 android:drawablePadding="9dp"
+                 android:drawableRight="@mipmap/img_psw_eye_closed"
+                 android:hint="确认密码"
+                 android:inputType="textPassword"
+                 android:lines="1"
+                 android:paddingBottom="16dp"
+                 android:paddingLeft="10dp"
+                 android:paddingRight="11dp"
+                 android:paddingTop="16dp"
+                 android:tag="false"
+                 android:textColor="@color/textColor_333333"
+                 android:textColorHint="@color/textColor_999999"
+                 android:textSize="15sp"
+                 android:visibility="gone" />-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/login_edit_border"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingEnd="7dp"
+                android:visibility="gone">
+
+                <cn.gogoal.im.ui.view.XEditText
+                    android:id="@+id/valid_edit_code"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:drawableLeft="@mipmap/icon_code"
+                    android:drawablePadding="7dp"
+                    android:hint="确认密码"
+                    android:paddingBottom="16dp"
+                    android:paddingEnd="7dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/textColor_333333"
+                    android:textColorHint="@color/textColor_999999"
+                    android:textSize="15sp"
+                    app:funcType="canClear" />
+
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/checkbox_valid_psw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/selector_psw" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -97,11 +171,12 @@
                     android:drawablePadding="9dp"
                     android:hint="验证码"
                     android:lines="1"
-                    android:paddingBottom="16dp"
+                    android:paddingBottom="14dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:paddingTop="16dp"
+                    android:paddingTop="15dp"
                     android:textColor="@color/textColor_333333"
+                    android:textColorHint="@color/textColor_999999"
                     android:textSize="15sp" />
 
                 <TextView

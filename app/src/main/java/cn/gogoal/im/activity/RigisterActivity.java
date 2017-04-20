@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,9 +48,14 @@ public class RigisterActivity extends BaseActivity {
     //密码
     @BindView(R.id.edit_code)
     XEditText editCode;
+    @BindView(R.id.checkbox_psw)
+    CheckBox chToggle;
+
     //验证密码
     @BindView(R.id.valid_edit_code)
     XEditText validEditCode;
+    @BindView(R.id.checkbox_valid_psw)
+    CheckBox toggleValid;
 
     @BindView(R.id.tv_get_code)
     TextView tvGetCode;
@@ -75,7 +81,8 @@ public class RigisterActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         actionType = getIntent().getIntExtra("action_type", -1);
-
+        UIHelper.passwordToggle(editCode, chToggle);
+        UIHelper.passwordToggle(validEditCode, toggleValid);
         initTitle();
         timeCounter();
     }
