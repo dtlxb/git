@@ -46,15 +46,19 @@ public class MyMessageHandler extends AVIMMessageHandler {
                             switch (chatType) {
                                 case 1001:
                                     //单聊
-                                    //if (isYourFriend(message)) {
                                     sendIMMessage(message, conversation);
-                                    //}
+                                    //更新通讯录
+                                    JSONObject contentObject = JSON.parseObject(message.getContent());
+                                    JSONObject lcattrsObject = contentObject.getJSONObject("_lcattrs");
+                                    UserUtils.upDataContactInfo(Integer.parseInt(message.getFrom()), lcattrsObject.getString("avatar"),
+                                            lcattrsObject.getString("username"), lcattrsObject.getString("conv_id"));
                                     break;
                                 case 1002:
                                     //群聊
                                     //更新对话
                                     final JSONObject content_object = JSON.parseObject(message.getContent());
                                     final String _lctype = content_object.getString("_lctype");
+                                    JSONObject lcattrsGroup = content_object.getJSONObject("_lcattrs");
                                     if ("5".equals(_lctype) || "6".equals(_lctype)) {
                                         conversation.fetchInfoInBackground(new AVIMConversationCallback() {
                                             @Override
@@ -67,6 +71,9 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                             }
                                         });
                                     } else {
+                                        //更新群通讯录
+                                        ChatGroupHelper.upDataGroupContactInfo(conversation.getConversationId(), Integer.parseInt(message.getFrom()),
+                                                lcattrsGroup.getString("avatar"), lcattrsGroup.getString("username"), lcattrsGroup.getString("conv_id"));
                                         sendIMMessage(message, conversation);
                                     }
 
@@ -89,12 +96,12 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     break;
                                 case 1005:
                                     //好友更新
-                                    JSONObject contentObject = JSON.parseObject(message.getContent());
-                                    JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
-                                    String avatar = lcattrsObject.getString("avatar");
-                                    String nickName = lcattrsObject.getString("nickname");
-                                    String conv_id = lcattrsObject.getString("conv_id");
-                                    int friend_id = lcattrsObject.getInteger("friend_id");
+                                    JSONObject contentObjec1 = JSON.parseObject(message.getContent());
+                                    JSONObject lcattrsObject1 = contentObjec1.getJSONObject("_lcattrs");
+                                    String avatar = lcattrsObject1.getString("avatar");
+                                    String nickName = lcattrsObject1.getString("nickname");
+                                    String conv_id = lcattrsObject1.getString("conv_id");
+                                    int friend_id = lcattrsObject1.getInteger("friend_id");
                                     ContactBean<String> contactBean = new ContactBean<>();
                                     contactBean.setNickname(nickName);
                                     contactBean.setAvatar(avatar);
@@ -154,7 +161,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
         boolean isFriend = false;
 
         JSONObject thiscontentObject = JSON.parseObject(message.getContent());
-        JSONObject thislcattrsObject = JSON.parseObject(thiscontentObject.getString("_lcattrs"));
+        JSONObject thislcattrsObject = thiscontentObject.getJSONObject("_lcattrs");
         int Friend_id = thislcattrsObject.getInteger("friend_id");
 
         String responseInfo = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", "");

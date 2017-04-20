@@ -401,6 +401,74 @@ public class UserUtils {
     }
 
     /**
+     * 好友通讯录信息更新
+     */
+    public static void upDataContactInfo(int friendId, String avatar, String nickname, String conv_id) {
+        String string = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", null);
+        KLog.e(string);
+        boolean hasThisGuy = false;
+        if (!TextUtils.isEmpty(string)) {
+            JSONObject jsonObject = JSON.parseObject(string);
+            KLog.e(jsonObject.toString());
+            if (jsonObject.get("data") != null) {
+                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                //有这个人修改
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    JSONObject oldObject = (JSONObject) jsonArray.get(i);
+                    if (oldObject.getInteger("friend_id") == friendId) {
+                        hasThisGuy = true;
+                        ((JSONObject) jsonArray.get(i)).put("avatar", avatar);
+                        ((JSONObject) jsonArray.get(i)).put("nickname", nickname);
+                        ((JSONObject) jsonArray.get(i)).put("friend_id", friendId);
+                        ((JSONObject) jsonArray.get(i)).put("conv_id", conv_id);
+                    }
+                }
+                //没这个人加入
+                if (hasThisGuy) {
+                    JSONObject newObject = new JSONObject();
+                    newObject.put("avatar", avatar);
+                    newObject.put("nickname", nickname);
+                    newObject.put("friend_id", friendId);
+                    newObject.put("conv_id", conv_id);
+                    jsonArray.add(newObject);
+                    jsonObject.put("data", jsonArray);
+                }
+
+                KLog.e(jsonObject);
+                SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", JSON.toJSONString(jsonObject));
+                KLog.e(SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", ""));
+            }
+        }
+    }
+
+    /**
+     * 好友通讯录删除操作(byId)
+     */
+    public static void deleteContactsSomeone(int friendId) {
+        String string = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", null);
+        KLog.e(string);
+        //清除缓存中的这个人
+        if (!TextUtils.isEmpty(string)) {
+            JSONObject jsonObject = JSON.parseObject(string);
+            KLog.e(jsonObject.toString());
+            if (jsonObject.get("data") != null) {
+                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                KLog.e(jsonArray.toString());
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    JSONObject thisObject = (JSONObject) jsonArray.get(i);
+                    if (thisObject.getInteger("friend_id") == friendId) {
+                        jsonArray.remove(jsonArray.get(i));
+                    }
+                }
+                jsonObject.put("data", jsonArray);
+                KLog.e(jsonObject);
+                SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", JSON.toJSONString(jsonObject));
+                KLog.e(SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", ""));
+            }
+        }
+    }
+
+    /**
      * 当群信息没有的时候 网上拉取
      */
     public static void getChatGroup(final int type, List<String> groupMembers, final String conversationId, final getSquareInfo mGetSquareInfo) {

@@ -1,5 +1,9 @@
 package cn.gogoal.im.common.IMHelpers;
 
+import android.text.TextUtils;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
@@ -8,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
 
 /**
@@ -130,6 +135,24 @@ public class ChatGroupHelper {
             }
         };
         new GGOKHTTP(params, GGOKHTTP.CANCEL_COLLECT_GROUP, ggHttpInterface).startGet();
+    }
+
+    //群通讯录更新
+    public static void upDataGroupContactInfo(String conversationID, int friendId, String avatar, String nickname, String conv_id) {
+        JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationID + "_accountList_beans", new JSONArray());
+        if (spAccountArray != null) {
+            //有这个人修改
+            for (int i = 0; i < spAccountArray.size(); i++) {
+                JSONObject oldObject = (JSONObject) spAccountArray.get(i);
+                if (oldObject.getInteger("friend_id") == friendId) {
+                    ((JSONObject) spAccountArray.get(i)).put("avatar", avatar);
+                    ((JSONObject) spAccountArray.get(i)).put("nickname", nickname);
+                    ((JSONObject) spAccountArray.get(i)).put("friend_id", friendId);
+                    ((JSONObject) spAccountArray.get(i)).put("conv_id", conv_id);
+                }
+            }
+            SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversationID + "_accountList_beans", spAccountArray);
+        }
     }
 
     /**

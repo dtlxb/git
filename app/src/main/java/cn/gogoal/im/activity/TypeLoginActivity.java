@@ -82,13 +82,8 @@ public class TypeLoginActivity extends BaseActivity {
         /*loginUserName.setText("E00002639");
         loginPassWord.setEditTextText("412174");*/
 
-        /*loginUserName.setText("E00003645");
-        loginPassWord.setEditTextText("147258369");*/
-        loginUserName.setText("E00003645");
-        loginPassWord.setText("147258369");
-
-        /*loginUserName.setText("E00002639");
-        loginPassWord.setText("412174");*/
+        loginUserName.setText("E00002639");
+        loginPassWord.setText("412174");
 
        /* loginUserName.setText("E00002638");
         loginPassWord.setText("123456");*/
@@ -188,13 +183,16 @@ public class TypeLoginActivity extends BaseActivity {
                         intent.putExtra("isFromLogin", true);
                         startActivity(intent);
                         finish();
-                        //测试代码(登录IM)
-                        AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
-                            @Override
-                            public void done(AVIMClient avimClient, AVIMException e) {
-                            }
-                        });
-
+                        //登录IM
+                        try {
+                            AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
+                                @Override
+                                public void done(AVIMClient avimClient, AVIMException e) {
+                                }
+                            });
+                        } catch (Exception ignored) {
+                            KLog.e(ignored.toString());
+                        }
                     } else {
                         UIHelper.toast(TypeLoginActivity.this, R.string.str_login_error);
                     }
