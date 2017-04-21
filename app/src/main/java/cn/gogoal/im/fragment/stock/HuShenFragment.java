@@ -21,6 +21,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.MarkteBean;
 import cn.gogoal.im.bean.stock.StockMarketBean;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
@@ -97,15 +98,18 @@ public class HuShenFragment extends BaseFragment {
         }
 
         final Map<String, String> param = new HashMap<>();
-        param.put("fullcode", "sh000001;sz399001;sh000300;sz399006");
+        param.put("fullcode", "sh000001;sz399001;sh000300;csi930715");
         param.put("category_type", "1");
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
                 AppManager.getInstance().sendMessage("STOP_MARKET_ANIMATION");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                    FileUtil.writeRequestResponse(responseInfo);
+
                     SPTools.saveString("MARKET_RESPONSEINFO_DATA", responseInfo);//缓存
                     reconstructData(responseInfo);
+
                 } else {
                     xLayout.setStatus(XLayout.Error);
                     String errorMsg = JSONObject.parseObject(responseInfo).getString("message");

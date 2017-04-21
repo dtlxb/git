@@ -576,13 +576,15 @@
                 <hply.com.niugu.view.InnerListView
                     android:id="@+id/stock_lv"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white"/>
 
                 <LinearLayout
                     android:id="@+id/stock_no_data"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:gravity="center"
+                    android:background="@android:color/white"
                     android:orientation="vertical"
                     android:visibility="gone">
 

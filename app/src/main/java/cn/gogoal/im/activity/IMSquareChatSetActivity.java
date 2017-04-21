@@ -116,7 +116,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
             groupMembers.addAll(getIntent().getExtras().getStringArrayList("group_members"));
             tvTeamSize.setText(groupMembers.size() + "人");
         }
-        JSONArray accountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationId + "_accountList_beans", null);
+        JSONArray accountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationId + "_accountList_beans", null);
         //缓存中没有群信息则向后台拉取
         if (null != accountArray) {
             getAllContacts(accountArray);
@@ -124,7 +124,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
             getChatGroup(groupMembers);
         }
 
-        final JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_groups_saved", new JSONArray());
+        final JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_groups_saved", new JSONArray());
         JSONObject thisGroup = null;
         for (int i = 0; i < groupsArray.size(); i++) {
             if (((JSONObject) groupsArray.get(i)).getString("conv_id").equals(conversationId)) {
@@ -174,7 +174,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                         }
                     });
                 }
-                SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_groups_saved", groupsArray);
+                SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_groups_saved", groupsArray);
             }
         });
 
@@ -183,13 +183,13 @@ public class IMSquareChatSetActivity extends BaseActivity {
             public void onItemClick(CommonAdapter adapter, View view, int position) {
                 Intent intent;
                 Bundle mBundle = new Bundle();
-                if (position == contactBeens.size() - 2 && squareCreater.equals(UserUtils.getUserAccountId())) {
+                if (position == contactBeens.size() - 2 && squareCreater.equals(UserUtils.getMyAccountId())) {
                     intent = new Intent(IMSquareChatSetActivity.this, ChooseContactActivity.class);
                     mBundle.putInt("square_action", AppConst.SQUARE_ROOM_ADD_ANYONE);
                     mBundle.putString("conversation_id", conversationId);
                     intent.putExtras(mBundle);
                     startActivityForResult(intent, AppConst.SQUARE_ROOM_ADD_ANYONE);
-                } else if (squareCreater.equals(UserUtils.getUserAccountId()) && position == contactBeens.size() - 1) {
+                } else if (squareCreater.equals(UserUtils.getMyAccountId()) && position == contactBeens.size() - 1) {
                     //删除人
                     intent = new Intent(IMSquareChatSetActivity.this, ChooseContactActivity.class);
                     mBundle.putInt("square_action", AppConst.SQUARE_ROOM_DELETE_ANYONE);
@@ -250,7 +250,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {
                 String groupFaceImageName = "_" + conversationId + ".png";
-                ImageUtils.cacheBitmapFile(mathingBitmap, "imagecache", groupFaceImageName);
+                ImageUtils.cacheBitmapFile(getActivity(),mathingBitmap, "imagecache", groupFaceImageName);
                 AppManager.getInstance().sendMessage("set_square_avatar");
             }
 
@@ -270,10 +270,10 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
     //删除群成员后
     public void afterDeleteAnyone(List<Integer> idList) {
-        if (idList.size() == 1 && idList.get(0) == (Integer.parseInt(UserUtils.getUserAccountId()))) {
+        if (idList.size() == 1 && idList.get(0) == (Integer.parseInt(UserUtils.getMyAccountId()))) {
             UIHelper.toast(IMSquareChatSetActivity.this, "退群并删除群成功");
             //群列表删除
-            SPTools.clearItem(UserUtils.getUserAccountId() + conversationId + "_accountList_beans");
+            SPTools.clearItem(UserUtils.getMyAccountId() + conversationId + "_accountList_beans");
             MessageUtils.removeByID(conversationId);
             finish();
             AppManager.getInstance().finishActivity(SquareChatRoomActivity.class);
@@ -341,7 +341,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 //群公告
                 intent = new Intent(getActivity(), EditSquareBriefActivity.class);
                 Bundle mBundle = new Bundle();
-                mBundle.putBoolean("is_creater", squareCreater.equals(UserUtils.getUserAccountId()));
+                mBundle.putBoolean("is_creater", squareCreater.equals(UserUtils.getMyAccountId()));
                 mBundle.putString("conversation_id", conversationId);
                 mBundle.putBoolean("is_notice", true);
                 intent.putExtras(mBundle);
@@ -349,7 +349,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 break;
             case R.id.tv_what_square:
                 //群名称
-                if (squareCreater.equals(UserUtils.getUserAccountId())) {
+                if (squareCreater.equals(UserUtils.getMyAccountId())) {
                     intent = new Intent(getActivity(), EditSquareNameActivity.class);
                     Bundle nameBundle = new Bundle();
                     nameBundle.putString("square_name", squareName);
@@ -362,7 +362,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 //群简介
                 intent = new Intent(getActivity(), EditSquareBriefActivity.class);
                 Bundle briefBundle = new Bundle();
-                briefBundle.putBoolean("is_creater", squareCreater.equals(UserUtils.getUserAccountId()));
+                briefBundle.putBoolean("is_creater", squareCreater.equals(UserUtils.getMyAccountId()));
                 briefBundle.putString("conversation_id", conversationId);
                 briefBundle.putBoolean("is_notice", false);
                 intent.putExtras(briefBundle);
@@ -374,7 +374,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
             case R.id.tv_delete_square:
                 //删除并退出群
                 final List<Integer> quitList = new ArrayList<>();
-                quitList.add(Integer.parseInt(UserUtils.getUserAccountId()));
+                quitList.add(Integer.parseInt(UserUtils.getMyAccountId()));
                 ChatGroupHelper.deleteAnyone(quitList, conversationId, new ChatGroupHelper.chatGroupManager() {
                     @Override
                     public void groupActionSuccess(JSONObject object) {
@@ -387,12 +387,12 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     }
                 });
                 //查看是收藏这个群了然后删除
-                JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_groups_saved", new JSONArray());
+                JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_groups_saved", new JSONArray());
                 for (int i = 0; i < groupsArray.size(); i++) {
                     JSONObject object = (JSONObject) groupsArray.get(i);
                     if (object.get("conv_id").equals(conversationId)) {
                         groupsArray.remove(i);
-                        SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_groups_saved", groupsArray);
+                        SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_groups_saved", groupsArray);
                     }
                 }
                 break;
@@ -486,7 +486,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         }
         contactBeanList.add(0, contactBean);
 
-        if (squareCreater.equals(UserUtils.getUserAccountId())) {
+        if (squareCreater.equals(UserUtils.getMyAccountId())) {
             if (contactBeanList.size() > 4) {
                 size = 4;
             } else {
@@ -507,7 +507,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 newContactBeanList.add(contactBeanList.get(i));
             }
         }
-        Log.e("+++contactBeanList4", contactBeanList.size() + "");
         return newContactBeanList;
     }
 }

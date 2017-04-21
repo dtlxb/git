@@ -133,7 +133,7 @@ public class MessageFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
+        jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
         IMMessageBeans.clear();
         IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
@@ -396,9 +396,9 @@ public class MessageFragment extends BaseFragment {
                             accountArray = lcattrsObject.getJSONArray("accountList");
                             squareMessage = MessageUtils.findSquarePeople(accountArray, _lctype);
                             //群消息记录
-                            SPTools.saveString(UserUtils.getUserAccountId() + messageBean.getConversationID() + "_square_message", squareMessage);
+                            SPTools.saveString(UserUtils.getMyAccountId() + messageBean.getConversationID() + "_square_message", squareMessage);
                         } else {
-                            squareMessage = SPTools.getString(UserUtils.getUserAccountId() + messageBean.getConversationID() + "_square_message", "");
+                            squareMessage = SPTools.getString(UserUtils.getMyAccountId() + messageBean.getConversationID() + "_square_message", "");
                         }
                         message = squareMessage;
                         break;
@@ -448,13 +448,12 @@ public class MessageFragment extends BaseFragment {
      */
     @Subscriber(tag = "set_avatar")
     public void setAvatar(String code) {
-        KLog.e(code);
         listAdapter.notifyItemChanged(Integer.parseInt(code));
     }
 
     private void createGroupImage(final String ConversationId, final int position) {
         //群删除好友(每次删除后重新生成群头像)
-        JSONArray accountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + ConversationId + "_accountList_beans", new JSONArray());
+        JSONArray accountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + ConversationId + "_accountList_beans", new JSONArray());
         List<String> memberList = new ArrayList<>();
         if (null != gruopMemberMap.get(ConversationId)) {
             memberList.addAll(gruopMemberMap.get(ConversationId));
@@ -517,7 +516,7 @@ public class MessageFragment extends BaseFragment {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {
                 String groupFaceImageName = "_" + ConversationId + ".png";
-                ImageUtils.cacheBitmapFile(mathingBitmap, "imagecache", groupFaceImageName);
+                ImageUtils.cacheBitmapFile(getContext(),mathingBitmap, "imagecache", groupFaceImageName);
 
                 AppManager.getInstance().sendMessage("set_avatar", position + "");
             }
@@ -555,7 +554,7 @@ public class MessageFragment extends BaseFragment {
         Long rightNow = CalendarUtils.getCurrentTime();
         String nickName = "";
         String avatar = "";
-        String friend_id = UserUtils.getUserAccountId();
+        String friend_id = UserUtils.getMyAccountId();
         int unreadmessage = 0;
 
         JSONObject contentObject = JSON.parseObject(message.getContent());

@@ -106,6 +106,10 @@ public class AppDevice {
         return dm.widthPixels;
     }
 
+    public static  boolean isLowDpi(){
+        return SPTools.getBoolean("low_dpi",false);
+    }
+
     private static long  lastClickTime;
     public synchronized static boolean isFastClick() {
         long time = System.currentTimeMillis();

@@ -44,7 +44,7 @@ public class FileUtil {
     }
 
     public static void writeRequestResponse(String name,String response){
-        KLog.file("TAG", MyApp.getAppContext().getExternalFilesDir("json"),"json_"+name+".txt",response);
+        KLog.file("TAG", MyApp.getAppContext().getExternalFilesDir("json"),name+".txt",response);
     }
 
     /**

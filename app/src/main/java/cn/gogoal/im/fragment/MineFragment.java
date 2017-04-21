@@ -106,8 +106,16 @@ public class MineFragment extends BaseFragment {
     private void iniheadInfo(Context mContext) {
         AppDevice.setViewWidth$Height(imageAvatar, 4 * AppDevice.getWidth(mContext) / 25, 3 * AppDevice.getWidth(mContext) / 13);
 
-        //设置头像
-        ImageDisplay.loadNetAvatarWithBorder(mContext, UserUtils.getUserAvatar(), imageAvatar);
+        UserUtils.cacheUserAvatar();//缓存用户头像大图
+        if (null != UserUtils.getUserCacheAvatarFile() &&
+                (!(UserUtils.getUserCacheAvatarFile().getAbsolutePath()).equalsIgnoreCase(UserUtils.getMyAvatarCacheName()))) {
+            ImageDisplay.loadCircleFileImageWithBoard(mContext, UserUtils.getUserCacheAvatarFile(), imageAvatar);
+            KLog.e("用的缓存");
+        } else {
+            ImageDisplay.loadNetAvatarWithBorder(mContext, UserUtils.getUserAvatar(), imageAvatar);
+            KLog.e("用的线上");
+        }
+
         tvMineUserName.setText(UserUtils.getUserName());
         tvMineIntroduction.setText(UserUtils.getDuty() + " " + UserUtils.getorgName());
 
@@ -183,6 +191,7 @@ public class MineFragment extends BaseFragment {
                     holder.getView(R.id.item_layout_simple_image_text).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            UIHelper.toast(v.getContext(),"pos="+position);
                             switch (position) {
 
                             }

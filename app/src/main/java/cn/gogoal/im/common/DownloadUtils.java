@@ -1,20 +1,22 @@
 package cn.gogoal.im.common;
 
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.util.SparseArray;
+import android.text.TextUtils;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
-import com.socks.library.KLog;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.BitmapCallback;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
+import okhttp3.Call;
 
 /**
  * author wangjd on 2017/4/18 0018.
@@ -26,80 +28,114 @@ public class DownloadUtils {
 
     private static DownloadCallBack callBack;
 
-    private static String dirs = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+    public static final String DEFAULT_DOWNLOAD_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
             .getAbsolutePath() + File.separator + "GoGoal";
-
-    private static Handler handler = new Handler(Looper.myLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            SparseArray<Object> map= (SparseArray<Object>) msg.obj;
-
-            Bitmap bitmap= (Bitmap) map.get(10086);
-
-            String name= (String) map.get(10010);
-
-            if (bitmap == null) {
-                if (callBack != null) {
-                    callBack.error("bitmap is null");
-                }
-            } else {
-                ImageUtils.saveBitmapFile(bitmap, dirs,name + ".png");
-                if (callBack != null) {
-                    callBack.success();
-                }
-            }
-            super.handleMessage(msg);
-        }
-    };
+    private static String dirs;
 
     private DownloadUtils(String dir) {
-        dirs = dir;
+        if (TextUtils.isEmpty(dir)) {
+            dirs = DEFAULT_DOWNLOAD_PATH;
+        } else {
+            dirs = dir;
+        }
+    }
+
+    public static DownloadUtils getInstance(String parentDir) {
+        return new DownloadUtils(parentDir);
     }
 
     /**
      * 下载图片
+     *
+     * @param context   上下文对象;
+     * @param imageUrl  下载图片地址;
+     * @param saveName  下载保存的名字，如果传null或者"",就以图片地址生成16位md5码作为图片名
+     * @param mCallBack 下载回调，成功与否
      */
-    public static void downloadPicture(final Activity context, final String imageUrl, final DownloadCallBack mCallBack) {
-        callBack = mCallBack;
-
-        KLog.e(imageUrl);
-
-        AsyncTaskUtil.doAsync(new AsyncTaskUtil.AsyncCallBack() {
+    public void downloadPicture(final Context context, final String imageUrl, final String saveName, final DownloadCallBack mCallBack) {
+        if (mCallBack != null) {
+            callBack = mCallBack;
+        }
+        Glide.with(context).load(imageUrl).asBitmap().toBytes().into(new SimpleTarget<byte[]>() {
             @Override
-            public void onPreExecute() {
-
-            }
-
-            @Override
-            public void doInBackground() {
+            public void onResourceReady(byte[] bytes, GlideAnimation<? super byte[]> glideAnimation) {
                 try {
-                    Bitmap myBitmap = Glide.with(context)
-                            .load(imageUrl)
-                            .asBitmap() //必须
-                            .centerCrop()
-                            .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                            .get();
-
-                    Message message = handler.obtainMessage();
-                    SparseArray<Object> map=new SparseArray<>();
-                    map.put(10086,myBitmap);
-                    map.put(10010,MD5Utils.getMD5EncryptyString32(imageUrl));
-                    message.obj = map;
-                    handler.sendMessage(message);
-
+                    savaFileToSD(saveName, ImageUtils.getImageSuffix(imageUrl), bytes);
                 } catch (Exception e) {
-                    e.printStackTrace();
                     if (callBack != null) {
                         callBack.error(e.getMessage());
                     }
+                    e.printStackTrace();
                 }
-            }
-
-            @Override
-            public void onPostExecute() {
-
             }
         });
 
     }
+
+    /**
+     * 下载图片
+     *
+     * @param context   上下文对象;
+     * @param imageUrl  下载图片地址;
+     * @param saveName  下载保存的名字，如果传null或者"",就以图片地址生成16位md5码作为图片名
+     * @param mCallBack 下载回调，成功与否
+     */
+    public void ggDownloadImage(final Context context, final String imageUrl, final String saveName, final DownloadCallBack mCallBack) {
+        if (mCallBack != null) {
+            callBack = mCallBack;
+        }
+
+        OkHttpUtils.get().url(imageUrl).build().execute(new BitmapCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                callBack.error(e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Bitmap response, int id) {
+                ImageUtils.saveImageToSD(context,
+                        dirs+ File.separator + saveName + ImageUtils.getImageSuffix(imageUrl),
+                        response, 100);
+            }
+        });
+    }
+
+    //往SD卡写入文件的方法
+    private void savaFileToSD(String filename, String suffer, byte[] bytes) {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            File dir1 = new File(dirs);
+            if (!dir1.exists()) {
+                dir1.mkdirs();
+            }
+            File iamgeFile = new File(dirs, filename + suffer);
+            //这里就不要用openFileOutput了,那个是往手机内存中写数据的
+            FileOutputStream output = null;
+            BufferedOutputStream bos = null;
+            try {
+                output = new FileOutputStream(iamgeFile);
+
+                output = new FileOutputStream(iamgeFile);
+                bos = new BufferedOutputStream(output);
+                bos.write(bytes);
+                //将bytes写入到输出流中
+//                Toast.makeText(context, "图片已成功保存到" + filePath, Toast.LENGTH_SHORT).show();
+                if (callBack != null) {
+                    callBack.success();
+                }
+            } catch (Exception e) {
+                if (callBack != null) {
+                    callBack.error(e.getMessage());
+                }
+                e.printStackTrace();
+            } finally {
+                FileUtil.closeIO(output);
+                FileUtil.closeIO(bos);
+            }
+        } else {
+            if (callBack != null) {
+                callBack.error("SD卡不存在或者不可读写");
+            }
+        }
+    }
+
 }

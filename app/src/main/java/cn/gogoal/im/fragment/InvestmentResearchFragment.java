@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.TypedValue;
@@ -32,11 +31,15 @@ import cn.gogoal.im.bean.BannerBean;
 import cn.gogoal.im.bean.SectionTouYanData;
 import cn.gogoal.im.bean.TouYan;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.view.AutoScrollViewPager;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
+
+import static cn.gogoal.im.R.id.banner_pager_id;
 
 /**
  * author wangjd on 2017/4/19 0019.
@@ -53,6 +56,7 @@ public class InvestmentResearchFragment extends BaseFragment {
     private List<SectionTouYanData> mData;
     private SectionAdapter sectionAdapter;
 
+
     /**
      * banner适配器和数据集
      */
@@ -66,10 +70,13 @@ public class InvestmentResearchFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle("投研");
+        setFragmentTitle(R.string.title_found);
+
         mRecyclerView.setBackgroundColor(getResColor(R.color.stock_market_bg));
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4,
+        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(
+                AppDevice.isLowDpi() ? 3 : 4,
                 StaggeredGridLayoutManager.VERTICAL));
+
         mData = new ArrayList<>();
         sectionAdapter = new SectionAdapter(getActivity(), mData);
         mRecyclerView.setAdapter(sectionAdapter);
@@ -81,7 +88,12 @@ public class InvestmentResearchFragment extends BaseFragment {
 
     private void getBannerImage() {
         final View bannerView = creatBannerView();
+        final AutoScrollViewPager bannerPager = (AutoScrollViewPager)
+                bannerView.findViewById(R.id.banner_pager_id);
+
         sectionAdapter.addHeaderView(bannerView);
+        bannerPager.startAutoScroll(1500);
+        bannerPager.showIndicator(true);
 
         Map<String, String> map = new HashMap<>();
         map.put("ad_position", "7");
@@ -95,7 +107,19 @@ public class InvestmentResearchFragment extends BaseFragment {
 
                 if (code == 0) {
                     bannerImageUrls.addAll(JSONObject.parseObject(responseInfo, BannerBean.class).getData());
-                    bannerAdapter.notifyDataSetChanged();
+                    if (bannerImageUrls.size() > 1) {
+                        bannerPager.startAutoScroll(1500);
+                        bannerPager.showIndicator(true);
+                    } else {
+                        bannerPager.stopAutoScroll();
+                        bannerPager.showIndicator(false);
+                    }
+                    try {
+                        bannerAdapter.notifyDataSetChanged();
+                        bannerPager.setAdapter(bannerAdapter);
+                    } catch (Exception e) {
+                        e.getMessage();
+                    }
                 } else {
                     BannerBean.Banner spaceBanner = new BannerBean.Banner();
                     spaceBanner.setImage("");
@@ -116,7 +140,7 @@ public class InvestmentResearchFragment extends BaseFragment {
     /**动态创建banner视图*/
     private View creatBannerView() {
         LinearLayout bannerView = new LinearLayout(getContext());
-        final ViewPager bannerPager = new ViewPager(getContext());
+        final AutoScrollViewPager bannerPager = new AutoScrollViewPager(getContext());
         LinearLayout.LayoutParams root = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
         );
@@ -124,10 +148,9 @@ public class InvestmentResearchFragment extends BaseFragment {
         bannerView.setBackgroundResource(R.drawable.shape_line_bottom);
         bannerView.setLayoutParams(root);
 
-        bannerPager.setId(R.id.banner_pager_id);
+        bannerPager.setId(banner_pager_id);
         bannerImageUrls = new ArrayList<>();
         bannerAdapter = new BannerAdapter(bannerImageUrls);
-        bannerPager.setAdapter(bannerAdapter);
         LinearLayout.LayoutParams pagerParams = new LinearLayout.LayoutParams(
                 AppDevice.getWidth(getContext()),
                 235 * AppDevice.getWidth(getContext()) / 740);
@@ -166,27 +189,20 @@ public class InvestmentResearchFragment extends BaseFragment {
             public void onSuccess(String responseInfo) {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
+                    FileUtil.writeRequestResponse(responseInfo);
+
                     List<TouYan.DataBean> touYanList = JSONObject.parseObject(responseInfo, TouYan.class).getData();
                     for (int i = 0; i < touYanList.size(); i++) {
                         TouYan.DataBean dataBean = touYanList.get(i);
                         mData.add(new SectionTouYanData(true, dataBean.getTitle()));
                         List<TouYan.DataBean.Item> itemList = dataBean.getDatas();
                         for (TouYan.DataBean.Item item : itemList) {
-                            mData.add(new SectionTouYanData(item));
+                            mData.add(new SectionTouYanData(item, false));
                         }
 
-                        TouYan.DataBean.Item spaceItem = creatSpaceItem();
+                        //模拟填充空数据
+                        creatSpaceItem(itemList);
 
-                        if (itemList.size() % 4 == 1) {
-                            mData.add(new SectionTouYanData(spaceItem));
-                            mData.add(new SectionTouYanData(spaceItem));
-                            mData.add(new SectionTouYanData(spaceItem));
-                        } else if (itemList.size() % 4 == 2) {
-                            mData.add(new SectionTouYanData(spaceItem));
-                            mData.add(new SectionTouYanData(spaceItem));
-                        } else if (itemList.size() % 4 == 3) {
-                            mData.add(new SectionTouYanData(spaceItem));
-                        }
                     }
                     sectionAdapter.notifyDataSetChanged();
                 } else if (code == 1001) {
@@ -204,14 +220,40 @@ public class InvestmentResearchFragment extends BaseFragment {
     }
 
     @NonNull
-    private TouYan.DataBean.Item creatSpaceItem() {
+    private void creatSpaceItem(List<TouYan.DataBean.Item> itemList) {
         TouYan.DataBean.Item spaceItem = new TouYan.DataBean.Item();
         spaceItem.setDesc("");
         spaceItem.setIconUrl("");
         spaceItem.setIsShow(0);
         spaceItem.setPosition(0);
         spaceItem.setType(0);
-        return spaceItem;
+
+        if (AppDevice.isLowDpi()) {
+            switch (itemList.size() % 3) {
+                case 1:
+                    mData.add(new SectionTouYanData(spaceItem, true));
+                    mData.add(new SectionTouYanData(spaceItem, true));
+                    break;
+                case 2:
+                    mData.add(new SectionTouYanData(spaceItem, true));
+                    break;
+            }
+        } else {
+            switch (itemList.size() % 4) {
+                case 1:
+                    mData.add(new SectionTouYanData(spaceItem, true));
+                    mData.add(new SectionTouYanData(spaceItem, true));
+                    mData.add(new SectionTouYanData(spaceItem, true));
+                    break;
+                case 2:
+                    mData.add(new SectionTouYanData(spaceItem, true));
+                    mData.add(new SectionTouYanData(spaceItem, true));
+                    break;
+                case 3:
+                    mData.add(new SectionTouYanData(spaceItem, true));
+                    break;
+            }
+        }
     }
 
     private class BannerAdapter extends PagerAdapter {

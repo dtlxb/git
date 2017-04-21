@@ -1,21 +1,16 @@
 package cn.gogoal.im.fragment;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,7 +21,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -285,7 +279,7 @@ public class ChatFragment extends BaseFragment {
                 attrsMap.put("avatar", UserUtils.getUserAvatar());
                 mTextMessage.setAttrs(attrsMap);
                 mTextMessage.setTimestamp(CalendarUtils.getCurrentTime());
-                mTextMessage.setFrom(UserUtils.getUserAccountId());
+                mTextMessage.setFrom(UserUtils.getMyAccountId());
                 mTextMessage.setText(etInput.getText().toString());
 
                 imChatAdapter.addItem(mTextMessage);
@@ -502,7 +496,7 @@ public class ChatFragment extends BaseFragment {
         //股票消息(消息type:11,加上stockCode,stockName);
         AVIMMessage mStockMessage = new AVIMMessage();
         mStockMessage.setTimestamp(CalendarUtils.getCurrentTime());
-        mStockMessage.setFrom(UserUtils.getUserAccountId());
+        mStockMessage.setFrom(UserUtils.getMyAccountId());
 
         //添加股票信息
         Map<String, String> lcattrsMap = new HashMap<>();
@@ -551,7 +545,7 @@ public class ChatFragment extends BaseFragment {
         attrsMap.put("username", UserUtils.getUserName());
         attrsMap.put("avatar", UserUtils.getUserAvatar());
         final AVIMImageMessage mImageMessage = new AVIMImageMessage(imagefile);
-        mImageMessage.setFrom(UserUtils.getUserAccountId());
+        mImageMessage.setFrom(UserUtils.getMyAccountId());
         mImageMessage.setAttrs(attrsMap);
         mImageMessage.setTimestamp(CalendarUtils.getCurrentTime());
 
@@ -633,7 +627,7 @@ public class ChatFragment extends BaseFragment {
                 final AVIMAudioMessage mAudioMessage = new AVIMAudioMessage(Audiofile);
 
                 KLog.e(mAudioMessage.getAVFile().getUrl());
-                mAudioMessage.setFrom(UserUtils.getUserAccountId());
+                mAudioMessage.setFrom(UserUtils.getMyAccountId());
                 mAudioMessage.setAttrs(attrsMap);
                 mAudioMessage.setTimestamp(CalendarUtils.getCurrentTime());
 
@@ -700,7 +694,7 @@ public class ChatFragment extends BaseFragment {
                     if (null == e) {
 
                         messageList.addAll(list);
-                        jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
+                        jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
                         KLog.e(messageList.get(list.size() - 1).getContent());
                         if (chatType == 1001) {
                             //拿到对方信息
@@ -753,7 +747,7 @@ public class ChatFragment extends BaseFragment {
     }
 
     private void getSpeakToInfo(AVIMConversation conversation) {
-        String responseInfo = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", "");
+        String responseInfo = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", "");
         List<ContactBean> contactBeanList = new ArrayList<>();
 
         //拿到对方
@@ -762,8 +756,8 @@ public class ChatFragment extends BaseFragment {
         members.addAll(conversation.getMembers());
         if (members.size() > 0) {
             if (members.size() == 2) {
-                if (members.contains(UserUtils.getUserAccountId())) {
-                    members.remove(UserUtils.getUserAccountId());
+                if (members.contains(UserUtils.getMyAccountId())) {
+                    members.remove(UserUtils.getMyAccountId());
                     speakTo = members.get(0);
                 }
             } else {

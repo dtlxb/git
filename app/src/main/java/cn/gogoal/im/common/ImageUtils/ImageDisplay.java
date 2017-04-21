@@ -53,7 +53,7 @@ public class ImageDisplay {
     }
 
     public static void loadFileImage(Context context, File fileImage, ImageView view) {
-        if (fileImage.exists()) {
+        if (fileImage!=null && fileImage.exists()) {
             Glide.with(context)
                     .load(Uri.fromFile(fileImage))
                     .placeholder(R.mipmap.image_placeholder)
@@ -113,7 +113,7 @@ public class ImageDisplay {
             Glide.with(context)
                     .load(url)
                     .skipMemoryCache(skipMemoryCache)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.mipmap.image_placeholder)
                     .thumbnail(0.1f)
                     .into(imageView);
@@ -269,10 +269,19 @@ public class ImageDisplay {
     }
 
     public static void loadCircleFileImage(Context context, File fileImage, ImageView view) {
-        if (fileImage.exists()) {
+        if (fileImage!=null && fileImage.exists()) {
             Glide.with(context)
                     .load(Uri.fromFile(fileImage))
                     .bitmapTransform(new CropCircleTransformation(context))
+                    .placeholder(R.mipmap.image_placeholder)
+                    .into(view);
+        }
+    }
+    public static void loadCircleFileImageWithBoard(Context context, File fileImage, ImageView view) {
+        if (fileImage.exists()) {
+            Glide.with(context)
+                    .load(Uri.fromFile(fileImage))
+                    .bitmapTransform(new BorderCircleTransformation(context))
                     .placeholder(R.mipmap.image_placeholder)
                     .into(view);
         }

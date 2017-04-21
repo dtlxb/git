@@ -31,10 +31,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.SPTools;
@@ -89,6 +87,10 @@ public class TypeLoginActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+
+        //存储设备是否低分屏，一定要竖屏
+        SPTools.saveBoolean("low_dpi", AppDevice.getWidth(mContext)<AppDevice.DPI720P);
+
         initTitle();
         loginPassWord.setInputType(InputType.TYPE_CLASS_TEXT);
         UIHelper.passwordToggle(loginPassWord, chToggle);
@@ -266,7 +268,7 @@ public class TypeLoginActivity extends BaseActivity {
     }
 
     public void getWindoDialog(int dialogRes, int dialogText) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.dialog_style);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         View dialogView = getLayoutInflater().inflate(R.layout.view_login_dialog, null);
         ImageView dialogIv = (ImageView) dialogView.findViewById(R.id.login_loading);

@@ -1,8 +1,5 @@
 package cn.gogoal.im.common.IMHelpers;
 
-import android.text.TextUtils;
-
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
@@ -139,7 +136,7 @@ public class ChatGroupHelper {
 
     //群通讯录更新
     public static void upDataGroupContactInfo(String conversationID, int friendId, String avatar, String nickname) {
-        JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationID + "_accountList_beans", new JSONArray());
+        JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", new JSONArray());
         KLog.e(spAccountArray.toString());
         boolean hasThisGuy = false;
         if (spAccountArray != null) {
@@ -153,8 +150,9 @@ public class ChatGroupHelper {
                     hasThisGuy = true;
                 }
             }
+            SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", spAccountArray);
             if (hasThisGuy) {
-                SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversationID + "_accountList_beans", spAccountArray);
+                SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", spAccountArray);
             }
         }
     }

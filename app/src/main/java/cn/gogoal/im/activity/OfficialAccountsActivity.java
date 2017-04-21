@@ -64,7 +64,7 @@ public class OfficialAccountsActivity extends BaseActivity {
         officialRecycler.setAdapter(messagesAdapter);
 
         //未读数清零
-        JSONArray messageListJsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
+        JSONArray messageListJsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
         List<IMMessageBean> iMMessageBeans = new ArrayList<>();
         iMMessageBeans.addAll(JSON.parseArray(String.valueOf(messageListJsonArray), IMMessageBean.class));
         for (int i = 0; i < iMMessageBeans.size(); i++) {

@@ -1,5 +1,6 @@
 package cn.gogoal.im.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -21,6 +22,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AsyncTaskUtil;
+import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
@@ -87,6 +89,12 @@ public class CreateLiveActivity extends BaseActivity {
 
     private void doUpload(final List<String> uriPaths) {
 
+        //弹个窗
+        final ProgressDialog waitDialog =
+                DialogHelp.getWaitDialog(getActivity(), "上传中...");
+        waitDialog.setCancelable(false);
+        waitDialog.show();
+
         AsyncTaskUtil.doAsync(new AsyncTaskUtil.AsyncCallBack() {
             @Override
             public void onPreExecute() {
@@ -104,6 +112,7 @@ public class CreateLiveActivity extends BaseActivity {
                     @Override
                     public void onSuccess(String onlineUri) {
                         KLog.e("上传成功===" + onlineUri);
+                        waitDialog.dismiss();
 
                         liveLargeImg = onlineUri;
 
@@ -118,6 +127,7 @@ public class CreateLiveActivity extends BaseActivity {
                     public void onFailed() {
                         KLog.e("上传失败!!!!!!");
 
+                        waitDialog.dismiss();
                         liveLargeImg = null;
 
                         UIHelper.toast(getContext(), "上传图片失败");

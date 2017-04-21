@@ -9,16 +9,13 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 
 /**
@@ -52,31 +49,21 @@ public class AutoScrollViewPager extends ViewPager {
     private int touchSlop;
     private OnPageClickListener onPageClickListener;
 
-    private boolean needIndicator = true;
+    private boolean needIndicator=true;
     private Paint paint;
-    private int dotSelectedColor = 0xffFF8200;
-    private int dotUnSelectedColor = 0xFFD9D9D9;
-    private float dotPadding = 1.2f;
+    private int dotSelectedColor=0xffFF8200;
+    private int dotUnSelectedColor=0xFFD9D9D9;
+    private float dotPadding=1.2f;
 
-    public void setDotPadding(float dotPadding) {
-        this.dotPadding = dotPadding;
-    }
 
-    private static class H extends Handler {
 
-        private WeakReference<AutoScrollViewPager> reference;
-
-        private H(AutoScrollViewPager viewPager) {
-            reference = new WeakReference<>(viewPager);
-        }
-
+    private class H extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            AutoScrollViewPager referencePager = reference.get();
             switch (msg.what) {
                 case MSG_AUTO_SCROLL:
-                    referencePager.setCurrentItem(referencePager.getCurrentItem() + 1);
-                    sendEmptyMessageDelayed(MSG_AUTO_SCROLL, referencePager.intervalInMillis);
+                    setCurrentItem(getCurrentItem() + 1);
+                    sendEmptyMessageDelayed(MSG_AUTO_SCROLL, intervalInMillis);
                     break;
                 default:
                     super.handleMessage(msg);
@@ -103,7 +90,7 @@ public class AutoScrollViewPager extends ViewPager {
         listener = new InnerOnPageChangeListener();
         super.addOnPageChangeListener(listener);
 
-        handler = new H(this);
+        handler = new H();
         touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
     }
 
@@ -113,18 +100,15 @@ public class AutoScrollViewPager extends ViewPager {
         drawCycle(canvas);
     }
 
-    public void showIndicator(boolean need) {
-        needIndicator = need;
+    public void showIndicator(boolean need){
+        needIndicator=need;
     }
-
-    public void setDotSelectedColor(int dotSelectedColor) {
-        this.dotSelectedColor = dotSelectedColor;
+    public void setDotSelectedColor(int dotSelectedColor){
+        this.dotSelectedColor=dotSelectedColor;
     }
-
-    public void setDotUnSelectedColor(int dotUnSelectedColor) {
-        this.dotUnSelectedColor = dotUnSelectedColor;
+    public void setDotUnSelectedColor(int dotUnSelectedColor){
+        this.dotUnSelectedColor=dotUnSelectedColor;
     }
-
     private void drawCycle(Canvas canvas) {
         canvas.save();
         canvas.translate(getScrollX(), getScrollY());
@@ -136,7 +120,7 @@ public class AutoScrollViewPager extends ViewPager {
         float density = getContext().getResources().getDisplayMetrics().density;
         int itemWidth = (int) (11 * density);
         int itemHeight = itemWidth / 2;
-        int x = (getWidth() - count * itemWidth) / 2;
+        int x = (getWidth() - count * itemWidth)/2;
         int y = getHeight() - itemWidth;
         int minItemHeight = (int) ((float) itemHeight * 0.8F);
         paint.setAntiAlias(true);
@@ -145,10 +129,10 @@ public class AutoScrollViewPager extends ViewPager {
         for (int i = 0; i < count; i++) {
             if (select == i) {
                 paint.setColor(dotSelectedColor);
-                canvas.drawCircle(x + itemWidth * dotPadding * i + itemWidth / 2, y, minItemHeight, paint);
+                canvas.drawCircle(x + itemWidth * dotPadding*i + itemWidth / 2, y, minItemHeight, paint);
             } else {
                 paint.setColor(dotUnSelectedColor);
-                canvas.drawCircle(x + itemWidth * dotPadding * i + itemWidth / 2, y, minItemHeight, paint);
+                canvas.drawCircle(x + itemWidth * dotPadding*i + itemWidth / 2, y, minItemHeight, paint);
             }
         }
         canvas.restore();
@@ -331,7 +315,6 @@ public class AutoScrollViewPager extends ViewPager {
         }
         return 0;
     }
-
     /**
      * 设置动画
      */
@@ -356,14 +339,14 @@ public class AutoScrollViewPager extends ViewPager {
         private OnPageChangeListener listener;
         private int lastSelectedPage = -1;
 
-        public InnerOnPageChangeListener() {
+        private InnerOnPageChangeListener() {
         }
 
         public InnerOnPageChangeListener(OnPageChangeListener listener) {
             setOnPageChangeListener(listener);
         }
 
-        public void setOnPageChangeListener(OnPageChangeListener listener) {
+        private void setOnPageChangeListener(OnPageChangeListener listener) {
             this.listener = listener;
         }
 
@@ -413,7 +396,7 @@ public class AutoScrollViewPager extends ViewPager {
                 AutoScrollViewPager.this.post(new Runnable() {
                     @Override
                     public void run() {
-                        listener.onPageSelected(pos);
+                        listener.onPageSelected(lastSelectedPage);
                     }
                 });
 //                }
@@ -421,7 +404,7 @@ public class AutoScrollViewPager extends ViewPager {
         }
     }
 
-    class AutoScrollFactorScroller extends Scroller {
+    private class AutoScrollFactorScroller extends Scroller {
 
         private double factor = 1;
 
@@ -429,15 +412,15 @@ public class AutoScrollViewPager extends ViewPager {
             super(context);
         }
 
-        public AutoScrollFactorScroller(Context context, Interpolator interpolator) {
+        private AutoScrollFactorScroller(Context context, Interpolator interpolator) {
             super(context, interpolator);
         }
 
-        public void setFactor(double factor) {
+        private void setFactor(double factor) {
             this.factor = factor;
         }
 
-        public double getFactor() {
+        private double getFactor() {
             return factor;
         }
 
@@ -446,12 +429,11 @@ public class AutoScrollViewPager extends ViewPager {
             super.startScroll(startX, startY, dx, dy, (int) (duration * factor));
         }
     }
-
-    class AutoScrollPagerAdapter extends PagerAdapter {
+    private class AutoScrollPagerAdapter extends PagerAdapter {
 
         private PagerAdapter wrappedAdapter;
 
-        public AutoScrollPagerAdapter(PagerAdapter wrapped) {
+        private AutoScrollPagerAdapter(PagerAdapter wrapped) {
             wrappedAdapter = wrapped;
         }
 
@@ -492,18 +474,5 @@ public class AutoScrollViewPager extends ViewPager {
             return wrappedAdapter.isViewFromObject(view, o);
         }
     }
-
-    private int getScreenHeight() {
-        WindowManager wManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics dm = new DisplayMetrics();
-        wManager.getDefaultDisplay().getMetrics(dm);
-        return dm.heightPixels;
-    }
-
-    private int getScreenWidth() {
-        WindowManager wManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics dm = new DisplayMetrics();
-        wManager.getDefaultDisplay().getMetrics(dm);
-        return dm.widthPixels;
-    }
 }
+
