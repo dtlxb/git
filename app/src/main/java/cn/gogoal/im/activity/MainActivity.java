@@ -16,11 +16,13 @@ import java.util.Map;
 
 import butterknife.BindArray;
 import butterknife.BindView;
+import cn.gogoal.im.BuildConfig;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.MD5Utils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -51,23 +53,56 @@ public class MainActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
-        KLog.e(MD5Utils.getMD5EncryptyString16("123456abcdefg"));
-        KLog.e(MD5Utils.getMD5EncryptyString32("123456abcdefg"));
+        KLog.e("width==="+AppDevice.getWidth(mContext)+";height==="+AppDevice.getHeight(mContext));
+//            //测试使用
+//        String userInfo="{\n" +
+//                "                                                               \"phone\" : \"\",\n" +
+//                "                                                               \"department\" : \"技术部\",\n" +
+//                "                                                               \"simple_avatar\" : \"http://www.go-goal.com/sample/ACC/ftx/forum/library/NOFTX.gif\",\n" +
+//                "                                                               \"duty\" : \"android开发\",\n" +
+//                "                                                               \"token\" : \"9a35baeb6c154dc9ab1632f3abd8c6fd\",\n" +
+//                "                                                               \"gender\" : \"未\",\n" +
+//                "                                                               \"parent_account_id\" : 0,\n" +
+//                "                                                               \"login_type\" : 0,\n" +
+//                "                                                               \"is_parent_account\" : 0,\n" +
+//                "                                                               \"login_id\" : 301117,\n" +
+//                "                                                               \"account_id\" : 357006,\n" +
+//                "                                                               \"nickname\" : \"隔壁王叔叔\",\n" +
+//                "                                                               \"code\" : 0,\n" +
+//                "                                                               \"avatar\" : \"nullHead/NOFTX.gif\",\n" +
+//                "                                                               \"account_status\" : 1,\n" +
+//                "                                                               \"photo\" : \"nullPhoto/ucloud_3FF7A10884D1D8FD.jpg\",\n" +
+//                "                                                               \"account_name\" : \"E00003645\",\n" +
+//                "                                                               \"email\" : \"\",\n" +
+//                "                                                               \"organization_id\" : 4,\n" +
+//                "                                                               \"organization_name\" : \"朝阳永续\",\n" +
+//                "                                                               \"organization_address\" : \"\",\n" +
+//                "                                                               \"mobile\" : \"\",\n" +
+//                "                                                               \"full_name\" : \"王洁东\",\n" +
+//                "                                                               \"weibo\" : \"\",\n" +
+//                "                                                               \"is_tc_org\" : 0\n" +
+//                "                                                             }";
+//        SPTools.saveString("userInfo",userInfo);
 
-        KLog.e(UserUtils.getToken());
+        if (BuildConfig.DEBUG) {
+            FileUtil.writeRequestResponse("token_" + UserUtils.getUserName(), UserUtils.getToken());
+        }
 
-        MessageFragment messageFragment = new MessageFragment();                // TAB1 消息
+        if (null!=UserUtils.getUserInfo()) {
+            KLog.e(UserUtils.getUserInfo().toString());
+        }
 
-        MyStockFragment myStockFragment = new MyStockFragment();                //自选股
+        MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
 
-//        FoundFragment foundFragment = new FoundFragment();                      // TAB3 投研
-        InvestmentResearchFragment foundFragment = new InvestmentResearchFragment();                      // TAB3 投研
+        MyStockFragment myStockFragment = new MyStockFragment();                     //自选股
 
-        SocialContactFragment socialContactFragment = new SocialContactFragment();//社交
+        InvestmentResearchFragment foundFragment = new InvestmentResearchFragment(); // TAB3 投研
 
-        final MineFragment mineFragment = new MineFragment();                 // TAB4 我的
+        SocialContactFragment socialContactFragment = new SocialContactFragment();   //社交
 
-        Boolean needRefresh = getIntent().getBooleanExtra("isFromLogin", false);
+        final MineFragment mineFragment = new MineFragment();                       // TAB4 我的
+
+        boolean needRefresh = getIntent().getBooleanExtra("isFromLogin", false);
         SPTools.saveBoolean("squareNeedRefresh", needRefresh);
 
         if (needRefresh) {
@@ -107,7 +142,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onPageSelected(int position) {
                 barUtil.setStatusBarFontDark(position != 4);
-                barUtil.setColor(position == 4?getResColor(R.color.colorMineHead):getResColor(android.R.color.white));
+                barUtil.setColor(position == 4 ? getResColor(R.color.colorMineHead) : getResColor(android.R.color.white));
             }
 
             @Override
@@ -134,9 +169,9 @@ public class MainActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
 
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", responseInfo);
+                    SPTools.saveString(UserUtils.getMyAccountId() + "_contact_beans", responseInfo);
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
-                    SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", "{\"code\":0,\"data\":[],\"message\":\"成功\"}");
+                    SPTools.saveString(UserUtils.getMyAccountId() + "_contact_beans", "{\"code\":0,\"data\":[],\"message\":\"成功\"}");
                 } else {
                     UIHelper.toastError(getActivity(), GGOKHTTP.getMessage(responseInfo));
                 }

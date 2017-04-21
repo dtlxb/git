@@ -177,52 +177,48 @@ public class DialogHelp {
         }
         return dialog;
     }
+//    /**
+//     * 弹出window窗体
+//     *
+//     * @param context    上下文
+//     * @param dialogView 弹窗视图
+//     */
+//    public static AlertDialog getWindoDialog(Context context, View dialogView,int style) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(context,style);
+//
+//        final AlertDialog dialog = builder.create();
+//        dialog.show();
+//        dialog.setCancelable(true);
+//        Window window = dialog.getWindow();
+//        if (window!=null) {
+//            window.setBackgroundDrawableResource(android.R.color.transparent);
+//            WindowManager.LayoutParams lp = window.getAttributes();
+//            lp.width = 5 * AppDevice.getWidth(context) / 6;
+//            window.setAttributes(lp);
+//            window.setContentView(dialogView);
+//        }
+//        return dialog;
+//    }
+
     /**
      * 弹出window窗体
      *
      * @param context    上下文
      * @param dialogView 弹窗视图
+     * @dialogWindowWidth 窗体宽度;
      */
-    public static AlertDialog getWindoDialog(Context context, View dialogView,int style) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context,style);
-
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-        dialog.setCancelable(true);
-        Window window = dialog.getWindow();
-        if (window != null) {
-            window.setBackgroundDrawableResource(android.R.color.transparent);
-            window.setContentView(dialogView);
-
-            WindowManager.LayoutParams params = window.getAttributes();
-            params.width = 5 * AppDevice.getWidth(context) / 6;
-            window.setAttributes(params);
-        }
-        return dialog;
-    }
-
-    /**
-     * 弹出window窗体
-     *
-     * @param context           上下文
-     * @param dialogView        弹窗视图
-     * @param dialogWindowWidth 窗体宽度
-     */
-    public static AlertDialog getWindoDialog(Context context, View dialogView, int dialogWindowWidth, int dialogWindowHeight) {
+    public static AlertDialog getWindoDialog(Context context, View dialogView, int dialogWindowWidth) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         final AlertDialog dialog = builder.create();
         dialog.show();
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(true);
+        dialog.setCancelable(false);
         Window window = dialog.getWindow();
         if (window != null) {
             window.setBackgroundDrawableResource(android.R.color.transparent);
             WindowManager.LayoutParams lp = window.getAttributes();
             lp.width = dialogWindowWidth;
-            lp.height = dialogWindowHeight;
             window.setAttributes(lp);
-
             window.setContentView(dialogView);
         }
         return dialog;

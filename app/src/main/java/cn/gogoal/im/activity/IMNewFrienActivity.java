@@ -64,7 +64,7 @@ public class IMNewFrienActivity extends BaseActivity {
         conversationId = getIntent().getStringExtra("conversation_id");
         titleBar = setMyTitle(R.string.title_message, true);
         //未读数清零
-        messageListJsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
+        messageListJsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
         IMMessageBeans.addAll(JSON.parseArray(String.valueOf(messageListJsonArray), IMMessageBean.class));
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(conversationId)) {
@@ -75,10 +75,10 @@ public class IMNewFrienActivity extends BaseActivity {
 
         if (addType == 0x01) {
             titleBar.setLeftText(R.string.title_new_friend);
-            jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_newFriendList", new JSONArray());
+            jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_newFriendList", new JSONArray());
         } else if (addType == 0x02) {
             titleBar.setLeftText(R.string.title_add_group);
-            jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationId + "_unadd_accountList_beans", new JSONArray());
+            jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationId + "_unadd_accountList_beans", new JSONArray());
         }
 
         initRecycleView(newFriendList, R.drawable.shape_divider_1px);
@@ -206,7 +206,7 @@ public class IMNewFrienActivity extends BaseActivity {
                             }
                         }
 
-                        SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_newFriendList", jsonArray);
+                        SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_newFriendList", jsonArray);
                     }
                 }
             }
@@ -250,7 +250,7 @@ public class IMNewFrienActivity extends BaseActivity {
                             }
                         }
 
-                        SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversationId + "_unadd_accountList_beans", jsonArray);
+                        SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationId + "_unadd_accountList_beans", jsonArray);
 
                         JSONObject jsonObject = new JSONObject();
                         JSONObject contentObject = JSON.parseObject(mIMNewFriendBean.getMessage().getContent());

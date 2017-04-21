@@ -2,15 +2,12 @@ package cn.gogoal.im.common.IMHelpers;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
-import com.avos.avoscloud.okio.Buffer;
 import com.socks.library.KLog;
 
 import cn.gogoal.im.bean.IMMessageBean;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
 
@@ -65,7 +62,7 @@ public class MessageUtils {
 
             thisJsonArray.add(jsonObject);
             KLog.e(jsonObject);
-            SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", thisJsonArray);
+            SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", thisJsonArray);
         } else {
 
         }
@@ -73,7 +70,7 @@ public class MessageUtils {
 
     //消息列表：移除消息
     public static void removeMessageInfo(String conversationID) {
-        JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
+        JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
         KLog.e(conversationID);
         for (int i = 0; i < jsonArray.size(); i++) {
             if (((JSONObject) jsonArray.get(i)).getString("conversationID").equals(conversationID)) {
@@ -81,24 +78,24 @@ public class MessageUtils {
             }
         }
         KLog.e(jsonArray);
-        SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", jsonArray);
+        SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", jsonArray);
     }
 
     //根据conversationID移除
     public static void removeByID(String conv_id) {
-        JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
+        JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
         for (int i = 0; i < jsonArray.size(); i++) {
             if (jsonArray.getJSONObject(i).get("conversationID").equals(conv_id)) {
                 jsonArray.remove(i);
             } else {
             }
         }
-        SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", jsonArray);
+        SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", jsonArray);
     }
 
     //群聊拉人加人(5:建群，拉人   6:踢人)
     public static void changeSquareInfo(String conversationID, JSONArray accountArray, String messageType) {
-        JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationID + "_accountList_beans", new JSONArray());
+        JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", new JSONArray());
         spAccountArray.addAll(accountArray);
         if (null != accountArray) {
             if (messageType.equals("5")) {
@@ -106,7 +103,7 @@ public class MessageUtils {
                 spAccountArray.removeAll(accountArray);
             }
             KLog.e(spAccountArray.toString());
-            SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversationID + "_accountList_beans", spAccountArray);
+            SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", spAccountArray);
         } else {
 
         }

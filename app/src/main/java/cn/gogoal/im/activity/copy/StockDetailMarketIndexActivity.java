@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.annotation.ColorRes;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -63,6 +64,8 @@ import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
+
+import static com.igexin.push.core.a.c;
 
 
 /*
@@ -325,6 +328,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
                 startActivity(intent);
             }
         });
+
         // 修改状态栏颜色
         setStatusColor(R.color.header_gray);
         relative_header.setBackgroundColor(getResColor(R.color.header_gray));
@@ -395,9 +399,8 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
     /**
      * 初始化下拉刷新样式
      */
-    private void initRefreshStyle(int color) {
-        int c = getResources().getColor(color);
-        headerView.setBackgroundColor(c);
+    private void initRefreshStyle(@ColorRes int color) {
+        headerView.setBackgroundColor(getResColor(color));
         ptrFrame.setBackgroundColor(c);
     }
 

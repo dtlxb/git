@@ -75,7 +75,7 @@ public class MyApp extends LitePalApplication {
         //相互踢监听
         AVImClientManager.setEventHandler();
         //连接服务器
-            /*AVImClientManager.getInstance().open(UserUtils.getUserAccountId(), new AVIMClientCallback() {
+            /*AVImClientManager.getInstance().open(UserUtils.getMyAccountId(), new AVIMClientCallback() {
                 @Override
                 public void done(AVIMClient avimClient, AVIMException e) {
                     //KLog.e(e.getAppCode()+";"+e.getMessage());

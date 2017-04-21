@@ -57,7 +57,7 @@ public class IMPersonDetailActivity extends BaseActivity {
         personDetailRecycler.addItemDecoration(new NormalItemDecoration(mContext));
         accountId = getIntent().getIntExtra("account_id", -1);
 
-        if (String.valueOf(accountId).equals(UserUtils.getUserAccountId())) {
+        if (String.valueOf(accountId).equals(UserUtils.getMyAccountId())) {
             addFriendBtn.setVisibility(View.GONE);
         }
 
@@ -82,7 +82,7 @@ public class IMPersonDetailActivity extends BaseActivity {
 
                     List<UserDetailInfo> infos = new ArrayList<>();
 
-                    infos.add(new UserDetailInfo(UserDetailInfo.HEAD,
+                    infos.add(new UserDetailInfo<>(UserDetailInfo.HEAD,
                             (String) contactBean.getAvatar(), contactBean.getFull_name(), contactBean.getNickname()));
 
                     infos.add(new UserDetailInfo(UserDetailInfo.SPACE));
@@ -143,7 +143,7 @@ public class IMPersonDetailActivity extends BaseActivity {
 
             switch (holder.getItemViewType()) {
                 case UserDetailInfo.HEAD:
-                    holder.setImageUrl(R.id.image_user_info_avatar, data.getAvatar());
+                    holder.setImageUrl(R.id.image_user_info_avatar, (String) data.getAvatar());
                     holder.setText(R.id.person_name, data.getFullName());
                     holder.setText(R.id.person_mark, data.getNickName());
                     break;

@@ -14,7 +14,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.promeg.pinyinhelper.Pinyin;
 import com.hply.imagepicker.view.SuperCheckBox;
@@ -40,7 +39,6 @@ import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ICheckItemListener;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -263,10 +261,10 @@ public class ChooseContactActivity extends BaseActivity {
                 TreeSet<Integer> userFriendsIdList = UserUtils.getUserFriendsIdList(result.values());
 
                 if (actionType == AppConst.CREATE_SQUARE_ROOM_BUILD) {
-                    userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getUserAccountId()));
+                    userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getMyAccountId()));
                     createChatGroup(userFriendsIdList);
                 } else if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
-                    userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getUserAccountId()));
+                    userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getMyAccountId()));
                     userFriendsIdList.add(itContactBean.getFriend_id());
                     createChatGroup(userFriendsIdList);
                 } else {
@@ -426,7 +424,7 @@ public class ChooseContactActivity extends BaseActivity {
             final SuperCheckBox checkBox = holder.getView(R.id.check_user);
             checkBox.setVisibility(View.VISIBLE);
 
-            if (String.valueOf(data.getFriend_id()).equals(UserUtils.getUserAccountId())) {
+            if (String.valueOf(data.getFriend_id()).equals(UserUtils.getMyAccountId())) {
                 checkBox.setChecked(true);
                 holder.itemView.setClickable(false);
                 holder.itemView.setEnabled(false);
