@@ -215,7 +215,7 @@ public class RigisterActivity extends BaseActivity {
                     boolean success = data.getBoolean("success");
                     if (success) {
                         UIHelper.toastInCenter(RigisterActivity.this, "密码重置成功,将自动跳转登录页面", Toast.LENGTH_LONG);
-                        handler.sendEmptyMessageDelayed(0x01, 2000);
+                        handler.sendEmptyMessageDelayed(0x01, 5000);
                     } else {
                         UIHelper.toast(RigisterActivity.this, "验证码失效，请重新获取验证码");
                     }
@@ -259,7 +259,7 @@ public class RigisterActivity extends BaseActivity {
                     int dataCode = data.getInteger("code");
                     if (dataCode == 0) {
                         UIHelper.toastInCenter(RigisterActivity.this, "注册成功,将自动跳转登录页面", Toast.LENGTH_LONG);
-                        handler.sendEmptyMessageDelayed(0x02, 2000);
+                        handler.sendEmptyMessageDelayed(0x02, 5000);
                     } else if (dataCode == 3) {
                         //账号已存在
                         DialogHelp.getConfirmDialog(RigisterActivity.this, "该手机号已注册，请直接登录", new DialogInterface.OnClickListener() {
