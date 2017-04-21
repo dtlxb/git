@@ -1,5 +1,8 @@
 package cn.gogoal.im.common.IMHelpers;
 
+import android.text.TextUtils;
+
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
@@ -132,6 +135,41 @@ public class MessageUtils {
             ms = "离开了群聊";
         }
         return mSB + ms;
+    }
+
+    //提取聊天对方头像
+    public static String getItsHeadPic(int friendId, int chatType, String conversationID) {
+        JSONArray jsonArray;
+        String headPicUri = "";
+        if (chatType == 1001) {
+            String string = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", null);
+            if (!TextUtils.isEmpty(string)) {
+                JSONObject jsonObject = JSON.parseObject(string);
+                KLog.e(jsonObject.toString());
+                if (jsonObject.get("data") != null) {
+                    jsonArray = jsonObject.getJSONArray("data");
+                    //有这个人修改
+                    for (int i = 0; i < jsonArray.size(); i++) {
+                        JSONObject oldObject = (JSONObject) jsonArray.get(i);
+                        if (oldObject.getInteger("friend_id") == friendId) {
+                            headPicUri = oldObject.getString("avatar");
+                        }
+                    }
+                }
+            }
+        } else if (chatType == 1002) {
+            jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationID + "_accountList_beans", new JSONArray());
+            if (jsonArray != null) {
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    JSONObject oldObject = (JSONObject) jsonArray.get(i);
+                    if (oldObject.getInteger("friend_id") == friendId) {
+                        headPicUri = oldObject.getString("avatar");
+                    }
+                }
+            }
+        }
+
+        return headPicUri;
     }
 
 }

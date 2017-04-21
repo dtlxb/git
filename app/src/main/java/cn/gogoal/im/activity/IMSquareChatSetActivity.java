@@ -22,6 +22,7 @@ import com.socks.library.KLog;
 import org.simple.eventbus.Subscriber;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,6 +86,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
     private IMPersonSetAdapter mPersonInfoAdapter;
     private List<ContactBean> contactBeens = new ArrayList<>();
+    private List<ContactBean> PersonContactBeens = new ArrayList<>();
     private String conversationId;
     private String squareCreater;
     private List<String> groupMembers;
@@ -232,33 +234,12 @@ public class IMSquareChatSetActivity extends BaseActivity {
             contactBeens.add(addNomoralFuns(accountObject.getString("nickname"), accountObject.getInteger("friend_id"), accountObject.getString("avatar")));
             urls.add(accountObject.getString("avatar"));
         }
+        PersonContactBeens.addAll(contactBeens);
         if (ImageUtils.getBitmapFilePaht(conversationId, "imagecache").equals("")) {
             getNicePicture(urls);
         }
-        //测试代码,没有数据的时候拉通讯录建群
-        KLog.e(contactBeens.size());
-        List<ContactBean> newContactBean = new ArrayList<>();
-        int size;
-        size = contactBeens.size();
-        if (squareCreater.equals(UserUtils.getUserAccountId())) {
-            if (contactBeens.size() > 4) {
-                size = 4;
-            }
-        } else {
-            if (contactBeens.size() > 6) {
-                size = 6;
-            }
-        }
-
-        for (int i = 0; i < size; i++) {
-            newContactBean.add(contactBeens.get(i));
-        }
         contactBeens.clear();
-        contactBeens.addAll(newContactBean);
-        if (squareCreater.equals(UserUtils.getUserAccountId())) {
-            contactBeens.add(addFunctionHead("", R.mipmap.person_add));
-            contactBeens.add(addFunctionHead("", R.mipmap.chat_reduce));
-        }
+        contactBeens.addAll(squareCreaterFirst(PersonContactBeens));
         mPersonInfoAdapter.notifyDataSetChanged();
         KLog.e(contactBeens);
     }
@@ -350,7 +331,11 @@ public class IMSquareChatSetActivity extends BaseActivity {
         Intent intent;
         switch (view.getId()) {
             case R.id.look_more_person:
-                //startActivity(new Intent(getActivity(), SearchActivity.class));
+                intent = new Intent(getActivity(), IMGroupContactsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("chat_group_contacts", (Serializable) PersonContactBeens);
+                intent.putExtras(bundle);
+                startActivity(intent);
                 break;
             case R.id.square_message_tv:
                 //群公告
@@ -439,9 +424,10 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
                         }
                     });
-                    //插在删人加人图片前
-                    contactBeens.addAll(contactBeens.size() - 2, addContactBeens);
-                    tvTeamSize.setText((contactBeens.size() - 2) + "人");
+                    PersonContactBeens.addAll(addContactBeens);
+                    contactBeens.clear();
+                    contactBeens.addAll(squareCreaterFirst(PersonContactBeens));
+                    tvTeamSize.setText(PersonContactBeens.size() + "人");
                     mPersonInfoAdapter.notifyDataSetChanged();
                     break;
                 case AppConst.SQUARE_ROOM_DELETE_ANYONE:
@@ -462,8 +448,10 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
                         }
                     });
-                    contactBeens.removeAll(changeContactBeens);
-                    tvTeamSize.setText((contactBeens.size() - 2) + "人");
+                    PersonContactBeens.removeAll(changeContactBeens);
+                    contactBeens.clear();
+                    contactBeens.addAll(squareCreaterFirst(PersonContactBeens));
+                    tvTeamSize.setText(PersonContactBeens.size() + "人");
                     mPersonInfoAdapter.notifyDataSetChanged();
                     break;
                 case AppConst.SQUARE_ROOM_EDIT_NAME:
@@ -483,5 +471,43 @@ public class IMSquareChatSetActivity extends BaseActivity {
             }
         }
 
+    }
+
+    //排序将群主放置第一位
+    public List<ContactBean> squareCreaterFirst(List<ContactBean> contactBeanList) {
+        List<ContactBean> newContactBeanList = new ArrayList<>();
+        int size;
+        ContactBean contactBean = new ContactBean();
+        for (int i = 0; i < contactBeanList.size(); i++) {
+            if (contactBeanList.get(i).getFriend_id() == Integer.parseInt(squareCreater)) {
+                contactBean = contactBeanList.get(i);
+                contactBeanList.remove(contactBean);
+            }
+        }
+        contactBeanList.add(0, contactBean);
+
+        if (squareCreater.equals(UserUtils.getUserAccountId())) {
+            if (contactBeanList.size() > 4) {
+                size = 4;
+            } else {
+                size = contactBeanList.size();
+            }
+            for (int i = 0; i < size; i++) {
+                newContactBeanList.add(contactBeanList.get(i));
+            }
+            newContactBeanList.add(addFunctionHead("", R.mipmap.person_add));
+            newContactBeanList.add(addFunctionHead("", R.mipmap.chat_reduce));
+        } else {
+            if (contactBeanList.size() > 6) {
+                size = 6;
+            } else {
+                size = contactBeanList.size();
+            }
+            for (int i = 0; i < size; i++) {
+                newContactBeanList.add(contactBeanList.get(i));
+            }
+        }
+        Log.e("+++contactBeanList4", contactBeanList.size() + "");
+        return newContactBeanList;
     }
 }

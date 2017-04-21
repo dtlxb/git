@@ -271,6 +271,13 @@ public class ChatFragment extends BaseFragment {
         {
             @Override
             public void onClick(View v) {
+
+                if (null==imConversation){
+                    UIHelper.toast(getActivity(),R.string.network_busy);
+                    etInput.setText("");
+                    return;
+                }
+
                 //显示自己的文字消息
                 AVIMTextMessage mTextMessage = new AVIMTextMessage();
                 HashMap<String, Object> attrsMap = new HashMap<>();
@@ -487,6 +494,11 @@ public class ChatFragment extends BaseFragment {
     }
 
     private void sendStockMessage(String stockCode, String stockName) {
+
+        if (null==imConversation){
+            UIHelper.toast(getActivity(),R.string.network_busy);
+            return;
+        }
         //股票消息(消息type:11,加上stockCode,stockName);
         AVIMMessage mStockMessage = new AVIMMessage();
         mStockMessage.setTimestamp(CalendarUtils.getCurrentTime());
@@ -558,6 +570,10 @@ public class ChatFragment extends BaseFragment {
             @Override
             public void onSuccess(String onlineUri) {
 
+                if (null==imConversation){
+                    UIHelper.toast(getActivity(),R.string.network_busy);
+                    return;
+                }
 
                 //图片消息基本信息
                 Map<Object, Object> messageMap = new HashMap<>();
@@ -635,6 +651,11 @@ public class ChatFragment extends BaseFragment {
 
                     @Override
                     public void onSuccess(String onlineUri) {
+
+                        if (null==imConversation){
+                            UIHelper.toast(getActivity(),R.string.network_busy);
+                            return;
+                        }
 
                         //语音消息基本信息
                         Map<Object, Object> messageMap = new HashMap<>();
