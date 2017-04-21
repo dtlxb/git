@@ -98,8 +98,6 @@ public class AppConst {
 
     //直播分享
     public static final String GG_LIVE_SHARE = WEB_URL + "/live/share/";
-    //发起直播填写信息
-    public static final String GG_LIVE_APPLY = WEB_URL + "/live/apply";
     //直播录播列表
     public static final String GG_LIVE_LIST = WEB_URL + "/live/list";
     //中国研网

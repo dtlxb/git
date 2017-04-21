@@ -48,7 +48,6 @@ import cn.gogoal.im.ui.view.XTitle;
 /**
  * Created by huangxx on 2017/4/17.
  */
-
 public class TypeLoginActivity extends BaseActivity {
 
     private XTitle xTitle;
@@ -108,11 +107,14 @@ public class TypeLoginActivity extends BaseActivity {
         /*loginUserName.setText("E00002639");
         loginPassWord.setEditTextText("412174");*/
 
-        loginUserName.setText("E00002639");
-        loginPassWord.setText("412174");
+        /*loginUserName.setText("E00003645");
+        loginPassWord.setText("147258369");*/
 
-       /* loginUserName.setText("E00002638");
-        loginPassWord.setText("123456");*/
+        /*loginUserName.setText("E00002639");
+        loginPassWord.setText("412174");*/
+
+        loginUserName.setText("E00002638");
+        loginPassWord.setText("123456");
 
         /*loginUserName.setText("E010399");
         loginPassWord.setText("198122");*/

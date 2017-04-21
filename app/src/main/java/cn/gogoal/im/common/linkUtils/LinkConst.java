@@ -29,6 +29,9 @@ public class LinkConst {
     public static final int MSG_WHAT_MIX_STREAM_ERROR = 4;
 
 
+
+    public static final long INVITE_CHAT_TIMEOUT_DELAY = 10 * 1000;   //连麦邀请等待响应超时时间——10秒
+
     /**
      * 播放器使用
      */
@@ -36,4 +39,7 @@ public class LinkConst {
 
     public static final int STATUS_NOT_AGREE = 2;
     public static final int STATUS_AGREE = 1;
+
+    public static final int INVITE_TYPE_WATCHER = 1;
+    public static final int INVITE_TYPE_ANCHOR = 2;
 }

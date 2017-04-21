@@ -2,14 +2,16 @@ package cn.gogoal.im.activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.hardware.camera2.params.BlackLevelPattern;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -19,13 +21,14 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alivc.player.MediaPlayer;
 import com.alivc.publisher.IMediaPublisher;
@@ -34,9 +37,7 @@ import com.alivc.publisher.MediaError;
 import com.alivc.videochat.AlivcVideoChatParter;
 import com.alivc.videochat.IVideoChatParter;
 import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.socks.library.KLog;
 
@@ -54,12 +55,12 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
+import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.PlayerUtils.CountDownTimerView;
-import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.linkUtils.ConnectivityMonitor;
@@ -156,12 +157,11 @@ public class WatchLiveActivity extends BaseActivity {
     private boolean shouldOffLine = false; //surfaceChange时是否应该结束连麦
 
     //播放地址
-    //private String mPlayUrl = "http://ggliveo.oss-cn-hangzhou.aliyuncs.com/ggVod/Act-ss-mp4-hd/xiaoceshi.mp4";
-    private String mPlayUrl = "rtmp://zbmo.go-goal.cn/microphone/dave_mix";
+    private String mPlayUrl;
     //推送地址
     private String mPushUrl;
     //连麦延迟播放网址
-    private String mSmallDelayPlayUrl = "rtmp://zbmo.go-goal.cn/microphone/dave";
+    private String mSmallDelayPlayUrl;
 
     //聊天对象
     private List<AVIMMessage> messageList = new ArrayList<>();
@@ -176,6 +176,9 @@ public class WatchLiveActivity extends BaseActivity {
 
     private WatchBottomFragment mBottomFragment;
 
+    private AlertDialog mFeedbackChooseDialog;
+    private AlertDialog mChatCloseConfirmDialog;
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -189,6 +192,8 @@ public class WatchLiveActivity extends BaseActivity {
                     UIHelper.toast(getContext(), R.string.invite_timeout_tip); //提醒：对方长时间未响应，已取消连麦邀请
                     break;
                 case LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT:
+                    mFeedbackChooseDialog.dismiss();
+                    mFeedbackChooseDialog = null;
                     feedbackInvite(LinkConst.STATUS_NOT_AGREE); //自动反馈不同意连麦
                     UIHelper.toast(getContext(), R.string.inviting_process_timeout); //提醒超时未处理，已经自动拒绝对方的连麦邀请
                     break;
@@ -208,13 +213,7 @@ public class WatchLiveActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
-        //live_id = getIntent().getStringExtra("live_id");
-        live_id = "cf68d632-b488-42fe-8142-07bc645d4229";
-        if (live_id.equals("887a1170-e034-4386-98fb-3b710fb37fbd")) {
-            mPlayUrl = "rtmp://zbmo.go-goal.cn/microphone/348628_mix";
-        } else if (live_id.equals("cf68d632-b488-42fe-8142-07bc645d4229")) {
-            mPlayUrl = "rtmp://zbmo.go-goal.cn/microphone/dave_mix";
-        }
+        live_id = getIntent().getStringExtra("live_id");
 
         if (Build.VERSION.SDK_INT >= 23) {
             permissionCheck();
@@ -237,8 +236,6 @@ public class WatchLiveActivity extends BaseActivity {
         initRecycleView(recyler_chat, null);
         mLiveChatAdapter = new LiveChatAdapter(R.layout.item_live_chat, messageList);
         recyler_chat.setAdapter(mLiveChatAdapter);
-
-        getPlayerInfo();
     }
 
     /**
@@ -251,6 +248,7 @@ public class WatchLiveActivity extends BaseActivity {
         ChatGroupHelper.addAnyone(idList, conversation.getConversationId(), new ChatGroupHelper.chatGroupManager() {
             @Override
             public void groupActionSuccess(JSONObject object) {
+
             }
 
             @Override
@@ -288,57 +286,40 @@ public class WatchLiveActivity extends BaseActivity {
 
         @Override
         protected void convert(BaseViewHolder holder, AVIMMessage message, int position) {
-            AVIMTextMessage msg = (AVIMTextMessage) message;
-
-            KLog.json(msg.toString());
-
-            String username = msg.getAttrs().get("username") + ": ";
-
             TextView textSend = holder.getView(R.id.text_you_send);
-            textSend.setText(username + msg.getText());
+            if (null != message) {
+                JSONObject contentObject = JSON.parseObject(message.getContent());
+                JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
+                String _lctype = contentObject.getString("_lctype");
+                String username = "";
+                String textString = "";
+                if (_lctype.equals("-1")) {
+                    username = lcattrsObject.getString("username") + ": ";
+                    textString = username + contentObject.getString("_lctext");
+                } else if (_lctype.equals("5") || _lctype.equals("6")) {
+                    if (null != lcattrsObject.get("accountList")) {
+                        JSONArray jsonArray = lcattrsObject.getJSONArray("accountList");
+                        if (jsonArray.size() > 0) {
+                            username = ((JSONObject) jsonArray.get(0)).getString("nickname");
+                        }
+                        if (_lctype.equals("5")) {
+                            textString = (username + "加入直播聊天室");
+                        } else {
+                            textString = (username + "离开直播聊天室");
+                        }
+                    }
+                } else {
 
-            SpannableStringBuilder builder = new SpannableStringBuilder(textSend.getText().toString());
-            ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.live_chat_level1));
-            ForegroundColorSpan Span2 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.textColor_333333));
-            builder.setSpan(Span1, 0, username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            builder.setSpan(Span2, username.length(), textSend.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            textSend.setText(builder);
-        }
-    }
+                }
+                textSend.setText(textString);
 
-    /**
-     * 反馈连麦邀请
-     *
-     * @param status 反馈的结果：同意1， 不同意2
-     */
-    public void feedbackInvite(final int status) {
-        if (mChatStatus == VideoChatStatus.RECEIVED_INVITE) {
-
-            if (status == LinkConst.STATUS_NOT_AGREE) {
-                mChatStatus = VideoChatStatus.UNCHAT; //不同意的情况需要更新当前状态为未连麦状态
+                SpannableStringBuilder builder = new SpannableStringBuilder(textSend.getText().toString());
+                ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.live_chat_level1));
+                ForegroundColorSpan Span2 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.textColor_333333));
+                builder.setSpan(Span1, 0, username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(Span2, username.length(), textSend.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                textSend.setText(builder);
             }
-
-            //TODO:连麦结果
-            /*if (status == LinkConst.STATUS_AGREE
-                    && result != null) {
-                //缓存推流URL和主播的短延迟播放URL
-                mPushUrl = result.getRtmpUrl();
-                mSmallDelayPlayUrl = result.getInviteePlayUrl();
-                //隐藏弹窗
-
-                //开始连麦
-                //startLaunchChat();
-            } else if (status == LinkConst.STATUS_AGREE) {
-                KLog.e("Feedback Result is Null");
-            } else { //不同意
-                //隐藏弹窗
-
-                mChatStatus = VideoChatStatus.UNCHAT; //更新当前连麦状态为未连麦状态
-            }*/
-
-            mHandler.removeMessages(LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT); //移除倒计时的消息
-        } else {
-            UIHelper.toast(getContext(), R.string.no_inviting_for_response); //当前没有连麦邀请需要反馈
         }
     }
 
@@ -411,10 +392,12 @@ public class WatchLiveActivity extends BaseActivity {
                     public void onSuccess(String responseInfo) {
                         KLog.json(responseInfo);
                         player_edit.setText("");
-                        //player_edit.setVisibility(View.GONE);
+                        mBottomFragment.hideCommentEditUI();
+
+                        /*player_edit.setVisibility(View.GONE);
                         InputMethodManager imm =
                                 (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(player_edit.getWindowToken(), 0);
+                        imm.hideSoftInputFromWindow(player_edit.getWindowToken(), 0);*/
                     }
 
                     @Override
@@ -554,6 +537,7 @@ public class WatchLiveActivity extends BaseActivity {
                     synchronized (isCaching) {
                         if (isCaching) {
                             mHandler.removeCallbacks(mShowInterruptRun);
+                            LayoutTip.setVisibility(View.GONE);
                             // 结束缓冲
                             isCaching = false;
                         }
@@ -570,7 +554,6 @@ public class WatchLiveActivity extends BaseActivity {
                 case MediaError.ALIVC_INFO_PUBLISH_DISPLAY_FIRST_FRAME:
                     //预览首帧渲染完成
                     if (isChatting()) {//如果是正在连麦的状态，则首帧渲染完后需要通知UI层隐藏【正在连麦】的view
-                        //mView.hideChattingView();
                     }
                     break;
                 case MediaError.ALIVC_INFO_PUBLISH_NETWORK_GOOD:
@@ -598,7 +581,7 @@ public class WatchLiveActivity extends BaseActivity {
 
             if (mPlaySurfaceStatus == SurfaceStatus.UNINITED) {
                 mPlaySurfaceStatus = SurfaceStatus.CREATED;
-                startToPlay(mPlaySurfaceView);
+                getPlayerInfo();
                 KLog.e("Player surface status is created");
             } else if (mPlaySurfaceStatus == SurfaceStatus.DESTROYED) {
                 mPlaySurfaceStatus = SurfaceStatus.RECREATED;
@@ -678,8 +661,9 @@ public class WatchLiveActivity extends BaseActivity {
      * 开始直播播放（大窗）
      *
      * @param surfaceView
+     * @param mPlayUrl
      */
-    public void startToPlay(final SurfaceView surfaceView) {
+    public void startToPlay(String mPlayUrl, final SurfaceView surfaceView) {
         if (mChatParter == null) {
             initPlayer();
         }
@@ -753,13 +737,33 @@ public class WatchLiveActivity extends BaseActivity {
      * 结束连麦
      */
     public void closeVideoCall() {
+        Map<String, String> param = new HashMap<>();
+        param.put("token", UserUtils.getToken());
 
-//        KLog.e("Close video chat failed");
-//        UIHelper.toast(WatchLiveActivity.this, R.string.close_video_chatting_failed);
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                JSONObject data = object.getJSONObject("data");
+                if (object.getIntValue("code") == 0 && data.getBooleanValue("result")) {
+                    //调用api结束连麦成功
+                    if (isChatting()) {
+                        abortChat(true);
+                    }
+                } else {
+                    //显示结束连麦失败的
+                    KLog.e("Close video chat failed");
+                    UIHelper.toast(WatchLiveActivity.this, R.string.close_video_chatting_failed);
+                }
+            }
 
-        if (isChatting()) {
-            abortChat(true);
-        }
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.VIDEOCALL_CLOSE, ggHttpInterface).startGet();
     }
 
     /**
@@ -795,7 +799,7 @@ public class WatchLiveActivity extends BaseActivity {
         }
         mIvChatClose.setVisibility(View.GONE);
         KLog.e("mIvChatClose setVisibility gone");
-        //mBottomFragment.hideRecordView();
+        mBottomFragment.hideCameraView();
         shouldOffLine = true; //表示在surfaceChanged时需要调用真正的offlineChat，来结束连麦
     }
 
@@ -804,7 +808,7 @@ public class WatchLiveActivity extends BaseActivity {
      */
     public void closeVideoChatSmallView() {
         mIvChatClose.setVisibility(View.GONE);
-        //mBottomFragment.hideRecordView();
+        mBottomFragment.hideCameraView();
     }
 
     /**
@@ -867,15 +871,49 @@ public class WatchLiveActivity extends BaseActivity {
         }
 
         //TODO:通知服务端，退出观看
+
+        if (null != imConversation) {
+            quiteSquare(imConversation);
+        }
     }
 
     @OnClick({R.id.iv_abort_chat})
     public void setClickFunctionBar(View v) {
         switch (v.getId()) {
             case R.id.iv_abort_chat: //关闭播放
-
+                showChatCloseConfirmDialog();
                 break;
         }
+    }
+
+    /**
+     * 显示结束连麦确认的dialog
+     */
+    private void showChatCloseConfirmDialog() {
+        AlertDialog.Builder dialog = null;
+        if (mChatCloseConfirmDialog == null) {
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    switch (i) {
+                        case DialogInterface.BUTTON_POSITIVE: //确定
+                            //结束连麦
+                            closeVideoCall();
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE: //取消
+                            mChatCloseConfirmDialog.dismiss();
+                            break;
+                    }
+                    mChatCloseConfirmDialog = null;
+                }
+            };
+            dialog = DialogHelp.getConfirmDialog(getContext(), getString(R.string.close_video_call_title),
+                    getString(R.string.close_video_call_confirm_message), getString(R.string.sure),
+                    getString(R.string.cancel), listener, listener);
+            dialog.setCancelable(false);
+        }
+
+        mChatCloseConfirmDialog = dialog.show();
     }
 
     /**
@@ -902,6 +940,8 @@ public class WatchLiveActivity extends BaseActivity {
                     //主播介绍
                     anchor = data.getJSONObject("anchor");
 
+                    mPlayUrl = data.getString("url_rtmp");
+
                     //倒计时
                     if (data.getLongValue("launch_time") > 0) {
                         countDownTimer.setVisibility(View.VISIBLE);
@@ -912,17 +952,16 @@ public class WatchLiveActivity extends BaseActivity {
                             @Override
                             public void startPlayer() {
                                 countDownTimer.setVisibility(View.GONE);
-
+                                startToPlay(mPlayUrl, mPlaySurfaceView);
                             }
                         });
                     } else {
                         countDownTimer.setVisibility(View.GONE);
                     }
 
-                    mPlayUrl = data.getString("url_rtmp");
-                    room_id = data.getString("room_id");
+                    startToPlay(mPlayUrl, mPlaySurfaceView);
 
-                    KLog.e(room_id);
+                    room_id = data.getString("room_id");
 
                     AVImClientManager.getInstance().findConversationById(room_id, new AVImClientManager.ChatJoinManager() {
                         @Override
@@ -987,33 +1026,207 @@ public class WatchLiveActivity extends BaseActivity {
         new GGOKHTTP(param, GGOKHTTP.GET_ONLINE_COUNT, ggHttpInterface).startGet();
     }
 
-    private WatchLiveActivity getContext() {
-        return WatchLiveActivity.this;
-    }
-
     /**
      * 消息接收
      */
     @Subscriber(tag = "Live_Message")
     public void handleMessage(BaseMessage baseMessage) {
 
+
         if (null != imConversation && null != baseMessage) {
             Map<String, Object> map = baseMessage.getOthers();
             AVIMMessage message = (AVIMMessage) map.get("message");
             AVIMConversation conversation = (AVIMConversation) map.get("conversation");
 
-            KLog.json(message.getContent());
             int chatType = (int) conversation.getAttribute("chat_type");
+
+            KLog.e(message.getContent());
 
             if (imConversation.getConversationId().equals(conversation.getConversationId()) && chatType == 1009) {
                 //Live消息处理
                 messageList.add(message);
                 mLiveChatAdapter.notifyDataSetChanged();
                 recyler_chat.smoothScrollToPosition(messageList.size());
-            } else if (chatType == 1010) {
+            } else if (chatType == 1008) {
                 //连麦动作处理
+                JSONObject content = JSONObject.parseObject(message.getContent());
+                JSONObject lcattrs = content.getJSONObject("_lcattrs");
 
+                switch (lcattrs.getString("code")) {
+                    case "invite":
+                        showFeedbackChooseDialog();
+                        //更新当前连麦状态为收到邀请等待反馈状态
+                        mChatStatus = VideoChatStatus.RECEIVED_INVITE;
+                        //超过10s自动拒绝连麦
+                        mHandler.sendEmptyMessageDelayed(LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT,
+                                LinkConst.INVITE_CHAT_TIMEOUT_DELAY);
+                        break;
+                    case "mixresult":
+                        //混流失败
+                        if (isChatting()) {
+                            UIHelper.toast(getContext(), R.string.merge_stream_failed);
+                            closeVideoCall();
+                        }
+                        break;
+                    case "close":
+                        //对方关闭连麦
+                        if (isChatting()) {
+                            //中断连麦推流
+                            abortChat(true);
+                            //显示对方结束连麦的UI提示
+                            showChatCloseNotifyUI();
+                        } else if (mChatStatus == VideoChatStatus.RECEIVED_INVITE) {
+                            //如果当前是收到邀请还未处理的状态，则需要隐藏邀请反馈选择的dialog
+                            if (mFeedbackChooseDialog != null && mFeedbackChooseDialog.isShowing()) {
+                                mFeedbackChooseDialog.dismiss();
+                            }
+                            UIHelper.toast(getContext(), R.string.video_chatting_timeout);
+                            mChatStatus = VideoChatStatus.UNCHAT;
+                        }
+                        break;
+
+                }
             }
         }
+    }
+
+    /**
+     * 显示直播邀请结果选择的Dialog
+     */
+    private void showFeedbackChooseDialog() {
+        AlertDialog.Builder dialog = null;
+        if (mFeedbackChooseDialog == null) {
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    switch (i) {
+                        case DialogInterface.BUTTON_POSITIVE: //同意
+                            feedbackInvite(LinkConst.STATUS_AGREE);
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE: //不同意
+                            feedbackInvite(LinkConst.STATUS_NOT_AGREE);
+                            break;
+                    }
+
+                    mFeedbackChooseDialog = null;
+                }
+            };
+            dialog = DialogHelp.getConfirmDialog(getContext(), getString(R.string.received_calling),
+                    getString(R.string.video_callling_message), getString(R.string.agree),
+                    getString(R.string.not_agree), listener, listener);
+            dialog.setCancelable(false);
+        }
+
+        mFeedbackChooseDialog = dialog.show();
+    }
+
+    /**
+     * 反馈连麦邀请
+     *
+     * @param status 反馈的结果：同意1， 不同意2
+     */
+    public void feedbackInvite(final int status) {
+        if (mChatStatus == VideoChatStatus.RECEIVED_INVITE) {
+
+            if (status == LinkConst.STATUS_NOT_AGREE) {
+                mChatStatus = VideoChatStatus.UNCHAT; //不同意的情况需要更新当前状态为未连麦状态
+            }
+
+            Map<String, String> param = new HashMap<>();
+            param.put("token", UserUtils.getToken());
+            if (status == LinkConst.STATUS_AGREE) {
+                param.put("feedback_result", "true");
+            } else if (status == LinkConst.STATUS_NOT_AGREE) {
+                param.put("feedback_result", "false");
+            }
+
+            GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+                @Override
+                public void onSuccess(String responseInfo) {
+                    KLog.e(responseInfo);
+                    JSONObject object = JSONObject.parseObject(responseInfo);
+                    JSONObject data = object.getJSONObject("data");
+                    if (object.getIntValue("code") == 0 && data.getBooleanValue("success")) {
+                        if (data.getBooleanValue("result")) {
+                            //缓存推流URL和主播的短延迟播放URL
+                            mPushUrl = data.getString("push_stream_url");
+                            mSmallDelayPlayUrl = data.getString("short_play_url");
+                            //开始连麦
+                            startLaunchChat();
+                        } else {
+                            mChatStatus = VideoChatStatus.UNCHAT;
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(String msg) {
+                    UIHelper.toast(getContext(), R.string.net_erro_hint);
+                }
+            };
+            new GGOKHTTP(param, GGOKHTTP.VIDEOCALL_FEEDBACK, ggHttpInterface).startGet();
+
+            //移除倒计时的消息
+            mHandler.removeMessages(LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT);
+        } else {
+            UIHelper.toast(getContext(), R.string.no_inviting_for_response); //当前没有连麦邀请需要反馈
+        }
+    }
+
+    /**
+     * 开始连麦
+     */
+    private void startLaunchChat() {
+        //更新当前连麦状态为开始推流并尝试混流，等待混流成功
+        mChatStatus = VideoChatStatus.TRY_MIX;
+
+        changePlayViewToChatMode();
+
+        //注意： 这里推流输出视频尺寸必须是360 * 640
+        mChatParter.onlineChat(mPushUrl, 360, 640,
+                mPreviewSurfaceView.getHolder().getSurface(), mMediaParam, mSmallDelayPlayUrl);
+
+    }
+
+    /**
+     * UI层从普通播放模式更改到连麦模式
+     */
+    private void changePlayViewToChatMode() {
+        if (mPlaySurfaceView != null) {
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mPlaySurfaceView.getLayoutParams();
+            final Resources resources = getResources();
+            if (layoutParams == null) {
+                layoutParams = new FrameLayout.LayoutParams(resources.getDimensionPixelSize(R.dimen.chat_play_window_width),
+                        resources.getDimensionPixelSize(R.dimen.chat_play_window_height));
+            } else {
+                layoutParams.width = resources.getDimensionPixelSize(R.dimen.chat_play_window_width);
+                layoutParams.height = resources.getDimensionPixelSize(R.dimen.chat_play_window_height);
+            }
+
+            layoutParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+            layoutParams.rightMargin = resources.getDimensionPixelSize(R.dimen.chat_play_window_right_margin);
+            layoutParams.bottomMargin = resources.getDimensionPixelSize(R.dimen.chat_play_window_bottom_margin);
+            mPlaySurfaceView.setLayoutParams(layoutParams);
+        }
+
+        mIvChatClose.setVisibility(View.VISIBLE);
+        mPreviewSurfaceView.setVisibility(View.VISIBLE);
+        mBottomFragment.showCameraView();
+    }
+
+    /**
+     * 显示连麦关闭的通知Dialog
+     */
+    private void showChatCloseNotifyUI() {
+        if (mChatCloseConfirmDialog != null && mChatCloseConfirmDialog.isShowing()) {
+            mChatCloseConfirmDialog.dismiss();
+        }
+
+        DialogHelp.getMessageDialog(getActivity(), getString(R.string.close_video_call_notify_message))
+                .setCancelable(false).setTitle(R.string.close_video_call_title).show();
+    }
+
+    private WatchLiveActivity getContext() {
+        return WatchLiveActivity.this;
     }
 }

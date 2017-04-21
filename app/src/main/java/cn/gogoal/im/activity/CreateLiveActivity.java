@@ -55,7 +55,6 @@ public class CreateLiveActivity extends BaseActivity {
                 imgLive,
                 AppDevice.dp2px(mContext, 5),//圆角弧度
                 R.mipmap.gogoal);
-
     }
 
     @OnClick({R.id.imgClose, R.id.imgLive, R.id.btnStartLive, R.id.textAgreement})
@@ -65,7 +64,7 @@ public class CreateLiveActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.imgLive: //设置直播封面图片
-                ImageTakeUtils.getInstance().takePhoto(getContext(), 1, true, new ITakePhoto() {
+                ImageTakeUtils.getInstance().takePhoto(getContext(), 1, true, 750, new ITakePhoto() {
                     @Override
                     public void success(List<String> uriPaths, boolean isOriginalPic) {
                         if (uriPaths != null) {
@@ -162,9 +161,10 @@ public class CreateLiveActivity extends BaseActivity {
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
                     if (data.getIntValue("code") == 1) {
-                        if (data.getString("liveId") != null) {
+                        if (data.getString("live_id") != null) {
+                            finish();
                             Intent intent = new Intent(getContext(), LiveActivity.class);
-                            intent.putExtra("liveId", data.getString("live_id"));
+                            intent.putExtra("live_id", data.getString("live_id"));
                             startActivity(intent);
                         } else {
                             UIHelper.toast(getContext(), "创建直播失败");

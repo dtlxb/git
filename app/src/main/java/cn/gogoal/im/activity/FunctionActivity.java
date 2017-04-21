@@ -53,7 +53,7 @@ public class FunctionActivity extends BaseActivity {
 
         initWebView(webView);
 
-        webView.loadUrl(AppConst.WEB_URL+url);
+        webView.loadUrl(url);
 
         //添加让web获取用户信息
         /*webView.registerHandler("getUserInfo", new BridgeHandler() {

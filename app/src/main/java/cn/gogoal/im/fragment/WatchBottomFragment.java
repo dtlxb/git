@@ -1,6 +1,7 @@
 package cn.gogoal.im.fragment;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -60,12 +61,12 @@ public class WatchBottomFragment extends BaseFragment {
     @BindView(R.id.linearPlayerShotCut)
     LinearLayout linearPlayerShotCut;
 
-    //Activity最外层的Layout视图
+    /*//Activity最外层的Layout视图
     private View activityRootView;
     //屏幕高度
     private int screenHeight = 0;
     //软件盘弹起后所占高度阀值
-    private int keyHeight = 0;
+    private int keyHeight = 0;*/
 
     private List<RelaterVideoData> videoDatas;
 
@@ -110,10 +111,12 @@ public class WatchBottomFragment extends BaseFragment {
 
         getRelaterVideoInfo();
 
-        //获取屏幕高度
+        /*//获取屏幕高度
         screenHeight = getActivity().getWindowManager().getDefaultDisplay().getHeight();
         //阀值设置为屏幕高度的1/3
-        keyHeight = screenHeight / 3;
+        keyHeight = screenHeight / 3;*/
+
+        mEtComment.getViewTreeObserver().addOnGlobalLayoutListener(mOnGlobalLayoutListener);
 
         mEtComment.addTextChangedListener(new TextWatcher() {
             @Override
@@ -137,11 +140,25 @@ public class WatchBottomFragment extends BaseFragment {
 
 
     public void setActivityRootView(View activityRootView) {
-        this.activityRootView = activityRootView;
+        //this.activityRootView = activityRootView;
     }
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    /**
+     * 显示推流时相关的操作UI（切换摄像头）
+     */
+    public void showCameraView() {
+        linearPlayerShotCut.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 隐藏推流时相关的操作UI（切换摄像头）
+     */
+    public void hideCameraView() {
+        linearPlayerShotCut.setVisibility(View.GONE);
     }
 
     @Override
@@ -154,7 +171,7 @@ public class WatchBottomFragment extends BaseFragment {
             linearPlayerShotCut.setVisibility(View.GONE);
         }
 
-        //添加layout大小发生改变监听器
+        /*//添加layout大小发生改变监听器
         activityRootView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View view, int left, int top, int right, int bottom,
@@ -172,7 +189,7 @@ public class WatchBottomFragment extends BaseFragment {
                     functionBar.setVisibility(View.VISIBLE);
                 }
             }
-        });
+        });*/
     }
 
     @OnClick({R.id.imgPlayerChat, R.id.imgPlayerProfiles, R.id.imgPlayerRelaterVideo, R.id.imgPlayerShare,
@@ -228,6 +245,16 @@ public class WatchBottomFragment extends BaseFragment {
         mEtComment.requestFocus();
     }
 
+    /**
+     * 隐藏评论编辑器
+     */
+    public void hideCommentEditUI() {
+        hideSoftKeyboard();
+        mEtComment.clearFocus();
+        player_linear.setVisibility(View.GONE);
+        functionBar.setVisibility(View.VISIBLE);
+    }
+
     private Runnable openKeyboardRunnable = new Runnable() {
         @Override
         public void run() {
@@ -241,6 +268,49 @@ public class WatchBottomFragment extends BaseFragment {
     private void showSoftKeyboard() {
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(mEtComment, 0);
+    }
+
+    /**
+     * 隐藏软键盘
+     */
+    private void hideSoftKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mEtComment.getWindowToken(), 0);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mOnGlobalLayoutListener.hasShowInputMethod = false;
+    }
+
+    private InputMethodUIListener mOnGlobalLayoutListener = new InputMethodUIListener();
+
+    /**
+     * 通过对比RootView的height和windowVisibleDisplayFrame的bottom来计算root view的不可见高度
+     * 如果不可见高度是0说明键盘处于隐藏的状态，反之属于弹出的状态
+     */
+    class InputMethodUIListener implements ViewTreeObserver.OnGlobalLayoutListener {
+        boolean hasShowInputMethod = false;
+
+        @Override
+        public void onGlobalLayout() {
+            Rect rootRect = new Rect();
+            View view = getActivity().getWindow().getDecorView();
+            view.getWindowVisibleDisplayFrame(rootRect);
+
+            int rootInvisibleHeight = view.getRootView().getHeight() - rootRect.bottom;
+
+            KLog.e("GlobalLayout", "decorView.top = "
+                    + view.getTop() + ", decorView.bottom = "
+                    + view.getBottom() + ", viewHeight = " + rootInvisibleHeight);
+            if (hasShowInputMethod && rootInvisibleHeight == 0) {//软件盘隐藏
+                hideCommentEditUI();
+                hasShowInputMethod = false;
+            } else if (rootInvisibleHeight > 0) {
+                hasShowInputMethod = true;
+            }
+        }
     }
 
     private void showAnchorProfiles() {
