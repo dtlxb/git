@@ -25,7 +25,7 @@ import cn.gogoal.im.activity.stock.MyStockNewsActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.bean.stock.MyStockTabBean;
+import cn.gogoal.im.bean.stock.MyStockTabNewsBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.StockUtils;
@@ -53,7 +53,7 @@ public class StockDetailNewTab extends BaseFragment {
 
     private int parentIndex;
     private StockDetailNewsAdapter newsAdapter;
-    private List<MyStockTabBean> stockNewsDatas = new ArrayList<>();
+    private List<MyStockTabNewsBean> stockNewsDatas = new ArrayList<>();
 
     public static Fragment getInstance(int position) {
         StockDetailNewTab fragment = new StockDetailNewTab();
@@ -137,7 +137,7 @@ public class StockDetailNewTab extends BaseFragment {
                     JSONArray jsonArray = JSONObject.parseObject(responseInfo).getJSONArray("data");
                     for (int i = 0; i < jsonArray.size(); i++) {
                         JSONObject object = (JSONObject) jsonArray.get(i);
-                        stockNewsDatas.add(new MyStockTabBean(object.getString("title"),
+                        stockNewsDatas.add(new MyStockTabNewsBean(object.getString("title"),
                                 ((JSONObject) object.getJSONArray("stock").get(0)).getString("stock_code"),
                                 ((JSONObject) object.getJSONArray("stock").get(0)).getString("stock_name"),
                                 object.getString("date"), String.valueOf(object.getIntValue("origin_id"))));
@@ -178,7 +178,7 @@ public class StockDetailNewTab extends BaseFragment {
                     JSONArray array = JSONObject.parseObject(responseInfo).getJSONArray("data");
                     for (int i = 0; i < array.size(); i++) {
                         JSONObject object = (JSONObject) array.get(i);
-                        stockNewsDatas.add(new MyStockTabBean(object.getString("report_title"),
+                        stockNewsDatas.add(new MyStockTabNewsBean(object.getString("report_title"),
                                 object.getString("stock_code"),
                                 object.getString("stock_name"),
                                 object.getString("create_date"),
@@ -201,14 +201,14 @@ public class StockDetailNewTab extends BaseFragment {
         new GGOKHTTP(param, GGOKHTTP.REPORT_LIST, ggHttpInterface).startGet();
     }
 
-    private class StockDetailNewsAdapter extends CommonAdapter<MyStockTabBean, BaseViewHolder> {
+    private class StockDetailNewsAdapter extends CommonAdapter<MyStockTabNewsBean, BaseViewHolder> {
 
-        private StockDetailNewsAdapter(List<MyStockTabBean> data) {
+        private StockDetailNewsAdapter(List<MyStockTabNewsBean> data) {
             super(R.layout.item_mystock_news, data);
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, MyStockTabBean data, int position) {
+        protected void convert(BaseViewHolder holder, MyStockTabNewsBean data, int position) {
             holder.getView(R.id.tv_mystock_news_stockInfo).setVisibility(View.GONE);
             holder.setText(tv_mystock_news_date, data.getDate());
             holder.setText(tv_mystock_news_title, data.getNewsTitle());

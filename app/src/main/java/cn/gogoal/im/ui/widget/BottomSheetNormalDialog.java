@@ -135,7 +135,7 @@ public class BottomSheetNormalDialog extends BaseBottomDialog {
         void bindDialogView(BottomSheetNormalDialog dialog,View dialogView);
     }
 
-    public BaseBottomDialog show() {
+    public BaseDialog show() {
         show(mFragmentManager);
         return this;
     }

@@ -153,7 +153,7 @@ public class InvestmentResearchFragment extends BaseFragment {
         bannerAdapter = new BannerAdapter(bannerImageUrls);
         LinearLayout.LayoutParams pagerParams = new LinearLayout.LayoutParams(
                 AppDevice.getWidth(getContext()),
-                235 * AppDevice.getWidth(getContext()) / 740);
+                244 * AppDevice.getWidth(getContext()) / 750);
         bannerView.addView(bannerPager, 0, pagerParams);
 
         DrawableCenterTextView searchView = new DrawableCenterTextView(getContext());

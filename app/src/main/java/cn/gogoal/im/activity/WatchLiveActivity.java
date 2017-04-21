@@ -244,7 +244,7 @@ public class WatchLiveActivity extends BaseActivity {
     private void joinSquare(AVIMConversation conversation) {
         List<Integer> idList = new ArrayList<>();
 
-        idList.add(Integer.parseInt(UserUtils.getUserAccountId()));
+        idList.add(Integer.parseInt(UserUtils.getMyAccountId()));
         ChatGroupHelper.addAnyone(idList, conversation.getConversationId(), new ChatGroupHelper.chatGroupManager() {
             @Override
             public void groupActionSuccess(JSONObject object) {

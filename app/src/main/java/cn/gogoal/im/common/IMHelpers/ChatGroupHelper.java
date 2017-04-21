@@ -135,7 +135,7 @@ public class ChatGroupHelper {
     }
 
     //群通讯录更新
-    public static void upDataGroupContactInfo(String conversationID, int friendId, String avatar, String nickname, String conv_id) {
+    public static void upDataGroupContactInfo(String conversationID, int friendId, String avatar, String nickname) {
         JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", new JSONArray());
         KLog.e(spAccountArray.toString());
         boolean hasThisGuy = false;
@@ -150,7 +150,6 @@ public class ChatGroupHelper {
                     hasThisGuy = true;
                 }
             }
-            SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", spAccountArray);
             if (hasThisGuy) {
                 SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", spAccountArray);
             }
