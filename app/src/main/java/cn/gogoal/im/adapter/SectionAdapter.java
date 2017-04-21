@@ -26,6 +26,8 @@ import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 
+
+
 /**
  * author wangjd on 2017/4/19 0019.
  * Staff_id 1375
@@ -115,7 +117,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionTouYanData, B
                                     inflate(R.layout.dialog_touyan_coming_soon, new LinearLayout(context), false);
 
                             final AlertDialog dialog = DialogHelp.getWindoDialog(v.getContext(), dialogView, 3 * screenWidth / 4);
-                            
+
                             dialogView.findViewById(R.id.img_touyan_cancle).setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {

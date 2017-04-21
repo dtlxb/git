@@ -1,6 +1,5 @@
 package cn.gogoal.im.fragment;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Looper;
@@ -35,7 +34,6 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.WeakReferenceHandler;
 import cn.gogoal.im.ui.NormalItemDecoration;
-
 
 /**
  * 我的

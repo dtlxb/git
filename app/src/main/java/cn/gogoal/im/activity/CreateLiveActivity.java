@@ -1,5 +1,6 @@
 package cn.gogoal.im.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -21,6 +22,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AsyncTaskUtil;
+import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
@@ -55,7 +57,6 @@ public class CreateLiveActivity extends BaseActivity {
                 imgLive,
                 AppDevice.dp2px(mContext, 5),//圆角弧度
                 R.mipmap.gogoal);
-
     }
 
     @OnClick({R.id.imgClose, R.id.imgLive, R.id.btnStartLive, R.id.textAgreement})
@@ -65,7 +66,7 @@ public class CreateLiveActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.imgLive: //设置直播封面图片
-                ImageTakeUtils.getInstance().takePhoto(getContext(), 1, true, new ITakePhoto() {
+                ImageTakeUtils.getInstance().takePhoto(getContext(), 1, true, 750, new ITakePhoto() {
                     @Override
                     public void success(List<String> uriPaths, boolean isOriginalPic) {
                         if (uriPaths != null) {
@@ -88,6 +89,12 @@ public class CreateLiveActivity extends BaseActivity {
 
     private void doUpload(final List<String> uriPaths) {
 
+        //弹个窗
+        final ProgressDialog waitDialog =
+                DialogHelp.getWaitDialog(getActivity(), "上传中...");
+        waitDialog.setCancelable(false);
+        waitDialog.show();
+
         AsyncTaskUtil.doAsync(new AsyncTaskUtil.AsyncCallBack() {
             @Override
             public void onPreExecute() {
@@ -105,6 +112,7 @@ public class CreateLiveActivity extends BaseActivity {
                     @Override
                     public void onSuccess(String onlineUri) {
                         KLog.e("上传成功===" + onlineUri);
+                        waitDialog.dismiss();
 
                         liveLargeImg = onlineUri;
 
@@ -119,6 +127,7 @@ public class CreateLiveActivity extends BaseActivity {
                     public void onFailed() {
                         KLog.e("上传失败!!!!!!");
 
+                        waitDialog.dismiss();
                         liveLargeImg = null;
 
                         UIHelper.toast(getContext(), "上传图片失败");
@@ -162,9 +171,10 @@ public class CreateLiveActivity extends BaseActivity {
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
                     if (data.getIntValue("code") == 1) {
-                        if (data.getString("liveId") != null) {
+                        if (data.getString("live_id") != null) {
+                            finish();
                             Intent intent = new Intent(getContext(), LiveActivity.class);
-                            intent.putExtra("liveId", data.getString("live_id"));
+                            intent.putExtra("live_id", data.getString("live_id"));
                             startActivity(intent);
                         } else {
                             UIHelper.toast(getContext(), "创建直播失败");

@@ -24,6 +24,7 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
 
+
 /**
  * author wangjd on 2017/4/18 0018.
  * Staff_id 1375
@@ -95,6 +96,7 @@ public class EditMyInfoActivity extends BaseActivity {
                         public void onClick(View v) {
                             Intent intent = new Intent(v.getContext(), ImageDetailActivity.class);
                             intent.putExtra("account_Id",UserUtils.getMyAccountId());
+                            intent.putExtra("account_Id", UserUtils.getMyAccountId());
                             startActivity(intent);
                         }
                     });
@@ -140,10 +142,10 @@ public class EditMyInfoActivity extends BaseActivity {
     }
 
     @Subscriber(tag = "updata_cache_avatar")
-    void updataCacheAvatar(String newAvatarUrl){
+    void updataCacheAvatar(String newAvatarUrl) {
         editInfos.remove(0);
-        editInfos.add(0,new UserDetailInfo(UserDetailInfo.HEAD, UserUtils.getUserCacheAvatarFile()));
+//        editInfos.add(0,new UserDetailInfo(UserDetailInfo.HEAD, UserUtils.getUserCacheAvatarFile()));
+        editInfos.add(0, new UserDetailInfo<>(UserDetailInfo.HEAD, newAvatarUrl));
         myInfoAdapter.notifyItemChanged(0);
     }
-
 }

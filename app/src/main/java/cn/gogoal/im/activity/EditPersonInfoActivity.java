@@ -171,7 +171,7 @@ public class EditPersonInfoActivity extends BaseActivity {
             case R.id.login_cofirm:
                 //资料上传后台
                 Map<String, String> map = new HashMap<>();
-                if (!imageUri.equals("")) {
+                if (!TextUtils.isEmpty(imageUri)) {
                     UserUtils.updataLocalUserInfo("simple_avatar", imageUri);
                     map.put("avatar", imageUri);
                 }

@@ -186,8 +186,8 @@ public class UserUtils {
         }
         if (user.containsKey(key)) {
             user.remove(key);
-            user.put(key, newValue);
         }
+        user.put(key, newValue);
 
     }
 
@@ -210,8 +210,12 @@ public class UserUtils {
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
                 JSONObject data = JSONObject.parseObject(responseInfo);
-                if (data.getIntValue("code") == 0) {
-                    updataListener.success(responseInfo);
+                JSONObject result = data.getJSONObject("data");
+                boolean success = result.getBoolean("success");
+                KLog.e(success);
+                if (success) {
+                    if (null != updataListener)
+                        updataListener.success(responseInfo);
                 } else {
                     if (updataListener != null) {
                         updataListener.failed(JSONObject.parseObject(responseInfo).getString("message"));
@@ -232,8 +236,9 @@ public class UserUtils {
     *
     * @return
     */
-    public static Boolean isFirstLogin() {
-        return SPTools.getBoolean("isFirstLogin", true);
+    public static Boolean isFirstLogin(int accountId) {
+        int savedAccountId = SPTools.getInt(accountId + "_saved_account", -1);
+        return accountId == savedAccountId;
     }
 
     /**
@@ -455,7 +460,6 @@ public class UserUtils {
     public static void upDataContactInfo(int friendId, String avatar, String nickname, String conv_id) {
         String string = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", null);
         KLog.e(string);
-        boolean hasThisGuy = false;
         if (!TextUtils.isEmpty(string)) {
             JSONObject jsonObject = JSON.parseObject(string);
             KLog.e(jsonObject.toString());
@@ -465,22 +469,11 @@ public class UserUtils {
                 for (int i = 0; i < jsonArray.size(); i++) {
                     JSONObject oldObject = (JSONObject) jsonArray.get(i);
                     if (oldObject.getInteger("friend_id") == friendId) {
-                        hasThisGuy = true;
                         ((JSONObject) jsonArray.get(i)).put("avatar", avatar);
                         ((JSONObject) jsonArray.get(i)).put("nickname", nickname);
                         ((JSONObject) jsonArray.get(i)).put("friend_id", friendId);
                         ((JSONObject) jsonArray.get(i)).put("conv_id", conv_id);
                     }
-                }
-                //没这个人加入
-                if (hasThisGuy) {
-                    JSONObject newObject = new JSONObject();
-                    newObject.put("avatar", avatar);
-                    newObject.put("nickname", nickname);
-                    newObject.put("friend_id", friendId);
-                    newObject.put("conv_id", conv_id);
-                    jsonArray.add(newObject);
-                    jsonObject.put("data", jsonArray);
                 }
 
                 KLog.e(jsonObject);

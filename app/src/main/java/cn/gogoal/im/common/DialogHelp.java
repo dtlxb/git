@@ -165,16 +165,40 @@ public class DialogHelp {
 
         final AlertDialog dialog = builder.create();
         dialog.show();
+        dialog.setCancelable(true);
         Window window = dialog.getWindow();
-        if (window!=null) {
+        if (window != null) {
             window.setBackgroundDrawableResource(android.R.color.transparent);
-            WindowManager.LayoutParams lp = window.getAttributes();
-            lp.width = 5 * AppDevice.getWidth(context) / 6;
-            window.setAttributes(lp);
             window.setContentView(dialogView);
+
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.width = 5 * AppDevice.getWidth(context) / 6;
+            window.setAttributes(params);
         }
         return dialog;
     }
+//    /**
+//     * 弹出window窗体
+//     *
+//     * @param context    上下文
+//     * @param dialogView 弹窗视图
+//     */
+//    public static AlertDialog getWindoDialog(Context context, View dialogView,int style) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(context,style);
+//
+//        final AlertDialog dialog = builder.create();
+//        dialog.show();
+//        dialog.setCancelable(true);
+//        Window window = dialog.getWindow();
+//        if (window!=null) {
+//            window.setBackgroundDrawableResource(android.R.color.transparent);
+//            WindowManager.LayoutParams lp = window.getAttributes();
+//            lp.width = 5 * AppDevice.getWidth(context) / 6;
+//            window.setAttributes(lp);
+//            window.setContentView(dialogView);
+//        }
+//        return dialog;
+//    }
 
     /**
      * 弹出window窗体
