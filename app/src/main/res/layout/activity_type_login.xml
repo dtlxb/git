@@ -52,12 +52,12 @@
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
+                android:digits="0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
                 android:drawableLeft="@mipmap/icon_code"
                 android:drawablePadding="7dp"
                 android:hint="请输入密码"
-                android:digits="0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
-                android:maxLength="16"
                 android:inputType="numberPassword"
+                android:maxLength="16"
                 android:paddingEnd="7dp"
                 android:paddingStart="10dp"
                 android:textColor="@color/textColor_333333"
@@ -69,8 +69,8 @@
                 android:id="@+id/checkbox_psw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="false"
-                android:button="@drawable/selector_psw"/>
+                android:button="@drawable/selector_psw"
+                android:checked="false" />
 
         </LinearLayout>
 
@@ -100,5 +100,32 @@
             android:textSize="15dp" />
 
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/layout_loading"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/shape_loading_bg"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/login_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:background="@mipmap/login_loading" />
+
+        <TextView
+            android:id="@+id/tv_login_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:text="登录中"
+            android:textColor="@color/absoluteWhite"
+            android:textSize="15sp" />
+    </FrameLayout>
 
 </cn.gogoal.im.ui.KeyboardLaunchListenLayout>

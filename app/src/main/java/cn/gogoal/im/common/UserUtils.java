@@ -137,8 +137,8 @@ public class UserUtils {
         }
         if (user.containsKey(key)) {
             user.remove(key);
-            user.put(key, newValue);
         }
+        user.put(key, newValue);
 
     }
 
@@ -187,8 +187,9 @@ public class UserUtils {
     *
     * @return
     */
-    public static Boolean isFirstLogin() {
-        return SPTools.getBoolean("isFirstLogin", false);
+    public static Boolean isFirstLogin(int accountId) {
+        int savedAccountId = SPTools.getInt(accountId + "_saved_account", -1);
+        return accountId == savedAccountId;
     }
 
     /**
