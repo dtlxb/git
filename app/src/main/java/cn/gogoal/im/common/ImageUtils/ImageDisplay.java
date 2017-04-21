@@ -269,10 +269,19 @@ public class ImageDisplay {
     }
 
     public static void loadCircleFileImage(Context context, File fileImage, ImageView view) {
-        if (fileImage.exists()) {
+        if (fileImage!=null && fileImage.exists()) {
             Glide.with(context)
                     .load(Uri.fromFile(fileImage))
                     .bitmapTransform(new CropCircleTransformation(context))
+                    .placeholder(R.mipmap.image_placeholder)
+                    .into(view);
+        }
+    }
+    public static void loadCircleFileImageWithBoard(Context context, File fileImage, ImageView view) {
+        if (fileImage.exists()) {
+            Glide.with(context)
+                    .load(Uri.fromFile(fileImage))
+                    .bitmapTransform(new BorderCircleTransformation(context))
                     .placeholder(R.mipmap.image_placeholder)
                     .into(view);
         }

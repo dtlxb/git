@@ -1,9 +1,7 @@
 package cn.gogoal.im.common.ImageUtils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -31,9 +29,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 
 import cn.gogoal.im.base.MyApp;
+import cn.gogoal.im.common.FileUtil;
 
 /**
  * author wangjd on 2017/2/23 0023.
@@ -42,24 +40,8 @@ import cn.gogoal.im.base.MyApp;
  */
 public class ImageUtils {
 
-    /**
-     * 请求相册
-     */
-    public static final int REQUEST_CODE_GETIMAGE_BYSDCARD = 0;
-    /**
-     * 请求相机
-     */
-    public static final int REQUEST_CODE_GETIMAGE_BYCAMERA = 1;
-    /**
-     * 请求裁剪
-     */
-    public static final int REQUEST_CODE_GETIMAGE_BYCROP = 2;
-
     public final static String SDCARD_MNT = "/mnt/sdcard";
-    //    public final static String SDCARD = "/sdcard";
     public final static String SDCARD = Environment.getExternalStorageState();
-
-    /**drawable转成Bitmap对象*/
 
     /**
      * 将Drawable转化为Bitmap
@@ -77,6 +59,10 @@ public class ImageUtils {
         drawable.setBounds(0, 0, width, height);
         drawable.draw(canvas);
         return bitmap;
+    }
+
+    public static String getImageSuffix(String oName) {
+        return oName.contains(".") ? oName.substring(oName.lastIndexOf(".")) : "png";
     }
 
     /**
@@ -154,47 +140,11 @@ public class ImageUtils {
     }
 
     /**
-     * 通过uri获取文件的绝对路径
-     *
-     * @param uri
-     * @return
-     */
-    @SuppressWarnings("deprecation")
-    public static String getAbsoluteImagePath(Activity context, Uri uri) {
-        String imagePath = "";
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = context.managedQuery(uri, proj, // Which columns to
-                // return
-                null, // WHERE clause; which rows to return (all rows)
-                null, // WHERE clause selection arguments (none)
-                null); // Order-by clause (ascending by name)
-
-        if (cursor != null) {
-            int column_index = cursor
-                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            if (cursor.getCount() > 0 && cursor.moveToFirst()) {
-                imagePath = cursor.getString(column_index);
-            }
-        }
-
-        return imagePath;
-    }
-
-
-    /**
      * bitmap 转 drawable
      */
     public static Drawable bitmap2Drawable(Context context, Bitmap bitmap) {
         return new BitmapDrawable(context.getResources(), bitmap);
     }
-
-    /*private Bitmap fastBlur(Bitmap bkg, int radius,int downSampling) {
-        if (downSampling < 2){
-            downSampling = 2;
-        }
-        Bitmap smallBitmap =   Bitmap.createScaledBitmap(bkg,bkg.getWidth()/downSampling,bkg.getHeight()/downSampling,true);
-        return   NativeStackBlur.process(smallBitmap, radius);
-    }*/
 
     /**
      * 旋转图片
@@ -260,7 +210,7 @@ public class ImageUtils {
     }
 
     /**
-     * 通过URI获取BITMAP图
+     * 通过本地URI获取BITMAP图
      */
     public static Bitmap decodeUriAsBitmap(Context context, Uri uri) {
         Bitmap bitmap = null;
@@ -273,44 +223,8 @@ public class ImageUtils {
         return bitmap;
     }
 
-    public static Bitmap getBitMBitmap(String urlpath) {
-        Bitmap map = null;
-        try {
-            URL url = new URL(urlpath);
-            URLConnection conn = url.openConnection();
-            conn.connect();
-            InputStream in;
-            in = conn.getInputStream();
-            map = BitmapFactory.decodeStream(in);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return map;
-    }
-
-    /**
-     * 将图片转换成二进制数组
-     */
-    public static byte[] bitmap2byteArry(File file) {
-        byte[] data = null;
-        FileInputStream input = null;
-        try {
-            input = new FileInputStream(file);
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
-            byte[] buf = new byte[1024];
-            int numBytesRead = 0;
-            while ((numBytesRead = input.read(buf)) != -1) {
-                output.write(buf, 0, numBytesRead);
-            }
-            data = output.toByteArray();
-            output.close();
-            input.close();
-        } catch (FileNotFoundException ex1) {
-            ex1.printStackTrace();
-        } catch (IOException ex1) {
-            ex1.printStackTrace();
-        }
-        return data;
+    public static Bitmap decodeFileAsBitmap(Context context, File file) {
+        return decodeUriAsBitmap(context, Uri.fromFile(file));
     }
 
     /**
@@ -413,13 +327,151 @@ public class ImageUtils {
         return (b[0] == 0x42) && (b[1] == 0x4d);
     }
 
-    //缩放图片，传比例倒数值
-    public static BitmapFactory.Options getBitmapOption(int inSampleSize) {
-        System.gc();
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPurgeable = true;
-        options.inSampleSize = inSampleSize;
-        return options;
+    /**
+     * 创建缩略图
+     *
+     * @param context
+     * @param largeImagePath 原始大图路径
+     * @param thumbfilePath  输出缩略图路径
+     * @param square_size    输出图片宽度
+     * @param quality        输出图片质量
+     * @throws IOException
+     */
+    public static void createImageThumbnail(Context context,
+                                            String largeImagePath, String thumbfilePath, int square_size,
+                                            int quality) throws IOException {
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inSampleSize = 1;
+        // 原始图片bitmap
+        Bitmap cur_bitmap = getBitmapByPath(largeImagePath, opts);
+
+        if (cur_bitmap == null)
+            return;
+
+        // 原始图片的高宽
+        int[] cur_img_size = new int[]{cur_bitmap.getWidth(),
+                cur_bitmap.getHeight()};
+        // 计算原始图片缩放后的宽高
+        int[] new_img_size = scaleImageSize(cur_img_size, square_size);
+        // 生成缩放后的bitmap
+        Bitmap thb_bitmap = zoomBitmap(cur_bitmap, new_img_size[0],
+                new_img_size[1]);
+        // 生成缩放后的图片文件
+        saveImageToSD(null, thumbfilePath, thb_bitmap, quality);
+    }
+
+    /**
+     * 放大缩小图片
+     *
+     * @param bitmap
+     * @param w
+     * @param h
+     * @return
+     */
+    public static Bitmap zoomBitmap(Bitmap bitmap, int w, int h) {
+        Bitmap newbmp = null;
+        if (bitmap != null) {
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            Matrix matrix = new Matrix();
+            float scaleWidht = ((float) w / width);
+            float scaleHeight = ((float) h / height);
+            matrix.postScale(scaleWidht, scaleHeight);
+            newbmp = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix,
+                    true);
+        }
+        return newbmp;
+    }
+
+    /**
+     * 写图片文件到SD卡
+     *
+     * @throws IOException
+     */
+    public static void saveImageToSD(Context ctx, String filePath,
+                                     Bitmap bitmap, int quality) {
+        if (bitmap != null) {
+            File file = new File(filePath.substring(0,
+                    filePath.lastIndexOf(File.separator)));
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            BufferedOutputStream bos = null;
+            try {
+                bos = new BufferedOutputStream(
+                        new FileOutputStream(filePath));
+
+                bitmap.compress(Bitmap.CompressFormat.PNG, quality, bos);
+                bos.flush();
+                if (ctx != null) {
+                    scanPhoto(ctx, filePath);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                FileUtil.closeIO(bos);
+            }
+        }
+    }
+
+    /**
+     * 让Gallery上能马上看到该图片
+     */
+    private static void scanPhoto(Context ctx, String imgFileName) {
+        Intent mediaScanIntent = new Intent(
+                Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File file = new File(imgFileName);
+        Uri contentUri = Uri.fromFile(file);
+        mediaScanIntent.setData(contentUri);
+        ctx.sendBroadcast(mediaScanIntent);
+    }
+
+    /**
+     * 计算缩放图片的宽高
+     *
+     * @param img_size
+     * @param square_size
+     * @return
+     */
+    public static int[] scaleImageSize(int[] img_size, int square_size) {
+        if (img_size[0] <= square_size && img_size[1] <= square_size)
+            return img_size;
+        double ratio = square_size
+                / (double) Math.max(img_size[0], img_size[1]);
+        return new int[]{(int) (img_size[0] * ratio),
+                (int) (img_size[1] * ratio)};
+    }
+
+    /**
+     * 获取bitmap
+     *
+     * @param filePath
+     * @return
+     */
+    public static Bitmap getBitmapByPath(String filePath) {
+        return getBitmapByPath(filePath, null);
+    }
+
+    public static Bitmap getBitmapByPath(String filePath,
+                                         BitmapFactory.Options opts) {
+        FileInputStream fis = null;
+        Bitmap bitmap = null;
+        try {
+            File file = new File(filePath);
+            fis = new FileInputStream(file);
+            bitmap = BitmapFactory.decodeStream(fis, null, opts);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (OutOfMemoryError e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fis.close();
+            } catch (Exception e) {
+            }
+        }
+        return bitmap;
     }
 
     //压缩图片--质量压缩
@@ -480,40 +532,10 @@ public class ImageUtils {
     /**
      * bitmap保存成本地图片
      */
-    public static File cacheBitmapFile(Bitmap bitmap, String localFlag, String name) {
-        return saveBitmapFile(bitmap,MyApp.getAppContext().getExternalFilesDir(localFlag),name);
-    }
-
-    /**
-     * bitmap保存成本地图片
-     */
-    public static File saveBitmapFile(Bitmap bitmap, File parentDir,String name) {
-        if (!parentDir.exists()){
-            parentDir.mkdirs();
-        }
-        File file = new File(parentDir,name);//将要保存图片的绝对路径全名
-        try {
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
-            bos.flush();
-            bos.close();
-
-            // 其次把文件插入到系统图库
-            try {
-                MediaStore.Images.Media.insertImage(MyApp.getAppContext().getContentResolver(),
-                        parentDir.getPath(), name, null);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            // 最后通知图库更新
-            MyApp.getAppContext().sendBroadcast(new Intent(
-                    Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-                    Uri.parse("file://" + parentDir+File.separator+name)));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return file;
+    public static void cacheBitmapFile(Context context, Bitmap bitmap, String localFlag, String name) {
+//        saveImageToSD
+        saveImageToSD(context, context.getExternalFilesDir(localFlag).getAbsolutePath() + File.separator + name,
+                bitmap, 100);
     }
 
     /**

@@ -85,14 +85,14 @@ public class EditSquareNameActivity extends BaseActivity {
                     //刷新conversation
                     KLog.e(conversationID);
                     AVImClientManager.getInstance().refreshConversation(conversationID);
-                    JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", new JSONArray());
+                    JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
                     for (int i = 0; i < jsonArray.size(); i++) {
                         JSONObject jsonObject = (JSONObject) jsonArray.get(i);
                         if (jsonObject.get("conversationID").equals(conversationID)) {
                             ((JSONObject) jsonArray.get(i)).put("nickname", editSquareName.getText().toString());
                         }
                     }
-                    SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_conversation_beans", jsonArray);
+                    SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", jsonArray);
                     AppManager.getInstance().sendMessage("correct_square_name", editSquareName.getText().toString());
                 } else {
                     UIHelper.toast(getActivity(), "群名称修改失败");

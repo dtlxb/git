@@ -3,7 +3,6 @@ package cn.gogoal.im.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.hardware.camera2.params.BlackLevelPattern;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -34,9 +33,7 @@ import com.alivc.publisher.MediaError;
 import com.alivc.videochat.AlivcVideoChatParter;
 import com.alivc.videochat.IVideoChatParter;
 import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.socks.library.KLog;
 
@@ -59,7 +56,6 @@ import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.PlayerUtils.CountDownTimerView;
-import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.linkUtils.ConnectivityMonitor;
@@ -247,7 +243,7 @@ public class WatchLiveActivity extends BaseActivity {
     private void joinSquare(AVIMConversation conversation) {
         List<Integer> idList = new ArrayList<>();
 
-        idList.add(Integer.parseInt(UserUtils.getUserAccountId()));
+        idList.add(Integer.parseInt(UserUtils.getMyAccountId()));
         ChatGroupHelper.addAnyone(idList, conversation.getConversationId(), new ChatGroupHelper.chatGroupManager() {
             @Override
             public void groupActionSuccess(JSONObject object) {
@@ -266,7 +262,7 @@ public class WatchLiveActivity extends BaseActivity {
     private void quiteSquare(AVIMConversation conversation) {
         List<Integer> idList = new ArrayList<>();
 
-        idList.add(Integer.parseInt(UserUtils.getUserAccountId()));
+        idList.add(Integer.parseInt(UserUtils.getMyAccountId()));
         ChatGroupHelper.deleteAnyone(idList, conversation.getConversationId(), new ChatGroupHelper.chatGroupManager() {
             @Override
             public void groupActionSuccess(JSONObject object) {

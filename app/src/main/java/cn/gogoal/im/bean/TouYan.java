@@ -107,6 +107,15 @@ public class TouYan {
             private int isShow;
             private int showHotFlag;
             private int type;
+            private int isClick;
+
+            public int getIsClick() {
+                return isClick;
+            }
+
+            public void setIsClick(int isClick) {
+                this.isClick = isClick;
+            }
 
             public String getDesc() {
                 return desc;

@@ -25,6 +25,7 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.SPTools;
@@ -64,6 +65,10 @@ public class TypeLoginActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+
+        //存储设备是否低分屏，一定要竖屏
+        SPTools.saveBoolean("low_dpi", AppDevice.getWidth(mContext)<AppDevice.DPI720P);
+
         initTitle();
         loginPassWord.setInputType(InputType.TYPE_CLASS_TEXT);
         UIHelper.passwordToggle(loginPassWord, chToggle);
@@ -76,14 +81,14 @@ public class TypeLoginActivity extends BaseActivity {
         /*loginUserName.setText("E00020190");
         loginPassWord.setText("955202");*/
 
-//        loginUserName.setText("E00003645");
-//        loginPassWord.setText("147258369");
+        loginUserName.setText("E00003645");
+        loginPassWord.setText("147258369");
 
         /*loginUserName.setText("E00002639");
         loginPassWord.setEditTextText("412174");*/
 
-        loginUserName.setText("E00002639");
-        loginPassWord.setText("412174");
+//        loginUserName.setText("E00002639");
+//        loginPassWord.setText("412174");
 
        /* loginUserName.setText("E00002638");
         loginPassWord.setText("123456");*/

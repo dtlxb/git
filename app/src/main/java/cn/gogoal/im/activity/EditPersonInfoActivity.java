@@ -220,7 +220,7 @@ public class EditPersonInfoActivity extends BaseActivity {
                 break;
             case R.id.layout_person_headpic:
                 /*Intent intent = new Intent(getActivity(), ImageDetailActivity.class);
-                intent.putExtra("account_Id", UserUtils.getUserAccountId());
+                intent.putExtra("account_Id", UserUtils.getMyAccountId());
                 startActivity(intent);*/
                 editDialogClick();
                 break;

@@ -309,7 +309,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
         JSONObject contentObject = JSON.parseObject(message.getContent());
         String _lctype = contentObject.getString("_lctype");
-        boolean isYourSelf = message.getFrom().endsWith(UserUtils.getUserAccountId());
+        boolean isYourSelf = message.getFrom().endsWith(UserUtils.getMyAccountId());
         switch (_lctype) {
             case "-1":
                 if (isYourSelf) {

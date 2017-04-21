@@ -168,7 +168,8 @@
         <activity android:name=".activity.copy.StockDetailChartsActivity"
             android:screenOrientation="landscape"/>
         <activity android:name=".activity.copy.CommentActivity"/>
-        <activity android:name=".activity.copy.StockDetailMarketIndexActivity"/>
+        <activity android:name=".activity.copy.StockDetailMarketIndexActivity"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".activity.copy.StockSearchActivity"/>
 

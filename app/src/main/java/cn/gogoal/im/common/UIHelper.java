@@ -108,7 +108,6 @@ public class UIHelper {
             return;
         }
         if (mToast == null) {
-            KLog.e("执行错误");
             if (AppDevice.isNetworkConnected(cont)) {
                 mToast = Toast.makeText(cont, msg, Toast.LENGTH_LONG);
                 xLayout.setStatus(XLayout.Error);

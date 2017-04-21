@@ -58,7 +58,7 @@ public class ImageDetailActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         final String accountId = getIntent().getStringExtra("account_Id");
 
-        isEditMyAvatar = accountId.equalsIgnoreCase(UserUtils.getUserAccountId());
+        isEditMyAvatar = accountId.equalsIgnoreCase(UserUtils.getMyAccountId());
         XTitle title = setMyTitle(isEditMyAvatar ? "个人头像" : "", true);
 
         title.addAction(new XTitle.ImageAction(getResDrawable(R.drawable.ic_more_horiz_black_24dp)) {
@@ -75,6 +75,8 @@ public class ImageDetailActivity extends BaseActivity {
 
         if (isEditMyAvatar) {
             imageUrls.add(UserUtils.getUserAvatar());
+//            imageUrls.add("http://hackfile.ufile.ucloud.cn/gogoal/avatar/ucloud_266F015CFCC3D7AB.jpg");
+//            imageUrls.add("http://hackfile.ufile.ucloud.cn/gogoal/avatar/ucloud_9385F5CF7F318CEE.jpg@1000x1000");
         } else {
             imageUrls.clear();
             imageUrls.addAll(null /*如果是别的预览情况，就传入别的图片集合*/);

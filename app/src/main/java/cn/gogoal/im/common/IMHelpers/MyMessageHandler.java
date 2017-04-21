@@ -87,12 +87,12 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     sendIMMessage(message, conversation);
 
                                     //加好友
-                                    JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_newFriendList", new JSONArray());
+                                    JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_newFriendList", new JSONArray());
                                     JSONObject jsonObject = new JSONObject();
                                     jsonObject.put("message", message);
                                     jsonObject.put("isYourFriend", false);
                                     jsonArray.add(jsonObject);
-                                    SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_newFriendList", jsonArray);
+                                    SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_newFriendList", jsonArray);
                                     break;
                                 case 1005:
                                     //好友更新
@@ -109,8 +109,8 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     contactBean.setContactType(ContactBean.ContactType.PERSION_ITEM);
                                     contactBean.setConv_id(conv_id);
                                     String friendList = UserUtils.updataFriendList(JSONObject.toJSONString(contactBean));
-                                    SPTools.saveString(UserUtils.getUserAccountId() + "_contact_beans", friendList);
-                                    KLog.e(SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", ""));
+                                    SPTools.saveString(UserUtils.getMyAccountId() + "_contact_beans", friendList);
+                                    KLog.e(SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", ""));
                                     break;
 
                                 case 1006:
@@ -121,12 +121,12 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     //群通知
                                     sendIMMessage(message, conversation);
                                     //加好友
-                                    JSONArray unAddArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversation.getConversationId() + "_unadd_accountList_beans", new JSONArray());
+                                    JSONArray unAddArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversation.getConversationId() + "_unadd_accountList_beans", new JSONArray());
                                     JSONObject unAddjsonObject = new JSONObject();
                                     unAddjsonObject.put("message", message);
                                     unAddjsonObject.put("isYourFriend", false);
                                     unAddArray.add(unAddjsonObject);
-                                    SPTools.saveJsonArray(UserUtils.getUserAccountId() + conversation.getConversationId() + "_unadd_accountList_beans", unAddArray);
+                                    SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversation.getConversationId() + "_unadd_accountList_beans", unAddArray);
                                     break;
                                 case 1008:
                                     //直播消息
@@ -164,7 +164,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
         JSONObject thislcattrsObject = thiscontentObject.getJSONObject("_lcattrs");
         int Friend_id = thislcattrsObject.getInteger("friend_id");
 
-        String responseInfo = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", "");
+        String responseInfo = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", "");
         if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
             BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
                     responseInfo,

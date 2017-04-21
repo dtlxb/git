@@ -8,14 +8,14 @@ import cn.gogoal.im.adapter.baseAdapter.entity.MultiItemEntity;
  * phone 18930640263
  * description :用户详情页实体.
  */
-public class UserDetailInfo implements MultiItemEntity{
+public class UserDetailInfo<T> implements MultiItemEntity{
     public static final int HEAD = 1;
     public static final int SPACE = 2;
     public static final int TEXT_ITEM_2 = 3;
 
     private int itemType;
 
-    private String avatar;//头像
+    private T avatar;//头像
     private String fullName;//真实姓名
     private String nickName;//昵称
 
@@ -28,12 +28,12 @@ public class UserDetailInfo implements MultiItemEntity{
         this.itemType = itemType;
     }
 
-    public UserDetailInfo(int itemType, String avatar) {
+    public UserDetailInfo(int itemType, T avatar) {
         this.itemType = itemType;
         this.avatar=avatar;
     }
 
-    public UserDetailInfo(int itemType, String avatar, String fullName, String nickName) {
+    public UserDetailInfo(int itemType, T avatar, String fullName, String nickName) {
         this.itemType=itemType;
         this.avatar = avatar;
         this.fullName = fullName;
@@ -47,11 +47,11 @@ public class UserDetailInfo implements MultiItemEntity{
         this.haveMore = haveMore;
     }
 
-    public String getAvatar() {
+    public T getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(String avatar) {
+    public void setAvatar(T avatar) {
         this.avatar = avatar;
     }
 

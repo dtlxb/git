@@ -80,7 +80,7 @@ public class SquareCollectActivity extends BaseActivity {
         xLayout.setEmptyText("你还没有群组\n\r赶快找到属于你的组织吧");
         initRecycleView(squareRoomRecycler, R.drawable.shape_divider_1px);
 
-        groupsArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + "_groups_saved", new JSONArray());
+        groupsArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_groups_saved", new JSONArray());
         Boolean needRefresh = SPTools.getBoolean("squareNeedRefresh", false);
         KLog.e(groupsArray.toString());
 
@@ -129,7 +129,7 @@ public class SquareCollectActivity extends BaseActivity {
 
                             groupsArray.remove(position);
                             groupList.remove(position);
-                            SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_groups_saved", groupsArray);
+                            SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_groups_saved", groupsArray);
                             listAdapter.notifyDataSetChanged();
                         }
                     }
@@ -188,7 +188,7 @@ public class SquareCollectActivity extends BaseActivity {
                     }
                     xLayout.setStatus(XLayout.Success);
                     listAdapter.notifyDataSetChanged();
-                    SPTools.saveJsonArray(UserUtils.getUserAccountId() + "_groups_saved", newGroupArray);
+                    SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_groups_saved", newGroupArray);
                     groupsArray.addAll(newGroupArray);
                 }
             }
@@ -216,7 +216,7 @@ public class SquareCollectActivity extends BaseActivity {
             nameView.setMaxWidth(AppDevice.getWidth(getActivity()) - AppDevice.dp2px(getActivity(), 120));
             KLog.e(groupObject.toString());
             if (ImageUtils.getBitmapFilePaht(groupObject.getString("conv_id"), "imagecache").equals("")) {
-                JSONArray accountArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + groupObject.getString("conv_id") + "_accountList_beans", null);
+                JSONArray accountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + groupObject.getString("conv_id") + "_accountList_beans", null);
                 if (null == accountArray) {
                     getNicePicture(groupObject.getString("conv_id"), position);
                 } else {
@@ -274,7 +274,7 @@ public class SquareCollectActivity extends BaseActivity {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {
                 String groupFaceImageName = "_" + conversationId + ".png";
-                ImageUtils.cacheBitmapFile(mathingBitmap, "imagecache", groupFaceImageName);
+                ImageUtils.cacheBitmapFile(getActivity(),mathingBitmap, "imagecache", groupFaceImageName);
                 AppManager.getInstance().sendMessage("set_squarecollcet_avatar", positon);
             }
 
