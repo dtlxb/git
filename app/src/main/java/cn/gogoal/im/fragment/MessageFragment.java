@@ -58,6 +58,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
@@ -95,6 +96,8 @@ public class MessageFragment extends BaseFragment {
 
     private Map<String, List<String>> gruopMemberMap = new HashMap<>();
 
+    private Map<Integer, Badge> badgeMap;
+
     public MessageFragment() {
     }
 
@@ -108,6 +111,7 @@ public class MessageFragment extends BaseFragment {
         initTitle();
         initRecycleView(message_recycler, R.drawable.shape_divider_1px);
         message_recycler.setItemAnimator(new NoAlphaItemAnimator());
+        badgeMap = new HashMap<>();
     }
 
     private void initTitle() {
@@ -313,6 +317,7 @@ public class MessageFragment extends BaseFragment {
             int chatType = messageBean.getChatType();
             ImageView avatarIv = holder.getView(R.id.head_image);
             TextView messageTv = holder.getView(R.id.last_message);
+            Badge badge;
 
             //未读数
             if (messageBean.getUnReadCounts().equals("0")) {
@@ -320,10 +325,16 @@ public class MessageFragment extends BaseFragment {
                 /*KLog.e("走这儿了的！！！");
                 badge.hide(true);*/
             } else {
-                Badge badge = new BadgeView(getActivity()).bindTarget(holder.getView(R.id.head_layout));
+                if (null != badgeMap.get(position)) {
+                    badge = badgeMap.get(position);
+                } else {
+                    badge = new BadgeView(getActivity()).bindTarget(holder.getView(R.id.head_layout));
+                    badgeMap.put(position, badge);
+                }
+
                 badge.setBadgeTextSize(10, true);
                 badge.setBadgeGravity(Gravity.TOP | Gravity.END);
-                badge.setBadgeText(messageBean.getUnReadCounts());
+                badge.setBadgeNumber(Integer.parseInt(messageBean.getUnReadCounts()));
                 unRead = "[" + messageBean.getUnReadCounts() + "条] ";
             }
 
@@ -346,8 +357,9 @@ public class MessageFragment extends BaseFragment {
                         squareMessageFrom = (lcattrsObject.get("username")) == null ? "" : lcattrsObject.getString("username");
                     }
                     if (ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache").equals("")) {
-                        createGroupImage(messageBean.getConversationID(), position);
+                        ChatGroupHelper.createGroupImage(messageBean.getConversationID(), gruopMemberMap.get(messageBean.getConversationID()));
                     } else {
+                        KLog.e(position);
                         ImageDisplay.loadFileImage(getActivity(), new File(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")), avatarIv);
                     }
                 } else if (chatType == 1004) {
@@ -448,10 +460,11 @@ public class MessageFragment extends BaseFragment {
      */
     @Subscriber(tag = "set_avatar")
     public void setAvatar(String code) {
+        KLog.e(code);
         listAdapter.notifyItemChanged(Integer.parseInt(code));
     }
 
-    private void createGroupImage(final String ConversationId, final int position) {
+    /*private void createGroupImage(final String ConversationId, final int position) {
         //群删除好友(每次删除后重新生成群头像)
         JSONArray accountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + ConversationId + "_accountList_beans", new JSONArray());
         List<String> memberList = new ArrayList<>();
@@ -516,16 +529,18 @@ public class MessageFragment extends BaseFragment {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {
                 String groupFaceImageName = "_" + ConversationId + ".png";
-                ImageUtils.cacheBitmapFile(getContext(),mathingBitmap, "imagecache", groupFaceImageName);
+                ImageUtils.cacheBitmapFile(getContext(), mathingBitmap, "imagecache", groupFaceImageName);
 
-                AppManager.getInstance().sendMessage("set_avatar", position + "");
+                if (position != -1) {
+                    AppManager.getInstance().sendMessage("set_avatar", position + "");
+                }
             }
 
             @Override
             public void onError(Exception e) {
             }
         });
-    }
+    }*/
 
     /**
      * 判断client连接状态
@@ -586,6 +601,8 @@ public class MessageFragment extends BaseFragment {
             case "6":
                 //好友入群
                 //群删除好友(每次删除后重新生成群头像)
+                KLog.e(gruopMemberMap.toString());
+                //createGroupImage(ConversationId, 0);
                 break;
             case "7":
                 //申请入群

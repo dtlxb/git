@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -104,7 +105,7 @@ public class OfficialAccountsActivity extends BaseActivity {
         });
     }
 
-    private class OfficialMessagesAdapter extends CommonAdapter<LcattrsBean,BaseViewHolder> {
+    private class OfficialMessagesAdapter extends CommonAdapter<LcattrsBean, BaseViewHolder> {
 
         private OfficialMessagesAdapter(Context context, int layoutId, List<LcattrsBean> datas) {
             super(layoutId, datas);
@@ -118,32 +119,46 @@ public class OfficialAccountsActivity extends BaseActivity {
             TextView official_allinfo = holder.getView(R.id.official_allinfo);
             ImageView official_image = holder.getView(R.id.official_image);
 
-            official_name.setText(lcattrsBean.getTitle().getWord());
-            official_name.setTextColor(Color.parseColor(lcattrsBean.getTitle().getColor()));
+            if (null != lcattrsBean.getTitle()) {
+                official_name.setText(lcattrsBean.getTitle().getWord());
+                official_name.setTextColor(Color.parseColor(lcattrsBean.getTitle().getColor()));
+            }
 
-            official_content.setText(lcattrsBean.getContent_title().getWord());
-            official_content.setTextColor(Color.parseColor(lcattrsBean.getContent_title().getColor()));
-
-            official_allinfo.setText(lcattrsBean.getContent().getWord());
+            if (null != lcattrsBean.getContent_title()) {
+                if (!TextUtils.isEmpty(lcattrsBean.getContent_title().getWord())) {
+                    official_content.setText(lcattrsBean.getContent_title().getWord());
+                }
+                if (!TextUtils.isEmpty(lcattrsBean.getContent_title().getColor())) {
+                    official_content.setTextColor(Color.parseColor(lcattrsBean.getContent_title().getColor()));
+                }
+            }
+            if (null != lcattrsBean.getContent() && !TextUtils.isEmpty(lcattrsBean.getContent().getWord())) {
+                official_allinfo.setText(lcattrsBean.getContent().getWord());
+            }
 
             int stringLength = 0;
             int lastLength = 0;
             SpannableStringBuilder stringBuffer = new SpannableStringBuilder();
-            for (int i = 0; i < lcattrsBean.getCoustom_list().size(); i++) {
-                if (i > 0) {
-                    stringBuffer.append("\n");
-                }
-                for (int j = 0; j < lcattrsBean.getCoustom_list().get(i).size(); j++) {
-                    ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor(lcattrsBean.getCoustom_list().get(i).get(j).getColor()));
-                    lastLength = stringBuffer.length();
-                    stringBuffer.append(lcattrsBean.getCoustom_list().get(i).get(j).getWord());
-                    stringLength = stringBuffer.length();
-                    stringBuffer.setSpan(fcs, lastLength, stringLength, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                }
-            }
-            official_brief.setText(stringBuffer);
 
-            ImageDisplay.loadNetImage(getActivity(), lcattrsBean.getImg_url(), official_image);
+            if (null != lcattrsBean.getCoustom_list()) {
+                for (int i = 0; i < lcattrsBean.getCoustom_list().size(); i++) {
+                    if (i > 0) {
+                        stringBuffer.append("\n");
+                    }
+                    for (int j = 0; j < lcattrsBean.getCoustom_list().get(i).size(); j++) {
+                        ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor(lcattrsBean.getCoustom_list().get(i).get(j).getColor()));
+                        lastLength = stringBuffer.length();
+                        stringBuffer.append(lcattrsBean.getCoustom_list().get(i).get(j).getWord());
+                        stringLength = stringBuffer.length();
+                        stringBuffer.setSpan(fcs, lastLength, stringLength, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    }
+                }
+                official_brief.setText(stringBuffer);
+            }
+
+            if (!TextUtils.isEmpty(lcattrsBean.getImg_url())) {
+                ImageDisplay.loadNetImage(getActivity(), lcattrsBean.getImg_url(), official_image);
+            }
         }
     }
 }
