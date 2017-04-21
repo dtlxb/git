@@ -438,10 +438,55 @@ public class LiveActivity extends BaseActivity {
 
         @Override
         public void onFinish() {
-            onBackPressed();
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    switch (i) {
+                        case DialogInterface.BUTTON_POSITIVE: //确定
+                            //结束直播
+                            closeLiveRoom();
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE: //取消
+                            break;
+                    }
+                }
+            };
+            DialogHelp.getConfirmDialog(getContext(), getString(R.string.close_live_call_confirm_message),
+                    listener).setTitle(getString(R.string.close_live_call_title))
+                    .setCancelable(false).show();
         }
 
     };
+
+    /*
+    * 结束直播推流
+    * */
+    private void closeLiveRoom() {
+
+        Map<String, String> param = new HashMap<>();
+        param.put("token", UserUtils.getToken());
+        param.put("live_id", live_id);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                JSONObject data = object.getJSONObject("data");
+                if (object.getIntValue("code") == 0 && data.getIntValue("code") == 1) {
+                    onBackPressed();
+                } else {
+                    UIHelper.toast(getContext(), R.string.close_live_failed);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.VIDEOCALL_CLOSE_LIVE, ggHttpInterface).startGet();
+    }
 
     /**
      * 权限检查（适配6.0以上手机）
@@ -1020,7 +1065,7 @@ public class LiveActivity extends BaseActivity {
     }
 
     /**
-     * 关闭推流直播
+     * 关闭直播推流
      */
     public void onBackPressed() {
         if (isChatting()) {

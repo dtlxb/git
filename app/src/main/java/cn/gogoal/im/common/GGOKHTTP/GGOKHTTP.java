@@ -561,6 +561,13 @@ public class GGOKHTTP {
      */
     public static final String VIDEOCALL_CLOSE = "v1/ggm_videocall/close";
 
+    /**
+     * 直播关闭
+     * token
+     * live_id
+     */
+    public static final String VIDEOCALL_CLOSE_LIVE = "v1/video_mobile/close_live";
+
 //--------------------------------------------------------------------------------------------------
 
     /**
