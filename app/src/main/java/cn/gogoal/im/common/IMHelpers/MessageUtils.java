@@ -139,7 +139,7 @@ public class MessageUtils {
         JSONArray jsonArray;
         String headPicUri = "";
         if (chatType == 1001) {
-            String string = SPTools.getString(UserUtils.getUserAccountId() + "_contact_beans", null);
+            String string = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", null);
             if (!TextUtils.isEmpty(string)) {
                 JSONObject jsonObject = JSON.parseObject(string);
                 KLog.e(jsonObject.toString());
@@ -155,7 +155,7 @@ public class MessageUtils {
                 }
             }
         } else if (chatType == 1002) {
-            jsonArray = SPTools.getJsonArray(UserUtils.getUserAccountId() + conversationID + "_accountList_beans", new JSONArray());
+            jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", new JSONArray());
             if (jsonArray != null) {
                 for (int i = 0; i < jsonArray.size(); i++) {
                     JSONObject oldObject = (JSONObject) jsonArray.get(i);
