@@ -1,14 +1,23 @@
 package cn.gogoal.im.common.IMHelpers;
 
+import android.graphics.Bitmap;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.gogoal.im.base.AppManager;
+import cn.gogoal.im.base.MyApp;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
+import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
 
@@ -155,6 +164,79 @@ public class ChatGroupHelper {
                 SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", spAccountArray);
             }
         }
+    }
+
+    //获取群头像并且缓存SD
+    public static void createGroupImage(final String ConversationId, List<String> gruopMemberMap) {
+        //群删除好友(每次删除后重新生成群头像)
+        JSONArray accountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + ConversationId + "_accountList_beans", new JSONArray());
+
+        if (null != accountArray && accountArray.size() > 0) {
+            getNinePic(accountArray, ConversationId);
+        } else {
+            //如果不存在则先找这个会话
+            if (gruopMemberMap == null || gruopMemberMap.size() == 0) {
+                AVImClientManager.getInstance().findConversationById(ConversationId, new AVImClientManager.ChatJoinManager() {
+                    @Override
+                    public void joinSuccess(AVIMConversation conversation) {
+                        UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, conversation.getMembers(), ConversationId, new UserUtils.getSquareInfo() {
+                            @Override
+                            public void squareGetSuccess(JSONObject object) {
+                                JSONArray array = object.getJSONArray("accountList");
+                                if (null != array && array.size() > 0)
+                                    getNinePic(array, ConversationId);
+                            }
+
+                            @Override
+                            public void squareGetFail(String error) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void joinFail(String error) {
+
+                    }
+                });
+            } else {
+                UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, gruopMemberMap, ConversationId, new UserUtils.getSquareInfo() {
+                    @Override
+                    public void squareGetSuccess(JSONObject object) {
+                        JSONArray array = object.getJSONArray("accountList");
+                        if (null != array && array.size() > 0)
+                            getNinePic(array, ConversationId);
+                    }
+
+                    @Override
+                    public void squareGetFail(String error) {
+
+                    }
+                });
+            }
+        }
+    }
+
+    public static void getNinePic(JSONArray array, final String ConversationId) {
+        List<String> picUrls = new ArrayList<>();
+        for (int i = 0; i < array.size(); i++) {
+            JSONObject personObject = array.getJSONObject(i);
+            picUrls.add(personObject.getString("avatar"));
+        }
+        //九宫图拼接
+        GroupFaceImage.getInstance(MyApp.getAppContext(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
+            @Override
+            public void onSuccess(Bitmap mathingBitmap) {
+                String groupFaceImageName = "_" + ConversationId + ".png";
+                ImageUtils.cacheBitmapFile(MyApp.getAppContext(), mathingBitmap, "imagecache", groupFaceImageName);
+
+                AppManager.getInstance().sendMessage("set_avatar", 0 + "");
+            }
+
+            @Override
+            public void onError(Exception e) {
+            }
+        });
     }
 
     /**
