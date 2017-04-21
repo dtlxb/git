@@ -1058,8 +1058,7 @@ public class WatchLiveActivity extends BaseActivity {
                         //更新当前连麦状态为收到邀请等待反馈状态
                         mChatStatus = VideoChatStatus.RECEIVED_INVITE;
                         //超过10s自动拒绝连麦
-                        mHandler.sendEmptyMessageDelayed(LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT,
-                                LinkConst.INVITE_CHAT_TIMEOUT_DELAY);
+                        //mHandler.sendEmptyMessageDelayed(LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT,LinkConst.INVITE_CHAT_TIMEOUT_DELAY);
                         break;
                     case "mixresult":
                         //混流失败

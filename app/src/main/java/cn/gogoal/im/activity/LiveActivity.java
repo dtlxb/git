@@ -1212,7 +1212,7 @@ public class LiveActivity extends BaseActivity {
                 JSONObject data = object.getJSONObject("data");
                 if (object.getIntValue("code") == 0 && data.getBooleanValue("success")) {
                     //倒计时，10s后未收到回复，自动认为对方决绝。
-                    mHandler.sendEmptyMessageDelayed(LinkConst.MSG_WHAT_INVITE_CHAT_TIMEOUT, LinkConst.INVITE_CHAT_TIMEOUT_DELAY);
+                    //mHandler.sendEmptyMessageDelayed(LinkConst.MSG_WHAT_INVITE_CHAT_TIMEOUT, LinkConst.INVITE_CHAT_TIMEOUT_DELAY);
                     mVideoChatStatus = VideoChatStatus.INVITE_FOR_RES;
                     UIHelper.toast(getContext(), R.string.invite_succeed);
                     liveTogether.setEnabled(false);
