@@ -35,7 +35,7 @@ public class SocialContactFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-
+        setFragmentTitle(R.string.title_social);
     }
 
     @OnClick({R.id.imgFloatAction})

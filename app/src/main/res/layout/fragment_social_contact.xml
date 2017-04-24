@@ -4,6 +4,80 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/include_title" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:orientation="vertical">
+
+            <cn.gogoal.im.ui.view.AutoScrollViewPager
+                android:id="@+id/vp_fund_banner"
+                android:layout_width="match_parent"
+                android:layout_height="155dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@null" />
+
+            <LinearLayout xmlns:imagetext="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <cn.gogoal.im.ui.view.ImageWithTextView
+                    android:id="@+id/linearLive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    imagetext:MiddleImg="@mipmap/social_live"
+                    imagetext:MiddleString="直播" />
+
+                <cn.gogoal.im.ui.view.ImageWithTextView
+                    android:id="@+id/linearConference"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    imagetext:MiddleImg="@mipmap/social_conference"
+                    imagetext:MiddleString="会务" />
+
+                <cn.gogoal.im.ui.view.ImageWithTextView
+                    android:id="@+id/linearRoadshow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    imagetext:MiddleImg="@mipmap/social_roadshow"
+                    imagetext:MiddleString="路演" />
+
+                <cn.gogoal.im.ui.view.ImageWithTextView
+                    android:id="@+id/linearClub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    imagetext:MiddleImg="@mipmap/social_club"
+                    imagetext:MiddleString="俱乐部" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorGriddivider" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/stock_market_bg" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
     <ImageView
         android:id="@+id/imgFloatAction"
         android:layout_width="wrap_content"
