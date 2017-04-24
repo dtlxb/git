@@ -36,6 +36,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.PlayerUtils.TextAndImage;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 import cn.gogoal.im.ui.widget.PopupWindowHelper;
 
 import static cn.gogoal.im.base.BaseActivity.initRecycleView;
@@ -214,8 +215,8 @@ public class WatchBottomFragment extends BaseFragment {
                 }
                 break;
             case R.id.imgPlayerShare:
+                PlayDataStatistics.getStatisticalData(getContext(), live_id, "2", "2");
                 DialogHelp.showShareDialog(getActivity(), AppConst.GG_LIVE_SHARE + live_id + "?live", "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
-
                 break;
             case R.id.imgPlayerShotCut:
                 if (mRecordUIClickListener != null) {

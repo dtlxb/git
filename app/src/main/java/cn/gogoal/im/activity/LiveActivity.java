@@ -438,10 +438,55 @@ public class LiveActivity extends BaseActivity {
 
         @Override
         public void onFinish() {
-            onBackPressed();
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    switch (i) {
+                        case DialogInterface.BUTTON_POSITIVE: //确定
+                            //结束直播
+                            closeLiveRoom();
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE: //取消
+                            break;
+                    }
+                }
+            };
+            DialogHelp.getConfirmDialog(getContext(), getString(R.string.close_live_call_confirm_message),
+                    listener).setTitle(getString(R.string.close_live_call_title))
+                    .setCancelable(false).show();
         }
 
     };
+
+    /*
+    * 结束直播推流
+    * */
+    private void closeLiveRoom() {
+
+        Map<String, String> param = new HashMap<>();
+        param.put("token", UserUtils.getToken());
+        param.put("live_id", live_id);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                JSONObject data = object.getJSONObject("data");
+                if (object.getIntValue("code") == 0 && data.getIntValue("code") == 1) {
+                    onBackPressed();
+                } else {
+                    UIHelper.toast(getContext(), R.string.close_live_failed);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.VIDEOCALL_CLOSE_LIVE, ggHttpInterface).startGet();
+    }
 
     /**
      * 权限检查（适配6.0以上手机）
@@ -833,12 +878,6 @@ public class LiveActivity extends BaseActivity {
      * 调用关闭直播的Rest API
      */
     public void closeLive() {
-        //TODO:结束回调
-
-        //显示关闭直播失败
-        /*UIHelper.toast(LiveActivity.this, R.string.close_live_failed);
-        onLiveClose();*/
-
         //显示关闭直播成功
         finish();
     }
@@ -902,9 +941,6 @@ public class LiveActivity extends BaseActivity {
         super.onPause();
         mConnectivityMonitor.unRegister(this); //取消对网络状态的监听
         mHeadsetMonitor.unRegister(this); //取消对耳机状态的监听
-
-        //TODO:如果当前有连麦请求，则取消该邀请连麦请求
-        //TODO:如果当前有连麦反馈请求，则取消该连麦反馈请求
 
         pausePublishStream();
 
@@ -1020,7 +1056,7 @@ public class LiveActivity extends BaseActivity {
     }
 
     /**
-     * 关闭推流直播
+     * 关闭直播推流
      */
     public void onBackPressed() {
         if (isChatting()) {
@@ -1212,7 +1248,7 @@ public class LiveActivity extends BaseActivity {
                 JSONObject data = object.getJSONObject("data");
                 if (object.getIntValue("code") == 0 && data.getBooleanValue("success")) {
                     //倒计时，10s后未收到回复，自动认为对方决绝。
-                    mHandler.sendEmptyMessageDelayed(LinkConst.MSG_WHAT_INVITE_CHAT_TIMEOUT, LinkConst.INVITE_CHAT_TIMEOUT_DELAY);
+                    //mHandler.sendEmptyMessageDelayed(LinkConst.MSG_WHAT_INVITE_CHAT_TIMEOUT, LinkConst.INVITE_CHAT_TIMEOUT_DELAY);
                     mVideoChatStatus = VideoChatStatus.INVITE_FOR_RES;
                     UIHelper.toast(getContext(), R.string.invite_succeed);
                     liveTogether.setEnabled(false);
