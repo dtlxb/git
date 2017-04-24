@@ -11,7 +11,7 @@
 
     <Button
         android:id="@+id/btn_mine_friend_dynamic"
-        style="@style/MineRadioButtonStyle"
+        style="@style/MineMiddleButtonStyle"
         android:drawableTop="@mipmap/img_mine_friend_dynamic"
         android:text="好友动态" />
 
@@ -22,7 +22,7 @@
 
     <Button
         android:id="@+id/btn_mine_group_chat"
-        style="@style/MineRadioButtonStyle"
+        style="@style/MineMiddleButtonStyle"
         android:drawableTop="@mipmap/img_mine_friend_dynamic"
         android:text="群组" />
 
@@ -33,7 +33,7 @@
 
     <Button
         android:id="@+id/btn_mine_twice_persion"
-        style="@style/MineRadioButtonStyle"
+        style="@style/MineMiddleButtonStyle"
         android:drawableTop="@mipmap/img_mine_friend_dynamic"
         android:text="二度人脉" />
 
@@ -44,7 +44,7 @@
 
     <Button
         android:id="@+id/btn_mine_my_visitor"
-        style="@style/MineRadioButtonStyle"
+        style="@style/MineMiddleButtonStyle"
         android:drawableTop="@mipmap/img_mine_friend_dynamic"
         android:text="谁看过我" />
 </LinearLayout>

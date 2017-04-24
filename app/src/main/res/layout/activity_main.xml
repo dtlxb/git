@@ -8,13 +8,14 @@
     android:fitsSystemWindows="true"
     tools:context="cn.gogoal.im.activity.MainActivity">
 
-    <android.support.v4.view.ViewPager
+    <cn.gogoal.im.ui.widget.UnSlidingViewPager
         android:fitsSystemWindows="true"
         android:id="@+id/vp_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
-        android:layout_above="@+id/tab_main"/>
+        android:layout_above="@+id/tab_main"
+        app:canScroll="false"/>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_main"

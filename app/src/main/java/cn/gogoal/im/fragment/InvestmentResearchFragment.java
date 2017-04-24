@@ -2,20 +2,14 @@ package cn.gogoal.im.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.copy.StockSearchActivity;
 import cn.gogoal.im.adapter.SectionAdapter;
@@ -37,9 +32,8 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.AutoScrollViewPager;
-import cn.gogoal.im.ui.view.DrawableCenterTextView;
 
-import static cn.gogoal.im.R.id.banner_pager_id;
+import static cn.gogoal.im.R.id.recyclerView;
 
 /**
  * author wangjd on 2017/4/19 0019.
@@ -50,8 +44,12 @@ import static cn.gogoal.im.R.id.banner_pager_id;
  * investment research
  */
 public class InvestmentResearchFragment extends BaseFragment {
-    @BindView(R.id.recyclerView)
+
+    @BindView(recyclerView)
     RecyclerView mRecyclerView;
+
+    @BindView(R.id.vp_fund_banner)
+    AutoScrollViewPager bannerPager;
 
     private List<SectionTouYanData> mData;
     private SectionAdapter sectionAdapter;
@@ -65,14 +63,14 @@ public class InvestmentResearchFragment extends BaseFragment {
 
     @Override
     public int bindLayout() {
-        return R.layout.layout_normal_list_without_refresh;
+        return R.layout.fragment_investmentresearch;
     }
 
     @Override
     public void doBusiness(Context mContext) {
         setFragmentTitle(R.string.title_found);
 
-        mRecyclerView.setBackgroundColor(getResColor(R.color.stock_market_bg));
+        mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(
                 AppDevice.isLowDpi() ? 3 : 4,
                 StaggeredGridLayoutManager.VERTICAL));
@@ -82,33 +80,29 @@ public class InvestmentResearchFragment extends BaseFragment {
         mRecyclerView.setAdapter(sectionAdapter);
 
         getBannerImage();
-
         getTouYan();
     }
 
     private void getBannerImage() {
-        final View bannerView = creatBannerView();
-        final AutoScrollViewPager bannerPager = (AutoScrollViewPager)
-                bannerView.findViewById(R.id.banner_pager_id);
+        AppDevice.setViewWidth$Height(bannerPager,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                AppDevice.getWidth(getContext())/3);
 
-        sectionAdapter.addHeaderView(bannerView);
-        bannerPager.startAutoScroll(1500);
-        bannerPager.showIndicator(true);
+        bannerImageUrls=new ArrayList<>();
+        bannerAdapter=new BannerAdapter(bannerImageUrls);
+        bannerPager.setAdapter(bannerAdapter);
+        bannerPager.setScrollFactgor(10);
 
         Map<String, String> map = new HashMap<>();
         map.put("ad_position", "7");
         new GGOKHTTP(map, GGOKHTTP.GET_AD_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-
-                KLog.e(responseInfo);
-
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
-
                 if (code == 0) {
                     bannerImageUrls.addAll(JSONObject.parseObject(responseInfo, BannerBean.class).getData());
                     if (bannerImageUrls.size() > 1) {
-                        bannerPager.startAutoScroll(1500);
+                        bannerPager.startAutoScroll(3000);
                         bannerPager.showIndicator(true);
                     } else {
                         bannerPager.stopAutoScroll();
@@ -126,57 +120,16 @@ public class InvestmentResearchFragment extends BaseFragment {
                     bannerImageUrls.add(spaceBanner);
                     bannerAdapter.notifyDataSetChanged();
                 }
-
             }
-
             @Override
             public void onFailure(String msg) {
-
             }
         }).startGet();
     }
 
-    @NonNull
-    /**动态创建banner视图*/
-    private View creatBannerView() {
-        LinearLayout bannerView = new LinearLayout(getContext());
-        final AutoScrollViewPager bannerPager = new AutoScrollViewPager(getContext());
-        LinearLayout.LayoutParams root = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        bannerView.setOrientation(LinearLayout.VERTICAL);
-        bannerView.setBackgroundResource(R.drawable.shape_line_bottom);
-        bannerView.setLayoutParams(root);
-
-        bannerPager.setId(banner_pager_id);
-        bannerImageUrls = new ArrayList<>();
-        bannerAdapter = new BannerAdapter(bannerImageUrls);
-        LinearLayout.LayoutParams pagerParams = new LinearLayout.LayoutParams(
-                AppDevice.getWidth(getContext()),
-                235 * AppDevice.getWidth(getContext()) / 740);
-        bannerView.addView(bannerPager, 0, pagerParams);
-
-        DrawableCenterTextView searchView = new DrawableCenterTextView(getContext());
-        searchView.setGravity(Gravity.CENTER_VERTICAL);
-        LinearLayout.LayoutParams searchParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, AppDevice.dp2px(getContext(), 35));
-        searchParams.setMargins(AppDevice.dp2px(getContext(), 10), AppDevice.dp2px(getContext(), 10),
-                AppDevice.dp2px(getContext(), 10), AppDevice.dp2px(getContext(), 10));
-        searchView.setBackgroundResource(R.drawable.shape_search_activity_edit);
-        searchView.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getContext(), R.mipmap.img_search)
-                , null, null, null);
-        searchView.setCompoundDrawablePadding(AppDevice.dp2px(getContext(), 5));
-        searchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), StockSearchActivity.class));
-            }
-        });
-        searchView.setText("股票代码/名称/拼音");
-        searchView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-        searchView.setId(R.id.banner_search_id);
-        bannerView.addView(searchView, 1, searchParams);
-        return bannerView;
+    @OnClick(R.id.tv_banner_2search)
+    void click(View view){
+        startActivity(new Intent(view.getContext(), StockSearchActivity.class));
     }
 
     public void getTouYan() {
@@ -202,9 +155,10 @@ public class InvestmentResearchFragment extends BaseFragment {
 
                         //模拟填充空数据
                         creatSpaceItem(itemList);
-
                     }
+
                     sectionAdapter.notifyDataSetChanged();
+
                 } else if (code == 1001) {
 
                 } else {
@@ -219,7 +173,6 @@ public class InvestmentResearchFragment extends BaseFragment {
 
     }
 
-    @NonNull
     private void creatSpaceItem(List<TouYan.DataBean.Item> itemList) {
         TouYan.DataBean.Item spaceItem = new TouYan.DataBean.Item();
         spaceItem.setDesc("");
@@ -284,7 +237,7 @@ public class InvestmentResearchFragment extends BaseFragment {
             ImageView view = new ImageView(container.getContext());
             view.setAdjustViewBounds(true);
             view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            ImageDisplay.loadNetImage(container.getContext(), imageUrls.get(position).getImage(), view);
+            ImageDisplay.loadNetImage(container.getContext(), imageUrls.get(position).getImage(), view,0);
             container.addView(view);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -53,17 +53,31 @@
     </style>
 
     <!--底部选择弹窗-->
-    <style name="BottomDialog" parent="@android:style/Theme.DeviceDefault.Dialog">
+    <style name="BaseBottomDialog" parent="@android:style/Theme.DeviceDefault.Dialog">
         <item name="android:windowTitleStyle">@null</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
-        <!--<item name="android:windowAnimationStyle">@style/BottomDialog.AnimationStyle</item>-->
+        <item name="android:windowAnimationStyle">@style/BaseBottomDialog.AnimationStyle</item>
         <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
     </style>
 
-    <style name="BottomDialog.AnimationStyle">
+    <!--顶部弹窗-->
+    <style name="TopDialog" parent="@android:style/Theme.DeviceDefault.Dialog">
+        <item name="android:windowTitleStyle">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowAnimationStyle">@style/BaseTopDialogStyle</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+    </style>
+
+    <style name="BaseBottomDialog.AnimationStyle">
         <item name="android:windowEnterAnimation">@anim/slide_in_from_bottom</item>
         <item name="android:windowExitAnimation">@anim/slide_out_to_bottom</item>
+    </style>
+
+    <style name="BaseTopDialogStyle">
+        <item name="android:windowEnterAnimation">@anim/top_in</item>
+        <item name="android:windowExitAnimation">@anim/top_out</item>
     </style>
 
     <!--分享弹窗按钮样式-->
@@ -88,6 +102,19 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <!--自选股 头部radiobutton样式-->
+    <style name="RdbMyStockTopStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:button">@null</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/selector_rdb_mystock_top_text</item>
+    </style>
+
     <style name="WindowDialogStyle" parent="android:Theme.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowFrame">@null</item>
@@ -96,18 +123,16 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <!--预览pdf提示窗口样式-->
     <style name="HoloDialogStyle" parent="android:Theme.Holo.Light.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowCloseOnTouchOutside">false</item>
         <item name="android:windowIsFloating">true</item>
-
         <item name="android:windowFrame">@null</item>
         <item name="android:windowTitleStyle">@style/HoloDialogTilteStyle</item>
         <item name="android:windowSoftInputMode">adjustResize|stateHidden</item>
         <item name="android:windowActionModeOverlay">true</item>
-
         <item name="android:colorBackgroundCacheHint">@null</item>
-
     </style>
 
     <style name="HoloDialogTilteStyle">
@@ -127,18 +152,6 @@
         <item name="voiceIcon">@null</item>
         <item name="commitIcon">@null</item>
         <item name="searchIcon">@null</item>
-        <item name="searchHintIcon">@null</item>
-        <item name="android:divider">@null</item>
-        <item name="iconifiedByDefault">false</item>
-    </style>
-
-    <style name="PasswordSearchView" parent="Base.Widget.AppCompat.SearchView">
-        <item name="layout">@layout/layout_search_view</item>
-        <item name="queryBackground">@android:color/transparent</item>
-        <item name="closeIcon">@drawable/ic_cancel_black_24dp</item>
-        <item name="voiceIcon">@null</item>
-        <item name="commitIcon">@null</item>
-        <item name="searchIcon">@mipmap/icon_code</item>
         <item name="searchHintIcon">@null</item>
         <item name="android:divider">@null</item>
         <item name="iconifiedByDefault">false</item>
@@ -170,7 +183,7 @@
         <item name="android:windowExitAnimation">@anim/hide_to_right</item>
     </style>
 
-    <style name="MineRadioButtonStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
+    <style name="MineMiddleButtonStyle">
         <item name="android:button">@null</item>
         <item name="android:background">@null</item>
         <item name="android:layout_width">0dp</item>

@@ -1,15 +1,11 @@
 package cn.gogoal.im.common;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.view.View;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.hply.imagepicker.view.StatusBarUtil;
 
 import java.util.Calendar;
 import java.util.HashSet;
@@ -112,8 +108,8 @@ public class StockUtils {
         SPTools.clearItem("my_stock_set");
     }
 
-    public static String plusMinus(String rateString,boolean percent) {
-        if (null == rateString) {
+    public static String plusMinus(String rateString, boolean percent) {
+        if (TextUtils.isEmpty(rateString)) {
             return "--";
         }
 
@@ -127,7 +123,7 @@ public class StockUtils {
             return "0.00%";
         }
         return (rate > 0 ? "+" : "") +
-                StringUtils.saveSignificand(rate, 2) +(percent?"%":"");
+                StringUtils.saveSignificand(rate, 2) + (percent ? "%" : "");
     }
 
     /**
@@ -167,6 +163,7 @@ public class StockUtils {
         SPTools.saveJsonArray("ggSearchedStock", jsonArray);
     }
 
+    /**根据判断的依据字段，返回股票颜色*/
     public static int getStockRateColor(String rateOrPriceString) {
         if (TextUtils.isEmpty(rateOrPriceString)) {
             return R.color.stock_gray;
@@ -187,26 +184,6 @@ public class StockUtils {
         return (c.get(Calendar.DAY_OF_WEEK)) != Calendar.SUNDAY
                 && (c.get(Calendar.DAY_OF_WEEK)) != Calendar.SATURDAY
                 && ((time >= 570 && time <= 690) || (time >= 780 && time <= 900));
-    }
-
-    /**
-     * @param diaplayView 设置颜色的视图控件
-     * @param rate        依据字段
-     */
-    private void setStockUpOrDownColor(View diaplayView, double rate) {
-        if (rate > 0) {
-            StatusBarUtil.with((Activity) diaplayView.getContext()).setColor(
-                    ContextCompat.getColor(diaplayView.getContext(), R.color.stock_red)
-            );
-            diaplayView.setBackgroundColor(
-                    ContextCompat.getColor(diaplayView.getContext(),R.color.stock_red));
-        } else if (rate < 0) {
-            diaplayView.setBackgroundColor(
-                    ContextCompat.getColor(diaplayView.getContext(),R.color.stock_green));
-        } else {
-            diaplayView.setBackgroundColor(
-                    ContextCompat.getColor(diaplayView.getContext(),R.color.stock_gray));
-        }
     }
 
     /**
@@ -307,6 +284,6 @@ public class StockUtils {
     }
 
     public static void savaColseprice(float closePrice) {
-        SPTools.saveFloat("closePrice",closePrice);
+        SPTools.saveFloat("closePrice", closePrice);
     }
 }

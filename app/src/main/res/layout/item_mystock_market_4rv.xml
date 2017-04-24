@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:layout_marginBottom="1dp"
+    android:paddingStart="14dp"
+    android:paddingTop="14dp"
+    android:paddingBottom="14dp"
+    android:id="@+id/item_mystock_market_4rv"
+    android:background="@drawable/selector_normal_write2gray"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_mystock_market_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textColor_333333"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_mystock_market_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textColor_333333"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/tv_mystock_market_price_change$rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textColor_333333"
+        android:textSize="14sp" />
+
+
+</LinearLayout>
