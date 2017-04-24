@@ -567,7 +567,7 @@ public class PlayerActivity extends BaseActivity {
                 mPlayer.setVideoScalingMode(MediaPlayer.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
                 update_total_duration(mPlayer.getDuration());
                 mTimerHandler.postDelayed(mRunnable, 1000);
-                show_progress_ui(true);
+                //show_progress_ui(true);
                 mTimerHandler.postDelayed(mUIRunnable, 3000);
             }
         }
