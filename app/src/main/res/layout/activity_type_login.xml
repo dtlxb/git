@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<cn.gogoal.im.ui.KeyboardLaunchListenLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<cn.gogoal.im.ui.KeyboardLaunchRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/login_keyboard_layout"
@@ -106,8 +106,8 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_centerInParent="true"
-        android:background="@drawable/shape_loading_bg"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:background="@drawable/shape_loading_bg">
 
         <ImageView
             android:id="@+id/login_loading"
@@ -128,4 +128,4 @@
             android:textSize="15sp" />
     </FrameLayout>
 
-</cn.gogoal.im.ui.KeyboardLaunchListenLayout>
+</cn.gogoal.im.ui.KeyboardLaunchRelativeLayout>

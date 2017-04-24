@@ -21,7 +21,6 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.MarkteBean;
 import cn.gogoal.im.bean.stock.StockMarketBean;
-import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
@@ -105,8 +104,6 @@ public class HuShenFragment extends BaseFragment {
             public void onSuccess(String responseInfo) {
                 AppManager.getInstance().sendMessage("STOP_MARKET_ANIMATION");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    FileUtil.writeRequestResponse(responseInfo);
-
                     SPTools.saveString("MARKET_RESPONSEINFO_DATA", responseInfo);//缓存
                     reconstructData(responseInfo);
 

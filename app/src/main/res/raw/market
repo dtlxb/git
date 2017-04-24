@@ -1,0 +1,16 @@
+
+
+intent.putExtra("stockName", "上证指数");
+intent.putExtra("stockCode", "sh000001");
+
+intent1.putExtra("stockName", "沪深300");
+intent1.putExtra("stockCode", "sh000300");
+
+intent2.putExtra("stockName", "深证成指");
+intent2.putExtra("stockCode", "sz399001");
+
+intent3.putExtra("stockName", "创业板指");
+intent3.putExtra("stockCode", "sz399006");
+
+intent3.putExtra("stockName", "CS朝阳88");
+intent3.putExtra("stockCode", "csi930715");

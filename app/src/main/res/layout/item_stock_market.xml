@@ -9,6 +9,7 @@
     android:layout_marginBottom="1px"
     android:background="@drawable/selector_normal_write2gray"
     android:stretchColumns="0">
+
     <!--android:background="@drawable/selector_stock_item_press"-->
     <TableRow android:gravity="center">
         <TextView

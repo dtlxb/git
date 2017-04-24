@@ -132,6 +132,7 @@ public class EditMyInfoActivity extends BaseActivity {
                                 case 5://职位
                                     break;
                                 case 6://工作地区
+                                    startActivity(new Intent(v.getContext(),AddressActivity.class));
                                     break;
                             }
                         }

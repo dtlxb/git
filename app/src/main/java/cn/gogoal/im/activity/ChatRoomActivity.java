@@ -27,7 +27,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.recording.MediaManager;
 import cn.gogoal.im.common.recording.Recorder;
-import cn.gogoal.im.ui.KeyboardLaunchListenLayout;
+import cn.gogoal.im.ui.KeyboardLaunchRelativeLayout;
 import cn.gogoal.im.ui.view.SwitchImageView;
 import cn.gogoal.im.ui.view.VoiceButton;
 
@@ -65,7 +65,7 @@ public class ChatRoomActivity extends BaseActivity {
     VoiceButton voiceView;
 
     @BindView(R.id.kayboard_layout)
-    KeyboardLaunchListenLayout kayboardLayout;
+    KeyboardLaunchRelativeLayout kayboardLayout;
 
     private AudioAdapter mAdapter;
     private List<Recorder> mDatas = new ArrayList<>();
@@ -80,7 +80,7 @@ public class ChatRoomActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
-        kayboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchListenLayout.OnKeyboardChangeListener() {
+        kayboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchRelativeLayout.OnKeyboardChangeListener() {
             @Override
             public void OnKeyboardPop(int height) {
                 KLog.e("键盘弹出:::"+height);

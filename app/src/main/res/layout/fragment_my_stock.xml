@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:focusableInTouchMode="true"
-    android:focusable="true"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
     <!--标题-->
@@ -24,32 +24,45 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:text="编辑"
                 android:gravity="center"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp"
+                android:text="编辑"
                 android:textColor="@color/textColor_333333"
                 android:textSize="18sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <RadioGroup
+
+                android:layout_width="150dp"
+                android:layout_height="35dp"
                 android:layout_centerInParent="true"
-                android:padding="10dp"
-                android:text="自选"
-                android:textColor="@color/textColor_333333"
-                android:textSize="18sp" />
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/btn_my_stock_zixuan"
+                    style="@style/RdbMyStockTopStyle"
+                    android:background="@drawable/selector_rdb_mystock_top_left"
+                    android:checked="true"
+                    android:text="自选" />
+
+                <RadioButton
+                    android:id="@+id/btn_my_stock_flag"
+                    style="@style/RdbMyStockTopStyle"
+                    android:background="@drawable/selector_rdb_mystock_top_right"
+                    android:text="标签" />
+
+            </RadioGroup>
 
             <ImageView
                 android:id="@+id/img_mystock_refresh"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:src="@mipmap/img_refresh"
-                android:contentDescription="@null"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true" />
+                android:contentDescription="@null"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp"
+                android:src="@mipmap/img_refresh" />
         </RelativeLayout>
     </RelativeLayout>
 
@@ -99,14 +112,33 @@
                             android:background="@color/stock_market_bg"
                             android:gravity="center_vertical">
 
-                            <AdapterViewFlipper
-                                android:id="@+id/flipper_mystock_banner"
+                            <RelativeLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
                                 android:layout_alignParentStart="true"
-                                android:layout_toStartOf="@+id/flag_middle"
-                                android:autoStart="true"
-                                android:flipInterval="2000" />
+                                android:layout_toStartOf="@+id/flag_middle">
+                                <!--img_mystock_down_flag-->
+                                <ImageView
+                                    android:id="@+id/img_mystock_more"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentTop="true"
+                                    android:contentDescription="@null"
+                                    android:paddingBottom="20dp"
+                                    android:paddingEnd="20dp"
+                                    android:paddingStart="10dp"
+                                    android:paddingTop="8dp"
+                                    android:src="@mipmap/img_mystock_down_flag" />
+
+                                <cn.gogoal.im.ui.widget.UnSlidingViewPager
+                                    android:id="@+id/flipper_mystock_banner"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_toStartOf="@+id/img_mystock_more"
+                                    app:canScroll="false"/>
+
+                            </RelativeLayout>
 
                             <View
                                 android:id="@+id/flag_middle"
@@ -165,7 +197,6 @@
                         </RelativeLayout>
 
                         <include layout="@layout/item_my_stock" />
-
 
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/rv_mystock"

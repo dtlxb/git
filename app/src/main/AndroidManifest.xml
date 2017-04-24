@@ -79,13 +79,13 @@
 
         <!--authorities="你的包名+fileprovider" -->
         <provider
-            android:authorities="cn.gogoal.im.fileprovider"
             android:name="android.support.v4.content.FileProvider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:authorities="cn.gogoal.im.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths"/>
+                android:resource="@xml/filepaths" />
         </provider>
 
         <activity
@@ -134,6 +134,7 @@
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".activity.IMPersonActivity" />
         <activity android:name=".activity.IMSquareChatSetActivity" />
+        <activity android:name=".activity.IMGroupContactsActivity" />
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".wxapi.WXPayEntryActivity" />
         <activity android:name=".activity.IMAddFriendActivity" />
@@ -171,11 +172,12 @@
         <activity android:name=".activity.copy.StockDetailMarketIndexActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".activity.copy.StockSearchActivity"/>
+        <activity android:name=".activity.copy.StockSearchActivity" />
 
-        <activity android:name=".activity.EditMyInfoActivity"/>
-        <activity android:name=".activity.ImageDetailActivity"/>
+        <activity android:name=".activity.EditMyInfoActivity" />
+        <activity android:name=".activity.ImageDetailActivity" />
         <activity android:name=".activity.CreateLiveActivity" />
+        <activity android:name=".activity.AddressActivity"/>
     </application>
 
 </manifest>

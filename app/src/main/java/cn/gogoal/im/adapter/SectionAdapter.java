@@ -36,9 +36,7 @@ import cn.gogoal.im.common.UIHelper;
  */
 public class SectionAdapter extends BaseSectionQuickAdapter<SectionTouYanData, BaseViewHolder> {
     private Context context;
-
     private int screenWidth;
-
     private int innerItem;
 
     public SectionAdapter(Context context, List<SectionTouYanData> data) {
@@ -47,8 +45,8 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionTouYanData, B
         screenWidth = AppDevice.getWidth(context);
 
         innerItem = AppDevice.isLowDpi() ?
-                (AppDevice.getWidth(context) - 2) / 3:
-        (AppDevice.getWidth(context) - 3) / 4 ;
+                AppDevice.getWidth(context) / 3:
+        AppDevice.getWidth(context) / 4 ;
     }
 
     @Override
