@@ -128,7 +128,7 @@ public class InvestmentResearchFragment extends BaseFragment {
     }
 
     @OnClick(R.id.tv_banner_2search)
-    void click(View view){
+    void click(View view) {
         startActivity(new Intent(view.getContext(), StockSearchActivity.class));
     }
 

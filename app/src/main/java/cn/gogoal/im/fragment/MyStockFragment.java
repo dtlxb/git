@@ -56,6 +56,7 @@ import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
 import cn.gogoal.im.ui.view.SortView;
 import cn.gogoal.im.ui.view.XLayout;
+import cn.gogoal.im.ui.widget.MyStockTopDialog;
 
 /**
  * author wangjd on 2017/4/7 0007.

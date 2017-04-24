@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
+import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
@@ -107,6 +109,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         JSONObject contentObject = JSON.parseObject(avimMessage.getContent());
         final JSONObject lcattrsObject = (JSONObject) contentObject.get("_lcattrs");
         String messageType = contentObject.getString("_lctype");
+        String headPicUrl = "";
         KLog.e(messageType);
         if (!messageType.equals("5") && !messageType.equals("6") && !messageType.equals("8")) {
             if (chatType == 1001) {
@@ -116,7 +119,13 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             } else {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
             }
-            ImageDisplay.loadNetImage(mContext, (String) lcattrsObject.get("avatar"), ((IMCHatViewHolder) holder).user_head_photo);
+            //头像
+            if (!TextUtils.isEmpty(MessageUtils.getItsHeadPic(Integer.parseInt(avimMessage.getFrom()), chatType, ""))) {
+                headPicUrl = MessageUtils.getItsHeadPic(Integer.parseInt(avimMessage.getFrom()), chatType, "");
+            } else {
+                headPicUrl = (String) lcattrsObject.get("avatar");
+            }
+            ImageDisplay.loadNetImage(mContext, headPicUrl, ((IMCHatViewHolder) holder).user_head_photo);
         } else {
         }
         if (holder instanceof LeftTextViewHolder) {
