@@ -8,10 +8,13 @@ import android.support.percent.PercentRelativeLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -36,7 +39,6 @@ import cn.gogoal.im.activity.stock.MyStockNewsActivity;
 import cn.gogoal.im.adapter.MyStockPagerAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.MyStockBean;
@@ -53,10 +55,9 @@ import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
+import cn.gogoal.im.ui.XDividerItemDecoration;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
 import cn.gogoal.im.ui.view.SortView;
-import cn.gogoal.im.ui.view.XLayout;
-import cn.gogoal.im.ui.widget.MyStockTopDialog;
 
 /**
  * author wangjd on 2017/4/7 0007.
@@ -66,10 +67,7 @@ import cn.gogoal.im.ui.widget.MyStockTopDialog;
  */
 public class MyStockFragment extends BaseFragment implements MyStockSortInteface {
 
-    @BindView(R.id.xLayout)
-    XLayout xLayout;
-
-    @BindView(R.id.swiperefreshlayout)
+    @BindView(R.id.swiperefreshlayout_my_stock)
     SwipeRefreshLayout refreshLayout;
 
     //左上角编辑按钮
@@ -108,16 +106,34 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     @BindView(R.id.btn_my_stock_flag)
     RadioButton btnMyStockFlag;
 
-    private ArrayList<MyStockMarketBean.MyStockMarketData> bannerDatas;
+    //大盘缩略viewpager集合
+    private ArrayList<MyStockMarketBean.MyStockMarketData> bannerDatas = new ArrayList<>();
+    //大盘缩略viewpager适配器
     private MyStockPagerAdapter bannerAdapter;
 
     @BindView(R.id.layout_title)
     ViewGroup layoutTitle;
 
+    //自选股集合
     private ArrayList<MyStockData> myStockDatas = new ArrayList<>();
     private MyStockAdapter myStockAdapter;
+
+    //标题右上角旋转动画
     private RotateAnimation rotateAnimation;
+
+    //自动刷新默认时间
     private static final long INTERVAL_TIME = 6000;
+
+    //弹窗的recyclerView
+    @BindView(R.id.rv_mystock_market)
+    RecyclerView rvMystockMarket;
+
+    private GridMarketAdapter myStockMarketAdapter;
+    //蒙版
+    @BindView(R.id.view_dialog_mask)
+    View viewDialogMask;
+    private Animation inAnimation;
+    private Animation outAnimation;
 
     @Override
     public int bindLayout() {
@@ -128,15 +144,13 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     public void doBusiness(final Context mContext) {
         BaseActivity.iniRefresh(refreshLayout);
 
+        initRecyclerView(mContext);
         initMarketBanner();
         initSortTitle(mContext);
-        initRecyclerView(mContext);
 
         refreshAll(AppConst.REFRESH_TYPE_FIRST);//请求
 
         handler.postDelayed(runnable, INTERVAL_TIME);
-
-        initXLayout();
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -164,25 +178,20 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         startAnimation();//刷新按钮动画
         getMyStockData(refreshType);
         getMarketLittle();
-//        stockTopDialog.updata();
     }
 
-    private void initXLayout() {
-        xLayout.setEmptyText(getString(R.string.str_add_my_stock));
-        xLayout.setEmptyImage(R.mipmap.img_mystock_no_data);
+    public boolean isMaskViewVisiable() {
+        return viewDialogMask.getVisibility() == View.VISIBLE;
+    }
 
-        xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
-            @Override
-            public void onReload(View v) {
-                getMyStockData(AppConst.REFRESH_TYPE_FIRST);
-            }
-        });
-
+    public void dismissMarket() {
+        rvMystockMarket.setVisibility(View.GONE);
+        rvMystockMarket.startAnimation(outAnimation);
+        viewDialogMask.setVisibility(View.GONE);
     }
 
     //init
     private void initMarketBanner() {
-        bannerDatas = new ArrayList<>();
         bannerAdapter = new MyStockPagerAdapter(bannerDatas);
         mystockBanner.setOffscreenPageLimit(4);
         mystockBanner.setAdapter(bannerAdapter);
@@ -193,7 +202,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         }
     }
 
-    public void chengIitem(int pos) {
+    public void changeIitem(int pos) {
         mystockBanner.setCurrentItem(pos);
     }
 
@@ -218,8 +227,8 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     }
 
     private void initRecyclerView(Context mContext) {
+        //自选股列表
         myStockAdapter = new MyStockAdapter(myStockDatas);
-        //------------------------
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         layoutManager.setSmoothScrollbarEnabled(true);
         layoutManager.setAutoMeasureEnabled(true);
@@ -227,10 +236,19 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         rvMystock.setLayoutManager(layoutManager);
         rvMystock.setHasFixedSize(true);
         rvMystock.setNestedScrollingEnabled(false);
-        //------------------------
+
         rvMystock.setLayoutManager(layoutManager);
         rvMystock.addItemDecoration(new NormalItemDecoration(mContext));
         rvMystock.setAdapter(myStockAdapter);
+
+        //大盘列表
+        myStockMarketAdapter = new GridMarketAdapter(bannerDatas);
+        rvMystockMarket.setLayoutManager(new GridLayoutManager(mContext, 3));
+        rvMystockMarket.setAdapter(myStockMarketAdapter);
+        rvMystockMarket.addItemDecoration(new RvMarketDvider(mContext));
+
+        inAnimation = android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.top_in);
+        outAnimation = android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.top_out);
     }
 
     @Override
@@ -273,9 +291,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
      */
     private void getMyStockData(final int loadType) {
         iniSortBar();
-        if (loadType == AppConst.REFRESH_TYPE_FIRST) {
-            xLayout.setStatus(XLayout.Loading);
-        }
         Map<String, String> params = new HashMap<>();
         params.put("page", "1");
         params.put("rows", "200");
@@ -286,7 +301,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             public void onSuccess(String responseInfo) {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
-                    xLayout.setPadding(0, 0, 0, 0);
                     myStockDatas.clear();
                     myStockDatas.addAll(JSONObject.parseObject(responseInfo, MyStockBean.class).getData());
                     myStockAdapter.notifyDataSetChanged();
@@ -294,18 +308,19 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     //缓存自选股
                     StockUtils.saveMyStock(JSONObject.parseObject(responseInfo).getJSONArray("data"));
 
-                    xLayout.setStatus(XLayout.Success);
-                    refreshLayout.setRefreshing(false);
-                    stopAnimation();
                     if (loadType == AppConst.REFRESH_TYPE_SWIPEREFRESH || loadType == AppConst.REFRESH_TYPE_PARENT_BUTTON) {
                         UIHelper.toast(getActivity(), getString(R.string.str_refresh_ok));
                     }
+                    new android.os.Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshLayout.setRefreshing(false);
+                            stopAnimation();
+                        }
+                    }, 1000);
 
                 } else if (code == 1001) {
-                    xLayout.setStatus(XLayout.Empty);
                 } else {
-                    xLayout.setStatus(XLayout.Error);
-                    xLayout.setPadding(0, 0, 0, 0);
                     refreshLayout.setRefreshing(false);
                     UIHelper.toastResponseError(getActivity(), responseInfo);
                 }
@@ -314,7 +329,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             @Override
             public void onFailure(String msg) {
                 refreshLayout.setRefreshing(false);
-                UIHelper.toastError(getActivity(), msg, xLayout);
+                UIHelper.toastError(getActivity(), msg);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.GET_MYSTOCKS, ggHttpInterface).startGet();
@@ -331,12 +346,13 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             public void onSuccess(String responseInfo) {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
+                    bannerDatas.clear();
                     List<MyStockMarketBean.MyStockMarketData> marketDatas =
                             JSONObject.parseObject(responseInfo, MyStockMarketBean.class).getData();
                     bannerDatas.addAll(marketDatas);
-                    bannerAdapter.notifyDataSetChanged();
 
-                    AppManager.getInstance().sendMessage("updata_top_popu");//更新popu弹窗中数据
+                    bannerAdapter.notifyDataSetChanged();
+                    myStockMarketAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -349,7 +365,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     }
 
     @OnClick({R.id.tv_mystock_edit, R.id.img_mystock_more, R.id.tv_mystock_news, R.id.tv_mystock_gonggao,
-            R.id.tv_mystock_yanbao, R.id.btn_my_stock_flag})
+            R.id.tv_mystock_yanbao, R.id.btn_my_stock_flag, R.id.view_dialog_mask})
     void click(View view) {
         switch (view.getId()) {
             case R.id.tv_mystock_edit:
@@ -361,7 +377,14 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 break;
 
             case R.id.img_mystock_more:
-                new MyStockTopDialog().show(getChildFragmentManager());
+//                new MyStockTopDialog().show(getChildFragmentManager());
+                rvMystockMarket.setVisibility(View.VISIBLE);
+                viewDialogMask.setVisibility(View.VISIBLE);
+                rvMystockMarket.startAnimation(inAnimation);
+                break;
+
+            case R.id.view_dialog_mask:
+                dismissMarket();
                 break;
 
             case R.id.tv_mystock_news:
@@ -374,7 +397,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 intentNews(2);
                 break;
             case R.id.btn_my_stock_flag:
-                UIHelper.toast(getContext(),"努力开发中...");
+                UIHelper.toast(getContext(), "努力开发中...");
                 btnMyStockFlag.setChecked(false);
                 btnMyStockZixuan.setChecked(true);
                 break;
@@ -402,6 +425,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         rotateAnimation.startNow();
     }
 
+    /**
+     * 自选股适配器
+     */
     private class MyStockAdapter extends CommonAdapter<MyStockData, BaseViewHolder> {
 
         private MyStockAdapter(List<MyStockData> datas) {
@@ -442,6 +468,72 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         }
     }
 
+    /**
+     * 弹出大盘的recyclerview适配器
+     */
+    private class GridMarketAdapter extends CommonAdapter<MyStockMarketBean.MyStockMarketData, BaseViewHolder> {
+
+        private GridMarketAdapter(List<MyStockMarketBean.MyStockMarketData> datas) {
+            super(R.layout.item_mystock_market_4rv, datas);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder holder, final MyStockMarketBean.MyStockMarketData data, final int position) {
+            View itemView = holder.getView(R.id.item_mystock_market_4rv);
+
+            itemView.setTag(position);
+
+            if (!TextUtils.isEmpty(data.getFullcode())) {
+
+                holder.setText(R.id.tv_mystock_market_name, data.getName());
+                holder.setText(R.id.tv_mystock_market_price, StringUtils.saveSignificand(data.getPrice(), 2));
+
+                holder.setText(R.id.tv_mystock_market_price_change$rate,
+                        StockUtils.plusMinus(data.getPrice_change(), false) + "  " +
+                                StockUtils.plusMinus(data.getPrice_change_rate(), true));
+
+                holder.setTextResColor(R.id.tv_mystock_market_price_change$rate,
+                        StockUtils.getStockRateColor(String.valueOf(data.getPrice_change_rate())));
+
+                holder.setTextResColor(R.id.tv_mystock_market_price,
+                        StockUtils.getStockRateColor(String.valueOf(data.getPrice_change_rate())));
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismissMarket();
+                        SPTools.saveInt("choose_banner_item", position);
+                        changeIitem(position);
+                    }
+                });
+            }
+        }
+    }
+
+    private class RvMarketDvider extends XDividerItemDecoration {
+
+        private RvMarketDvider(Context context) {
+            super(context, 1, ContextCompat.getColor(context, R.color.wx_share_line));
+        }
+
+        @Override
+        public boolean[] getItemSidesIsHaveOffsets(int itemPosition) {
+//            left, top, right, bottom
+            boolean[] dividerTog = new boolean[4];
+            switch (itemPosition % 3) {
+                case 0:
+                case 1:
+                    dividerTog[2] = true;
+                    dividerTog[3] = true;
+                    break;
+                case 2:
+                    dividerTog[3] = true;
+                    break;
+            }
+            return dividerTog;
+        }
+    }
+
     //定时刷新
     Handler handler = new Handler();
 
@@ -474,5 +566,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             myStockAdapter.notifyDataSetChanged();
         }
     }
+
 }
 

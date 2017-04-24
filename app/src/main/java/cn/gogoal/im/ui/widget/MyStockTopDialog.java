@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSONObject;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +20,6 @@ import java.util.Map;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.stock.MyStockMarketBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -35,6 +36,11 @@ import cn.gogoal.im.fragment.MyStockFragment;
  * description :${annotated}.
  */
 public class MyStockTopDialog extends BaseDialog {
+
+    @Override
+    public float getDimAmount() {
+        return 0;
+    }
 
     private List<MyStockMarketBean.MyStockMarketData> datas;
 
@@ -58,7 +64,20 @@ public class MyStockTopDialog extends BaseDialog {
     @Override
     public void bindView(View v) {
         datas = new ArrayList<>();
+
         marketAdapter = new GridMarketAdapter(v.getContext(), datas);
+
+        View spaceTop=v.findViewById(R.id.dialog_space);
+        AppDevice.setViewWidth$Height(spaceTop,ViewGroup.LayoutParams.MATCH_PARENT,
+                getResources().getDimensionPixelOffset(R.dimen.titlebar_size)+1);
+
+        v.findViewById(R.id.view_dialog_dismiss).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyStockTopDialog.this.dismiss();
+            }
+        });
+
         RecyclerView rvMystockMarket = (RecyclerView) v.findViewById(R.id.rv_mystock_market);
         rvMystockMarket.setLayoutManager(new GridLayoutManager(v.getContext(), 3));
         rvMystockMarket.setAdapter(marketAdapter);
@@ -67,7 +86,8 @@ public class MyStockTopDialog extends BaseDialog {
 
     }
 
-    public void updata() {
+    @Subscriber(tag = "dialog_market_refresh")
+    public void updata(String msg) {
         getMarketLittle();
     }
 
@@ -75,6 +95,7 @@ public class MyStockTopDialog extends BaseDialog {
      * 获取大盘数据
      */
     private void getMarketLittle() {
+        datas.clear();
         final Map<String, String> param = new HashMap<>();
         param.put("fullcode", "sh000001;sz399001;sh000300;csi930715;sz399006");
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
@@ -88,8 +109,6 @@ public class MyStockTopDialog extends BaseDialog {
                     //补一个空数据
                     datas.add(new MyStockMarketBean.MyStockMarketData());
                     marketAdapter.notifyDataSetChanged();
-
-                    AppManager.getInstance().sendMessage("updata_top_popu");//更新popu弹窗中数据
                 }
             }
 
@@ -143,7 +162,7 @@ public class MyStockTopDialog extends BaseDialog {
                         MyStockTopDialog.this.dismiss();
                         SPTools.saveInt("choose_banner_item", position);
 
-                        ((MyStockFragment)getParentFragment()).chengIitem(position);
+                        ((MyStockFragment)getParentFragment()).changeIitem(position);
                     }
                 });
             }

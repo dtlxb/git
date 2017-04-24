@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hply.imagepicker.view.StatusBarUtil;
@@ -41,6 +43,8 @@ public class MainActivity extends BaseActivity {
     TabLayout tabMain;
     private StatusBarUtil barUtil;
 
+    private MyStockFragment myStockFragment;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_main;
@@ -53,48 +57,19 @@ public class MainActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
-        KLog.e("width==="+AppDevice.getWidth(mContext)+";height==="+AppDevice.getHeight(mContext));
-//            //测试使用
-//        String userInfo="{\n" +
-//                "                                                               \"phone\" : \"\",\n" +
-//                "                                                               \"department\" : \"技术部\",\n" +
-//                "                                                               \"simple_avatar\" : \"http://www.go-goal.com/sample/ACC/ftx/forum/library/NOFTX.gif\",\n" +
-//                "                                                               \"duty\" : \"android开发\",\n" +
-//                "                                                               \"token\" : \"9a35baeb6c154dc9ab1632f3abd8c6fd\",\n" +
-//                "                                                               \"gender\" : \"未\",\n" +
-//                "                                                               \"parent_account_id\" : 0,\n" +
-//                "                                                               \"login_type\" : 0,\n" +
-//                "                                                               \"is_parent_account\" : 0,\n" +
-//                "                                                               \"login_id\" : 301117,\n" +
-//                "                                                               \"account_id\" : 357006,\n" +
-//                "                                                               \"nickname\" : \"隔壁王叔叔\",\n" +
-//                "                                                               \"code\" : 0,\n" +
-//                "                                                               \"avatar\" : \"nullHead/NOFTX.gif\",\n" +
-//                "                                                               \"account_status\" : 1,\n" +
-//                "                                                               \"photo\" : \"nullPhoto/ucloud_3FF7A10884D1D8FD.jpg\",\n" +
-//                "                                                               \"account_name\" : \"E00003645\",\n" +
-//                "                                                               \"email\" : \"\",\n" +
-//                "                                                               \"organization_id\" : 4,\n" +
-//                "                                                               \"organization_name\" : \"朝阳永续\",\n" +
-//                "                                                               \"organization_address\" : \"\",\n" +
-//                "                                                               \"mobile\" : \"\",\n" +
-//                "                                                               \"full_name\" : \"王洁东\",\n" +
-//                "                                                               \"weibo\" : \"\",\n" +
-//                "                                                               \"is_tc_org\" : 0\n" +
-//                "                                                             }";
-//        SPTools.saveString("userInfo",userInfo);
+        KLog.e("width===" + AppDevice.getWidth(mContext) + ";height===" + AppDevice.getHeight(mContext));
 
         if (BuildConfig.DEBUG) {
             FileUtil.writeRequestResponse("token_" + UserUtils.getUserName(), UserUtils.getToken());
         }
 
-        if (null!=UserUtils.getUserInfo()) {
+        if (null != UserUtils.getUserInfo()) {
             KLog.e(UserUtils.getUserInfo().toString());
         }
 
         MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
 
-        MyStockFragment myStockFragment = new MyStockFragment();                     //自选股
+        myStockFragment = new MyStockFragment();                     //自选股
 
         InvestmentResearchFragment foundFragment = new InvestmentResearchFragment(); // TAB3 投研
 
@@ -184,5 +159,29 @@ public class MainActivity extends BaseActivity {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_FRIEND_LIST, ggHttpInterface).startGet();
+    }
+
+    private long exitTime = 0;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (myStockFragment.isMaskViewVisiable()){
+                myStockFragment.dismissMarket();
+            }else {
+                exitBy2Click();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void exitBy2Click() {
+        if (System.currentTimeMillis() - exitTime > 2000) {
+            Toast.makeText(this, "再次点击退出", Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        } else {
+            finish();
+        }
     }
 }

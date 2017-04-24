@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:layout_marginBottom="1dp"
-    android:paddingStart="25dp"
     android:paddingEnd="0dp"
+    android:paddingStart="20dp"
     android:background="@drawable/selector_normal_write2gray"
     android:orientation="vertical">
 
@@ -23,12 +25,15 @@
         android:textColor="@color/textColor_333333"
         android:textSize="18sp" />
 
-    <TextView
+    <hply.com.niugu.autofixtext.AutofitTextView
         android:id="@+id/tv_mystock_market_price_change$rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:singleLine="true"
         android:textColor="@color/textColor_333333"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        app:minTextSize="8sp"
+        app:sizeToFit="true"/>
 
 
 </LinearLayout>

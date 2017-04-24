@@ -4,7 +4,6 @@ package cn.gogoal.im.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -49,7 +48,6 @@ import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.IMMessageBean;
@@ -60,7 +58,6 @@ import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
-import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
@@ -359,7 +356,6 @@ public class MessageFragment extends BaseFragment {
                     if (ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache").equals("")) {
                         ChatGroupHelper.createGroupImage(messageBean.getConversationID(), gruopMemberMap.get(messageBean.getConversationID()));
                     } else {
-                        KLog.e(position);
                         ImageDisplay.loadFileImage(getActivity(), new File(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")), avatarIv);
                     }
                 } else if (chatType == 1004) {
