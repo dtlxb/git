@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,23 +9,37 @@
     tools:context="cn.gogoal.im.activity.MainActivity">
 
     <cn.gogoal.im.ui.widget.UnSlidingViewPager
-        android:fitsSystemWindows="true"
         android:id="@+id/vp_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/flag_layout_bottom"
         android:background="@android:color/white"
-        android:layout_above="@+id/tab_main"
-        app:canScroll="false"/>
+        android:fitsSystemWindows="true"
+        app:canScroll="false" />
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tab_main"
-        style="@style/MainTabStyle"
+    <FrameLayout
+        android:id="@+id/flag_layout_bottom"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_alignParentBottom="true"
-        app:tabGravity="fill"
-        app:tabMode="fixed"
-        android:background="@drawable/layer_list_main_tab"
-        app:tabSelectedTextColor="@color/colorPrimary"/>
+        android:layout_alignParentBottom="true">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_main"
+            style="@style/MainTabStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/layer_list_main_tab"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/colorPrimary" />
+
+        <View
+            android:id="@+id/main_view_mask"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:background="#55000000" />
+
+    </FrameLayout>
 
 </RelativeLayout>

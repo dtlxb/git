@@ -5,6 +5,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
@@ -41,6 +43,10 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.tab_main)
     TabLayout tabMain;
+
+    @BindView(R.id.main_view_mask)
+    View mainViewMask;
+
     private StatusBarUtil barUtil;
 
     private MyStockFragment myStockFragment;
@@ -126,6 +132,12 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        mainViewMask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myStockFragment.dismissMarket();
+            }
+        });
     }
 
 //    @Override
@@ -161,14 +173,26 @@ public class MainActivity extends BaseActivity {
         new GGOKHTTP(param, GGOKHTTP.GET_FRIEND_LIST, ggHttpInterface).startGet();
     }
 
+    public void showMainMsk(){
+        mainViewMask.setVisibility(View.VISIBLE);
+        mainViewMask.startAnimation(AnimationUtils.loadAnimation(this,
+                R.anim.alpha_in));
+    }
+
+    public void hideMainMsk(){
+        mainViewMask.setVisibility(View.GONE);
+        mainViewMask.startAnimation(AnimationUtils.loadAnimation(this,
+                R.anim.alpha_out));
+    }
+
     private long exitTime = 0;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (myStockFragment.isMaskViewVisiable()){
+            if (myStockFragment.isMaskViewVisiable()) {
                 myStockFragment.dismissMarket();
-            }else {
+            } else {
                 exitBy2Click();
             }
             return true;

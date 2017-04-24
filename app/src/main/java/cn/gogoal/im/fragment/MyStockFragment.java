@@ -14,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -33,6 +32,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.activity.copy.StockSearchActivity;
 import cn.gogoal.im.activity.stock.EditMyStockActivity;
 import cn.gogoal.im.activity.stock.MyStockNewsActivity;
@@ -132,8 +132,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     //蒙版
     @BindView(R.id.view_dialog_mask)
     View viewDialogMask;
-    private Animation inAnimation;
-    private Animation outAnimation;
 
     @Override
     public int bindLayout() {
@@ -185,9 +183,28 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     }
 
     public void dismissMarket() {
-        rvMystockMarket.setVisibility(View.GONE);
-        rvMystockMarket.startAnimation(outAnimation);
+        ((MainActivity)getActivity()).hideMainMsk();
         viewDialogMask.setVisibility(View.GONE);
+        rvMystockMarket.setVisibility(View.GONE);
+
+        rvMystockMarket.startAnimation(
+                android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.top_out));
+        viewDialogMask.startAnimation(
+                android.view.animation.AnimationUtils.loadAnimation(getContext(),R.anim.alpha_out
+        ));
+
+    }
+
+    public void showMarketDialog() {
+//        new MyStockTopDialog().show(getChildFragmentManager());
+        ((MainActivity)getActivity()).showMainMsk();
+        rvMystockMarket.startAnimation(
+                android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.top_in));
+        rvMystockMarket.setVisibility(View.VISIBLE);
+
+        viewDialogMask.setVisibility(View.VISIBLE);
+        viewDialogMask.startAnimation(
+                android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.alpha_in));
     }
 
     //init
@@ -247,8 +264,12 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         rvMystockMarket.setAdapter(myStockMarketAdapter);
         rvMystockMarket.addItemDecoration(new RvMarketDvider(mContext));
 
-        inAnimation = android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.top_in);
-        outAnimation = android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.top_out);
+        viewDialogMask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissMarket();
+            }
+        });
     }
 
     @Override
@@ -365,7 +386,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     }
 
     @OnClick({R.id.tv_mystock_edit, R.id.img_mystock_more, R.id.tv_mystock_news, R.id.tv_mystock_gonggao,
-            R.id.tv_mystock_yanbao, R.id.btn_my_stock_flag, R.id.view_dialog_mask})
+            R.id.tv_mystock_yanbao, R.id.btn_my_stock_flag})
     void click(View view) {
         switch (view.getId()) {
             case R.id.tv_mystock_edit:
@@ -377,14 +398,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 break;
 
             case R.id.img_mystock_more:
-//                new MyStockTopDialog().show(getChildFragmentManager());
-                rvMystockMarket.setVisibility(View.VISIBLE);
-                viewDialogMask.setVisibility(View.VISIBLE);
-                rvMystockMarket.startAnimation(inAnimation);
-                break;
-
-            case R.id.view_dialog_mask:
-                dismissMarket();
+                showMarketDialog();
                 break;
 
             case R.id.tv_mystock_news:
