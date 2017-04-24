@@ -878,12 +878,6 @@ public class LiveActivity extends BaseActivity {
      * 调用关闭直播的Rest API
      */
     public void closeLive() {
-        //TODO:结束回调
-
-        //显示关闭直播失败
-        /*UIHelper.toast(LiveActivity.this, R.string.close_live_failed);
-        onLiveClose();*/
-
         //显示关闭直播成功
         finish();
     }
@@ -947,9 +941,6 @@ public class LiveActivity extends BaseActivity {
         super.onPause();
         mConnectivityMonitor.unRegister(this); //取消对网络状态的监听
         mHeadsetMonitor.unRegister(this); //取消对耳机状态的监听
-
-        //TODO:如果当前有连麦请求，则取消该邀请连麦请求
-        //TODO:如果当前有连麦反馈请求，则取消该连麦反馈请求
 
         pausePublishStream();
 

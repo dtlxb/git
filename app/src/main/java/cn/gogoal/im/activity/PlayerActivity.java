@@ -54,6 +54,7 @@ import cn.gogoal.im.common.PlayerUtils.PlayerControl;
 import cn.gogoal.im.common.PlayerUtils.StatusListener;
 import cn.gogoal.im.common.PlayerUtils.TextAndImage;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 import cn.gogoal.im.ui.widget.PopupWindowHelper;
 
 /**
@@ -191,6 +192,8 @@ public class PlayerActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
 
         live_id = getIntent().getStringExtra("live_id");
+
+        PlayDataStatistics.getStatisticalData(getContext(), live_id, "2", "1");
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -979,6 +982,7 @@ public class PlayerActivity extends BaseActivity {
                 }
                 break;
             case R.id.imgPlayerShare: //分享
+                PlayDataStatistics.getStatisticalData(getContext(), live_id, "2", "2");
                 DialogHelp.showShareDialog(getContext(), AppConst.GG_LIVE_SHARE + live_id + "?video", "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
                 break;
             case R.id.imgPlayerClose: //退出

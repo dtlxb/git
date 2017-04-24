@@ -568,6 +568,16 @@ public class GGOKHTTP {
      */
     public static final String VIDEOCALL_CLOSE_LIVE = "v1/video_mobile/close_live";
 
+    /**
+     * 直播录播播放数据统计
+     * video_id   视频id      String     视频id    否
+     * source    观看来源    Number   观看来源：1终端，2手机端，3网页  否
+     * token    用户token     String     用户token   是
+     * equipment_id   设备id   String    设备id      是
+     * type    统计类型   Number    统计类型：1播放，2分享。（默认播放）  是
+     */
+    public static final String ADD_PALY_DATE = "v1/video_studio/add_paly_date";
+
 //--------------------------------------------------------------------------------------------------
 
     /**
