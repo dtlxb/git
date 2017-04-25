@@ -103,8 +103,8 @@ public class TypeLoginActivity extends BaseActivity {
         /*loginUserName.setText("E00020190");
         loginPassWord.setText("955202");*/
 
-        loginUserName.setText("E00003645");
-        loginPassWord.setText("147258369");
+        /*loginUserName.setText("E00003645");
+        loginPassWord.setText("147258369");*/
 
         /*loginUserName.setText("E00002639");
         loginPassWord.setEditTextText("412174");*/
@@ -112,8 +112,8 @@ public class TypeLoginActivity extends BaseActivity {
         /*loginUserName.setText("E00003645");
         loginPassWord.setText("147258369");*/
 
-//        loginUserName.setText("E00002639");
-//        loginPassWord.setText("412174");
+        loginUserName.setText("E00002639");
+        loginPassWord.setText("412174");
 
 //        loginUserName.setText("E00002638");
 //        loginPassWord.setText("123456");

@@ -81,30 +81,28 @@ public class SettingActivity extends BaseActivity {
         settingAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(CommonAdapter adapter, View view, int position) {
+                Intent intent;
+
                 switch (position) {
                     case 0:
-                        UIHelper.toast(getActivity(), "Item" + position);
                         break;
                     case 1:
-                        UIHelper.toast(getActivity(), "Item" + position);
-                        break;
-                    case 2:
-                        UIHelper.toast(getActivity(), "Item" + position);
                         break;
                     case 3:
-                        UIHelper.toast(getActivity(), "Item" + position);
+                        //行情刷新频率
+                        intent = new Intent(SettingActivity.this, SetStockRefreshActivity.class);
+                        startActivity(intent);
                         break;
                     case 4:
-                        UIHelper.toast(getActivity(), "Item" + position);
+                        //K线设置
+                        intent = new Intent(SettingActivity.this, KlineSettingActivity.class);
+                        startActivity(intent);
                         break;
                     case 5:
-                        UIHelper.toast(getActivity(), "Item" + position);
+                        //涨跌幅显示
                         break;
                     case 6:
-                        UIHelper.toast(getActivity(), "Item" + position);
-                        break;
-                    case 7:
-                        UIHelper.toast(getActivity(), "Item" + position);
+                        //清除缓存
                         break;
                     case 8:
                         UIHelper.toast(getActivity(), "Item" + position);
