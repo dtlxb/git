@@ -10,7 +10,6 @@
         <item name="android:fadingEdgeLength">0dp</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:disabledAlpha">0.5</item>
-        <item name="searchViewStyle">@style/NormalSearchView</item>
     </style>
 
     <style name="NormaltabLayout" parent="Widget.Design.TabLayout">
@@ -28,7 +27,7 @@
         <item name="textAllCaps">false</item>
     </style>
 
-    <style name="TranslucentTheme" parent="AppTheme"/>
+    <style name="TranslucentTheme" parent="AppTheme" />
 
     <style name="AppBarLayoutStyle" parent="Base.Widget.Design.AppBarLayout">
         <item name="android:background">@color/colorchatGrid</item>
@@ -46,10 +45,6 @@
     <style name="MainTabItem" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">12sp</item>
         <item name="textAllCaps">false</item>
-    </style>
-
-    <!--toolbar样式-->
-    <style name="GroupToolBar" parent="Base.Widget.AppCompat.Toolbar">
     </style>
 
     <!--底部选择弹窗-->
@@ -140,6 +135,21 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <!--全局 验证码输入框-->
+    <style name="EditTextPastCode" parent="Widget.AppCompat.EditText">
+        <item name="android:background">?attr/editTextBackground</item>
+        <item name="android:textColor">@color/textColor_333333</item>
+        <item name="android:hint">验证码</item>
+        <item name="android:drawableStart">@mipmap/img_verification_code</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:inputType">number</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:drawablePadding">11dp</item>
+        <item name="android:paddingStart">9dp</item>
+        <item name="android:paddingEnd">0dp</item>
+    </style>
+
     <!--预览pdf提示窗口样式-->
     <style name="HoloDialogStyle" parent="android:Theme.Holo.Light.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -181,12 +191,12 @@
         <item name="android:windowExitAnimation">@anim/shrink_fade_out_from_bottom</item>
     </style>
 
-    <style name="AnimationFromButtom" >
+    <style name="AnimationFromButtom">
         <item name="android:windowEnterAnimation">@anim/drop_down_form_bottom</item>
         <item name="android:windowExitAnimation">@anim/hide_to_bottom</item>
     </style>
 
-    <style name="AnimationFromRight" >
+    <style name="AnimationFromRight">
         <item name="android:windowEnterAnimation">@anim/drop_down_from_right</item>
         <item name="android:windowExitAnimation">@anim/hide_to_right</item>
     </style>

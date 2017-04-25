@@ -1,6 +1,7 @@
 package cn.gogoal.im.fragment.stock;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,6 +22,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.MarkteBean;
 import cn.gogoal.im.bean.stock.StockMarketBean;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
@@ -40,7 +42,9 @@ import static cn.gogoal.im.common.AppConst.REFRESH_TYPE_SWIPEREFRESH;
  */
 public class HuShenFragment extends BaseFragment {
 
-    public int refreshType = REFRESH_TYPE_RELOAD;//刷新类型
+    private long INTERVAL_TIME = 15000;//默认刷新间隔
+
+//    public int refreshType = REFRESH_TYPE_RELOAD;//刷新类型
 
     @BindView(R.id.xLayout)
     XLayout xLayout;
@@ -55,9 +59,9 @@ public class HuShenFragment extends BaseFragment {
 
     private ArrayList<MarkteBean> markteList = new ArrayList<>();
 
-    public void setRefreshType(int refreshType) {
-        this.refreshType = refreshType;
-    }
+//    public void setRefreshType(int refreshType) {
+//        this.refreshType = refreshType;
+//    }
 
     @Override
     public int bindLayout() {
@@ -69,17 +73,20 @@ public class HuShenFragment extends BaseFragment {
         BaseActivity.initRecycleView(rvMarket, null);
         BaseActivity.iniRefresh(refreshLayout);
 
+        INTERVAL_TIME = SPTools.getLong("INTERVAL_TIME", 15000L);
+
         adapter = new MarketAdapter(getActivity(), markteList);
 
         rvMarket.setAdapter(adapter);
 
-        getMarketInformation();
+        getMarketInformation(AppConst.REFRESH_TYPE_FIRST);
+
+        handler.postDelayed(runnable, INTERVAL_TIME);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshType = REFRESH_TYPE_SWIPEREFRESH;
-                getMarketInformation();
+                getMarketInformation(AppConst.REFRESH_TYPE_SWIPEREFRESH);
                 refreshLayout.setRefreshing(false);
             }
         });
@@ -88,7 +95,7 @@ public class HuShenFragment extends BaseFragment {
     /**
      * 获取[大盘]、[热门行业]、[涨跌振换]列表
      */
-    public void getMarketInformation() {
+    public void getMarketInformation(final int refreshType) {
 
         AppManager.getInstance().sendMessage("START_MARKET_ANIMATIOM");
 
@@ -105,7 +112,7 @@ public class HuShenFragment extends BaseFragment {
                 AppManager.getInstance().sendMessage("STOP_MARKET_ANIMATION");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     SPTools.saveString("MARKET_RESPONSEINFO_DATA", responseInfo);//缓存
-                    reconstructData(responseInfo);
+                    reconstructData(responseInfo, refreshType);
 
                 } else {
                     xLayout.setStatus(XLayout.Error);
@@ -115,20 +122,18 @@ public class HuShenFragment extends BaseFragment {
                         UIHelper.toast(getContext(), "行情数据更新出错\r\n" + errorMsg, Toast.LENGTH_LONG);
                         AppManager.getInstance().sendMessage("STOP_MARKET_ANIMATION");
                     }
-                    refreshType = REFRESH_TYPE_RELOAD;
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                refreshType = REFRESH_TYPE_RELOAD;
                 UIHelper.toastError(getActivity(), msg, xLayout);
                 AppManager.getInstance().sendMessage("STOP_MARKET_ANIMATION");
                 xLayout.setEmptyText(msg);
                 xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
                     @Override
                     public void onReload(View v) {
-                        getMarketInformation();
+                        getMarketInformation(AppConst.REFRESH_TYPE_RELOAD);
                     }
                 });
             }
@@ -136,7 +141,7 @@ public class HuShenFragment extends BaseFragment {
         new GGOKHTTP(param, GGOKHTTP.APP_HQ_INFORMATION, ggHttpInterface).startGet();
     }
 
-    private void reconstructData(String responseInfo) {
+    private void reconstructData(String responseInfo, final int refreshType) {
         markteList.clear();
         StockMarketBean.DataBean marketData = JSONObject.parseObject(responseInfo, StockMarketBean.class).getData();
         //大盘
@@ -147,7 +152,7 @@ public class HuShenFragment extends BaseFragment {
                     hangqingBean.getName(),
                     hangqingBean.getPrice(),
                     hangqingBean.getPrice_change(),
-                    hangqingBean.getPrice_change_rate(),"", null, hangqingBean.getFullcode(),
+                    hangqingBean.getPrice_change_rate(), "", null, hangqingBean.getFullcode(),
                     StockUtils.getStockRateColor(hangqingBean.getPrice_change()));
             listMarket.add(itemData);
         }
@@ -204,6 +209,27 @@ public class HuShenFragment extends BaseFragment {
             increase.add(itemData);
         }
         return increase;
+    }
+
+    //定时刷新
+    Handler handler = new Handler();
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                handler.postDelayed(this, INTERVAL_TIME);
+                getMarketInformation(AppConst.REFRESH_TYPE_AUTO);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        handler.removeCallbacks(runnable);
     }
 
 }

@@ -1,7 +1,6 @@
 package cn.gogoal.im.activity.stock;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -21,14 +20,12 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AnimationUtils;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.fragment.stock.BondFragment;
 import cn.gogoal.im.fragment.stock.FundFragment;
 import cn.gogoal.im.fragment.stock.HKFragment;
 import cn.gogoal.im.fragment.stock.HuShenFragment;
 import cn.gogoal.im.ui.view.XTitle;
-
-import static cn.gogoal.im.common.AppConst.REFRESH_TYPE_AUTO;
-import static cn.gogoal.im.common.AppConst.REFRESH_TYPE_PARENT_BUTTON;
 
 /**
  * Author wangjd on 2017/4/5 0005.
@@ -78,8 +75,7 @@ public class MarketActivity extends BaseActivity {
                         new XTitle.ImageAction(getResDrawable(R.mipmap.img_refresh)) {
                             @Override
                             public void actionClick(View view) {
-                                huShenFragment.setRefreshType(REFRESH_TYPE_PARENT_BUTTON);
-                                huShenFragment.getMarketInformation();
+                                huShenFragment.getMarketInformation(AppConst.REFRESH_TYPE_PARENT_BUTTON);
 
                                 AppManager.getInstance().sendMessage("START_MARKET_ANIMATIOM");
                             }
@@ -129,32 +125,32 @@ public class MarketActivity extends BaseActivity {
         rotateAnimation.startNow();
     }
 
-    //定时刷新
-    Handler handler = new Handler();
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                handler.postDelayed(this, INTERVAL_TIME);
-                huShenFragment.setRefreshType(REFRESH_TYPE_AUTO);
-                huShenFragment.getMarketInformation();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        handler.postDelayed(runnable,INTERVAL_TIME);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        handler.removeCallbacks(runnable);
-    }
+//    //定时刷新
+//    Handler handler = new Handler();
+//    Runnable runnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            try {
+//                handler.postDelayed(this, INTERVAL_TIME);
+//                huShenFragment.setRefreshType(REFRESH_TYPE_AUTO);
+//                huShenFragment.getMarketInformation();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    };
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        handler.postDelayed(runnable,INTERVAL_TIME);
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        handler.removeCallbacks(runnable);
+//    }
 
     @Override
     protected void onDestroy() {

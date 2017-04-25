@@ -25,6 +25,7 @@
             android:name="com.hply.imagepicker.ui.ImagePreviewActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/ImagePickerTheme"/>
+        
     </application>
 
 </manifest>

@@ -506,14 +506,16 @@ public class GGOKHTTP {
     public static final String ADD_LIVE_VIDEO = "v1/video_mobile/add_live_video";
 
     /**
-     * token                         用户token
-     * mobile                        手机号
+     * token
+     *  mobile
+     *  发送验证码 更换绑定手机号
      */
     public static final String SEND_CAPTCHA = "v1/ggm_im/send_captcha";
 
     /**
      * phone                         手机号
      * source                        来源=20
+     * 注册找回密码用
      */
     public static final String MOBILE_SEND_CAPTCHA = "v1/mobile/send_captcha";
 
@@ -577,6 +579,13 @@ public class GGOKHTTP {
      * type    统计类型   Number    统计类型：1播放，2分享。（默认播放）  是
      */
     public static final String ADD_PALY_DATE = "v1/video_studio/add_paly_date";
+
+    /*
+     *  token
+     *  captcha
+     *  绑定手机号
+     */
+    public static final String BIND_MOBILE = "v1/ggm_im/bind_mobile";
 
 //--------------------------------------------------------------------------------------------------
 

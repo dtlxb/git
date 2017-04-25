@@ -23,6 +23,7 @@
     <string name="title_stock_news">个股资讯</string>
     <string name="title_edit_my_infomation">编辑个人资料</string>
     <string name="title_choose_address">选择地区</string>
+    <string name="title_change_phone_number">更换手机号</string>
 
     <string name="square_collcet_add">添加</string>
     <string name="square_publish_create">创建</string>

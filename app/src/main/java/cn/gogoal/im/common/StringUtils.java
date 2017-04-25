@@ -33,10 +33,6 @@ public class StringUtils {
         return false;
     }
 
-    public static boolean isSpace(String s) {
-        return (s == null || s.trim().length() == 0);
-    }
-
     /**
      * 字符串去掉空格回车换行
      *
@@ -164,11 +160,17 @@ public class StringUtils {
      * 输入的手机号是否合法
      */
     public static boolean checkPhoneString(String phoneNumber) {
-        if (!phoneNumber.matches("^1[3-57-9]\\d{9}$")) {
-            return false;
-        }
-        return true;
+        return phoneNumber.matches("^1[3-57-9]\\d{9}$");
     }
+
+    /**
+     * 校验验证码
+     * */
+    public static boolean checkVerificationCode(String veriCode){
+        return (!TextUtils.isEmpty(veriCode)) && veriCode.length()>=6;
+    }
+
+
 
     /**
      * 输入的邮箱格式是否合法

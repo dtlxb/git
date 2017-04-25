@@ -45,7 +45,7 @@ public class UnSlidingViewPager extends ViewPager {
 
     @Override
     public void setCurrentItem(int item) {
-        super.setCurrentItem(item);
+        this.setCurrentItem(item,false);
     }
 
     @Override

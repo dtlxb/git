@@ -125,7 +125,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     private RotateAnimation rotateAnimation;
 
     //自动刷新默认时间
-    private static final long INTERVAL_TIME = 6000;
+    private long INTERVAL_TIME;
 
     //弹窗的recyclerView
     @BindView(R.id.rv_mystock_market)
@@ -144,6 +144,8 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     @Override
     public void doBusiness(final Context mContext) {
         BaseActivity.iniRefresh(refreshLayout);
+
+        INTERVAL_TIME=SPTools.getLong("INTERVAL_TIME",15000);
 
         initRecyclerView(mContext);
         initMarketBanner();

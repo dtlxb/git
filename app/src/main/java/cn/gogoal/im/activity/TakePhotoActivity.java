@@ -89,6 +89,7 @@ public class TakePhotoActivity extends Activity{
         imagePicker.setOutPutX(canCropSize);                           //保存文件的宽度。单位像素
         imagePicker.setOutPutY(canCropSize);                           //保存文件的高度。单位像素
         imagePicker.setMultiMode(limit!=1);
+
     }
 
 }
