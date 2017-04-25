@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hply.imagepicker.ITakePhoto;
@@ -57,7 +58,6 @@ public class ImageDetailActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         final String accountId = getIntent().getStringExtra("account_Id");
-
         isEditMyAvatar = accountId.equalsIgnoreCase(UserUtils.getMyAccountId());
         XTitle title = setMyTitle(isEditMyAvatar ? "个人头像" : "", true);
 
@@ -79,8 +79,7 @@ public class ImageDetailActivity extends BaseActivity {
             imageUrls.add("http://www.jcodecraeer.com/uploads/20170330/1490865016182928.jpeg");
             imageUrls.add("http://hackfile.ufile.ucloud.cn/gogoal/avatar/ucloud_9385F5CF7F318CEE.jpg@1000x1000");
         } else {
-            imageUrls.clear();
-            imageUrls.addAll(null /*如果是别的预览情况，就传入别的图片集合*/);
+            imageUrls.addAll(getIntent().getStringArrayListExtra("image_urls"));
         }
 
         vpImageDetail.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -135,7 +134,7 @@ public class ImageDetailActivity extends BaseActivity {
                         break;
                     case 1://保存图片
                         DownloadUtils.getInstance(DownloadUtils.DEFAULT_DOWNLOAD_PATH).downloadPicture(getActivity(),
-                                imageUrls.get(vpImageDetail.getCurrentItem()),null, new DownloadCallBack() {
+                                imageUrls.get(vpImageDetail.getCurrentItem()), null, new DownloadCallBack() {
                                     @Override
                                     public void success() {
                                         UIHelper.toast(getActivity(), "图片已成功下载到相册");

@@ -89,7 +89,7 @@ public class TypeLoginActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
 
         //存储设备是否低分屏，一定要竖屏
-        SPTools.saveBoolean("low_dpi", AppDevice.getWidth(mContext)<AppDevice.DPI720P);
+        SPTools.saveBoolean("low_dpi", AppDevice.getWidth(mContext) < AppDevice.DPI720P);
 
         initTitle();
         loginPassWord.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -270,7 +270,7 @@ public class TypeLoginActivity extends BaseActivity {
     }
 
     public void getWindoDialog(int dialogRes, int dialogText) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.dialog_style);
 
         View dialogView = getLayoutInflater().inflate(R.layout.view_login_dialog, null);
         ImageView dialogIv = (ImageView) dialogView.findViewById(R.id.login_loading);

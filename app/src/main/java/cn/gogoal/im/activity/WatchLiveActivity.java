@@ -66,6 +66,7 @@ import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.linkUtils.ConnectivityMonitor;
 import cn.gogoal.im.common.linkUtils.HeadsetMonitor;
 import cn.gogoal.im.common.linkUtils.LinkConst;
+import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 import cn.gogoal.im.common.linkUtils.VideoChatStatus;
 import cn.gogoal.im.fragment.WatchBottomFragment;
 
@@ -958,6 +959,8 @@ public class WatchLiveActivity extends BaseActivity {
                         });
                     } else {
                         countDownTimer.setVisibility(View.GONE);
+
+                        PlayDataStatistics.getStatisticalData(getContext(), live_id, "2", "1");
                     }
 
                     startToPlay(mPlayUrl, mPlaySurfaceView);
@@ -1039,6 +1042,9 @@ public class WatchLiveActivity extends BaseActivity {
             AVIMMessage message = (AVIMMessage) map.get("message");
             AVIMConversation conversation = (AVIMConversation) map.get("conversation");
 
+            //lctype==12关闭
+            JSONObject contentObject = JSON.parseObject(message.getContent());
+            String _lctype = contentObject.getString("_lctype");
             int chatType = (int) conversation.getAttribute("chat_type");
 
             KLog.e(message.getContent());
@@ -1059,8 +1065,7 @@ public class WatchLiveActivity extends BaseActivity {
                         //更新当前连麦状态为收到邀请等待反馈状态
                         mChatStatus = VideoChatStatus.RECEIVED_INVITE;
                         //超过10s自动拒绝连麦
-                        mHandler.sendEmptyMessageDelayed(LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT,
-                                LinkConst.INVITE_CHAT_TIMEOUT_DELAY);
+                        //mHandler.sendEmptyMessageDelayed(LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT,LinkConst.INVITE_CHAT_TIMEOUT_DELAY);
                         break;
                     case "mixresult":
                         //混流失败

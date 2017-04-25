@@ -104,7 +104,6 @@ public class EditMyInfoActivity extends BaseActivity {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(v.getContext(), ImageDetailActivity.class);
-                            intent.putExtra("account_Id",UserUtils.getMyAccountId());
                             intent.putExtra("account_Id", UserUtils.getMyAccountId());
                             startActivity(intent);
                         }

@@ -78,6 +78,9 @@
     <string name="sure">确定</string>
     <string name="close_video_call_notify_message">对方已经终止连麦！</string>
     <string name="video_chatting_timeout">连麦超时</string>
+    <string name="close_live_call_title">结束直播</string>
+    <string name="close_live_call_confirm_message">确定要结束直播？</string>
+    <string name="close_live_failed">结束直播失败</string>
 
     <!--权限-->
     <string name="no_camera_permission">没有权限使用摄像头，请开启摄像头权限</string>
@@ -168,6 +171,7 @@
     <string name="str_account_exit">该手机号已注册，请直接登录</string>
     <string name="str_title_back">返回</string>
     <string name="str_login_in">登录</string>
+    <string name="str_login_at_time">登录中...</string>
     <string name="str_login_register">注册</string>
     <string name="str_login_sure">确  定</string>
     <string name="str_login_confirm">信息验证</string>
