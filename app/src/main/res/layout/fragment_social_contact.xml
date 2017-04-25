@@ -11,113 +11,122 @@
 
         <include layout="@layout/include_title" />
 
-        <android.support.v4.widget.NestedScrollView
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swiperefresh_social"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <cn.gogoal.im.ui.view.AutoScrollViewPager
-                    android:id="@+id/socialViewPager"
-                    android:layout_width="match_parent"
-                    android:layout_height="155dp"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@null" />
-
-                <LinearLayout xmlns:imagetext="http://schemas.android.com/apk/res-auto"
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
-                    android:orientation="horizontal"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp">
+                    android:orientation="vertical">
 
-                    <cn.gogoal.im.ui.view.ImageWithTextView
-                        android:id="@+id/linearLive"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        imagetext:MiddleImg="@mipmap/social_live"
-                        imagetext:MiddleString="直播" />
+                    <cn.gogoal.im.ui.view.AutoScrollViewPager
+                        android:id="@+id/socialViewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="155dp"
+                        android:adjustViewBounds="true"
+                        android:contentDescription="@null" />
 
-                    <cn.gogoal.im.ui.view.ImageWithTextView
-                        android:id="@+id/linearConference"
-                        android:layout_width="wrap_content"
+                    <LinearLayout xmlns:imagetext="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        imagetext:MiddleImg="@mipmap/social_conference"
-                        imagetext:MiddleString="会务" />
+                        android:background="@android:color/white"
+                        android:orientation="horizontal"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp">
 
-                    <cn.gogoal.im.ui.view.ImageWithTextView
-                        android:id="@+id/linearRoadshow"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        imagetext:MiddleImg="@mipmap/social_roadshow"
-                        imagetext:MiddleString="路演" />
+                        <cn.gogoal.im.ui.view.ImageWithTextView
+                            android:id="@+id/linearLive"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            imagetext:MiddleImg="@mipmap/social_live"
+                            imagetext:MiddleString="直播" />
 
-                    <cn.gogoal.im.ui.view.ImageWithTextView
-                        android:id="@+id/linearClub"
-                        android:layout_width="wrap_content"
+                        <cn.gogoal.im.ui.view.ImageWithTextView
+                            android:id="@+id/linearConference"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            imagetext:MiddleImg="@mipmap/social_conference"
+                            imagetext:MiddleString="会务" />
+
+                        <cn.gogoal.im.ui.view.ImageWithTextView
+                            android:id="@+id/linearRoadshow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            imagetext:MiddleImg="@mipmap/social_roadshow"
+                            imagetext:MiddleString="路演" />
+
+                        <cn.gogoal.im.ui.view.ImageWithTextView
+                            android:id="@+id/linearClub"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            imagetext:MiddleImg="@mipmap/social_club"
+                            imagetext:MiddleString="俱乐部" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:background="@color/stock_market_bg" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/colorGriddivider" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        imagetext:MiddleImg="@mipmap/social_club"
-                        imagetext:MiddleString="俱乐部" />
+                        android:background="@android:color/white"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:paddingTop="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:text="@string/social_newest"
+                            android:textColor="@color/textColor_333333"
+                            android:textSize="16dp" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:src="@mipmap/img_more" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/colorGriddivider" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/socialRecycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="15dp"
-                    android:background="@color/stock_market_bg" />
+            </android.support.v4.widget.NestedScrollView>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/colorGriddivider" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/white"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:paddingTop="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/social_newest"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentLeft="true"
-                        android:textSize="16dp"
-                        android:textColor="@color/textColor_333333"/>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:src="@mipmap/img_more"/>
-
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/colorGriddivider" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/socialRecycler"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 

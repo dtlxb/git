@@ -1,6 +1,8 @@
 package cn.gogoal.im.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.SocialLiveData;
@@ -26,20 +29,20 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
  */
 public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHolder> {
 
-    private Context context;
+    private Context mContext;
 
-    public SocialLiveAdapter(Context context, List<SocialLiveData> data) {
+    public SocialLiveAdapter(Context mContext, List<SocialLiveData> data) {
         super(R.layout.item_social_live, data);
-        this.context = context;
+        this.mContext = mContext;
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, SocialLiveData data, int position) {
+    protected void convert(BaseViewHolder holder, final SocialLiveData data, int position) {
 
         long timeHour = 60 * 60;
         String live_time_start = CalendarUtils.formatDate("yyyy-MM-dd HH:mm:ss", "MM-dd HH:mm", data.getLive_time_start());
 
-        if (data.getLive_source() == 1) {
+        if (data.getLive_source() == 2) {
             //pc
             holder.setVisible(R.id.linearPhone, false);
             holder.setVisible(R.id.framePhone, false);
@@ -47,7 +50,7 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
             holder.setVisible(R.id.linearPc, true);
 
             ImageView imgPcCover = holder.getView(R.id.imgPcCover);
-            ImageDisplay.loadNetImage(context, data.getLive_large_img(), imgPcCover);
+            ImageDisplay.loadNetImage(mContext, data.getLive_large_img(), imgPcCover);
             //直播状态
             if (data.getLive_status() == 1) {
                 //直播中
@@ -77,7 +80,7 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
 
             holder.setText(R.id.textPcTitle, data.getVideo_name());
             ImageView imgPcIcon = holder.getView(R.id.imgPcIcon);
-            ImageDisplay.loadCircleNetImage(context, data.getAnchor().getFace_url(), imgPcIcon);
+            ImageDisplay.loadCircleNetImage(mContext, data.getAnchor().getFace_url(), imgPcIcon);
             holder.setText(R.id.textCompanTitle, data.getAnchor().getOrganization() + " | "
                     + data.getAnchor().getAnchor_position());
 
@@ -89,13 +92,13 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
             holder.setVisible(R.id.linearPc, false);
 
             ImageView imgAnchorAvatar = holder.getView(R.id.imgAnchorAvatar);
-            ImageDisplay.loadCircleNetImage(context, data.getAnchor().getFace_url(), imgAnchorAvatar);
+            ImageDisplay.loadCircleNetImage(mContext, data.getAnchor().getFace_url(), imgAnchorAvatar);
             holder.setText(R.id.textAnchorName, data.getAnchor().getAnchor_name());
             holder.setText(R.id.textAnchorTitle, data.getAnchor().getOrganization() + " | "
                     + data.getAnchor().getAnchor_position());
 
             ImageView imgPhoneCover = holder.getView(R.id.imgPhoneCover);
-            ImageDisplay.loadNetImage(context, data.getLive_large_img(), imgPhoneCover);
+            ImageDisplay.loadNetImage(mContext, data.getLive_large_img(), imgPhoneCover);
             //直播状态
             if (data.getLive_status() == 1) {
                 //直播中
@@ -124,6 +127,15 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
             }
             holder.setText(R.id.textPhoneTitle, data.getVideo_name());
         }
+
+        holder.setOnClickListener(R.id.linearSocial, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, WatchLiveActivity.class);
+                intent.putExtra("live_id", data.getLive_id());
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     /*
@@ -141,7 +153,7 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
-                    textOnlineNumber.setText(data.getIntValue("result"));
+                    textOnlineNumber.setText(data.getString("result"));
                 }
             }
 

@@ -3,6 +3,7 @@ package cn.gogoal.im.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.activity.CreateLiveActivity;
 import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.adapter.SocialLiveAdapter;
+import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BannerBean;
 import cn.gogoal.im.bean.SocialLiveBean;
@@ -42,13 +44,15 @@ import cn.gogoal.im.ui.view.AutoScrollViewPager;
  */
 public class SocialContactFragment extends BaseFragment {
 
+    @BindView(R.id.swiperefresh_social)
+    SwipeRefreshLayout refreshSocial;
+
     @BindView(R.id.socialRecycler)
     RecyclerView socialRecycler;
 
     @BindView(R.id.socialViewPager)
     AutoScrollViewPager bannerPager;
 
-    private List<SocialLiveData> listData = new ArrayList<>();
     private SocialLiveAdapter adapter;
 
     /**
@@ -66,10 +70,16 @@ public class SocialContactFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         setFragmentTitle(R.string.title_social);
 
+        BaseActivity.iniRefresh(refreshSocial);
+        BaseActivity.initRecycleView(socialRecycler, 0);
         socialRecycler.setNestedScrollingEnabled(false);
 
-        adapter = new SocialLiveAdapter(getActivity(), listData);
-        socialRecycler.setAdapter(adapter);
+        refreshSocial.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getLiveData();
+            }
+        });
 
         getBannerImage();
         getLiveData();
@@ -138,17 +148,21 @@ public class SocialContactFragment extends BaseFragment {
                 KLog.e(responseInfo);
                 SocialLiveBean object = JSONObject.parseObject(responseInfo, SocialLiveBean.class);
                 if (object.getCode() == 0) {
-                    listData = object.getData();
-                    adapter.notifyDataSetChanged();
+                    List<SocialLiveData> listData = object.getData();
+                    adapter = new SocialLiveAdapter(getActivity(), listData);
+                    socialRecycler.setAdapter(adapter);
                 } else if (object.getCode() == 1001) {
 
                 } else {
-
+                    UIHelper.toast(getContext(), R.string.net_erro_hint);
                 }
+
+                refreshSocial.setRefreshing(false);
             }
 
             @Override
             public void onFailure(String msg) {
+                refreshSocial.setRefreshing(false);
                 UIHelper.toast(getContext(), R.string.net_erro_hint);
             }
         };
