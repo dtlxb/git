@@ -1,8 +1,12 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,10 +53,28 @@ public class SettingActivity extends BaseActivity {
         rvSetting.setAdapter(settingAdapter);
 
         SelectorButton selectorButton=new SelectorButton(mContext);
+
+        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        params.setMargins(AppDevice.dp2px(mContext,15),AppDevice.dp2px(mContext,55)
+                ,AppDevice.dp2px(mContext,15),AppDevice.dp2px(mContext,20));
+        selectorButton.setLayoutParams(params);
+
         selectorButton.setText("退出登录");
         selectorButton.setNormalBackgroundColor(getResColor(R.color.stock_red));
         selectorButton.setPressedBackgroundColor(getResColor(R.color.colorMineHead));
         selectorButton.setRadius(AppDevice.dp2px(mContext,5));
+        selectorButton.setTextColor(Color.WHITE);
+        selectorButton.setTextSize(TypedValue.COMPLEX_UNIT_SP,18);
+
+        selectorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(),TypeLoginActivity.class));
+                finish();
+            }
+        });
 
         settingAdapter.addFooterView(selectorButton);
 
