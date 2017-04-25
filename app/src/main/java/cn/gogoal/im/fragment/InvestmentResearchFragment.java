@@ -86,15 +86,16 @@ public class InvestmentResearchFragment extends BaseFragment {
     private void getBannerImage() {
         AppDevice.setViewWidth$Height(bannerPager,
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                AppDevice.getWidth(getContext())/3);
+                AppDevice.getWidth(getContext()) / 3);
 
-        bannerImageUrls=new ArrayList<>();
-        bannerAdapter=new BannerAdapter(bannerImageUrls);
+        bannerImageUrls = new ArrayList<>();
+        bannerAdapter = new BannerAdapter(bannerImageUrls);
         bannerPager.setAdapter(bannerAdapter);
         bannerPager.setScrollFactgor(10);
 
         Map<String, String> map = new HashMap<>();
-        map.put("ad_position", "7");
+        //map.put("ad_position", "7");
+        map.put("ad_position", "3");
         new GGOKHTTP(map, GGOKHTTP.GET_AD_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
@@ -121,6 +122,7 @@ public class InvestmentResearchFragment extends BaseFragment {
                     bannerAdapter.notifyDataSetChanged();
                 }
             }
+
             @Override
             public void onFailure(String msg) {
             }
@@ -237,7 +239,7 @@ public class InvestmentResearchFragment extends BaseFragment {
             ImageView view = new ImageView(container.getContext());
             view.setAdjustViewBounds(true);
             view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            ImageDisplay.loadNetImage(container.getContext(), imageUrls.get(position).getImage(), view,0);
+            ImageDisplay.loadNetImage(container.getContext(), imageUrls.get(position).getImage(), view, 0);
             container.addView(view);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override

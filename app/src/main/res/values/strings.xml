@@ -171,6 +171,7 @@
     <string name="str_account_exit">该手机号已注册，请直接登录</string>
     <string name="str_title_back">返回</string>
     <string name="str_login_in">登录</string>
+    <string name="str_login_at_time">登录中...</string>
     <string name="str_login_register">注册</string>
     <string name="str_login_sure">确  定</string>
     <string name="str_login_confirm">信息验证</string>
