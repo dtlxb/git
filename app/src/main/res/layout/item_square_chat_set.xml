@@ -30,7 +30,7 @@
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:text="群主"
-            android:textColor="@color/absoluteWhite"
+            android:textColor="@android:color/white"
             android:textSize="10sp" />
 
     </FrameLayout>

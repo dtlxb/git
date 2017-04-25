@@ -5,7 +5,7 @@
     android:id="@+id/login_keyboard_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/absoluteWhite"
+    android:background="@android:color/white"
     android:fitsSystemWindows="true"
     tools:context=".activity.TypeLoginActivity">
 
@@ -83,7 +83,7 @@
             android:layout_marginTop="25dp"
             android:lines="1"
             android:text="登  录"
-            android:textColor="@color/absoluteWhite"
+            android:textColor="@android:color/white"
             android:textSize="17sp"
             app:normalBackgroundColor="@color/colorPrimary"
             app:pressedBackgroundColor="#f68d8d"
@@ -124,7 +124,7 @@
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="10dp"
             android:text="登录中"
-            android:textColor="@color/absoluteWhite"
+            android:textColor="@android:color/white"
             android:textSize="15sp" />
     </FrameLayout>
 

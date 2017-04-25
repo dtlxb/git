@@ -43,7 +43,7 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean, BaseViewHolde
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         layoutParams.width = AppDevice.getWidth(context) / 6;
         layoutParams.height = AppDevice.getWidth(context) / 4;
-        view.setBackgroundColor(ContextCompat.getColor(mContext, R.color.absoluteWhite));
+        view.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.white));
         view.setLayoutParams(layoutParams);
 
         RectangleView imageIcon = holder.getView(R.id.iv);
