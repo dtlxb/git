@@ -100,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/textBlank"
-                    android:textColor="@color/absoluteWhite"
+                    android:textColor="@android:color/white"
                     android:textSize="12dp" />
 
             </LinearLayout>
@@ -116,7 +116,7 @@
             android:layout_marginLeft="10dp"
             android:singleLine="true"
             android:text="@string/textBlank"
-            android:textColor="@color/absoluteWhite"
+            android:textColor="@android:color/white"
             android:textSize="16dp" />
 
     </FrameLayout>
@@ -175,7 +175,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/textBlank"
-                    android:textColor="@color/absoluteWhite"
+                    android:textColor="@android:color/white"
                     android:textSize="12dp" />
 
             </LinearLayout>

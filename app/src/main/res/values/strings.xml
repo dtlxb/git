@@ -23,7 +23,7 @@
     <string name="title_mtstock_news">自选股资讯</string>
     <string name="title_stock_news">个股资讯</string>
     <string name="title_edit_my_infomation">编辑个人资料</string>
-
+    <string name="title_choose_address">选择地区</string>
 
     <string name="square_collcet_add">添加</string>
     <string name="square_publish_create">创建</string>
@@ -172,6 +172,7 @@
     <string name="str_account_exit">该手机号已注册，请直接登录</string>
     <string name="str_title_back">返回</string>
     <string name="str_login_in">登录</string>
+    <string name="str_login_at_time">登录中...</string>
     <string name="str_login_register">注册</string>
     <string name="str_login_sure">确  定</string>
     <string name="str_login_confirm">信息验证</string>

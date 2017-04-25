@@ -111,4 +111,16 @@
         <item>职位</item>
         <item>工作地区</item>
     </string-array>
+    
+    <string-array name="settingArray">
+        <item>账号与安全</item>
+        <item>推送设置</item>
+        <item>行情刷新频率</item>
+        <item>K线设置</item>
+        <item>涨跌显示设置</item>
+        <item>清除缓存</item>
+        <item>关于</item>
+        <item>免责申明</item>
+        <item>服务协议</item>
+    </string-array>
 </resources>

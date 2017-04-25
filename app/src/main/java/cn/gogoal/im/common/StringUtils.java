@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -473,5 +474,14 @@ public class StringUtils {
 
     public static Object objectNullDeal(Object input, Objects replace) {
         return input == null ? replace : input;
+    }
+
+    public static String map2ggParameter(Map<String, String> map) {
+        String params="";
+        for (String keyString : map.keySet()) {
+            String str = map.get(keyString);
+            params+=keyString+"="+str+"&";
+        }
+        return params.substring(0,params.length()-1);
     }
 }

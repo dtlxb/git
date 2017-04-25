@@ -24,6 +24,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.EditMyInfoActivity;
+import cn.gogoal.im.activity.SettingActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseFragment;
@@ -191,9 +192,13 @@ public class MineFragment extends BaseFragment {
                     holder.getView(R.id.item_layout_simple_image_text).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            UIHelper.toast(v.getContext(),"pos="+position);
                             switch (position) {
-
+                                case 10:
+                                    startActivity(new Intent(v.getContext(), SettingActivity.class));
+                                    break;
+                                default:
+                                    UIHelper.toast(v.getContext(), "pos=" + position);
+                                    break;
                             }
                         }
                     });

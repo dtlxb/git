@@ -155,7 +155,7 @@ public class IMNewFrienActivity extends BaseActivity {
                     addView.setText("通过");
                 }
                 addView.setBackgroundResource(R.drawable.shape_add_friend);
-                addView.setTextColor(ContextCompat.getColor(IMNewFrienActivity.this, R.color.absoluteWhite));
+                addView.setTextColor(ContextCompat.getColor(IMNewFrienActivity.this, android.R.color.white));
             }
 
             addView.setOnClickListener(new View.OnClickListener() {
@@ -192,7 +192,7 @@ public class IMNewFrienActivity extends BaseActivity {
                     if (view.getText().toString().equals("添加")) {
                         view.setText("已添加");
                         view.setTextColor(ContextCompat.getColor(IMNewFrienActivity.this, R.color.relater_play_count));
-                        view.setBackgroundResource(R.color.absoluteWhite);
+                        view.setBackgroundResource(android.R.color.white);
                         view.setClickable(true);
 
                         //列表缓存
@@ -238,7 +238,7 @@ public class IMNewFrienActivity extends BaseActivity {
                     if (view.getText().toString().equals("通过")) {
                         view.setText("已通过");
                         view.setTextColor(ContextCompat.getColor(IMNewFrienActivity.this, R.color.relater_play_count));
-                        view.setBackgroundResource(R.color.absoluteWhite);
+                        view.setBackgroundResource(android.R.color.white);
                         view.setClickable(true);
 
                         for (int i = 0; i < jsonArray.size(); i++) {

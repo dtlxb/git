@@ -94,8 +94,11 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     @BindView(R.id.item_mystock)
     PercentRelativeLayout itemMystock;
 
-    @BindView(R.id.flag_layout)
-    ViewGroup flagLayout;
+    @BindView(R.id.tv_mystock_stockcode)
+    View flagLayout;
+
+    @BindView(R.id.tv_mystock_stockname)
+    TextView sortTitleName;
 
     @BindView(R.id.flipper_mystock_banner)
     ViewPager mystockBanner;
@@ -184,11 +187,13 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
     public void dismissMarket() {
         ((MainActivity)getActivity()).hideMainMsk();
-        viewDialogMask.setVisibility(View.GONE);
         rvMystockMarket.setVisibility(View.GONE);
-
         rvMystockMarket.startAnimation(
                 android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.top_out));
+
+        viewDialogMask.setClickable(false);
+        viewDialogMask.setEnabled(false);//防止重复点击反复出现
+        viewDialogMask.setVisibility(View.GONE);
         viewDialogMask.startAnimation(
                 android.view.animation.AnimationUtils.loadAnimation(getContext(),R.anim.alpha_out
         ));
@@ -202,6 +207,8 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.top_in));
         rvMystockMarket.setVisibility(View.VISIBLE);
 
+        viewDialogMask.setEnabled(true);
+        viewDialogMask.setClickable(true);
         viewDialogMask.setVisibility(View.VISIBLE);
         viewDialogMask.startAnimation(
                 android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.alpha_in));
@@ -212,11 +219,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         bannerAdapter = new MyStockPagerAdapter(bannerDatas);
         mystockBanner.setOffscreenPageLimit(4);
         mystockBanner.setAdapter(bannerAdapter);
-        try {
-            mystockBanner.setCurrentItem(SPTools.getInt("choose_banner_item", 1));
-        } catch (Exception e) {
-            e.getMessage();
-        }
     }
 
     public void changeIitem(int pos) {
@@ -226,7 +228,8 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
     private void initSortTitle(Context ctx) {
         itemMystock.setPadding(0, AppDevice.dp2px(ctx, 5), 0, AppDevice.dp2px(ctx, 5));
-        flagLayout.setVisibility(View.INVISIBLE);
+        flagLayout.setVisibility(View.GONE);
+        sortTitleName.setText("全部");
         AppDevice.setViewWidth$Height(itemMystock, -1, AppDevice.dp2px(ctx, 40));
 
         iniSortBar();
@@ -374,6 +377,12 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
                     bannerAdapter.notifyDataSetChanged();
                     myStockMarketAdapter.notifyDataSetChanged();
+
+                    try {
+                        mystockBanner.setCurrentItem(SPTools.getInt("choose_banner_item", 0));
+                    }catch (Exception e){
+                        e.getMessage();
+                    }
                 }
             }
 

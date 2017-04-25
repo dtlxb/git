@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,41 +18,41 @@ import cn.gogoal.im.common.AsyncTaskUtil;
  * phone 18930640263
  * description :群主头像拼接.
  */
-public class GroupFaceImage {
+public class GroupFaceImage<T> {
 
-    private static final int INNER_DIVIDER = 5;//间距单元
+    private static final int INNER_DIVIDER = 4;//间距单元
 
     private static final int BITMAP_CANVAS = INNER_DIVIDER * 37;//画布大小，没所谓
 
     private static int minItemH;//每个小头像宽高
 
-    private List<String> imageUrls;//头像url集合
+    private List<T> imageUrls;//头像url集合
 
     private OnMatchingListener matchingListener;
 
     private Context context;
 
-    private GroupFaceImage(Context context, List<String> imageUrls) {
+    private GroupFaceImage(Context context, List<T> imageUrls) {
         this.context = context.getApplicationContext();
         this.imageUrls = imageUrls;
     }
 
-    public static GroupFaceImage getInstance(Context context, List<String> imageUrls) {
-        GroupFaceImage instance = new GroupFaceImage(context, imageUrls);
+    public static <T> GroupFaceImage<T> getInstance(Context context, List<T> imageUrls) {
+        GroupFaceImage<T> instance = new GroupFaceImage<>(context, imageUrls);
         if (null != imageUrls) {
             switch (imageUrls.size()) {
                 case 1:
                 case 2:
                 case 3:
                 case 4:
-                    minItemH = (BITMAP_CANVAS-3*INNER_DIVIDER)/2;
+                    minItemH = 17 * INNER_DIVIDER;
                     break;
                 case 5:
                 case 6:
                 case 7:
                 case 8:
                 case 9:
-                    minItemH = (BITMAP_CANVAS-4*INNER_DIVIDER)/3;
+                    minItemH = 11 * INNER_DIVIDER;
                     break;
                 default:
                     break;
@@ -81,6 +82,8 @@ public class GroupFaceImage {
                                 .load(imageUrls.get(i))
                                 .asBitmap() //必须
                                 .centerCrop()
+                                .skipMemoryCache(true)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(minItemH, minItemH)
                                 .get();
                         bitmaps.add(myBitmap);
@@ -90,55 +93,6 @@ public class GroupFaceImage {
                     }
                 }
                 matchingListener.onSuccess(mathingBitmap(bitmaps));
-//                switch (imageUrls.size()) {
-//                    case 1:
-//                        listener.onSuccess(bitmaps.get(0));
-//                        break;
-//                    case 2:
-//                        listener.onSuccess(addHorizontalBitmap(bitmaps.get(0), bitmaps.get(1)));
-//                        break;
-//                    case 3:
-//                        listener.onSuccess(addVerticalBitmap(bitmaps.get(0), addHorizontalBitmap(bitmaps.get(1), bitmaps.get(2))));
-//                        break;
-//                    case 4:
-//                        listener.onSuccess(addVerticalBitmap(
-//                                addHorizontalBitmap(bitmaps.get(0), bitmaps.get(1)),
-//                                addHorizontalBitmap(bitmaps.get(2), bitmaps.get(3))
-//                        ));
-//                        break;
-//                    case 5:
-//                        listener.onSuccess(addVerticalBitmap(
-//                                addHorizontalBitmap(bitmaps.get(0), bitmaps.get(1)),
-//                                addHorizontalBitmap(bitmaps.get(2), bitmaps.get(3), bitmaps.get(4))
-//                        ));
-//                        break;
-//                    case 6:
-//                        listener.onSuccess(addVerticalBitmap(
-//                                addHorizontalBitmap(bitmaps.get(0), bitmaps.get(1), bitmaps.get(2)),
-//                                addHorizontalBitmap(bitmaps.get(3), bitmaps.get(4), bitmaps.get(5))
-//
-//                        ));
-//                    case 7:
-//                        listener.onSuccess(addVerticalBitmap(
-//                                bitmaps.get(0),
-//                                addHorizontalBitmap(bitmaps.get(1), bitmaps.get(2), bitmaps.get(3)),
-//                                addHorizontalBitmap(bitmaps.get(4), bitmaps.get(5), bitmaps.get(6))
-//                        ));
-//                    case 8:
-//                        listener.onSuccess(addVerticalBitmap(
-//                                addHorizontalBitmap(bitmaps.get(0), bitmaps.get(1)),
-//                                addHorizontalBitmap(bitmaps.get(2), bitmaps.get(3), bitmaps.get(4)),
-//                                addHorizontalBitmap(bitmaps.get(5), bitmaps.get(6), bitmaps.get(7))
-//                        ));
-//                        break;
-//                    case 9:
-//                        listener.onSuccess(addVerticalBitmap(
-//                                addHorizontalBitmap(bitmaps.get(0), bitmaps.get(1), bitmaps.get(2)),
-//                                addHorizontalBitmap(bitmaps.get(3), bitmaps.get(4), bitmaps.get(5)),
-//                                addHorizontalBitmap(bitmaps.get(6), bitmaps.get(7), bitmaps.get(8))
-//                        ));
-//                        break;
-//                }
             }
 
             public void onPostExecute() {
@@ -146,7 +100,7 @@ public class GroupFaceImage {
         });
     }
 
-    public Bitmap mathingBitmap(List<Bitmap> bitmapList) {
+    private Bitmap mathingBitmap(List<Bitmap> bitmapList) {
         if (null == bitmapList || bitmapList.isEmpty()) {
             return null;
         }

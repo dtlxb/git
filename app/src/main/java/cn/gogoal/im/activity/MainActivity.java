@@ -69,10 +69,6 @@ public class MainActivity extends BaseActivity {
             FileUtil.writeRequestResponse("token_" + UserUtils.getUserName(), UserUtils.getToken());
         }
 
-        if (null != UserUtils.getUserInfo()) {
-            KLog.e(UserUtils.getUserInfo().toString());
-        }
-
         MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
 
         myStockFragment = new MyStockFragment();                     //自选股
@@ -102,7 +98,7 @@ public class MainActivity extends BaseActivity {
                 getSupportFragmentManager(), MainActivity.this, tabFragments, mainTabArray);
 
         vpMain.setAdapter(tabAdapter);
-        vpMain.setOffscreenPageLimit(3);
+        vpMain.setOffscreenPageLimit(4);
         tabMain.setupWithViewPager(vpMain);
         for (int i = 0; i < mainTabArray.length; i++) {
             TabLayout.Tab tab = tabMain.getTabAt(i);
@@ -174,12 +170,16 @@ public class MainActivity extends BaseActivity {
     }
 
     public void showMainMsk(){
+        mainViewMask.setClickable(true);
+        mainViewMask.setEnabled(true);
         mainViewMask.setVisibility(View.VISIBLE);
         mainViewMask.startAnimation(AnimationUtils.loadAnimation(this,
                 R.anim.alpha_in));
     }
 
     public void hideMainMsk(){
+        mainViewMask.setClickable(false);
+        mainViewMask.setEnabled(false);
         mainViewMask.setVisibility(View.GONE);
         mainViewMask.startAnimation(AnimationUtils.loadAnimation(this,
                 R.anim.alpha_out));

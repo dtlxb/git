@@ -25,13 +25,6 @@
             android:background="@drawable/shape_search_activity_edit"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center"
-                android:layout_margin="8dp"
-                android:src="@drawable/search_gray" />
-
             <android.support.v7.widget.SearchView
                 style="@style/NormalSearchView"
                 android:id="@+id/search_edit"
@@ -40,7 +33,7 @@
                 android:drawableRight="@drawable/cancel_phone"
                 app:defaultQueryHint="@string/stock_fund_plate"
                 android:singleLine="true"
-
+                app:searchIcon="@drawable/search_gray"
                 android:textColorHint="@color/text_color_light"
                 android:textSize="@dimen/text_size_11"/>
 

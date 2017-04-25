@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -21,7 +20,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -41,7 +39,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.RigisterActivity;
 import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.permission.IPermissionListner;
@@ -209,13 +206,12 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
      * @param dividerId:分割线对象     : 0时为默认一条直线;int值 shape资源；null(不要分割线)
      */
     public static void initRecycleView(RecyclerView recyclerView, Integer dividerId) {
+        recyclerView.setNestedScrollingEnabled(false);
         LinearLayoutManager layoutManager = new LinearLayoutManager(MyApp.getAppContext());
         if (dividerId != null) {
             if (dividerId != 0x00) {
                 try {
-                    DividerItemDecoration itemDecoration = new DividerItemDecoration(getAppContext(), LinearLayoutManager.VERTICAL);
-                    itemDecoration.setDrawable(ContextCompat.getDrawable(getAppContext(), dividerId));//R.drawable.shape_divider
-                    recyclerView.addItemDecoration(itemDecoration);
+                    recyclerView.addItemDecoration(new NormalItemDecoration(recyclerView.getContext()));
                 } catch (Exception e) {
                     throw new IllegalArgumentException("initRecycleView(RecyclerView,Integer)第二个参数必须是一个分割线shape资源或者填0或者null");
                 }

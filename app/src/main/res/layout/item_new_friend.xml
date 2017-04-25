@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/absoluteWhite"
+    android:background="@android:color/white"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -53,7 +53,7 @@
             android:layout_marginEnd="15dp"
             android:background="@drawable/shape_add_friend"
             android:gravity="center"
-            android:textColor="@color/absoluteWhite"
+            android:textColor="@android:color/white"
             android:textSize="14sp" />
 
     </RelativeLayout>

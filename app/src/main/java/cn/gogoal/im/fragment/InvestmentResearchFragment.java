@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,9 +28,7 @@ import cn.gogoal.im.bean.BannerBean;
 import cn.gogoal.im.bean.SectionTouYanData;
 import cn.gogoal.im.bean.TouYan;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.AutoScrollViewPager;
@@ -89,13 +89,16 @@ public class InvestmentResearchFragment extends BaseFragment {
         bannerImageUrls = new ArrayList<>();
         bannerAdapter = new BannerAdapter(bannerImageUrls);
         bannerPager.setAdapter(bannerAdapter);
-        bannerPager.setScrollFactgor(10);
+        bannerPager.setScrollFactgor(5);
 
         Map<String, String> map = new HashMap<>();
         map.put("ad_position", "3");
+
         new GGOKHTTP(map, GGOKHTTP.GET_AD_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     bannerImageUrls.addAll(JSONObject.parseObject(responseInfo, BannerBean.class).getData());
@@ -141,8 +144,6 @@ public class InvestmentResearchFragment extends BaseFragment {
             public void onSuccess(String responseInfo) {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
-                    FileUtil.writeRequestResponse(responseInfo);
-
                     List<TouYan.DataBean> touYanList = JSONObject.parseObject(responseInfo, TouYan.class).getData();
                     for (int i = 0; i < touYanList.size(); i++) {
                         TouYan.DataBean dataBean = touYanList.get(i);
@@ -234,9 +235,10 @@ public class InvestmentResearchFragment extends BaseFragment {
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
             ImageView view = new ImageView(container.getContext());
+
             view.setAdjustViewBounds(true);
             view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            ImageDisplay.loadNetImage(container.getContext(), imageUrls.get(position).getImage(), view, 0);
+            Glide.with(getActivity()).load(imageUrls.get(position).getImage()).into(view);
             container.addView(view);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override

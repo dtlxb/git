@@ -1,9 +1,6 @@
 package cn.gogoal.im.fragment.stock;
 
 import android.content.Context;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
@@ -21,9 +18,6 @@ public class HKFragment extends BaseFragment {
     @BindView(R.id.xLayout)
     XLayout xLayout;
 
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-
     @Override
     public int bindLayout() {
         return R.layout.layout_normal_list_without_refresh;
@@ -32,9 +26,6 @@ public class HKFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
         commingSoon(xLayout);
-        xLayout.setStatus(XLayout.Success);
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerView.addItemDecoration(new DividerItemDecoration(mContext,LinearLayoutManager.VERTICAL));
     }
 
     private void commingSoon(XLayout xLayout) {

@@ -1042,6 +1042,9 @@ public class WatchLiveActivity extends BaseActivity {
             AVIMMessage message = (AVIMMessage) map.get("message");
             AVIMConversation conversation = (AVIMConversation) map.get("conversation");
 
+            //lctype==12关闭
+            JSONObject contentObject = JSON.parseObject(message.getContent());
+            String _lctype = contentObject.getString("_lctype");
             int chatType = (int) conversation.getAttribute("chat_type");
 
             KLog.e(message.getContent());

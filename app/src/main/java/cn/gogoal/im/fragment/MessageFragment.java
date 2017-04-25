@@ -460,7 +460,6 @@ public class MessageFragment extends BaseFragment {
      */
     @Subscriber(tag = "set_avatar")
     public void setAvatar(String code) {
-        KLog.e(code);
         listAdapter.notifyItemChanged(Integer.parseInt(code));
     }
 
