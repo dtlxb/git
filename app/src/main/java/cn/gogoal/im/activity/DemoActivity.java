@@ -30,9 +30,9 @@ import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.openServices.IOpenCallback;
 import cn.gogoal.im.common.openServices.OpenServiceFactory;
-import cn.gogoal.im.ui.widget.BottomSheetListDialog;
-import cn.gogoal.im.ui.widget.BottomSheetNormalDialog;
-import cn.gogoal.im.ui.widget.EditTextDialog;
+import cn.gogoal.im.ui.dialog.BottomSheetListDialog;
+import cn.gogoal.im.ui.dialog.BottomSheetNormalDialog;
+import cn.gogoal.im.ui.dialog.EditTextDialog;
 
 import static cn.gogoal.im.base.MyApp.getAppContext;
 

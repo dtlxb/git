@@ -88,10 +88,22 @@ public class MineFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
+        AppDevice.setViewWidth$Height(imageAvatar, 4 * AppDevice.getWidth(mContext) / 25, 3 * AppDevice.getWidth(mContext) / 13);
         iniheadInfo(mContext);
         initRecycler(mContext);
         initDatas();
         rvMine.setAdapter(mineAdapter);
+
+        //滚动监听
+        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (oldScrollY < AppDevice.dp2px(getContext(), 150)) {
+                    mTitleText.setAlpha(scrollY * 1.0f / AppDevice.dp2px(getContext(), 150));
+                    layoutHead.setAlpha(1 - scrollY * 1.0f / AppDevice.dp2px(getContext(), 150));
+                }
+            }
+        });
     }
 
     private void initRecycler(Context mContext) {
@@ -105,8 +117,6 @@ public class MineFragment extends BaseFragment {
     }
 
     private void iniheadInfo(Context mContext) {
-        AppDevice.setViewWidth$Height(imageAvatar, 4 * AppDevice.getWidth(mContext) / 25, 3 * AppDevice.getWidth(mContext) / 13);
-
         UserUtils.cacheUserAvatar();//缓存用户头像大图
         if (null != UserUtils.getUserCacheAvatarFile() &&
                 (!(UserUtils.getUserCacheAvatarFile().getAbsolutePath()).equalsIgnoreCase(UserUtils.getMyAvatarCacheName()))) {
@@ -119,16 +129,6 @@ public class MineFragment extends BaseFragment {
 
         tvMineUserName.setText(UserUtils.getUserName());
         tvMineIntroduction.setText(UserUtils.getDuty() + " " + UserUtils.getorgName());
-
-        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (oldScrollY < AppDevice.dp2px(getContext(), 150)) {
-                    mTitleText.setAlpha(scrollY * 1.0f / AppDevice.dp2px(getContext(), 150));
-                    layoutHead.setAlpha(1 - scrollY * 1.0f / AppDevice.dp2px(getContext(), 150));
-                }
-            }
-        });
 
     }
 
@@ -166,8 +166,14 @@ public class MineFragment extends BaseFragment {
     void updataCacheAvatar(String newAvatarUrl) {
         KLog.e(newAvatarUrl);
         ImageDisplay.loadNetAvatarWithBorder(getContext(), UserUtils.getUserAvatar(), imageAvatar);
-        KLog.e("更新头像执行");
+
     }
+
+    @Subscriber(tag = "updata_userinfo")
+    void updataUserInfo(String msg){
+        iniheadInfo(getActivity());
+    }
+
 
     private class MineAdapter extends BaseMultiItemQuickAdapter<MineItem, BaseViewHolder> {
 

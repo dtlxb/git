@@ -184,5 +184,8 @@
     <string name="str_login_no_net">网络无法连接</string>
     <string name="str_login_success">登录成功</string>
     <string name="str_login_code_error">账户或密码错误</string>
+    <string name="str_setting_name">姓名</string>
+    <string name="str_setting_duty">职位</string>
+    <string name="str_setting_company">公司</string>
 
 </resources>

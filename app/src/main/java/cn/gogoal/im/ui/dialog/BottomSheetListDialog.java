@@ -1,4 +1,4 @@
-package cn.gogoal.im.ui.widget;
+package cn.gogoal.im.ui.dialog;
 
 import android.os.Bundle;
 import android.view.View;
@@ -10,13 +10,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.ui.dialog.base.BaseBottomDialog;
 
 /**
  * author wangjd on 2017/3/1 0001.
  * Staff_id 1375
  * phone 18930640263
  *
- * 底部弹出是dialog
+ * 底部弹出式 列表dialog
  */
 public class BottomSheetListDialog extends BaseBottomDialog {
 

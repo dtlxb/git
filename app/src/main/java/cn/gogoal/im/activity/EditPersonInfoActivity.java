@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hply.imagepicker.ITakePhoto;
-import com.socks.library.KLog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,7 +23,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
-import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
@@ -34,7 +32,7 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XTitle;
-import cn.gogoal.im.ui.widget.BottomSheetListDialog;
+import cn.gogoal.im.ui.dialog.BottomSheetListDialog;
 
 /**
  * Created by huangxx on 2017/4/18.

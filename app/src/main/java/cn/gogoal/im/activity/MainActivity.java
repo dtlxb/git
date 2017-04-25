@@ -118,8 +118,10 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                barUtil.setStatusBarFontDark(position != 4);
-                barUtil.setColor(position == 4 ? getResColor(R.color.colorMineHead) : getResColor(android.R.color.white));
+                if (barUtil.isOperableDevice()) {
+                    barUtil.setStatusBarFontDark(position != 4);
+                    barUtil.setColor(position == 4 ? getResColor(R.color.colorMineHead) : getResColor(android.R.color.white));
+                }
             }
 
             @Override

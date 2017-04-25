@@ -15,6 +15,8 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.bean.AddressBean;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.dialog.base.BaseBottomDialog;
+import cn.gogoal.im.ui.dialog.StringPicker;
 
 
 /**
@@ -89,7 +91,8 @@ public class AddressPicker extends BaseBottomDialog {
         try {
             pickerCity.setMaxValue(cityNameLists.size() - 1);
         } catch (Exception e) {
-            KLog.e(e.getMessage());
+            String eMessage = e.getMessage();
+            KLog.e(eMessage);
         }
         pickerCity.setMinValue(0);
         pickerCity.setDisplayedValues(cityNameLists.toArray(new String[cityNameLists.size()]));

@@ -179,6 +179,7 @@
         <activity android:name=".activity.CreateLiveActivity" />
         <activity android:name=".activity.AddressActivity"/>
         <activity android:name=".activity.SettingActivity"/>
+        <activity android:name=".activity.SingleEditActivity"/>
     </application>
 
 </manifest>

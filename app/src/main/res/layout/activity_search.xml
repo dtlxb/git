@@ -16,28 +16,19 @@
         android:paddingBottom="6dp"
         android:paddingTop="6dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/searchView"
+            style="@style/NormalSearchView"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:paddingStart="10dp"
+            android:layout_marginStart="10dp"
             android:layout_toStartOf="@+id/btn_cancle"
+            android:layout_weight="1"
             android:background="@drawable/shape_search_activity_edit"
-            android:gravity="center_vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/img_search" />
-
-            <android.support.v7.widget.SearchView
-                android:id="@+id/searchView"
-                style="@style/SearchEdit"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="36dp" />
-        </LinearLayout>
+            app:searchIcon="@mipmap/img_search" />
 
         <TextView
             android:id="@+id/btn_cancle"

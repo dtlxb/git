@@ -379,6 +379,15 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         } else {
             TextView text = new TextView(getContext());
             text.setGravity(Gravity.CENTER);
+
+            if (action.getActionTextColor()!=0) {
+                try {
+                    text.setTextColor(action.getActionTextColor());
+                }catch (Exception e){
+                    e.getMessage();
+                }
+            }
+
             text.setText(action.getText());
             text.setTextSize(DEFAULT_ACTION_TEXT_SIZE);
             if (mActionTextColor != 0) {
@@ -487,11 +496,18 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
 
         Drawable getDrawable();
 
+        int getActionTextColor();
+
         void actionClick(View view);
     }
 
     public static abstract class ImageAction implements Action {
         private Drawable mDrawable;
+
+        @Override
+        public int getActionTextColor() {
+            return 0;
+        }
 
         public ImageAction(Drawable drawable) {
             mDrawable = drawable;
@@ -509,10 +525,16 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
     }
 
     public static abstract class TextAction implements Action {
-        final private String mText;
+        private String actionText;
+        private int actiontextColor;
 
-        public TextAction(String text) {
-            mText = text;
+        public TextAction(String actionText) {
+            this.actionText = actionText;
+        }
+
+        public TextAction(String actionText, int actiontextColor) {
+            this.actionText = actionText;
+            this.actiontextColor = actiontextColor;
         }
 
         @Override
@@ -521,8 +543,13 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         }
 
         @Override
+        public int getActionTextColor() {
+            return actiontextColor;
+        }
+
+        @Override
         public String getText() {
-            return mText;
+            return actionText;
         }
 
     }

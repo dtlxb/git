@@ -1,9 +1,12 @@
-package cn.gogoal.im.ui.widget;
+package cn.gogoal.im.ui.dialog;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
+
+import cn.gogoal.im.ui.dialog.base.BaseBottomDialog;
+import cn.gogoal.im.ui.dialog.base.BaseDialog;
 
 /**
  * author wangjd on 2017/2/28 0028.
