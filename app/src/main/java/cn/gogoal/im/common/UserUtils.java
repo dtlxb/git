@@ -204,7 +204,8 @@ public class UserUtils {
 //        map.put("city", "7");
         map.put("token", UserUtils.getToken());
 
-        KLog.e(map.toString());
+        KLog.e(StringUtils.map2ggParameter(map));
+
         new GGOKHTTP(map, GGOKHTTP.UPDATE_ACCOUNT_INFO, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
@@ -212,7 +213,6 @@ public class UserUtils {
                 JSONObject data = JSONObject.parseObject(responseInfo);
                 JSONObject result = data.getJSONObject("data");
                 boolean success = result.getBoolean("success");
-                KLog.e(success);
                 if (success) {
                     if (null != updataListener)
                         updataListener.success(responseInfo);

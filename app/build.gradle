@@ -132,4 +132,5 @@ dependencies {
     compile files('libs/alivc-player-2.3.0.11.jar')
     //连麦
     compile files('libs/alivc-publisher-2.0.0.24.jar')
+
 }

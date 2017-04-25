@@ -1,5 +1,8 @@
 package cn.gogoal.im.bean;
 
+import com.github.promeg.pinyinhelper.Pinyin;
+
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -8,7 +11,7 @@ import java.util.List;
  * phone 18930640263
  * description :三级联动数据
  */
-public class City {
+public class AddressBean {
 
     private String reason;
     private int error_code;
@@ -38,7 +41,7 @@ public class City {
         this.result = result;
     }
 
-    public static class ProvinceBean {
+    public static class ProvinceBean implements Comparator<ProvinceBean> {
 
         private String id;
         private String province;
@@ -68,7 +71,13 @@ public class City {
             this.city = city;
         }
 
-        public static class CityBean {
+        @Override
+        public int compare(ProvinceBean o1, ProvinceBean o2) {
+            return Character.compare(Pinyin.toPinyin(o1.getProvince(), "").charAt(0),
+                    Pinyin.toPinyin(o2.getProvince(), "").charAt(0));
+        }
+
+        public static class CityBean implements Comparator<CityBean>{
 
             private String id;
             private String city;
@@ -96,6 +105,12 @@ public class City {
 
             public void setDistrict(List<DistrictBean> district) {
                 this.district = district;
+            }
+
+            @Override
+            public int compare(CityBean o1, CityBean o2) {
+                return Character.compare(Pinyin.toPinyin(o1.getCity(),"").charAt(0),
+                        Pinyin.toPinyin(o2.getCity(),"").charAt(0));
             }
 
             public static class DistrictBean {

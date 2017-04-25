@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.socks.library.KLog;
+
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
+import cn.gogoal.im.ui.widget.AddressPicker;
 
 
 /**
@@ -87,9 +90,15 @@ public class EditMyInfoActivity extends BaseActivity {
 
             switch (holder.getItemViewType()) {
                 case UserDetailInfo.HEAD:
-                    ImageDisplay.loadCircleFileImageWithBoard(getActivity(),
-                            UserUtils.getUserCacheAvatarFile(),
-                            (ImageView) holder.getView(R.id.image_user_info_avatar));
+                    if (null != UserUtils.getUserCacheAvatarFile() &&
+                            (!(UserUtils.getUserCacheAvatarFile().getAbsolutePath()).equalsIgnoreCase(UserUtils.getMyAvatarCacheName()))) {
+                        ImageDisplay.loadCircleFileImageWithBoard(mContext, UserUtils.getUserCacheAvatarFile(), (ImageView) holder.getView(R.id.image_user_info_avatar));
+                        KLog.e("用的缓存");
+                    } else {
+                        ImageDisplay.loadNetAvatarWithBorder(mContext, UserUtils.getUserAvatar(), (ImageView) holder.getView(R.id.image_user_info_avatar));
+                        UserUtils.cacheUserAvatar();//缓存用户头像大图
+                        KLog.e("用的线上");
+                    }
 
                     holder.getView(R.id.header_edit_my_info).setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -118,7 +127,7 @@ public class EditMyInfoActivity extends BaseActivity {
                     itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            UIHelper.toast(v.getContext(), getString(R.string.str_coming_soon) + "::" + position);
+//                            UIHelper.toast(v.getContext(), getString(R.string.str_coming_soon) + "::" + position);
                             switch (position) {
                                 case 1://姓名、昵称
                                     break;
@@ -132,7 +141,8 @@ public class EditMyInfoActivity extends BaseActivity {
                                 case 5://职位
                                     break;
                                 case 6://工作地区
-                                    startActivity(new Intent(v.getContext(),AddressActivity.class));
+                                    new AddressPicker().show(getSupportFragmentManager());
+//                                    startActivity(new Intent(v.getContext(),AddressActivity.class));
                                     break;
                             }
                         }

@@ -80,11 +80,8 @@ public class ImageDisplay {
         if (!TextUtils.isEmpty(url)) {
             DrawableRequestBuilder<String> builder = Glide.with(context)
                     .load(url)
-                    .dontAnimate().dontTransform()
                     .skipMemoryCache(true)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-//                    .placeholder(R.mipmap.image_placeholder)
-                    .thumbnail(0.1f);
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT);
 
             if (placeholdeer == 0) {
                 builder.into(imageView);

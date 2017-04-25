@@ -19,7 +19,6 @@ import java.util.List;
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
-import cn.gogoal.im.common.IMHelpers.MyClientEventHandler;
 import cn.gogoal.im.common.IMHelpers.MyConversationHandler;
 import cn.gogoal.im.common.IMHelpers.MyMessageHandler;
 import cn.gogoal.im.common.SPTools;
@@ -43,7 +42,6 @@ public class MyApp extends LitePalApplication {
         app = this;
 
         SPTools.initSharedPreferences(this);
-
         XLayout.getConfig()
                 .setErrorText("出错啦~请稍后重试！")
                 .setEmptyText("抱歉，暂无数据")
