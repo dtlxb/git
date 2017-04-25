@@ -17,21 +17,21 @@ public class SocialLiveData {
     private String live_time_start;
     private String live_large_img;
     private String share_img;
-    private String live_status;
+    private int live_status;
     private String play_base;
     private String introduction_img;
     private String introduction;
     private String user_level;
     private String room_id;
     private String channel;
-    private String live_source;
+    private int live_source;
     private String video_name;
     private String programme_name;
     private SocialLiveDataAnchor anchor;
     private String anchor_name;
     private String face_url;
     private String order_status;
-    private String launch_time;
+    private Long launch_time;
     private String live_id;
     private String is_anchor;
     private String url_rtmp;
@@ -119,11 +119,11 @@ public class SocialLiveData {
         this.share_img = share_img;
     }
 
-    public String getLive_status() {
+    public int getLive_status() {
         return live_status;
     }
 
-    public void setLive_status(String live_status) {
+    public void setLive_status(int live_status) {
         this.live_status = live_status;
     }
 
@@ -175,11 +175,11 @@ public class SocialLiveData {
         this.channel = channel;
     }
 
-    public String getLive_source() {
+    public int getLive_source() {
         return live_source;
     }
 
-    public void setLive_source(String live_source) {
+    public void setLive_source(int live_source) {
         this.live_source = live_source;
     }
 
@@ -231,11 +231,11 @@ public class SocialLiveData {
         this.order_status = order_status;
     }
 
-    public String getLaunch_time() {
+    public Long getLaunch_time() {
         return launch_time;
     }
 
-    public void setLaunch_time(String launch_time) {
+    public void setLaunch_time(Long launch_time) {
         this.launch_time = launch_time;
     }
 

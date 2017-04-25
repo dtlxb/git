@@ -33,8 +33,6 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.AutoScrollViewPager;
 
-import static cn.gogoal.im.R.id.recyclerView;
-
 /**
  * author wangjd on 2017/4/19 0019.
  * Staff_id 1375
@@ -45,7 +43,7 @@ import static cn.gogoal.im.R.id.recyclerView;
  */
 public class InvestmentResearchFragment extends BaseFragment {
 
-    @BindView(recyclerView)
+    @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
     @BindView(R.id.vp_fund_banner)
@@ -86,10 +84,10 @@ public class InvestmentResearchFragment extends BaseFragment {
     private void getBannerImage() {
         AppDevice.setViewWidth$Height(bannerPager,
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                AppDevice.getWidth(getContext())/3);
+                AppDevice.getWidth(getContext()) / 3);
 
-        bannerImageUrls=new ArrayList<>();
-        bannerAdapter=new BannerAdapter(bannerImageUrls);
+        bannerImageUrls = new ArrayList<>();
+        bannerAdapter = new BannerAdapter(bannerImageUrls);
         bannerPager.setAdapter(bannerAdapter);
         bannerPager.setScrollFactgor(10);
 
@@ -121,6 +119,7 @@ public class InvestmentResearchFragment extends BaseFragment {
                     bannerAdapter.notifyDataSetChanged();
                 }
             }
+
             @Override
             public void onFailure(String msg) {
             }
@@ -237,7 +236,7 @@ public class InvestmentResearchFragment extends BaseFragment {
             ImageView view = new ImageView(container.getContext());
             view.setAdjustViewBounds(true);
             view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            ImageDisplay.loadNetImage(container.getContext(), imageUrls.get(position).getImage(), view,0);
+            ImageDisplay.loadNetImage(container.getContext(), imageUrls.get(position).getImage(), view, 0);
             container.addView(view);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override

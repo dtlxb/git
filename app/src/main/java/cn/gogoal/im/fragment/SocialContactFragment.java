@@ -34,8 +34,6 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.AutoScrollViewPager;
 
-import static cn.gogoal.im.R.id.recyclerView;
-
 /**
  * author wangjd on 2017/4/7 0007.
  * Staff_id 1375
@@ -44,8 +42,8 @@ import static cn.gogoal.im.R.id.recyclerView;
  */
 public class SocialContactFragment extends BaseFragment {
 
-    @BindView(recyclerView)
-    RecyclerView mRecyclerView;
+    @BindView(R.id.socialRecycler)
+    RecyclerView socialRecycler;
 
     @BindView(R.id.socialViewPager)
     AutoScrollViewPager bannerPager;
@@ -68,10 +66,10 @@ public class SocialContactFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         setFragmentTitle(R.string.title_social);
 
-        mRecyclerView.setNestedScrollingEnabled(false);
+        socialRecycler.setNestedScrollingEnabled(false);
 
         adapter = new SocialLiveAdapter(getActivity(), listData);
-        mRecyclerView.setAdapter(adapter);
+        socialRecycler.setAdapter(adapter);
 
         getBannerImage();
         getLiveData();
