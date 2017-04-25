@@ -16,9 +16,11 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.UserDetailInfo;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.SelectorButton;
 
 /**
@@ -47,32 +49,69 @@ public class SettingActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         setMyTitle("设置", true);
 
-        settingAdapter=new SettingAdapter(settingDatas);
+        settingAdapter = new SettingAdapter(settingDatas);
 
-        initRecycleView(rvSetting,0);
+        initRecycleView(rvSetting, 0);
         rvSetting.setAdapter(settingAdapter);
 
-        SelectorButton selectorButton=new SelectorButton(mContext);
+        SelectorButton selectorButton = new SelectorButton(mContext);
 
-        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        params.setMargins(AppDevice.dp2px(mContext,15),AppDevice.dp2px(mContext,55)
-                ,AppDevice.dp2px(mContext,15),AppDevice.dp2px(mContext,20));
+        params.setMargins(AppDevice.dp2px(mContext, 15), AppDevice.dp2px(mContext, 55)
+                , AppDevice.dp2px(mContext, 15), AppDevice.dp2px(mContext, 20));
         selectorButton.setLayoutParams(params);
 
         selectorButton.setText("退出登录");
         selectorButton.setNormalBackgroundColor(getResColor(R.color.stock_red));
         selectorButton.setPressedBackgroundColor(getResColor(R.color.colorMineHead));
-        selectorButton.setRadius(AppDevice.dp2px(mContext,5));
+        selectorButton.setRadius(AppDevice.dp2px(mContext, 5));
         selectorButton.setTextColor(Color.WHITE);
-        selectorButton.setTextSize(TypedValue.COMPLEX_UNIT_SP,18);
+        selectorButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
 
         selectorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(),TypeLoginActivity.class));
+                startActivity(new Intent(v.getContext(), TypeLoginActivity.class));
                 finish();
+            }
+        });
+
+        settingAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(CommonAdapter adapter, View view, int position) {
+                switch (position) {
+                    case 0:
+                        UIHelper.toast(getActivity(), "Item" + position);
+                        break;
+                    case 1:
+                        UIHelper.toast(getActivity(), "Item" + position);
+                        break;
+                    case 2:
+                        UIHelper.toast(getActivity(), "Item" + position);
+                        break;
+                    case 3:
+                        UIHelper.toast(getActivity(), "Item" + position);
+                        break;
+                    case 4:
+                        UIHelper.toast(getActivity(), "Item" + position);
+                        break;
+                    case 5:
+                        UIHelper.toast(getActivity(), "Item" + position);
+                        break;
+                    case 6:
+                        UIHelper.toast(getActivity(), "Item" + position);
+                        break;
+                    case 7:
+                        UIHelper.toast(getActivity(), "Item" + position);
+                        break;
+                    case 8:
+                        UIHelper.toast(getActivity(), "Item" + position);
+                        break;
+                    default:
+                        break;
+                }
             }
         });
 
@@ -82,11 +121,11 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void iniSettingData() {
-        for (String s:strings){
-            settingDatas.add(new UserDetailInfo<>(UserDetailInfo.TEXT_ITEM_2,s));
+        for (String s : strings) {
+            settingDatas.add(new UserDetailInfo<>(UserDetailInfo.TEXT_ITEM_2, s));
         }
-        settingDatas.add(2,new UserDetailInfo<String>(UserDetailInfo.SPACE));
-        settingDatas.add(7,new UserDetailInfo<String>(UserDetailInfo.SPACE));
+        settingDatas.add(2, new UserDetailInfo<String>(UserDetailInfo.SPACE));
+        settingDatas.add(7, new UserDetailInfo<String>(UserDetailInfo.SPACE));
         settingAdapter.notifyDataSetChanged();
     }
 

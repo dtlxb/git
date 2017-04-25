@@ -28,7 +28,7 @@
             android:layout_gravity="top|right"
             android:background="@drawable/shape_message_tag"
             android:gravity="center"
-            android:textColor="@color/absoluteWhite"
+            android:textColor="@android:color/white"
             android:textSize="10sp" />
 
     </FrameLayout>
