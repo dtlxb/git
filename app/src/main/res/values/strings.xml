@@ -11,6 +11,7 @@
     <string name="title_status">连接中...</string>
     <string name="title_contacts">金融人脉</string>
     <string name="title_found">投研</string>
+    <string name="title_social">社交</string>
     <string name="title_mine">我的</string>
     <string name="title_group_chat">发起群聊</string>
     <string name="title_add_friend">朋友验证</string>
@@ -188,5 +189,6 @@
     <string name="str_setting_name">姓名</string>
     <string name="str_setting_duty">职位</string>
     <string name="str_setting_company">公司</string>
+    <string name="social_newest">最新</string>
 
 </resources>

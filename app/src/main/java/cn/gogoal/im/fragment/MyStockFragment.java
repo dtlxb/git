@@ -150,6 +150,8 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         initRecyclerView(mContext);
         initMarketBanner();
         initSortTitle(mContext);
+        //缓存刷新时间
+        SPTools.saveLong("interval_time", INTERVAL_TIME);
 
         refreshAll(AppConst.REFRESH_TYPE_FIRST);//请求
 
@@ -188,7 +190,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     }
 
     public void dismissMarket() {
-        ((MainActivity)getActivity()).hideMainMsk();
+        ((MainActivity) getActivity()).hideMainMsk();
         rvMystockMarket.setVisibility(View.GONE);
         rvMystockMarket.startAnimation(
                 android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.top_out));
@@ -197,14 +199,14 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         viewDialogMask.setEnabled(false);//防止重复点击反复出现
         viewDialogMask.setVisibility(View.GONE);
         viewDialogMask.startAnimation(
-                android.view.animation.AnimationUtils.loadAnimation(getContext(),R.anim.alpha_out
-        ));
+                android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.alpha_out
+                ));
 
     }
 
     public void showMarketDialog() {
 //        new MyStockTopDialog().show(getChildFragmentManager());
-        ((MainActivity)getActivity()).showMainMsk();
+        ((MainActivity) getActivity()).showMainMsk();
         rvMystockMarket.startAnimation(
                 android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.top_in));
         rvMystockMarket.setVisibility(View.VISIBLE);
@@ -382,7 +384,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
                     try {
                         mystockBanner.setCurrentItem(SPTools.getInt("choose_banner_item", 0));
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.getMessage();
                     }
                 }

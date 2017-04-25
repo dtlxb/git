@@ -1,6 +1,7 @@
 package cn.gogoal.im.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.PlayerActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
@@ -403,6 +405,15 @@ public class WatchBottomFragment extends BaseFragment {
             ImageDisplay.loadCircleNetImage(getActivity(), data.getFace_url(), relater_avatar);
             holder.setText(R.id.relater_name, data.getAnchor_name());
             holder.setText(R.id.relater_content, data.getProgramme_name());
+
+            holder.setOnClickListener(R.id.linearRelaterVideo, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), PlayerActivity.class);
+                    intent.putExtra("live_id", data.getVideo_id());
+                    startActivity(intent);
+                }
+            });
         }
     }
 

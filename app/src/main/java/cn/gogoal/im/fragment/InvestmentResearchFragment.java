@@ -33,8 +33,6 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.AutoScrollViewPager;
 
-import static cn.gogoal.im.R.id.recyclerView;
-
 /**
  * author wangjd on 2017/4/19 0019.
  * Staff_id 1375
@@ -45,7 +43,7 @@ import static cn.gogoal.im.R.id.recyclerView;
  */
 public class InvestmentResearchFragment extends BaseFragment {
 
-    @BindView(recyclerView)
+    @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
 
     @BindView(R.id.vp_fund_banner)
@@ -94,8 +92,8 @@ public class InvestmentResearchFragment extends BaseFragment {
         bannerPager.setScrollFactgor(5);
 
         Map<String, String> map = new HashMap<>();
-        //map.put("ad_position", "7");
         map.put("ad_position", "3");
+
         new GGOKHTTP(map, GGOKHTTP.GET_AD_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {

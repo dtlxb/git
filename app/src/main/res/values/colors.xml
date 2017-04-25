@@ -87,4 +87,9 @@
     <color name="create_live_bg">#171717</color>
     <color name="shape_create_bg">#1a1a1a</color>
 
+    <color name="social_live_status">#f5f5f5</color>
+    <color name="social_live_status_red">#c8f44744</color>
+    <color name="social_live_status_yellow">#c8ffa200</color>
+    <color name="social_live_online_time">#99000000</color>
+
 </resources>

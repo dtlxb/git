@@ -164,21 +164,25 @@
         <activity android:name=".activity.stock.StockDetailActivity" />
         <!-- <activity android:name=".activity.Test2Activity"></activity> -->
 
-        <activity android:name=".activity.copy.CopyStockDetailActivity"/>
-        <activity android:name=".activity.copy.NewsContentActivity"/>
-        <activity android:name=".activity.copy.StockDetailChartsActivity"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".activity.copy.CommentActivity"/>
-        <activity android:name=".activity.copy.StockDetailMarketIndexActivity"
-            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.copy.CopyStockDetailActivity" />
+        <activity android:name=".activity.copy.NewsContentActivity" />
+        <activity
+            android:name=".activity.copy.StockDetailChartsActivity"
+            android:screenOrientation="landscape" />
+        <activity android:name=".activity.copy.CommentActivity" />
+        <activity
+            android:name=".activity.copy.StockDetailMarketIndexActivity"
+            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.copy.StockSearchActivity" />
 
         <activity android:name=".activity.EditMyInfoActivity" />
         <activity android:name=".activity.ImageDetailActivity" />
         <activity android:name=".activity.CreateLiveActivity" />
-        <activity android:name=".activity.AddressActivity"/>
-        <activity android:name=".activity.SettingActivity"/>
+        <activity android:name=".activity.AddressActivity" />
+        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".activity.SetStockRefreshActivity" />
+        <activity android:name=".activity.KlineSettingActivity" />
         <activity android:name=".activity.SingleEditActivity"/>
         <activity android:name=".activity.ChangePhoneNumber"/>
 
