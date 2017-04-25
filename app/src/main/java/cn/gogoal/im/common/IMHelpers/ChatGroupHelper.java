@@ -167,12 +167,12 @@ public class ChatGroupHelper {
     }
 
     //获取群头像并且缓存SD
-    public static void createGroupImage(final String ConversationId, List<String> gruopMemberMap) {
+    public static void createGroupImage(final String ConversationId, List<String> gruopMemberMap, final String msgTag) {
         //群删除好友(每次删除后重新生成群头像)
         JSONArray accountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + ConversationId + "_accountList_beans", new JSONArray());
 
         if (null != accountArray && accountArray.size() > 0) {
-            getNinePic(accountArray, ConversationId);
+            getNinePic(accountArray, ConversationId, msgTag);
         } else {
             //如果不存在则先找这个会话
             if (gruopMemberMap == null || gruopMemberMap.size() == 0) {
@@ -184,7 +184,7 @@ public class ChatGroupHelper {
                             public void squareGetSuccess(JSONObject object) {
                                 JSONArray array = object.getJSONArray("accountList");
                                 if (null != array && array.size() > 0)
-                                    getNinePic(array, ConversationId);
+                                    getNinePic(array, ConversationId, msgTag);
                             }
 
                             @Override
@@ -205,7 +205,7 @@ public class ChatGroupHelper {
                     public void squareGetSuccess(JSONObject object) {
                         JSONArray array = object.getJSONArray("accountList");
                         if (null != array && array.size() > 0)
-                            getNinePic(array, ConversationId);
+                            getNinePic(array, ConversationId, msgTag);
                     }
 
                     @Override
@@ -217,7 +217,7 @@ public class ChatGroupHelper {
         }
     }
 
-    public static void getNinePic(JSONArray array, final String ConversationId) {
+    public static void getNinePic(JSONArray array, final String ConversationId, final String msgTag) {
         List<String> picUrls = new ArrayList<>();
         for (int i = 0; i < array.size(); i++) {
             JSONObject personObject = array.getJSONObject(i);
@@ -230,7 +230,7 @@ public class ChatGroupHelper {
                 String groupFaceImageName = "_" + ConversationId + ".png";
                 ImageUtils.cacheBitmapFile(MyApp.getAppContext(), mathingBitmap, "imagecache", groupFaceImageName);
 
-                AppManager.getInstance().sendMessage("set_avatar", 0 + "");
+                AppManager.getInstance().sendMessage(msgTag, 0 + "");
             }
 
             @Override

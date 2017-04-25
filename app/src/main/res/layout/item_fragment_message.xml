@@ -5,21 +5,33 @@
     android:layout_centerVertical="true">
 
 
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/head_layout"
         android:layout_width="68dp"
         android:layout_height="match_parent"
         android:gravity="center">
 
-        <ImageView
+        <cn.gogoal.im.ui.view.RectangleView
             android:id="@+id/head_image"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/timg"
-            android:contentDescription="@null" />
+            android:layout_gravity="center"
+            android:contentDescription="@null"
+            android:scaleType="fitXY" />
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/count_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_gravity="top|right"
+            android:background="@drawable/shape_message_tag"
+            android:gravity="center"
+            android:textColor="@color/absoluteWhite"
+            android:textSize="10sp" />
+
+    </FrameLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"

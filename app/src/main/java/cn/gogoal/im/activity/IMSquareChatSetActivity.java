@@ -3,10 +3,12 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -35,6 +37,7 @@ import cn.gogoal.im.adapter.IMPersonSetAdapter;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -46,6 +49,7 @@ import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.view.RectangleView;
 
 /**
  * Created by huangxx on 2017/3/20.
@@ -58,7 +62,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     RecyclerView personlistRecycler;
 
     @BindView(R.id.iv_square_head)
-    ImageView iv_square_head;
+    RectangleView iv_square_head;
 
     @BindView(R.id.tv_square_name)
     TextView tvSquareName;
@@ -91,6 +95,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     private String squareCreater;
     private List<String> groupMembers;
     private String squareName;
+    private List<String> urls;
 
     @Override
     public int bindLayout() {
@@ -101,13 +106,14 @@ public class IMSquareChatSetActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         setMyTitle(R.string.title_chat_person_detial, true);
         //初始化
+        squareCreater = getIntent().getExtras().getString("square_creater");
         personlistRecycler.setLayoutManager(new GridLayoutManager(this, 6));
-        mPersonInfoAdapter = new IMPersonSetAdapter(1002, IMSquareChatSetActivity.this, R.layout.item_square_chat_set, contactBeens);
+        mPersonInfoAdapter = new IMPersonSetAdapter(1002, IMSquareChatSetActivity.this, R.layout.item_square_chat_set, squareCreater, contactBeens);
         personlistRecycler.setAdapter(mPersonInfoAdapter);
         groupMembers = new ArrayList<>();
+        urls = new ArrayList<>();
         //正式流程走完后
         conversationId = getIntent().getExtras().getString("conversation_id");
-        squareCreater = getIntent().getExtras().getString("square_creater");
         squareName = getIntent().getExtras().getString("squareName");
         tvSquareName.setText(squareName);
         the_square.setText(squareName);
@@ -205,7 +211,8 @@ public class IMSquareChatSetActivity extends BaseActivity {
             }
         });
         if (!ImageUtils.getBitmapFilePaht(conversationId, "imagecache").equals("")) {
-            ImageDisplay.loadFileImage(IMSquareChatSetActivity.this, new File(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")), iv_square_head);
+            //ImageDisplay.loadFileImage(IMSquareChatSetActivity.this, new File(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")), iv_square_head);
+            iv_square_head.setImageURI(Uri.parse(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")));
         }
         getGroupInfo();
     }
@@ -228,7 +235,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
     }
 
     private void getAllContacts(JSONArray aarray) {
-        List<String> urls = new ArrayList<>();
         for (int i = 0; i < aarray.size(); i++) {
             JSONObject accountObject = aarray.getJSONObject(i);
             contactBeens.add(addNomoralFuns(accountObject.getString("nickname"), accountObject.getInteger("friend_id"), accountObject.getString("avatar")));
@@ -250,8 +256,11 @@ public class IMSquareChatSetActivity extends BaseActivity {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {
                 String groupFaceImageName = "_" + conversationId + ".png";
-                ImageUtils.cacheBitmapFile(getActivity(),mathingBitmap, "imagecache", groupFaceImageName);
-                AppManager.getInstance().sendMessage("set_square_avatar");
+                ImageUtils.cacheBitmapFile(getActivity(), mathingBitmap, "imagecache", groupFaceImageName);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("mathing_bitmap", mathingBitmap);
+                BaseMessage baseMessage = new BaseMessage("bitmapMessage", map);
+                AppManager.getInstance().sendMessage("set_square_avatar", baseMessage);
             }
 
             @Override
@@ -264,8 +273,10 @@ public class IMSquareChatSetActivity extends BaseActivity {
      * 群头像
      */
     @Subscriber(tag = "set_square_avatar")
-    public void setAvatar(String msg) {
-        ImageDisplay.loadFileImage(IMSquareChatSetActivity.this, new File(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")), iv_square_head);
+    public void setAvatar(BaseMessage baseMessage) {
+        Map<String, Object> map = baseMessage.getOthers();
+        Bitmap bitmap = (Bitmap) map.get("mathing_bitmap");
+        iv_square_head.setImageBitmap(bitmap);
     }
 
     //删除群成员后
@@ -313,9 +324,20 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     the_square.setText(((JSONObject) result.get("data")).get("name") == null ? "" : ((JSONObject) result.get("data")).getString("name"));
                     tvSquareName.setText(((JSONObject) result.get("data")).get("name") == null ? "" : ((JSONObject) result.get("data")).getString("name"));
                     JSONObject jsonObject = (JSONObject) ((JSONObject) result.get("data")).get("attr");
-                    the_brief.setText(jsonObject.get("intro") == null ? "" : jsonObject.getString("intro"));
-                    tvSquareDetail.setText(jsonObject.get("intro") == null ? "" : jsonObject.getString("intro"));
-                    the_square_notice.setText(jsonObject.get("notice") == null ? "" : jsonObject.getString("notice"));
+                    if (jsonObject.get("intro") != null && !TextUtils.isEmpty(jsonObject.getString("intro"))) {
+                        the_brief.setText(jsonObject.get("intro") == null ? "" : jsonObject.getString("intro"));
+                        tvSquareDetail.setText(jsonObject.get("intro") == null ? "" : jsonObject.getString("intro"));
+                    } else {
+                        the_brief.setText("暂无群简介");
+                        tvSquareDetail.setText("暂无群简介");
+                    }
+
+                    if (jsonObject.get("notice") != null && !TextUtils.isEmpty(jsonObject.getString("notice"))) {
+                        the_square_notice.setText(jsonObject.get("notice") == null ? "" : jsonObject.getString("notice"));
+                    } else {
+                        the_square_notice.setText("暂无群公告");
+                    }
+
                 }
             }
 
@@ -333,6 +355,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
             case R.id.look_more_person:
                 intent = new Intent(getActivity(), IMGroupContactsActivity.class);
                 Bundle bundle = new Bundle();
+                bundle.putString("square_creater",squareCreater);
                 bundle.putSerializable("chat_group_contacts", (Serializable) PersonContactBeens);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -411,6 +434,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     List<Integer> addIdList = new ArrayList<>();
                     for (int i = 0; i < addContactBeens.size(); i++) {
                         addIdList.add(addContactBeens.get(i).getFriend_id());
+                        urls.add((String) addContactBeens.get(i).getAvatar());
                     }
                     //添加群成员
                     ChatGroupHelper.addAnyone(addIdList, conversationId, new ChatGroupHelper.chatGroupManager() {
@@ -424,7 +448,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
                         }
                     });
+                    Log.e("+++urls1", urls.toString());
                     PersonContactBeens.addAll(addContactBeens);
+                    getNicePicture(urls);
                     contactBeens.clear();
                     contactBeens.addAll(squareCreaterFirst(PersonContactBeens));
                     tvTeamSize.setText(PersonContactBeens.size() + "人");
@@ -435,6 +461,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     final List<Integer> idList = new ArrayList<>();
                     for (int i = 0; i < changeContactBeens.size(); i++) {
                         idList.add(changeContactBeens.get(i).getFriend_id());
+                        urls.remove((String) changeContactBeens.get(i).getAvatar());
                     }
                     //删除群成员
                     ChatGroupHelper.deleteAnyone(idList, conversationId, new ChatGroupHelper.chatGroupManager() {
@@ -449,6 +476,8 @@ public class IMSquareChatSetActivity extends BaseActivity {
                         }
                     });
                     PersonContactBeens.removeAll(changeContactBeens);
+                    Log.e("+++urls", urls.toString());
+                    getNicePicture(urls);
                     contactBeens.clear();
                     contactBeens.addAll(squareCreaterFirst(PersonContactBeens));
                     tvTeamSize.setText(PersonContactBeens.size() + "人");
@@ -461,11 +490,17 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     break;
                 case AppConst.SQUARE_ROOM_EDIT_BRIEF:
                     String stringBrief = data.getStringExtra("group_intro");
+                    if (TextUtils.isEmpty(stringBrief)) {
+                        stringBrief = "暂无群简介";
+                    }
                     the_brief.setText(stringBrief);
                     tvSquareDetail.setText(stringBrief);
                     break;
                 case AppConst.SQUARE_ROOM_EDIT_NOTICE:
                     String stringNotice = data.getStringExtra("group_notice");
+                    if (TextUtils.isEmpty(stringNotice)) {
+                        stringNotice = "暂无群公告";
+                    }
                     the_square_notice.setText(stringNotice);
                     break;
             }
