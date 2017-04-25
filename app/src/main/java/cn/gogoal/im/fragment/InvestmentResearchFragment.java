@@ -94,7 +94,7 @@ public class InvestmentResearchFragment extends BaseFragment {
         bannerPager.setScrollFactgor(10);
 
         Map<String, String> map = new HashMap<>();
-        map.put("ad_position", "7");
+        map.put("ad_position", "3");
         new GGOKHTTP(map, GGOKHTTP.GET_AD_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
