@@ -220,24 +220,27 @@ public class UserUtils {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
-                JSONObject data = JSONObject.parseObject(responseInfo);
-                JSONObject result = data.getJSONObject("data");
-                boolean success = result.getBoolean("success");
-                if (success) {
-                    if (null != updataListener)
-                        updataListener.success(responseInfo);
-                } else {
-                    if (updataListener != null) {
-                        switch (result.getIntValue("code")) {
-                            case 115://昵称已存在
-                                updataListener.failed("昵称已存在！");
-                                break;
-                            default:
-                                updataListener.failed(JSONObject.parseObject(responseInfo).getString("message"));
-                                break;
-                        }
+                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                    JSONObject result = JSONObject.parseObject(responseInfo).getJSONObject("data");
+                    boolean success = result.getBoolean("success");
+                    if (success) {
+                        if (null != updataListener)
+                            updataListener.success(responseInfo);
+                    } else {
+                        if (updataListener != null) {
+                            switch (result.getIntValue("code")) {
+                                case 115://昵称已存在
+                                    updataListener.failed("昵称已存在！");
+                                    break;
+                                default:
+                                    updataListener.failed(result.getString("msg"));
+                                    break;
+                            }
 
+                        }
                     }
+                } else {
+                    updataListener.failed(JSONObject.parseObject(responseInfo).getString("message"));
                 }
             }
 
