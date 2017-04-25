@@ -159,7 +159,6 @@ public class ChatGroupHelper {
                     hasThisGuy = true;
                 }
             }
-            SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", spAccountArray);
             if (hasThisGuy) {
                 SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", spAccountArray);
             }

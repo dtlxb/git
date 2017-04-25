@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:focusableInTouchMode="true"
-    android:focusable="true"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
     <!--标题-->
@@ -24,157 +24,201 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:text="编辑"
                 android:gravity="center"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp"
+                android:text="编辑"
                 android:textColor="@color/textColor_333333"
                 android:textSize="18sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <RadioGroup
+
+                android:layout_width="150dp"
+                android:layout_height="35dp"
                 android:layout_centerInParent="true"
-                android:padding="10dp"
-                android:text="自选"
-                android:textColor="@color/textColor_333333"
-                android:textSize="18sp" />
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/btn_my_stock_zixuan"
+                    style="@style/RdbMyStockTopStyle"
+                    android:background="@drawable/selector_rdb_mystock_top_left"
+                    android:checked="true"
+                    android:text="自选" />
+
+                <RadioButton
+                    android:id="@+id/btn_my_stock_flag"
+                    style="@style/RdbMyStockTopStyle"
+                    android:background="@drawable/selector_rdb_mystock_top_right"
+                    android:text="标签" />
+
+            </RadioGroup>
 
             <ImageView
                 android:id="@+id/img_mystock_refresh"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingStart="15dp"
-                android:paddingEnd="15dp"
-                android:src="@mipmap/img_refresh"
-                android:contentDescription="@null"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true" />
+                android:contentDescription="@null"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp"
+                android:src="@mipmap/img_refresh" />
         </RelativeLayout>
     </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swiperefreshlayout"
+        android:id="@+id/swiperefreshlayout_my_stock"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v4.widget.NestedScrollView
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <cn.gogoal.im.ui.view.DrawableCenterTextView
-                    android:id="@+id/search_market"
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/shape_search_activity_edit"
-                    android:drawableLeft="@mipmap/img_search"
-                    android:drawablePadding="5dp"
-                    android:gravity="center_vertical"
-                    android:text="股票代码/名称/拼音"
-                    android:textColor="@color/colorXLayout"
-                    android:textSize="14sp"
-                    app:layout_scrollFlags="scroll|enterAlways" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <cn.gogoal.im.ui.view.XLayout
-                    android:id="@+id/xLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
+                    <cn.gogoal.im.ui.view.DrawableCenterTextView
+                        android:id="@+id/search_market"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="35dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/shape_search_activity_edit"
+                        android:drawableLeft="@mipmap/img_search"
+                        android:drawablePadding="5dp"
+                        android:gravity="center_vertical"
+                        android:text="股票代码/名称/拼音"
+                        android:textColor="@color/colorXLayout"
+                        android:textSize="14sp"
+                        app:layout_scrollFlags="scroll|enterAlways" />
 
-                        <include layout="@layout/include_line" />
+                    <include layout="@layout/include_line" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:background="@color/stock_market_bg"
+                        android:gravity="center_vertical">
 
                         <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="70dp"
-                            android:background="@color/stock_market_bg"
-                            android:gravity="center_vertical">
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_toStartOf="@+id/flag_middle">
+                            <!--img_mystock_down_flag-->
+                            <ImageView
+                                android:id="@+id/img_mystock_more"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentTop="true"
+                                android:contentDescription="@null"
+                                android:paddingBottom="20dp"
+                                android:paddingEnd="20dp"
+                                android:paddingStart="10dp"
+                                android:paddingTop="8dp"
+                                android:src="@mipmap/img_mystock_down_flag" />
 
-                            <AdapterViewFlipper
+                            <cn.gogoal.im.ui.widget.UnSlidingViewPager
                                 android:id="@+id/flipper_mystock_banner"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:layout_alignParentStart="true"
-                                android:layout_toStartOf="@+id/flag_middle"
-                                android:autoStart="true"
-                                android:flipInterval="2000" />
+                                android:layout_toStartOf="@+id/img_mystock_more"
+                                app:canScroll="false" />
 
-                            <View
-                                android:id="@+id/flag_middle"
-                                android:layout_width="1dp"
-                                android:layout_height="35dp"
-                                android:layout_centerInParent="true"
-                                android:background="#d8d8d8" />
-
-                            <!--新闻、公告、研报-->
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_alignParentEnd="true"
-                                android:layout_toEndOf="@+id/flag_middle"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                android:paddingEnd="5dp"
-                                android:paddingStart="5dp">
-
-                                <TextView
-                                    android:id="@+id/tv_mystock_news"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:drawablePadding="5dp"
-                                    android:drawableTop="@mipmap/img_mystock_news"
-                                    android:gravity="center"
-                                    android:text="新闻"
-                                    android:textColor="@color/textColor_666666"
-                                    android:textSize="14sp" />
-
-                                <TextView
-                                    android:id="@+id/tv_mystock_gonggao"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:drawablePadding="5dp"
-                                    android:drawableTop="@mipmap/img_mystock_gonggao"
-                                    android:gravity="center"
-                                    android:text="公告"
-                                    android:textColor="@color/textColor_666666"
-                                    android:textSize="14sp" />
-
-                                <TextView
-                                    android:id="@+id/tv_mystock_yanbao"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:drawablePadding="5dp"
-                                    android:drawableTop="@mipmap/img_mystock_yanbao"
-                                    android:gravity="center"
-                                    android:text="研报"
-                                    android:textColor="@color/textColor_666666"
-                                    android:textSize="14sp" />
-                            </LinearLayout>
                         </RelativeLayout>
 
-                        <include layout="@layout/item_my_stock" />
+                        <View
+                            android:id="@+id/flag_middle"
+                            android:layout_width="1dp"
+                            android:layout_height="35dp"
+                            android:layout_centerInParent="true"
+                            android:background="#d8d8d8" />
 
-
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/rv_mystock"
-                            android:layout_width="match_parent"
+                        <!--新闻、公告、研报-->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:background="#fff" />
-                    </LinearLayout>
-                </cn.gogoal.im.ui.view.XLayout>
-            </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
+                            android:layout_alignParentEnd="true"
+                            android:layout_toEndOf="@+id/flag_middle"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingEnd="5dp"
+                            android:paddingStart="5dp">
+
+                            <TextView
+                                android:id="@+id/tv_mystock_news"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawablePadding="5dp"
+                                android:drawableTop="@mipmap/img_mystock_news"
+                                android:gravity="center"
+                                android:text="新闻"
+                                android:textColor="@color/textColor_666666"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tv_mystock_gonggao"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawablePadding="5dp"
+                                android:drawableTop="@mipmap/img_mystock_gonggao"
+                                android:gravity="center"
+                                android:text="公告"
+                                android:textColor="@color/textColor_666666"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tv_mystock_yanbao"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:drawablePadding="5dp"
+                                android:drawableTop="@mipmap/img_mystock_yanbao"
+                                android:gravity="center"
+                                android:text="研报"
+                                android:textColor="@color/textColor_666666"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <include layout="@layout/item_my_stock" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_mystock"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#fff" />
+                </LinearLayout>
+
+            </android.support.v4.widget.NestedScrollView>
+
+            <!--蒙版-->
+            <View
+                android:id="@+id/view_dialog_mask"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#55000000"
+                android:clickable="true"
+                android:visibility="gone" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_mystock_market"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:visibility="gone" />
+        </FrameLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
+
 </LinearLayout>

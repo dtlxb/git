@@ -24,6 +24,11 @@ public class EditTextDialog extends BaseBottomDialog {
     OnSendMessageListener listener;
 
     @Override
+    public int getDialogStyle() {
+        return R.style.BaseBottomDialog;
+    }
+
+    @Override
     public int getLayoutRes() {
         return R.layout.dialog_live_chat;
     }

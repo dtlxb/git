@@ -34,6 +34,7 @@ public class ShareBottomDialog extends BaseBottomDialog {
 
     @Override
     public void bindView(View v) {
+
         String url = getArguments().getString("share_url");
         String imageUrl = getArguments().getString("share_imageUrl");
         String title = getArguments().getString("share_title");

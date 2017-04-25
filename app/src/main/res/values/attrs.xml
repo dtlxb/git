@@ -91,4 +91,7 @@
         <attr name="rightDrawableHeight" format="dimension"/>
     </declare-styleable>
 
+    <declare-styleable name="UnSlidingViewPager">
+        <attr name="canScroll" format="boolean"/>
+    </declare-styleable>
 </resources>

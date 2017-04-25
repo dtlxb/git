@@ -105,7 +105,6 @@ public class MessageUtils {
             } else if (messageType.equals("6")) {
                 spAccountArray.removeAll(accountArray);
             }
-            KLog.e(spAccountArray.toString());
             SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", spAccountArray);
         } else {
 

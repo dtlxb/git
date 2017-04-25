@@ -38,7 +38,7 @@ import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.KeyboardLaunchListenLayout;
+import cn.gogoal.im.ui.KeyboardLaunchRelativeLayout;
 import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XEditText;
 import cn.gogoal.im.ui.view.XTitle;
@@ -75,7 +75,7 @@ public class TypeLoginActivity extends BaseActivity {
     SelectorButton loginButton;
 
     @BindView(R.id.login_keyboard_layout)
-    KeyboardLaunchListenLayout keyboardLayout;
+    KeyboardLaunchRelativeLayout keyboardLayout;
 
     private RotateAnimation animation;
 
@@ -103,8 +103,8 @@ public class TypeLoginActivity extends BaseActivity {
         /*loginUserName.setText("E00020190");
         loginPassWord.setText("955202");*/
 
-//        loginUserName.setText("E00003645");
-//        loginPassWord.setText("147258369");
+        loginUserName.setText("E00003645");
+        loginPassWord.setText("147258369");
 
         /*loginUserName.setText("E00002639");
         loginPassWord.setEditTextText("412174");*/
@@ -112,9 +112,11 @@ public class TypeLoginActivity extends BaseActivity {
         /*loginUserName.setText("E00003645");
         loginPassWord.setText("147258369");*/
 
-        loginUserName.setText("E00002639");
-        loginPassWord.setText("412174");
+//        loginUserName.setText("E00002639");
+//        loginPassWord.setText("412174");
 
+//        loginUserName.setText("E00002638");
+//        loginPassWord.setText("123456");
         /*loginUserName.setText("E00002638");
         loginPassWord.setText("123456");*/
 
@@ -124,7 +126,7 @@ public class TypeLoginActivity extends BaseActivity {
         loginUserName.setSelection(loginUserName.getText().length());
 
         //保存键盘高度
-        keyboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchListenLayout.OnKeyboardChangeListener() {
+        keyboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchRelativeLayout.OnKeyboardChangeListener() {
             @Override
             public void OnKeyboardPop(int height) {
                 SPTools.saveInt("soft_keybord_height", height);

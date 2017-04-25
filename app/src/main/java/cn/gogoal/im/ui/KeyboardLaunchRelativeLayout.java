@@ -16,7 +16,7 @@ import java.util.List;
  * phone 18930640263
  * description :软键盘监听布局
  */
-public class KeyboardLaunchListenLayout extends RelativeLayout {
+public class KeyboardLaunchRelativeLayout extends RelativeLayout {
 
     private Context mContext;
     private int mOldh = -1;
@@ -24,7 +24,7 @@ public class KeyboardLaunchListenLayout extends RelativeLayout {
     protected int mScreenHeight = 0;
     protected boolean mIsSoftKeyboardPop = false;
 
-    public KeyboardLaunchListenLayout(Context context, AttributeSet attrs) {
+    public KeyboardLaunchRelativeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

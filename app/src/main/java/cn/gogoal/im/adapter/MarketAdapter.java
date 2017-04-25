@@ -24,7 +24,7 @@ import cn.gogoal.im.common.StringUtils;
  * author wangjd on 2017/4/5 0005.
  * Staff_id 1375
  * phone 18930640263
- * description :行情整体适配器.
+ * description :行情整体适配器
  */
 public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
 
@@ -37,7 +37,7 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
 
     @Override
     protected void convert(BaseViewHolder holder, final MarkteBean data, final int position) {
-        RecyclerView recyclerView = holder.getView(R.id.item_stock_rank_list);
+        RecyclerView recyclerView = holder.getView(R.id.item_stock_rank_rv);
 
         recyclerView.setTag(position);
         switch (position) {
