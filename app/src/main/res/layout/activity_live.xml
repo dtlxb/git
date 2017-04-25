@@ -40,11 +40,11 @@
             android:id="@+id/imgPlayClose"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:scaleType="fitXY"
             android:layout_gravity="right"
             android:clickable="true"
             android:focusable="true"
             android:padding="3dp"
+            android:scaleType="fitXY"
             android:src="@mipmap/icon_live_close"
             android:visibility="gone" />
 
@@ -91,8 +91,7 @@
                     <ImageView
                         android:id="@+id/imgPalyer"
                         android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:background="@mipmap/player_chat" />
+                        android:layout_height="18dp" />
 
                     <TextView
                         android:id="@+id/textCompany"

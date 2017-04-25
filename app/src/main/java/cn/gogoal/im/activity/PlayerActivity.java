@@ -1116,6 +1116,14 @@ public class PlayerActivity extends BaseActivity {
             ImageDisplay.loadCircleNetImage(getActivity(), data.getFace_url(), relater_avatar);
             holder.setText(R.id.relater_name, data.getAnchor_name());
             holder.setText(R.id.relater_content, data.getProgramme_name());
+
+            holder.setOnClickListener(R.id.linearRelaterVideo, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    live_id = data.getVideo_id();
+                    getPlayerInfo();
+                }
+            });
         }
     }
 

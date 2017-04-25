@@ -94,4 +94,9 @@
     <declare-styleable name="UnSlidingViewPager">
         <attr name="canScroll" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="ImageWithTextView">
+        <attr name="MiddleImg" format="reference" />
+        <attr name="MiddleString" format="string|reference" />
+    </declare-styleable>
 </resources>
