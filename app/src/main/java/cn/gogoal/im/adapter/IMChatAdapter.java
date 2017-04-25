@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -27,9 +28,11 @@ import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.socks.library.KLog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.ImageDetailActivity;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
@@ -38,6 +41,7 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.recording.MediaManager;
+import cn.gogoal.im.ui.view.RectangleView;
 
 /**
  * Created by huangxx on 2017/2/27.
@@ -105,7 +109,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
 
-        AVIMMessage avimMessage = messageList.get(position);
+        final AVIMMessage avimMessage = messageList.get(position);
         JSONObject contentObject = JSON.parseObject(avimMessage.getContent());
         final JSONObject lcattrsObject = (JSONObject) contentObject.get("_lcattrs");
         String messageType = contentObject.getString("_lctype");
@@ -125,7 +129,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             } else {
                 headPicUrl = (String) lcattrsObject.get("avatar");
             }
-            ImageDisplay.loadNetImage(mContext, headPicUrl, ((IMCHatViewHolder) holder).user_head_photo);
+            ImageDisplay.loadRoundedRectangleImage(mContext, ((IMCHatViewHolder) holder).user_head_photo, AppDevice.dp2px(mContext, 4), headPicUrl);
         } else {
         }
         if (holder instanceof LeftTextViewHolder) {
@@ -143,7 +147,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             showMessageTime(position, ((RightTextViewHolder) holder).message_time);
 
         } else if (holder instanceof LeftImageViewHolder) {
-            AVIMImageMessage imageMessage = (AVIMImageMessage) avimMessage;
+            final AVIMImageMessage imageMessage = (AVIMImageMessage) avimMessage;
             ((LeftImageViewHolder) holder).user_name.setText((String) imageMessage.getAttrs().get("username"));
 
             //获取后台图片大小设置
@@ -151,11 +155,17 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             setImageSize(params, imageMessage);
             ((LeftImageViewHolder) holder).image_user_send.setLayoutParams(params);
             ImageDisplay.loadNetImage(mContext, imageMessage.getAVFile().getUrl(), ((LeftImageViewHolder) holder).image_user_send);
-
             showMessageTime(position, ((LeftImageViewHolder) holder).message_time);
 
+            ((LeftImageViewHolder) holder).image_user_send.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    imageClickAction(imageMessage);
+                }
+            });
+
         } else if (holder instanceof RightImageViewHolder) {
-            AVIMImageMessage imageMessage = (AVIMImageMessage) avimMessage;
+            final AVIMImageMessage imageMessage = (AVIMImageMessage) avimMessage;
             ((RightImageViewHolder) holder).user_name.setVisibility(View.GONE);
             //获取后台图片大小设置
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((RightImageViewHolder) holder).image_user_send.getLayoutParams();
@@ -163,6 +173,13 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             ((RightImageViewHolder) holder).image_user_send.setLayoutParams(params);
             ImageDisplay.loadNetImage(mContext, imageMessage.getAVFile().getUrl(), ((RightImageViewHolder) holder).image_user_send);
             showMessageTime(position, ((RightImageViewHolder) holder).message_time);
+
+            ((RightImageViewHolder) holder).image_user_send.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    imageClickAction(imageMessage);
+                }
+            });
 
         } else if (holder instanceof RightAudioViewHolder) {
             final AVIMAudioMessage audioMessage = (AVIMAudioMessage) avimMessage;
@@ -416,6 +433,15 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         } else {
             view.setVisibility(View.GONE);
         }
+    }
+
+    private void imageClickAction(AVIMImageMessage imageMessage) {
+        List<String> urls = new ArrayList<>();
+        urls.add(imageMessage.getAVFile().getUrl());
+        Intent intent = new Intent(mContext, ImageDetailActivity.class);
+        intent.putStringArrayListExtra("image_urls", (ArrayList<String>) urls);
+        intent.putExtra("account_Id", "");
+        mContext.startActivity(intent);
     }
 
     private static class IMCHatViewHolder extends RecyclerView.ViewHolder {

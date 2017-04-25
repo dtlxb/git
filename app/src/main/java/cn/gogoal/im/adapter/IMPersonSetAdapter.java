@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -15,6 +17,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.view.RectangleView;
 
 /**
  * Created by huangxx on 2017/3/20.
@@ -23,12 +26,14 @@ import cn.gogoal.im.common.UserUtils;
 public class IMPersonSetAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
 
     private Context context;
+    private String squareCreater;
     private int chatTytpe;
 
-    public IMPersonSetAdapter(int chatTytpe, Context context, int layoutId, List<ContactBean> datas) {
+    public IMPersonSetAdapter(int chatTytpe, Context context, int layoutId, String squareCreater, List<ContactBean> datas) {
         super(layoutId, datas);
         this.context = context;
         this.chatTytpe = chatTytpe;
+        this.squareCreater = squareCreater;
     }
 
     @Override
@@ -41,7 +46,7 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean, BaseViewHolde
         view.setBackgroundColor(ContextCompat.getColor(mContext, R.color.absoluteWhite));
         view.setLayoutParams(layoutParams);
 
-        ImageView imageIcon = holder.getView(R.id.iv);
+        RectangleView imageIcon = holder.getView(R.id.iv);
         TextView personName = holder.getView(R.id.tv);
         TextView squareManTag = holder.getView(R.id.square_man_tag);
         ViewGroup.LayoutParams viewParams = imageIcon.getLayoutParams();
@@ -57,10 +62,11 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean, BaseViewHolde
         personName.setText(contactBean.getNickname());
         if (avatar instanceof String) {
             holder.setImageUrl(R.id.iv, avatar.toString());
+            Glide.with(mContext).load(avatar.toString()).asBitmap().into(imageIcon);
         } else if (avatar instanceof Integer) {
-            holder.setImageResource(R.id.iv, (Integer) avatar);
+            imageIcon.setImageResource((Integer) avatar);
         }
-        if (String.valueOf(contactBean.getFriend_id()).equals(UserUtils.getMyAccountId()) && chatTytpe == 1002) {
+        if (String.valueOf(contactBean.getFriend_id()).equals(squareCreater) && chatTytpe == 1002) {
             squareManTag.setVisibility(View.VISIBLE);
         } else {
             squareManTag.setVisibility(View.GONE);

@@ -53,7 +53,7 @@ public class ImageDisplay {
     }
 
     public static void loadFileImage(Context context, File fileImage, ImageView view) {
-        if (fileImage!=null && fileImage.exists()) {
+        if (fileImage != null && fileImage.exists()) {
             Glide.with(context)
                     .load(Uri.fromFile(fileImage))
                     .placeholder(R.mipmap.image_placeholder)
@@ -76,7 +76,7 @@ public class ImageDisplay {
         }
     }
 
-    public static void loadNetImage(Context context, String url, ImageView imageView,int placeholdeer) {
+    public static void loadNetImage(Context context, String url, ImageView imageView, int placeholdeer) {
         if (!TextUtils.isEmpty(url)) {
             DrawableRequestBuilder<String> builder = Glide.with(context)
                     .load(url)
@@ -93,6 +93,7 @@ public class ImageDisplay {
             }
         }
     }
+
     public static void loadChartImage(Context context, String url, ImageView imageView) {
         if (!TextUtils.isEmpty(url)) {
             DrawableRequestBuilder<String> builder = Glide.with(context)
@@ -193,6 +194,7 @@ public class ImageDisplay {
         Glide.with(context)
                 .load(Uri.fromFile(imageFile))
                 .bitmapTransform(new RoundedCornersTransformation(context, radius, 0))
+                .skipMemoryCache(true)
                 .into(imageView);
     }
 
@@ -269,7 +271,7 @@ public class ImageDisplay {
     }
 
     public static void loadCircleFileImage(Context context, File fileImage, ImageView view) {
-        if (fileImage!=null && fileImage.exists()) {
+        if (fileImage != null && fileImage.exists()) {
             Glide.with(context)
                     .load(Uri.fromFile(fileImage))
                     .bitmapTransform(new CropCircleTransformation(context))
@@ -277,6 +279,7 @@ public class ImageDisplay {
                     .into(view);
         }
     }
+
     public static void loadCircleFileImageWithBoard(Context context, File fileImage, ImageView view) {
         if (fileImage.exists()) {
             Glide.with(context)

@@ -73,7 +73,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                                 MessageUtils.changeSquareInfo(conversation.getConversationId(), accountArray, _lctype);
 
                                                 //生成群头像
-                                                ChatGroupHelper.createGroupImage(conversation.getConversationId(), conversation.getMembers());
+                                                ChatGroupHelper.createGroupImage(conversation.getConversationId(), conversation.getMembers(), "set_avatar");
 
                                                 //发送
                                                 sendIMMessage(message, conversation);

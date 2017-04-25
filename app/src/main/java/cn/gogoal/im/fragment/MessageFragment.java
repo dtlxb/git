@@ -4,13 +4,13 @@ package cn.gogoal.im.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,11 +24,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
+import com.bumptech.glide.Glide;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -58,14 +58,11 @@ import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
-import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.badgeview.Badge;
-import cn.gogoal.im.ui.badgeview.BadgeView;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
 import cn.gogoal.im.ui.view.XTitle;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
@@ -93,8 +90,6 @@ public class MessageFragment extends BaseFragment {
 
     private Map<String, List<String>> gruopMemberMap = new HashMap<>();
 
-    private Map<Integer, Badge> badgeMap;
-
     public MessageFragment() {
     }
 
@@ -108,7 +103,6 @@ public class MessageFragment extends BaseFragment {
         initTitle();
         initRecycleView(message_recycler, R.drawable.shape_divider_1px);
         message_recycler.setItemAnimator(new NoAlphaItemAnimator());
-        badgeMap = new HashMap<>();
     }
 
     private void initTitle() {
@@ -314,27 +308,15 @@ public class MessageFragment extends BaseFragment {
             int chatType = messageBean.getChatType();
             ImageView avatarIv = holder.getView(R.id.head_image);
             TextView messageTv = holder.getView(R.id.last_message);
-            Badge badge;
+            TextView countTv = holder.getView(R.id.count_tv);
 
             //未读数
+            setCountTag(countTv, messageBean.getUnReadCounts());
             if (messageBean.getUnReadCounts().equals("0")) {
                 unRead = "";
-                /*KLog.e("走这儿了的！！！");
-                badge.hide(true);*/
             } else {
-                if (null != badgeMap.get(position)) {
-                    badge = badgeMap.get(position);
-                } else {
-                    badge = new BadgeView(getActivity()).bindTarget(holder.getView(R.id.head_layout));
-                    badgeMap.put(position, badge);
-                }
-
-                badge.setBadgeTextSize(10, true);
-                badge.setBadgeGravity(Gravity.TOP | Gravity.END);
-                badge.setBadgeNumber(Integer.parseInt(messageBean.getUnReadCounts()));
                 unRead = "[" + messageBean.getUnReadCounts() + "条] ";
             }
-
             //时间
             if (null != messageBean.getLastTime()) {
                 dateStr = CalendarUtils.parseDateIMMessageFormat(messageBean.getLastTime());
@@ -354,14 +336,18 @@ public class MessageFragment extends BaseFragment {
                         squareMessageFrom = (lcattrsObject.get("username")) == null ? "" : lcattrsObject.getString("username");
                     }
                     if (ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache").equals("")) {
-                        ChatGroupHelper.createGroupImage(messageBean.getConversationID(), gruopMemberMap.get(messageBean.getConversationID()));
+                        ChatGroupHelper.createGroupImage(messageBean.getConversationID(), gruopMemberMap.get(messageBean.getConversationID()), "set_avatar");
                     } else {
-                        ImageDisplay.loadFileImage(getActivity(), new File(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")), avatarIv);
+                        KLog.e(position);
+                        //ImageDisplay.loadFileImage(getActivity(), new File(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")), avatarIv);
+                        avatarIv.setImageURI(Uri.parse(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")));
                     }
                 } else if (chatType == 1004) {
-                    ImageDisplay.loadResImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
+                    Glide.with(getActivity()).load(R.mipmap.chat_new_friend).asBitmap().into(avatarIv);
+                    //ImageDisplay.loadRoundedRectangleImage(getActivity(), avatarIv, AppDevice.dp2px(getActivity(), 4), R.mipmap.chat_new_friend);
                 } else {
-                    ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv, 0);
+                    Glide.with(getActivity()).load(messageBean.getAvatar()).asBitmap().into(avatarIv);
+                    //ImageDisplay.loadRoundedRectangleImage(getActivity(), avatarIv, AppDevice.dp2px(getActivity(), 4), messageBean.getAvatar());
                 }
 
                 switch (_lctype) {
@@ -414,7 +400,7 @@ public class MessageFragment extends BaseFragment {
                         //群通知
                         nickName = "申请入群";
                         message = messageBean.getNickname() + "请求加入" + messageBean.getFriend_id();
-                        ImageDisplay.loadNetImage(getActivity(), messageBean.getAvatar(), avatarIv, 0);
+                        Glide.with(getActivity()).load(messageBean.getAvatar()).into(avatarIv);
                         break;
                     case "8":
                         //群公告,群简介
@@ -451,6 +437,24 @@ public class MessageFragment extends BaseFragment {
         }
     }
 
+    private void setCountTag(TextView view, String count) {
+        if (count.equals("0")) {
+            view.setVisibility(View.GONE);
+        } else if (count.length() == 1) {
+            view.setVisibility(View.VISIBLE);
+            view.setText(count);
+            view.setBackgroundResource(R.drawable.shape_message_circle_tag);
+        } else if (count.length() == 2) {
+            view.setVisibility(View.VISIBLE);
+            view.setText(count);
+            view.setBackgroundResource(R.drawable.shape_message_tag);
+        } else {
+            view.setVisibility(View.VISIBLE);
+            view.setText("...");
+            view.setBackgroundResource(R.drawable.shape_message_tag);
+        }
+    }
+
     /**
      * 群头像
      */
@@ -459,84 +463,6 @@ public class MessageFragment extends BaseFragment {
         KLog.e(code);
         listAdapter.notifyItemChanged(Integer.parseInt(code));
     }
-
-    /*private void createGroupImage(final String ConversationId, final int position) {
-        //群删除好友(每次删除后重新生成群头像)
-        JSONArray accountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + ConversationId + "_accountList_beans", new JSONArray());
-        List<String> memberList = new ArrayList<>();
-        if (null != gruopMemberMap.get(ConversationId)) {
-            memberList.addAll(gruopMemberMap.get(ConversationId));
-        }
-
-        if (null != accountArray && accountArray.size() > 0) {
-            getNinePic(accountArray, ConversationId, position);
-        } else {
-            //如果不存在则先找这个会话
-            if (memberList == null || memberList.size() == 0) {
-                AVImClientManager.getInstance().findConversationById(ConversationId, new AVImClientManager.ChatJoinManager() {
-                    @Override
-                    public void joinSuccess(AVIMConversation conversation) {
-                        UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, conversation.getMembers(), ConversationId, new UserUtils.getSquareInfo() {
-                            @Override
-                            public void squareGetSuccess(JSONObject object) {
-                                JSONArray array = object.getJSONArray("accountList");
-                                if (null != array && array.size() > 0)
-                                    getNinePic(array, ConversationId, position);
-                            }
-
-                            @Override
-                            public void squareGetFail(String error) {
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void joinFail(String error) {
-
-                    }
-                });
-            } else {
-                UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, memberList, ConversationId, new UserUtils.getSquareInfo() {
-                    @Override
-                    public void squareGetSuccess(JSONObject object) {
-                        JSONArray array = object.getJSONArray("accountList");
-                        if (null != array && array.size() > 0)
-                            getNinePic(array, ConversationId, position);
-                    }
-
-                    @Override
-                    public void squareGetFail(String error) {
-
-                    }
-                });
-            }
-        }
-    }
-
-    private void getNinePic(JSONArray array, final String ConversationId, final int position) {
-        List<String> picUrls = new ArrayList<>();
-        for (int i = 0; i < array.size(); i++) {
-            JSONObject personObject = array.getJSONObject(i);
-            picUrls.add(personObject.getString("avatar"));
-        }
-        //九宫图拼接
-        GroupFaceImage.getInstance(getContext(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
-            @Override
-            public void onSuccess(Bitmap mathingBitmap) {
-                String groupFaceImageName = "_" + ConversationId + ".png";
-                ImageUtils.cacheBitmapFile(getContext(), mathingBitmap, "imagecache", groupFaceImageName);
-
-                if (position != -1) {
-                    AppManager.getInstance().sendMessage("set_avatar", position + "");
-                }
-            }
-
-            @Override
-            public void onError(Exception e) {
-            }
-        });
-    }*/
 
     /**
      * 判断client连接状态

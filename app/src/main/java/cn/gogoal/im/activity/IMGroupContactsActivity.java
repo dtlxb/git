@@ -29,6 +29,7 @@ public class IMGroupContactsActivity extends BaseActivity {
     RecyclerView personlistRecycler;
 
     private IMPersonSetAdapter mPersonInfoAdapter;
+    private String squareCreater;
     private List<ContactBean> contactBeens = new ArrayList<>();
 
     @Override
@@ -41,8 +42,9 @@ public class IMGroupContactsActivity extends BaseActivity {
         setMyTitle(R.string.title_square_contacts, true);
 
         contactBeens = (List<ContactBean>) getIntent().getSerializableExtra("chat_group_contacts");
+        squareCreater = getIntent().getStringExtra("square_creater");
         personlistRecycler.setLayoutManager(new GridLayoutManager(this, 6));
-        mPersonInfoAdapter = new IMPersonSetAdapter(1002, IMGroupContactsActivity.this, R.layout.item_square_chat_set, contactBeens);
+        mPersonInfoAdapter = new IMPersonSetAdapter(1002, IMGroupContactsActivity.this, R.layout.item_square_chat_set, squareCreater, contactBeens);
         personlistRecycler.setAdapter(mPersonInfoAdapter);
 
         mPersonInfoAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
