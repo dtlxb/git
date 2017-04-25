@@ -30,7 +30,7 @@
                 android:layout_centerVertical="true" />
 
             <android.support.v7.widget.SearchView
-                style="@style/SearchEdit"
+                style="@style/NormalSearchView"
                 android:id="@+id/search_choose"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

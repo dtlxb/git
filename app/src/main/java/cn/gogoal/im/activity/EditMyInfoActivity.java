@@ -123,12 +123,15 @@ public class EditMyInfoActivity extends BaseActivity {
 
                     holder.getView(R.id.flag_img_more).setVisibility(data.isHaveMore() ? View.VISIBLE : View.GONE);
 
+                    final Intent intent = new Intent(getActivity(), SingleEditActivity.class);
                     itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 //                            UIHelper.toast(v.getContext(), getString(R.string.str_coming_soon) + "::" + position);
                             switch (position) {
                                 case 1://姓名、昵称
+                                    intent.putExtra(SingleEditActivity.EDIT_MY_INFO_TYPE,SingleEditActivity.EDIT_MY_INFO_TYPE_NAME);
+                                    startActivity(intent);
                                     break;
                                 case 2://不支持修改
                                     break;
@@ -136,8 +139,12 @@ public class EditMyInfoActivity extends BaseActivity {
                                     UIHelper.toast(v.getContext(), getString(R.string.str_coming_soon) + "::" + position);
                                     break;
                                 case 4://公司
+                                    intent.putExtra(SingleEditActivity.EDIT_MY_INFO_TYPE,SingleEditActivity.EDIT_MY_INFO_TYPE_COMPANY);
+                                    startActivity(intent);
                                     break;
                                 case 5://职位
+                                    intent.putExtra(SingleEditActivity.EDIT_MY_INFO_TYPE,SingleEditActivity.EDIT_MY_INFO_TYPE_DUTY);
+                                    startActivity(intent);
                                     break;
                                 case 6://工作地区
                                     new AddressPicker().show(getSupportFragmentManager());
@@ -157,5 +164,11 @@ public class EditMyInfoActivity extends BaseActivity {
 //        editInfos.add(0,new UserDetailInfo(UserDetailInfo.HEAD, UserUtils.getUserCacheAvatarFile()));
         editInfos.add(0, new UserDetailInfo<>(UserDetailInfo.HEAD, newAvatarUrl));
         myInfoAdapter.notifyItemChanged(0);
+    }
+
+    @Subscriber(tag = "updata_userinfo")
+    void updataUserInfo(String msg){
+        editInfos.clear();
+        iniListDatas();
     }
 }

@@ -7,7 +7,7 @@
 
     <dimen name="bar_text_size">13sp</dimen>
 
-    <dimen name="titlebar_size">45dp</dimen>
+    <dimen name="titlebar_size">50dp</dimen>
 
     <dimen name="action_sheet_dialog_radius">10dp</dimen>
 

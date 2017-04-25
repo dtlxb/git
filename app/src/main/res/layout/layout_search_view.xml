@@ -41,18 +41,22 @@
             android:scaleType="centerInside"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"/>
         <!--talk is cheap show me the code-->
         <!-- Inner layout contains the app icon, button(s) and EditText -->
         <LinearLayout
             android:id="@+id/search_plate"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toEndOf="@+id/search_mag_icon"
             android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/search_mag_icon"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
+            android:paddingStart="15dp"
+            android:paddingEnd="0dp"
             android:orientation="horizontal">
 
             <view class="android.support.v7.widget.SearchView$SearchAutoComplete"
@@ -64,9 +68,10 @@
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:textSize="16sp"
-                android:background="@null"
-                android:imeOptions="actionNext"
-                android:inputType="textPassword" />
+                android:gravity="center_vertical"
+                android:background="#0000"
+                android:imeOptions="actionNone"
+                android:inputType="text" />
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/search_close_btn"
@@ -85,6 +90,7 @@
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:visibility="gone"
+            android:layout_alignParentEnd="true"
             android:layout_height="match_parent">
 
             <ImageView

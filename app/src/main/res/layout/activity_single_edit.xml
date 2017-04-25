@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.gogoal.im.ui.KeyboardLaunchLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/keyboard_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/stock_market_bg"
+    android:orientation="vertical"
+    tools:context=".activity.SingleEditActivity">
+
+    <include layout="@layout/include_title" />
+
+    <android.support.v7.widget.SearchView
+        android:id="@+id/sv_edit_info"
+        style="@style/NormalSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@android:color/white" />
+
+    <TextView
+        android:id="@+id/tv_single_edit_flag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:text="使用真实名字让人更快的找到和联系你"
+        android:textColor="#9d9d9d"
+        android:textSize="14sp" />
+</cn.gogoal.im.ui.KeyboardLaunchLinearLayout>

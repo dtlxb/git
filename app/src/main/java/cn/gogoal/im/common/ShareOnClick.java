@@ -3,7 +3,7 @@ package cn.gogoal.im.common;
 import android.view.View;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.ui.widget.ShareBottomDialog;
+import cn.gogoal.im.ui.dialog.ShareBottomDialog;
 
 /**
  * author wangjd on 2017/2/28 0028.

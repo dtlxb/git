@@ -62,7 +62,7 @@
     </style>
 
     <!--顶部弹窗-->
-    <style name="TopDialog" parent="@android:style/Theme.DeviceDefault.Dialog">
+    <style name="BaseTopDialog" parent="@android:style/Theme.DeviceDefault.Dialog">
         <item name="android:windowTitleStyle">@null</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
@@ -70,14 +70,31 @@
         <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
     </style>
 
+    <!--中间弹窗-->
+    <style name="CenterDialog" parent="@android:style/Theme.DeviceDefault.Dialog">
+        <item name="android:windowTitleStyle">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowAnimationStyle">@style/BaseCenterDialogStyle</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+    </style>
+
+    <!--弹窗动画底部-->
     <style name="BaseBottomDialog.AnimationStyle">
         <item name="android:windowEnterAnimation">@anim/slide_in_from_bottom</item>
         <item name="android:windowExitAnimation">@anim/slide_out_to_bottom</item>
     </style>
 
+    <!--弹窗动画顶部-->
     <style name="BaseTopDialogStyle">
         <item name="android:windowEnterAnimation">@anim/top_in</item>
         <item name="android:windowExitAnimation">@anim/top_out</item>
+    </style>
+
+    <!--弹窗动画中间-->
+    <style name="BaseCenterDialogStyle">
+        <item name="android:windowEnterAnimation">@anim/alpha_in</item>
+        <item name="android:windowExitAnimation">@anim/alpha_out</item>
     </style>
 
     <!--分享弹窗按钮样式-->
@@ -154,16 +171,6 @@
         <item name="commitIcon">@null</item>
         <item name="searchIcon">@null</item>
         <item name="searchHintIcon">@null</item>
-        <item name="android:divider">@null</item>
-        <item name="iconifiedByDefault">false</item>
-    </style>
-
-    <style name="SearchEdit" parent="NormalSearchView">
-        <item name="queryBackground">@android:color/transparent</item>
-        <item name="closeIcon">@null</item>
-        <item name="voiceIcon">@null</item>
-        <item name="commitIcon">@null</item>
-        <item name="searchIcon">@null</item>
         <item name="android:divider">@null</item>
         <item name="iconifiedByDefault">false</item>
     </style>

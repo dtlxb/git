@@ -1,4 +1,4 @@
-package cn.gogoal.im.ui.widget;
+package cn.gogoal.im.ui.dialog;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
@@ -17,7 +17,7 @@ import cn.gogoal.im.R;
  * author wangjd on 2017/4/24 0024.
  * Staff_id 1375
  * phone 18930640263
- * description :滚轮
+ * description :滚轮,两级联动底部弹窗
  */
 public class StringPicker extends NumberPicker {
     public StringPicker(Context context) {

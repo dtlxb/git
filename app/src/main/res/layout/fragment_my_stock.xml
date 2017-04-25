@@ -111,18 +111,18 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_toStartOf="@+id/flag_middle">
-                            <!--img_mystock_down_flag-->
+
                             <ImageView
                                 android:id="@+id/img_mystock_more"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_alignParentRight="true"
                                 android:layout_alignParentTop="true"
                                 android:contentDescription="@null"
-                                android:paddingBottom="20dp"
                                 android:paddingEnd="20dp"
+                                android:scaleType="fitStart"
+                                android:paddingTop="10dp"
                                 android:paddingStart="10dp"
-                                android:paddingTop="8dp"
                                 android:src="@mipmap/img_mystock_down_flag" />
 
                             <cn.gogoal.im.ui.widget.UnSlidingViewPager

@@ -1,4 +1,4 @@
-package cn.gogoal.im.ui.widget;
+package cn.gogoal.im.ui.dialog;
 
 import android.os.Bundle;
 import android.view.View;
@@ -6,13 +6,14 @@ import android.widget.TextView;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.ShareOnClick;
+import cn.gogoal.im.ui.dialog.base.BaseBottomDialog;
 
 /**
  * author wangjd on 2017/2/28 0028.
  * Staff_id 1375
  * phone 18930640263
  *
- * 分享
+ * 分享 封装弹窗
  */
 public class ShareBottomDialog extends BaseBottomDialog {
 

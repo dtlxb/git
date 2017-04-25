@@ -5,7 +5,6 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hply.imagepicker.ITakePhoto;
@@ -32,7 +31,7 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.ImageDetailFragment;
 import cn.gogoal.im.ui.view.XTitle;
-import cn.gogoal.im.ui.widget.BottomSheetListDialog;
+import cn.gogoal.im.ui.dialog.BottomSheetListDialog;
 import cn.gogoal.im.ui.widget.PhotoViewPager;
 
 /**
@@ -62,6 +61,7 @@ public class ImageDetailActivity extends BaseActivity {
         XTitle title = setMyTitle(isEditMyAvatar ? "个人头像" : "", true);
 
         title.addAction(new XTitle.ImageAction(getResDrawable(R.drawable.ic_more_horiz_black_24dp)) {
+
             @Override
             public void actionClick(View view) {
                 if (isEditMyAvatar) { //自己头像,查看修改

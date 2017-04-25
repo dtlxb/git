@@ -4,10 +4,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.lzyzsd.jsbridge.BridgeHandler;
@@ -17,7 +19,6 @@ import com.github.lzyzsd.jsbridge.DefaultHandler;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.UIHelper;
@@ -41,7 +42,7 @@ public class FunctionActivity extends BaseActivity {
     public int bindLayout() {
         return R.layout.activity_function;
     }
-
+//    d4d0f74e3c87483cb3bf91dd10dc53f8
     @Override
     public void doBusiness(final Context mContext) {
 
@@ -55,6 +56,9 @@ public class FunctionActivity extends BaseActivity {
 
         webView.loadUrl(url);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
         //添加让web获取用户信息
         /*webView.registerHandler("getUserInfo", new BridgeHandler() {
             @Override

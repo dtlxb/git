@@ -133,7 +133,7 @@ public class UserUtils {
 
                             @Override
                             public void error(String errorMsg) {
-                                KLog.e("failed========================"+errorMsg);
+                                KLog.e("failed========================" + errorMsg);
                             }
                         });
     }
@@ -149,18 +149,24 @@ public class UserUtils {
         return null;
     }
 
-    /**缓存头像的绝对路径*/
+    /**
+     * 缓存头像的绝对路径
+     */
     public static String getUserAvatarCacheAbsolutePath() {
-        return MyApp.getAppContext().getExternalFilesDir("avatar") + File.separator +getUserAvatarCacheName();
+        return MyApp.getAppContext().getExternalFilesDir("avatar") + File.separator + getUserAvatarCacheName();
     }
 
-    /**缓存我的头像的文件名*/
+    /**
+     * 缓存我的头像的文件名
+     */
     public static String getMyAvatarCacheName() {
         return "avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()) +
                 ImageUtils.getImageSuffix(UserUtils.getUserAvatar());
     }
 
-    /**缓存头像的文件名*/
+    /**
+     * 缓存头像的文件名
+     */
     public static String getUserAvatarCacheName() {
         return "avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()) +
                 ImageUtils.getImageSuffix(UserUtils.getUserAvatar());
@@ -180,6 +186,8 @@ public class UserUtils {
      * 更新用户指定字段信息
      */
     public static void updataLocalUserInfo(String key, String newValue) {
+        KLog.e(key, "value=" + newValue);
+
         JSONObject user = getUserInfo();
         if (user == null) {
             return;
@@ -188,7 +196,9 @@ public class UserUtils {
             user.remove(key);
         }
         user.put(key, newValue);
+        SPTools.saveJsonObject("userInfo", user);
 
+        KLog.json(SPTools.getString("userInfo", ""));
     }
 
     /**
@@ -210,16 +220,27 @@ public class UserUtils {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
-                JSONObject data = JSONObject.parseObject(responseInfo);
-                JSONObject result = data.getJSONObject("data");
-                boolean success = result.getBoolean("success");
-                if (success) {
-                    if (null != updataListener)
-                        updataListener.success(responseInfo);
-                } else {
-                    if (updataListener != null) {
-                        updataListener.failed(JSONObject.parseObject(responseInfo).getString("message"));
+                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                    JSONObject result = JSONObject.parseObject(responseInfo).getJSONObject("data");
+                    boolean success = result.getBoolean("success");
+                    if (success) {
+                        if (null != updataListener)
+                            updataListener.success(responseInfo);
+                    } else {
+                        if (updataListener != null) {
+                            switch (result.getIntValue("code")) {
+                                case 115://昵称已存在
+                                    updataListener.failed("昵称已存在！");
+                                    break;
+                                default:
+                                    updataListener.failed(result.getString("msg"));
+                                    break;
+                            }
+
+                        }
                     }
+                } else {
+                    updataListener.failed(JSONObject.parseObject(responseInfo).getString("message"));
                 }
             }
 

@@ -14,9 +14,9 @@ import android.view.WindowManager;
 
 import java.util.ArrayList;
 
-import cn.gogoal.im.ui.widget.BottomSheetListDialog;
-import cn.gogoal.im.ui.widget.BottomSheetNormalDialog;
-import cn.gogoal.im.ui.widget.ShareBottomDialog;
+import cn.gogoal.im.ui.dialog.BottomSheetListDialog;
+import cn.gogoal.im.ui.dialog.BottomSheetNormalDialog;
+import cn.gogoal.im.ui.dialog.ShareBottomDialog;
 
 
 /**
@@ -272,6 +272,7 @@ public class DialogHelp {
         return dialog;
     }
 
+
     /**
      * 通用底部弹出窗
      */
@@ -302,5 +303,7 @@ public class DialogHelp {
         shareDialog.show(context.getSupportFragmentManager());
     }
 
+    public static void showSubmitDialog(FragmentActivity activity, final String text, int iconRes) {
 
+    }
 }

@@ -1,4 +1,4 @@
-package cn.gogoal.im.ui.widget;
+package cn.gogoal.im.ui.dialog.base;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -27,14 +27,14 @@ public abstract class BaseDialog extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(android.support.v4.app.DialogFragment.STYLE_NO_TITLE,getDialogStyle());
+        setStyle(android.support.v4.app.DialogFragment.STYLE_NO_TITLE, getDialogStyle());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Window window=getDialog().getWindow();
-        if (window!=null) {
+        Window window = getDialog().getWindow();
+        if (window != null) {
             window.requestFeature(Window.FEATURE_NO_TITLE);
         }
         getDialog().setCanceledOnTouchOutside(getCancelOutside());
@@ -59,19 +59,19 @@ public abstract class BaseDialog extends DialogFragment {
         super.onStart();
 
         Window window = getDialog().getWindow();
-        if (window!=null) {
+        if (window != null) {
             WindowManager.LayoutParams params = window.getAttributes();
             params.dimAmount = getDimAmount();
-            params.width = WindowManager.LayoutParams.MATCH_PARENT;
-            if (getHeight() > 0) {
-                params.height = getHeight();
-            } else {
-                params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-            }
+            params.height = getHeight() > 0 ? getHeight() : WindowManager.LayoutParams.WRAP_CONTENT;
+            params.width = getWidth() > 0 ? getWidth() : WindowManager.LayoutParams.MATCH_PARENT;
             params.gravity = gravity();
 
             window.setAttributes(params);
         }
+    }
+
+    public int getWidth() {
+        return -1;
     }
 
     public int getHeight() {

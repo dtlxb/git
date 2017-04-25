@@ -1,15 +1,12 @@
 package cn.gogoal.im.adapter;
 
-import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -22,10 +19,9 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.bean.SectionTouYanData;
 import cn.gogoal.im.bean.TouYan;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
-
+import cn.gogoal.im.ui.dialog.ComingSoonDialog;
 
 
 /**
@@ -35,11 +31,11 @@ import cn.gogoal.im.common.UIHelper;
  * description :投研适配器
  */
 public class SectionAdapter extends BaseSectionQuickAdapter<SectionTouYanData, BaseViewHolder> {
-    private Context context;
+    private FragmentActivity context;
     private int screenWidth;
     private int innerItem;
 
-    public SectionAdapter(Context context, List<SectionTouYanData> data) {
+    public SectionAdapter(FragmentActivity context, List<SectionTouYanData> data) {
         super(R.layout.item_touyan_item, R.layout.item_touyan_title, data);
         this.context = context;
         screenWidth = AppDevice.getWidth(context);
@@ -111,17 +107,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionTouYanData, B
                             intent.putExtra("title", item.getDesc());
                             context.startActivity(intent);
                         } else {
-                            View dialogView = LayoutInflater.from(context).
-                                    inflate(R.layout.dialog_touyan_coming_soon, new LinearLayout(context), false);
-
-                            final AlertDialog dialog = DialogHelp.getWindoDialog(v.getContext(), dialogView, 3 * screenWidth / 4);
-
-                            dialogView.findViewById(R.id.img_touyan_cancle).setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    dialog.dismiss();
-                                }
-                            });
+                            new ComingSoonDialog().show(context.getSupportFragmentManager());
                         }
                     }
                 }

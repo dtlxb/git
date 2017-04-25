@@ -1,4 +1,4 @@
-package cn.gogoal.im.ui.widget;
+package cn.gogoal.im.ui.dialog;
 
 import android.content.Context;
 import android.text.Editable;
@@ -9,11 +9,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.ui.dialog.base.BaseBottomDialog;
 
 /**
  * author wangjd on 2017/2/28 0028.
  * Staff_id 1375
  * phone 18930640263
+ *
+ * 底部弹出式输入框
  */
 public class EditTextDialog extends BaseBottomDialog {
 
