@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONObject;
 import com.hply.imagepicker.view.StatusBarUtil;
 import com.socks.library.KLog;
+
+import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +38,7 @@ import cn.gogoal.im.fragment.MessageFragment;
 import cn.gogoal.im.fragment.MineFragment;
 import cn.gogoal.im.fragment.MyStockFragment;
 import cn.gogoal.im.fragment.SocialContactFragment;
+import cn.gogoal.im.ui.badgeview.BadgeView;
 
 public class MainActivity extends BaseActivity {
 
@@ -50,6 +54,8 @@ public class MainActivity extends BaseActivity {
     private StatusBarUtil barUtil;
 
     private MyStockFragment myStockFragment;
+
+    private BadgeView badgeView;
 
     @Override
     public int bindLayout() {
@@ -110,6 +116,9 @@ public class MainActivity extends BaseActivity {
         }
 
         tabMain.getTabAt(2).select();
+        badgeView = new BadgeView(MainActivity.this);
+        badgeView.bindTarget(tabMain.getTabAt(0).getCustomView());
+        badgeView.setBadgeTextSize(10, true);
 
         barUtil = StatusBarUtil.with(MainActivity.this);
 
@@ -173,7 +182,7 @@ public class MainActivity extends BaseActivity {
         new GGOKHTTP(param, GGOKHTTP.GET_FRIEND_LIST, ggHttpInterface).startGet();
     }
 
-    public void showMainMsk(){
+    public void showMainMsk() {
         mainViewMask.setClickable(true);
         mainViewMask.setEnabled(true);
         mainViewMask.setVisibility(View.VISIBLE);
@@ -181,7 +190,7 @@ public class MainActivity extends BaseActivity {
                 R.anim.alpha_in));
     }
 
-    public void hideMainMsk(){
+    public void hideMainMsk() {
         mainViewMask.setClickable(false);
         mainViewMask.setEnabled(false);
         mainViewMask.setVisibility(View.GONE);
@@ -211,5 +220,10 @@ public class MainActivity extends BaseActivity {
         } else {
             finish();
         }
+    }
+
+    @Subscriber(tag = "correct_allmessage_count")
+    public void setBadgeViewNum(String number) {
+        badgeView.setBadgeNumber(Integer.parseInt(number));
     }
 }

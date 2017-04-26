@@ -84,6 +84,15 @@ public class MessageUtils {
         SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", jsonArray);
     }
 
+    public static int getAllMessageUnredCount(JSONArray jsonArray) {
+        int count = 0;
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+            count += jsonObject.getInteger("unReadCounts");
+        }
+        return count;
+    }
+
     //根据conversationID移除
     public static void removeByID(String conv_id) {
         JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
