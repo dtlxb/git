@@ -186,6 +186,7 @@
         <activity android:name=".activity.SingleEditActivity" />
         <activity android:name=".activity.RedGreenSettingActivity" />
         <activity android:name=".activity.ChangePhoneNumber" />
+        <activity android:name=".adapter.copy.StockDetailNewsListDataActivity" />
 
     </application>
 
