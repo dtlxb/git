@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -22,7 +23,6 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.UserDetailInfo;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.widget.AddressPicker;
@@ -64,7 +64,8 @@ public class EditMyInfoActivity extends BaseActivity {
 
     private void iniListDatas() {
         String[] userInfoValue = {UserUtils.getNickname(), UserUtils.getUserName(), UserUtils.getPhoneNumber(),
-                UserUtils.getorgName(), UserUtils.getDuty(), UserUtils.getOrganizationAddress()};
+                UserUtils.getorgName(), UserUtils.getDuty(), UserUtils.getOrganizationAddress(),UserUtils.getOrganizationAddress()};
+
         editInfos.add(new UserDetailInfo<>(UserDetailInfo.HEAD, UserUtils.getUserCacheAvatarFile()));
         for (int i = 0; i < edidInfoArray.length; i++) {
             editInfos.add(new UserDetailInfo(
@@ -119,7 +120,8 @@ public class EditMyInfoActivity extends BaseActivity {
                     itemView.setEnabled(!data.getItemKey().equals("Go-Goal账号"));
 
                     holder.setText(R.id.tv_info_key, data.getItemKey());
-                    holder.setText(R.id.tv_info_value, data.getItemValue());
+
+                    holder.setText(R.id.tv_info_value, TextUtils.isEmpty(data.getItemValue())?"未设置":data.getItemValue());
 
                     holder.getView(R.id.flag_img_more).setVisibility(data.isHaveMore() ? View.VISIBLE : View.GONE);
 
@@ -135,8 +137,8 @@ public class EditMyInfoActivity extends BaseActivity {
                                     break;
                                 case 2://不支持修改
                                     break;
-                                case 3://手机号，暂不支持修改
-                                    UIHelper.toast(v.getContext(), getString(R.string.str_coming_soon) + "::" + position);
+                                case 3://
+                                    startActivity(new Intent(v.getContext(),ChangePhoneNumber.class));
                                     break;
                                 case 4://公司
                                     intent.putExtra(SingleEditActivity.EDIT_MY_INFO_TYPE,SingleEditActivity.EDIT_MY_INFO_TYPE_COMPANY);

@@ -20,13 +20,12 @@
         <android.support.v7.widget.SearchView
             android:id="@+id/searchView"
             style="@style/NormalSearchView"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="36dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:layout_toStartOf="@+id/btn_cancle"
-            android:layout_weight="1"
             android:background="@drawable/shape_search_activity_edit"
             app:searchIcon="@mipmap/img_search" />
 

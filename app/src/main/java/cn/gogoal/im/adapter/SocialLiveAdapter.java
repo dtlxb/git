@@ -67,7 +67,7 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
                     //预告
                     holder.setText(R.id.textPcStatus, "预告 " + live_time_start);
                     if (data.getLaunch_time() >= timeHour) {
-                        holder.setText(R.id.textPcTime, "距离开始" + data.getLaunch_time() % timeHour + "小时");
+                        holder.setText(R.id.textPcTime, "距离开始" + (int) Math.floor(data.getLaunch_time() / timeHour) + "小时");
                     } else {
                         holder.setText(R.id.textPcTime, "即将开始");
                     }
@@ -115,7 +115,7 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
                     //预告
                     holder.setText(R.id.textPhoneStatus, "预告 " + live_time_start);
                     if (data.getLaunch_time() >= timeHour) {
-                        holder.setText(R.id.textPhoneTime, "距离开始" + data.getLaunch_time() % timeHour + "小时");
+                        holder.setText(R.id.textPhoneTime, "距离开始" + (int) Math.floor(data.getLaunch_time() / timeHour) + "小时");
                     } else {
                         holder.setText(R.id.textPhoneTime, "即将开始");
                     }

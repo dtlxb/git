@@ -169,7 +169,7 @@
                     android:layout_marginRight="16dp"
                     android:layout_weight="5"
                     android:background="@drawable/login_edit_border"
-                    android:drawableLeft="@mipmap/login_code"
+                    android:drawableLeft="@mipmap/img_verification_code"
                     android:drawablePadding="9dp"
                     android:hint="验证码"
                     android:lines="1"

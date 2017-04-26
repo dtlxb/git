@@ -12,11 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.AddressBean;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.dialog.base.BaseBottomDialog;
 import cn.gogoal.im.ui.dialog.StringPicker;
+import cn.gogoal.im.ui.dialog.base.BaseBottomDialog;
 
 
 /**
@@ -70,14 +71,32 @@ public class AddressPicker extends BaseBottomDialog {
         v.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String provinceChoose = provinceList.get(pickerProvince.getValue()).getProvince();
-                String cityChoose = provinceList.get(pickerProvince.getValue()).getCity().get(pickerCity.getValue()).getCity();
-                UIHelper.toast(v.getContext(),provinceChoose+" "+cityChoose);
+                final String provinceChoose = provinceList.get(pickerProvince.getValue()).getProvince();
+                final String cityChoose = provinceList.get(pickerProvince.getValue()).getCity().get(pickerCity.getValue()).getCity();
+//                UIHelper.toast(v.getContext(),provinceChoose+" "+cityChoose);
 
                 Map<String,String> addMap=new HashMap<>();
                 addMap.put("province",provinceChoose);
                 addMap.put("city",cityChoose);
-                UserUtils.updataNetUserInfo(addMap,null);
+
+                UserUtils.updataNetUserInfo(addMap, new UserUtils.UpdataListener() {
+                    @Override
+                    public void success(String responseInfo) {
+                        //更新本地缓存
+                        UserUtils.updataLocalUserInfo("organization_address",provinceChoose+" "+cityChoose);
+                        //发消息更新当前列表
+                        AppManager.getInstance().sendMessage("updata_userinfo","弹窗中更新");
+                    }
+
+                    @Override
+                    public void failed(String errorMsg) {
+                        UIHelper.toast(getActivity(),"更新出错");
+                    }
+                });
+
+
+                AddressPicker.this.dismiss();
+
             }
         });
     }

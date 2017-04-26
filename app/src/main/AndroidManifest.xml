@@ -185,6 +185,8 @@
         <activity android:name=".activity.KlineSettingActivity" />
         <activity android:name=".activity.SingleEditActivity" />
         <activity android:name=".activity.RedGreenSettingActivity" />
+        <activity android:name=".activity.ChangePhoneNumber" />
+
     </application>
 
 </manifest>
