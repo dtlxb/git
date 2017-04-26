@@ -1588,7 +1588,7 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
                 showPopupWindow();
                 break;
             case R.id.stock_detail_choose:
-                addOptionalShare();
+                addOptionalShare();//TODO 更换新的删除自选股接口
                 break;
         }
     }

@@ -74,7 +74,7 @@ public class MainActivity extends BaseActivity {
                 ";DpValueHeight===" + AppDevice.px2dp(mContext, AppDevice.getHeight(mContext)));
 
         if (BuildConfig.DEBUG) {
-            FileUtil.writeRequestResponse("token_" + UserUtils.getUserName(), UserUtils.getToken());
+            FileUtil.writeRequestResponse(UserUtils.getToken(),"token_" + UserUtils.getUserName());
         }
 
         MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息

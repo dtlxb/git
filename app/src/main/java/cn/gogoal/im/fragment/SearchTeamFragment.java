@@ -36,6 +36,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.RecommendBean;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.UIHelper;
@@ -104,6 +105,7 @@ public class SearchTeamFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
+                FileUtil.writeRequestResponse(responseInfo,"推荐群");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     RecommendBean recommendBean = JSONObject.parseObject(responseInfo, RecommendBean.class);
                     if (null != recommendBean.getData()) {
@@ -217,6 +219,26 @@ public class SearchTeamFragment extends BaseFragment {
 //                    }
 //                }
 //            });
+            holder.setText(R.id.item_tv_search_result_name,data.getName()+
+                    String.format(getString(R.string.str_group_count),null==data.getM()?0:data.getM().size()));
+
+            holder.setText(R.id.item_tv_search_result_intro,TextUtils.isEmpty(data.getAttr().getIntro())?"暂无群简介":data.getAttr().getIntro());
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (data.isIs_in()){//我在群里
+
+                        // TODO: 进入聊天
+                        Intent in=new Intent(v.getContext(), SquareChatRoomActivity.class);
+                        in.putExtra("squareName",data.getName());
+                        in.putExtra("conversation_id",data.getConv_id());
+                        startActivity(in);
+                    }else {//TODO: 申请加群
+
+                    }
+                }
+            });
 
         }
     }

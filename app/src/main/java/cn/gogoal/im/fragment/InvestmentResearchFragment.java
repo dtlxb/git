@@ -83,7 +83,7 @@ public class InvestmentResearchFragment extends BaseFragment {
     private void getBannerImage() {
         AppDevice.setViewWidth$Height(bannerPager,
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                AppDevice.getWidth(getContext()) / 3);
+                245*AppDevice.getWidth(getContext()) / 750);
 
         bannerImageUrls = new ArrayList<>();
         bannerAdapter = new BannerAdapter(bannerImageUrls);
