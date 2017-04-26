@@ -69,6 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="19dp"
+                android:background="@drawable/shape_text_border"
                 android:orientation="vertical">
 
                 <RelativeLayout

@@ -105,7 +105,7 @@ public class SearchTeamFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
-                FileUtil.writeRequestResponse(responseInfo,"推荐群");
+                FileUtil.writeRequestResponse(responseInfo, "推荐群");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     RecommendBean recommendBean = JSONObject.parseObject(responseInfo, RecommendBean.class);
                     if (null != recommendBean.getData()) {
@@ -143,6 +143,17 @@ public class SearchTeamFragment extends BaseFragment {
         @Override
         protected void convert(final BaseViewHolder holder, final RecommendBean.DataBean data, final int position) {
             TextView addView = holder.getView(R.id.btn_search_group_add);
+
+            final View itemView = holder.itemView;
+
+            if (data.getM()==null || data.getM().isEmpty()){
+                itemView.setClickable(false);
+                itemView.setEnabled(false);
+            }else {
+                itemView.setClickable(true);
+                itemView.setEnabled(true);
+            }
+
             addView.setVisibility(View.VISIBLE);
             if (data.isIs_in()) {
                 addView.setBackgroundColor(Color.TRANSPARENT);
@@ -151,6 +162,7 @@ public class SearchTeamFragment extends BaseFragment {
             }
 
             Glide.get(getContext()).clearMemory();
+
 
             GroupFaceImage.getInstance(getActivity(), getImageAvatar(data.getM())
             ).load(new GroupFaceImage.OnMatchingListener() {
@@ -164,7 +176,7 @@ public class SearchTeamFragment extends BaseFragment {
                         }
                     });
 
-                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent in = new Intent(v.getContext(), SquareChatRoomActivity.class);
@@ -199,46 +211,12 @@ public class SearchTeamFragment extends BaseFragment {
                 }
             });
 
-            UIHelper.setRippBg(holder.itemView);
-            holder.setText(R.id.item_tv_search_result_name, data.getName() +
-                    String.format(getString(R.string.str_group_count), data.getM().size()));
+            UIHelper.setRippBg(itemView);
 
             holder.setText(R.id.item_tv_search_result_intro, TextUtils.isEmpty(data.getAttr().getIntro()) ? "暂无群简介" : data.getAttr().getIntro());
 
-//            holder.itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (data.isIs_in()) {//我在群里
-//                        // TODO: 进入聊天
-//                        Intent in = new Intent(v.getContext(), SquareChatRoomActivity.class);
-//                        in.putExtra("squareName", data.getName());
-//                        in.putExtra("conversation_id", data.getConv_id());
-//                        startActivity(in);
-//                    } else {//TODO: 申请加群
-//
-//                    }
-//                }
-//            });
-            holder.setText(R.id.item_tv_search_result_name,data.getName()+
-                    String.format(getString(R.string.str_group_count),null==data.getM()?0:data.getM().size()));
-
-            holder.setText(R.id.item_tv_search_result_intro,TextUtils.isEmpty(data.getAttr().getIntro())?"暂无群简介":data.getAttr().getIntro());
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (data.isIs_in()){//我在群里
-
-                        // TODO: 进入聊天
-                        Intent in=new Intent(v.getContext(), SquareChatRoomActivity.class);
-                        in.putExtra("squareName",data.getName());
-                        in.putExtra("conversation_id",data.getConv_id());
-                        startActivity(in);
-                    }else {//TODO: 申请加群
-
-                    }
-                }
-            });
+            holder.setText(R.id.item_tv_search_result_name, data.getName() +
+                    String.format(getString(R.string.str_group_count), null == data.getM() ? 0 : data.getM().size()));
 
         }
     }

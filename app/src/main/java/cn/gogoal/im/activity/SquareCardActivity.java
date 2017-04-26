@@ -27,17 +27,14 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.IMPersonSetAdapter;
-import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
-import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
-import cn.gogoal.im.common.ImageUtils.ImageUtils;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.RectangleView;
+import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**
@@ -60,6 +57,8 @@ public class SquareCardActivity extends BaseActivity {
     TextView tvSquareDetail;
     @BindView(R.id.team_size)
     TextView tvTeamSize;
+    @BindView(R.id.jion_group)
+    SelectorButton jion_group;
 
     private IMPersonSetAdapter mPersonInfoAdapter;
     private List<ContactBean> contactBeens = new ArrayList<>();
@@ -67,6 +66,7 @@ public class SquareCardActivity extends BaseActivity {
     private String conversationId;
     private String squareName;
     private List<String> groupMembers;
+    private boolean isIn;
 
     @Override
     public int bindLayout() {
@@ -105,6 +105,15 @@ public class SquareCardActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.jion_group:
+                if (isIn) {
+                    Intent intent1 = new Intent(SquareCardActivity.this, SquareChatRoomActivity.class);
+                    intent1.putExtra("conversation_id", conversationId);
+                    intent1.putExtra("squareName", squareName);
+                    intent1.putExtra("need_update", true);
+                    startActivity(intent1);
+                } else {
+                    applyIntoGroup();
+                }
                 break;
         }
     }
@@ -113,13 +122,13 @@ public class SquareCardActivity extends BaseActivity {
         xTitle = setMyTitle("群名片", true);
         tvSquareName.setText(squareName);
         iv_square_head.setImageBitmap((Bitmap) getIntent().getParcelableExtra("bitmap_avatar"));
-        XTitle.ImageAction imageAction = new XTitle.ImageAction(getResDrawable(R.mipmap.arrows_white)) {
+        /*XTitle.ImageAction imageAction = new XTitle.ImageAction(getResDrawable(R.mipmap.arrows_white)) {
             @Override
             public void actionClick(View view) {
 
             }
         };
-        xTitle.addAction(imageAction, 0);
+        xTitle.addAction(imageAction, 0);*/
     }
 
     //拉取群组信息
@@ -163,26 +172,34 @@ public class SquareCardActivity extends BaseActivity {
         params.put("token", UserUtils.getToken());
         params.put("conv_id", conversationId);
         KLog.e(params);
+        jion_group.setClickable(false);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
                 Log.e("=====notice", responseInfo);
+                jion_group.setClickable(true);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if ((int) result.get("code") == 0) {
-                    tvSquareName.setText(((JSONObject) result.get("data")).get("name") == null ? "" : ((JSONObject) result.get("data")).getString("name"));
-                    JSONObject jsonObject = (JSONObject) ((JSONObject) result.get("data")).get("attr");
+                    JSONObject dataJsonObject = (JSONObject) result.get("data");
+                    isIn = dataJsonObject.getBoolean("is_in");
+                    tvSquareName.setText((dataJsonObject).get("name") == null ? "" : (dataJsonObject).getString("name"));
+                    JSONObject jsonObject = (JSONObject) (dataJsonObject).get("attr");
                     if (jsonObject.get("intro") != null && !TextUtils.isEmpty(jsonObject.getString("intro"))) {
                         tvSquareDetail.setText(jsonObject.get("intro") == null ? "" : jsonObject.getString("intro"));
                     } else {
                         tvSquareDetail.setText("暂无群简介");
                     }
-
                     if (jsonObject.get("notice") != null && !TextUtils.isEmpty(jsonObject.getString("notice"))) {
                         square_notice.setVisibility(View.VISIBLE);
                         square_notice.setText(jsonObject.get("notice") == null ? "" : jsonObject.getString("notice"));
                     } else {
                         square_notice.setVisibility(View.GONE);
+                    }
+                    if (isIn) {
+                        jion_group.setText("进入聊天");
+                    } else {
+                        jion_group.setText("我要报名");
                     }
 
                 }
@@ -190,15 +207,53 @@ public class SquareCardActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
+                jion_group.setClickable(true);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.GET_GROUP_INFO, ggHttpInterface).startGet();
     }
 
+    public void applyIntoGroup() {
+        Map<String, String> params = new HashMap<>();
+        params.put("token", UserUtils.getToken());
+        params.put("conv_id", conversationId);
+        KLog.e(params);
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                KLog.e(responseInfo);
+                if ((int) result.get("code") == 0) {
+                    JSONObject dataJson = result.getJSONObject("data");
+                    if (dataJson.getBoolean("success")) {
+                        UIHelper.toast(SquareCardActivity.this, "入群申请发送成功");
+                    } else {
+                        UIHelper.toast(SquareCardActivity.this, "入群申请发送失败");
+                    }
+                } else {
+                    UIHelper.toast(SquareCardActivity.this, "入群申请发送失败");
+                }
+            }
+
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(SquareCardActivity.this, R.string.network_busy);
+            }
+        };
+        new GGOKHTTP(params, GGOKHTTP.APPLY_INTO_GROUP, ggHttpInterface).startGet();
+    }
+
     //排序将群主放置第一位
     public List<ContactBean> squareShowSix(List<ContactBean> contactBeanList) {
         List<ContactBean> newContactBeanList = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
+        int msize;
+        if (contactBeanList.size() > 6) {
+            msize = 6;
+        } else {
+            msize = contactBeanList.size();
+        }
+        for (int i = 0; i < msize; i++) {
             newContactBeanList.add(contactBeanList.get(i));
         }
         return newContactBeanList;
