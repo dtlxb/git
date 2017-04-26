@@ -25,11 +25,13 @@ import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.socks.library.KLog;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
@@ -88,6 +90,11 @@ public class TypeLoginActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
+        try {
+            AppManager.getInstance().finishBackActivity(this);
+        }catch (Exception e){
+            e.getMessage();
+        }
         //存储设备是否低分屏，一定要竖屏
         SPTools.saveBoolean("low_dpi", AppDevice.getWidth(mContext) < AppDevice.DPI720P);
 
@@ -109,14 +116,14 @@ public class TypeLoginActivity extends BaseActivity {
         /*loginUserName.setText("E00002639");
         loginPassWord.setEditTextText("412174");*/
 
-        /*loginUserName.setText("E00003645");
-        loginPassWord.setText("147258369");*/
+        loginUserName.setText("E00003645");
+        loginPassWord.setText("147258369");
 
-        loginUserName.setText("E00002639");
-        loginPassWord.setText("412174");
-
-        loginUserName.setText("E00002638");
-        loginPassWord.setText("123456");
+//        loginUserName.setText("E00002639");
+//        loginPassWord.setText("412174");
+//
+//        loginUserName.setText("E00002638");
+//        loginPassWord.setText("123456");
         /*loginUserName.setText("E00002638");
         loginPassWord.setText("123456");*/
 
@@ -188,7 +195,7 @@ public class TypeLoginActivity extends BaseActivity {
     }
 
     private void Login() {
-        String name = loginUserName.getText().toString();
+        String name = loginUserName.getText().toString().toUpperCase(Locale.ENGLISH);
         String word = loginPassWord.getText().toString();
 
         if (TextUtils.isEmpty(word) || TextUtils.isEmpty(name)) {
