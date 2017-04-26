@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -39,7 +38,7 @@ import cn.gogoal.im.fragment.MessageFragment;
 import cn.gogoal.im.fragment.MineFragment;
 import cn.gogoal.im.fragment.MyStockFragment;
 import cn.gogoal.im.fragment.SocialContactFragment;
-import cn.gogoal.im.ui.badgeview.BadgeView;
+import hply.com.niugu.autofixtext.AutofitTextView;
 
 public class MainActivity extends BaseActivity {
 
@@ -56,7 +55,7 @@ public class MainActivity extends BaseActivity {
 
     private MyStockFragment myStockFragment;
 
-    private BadgeView badgeView;
+    private AutofitTextView[] badgeView;
 
     @Override
     public int bindLayout() {
@@ -107,18 +106,20 @@ public class MainActivity extends BaseActivity {
                 getSupportFragmentManager(), MainActivity.this, tabFragments, mainTabArray);
 
         vpMain.setAdapter(tabAdapter);
-        vpMain.setOffscreenPageLimit(4);
+        vpMain.setOffscreenPageLimit(mainTabArray.length-1);
         tabMain.setupWithViewPager(vpMain);
+
+        badgeView=new AutofitTextView[mainTabArray.length];
+
         for (int i = 0; i < mainTabArray.length; i++) {
             TabLayout.Tab tab = tabMain.getTabAt(i);
             if (tab != null) {
                 tab.setCustomView(tabAdapter.getTabView(i));
+                badgeView[i]= (AutofitTextView) tabAdapter.getTabView(i).findViewById(R.id.count_tv);
             }
         }
 
         tabMain.getTabAt(2).select();
-        badgeView = new BadgeView(MainActivity.this);
-        badgeView.setBadgeTextSize(10, true);
 
         barUtil = StatusBarUtil.with(MainActivity.this);
 
@@ -225,12 +226,11 @@ public class MainActivity extends BaseActivity {
     @Subscriber(tag = "correct_allmessage_count")
     public void setBadgeViewNum(BaseMessage<Integer> message) {
         int index = message.getOthers().get("index");
+        int num = message.getOthers().get("number");
 
         if (index >= 0 && index < mainTabArray.length) {
-            badgeView.bindTarget(tabMain.getTabAt(index).getCustomView());
+            badgeView[index].setText(num>99?"99+":String.valueOf(num));
         }
-        int num = message.getOthers().get("number");
-        badgeView.setBadgeNumber(num);
-        badgeView.setBadgeGravity(Gravity.TOP | Gravity.END);
+        if (num==0)badgeView[index].setVisibility(View.GONE);
     }
 }

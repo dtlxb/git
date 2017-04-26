@@ -834,8 +834,8 @@ public class ChatFragment extends BaseFragment {
     }
 
     @Subscriber(tag = "refresh_recyle")
-    public void audioRefresh(BaseMessage message) {
-        AVIMAudioMessage audioMessage = (AVIMAudioMessage) message.getOthers().get("audio_message");
+    public void audioRefresh(BaseMessage<AVIMAudioMessage> message) {
+        AVIMAudioMessage audioMessage = message.getOthers().get("audio_message");
         imChatAdapter.addItem(audioMessage);
         imChatAdapter.notifyItemInserted(messageList.size() - 1);
         message_recycler.smoothScrollToPosition(messageList.size() - 1);

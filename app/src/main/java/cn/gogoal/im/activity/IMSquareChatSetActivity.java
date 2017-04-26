@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -23,7 +22,6 @@ import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +42,6 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
-import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
@@ -273,9 +270,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
      * 群头像
      */
     @Subscriber(tag = "set_square_avatar")
-    public void setAvatar(BaseMessage baseMessage) {
-        Map<String, Object> map = baseMessage.getOthers();
-        Bitmap bitmap = (Bitmap) map.get("mathing_bitmap");
+    public void setAvatar(BaseMessage<Bitmap> baseMessage) {
+        Map<String, Bitmap> map = baseMessage.getOthers();
+        Bitmap bitmap =map.get("mathing_bitmap");
         iv_square_head.setImageBitmap(bitmap);
     }
 
