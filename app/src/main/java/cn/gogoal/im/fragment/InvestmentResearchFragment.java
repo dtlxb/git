@@ -11,7 +11,6 @@ import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -97,8 +96,6 @@ public class InvestmentResearchFragment extends BaseFragment {
         new GGOKHTTP(map, GGOKHTTP.GET_AD_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
-
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     bannerImageUrls.addAll(JSONObject.parseObject(responseInfo, BannerBean.class).getData());

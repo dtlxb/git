@@ -43,7 +43,7 @@
 
                         <cn.gogoal.im.ui.view.ImageWithTextView
                             android:id="@+id/linearLive"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             imagetext:MiddleImg="@mipmap/social_live"
@@ -51,7 +51,7 @@
 
                         <cn.gogoal.im.ui.view.ImageWithTextView
                             android:id="@+id/linearConference"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             imagetext:MiddleImg="@mipmap/social_conference"
@@ -59,7 +59,7 @@
 
                         <cn.gogoal.im.ui.view.ImageWithTextView
                             android:id="@+id/linearRoadshow"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             imagetext:MiddleImg="@mipmap/social_roadshow"
@@ -67,7 +67,7 @@
 
                         <cn.gogoal.im.ui.view.ImageWithTextView
                             android:id="@+id/linearClub"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             imagetext:MiddleImg="@mipmap/social_club"

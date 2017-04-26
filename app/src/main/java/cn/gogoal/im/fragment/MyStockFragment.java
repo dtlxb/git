@@ -20,7 +20,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,6 +46,7 @@ import cn.gogoal.im.bean.stock.MyStockMarketBean;
 import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.MyStockSortInteface;
 import cn.gogoal.im.common.SPTools;
@@ -125,7 +125,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     private RotateAnimation rotateAnimation;
 
     //自动刷新默认时间
-    private long INTERVAL_TIME;
+    private long INTERVAL_TIME=15000;
 
     //弹窗的recyclerView
     @BindView(R.id.rv_mystock_market)
@@ -145,13 +145,11 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     public void doBusiness(final Context mContext) {
         BaseActivity.iniRefresh(refreshLayout);
 
-        INTERVAL_TIME=SPTools.getLong("INTERVAL_TIME",15000);
+        INTERVAL_TIME = SPTools.getLong("interval_time", 15000);
 
         initRecyclerView(mContext);
         initMarketBanner();
         initSortTitle(mContext);
-        //缓存刷新时间
-        SPTools.saveLong("interval_time", INTERVAL_TIME);
 
         refreshAll(AppConst.REFRESH_TYPE_FIRST);//请求
 
@@ -179,16 +177,19 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         });
     }
 
+    /**全部数据请求*/
     private void refreshAll(int refreshType) {
         startAnimation();//刷新按钮动画
         getMyStockData(refreshType);
-        getMarketLittle();
+        getMarketLittle(refreshType);
     }
 
+    /**指数[弹窗]是否可见，方便处理返回键*/
     public boolean isMaskViewVisiable() {
         return viewDialogMask.getVisibility() == View.VISIBLE;
     }
 
+    /**销毁指数[弹窗]*/
     public void dismissMarket() {
         ((MainActivity) getActivity()).hideMainMsk();
         rvMystockMarket.setVisibility(View.GONE);
@@ -204,6 +205,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
     }
 
+    /**显示指数[弹窗]*/
     public void showMarketDialog() {
 //        new MyStockTopDialog().show(getChildFragmentManager());
         ((MainActivity) getActivity()).showMainMsk();
@@ -218,18 +220,19 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.alpha_in));
     }
 
-    //init
+    //初始化指数缩略
     private void initMarketBanner() {
         bannerAdapter = new MyStockPagerAdapter(bannerDatas);
         mystockBanner.setOffscreenPageLimit(4);
         mystockBanner.setAdapter(bannerAdapter);
     }
 
+    /**切换指数缩略*/
     public void changeIitem(int pos) {
         mystockBanner.setCurrentItem(pos);
     }
 
-
+    /**初始化排序头*/
     private void initSortTitle(Context ctx) {
         itemMystock.setPadding(0, AppDevice.dp2px(ctx, 5), 0, AppDevice.dp2px(ctx, 5));
         flagLayout.setVisibility(View.GONE);
@@ -243,6 +246,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
     }
 
+    /**初始化排序按钮*/
     private void iniSortBar() {
         tvMystockPrice.setDefaultText("最新价");
         tvMystockRate.setDefaultText("涨跌幅");
@@ -250,6 +254,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         tvMystockRate.setViewStateNormal();
     }
 
+    /**初始化自选股列表和大盘指数列表*/
     private void initRecyclerView(Context mContext) {
         //自选股列表
         myStockAdapter = new MyStockAdapter(myStockDatas);
@@ -281,8 +286,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
     @Override
     public void doSort(final View view, final int sortType) {
-
-        KLog.e(sortType);
         Collections.sort(myStockDatas, new Comparator<MyStockData>() {
             @Override
             public int compare(MyStockData o1, MyStockData o2) {
@@ -293,8 +296,12 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     } else if (sortType == 1) {
                         return StringUtils.getStockDouble(o1.getPrice()).compareTo(StringUtils.getStockDouble(o2.getPrice()));
                     } else {
-                        getMyStockData(AppConst.REFRESH_TYPE_PARENT_BUTTON);
-                        return 0;
+                        try {
+                            return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()),CalendarUtils.parseString2Long(o1.getInsertdate()));
+                        }catch (Exception e){
+                            getMyStockData(AppConst.REFRESH_TYPE_PARENT_BUTTON);
+                            return 0;
+                        }
                     }
                 } else if (view.getId() == R.id.tv_mystock_rate) {
                     tvMystockPrice.setViewStateNormal();
@@ -303,8 +310,12 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     } else if (sortType == 1) {
                         return StringUtils.getStockDouble(o1.getChange_rate()).compareTo(StringUtils.getStockDouble(o2.getChange_rate()));
                     } else {
-                        getMyStockData(AppConst.REFRESH_TYPE_PARENT_BUTTON);
-                        return 0;
+                        try {
+                            return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()),CalendarUtils.parseString2Long(o1.getInsertdate()));
+                        }catch (Exception e){
+                            getMyStockData(AppConst.REFRESH_TYPE_PARENT_BUTTON);
+                            return 0;
+                        }
                     }
                 }
                 return 0;
@@ -330,7 +341,12 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     myStockDatas.clear();
-                    myStockDatas.addAll(JSONObject.parseObject(responseInfo, MyStockBean.class).getData());
+                    List<MyStockData> parseData = JSONObject.parseObject(responseInfo, MyStockBean.class).getData();
+                    for (MyStockData data:parseData){
+                        if (data.getStock_type()==1){
+                            myStockDatas.add(data);
+                        }
+                    }
                     myStockAdapter.notifyDataSetChanged();
 
                     //缓存自选股
@@ -348,6 +364,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     }, 1000);
 
                 } else if (code == 1001) {
+                    //没有数据
                 } else {
                     refreshLayout.setRefreshing(false);
                     UIHelper.toastResponseError(getActivity(), responseInfo);
@@ -366,7 +383,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     /**
      * 获取大盘数据
      */
-    public void getMarketLittle() {
+    public void getMarketLittle(final int refreshType) {
         final Map<String, String> param = new HashMap<>();
         param.put("fullcode", "sh000001;sz399001;sh000300;csi930715;sz399006");
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
@@ -382,10 +399,8 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     bannerAdapter.notifyDataSetChanged();
                     myStockMarketAdapter.notifyDataSetChanged();
 
-                    try {
+                    if (refreshType==AppConst.REFRESH_TYPE_FIRST) {
                         mystockBanner.setCurrentItem(SPTools.getInt("choose_banner_item", 0));
-                    } catch (Exception e) {
-                        e.getMessage();
                     }
                 }
             }
@@ -574,12 +589,11 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 e.printStackTrace();
             }
         }
-//        handler.postDelayed(runnable,INTERVAL_TIME);
     };
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroyView() {
+        super.onDestroyView();
         handler.removeCallbacks(runnable);
     }
 
