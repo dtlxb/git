@@ -103,7 +103,6 @@ public class SearchTeamFragment extends BaseFragment {
                     if (null!=recommendBean.getData()){
                         dataBeanList.addAll(recommendBean.getData());
                         adapter.notifyDataSetChanged();
-                        adapter.notifyDataSetChanged();
                         xLayout.setStatus(XLayout.Success);
                     }
 
@@ -166,9 +165,9 @@ public class SearchTeamFragment extends BaseFragment {
             });
 
             UIHelper.setRippBg(holder.itemView);
-            holder.setText(R.id.item_tv_search_result_name,data.getName());
-            holder.setText(R.id.item_tv_search_result_count,
+            holder.setText(R.id.item_tv_search_result_name,data.getName()+
                     String.format(getString(R.string.str_group_count),data.getM().size()));
+
             holder.setText(R.id.item_tv_search_result_intro,TextUtils.isEmpty(data.getAttr().getIntro())?"暂无群简介":data.getAttr().getIntro());
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {

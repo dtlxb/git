@@ -13,6 +13,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.hply.imagepicker.view.StatusBarUtil;
 import com.socks.library.KLog;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +26,7 @@ import cn.gogoal.im.BuildConfig;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -35,6 +38,7 @@ import cn.gogoal.im.fragment.MessageFragment;
 import cn.gogoal.im.fragment.MineFragment;
 import cn.gogoal.im.fragment.MyStockFragment;
 import cn.gogoal.im.fragment.SocialContactFragment;
+import hply.com.niugu.autofixtext.AutofitTextView;
 
 public class MainActivity extends BaseActivity {
 
@@ -51,6 +55,8 @@ public class MainActivity extends BaseActivity {
 
     private MyStockFragment myStockFragment;
 
+    private AutofitTextView[] badgeView;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_main;
@@ -64,6 +70,8 @@ public class MainActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
 
         KLog.e("width===" + AppDevice.getWidth(mContext) + ";height===" + AppDevice.getHeight(mContext));
+        KLog.e("DpValueWidth===" + AppDevice.px2dp(mContext, AppDevice.getWidth(mContext)) +
+                ";DpValueHeight===" + AppDevice.px2dp(mContext, AppDevice.getHeight(mContext)));
 
         if (BuildConfig.DEBUG) {
             FileUtil.writeRequestResponse("token_" + UserUtils.getUserName(), UserUtils.getToken());
@@ -98,12 +106,16 @@ public class MainActivity extends BaseActivity {
                 getSupportFragmentManager(), MainActivity.this, tabFragments, mainTabArray);
 
         vpMain.setAdapter(tabAdapter);
-        vpMain.setOffscreenPageLimit(4);
+        vpMain.setOffscreenPageLimit(mainTabArray.length-1);
         tabMain.setupWithViewPager(vpMain);
+
+        badgeView=new AutofitTextView[mainTabArray.length];
+
         for (int i = 0; i < mainTabArray.length; i++) {
             TabLayout.Tab tab = tabMain.getTabAt(i);
             if (tab != null) {
                 tab.setCustomView(tabAdapter.getTabView(i));
+                badgeView[i]= (AutofitTextView) tabAdapter.getTabView(i).findViewById(R.id.count_tv);
             }
         }
 
@@ -171,7 +183,7 @@ public class MainActivity extends BaseActivity {
         new GGOKHTTP(param, GGOKHTTP.GET_FRIEND_LIST, ggHttpInterface).startGet();
     }
 
-    public void showMainMsk(){
+    public void showMainMsk() {
         mainViewMask.setClickable(true);
         mainViewMask.setEnabled(true);
         mainViewMask.setVisibility(View.VISIBLE);
@@ -179,7 +191,7 @@ public class MainActivity extends BaseActivity {
                 R.anim.alpha_in));
     }
 
-    public void hideMainMsk(){
+    public void hideMainMsk() {
         mainViewMask.setClickable(false);
         mainViewMask.setEnabled(false);
         mainViewMask.setVisibility(View.GONE);
@@ -209,5 +221,16 @@ public class MainActivity extends BaseActivity {
         } else {
             finish();
         }
+    }
+
+    @Subscriber(tag = "correct_allmessage_count")
+    public void setBadgeViewNum(BaseMessage<Integer> message) {
+        int index = message.getOthers().get("index");
+        int num = message.getOthers().get("number");
+
+        if (index >= 0 && index < mainTabArray.length) {
+            badgeView[index].setText(num>99?"99+":String.valueOf(num));
+        }
+        if (num==0)badgeView[index].setVisibility(View.GONE);
     }
 }

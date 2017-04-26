@@ -14,43 +14,34 @@
         android:contentDescription="@null"
         android:src="@mipmap/image_placeholder" />
 
-    <TextView
-        android:id="@+id/item_tv_search_result_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/item_user_avatar"
         android:layout_toEndOf="@+id/item_user_avatar"
-        android:layout_toStartOf="@+id/item_tv_search_result_count"
-        android:singleLine="true"
-        android:ellipsize="middle"
-        android:text="--"
-        android:textColor="@color/textColor_333333"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/item_tv_search_result_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/item_user_avatar"
+        android:gravity="center_vertical"
+        android:layout_centerVertical="true"
         android:layout_toStartOf="@+id/btn_search_group_add"
-        android:singleLine="true"
-        android:ellipsize="middle"
-        android:textColor="@color/textColor_333333"
-        android:textSize="14sp" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/item_tv_search_result_intro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/item_tv_search_result_name"
-        android:layout_marginTop="5dp"
-        android:layout_toEndOf="@+id/item_user_avatar"
-        android:layout_toStartOf="@+id/btn_search_group_add"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:text="--"
-        android:textColor="@color/textColor_999999"
-        android:textSize="12sp" />
+        <TextView
+            android:id="@+id/item_tv_search_result_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="middle"
+            android:textColor="@color/textColor_333333"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/item_tv_search_result_intro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/textColor_999999"
+            android:textSize="12sp" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/btn_search_group_add"

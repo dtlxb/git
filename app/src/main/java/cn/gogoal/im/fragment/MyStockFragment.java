@@ -1,6 +1,7 @@
 package cn.gogoal.im.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +9,8 @@ import android.support.percent.PercentRelativeLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -125,7 +128,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     private RotateAnimation rotateAnimation;
 
     //自动刷新默认时间
-    private long INTERVAL_TIME=15000;
+    private long INTERVAL_TIME = 15000;
 
     //弹窗的recyclerView
     @BindView(R.id.rv_mystock_market)
@@ -177,19 +180,25 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         });
     }
 
-    /**全部数据请求*/
+    /**
+     * 全部数据请求
+     */
     private void refreshAll(int refreshType) {
         startAnimation();//刷新按钮动画
         getMyStockData(refreshType);
         getMarketLittle(refreshType);
     }
 
-    /**指数[弹窗]是否可见，方便处理返回键*/
+    /**
+     * 指数[弹窗]是否可见，方便处理返回键
+     */
     public boolean isMaskViewVisiable() {
         return viewDialogMask.getVisibility() == View.VISIBLE;
     }
 
-    /**销毁指数[弹窗]*/
+    /**
+     * 销毁指数[弹窗]
+     */
     public void dismissMarket() {
         ((MainActivity) getActivity()).hideMainMsk();
         rvMystockMarket.setVisibility(View.GONE);
@@ -205,7 +214,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
     }
 
-    /**显示指数[弹窗]*/
+    /**
+     * 显示指数[弹窗]
+     */
     public void showMarketDialog() {
 //        new MyStockTopDialog().show(getChildFragmentManager());
         ((MainActivity) getActivity()).showMainMsk();
@@ -227,12 +238,16 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         mystockBanner.setAdapter(bannerAdapter);
     }
 
-    /**切换指数缩略*/
+    /**
+     * 切换指数缩略
+     */
     public void changeIitem(int pos) {
         mystockBanner.setCurrentItem(pos);
     }
 
-    /**初始化排序头*/
+    /**
+     * 初始化排序头
+     */
     private void initSortTitle(Context ctx) {
         itemMystock.setPadding(0, AppDevice.dp2px(ctx, 5), 0, AppDevice.dp2px(ctx, 5));
         flagLayout.setVisibility(View.GONE);
@@ -246,7 +261,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
     }
 
-    /**初始化排序按钮*/
+    /**
+     * 初始化排序按钮
+     */
     private void iniSortBar() {
         tvMystockPrice.setDefaultText("最新价");
         tvMystockRate.setDefaultText("涨跌幅");
@@ -254,7 +271,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         tvMystockRate.setViewStateNormal();
     }
 
-    /**初始化自选股列表和大盘指数列表*/
+    /**
+     * 初始化自选股列表和大盘指数列表
+     */
     private void initRecyclerView(Context mContext) {
         //自选股列表
         myStockAdapter = new MyStockAdapter(myStockDatas);
@@ -265,7 +284,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         rvMystock.setLayoutManager(layoutManager);
         rvMystock.setHasFixedSize(true);
         rvMystock.setNestedScrollingEnabled(false);
-
+        rvMystock.setItemAnimator(new DefaultItemAnimator());
         rvMystock.setLayoutManager(layoutManager);
         rvMystock.addItemDecoration(new NormalItemDecoration(mContext));
         rvMystock.setAdapter(myStockAdapter);
@@ -297,8 +316,8 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                         return StringUtils.getStockDouble(o1.getPrice()).compareTo(StringUtils.getStockDouble(o2.getPrice()));
                     } else {
                         try {
-                            return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()),CalendarUtils.parseString2Long(o1.getInsertdate()));
-                        }catch (Exception e){
+                            return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()), CalendarUtils.parseString2Long(o1.getInsertdate()));
+                        } catch (Exception e) {
                             getMyStockData(AppConst.REFRESH_TYPE_PARENT_BUTTON);
                             return 0;
                         }
@@ -311,8 +330,8 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                         return StringUtils.getStockDouble(o1.getChange_rate()).compareTo(StringUtils.getStockDouble(o2.getChange_rate()));
                     } else {
                         try {
-                            return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()),CalendarUtils.parseString2Long(o1.getInsertdate()));
-                        }catch (Exception e){
+                            return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()), CalendarUtils.parseString2Long(o1.getInsertdate()));
+                        } catch (Exception e) {
                             getMyStockData(AppConst.REFRESH_TYPE_PARENT_BUTTON);
                             return 0;
                         }
@@ -342,8 +361,8 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 if (code == 0) {
                     myStockDatas.clear();
                     List<MyStockData> parseData = JSONObject.parseObject(responseInfo, MyStockBean.class).getData();
-                    for (MyStockData data:parseData){
-                        if (data.getStock_type()==1){
+                    for (MyStockData data : parseData) {
+                        if (data.getStock_type() == 1) {
                             myStockDatas.add(data);
                         }
                     }
@@ -355,13 +374,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     if (loadType == AppConst.REFRESH_TYPE_SWIPEREFRESH || loadType == AppConst.REFRESH_TYPE_PARENT_BUTTON) {
                         UIHelper.toast(getActivity(), getString(R.string.str_refresh_ok));
                     }
-                    new android.os.Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            refreshLayout.setRefreshing(false);
-                            stopAnimation();
-                        }
-                    }, 1000);
 
                 } else if (code == 1001) {
                     //没有数据
@@ -369,12 +381,27 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     refreshLayout.setRefreshing(false);
                     UIHelper.toastResponseError(getActivity(), responseInfo);
                 }
+
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.setRefreshing(false);
+                        stopAnimation();
+                    }
+                }, 1000);
             }
 
             @Override
             public void onFailure(String msg) {
                 refreshLayout.setRefreshing(false);
                 UIHelper.toastError(getActivity(), msg);
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.setRefreshing(false);
+                        stopAnimation();
+                    }
+                }, 1000);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.GET_MYSTOCKS, ggHttpInterface).startGet();
@@ -399,7 +426,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     bannerAdapter.notifyDataSetChanged();
                     myStockMarketAdapter.notifyDataSetChanged();
 
-                    if (refreshType==AppConst.REFRESH_TYPE_FIRST) {
+                    if (refreshType == AppConst.REFRESH_TYPE_FIRST) {
                         mystockBanner.setCurrentItem(SPTools.getInt("choose_banner_item", 0));
                     }
                 }
@@ -505,6 +532,37 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 public void onClick(View v) {
                     StockUtils.go2StockDetail(v.getContext(),
                             data.getStock_code(), data.getStock_name());
+                }
+            });
+
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    new AlertDialog.Builder(v.getContext()).setMessage(
+                            "删除自选股 " + data.getStock_name() + "(" + data.getStock_code() + ")?")
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    StockUtils.reqDelStock(getContext(),
+                                            data.getStock_name(),
+                                            data.getSource() + data.getStock_code(),
+                                            new StockUtils.ToggleMyStockCallBack() {
+                                                @Override
+                                                public void success() {
+                                                    MyStockAdapter.this.removeItem(data);
+                                                }
+
+                                                @Override
+                                                public void failed(String msg) {
+                                                    //TODO 本来应该成功返回code==0才刷新列表，
+                                                    // TODO 现在TM的返回的是1001 但是删除成功
+                                                    MyStockAdapter.this.removeItem(data);
+//                                                    UIHelper.toast(getActivity(), msg);
+                                                }
+                                            });
+                                }
+                            }).show();
+                    return true;
                 }
             });
         }

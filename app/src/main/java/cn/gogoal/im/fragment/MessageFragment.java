@@ -48,6 +48,7 @@ import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.IMMessageBean;
@@ -90,6 +91,8 @@ public class MessageFragment extends BaseFragment {
 
     private Map<String, List<String>> gruopMemberMap = new HashMap<>();
 
+    private int allCount;
+
     public MessageFragment() {
     }
 
@@ -129,6 +132,8 @@ public class MessageFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
+        allCount = MessageUtils.getAllMessageUnredCount(jsonArray);
+        AppManager.getInstance().sendMessage("correct_allmessage_count", String.valueOf(allCount));
         IMMessageBeans.clear();
         IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
@@ -602,6 +607,9 @@ public class MessageFragment extends BaseFragment {
                 isTheSame ? String.valueOf(unreadmessage) : "1", nickName, friend_id, avatar, message);
         KLog.e(imMessageBean);
         MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
+        allCount++;
+        //发送消息更改消息总数
+        AppManager.getInstance().sendMessage("correct_allmessage_count", String.valueOf(allCount));
 
         //按照时间排序
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {

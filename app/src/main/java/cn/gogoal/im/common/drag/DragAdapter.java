@@ -12,6 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -26,12 +27,6 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
      */
     private OnCheckedChangeListener mOnCheckedChangeListener;
 
-//    /**
-//     * Item点击监听
-//     */
-//    private OnItemClickListener mItemOnClickListener;
-
-
     /**
      * 数据
      */
@@ -41,9 +36,6 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
      * Item拖拽滑动帮助
      */
     private ItemTouchHelper itemTouchHelper;
-
-    public DragAdapter() {
-    }
 
     public DragAdapter(Context context,List<MyStockData> dataList) {
         this.context=context;
@@ -69,8 +61,22 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
     }
 
     @Override
-    public void onBindViewHolder(MainContentViewHolder holder, int position) {
+    public void onBindViewHolder(final MainContentViewHolder holder, final int position) {
         holder.setData();
+        holder.mIv2Top.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collections.swap(dataList,position,0);
+                DragAdapter.this.notifyDataSetChanged();
+            }
+        });
+
+        holder.mTvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.mCbCheck.performClick();
+            }
+        });
     }
 
     @Override
@@ -102,6 +108,7 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
 
         private TextView mTvName;
         private ImageView mIvTouch;
+        private ImageView mIv2Top;
         private AppCompatCheckBox mCbCheck;
 
         private MainContentViewHolder(View itemView) {
@@ -109,6 +116,7 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
             mCbCheck = (AppCompatCheckBox) itemView.findViewById(R.id.checker);
             mTvName = (TextView) itemView.findViewById(R.id.tv_drag_stock_name);
             mIvTouch = (ImageView) itemView.findViewById(R.id.img_drag);
+            mIv2Top = (ImageView) itemView.findViewById(R.id.img_2_top);
 
             mCbCheck.setOnClickListener(this);
             mIvTouch.setOnTouchListener(this);

@@ -1696,7 +1696,8 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
                 //登录时
                 final Map<String, String> param = new HashMap<String, String>();
                 param.put("token", UserUtils.getToken());
-                param.put("stock_code", stockCode);
+                param.put("group_id", "0");
+                param.put("full_codes", stockCode);
 
                 GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
                     @Override
