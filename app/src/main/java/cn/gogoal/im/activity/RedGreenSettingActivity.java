@@ -25,7 +25,7 @@ public class RedGreenSettingActivity extends BaseActivity {
     @BindView(R.id.greenup_rb)
     RadioButton greenup_rb;
 
-    private boolean redUp;
+    private boolean stockUnNomoralShow;
 
     @Override
     public int bindLayout() {
@@ -36,18 +36,18 @@ public class RedGreenSettingActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         setMyTitle("涨跌显示设置", true);
 
-        redUp = SPTools.getBoolean("stock_redup_greendown", false);
-        if (redUp) {
-            redup_rb.setChecked(true);
-        } else {
+        stockUnNomoralShow = SPTools.getBoolean("stock_unnomoral_show", false);
+        if (stockUnNomoralShow) {
             greenup_rb.setChecked(true);
+        } else {
+            redup_rb.setChecked(true);
         }
 
         group_redgreen.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 int rbId = group.getCheckedRadioButtonId();
-                SPTools.saveBoolean("stock_redup_greendown", rbId == redup_rb.getId());
+                SPTools.saveBoolean("stock_unnomoral_show", rbId == greenup_rb.getId());
             }
         });
     }
