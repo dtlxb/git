@@ -63,7 +63,7 @@
             android:id="@+id/imgPhoneCover"
             android:layout_width="match_parent"
             android:layout_height="375dp"
-            android:scaleType="fitXY" />
+            android:scaleType="centerCrop" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -137,7 +137,7 @@
             android:id="@+id/imgPcCover"
             android:layout_width="match_parent"
             android:layout_height="190dp"
-            android:scaleType="fitXY" />
+            android:scaleType="centerCrop" />
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -246,7 +246,7 @@ public class PlayerActivity extends BaseActivity {
                         linearPlayerProfiles.setVisibility(View.VISIBLE);
                     }
 
-                    mURI = data.getString("video_file");
+                    mURI = data.getString("video_url");
 
                     textOnlineNumber.setText("0人在线");
 
@@ -259,7 +259,6 @@ public class PlayerActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                KLog.json(msg);
                 UIHelper.toast(getContext(), R.string.net_erro_hint);
             }
         };
