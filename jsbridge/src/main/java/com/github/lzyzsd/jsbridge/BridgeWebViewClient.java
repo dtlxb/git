@@ -1,17 +1,8 @@
 package com.github.lzyzsd.jsbridge;
 
 import android.graphics.Bitmap;
-import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-
-import com.bumptech.glide.Glide;
-import com.github.lzyzsd.library.R;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -65,45 +56,9 @@ public class BridgeWebViewClient extends WebViewClient {
         }
     }
 
-    //loading
-    private View mLoadingView;
-
-    private void showLoadingPage() {
-        initLoadingPage();
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-        lp.setMargins(0, Utils.dp2px(webView.getContext(), 2), 0, 0);
-        if (webView.getChildCount() < 2) {
-            webView.addView(mLoadingView, 0, lp);
-        }
-    }
-
-    private void hideLoadingPage() {
-        if (null != webView.getChildAt(0)) {
-            webView.removeViewAt(0);
-        }
-    }
-
-    private void initLoadingPage() {
-        if (mLoadingView == null) {
-            mLoadingView = View.inflate(
-                    webView.getContext(),
-                    R.layout.web_loading,
-                    new RelativeLayout(webView.getContext()));
-            ImageView imageView = (ImageView) mLoadingView.findViewById(R.id.image_loading);
-
-            ViewGroup.LayoutParams params = imageView.getLayoutParams();
-            params.width = 2 * Utils.getScreemWidth(webView.getContext()) / 5;
-            params.height = 4 * Utils.getScreemHeight(webView.getContext()) / 25;
-            imageView.setLayoutParams(params);
-
-            Glide.with(webView.getContext()).load(R.mipmap.web_loading).asGif().fitCenter().into(imageView);
-        }
-    }
-
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
         super.onPageStarted(view, url, favicon);
-        showLoadingPage();
     }
 
     @Override
@@ -118,26 +73,15 @@ public class BridgeWebViewClient extends WebViewClient {
             }
         }
 
-        hideLoadingPage();
-
     }
 
     @Override
     public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
         super.onReceivedError(view, errorCode, description, failingUrl);
 
-//        if (!view.canGoBack()) {
-//            switch (Utils.getNetworkType(view.getContext())) {//获取网络状态
-//                case 0://无网络
-//                    view.loadUrl("file:///android_asset/404.html");
-//                    break;
-//                default:
-//                    view.loadUrl("file:///android_asset/erro.html");
-//                    break;
-//            }
-//        }
         if (!view.canGoBack()) {
             view.loadUrl("file:///android_asset/404.html");
         }
     }
+
 }

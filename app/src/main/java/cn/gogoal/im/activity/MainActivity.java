@@ -74,7 +74,7 @@ public class MainActivity extends BaseActivity {
                 ";DpValueHeight===" + AppDevice.px2dp(mContext, AppDevice.getHeight(mContext)));
 
         if (BuildConfig.DEBUG) {
-            FileUtil.writeRequestResponse(UserUtils.getToken(),"token_" + UserUtils.getUserName());
+            FileUtil.writeRequestResponse(UserUtils.getToken(), "token_" + UserUtils.getUserName());
         }
 
         MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
@@ -106,16 +106,16 @@ public class MainActivity extends BaseActivity {
                 getSupportFragmentManager(), MainActivity.this, tabFragments, mainTabArray);
 
         vpMain.setAdapter(tabAdapter);
-        vpMain.setOffscreenPageLimit(mainTabArray.length-1);
+        vpMain.setOffscreenPageLimit(mainTabArray.length - 1);
         tabMain.setupWithViewPager(vpMain);
 
-        badgeView=new AutofitTextView[mainTabArray.length];
+        badgeView = new AutofitTextView[mainTabArray.length];
 
         for (int i = 0; i < mainTabArray.length; i++) {
             TabLayout.Tab tab = tabMain.getTabAt(i);
             if (tab != null) {
                 tab.setCustomView(tabAdapter.getTabView(i));
-                badgeView[i]= (AutofitTextView) tabAdapter.getTabView(i).findViewById(R.id.count_tv);
+                badgeView[i] = (AutofitTextView) tabAdapter.getTabView(i).findViewById(R.id.count_tv);
             }
         }
 
@@ -229,8 +229,12 @@ public class MainActivity extends BaseActivity {
         int num = message.getOthers().get("number");
 
         if (index >= 0 && index < mainTabArray.length) {
-            badgeView[index].setText(num>99?"99+":String.valueOf(num));
+            badgeView[index].setText(num > 99 ? "99+" : String.valueOf(num));
         }
-        if (num==0)badgeView[index].setVisibility(View.GONE);
+        if (num == 0) {
+            badgeView[index].setVisibility(View.GONE)
+        } else {
+            badgeView[index].setVisibility(View.VISIBLE);
+        } ;
     }
 }

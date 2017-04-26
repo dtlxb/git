@@ -28,6 +28,7 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.SelectorButton;
+import cn.gogoal.im.ui.view.XLayout;
 
 
 /**
@@ -44,6 +45,9 @@ public class IMPersonDetailActivity extends BaseActivity {
     @BindView(R.id.add_friend_button)
     SelectorButton addFriendBtn;
 
+    @BindView(R.id.xLayout)
+    XLayout xLayout;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_person_detail;
@@ -51,7 +55,7 @@ public class IMPersonDetailActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        setMyTitle(R.string.title_chat_person_detial, true);
+        setMyTitle(R.string.title_user_information, true);
 
         personDetailRecycler.setLayoutManager(new LinearLayoutManager(mContext));
         personDetailRecycler.addItemDecoration(new NormalItemDecoration(mContext));
@@ -69,6 +73,7 @@ public class IMPersonDetailActivity extends BaseActivity {
     }
 
     private void getUsernfo() {
+        xLayout.setStatus(XLayout.Loading);
         final Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
         param.put("account_id", String.valueOf(accountId));
@@ -98,16 +103,18 @@ public class IMPersonDetailActivity extends BaseActivity {
 
                     personDetailRecycler.setAdapter(new UserInfoAdapter(infos));
 
+                    xLayout.setStatus(XLayout.Success);
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
-
+                    xLayout.setStatus(XLayout.Empty);
                 } else {
                     UIHelper.toastResponseError(getActivity(), responseInfo);
+                    xLayout.setStatus(XLayout.Error);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toastError(getActivity(), msg);
+                UIHelper.toastError(getActivity(), msg,xLayout);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_ACCOUNT_DETAIL, ggHttpInterface).startGet();
