@@ -5,7 +5,7 @@
             <shape>
                 <corners android:radius="5dip" />
                 <gradient
-                    android:endColor="@color/colorProgressDark"
+                    android:endColor="@color/colorProgress"
                     android:startColor="@color/colorProgress" />
             </shape>
         </clip>

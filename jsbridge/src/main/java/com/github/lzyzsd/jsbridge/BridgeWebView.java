@@ -107,10 +107,11 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
     @SuppressLint("SetJavaScriptEnabled")
     private void init() {
         progressbar = new ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal);
-        progressbar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 5, 0, 0));
+        progressbar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,Utils.dp2px(context,2), 0, 0));
         progressbar.setProgressDrawable(ContextCompat.getDrawable(context,R.drawable.web_progress));
         addView(progressbar);
 
+        setWebChromeClient(new WebChromeClient());
 
         this.setVerticalScrollBarEnabled(false);
         this.setHorizontalScrollBarEnabled(false);

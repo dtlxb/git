@@ -20,7 +20,6 @@ import cn.gogoal.im.bean.SectionTouYanData;
 import cn.gogoal.im.bean.TouYan;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.dialog.ComingSoonDialog;
 
 
@@ -99,9 +98,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionTouYanData, B
                         context.startActivity(new Intent(context, MarketActivity.class));
                     } else {
                         //TODO 跳网页类型
-
                         if (item.getIsClick() == 0) {
-                            UIHelper.toast(v.getContext(), "pos=" + position);
                             Intent intent = new Intent(v.getContext(), FunctionActivity.class);
                             intent.putExtra("function_url", item.getUrl());
                             intent.putExtra("title", item.getDesc());
