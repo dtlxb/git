@@ -6,13 +6,17 @@ import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 
 /**
  * Created by huangxx on 2017/2/14.
@@ -163,7 +167,9 @@ public class StockUtils {
         SPTools.saveJsonArray("ggSearchedStock", jsonArray);
     }
 
-    /**根据判断的依据字段，返回股票颜色*/
+    /**
+     * 根据判断的依据字段，返回股票颜色
+     */
     public static int getStockRateColor(String rateOrPriceString) {
         if (TextUtils.isEmpty(rateOrPriceString)) {
             return R.color.stock_gray;
@@ -285,5 +291,83 @@ public class StockUtils {
 
     public static void savaColseprice(float closePrice) {
         SPTools.saveFloat("closePrice", closePrice);
+    }
+
+    /**
+     * 添加自选股
+     */
+    public static void reqAddStock(final Context context, final String stock_name, final String stock_code) {
+        final Map<String, String> param = new HashMap<String, String>();
+        param.put("token", UserUtils.getToken());
+        param.put("group_id", "0");
+        param.put("stock_code", stock_code);
+        param.put("stock_class", "0");
+        param.put("source", "9");
+        param.put("group_class", "1");
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+
+            @Override
+            public void onSuccess(String responseInfo) {
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                int data = (int) result.get("code");
+                if (data == 0) {
+                    JSONObject singlestock = new JSONObject();
+                    singlestock.put("stock_name", stock_name);
+                    singlestock.put("stock_code", stock_code);
+                    singlestock.put("stock_type", 1);
+                    singlestock.put("price", 0);
+                    singlestock.put("change_rate", 0);
+                    StockUtils.addStock2MyStock(singlestock);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toastError(context, msg);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.MYSTOCK_ADD, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 删除自选股
+     */
+    public static void reqDelStock(final Context context, final String stock_name, final String stock_code, final ToggleMyStockCallBack callBack) {
+        final Map<String, String> param = new HashMap<>();
+        param.put("token", UserUtils.getToken());
+        param.put("group_id", "0");
+        param.put("full_codes", stock_code);
+
+        KLog.e(StringUtils.map2ggParameter(param));
+
+        GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                int code = (int) result.get("code");
+                if (code == 0) {
+                    UIHelper.toast(context, "删除自选成功");
+                    callBack.success();
+                }else {
+                    callBack.failed(JSONObject.parseObject(responseInfo).getString("message"));
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                callBack.failed(msg);
+                UIHelper.toastError(context, msg);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.MYSTOCK_DELETE, httpInterface).startGet();
+    }
+
+    public interface ToggleMyStockCallBack {
+        void success();
+
+        void failed(String msg);
     }
 }

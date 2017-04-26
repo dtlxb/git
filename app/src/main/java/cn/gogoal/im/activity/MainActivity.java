@@ -27,6 +27,7 @@ import cn.gogoal.im.BuildConfig;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -70,6 +71,8 @@ public class MainActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
 
         KLog.e("width===" + AppDevice.getWidth(mContext) + ";height===" + AppDevice.getHeight(mContext));
+        KLog.e("DpValueWidth===" + AppDevice.px2dp(mContext, AppDevice.getWidth(mContext)) +
+                ";DpValueHeight===" + AppDevice.px2dp(mContext, AppDevice.getHeight(mContext)));
 
         if (BuildConfig.DEBUG) {
             FileUtil.writeRequestResponse("token_" + UserUtils.getUserName(), UserUtils.getToken());
@@ -115,7 +118,6 @@ public class MainActivity extends BaseActivity {
 
         tabMain.getTabAt(2).select();
         badgeView = new BadgeView(MainActivity.this);
-        badgeView.bindTarget(tabMain.getTabAt(0).getCustomView());
         badgeView.setBadgeTextSize(10, true);
 
         barUtil = StatusBarUtil.with(MainActivity.this);
@@ -221,7 +223,14 @@ public class MainActivity extends BaseActivity {
     }
 
     @Subscriber(tag = "correct_allmessage_count")
-    public void setBadgeViewNum(String number) {
-        badgeView.setBadgeNumber(Integer.parseInt(number));
+    public void setBadgeViewNum(BaseMessage<Integer> message) {
+        int index = message.getOthers().get("index");
+
+        if (index >= 0 && index < mainTabArray.length) {
+            badgeView.bindTarget(tabMain.getTabAt(index).getCustomView());
+        }
+        int num = message.getOthers().get("number");
+        badgeView.setBadgeNumber(num);
+        badgeView.setBadgeGravity(Gravity.TOP | Gravity.END);
     }
 }
