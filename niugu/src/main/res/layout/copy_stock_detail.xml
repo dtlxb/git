@@ -561,6 +561,7 @@
                         app:tabBackground="@color/main_bg"
                         app:tabIndicatorColor="@color/tabSelected"
                         app:tabMode="fixed"
+                        android:background="#f00"
                         app:tabSelectedTextColor="@color/tabSelected"
                         app:tabTextAppearance="@style/TabLayoutTextStyle"
                         app:tabTextColor="@color/tabUnSelected"/>
