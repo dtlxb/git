@@ -21,6 +21,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.CreateLiveActivity;
+import cn.gogoal.im.activity.FunctionActivity;
 import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.adapter.SocialLiveAdapter;
 import cn.gogoal.im.base.BaseActivity;
@@ -28,12 +29,14 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BannerBean;
 import cn.gogoal.im.bean.SocialLiveBean;
 import cn.gogoal.im.bean.SocialLiveData;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.dialog.ComingSoonDialog;
 import cn.gogoal.im.ui.view.AutoScrollViewPager;
 
 /**
@@ -85,11 +88,22 @@ public class SocialContactFragment extends BaseFragment {
         getLiveData();
     }
 
-    @OnClick({R.id.imgFloatAction})
+    @OnClick({R.id.imgFloatAction, R.id.linearLive, R.id.linearConference, R.id.linearRoadshow, R.id.linearClub})
     public void viewOnClick(View view) {
         switch (view.getId()) {
             case R.id.imgFloatAction: //发起直播
                 getUserValid();
+                break;
+            case R.id.linearLive: //直播
+                Intent intent = new Intent(getActivity(), FunctionActivity.class);
+                intent.putExtra("function_url", AppConst.GG_LIVE_LIST);
+                intent.putExtra("title", "GoGoal直播");
+                startActivity(intent);
+                break;
+            case R.id.linearConference: //会务
+            case R.id.linearRoadshow: //路演
+            case R.id.linearClub: //俱乐部
+                new ComingSoonDialog().show(getFragmentManager());
                 break;
         }
     }

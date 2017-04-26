@@ -62,8 +62,8 @@
         <ImageView
             android:id="@+id/imgPhoneCover"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"/>
+            android:layout_height="375dp"
+            android:scaleType="fitXY" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -136,8 +136,8 @@
         <ImageView
             android:id="@+id/imgPcCover"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"/>
+            android:layout_height="190dp"
+            android:scaleType="fitXY" />
 
         <RelativeLayout
             android:layout_width="match_parent"
