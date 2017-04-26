@@ -75,9 +75,9 @@ public class ImageDetailActivity extends BaseActivity {
 
         if (isEditMyAvatar) {
             imageUrls.add(UserUtils.getUserAvatar());
-            imageUrls.add("http://hackfile.ufile.ucloud.cn/gogoal/avatar/ucloud_266F015CFCC3D7AB.jpg");
-            imageUrls.add("http://www.jcodecraeer.com/uploads/20170330/1490865016182928.jpeg");
-            imageUrls.add("http://hackfile.ufile.ucloud.cn/gogoal/avatar/ucloud_9385F5CF7F318CEE.jpg@1000x1000");
+//            imageUrls.add("http://hackfile.ufile.ucloud.cn/gogoal/avatar/ucloud_266F015CFCC3D7AB.jpg");
+//            imageUrls.add("http://www.jcodecraeer.com/uploads/20170330/1490865016182928.jpeg");
+//            imageUrls.add("http://hackfile.ufile.ucloud.cn/gogoal/avatar/ucloud_9385F5CF7F318CEE.jpg@1000x1000");
         } else {
             imageUrls.addAll(getIntent().getStringArrayListExtra("image_urls"));
         }

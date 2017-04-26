@@ -128,7 +128,7 @@ public class MineFragment extends BaseFragment {
         }
 
         tvMineUserName.setText(UserUtils.getUserName());
-        tvMineIntroduction.setText(UserUtils.getDuty() + " " + UserUtils.getorgName());
+        tvMineIntroduction.setText(UserUtils.getDuty());
 
     }
 
@@ -142,11 +142,6 @@ public class MineFragment extends BaseFragment {
         mineItems.add(1, new MineItem(MineItem.TYPE_SPACE));
         mineItems.add(4, new MineItem(MineItem.TYPE_SPACE));
         mineItems.add(8, new MineItem(MineItem.TYPE_SPACE));
-        mineItems.add(new MineItem(MineItem.TYPE_SPACE));
-        mineItems.add(new MineItem(MineItem.TYPE_ICON_TEXT_ITEM, R.mipmap.cache_found_js_native, "测试1"));
-        mineItems.add(new MineItem(MineItem.TYPE_ICON_TEXT_ITEM, R.mipmap.cache_found_js_native, "测试2"));
-        mineItems.add(new MineItem(MineItem.TYPE_ICON_TEXT_ITEM, R.mipmap.cache_found_js_native, "测试3"));
-        mineItems.add(new MineItem(MineItem.TYPE_ICON_TEXT_ITEM, R.mipmap.cache_found_js_native, "测试4"));
         mineAdapter = new MineAdapter(mineItems);
     }
 

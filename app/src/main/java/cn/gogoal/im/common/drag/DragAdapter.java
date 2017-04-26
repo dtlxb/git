@@ -12,6 +12,8 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.socks.library.KLog;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -66,6 +68,7 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
         holder.mIv2Top.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                KLog.e("name=="+dataList.get(position).getStock_name()+";pos=="+position);
                 Collections.swap(dataList,position,0);
                 DragAdapter.this.notifyDataSetChanged();
             }

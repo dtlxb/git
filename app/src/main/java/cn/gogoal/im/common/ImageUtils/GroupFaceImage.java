@@ -2,6 +2,7 @@ package cn.gogoal.im.common.ImageUtils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 import com.bumptech.glide.Glide;
@@ -10,6 +11,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.gogoal.im.R;
 import cn.gogoal.im.common.AsyncTaskUtil;
 
 /**
@@ -65,7 +67,9 @@ public class GroupFaceImage<T> {
         this.matchingListener = listener;
         final List<Bitmap> bitmaps = new ArrayList<>();
         if (null == imageUrls || imageUrls.isEmpty()) {
-            throw new NullPointerException("图像集合不能为空");
+//            throw new NullPointerException("图像集合不能为空");
+            listener.onSuccess(BitmapFactory.decodeResource(context.getResources(), R.mipmap.image_placeholder));
+            return;
         }
         if (imageUrls.size() > 9) {
             imageUrls = imageUrls.subList(0, 9);//最多只取前九张

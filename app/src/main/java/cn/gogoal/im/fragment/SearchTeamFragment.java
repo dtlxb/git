@@ -33,6 +33,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.RecommendBean;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.UIHelper;
@@ -98,6 +99,9 @@ public class SearchTeamFragment extends BaseFragment {
         new GGOKHTTP(map, GGOKHTTP.SEARCH_GROUP, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+
+                FileUtil.writeRequestResponse(responseInfo,"推荐群");
+
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     RecommendBean recommendBean = JSONObject.parseObject(responseInfo, RecommendBean.class);
                     if (null!=recommendBean.getData()){
@@ -166,7 +170,7 @@ public class SearchTeamFragment extends BaseFragment {
 
             UIHelper.setRippBg(holder.itemView);
             holder.setText(R.id.item_tv_search_result_name,data.getName()+
-                    String.format(getString(R.string.str_group_count),data.getM().size()));
+                    String.format(getString(R.string.str_group_count),null==data.getM()?0:data.getM().size()));
 
             holder.setText(R.id.item_tv_search_result_intro,TextUtils.isEmpty(data.getAttr().getIntro())?"暂无群简介":data.getAttr().getIntro());
 
