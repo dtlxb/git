@@ -20,6 +20,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -207,6 +208,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
      */
     public static void initRecycleView(RecyclerView recyclerView, Integer dividerId) {
         recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         LinearLayoutManager layoutManager = new LinearLayoutManager(MyApp.getAppContext());
         if (dividerId != null) {
             if (dividerId != 0x00) {

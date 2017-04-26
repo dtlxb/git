@@ -187,10 +187,11 @@ public class GGOKHTTP {
 
     /*
       * 自选股的删除
+      * group_id=0
       * params token=4967b285a82244d296b807a8fea9bc77
       * params stock_code=600001
       * */
-    public static final String MYSTOCK_DELETE = "v1/mystock/delete";
+    public static final String MYSTOCK_DELETE = "v1/mystock/delete_stocks";
 
     /**
      * 是否已收藏

@@ -64,6 +64,8 @@ public class MainActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
 
         KLog.e("width===" + AppDevice.getWidth(mContext) + ";height===" + AppDevice.getHeight(mContext));
+        KLog.e("DpValueWidth===" + AppDevice.px2dp(mContext,AppDevice.getWidth(mContext)) +
+                ";DpValueHeight===" + AppDevice.px2dp(mContext,AppDevice.getHeight(mContext)));
 
         if (BuildConfig.DEBUG) {
             FileUtil.writeRequestResponse("token_" + UserUtils.getUserName(), UserUtils.getToken());

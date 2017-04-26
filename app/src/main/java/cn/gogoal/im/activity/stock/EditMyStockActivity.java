@@ -1,8 +1,6 @@
 package cn.gogoal.im.activity.stock;
 
 import android.content.Context;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -21,7 +19,6 @@ import cn.gogoal.im.bean.stock.MyStockData;
 import cn.gogoal.im.common.drag.DefaultItemTouchHelpCallback;
 import cn.gogoal.im.common.drag.DefaultItemTouchHelper;
 import cn.gogoal.im.common.drag.DragAdapter;
-import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**
@@ -74,9 +71,8 @@ public class EditMyStockActivity extends BaseActivity {
                 KLog.e("剩下："+code.toString());
             }
         });
-        rvEditDrag.setLayoutManager(new LinearLayoutManager(mContext));
-        rvEditDrag.setItemAnimator(new DefaultItemAnimator());
-        rvEditDrag.addItemDecoration(new NormalItemDecoration(mContext));
+
+        BaseActivity.initRecycleView(rvEditDrag,0);
 
         myStockList.addAll((ArrayList<MyStockData>) getIntent().getSerializableExtra("my_stock_edit"));
 
