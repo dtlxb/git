@@ -39,6 +39,7 @@ import cn.gogoal.im.fragment.MessageFragment;
 import cn.gogoal.im.fragment.MineFragment;
 import cn.gogoal.im.fragment.MyStockFragment;
 import cn.gogoal.im.fragment.SocialContactFragment;
+import cn.gogoal.im.ui.Badge.Badge;
 import cn.gogoal.im.ui.Badge.BadgeView;
 
 public class MainActivity extends BaseActivity {
@@ -65,8 +66,10 @@ public class MainActivity extends BaseActivity {
     String[] mainTabArray;
 
     private BadgeView badge;
+
     @Override
     public void doBusiness(Context mContext) {
+
 
         KLog.e("width===" + AppDevice.getWidth(mContext) + ";height===" + AppDevice.getHeight(mContext));
         KLog.e("DpValueWidth===" + AppDevice.px2dp(mContext, AppDevice.getWidth(mContext)) +
@@ -75,6 +78,7 @@ public class MainActivity extends BaseActivity {
         if (BuildConfig.DEBUG) {
             FileUtil.writeRequestResponse(UserUtils.getToken(), "token_" + UserUtils.getUserName());
         }
+        badge = new BadgeView(MainActivity.this);
 
         MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
 
@@ -221,31 +225,44 @@ public class MainActivity extends BaseActivity {
 
     @Subscriber(tag = "correct_allmessage_count")
     public void setBadgeViewNum(BaseMessage<Integer> message) {
-        initBadge();
 
         int index = message.getOthers().get("index");
         int num = message.getOthers().get("number");
 
-        KLog.e("index=="+index+";num=="+num);
+        initBadge(num);
+
+        KLog.e("index==" + index + ";num==" + num);
 
         if (index >= 0 && index < mainTabArray.length) {
-            badge.bindTarget(tabMain.getTabAt(index).getCustomView());
+            if (num > 0) {
+                badge.bindTarget(tabMain.getTabAt(index).getCustomView());
+                badge.setBadgeNumber(num);
+            }else {
+                badge.hide(false);
+            }
         }
-        if (num == 0) {
-            badge.hide(false);
-        } else {
-            badge.setBadgeNumber(num);
-        };
     }
 
-    private void initBadge(){
-        badge=new BadgeView(MainActivity.this);
-
-        badge.setGravityOffset(0,0,true);
+    private void initBadge(int num) {
+        if (badge!=null && num==0){
+            badge.hide(false);
+            KLog.e("执行隐藏");
+            badge.setBadgeNumber(0);
+        }
+        badge.setGravityOffset(0, 0, true);
         badge.setShowShadow(false);
 
         badge.setBadgeGravity(Gravity.TOP | Gravity.END);
-        badge.setBadgeTextSize(10, true);
-        badge.setBadgePadding(4, true);
+        badge.setBadgeTextSize(12, true);
+        badge.setBadgePadding(5, true);
+
+        badge.setOnDragStateChangedListener(new Badge.OnDragStateChangedListener() {
+            @Override
+            public void onDragStateChanged(int dragState, Badge badge, View targetView) {
+                if (dragState == STATE_SUCCEED) {
+                    UIHelper.toast(MainActivity.this,"全部标记为已读");
+                }
+            }
+        });
     }
 }

@@ -394,13 +394,17 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     UIHelper.toastResponseError(getActivity(), responseInfo);
                 }
 
-                new android.os.Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.setRefreshing(false);
-                        stopAnimation();
-                    }
-                }, 1000);
+                try {
+                    new android.os.Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshLayout.setRefreshing(false);
+                            stopAnimation();
+                        }
+                    }, 1000);
+                }catch (Exception e){
+                    e.getMessage();
+                }
             }
 
             @Override
