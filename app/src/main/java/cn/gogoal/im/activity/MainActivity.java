@@ -225,16 +225,20 @@ public class MainActivity extends BaseActivity {
 
     @Subscriber(tag = "correct_allmessage_count")
     public void setBadgeViewNum(BaseMessage<Integer> message) {
+
         int index = message.getOthers().get("index");
         int num = message.getOthers().get("number");
+
+        KLog.e("index==="+index+";num=="+num);
+
+        if (num == 0) {
+            badgeView[index].setVisibility(View.GONE);
+        } else {
+            badgeView[index].setVisibility(View.VISIBLE);
+        } ;
 
         if (index >= 0 && index < mainTabArray.length) {
             badgeView[index].setText(num > 99 ? "99+" : String.valueOf(num));
         }
-        if (num == 0) {
-            badgeView[index].setVisibility(View.GONE)
-        } else {
-            badgeView[index].setVisibility(View.VISIBLE);
-        } ;
     }
 }
