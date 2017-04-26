@@ -59,11 +59,7 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
         ImageView imageView = (ImageView) view.findViewById(R.id.img_main_tab);
         switch (position) {
             case 0:
-//                    if (!TextUtils.isEmpty(url)){//底部按钮icon图片可以为后台提供(节假日纪念日活动)
-//                    ImageDisplay.loadNetImage(getActivity(),url,imageView);
-//                    }else {
                 imageView.setImageResource(R.drawable.selector_icon_main_tab_message);
-//                    }
                 break;
             case 1:
                 imageView.setImageResource(R.drawable.selector_icon_main_tab_my_stock);
