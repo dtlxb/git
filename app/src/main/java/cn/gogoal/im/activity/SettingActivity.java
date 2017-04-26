@@ -1,12 +1,16 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +24,8 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.UserDetailInfo;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.common.ImageUtils.GlideCacheUtil;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.SelectorButton;
 
@@ -100,9 +106,12 @@ public class SettingActivity extends BaseActivity {
                         break;
                     case 5:
                         //涨跌幅显示
+                        intent = new Intent(SettingActivity.this, RedGreenSettingActivity.class);
+                        startActivity(intent);
                         break;
                     case 6:
                         //清除缓存
+                        clearMyAppCache();
                         break;
                     case 8:
                         UIHelper.toast(getActivity(), "Item" + position);
@@ -116,6 +125,25 @@ public class SettingActivity extends BaseActivity {
         settingAdapter.addFooterView(selectorButton);
 
         iniSettingData();
+    }
+
+    private void clearMyAppCache() {
+        String rubbish = GlideCacheUtil.getInstance().getCacheSize(SettingActivity.this);
+        if (TextUtils.isEmpty(rubbish) || rubbish.equals("0.0Byte")) {
+            DialogHelp.getMessageDialog(SettingActivity.this, "已经没有缓存了", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).show();
+        } else {
+            DialogHelp.getConfirmDialog(SettingActivity.this, "总共有" + rubbish + "的缓存文件,确认要删除么？", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    GlideCacheUtil.getInstance().clearImageAllCache(SettingActivity.this);
+                }
+            }).show();
+        }
     }
 
     private void iniSettingData() {

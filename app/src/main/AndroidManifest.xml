@@ -183,8 +183,10 @@
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.SetStockRefreshActivity" />
         <activity android:name=".activity.KlineSettingActivity" />
-        <activity android:name=".activity.SingleEditActivity"/>
-        <activity android:name=".activity.ChangePhoneNumber"/>
+        <activity android:name=".activity.SingleEditActivity" />
+        <activity android:name=".activity.RedGreenSettingActivity" />
+        <activity android:name=".activity.ChangePhoneNumber" />
+        <activity android:name=".adapter.copy.StockDetailNewsListDataActivity" />
 
     </application>
 

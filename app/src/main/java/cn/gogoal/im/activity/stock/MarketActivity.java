@@ -35,7 +35,7 @@ import cn.gogoal.im.ui.view.XTitle;
  */
 public class MarketActivity extends BaseActivity {
 
-    private static int INTERVAL_TIME = 15000;//自动刷新间隔时间
+    private int INTERVAL_TIME = 15000;//自动刷新间隔时间
 
     @BindView(R.id.search_market)
     AppCompatTextView searchMarket;

@@ -38,7 +38,7 @@ public class CalendarUtils {
      * 指定格式返回当前系统时间
      */
     public static String getDataTime(String format) {
-        SimpleDateFormat df = new SimpleDateFormat(format);
+        SimpleDateFormat df = new SimpleDateFormat(format,Locale.CHINA);
         return df.format(new Date());
     }
 
@@ -195,6 +195,22 @@ public class CalendarUtils {
             }
         }
         return null;
+    }
+    /**
+     * 将标准表时间搓转成毫秒值
+     */
+    public static long parseString2Long(String dateString) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        try {
+            return format.parse(dateString).getTime();
+        } catch (ParseException e) {
+            try {
+                throw new Exception("错误的8位时间格式");
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        }
+        return 0;
     }
 
     /**

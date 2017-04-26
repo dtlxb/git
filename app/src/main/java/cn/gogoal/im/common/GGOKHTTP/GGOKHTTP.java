@@ -122,7 +122,7 @@ public class GGOKHTTP {
      * params token 用户令牌
      * params stock_codes 通过股票代码获取股票信息
      */
-    public static final String GET_MYSTOCKS = "v1/mystock/list";
+    public static final String GET_MYSTOCKS = "v1/mystock/mystock_list";
 
     /**
      * 自选股编辑
