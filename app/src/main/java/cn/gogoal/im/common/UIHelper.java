@@ -274,7 +274,7 @@ public class UIHelper {
         // 网络图片地址 png 格式
         // 0:发送到朋友 1:发送到朋友圈 2:收藏
         final int shareWhat = sharetType;
-        Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
+        Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.mipmap.login_gogoal);
         final Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 140, 140, true);
         if (imageUrl == null || imageUrl.length() == 0) {
             msg.thumbData = WXUtil.bmpToByteArray(thumbBmp, true);
