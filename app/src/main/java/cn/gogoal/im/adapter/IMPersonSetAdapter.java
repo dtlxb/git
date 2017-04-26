@@ -34,6 +34,9 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean, BaseViewHolde
         this.context = context;
         this.chatTytpe = chatTytpe;
         this.squareCreater = squareCreater;
+        if (squareCreater.equals("square_card")) {
+            this.squareCreater = String.valueOf(datas.get(0).getAccount_id());
+        }
     }
 
     @Override
