@@ -8,16 +8,16 @@ import java.util.Map;
  * @phone 18930640263
  */
 
-public class BaseMessage {
+public class BaseMessage<T> {
     private String code;
-    private Map<String, Object> others;
+    private Map<String, T> others;
     private Integer type;
     private String msg;
 
     public BaseMessage() {
     }
 
-    public BaseMessage(String code, Map<String, Object> others) {
+    public BaseMessage(String code, Map<String, T> others) {
         this.code = code;
         this.others = others;
     }
@@ -46,11 +46,11 @@ public class BaseMessage {
         this.code = code;
     }
 
-    public Map<String, Object> getOthers() {
+    public Map<String, T> getOthers() {
         return others;
     }
 
-    public void setOthers(Map<String, Object> others) {
+    public void setOthers(Map<String, T> others) {
         this.others = others;
     }
 
