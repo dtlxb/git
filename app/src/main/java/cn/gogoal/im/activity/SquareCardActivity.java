@@ -29,6 +29,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.IMPersonSetAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.RecommendBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
@@ -65,7 +66,8 @@ public class SquareCardActivity extends BaseActivity {
     private List<ContactBean> PersonContactBeens = new ArrayList<>();
     private String conversationId;
     private String squareName;
-    private List<String> groupMembers;
+    private String squareCreater;
+    private List<RecommendBean.DataBean.MBean> mBeanList;
     private boolean isIn;
 
     @Override
@@ -76,21 +78,20 @@ public class SquareCardActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         //初始化数据
+        mBeanList = new ArrayList<>();
         personlistRecycler.setLayoutManager(new GridLayoutManager(this, 6));
         conversationId = getIntent().getExtras().getString("conversation_id");
         squareName = getIntent().getExtras().getString("square_name");
-        groupMembers = new ArrayList<>();
-        //拉取数据
-        getGroupInfo();
-        if (null != getIntent().getExtras().getStringArrayList("group_members")) {
-            groupMembers.addAll(getIntent().getExtras().getStringArrayList("group_members"));
-            tvTeamSize.setText(groupMembers.size() + "人");
-            getChatGroup(groupMembers);
-        }
+        squareCreater = getIntent().getExtras().getString("square_creater");
+        mBeanList = (List<RecommendBean.DataBean.MBean>) getIntent().getExtras().getSerializable("square_members");
+        mPersonInfoAdapter = new IMPersonSetAdapter(1002, SquareCardActivity.this, R.layout.item_square_chat_set, squareCreater, contactBeens);
+        personlistRecycler.setAdapter(mPersonInfoAdapter);
         //初始化界面
         initTitle();
-        mPersonInfoAdapter = new IMPersonSetAdapter(1002, SquareCardActivity.this, R.layout.item_square_chat_set, "square_card", contactBeens);
-        personlistRecycler.setAdapter(mPersonInfoAdapter);
+        //群成员
+        getAllContacts(mBeanList);
+        //拉取数据
+        getGroupInfo();
     }
 
     @OnClick({R.id.look_more_person, R.id.jion_group})
@@ -99,7 +100,7 @@ public class SquareCardActivity extends BaseActivity {
             case R.id.look_more_person:
                 Intent intent = new Intent(getActivity(), IMGroupContactsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("square_creater", "square_card");
+                bundle.putString("square_creater", squareCreater);
                 bundle.putSerializable("chat_group_contacts", (Serializable) PersonContactBeens);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -121,6 +122,7 @@ public class SquareCardActivity extends BaseActivity {
     private void initTitle() {
         xTitle = setMyTitle("群名片", true);
         tvSquareName.setText(squareName);
+        tvTeamSize.setText(String.valueOf(mBeanList.size()));
         iv_square_head.setImageBitmap((Bitmap) getIntent().getParcelableExtra("bitmap_avatar"));
         /*XTitle.ImageAction imageAction = new XTitle.ImageAction(getResDrawable(R.mipmap.arrows_white)) {
             @Override
@@ -131,25 +133,11 @@ public class SquareCardActivity extends BaseActivity {
         xTitle.addAction(imageAction, 0);*/
     }
 
-    //拉取群组信息
-    public void getChatGroup(List<String> groupMembers) {
-        UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, groupMembers, conversationId, new UserUtils.getSquareInfo() {
-            @Override
-            public void squareGetSuccess(JSONObject object) {
-                getAllContacts(object.getJSONArray("accountList"));
-            }
-
-            @Override
-            public void squareGetFail(String error) {
-
-            }
-        });
-    }
-
-    private void getAllContacts(JSONArray aarray) {
-        for (int i = 0; i < aarray.size(); i++) {
-            JSONObject accountObject = aarray.getJSONObject(i);
-            contactBeens.add(addNomoralFuns(accountObject.getString("nickname"), accountObject.getInteger("friend_id"), accountObject.getString("avatar")));
+    private void getAllContacts(List<RecommendBean.DataBean.MBean> MBeanList) {
+        KLog.e(MBeanList);
+        for (int i = 0; i < MBeanList.size(); i++) {
+            RecommendBean.DataBean.MBean mBean = mBeanList.get(i);
+            contactBeens.add(addNomoralFuns(mBean.getNickname(), mBean.getAccount_id(), mBean.getAvatar(), mBean.getAccount_name()));
         }
         PersonContactBeens.addAll(contactBeens);
         contactBeens.clear();
@@ -157,12 +145,13 @@ public class SquareCardActivity extends BaseActivity {
         mPersonInfoAdapter.notifyDataSetChanged();
     }
 
-    private ContactBean<String> addNomoralFuns(String name, int friend_id, String avatar) {
+    private ContactBean<String> addNomoralFuns(String name, int friend_id, String avatar, String accountName) {
         ContactBean<String> nomoralbean = new ContactBean<>();
         nomoralbean.setNickname(name);
         nomoralbean.setFriend_id(friend_id);
         nomoralbean.setContactType(ContactBean.ContactType.PERSION_ITEM);
         nomoralbean.setAvatar(avatar);
+        nomoralbean.setAccount_name(accountName);
         return nomoralbean;
     }
 
@@ -244,7 +233,7 @@ public class SquareCardActivity extends BaseActivity {
         new GGOKHTTP(params, GGOKHTTP.APPLY_INTO_GROUP, ggHttpInterface).startGet();
     }
 
-    //排序将群主放置第一位
+    //取六个人
     public List<ContactBean> squareShowSix(List<ContactBean> contactBeanList) {
         List<ContactBean> newContactBeanList = new ArrayList<>();
         int msize;

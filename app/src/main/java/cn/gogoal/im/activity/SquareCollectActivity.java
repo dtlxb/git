@@ -145,7 +145,6 @@ public class SquareCollectActivity extends BaseActivity {
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
         params.put("conv_id", conversationId);
-        xLayout.setStatus(XLayout.Loading);
         KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
@@ -155,14 +154,12 @@ public class SquareCollectActivity extends BaseActivity {
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 KLog.e(result.get("code"));
                 if ((int) result.get("code") == 0) {
-                    xLayout.setStatus(XLayout.Success);
                     UIHelper.toast(SquareCollectActivity.this, "群已取消收藏!!!");
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                xLayout.setStatus(XLayout.Error);
                 KLog.json(msg);
             }
         };
@@ -190,6 +187,8 @@ public class SquareCollectActivity extends BaseActivity {
                     listAdapter.notifyDataSetChanged();
                     SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_groups_saved", newGroupArray);
                     groupsArray.addAll(newGroupArray);
+                } else {
+                    xLayout.setStatus(XLayout.Empty);
                 }
             }
 
@@ -274,7 +273,7 @@ public class SquareCollectActivity extends BaseActivity {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {
                 String groupFaceImageName = "_" + conversationId + ".png";
-                ImageUtils.cacheBitmapFile(getActivity(),mathingBitmap, "imagecache", groupFaceImageName);
+                ImageUtils.cacheBitmapFile(getActivity(), mathingBitmap, "imagecache", groupFaceImageName);
                 AppManager.getInstance().sendMessage("set_squarecollcet_avatar", positon);
             }
 

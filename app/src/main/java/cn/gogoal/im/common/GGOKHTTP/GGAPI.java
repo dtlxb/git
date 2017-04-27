@@ -1,5 +1,9 @@
 package cn.gogoal.im.common.GGOKHTTP;
 
+import android.util.Log;
+
+import com.alibaba.fastjson.JSON;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -89,6 +93,13 @@ public class GGAPI {
         SignHelper.codePayValue(paramsMap);
 
         try {
+
+            Map<String, String> map = new HashMap<>();
+
+            Log.e("TTTK", JSON.toJSONString(params));
+
+            Log.e("TTTKKK", SignHelper.makeSign("get", "baidu", params, "123"));
+
             return SignHelper.makeSign(requestMethod, url, paramsMap, appSecret);
         } catch (Exception var8) {
             var8.printStackTrace();

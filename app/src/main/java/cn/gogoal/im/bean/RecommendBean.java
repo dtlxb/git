@@ -1,5 +1,6 @@
 package cn.gogoal.im.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
  * phone 18930640263
  * description :${annotated}.
  */
-public class RecommendBean {
+public class RecommendBean implements Serializable {
 
     /**
      * code : 0
@@ -64,7 +65,7 @@ public class RecommendBean {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         /**
          * c : 348638
          * conv_id : 58ddadb65c497d0064aa2908
@@ -164,7 +165,7 @@ public class RecommendBean {
             }
         }
 
-        public static class MBean {
+        public static class MBean implements Serializable {
             /**
              * nickname : 寒平洛一
              * avatar : http://www.go-goal.com/sample/ACC/ftx/forum/library/NoPhoto.gif

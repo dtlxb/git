@@ -138,14 +138,15 @@ public class SignHelper {
         StringBuffer sb = new StringBuffer(s);
         StringBuffer sbRtn = new StringBuffer();
         Pattern p = Pattern.compile(rexp);
-
+        char temp;
+        String tempStr;
         for (int i = 0; i < sb.length(); i++) {
-            char temp = sb.charAt(i);
-            String tempStr = String.valueOf(temp);
+            temp = sb.charAt(i);
+            tempStr = String.valueOf(temp);
             Matcher m = p.matcher(tempStr);
             boolean result = m.find();
             if (!result) {
-                tempStr = hexString(tempStr);
+                tempStr = hexString(temp);
             }
             sbRtn.append(tempStr);
         }
@@ -158,18 +159,15 @@ public class SignHelper {
      * @param s
      * @return
      */
-    private static String hexString(String s) {
-        byte[] b = s.getBytes();
-        String retStr = "";
-
-        for (int i = 0; i < b.length; ++i) {
-            String hex = Integer.toHexString(b[i] & 255);
-            if (hex.length() == 1) {
-                hex = '0' + hex;
-            }
-
-            retStr = "%" + hex.toUpperCase();
+    private static String hexString(char s) {
+        String d = Integer.toBinaryString(s);
+        if (7 < d.length()) {
+            d = "10" + d.substring(d.length() - 6);
         }
-        return retStr;
+        String hex = Integer.toString(Integer.parseInt (d, 2), 16).toUpperCase();
+        if (hex.length() == 1) {
+            hex = "0" + hex;
+        }
+        return "%" + hex;
     }
 }

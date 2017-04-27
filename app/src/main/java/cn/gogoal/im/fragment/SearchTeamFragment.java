@@ -22,6 +22,7 @@ import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -146,10 +147,10 @@ public class SearchTeamFragment extends BaseFragment {
 
             final View itemView = holder.itemView;
 
-            if (data.getM()==null || data.getM().isEmpty()){
+            if (data.getM() == null || data.getM().isEmpty()) {
                 itemView.setClickable(false);
                 itemView.setEnabled(false);
-            }else {
+            } else {
                 itemView.setClickable(true);
                 itemView.setEnabled(true);
             }
@@ -194,8 +195,9 @@ public class SearchTeamFragment extends BaseFragment {
                                     Bundle bundle = new Bundle();
                                     bundle.putString("conversation_id", dataBeanList.get(position - 1).getConv_id());
                                     bundle.putString("square_name", dataBeanList.get(position - 1).getName());
-                                    bundle.putStringArrayList("group_members", (ArrayList<String>) groupMembers);
                                     bundle.putParcelable("bitmap_avatar", mathingBitmap);
+                                    bundle.putString("square_creater", dataBeanList.get(position - 1).getC());
+                                    bundle.putSerializable("square_members", (Serializable) dataBeanList.get(position - 1).getM());
                                     in.putExtras(bundle);
                                     startActivity(in);
                                 }
