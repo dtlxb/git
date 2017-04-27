@@ -2,7 +2,10 @@ package cn.gogoal.im.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +24,8 @@ import cn.gogoal.im.bean.SocialLiveData;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.UserUtils;
 
 /**
  * Created by dave.
@@ -51,6 +56,32 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
 
             ImageView imgPcCover = holder.getView(R.id.imgPcCover);
             ImageDisplay.loadNetImage(mContext, data.getLive_large_img(), imgPcCover);
+
+            //预约
+            final CheckBox btnPcOrder = holder.getView(R.id.btnPcOrder);
+            if (data.getOrder_status() == 0) {
+                btnPcOrder.setChecked(false);
+                btnPcOrder.setText("预约");
+                btnPcOrder.setTextColor(ContextCompat.getColor(mContext, R.color.social_order_text));
+                btnPcOrder.setBackgroundResource(R.drawable.bg_social_live_order_red);
+            } else {
+                btnPcOrder.setChecked(true);
+                btnPcOrder.setText("已预约");
+                btnPcOrder.setTextColor(ContextCompat.getColor(mContext, R.color.textColor_666666));
+                btnPcOrder.setBackgroundResource(R.drawable.bg_social_live_order_black);
+            }
+
+            btnPcOrder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean check) {
+                    if (check) {
+                        setOrderLive(data.getLive_id(), btnPcOrder);
+                    } else {
+
+                    }
+                }
+            });
+
             //直播状态
             if (data.getLive_status() == 1) {
                 //直播中
@@ -81,8 +112,9 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
             holder.setText(R.id.textPcTitle, data.getVideo_name());
             ImageView imgPcIcon = holder.getView(R.id.imgPcIcon);
             ImageDisplay.loadCircleNetImage(mContext, data.getAnchor().getFace_url(), imgPcIcon);
-            holder.setText(R.id.textCompanTitle, data.getAnchor().getOrganization() + " | "
-                    + data.getAnchor().getAnchor_position());
+            holder.setText(R.id.textCompanTitle, data.getAnchor().getOrganization() == null ? "--"
+                    : data.getAnchor().getOrganization() + " | " + data.getAnchor().getAnchor_position()
+                    == null ? "--" : data.getAnchor().getAnchor_position());
 
         } else {
             //phone
@@ -94,11 +126,38 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
             ImageView imgAnchorAvatar = holder.getView(R.id.imgAnchorAvatar);
             ImageDisplay.loadCircleNetImage(mContext, data.getAnchor().getFace_url(), imgAnchorAvatar);
             holder.setText(R.id.textAnchorName, data.getAnchor().getAnchor_name());
-            holder.setText(R.id.textAnchorTitle, data.getAnchor().getOrganization() + " | "
-                    + data.getAnchor().getAnchor_position());
+            holder.setText(R.id.textAnchorTitle, data.getAnchor().getOrganization() == null ? "--"
+                    : data.getAnchor().getOrganization() + " | " + data.getAnchor().getAnchor_position()
+                    == null ? "--" : data.getAnchor().getAnchor_position());
+
+            //预约
+            final CheckBox btnPhoneOrder = holder.getView(R.id.btnPhoneOrder);
+            if (data.getOrder_status() == 0) {
+                btnPhoneOrder.setChecked(false);
+                btnPhoneOrder.setText("预约");
+                btnPhoneOrder.setTextColor(ContextCompat.getColor(mContext, R.color.social_order_text));
+                btnPhoneOrder.setBackgroundResource(R.drawable.bg_social_live_order_red);
+            } else {
+                btnPhoneOrder.setChecked(true);
+                btnPhoneOrder.setText("已预约");
+                btnPhoneOrder.setTextColor(ContextCompat.getColor(mContext, R.color.textColor_666666));
+                btnPhoneOrder.setBackgroundResource(R.drawable.bg_social_live_order_black);
+            }
+
+            btnPhoneOrder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean check) {
+                    if (check) {
+                        setOrderLive(data.getLive_id(), btnPhoneOrder);
+                    } else {
+
+                    }
+                }
+            });
 
             ImageView imgPhoneCover = holder.getView(R.id.imgPhoneCover);
             ImageDisplay.loadNetImage(mContext, data.getLive_large_img(), imgPhoneCover);
+
             //直播状态
             if (data.getLive_status() == 1) {
                 //直播中
@@ -162,5 +221,42 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_ONLINE_COUNT, ggHttpInterface).startGet();
+    }
+
+    /*
+    * 预约
+    * */
+    private void setOrderLive(String video_id, final CheckBox btnOrder) {
+
+        Map<String, String> param = new HashMap<>();
+        param.put("token", UserUtils.getToken());
+        param.put("video_id", video_id);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONObject data = object.getJSONObject("data");
+                    if (data.getIntValue("code") == 100) {
+                        btnOrder.setChecked(true);
+                        btnOrder.setText("已预约");
+                        btnOrder.setTextColor(ContextCompat.getColor(mContext, R.color.textColor_666666));
+                        btnOrder.setBackgroundResource(R.drawable.bg_social_live_order_black);
+                    } else {
+                        UIHelper.toast(mContext, "预约失败");
+                    }
+                } else {
+                    UIHelper.toast(mContext, "预约失败");
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(mContext, "预约失败");
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.ORDER_LIVE, ggHttpInterface).startGet();
     }
 }
