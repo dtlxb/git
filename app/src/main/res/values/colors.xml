@@ -31,6 +31,7 @@
     <!--直播涉及颜色-->
     <color name="live_together">#3381e3</color>
     <color name="market_interpre">#888888</color>
+    <color name="message_tag_red">#f43531</color>
     <color name="online_number">#f44744</color>
     <color name="live_trailer">#5b5b5b</color>
     <color name="count_down">#FFA200</color>

@@ -23,13 +23,14 @@
             android:id="@+id/count_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginRight="2dp"
             android:layout_gravity="top|right"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="1dp"
             android:background="@drawable/shape_message_tag"
             android:gravity="center"
             android:textColor="@android:color/white"
-            android:textSize="10sp" />
+            android:textSize="12sp"
+            android:visibility="gone" />
 
     </FrameLayout>
 
@@ -49,7 +50,6 @@
             android:layout_marginTop="2dp"
             android:ellipsize="end"
             android:lines="1"
-            android:text="JR屎密斯JR屎密斯JR屎密斯JR屎密斯JR屎密斯JR屎密斯"
             android:textColor="@color/textColor_333333"
             android:textSize="16sp" />
 
@@ -59,9 +59,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="2dp"
+            android:layout_marginEnd="35dp"
             android:ellipsize="end"
             android:lines="1"
-            android:text="你晚饭还吃不吃了，不吃我吃了"
             android:textColor="@color/relater_play_count"
             android:textSize="14sp" />
 
@@ -72,7 +72,6 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="2dp"
-            android:text="今天下午"
             android:textColor="@color/relater_play_count"
             android:textSize="12sp" />
 

@@ -435,7 +435,7 @@ public class MessageFragment extends BaseFragment {
                     sb.setSpan(fcs, 0, 7, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                     messageTv.setText(sb);
                 } else {
-                    messageTv.setText(squareMessageFrom.endsWith("") ? message : squareMessageFrom + ":" +
+                    messageTv.setText(squareMessageFrom.equals("") ? message : squareMessageFrom + ": " +
                             message);
                 }
             } else {

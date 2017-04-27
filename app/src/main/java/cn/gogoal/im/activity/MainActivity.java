@@ -237,18 +237,19 @@ public class MainActivity extends BaseActivity {
             if (num > 0) {
                 badge.bindTarget(tabMain.getTabAt(index).getCustomView());
                 badge.setBadgeNumber(num);
-            }else {
+            } else {
                 badge.hide(false);
             }
         }
     }
 
     private void initBadge(int num) {
-        if (badge!=null && num==0){
+        if (badge != null && num == 0) {
             badge.hide(false);
             KLog.e("执行隐藏");
             badge.setBadgeNumber(0);
         }
+        badge.setBadgeBackgroundColor(getResColor(R.color.message_tag_red));
         badge.setGravityOffset(0, 0, true);
         badge.setShowShadow(false);
 
@@ -260,7 +261,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onDragStateChanged(int dragState, Badge badge, View targetView) {
                 if (dragState == STATE_SUCCEED) {
-                    UIHelper.toast(MainActivity.this,"全部标记为已读");
+                    UIHelper.toast(MainActivity.this, "全部标记为已读");
                 }
             }
         });

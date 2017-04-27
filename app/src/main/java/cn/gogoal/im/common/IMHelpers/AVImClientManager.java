@@ -82,7 +82,7 @@ public class AVImClientManager {
     // 查找聊天室
     public void findConversationById(String conversationId, final ChatJoinManager mChatJoinManager) {
 
-        if (avimClient==null){
+        if (avimClient == null) {
             return;
         }
         AVIMConversationQuery conversationQuery = avimClient.getQuery();
@@ -100,12 +100,12 @@ public class AVImClientManager {
                         }
                     } else {
                         if (null != mChatJoinManager) {
-                            mChatJoinManager.joinFail("查找聊天对象失败2===");
+                            mChatJoinManager.joinFail("服务器连接中...");
                         }
                     }
                 } else {
                     if (null != mChatJoinManager) {
-                        mChatJoinManager.joinFail("查找聊天对象失败3===" + e.getMessage());
+                        mChatJoinManager.joinFail("服务器连接中...");
                     }
                 }
             }
