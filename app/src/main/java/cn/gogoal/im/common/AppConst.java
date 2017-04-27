@@ -93,7 +93,8 @@ public class AppConst {
      */
     //开发环境
 //    public static final String WEB_URL = "http://192.168.72.155:9000/#";
-    public static final String WEB_URL = "http://192.168.52.156:9000/#";
+//    public static final String WEB_URL = "http://192.168.52.156:9000/#";
+    public static final String WEB_URL = "http://ggmobile.sandbox.go-goal.cn/#";
     //预正式环境
 //    public static final String WEB_URL = "http://192.168.52.156:9000/#";
     //正式环境

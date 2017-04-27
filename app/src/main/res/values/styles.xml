@@ -221,5 +221,8 @@
         <item name="android:backgroundDimEnabled">false</item><!-- 模糊 -->
     </style>
 
+    <style name="LiveClose" parent="">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 
 </resources>

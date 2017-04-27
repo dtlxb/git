@@ -38,6 +38,9 @@
     <color name="relater_play_count">#9d9d9d</color>
     <color name="player_info">#40000000</color>
     <color name="black_transprent_30">#4d000000</color>
+    <color name="black_transprent_80">#cc000000</color>
+    <color name="white_alpha_30">#4dffffff</color>
+    <color name="live_close_title_color">#FFB5A2F1</color>
 
     <color name="relater_playback">#000000</color>
 
@@ -54,6 +57,8 @@
     <color name="live_chat_level3">#31b48d</color>
     <color name="complete_text">#ee2626</color>
     <color name="live_start_text">#3381e3</color>
+    <color name="social_order_border">#de5150</color>
+    <color name="social_order_text">#e15152</color>
 
     <!--封装通用底部列表弹窗颜色-->
     <color name="item_press">#D9D9D9</color>
