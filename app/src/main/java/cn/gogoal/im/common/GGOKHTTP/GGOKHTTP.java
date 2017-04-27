@@ -588,6 +588,14 @@ public class GGOKHTTP {
      */
     public static final String BIND_MOBILE = "v1/ggm_im/bind_mobile";
 
+    /**
+     * 预约直播
+     * @prama token
+     * @prama sourece 4(移动版)
+     * @prama video_id 直播的id（live_id）
+     */
+    public static final String ORDER_LIVE = "v1/video_studio/order_live";
+
 //--------------------------------------------------------------------------------------------------
 
     /**

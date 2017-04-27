@@ -30,7 +30,7 @@ public class SocialLiveData {
     private SocialLiveDataAnchor anchor;
     private String anchor_name;
     private String face_url;
-    private String order_status;
+    private int order_status;
     private Long launch_time;
     private String live_id;
     private String is_anchor;
@@ -223,11 +223,11 @@ public class SocialLiveData {
         this.face_url = face_url;
     }
 
-    public String getOrder_status() {
+    public int getOrder_status() {
         return order_status;
     }
 
-    public void setOrder_status(String order_status) {
+    public void setOrder_status(int order_status) {
         this.order_status = order_status;
     }
 

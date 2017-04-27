@@ -69,6 +69,7 @@ import cn.gogoal.im.common.linkUtils.LinkConst;
 import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 import cn.gogoal.im.common.linkUtils.VideoChatStatus;
 import cn.gogoal.im.fragment.WatchBottomFragment;
+import cn.gogoal.im.ui.dialog.LiveCloseDialog;
 
 /*
 * 观看直播页面
@@ -179,6 +180,7 @@ public class WatchLiveActivity extends BaseActivity {
 
     private AlertDialog mFeedbackChooseDialog;
     private AlertDialog mChatCloseConfirmDialog;
+    private LiveCloseDialog mLiveCloseDialog = null;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -240,6 +242,39 @@ public class WatchLiveActivity extends BaseActivity {
     }
 
     /**
+     * 权限检查（适配6.0以上手机）
+     */
+    private void permissionCheck() {
+        int permissionCheck = PackageManager.PERMISSION_GRANTED;
+        for (String permission : permissionManifest) {
+            if (PermissionChecker.checkSelfPermission(this, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                permissionCheck = PackageManager.PERMISSION_DENIED;
+            }
+        }
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, permissionManifest, PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                for (int i = 0; i < permissions.length; i++) {
+                    if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                        int toastTip = noPermissionTip[i];
+                        if (toastTip != 0) {
+                            UIHelper.toast(getContext(), toastTip);
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    /**
      * 加入聊天室
      */
     private void joinSquare(AVIMConversation conversation) {
@@ -280,6 +315,9 @@ public class WatchLiveActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 聊天适配器
+     */
     class LiveChatAdapter extends CommonAdapter<AVIMMessage, BaseViewHolder> {
 
         public LiveChatAdapter(int layoutId, List<AVIMMessage> datas) {
@@ -326,38 +364,8 @@ public class WatchLiveActivity extends BaseActivity {
     }
 
     /**
-     * 权限检查（适配6.0以上手机）
+     * 底部按钮点击
      */
-    private void permissionCheck() {
-        int permissionCheck = PackageManager.PERMISSION_GRANTED;
-        for (String permission : permissionManifest) {
-            if (PermissionChecker.checkSelfPermission(this, permission)
-                    != PackageManager.PERMISSION_GRANTED) {
-                permissionCheck = PackageManager.PERMISSION_DENIED;
-            }
-        }
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, permissionManifest, PERMISSION_REQUEST_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case PERMISSION_REQUEST_CODE:
-                for (int i = 0; i < permissions.length; i++) {
-                    if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                        int toastTip = noPermissionTip[i];
-                        if (toastTip != 0) {
-                            UIHelper.toast(getContext(), toastTip);
-                        }
-                    }
-                }
-                break;
-        }
-    }
-
     private WatchBottomFragment.RecorderUIClickListener mUIClickListener = new WatchBottomFragment.RecorderUIClickListener() {
 
         @Override
@@ -1044,7 +1052,7 @@ public class WatchLiveActivity extends BaseActivity {
 
             //lctype==12关闭
             JSONObject contentObject = JSON.parseObject(message.getContent());
-            String _lctype = contentObject.getString("_lctype");
+            int _lctype = contentObject.getIntValue("_lctype");
             int chatType = (int) conversation.getAttribute("chat_type");
 
             KLog.e(message.getContent());
@@ -1054,6 +1062,13 @@ public class WatchLiveActivity extends BaseActivity {
                 messageList.add(message);
                 mLiveChatAdapter.notifyDataSetChanged();
                 recyler_chat.smoothScrollToPosition(messageList.size());
+
+                //主播关闭直播了
+                if (_lctype == 12) {
+                    KLog.e("结束直播");
+                    showLiveCloseUI();
+                }
+
             } else if (chatType == 1008) {
                 //连麦动作处理
                 JSONObject content = JSONObject.parseObject(message.getContent());
@@ -1230,6 +1245,23 @@ public class WatchLiveActivity extends BaseActivity {
 
         DialogHelp.getMessageDialog(getActivity(), getString(R.string.close_video_call_notify_message))
                 .setCancelable(false).setTitle(R.string.close_video_call_title).show();
+    }
+
+    /**
+     * 显示主播结束直播
+     */
+    private void showLiveCloseUI() {
+        if (mChatCloseConfirmDialog != null && mChatCloseConfirmDialog.isShowing()) {
+            mChatCloseConfirmDialog.dismiss();
+        }
+
+        if (mLiveCloseDialog == null) {
+            mLiveCloseDialog = LiveCloseDialog.newInstance(getString(R.string.live_finished));
+        }
+
+        if (!mLiveCloseDialog.isShow()) {
+            mLiveCloseDialog.show(getSupportFragmentManager(), LiveCloseDialog.TAG);
+        }
     }
 
     private WatchLiveActivity getContext() {
