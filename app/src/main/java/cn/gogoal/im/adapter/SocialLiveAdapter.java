@@ -59,38 +59,20 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
 
             //预约
             final CheckBox btnPcOrder = holder.getView(R.id.btnPcOrder);
-            if (data.getOrder_status() == 0) {
-                btnPcOrder.setChecked(false);
-                btnPcOrder.setText("预约");
-                btnPcOrder.setTextColor(ContextCompat.getColor(mContext, R.color.social_order_text));
-                btnPcOrder.setBackgroundResource(R.drawable.bg_social_live_order_red);
-            } else {
-                btnPcOrder.setChecked(true);
-                btnPcOrder.setText("已预约");
-                btnPcOrder.setTextColor(ContextCompat.getColor(mContext, R.color.textColor_666666));
-                btnPcOrder.setBackgroundResource(R.drawable.bg_social_live_order_black);
-            }
-
-            btnPcOrder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean check) {
-                    if (check) {
-                        setOrderLive(data.getLive_id(), btnPcOrder);
-                    } else {
-
-                    }
-                }
-            });
 
             //直播状态
             if (data.getLive_status() == 1) {
                 //直播中
+                btnPcOrder.setVisibility(View.GONE);
+
                 holder.setText(R.id.textPcStatus, "直播中 " + live_time_start);
                 holder.setBackgroundRes(R.id.textPcStatus, R.drawable.shape_social_live_status_red);
                 holder.setImageResource(R.id.imgPcTime, R.mipmap.social_online_num);
                 getOnlineCount(data.getRoom_id(), (TextView) holder.getView(R.id.textPcTime));
             } else {
                 //预告
+                btnPcOrder.setVisibility(View.VISIBLE);
+
                 holder.setBackgroundRes(R.id.textPcStatus, R.drawable.shape_social_live_status_yellow);
                 holder.setImageResource(R.id.imgPcTime, R.mipmap.social_time);
 
@@ -104,9 +86,36 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
                     }
                 } else {
                     //准备中
+                    btnPcOrder.setVisibility(View.GONE);
+
                     holder.setText(R.id.textPcStatus, "准备中 " + live_time_start);
                     holder.setText(R.id.textPcTime, "即将开始");
                 }
+
+                if (data.getOrder_status() == 0) {
+                    btnPcOrder.setChecked(false);
+                    btnPcOrder.setText("预约");
+                    btnPcOrder.setTextColor(ContextCompat.getColor(mContext, R.color.social_order_text));
+                    btnPcOrder.setBackgroundResource(R.drawable.bg_social_live_order_red);
+                } else if (data.getOrder_status() == 1) {
+                    btnPcOrder.setChecked(true);
+                    btnPcOrder.setText("已预约");
+                    btnPcOrder.setTextColor(ContextCompat.getColor(mContext, R.color.textColor_666666));
+                    btnPcOrder.setBackgroundResource(R.drawable.bg_social_live_order_black);
+                } else {
+                    btnPcOrder.setVisibility(View.GONE);
+                }
+
+                btnPcOrder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean check) {
+                        if (check) {
+                            setOrderLive(data.getLive_id(), btnPcOrder);
+                        } else {
+
+                        }
+                    }
+                });
             }
 
             holder.setText(R.id.textPcTitle, data.getVideo_name());
@@ -132,28 +141,6 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
 
             //预约
             final CheckBox btnPhoneOrder = holder.getView(R.id.btnPhoneOrder);
-            if (data.getOrder_status() == 0) {
-                btnPhoneOrder.setChecked(false);
-                btnPhoneOrder.setText("预约");
-                btnPhoneOrder.setTextColor(ContextCompat.getColor(mContext, R.color.social_order_text));
-                btnPhoneOrder.setBackgroundResource(R.drawable.bg_social_live_order_red);
-            } else {
-                btnPhoneOrder.setChecked(true);
-                btnPhoneOrder.setText("已预约");
-                btnPhoneOrder.setTextColor(ContextCompat.getColor(mContext, R.color.textColor_666666));
-                btnPhoneOrder.setBackgroundResource(R.drawable.bg_social_live_order_black);
-            }
-
-            btnPhoneOrder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean check) {
-                    if (check) {
-                        setOrderLive(data.getLive_id(), btnPhoneOrder);
-                    } else {
-
-                    }
-                }
-            });
 
             ImageView imgPhoneCover = holder.getView(R.id.imgPhoneCover);
             ImageDisplay.loadNetImage(mContext, data.getLive_large_img(), imgPhoneCover);
@@ -161,12 +148,16 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
             //直播状态
             if (data.getLive_status() == 1) {
                 //直播中
+                btnPhoneOrder.setVisibility(View.GONE);
+
                 holder.setText(R.id.textPhoneStatus, "直播中 " + live_time_start);
                 holder.setBackgroundRes(R.id.textPhoneStatus, R.drawable.shape_social_live_status_red);
                 holder.setImageResource(R.id.imgPhoneTime, R.mipmap.social_online_num);
                 getOnlineCount(data.getRoom_id(), (TextView) holder.getView(R.id.textPhoneTime));
             } else {
                 //预告
+                btnPhoneOrder.setVisibility(View.VISIBLE);
+
                 holder.setBackgroundRes(R.id.textPhoneStatus, R.drawable.shape_social_live_status_yellow);
                 holder.setImageResource(R.id.imgPhoneTime, R.mipmap.social_time);
 
@@ -180,9 +171,36 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
                     }
                 } else {
                     //准备中
+                    btnPhoneOrder.setVisibility(View.GONE);
+
                     holder.setText(R.id.textPhoneStatus, "准备中 " + live_time_start);
                     holder.setText(R.id.textPhoneTime, "即将开始");
                 }
+
+                if (data.getOrder_status() == 0) {
+                    btnPhoneOrder.setChecked(false);
+                    btnPhoneOrder.setText("预约");
+                    btnPhoneOrder.setTextColor(ContextCompat.getColor(mContext, R.color.social_order_text));
+                    btnPhoneOrder.setBackgroundResource(R.drawable.bg_social_live_order_red);
+                } else if (data.getOrder_status() == 1) {
+                    btnPhoneOrder.setChecked(true);
+                    btnPhoneOrder.setText("已预约");
+                    btnPhoneOrder.setTextColor(ContextCompat.getColor(mContext, R.color.textColor_666666));
+                    btnPhoneOrder.setBackgroundResource(R.drawable.bg_social_live_order_black);
+                } else {
+                    btnPhoneOrder.setVisibility(View.GONE);
+                }
+
+                btnPhoneOrder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean check) {
+                        if (check) {
+                            setOrderLive(data.getLive_id(), btnPhoneOrder);
+                        } else {
+
+                        }
+                    }
+                });
             }
             holder.setText(R.id.textPhoneTitle, data.getVideo_name());
         }

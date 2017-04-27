@@ -563,7 +563,7 @@ public class PlayerActivity extends BaseActivity {
             KLog.json("onPrepared");
             if (mPlayer != null) {
                 //VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING  |  VIDEO_SCALING_MODE_SCALE_TO_FIT
-                mPlayer.setVideoScalingMode(MediaPlayer.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
+                mPlayer.setVideoScalingMode(MediaPlayer.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT);
                 update_total_duration(mPlayer.getDuration());
                 mTimerHandler.postDelayed(mRunnable, 1000);
                 //show_progress_ui(true);
