@@ -16,7 +16,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -117,9 +116,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     //大盘缩略viewpager适配器
     private MyStockPagerAdapter bannerAdapter;
 
-    @BindView(R.id.layout_title)
-    ViewGroup layoutTitle;
-
     //自选股集合
     private ArrayList<MyStockData> myStockDatas = new ArrayList<>();
     private MyStockAdapter myStockAdapter;
@@ -151,6 +147,22 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         INTERVAL_TIME = SPTools.getLong("interval_time", 15000);
 
         initRecyclerView(mContext);
+
+        rvMystockMarket.addOnScrollListener(new RecyclerView.OnScrollListener(){
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                int topRowVerticalPosition =
+                        (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
+                refreshLayout.setEnabled(topRowVerticalPosition >= 0);
+
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+
         initMarketBanner();
         initSortTitle(mContext);
 
@@ -382,13 +394,17 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     UIHelper.toastResponseError(getActivity(), responseInfo);
                 }
 
-                new android.os.Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.setRefreshing(false);
-                        stopAnimation();
-                    }
-                }, 1000);
+                try {
+                    new android.os.Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshLayout.setRefreshing(false);
+                            stopAnimation();
+                        }
+                    }, 1000);
+                }catch (Exception e){
+                    e.getMessage();
+                }
             }
 
             @Override

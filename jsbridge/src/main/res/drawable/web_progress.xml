@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    <item android:id="@android:id/background">
-        <shape>
-            <size android:height="2dp"/>
-
-            <solid android:color="#ffffff" />
-        </shape>
-    </item>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@android:id/progress">
+        <clip>
             <shape>
-                <size android:height="2dp"/>
-                <solid android:color="@color/colorProgress" />
+                <corners android:radius="5dip" />
+                <gradient
+                    android:endColor="@color/colorProgress"
+                    android:startColor="@color/colorProgress" />
             </shape>
+        </clip>
     </item>
 
 </layer-list>

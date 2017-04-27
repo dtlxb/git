@@ -31,6 +31,11 @@ public class MyStockPagerAdapter extends PagerAdapter {
     }
 
     @Override
+    public int getItemPosition(Object object) {
+        return PagerAdapter.POSITION_NONE;
+    }
+
+    @Override
     public int getCount() {
         return datas == null ? 0 : datas.size();
     }
@@ -80,4 +85,5 @@ public class MyStockPagerAdapter extends PagerAdapter {
         });
         return view;
     }
+
 }

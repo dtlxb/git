@@ -300,7 +300,7 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
     TabLayout tabLayoutNews;
     @BindView(R.id.vp_news_)
     ViewPager viewPagerNews;
-    private String[] newTitles = {"新闻", "公告", "研报", "看点"};
+    private String[] newTitles = {"新闻", "公告", "研报"};
     private List<TimeDetialData> timeDetialLists;
     private RotateAnimation rotateAnimation;
 
@@ -665,110 +665,6 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
         }
 
     }
-
-//    private void initChartsData(String stockCode) {
-//        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-//            @Override
-//            public void onSuccess(String responseInfo) {
-//                JSONObject result = JSONObject.parseObject(responseInfo);
-//                Integer code = result.getInteger("code");
-//                if (code == 0) {
-//                    JSONObject data = result.getJSONObject("data");
-//                    handleChartData(data);
-//                } else {
-//                    chars_progressbar.setVisibility(View.GONE);
-//                    charts_title.setVisibility(View.GONE);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(String msg) {
-//                chars_progressbar.setVisibility(View.GONE);
-//                charts_title.setVisibility(View.GONE);
-//            }
-//        };
-//        Map<String, String> params = new HashMap<String, String>();
-//        params.put("stock_code", stockCode);
-//        new GGOKHTTP(params, GGOKHTTP.GET_CHARTS_DATA, ggHttpInterface).startGet();
-//    }
-
-//    private void handleChartData(JSONObject data) {
-//
-//        pie_data.clear();
-//        bar_eps_list.clear();
-//        bar_peg_list.clear();
-//        bar_roe_list.clear();
-//        if (data.getJSONArray("pie") != null) {
-//            pie_data = data.getJSONArray("pie");
-//        }
-//        JSONArray bar_data = data.getJSONArray("bar");
-//
-//        if (bar_data != null) {
-//            for (int i = 0; i < bar_data.size(); i++) {
-//                JSONObject one = bar_data.getJSONObject(i);
-//                Map<String, String> map_eps = new HashMap<String, String>();
-//                map_eps.put("stock_name", one.getString("stock_name"));
-//                map_eps.put("stock_code", one.getString("stock_code"));
-//                map_eps.put("data", one.getString("eps"));
-//                map_eps.put("year", one.getString("year"));
-//                map_eps.put("type", "元");
-//                map_eps.put("profit_type", one.getString("profit_type"));
-//                bar_eps_list.add(map_eps);
-//
-//                Map<String, String> map_peg = new HashMap<String, String>();
-//                map_peg.put("stock_name", one.getString("stock_name"));
-//                map_peg.put("stock_code", one.getString("stock_code"));
-//                map_peg.put("data", one.getString("pe"));
-//                map_peg.put("year", one.getString("year"));
-//                map_peg.put("type", "倍");
-//                map_peg.put("profit_type", one.getString("profit_type"));
-//                bar_peg_list.add(map_peg);
-//
-//                Map<String, String> map_roe = new HashMap<String, String>();
-//                map_roe.put("stock_name", one.getString("stock_name"));
-//                map_roe.put("stock_code", one.getString("stock_code"));
-//                map_roe.put("data", one.getString("roe"));
-//                map_roe.put("year", one.getString("year"));
-//                map_roe.put("type", "%");
-//                map_roe.put("profit_type", one.getString("profit_type"));
-//                bar_roe_list.add(map_roe);
-//            }
-//        } else {
-//            chars_progressbar.setVisibility(View.GONE);
-//            charts_title.setVisibility(View.GONE);
-//        }
-//
-//        if (bar_eps_list.size() > 0 && bar_eps_list != null) {
-//            chars_progressbar.setVisibility(View.GONE);
-//            mBarChart.setVisibility(View.VISIBLE);
-//
-//            charts_title.setVisibility(View.GONE);
-//            stock_nodata.setVisibility(View.GONE);
-//            charts_title.setVisibility(View.VISIBLE);
-//
-//            tv_eps.setTextColor(getResColor(R.color.red));
-//            tv_line_eps.setVisibility(View.VISIBLE);
-//            tv_pe.setTextColor(getResColor(R.color.text_color_tab));
-//            tv_line_pe.setVisibility(View.GONE);
-//            tv_return_equity.setTextColor(getResColor(R.color.text_color_tab));
-//            tv_line_return_equity.setVisibility(View.GONE);
-//            tv_rating_agencies.setTextColor(getResColor(R.color.text_color_tab));
-//            tv_line_rating_agencies.setVisibility(View.GONE);
-//
-//            if (dpi <= AppDevice.DPI480P) {
-//                mBarChart.setIsSw480P(true);
-//            } else if (dpi <= AppDevice.DPI720P) {
-//                mBarChart.setIsSw720P(true);
-//            } else if (dpi <= AppDevice.DPI1080P) {
-//                mBarChart.setIsSw1080P(true);
-//            }
-//            mPieView.setVisibility(View.GONE);
-//            mBarChart.setData(bar_eps_list, false);
-//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//            String date = sdf.format(new Date());
-//            charts_date.setText("统计截止" + date);
-//        }
-//    }
 
     private void refreshChart(int item) {
         switch (item) {
@@ -1588,7 +1484,7 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
                 showPopupWindow();
                 break;
             case R.id.stock_detail_choose:
-                addOptionalShare();
+                addOptionalShare();//TODO 更换新的删除自选股接口
                 break;
         }
     }

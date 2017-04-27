@@ -1,12 +1,7 @@
-package cn.gogoal.im.ui.badgeview;
+package cn.gogoal.im.ui.Badge;
 
 import android.graphics.PointF;
 import android.view.View;
-
-/**
- * @author chqiu
- *         Email:qstumn@163.com
- */
 
 public interface Badge {
 

@@ -28,7 +28,7 @@
 
     </LinearLayout>
 
-    <hply.com.niugu.autofixtext.AutofitTextView
+   <!-- <hply.com.niugu.autofixtext.AutofitTextView
         android:id="@+id/count_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,6 +41,6 @@
         android:textColor="@android:color/white"
         android:textSize="12sp"
         app:minTextSize="8dp"
-        app:sizeToFit="true"/>
+        app:sizeToFit="true"/>-->
 
 </FrameLayout>

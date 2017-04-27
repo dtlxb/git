@@ -120,6 +120,7 @@ public class EditMyStockActivity extends BaseActivity {
                 notifCountText(0);
             }
         });
+
     }
 
     private void notifCountText(int selectedCount) {

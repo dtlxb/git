@@ -439,7 +439,7 @@ public class ChatFragment extends BaseFragment {
                     if (chatType == 1001) {
                         if (null != contactBean) {
                             imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
-                                    "0", null != contactBean.getNickname() ? contactBean.getNickname() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), message);
+                                    "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), message);
                         }
                     } else if (chatType == 1002) {
                         imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
@@ -723,7 +723,7 @@ public class ChatFragment extends BaseFragment {
                                 if (null != contactBean) {
                                     //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息
                                     imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0",
-                                            null != contactBean.getNickname() ? contactBean.getNickname() : "",
+                                            null != contactBean.getTarget() ? contactBean.getTarget() : "",
                                             String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), lastMessage);
                                 }
                             } else if (chatType == 1002) {
@@ -850,7 +850,7 @@ public class ChatFragment extends BaseFragment {
 
                 List<ContactBean> changeContactBeens = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
                 for (int i = 0; i < changeContactBeens.size(); i++) {
-                    stringBuilder.append("@" + changeContactBeens.get(i).getNickname() + " ");
+                    stringBuilder.append("@" + changeContactBeens.get(i).getTarget() + " ");
                 }
                 etInput.setText(stringBuilder.toString());
                 etInput.setSelection(stringBuilder.toString().length());

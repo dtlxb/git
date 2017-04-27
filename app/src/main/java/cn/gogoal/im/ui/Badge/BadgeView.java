@@ -1,4 +1,4 @@
-package cn.gogoal.im.ui.badgeview;
+package cn.gogoal.im.ui.Badge;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -22,12 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.gogoal.im.common.AppDevice;
-
-
-/**
- * @author chqiu
- *         Email:qstumn@163.com
- */
 
 public class BadgeView extends View implements Badge {
     protected int mColorBackground;

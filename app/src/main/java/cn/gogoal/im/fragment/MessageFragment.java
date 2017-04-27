@@ -133,7 +133,13 @@ public class MessageFragment extends BaseFragment {
         super.onResume();
         jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
         allCount = MessageUtils.getAllMessageUnredCount(jsonArray);
-        AppManager.getInstance().sendMessage("correct_allmessage_count", String.valueOf(allCount));
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("index", 0);
+        map.put("number", allCount);
+        BaseMessage baseMessage = new BaseMessage("message_count", map);
+        AppManager.getInstance().sendMessage("correct_allmessage_count", baseMessage);
+
         IMMessageBeans.clear();
         IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
@@ -608,8 +614,13 @@ public class MessageFragment extends BaseFragment {
         KLog.e(imMessageBean);
         MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
         allCount++;
+
         //发送消息更改消息总数
-        AppManager.getInstance().sendMessage("correct_allmessage_count", String.valueOf(allCount));
+        HashMap<String, Object> countMap = new HashMap<>();
+        countMap.put("index", 0);
+        countMap.put("number", allCount);
+        BaseMessage countMessage = new BaseMessage("message_count", countMap);
+        AppManager.getInstance().sendMessage("correct_allmessage_count", countMessage);
 
         //按照时间排序
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {

@@ -25,6 +25,8 @@
     <string name="title_edit_my_infomation">编辑个人资料</string>
     <string name="title_choose_address">选择地区</string>
     <string name="title_change_phone_number">更换手机号</string>
+    <string name="title_user_information">详细资料</string>
+
 
     <string name="square_collcet_add">添加</string>
     <string name="square_publish_create">创建</string>
@@ -138,6 +140,7 @@
     <string name="title_update_success_status">个人信息更新成功&#8230;</string>
     <string name="title_update_fail_status">个人信息更新失败&#8230;</string>
 
+
     <string name="permissions_camera_error">相机无法完成初始化,请正确授权。</string>
     <string name="str_request_camera_message">请求获取相机权限</string>
 
@@ -191,5 +194,6 @@
     <string name="str_setting_duty">职位</string>
     <string name="str_setting_company">公司</string>
     <string name="social_newest">最新</string>
+
 
 </resources>

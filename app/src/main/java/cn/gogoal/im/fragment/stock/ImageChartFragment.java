@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 
+import com.socks.library.KLog;
+
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseFragment;
@@ -22,6 +24,8 @@ public class ImageChartFragment extends BaseFragment {
     AppCompatImageView imageFragment;
 
     public static ImageChartFragment getInstance(String imageUrl) {
+        KLog.e(imageUrl);
+
         ImageChartFragment fragment = new ImageChartFragment();
         Bundle bundle = new Bundle();
         bundle.putString("image_url", imageUrl);

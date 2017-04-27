@@ -1,4 +1,4 @@
-package cn.gogoal.im.ui.badgeview;
+package cn.gogoal.im.ui.Badge;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -10,12 +10,6 @@ import android.graphics.PointF;
 
 import java.lang.ref.WeakReference;
 import java.util.Random;
-
-/**
- * @author chqiu
- *         Email:qstumn@163.com
- * 隐藏动画,动画参考自https://github.com/tyrantgit/ExplosionField
- */
 
 public class BadgeAnimator extends ValueAnimator {
     private BitmapFragment[][] mFragments;

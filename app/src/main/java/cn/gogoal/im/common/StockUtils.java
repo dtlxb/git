@@ -54,12 +54,12 @@ public class StockUtils {
      * 集合拼Srtring
      */
     private static String cacheMyStock(Set<String> myStockArr) {
-        String allMyStock = "";
+        StringBuilder builder = new StringBuilder();
         for (String stockCode : myStockArr) {
-            allMyStock += stockCode;
-            allMyStock += ";";
+            builder.append(stockCode);
+            builder.append(";");
         }
-        return allMyStock.substring(0, allMyStock.length() - 1);
+        return builder.toString().substring(0, builder.length() - 1);
     }
 
     /**

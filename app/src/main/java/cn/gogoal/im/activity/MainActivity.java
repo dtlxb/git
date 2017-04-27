@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -38,7 +39,8 @@ import cn.gogoal.im.fragment.MessageFragment;
 import cn.gogoal.im.fragment.MineFragment;
 import cn.gogoal.im.fragment.MyStockFragment;
 import cn.gogoal.im.fragment.SocialContactFragment;
-import hply.com.niugu.autofixtext.AutofitTextView;
+import cn.gogoal.im.ui.Badge.Badge;
+import cn.gogoal.im.ui.Badge.BadgeView;
 
 public class MainActivity extends BaseActivity {
 
@@ -55,8 +57,6 @@ public class MainActivity extends BaseActivity {
 
     private MyStockFragment myStockFragment;
 
-    private AutofitTextView[] badgeView;
-
     @Override
     public int bindLayout() {
         return R.layout.activity_main;
@@ -65,17 +65,20 @@ public class MainActivity extends BaseActivity {
     @BindArray(R.array.main_tab)
     String[] mainTabArray;
 
+    private BadgeView badge;
 
     @Override
     public void doBusiness(Context mContext) {
+
 
         KLog.e("width===" + AppDevice.getWidth(mContext) + ";height===" + AppDevice.getHeight(mContext));
         KLog.e("DpValueWidth===" + AppDevice.px2dp(mContext, AppDevice.getWidth(mContext)) +
                 ";DpValueHeight===" + AppDevice.px2dp(mContext, AppDevice.getHeight(mContext)));
 
         if (BuildConfig.DEBUG) {
-            FileUtil.writeRequestResponse("token_" + UserUtils.getUserName(), UserUtils.getToken());
+            FileUtil.writeRequestResponse(UserUtils.getToken(), "token_" + UserUtils.getUserName());
         }
+        badge = new BadgeView(MainActivity.this);
 
         MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
 
@@ -106,16 +109,13 @@ public class MainActivity extends BaseActivity {
                 getSupportFragmentManager(), MainActivity.this, tabFragments, mainTabArray);
 
         vpMain.setAdapter(tabAdapter);
-        vpMain.setOffscreenPageLimit(mainTabArray.length-1);
+        vpMain.setOffscreenPageLimit(mainTabArray.length - 1);
         tabMain.setupWithViewPager(vpMain);
-
-        badgeView=new AutofitTextView[mainTabArray.length];
 
         for (int i = 0; i < mainTabArray.length; i++) {
             TabLayout.Tab tab = tabMain.getTabAt(i);
             if (tab != null) {
                 tab.setCustomView(tabAdapter.getTabView(i));
-                badgeView[i]= (AutofitTextView) tabAdapter.getTabView(i).findViewById(R.id.count_tv);
             }
         }
 
@@ -225,12 +225,44 @@ public class MainActivity extends BaseActivity {
 
     @Subscriber(tag = "correct_allmessage_count")
     public void setBadgeViewNum(BaseMessage<Integer> message) {
+
         int index = message.getOthers().get("index");
         int num = message.getOthers().get("number");
 
+        initBadge(num);
+
+        KLog.e("index==" + index + ";num==" + num);
+
         if (index >= 0 && index < mainTabArray.length) {
-            badgeView[index].setText(num>99?"99+":String.valueOf(num));
+            if (num > 0) {
+                badge.bindTarget(tabMain.getTabAt(index).getCustomView());
+                badge.setBadgeNumber(num);
+            }else {
+                badge.hide(false);
+            }
         }
-        if (num==0)badgeView[index].setVisibility(View.GONE);
+    }
+
+    private void initBadge(int num) {
+        if (badge!=null && num==0){
+            badge.hide(false);
+            KLog.e("执行隐藏");
+            badge.setBadgeNumber(0);
+        }
+        badge.setGravityOffset(0, 0, true);
+        badge.setShowShadow(false);
+
+        badge.setBadgeGravity(Gravity.TOP | Gravity.END);
+        badge.setBadgeTextSize(12, true);
+        badge.setBadgePadding(5, true);
+
+        badge.setOnDragStateChangedListener(new Badge.OnDragStateChangedListener() {
+            @Override
+            public void onDragStateChanged(int dragState, Badge badge, View targetView) {
+                if (dragState == STATE_SUCCEED) {
+                    UIHelper.toast(MainActivity.this,"全部标记为已读");
+                }
+            }
+        });
     }
 }

@@ -74,7 +74,6 @@ public class StockDetailNewsFragment extends BaseFragment {
 
     private String title = "新闻";
     private int type = 7;
-    private int rows = 3;
 
     //点击查看更多
     private TextView load_more_tv;

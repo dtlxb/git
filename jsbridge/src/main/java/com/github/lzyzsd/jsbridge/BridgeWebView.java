@@ -7,11 +7,9 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.view.Gravity;
+import android.view.View;
 import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.github.lzyzsd.library.R;
@@ -27,6 +25,9 @@ import java.util.Map;
 import static com.github.lzyzsd.library.BuildConfig.DEBUG;
 
 public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
+
+    private ProgressBar progressbar;
+    private Context context;
 
     public interface WebChangeListener {
         void getWebInfo(String url, String title);
@@ -89,25 +90,28 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
 
     public BridgeWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        this.context=context;
+        init();
     }
 
     public BridgeWebView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init(context);
+        init();
     }
 
     public BridgeWebView(Context context) {
         super(context);
-        init(context);
+        init();
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private void init(Context context) {
+    private void init() {
         progressbar = new ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal);
-        progressbar.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, Utils.dp2px(context, 2), Gravity.TOP));
-        progressbar.setProgressDrawable(ContextCompat.getDrawable(context, R.drawable.web_progress));
+        progressbar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,Utils.dp2px(context,2), 0, 0));
+        progressbar.setProgressDrawable(ContextCompat.getDrawable(context,R.drawable.web_progress));
         addView(progressbar);
+
+        setWebChromeClient(new WebChromeClient());
 
         this.setVerticalScrollBarEnabled(false);
         this.setHorizontalScrollBarEnabled(false);
@@ -116,25 +120,6 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
             WebView.setWebContentsDebuggingEnabled(true);
         }
         this.setWebViewClient(generateBridgeWebViewClient());
-
-        this.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                if (newProgress == 100) {
-                    progressbar.setVisibility(GONE);
-                } else {
-                    if (progressbar.getVisibility() == GONE)
-                        progressbar.setVisibility(VISIBLE);
-                    progressbar.setProgress(newProgress);
-                }
-                super.onProgressChanged(view, newProgress);
-            }
-
-        });
-    }
-
-    public ProgressBar getProgressBar() {
-        return progressbar;
     }
 
     public PageLoadFinishListener getFinishListener() {
@@ -338,7 +323,29 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
         doSend(handlerName, data, callBack);
     }
 
-    //progress
-    private ProgressBar progressbar;
+    public class WebChromeClient extends android.webkit.WebChromeClient {
+
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
+            if (newProgress == 100) {
+                progressbar.setVisibility(View.GONE);
+            } else {
+                if (progressbar.getVisibility() == View.GONE)
+                    progressbar.setVisibility(View.VISIBLE);
+                progressbar.setProgress(newProgress);
+            }
+            super.onProgressChanged(view, newProgress);
+        }
+
+    }
+
+    @Override
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+        LayoutParams lp = (LayoutParams) progressbar.getLayoutParams();
+        lp.x = l;
+        lp.y = t;
+        progressbar.setLayoutParams(lp);
+        super.onScrollChanged(l, t, oldl, oldt);
+    }
 
 }
