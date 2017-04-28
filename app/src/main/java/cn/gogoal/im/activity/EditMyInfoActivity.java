@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -22,6 +23,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.EditInfoBean;
 import cn.gogoal.im.bean.UserDetailInfo;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
@@ -72,6 +74,11 @@ public class EditMyInfoActivity extends BaseActivity {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
+                if (JSONObject.parseObject(responseInfo).getIntValue("code")==0){
+                    EditInfoBean.EditInfoData editInfoData = JSONObject.parseObject(responseInfo, EditInfoBean.class).getData();
+                    UserUtils.updataLocalUserInfo("city",editInfoData.getCity());
+                    updataUserInfo("");
+                }
             }
 
             @Override

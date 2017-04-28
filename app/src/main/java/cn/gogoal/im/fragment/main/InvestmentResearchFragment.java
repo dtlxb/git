@@ -1,7 +1,6 @@
 package cn.gogoal.im.fragment.main;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -18,9 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.copy.StockSearchActivity;
 import cn.gogoal.im.adapter.SectionAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BannerBean;
@@ -123,11 +120,6 @@ public class InvestmentResearchFragment extends BaseFragment {
             public void onFailure(String msg) {
             }
         }).startGet();
-    }
-
-    @OnClick(R.id.tv_banner_2search)
-    void click(View view) {
-        startActivity(new Intent(view.getContext(), StockSearchActivity.class));
     }
 
     public void getTouYan() {
