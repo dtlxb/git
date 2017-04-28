@@ -7,10 +7,13 @@ package cn.gogoal.im.common;
  */
 public class AppConst {
 
-    //LeanCloud参数
-    public static final String LEANCLOUD_APP_ID = "R7vH8N41V1rqJIqrlTQ1mMnR-gzGzoHsz";
+    //LeanCloud参数(沙盒)
+//    public static final String LEANCLOUD_APP_ID = "R7vH8N41V1rqJIqrlTQ1mMnR-gzGzoHsz";
+//    public static final String LEANCLOUD_APP_KEY = "4iXr2Ylh1VwVyYjaxs3ufFmo";
 
-    public static final String LEANCLOUD_APP_KEY = "4iXr2Ylh1VwVyYjaxs3ufFmo";
+    //LeanCloud参数(预正式)
+    public static final String LEANCLOUD_APP_ID = "TSmwX3vIIpOo6HGcI7Ykyj73-gzGzoHsz";
+    public static final String LEANCLOUD_APP_KEY = "tKBwDIKoyyAbMK5i3yAsJ4bD";
 
     //UCloud  UFile
     public static final String publicKey = "ucloudgcqin@go-goal.com13648682571239575500";
@@ -90,7 +93,8 @@ public class AppConst {
      */
     //开发环境
 //    public static final String WEB_URL = "http://192.168.72.155:9000/#";
-    public static final String WEB_URL = "http://192.168.52.156:9000/#";
+//    public static final String WEB_URL = "http://192.168.52.156:9000/#";
+    public static final String WEB_URL = "http://ggmobile.sandbox.go-goal.cn/#";
     //预正式环境
 //    public static final String WEB_URL = "http://192.168.52.156:9000/#";
     //正式环境

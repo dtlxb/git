@@ -2,6 +2,7 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -37,6 +38,8 @@ import cn.gogoal.im.ui.view.XLayout;
 
 public class IMPersonDetailActivity extends BaseActivity {
 
+    private static final int ClassRequestCode = 0x10;
+
     @BindView(R.id.person_detail)
     RecyclerView personDetailRecycler;
 
@@ -47,6 +50,8 @@ public class IMPersonDetailActivity extends BaseActivity {
 
     @BindView(R.id.xLayout)
     XLayout xLayout;
+
+    private ContactBean contactBean;
 
     @Override
     public int bindLayout() {
@@ -65,7 +70,7 @@ public class IMPersonDetailActivity extends BaseActivity {
             addFriendBtn.setVisibility(View.GONE);
         }
 
-        addFriendBtn.setText(UserUtils.isMyFriend(accountId) ? "删除好友" : "添加好友");
+        addFriendBtn.setText(UserUtils.isMyFriend(accountId) ? "发送消息" : "添加好友");
 
         if (accountId != -1) {
             getUsernfo();
@@ -83,7 +88,7 @@ public class IMPersonDetailActivity extends BaseActivity {
                 KLog.e(responseInfo);
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
 
-                    ContactBean contactBean = JSONObject.parseObject(responseInfo, BaseInfo.class).getData();
+                    contactBean = JSONObject.parseObject(responseInfo, BaseInfo.class).getData();
 
                     List<UserDetailInfo> infos = new ArrayList<>();
 
@@ -114,21 +119,39 @@ public class IMPersonDetailActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toastError(getActivity(), msg,xLayout);
+                UIHelper.toastError(getActivity(), msg, xLayout);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_ACCOUNT_DETAIL, ggHttpInterface).startGet();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        /*if (resultCode != 0) {
+            if (requestCode == ClassRequestCode) {
+                addFriendBtn.setClickable(false);
+                addFriendBtn.setBackgroundResource(R.drawable.selector_button_enable_color);
+                addFriendBtn.setText("等待验证");
+            }
+        }*/
+    }
+
     @OnClick(R.id.add_friend_button)
     void toAddFraeng(View view) {
-
+        Intent intent;
         if (accountId != -1) {
             if (UserUtils.isMyFriend(accountId)) {
-                UIHelper.toast(view.getContext(), "没有删除接口");
+                intent = new Intent(IMPersonDetailActivity.this, SingleChatRoomActivity.class);
+                intent.putExtra("conversation_id", UserUtils.findAnyoneByFriendId(accountId) != null ?
+                        UserUtils.findAnyoneByFriendId(accountId).getConv_id() : "");
+                intent.putExtra("nickname", contactBean.getNickname());
+                intent.putExtra("need_update", false);
+                startActivity(intent);
             } else {
-                Intent intent = new Intent(view.getContext(), IMAddFriendActivity.class);
+                intent = new Intent(view.getContext(), IMAddFriendActivity.class);
                 intent.putExtra("user_id", accountId);
+                //startActivityForResult(intent, ClassRequestCode);
                 startActivity(intent);
             }
         } else {

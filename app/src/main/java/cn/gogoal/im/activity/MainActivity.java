@@ -36,10 +36,11 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.main.InvestmentResearchFragment;
+import cn.gogoal.im.fragment.main.MainStockFragment;
 import cn.gogoal.im.fragment.main.MessageFragment;
 import cn.gogoal.im.fragment.main.MineFragment;
 import cn.gogoal.im.fragment.main.SocialContactFragment;
-import cn.gogoal.im.fragment.main.MainStockFragment;
+import cn.gogoal.im.ui.Badge.Badge;
 import cn.gogoal.im.ui.Badge.BadgeView;
 
 public class MainActivity extends BaseActivity {
@@ -254,17 +255,7 @@ public class MainActivity extends BaseActivity {
 
 //                VoiceManager.getInstance(MainActivity.this)
 //                        .startPlay(Uri.parse(uriStr));
-
-//                badge.setOnDragStateChangedListener(new Badge.OnDragStateChangedListener() {
-//                    @Override
-//                    public void onDragStateChanged(int dragState, Badge badge, View targetView) {
-//                        if (dragState == STATE_SUCCEED) {
-//                            UIHelper.toast(MainActivity.this, "全部标记为已读");
-//                        }
-//                    }
-//                });
             }
         }
-
     }
 }

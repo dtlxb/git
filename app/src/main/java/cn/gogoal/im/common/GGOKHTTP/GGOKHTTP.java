@@ -593,6 +593,13 @@ public class GGOKHTTP {
      *  获取个人信息
      */
     public static final String GET_MY_INFO = "v1/user/get_info";
+    /**
+     * 预约直播
+     * @prama token
+     * @prama sourece 4(移动版)
+     * @prama video_id 直播的id（live_id）
+     */
+    public static final String ORDER_LIVE = "v1/video_studio/order_live";
 
 //--------------------------------------------------------------------------------------------------
 

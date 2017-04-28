@@ -139,7 +139,7 @@ public class ChatFragment extends BaseFragment {
     private ChatFunctionAdapter chatFunctionAdapter;
     private List<FoundData.ItemPojos> itemPojosList;
     private JSONArray jsonArray;
-    private ContactBean contactBean;
+    private ContactBean<String> contactBean;
 
     @Override
     public void onAttach(Context context) {
@@ -193,9 +193,10 @@ public class ChatFragment extends BaseFragment {
                 imConversation.queryMessages(messageList.get(0).getMessageId(), messageList.get(0).getTimestamp(), 15, new AVIMMessagesQueryCallback() {
                     @Override
                     public void done(List<AVIMMessage> list, AVIMException e) {
-                        messageList.addAll(0, list);
-                        imChatAdapter.notifyItemRangeInserted(0, list.size());
-                        //message_recycler.smoothScrollToPosition(list);
+                        if (e == null && null != list && list.size() > 0) {
+                            messageList.addAll(0, list);
+                            imChatAdapter.notifyItemRangeInserted(0, list.size());
+                        }
                         message_swipe.setRefreshing(false);
                     }
                 });
@@ -267,8 +268,8 @@ public class ChatFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
 
-                if (null==imConversation){
-                    UIHelper.toast(getActivity(),R.string.network_busy);
+                if (null == imConversation) {
+                    UIHelper.toast(getActivity(), R.string.network_busy);
                     etInput.setText("");
                     return;
                 }
@@ -490,8 +491,8 @@ public class ChatFragment extends BaseFragment {
 
     private void sendStockMessage(String stockCode, String stockName) {
 
-        if (null==imConversation){
-            UIHelper.toast(getActivity(),R.string.network_busy);
+        if (null == imConversation) {
+            UIHelper.toast(getActivity(), R.string.network_busy);
             return;
         }
         //股票消息(消息type:11,加上stockCode,stockName);
@@ -500,7 +501,7 @@ public class ChatFragment extends BaseFragment {
         mStockMessage.setFrom(UserUtils.getMyAccountId());
 
         //添加股票信息
-        Map<String, String> lcattrsMap = new HashMap<>();
+        Map<String, String> lcattrsMap;
         lcattrsMap = AVImClientManager.getInstance().userBaseInfo();
         lcattrsMap.put("stockCode", stockCode);
         lcattrsMap.put("stockName", stockName);
@@ -565,8 +566,8 @@ public class ChatFragment extends BaseFragment {
             @Override
             public void onSuccess(String onlineUri) {
 
-                if (null==imConversation){
-                    UIHelper.toast(getActivity(),R.string.network_busy);
+                if (null == imConversation) {
+                    UIHelper.toast(getActivity(), R.string.network_busy);
                     return;
                 }
 
@@ -647,8 +648,8 @@ public class ChatFragment extends BaseFragment {
                     @Override
                     public void onSuccess(String onlineUri) {
 
-                        if (null==imConversation){
-                            UIHelper.toast(getActivity(),R.string.network_busy);
+                        if (null == imConversation) {
+                            UIHelper.toast(getActivity(), R.string.network_busy);
                             return;
                         }
 
@@ -749,7 +750,7 @@ public class ChatFragment extends BaseFragment {
 
     private void getSpeakToInfo(AVIMConversation conversation) {
         String responseInfo = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", "");
-        List<ContactBean> contactBeanList = new ArrayList<>();
+        List<ContactBean<String>> contactBeanList = new ArrayList<>();
 
         //拿到对方
         String speakTo = "";
@@ -871,7 +872,7 @@ public class ChatFragment extends BaseFragment {
     @Subscriber(tag = "IM_Message")
     public void handleMessage(BaseMessage baseMessage) {
         if (null != imConversation && null != baseMessage) {
-            Map<String, Object> map = baseMessage.getOthers();
+            Map map = baseMessage.getOthers();
             AVIMMessage message = (AVIMMessage) map.get("message");
             AVIMConversation conversation = (AVIMConversation) map.get("conversation");
             JSONObject contentObject = JSON.parseObject(message.getContent());

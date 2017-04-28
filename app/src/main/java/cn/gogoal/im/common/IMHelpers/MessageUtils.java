@@ -153,7 +153,6 @@ public class MessageUtils {
                 KLog.e(jsonObject.toString());
                 if (jsonObject.get("data") != null) {
                     jsonArray = jsonObject.getJSONArray("data");
-                    //有这个人修改
                     for (int i = 0; i < jsonArray.size(); i++) {
                         JSONObject oldObject = (JSONObject) jsonArray.get(i);
                         if (oldObject.getInteger("friend_id") == friendId) {

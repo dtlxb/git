@@ -2,11 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="15dp"
+    android:layout_marginBottom="15dp"
     android:paddingRight="10dp"
     android:paddingLeft="10dp">
 
     <TextView
+        android:layout_marginTop="15dp"
         android:id="@+id/message_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,17 +15,17 @@
         android:layout_marginBottom="15dp"
         android:background="@drawable/item_chat_time_bg"
         android:gravity="center"
-        android:paddingBottom="4dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="4dp"
+        android:paddingBottom="2dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingTop="2dp"
         android:textColor="@android:color/white"
         android:textSize="12sp" />
 
     <ImageView
         android:id="@+id/user_head_photo"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/message_time" />
 
@@ -34,8 +35,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/message_time"
-        android:layout_marginLeft="54dp"
-        android:layout_marginRight="54dp">
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp">
 
         <TextView
             android:id="@+id/user_name"

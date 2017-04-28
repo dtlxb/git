@@ -85,6 +85,7 @@
     <string name="close_live_call_title">结束直播</string>
     <string name="close_live_call_confirm_message">确定要结束直播？</string>
     <string name="close_live_failed">结束直播失败</string>
+    <string name="live_finished">直播已结束</string>
 
     <!--权限-->
     <string name="no_camera_permission">没有权限使用摄像头，请开启摄像头权限</string>
@@ -155,6 +156,7 @@
     <string name="str_cancle">取消</string>
 
     <string name="str_search">\u0020&#xe62c; 搜索</string>
+    <string name="str_search_man_square">\u0020&#xe62c; 手机号/Go-Goal账号</string>
     <string name="str_title_ok">确定%s</string>
     <string name="str_title_del">删除%s</string>
     <string name="finish_live">完成直播</string>

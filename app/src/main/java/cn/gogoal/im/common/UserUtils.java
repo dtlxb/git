@@ -411,6 +411,16 @@ public class UserUtils {
         return false;
     }
 
+    public static ContactBean findAnyoneByFriendId(int friendId) {
+        List<ContactBean> userContacts = getUserContacts();
+        for (ContactBean bean : userContacts) {
+            if (bean.getUserId() == friendId) {
+                return bean;
+            }
+        }
+        return null;
+    }
+
     /**
      * 找出当前群中自己的好友
      * <p>

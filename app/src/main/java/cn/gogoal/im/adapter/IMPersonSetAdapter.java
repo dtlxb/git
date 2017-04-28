@@ -66,8 +66,7 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean, BaseViewHolde
         } else if (avatar instanceof Integer) {
             imageIcon.setImageResource((Integer) avatar);
         }
-        if ((squareCreater.equals("square_card") && position == 0) ||
-                (String.valueOf(contactBean.getFriend_id()).equals(squareCreater) && chatTytpe == 1002)) {
+        if ((String.valueOf(contactBean.getFriend_id()).equals(squareCreater) && chatTytpe == 1002)) {
             squareManTag.setVisibility(View.VISIBLE);
         } else {
             squareManTag.setVisibility(View.GONE);

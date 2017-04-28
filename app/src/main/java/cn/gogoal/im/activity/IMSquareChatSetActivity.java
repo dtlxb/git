@@ -119,13 +119,13 @@ public class IMSquareChatSetActivity extends BaseActivity {
             groupMembers.addAll(getIntent().getExtras().getStringArrayList("group_members"));
             tvTeamSize.setText(groupMembers.size() + "人");
         }
-        JSONArray accountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationId + "_accountList_beans", null);
-        //缓存中没有群信息则向后台拉取
-        if (null != accountArray) {
-            getAllContacts(accountArray);
-        } else {
-            getChatGroup(groupMembers);
-        }
+        //JSONArray accountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationId + "_accountList_beans", null);
+        //缓存中没有群信息则向后台拉取(取消这个)
+//        if (null != accountArray) {
+//            getAllContacts(accountArray);
+//        } else {
+        getChatGroup(groupMembers);
+//        }
 
         final JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_groups_saved", new JSONArray());
         JSONObject thisGroup = null;
@@ -238,9 +238,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
             urls.add(accountObject.getString("avatar"));
         }
         PersonContactBeens.addAll(contactBeens);
-        if (ImageUtils.getBitmapFilePaht(conversationId, "imagecache").equals("")) {
-            getNicePicture(urls);
-        }
+        //if (ImageUtils.getBitmapFilePaht(conversationId, "imagecache").equals("")) {
+        getNicePicture(urls);
+        // }
         contactBeens.clear();
         contactBeens.addAll(squareCreaterFirst(PersonContactBeens));
         mPersonInfoAdapter.notifyDataSetChanged();
@@ -272,7 +272,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     @Subscriber(tag = "set_square_avatar")
     public void setAvatar(BaseMessage<Bitmap> baseMessage) {
         Map<String, Bitmap> map = baseMessage.getOthers();
-        Bitmap bitmap =map.get("mathing_bitmap");
+        Bitmap bitmap = map.get("mathing_bitmap");
         iv_square_head.setImageBitmap(bitmap);
     }
 
@@ -352,7 +352,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
             case R.id.look_more_person:
                 intent = new Intent(getActivity(), IMGroupContactsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("square_creater",squareCreater);
+                bundle.putString("square_creater", squareCreater);
                 bundle.putSerializable("chat_group_contacts", (Serializable) PersonContactBeens);
                 intent.putExtras(bundle);
                 startActivity(intent);

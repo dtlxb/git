@@ -5,13 +5,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +39,6 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.recording.MediaManager;
-import cn.gogoal.im.ui.view.RectangleView;
 
 /**
  * Created by huangxx on 2017/2/27.
@@ -50,26 +47,27 @@ import cn.gogoal.im.ui.view.RectangleView;
 public class IMChatAdapter extends RecyclerView.Adapter {
 
     //文字
-    public static int TYPE_LEFT_TEXT_MESSAGE = 0x01;
-    public static int TYPE_RIGHT_TEXT_MESSAGE = 0x02;
+    private static int TYPE_LEFT_TEXT_MESSAGE = 0x01;
+    private static int TYPE_RIGHT_TEXT_MESSAGE = 0x02;
     //图片
-    public static int TYPE_LEFT_IMAGE_MESSAGE = 0x03;
-    public static int TYPE_RIGHT_IMAGE_MESSAGE = 0x04;
+    private static int TYPE_LEFT_IMAGE_MESSAGE = 0x03;
+    private static int TYPE_RIGHT_IMAGE_MESSAGE = 0x04;
     //语音
-    public static int TYPE_LEFT_VOICE_MESSAGE = 0x05;
-    public static int TYPE_RIGHT_VOICE_MESSAGE = 0x06;
+    private static int TYPE_LEFT_VOICE_MESSAGE = 0x05;
+    private static int TYPE_RIGHT_VOICE_MESSAGE = 0x06;
     //股票
-    public static int TYPE_LEFT_STOCK_MESSAGE = 0x07;
-    public static int TYPE_RIGHT_STOCK_MESSAGE = 0x08;
+    private static int TYPE_LEFT_STOCK_MESSAGE = 0x07;
+    private static int TYPE_RIGHT_STOCK_MESSAGE = 0x08;
     //未知消息
-    public static int TYPE_LEFT_UNKONW_MESSAGE = 0x09;
-    public static int TYPE_RIGHT_UNKONW_MESSAGE = 0x10;
+    private static int TYPE_LEFT_UNKONW_MESSAGE = 0x09;
+    private static int TYPE_RIGHT_UNKONW_MESSAGE = 0x10;
     //系统
-    public static int TYPE_SYSTEM_MESSAGE = 0x11;
+    private static int TYPE_SYSTEM_MESSAGE = 0x11;
     private List<AVIMMessage> messageList;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private int chatType;
+    private Boolean isYourSelf;
 
     public IMChatAdapter(Context mContext, List<AVIMMessage> messageList) {
         this.mLayoutInflater = LayoutInflater.from(mContext);
@@ -113,7 +111,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         JSONObject contentObject = JSON.parseObject(avimMessage.getContent());
         final JSONObject lcattrsObject = (JSONObject) contentObject.get("_lcattrs");
         String messageType = contentObject.getString("_lctype");
-        String headPicUrl = "";
+        String headPicUrl;
         KLog.e(messageType);
         if (!messageType.equals("5") && !messageType.equals("6") && !messageType.equals("8")) {
             if (chatType == 1001) {
@@ -124,10 +122,14 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
             }
             //头像
-            if (!TextUtils.isEmpty(MessageUtils.getItsHeadPic(Integer.parseInt(avimMessage.getFrom()), chatType, ""))) {
-                headPicUrl = MessageUtils.getItsHeadPic(Integer.parseInt(avimMessage.getFrom()), chatType, "");
+            if (isYourSelf) {
+                headPicUrl = UserUtils.getUserAvatar();
             } else {
-                headPicUrl = (String) lcattrsObject.get("avatar");
+                if (!TextUtils.isEmpty(MessageUtils.getItsHeadPic(Integer.parseInt(avimMessage.getFrom()), chatType, ""))) {
+                    headPicUrl = MessageUtils.getItsHeadPic(Integer.parseInt(avimMessage.getFrom()), chatType, "");
+                } else {
+                    headPicUrl = (String) lcattrsObject.get("avatar");
+                }
             }
             ImageDisplay.loadRoundedRectangleImage(mContext, ((IMCHatViewHolder) holder).user_head_photo, AppDevice.dp2px(mContext, 4), headPicUrl);
         } else {
@@ -335,7 +337,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
         JSONObject contentObject = JSON.parseObject(message.getContent());
         String _lctype = contentObject.getString("_lctype");
-        boolean isYourSelf = message.getFrom().endsWith(UserUtils.getMyAccountId());
+        isYourSelf = message.getFrom().equals(UserUtils.getMyAccountId());
         switch (_lctype) {
             case "-1":
                 if (isYourSelf) {
@@ -379,7 +381,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
      */
     private void setImageSize(RelativeLayout.LayoutParams params, AVIMImageMessage message) {
         int maxWidth = (int) (AppDevice.getWidth(mContext) * 0.4);
-        String rateText = "";
+        String rateText;
 
         if (null != message && 0 != ((Number) message.getFileMetaData().get("height")).intValue() && ((Number) message.getFileMetaData().get("width")).intValue() != 0) {
             int dpWidth = ((Number) message.getFileMetaData().get("width")).intValue();
@@ -396,10 +398,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
     }
 
-    public int getChatType() {
-        return chatType;
-    }
-
     public void setChatType(int chatType) {
         this.chatType = chatType;
     }
@@ -410,16 +408,12 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     }
 
     //时间处理
-    public boolean showTime(Long lastTime, Long rightNow) {
+    private boolean showTime(Long lastTime, Long rightNow) {
         Long timeDiffer = rightNow - lastTime;
-        if (timeDiffer >= 5 * 60 * 1000) {
-            return true;
-        } else {
-            return false;
-        }
+        return timeDiffer >= 5 * 60 * 1000;
     }
 
-    public void showMessageTime(int position, TextView view) {
+    private void showMessageTime(int position, TextView view) {
         if (position == 0) {
             view.setVisibility(View.VISIBLE);
             view.setText(CalendarUtils.parseDateIMMessageFormat(messageList.get(position).getTimestamp()));
@@ -462,7 +456,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             user_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("LEAN_CLOUD", "TextViewHolder" + getPosition());
                 }
             });
         }

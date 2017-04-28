@@ -3,7 +3,7 @@
     android:shape="oval"
     android:useLevel="false">
 
-    <solid android:color="@color/colorPrimary" />
+    <solid android:color="@color/message_tag_red" />
     <size
         android:width="18dp"
         android:height="18dp" />
