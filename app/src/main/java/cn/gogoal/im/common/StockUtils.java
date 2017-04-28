@@ -16,6 +16,7 @@ import java.util.Set;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 
 /**
@@ -113,7 +114,7 @@ public class StockUtils {
     }
 
     public static String plusMinus(String rateString, boolean percent) {
-        if (TextUtils.isEmpty(rateString)) {
+        if (rateString==null || TextUtils.isEmpty(rateString)) {
             return "--";
         }
 
@@ -318,7 +319,8 @@ public class StockUtils {
                     singlestock.put("stock_type", 1);
                     singlestock.put("price", 0);
                     singlestock.put("change_rate", 0);
-                    StockUtils.addStock2MyStock(singlestock);
+
+                    AppManager.getInstance().sendMessage("updata_my_stock_data");
                 }
             }
 

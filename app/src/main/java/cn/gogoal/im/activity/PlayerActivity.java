@@ -32,6 +32,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.alivc.player.AliVcMediaPlayer;
 import com.alivc.player.MediaPlayer;
+import com.hply.imagepicker.view.StatusBarUtil;
 import com.socks.library.KLog;
 
 import java.util.HashMap;
@@ -213,7 +214,7 @@ public class PlayerActivity extends BaseActivity {
 
     @Override
     public void setStatusBar(boolean light) {
-
+        StatusBarUtil.with(this).setTranslucentForView(frameContainer);
     }
 
     /**

@@ -110,4 +110,14 @@ public class AppConst {
     public static final String GG_REPORT = WEB_URL + "/report";
     //文字一分钟
     public static final String GG_TEXT = WEB_URL + "/text";
+
+    //投研页帮助
+    public static final String GG_HELP = WEB_URL + "/help/index";
+
+    //设置页关于
+    public static final String GG_SETTING_ABOUT = WEB_URL + "/help/about";
+    //设置页免责申明
+    public static final String GG_DISCLAIMER= WEB_URL + "/help/disclaimer";
+    //设置页服务协议
+    public static final String GG_SERVICE_AGREEMENT = WEB_URL + "/help/service";
 }

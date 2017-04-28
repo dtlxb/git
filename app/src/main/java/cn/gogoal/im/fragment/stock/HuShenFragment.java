@@ -1,7 +1,6 @@
 package cn.gogoal.im.fragment.stock;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -42,10 +41,6 @@ import static cn.gogoal.im.common.AppConst.REFRESH_TYPE_SWIPEREFRESH;
  */
 public class HuShenFragment extends BaseFragment {
 
-    private long INTERVAL_TIME = 15000;//默认刷新间隔
-
-//    public int refreshType = REFRESH_TYPE_RELOAD;//刷新类型
-
     @BindView(R.id.xLayout)
     XLayout xLayout;
 
@@ -59,10 +54,6 @@ public class HuShenFragment extends BaseFragment {
 
     private ArrayList<MarkteBean> markteList = new ArrayList<>();
 
-//    public void setRefreshType(int refreshType) {
-//        this.refreshType = refreshType;
-//    }
-
     @Override
     public int bindLayout() {
         return R.layout.fragment_hushen;
@@ -73,15 +64,11 @@ public class HuShenFragment extends BaseFragment {
         BaseActivity.initRecycleView(rvMarket, null);
         BaseActivity.iniRefresh(refreshLayout);
 
-        INTERVAL_TIME = SPTools.getLong("INTERVAL_TIME", 15000L);
-
         adapter = new MarketAdapter(getActivity(), markteList);
 
         rvMarket.setAdapter(adapter);
 
         getMarketInformation(AppConst.REFRESH_TYPE_FIRST);
-
-        handler.postDelayed(runnable, INTERVAL_TIME);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -209,27 +196,6 @@ public class HuShenFragment extends BaseFragment {
             increase.add(itemData);
         }
         return increase;
-    }
-
-    //定时刷新
-    Handler handler = new Handler();
-
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                handler.postDelayed(this, INTERVAL_TIME);
-                getMarketInformation(AppConst.REFRESH_TYPE_AUTO);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        handler.removeCallbacks(runnable);
     }
 
 }

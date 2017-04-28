@@ -72,7 +72,7 @@ public class SearchPersionFragment extends BaseFragment {
         xLayout.setStatus(XLayout.Loading);
         final Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
-        param.put("keyword", keyword.toUpperCase());
+        param.put("keyword", keyword);
         KLog.e("token=" + UserUtils.getToken() + "&keyword=" + keyword);
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override

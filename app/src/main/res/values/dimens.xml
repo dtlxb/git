@@ -23,4 +23,5 @@
     <dimen name="chat_play_window_right_margin">20dp</dimen>
     <dimen name="chat_play_window_bottom_margin">70dp</dimen>
 
+    <dimen name="tabtop_radius">4dp</dimen>
 </resources>

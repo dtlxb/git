@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hply.imagepicker.ITakePhoto;
+import com.hply.imagepicker.view.StatusBarUtil;
 import com.socks.library.KLog;
 
 import java.io.File;
@@ -193,6 +194,11 @@ public class CreateLiveActivity extends BaseActivity {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.ADD_LIVE_VIDEO, ggHttpInterface).startGet();
+    }
+
+    @Override
+    public void setStatusBar(boolean light) {
+        StatusBarUtil.with(this).setTranslucent();
     }
 
     private CreateLiveActivity getContext() {

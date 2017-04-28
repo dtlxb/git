@@ -1,4 +1,4 @@
-package cn.gogoal.im.fragment;
+package cn.gogoal.im.fragment.main;
 
 import android.content.Context;
 import android.content.Intent;
@@ -123,10 +123,10 @@ public class MineFragment extends BaseFragment {
             ImageDisplay.loadCircleFileImageWithBoard(mContext, UserUtils.getUserCacheAvatarFile(), imageAvatar);
             KLog.e("用的缓存");
         } else {
-            ImageDisplay.loadNetAvatarWithBorder(mContext, UserUtils.getUserAvatar(), imageAvatar);
+            ImageDisplay.loadNetAvatarWithBorder(mContext, UserUtils.getUserAvatar(),imageAvatar);
+            UserUtils.cacheUserAvatar();//缓存用户头像大图
             KLog.e("用的线上");
         }
-
         tvMineUserName.setText(UserUtils.getUserName());
         tvMineIntroduction.setText(UserUtils.getDuty());
 

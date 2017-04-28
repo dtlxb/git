@@ -63,6 +63,7 @@ public class BadgeView extends View implements Badge {
 
     protected TextPaint mBadgeTextPaint;
     protected Paint mBadgeBackgroundPaint;
+    protected Paint mBadgeBorder;
 
     protected BadgeAnimator mAnimator;
 

@@ -26,7 +26,7 @@ import java.util.LinkedList;
 public class XTitle extends ViewGroup implements View.OnClickListener {
     private static final int DEFAULT_MAIN_TEXT_SIZE = 18;
     private static final int DEFAULT_SUB_TEXT_SIZE = 12;
-    private static final int DEFAULT_ACTION_TEXT_SIZE = 15;
+    private static final int DEFAULT_ACTION_TEXT_SIZE = 16;
     private static final int DEFAULT_TITLE_BAR_HEIGHT = 48;
 
     private static final String STATUS_BAR_HEIGHT_RES_NAME = "status_bar_height";
@@ -86,7 +86,7 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
 
         LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
 
-        mLeftText.setTextSize(DEFAULT_ACTION_TEXT_SIZE);
+        mLeftText.setTextSize(TypedValue.COMPLEX_UNIT_SP,DEFAULT_ACTION_TEXT_SIZE);
         mLeftText.setSingleLine();
         mLeftText.setGravity(Gravity.CENTER_VERTICAL);
         mLeftText.setPadding(mOutPadding + mActionPadding, 0, mOutPadding, 0);
@@ -389,7 +389,7 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
             }
 
             text.setText(action.getText());
-            text.setTextSize(DEFAULT_ACTION_TEXT_SIZE);
+            text.setTextSize(TypedValue.COMPLEX_UNIT_SP,DEFAULT_ACTION_TEXT_SIZE);
             if (mActionTextColor != 0) {
                 text.setTextColor(mActionTextColor);
             }

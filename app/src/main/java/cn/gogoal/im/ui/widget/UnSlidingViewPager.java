@@ -21,6 +21,12 @@ public class UnSlidingViewPager extends ViewPager {
 
     private boolean scrollable;
 
+    private boolean smoothAnimation;
+
+    public void setSmoothAnimation(boolean smoothAnimation) {
+        this.smoothAnimation = smoothAnimation;
+    }
+
     public UnSlidingViewPager(Context context) {
         super(context);
     }
@@ -28,7 +34,7 @@ public class UnSlidingViewPager extends ViewPager {
     public UnSlidingViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.UnSlidingViewPager);
-        scrollable = a.getBoolean(R.styleable.UnSlidingViewPager_canScroll, true);
+        scrollable = a.getBoolean(R.styleable.UnSlidingViewPager_canScroll, false);
         a.recycle();
     }
 
@@ -45,12 +51,12 @@ public class UnSlidingViewPager extends ViewPager {
 
     @Override
     public void setCurrentItem(int item) {
-        this.setCurrentItem(item,false);
+        this.setCurrentItem(item,smoothAnimation);
     }
 
     @Override
     public void setCurrentItem(int item, boolean smoothScroll) {
-        super.setCurrentItem(item, false);
+        super.setCurrentItem(item, smoothAnimation);
     }
 
     public void setScrollable(boolean scrollable) {

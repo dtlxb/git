@@ -5,7 +5,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
@@ -37,9 +36,6 @@ public class MarketActivity extends BaseActivity {
 
     private int INTERVAL_TIME = 15000;//自动刷新间隔时间
 
-    @BindView(R.id.search_market)
-    AppCompatTextView searchMarket;
-
     @BindView(R.id.tablayout_market)
     TabLayout tablayoutMarket;
 
@@ -59,7 +55,7 @@ public class MarketActivity extends BaseActivity {
 
     @Override
     public int bindLayout() {
-        return R.layout.activity_market;
+        return R.layout.fragment_market;
     }
 
     @Override

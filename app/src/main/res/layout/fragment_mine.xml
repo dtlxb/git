@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="cn.gogoal.im.fragment.MineFragment">
+    tools:context="cn.gogoal.im.fragment.main.MineFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"

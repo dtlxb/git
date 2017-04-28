@@ -2,9 +2,9 @@ package cn.gogoal.im.common.PlayerUtils;
 
 import android.app.Activity;
 
-import cn.gogoal.im.activity.PlayerActivity;
-
 import java.util.Random;
+
+import cn.gogoal.im.activity.PlayerActivity;
 
 /**
  * Created by dave.

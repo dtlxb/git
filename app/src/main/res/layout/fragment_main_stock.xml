@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--标题-->
+    <RelativeLayout
+        android:id="@+id/layout_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/titlebar_size"
+        android:background="@drawable/shape_line_bottom">
+
+        <TextView
+            android:id="@+id/tv_mystock_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:text="编辑"
+            android:textColor="@color/textColor_333333"
+            android:textSize="18sp" />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_my_stock"
+            style="@style/RadioTabLayout"
+            android:layout_width="150dp"
+            android:layout_height="35dp"
+            android:layout_centerInParent="true"
+            app:tabSelectedTextColor="@android:color/white"
+            app:tabTextColor="@color/colorPrimary" />
+
+        <ImageView
+            android:id="@+id/img_mystock_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:src="@mipmap/img_refresh" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <cn.gogoal.im.ui.widget.UnSlidingViewPager
+            android:id="@+id/vp_my_stock_tab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <!--蒙版-->
+        <View
+            android:id="@+id/view_dialog_mask"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#55000000"
+            android:clickable="true"
+            android:visibility="gone" />
+
+        <!--网格大盘指数-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_dialog_market"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+</LinearLayout>

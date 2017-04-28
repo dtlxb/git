@@ -41,7 +41,7 @@ import static cn.gogoal.im.R.id.tv_mystock_news_title;
  * author wangjd on 2017/4/12 0012.
  * Staff_id 1375
  * phone 18930640263
- * description :${annotated}.
+ * description :个股详情中的 新闻、公共、研报 单个Tab Fragment
  */
 public class StockDetailNewTab extends BaseFragment {
 

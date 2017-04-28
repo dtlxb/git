@@ -5,15 +5,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
 
 import java.util.List;
-
-import cn.gogoal.im.R;
 
 /**
  * author wangjd on 2017/3/1 0001.
@@ -33,7 +30,7 @@ public class SuspendedDecoration extends RecyclerView.ItemDecoration {
     private static int COLOR_TITLE_BG;
 
     //分组字体颜色
-    private static int COLOR_TITLE_FONT = Color.parseColor("#FF888888");
+    private static int COLOR_TITLE_FONT = Color.parseColor("#9d9d9d");
 
     private int mHeaderViewCount = 0;
 
@@ -43,7 +40,7 @@ public class SuspendedDecoration extends RecyclerView.ItemDecoration {
 
     public SuspendedDecoration(Context context, List<? extends ISuspensionInterface> datas) {
         super();
-        COLOR_TITLE_BG = ContextCompat.getColor(context, R.color.colorGriddivider);
+        COLOR_TITLE_BG = 0xfff8f8f8;
         mDatas = datas;
         mPaint = new Paint();
         mBounds = new Rect();
