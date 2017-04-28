@@ -94,7 +94,7 @@ public class ContactsActivity extends BaseActivity {
 
         contactAdapter.notifyDataSetChanged();
 
-        rvContacts.addItemDecoration(new NormalItemDecoration(mContext, Color.parseColor("#D9D9D9")));
+        rvContacts.addItemDecoration(new NormalItemDecoration(mContext, getResColor(R.color.normal_line_color)));
 
         rvContacts.setAdapter(contactAdapter);
 

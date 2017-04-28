@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.IMPersonDetailActivity;
 import cn.gogoal.im.activity.ImageDetailActivity;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.common.AppDevice;
@@ -132,6 +133,15 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 }
             }
             ImageDisplay.loadRoundedRectangleImage(mContext, ((IMCHatViewHolder) holder).user_head_photo, AppDevice.dp2px(mContext, 4), headPicUrl);
+            //点击头像展开详情
+            ((IMCHatViewHolder) holder).user_head_photo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, IMPersonDetailActivity.class);
+                    intent.putExtra("account_id", Integer.parseInt(avimMessage.getFrom()));
+                    mContext.startActivity(intent);
+                }
+            });
         } else {
         }
         if (holder instanceof LeftTextViewHolder) {

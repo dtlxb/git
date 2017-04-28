@@ -15,7 +15,7 @@ import cn.gogoal.im.bean.ContactBean;
  * phone 18930640263
  * description:联系人列表适配器
  */
-public class ContactAdapter extends CommonAdapter<ContactBean,BaseViewHolder> {
+public class ContactAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
     List<ContactBean> list;
 
     public ContactAdapter(Context context, List<ContactBean> datas) {
@@ -26,6 +26,7 @@ public class ContactAdapter extends CommonAdapter<ContactBean,BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder holder, ContactBean contactBean, int position) {
         holder.setText(R.id.item_contacts_tv_nickname, contactBean.getTarget());
+        holder.setText(R.id.item_contacts_tv_duty, contactBean.getDuty());
 
         holder.itemView.setBackgroundResource(R.drawable.selector_normal_write2gray);
 

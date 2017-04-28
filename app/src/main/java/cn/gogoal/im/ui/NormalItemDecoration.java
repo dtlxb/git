@@ -25,9 +25,9 @@ public class NormalItemDecoration extends android.support.v7.widget.DividerItemD
     public NormalItemDecoration(Context context, @ColorInt int color) {
         super(context, LinearLayoutManager.VERTICAL);
 
-        GradientDrawable drawable=new GradientDrawable();
+        GradientDrawable drawable = new GradientDrawable();
         drawable.setColor(color);
-        drawable.setSize(-1, AppDevice.dp2px(context,1));
+        drawable.setSize(-1, AppDevice.dp2px(context, (float) 0.5));
         this.setDrawable(drawable);
     }
 

@@ -13,6 +13,7 @@
     <color name="main_footer_bg">#f5f5f5</color>
     <color name="main_bg">#f0f5fb</color>
     <color name="Kline_item_bg">#f4f8fc</color>
+    <color name="normal_line_color">#eeeeee</color>
 
     <!--我的页面颜色-->
     <color name="my_header">#445c95</color>
