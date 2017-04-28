@@ -96,38 +96,24 @@ public class SingleEditActivity extends BaseActivity {
                         @Override
                         public void success(String responseInfo) {
 
-                            loadingDialog.dismiss();
-                            WaitDialog.getInstance(typeString[editType] + "信息修改成功",
-                                    R.mipmap.login_success, false).show(getSupportFragmentManager());
-
                             //TODO 更新本地缓存，刷新上一个页面
-                            UserUtils.updataLocalUserInfo(localCacheKey,svEditInfo.getQuery().toString());
-                            AppManager.getInstance().sendMessage("updata_userinfo","更新用户信息");
+                            UserUtils.updataLocalUserInfo(localCacheKey, svEditInfo.getQuery().toString());
+                            AppManager.getInstance().sendMessage("updata_userinfo", "更新用户信息");
 
-                            new android.os.Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    SingleEditActivity.this.finish();
-                                }
-                            }, 1000);
+                            SingleEditActivity.this.finish();
                         }
 
                         @Override
                         public void failed(String errorMsg) {
                             loadingDialog.dismiss();
 
-                            final WaitDialog waitDialog = WaitDialog.getInstance("信息修改失败\n\r"+
-                                    errorMsg,
+                            final WaitDialog waitDialog = WaitDialog.getInstance("信息修改失败\n\r" +
+                                            errorMsg,
                                     R.mipmap.login_error, false);
 
                             waitDialog.show(getSupportFragmentManager());
 
-                            new android.os.Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    waitDialog.dismiss();
-                                }
-                            }, 1000);
+                            waitDialog.dismiss(false);
                         }
                     });
                 }

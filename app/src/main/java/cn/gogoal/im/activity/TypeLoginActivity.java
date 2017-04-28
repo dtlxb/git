@@ -7,15 +7,8 @@ import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -41,6 +34,7 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.KeyboardLaunchRelativeLayout;
+import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XEditText;
 import cn.gogoal.im.ui.view.XTitle;
@@ -64,23 +58,11 @@ public class TypeLoginActivity extends BaseActivity {
     @BindView(R.id.forget_code)
     TextView forgetCode;
 
-    @BindView(R.id.tv_login_status)
-    TextView tvLoginStatus;
-
-    @BindView(R.id.login_loading)
-    ImageView loginLoading;
-
-    @BindView(R.id.layout_loading)
-    FrameLayout layoutLoading;
-
     @BindView(R.id.login_button)
     SelectorButton loginButton;
 
     @BindView(R.id.login_keyboard_layout)
     KeyboardLaunchRelativeLayout keyboardLayout;
-
-    private RotateAnimation animation;
-
 
     @Override
     public int bindLayout() {
@@ -165,13 +147,6 @@ public class TypeLoginActivity extends BaseActivity {
         TextView rigisterView = (TextView) xTitle.getViewByAction(rigisterAction);
         rigisterView.setTextColor(getResColor(R.color.colorPrimary));
 
-        animation = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        animation.setDuration(2000);
-        animation.setRepeatCount(3000);
-        animation.setFillAfter(true);
-        animation.setStartOffset(0);
-        animation.setInterpolator(new LinearInterpolator());
-
     }
 
     @OnClick({R.id.login_button, R.id.forget_code})
@@ -191,6 +166,9 @@ public class TypeLoginActivity extends BaseActivity {
     }
 
     private void Login() {
+        final WaitDialog loginDialog=WaitDialog.getInstance("登录中",R.mipmap.login_loading,true);
+        loginDialog.show(getSupportFragmentManager());
+
         String name = loginUserName.getText().toString().toUpperCase(Locale.ENGLISH);
         String word = loginPassWord.getText().toString();
 
@@ -208,9 +186,6 @@ public class TypeLoginActivity extends BaseActivity {
         param.put("source", "20");
 
         loginButton.setClickable(false);
-        layoutLoading.setVisibility(View.VISIBLE);
-        animation.startNow();
-        loginLoading.setAnimation(animation);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -236,65 +211,50 @@ public class TypeLoginActivity extends BaseActivity {
                                 @Override
                                 public void done(AVIMClient avimClient, AVIMException e) {
                                     loginButton.setClickable(true);
-                                    tvLoginStatus.setText(R.string.str_login_success);
-                                    animation.cancel();
-                                    loginLoading.clearAnimation();
-                                    loginLoading.setBackgroundResource(R.mipmap.login_success);
-
+                                    loginDialog.dismiss(true);
                                     startActivity(intent);
                                     finish();
                                 }
                             });
                         } catch (Exception ignored) {
                             loginButton.setClickable(true);
-                            layoutLoading.setVisibility(View.GONE);
-                            getWindoDialog(R.mipmap.login_error, R.string.str_login_code_error);
+                            loginDialog.dismiss(true);
+                            WaitDialog errorDialog=WaitDialog.getInstance(getString(R.string.str_login_code_error),
+                                    R.mipmap.login_error,false);
+                            errorDialog.show(getSupportFragmentManager());
+                            errorDialog.dismiss(false);
                         }
                     } else {
                         loginButton.setClickable(true);
-                        layoutLoading.setVisibility(View.GONE);
-                        getWindoDialog(R.mipmap.login_error, R.string.str_login_code_error);
+                        loginDialog.dismiss(true);
+                        WaitDialog errorDialog=WaitDialog.getInstance(getString(R.string.str_login_code_error),
+                                R.mipmap.login_error,false);
+                        errorDialog.show(getSupportFragmentManager());
+                        errorDialog.dismiss(false);
+
                     }
                 } else {
                     loginButton.setClickable(true);
-                    layoutLoading.setVisibility(View.GONE);
-                    getWindoDialog(R.mipmap.login_error, R.string.str_login_code_error);
+                    loginDialog.dismiss(true);
+                    WaitDialog errorDialog=WaitDialog.getInstance(getString(R.string.str_login_code_error),
+                            R.mipmap.login_error,false);
+                    errorDialog.show(getSupportFragmentManager());
+                    errorDialog.dismiss(false);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
                 KLog.e(msg);
+                loginDialog.dismiss(true);
                 loginButton.setClickable(true);
-                layoutLoading.setVisibility(View.GONE);
-                getWindoDialog(R.mipmap.login_without_net, R.string.str_login_no_net);
+                WaitDialog errorDialog=WaitDialog.getInstance(getString(R.string.str_login_no_net),
+                        R.mipmap.login_without_net,false);
+                errorDialog.show(getSupportFragmentManager());
+                errorDialog.dismiss(false);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_USER_LOGIN, ggHttpInterface).startGet();
-    }
-
-    public void getWindoDialog(int dialogRes, int dialogText) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.dialog_style);
-
-        View dialogView = getLayoutInflater().inflate(R.layout.view_login_dialog, null);
-        ImageView dialogIv = (ImageView) dialogView.findViewById(R.id.login_loading);
-        TextView dialogTv = (TextView) dialogView.findViewById(R.id.tv_login_status);
-        dialogIv.setBackgroundResource(dialogRes);
-        dialogTv.setText(dialogText);
-
-        final AlertDialog dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.setCancelable(true);
-        dialog.show();
-        Window window = dialog.getWindow();
-        if (window != null) {
-            window.setBackgroundDrawableResource(android.R.color.transparent);
-            WindowManager.LayoutParams lp = window.getAttributes();
-            lp.width = AppDevice.dp2px(getActivity(), 120);
-            lp.height = AppDevice.dp2px(getActivity(), 120);
-            window.setAttributes(lp);
-            window.setContentView(dialogView);
-        }
     }
 
     @Override

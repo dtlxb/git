@@ -43,16 +43,17 @@
             android:src="@mipmap/img_search"
             android:visibility="gone" />
 
-        <android.support.v7.widget.AppCompatEditText
+        <cn.gogoal.im.ui.view.HintCenterEditText
             android:id="@+id/layout_2search"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@android:color/transparent"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:textSize="14sp"
+            android:drawablePadding="5dp"
+            android:drawableLeft="@mipmap/img_search"
             android:hint="@string/str_search_man_square"
             android:imeOptions="actionSearch"
-            android:orientation="horizontal"
             android:singleLine="true" />
 
     </LinearLayout>

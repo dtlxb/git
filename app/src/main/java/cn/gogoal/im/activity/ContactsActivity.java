@@ -4,7 +4,6 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.LinearLayoutManager;
@@ -94,7 +93,8 @@ public class ContactsActivity extends BaseActivity {
 
         contactAdapter.notifyDataSetChanged();
 
-        rvContacts.addItemDecoration(new NormalItemDecoration(mContext, Color.parseColor("#f8f8f8")));
+        rvContacts.addItemDecoration(new NormalItemDecoration(getActivity(),
+                getResColor(R.color.contactDividerColor)));
 
         rvContacts.setAdapter(contactAdapter);
 
@@ -258,6 +258,7 @@ public class ContactsActivity extends BaseActivity {
 
         if (added) {
             rvContacts.addItemDecoration(mDecoration);
+
             added = false;
         }
     }
