@@ -52,7 +52,7 @@
 
     <color name="live_chat">#c8ffffff</color>
 
-    <color name="contactDividerColor">#eeeeee</color>
+    <color name="contactDividerColor">@color/colorGriddivider</color>
 
     <color name="live_chat_level1">#ee514d</color>
     <color name="live_chat_level2">#1d8fe1</color>

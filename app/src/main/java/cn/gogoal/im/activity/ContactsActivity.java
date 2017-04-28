@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -59,6 +62,8 @@ public class ContactsActivity extends BaseActivity {
     private ContactAdapter contactAdapter;
     private ArrayList<ContactBean> contactBeanList;
 
+    private TextView textViewFooter;
+
     public ContactsActivity() {
     }
 
@@ -87,6 +92,14 @@ public class ContactsActivity extends BaseActivity {
         tvParams.height = AppDevice.getWidth(getActivity()) / 4;
         tvConstactsFlag.setLayoutParams(tvParams);
 
+        textViewFooter=new TextView(mContext);
+        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(-1,-2);
+        textViewFooter.setPadding(0,AppDevice.dp2px(mContext,15),0,AppDevice.dp2px(mContext,45));
+        textViewFooter.setLayoutParams(params);
+        textViewFooter.setTextSize(TypedValue.COMPLEX_UNIT_SP,18);
+        textViewFooter.setGravity(Gravity.CENTER);
+        textViewFooter.setTextColor(getResColor(R.color.textColor_666666));
+
         //初始化
         LinearLayoutManager layoutManager;
         rvContacts.setLayoutManager(layoutManager = new LinearLayoutManager(
@@ -104,6 +117,8 @@ public class ContactsActivity extends BaseActivity {
         getData();//联系人列表数据
 
         contactAdapter = new ContactAdapter(getActivity(), contactBeanList);
+
+        contactAdapter.addFooterView(textViewFooter);
 
         contactAdapter.notifyDataSetChanged();
 
@@ -156,7 +171,6 @@ public class ContactsActivity extends BaseActivity {
                 return false;
             }
         });
-
     }
 
     public void srcollShowIndexBar(boolean show) {
@@ -204,6 +218,7 @@ public class ContactsActivity extends BaseActivity {
                 KLog.e(responseInfo);
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     UIHelper.toast(getActivity(), "此人删除成功");
+                    upDataFootCount(UserUtils.getUserContacts());
                 }
             }
 
@@ -215,6 +230,15 @@ public class ContactsActivity extends BaseActivity {
         new GGOKHTTP(param, GGOKHTTP.del_friend, ggHttpInterface).startGet();
     }
 
+    /**更新底部好友人数统计*/
+    public void upDataFootCount(List<ContactBean> list) {
+        if (list.size()>0) {
+            textViewFooter.setText(list.size() + "位联系人");
+        }else {
+            textViewFooter.setText("你还没有好友，赶快去添加一些吧");
+        }
+    }
+
     private void getFriendList(final List<ContactBean> contactBeanList) {
 
         Map<String, String> param = new HashMap<>();
@@ -224,7 +248,6 @@ public class ContactsActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-
                 KLog.e(responseInfo);
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     SPTools.saveString(UserUtils.getMyAccountId() + "_contact_beans", responseInfo);
@@ -247,7 +270,7 @@ public class ContactsActivity extends BaseActivity {
     }
 
     private void parseContactDatas(String responseInfo, List<ContactBean> contactBeanList) {
-        List<ContactBean<String>> list = new ArrayList<>();
+        List<ContactBean> list = new ArrayList<>();
         BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
                 responseInfo,
                 new TypeReference<BaseBeanList<ContactBean<String>>>() {
@@ -255,7 +278,9 @@ public class ContactsActivity extends BaseActivity {
         list.clear();
         list.addAll(beanList.getData());
 
-        for (ContactBean<String> bean : list) {
+        upDataFootCount(list);
+
+        for (ContactBean bean : list) {
             bean.setContactType(ContactBean.ContactType.PERSION_ITEM);
         }
 

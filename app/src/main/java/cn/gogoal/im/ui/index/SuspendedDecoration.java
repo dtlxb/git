@@ -32,7 +32,7 @@ public class SuspendedDecoration extends RecyclerView.ItemDecoration {
 
     private int mTitleHeight;//title的高
     //分组背景
-    private static int COLOR_TITLE_BG;
+    private int COLOR_TITLE_BG;
 
     //分组字体颜色
     private static int COLOR_TITLE_FONT = Color.parseColor("#9d9d9d");
@@ -53,6 +53,7 @@ public class SuspendedDecoration extends RecyclerView.ItemDecoration {
 
     private void init(Context context, List<? extends ISuspensionInterface> datas) {
         COLOR_TITLE_BG = 0xfff8f8f8;
+
         mDatas = datas;
         mPaint = new Paint();
         mBounds = new Rect();

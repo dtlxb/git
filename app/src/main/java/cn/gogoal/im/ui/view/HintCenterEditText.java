@@ -62,7 +62,7 @@ public class HintCenterEditText extends AppCompatEditText {
             if (drawableLeft != null) {
                 float textWidth = getPaint().measureText(getText().toString());
                 int drawablePadding = getCompoundDrawablePadding();
-                int drawableWidth = 0;
+                int drawableWidth;
                 drawableWidth = drawableLeft.getIntrinsicWidth();
                 float bodyWidth = textWidth + drawableWidth + drawablePadding;
                 canvas.translate((getWidth() - bodyWidth) / 3, 0);
