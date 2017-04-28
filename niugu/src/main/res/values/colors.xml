@@ -38,6 +38,7 @@
 
     <color name="stocklist_bg">#fefefe</color>
     <color name="stock_red">#f14958</color>
+    <color name="selectbutton_enable_red">#f68d8f</color>
     <color name="stock_green">#1ebf61</color>
 
     <color name="mystock_news_green">#a1d36e</color>
