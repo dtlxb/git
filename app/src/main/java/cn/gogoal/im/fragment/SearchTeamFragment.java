@@ -160,7 +160,21 @@ public class SearchTeamFragment extends BaseFragment {
                 addView.setBackgroundColor(Color.TRANSPARENT);
                 addView.setText("已加入");
                 addView.setTextColor(Color.parseColor("#a9a9a9"));
+                addView.setClickable(false);
+                addView.setEnabled(false);
+            }else {
+                addView.setBackgroundResource(R.drawable.shape_search_group_add_btn);
+                addView.setText("加入");
+                addView.setTextColor(Color.parseColor("#a9a9a9"));
+                addView.setClickable(true);
+                addView.setEnabled(true);
             }
+            addView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO 申请加入
+                }
+            });
 
             Glide.get(getContext()).clearMemory();
 

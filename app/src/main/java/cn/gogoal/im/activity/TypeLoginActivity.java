@@ -211,9 +211,9 @@ public class TypeLoginActivity extends BaseActivity {
                                 @Override
                                 public void done(AVIMClient avimClient, AVIMException e) {
                                     loginButton.setClickable(true);
-                                    loginDialog.dismiss(true);
                                     startActivity(intent);
                                     finish();
+                                    loginDialog.dismiss(true);
                                 }
                             });
                         } catch (Exception ignored) {

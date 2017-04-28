@@ -12,7 +12,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.FunctionActivity;
 import cn.gogoal.im.activity.stock.MarketActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseSectionQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
@@ -20,6 +19,7 @@ import cn.gogoal.im.bean.SectionTouYanData;
 import cn.gogoal.im.bean.TouYan;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.ui.dialog.ComingSoonDialog;
 
 
@@ -40,8 +40,8 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionTouYanData, B
         screenWidth = AppDevice.getWidth(context);
 
         innerItem = AppDevice.isLowDpi() ?
-                AppDevice.getWidth(context) / 3:
-        AppDevice.getWidth(context) / 4 ;
+                AppDevice.getWidth(context) / 3 :
+                AppDevice.getWidth(context) / 4;
     }
 
     @Override
@@ -93,16 +93,17 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionTouYanData, B
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        //TODO 跳原生类型
+                    //TODO 跳原生类型
                     if (item.getDesc().equalsIgnoreCase("行情")) {
                         context.startActivity(new Intent(context, MarketActivity.class));
                     } else {
                         //TODO 跳网页类型
                         if (item.getIsClick() == 0) {
-                            Intent intent = new Intent(v.getContext(), FunctionActivity.class);
-                            intent.putExtra("function_url", item.getUrl());
-                            intent.putExtra("title", item.getDesc());
-                            context.startActivity(intent);
+
+                            NormalIntentUtils.go2WebActivity(
+                                    v.getContext(),
+                                    item.getUrl(),
+                                    item.getDesc());
                         } else {
                             new ComingSoonDialog().show(context.getSupportFragmentManager());
                         }

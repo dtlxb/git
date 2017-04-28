@@ -36,6 +36,7 @@ import cn.gogoal.im.adapter.copy.HotSearchAdapter;
 import cn.gogoal.im.adapter.copy.SearchStockAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -171,7 +172,7 @@ public class StockSearchActivity extends BaseActivity {
                         stockJson.put("stockName", stockname);
                         stockJson.put("stockCode", stockcode);
                         SPTools.saveJsonObject("searchedStock", stockJson);
-                        StockUtils.go2StockDetail(getActivity(), stockcode, stockname);
+                        NormalIntentUtils.go2StockDetail(getActivity(), stockcode, stockname);
 //                        setResult(ConstantUtils.RESULT_OK, intent);
 //                        finish();
                         HistorySearchData data = new HistorySearchData(stockname, stockcode);
@@ -182,7 +183,7 @@ public class StockSearchActivity extends BaseActivity {
                         InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
-                        StockUtils.go2StockDetail(getActivity(), stockcode, stockname);
+                        NormalIntentUtils.go2StockDetail(getActivity(), stockcode, stockname);
 
                         JSONObject historyStock = new JSONObject();
                         historyStock.put("stock_name", stockname);
@@ -218,7 +219,7 @@ public class StockSearchActivity extends BaseActivity {
                     setResult(0x01, intent1);
                     finish();
                 } else {
-                    StockUtils.go2StockDetail(getActivity(), stockcode,
+                    NormalIntentUtils.go2StockDetail(getActivity(), stockcode,
                             stockname);
                 }
             }
@@ -249,7 +250,7 @@ public class StockSearchActivity extends BaseActivity {
                     setResult(0x01, intent1);
                     finish();
                 } else {
-                    StockUtils.go2StockDetail(getActivity(), list_hot.get(position).getStock_code(),
+                    NormalIntentUtils.go2StockDetail(getActivity(), list_hot.get(position).getStock_code(),
                             list_hot.get(position).getStock_name());
 
                     JSONObject historyStock = new JSONObject();

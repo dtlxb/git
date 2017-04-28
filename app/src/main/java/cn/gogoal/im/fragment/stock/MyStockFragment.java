@@ -40,6 +40,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.MyStockSortInteface;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -338,7 +339,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    StockUtils.go2StockDetail(v.getContext(),
+                    NormalIntentUtils.go2StockDetail(v.getContext(),
                             data.getStock_code(), data.getStock_name());
                 }
             });

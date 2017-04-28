@@ -1,7 +1,6 @@
 package cn.gogoal.im.common;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONArray;
@@ -15,7 +14,6 @@ import java.util.Map;
 import java.util.Set;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 
@@ -219,13 +217,6 @@ public class StockUtils {
 //        intent.putExtra("stock_name", stockName);
 //        context.startActivity(intent);
 //    }
-
-    public static void go2StockDetail(Context context, String stockCode, String stockName) {
-        Intent intent = new Intent(context, CopyStockDetailActivity.class);
-        intent.putExtra("stock_code", stockCode);
-        intent.putExtra("stock_name", stockName);
-        context.startActivity(intent);
-    }
 
     /**
      * 基准年计算
