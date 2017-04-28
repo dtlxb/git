@@ -38,11 +38,14 @@ import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.index.IndexBar;
 import cn.gogoal.im.ui.index.SuspendedDecoration;
+import cn.gogoal.im.ui.view.XTitle;
 
 /**
  * 联系人
  */
 public class ContactsActivity extends BaseActivity {
+
+    private XTitle xTitle;
 
     @BindView(R.id.rv_contacts)
     RecyclerView rvContacts;
@@ -67,7 +70,18 @@ public class ContactsActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        setMyTitle(R.string.title_contacts, true);
+        xTitle = setMyTitle(R.string.title_contacts, true);
+        XTitle.TextAction textAction = new XTitle.TextAction("添加") {
+            @Override
+            public void actionClick(View view) {
+                Intent intent = new Intent(ContactsActivity.this, SearchPersonSquareActivity.class);
+                intent.putExtra("search_index", 0);
+                startActivity(intent);
+            }
+        };
+        xTitle.addAction(textAction, 0);
+        TextView RightText = (TextView) xTitle.getViewByAction(textAction);
+        RightText.setTextColor(getResColor(R.color.textColor_333333));
 
         ViewGroup.LayoutParams tvParams = tvConstactsFlag.getLayoutParams();
         tvParams.width = AppDevice.getWidth(getActivity()) / 4;
@@ -165,8 +179,8 @@ public class ContactsActivity extends BaseActivity {
      * 添加联系人列表头部
      */
     private void addContactHead() {
-        contactBeanList.add(addFunctionHead("新朋友", R.mipmap.cache_img_contacts_0));
-        contactBeanList.add(addFunctionHead("我的群组", R.mipmap.cache_img_contacts_1));
+        contactBeanList.add(addFunctionHead("新朋友", R.mipmap.contacts_new_friend));
+        contactBeanList.add(addFunctionHead("我的群组", R.mipmap.group_contacts));
         /*contactBeanList.add(addFunctionHead("标签", R.mipmap.cache_img_contacts_2));
         contactBeanList.add(addFunctionHead("公众号", R.mipmap.cache_img_contacts_3));*/
     }
