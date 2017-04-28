@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.design.widget.AppBarLayout;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +32,7 @@ import cn.gogoal.im.activity.copy.StockDetailMarketIndexActivity;
 import cn.gogoal.im.activity.stock.MyStockNewsActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
+import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.MyStockBean;
 import cn.gogoal.im.bean.stock.MyStockData;
@@ -93,6 +95,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     @BindView(R.id.layout_tiny_market)
     LinearLayout layoutTinyMarket;
 
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout refreshLayout;
+
     //自选股集合
     private ArrayList<MyStockData> myStockDatas = new ArrayList<>();
     private MyStockAdapter myStockAdapter;
@@ -104,11 +109,32 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
     @Override
     public void doBusiness(Context mContext) {
+
+        BaseActivity.iniRefresh(refreshLayout);
+
         initSortTitle(mContext);
 
         iniMyStockList();
 
-        getMyStockData(AppConst.REFRESH_TYPE_FIRST);
+        refreshMyStock(AppConst.REFRESH_TYPE_FIRST);
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //刷新自选股，大盘缩略
+                refreshMyStock(AppConst.REFRESH_TYPE_SWIPEREFRESH);
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.setRefreshing(false);
+                    }
+                },1000);
+            }
+        });
+    }
+
+    public void refreshMyStock(int refreshType){
+        getMyStockData(refreshType);
     }
 
     private void iniMyStockList() {
@@ -126,6 +152,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
      * 切换指数缩略
      */
     public void changeIitem(final MyStockMarketBean.MyStockMarketData data) {
+        if (data==null){
+            return;
+        }
         tvTinyMarketName.setText(data.getName());
         tvTinyMarketPrice.setText(StringUtils.saveSignificand(data.getPrice(), 2));
         tvTinyMarketpriceChange$Rate.setText(StockUtils.plusMinus(String.valueOf(data.getPrice_change()) + "", false) + "  " +

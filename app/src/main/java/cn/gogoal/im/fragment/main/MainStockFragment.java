@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -31,7 +30,6 @@ import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.AppManager;
-import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.MyStockMarketBean;
 import cn.gogoal.im.common.AppConst;
@@ -52,9 +50,6 @@ import cn.gogoal.im.ui.widget.UnSlidingViewPager;
  * description :${annotated}.
  */
 public class MainStockFragment extends BaseFragment {
-
-    @BindView(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout refreshLayout;
 
     @BindView(R.id.tv_mystock_edit)
     TextView tvMystockEdit;
@@ -95,8 +90,6 @@ public class MainStockFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
 
         INTERVAL_TIME = SPTools.getLong("interval_time", 15000);
-
-        BaseActivity.iniRefresh(refreshLayout);
 
         myStockFragment = new MyStockFragment();
         marketFragment = new MarketFragment();
