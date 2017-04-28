@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
@@ -18,13 +19,16 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.adapter.IMChatAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseInfo;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.UserDetailInfo;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -169,11 +173,23 @@ public class IMPersonDetailActivity extends BaseActivity {
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, UserDetailInfo data, int position) {
+        protected void convert(BaseViewHolder holder, final UserDetailInfo data, int position) {
 
             switch (holder.getItemViewType()) {
                 case UserDetailInfo.HEAD:
-                    holder.setImageUrl(R.id.image_user_info_avatar, (String) data.getAvatar());
+                    ImageView imageAvatar = holder.getView(R.id.image_user_info_avatar);
+                    ImageDisplay.loadRoundedRectangleImage(mContext, imageAvatar, AppDevice.dp2px(mContext, 4), (String) data.getAvatar());
+                    imageAvatar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            List<String> urls = new ArrayList<>();
+                            urls.add((String) data.getAvatar());
+                            Intent intent = new Intent(mContext, ImageDetailActivity.class);
+                            intent.putStringArrayListExtra("image_urls", (ArrayList<String>) urls);
+                            intent.putExtra("account_Id", "");
+                            mContext.startActivity(intent);
+                        }
+                    });
                     holder.setText(R.id.person_name, data.getFullName());
                     holder.setText(R.id.person_mark, data.getNickName());
                     break;

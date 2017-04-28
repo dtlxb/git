@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -16,7 +15,6 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.RectangleView;
 
 /**
@@ -61,8 +59,7 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean, BaseViewHolde
 
         personName.setText(contactBean.getNickname());
         if (avatar instanceof String) {
-            holder.setImageUrl(R.id.iv, avatar.toString());
-            Glide.with(mContext).load(avatar.toString()).asBitmap().into(imageIcon);
+            Glide.with(mContext).load(avatar.toString()).asBitmap().placeholder(R.mipmap.image_placeholder).into(imageIcon);
         } else if (avatar instanceof Integer) {
             imageIcon.setImageResource((Integer) avatar);
         }

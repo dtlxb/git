@@ -1,6 +1,8 @@
 package cn.gogoal.im.adapter;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -15,7 +17,7 @@ import cn.gogoal.im.bean.ContactBean;
  * phone 18930640263
  * description:联系人列表适配器
  */
-public class ContactAdapter extends CommonAdapter<ContactBean,BaseViewHolder> {
+public class ContactAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
     List<ContactBean> list;
 
     public ContactAdapter(Context context, List<ContactBean> datas) {
@@ -25,7 +27,14 @@ public class ContactAdapter extends CommonAdapter<ContactBean,BaseViewHolder> {
 
     @Override
     protected void convert(BaseViewHolder holder, ContactBean contactBean, int position) {
+        TextView textView = holder.getView(R.id.item_contacts_tv_duty);
         holder.setText(R.id.item_contacts_tv_nickname, contactBean.getTarget());
+        if (contactBean.getContactType() == ContactBean.ContactType.FUNCTION_ITEM) {
+            textView.setVisibility(View.GONE);
+        } else {
+            textView.setVisibility(View.VISIBLE);
+            textView.setText(contactBean.getDuty());
+        }
 
         holder.itemView.setBackgroundResource(R.drawable.selector_normal_write2gray);
 

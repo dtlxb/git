@@ -39,9 +39,11 @@
         android:id="@+id/tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:ellipsize="end"
+        android:gravity="center"
         android:maxLines="1"
-        android:text="描述文字"
+        android:text="文字"
         android:textColor="@color/textColor_666666"
         android:textSize="12sp" />
 
