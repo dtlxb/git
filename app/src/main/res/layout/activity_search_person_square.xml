@@ -5,10 +5,10 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:fitsSystemWindows="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:background="@android:color/white"
     android:orientation="vertical"
     tools:context=".activity.SearchPersonSquareActivity">
 
@@ -49,19 +49,24 @@
             android:layout_height="40dp"
             android:background="@android:color/transparent"
             android:gravity="center"
-            android:textSize="14sp"
             android:hint="@string/str_search_man_square"
             android:imeOptions="actionSearch"
             android:orientation="horizontal"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textSize="14sp" />
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@drawable/shape_text_border" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_search_persion_team"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@android:color/white"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:background="@android:color/white" />
 
 </LinearLayout>

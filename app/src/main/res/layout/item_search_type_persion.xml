@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/item_user_avatar"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_centerVertical="true"
         android:layout_margin="15dp"
         android:contentDescription="@null"
@@ -30,34 +30,30 @@
             android:singleLine="true"
             android:ellipsize="middle"
             android:textColor="@color/textColor_333333"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
 
         <TextView
+            android:text="地方就是快发货速度快混分巨兽看到回复加快速度"
             android:id="@+id/item_tv_search_result_intro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
             android:textColor="@color/textColor_999999"
-            android:textSize="12sp" />
+            android:textSize="15sp" />
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/btn_search_group_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="15dp"
         android:background="@drawable/shape_search_group_add_btn"
         android:gravity="center"
-        android:paddingBottom="10dp"
-        android:paddingEnd="20dp"
-        android:visibility="invisible"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
         android:text="加入"
-        android:textSize="14sp"/>
+        android:textSize="13sp"/>
 
 </RelativeLayout>
