@@ -1,6 +1,7 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -34,12 +35,11 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.fragment.InvestmentResearchFragment;
-import cn.gogoal.im.fragment.MessageFragment;
-import cn.gogoal.im.fragment.MineFragment;
-import cn.gogoal.im.fragment.MyStockFragment;
-import cn.gogoal.im.fragment.SocialContactFragment;
-import cn.gogoal.im.ui.Badge.Badge;
+import cn.gogoal.im.fragment.main.InvestmentResearchFragment;
+import cn.gogoal.im.fragment.main.MessageFragment;
+import cn.gogoal.im.fragment.main.MineFragment;
+import cn.gogoal.im.fragment.main.SocialContactFragment;
+import cn.gogoal.im.fragment.main.MainStockFragment;
 import cn.gogoal.im.ui.Badge.BadgeView;
 
 public class MainActivity extends BaseActivity {
@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity {
 
     private StatusBarUtil barUtil;
 
-    private MyStockFragment myStockFragment;
+    private MainStockFragment mainStockFragment;
 
     @Override
     public int bindLayout() {
@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity {
 
         MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
 
-        myStockFragment = new MyStockFragment();                     //自选股
+        mainStockFragment = new MainStockFragment();                     //自选股
 
         InvestmentResearchFragment foundFragment = new InvestmentResearchFragment(); // TAB3 投研
 
@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity {
 
         List<Fragment> tabFragments = new ArrayList<>();
         tabFragments.add(messageFragment);
-        tabFragments.add(myStockFragment);
+        tabFragments.add(mainStockFragment);
         tabFragments.add(foundFragment);
         tabFragments.add(socialContactFragment);
         tabFragments.add(mineFragment);
@@ -145,15 +145,10 @@ public class MainActivity extends BaseActivity {
         mainViewMask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myStockFragment.dismissMarket();
+                mainStockFragment.dismissMarket();
             }
         });
     }
-
-//    @Override
-//    public void setStatusBar(boolean light) {
-//        StatusBarUtil.with(MainActivity.this).setTranslucentForImageViewInFragment(null);
-//    }
 
     private void getFriendList() {
 
@@ -204,12 +199,14 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (myStockFragment.isMaskViewVisiable()) {
-                myStockFragment.dismissMarket();
+            if (mainStockFragment.isMaskViewVisiable()) {
+                mainStockFragment.dismissMarket();
             } else {
                 exitBy2Click();
             }
             return true;
+        }else if (keyCode==KeyEvent.KEYCODE_MENU){
+            startActivity(new Intent(getActivity(),TestActivity.class));
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -231,38 +228,43 @@ public class MainActivity extends BaseActivity {
 
         initBadge(num);
 
-        KLog.e("index==" + index + ";num==" + num);
-
         if (index >= 0 && index < mainTabArray.length) {
             if (num > 0) {
                 badge.bindTarget(tabMain.getTabAt(index).getCustomView());
                 badge.setBadgeNumber(num);
-            }else {
+            } else {
                 badge.hide(false);
             }
         }
     }
 
     private void initBadge(int num) {
-        if (badge!=null && num==0){
-            badge.hide(false);
-            KLog.e("执行隐藏");
-            badge.setBadgeNumber(0);
-        }
-        badge.setGravityOffset(0, 0, true);
-        badge.setShowShadow(false);
+        if (badge != null) {
+            if (num == 0) {
+                badge.hide(false);
+            }else {
+                badge.setGravityOffset(0, 0, true);
+                badge.setShowShadow(false);
 
-        badge.setBadgeGravity(Gravity.TOP | Gravity.END);
-        badge.setBadgeTextSize(12, true);
-        badge.setBadgePadding(5, true);
+                badge.setBadgeGravity(Gravity.TOP | Gravity.END);
+                badge.setBadgeTextSize(12, true);
+                badge.setBadgePadding(5, true);
 
-        badge.setOnDragStateChangedListener(new Badge.OnDragStateChangedListener() {
-            @Override
-            public void onDragStateChanged(int dragState, Badge badge, View targetView) {
-                if (dragState == STATE_SUCCEED) {
-                    UIHelper.toast(MainActivity.this,"全部标记为已读");
-                }
+                String uriStr = "android.resource://" + this.getPackageName() + "/"+R.raw.ding;
+
+//                VoiceManager.getInstance(MainActivity.this)
+//                        .startPlay(Uri.parse(uriStr));
+
+//                badge.setOnDragStateChangedListener(new Badge.OnDragStateChangedListener() {
+//                    @Override
+//                    public void onDragStateChanged(int dragState, Badge badge, View targetView) {
+//                        if (dragState == STATE_SUCCEED) {
+//                            UIHelper.toast(MainActivity.this, "全部标记为已读");
+//                        }
+//                    }
+//                });
             }
-        });
+        }
+
     }
 }

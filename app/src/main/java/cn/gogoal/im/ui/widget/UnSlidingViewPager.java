@@ -28,7 +28,7 @@ public class UnSlidingViewPager extends ViewPager {
     public UnSlidingViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.UnSlidingViewPager);
-        scrollable = a.getBoolean(R.styleable.UnSlidingViewPager_canScroll, true);
+        scrollable = a.getBoolean(R.styleable.UnSlidingViewPager_canScroll, false);
         a.recycle();
     }
 

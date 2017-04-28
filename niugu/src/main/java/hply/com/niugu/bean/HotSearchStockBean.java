@@ -14,7 +14,7 @@ public class HotSearchStockBean {
     }*/
     private String message;
     private ArrayList<HotSearchStockData> data;
-    private String code;
+    private int code;
 
     public String getMessage() {
         return message;
@@ -32,11 +32,11 @@ public class HotSearchStockBean {
         this.data = data;
     }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 

@@ -45,7 +45,7 @@
 
                     <android.support.design.widget.TabLayout
                         android:id="@+id/tab_stock_detail_chart"
-                        style="@style/NormaltabLayout"
+                        style="@style/NormalTabLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/stock_market_bg" />
@@ -59,7 +59,7 @@
 
                     <android.support.design.widget.TabLayout
                         android:id="@+id/tab_stock_detail_news"
-                        style="@style/NormaltabLayout"
+                        style="@style/NormalTabLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/stock_market_bg" />
@@ -72,7 +72,7 @@
 
                     <android.support.design.widget.TabLayout
                         android:id="@+id/tab_stock_detail_chart_img"
-                        style="@style/NormaltabLayout"
+                        style="@style/NormalTabLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/stock_market_bg" />

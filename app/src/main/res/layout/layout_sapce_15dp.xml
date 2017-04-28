@@ -2,5 +2,5 @@
 <View xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="15dp"
-    android:background="@drawable/shape_line_top_and_bottom_title_color"
+    android:background="@drawable/shape_line_top_and_bottom_colorf0f0f0"
     android:orientation="vertical"/>

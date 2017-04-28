@@ -68,12 +68,13 @@ public class IMAddFriendActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
-                if (result.getBoolean("success")) {
-                    UIHelper.toast(IMAddFriendActivity.this, "好友请求发送成功!");
-                    finish();
-                }else {
-                    UIHelper.toast(IMAddFriendActivity.this, "好友请求发送失败!请重试");
+                if (result.getIntValue("code")==0) {
+                    if (result.getJSONObject("data").getBoolean("success")) {
+                        UIHelper.toast(IMAddFriendActivity.this, "好友请求发送成功!");
+                        finish();
+                    } else {
+                        UIHelper.toast(IMAddFriendActivity.this, "好友请求发送失败!请重试");
+                    }
                 }
             }
 

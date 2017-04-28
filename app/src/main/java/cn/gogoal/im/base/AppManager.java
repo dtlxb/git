@@ -14,7 +14,7 @@ import cn.gogoal.im.bean.BaseMessage;
  */
 public class AppManager {
 
-    private static LinkedList<FragmentActivity> activityStack;
+    private static LinkedList<Activity> activityStack;
 
     private volatile static AppManager instance;
 
@@ -53,7 +53,7 @@ public class AppManager {
     /**
      * 添加Activity到堆栈
      */
-    void addActivity(FragmentActivity activity) {
+    void addActivity(Activity activity) {
         activityStack.add(activity);
     }
 
@@ -75,7 +75,7 @@ public class AppManager {
         return activityStack.get(activityStack.size() - 1);
     }
 
-    private void removeActivity(FragmentActivity activity) {
+    private void removeActivity(Activity activity) {
         if (activity != null && activityStack.contains(activity)) {
             activityStack.remove(activity);
         }
@@ -84,7 +84,7 @@ public class AppManager {
     /**
      * 结束指定的Activity
      */
-    public void finishActivity(FragmentActivity activity) {
+    public void finishActivity(Activity activity) {
         if (!isEmpty(activity)) {
             removeActivity(activity);
             activity.finish();
@@ -95,7 +95,7 @@ public class AppManager {
      * 结束指定类名的Activity
      */
     public void finishActivity(Class<?> cls) {
-        for (FragmentActivity activity : activityStack) {
+        for (Activity activity : activityStack) {
             if (activity.getClass().equals(cls)) {
                 finishActivity(activity);
                 break;
@@ -109,7 +109,7 @@ public class AppManager {
 
     public void finishBackActivity(FragmentActivity activity) {
         if (null!=activityStack && !activityStack.isEmpty()) {
-            for (FragmentActivity a : activityStack) {
+            for (Activity a : activityStack) {
                 if (!a.getClass().equals(activity.getClass())) {
                     finishActivity(a);
                 }
@@ -122,7 +122,7 @@ public class AppManager {
      */
     public void finishAllActivity() {
         if (!isStackEmpty()) {
-            for (FragmentActivity activity:activityStack) {
+            for (Activity activity:activityStack) {
                activity.finish();
             }
             activityStack.clear();

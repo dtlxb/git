@@ -13,6 +13,7 @@ import com.socks.library.KLog;
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindArray;
@@ -22,6 +23,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.UserDetailInfo;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -59,7 +61,24 @@ public class EditMyInfoActivity extends BaseActivity {
         rvMyInfo.addItemDecoration(new NormalItemDecoration(mContext));
         rvMyInfo.setLayoutManager(new LinearLayoutManager(mContext));
         rvMyInfo.setAdapter(myInfoAdapter);
-        iniListDatas();
+        iniListDatas();//初始化设置列表
+        getMyInfo();//获取个人信息
+    }
+
+    private void getMyInfo() {
+        HashMap<String,String> map=new HashMap<>();
+        map.put("token",UserUtils.getToken());
+        new GGOKHTTP(map, GGOKHTTP.GET_MY_INFO, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+
+            }
+        }).startGet();
     }
 
     private void iniListDatas() {

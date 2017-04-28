@@ -106,7 +106,7 @@ public class UserUtils {
     public static String getOrganizationAddress() {
         JSONObject user = getUserInfo();
         if (user == null) return null;
-        return user.getString("organization_address");
+        return user.getString("city");
     }
 
     /**
@@ -204,7 +204,7 @@ public class UserUtils {
     /**
      * 发请求更新用户信息
      */
-    public static void updataNetUserInfo(Map<String, String> map, final UpdataListener updataListener) {
+    public static void updataNetUserInfo(final Map<String, String> map, final UpdataListener updataListener) {
 //        Map<String, String> map = new HashMap<>();
 //        map.put("avatar", "7");
 //        map.put("name", "7");
@@ -228,15 +228,18 @@ public class UserUtils {
                             updataListener.success(responseInfo);
                     } else {
                         if (updataListener != null) {
-                            switch (result.getIntValue("code")) {
-                                case 115://昵称已存在
-                                    updataListener.failed("昵称已存在！");
-                                    break;
-                                default:
-                                    updataListener.failed(result.getString("msg"));
-                                    break;
+                            if (map.containsKey("name")) {
+                                switch (result.getIntValue("code")) {
+                                    case 115://昵称已存在
+                                        updataListener.failed("昵称已存在！");
+                                        break;
+                                    default:
+                                        updataListener.failed(result.getString("msg"));
+                                        break;
+                                }
+                            }else {
+                                updataListener.failed(result.getString("msg"));
                             }
-
                         }
                     }
                 } else {

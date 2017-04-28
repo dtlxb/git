@@ -27,7 +27,7 @@
 //import cn.gogoal.im.common.StockUtils;
 //import cn.gogoal.im.common.StringUtils;
 //import cn.gogoal.im.common.UIHelper;
-//import cn.gogoal.im.fragment.MyStockFragment;
+//import cn.gogoal.im.fragment.MainStockFragment;
 //
 ///**
 // * author wangjd on 2017/4/21 0021.
@@ -162,7 +162,7 @@
 //                        MyStockTopDialog.this.dismiss();
 //                        SPTools.saveInt("choose_banner_item", position);
 //
-//                        ((MyStockFragment)getParentFragment()).changeIitem(position);
+//                        ((MainStockFragment)getParentFragment()).changeIitem(position);
 //                    }
 //                });
 //            }

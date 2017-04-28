@@ -588,6 +588,12 @@ public class GGOKHTTP {
      */
     public static final String BIND_MOBILE = "v1/ggm_im/bind_mobile";
 
+    /*
+     *  token
+     *  获取个人信息
+     */
+    public static final String GET_MY_INFO = "v1/user/get_info";
+
 //--------------------------------------------------------------------------------------------------
 
     /**

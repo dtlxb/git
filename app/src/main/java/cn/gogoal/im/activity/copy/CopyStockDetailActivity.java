@@ -326,7 +326,6 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
 
         onShow(showItem);
 
-
     }
 
     private void getImageChart() {

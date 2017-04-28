@@ -1,4 +1,4 @@
-package cn.gogoal.im.fragment;
+package cn.gogoal.im.fragment.main;
 
 import android.content.Context;
 import android.content.Intent;

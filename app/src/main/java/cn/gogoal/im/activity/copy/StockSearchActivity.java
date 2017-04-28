@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hply.imagepicker.view.StatusBarUtil;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -105,8 +104,6 @@ public class StockSearchActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
-        KLog.e(JSONObject.toJSONString(list_history));
-
         StatusBarUtil barUtil = StatusBarUtil.with(this);
 
         barUtil.setStatusBarFontDark(true);
@@ -115,7 +112,7 @@ public class StockSearchActivity extends BaseActivity {
         Intent intent = getIntent();
         num = intent.getIntExtra("num", 0);
 
-        InitHotList();
+        initHotList();
     }
 
     //数据初始化
@@ -165,9 +162,8 @@ public class StockSearchActivity extends BaseActivity {
                 SearchStockData stock = list.get(position);
                 String stockname = stock.getStock_name();
                 String stockcode = stock.getStock_code();
-                KLog.e(num);
                 switch (num) {
-                    case 0:
+                    case 0://点击去个股详情
                         Intent intent = new Intent();
                         intent.putExtra("stockName", stockname);
                         intent.putExtra("stockCode", stockcode);
@@ -180,7 +176,7 @@ public class StockSearchActivity extends BaseActivity {
 //                        finish();
                         HistorySearchData data = new HistorySearchData(stockname, stockcode);
                         StockUtils.addSearchedStock(JSONObject.parseObject(JSONObject.toJSONString(data)));
-                        InitHotList();
+                        initHotList();
                         break;
                     case 1:
                         InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -236,7 +232,8 @@ public class StockSearchActivity extends BaseActivity {
             }
         });
 
-        adapter_hot = new HotSearchAdapter(list_hot);
+        adapter_hot = new HotSearchAdapter(list_hot,getIntent().getBooleanExtra("show_add_btn",true));
+
         search_hot_list.setAdapter(adapter_hot);
         search_hot_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -340,7 +337,7 @@ public class StockSearchActivity extends BaseActivity {
     }
 
     //热门搜索
-    private void InitHotList() {
+    private void initHotList() {
         final Map<String, String> param = new HashMap<String, String>();
         param.put("type", "1");
         param.put("get_count", "0");
@@ -352,12 +349,13 @@ public class StockSearchActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 if (responseInfo != null) {
                     HotSearchStockBean bean = JSONObject.parseObject(responseInfo, HotSearchStockBean.class);
-                    if (bean.getCode().equals("0")) {
+                    if (bean.getCode()==0) {
+                        list_hot.clear();
                         search_hot.setVisibility(View.VISIBLE);
                         ArrayList<HotSearchStockData> info = bean.getData();
                         list_hot.addAll(info);
                         adapter_hot.notifyDataSetChanged();
-                    } else if (bean.getCode().equals("1001")) {
+                    } else if (bean.getCode()==1001) {
                         search_hot.setVisibility(View.GONE);
                     }
                     load_animation.setVisibility(View.GONE);

@@ -235,6 +235,7 @@ public class ChatFragment extends BaseFragment {
                         Intent intent = new Intent(getActivity(), StockSearchActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putInt("num", 2);
+                        bundle.putBoolean("show_add_btn", false);
                         intent.putExtras(bundle);
                         startActivityForResult(intent, GET_STOCK);
                         break;

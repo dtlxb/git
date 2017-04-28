@@ -6,9 +6,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.TextView;
-
-import com.socks.library.KLog;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.MyStockSortInteface;
@@ -68,7 +65,6 @@ public class SortView extends AppCompatTextView {
     private class SortClick implements OnClickListener {
         @Override
         public void onClick(View v) {
-            KLog.e(((TextView) v).getText());
             if (sortType == 0) {
                 if (sortInteface != null) {
                     sortInteface.doSort(v, 1);

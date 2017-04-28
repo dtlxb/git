@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/create_live_bg"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     tools:context="cn.gogoal.im.activity.CreateLiveActivity">
 
     <ImageView

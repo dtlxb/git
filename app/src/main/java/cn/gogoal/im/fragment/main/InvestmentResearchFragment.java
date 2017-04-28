@@ -1,4 +1,4 @@
-package cn.gogoal.im.fragment;
+package cn.gogoal.im.fragment.main;
 
 import android.content.Context;
 import android.content.Intent;
@@ -50,7 +50,6 @@ public class InvestmentResearchFragment extends BaseFragment {
 
     private List<SectionTouYanData> mData;
     private SectionAdapter sectionAdapter;
-
 
     /**
      * banner适配器和数据集
