@@ -40,7 +40,6 @@ import cn.gogoal.im.fragment.main.MainStockFragment;
 import cn.gogoal.im.fragment.main.MessageFragment;
 import cn.gogoal.im.fragment.main.MineFragment;
 import cn.gogoal.im.fragment.main.SocialContactFragment;
-import cn.gogoal.im.ui.Badge.Badge;
 import cn.gogoal.im.ui.Badge.BadgeView;
 
 public class MainActivity extends BaseActivity {
@@ -56,7 +55,7 @@ public class MainActivity extends BaseActivity {
 
     private StatusBarUtil barUtil;
 
-    private MainStockFragment mainStockFragment;
+    public MainStockFragment mainStockFragment;
 
     @Override
     public int bindLayout() {
@@ -151,6 +150,12 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    public void changeItem(int index) {
+        if (index > 0 && index < tabMain.getTabCount()) {
+            tabMain.getTabAt(index).select();
+        }
+    }
+
     private void getFriendList() {
 
         Map<String, String> param = new HashMap<>();
@@ -206,8 +211,8 @@ public class MainActivity extends BaseActivity {
                 exitBy2Click();
             }
             return true;
-        }else if (keyCode==KeyEvent.KEYCODE_MENU){
-            startActivity(new Intent(getActivity(),TestActivity.class));
+        } else if (keyCode == KeyEvent.KEYCODE_MENU) {
+            startActivity(new Intent(getActivity(), TestActivity.class));
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -243,7 +248,7 @@ public class MainActivity extends BaseActivity {
         if (badge != null) {
             if (num == 0) {
                 badge.hide(false);
-            }else {
+            } else {
                 badge.setGravityOffset(0, 0, true);
                 badge.setShowShadow(false);
 
@@ -251,7 +256,7 @@ public class MainActivity extends BaseActivity {
                 badge.setBadgeTextSize(12, true);
                 badge.setBadgePadding(5, true);
 
-                String uriStr = "android.resource://" + this.getPackageName() + "/"+R.raw.ding;
+                String uriStr = "android.resource://" + this.getPackageName() + "/" + R.raw.ding;
 
 //                VoiceManager.getInstance(MainActivity.this)
 //                        .startPlay(Uri.parse(uriStr));

@@ -20,6 +20,8 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,9 +32,9 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.MyStockMarketBean;
+import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
@@ -43,6 +45,8 @@ import cn.gogoal.im.fragment.stock.MarketFragment;
 import cn.gogoal.im.fragment.stock.MyStockFragment;
 import cn.gogoal.im.ui.XDividerItemDecoration;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
+
+import static cn.gogoal.im.R.id.img_mystock_refresh;
 
 /**
  * author wangjd on 2017/4/27 0027.
@@ -55,10 +59,14 @@ public class MainStockFragment extends BaseFragment {
     @BindView(R.id.tv_mystock_edit)
     TextView tvMystockEdit;
 
+    public TextView getTvMystockEdit() {
+        return tvMystockEdit;
+    }
+
     @BindView(R.id.tab_my_stock)
     TabLayout tabMyStock;
 
-    @BindView(R.id.img_mystock_refresh)
+    @BindView(img_mystock_refresh)
     ImageView imgMystockRefresh;
 
     @BindView(R.id.layout_title)
@@ -66,8 +74,6 @@ public class MainStockFragment extends BaseFragment {
 
     @BindView(R.id.vp_my_stock_tab)
     UnSlidingViewPager vpMyStockTab;
-
-    private RotateAnimation refreshAnimation;
 
     String[] marketTabs = {"自选股", "市场"};
 
@@ -83,6 +89,7 @@ public class MainStockFragment extends BaseFragment {
     private GridMarketAdapter myAdaptetDialogMarket;
     private MyStockFragment myStockFragment;
     private MarketFragment marketFragment;
+    private RotateAnimation animation;
 
     @Override
     public int bindLayout() {
@@ -100,7 +107,9 @@ public class MainStockFragment extends BaseFragment {
         MainStockTabAdapter tabAdapter = new MainStockTabAdapter(getChildFragmentManager());
 
         vpMyStockTab.setAdapter(tabAdapter);
+
         tabMyStock.setupWithViewPager(vpMyStockTab);
+
         for (int i = 0; i < marketTabs.length; i++) {
             TabLayout.Tab tab = tabMyStock.getTabAt(i);
             if (tab != null) {
@@ -128,7 +137,25 @@ public class MainStockFragment extends BaseFragment {
         initView();//初始化一些View
 
         refreshAll(AppConst.REFRESH_TYPE_FIRST);
-//        handler.postDelayed(runnable, INTERVAL_TIME);//启动定时刷新
+
+        imgMystockRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshAll(AppConst.REFRESH_TYPE_PARENT_BUTTON);
+            }
+        });
+
+        if (StockUtils.isTradeTime()) {//交易时间段
+            handler.postDelayed(runnable, INTERVAL_TIME);//启动定时刷新
+        }
+    }
+
+    @Subscriber(tag = "updata_refresh_mode")
+    void updataRefreshMode(String msg){
+        handler.removeCallbacks(runnable);
+        if (StockUtils.isTradeTime()) {//交易时间段
+            handler.postDelayed(runnable, INTERVAL_TIME);//启动定时刷新
+        }
     }
 
     public void initView() {
@@ -147,6 +174,11 @@ public class MainStockFragment extends BaseFragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        INTERVAL_TIME = SPTools.getLong("interval_time", 15000);
+    }
 
     /**
      * 获取大盘数据
@@ -168,14 +200,15 @@ public class MainStockFragment extends BaseFragment {
                     myAdaptetDialogMarket.notifyDataSetChanged();
 
                     myStockFragment.changeIitem(
-                            marketDatas.get(SPTools.getInt("CHANGE_ITEM", 0)));
-
+                            marketDatas.get(SPTools.getInt("change_market_item", 0)));
                 }
+                stopAnimation(null);
             }
 
             @Override
             public void onFailure(String msg) {
                 UIHelper.toastError(getActivity(), msg);
+                stopAnimation(null);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.APP_HQ_GET, ggHttpInterface).startGet();
@@ -197,9 +230,44 @@ public class MainStockFragment extends BaseFragment {
     }
 
     private void refreshAll(int type){
+        //大盘指数模块刷新
         getMarketLittle(type);
-        AppManager.getInstance().sendMessage("stock_market_updata");
+
+        //嵌套的自选股、行情模块更新
+        if (tabMyStock.getTabAt(0).isSelected()){
+            myStockFragment.refreshMyStock(type);
+        }else {
+            marketFragment.huShenFragment.getMarketInformation(type);
+        }
+
+        //刷新动画
+        startAnimation(null);
     }
+
+    @Subscriber(tag = "market_stop_animation_refresh")
+    public void stopAnimation(String msg) {
+        if (animation != null) {
+            AnimationUtils.getInstance().cancleLoadingAnime(
+                    animation,
+                    imgMystockRefresh,
+                    R.mipmap.img_refresh);
+        } else {
+            imgMystockRefresh.clearAnimation();
+            imgMystockRefresh.setImageResource(R.mipmap.img_refresh);
+        }
+        imgMystockRefresh.setEnabled(true);
+        imgMystockRefresh.setClickable(true);
+    }
+
+    @Subscriber(tag = "market_start_animation_refresh")
+    public void startAnimation(String msg) {
+        animation = AnimationUtils.getInstance().setLoadingAnime(
+                imgMystockRefresh, R.mipmap.img_loading_refresh);
+        animation.startNow();
+        imgMystockRefresh.setClickable(false);
+        imgMystockRefresh.setEnabled(false);
+    }
+
 
     /**
      * 销毁指数[弹窗]
@@ -233,7 +301,9 @@ public class MainStockFragment extends BaseFragment {
         public void run() {
             try {
                 handler.postDelayed(this, INTERVAL_TIME);
-                //TODO 刷新 1.数据首次载入；2.行情刷新；3.自选股数据刷新；4.自选股中的大盘数据刷新
+
+                refreshAll(AppConst.REFRESH_TYPE_AUTO);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -244,6 +314,13 @@ public class MainStockFragment extends BaseFragment {
     public void onStop() {
         super.onStop();
         handler.removeCallbacks(runnable);
+    }
+
+    public void changeItem(int index) {
+//        Artificial
+        if (index>=0 && index<tabMyStock.getTabCount()) {
+            tabMyStock.getTabAt(index).select();
+        }
     }
 
     /**
@@ -322,7 +399,7 @@ public class MainStockFragment extends BaseFragment {
                     @Override
                     public void onClick(View v) {
                         dismissMarket();
-                        SPTools.saveInt("CHANGE_ITEM", position);
+                        SPTools.saveInt("change_market_item", position);
                         myStockFragment.changeIitem(data);
                     }
                 });

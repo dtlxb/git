@@ -2,7 +2,6 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,6 +13,7 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.SPTools;
 
@@ -93,6 +93,7 @@ public class SetStockRefreshActivity extends BaseActivity {
                         lastView = tagView;
                     }
                     SPTools.saveLong("interval_time", time);
+                    AppManager.getInstance().sendMessage("updata_refresh_mode");
                 }
             });
         }

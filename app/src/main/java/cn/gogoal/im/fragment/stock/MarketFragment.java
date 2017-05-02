@@ -35,6 +35,7 @@ public class MarketFragment extends BaseFragment {
     String[] marketTabTitles;
 
     private ArrayList<Fragment> marketFragments;
+    public HuShenFragment huShenFragment;
 
     @Override
     public int bindLayout() {
@@ -44,7 +45,7 @@ public class MarketFragment extends BaseFragment {
     @Override
     public void doBusiness(final Context mContext) {
 
-        HuShenFragment huShenFragment = new HuShenFragment();
+        huShenFragment = new HuShenFragment();
         HKFragment hkFragment = new HKFragment();
         FundFragment fundFragment = new FundFragment();
         BondFragment bondFragment = new BondFragment();
