@@ -144,10 +144,10 @@ public class CreateLiveActivity extends BaseActivity {
 
     private void getStartLive() {
 
-        if (liveLargeImg == null) {
+        /*if (liveLargeImg == null) {
             UIHelper.toast(this, "请更换封面");
             return;
-        }
+        }*/
 
         String title = editLive.getText().toString();
         if (title.equals("")) {

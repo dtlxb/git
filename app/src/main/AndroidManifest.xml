@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 基础模块 END -->
 
-
     <!-- 阿里云播放器 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -22,13 +21,6 @@
     <uses-permission android:name="android.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <!-- iBeancon功能所需权限 -->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <!-- 个推3.0电子围栏功能所需权限 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <!-- 连麦功能所需权限 -->
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -59,15 +51,6 @@
             </intent-filter>
         </receiver>
         <!-- 实时通信模块 END -->
-
-
-        <!-- 配置SDK核心服务 -->
-        <service
-            android:name=".servise.PushService"
-            android:exported="true"
-            android:label="PushService"
-            android:process=":pushservice" />
-        <service android:name=".servise.IntentService" />
 
         <activity android:name=".activity.TypeLoginActivity">
             <intent-filter>

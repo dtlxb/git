@@ -65,8 +65,6 @@ import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 
-import static com.igexin.push.core.a.c;
-
 
 /*
 * 大盘股票详情
@@ -401,7 +399,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
      */
     private void initRefreshStyle(@ColorRes int color) {
         headerView.setBackgroundColor(getResColor(color));
-        ptrFrame.setBackgroundColor(c);
+        ptrFrame.setBackgroundColor(getResColor(color));
     }
 
     private void onShow(int item) {
@@ -755,24 +753,24 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
 //                KLog.e(responseInfo);
 
                 StockDetailMarketIndexBean bean = JSONObject.parseObject(responseInfo, StockDetailMarketIndexBean.class);
-                if (JSONObject.parseObject(responseInfo).getIntValue("code")==0) {
+                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     info = bean.getData();
                     //涨跌
                     if (info.get(0).getPrice_change() > 0) {
-                            setStatusColor(R.color.header_red);
-                            relative_header.setBackgroundColor(getResColor(R.color.header_red));
-                            linear_header.setBackgroundColor(getResColor(R.color.header_red));
-                            initRefreshStyle(R.color.header_red);
+                        setStatusColor(R.color.header_red);
+                        relative_header.setBackgroundColor(getResColor(R.color.header_red));
+                        linear_header.setBackgroundColor(getResColor(R.color.header_red));
+                        initRefreshStyle(R.color.header_red);
                         stock_price.setText(StringUtils.save2Significand(info.get(0).getPrice()));//股票价格
                         stock_start.setText(StringUtils.save2Significand(info.get(0).getOpen_price()));//开盘价
                         stock_detail_tv1.setText("+" + StringUtils.save2Significand(info.get(0).getPrice_change()));
                         stock_detail_tv2.setText("+" + StringUtils.save2Significand(info.get(0).getPrice_change_rate()) + "%");
                     } else if (info.get(0).getPrice_change() < 0) {
-                            setStatusColor(R.color.header_green);
-                            relative_header.setBackgroundColor(getResColor(R.color.header_green));
-                            linear_header.setBackgroundColor(getResColor(R.color.header_green));
-                            initRefreshStyle(R.color.header_green);
-                        
+                        setStatusColor(R.color.header_green);
+                        relative_header.setBackgroundColor(getResColor(R.color.header_green));
+                        linear_header.setBackgroundColor(getResColor(R.color.header_green));
+                        initRefreshStyle(R.color.header_green);
+
                         stock_price.setText(StringUtils.save2Significand(info.get(0).getPrice()));//股票价格
                         stock_start.setText(StringUtils.save2Significand(info.get(0).getOpen_price()));//开盘价
                         stock_detail_tv1.setText(StringUtils.save2Significand(info.get(0).getPrice_change()));
@@ -1094,7 +1092,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
                     if (params.length > 1) {
                         mOHLCData.clear();
                         parseObjects(params[1]);
-                        KChartsBitmap kChartsBitmap = new KChartsBitmap(getActivity(),width, height);
+                        KChartsBitmap kChartsBitmap = new KChartsBitmap(getActivity(), width, height);
                         if (dpi <= DeviceUtil.DPI480P) {
                             kChartsBitmap.setIsSw480P(true);
                         } else if (dpi <= DeviceUtil.DPI720P) {
@@ -1110,7 +1108,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
                     if (params.length > 1) {
                         mOHLCData.clear();
                         parseObjects(params[1]);
-                        KChartsBitmap kChartsBitmap1 = new KChartsBitmap(getActivity(),width, height);
+                        KChartsBitmap kChartsBitmap1 = new KChartsBitmap(getActivity(), width, height);
                         if (dpi <= DeviceUtil.DPI480P) {
                             kChartsBitmap1.setIsSw480P(true);
                         } else if (dpi <= DeviceUtil.DPI720P) {
@@ -1126,7 +1124,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
                     if (params.length > 1) {
                         mOHLCData.clear();
                         parseObjects(params[1]);
-                        KChartsBitmap kChartsBitmap2 = new KChartsBitmap(getActivity(),width, height);
+                        KChartsBitmap kChartsBitmap2 = new KChartsBitmap(getActivity(), width, height);
                         if (dpi <= DeviceUtil.DPI480P) {
                             kChartsBitmap2.setIsSw480P(true);
                         } else if (dpi <= DeviceUtil.DPI720P) {
