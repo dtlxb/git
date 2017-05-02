@@ -189,9 +189,16 @@ public class GGOKHTTP {
       * 自选股的删除
       * group_id=0
       * params token=4967b285a82244d296b807a8fea9bc77
+      * params full_codes:sh600340
+      * */
+    public static final String DELETE_MY_STOCKS = "v1/mystock/delete_stocks";
+
+    /*
+      * 自选股的删除--老接口，不支持删除基金，债券，指数
+      * params token=4967b285a82244d296b807a8fea9bc77
       * params stock_code=600001
       * */
-    public static final String MYSTOCK_DELETE = "v1/mystock/delete_stocks";
+    public static final String MYSTOCK_DELETE = "v1/mystock/delete";
 
     /**
      * 是否已收藏
@@ -508,8 +515,8 @@ public class GGOKHTTP {
 
     /**
      * token
-     *  mobile
-     *  发送验证码 更换绑定手机号
+     * mobile
+     * 发送验证码 更换绑定手机号
      */
     public static final String SEND_CAPTCHA = "v1/ggm_im/send_captcha";
 
@@ -595,6 +602,7 @@ public class GGOKHTTP {
     public static final String GET_MY_INFO = "v1/user/get_info";
     /**
      * 预约直播
+     *
      * @prama token
      * @prama sourece 4(移动版)
      * @prama video_id 直播的id（live_id）
@@ -637,26 +645,28 @@ public class GGOKHTTP {
                             if (httpInterface != null) httpInterface.onSuccess(response);
                         }
                     });
-//            OkHttpUtils
-//                    .get()
-//                    .url(GGAPI.get(url, param))
-//                    .build()
-//                    .execute(new StringCallback() {
-//                        @Override
-//                        public void onError(Call call, Exception e) {
-//                            if (httpInterface != null) httpInterface.onFailure(e.toString());
-//                        }
-//
-//                        @Override
-//                        public void onResponse(String response) {
-//                            if (httpInterface != null) httpInterface.onSuccess(response);
-////                            try {
-////                                KLog.e(GGAPI.get(url, param));
-////                            } catch (Exception e) {
-////                                e.printStackTrace();
-////                            }
-//                        }
-//                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (httpInterface != null) httpInterface.onFailure(e.toString());
+        }
+    }
+
+    public void startRealGet() {
+        try {
+            OkHttpUtils.get()
+                    .url(GGAPI.getReal(url, param))
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+                            if (httpInterface != null) httpInterface.onFailure(e.toString());
+                        }
+
+                        @Override
+                        public void onResponse(String response, int id) {
+                            if (httpInterface != null) httpInterface.onSuccess(response);
+                        }
+                    });
         } catch (Exception e) {
             e.printStackTrace();
             if (httpInterface != null) httpInterface.onFailure(e.toString());

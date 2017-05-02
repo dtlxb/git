@@ -112,7 +112,7 @@ public class StockUtils {
     }
 
     public static String plusMinus(String rateString, boolean percent) {
-        if (rateString==null || TextUtils.isEmpty(rateString)) {
+        if (rateString == null || TextUtils.isEmpty(rateString)) {
             return "--";
         }
 
@@ -211,6 +211,21 @@ public class StockUtils {
         }
     }
 
+    public static String getSympolType(int sympolType) {
+        switch (sympolType) {
+            case 1:
+                return "股票";
+            case 2:
+                return "指数";
+            case 3:
+                return "基金";
+            case 4:
+                return "债券";
+            default:
+                return "其他类型";
+        }
+    }
+
 //    public static void go2StockDetail(Context context, String stockCode, String stockName) {
 //        Intent intent = new Intent(context, StockDetailActivity.class);
 //        intent.putExtra("stock_code", stockCode);
@@ -288,7 +303,7 @@ public class StockUtils {
     /**
      * 添加自选股
      */
-    public static void reqAddStock(final Context context, final String stock_name, final String stock_code) {
+    public static void addMyStock(final Context context, final String stock_name, final String stock_code) {
         final Map<String, String> param = new HashMap<String, String>();
         param.put("token", UserUtils.getToken());
         param.put("group_id", "0");
@@ -326,7 +341,7 @@ public class StockUtils {
     /**
      * 删除自选股
      */
-    public static void reqDelStock(final Context context, final String stock_name, final String stock_code, final ToggleMyStockCallBack callBack) {
+    public static void deleteMyStock(final Context context, final String stock_name, final String stock_code, final ToggleMyStockCallBack callBack) {
         final Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
         param.put("group_id", "0");
@@ -344,7 +359,7 @@ public class StockUtils {
                 if (code == 0) {
                     UIHelper.toast(context, "删除自选成功");
                     callBack.success();
-                }else {
+                } else {
                     callBack.failed(JSONObject.parseObject(responseInfo).getString("message"));
                 }
             }
@@ -355,7 +370,7 @@ public class StockUtils {
                 UIHelper.toastError(context, msg);
             }
         };
-        new GGOKHTTP(param, GGOKHTTP.MYSTOCK_DELETE, httpInterface).startGet();
+        new GGOKHTTP(param, GGOKHTTP.DELETE_MY_STOCKS, httpInterface).startGet();
     }
 
     public interface ToggleMyStockCallBack {

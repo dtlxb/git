@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +34,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hply.imagepicker.view.StatusBarUtil;
+import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -85,7 +87,7 @@ import in.srain.cube.views.ptr.PtrHandler;
 /*
 * 普通股票详情
 * */
-public class CopyStockDetailActivity extends BaseActivity implements OnClickListener {
+public class CopyStockDetailActivity extends BaseActivity {
 
     public static final String TAG = "CopyStockDetailActivity";
 
@@ -188,39 +190,45 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
     private double change_rate;
 
     //五个图的布局
-    @BindView(R.id.charts_min_line_layout)
-    RelativeLayout tiemsLayout;
-    @BindView(R.id.charts_fiveday_k_layout)
-    RelativeLayout fivedayLayout;
-    @BindView(R.id.charts_day_k_layout)
-    RelativeLayout daykLayout;
-    @BindView(R.id.charts_week_k_layout)
-    RelativeLayout weekkLayout;
-    @BindView(R.id.charts_mouth_k_layout)
-    RelativeLayout monthkLayout;
+//    @BindView(R.id.charts_min_line_layout)
+//    RelativeLayout tiemsLayout;
+//    @BindView(R.id.charts_fiveday_k_layout)
+//    RelativeLayout fivedayLayout;
+//    @BindView(R.id.charts_day_k_layout)
+//    RelativeLayout daykLayout;
+//    @BindView(R.id.charts_week_k_layout)
+//    RelativeLayout weekkLayout;
+//    @BindView(R.id.charts_mouth_k_layout)
+//    RelativeLayout monthkLayout;
 
-    //每个图表item
-    @BindView(R.id.charts_min_line_tv)
-    TextView minLineTv;
-    @BindView(R.id.charts_day_k_tv)
-    TextView dayKTv;
-    @BindView(R.id.charts_fiveday_k_tv)
-    TextView fiveKTv;
-    @BindView(R.id.charts_mouth_k_tv)
-    TextView monthKTv;
-    @BindView(R.id.charts_week_k_tv)
-    TextView WeekKTv;
+    //图表表头
+    @BindView(R.id.charts_line_tab_up_ll)
+    TabLayout tabChartsTitles;
+    @BindArray(R.array.stock_detail_chart_titles)
+    String[] stockDetailChartTitles;
 
-    @BindView(R.id.tv_line_min)
-    TextView minLine;
-    @BindView(R.id.tv_line_dayk)
-    TextView daykLine;
-    @BindView(R.id.tv_line_fiveday)
-    TextView fivedayLine;
-    @BindView(R.id.tv_line_monthk)
-    TextView monthkLine;
-    @BindView(R.id.tv_line_weekk)
-    TextView weekkLine;
+//    //每个图表item
+//    @BindView(R.id.charts_min_line_tv)
+//    TextView minLineTv;
+//    @BindView(R.id.charts_day_k_tv)
+//    TextView dayKTv;
+//    @BindView(R.id.charts_fiveday_k_tv)
+//    TextView fiveKTv;
+//    @BindView(R.id.charts_mouth_k_tv)
+//    TextView monthKTv;
+//    @BindView(R.id.charts_week_k_tv)
+//    TextView WeekKTv;
+
+    //    @BindView(R.id.tv_line_min)
+//    TextView minLine;
+//    @BindView(R.id.tv_line_dayk)
+//    TextView daykLine;
+//    @BindView(R.id.tv_line_fiveday)
+//    TextView fivedayLine;
+//    @BindView(R.id.tv_line_monthk)
+//    TextView monthkLine;
+//    @BindView(R.id.tv_line_weekk)
+//    TextView weekkLine;
     //页面加载动画
     @BindView(R.id.load_animation)
     RelativeLayout load_animation;
@@ -255,7 +263,6 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
     private double closePrice;
     private HashMap<String, Bitmap> map = new HashMap<>();
     //定时刷新
-    private int position;
     private int showItem;
     private int width;
     private int height;
@@ -329,11 +336,15 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
     }
 
     private void getImageChart() {
+        AppDevice.setViewWidth$Height(layoutImageChart, -1, 350 * AppDevice.getWidth(getActivity()) / 560);
+
         Map<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+
+                KLog.e(responseInfo);
 
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
 
@@ -341,24 +352,16 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
                     layoutNoData.setVisibility(View.GONE);
                     final ChartImageBean.ChartImage chartImage = JSONObject.parseObject(responseInfo, ChartImageBean.class).getData();
 
-                    vpImageChart.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
-                        @Override
-                        public Fragment getItem(int position) {
-                            return ImageChartFragment.getInstance(position == 0 ? chartImage.getEps_img() : (
-                                    position == 1 ? chartImage.getProfit_img() : chartImage.getPe_img()
-                            ));
-                        }
+                    final List<String> chartImageLists = new ArrayList<>();
 
-                        @Override
-                        public int getCount() {
-                            return 3;
-                        }
+                    chartImageLists.add(chartImage.getEps_img());
+                    chartImageLists.add(chartImage.getProfit_img());
+                    chartImageLists.add(chartImage.getPe_img());
 
-                        @Override
-                        public CharSequence getPageTitle(int position) {
-                            return arrStockChartImage[position];
-                        }
-                    });
+                    final ImageChartAdapter chartAdapter = new ImageChartAdapter(getSupportFragmentManager(), chartImageLists);
+
+                    vpImageChart.setAdapter(chartAdapter);
+
                     tabImageChart.setupWithViewPager(vpImageChart);
 
                 } else {
@@ -369,11 +372,11 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
 
             public void onFailure(String msg) {
 
-                UIHelper.toastError(getActivity(), msg);
                 layoutNoData.setVisibility(View.VISIBLE);
+                UIHelper.toastError(getActivity(), msg);
             }
         };
-        new GGOKHTTP(param, GGOKHTTP.DM_GET_IMG, ggHttpInterface).startGet();
+        new GGOKHTTP(param, GGOKHTTP.DM_GET_IMG, ggHttpInterface).startRealGet();
 
     }
 
@@ -449,8 +452,6 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
 
     //初始化
     private void init() {
-        AppDevice.setViewWidth$Height(layoutImageChart, -1, 350 * AppDevice.getWidth(getActivity()) / 560);
-
         dayk1 = SPTools.getInt("tv_ln1", 5);
         dayk2 = SPTools.getInt("tv_ln2", 10);
         dayk3 = SPTools.getInt("tv_ln3", 20);
@@ -480,11 +481,87 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
         textView4.setAlpha((float) 0.7);
 
         showItem = SPTools.getInt("showItem", 0);
-        tiemsLayout.setOnClickListener(this);
-        daykLayout.setOnClickListener(this);
-        monthkLayout.setOnClickListener(this);
-        weekkLayout.setOnClickListener(this);
-        fivedayLayout.setOnClickListener(this);
+
+        for (int i = 0; i < 5; i++) {
+            tabChartsTitles.addTab(tabChartsTitles.newTab().setText(stockDetailChartTitles[i]));
+        }
+
+        tabChartsTitles.getTabAt(showItem).select();
+
+        tabChartsTitles.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        if (map.containsKey("0")) {
+                            setMinLineStatu(1);
+                            if (stock_charge_type == 1 && StockUtils.isTradeTime()) {
+                                mBitmapChartView.setBitmap(map.get(String.valueOf("0")), true, timesBitmap);
+                            } else {
+                                mBitmapChartView.setBitmap(map.get(String.valueOf("0")), false, timesBitmap);
+                            }
+                        } else {
+                            setMinLineStatu(0);
+                            GetMinLineData();
+                        }
+                        break;
+                    case 1:
+                        if (map.containsKey("1")) {
+                            setFiveStatu(1);
+                            if (stock_charge_type == 1 && StockUtils.isTradeTime()) {
+                                mBitmapChartView.setBitmap(map.get(String.valueOf("1")), true, fiveDayBitmap);
+                            } else {
+                                mBitmapChartView.setBitmap(map.get(String.valueOf("1")), false, fiveDayBitmap);
+                            }
+                        } else {
+                            setFiveStatu(0);
+                            getFiveData();
+                        }
+                        break;
+                    case 2:
+                        if (map.containsKey("2")) {
+                            setDayKStatue(1);
+                            mBitmapChartView.setBitmap(map.get("2"));
+                        } else {
+                            setDayKStatue(0);
+                            getKLineData(0);
+                        }
+                        break;
+                    case 3:
+                        if (map.containsKey("3")) {
+                            setWeekLineStatu(1);
+                            mBitmapChartView.setBitmap(map.get("3"));
+                        } else {
+                            setWeekLineStatu(0);
+                            getKLineData(1);
+                        }
+                        break;
+                    case 4:
+                        if (map.containsKey("4")) {
+                            setMonthLineStatu(1);
+                            mBitmapChartView.setBitmap(map.get("4"));
+                        } else {
+                            setMonthLineStatu(0);
+                            getKLineData(2);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                showItem = tab.getPosition();
+                SPTools.saveInt("showItem", showItem);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         mBitmapChartView.setOnClickListener(new OnClickListener() {
             @Override
@@ -528,15 +605,23 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
 
 
         // 修改状态栏颜色
-        StatusBarUtil.with(getActivity()).setColor(getResColor(R.color.header_gray));
+        StatusBarUtil.with(
+
+                getActivity()).
+
+                setColor(getResColor(R.color.header_gray));
         relative_header.setBackgroundResource(R.color.header_gray);
         linear_header.setBackgroundResource(R.color.header_gray);
+
         initRefreshStyle(R.color.header_gray);
+
         //股票状态和当前时间
         StockState();
 
         //设置下拉头部属性
-        headerView.setFontColor(getResColor(R.color.white));
+        headerView.setFontColor(
+
+                getResColor(R.color.white));
         headerView.setPullImage(R.mipmap.arrows_white);
         headerView.setLoadingImage(R.mipmap.loading_white);
 
@@ -813,16 +898,16 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
         } else if (type == 1) {
             load_animation.setVisibility(View.GONE);
         }
-        minLineTv.setTextColor(getResColor(R.color.red));
-        dayKTv.setTextColor(getResColor(R.color.text_color_tab));
-        fiveKTv.setTextColor(getResColor(R.color.text_color_tab));
-        monthKTv.setTextColor(getResColor(R.color.text_color_tab));
-        WeekKTv.setTextColor(getResColor(R.color.text_color_tab));
-        minLine.setVisibility(View.VISIBLE);
-        fivedayLine.setVisibility(View.GONE);
-        daykLine.setVisibility(View.GONE);
-        weekkLine.setVisibility(View.GONE);
-        monthkLine.setVisibility(View.GONE);
+//        minLineTv.setTextColor(getResColor(R.color.red));
+//        dayKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        fiveKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        monthKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        WeekKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        minLine.setVisibility(View.VISIBLE);
+//        fivedayLine.setVisibility(View.GONE);
+//        daykLine.setVisibility(View.GONE);
+//        weekkLine.setVisibility(View.GONE);
+//        monthkLine.setVisibility(View.GONE);
     }
 
     private void setFiveStatu(int type) {
@@ -831,16 +916,16 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
         } else if (type == 1) {
             load_animation.setVisibility(View.GONE);
         }
-        minLineTv.setTextColor(getResColor(R.color.text_color_tab));
-        dayKTv.setTextColor(getResColor(R.color.text_color_tab));
-        fiveKTv.setTextColor(getResColor(R.color.red));
-        monthKTv.setTextColor(getResColor(R.color.text_color_tab));
-        WeekKTv.setTextColor(getResColor(R.color.text_color_tab));
-        minLine.setVisibility(View.GONE);
-        fivedayLine.setVisibility(View.VISIBLE);
-        daykLine.setVisibility(View.GONE);
-        weekkLine.setVisibility(View.GONE);
-        monthkLine.setVisibility(View.GONE);
+//        minLineTv.setTextColor(getResColor(R.color.text_color_tab));
+//        dayKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        fiveKTv.setTextColor(getResColor(R.color.red));
+//        monthKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        WeekKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        minLine.setVisibility(View.GONE);
+//        fivedayLine.setVisibility(View.VISIBLE);
+//        daykLine.setVisibility(View.GONE);
+//        weekkLine.setVisibility(View.GONE);
+//        monthkLine.setVisibility(View.GONE);
     }
 
     private void setDayKStatue(int type) {
@@ -849,16 +934,16 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
         } else if (type == 1) {
             load_animation.setVisibility(View.GONE);
         }
-        minLineTv.setTextColor(getResColor(R.color.text_color_tab));
-        dayKTv.setTextColor(getResColor(R.color.red));
-        fiveKTv.setTextColor(getResColor(R.color.text_color_tab));
-        monthKTv.setTextColor(getResColor(R.color.text_color_tab));
-        WeekKTv.setTextColor(getResColor(R.color.text_color_tab));
-        minLine.setVisibility(View.GONE);
-        fivedayLine.setVisibility(View.GONE);
-        daykLine.setVisibility(View.VISIBLE);
-        weekkLine.setVisibility(View.GONE);
-        monthkLine.setVisibility(View.GONE);
+//        minLineTv.setTextColor(getResColor(R.color.text_color_tab));
+//        dayKTv.setTextColor(getResColor(R.color.red));
+//        fiveKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        monthKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        WeekKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        minLine.setVisibility(View.GONE);
+//        fivedayLine.setVisibility(View.GONE);
+//        daykLine.setVisibility(View.VISIBLE);
+//        weekkLine.setVisibility(View.GONE);
+//        monthkLine.setVisibility(View.GONE);
     }
 
     private void setWeekLineStatu(int type) {
@@ -867,16 +952,16 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
         } else if (type == 1) {
             load_animation.setVisibility(View.GONE);
         }
-        minLineTv.setTextColor(getResColor(R.color.text_color_tab));
-        dayKTv.setTextColor(getResColor(R.color.text_color_tab));
-        fiveKTv.setTextColor(getResColor(R.color.text_color_tab));
-        monthKTv.setTextColor(getResColor(R.color.text_color_tab));
-        WeekKTv.setTextColor(getResColor(R.color.red));
-        minLine.setVisibility(View.GONE);
-        fivedayLine.setVisibility(View.GONE);
-        daykLine.setVisibility(View.GONE);
-        weekkLine.setVisibility(View.VISIBLE);
-        monthkLine.setVisibility(View.GONE);
+//        minLineTv.setTextColor(getResColor(R.color.text_color_tab));
+//        dayKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        fiveKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        monthKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        WeekKTv.setTextColor(getResColor(R.color.red));
+//        minLine.setVisibility(View.GONE);
+//        fivedayLine.setVisibility(View.GONE);
+//        daykLine.setVisibility(View.GONE);
+//        weekkLine.setVisibility(View.VISIBLE);
+//        monthkLine.setVisibility(View.GONE);
     }
 
     private void setMonthLineStatu(int type) {
@@ -885,16 +970,16 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
         } else if (type == 1) {
             load_animation.setVisibility(View.GONE);
         }
-        minLineTv.setTextColor(getResColor(R.color.text_color_tab));
-        dayKTv.setTextColor(getResColor(R.color.text_color_tab));
-        fiveKTv.setTextColor(getResColor(R.color.text_color_tab));
-        monthKTv.setTextColor(getResColor(R.color.red));
-        WeekKTv.setTextColor(getResColor(R.color.text_color_tab));
-        minLine.setVisibility(View.GONE);
-        fivedayLine.setVisibility(View.GONE);
-        daykLine.setVisibility(View.GONE);
-        weekkLine.setVisibility(View.GONE);
-        monthkLine.setVisibility(View.VISIBLE);
+//        minLineTv.setTextColor(getResColor(R.color.text_color_tab));
+//        dayKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        fiveKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        monthKTv.setTextColor(getResColor(R.color.red));
+//        WeekKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        minLine.setVisibility(View.GONE);
+//        fivedayLine.setVisibility(View.GONE);
+//        daykLine.setVisibility(View.GONE);
+//        weekkLine.setVisibility(View.GONE);
+//        monthkLine.setVisibility(View.VISIBLE);
     }
 
     //初始化下拉刷新样式
@@ -1272,12 +1357,14 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
         text_state.setAlpha((float) 0.7);
     }
 
-    //图表点击事件
+    /*//图表点击事件
     @Override
     public void onClick(View view) {
         if (textLayout.getVisibility() == View.VISIBLE) {
             textLayout.setVisibility(View.GONE);
         }
+
+        //TODO
         switch (view.getId()) {
             case R.id.charts_min_line_layout:
                 if (map.containsKey("0")) {
@@ -1343,7 +1430,7 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
         }
         showItem = position;
         SPTools.saveInt("showItem", position);
-    }
+    }*/
 
 
     //异步画图
@@ -1357,7 +1444,7 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
             item_index = params[0];
             switch (item_index) {
                 case "0":
-                    timesBitmap = new TimesFivesBitmap(width, height);
+                    timesBitmap = new TimesFivesBitmap(3 * width / 5, height);
                     if (dpi <= AppDevice.DPI480P) {
                         timesBitmap.setIsSw480P(true);
                     } else if (dpi <= AppDevice.DPI720P) {
@@ -1591,8 +1678,7 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
                 //登录时
                 final Map<String, String> param = new HashMap<String, String>();
                 param.put("token", UserUtils.getToken());
-                param.put("group_id", "0");
-                param.put("full_codes", stockCode);
+                param.put("stock_code", stockCode);
 
                 GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
                     @Override
@@ -1738,5 +1824,31 @@ public class CopyStockDetailActivity extends BaseActivity implements OnClickList
     public void setNow(String now) {
         this.now = now;
     }
+
+    private class ImageChartAdapter extends FragmentPagerAdapter {
+        private List<String> datas;
+
+        private ImageChartAdapter(FragmentManager fm, List<String> datas) {
+            super(fm);
+            this.datas = datas;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return ImageChartFragment.getInstance(datas.get(position));
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return arrStockChartImage[position];
+        }
+
+    }
+
 
 }

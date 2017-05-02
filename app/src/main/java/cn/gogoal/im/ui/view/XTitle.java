@@ -2,6 +2,7 @@ package cn.gogoal.im.ui.view;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.v7.widget.AppCompatImageView;
@@ -386,6 +387,8 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
                 }catch (Exception e){
                     e.getMessage();
                 }
+            }else {
+                text.setTextColor(Color.BLACK);
             }
 
             text.setText(action.getText());

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.annotation.ColorRes;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
@@ -65,28 +67,26 @@ import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 
-import static com.igexin.push.core.a.c;
-
 
 /*
 * 大盘股票详情
 * */
-public class StockDetailMarketIndexActivity extends BaseActivity implements View.OnClickListener {
+public class StockDetailMarketIndexActivity extends BaseActivity {
 
     TimesFivesBitmap fiveDayBitmap;
     TimesFivesBitmap timesBitmap;
     StockMinuteBean timesBean;
-    //五个图的布局
-    @BindView(R.id.charts_min_line_layout)
-    RelativeLayout tiemsLayout;
-    @BindView(R.id.charts_fiveday_k_layout)
-    RelativeLayout fivedayLayout;
-    @BindView(R.id.charts_day_k_layout)
-    RelativeLayout daykLayout;
-    @BindView(R.id.charts_week_k_layout)
-    RelativeLayout weekkLayout;
-    @BindView(R.id.charts_mouth_k_layout)
-    RelativeLayout monthkLayout;
+    //    //五个图的布局
+//    @BindView(R.id.charts_min_line_layout)
+//    RelativeLayout tiemsLayout;
+//    @BindView(R.id.charts_fiveday_k_layout)
+//    RelativeLayout fivedayLayout;
+//    @BindView(R.id.charts_day_k_layout)
+//    RelativeLayout daykLayout;
+//    @BindView(R.id.charts_week_k_layout)
+//    RelativeLayout weekkLayout;
+//    @BindView(R.id.charts_mouth_k_layout)
+//    RelativeLayout monthkLayout;
     //返回
     @BindView(R.id.btnBack)
     LinearLayout btnBack;
@@ -191,28 +191,35 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
     BitmapChartView mBitmapChartView;
     @BindView(R.id.stockdetail_textview)
     LinearLayout textLayout;
-    //每个图表item
-    @BindView(R.id.charts_min_line_tv)
-    TextView minLineTv;
-    @BindView(R.id.charts_day_k_tv)
-    TextView dayKTv;
-    @BindView(R.id.charts_fiveday_k_tv)
-    TextView fiveKTv;
-    @BindView(R.id.charts_mouth_k_tv)
-    TextView monthKTv;
-    @BindView(R.id.charts_week_k_tv)
-    TextView WeekKTv;
 
-    @BindView(R.id.tv_line_min)
-    TextView minLine;
-    @BindView(R.id.tv_line_dayk)
-    TextView daykLine;
-    @BindView(R.id.tv_line_fiveday)
-    TextView fivedayLine;
-    @BindView(R.id.tv_line_monthk)
-    TextView monthkLine;
-    @BindView(R.id.tv_line_weekk)
-    TextView weekkLine;
+    //图表表头
+    @BindView(R.id.charts_line_tab_up_ll)
+    TabLayout tabChartsTitles;
+    @BindArray(R.array.stock_detail_chart_titles)
+    String[] stockDetailChartTitles;
+
+    //    //每个图表item
+//    @BindView(R.id.charts_min_line_tv)
+//    TextView minLineTv;
+//    @BindView(R.id.charts_day_k_tv)
+//    TextView dayKTv;
+//    @BindView(R.id.charts_fiveday_k_tv)
+//    TextView fiveKTv;
+//    @BindView(R.id.charts_mouth_k_tv)
+//    TextView monthKTv;
+//    @BindView(R.id.charts_week_k_tv)
+//    TextView WeekKTv;
+
+    //    @BindView(R.id.tv_line_min)
+//    TextView minLine;
+//    @BindView(R.id.tv_line_dayk)
+//    TextView daykLine;
+//    @BindView(R.id.tv_line_fiveday)
+//    TextView fivedayLine;
+//    @BindView(R.id.tv_line_monthk)
+//    TextView monthkLine;
+//    @BindView(R.id.tv_line_weekk)
+//    TextView weekkLine;
     //页面加载动画
     @BindView(R.id.load_animation_change)
     RelativeLayout load_animation_change;
@@ -237,7 +244,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
     private StockMinuteBean bean;
     private double closePrice;
     //定时刷新
-    private int position;
     private int seat;
     private int showItem;
     private int width;
@@ -291,11 +297,95 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
         showItem = SPTools.getInt("showItem", 0);
         FLineLayout.setVisibility(View.GONE);
         stockminuteList = new ArrayList<>();
-        tiemsLayout.setOnClickListener(this);
-        daykLayout.setOnClickListener(this);
-        monthkLayout.setOnClickListener(this);
-        weekkLayout.setOnClickListener(this);
-        fivedayLayout.setOnClickListener(this);
+
+        for (int i = 0; i < 5; i++) {
+            tabChartsTitles.addTab(tabChartsTitles.newTab().setText(stockDetailChartTitles[i]));
+        }
+
+        tabChartsTitles.getTabAt(showItem).select();
+
+        tabChartsTitles.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (textLayout.getVisibility() == View.VISIBLE) {
+                    textLayout.setVisibility(View.GONE);
+                }
+                switch (tab.getPosition()) {
+                    case 0:
+                        if (map.containsKey("0")) {
+                            setMinLineStatu(1);
+                            if (StockUtils.isTradeTime()) {
+                                mBitmapChartView.setBitmap(map.get(String.valueOf("0")), true, timesBitmap);
+                            } else {
+                                mBitmapChartView.setBitmap(map.get(String.valueOf("0")), false, timesBitmap);
+                            }
+                        } else {
+                            setMinLineStatu(0);
+                            GetMinLineData();
+                        }
+                        break;
+                    case 1:
+                        if (map.containsKey("1")) {
+                            setFiveStatu(1);
+                            if (StockUtils.isTradeTime()) {
+                                mBitmapChartView.setBitmap(map.get(String.valueOf("1")), true, fiveDayBitmap);
+                            } else {
+                                mBitmapChartView.setBitmap(map.get(String.valueOf("1")), false, fiveDayBitmap);
+                            }
+                        } else {
+                            setFiveStatu(0);
+                            getFiveData();
+                        }
+                        break;
+                    case 2:
+                        if (map.containsKey("2")) {
+                            setDayKStatue(1);
+                            mBitmapChartView.setBitmap(map.get("2"));
+                        } else {
+                            setDayKStatue(0);
+                            getKLineData(0);
+                        }
+                        break;
+                    case 3:
+                        if (map.containsKey("3")) {
+                            setWeekLineStatu(1);
+                            mBitmapChartView.setBitmap(map.get("3"));
+                        } else {
+                            setWeekLineStatu(0);
+                            getKLineData(1);
+                        }
+                        break;
+                    case 4:
+                        if (map.containsKey("4")) {
+                            setMonthLineStatu(1);
+                            mBitmapChartView.setBitmap(map.get("4"));
+                        } else {
+                            setMonthLineStatu(0);
+                            getKLineData(2);
+                        }
+                        break;
+                    default:
+
+                        break;
+                }
+                showItem = tab.getPosition();
+                SPTools.saveInt("showItem", showItem);
+            }
+
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+
+//        tiemsLayout.setOnClickListener(this);
+//        daykLayout.setOnClickListener(this);
+//        monthkLayout.setOnClickListener(this);
+//        weekkLayout.setOnClickListener(this);
+//        fivedayLayout.setOnClickListener(this);
+
+
         refreshtime = SPTools.getInt("refreshtime", 15000);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -401,8 +491,9 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
      */
     private void initRefreshStyle(@ColorRes int color) {
         headerView.setBackgroundColor(getResColor(color));
-        ptrFrame.setBackgroundColor(c);
+        ptrFrame.setBackgroundColor(getResColor(color));
     }
+
 
     private void onShow(int item) {
         switch (item) {
@@ -455,16 +546,16 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
         } else if (type == 1) {
             load_animation.setVisibility(View.GONE);
         }
-        minLineTv.setTextColor(getResColor(R.color.red));
-        dayKTv.setTextColor(getResColor(R.color.text_color_tab));
-        fiveKTv.setTextColor(getResColor(R.color.text_color_tab));
-        monthKTv.setTextColor(getResColor(R.color.text_color_tab));
-        WeekKTv.setTextColor(getResColor(R.color.text_color_tab));
-        minLine.setVisibility(View.VISIBLE);
-        fivedayLine.setVisibility(View.GONE);
-        daykLine.setVisibility(View.GONE);
-        weekkLine.setVisibility(View.GONE);
-        monthkLine.setVisibility(View.GONE);
+//        minLineTv.setTextColor(getResColor(R.color.red));
+//        dayKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        fiveKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        monthKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        WeekKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        minLine.setVisibility(View.VISIBLE);
+//        fivedayLine.setVisibility(View.GONE);
+//        daykLine.setVisibility(View.GONE);
+//        weekkLine.setVisibility(View.GONE);
+//        monthkLine.setVisibility(View.GONE);
     }
 
     private void setFiveStatu(int type) {
@@ -473,16 +564,16 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
         } else if (type == 1) {
             load_animation.setVisibility(View.GONE);
         }
-        minLineTv.setTextColor(getResColor(R.color.text_color_tab));
-        dayKTv.setTextColor(getResColor(R.color.text_color_tab));
-        fiveKTv.setTextColor(getResColor(R.color.red));
-        monthKTv.setTextColor(getResColor(R.color.text_color_tab));
-        WeekKTv.setTextColor(getResColor(R.color.text_color_tab));
-        minLine.setVisibility(View.GONE);
-        fivedayLine.setVisibility(View.VISIBLE);
-        daykLine.setVisibility(View.GONE);
-        weekkLine.setVisibility(View.GONE);
-        monthkLine.setVisibility(View.GONE);
+//        minLineTv.setTextColor(getResColor(R.color.text_color_tab));
+//        dayKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        fiveKTv.setTextColor(getResColor(R.color.red));
+//        monthKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        WeekKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        minLine.setVisibility(View.GONE);
+//        fivedayLine.setVisibility(View.VISIBLE);
+//        daykLine.setVisibility(View.GONE);
+//        weekkLine.setVisibility(View.GONE);
+//        monthkLine.setVisibility(View.GONE);
     }
 
     private void setDayKStatue(int type) {
@@ -491,16 +582,16 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
         } else if (type == 1) {
             load_animation.setVisibility(View.GONE);
         }
-        minLineTv.setTextColor(getResColor(R.color.text_color_tab));
-        dayKTv.setTextColor(getResColor(R.color.red));
-        fiveKTv.setTextColor(getResColor(R.color.text_color_tab));
-        monthKTv.setTextColor(getResColor(R.color.text_color_tab));
-        WeekKTv.setTextColor(getResColor(R.color.text_color_tab));
-        minLine.setVisibility(View.GONE);
-        fivedayLine.setVisibility(View.GONE);
-        daykLine.setVisibility(View.VISIBLE);
-        weekkLine.setVisibility(View.GONE);
-        monthkLine.setVisibility(View.GONE);
+//        minLineTv.setTextColor(getResColor(R.color.text_color_tab));
+//        dayKTv.setTextColor(getResColor(R.color.red));
+//        fiveKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        monthKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        WeekKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        minLine.setVisibility(View.GONE);
+//        fivedayLine.setVisibility(View.GONE);
+//        daykLine.setVisibility(View.VISIBLE);
+//        weekkLine.setVisibility(View.GONE);
+//        monthkLine.setVisibility(View.GONE);
     }
 
     private void setWeekLineStatu(int type) {
@@ -509,16 +600,16 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
         } else if (type == 1) {
             load_animation.setVisibility(View.GONE);
         }
-        minLineTv.setTextColor(getResColor(R.color.text_color_tab));
-        dayKTv.setTextColor(getResColor(R.color.text_color_tab));
-        fiveKTv.setTextColor(getResColor(R.color.text_color_tab));
-        monthKTv.setTextColor(getResColor(R.color.text_color_tab));
-        WeekKTv.setTextColor(getResColor(R.color.red));
-        minLine.setVisibility(View.GONE);
-        fivedayLine.setVisibility(View.GONE);
-        daykLine.setVisibility(View.GONE);
-        weekkLine.setVisibility(View.VISIBLE);
-        monthkLine.setVisibility(View.GONE);
+//        minLineTv.setTextColor(getResColor(R.color.text_color_tab));
+//        dayKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        fiveKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        monthKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        WeekKTv.setTextColor(getResColor(R.color.red));
+//        minLine.setVisibility(View.GONE);
+//        fivedayLine.setVisibility(View.GONE);
+//        daykLine.setVisibility(View.GONE);
+//        weekkLine.setVisibility(View.VISIBLE);
+//        monthkLine.setVisibility(View.GONE);
     }
 
     private void setMonthLineStatu(int type) {
@@ -527,16 +618,16 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
         } else if (type == 1) {
             load_animation.setVisibility(View.GONE);
         }
-        minLineTv.setTextColor(getResColor(R.color.text_color_tab));
-        dayKTv.setTextColor(getResColor(R.color.text_color_tab));
-        fiveKTv.setTextColor(getResColor(R.color.text_color_tab));
-        monthKTv.setTextColor(getResColor(R.color.red));
-        WeekKTv.setTextColor(getResColor(R.color.text_color_tab));
-        minLine.setVisibility(View.GONE);
-        fivedayLine.setVisibility(View.GONE);
-        daykLine.setVisibility(View.GONE);
-        weekkLine.setVisibility(View.GONE);
-        monthkLine.setVisibility(View.VISIBLE);
+//        minLineTv.setTextColor(getResColor(R.color.text_color_tab));
+//        dayKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        fiveKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        monthKTv.setTextColor(getResColor(R.color.red));
+//        WeekKTv.setTextColor(getResColor(R.color.text_color_tab));
+//        minLine.setVisibility(View.GONE);
+//        fivedayLine.setVisibility(View.GONE);
+//        daykLine.setVisibility(View.GONE);
+//        weekkLine.setVisibility(View.GONE);
+//        monthkLine.setVisibility(View.VISIBLE);
     }
 
     private void GetMinLineData() {
@@ -755,24 +846,24 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
 //                KLog.e(responseInfo);
 
                 StockDetailMarketIndexBean bean = JSONObject.parseObject(responseInfo, StockDetailMarketIndexBean.class);
-                if (JSONObject.parseObject(responseInfo).getIntValue("code")==0) {
+                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     info = bean.getData();
                     //涨跌
                     if (info.get(0).getPrice_change() > 0) {
-                            setStatusColor(R.color.header_red);
-                            relative_header.setBackgroundColor(getResColor(R.color.header_red));
-                            linear_header.setBackgroundColor(getResColor(R.color.header_red));
-                            initRefreshStyle(R.color.header_red);
+                        setStatusColor(R.color.header_red);
+                        relative_header.setBackgroundColor(getResColor(R.color.header_red));
+                        linear_header.setBackgroundColor(getResColor(R.color.header_red));
+                        initRefreshStyle(R.color.header_red);
                         stock_price.setText(StringUtils.save2Significand(info.get(0).getPrice()));//股票价格
                         stock_start.setText(StringUtils.save2Significand(info.get(0).getOpen_price()));//开盘价
                         stock_detail_tv1.setText("+" + StringUtils.save2Significand(info.get(0).getPrice_change()));
                         stock_detail_tv2.setText("+" + StringUtils.save2Significand(info.get(0).getPrice_change_rate()) + "%");
                     } else if (info.get(0).getPrice_change() < 0) {
-                            setStatusColor(R.color.header_green);
-                            relative_header.setBackgroundColor(getResColor(R.color.header_green));
-                            linear_header.setBackgroundColor(getResColor(R.color.header_green));
-                            initRefreshStyle(R.color.header_green);
-                        
+                        setStatusColor(R.color.header_green);
+                        relative_header.setBackgroundColor(getResColor(R.color.header_green));
+                        linear_header.setBackgroundColor(getResColor(R.color.header_green));
+                        initRefreshStyle(R.color.header_green);
+
                         stock_price.setText(StringUtils.save2Significand(info.get(0).getPrice()));//股票价格
                         stock_start.setText(StringUtils.save2Significand(info.get(0).getOpen_price()));//开盘价
                         stock_detail_tv1.setText(StringUtils.save2Significand(info.get(0).getPrice_change()));
@@ -980,7 +1071,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
         new GGOKHTTP(param, GGOKHTTP.STOCK_RANK_LIST, ggHttpInterface).startGet();
     }
 
-    @Override
+   /* @Override
     public void onClick(View view) {
         if (textLayout.getVisibility() == View.VISIBLE) {
             textLayout.setVisibility(View.GONE);
@@ -1050,7 +1141,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
         }
         showItem = position;
         SPTools.saveInt("showItem", position);
-    }
+    }*/
 
     class BitmapTask extends AsyncTask<String, Void, Bitmap> {
         private String item_index;
@@ -1094,7 +1185,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
                     if (params.length > 1) {
                         mOHLCData.clear();
                         parseObjects(params[1]);
-                        KChartsBitmap kChartsBitmap = new KChartsBitmap(getActivity(),width, height);
+                        KChartsBitmap kChartsBitmap = new KChartsBitmap(getActivity(), width, height);
                         if (dpi <= DeviceUtil.DPI480P) {
                             kChartsBitmap.setIsSw480P(true);
                         } else if (dpi <= DeviceUtil.DPI720P) {
@@ -1110,7 +1201,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
                     if (params.length > 1) {
                         mOHLCData.clear();
                         parseObjects(params[1]);
-                        KChartsBitmap kChartsBitmap1 = new KChartsBitmap(getActivity(),width, height);
+                        KChartsBitmap kChartsBitmap1 = new KChartsBitmap(getActivity(), width, height);
                         if (dpi <= DeviceUtil.DPI480P) {
                             kChartsBitmap1.setIsSw480P(true);
                         } else if (dpi <= DeviceUtil.DPI720P) {
@@ -1126,7 +1217,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity implements View
                     if (params.length > 1) {
                         mOHLCData.clear();
                         parseObjects(params[1]);
-                        KChartsBitmap kChartsBitmap2 = new KChartsBitmap(getActivity(),width, height);
+                        KChartsBitmap kChartsBitmap2 = new KChartsBitmap(getActivity(), width, height);
                         if (dpi <= DeviceUtil.DPI480P) {
                             kChartsBitmap2.setIsSw480P(true);
                         } else if (dpi <= DeviceUtil.DPI720P) {

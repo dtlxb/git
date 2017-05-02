@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 
+import com.bumptech.glide.Glide;
 import com.socks.library.KLog;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 
 /**
  * author wangjd on 2017/4/12 0012.
@@ -24,8 +24,6 @@ public class ImageChartFragment extends BaseFragment {
     AppCompatImageView imageFragment;
 
     public static ImageChartFragment getInstance(String imageUrl) {
-        KLog.e(imageUrl);
-
         ImageChartFragment fragment = new ImageChartFragment();
         Bundle bundle = new Bundle();
         bundle.putString("image_url", imageUrl);
@@ -41,8 +39,10 @@ public class ImageChartFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
         String imageUrl = getArguments().getString("image_url");
+        KLog.e(imageUrl);
+
         if (!TextUtils.isEmpty(imageUrl)) {
-            ImageDisplay.loadChartImage(mContext,imageUrl,imageFragment);
+            Glide.with(getActivity()).load(imageUrl).into(imageFragment);
         }
     }
 }

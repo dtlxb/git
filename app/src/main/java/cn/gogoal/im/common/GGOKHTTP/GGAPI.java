@@ -12,9 +12,9 @@ import java.util.Map;
 public class GGAPI {
 
     //开发环境
-//    private static final String Native_API = "http://ggservice.sandbox.gofund.com.cn";
-//    private static final String APP_KEY = "HBTORVzBaGtqmGE";
-//    private static final String APP_SECRET = "cGYIsTyTWXGeP4frqOqmdWxRO5xmh2Pi";
+    private static final String Native_API = "http://ggservice.sandbox.gofund.com.cn";
+    private static final String APP_KEY = "HBTORVzBaGtqmGE";
+    private static final String APP_SECRET = "cGYIsTyTWXGeP4frqOqmdWxRO5xmh2Pi";
 
     //春哥环境
 //    private static final String Native_API = "http://192.168.52.150:9000";
@@ -22,9 +22,9 @@ public class GGAPI {
 //    private static final String APP_SECRET = "cGYIsTyTWXGeP4frqOqmdWxRO5xmh2Pi";
 
     //预正式环境
-    private static final String Native_API = "http://ggservice-pre.go-goal.cn";
-    private static final String APP_KEY = "VzNQumNMxCmPcbD";
-    private static final String APP_SECRET = "SYRyCEmkmZsMm8xnN5VrLQLXfc7C9GB1";
+//    private static final String Native_API = "http://ggservice-pre.go-goal.cn";
+//    private static final String APP_KEY = "VzNQumNMxCmPcbD";
+//    private static final String APP_SECRET = "SYRyCEmkmZsMm8xnN5VrLQLXfc7C9GB1";
 
     //正式环境
     /*private static final String Native_API = "https://ggservice.go-goal.cn";
@@ -62,6 +62,40 @@ public class GGAPI {
         }
 
         url = Native_API + url;
+        return url;
+    }
+
+    public static String getReal(String api, Map<String, String> params) throws Exception {
+        long timeStamp = System.currentTimeMillis() / 1000L;
+        String sign = getSign("GnbhWYzxfcbrMOd", "I7WFKwulOrcYPHu8ZeQcMFEsiwQ45ruS", timeStamp, params, api, "GET");
+        String incomingParams = "";
+        String url;
+        if (params != null) {
+            try {
+                for (Iterator e = params.keySet().iterator(); e.hasNext();
+                     incomingParams = incomingParams + url + "=" + URLEncoder.encode(params.get(url), "UTF-8") + "&") {
+                    url = (String) e.next();
+                }
+            } catch (UnsupportedEncodingException var9) {
+                var9.printStackTrace();
+            }
+
+            incomingParams = incomingParams.substring(0, incomingParams.length() - 1);
+        }
+
+        url = "";
+
+        try {
+            url = "/" + api + "?" + "app_key=" + "GnbhWYzxfcbrMOd" + "&time_stamp=" + timeStamp + "&sign=" + URLEncoder.encode(sign, "UTF-8");
+        } catch (UnsupportedEncodingException var8) {
+            var8.printStackTrace();
+        }
+
+        if (!"".equals(incomingParams.trim())) {
+            url = url + "&" + incomingParams;
+        }
+
+        url = "https://ggservice.go-goal.cn" + url;
         return url;
     }
 

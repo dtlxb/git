@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <!--<LinearLayout
             android:id="@+id/charts_line_tab_up_ll"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -167,8 +167,17 @@
 
             </RelativeLayout>
 
-        </LinearLayout>
+        </LinearLayout>-->
 
+        <android.support.design.widget.TabLayout
+            android:id="@+id/charts_line_tab_up_ll"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/Kline_item_bg"
+            app:tabIndicatorColor="@color/stock_red"
+            app:tabIndicatorHeight="1dp"
+            app:tabSelectedTextColor="@color/stock_red"
+            app:tabTextColor="@color/text_color_tab" />
 
         <LinearLayout
             android:id="@+id/xcharts_line_center_ll"
@@ -227,9 +236,9 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_treat"
                     android:layout_width="0dp"
-                    android:background="@android:color/white"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.7"/>
+                    android:layout_weight="0.7"
+                    android:background="@android:color/white" />
 
             </LinearLayout>
         </LinearLayout>
