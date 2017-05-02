@@ -39,6 +39,8 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder holder, final MarkteBean data, final int position) {
         RecyclerView recyclerView = holder.getView(R.id.item_stock_rank_rv);
+        recyclerView.setFocusable(false);
+        recyclerView.setFocusableInTouchMode(false);
 
         recyclerView.setTag(position);
         switch (position) {

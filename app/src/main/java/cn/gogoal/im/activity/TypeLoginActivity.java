@@ -168,6 +168,7 @@ public class TypeLoginActivity extends BaseActivity {
     private void Login() {
         final WaitDialog loginDialog=WaitDialog.getInstance("登录中",R.mipmap.login_loading,true);
         loginDialog.show(getSupportFragmentManager());
+        loginDialog.setCancelable(false);
 
         String name = loginUserName.getText().toString().toUpperCase(Locale.ENGLISH);
         String word = loginPassWord.getText().toString();

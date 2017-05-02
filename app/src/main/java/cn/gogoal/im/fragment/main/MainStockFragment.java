@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -65,6 +66,8 @@ public class MainStockFragment extends BaseFragment {
 
     @BindView(R.id.vp_my_stock_tab)
     UnSlidingViewPager vpMyStockTab;
+
+    private RotateAnimation refreshAnimation;
 
     String[] marketTabs = {"自选股", "市场"};
 
@@ -143,6 +146,7 @@ public class MainStockFragment extends BaseFragment {
             }
         });
     }
+
 
     /**
      * 获取大盘数据
