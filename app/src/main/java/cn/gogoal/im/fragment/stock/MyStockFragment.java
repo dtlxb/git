@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +31,7 @@ import cn.gogoal.im.activity.copy.StockDetailMarketIndexActivity;
 import cn.gogoal.im.activity.stock.MyStockNewsActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.MyStockBean;
@@ -123,24 +123,21 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             public void onRefresh() {
                 //刷新自选股，大盘缩略
                 refreshMyStock(AppConst.REFRESH_TYPE_SWIPEREFRESH);
-                new android.os.Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.setRefreshing(false);
-                    }
-                },1000);
+
+                refreshLayout.setRefreshing(false);
             }
         });
     }
 
-    public void refreshMyStock(int refreshType){
+    public void refreshMyStock(int refreshType) {
+        AppManager.getInstance().sendMessage("market_start_animation_refresh");
         getMyStockData(refreshType);
     }
 
     private void iniMyStockList() {
-        myStockAdapter=new MyStockAdapter(myStockDatas);
+        myStockAdapter = new MyStockAdapter(myStockDatas);
 
-        LinearLayoutManager layoutManager=new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvMyStock.setLayoutManager(layoutManager);
         rvMyStock.addItemDecoration(new NormalItemDecoration(getContext()));
 
@@ -152,7 +149,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
      * 切换指数缩略
      */
     public void changeIitem(final MyStockMarketBean.MyStockMarketData data) {
-        if (data==null){
+        if (data == null) {
             return;
         }
         tvTinyMarketName.setText(data.getName());
@@ -204,17 +201,15 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
-
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     myStockDatas.clear();
+
+                    TextView editView = editEnable(true);
+
                     List<MyStockData> parseData = JSONObject.parseObject(responseInfo, MyStockBean.class).getData();
-                    for (MyStockData data : parseData) {
-                        if (data.getStock_type() == 1) {
-                            myStockDatas.add(data);
-                        }
-                    }
+                    myStockDatas.addAll(parseData);
+
                     myStockAdapter.notifyDataSetChanged();
 
                     //缓存自选股
@@ -224,19 +219,42 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                         UIHelper.toast(getActivity(), getString(R.string.str_refresh_ok));
                     }
 
+                    editView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+
                 } else if (code == 1001) {
                     //没有数据
+                    editEnable(false);
+
                 } else {
                     UIHelper.toastResponseError(getActivity(), responseInfo);
+                    editEnable(false);
                 }
+                AppManager.getInstance().sendMessage("market_stop_animation_refresh");
             }
 
             @Override
             public void onFailure(String msg) {
+                AppManager.getInstance().sendMessage("market_stop_animation_refresh");
                 UIHelper.toastError(getActivity(), msg);
+                editEnable(false);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.GET_MYSTOCKS, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 没有正确加载自选股列表的时候(没网络，请求出错，或者没有自选股)时，不允许编辑
+     */
+    TextView editEnable(boolean enable) {
+        final TextView tvEditMyStock = ((MainStockFragment) getParentFragment()).getTvMystockEdit();
+        tvEditMyStock.setEnabled(enable);
+        tvEditMyStock.setClickable(enable);
+        return tvEditMyStock;
     }
 
     @OnClick({R.id.img_show_tinymarket_dialog, R.id.tv_mystock_news,
@@ -275,15 +293,15 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         startActivity(intent);
     }
 
-    private void setAppBarLayout(AppBarLayout appBarLayout,boolean scroll){
-        LinearLayout layout= (LinearLayout) appBarLayout.getChildAt(0);
+    private void setAppBarLayout(AppBarLayout appBarLayout, boolean scroll) {
+        LinearLayout layout = (LinearLayout) appBarLayout.getChildAt(0);
         AppBarLayout.LayoutParams mParams = (AppBarLayout.LayoutParams)
                 layout.getLayoutParams();
         if (!scroll) {
             mParams.setScrollFlags(0);
             appBarLayout.setExpanded(true);
-        }else {
-            mParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL|
+        } else {
+            mParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL |
                     AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
         }
         layout.setLayoutParams(mParams);
@@ -291,7 +309,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
     @Override
     public void doSort(final View view, final int sortType) {
-        ArrayList<MyStockData> cloneData= (ArrayList<MyStockData>) myStockDatas.clone();
+        ArrayList<MyStockData> cloneData = (ArrayList<MyStockData>) myStockDatas.clone();
         Collections.sort(myStockDatas, new Comparator<MyStockData>() {
             @Override
             public int compare(MyStockData o1, MyStockData o2) {

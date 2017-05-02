@@ -1,6 +1,5 @@
 package cn.gogoal.im.adapter;
 
-import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -12,7 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.stock.MarketActivity;
+import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseSectionQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.bean.SectionTouYanData;
@@ -31,13 +30,11 @@ import cn.gogoal.im.ui.dialog.ComingSoonDialog;
  */
 public class SectionAdapter extends BaseSectionQuickAdapter<SectionTouYanData, BaseViewHolder> {
     private FragmentActivity context;
-    private int screenWidth;
     private int innerItem;
 
     public SectionAdapter(FragmentActivity context, List<SectionTouYanData> data) {
         super(R.layout.item_touyan_item, R.layout.item_touyan_title, data);
         this.context = context;
-        screenWidth = AppDevice.getWidth(context);
 
         innerItem = AppDevice.isLowDpi() ?
                 AppDevice.getWidth(context) / 3 :
@@ -95,7 +92,8 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionTouYanData, B
                 public void onClick(View v) {
                     //TODO 跳原生类型
                     if (item.getDesc().equalsIgnoreCase("行情")) {
-                        context.startActivity(new Intent(context, MarketActivity.class));
+                        ((MainActivity)context).changeItem(1);
+                        ((MainActivity)context).mainStockFragment.changeItem(1);
                     } else {
                         //TODO 跳网页类型
                         if (item.getIsClick() == 0) {

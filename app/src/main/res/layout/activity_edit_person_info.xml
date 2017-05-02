@@ -34,7 +34,7 @@
                     android:layout_width="78dp"
                     android:layout_height="78dp"
                     android:layout_gravity="center"
-                    android:src="@mipmap/login_gogoal" />
+                    android:src="@mipmap/logo" />
 
                 <ImageView
                     android:layout_width="22dp"
