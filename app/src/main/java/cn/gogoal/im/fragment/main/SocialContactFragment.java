@@ -2,17 +2,14 @@ package cn.gogoal.im.fragment.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,44 +22,41 @@ import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.adapter.SocialLiveAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.bean.BannerBean;
 import cn.gogoal.im.bean.SocialLiveBean;
 import cn.gogoal.im.bean.SocialLiveData;
-import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.dialog.ComingSoonDialog;
-import cn.gogoal.im.ui.view.AutoScrollViewPager;
+import cn.gogoal.im.ui.view.XTitle;
 
 /**
  * author wangjd on 2017/4/7 0007.
  * Staff_id 1375
  * phone 18930640263
- * description :社交.
+ * description :直播.
  */
 public class SocialContactFragment extends BaseFragment {
 
     @BindView(R.id.swiperefresh_social)
     SwipeRefreshLayout refreshSocial;
-
-    @BindView(R.id.socialRecycler)
-    RecyclerView socialRecycler;
-
-    @BindView(R.id.socialViewPager)
-    AutoScrollViewPager bannerPager;
+    //个人发起直播
+    @BindView(R.id.perLiveLinear)
+    LinearLayout perLiveLinear;
+    @BindView(R.id.perLiveRecycler)
+    RecyclerView perLiveRecycler;
+    //后台发起直播
+    @BindView(R.id.orgLiveLinear)
+    LinearLayout orgLiveLinear;
+    @BindView(R.id.orgLiveRecycler)
+    RecyclerView orgLiveRecycler;
+    //录播
+    @BindView(R.id.recordLinear)
+    LinearLayout recordLinear;
+    @BindView(R.id.recordRecycler)
+    RecyclerView recordRecycler;
 
     private SocialLiveAdapter adapter;
-
-    /**
-     * banner适配器和数据集
-     */
-    private List<BannerBean.Banner> bannerImageUrls;
-    private BannerAdapter bannerAdapter;
 
     @Override
     public int bindLayout() {
@@ -71,36 +65,41 @@ public class SocialContactFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle(R.string.title_social);
+        setFragmentTitle(R.string.title_live).addAction(new XTitle.TextAction("筛选") {
+            @Override
+            public void actionClick(View view) {
+
+            }
+        });
 
         BaseActivity.iniRefresh(refreshSocial);
-        BaseActivity.initRecycleView(socialRecycler, 0);
-        socialRecycler.setNestedScrollingEnabled(false);
+
+        BaseActivity.initRecycleView(perLiveRecycler, 0);
+        perLiveRecycler.setNestedScrollingEnabled(false);
+
+        BaseActivity.initRecycleView(orgLiveRecycler, 0);
+        orgLiveRecycler.setNestedScrollingEnabled(false);
+
+        BaseActivity.initRecycleView(recordRecycler, 0);
+        recordRecycler.setNestedScrollingEnabled(false);
 
         refreshSocial.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getLiveData();
+                getLiveData(1);
+                getLiveData(2);
             }
         });
 
-        getBannerImage();
-        getLiveData();
+        getLiveData(1);
+        getLiveData(2);
     }
 
-    @OnClick({R.id.imgFloatAction, R.id.linearLive, R.id.linearConference, R.id.linearRoadshow, R.id.linearClub})
+    @OnClick({R.id.imgFloatAction})
     public void viewOnClick(View view) {
         switch (view.getId()) {
             case R.id.imgFloatAction: //发起直播
                 getUserValid();
-                break;
-            case R.id.linearLive: //直播
-                NormalIntentUtils.go2WebActivity(getActivity(), AppConst.GG_LIVE_LIST,"GoGoal直播");
-                break;
-            case R.id.linearConference: //会务
-            case R.id.linearRoadshow: //路演
-            case R.id.linearClub: //俱乐部
-                new ComingSoonDialog().show(getFragmentManager());
                 break;
         }
     }
@@ -147,23 +146,36 @@ public class SocialContactFragment extends BaseFragment {
     /**
      * 获取直播列表数据
      */
-    private void getLiveData() {
-        Map<String, String> param = new HashMap<>();
+    private void getLiveData(final int live_source) {
+        final Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
+        param.put("live_source", live_source + "");
         param.put("page", "1");
         param.put("rows", "100");
 
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+        final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
                 SocialLiveBean object = JSONObject.parseObject(responseInfo, SocialLiveBean.class);
                 if (object.getCode() == 0) {
-                    List<SocialLiveData> listData = object.getData();
-                    adapter = new SocialLiveAdapter(getActivity(), listData);
-                    socialRecycler.setAdapter(adapter);
+                    if (live_source == 1) {
+                        perLiveLinear.setVisibility(View.VISIBLE);
+                        List<SocialLiveData> listData = object.getData();
+                        adapter = new SocialLiveAdapter(getActivity(), listData);
+                        perLiveRecycler.setAdapter(adapter);
+                    } else if (live_source == 2) {
+                        orgLiveLinear.setVisibility(View.VISIBLE);
+                        List<SocialLiveData> listData = object.getData();
+                        adapter = new SocialLiveAdapter(getActivity(), listData);
+                        orgLiveRecycler.setAdapter(adapter);
+                    }
                 } else if (object.getCode() == 1001) {
-
+                    if (live_source == 1) {
+                        perLiveLinear.setVisibility(View.GONE);
+                    } else if (live_source == 2) {
+                        orgLiveLinear.setVisibility(View.GONE);
+                    }
                 } else {
                     UIHelper.toast(getContext(), R.string.net_erro_hint);
                 }
@@ -178,93 +190,5 @@ public class SocialContactFragment extends BaseFragment {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_STUDIO_LIST, ggHttpInterface).startGet();
-    }
-
-    /**
-     * 获取banner数据
-     */
-    private void getBannerImage() {
-        AppDevice.setViewWidth$Height(bannerPager,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                AppDevice.getWidth(getContext()) / 3);
-
-        bannerImageUrls = new ArrayList<>();
-        bannerAdapter = new BannerAdapter(bannerImageUrls);
-        bannerPager.setAdapter(bannerAdapter);
-        bannerPager.setScrollFactgor(10);
-
-        Map<String, String> map = new HashMap<>();
-        map.put("ad_position", "4");
-        new GGOKHTTP(map, GGOKHTTP.GET_AD_LIST, new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
-                if (code == 0) {
-                    bannerImageUrls.addAll(JSONObject.parseObject(responseInfo, BannerBean.class).getData());
-                    if (bannerImageUrls.size() > 1) {
-                        bannerPager.startAutoScroll(3000);
-                        bannerPager.showIndicator(true);
-                    } else {
-                        bannerPager.stopAutoScroll();
-                        bannerPager.showIndicator(false);
-                    }
-                    try {
-                        bannerAdapter.notifyDataSetChanged();
-                        bannerPager.setAdapter(bannerAdapter);
-                    } catch (Exception e) {
-                        e.getMessage();
-                    }
-                } else {
-                    BannerBean.Banner spaceBanner = new BannerBean.Banner();
-                    spaceBanner.setImage("");
-                    bannerImageUrls.add(spaceBanner);
-                    bannerAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-            }
-        }).startGet();
-    }
-
-    private class BannerAdapter extends PagerAdapter {
-
-        private List<BannerBean.Banner> imageUrls;
-
-        private BannerAdapter(List<BannerBean.Banner> imageUrls) {
-            this.imageUrls = imageUrls;
-        }
-
-        @Override
-        public int getCount() {
-            return imageUrls == null ? 0 : imageUrls.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return object == view;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View) object);
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, final int position) {
-            ImageView view = new ImageView(container.getContext());
-            view.setAdjustViewBounds(true);
-            view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            ImageDisplay.loadNetImage(container.getContext(), imageUrls.get(position).getImage(), view, 0);
-            container.addView(view);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    UIHelper.toast(v.getContext(), "banner::" + position);
-                }
-            });
-            return view;
-        }
     }
 }
