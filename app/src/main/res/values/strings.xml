@@ -86,6 +86,7 @@
     <string name="close_live_call_confirm_message">确定要结束直播？</string>
     <string name="close_live_failed">结束直播失败</string>
     <string name="live_finished">直播已结束</string>
+    <string name="not_link_live">无法进行连麦，请稍后再试或联系客服。</string>
 
     <!--权限-->
     <string name="no_camera_permission">没有权限使用摄像头，请开启摄像头权限</string>

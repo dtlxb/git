@@ -213,7 +213,7 @@ public class LiveActivity extends BaseActivity {
                     if (mVideoChatStatus == VideoChatStatus.INVITE_FOR_RES) {
                         mVideoChatStatus = VideoChatStatus.UNCHAT;
                         UIHelper.toast(getContext(), R.string.invite_timeout_tip); //提醒：对方长时间未响应，已取消连麦邀请
-                        liveTogether.setEnabled(true);
+                        //liveTogether.setEnabled(true);
                     }
                     break;
                 case LinkConst.MSG_WHAT_PROCESS_INVITING_TIMEOUT:
@@ -316,6 +316,7 @@ public class LiveActivity extends BaseActivity {
     public void setStatusBar(boolean light) {
         StatusBarUtil.with(this).setTranslucent();
     }
+
     /**
      * 退出聊天室
      */
@@ -668,7 +669,7 @@ public class LiveActivity extends BaseActivity {
         }
         imgPlayClose.setVisibility(View.GONE);
         mParterViewContainer.setVisibility(View.GONE);
-        liveTogether.setEnabled(true);
+        //liveTogether.setEnabled(true);
     }
 
     private SurfaceHolder.Callback mPlayCallback = new SurfaceHolder.Callback() {
@@ -1014,13 +1015,17 @@ public class LiveActivity extends BaseActivity {
     public void closeOnClick(View v) {
         switch (v.getId()) {
             case R.id.liveTogether: //邀请连麦
-                imConversation.fetchInfoInBackground(new AVIMConversationCallback() {
-                    @Override
-                    public void done(AVIMException e) {
-                        //拉取群通讯录并缓存本地
-                        getChatGroupInfos(imConversation);
-                    }
-                });
+                if (imConversation != null) {
+                    imConversation.fetchInfoInBackground(new AVIMConversationCallback() {
+                        @Override
+                        public void done(AVIMException e) {
+                            //拉取群通讯录并缓存本地
+                            getChatGroupInfos(imConversation);
+                        }
+                    });
+                } else {
+
+                }
                 break;
             case R.id.imgPlayClose: //关闭连麦
                 showChatCloseConfirmDialog();
@@ -1042,7 +1047,7 @@ public class LiveActivity extends BaseActivity {
                             //结束连麦
                             abortChat(true); //停止客户端连麦拉流播放
                             closeLiveChat(); //通知APP Server结束连麦，调用REST API
-                            liveTogether.setEnabled(true);
+                            //liveTogether.setEnabled(true);
                             break;
                         case DialogInterface.BUTTON_NEGATIVE: //取消
                             mChatCloseConfirmDialog.dismiss();
@@ -1231,7 +1236,7 @@ public class LiveActivity extends BaseActivity {
                     UIHelper.toast(getContext(), R.string.not_allow_repeat_call);
                 }
 
-                liveTogether.setEnabled(false);
+                //liveTogether.setEnabled(false);
             }
         }
     }
@@ -1256,11 +1261,11 @@ public class LiveActivity extends BaseActivity {
                     //mHandler.sendEmptyMessageDelayed(LinkConst.MSG_WHAT_INVITE_CHAT_TIMEOUT, LinkConst.INVITE_CHAT_TIMEOUT_DELAY);
                     mVideoChatStatus = VideoChatStatus.INVITE_FOR_RES;
                     UIHelper.toast(getContext(), R.string.invite_succeed);
-                    liveTogether.setEnabled(false);
+                    //liveTogether.setEnabled(false);
                 } else {
                     UIHelper.toast(getContext(), R.string.invite_failed);
                     mVideoChatStatus = VideoChatStatus.UNCHAT;
-                    liveTogether.setEnabled(true);
+                    //liveTogether.setEnabled(true);
                 }
 
             }
@@ -1299,7 +1304,18 @@ public class LiveActivity extends BaseActivity {
                 switch (lcattrs.getString("code")) {
                     case "feedback":
                         boolean feedback_result = lcattrs.getBooleanValue("feedback_result");
-                        feedbackInviteResult(feedback_result);
+                        boolean startmix_result = lcattrs.getBooleanValue("startmix_result");
+                        if (startmix_result) {
+                            feedbackInviteResult(feedback_result);
+                        } else {
+                            DialogHelp.getMessageDialog(getActivity(), getString(R.string.not_link_live)).setCancelable(false)
+                                    .setTitle(R.string.merge_stream_failed).show();
+
+                            if (mVideoChatStatus == VideoChatStatus.INVITE_FOR_RES) {
+                                mVideoChatStatus = VideoChatStatus.UNCHAT;
+                            }
+                            //liveTogether.setEnabled(true);
+                        }
                         break;
                     case "mixresult":
                         //混流成功
@@ -1353,7 +1369,7 @@ public class LiveActivity extends BaseActivity {
         if (isAgree) {
             message = getString(R.string.agree_message);
         } else {
-            liveTogether.setEnabled(true);
+            //liveTogether.setEnabled(true);
             message = getString(R.string.not_agree_message);
         }
 
