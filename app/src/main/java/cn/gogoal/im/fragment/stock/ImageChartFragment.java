@@ -6,7 +6,6 @@ import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 
 import com.bumptech.glide.Glide;
-import com.socks.library.KLog;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
@@ -39,7 +38,6 @@ public class ImageChartFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
         String imageUrl = getArguments().getString("image_url");
-        KLog.e(imageUrl);
 
         if (!TextUtils.isEmpty(imageUrl)) {
             Glide.with(getActivity()).load(imageUrl).into(imageFragment);

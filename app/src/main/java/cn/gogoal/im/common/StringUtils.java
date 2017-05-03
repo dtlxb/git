@@ -156,6 +156,10 @@ public class StringUtils {
         return new StringBuilder(orderStr).reverse().toString();
     }
 
+    public static boolean isActuallyEmpty(String words){
+        return TextUtils.isEmpty(words) || words.equals("null") || TextUtils.isEmpty(words.replace(" ",""));
+    }
+
     /**
      * 输入的手机号是否合法
      */
@@ -247,7 +251,7 @@ public class StringUtils {
     }
 
     public static Double getStockDouble(String value) {
-        if (TextUtils.isEmpty(value)) {
+        if (StringUtils.isActuallyEmpty(value)) {
             return 0.0d;
         }
         return Double.parseDouble(value);

@@ -12,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,11 +33,9 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hply.imagepicker.view.StatusBarUtil;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -55,11 +52,13 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.adapter.TreatAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.stock.ChartImageBean;
 import cn.gogoal.im.bean.stock.StockDetail;
+import cn.gogoal.im.bean.stock.TreatData;
 import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -70,10 +69,9 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.copy.StockDetailNewsFragment;
 import cn.gogoal.im.fragment.stock.ImageChartFragment;
+import cn.gogoal.im.ui.widget.UnSlidingViewPager;
 import hply.com.niugu.HeaderView;
 import hply.com.niugu.autofixtext.AutofitTextView;
-import hply.com.niugu.bean.TimeDetialBean;
-import hply.com.niugu.bean.TimeDetialData;
 import hply.com.niugu.stock.BitmapChartView;
 import hply.com.niugu.stock.StockMinuteBean;
 import hply.com.niugu.stock.TimesFivesBitmap;
@@ -90,6 +88,11 @@ import in.srain.cube.views.ptr.PtrHandler;
 public class CopyStockDetailActivity extends BaseActivity {
 
     public static final String TAG = "CopyStockDetailActivity";
+
+    public static final int TREAT_TYPE_WU_DANG = 952;
+
+    public static final int TREAT_TYPE_MING_XI = 459;
+
 
     TimesFivesBitmap fiveDayBitmap;
     TimesFivesBitmap timesBitmap;
@@ -186,20 +189,6 @@ public class CopyStockDetailActivity extends BaseActivity {
     //下拉刷新头部控件
     private HeaderView headerView;
     private int stock_charge_type = 1;
-    private double change_value;
-    private double change_rate;
-
-    //五个图的布局
-//    @BindView(R.id.charts_min_line_layout)
-//    RelativeLayout tiemsLayout;
-//    @BindView(R.id.charts_fiveday_k_layout)
-//    RelativeLayout fivedayLayout;
-//    @BindView(R.id.charts_day_k_layout)
-//    RelativeLayout daykLayout;
-//    @BindView(R.id.charts_week_k_layout)
-//    RelativeLayout weekkLayout;
-//    @BindView(R.id.charts_mouth_k_layout)
-//    RelativeLayout monthkLayout;
 
     //图表表头
     @BindView(R.id.charts_line_tab_up_ll)
@@ -207,28 +196,9 @@ public class CopyStockDetailActivity extends BaseActivity {
     @BindArray(R.array.stock_detail_chart_titles)
     String[] stockDetailChartTitles;
 
-//    //每个图表item
-//    @BindView(R.id.charts_min_line_tv)
-//    TextView minLineTv;
-//    @BindView(R.id.charts_day_k_tv)
-//    TextView dayKTv;
-//    @BindView(R.id.charts_fiveday_k_tv)
-//    TextView fiveKTv;
-//    @BindView(R.id.charts_mouth_k_tv)
-//    TextView monthKTv;
-//    @BindView(R.id.charts_week_k_tv)
-//    TextView WeekKTv;
+    @BindView(R.id.flag_layout_treat)
+    LinearLayout layoutTreat;
 
-    //    @BindView(R.id.tv_line_min)
-//    TextView minLine;
-//    @BindView(R.id.tv_line_dayk)
-//    TextView daykLine;
-//    @BindView(R.id.tv_line_fiveday)
-//    TextView fivedayLine;
-//    @BindView(R.id.tv_line_monthk)
-//    TextView monthkLine;
-//    @BindView(R.id.tv_line_weekk)
-//    TextView weekkLine;
     //页面加载动画
     @BindView(R.id.load_animation)
     RelativeLayout load_animation;
@@ -254,12 +224,11 @@ public class CopyStockDetailActivity extends BaseActivity {
     private int pixels = -85;
     private String stockName;
     private String stockCode;
-    private List<String> priceVolumDatas = new ArrayList<String>();
+    private List<String> priceVolumDatas = new ArrayList<>();
     //定时刷新
     private Timer timer;
-    private static final int refreshtime = 15000;
     //数据集合
-    private List<Map<String, Object>> mOHLCData = new ArrayList<Map<String, Object>>();
+    private List<Map<String, Object>> mOHLCData = new ArrayList<>();
     private double closePrice;
     private HashMap<String, Bitmap> map = new HashMap<>();
     //定时刷新
@@ -268,7 +237,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     private int height;
     private boolean canRefreshLine = true;
 
-    private StockDetail.TreatData info;
+    private TreatData info;
     private boolean isChoose = true;
     private int dpi;
 
@@ -280,9 +249,6 @@ public class CopyStockDetailActivity extends BaseActivity {
     private int dayk2;
     private int dayk3;
     private int dayk4;
-
-    private Fragment[] listDataFragment = null;
-    private int currentIndex = 0;
 
     //图片表格
     @BindView(R.id.stock_no_data)
@@ -297,19 +263,20 @@ public class CopyStockDetailActivity extends BaseActivity {
     @BindArray(R.array.srock_chart_image)
     String[] arrStockChartImage;
 
-    @BindView(R.id.rv_treat)
-    RecyclerView rvTreat;//交易，买1~5、卖1~5
-
-    //    @BindView(R.id.layout_imgchart_and_nodata)
-//    FrameLayout layoutImgChart_Nodata;
     //修改的中间新闻模块
     @BindView(R.id.tablayout_news_)
     TabLayout tabLayoutNews;
     @BindView(R.id.vp_news_)
     ViewPager viewPagerNews;
     private String[] newTitles = {"新闻", "公告", "研报"};
-    private List<TimeDetialData> timeDetialLists;
     private RotateAnimation rotateAnimation;
+
+    //交易五档、明细
+    @BindView(R.id.tablayout_treat)
+    TabLayout tabLayoutTreat;
+
+    @BindView(R.id.vp_treat)
+    UnSlidingViewPager vpTreat;
 
     @Override
     public int bindLayout() {
@@ -329,8 +296,6 @@ public class CopyStockDetailActivity extends BaseActivity {
 
         getImageChart();
 
-        getStockTimeDetial(stockCode);
-
         onShow(showItem);
 
     }
@@ -343,8 +308,6 @@ public class CopyStockDetailActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-
-                KLog.e(responseInfo);
 
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
 
@@ -441,13 +404,14 @@ public class CopyStockDetailActivity extends BaseActivity {
                 child.invalidate();
             }
         } catch (Exception e) {
+            e.getMessage();
         }
     }
 
     private void findView() {
         scrollView.smoothScrollTo(0, 20);
-        headerView = (HeaderView) LayoutInflater.from(this).inflate(R.layout.header_layout, null);
-
+        headerView = (HeaderView) LayoutInflater.from(this).inflate(
+                R.layout.header_layout, new LinearLayout(getActivity()),false);
     }
 
     //初始化
@@ -460,7 +424,18 @@ public class CopyStockDetailActivity extends BaseActivity {
         stockName = getIntent().getStringExtra("stock_name");
         setStockCode(stockCode);
         setStockName(stockName);
-        rvTreat.setVisibility(View.GONE);
+
+        TreatAdapter treatAdapter = new TreatAdapter(getSupportFragmentManager(),getActivity(),stockCode,true);
+        vpTreat.setAdapter(treatAdapter);
+        tabLayoutTreat.setupWithViewPager(vpTreat);
+
+        for (int i=0;i<2;i++){
+            TabLayout.Tab tabAt = tabLayoutTreat.getTabAt(i);
+            if (tabAt!=null){
+                tabAt.setCustomView(treatAdapter.getTabView(i));
+            }
+        }
+
         textHeadTitle.setText(stockName + "(" + stockCode + ")");
         dpi = AppDevice.getWidth(CopyStockDetailActivity.this);
         if (StockUtils.getMyStockSet() != null) {
@@ -482,15 +457,19 @@ public class CopyStockDetailActivity extends BaseActivity {
 
         showItem = SPTools.getInt("showItem", 0);
 
+        layoutTreat.setVisibility(showItem == 0 ? View.VISIBLE : View.GONE);
+
         for (int i = 0; i < 5; i++) {
             tabChartsTitles.addTab(tabChartsTitles.newTab().setText(stockDetailChartTitles[i]));
         }
 
         tabChartsTitles.getTabAt(showItem).select();
 
+        //图表头点击事件
         tabChartsTitles.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                layoutTreat.setVisibility(tab.getPosition() == 0 ? View.VISIBLE : View.GONE);
                 switch (tab.getPosition()) {
                     case 0:
                         if (map.containsKey("0")) {
@@ -569,7 +548,6 @@ public class CopyStockDetailActivity extends BaseActivity {
                 if (stockCode != null && stockName != null && info != null) {
                     Intent intent = new Intent(CopyStockDetailActivity.this, StockDetailChartsActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("detialList", (Serializable) timeDetialLists);
                     intent.putExtras(bundle);
                     intent.putExtra("position", showItem);
                     intent.putExtra("closePrice", closePrice);
@@ -606,9 +584,7 @@ public class CopyStockDetailActivity extends BaseActivity {
 
         // 修改状态栏颜色
         StatusBarUtil.with(
-
                 getActivity()).
-
                 setColor(getResColor(R.color.header_gray));
         relative_header.setBackgroundResource(R.color.header_gray);
         linear_header.setBackgroundResource(R.color.header_gray);
@@ -678,12 +654,6 @@ public class CopyStockDetailActivity extends BaseActivity {
         startAnimation();
         initList(stockCode);
         refreshChart(showItem);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getStockTimeDetial(stockCode);
-            }
-        }).start();
         setNewsTab();
     }
 
@@ -699,28 +669,6 @@ public class CopyStockDetailActivity extends BaseActivity {
     void startAnimation() {
         rotateAnimation = AnimationUtils.getInstance().setLoadingAnime(btnRefresh, R.mipmap.loading_white);
         rotateAnimation.startNow();
-    }
-
-    //分时数据交易明细
-    private void getStockTimeDetial(final String stockCode) {
-        HashMap<String, String> param = new HashMap<>();
-        param.put("stock_code", stockCode);
-        param.put("limit", "3");
-
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                parseTimeDetial(responseInfo);
-            }
-
-            public void onFailure(String msg) {
-            }
-        };
-        new GGOKHTTP(param, GGOKHTTP.GET_STOCK_TIME_DETIAL, ggHttpInterface).startGet();
-    }
-
-    private void parseTimeDetial(String responseInfo) {
-        timeDetialLists = JSONObject.parseObject(responseInfo, TimeDetialBean.class).getData();
     }
 
     //图表展示
@@ -990,7 +938,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     }
 
     //定时自动刷新
-    private void AutoRefresh(int time) {
+    private void AutoRefresh(long time) {
         if (StockUtils.isTradeTime()) {
             setTime(time);
         } else {
@@ -1001,7 +949,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         }
     }
 
-    public void setTime(int num) {
+    public void setTime(long num) {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -1022,7 +970,6 @@ public class CopyStockDetailActivity extends BaseActivity {
 
                     initList(stockCode);
                     refreshChart(showItem);
-                    getStockTimeDetial(stockCode);
                 } else {
                     if (timer != null) {
                         timer.cancel();
@@ -1057,11 +1004,8 @@ public class CopyStockDetailActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        if (showItem == 0) {
-//            if (sailLineLayout.getVisibility() == View.GONE) {
-//                sailLineLayout.setVisibility(View.VISIBLE);
-//            }
-//        }
+        long refreshtime = SPTools.getLong("interval_time", 15000);
+
         width = AppDevice.getWidth(CopyStockDetailActivity.this) - AppDevice.dp2px(CopyStockDetailActivity.this, 22);
         height = AppDevice.dp2px(CopyStockDetailActivity.this, 190);
         timer = new Timer();
@@ -1091,8 +1035,6 @@ public class CopyStockDetailActivity extends BaseActivity {
 
                 StockDetail bean = JSONObject.parseObject(responseInfo, StockDetail.class);
 
-//                KLog.e(JSONObject.toJSON(bean.getData()).toString());
-
                 if (bean.getCode() == 0) {
 
                     info = bean.getData();
@@ -1100,9 +1042,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                     setNow(info.getUpdate_time());
                     //保存收盘价
                     stock_charge_type = info.getStock_type();
-                    change_value = hply.com.niugu.StringUtils.getDouble(info.getChange_value());
                     closePrice = hply.com.niugu.StringUtils.getDouble(String.valueOf(info.getClose_price()));
-                    change_rate = hply.com.niugu.StringUtils.getDouble(info.getChange_rate());
 
                     StockUtils.savaColseprice((float) closePrice);
                     priceVolumDatas.clear();
@@ -1357,82 +1297,6 @@ public class CopyStockDetailActivity extends BaseActivity {
         text_state.setAlpha((float) 0.7);
     }
 
-    /*//图表点击事件
-    @Override
-    public void onClick(View view) {
-        if (textLayout.getVisibility() == View.VISIBLE) {
-            textLayout.setVisibility(View.GONE);
-        }
-
-        //TODO
-        switch (view.getId()) {
-            case R.id.charts_min_line_layout:
-                if (map.containsKey("0")) {
-                    setMinLineStatu(1);
-                    if (stock_charge_type == 1 && StockUtils.isTradeTime()) {
-                        mBitmapChartView.setBitmap(map.get(String.valueOf("0")), true, timesBitmap);
-                    } else {
-                        mBitmapChartView.setBitmap(map.get(String.valueOf("0")), false, timesBitmap);
-                    }
-                } else {
-                    setMinLineStatu(0);
-                    GetMinLineData();
-                }
-                position = 0;
-                break;
-            case R.id.charts_fiveday_k_layout:
-                if (map.containsKey("1")) {
-                    setFiveStatu(1);
-                    if (stock_charge_type == 1 && StockUtils.isTradeTime()) {
-                        mBitmapChartView.setBitmap(map.get(String.valueOf("1")), true, fiveDayBitmap);
-                    } else {
-                        mBitmapChartView.setBitmap(map.get(String.valueOf("1")), false, fiveDayBitmap);
-                    }
-                } else {
-                    setFiveStatu(0);
-                    getFiveData();
-                }
-                position = 1;
-                break;
-            case R.id.charts_day_k_layout:
-                if (map.containsKey("2")) {
-                    setDayKStatue(1);
-                    mBitmapChartView.setBitmap(map.get("2"));
-                } else {
-                    setDayKStatue(0);
-                    getKLineData(0);
-                }
-                position = 2;
-                break;
-            case R.id.charts_week_k_layout:
-                if (map.containsKey("3")) {
-                    setWeekLineStatu(1);
-                    mBitmapChartView.setBitmap(map.get("3"));
-                } else {
-                    setWeekLineStatu(0);
-                    getKLineData(1);
-                }
-                position = 3;
-                break;
-            case R.id.charts_mouth_k_layout:
-                if (map.containsKey("4")) {
-                    setMonthLineStatu(1);
-                    mBitmapChartView.setBitmap(map.get("4"));
-                } else {
-                    setMonthLineStatu(0);
-                    getKLineData(2);
-                }
-                position = 4;
-                break;
-            default:
-
-                break;
-        }
-        showItem = position;
-        SPTools.saveInt("showItem", position);
-    }*/
-
-
     //异步画图
     class BitmapTask extends AsyncTask<String, Void, Bitmap> {
         private String item_index;
@@ -1444,7 +1308,7 @@ public class CopyStockDetailActivity extends BaseActivity {
             item_index = params[0];
             switch (item_index) {
                 case "0":
-                    timesBitmap = new TimesFivesBitmap(3 * width / 5, height);
+                    timesBitmap = new TimesFivesBitmap(13 * width / 20, height);
                     if (dpi <= AppDevice.DPI480P) {
                         timesBitmap.setIsSw480P(true);
                     } else if (dpi <= AppDevice.DPI720P) {
@@ -1850,5 +1714,12 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     }
 
-
+    /*五档、明细切换*/
+    public void toggleTreatMode() {
+        if (tabLayoutTreat.getTabAt(0).isSelected()) {
+            tabLayoutTreat.getTabAt(1).select();
+        } else {
+            tabLayoutTreat.getTabAt(0).select();
+        }
+    }
 }

@@ -155,9 +155,10 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         if (data == null) {
             return;
         }
+
         tvTinyMarketName.setText(data.getName());
         tvTinyMarketPrice.setText(StringUtils.saveSignificand(data.getPrice(), 2));
-        tvTinyMarketpriceChange$Rate.setText(StockUtils.plusMinus(String.valueOf(data.getPrice_change()) + "", false) + "  " +
+        tvTinyMarketpriceChange$Rate.setText(StockUtils.plusMinus(data.getPrice_change() + "", false) + "  " +
                 StockUtils.plusMinus(String.valueOf(data.getPrice_change_rate()), true));
 
         tvTinyMarketPrice.setTextColor(ContextCompat.getColor(getContext(),

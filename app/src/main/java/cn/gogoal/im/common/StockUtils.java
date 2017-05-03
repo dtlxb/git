@@ -112,7 +112,7 @@ public class StockUtils {
     }
 
     public static String plusMinus(String rateString, boolean percent) {
-        if (rateString == null || TextUtils.isEmpty(rateString)) {
+        if (StringUtils.isActuallyEmpty(rateString)) {
             return "--";
         }
 
@@ -170,9 +170,10 @@ public class StockUtils {
      * 根据判断的依据字段，返回股票颜色
      */
     public static int getStockRateColor(String rateOrPriceString) {
-        if (TextUtils.isEmpty(rateOrPriceString)) {
+        if (TextUtils.isEmpty(rateOrPriceString) || rateOrPriceString.equals("null")) {
             return R.color.stock_gray;
         }
+
         double rateOrPrice = Double.parseDouble(rateOrPriceString);
 
         return rateOrPrice == Double.NaN ? R.color.stock_gray : (rateOrPrice > 0 ? R.color.stock_red : (rateOrPrice == 0 ? R.color.stock_gray :

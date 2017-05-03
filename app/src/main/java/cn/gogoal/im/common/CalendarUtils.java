@@ -272,7 +272,10 @@ public class CalendarUtils {
 
     //传入一个标准的完整时间戳，返回时、分
     public static String getHour$Min(String yMDHms) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        if (StringUtils.isActuallyEmpty(yMDHms)){
+            return "--";
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         try {
             Calendar c = Calendar.getInstance();
             c.setTime(simpleDateFormat.parse(yMDHms));
@@ -280,8 +283,8 @@ public class CalendarUtils {
                     formatInteger(c.get(Calendar.MINUTE));
         } catch (ParseException e) {
             e.printStackTrace();
+            return yMDHms.substring(11, 16);
         }
-        return yMDHms.substring(11, 16);
     }
 
     public static String getHourMin(long timeMillis) {
