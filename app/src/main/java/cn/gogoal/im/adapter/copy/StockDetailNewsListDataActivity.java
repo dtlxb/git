@@ -2,6 +2,7 @@ package cn.gogoal.im.adapter.copy;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -17,7 +18,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.copy.NewsContentActivity;
+import cn.gogoal.im.activity.FunctionActivity;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
@@ -69,7 +70,7 @@ public class StockDetailNewsListDataActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         init();
         //设置状态栏
-        StatusBarUtil.with(this).setColor(getResColor(R.color.main_header_bg));
+        StatusBarUtil.with(this).setColor(Color.WHITE);
     }
 
     private void init() {
@@ -117,7 +118,7 @@ public class StockDetailNewsListDataActivity extends BaseActivity {
                 switch (type) {
                     case 7:
                         if (list_news != null) {
-                            Intent intent = new Intent(StockDetailNewsListDataActivity.this, NewsContentActivity.class);
+                            Intent intent = new Intent(StockDetailNewsListDataActivity.this, FunctionActivity.class);
                             intent.putExtra("id", list_news.get(position).getOrigin_id());
                             intent.putExtra("type", "100");
                             intent.putExtra("favor_type", "1");
@@ -133,7 +134,7 @@ public class StockDetailNewsListDataActivity extends BaseActivity {
                         break;
                     case 3:
                         if (list_news != null) {
-                            Intent intent = new Intent(StockDetailNewsListDataActivity.this, NewsContentActivity.class);
+                            Intent intent = new Intent(StockDetailNewsListDataActivity.this, FunctionActivity.class);
                             intent.putExtra("id", list_news.get(position).getOrigin_id());
                             intent.putExtra("type", "105");
                             intent.putExtra("newstitle", list_news.get(position).getTitle());
@@ -148,7 +149,7 @@ public class StockDetailNewsListDataActivity extends BaseActivity {
                         break;
                     case 0:
                         if (list_research != null) {
-                            Intent intent = new Intent(StockDetailNewsListDataActivity.this, NewsContentActivity.class);
+                            Intent intent = new Intent(StockDetailNewsListDataActivity.this, FunctionActivity.class);
                             intent.putExtra("id", list_research.get(position).getGuid());
                             intent.putExtra("type", "102");
                             intent.putExtra("newstitle", list_research.get(position).getReport_title());
@@ -163,7 +164,7 @@ public class StockDetailNewsListDataActivity extends BaseActivity {
                         break;
                     case 9:
                         if (list_overview != null) {
-                            Intent intent = new Intent(StockDetailNewsListDataActivity.this, NewsContentActivity.class);
+                            Intent intent = new Intent(StockDetailNewsListDataActivity.this, FunctionActivity.class);
                             intent.putExtra("id", list_overview.get(position).getGuid());
                             intent.putExtra("type", "102");
                             intent.putExtra("favor_type", "5");

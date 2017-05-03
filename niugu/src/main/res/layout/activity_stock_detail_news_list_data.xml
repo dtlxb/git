@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@color/main_header_bg">
+        android:background="@drawable/shape_line_bottom">
 
         <LinearLayout
             android:id="@+id/btnBack"
@@ -25,15 +25,15 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/back" />
+                android:background="@mipmap/image_title_back_0" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="返回"
-                android:textColor="@color/title_base_button_text_color"
-                android:textSize="@dimen/text_size_14" />
+                android:textColor="#000"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -44,7 +44,7 @@
             android:layout_centerVertical="true"
             android:clickable="true"
             android:text="@string/app_name"
-            android:textColor="@color/main_head_title"
+            android:textColor="#000"
             android:textSize="@dimen/text_size_18" />
 
     </RelativeLayout>

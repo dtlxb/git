@@ -80,7 +80,7 @@ public class AppConst {
     //开发环境
 //    public static final String WEB_URL = "http://192.168.72.155:9000/#";
 //    public static final String WEB_URL = "http://192.168.52.156:9000/#";
-    public static final String WEB_URL = "http://ggmobile.sandbox.go-goal.cn/#";
+    private static final String WEB_URL = "http://ggmobile.sandbox.go-goal.cn/#";
     //预正式环境
 //    public static final String WEB_URL = "http://192.168.52.156:9000/#";
     //正式环境
@@ -107,7 +107,11 @@ public class AppConst {
     //设置页服务协议
     public static final String GG_SERVICE_AGREEMENT = WEB_URL + "/help/service";
 
+    public static final int SOURCE_TYPE_YANBAO = 102;//个股 研报
+    public static final int SOURCE_TYPE_GONGGAO = 105;//个股 公告
+    public static final String WEB_NEWS = WEB_URL+"/report/info/";
+
     //新闻远端
-    //正式用
-    public static final String WEB_NEWS = "http://ggmobile.go-goal.cn/";
+    public static final int SOURCE_TYPE_NEWS = 100;//个股 新闻
+
 }

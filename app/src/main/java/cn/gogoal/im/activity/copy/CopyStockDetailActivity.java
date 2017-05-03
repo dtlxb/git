@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -67,8 +67,8 @@ import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.fragment.copy.StockDetailNewsFragment;
 import cn.gogoal.im.fragment.stock.ImageChartFragment;
+import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
 import hply.com.niugu.HeaderView;
 import hply.com.niugu.autofixtext.AutofitTextView;
@@ -121,7 +121,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     LinearLayout linear_header;
     //下拉刷新
     @BindView(R.id.scrollView)
-    ScrollView scrollView;
+    NestedScrollView scrollView;
     //股票价格
     @BindView(R.id.stock_price)
     AutofitTextView stock_price;
@@ -349,12 +349,10 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     /***/
     private void setNewsTab() {
-
         viewPagerNews.setOffscreenPageLimit(3);
-
         viewPagerNews.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             public Fragment getItem(int position) {
-                return StockDetailNewsFragment.newInstance(position, newTitles[position]);
+                return StockNewsMinFragment.getInstance(position);
             }
 
             public int getCount() {

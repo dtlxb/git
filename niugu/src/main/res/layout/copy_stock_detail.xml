@@ -26,7 +26,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/back" />
+                android:background="@mipmap/image_title_back_255" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -97,7 +97,7 @@
             app:ptr_ratio_of_header_height_to_refresh="1.2"
             app:ptr_resistance="1.7">
 
-            <ScrollView
+            <android.support.v4.widget.NestedScrollView
                 android:id="@+id/scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -603,7 +603,7 @@
                     <include layout="@layout/line_space_line"/>
                 </LinearLayout>
 
-            </ScrollView>
+            </android.support.v4.widget.NestedScrollView>
         </in.srain.cube.views.ptr.PtrClassicFrameLayout>
 
         <!---底部dock栏-->
