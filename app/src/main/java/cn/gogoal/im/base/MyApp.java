@@ -7,7 +7,11 @@ import android.support.multidex.MultiDex;
 import com.alivc.player.AccessKey;
 import com.alivc.player.AccessKeyCallback;
 import com.alivc.player.AliVcMediaPlayer;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
+import com.avos.avoscloud.PushService;
+import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 
@@ -17,6 +21,7 @@ import java.io.FileReader;
 import java.util.List;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.MyConversationHandler;
@@ -101,6 +106,21 @@ public class MyApp extends LitePalApplication {
         });
 //        }
 
+        // leancloud推送注册
+        AVInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
+            @Override
+            public void done(AVException e) {
+                if (e == null) {
+                    // 保存成功
+                    String installationId = AVInstallation.getCurrentInstallation().getInstallationId();
+                    // 关联  installationId 到用户表等操作……
+                } else {
+                    // 保存失败，输出错误信息
+                }
+            }
+        });
+
+        PushService.setDefaultPushCallback(this, MainActivity.class);
     }
 
     /**
