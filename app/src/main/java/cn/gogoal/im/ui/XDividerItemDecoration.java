@@ -13,43 +13,39 @@ import android.view.View;
  * author wangjd on 2017/3/21 0021.
  * Staff_id 1375
  * phone 18930640263
- * description :${annotated}.
+ * description :${left, top, right, bottom,九点开始顺时针}.
  */
 
 public abstract class XDividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private Paint mPaint;
-    private int lineWidth = 1;//px 分割线宽
-
-    private static int defaultColoe = 0XFFCCCCCC;
-
+    private int lineWidth;//px 分割线宽
     /**
      * A single color value in the form 0xAARRGGBB.
      **/
-    public XDividerItemDecoration(Context context, float lineWidthDp, @ColorInt int dividerColor) {
-        this.lineWidth = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                lineWidthDp,
-                context.getResources().getDisplayMetrics());
-        defaultColoe = dividerColor;
+    private int colorRGB;
+
+    public XDividerItemDecoration(Context context, float lineWidthDp, @ColorInt int colorRGB) {
+        this.colorRGB = colorRGB;
+        this.lineWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, lineWidthDp, context.getResources().getDisplayMetrics());
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setColor(defaultColoe);
+        mPaint.setColor(colorRGB);
         mPaint.setStyle(Paint.Style.FILL);
     }
 
-    public XDividerItemDecoration(Context context, int lineWidthDp, @ColorInt int dividerColor) {
-        this(context, (float) lineWidthDp, dividerColor);
+    public XDividerItemDecoration(Context context, int lineWidthDp, @ColorInt int colorRGB) {
+        this(context, (float) lineWidthDp, colorRGB);
     }
 
 
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         //left, top, right, bottom
-        int childCount = parent.getChildCount();
+        int childCount1 = parent.getChildCount();
         //        int childCount2 = parent.getLayoutManager().getChildCount();
         //        int childCount3 = parent.getAdapter().getItemCount();
         //        Log.e("count", "getChildCount()=" + childCount1 + "-----getLayoutManager().getChildCount()=" + childCount2 + "----getAdapter().getItemCount()=" + childCount3);
-        for (int i = 0; i < childCount; i++) {
+        for (int i = 0; i < childCount1; i++) {
             View child = parent.getChildAt(i);
 
             int itemPosition = ((RecyclerView.LayoutParams) child.getLayoutParams()).getViewLayoutPosition();
@@ -146,20 +142,3 @@ public abstract class XDividerItemDecoration extends RecyclerView.ItemDecoration
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -36,6 +36,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.stock.ChartImageBean;
 import cn.gogoal.im.bean.stock.StockDetail;
 import cn.gogoal.im.bean.stock.StockDetailText2;
+import cn.gogoal.im.bean.stock.TreatData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -265,7 +266,7 @@ public class StockDetailActivity extends BaseActivity {
                         "stockDetail_" + stockName + ".txt", responseInfo);
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
-                    StockDetail.TreatData treatData = JSONObject.parseObject(responseInfo, StockDetail.class).getData();
+                    TreatData treatData = JSONObject.parseObject(responseInfo, StockDetail.class).getData();
                     setStockHeadColor(treatData.getChange_rate());//设置颜色
                     //设置标题、副标题
                     xTitle.setTitle(stockName + "(" + stockCode + ")\n" + (

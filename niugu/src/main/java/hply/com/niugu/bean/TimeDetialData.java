@@ -20,7 +20,7 @@ public class TimeDetialData implements Serializable {
 
     private String update_time;
 
-    private int volume;
+    private String volume;
 
     public double getLast_price_change() {
         return last_price_change;
@@ -62,11 +62,11 @@ public class TimeDetialData implements Serializable {
         this.update_time = update_time;
     }
 
-    public int getVolume() {
+    public String getVolume() {
         return volume;
     }
 
-    public void setVolume(int volume) {
+    public void setVolume(String volume) {
         this.volume = volume;
     }
 }

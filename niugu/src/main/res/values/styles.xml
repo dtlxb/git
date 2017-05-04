@@ -57,4 +57,12 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
+    <style name="RadioTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@android:color/transparent</item>
+        <item name="tabIndicatorHeight">0dp</item>
+        <item name="tabPaddingStart">0dp</item>
+        <item name="tabPaddingEnd">0dp</item>
+        <item name="android:maxHeight">0dp</item>
+
+    </style>
 </resources>

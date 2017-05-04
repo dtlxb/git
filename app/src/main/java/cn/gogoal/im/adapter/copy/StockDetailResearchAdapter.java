@@ -30,7 +30,7 @@ public class StockDetailResearchAdapter extends MyBaseAdapter<StockDetailResearc
         final ViewHolder holder;
         if(convertView==null){
             holder=new ViewHolder();
-            convertView= LayoutInflater.from(parent.getContext()).inflate(R.layout.stockdetailnews_item,null);
+            convertView= LayoutInflater.from(parent.getContext()).inflate(R.layout.stock_detail_news_item,null);
             holder.big_event_tittle_tv= (TextView) convertView.findViewById(R.id.big_event_tittle_tv);
             holder.big_event_date= (TextView) convertView.findViewById(R.id.big_event_date);
             convertView.setTag(holder);

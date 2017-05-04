@@ -37,7 +37,6 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.RecommendBean;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.UIHelper;
@@ -106,7 +105,6 @@ public class SearchTeamFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
-                FileUtil.writeRequestResponse(responseInfo, "推荐群");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     RecommendBean recommendBean = JSONObject.parseObject(responseInfo, RecommendBean.class);
                     if (null != recommendBean.getData()) {

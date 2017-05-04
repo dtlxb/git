@@ -3,8 +3,12 @@ package cn.gogoal.im.common;
 import android.content.Context;
 import android.content.Intent;
 
+import com.alibaba.fastjson.JSONObject;
+
 import cn.gogoal.im.activity.FunctionActivity;
+import cn.gogoal.im.activity.PdfDisplayActivity;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
+import cn.gogoal.im.bean.PdfData;
 
 /**
  * author wangjd on 2017/4/28 0028.
@@ -22,11 +26,45 @@ public class NormalIntentUtils {
         context.startActivity(intent);
     }
 
-    //跳网页Web Activiy
-    public static void go2WebActivity(Context context,String url,String title){
+    /**
+     * 跳网页Web Activiy
+     *
+     * @param context 上下文
+     * @param url     跳转的url(拼好的)
+     * @param title   web页面的原生标题头
+     */
+    public static void go2WebActivity(Context context, String url, String title) {
         Intent intent = new Intent(context, FunctionActivity.class);
         intent.putExtra("function_url", url);
-        intent.putExtra("title",title);
+        intent.putExtra("title", title);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 跳网页Web Activiy
+     *
+     * @param context   上下文
+     * @param url       跳转的url(拼好的)
+     * @param title     web页面的原生标题头
+     * @param needShare 是否支持分享，(显示分享按钮判断)
+     */
+    public static void go2WebActivity(Context context, String url, String title, boolean needShare) {
+        Intent intent = new Intent(context, FunctionActivity.class);
+        intent.putExtra("function_url", url);
+        intent.putExtra("title", title);
+        intent.putExtra("need_share", needShare);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 跳网页Web pdf预览
+     *
+     * @param context   上下文
+     * @param url       pdf url
+     */
+    public static void go2PdfDisplayActivity(Context context, String url,String pdfTitle) {
+        Intent intent = new Intent(context, PdfDisplayActivity.class);
+        intent.putExtra("pdf_data", JSONObject.toJSONString(new PdfData(url,pdfTitle)));
         context.startActivity(intent);
     }
 }

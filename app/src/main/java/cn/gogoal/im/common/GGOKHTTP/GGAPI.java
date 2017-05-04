@@ -65,6 +65,40 @@ public class GGAPI {
         return url;
     }
 
+    public static String getReal(String api, Map<String, String> params) throws Exception {
+        long timeStamp = System.currentTimeMillis() / 1000L;
+        String sign = getSign("GnbhWYzxfcbrMOd", "I7WFKwulOrcYPHu8ZeQcMFEsiwQ45ruS", timeStamp, params, api, "GET");
+        String incomingParams = "";
+        String url;
+        if (params != null) {
+            try {
+                for (Iterator e = params.keySet().iterator(); e.hasNext();
+                     incomingParams = incomingParams + url + "=" + URLEncoder.encode(params.get(url), "UTF-8") + "&") {
+                    url = (String) e.next();
+                }
+            } catch (UnsupportedEncodingException var9) {
+                var9.printStackTrace();
+            }
+
+            incomingParams = incomingParams.substring(0, incomingParams.length() - 1);
+        }
+
+        url = "";
+
+        try {
+            url = "/" + api + "?" + "app_key=" + "GnbhWYzxfcbrMOd" + "&time_stamp=" + timeStamp + "&sign=" + URLEncoder.encode(sign, "UTF-8");
+        } catch (UnsupportedEncodingException var8) {
+            var8.printStackTrace();
+        }
+
+        if (!"".equals(incomingParams.trim())) {
+            url = url + "&" + incomingParams;
+        }
+
+        url = "https://ggservice.go-goal.cn" + url;
+        return url;
+    }
+
     protected static Map<String, Object> post(String api, Map<String, String> params) throws Exception {
         long timeStamp = System.currentTimeMillis() / 1000L;
         String sign = getSign(APP_KEY, APP_SECRET, timeStamp, params, api, "POST");

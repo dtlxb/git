@@ -147,9 +147,9 @@
         <!-- <activity android:name=".activity.Test2Activity"></activity> -->
 
         <activity android:name=".activity.copy.CopyStockDetailActivity" />
-        <activity android:name=".activity.copy.NewsContentActivity" />
         <activity
             android:name=".activity.copy.StockDetailChartsActivity"
+            android:configChanges="orientation|screenSize|keyboard"
             android:screenOrientation="landscape" />
         <activity android:name=".activity.copy.CommentActivity" />
         <activity
@@ -169,8 +169,8 @@
         <activity android:name=".activity.SingleEditActivity" />
         <activity android:name=".activity.RedGreenSettingActivity" />
         <activity android:name=".activity.ChangePhoneNumber" />
-        <activity android:name=".adapter.copy.StockDetailNewsListDataActivity" />
-
+        <activity android:name=".activity.copy.StockDetailNewsListDataActivity" />
+        <activity android:name=".activity.StockNewsAllListActivity" />
     </application>
 
 </manifest>

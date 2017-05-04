@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_mystock"
     android:layout_width="match_parent"
     android:layout_height="55dp"
-    android:orientation="horizontal"
-    android:id="@+id/item_mystock"
-    android:background="@drawable/shape_line_bottom">
+    android:background="@drawable/shape_line_bottom"
+    android:orientation="horizontal">
 
     <LinearLayout
         android:id="@+id/flag_layout"
@@ -24,13 +24,30 @@
             android:textColor="@color/textColor_333333"
             android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/tv_mystock_stockcode"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/default__"
-            android:textColor="#b2b2b2"
-            android:textSize="13sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_mystock_stockcode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/default__"
+                android:textColor="#b2b2b2"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_stock_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:visibility="gone"
+                android:textColor="@color/colorPrimary"
+                android:background="@drawable/shape_stock_type_bg"
+                android:text="--"/>
+
+        </LinearLayout>
     </LinearLayout>
 
     <cn.gogoal.im.ui.view.SortView

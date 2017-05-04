@@ -1,5 +1,6 @@
 package cn.gogoal.im.activity;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -14,6 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.hply.imagepicker.view.StatusBarUtil;
+import com.socks.library.KLog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,8 +27,10 @@ import java.net.URL;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.MD5Utils;
+import cn.gogoal.im.ui.view.XLayout;
 
 /**
  * author wangjd on 2017/3/13 0013.
@@ -38,6 +42,9 @@ public class PdfDisplayActivity extends BaseActivity {
 
     @BindView(R.id.pdf_view)
     PDFView pdfView;
+
+    @BindView(R.id.xLayout)
+    XLayout xLayout;
 
     /* 进度条对话框 */
     private ProgressDialog pdialog;
@@ -54,23 +61,59 @@ public class PdfDisplayActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
-        if (StatusBarUtil.with(this).isOperableDevice()){
+        if (StatusBarUtil.with(this).isOperableDevice()) {
             StatusBarUtil.with(this).setStatusBarFontDark(true);
-        }else {
+        } else {
             StatusBarUtil.with(this).setColor(Color.BLACK);
         }
+
         String jsonData = getIntent().getStringExtra("pdf_data");
+
+        KLog.e(jsonData);
+
         if (!TextUtils.isEmpty(jsonData)) {
             try {
                 pdfUrl = JSONObject.parseObject(jsonData).getString("pdfUrl");
                 setMyTitle(JSONObject.parseObject(jsonData).getString("title"), true);
 
-                new MyLoadAsyncTask().execute(pdfUrl);
+                showPdf();
+
             } catch (Exception e) {
+                setMyTitle("", true);
                 e.printStackTrace();
             }
+        } else {
+            setMyTitle("", true);
         }
 
+    }
+
+    private void showPdf() {
+//        0：没有网络 1：WIFI网络 2：WAP网络 3：NET网络
+        switch (AppDevice.getNetworkType(getActivity())) {
+            case 0:
+                xLayout.setStatus(XLayout.No_Network);
+                break;
+            case 1:
+//                new MyLoadAsyncTask().execute(pdfUrl);
+//                break;
+            case 2:
+            case 3:
+                new AlertDialog.Builder(this, R.style.HoloDialogStyle).setTitle("提示")
+                        .setMessage("当前处于非WI-FI环境，继续查看将消耗运营商流量，请确认是否继续")
+                        .setPositiveButton("继续,有的是流量", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                new MyLoadAsyncTask().execute(pdfUrl);
+                            }
+                        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                }).setCancelable(false).show();
+                break;
+        }
     }
 
     @Nullable
@@ -81,7 +124,7 @@ public class PdfDisplayActivity extends BaseActivity {
         pdialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                if (pdialog.getProgress()<95) {
+                if (pdialog.getProgress() < 95) {
                     FileUtil.deleteDir(getExternalFilesDir("cachePdf"));
                     finish();
                 }
@@ -103,10 +146,10 @@ public class PdfDisplayActivity extends BaseActivity {
         return pdialog;
     }
 
-//     异步任务，后台处理与更新UI
+    //     异步任务，后台处理与更新UI
     private class MyLoadAsyncTask extends AsyncTask<String, String, String> {
 
-//         后台线程
+        //         后台线程
         @Override
         protected String doInBackground(String... params) {
 //             所下载文件的URL
@@ -160,19 +203,19 @@ public class PdfDisplayActivity extends BaseActivity {
             return null;
         }
 
-//         预处理UI线程
+        //         预处理UI线程
         @Override
         protected void onPreExecute() {
             showDialog(0);
             super.onPreExecute();
         }
 
-//         结束时的UI线程
+        //         结束时的UI线程
         @Override
         protected void onPostExecute(String result) {
             try {
                 dismissDialog(0);
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
             super.onPostExecute(result);
@@ -186,7 +229,7 @@ public class PdfDisplayActivity extends BaseActivity {
 
         }
 
-//         处理UI线程，会被多次调用,触发事件为publicProgress方法
+        //         处理UI线程，会被多次调用,触发事件为publicProgress方法
         @Override
         protected void onProgressUpdate(String... values) {
             //进度显示
@@ -204,9 +247,11 @@ public class PdfDisplayActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        if (keyCode==KeyEvent.KEYCODE_BACK){
-            if (pdialog.isShowing()){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (pdialog.isShowing()) {
                 pdialog.dismiss();
+                finish();
+            } else {
                 finish();
             }
             return true;

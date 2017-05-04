@@ -17,10 +17,12 @@ package cn.gogoal.im.adapter.baseAdapter;
 
 import android.animation.Animator;
 import android.content.Context;
+import android.support.annotation.ColorRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -147,6 +149,9 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
         }
     }
 
+    public int getResColor(@ColorRes int colorRes){
+        return ContextCompat.getColor(mContext,colorRes);
+    }
     /**
      * same as recyclerView.setAdapter(), and save the instance of recyclerView
      */
@@ -249,7 +254,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
     /**
      * Set custom load more
      *
-     * @param loadingView
+     * @param loadingView ;
      */
     public void setLoadMoreView(LoadMoreView loadingView) {
         this.mLoadMoreView = loadingView;
@@ -1318,7 +1323,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
     }
 
 
-    public interface RequestLoadMoreListener {
+    public interface RequestLoadMoreListener{
 
         void onLoadMoreRequested();
 
