@@ -14,8 +14,16 @@ public class BoxScreenData {
     }*/
 
     private String programme_name;
-    private String sort;
+    //private String sort;
     private String programme_id;
+
+    private boolean isSelected;
+
+    public BoxScreenData(String programme_name, String programme_id, boolean isSelected) {
+        this.programme_name = programme_name;
+        this.programme_id = programme_id;
+        this.isSelected = isSelected;
+    }
 
     public String getProgramme_name() {
         return programme_name;
@@ -25,19 +33,19 @@ public class BoxScreenData {
         this.programme_name = programme_name;
     }
 
-    public String getSort() {
-        return sort;
-    }
-
-    public void setSort(String sort) {
-        this.sort = sort;
-    }
-
     public String getProgramme_id() {
         return programme_id;
     }
 
     public void setProgramme_id(String programme_id) {
         this.programme_id = programme_id;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

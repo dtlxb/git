@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 基础模块 END -->
 
+
     <!-- 阿里云播放器 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -60,7 +61,7 @@
             </intent-filter>
         </activity>
 
-        <!--authorities="你的包名+fileprovider" -->
+        <!-- authorities="你的包名+fileprovider" -->
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="cn.gogoal.im.fileprovider"
@@ -74,7 +75,6 @@
         <activity
             android:name=".activity.MainActivity"
             android:windowSoftInputMode="adjustPan" />
-
         <activity
             android:name=".activity.RigisterActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
@@ -155,9 +155,7 @@
         <activity
             android:name=".activity.copy.StockDetailMarketIndexActivity"
             android:screenOrientation="portrait" />
-
         <activity android:name=".activity.copy.StockSearchActivity" />
-
         <activity android:name=".activity.EditMyInfoActivity" />
         <activity android:name=".activity.ImageDetailActivity" />
         <activity android:name=".activity.CreateLiveActivity" />
@@ -171,6 +169,7 @@
         <activity android:name=".activity.ChangePhoneNumber" />
         <activity android:name=".activity.copy.StockDetailNewsListDataActivity" />
         <activity android:name=".activity.StockNewsAllListActivity" />
+        <activity android:name=".activity.ScreenActivity" />
     </application>
 
 </manifest>

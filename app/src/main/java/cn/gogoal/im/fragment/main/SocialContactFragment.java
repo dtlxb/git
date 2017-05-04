@@ -7,14 +7,17 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +27,7 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.CreateLiveActivity;
 import cn.gogoal.im.activity.LiveActivity;
+import cn.gogoal.im.activity.ScreenActivity;
 import cn.gogoal.im.adapter.SocialLiveAdapter;
 import cn.gogoal.im.adapter.SocialRecordAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
@@ -80,6 +84,8 @@ public class SocialContactFragment extends BaseFragment {
 
     private PopupWindowHelper screenHelper;
 
+    private int mSelectedPos = 0;
+
     @Override
     public int bindLayout() {
         return R.layout.fragment_social_contact;
@@ -126,16 +132,15 @@ public class SocialContactFragment extends BaseFragment {
                     screenHelper.showScreenFromRight(relaterTittle);
                     boxScreen.setTextColor(getResColor(R.color.stock_red));
                 } else {
-                    screenHelper.dismiss();
                     boxScreen.setTextColor(getResColor(R.color.textColor_333333));
                 }
                 break;
         }
     }
 
-    /*
-        * 能否发起直播
-        * */
+    /**
+     * 能否发起直播
+     */
     private void getUserValid() {
 
         Map<String, String> param = new HashMap<>();
@@ -270,10 +275,18 @@ public class SocialContactFragment extends BaseFragment {
                 KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
-                    List<BoxScreenData> screenData = JSONObject.parseArray(String.valueOf(object.getJSONArray("data")), BoxScreenData.class);
-                    if (screenData != null) {
-                        showBoxScreen(screenData);
+                    JSONArray data = object.getJSONArray("data");
+                    List<BoxScreenData> screenData = new ArrayList<>();
+
+                    if (data != null) {
+                        for (int i = 0; i < data.size(); i++) {
+                            screenData.add(new BoxScreenData(data.getJSONObject(i).getString("programme_name"),
+                                    data.getJSONObject(i).getString("programme_id"), false));
+                        }
                     }
+
+                    screenData.add(0, new BoxScreenData("全部", "all", true));
+                    showBoxScreen(screenData);
                 }
             }
 
@@ -288,7 +301,7 @@ public class SocialContactFragment extends BaseFragment {
     /**
      * 设置筛选弹窗
      */
-    private void showBoxScreen(List<BoxScreenData> screenData) {
+    private void showBoxScreen(final List<BoxScreenData> screenData) {
         View dialogBoxScreen = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_box_screen, null);
         screenHelper = new PopupWindowHelper(dialogBoxScreen);
 
@@ -304,20 +317,56 @@ public class SocialContactFragment extends BaseFragment {
         initRecycleView(recyScreen, null);
         recyScreen.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
-        recyScreen.setAdapter(new BoxScreenAdapter(getActivity(), screenData));
+        final BoxScreenAdapter adapter = new BoxScreenAdapter(getActivity(), screenData);
+        recyScreen.setAdapter(adapter);
+
+        Button btnScreen = (Button) dialogBoxScreen.findViewById(R.id.btnScreen);
+        btnScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mSelectedPos != 0) {
+                    Intent intent = new Intent(getActivity(), ScreenActivity.class);
+                    intent.putExtra("programme_name", screenData.get(mSelectedPos).getProgramme_name());
+                    intent.putExtra("programme_id", screenData.get(mSelectedPos).getProgramme_id());
+                    startActivity(intent);
+                }
+
+                screenHelper.dismiss();
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     class BoxScreenAdapter extends CommonAdapter<BoxScreenData, BaseViewHolder> {
 
+        private List<BoxScreenData> mDatas;
+
         public BoxScreenAdapter(Context context, List<BoxScreenData> list) {
             super(R.layout.item_box_screen, list);
+            this.mDatas = list;
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, final BoxScreenData data, int position) {
-            TextView textProName = holder.getView(R.id.textProName);
+        protected void convert(BaseViewHolder holder, final BoxScreenData data, final int position) {
+            final TextView textProName = holder.getView(R.id.textProName);
 
+            textProName.setSelected(data.isSelected());
             textProName.setText(data.getProgramme_name());
+
+            textProName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    mSelectedPos = position;
+
+                    for (BoxScreenData data : mDatas) {
+                        data.setSelected(false);
+                    }
+
+                    mDatas.get(mSelectedPos).setSelected(true);
+                    notifyDataSetChanged();
+                }
+            });
         }
     }
 }
