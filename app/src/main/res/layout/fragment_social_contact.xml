@@ -9,7 +9,36 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/include_title" />
+        <RelativeLayout
+            android:id="@+id/relaterTittle"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/titlebar_size"
+            android:background="@drawable/shape_line_bottom">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/title_live"
+                android:textColor="@color/textColor_333333"
+                android:textSize="18dp" />
+
+            <CheckBox
+                android:id="@+id/boxScreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:button="@null"
+                android:drawablePadding="6dp"
+                android:drawableRight="@drawable/social_fragment_screen"
+                android:text="筛选"
+                android:textColor="@color/textColor_333333"
+                android:textSize="16dp" />
+
+        </RelativeLayout>
+
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swiperefresh_social"

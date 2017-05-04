@@ -3,9 +3,14 @@ package cn.gogoal.im.fragment.main;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
@@ -20,15 +25,23 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.activity.CreateLiveActivity;
 import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.adapter.SocialLiveAdapter;
+import cn.gogoal.im.adapter.SocialRecordAdapter;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.bean.BoxScreenData;
 import cn.gogoal.im.bean.SocialLiveBean;
 import cn.gogoal.im.bean.SocialLiveData;
+import cn.gogoal.im.bean.SocialRecordBean;
+import cn.gogoal.im.bean.SocialRecordData;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.view.XTitle;
+import cn.gogoal.im.ui.widget.PopupWindowHelper;
+
+import static cn.gogoal.im.base.BaseActivity.initRecycleView;
 
 /**
  * author wangjd on 2017/4/7 0007.
@@ -37,6 +50,12 @@ import cn.gogoal.im.ui.view.XTitle;
  * description :直播.
  */
 public class SocialContactFragment extends BaseFragment {
+
+    @BindView(R.id.relaterTittle)
+    RelativeLayout relaterTittle;
+
+    @BindView(R.id.boxScreen)
+    CheckBox boxScreen;
 
     @BindView(R.id.swiperefresh_social)
     SwipeRefreshLayout refreshSocial;
@@ -56,7 +75,10 @@ public class SocialContactFragment extends BaseFragment {
     @BindView(R.id.recordRecycler)
     RecyclerView recordRecycler;
 
-    private SocialLiveAdapter adapter;
+    private SocialLiveAdapter liveAdapter;
+    private SocialRecordAdapter recordAdapter;
+
+    private PopupWindowHelper screenHelper;
 
     @Override
     public int bindLayout() {
@@ -65,22 +87,22 @@ public class SocialContactFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle(R.string.title_live).addAction(new XTitle.TextAction("筛选") {
+        /*setFragmentTitle(R.string.title_live).addAction(new XTitle.TextAction("筛选") {
             @Override
             public void actionClick(View view) {
 
             }
-        });
+        });*/
 
         BaseActivity.iniRefresh(refreshSocial);
 
-        BaseActivity.initRecycleView(perLiveRecycler, 0);
+        BaseActivity.initRecycleView(perLiveRecycler, null);
         perLiveRecycler.setNestedScrollingEnabled(false);
 
-        BaseActivity.initRecycleView(orgLiveRecycler, 0);
+        BaseActivity.initRecycleView(orgLiveRecycler, null);
         orgLiveRecycler.setNestedScrollingEnabled(false);
 
-        BaseActivity.initRecycleView(recordRecycler, 0);
+        BaseActivity.initRecycleView(recordRecycler, null);
         recordRecycler.setNestedScrollingEnabled(false);
 
         refreshSocial.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -88,25 +110,38 @@ public class SocialContactFragment extends BaseFragment {
             public void onRefresh() {
                 getLiveData(1);
                 getLiveData(2);
+                getRecordData(1);
             }
         });
 
         getLiveData(1);
         getLiveData(2);
+        getRecordData(1);
+
+        getScreenData();
     }
 
-    @OnClick({R.id.imgFloatAction})
+    @OnClick({R.id.imgFloatAction, R.id.boxScreen})
     public void viewOnClick(View view) {
         switch (view.getId()) {
             case R.id.imgFloatAction: //发起直播
                 getUserValid();
                 break;
+            case R.id.boxScreen: //筛选
+                if (boxScreen.isChecked()) {
+                    screenHelper.showScreenFromRight(relaterTittle);
+                    boxScreen.setTextColor(getResColor(R.color.stock_red));
+                } else {
+                    screenHelper.dismiss();
+                    boxScreen.setTextColor(getResColor(R.color.textColor_333333));
+                }
+                break;
         }
     }
 
     /*
-    * 能否发起直播
-    * */
+        * 能否发起直播
+        * */
     private void getUserValid() {
 
         Map<String, String> param = new HashMap<>();
@@ -161,14 +196,14 @@ public class SocialContactFragment extends BaseFragment {
                 if (object.getCode() == 0) {
                     if (live_source == 1) {
                         perLiveLinear.setVisibility(View.VISIBLE);
-                        List<SocialLiveData> listData = object.getData();
-                        adapter = new SocialLiveAdapter(getActivity(), listData);
-                        perLiveRecycler.setAdapter(adapter);
+                        List<SocialLiveData> liveData = object.getData();
+                        liveAdapter = new SocialLiveAdapter(getActivity(), liveData);
+                        perLiveRecycler.setAdapter(liveAdapter);
                     } else if (live_source == 2) {
                         orgLiveLinear.setVisibility(View.VISIBLE);
                         List<SocialLiveData> listData = object.getData();
-                        adapter = new SocialLiveAdapter(getActivity(), listData);
-                        orgLiveRecycler.setAdapter(adapter);
+                        liveAdapter = new SocialLiveAdapter(getActivity(), listData);
+                        orgLiveRecycler.setAdapter(liveAdapter);
                     }
                 } else if (object.getCode() == 1001) {
                     if (live_source == 1) {
@@ -190,5 +225,105 @@ public class SocialContactFragment extends BaseFragment {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_STUDIO_LIST, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 获取录播列表数据
+     */
+    private void getRecordData(final int page) {
+        final Map<String, String> param = new HashMap<>();
+        param.put("page", page + "");
+        param.put("rows", "10");
+
+        final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                SocialRecordBean object = JSONObject.parseObject(responseInfo, SocialRecordBean.class);
+                if (object.getCode() == 0) {
+                    recordLinear.setVisibility(View.VISIBLE);
+                    List<SocialRecordData> recordData = object.getData();
+                    recordAdapter = new SocialRecordAdapter(getActivity(), recordData);
+                    recordRecycler.setAdapter(recordAdapter);
+                } else if (object.getCode() == 1001) {
+                    if (page == 1) {
+                        recordLinear.setVisibility(View.GONE);
+                    }
+                } else {
+                    UIHelper.toast(getContext(), R.string.net_erro_hint);
+                }
+
+                refreshSocial.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                refreshSocial.setRefreshing(false);
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.GET_RECORD_LIST, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 获取筛选列表数据
+     */
+    private void getScreenData() {
+
+        final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    List<BoxScreenData> screenData = JSONObject.parseArray(String.valueOf(object.getJSONArray("data")), BoxScreenData.class);
+                    if (screenData != null) {
+                        showBoxScreen(screenData);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(null, GGOKHTTP.GET_PROGRAMME_GUIDE, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 设置筛选弹窗
+     */
+    private void showBoxScreen(List<BoxScreenData> screenData) {
+        View dialogBoxScreen = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_box_screen, null);
+        screenHelper = new PopupWindowHelper(dialogBoxScreen);
+
+        screenHelper.setMissCallBack(new PopupWindowHelper.PopDismissCallBack() {
+            @Override
+            public void setBoxScreen() {
+                boxScreen.setChecked(false);
+                boxScreen.setTextColor(getResColor(R.color.textColor_333333));
+            }
+        });
+
+        RecyclerView recyScreen = (RecyclerView) dialogBoxScreen.findViewById(R.id.recyScreen);
+        initRecycleView(recyScreen, null);
+        recyScreen.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+
+        recyScreen.setAdapter(new BoxScreenAdapter(getActivity(), screenData));
+    }
+
+    class BoxScreenAdapter extends CommonAdapter<BoxScreenData, BaseViewHolder> {
+
+        public BoxScreenAdapter(Context context, List<BoxScreenData> list) {
+            super(R.layout.item_box_screen, list);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder holder, final BoxScreenData data, int position) {
+            TextView textProName = holder.getView(R.id.textProName);
+
+            textProName.setText(data.getProgramme_name());
+        }
     }
 }

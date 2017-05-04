@@ -508,8 +508,8 @@ public class GGOKHTTP {
 
     /**
      * token
-     *  mobile
-     *  发送验证码 更换绑定手机号
+     * mobile
+     * 发送验证码 更换绑定手机号
      */
     public static final String SEND_CAPTCHA = "v1/ggm_im/send_captcha";
 
@@ -593,13 +593,20 @@ public class GGOKHTTP {
      *  获取个人信息
      */
     public static final String GET_MY_INFO = "v1/user/get_info";
+
     /**
      * 预约直播
+     *
      * @prama token
      * @prama sourece 4(移动版)
      * @prama video_id 直播的id（live_id）
      */
     public static final String ORDER_LIVE = "v1/video_studio/order_live";
+
+    /*
+     * 获取节目单
+     */
+    public static final String GET_PROGRAMME_GUIDE = "v1/video_studio/get_programme_guide";
 
 //--------------------------------------------------------------------------------------------------
 

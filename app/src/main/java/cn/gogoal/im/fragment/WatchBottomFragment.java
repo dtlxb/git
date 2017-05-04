@@ -379,7 +379,7 @@ public class WatchBottomFragment extends BaseFragment {
         RecyclerView recy_relater = (RecyclerView) relaterVideo.findViewById(R.id.recy_relater);
         initRecycleView(recy_relater, null);
 
-        recy_relater.setAdapter(new RelaterVideoAdapter(getContext(), videoDatas));
+        recy_relater.setAdapter(new RelaterVideoAdapter(getActivity(), videoDatas));
     }
 
     class RelaterVideoAdapter extends CommonAdapter<RelaterVideoData, BaseViewHolder> {
