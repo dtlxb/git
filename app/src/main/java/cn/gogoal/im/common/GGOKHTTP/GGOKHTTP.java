@@ -601,6 +601,7 @@ public class GGOKHTTP {
      *  获取个人信息
      */
     public static final String GET_MY_INFO = "v1/user/get_info";
+
     /**
      * 预约直播
      *
@@ -609,6 +610,11 @@ public class GGOKHTTP {
      * @prama video_id 直播的id（live_id）
      */
     public static final String ORDER_LIVE = "v1/video_studio/order_live";
+
+    /*
+     * 获取节目单
+     */
+    public static final String GET_PROGRAMME_GUIDE = "v1/video_studio/get_programme_guide";
 
 //--------------------------------------------------------------------------------------------------
 
