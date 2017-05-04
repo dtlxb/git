@@ -134,8 +134,9 @@ public class GGOKHTTP {
 
     /**
      * 个股新闻、公告、投资者互动
+     *
      * params stock_code=002285&
-     * params type=2
+     * params type=7(新闻)、3(公告)、9(看点);
      */
     public static final String GET_STOCK_NEWS = "v1/news/get_stock_news";
 

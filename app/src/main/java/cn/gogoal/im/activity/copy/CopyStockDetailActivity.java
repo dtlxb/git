@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -67,8 +67,8 @@ import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.fragment.copy.StockDetailNewsFragment;
 import cn.gogoal.im.fragment.stock.ImageChartFragment;
+import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
 import hply.com.niugu.HeaderView;
 import hply.com.niugu.autofixtext.AutofitTextView;
@@ -88,11 +88,6 @@ import in.srain.cube.views.ptr.PtrHandler;
 public class CopyStockDetailActivity extends BaseActivity {
 
     public static final String TAG = "CopyStockDetailActivity";
-
-    public static final int TREAT_TYPE_WU_DANG = 952;
-
-    public static final int TREAT_TYPE_MING_XI = 459;
-
 
     TimesFivesBitmap fiveDayBitmap;
     TimesFivesBitmap timesBitmap;
@@ -121,7 +116,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     LinearLayout linear_header;
     //下拉刷新
     @BindView(R.id.scrollView)
-    ScrollView scrollView;
+    NestedScrollView scrollView;
     //股票价格
     @BindView(R.id.stock_price)
     AutofitTextView stock_price;
@@ -349,12 +344,10 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     /***/
     private void setNewsTab() {
-
         viewPagerNews.setOffscreenPageLimit(3);
-
         viewPagerNews.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             public Fragment getItem(int position) {
-                return StockDetailNewsFragment.newInstance(position, newTitles[position]);
+                return StockNewsMinFragment.getInstance(position);
             }
 
             public int getCount() {
@@ -575,9 +568,6 @@ public class CopyStockDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 refreshAll();
-                //通知嵌套的Fragment更新
-                AppManager.getInstance().sendMessage("child_fragment_Refresh");
-//                AppManager.sendMessage("StockDetailNewsFragment_Refresh");
             }
         });
 
@@ -609,10 +599,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                 headerView.loading();
 
                 if (canRefreshLine) {
-                    StockState();
-                    startAnimation();
-                    initList(stockCode);
-                    refreshChart(showItem);
+                    refreshAll();
                 } else {
                     ptrFrame.refreshComplete();
 
@@ -651,10 +638,13 @@ public class CopyStockDetailActivity extends BaseActivity {
 //    }
 
     private void refreshAll() {
+        StockState();
         startAnimation();
         initList(stockCode);
         refreshChart(showItem);
         setNewsTab();
+        AppManager.getInstance().sendMessage("updata_treat_data");
+//        "updata_treat_data"
     }
 
     void stopAnimation() {
@@ -967,9 +957,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         switch (s.getCode()) {
             case "autoRefresh1":
                 if (StockUtils.isTradeTime()) {
-
-                    initList(stockCode);
-                    refreshChart(showItem);
+                    refreshAll();
                 } else {
                     if (timer != null) {
                         timer.cancel();

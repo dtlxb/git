@@ -254,7 +254,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
     /**
      * Set custom load more
      *
-     * @param loadingView
+     * @param loadingView ;
      */
     public void setLoadMoreView(LoadMoreView loadingView) {
         this.mLoadMoreView = loadingView;
@@ -1323,7 +1323,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
     }
 
 
-    public interface RequestLoadMoreListener {
+    public interface RequestLoadMoreListener{
 
         void onLoadMoreRequested();
 

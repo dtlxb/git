@@ -13,7 +13,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
+
+import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +32,7 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.StockDetail;
 import cn.gogoal.im.bean.stock.ThreeText;
 import cn.gogoal.im.bean.stock.TreatData;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -39,7 +43,6 @@ import cn.gogoal.im.ui.view.XLayout;
 import hply.com.niugu.bean.TimeDetialBean;
 import hply.com.niugu.bean.TimeDetialData;
 
-import static com.alibaba.fastjson.JSON.parseObject;
 
 /**
  * author wangjd on 2017/5/2 0002.
@@ -66,6 +69,9 @@ public class TreatFragment extends BaseFragment {
     private boolean fromStockDetail;
     private int type;
 
+    private float itemHeight;
+    private String stockCode;
+
     @Override
     public int bindLayout() {
         return R.layout.layout_normal_list_without_refresh;
@@ -82,6 +88,11 @@ public class TreatFragment extends BaseFragment {
         bundle.putString("stock_code", stockCode);
         bundle.putInt("type", type);
         bundle.putBoolean("from_stock_detail", fromStockDetail);
+        if (type == AppConst.TREAT_TYPE_WU_DANG) {
+            fragment.itemHeight = fromStockDetail ? 16.3f : 24f;
+        } else {
+            fragment.itemHeight = 21;
+        }
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -90,17 +101,24 @@ public class TreatFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
-        String stockCode = getArguments().getString("stock_code");
+        stockCode = getArguments().getString("stock_code");
         type = getArguments().getInt("type");
         fromStockDetail = getArguments().getBoolean("from_stock_detail");
 
         KLog.e("stockCode=" + stockCode + ";type=" + type + ";fromStockDetail=" + fromStockDetail);
 
         if (stockCode != null) {
-            if (type == CopyStockDetailActivity.TREAT_TYPE_WU_DANG) {
-                getTreatWudang(stockCode);
-            } else if (type == CopyStockDetailActivity.TREAT_TYPE_MING_XI) {
-                getStockTimeDetial(stockCode);
+            if (type == AppConst.TREAT_TYPE_WU_DANG) {
+                threeTexts = new ArrayList<>();
+                wudangAdapter = new WudangAdapter(threeTexts);
+                recyclerView.setAdapter(wudangAdapter);
+                recyclerView.addItemDecoration(new WudangDivider(getResColor(R.color.chart_text_color)));
+                getTreatWudang();
+            } else if (type == AppConst.TREAT_TYPE_MING_XI) {
+                timeDetialDatas = new ArrayList<>();
+                mingxiAdapter = new MingxiAdapter(timeDetialDatas);
+                recyclerView.setAdapter(mingxiAdapter);
+                getStockTimeDetial();
             }
         }
 
@@ -112,29 +130,33 @@ public class TreatFragment extends BaseFragment {
         });
     }
 
-    private void toggleParentTab() {
-        if (fromStockDetail) {
-            ((CopyStockDetailActivity) getActivity()).toggleTreatMode();
-        }else {
-            ((TimesFragment)getParentFragment()).toggleTreatMode();
+    @Subscriber(tag = "updata_treat_data")
+    void updataTreatData(String msg) {
+        if (type == AppConst.TREAT_TYPE_WU_DANG) {
+            getTreatWudang();
+        } else if (type == AppConst.TREAT_TYPE_MING_XI) {
+            getStockTimeDetial();
         }
     }
 
-    private void getTreatWudang(String stockCode) {
-        threeTexts = new ArrayList<>();
-        wudangAdapter = new WudangAdapter(threeTexts);
-        recyclerView.setAdapter(wudangAdapter);
-        recyclerView.addItemDecoration(new WudangDivider(getResColor(R.color.chart_text_color)));
+    private void toggleParentTab() {
+        if (fromStockDetail) {
+            ((CopyStockDetailActivity) getActivity()).toggleTreatMode();
+        } else {
+            ((TimesFragment) getParentFragment()).toggleTreatMode();
+        }
+    }
 
+    private void getTreatWudang() {
         final Map<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
 
         new GGOKHTTP(param, GGOKHTTP.ONE_STOCK_DETAIL, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                if (parseObject(responseInfo).getIntValue("code") == 0) {
+                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     threeTexts.clear();
-                    TreatData treatData = parseObject(responseInfo, StockDetail.class).getData();
+                    TreatData treatData = JSONObject.parseObject(responseInfo, StockDetail.class).getData();
                     threeTexts.add(new ThreeText("卖5", treatData.getSell5_price(), treatData.getSell5_volume()));
                     threeTexts.add(new ThreeText("卖4", treatData.getSell4_price(), treatData.getSell4_volume()));
                     threeTexts.add(new ThreeText("卖3", treatData.getSell3_price(), treatData.getSell3_volume()));
@@ -161,11 +183,7 @@ public class TreatFragment extends BaseFragment {
     }
 
     //分时数据交易明细
-    private void getStockTimeDetial(final String stockCode) {
-        timeDetialDatas = new ArrayList<>();
-        mingxiAdapter = new MingxiAdapter(timeDetialDatas);
-        recyclerView.setAdapter(mingxiAdapter);
-
+    private void getStockTimeDetial() {
         HashMap<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
         param.put("limit", "10");
@@ -173,8 +191,15 @@ public class TreatFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                if (parseObject(responseInfo).getIntValue("code") == 0) {
-                    timeDetialDatas.addAll(parseObject(responseInfo, TimeDetialBean.class).getData());
+                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                    timeDetialDatas.clear();
+                    List<TimeDetialData> cacheData =
+                            JSONObject.parseObject(responseInfo, TimeDetialBean.class).getData();
+                    if (fromStockDetail) {
+                        timeDetialDatas.addAll(cacheData.subList(0, 8));
+                    } else {
+                        timeDetialDatas.addAll(cacheData);
+                    }
                     mingxiAdapter.notifyDataSetChanged();
                 }
             }
@@ -195,23 +220,16 @@ public class TreatFragment extends BaseFragment {
         protected void convert(BaseViewHolder holder, ThreeText data, int position) {
 
             View view = holder.getView(R.id.item_view);
-            if (fromStockDetail){
-                LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-                view.setLayoutParams(params);
-            }else {
-                LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        AppDevice.dp2px(getContext(),24));
-                view.setLayoutParams(params);
-            }
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    AppDevice.dp2px(getContext(), itemHeight));
+            view.setLayoutParams(params);
 
             TextView tvTreatPrice = holder.getView(R.id.tv_treat_price);
 
-            if (type == CopyStockDetailActivity.TREAT_TYPE_MING_XI) {
+            if (type == AppConst.TREAT_TYPE_MING_XI) {
                 tvTreatPrice.setGravity(Gravity.RIGHT);
-            }else {
+            } else {
                 tvTreatPrice.setGravity(Gravity.CENTER);
             }
 
@@ -229,7 +247,6 @@ public class TreatFragment extends BaseFragment {
                 holder.setTextColor(R.id.tv_treat_price, getResColor(R.color.gray_light));
             } else {
                 holder.setTextColor(R.id.tv_treat_price, getResColor(R.color.stock_green));
-                ;
             }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -280,8 +297,13 @@ public class TreatFragment extends BaseFragment {
 
         @Override
         protected void convert(BaseViewHolder holder, TimeDetialData data, int position) {
-            holder.setText(R.id.tv_treat_name, CalendarUtils.getHour$Min(data.getUpdate_time()));
+            View view = holder.getView(R.id.item_view);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    AppDevice.dp2px(getContext(), itemHeight));
+            view.setLayoutParams(params);
 
+            holder.setText(R.id.tv_treat_name, CalendarUtils.getHour$Min(data.getUpdate_time()));
             TextView tvDealPrice = holder.getView(R.id.tv_treat_price);
             tvDealPrice.setText(StringUtils.getStockDouble(data.getPrice(), 2));
             if (data.getLast_price_change() > 0) {

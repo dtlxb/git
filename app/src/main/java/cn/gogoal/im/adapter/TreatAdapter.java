@@ -11,10 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.fragment.stock.TreatFragment;
-
-import static cn.gogoal.im.activity.copy.CopyStockDetailActivity.TREAT_TYPE_MING_XI;
-import static cn.gogoal.im.activity.copy.CopyStockDetailActivity.TREAT_TYPE_WU_DANG;
 
 /**
  * author wangjd on 2017/5/3 0003.
@@ -38,7 +36,7 @@ public class TreatAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int i) {
         return TreatFragment.getInstance(stockCode,
-                i == 0 ? TREAT_TYPE_WU_DANG : TREAT_TYPE_MING_XI,
+                i == 0 ? AppConst.TREAT_TYPE_WU_DANG : AppConst.TREAT_TYPE_MING_XI,
                 fromStockDetail);
     }
 
