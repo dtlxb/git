@@ -87,12 +87,6 @@ public class SocialContactFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        /*setFragmentTitle(R.string.title_live).addAction(new XTitle.TextAction("筛选") {
-            @Override
-            public void actionClick(View view) {
-
-            }
-        });*/
 
         BaseActivity.iniRefresh(refreshSocial);
 
