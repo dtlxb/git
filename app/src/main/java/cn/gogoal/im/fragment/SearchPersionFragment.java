@@ -120,6 +120,8 @@ public class SearchPersionFragment extends BaseFragment {
 
         @Override
         protected void convert(BaseViewHolder holder, final ContactBean data, int position) {
+            holder.getView(R.id.btn_search_group_add).setVisibility(View.GONE);
+            
             ImageView imageView = holder.getView(R.id.item_user_avatar);
             holder.setText(R.id.item_tv_search_result_name, data.getNickname());
             holder.setText(R.id.item_tv_search_result_intro,data.getDuty());
