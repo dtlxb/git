@@ -63,7 +63,7 @@
             android:id="@+id/relater_tittle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/textBlank"
+            android:text="@string/text_empty"
             android:textColor="@color/textColor_333333"
             android:textSize="16dp" />
 
@@ -75,7 +75,7 @@
             android:drawableLeft="@mipmap/play_count"
             android:drawablePadding="6dp"
             android:gravity="center_vertical"
-            android:text="@string/textBlank"
+            android:text="@string/text_empty"
             android:textColor="@color/relater_play_count"
             android:textSize="12dp" />
 
@@ -101,7 +101,7 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="@string/textBlank"
+                android:text="@string/text_empty"
                 android:textColor="@color/relater_play_count"
                 android:textSize="12dp" />
 
@@ -118,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="@string/textBlank"
+                    android:text="@string/text_empty"
                     android:textColor="@color/relater_play_count"
                     android:textSize="12dp" />
 

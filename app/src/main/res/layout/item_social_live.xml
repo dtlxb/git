@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="@string/textBlank"
+                android:text="@string/text_empty"
                 android:textColor="@color/textColor_333333"
                 android:textSize="15dp" />
 
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:singleLine="true"
-                android:text="@string/textBlank"
+                android:text="@string/text_empty"
                 android:textColor="@color/textColor_666666"
                 android:textSize="12dp" />
 
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:background="@drawable/shape_social_live_status_red"
-                android:text="@string/textBlank"
+                android:text="@string/text_empty"
                 android:textColor="@color/social_live_status"
                 android:textSize="12dp" />
 
@@ -113,7 +113,7 @@
                     android:id="@+id/textPhoneTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/textBlank"
+                    android:text="@string/text_empty"
                     android:textColor="@android:color/white"
                     android:textSize="12dp" />
 
@@ -129,7 +129,7 @@
             android:layout_marginBottom="15dp"
             android:layout_marginLeft="10dp"
             android:singleLine="true"
-            android:text="@string/textBlank"
+            android:text="@string/text_empty"
             android:textColor="@android:color/white"
             android:textSize="16dp" />
 
@@ -166,7 +166,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:background="@drawable/shape_social_live_status_red"
-                android:text="@string/textBlank"
+                android:text="@string/text_empty"
                 android:textColor="@color/social_live_status"
                 android:textSize="12dp" />
 
@@ -189,7 +189,7 @@
                     android:id="@+id/textPcTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/textBlank"
+                    android:text="@string/text_empty"
                     android:textColor="@android:color/white"
                     android:textSize="12dp" />
 
@@ -215,7 +215,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:singleLine="true"
-            android:text="@string/textBlank"
+            android:text="@string/text_empty"
             android:textColor="@color/textColor_333333"
             android:textSize="17dp" />
 
@@ -244,7 +244,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="7dp"
                     android:singleLine="true"
-                    android:text="@string/textBlank"
+                    android:text="@string/text_empty"
                     android:textColor="@color/textColor_666666"
                     android:textSize="13dp" />
 
