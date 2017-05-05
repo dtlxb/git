@@ -21,6 +21,7 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.CreateLiveActivity;
 import cn.gogoal.im.activity.LiveActivity;
+import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.adapter.SocialLiveAdapter;
 import cn.gogoal.im.adapter.SocialRecordAdapter;
 import cn.gogoal.im.base.BaseActivity;
@@ -100,6 +101,14 @@ public class SocialContactFragment extends BaseFragment {
         getLiveData(1);
         getLiveData(2);
         getRecordData(1);
+
+        ((MainActivity) getActivity()).setCloseCallBack(new MainActivity.drawerCloseCallBack() {
+            @Override
+            public void closeDrawer() {
+                boxScreen.setChecked(false);
+                boxScreen.setTextColor(getResColor(R.color.textColor_333333));
+            }
+        });
     }
 
     @OnClick({R.id.imgFloatAction, R.id.boxScreen})
@@ -110,8 +119,10 @@ public class SocialContactFragment extends BaseFragment {
                 break;
             case R.id.boxScreen: //筛选
                 if (boxScreen.isChecked()) {
+                    ((MainActivity) getActivity()).openMenu();
                     boxScreen.setTextColor(getResColor(R.color.stock_red));
                 } else {
+                    ((MainActivity) getActivity()).closeMenu();
                     boxScreen.setTextColor(getResColor(R.color.textColor_333333));
                 }
                 break;

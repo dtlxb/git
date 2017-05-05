@@ -174,6 +174,16 @@ public class MainActivity extends BaseActivity {
         });
 
         //侧滑
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        mDrawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                closeCallBack.closeDrawer();
+            }
+        });
+
         getScreenData();
     }
 
@@ -383,6 +393,8 @@ public class MainActivity extends BaseActivity {
                     mDatas.get(mSelectedPos).setSelected(true);
                     notifyDataSetChanged();
 
+                    closeMenu();
+
                     if (mSelectedPos != 0) {
                         Intent intent = new Intent(getActivity(), ScreenActivity.class);
                         intent.putExtra("programme_name", data.getProgramme_name());
@@ -394,4 +406,17 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    drawerCloseCallBack closeCallBack;
+
+    public drawerCloseCallBack getCloseCallBack() {
+        return closeCallBack;
+    }
+
+    public void setCloseCallBack(drawerCloseCallBack closeCallBack) {
+        this.closeCallBack = closeCallBack;
+    }
+
+    public interface drawerCloseCallBack {
+        public void closeDrawer();
+    }
 }
