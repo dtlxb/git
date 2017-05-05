@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ import java.util.List;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.IMPersonDetailActivity;
 import cn.gogoal.im.activity.ImageDetailActivity;
+import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
@@ -45,6 +47,7 @@ import cn.gogoal.im.common.GGEmoticons;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.recording.MediaManager;
@@ -67,11 +70,14 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     //股票
     private static int TYPE_LEFT_STOCK_MESSAGE = 0x07;
     private static int TYPE_RIGHT_STOCK_MESSAGE = 0x08;
-    //未知消息
+    //未知
     private static int TYPE_LEFT_UNKONW_MESSAGE = 0x09;
     private static int TYPE_RIGHT_UNKONW_MESSAGE = 0x10;
+    //分享
+    private static int TYPE_LEFT_NORMOAL_SHARE = 0x11;
+    private static int TYPE_RIGHT_NORMOAL_SHARE = 0x12;
     //系统
-    private static int TYPE_SYSTEM_MESSAGE = 0x11;
+    private static int TYPE_SYSTEM_MESSAGE = 0x13;
     private List<AVIMMessage> messageList;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
@@ -102,6 +108,10 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             return new RightStockViewHolder(mLayoutInflater.inflate(R.layout.item_right_text, parent, false));
         } else if (viewType == TYPE_LEFT_STOCK_MESSAGE) {
             return new LeftStockViewHolder(mLayoutInflater.inflate(R.layout.item_left_text, parent, false));
+        } else if (viewType == TYPE_RIGHT_NORMOAL_SHARE) {
+            return new RightShareViewHolder(mLayoutInflater.inflate(R.layout.item_right_share, parent, false));
+        } else if (viewType == TYPE_LEFT_NORMOAL_SHARE) {
+            return new LeftShareViewHolder(mLayoutInflater.inflate(R.layout.item_left_share, parent, false));
         } else if (viewType == TYPE_RIGHT_UNKONW_MESSAGE) {
             return new LeftUnKonwViewHolder(mLayoutInflater.inflate(R.layout.item_left_unknow, parent, false));
         } else if (viewType == TYPE_LEFT_UNKONW_MESSAGE) {
@@ -282,10 +292,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             ((LeftAudioViewHolder) holder).recorder_length.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*if (((LeftAudioViewHolder) holder).animView != null) {
-                        ((LeftAudioViewHolder) holder).animView.setBackgroundResource(R.drawable.v_anim3);
-                        ((LeftAudioViewHolder) holder).animView = null;
-                    }*/
                     //播放动画
                     ((LeftAudioViewHolder) holder).animView.setBackgroundResource(R.drawable.left_play_anim);
                     AnimationDrawable anim = (AnimationDrawable) ((LeftAudioViewHolder) holder).animView.getBackground();
@@ -343,10 +349,52 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                         mContext.startActivity(intent);
                     }
                 });
-
             }
 
             showMessageTime(position, ((RightStockViewHolder) holder).message_time);
+        } else if (holder instanceof LeftShareViewHolder) {
+            ((LeftShareViewHolder) holder).user_name.setText(avimMessage.getFrom());
+            getLayoutSize(((LeftShareViewHolder) holder).user_layout);
+            if (lcattrsObject.getString("toolType").equals("1")) {
+                ((LeftShareViewHolder) holder).layout_normal.setVisibility(View.VISIBLE);
+                ((LeftShareViewHolder) holder).live_layout.setVisibility(View.GONE);
+                ((LeftShareViewHolder) holder).tv_share_title.setText(lcattrsObject.getString("title"));
+                ((LeftShareViewHolder) holder).tv_share.setText(lcattrsObject.getString("content"));
+                ImageDisplay.loadNetImage(mContext, lcattrsObject.getString("thumUrl"), ((LeftShareViewHolder) holder).iv_share);
+            } else if (lcattrsObject.getString("toolType").equals("2")) {
+                ((LeftShareViewHolder) holder).layout_normal.setVisibility(View.GONE);
+                ((LeftShareViewHolder) holder).live_layout.setVisibility(View.VISIBLE);
+                ((LeftShareViewHolder) holder).tv_share_title.setText(lcattrsObject.getString("title"));
+                ((LeftShareViewHolder) holder).tv_live_share.setText(lcattrsObject.getString("content"));
+                getImageSize(((LeftShareViewHolder) holder).iv_live_share);
+                ImageDisplay.loadNetImage(mContext, lcattrsObject.getString("thumUrl"), ((LeftShareViewHolder) holder).iv_live_share);
+            }
+
+            ((LeftShareViewHolder) holder).card_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    shareAction(lcattrsObject);
+                }
+            });
+            showMessageTime(position, ((LeftShareViewHolder) holder).message_time);
+        } else if (holder instanceof RightShareViewHolder) {
+            getLayoutSize(((RightShareViewHolder) holder).user_layout);
+            if (lcattrsObject.getString("toolType").equals("1")) {
+                ((RightShareViewHolder) holder).layout_normal.setVisibility(View.VISIBLE);
+                ((RightShareViewHolder) holder).live_layout.setVisibility(View.GONE);
+                ((RightShareViewHolder) holder).tv_share_title.setText(lcattrsObject.getString("title"));
+                ((RightShareViewHolder) holder).tv_share.setText(lcattrsObject.getString("content"));
+                ImageDisplay.loadNetImage(mContext, lcattrsObject.getString("thumUrl"), ((RightShareViewHolder) holder).iv_share);
+            } else if (lcattrsObject.getString("toolType").equals("2")) {
+                ((RightShareViewHolder) holder).layout_normal.setVisibility(View.GONE);
+                ((RightShareViewHolder) holder).live_layout.setVisibility(View.VISIBLE);
+                ((RightShareViewHolder) holder).tv_share_title.setText(lcattrsObject.getString("title"));
+                ((RightShareViewHolder) holder).tv_live_share.setText(lcattrsObject.getString("content"));
+                getImageSize(((RightShareViewHolder) holder).iv_live_share);
+                ImageDisplay.loadNetImage(mContext, lcattrsObject.getString("thumUrl"), ((RightShareViewHolder) holder).iv_live_share);
+            }
+
+            showMessageTime(position, ((RightShareViewHolder) holder).message_time);
         } else if (holder instanceof LeftUnKonwViewHolder) {
             ((LeftUnKonwViewHolder) holder).user_name.setText(avimMessage.getFrom());
             showMessageTime(position, ((LeftUnKonwViewHolder) holder).message_time);
@@ -359,6 +407,19 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         } else {
 
         }
+    }
+
+    private void getLayoutSize(RelativeLayout relativeLayout) {
+        ViewGroup.LayoutParams params = relativeLayout.getLayoutParams();
+        params.width = (AppDevice.getWidth(mContext) * 3) / 5;
+        relativeLayout.setLayoutParams(params);
+    }
+
+    private void getImageSize(ImageView iv_share) {
+        ViewGroup.LayoutParams params = iv_share.getLayoutParams();
+        params.width = (AppDevice.getWidth(mContext) * 3) / 5 - AppDevice.dp2px(mContext, 28);
+        params.height = (int) (params.width / 1.82);
+        iv_share.setLayoutParams(params);
     }
 
     @Override
@@ -401,6 +462,12 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                     return TYPE_RIGHT_STOCK_MESSAGE;
                 } else {
                     return TYPE_LEFT_STOCK_MESSAGE;
+                }
+            case "13":
+                if (isYourSelf) {
+                    return TYPE_RIGHT_NORMOAL_SHARE;
+                } else {
+                    return TYPE_LEFT_NORMOAL_SHARE;
                 }
             default:
                 if (isYourSelf) {
@@ -464,6 +531,18 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         }
     }
 
+
+    private void shareAction(JSONObject jsonObject) {
+        if (jsonObject.getString("toolType").equals("1")) {
+            NormalIntentUtils.go2WebActivity(mContext, jsonObject.getString("link"), jsonObject.getString("title"));
+        } else if (jsonObject.getString("toolType").equals("2")) {
+            Intent intent = new Intent(mContext, WatchLiveActivity.class);
+            intent.putExtra("live_id", jsonObject.getString("live_id"));
+            mContext.startActivity(intent);
+        }
+    }
+
+
     private void imageClickAction(AVIMImageMessage imageMessage) {
         List<String> urls = new ArrayList<>();
         urls.add(imageMessage.getAVFile().getUrl());
@@ -479,7 +558,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             public void onClick(DialogInterface dialog, int which) {
                 ClipboardManager cm = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
                 cm.setText(imageMessage.getText());
-                //cm.setPrimaryClip(ClipData.newPlainText("data", imageMessage.getText()));
             }
         }, false).show();
     }
@@ -596,6 +674,60 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             super(itemView);
             user_name = (TextView) itemView.findViewById(R.id.user_name);
             what_user_send = (TextView) itemView.findViewById(R.id.what_user_send);
+        }
+
+    }
+
+    private class LeftShareViewHolder extends IMCHatViewHolder {
+        private ImageView iv_share;
+        private TextView tv_share;
+        private TextView tv_share_title;
+        private RelativeLayout layout_normal;
+
+        private ImageView iv_live_share;
+        private TextView tv_live_share;
+        private LinearLayout live_layout;
+
+        private LinearLayout card_layout;
+
+        LeftShareViewHolder(View itemView) {
+            super(itemView);
+            iv_share = (ImageView) itemView.findViewById(R.id.iv_share);
+            tv_share = (TextView) itemView.findViewById(R.id.tv_share);
+            tv_share_title = (TextView) itemView.findViewById(R.id.tv_share_title);
+            layout_normal = (RelativeLayout) itemView.findViewById(R.id.layout_normal);
+
+            iv_live_share = (ImageView) itemView.findViewById(R.id.iv_live_share);
+            tv_live_share = (TextView) itemView.findViewById(R.id.tv_live_share);
+            live_layout = (LinearLayout) itemView.findViewById(R.id.live_layout);
+            card_layout = (LinearLayout) itemView.findViewById(R.id.card_layout);
+        }
+
+    }
+
+    private class RightShareViewHolder extends IMCHatViewHolder {
+        private ImageView iv_share;
+        private TextView tv_share;
+        private TextView tv_share_title;
+        private RelativeLayout layout_normal;
+
+        private ImageView iv_live_share;
+        private TextView tv_live_share;
+        private LinearLayout live_layout;
+
+        private LinearLayout card_layout;
+
+        RightShareViewHolder(View itemView) {
+            super(itemView);
+            iv_share = (ImageView) itemView.findViewById(R.id.iv_share);
+            tv_share = (TextView) itemView.findViewById(R.id.tv_share);
+            tv_share_title = (TextView) itemView.findViewById(R.id.tv_share_title);
+            layout_normal = (RelativeLayout) itemView.findViewById(R.id.layout_normal);
+
+            iv_live_share = (ImageView) itemView.findViewById(R.id.iv_live_share);
+            tv_live_share = (TextView) itemView.findViewById(R.id.tv_live_share);
+            live_layout = (LinearLayout) itemView.findViewById(R.id.live_layout);
+            card_layout = (LinearLayout) itemView.findViewById(R.id.card_layout);
         }
 
     }
