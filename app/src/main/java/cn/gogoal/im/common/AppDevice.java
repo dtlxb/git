@@ -106,11 +106,12 @@ public class AppDevice {
         return dm.widthPixels;
     }
 
-    public static  boolean isLowDpi(){
-        return SPTools.getBoolean("low_dpi",false);
+    public static boolean isLowDpi() {
+        return SPTools.getBoolean("low_dpi", false);
     }
 
-    private static long  lastClickTime;
+    private static long lastClickTime;
+
     public synchronized static boolean isFastClick() {
         long time = System.currentTimeMillis();
         if (time - lastClickTime < 500) {
@@ -120,15 +121,16 @@ public class AppDevice {
         return false;
     }
 
-    public static int getDefaultActionBarSize(Context mContext){
+    public static int getDefaultActionBarSize(Context mContext) {
         TypedValue typedValue = new TypedValue();
         mContext.getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true);
-        int[] attribute = new int[] { android.R.attr.actionBarSize };
+        int[] attribute = new int[]{android.R.attr.actionBarSize};
         TypedArray array = mContext.obtainStyledAttributes(typedValue.resourceId, attribute);
         int titleHeight = array.getDimensionPixelSize(0 /* index */, -1 /* default size */);
         array.recycle();
         return titleHeight;
     }
+
     /**
      * 代码动态控制布局中控件的宽高
      */
@@ -206,15 +208,15 @@ public class AppDevice {
                 .getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
                 .getRunningAppProcesses();
+
+        if (appProcesses == null) {
+            return false;
+        }
+
         for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
-            if (appProcess.processName.equals(context.getPackageName())) {
-                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND) {
-                    // 后台运行
-                    return true;
-                } else {
-                    // 前台运行
-                    return false;
-                }
+            if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+                    && appProcess.processName.equals(context.getPackageName())) {
+                return true;
             }
         }
         return false;
