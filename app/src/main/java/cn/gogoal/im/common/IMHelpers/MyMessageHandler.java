@@ -1,5 +1,10 @@
 package cn.gogoal.im.common.IMHelpers;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -9,13 +14,18 @@ import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageHandler;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
+import com.avos.avospush.notification.NotificationCompat;
 import com.socks.library.KLog;
 
 import java.util.HashMap;
 
+import cn.gogoal.im.R;
+import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.base.AppManager;
+import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
 
@@ -26,7 +36,8 @@ public class MyMessageHandler extends AVIMMessageHandler {
 
     @Override
     public void onMessage(final AVIMMessage message, AVIMConversation conversation, final AVIMClient client) {
-
+        KLog.e(conversation.getAttribute("chat_type"));
+        KLog.e(message.getContent());
         try {
             final String clientID = AVImClientManager.getInstance().getClientId();
 
@@ -38,6 +49,9 @@ public class MyMessageHandler extends AVIMMessageHandler {
                     if (clientID.equals(client.getClientId())) {
                         //剔除自己消息
                         if (!message.getFrom().equals(clientID)) {
+
+                            showNotification(message);
+
                             final int chatType = (int) conversation.getAttribute("chat_type");
                             switch (chatType) {
                                 case 1001:
@@ -171,7 +185,32 @@ public class MyMessageHandler extends AVIMMessageHandler {
     /**
      * 推送Notification
      */
-    private void showNotification() {
+    private void showNotification(AVIMMessage message) {
+        JSONObject content = JSONObject.parseObject(message.getContent());
+        KLog.e(content);
+        JSONObject lcattrs = content.getJSONObject("_lcattrs");
+        String push = lcattrs.getString("push");
+        if (push != null) {
+            if (AppDevice.isBackground(MyApp.getAppContext())) {
+                try {
+                    Intent resultIntent = new Intent(MyApp.getAppContext(), MainActivity.class);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(MyApp.getAppContext(), 0,
+                            resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MyApp.getAppContext())
+                            .setSmallIcon(R.mipmap.logo).setContentTitle("GoGoal")
+                            .setContentText(push).setTicker(push);
+                    mBuilder.setContentIntent(pendingIntent);
+                    mBuilder.setAutoCancel(true);
 
+                    int mNotificationId = 10001;
+                    NotificationManager mNotifyMgr = (NotificationManager) MyApp.getAppContext().
+                            getSystemService(Context.NOTIFICATION_SERVICE);
+                    mNotifyMgr.notify(mNotificationId, mBuilder.build());
+
+                } catch (Exception e) {
+                    KLog.e(e);
+                }
+            }
+        }
     }
 }

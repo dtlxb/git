@@ -334,6 +334,8 @@ public class ChatFragment extends BaseFragment {
                     String backString = StringUtils.StringFilter(etInput.getText().toString());
                     etInput.setText(backString);
                     etInput.setSelection(backString.length());
+                } else if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    getActivity().finish();
                 }
                 return true;
             }
@@ -348,7 +350,6 @@ public class ChatFragment extends BaseFragment {
             }
         });
 
-        //子碎片
     }
 
     private void initFragment() {
@@ -665,12 +666,14 @@ public class ChatFragment extends BaseFragment {
                                 JSONObject contentObject = JSON.parseObject(messageList.get(i).getContent());
                                 String _lctype = contentObject.getString("_lctype");
                                 if (_lctype.equals("5") || _lctype.equals("6")) {
-                                    HashMap<String, String> map = new HashMap<>();
-                                    JSONArray accountArray = contentObject.getJSONObject("_lcattrs").getJSONArray("accountList");
-                                    String _lctext = MessageUtils.findSquarePeople(accountArray, _lctype);
-                                    map.put("_lctext", _lctext);
-                                    map.put("_lctype", _lctype);
-                                    messageList.get(i).setContent(JSON.toJSONString(map));
+                                    if (null != contentObject.getJSONObject("_lcattrs") && null != contentObject.getJSONObject("_lcattrs").getJSONArray("accountList")) {
+                                        HashMap<String, String> map = new HashMap<>();
+                                        JSONArray accountArray = contentObject.getJSONObject("_lcattrs").getJSONArray("accountList");
+                                        String _lctext = MessageUtils.findSquarePeople(accountArray, _lctype);
+                                        map.put("_lctext", _lctext);
+                                        map.put("_lctype", _lctype);
+                                        messageList.get(i).setContent(JSON.toJSONString(map));
+                                    }
                                 }
                             }
                         }

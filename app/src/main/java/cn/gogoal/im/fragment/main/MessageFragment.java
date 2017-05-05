@@ -425,6 +425,9 @@ public class MessageFragment extends BaseFragment {
                         //股票消息
                         message = "发来一条股票消息";
                         break;
+                    case "13":
+                        message = "发来一条分享消息";
+                        break;
                     default:
                         break;
                 }
@@ -516,14 +519,11 @@ public class MessageFragment extends BaseFragment {
                 //图片
             case "-3":
                 //语音
-                nickName = lcattrsObject.getString("username");
-                break;
             case "1":
-
-                break;
             case "2":
                 //加好友
             case "3":
+            case "13":
                 //好友加入通讯录
                 nickName = lcattrsObject.getString("nickname");
                 break;
