@@ -35,6 +35,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.BoxScreenData;
@@ -339,7 +340,7 @@ public class MainActivity extends BaseActivity {
                         }
                     }
 
-                    screenData.add(0, new BoxScreenData("全部", "all", true));
+                    screenData.add(0, new BoxScreenData("全部", null, true));
                     showBoxScreen(screenData);
                 }
             }
@@ -395,12 +396,15 @@ public class MainActivity extends BaseActivity {
 
                     closeMenu();
 
-                    if (mSelectedPos != 0) {
+                    vpMain.setCurrentItem(3);
+                    AppManager.getInstance().sendMessage("setScreen", new BaseMessage("programme_id", data.getProgramme_id()));
+
+                    /*if (mSelectedPos != 0) {
                         Intent intent = new Intent(getActivity(), ScreenActivity.class);
                         intent.putExtra("programme_name", data.getProgramme_name());
                         intent.putExtra("programme_id", data.getProgramme_id());
                         startActivity(intent);
-                    }
+                    }*/
                 }
             });
         }

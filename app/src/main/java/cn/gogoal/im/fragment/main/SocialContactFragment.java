@@ -12,6 +12,8 @@ import android.widget.RelativeLayout;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,7 @@ import cn.gogoal.im.adapter.SocialLiveAdapter;
 import cn.gogoal.im.adapter.SocialRecordAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.SocialLiveBean;
 import cn.gogoal.im.bean.SocialLiveData;
 import cn.gogoal.im.bean.SocialRecordBean;
@@ -70,6 +73,8 @@ public class SocialContactFragment extends BaseFragment {
     private SocialLiveAdapter liveAdapter;
     private SocialRecordAdapter recordAdapter;
 
+    private String programme_name;
+
     @Override
     public int bindLayout() {
         return R.layout.fragment_social_contact;
@@ -92,15 +97,15 @@ public class SocialContactFragment extends BaseFragment {
         refreshSocial.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getLiveData(1);
-                getLiveData(2);
-                getRecordData(1);
+                getLiveData(1, null);
+                getLiveData(2, null);
+                getRecordData(1, null);
             }
         });
 
-        getLiveData(1);
-        getLiveData(2);
-        getRecordData(1);
+        getLiveData(1, null);
+        getLiveData(2, null);
+        getRecordData(1, null);
 
         ((MainActivity) getActivity()).setCloseCallBack(new MainActivity.drawerCloseCallBack() {
             @Override
@@ -109,6 +114,17 @@ public class SocialContactFragment extends BaseFragment {
                 boxScreen.setTextColor(getResColor(R.color.textColor_333333));
             }
         });
+    }
+
+    @Subscriber(tag = "setScreen")
+    private void setScreen(BaseMessage s) {
+        programme_name = s.getMsg();
+
+        //perLiveLinear.setVisibility(View.GONE);
+
+        getLiveData(1, programme_name);
+        getLiveData(2, programme_name);
+        getRecordData(1, programme_name);
     }
 
     @OnClick({R.id.imgFloatAction, R.id.boxScreen})
@@ -171,10 +187,13 @@ public class SocialContactFragment extends BaseFragment {
     /**
      * 获取直播列表数据
      */
-    private void getLiveData(final int live_source) {
+    private void getLiveData(final int live_source, String programme_id) {
         final Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
         param.put("live_source", live_source + "");
+        if (programme_id != null) {
+            param.put("programme_id", programme_id);
+        }
         param.put("page", "1");
         param.put("rows", "100");
 
@@ -220,8 +239,11 @@ public class SocialContactFragment extends BaseFragment {
     /**
      * 获取录播列表数据
      */
-    private void getRecordData(final int page) {
+    private void getRecordData(final int page, String programme_id) {
         final Map<String, String> param = new HashMap<>();
+        if (programme_id != null) {
+            param.put("programme_id", programme_id);
+        }
         param.put("page", page + "");
         param.put("rows", "10");
 
