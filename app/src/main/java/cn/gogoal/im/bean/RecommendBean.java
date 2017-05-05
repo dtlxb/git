@@ -1,6 +1,10 @@
 package cn.gogoal.im.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,7 +64,7 @@ public class RecommendBean implements Serializable {
         private String name;
         private String conv_id;
         private boolean is_in;
-        private List<MBean> m;
+        private ArrayList<MBean> m;
 
         public AttrBean getAttr() {
             return attr;
@@ -102,11 +106,11 @@ public class RecommendBean implements Serializable {
             this.is_in = is_in;
         }
 
-        public List<MBean> getM() {
+        public ArrayList<MBean> getM() {
             return m;
         }
 
-        public void setM(List<MBean> m) {
+        public void setM(ArrayList<MBean> m) {
             this.m = m;
         }
 
@@ -206,7 +210,7 @@ public class RecommendBean implements Serializable {
             }
         }
 
-        public static class MBean {
+        public static class MBean implements Parcelable{
             /**
              * account_id : 393028
              * account_name : E00018282
@@ -270,6 +274,46 @@ public class RecommendBean implements Serializable {
             public void setNickname(String nickname) {
                 this.nickname = nickname;
             }
+
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeInt(this.account_id);
+                dest.writeString(this.account_name);
+                dest.writeString(this.avatar);
+                dest.writeString(this.city);
+                dest.writeString(this.duty);
+                dest.writeString(this.nickname);
+            }
+
+            public MBean() {
+            }
+
+            protected MBean(Parcel in) {
+                this.account_id = in.readInt();
+                this.account_name = in.readString();
+                this.avatar = in.readString();
+                this.city = in.readString();
+                this.duty = in.readString();
+                this.nickname = in.readString();
+            }
+
+            public static final Creator<MBean> CREATOR = new Creator<MBean>() {
+                @Override
+                public MBean createFromParcel(Parcel source) {
+                    return new MBean(source);
+                }
+
+                @Override
+                public MBean[] newArray(int size) {
+                    return new MBean[size];
+                }
+            };
         }
     }
 }

@@ -355,14 +355,14 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 ((LeftShareViewHolder) holder).live_layout.setVisibility(View.GONE);
                 ((LeftShareViewHolder) holder).tv_share_title.setText(lcattrsObject.getString("title"));
                 ((LeftShareViewHolder) holder).tv_share.setText(lcattrsObject.getString("content"));
-                ImageDisplay.loadNetImage(mContext, lcattrsObject.getString("thumUrl"), ((LeftShareViewHolder) holder).iv_share);
+                ImageDisplay.loadImage(mContext, lcattrsObject.getString("thumUrl"), ((LeftShareViewHolder) holder).iv_share);
             } else if (lcattrsObject.getString("toolType").equals("2")) {
                 ((LeftShareViewHolder) holder).layout_normal.setVisibility(View.GONE);
                 ((LeftShareViewHolder) holder).live_layout.setVisibility(View.VISIBLE);
                 ((LeftShareViewHolder) holder).tv_share_title.setText(lcattrsObject.getString("title"));
                 ((LeftShareViewHolder) holder).tv_live_share.setText(lcattrsObject.getString("content"));
                 getImageSize(((LeftShareViewHolder) holder).iv_live_share);
-                ImageDisplay.loadNetImage(mContext, lcattrsObject.getString("thumUrl"), ((LeftShareViewHolder) holder).iv_live_share);
+                ImageDisplay.loadImage(mContext, lcattrsObject.getString("thumUrl"), ((LeftShareViewHolder) holder).iv_live_share);
             }
 
             ((LeftShareViewHolder) holder).card_layout.setOnClickListener(new View.OnClickListener() {
@@ -379,14 +379,14 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 ((RightShareViewHolder) holder).live_layout.setVisibility(View.GONE);
                 ((RightShareViewHolder) holder).tv_share_title.setText(lcattrsObject.getString("title"));
                 ((RightShareViewHolder) holder).tv_share.setText(lcattrsObject.getString("content"));
-                ImageDisplay.loadNetImage(mContext, lcattrsObject.getString("thumUrl"), ((RightShareViewHolder) holder).iv_share);
+                ImageDisplay.loadImage(mContext, lcattrsObject.getString("thumUrl"), ((RightShareViewHolder) holder).iv_share);
             } else if (lcattrsObject.getString("toolType").equals("2")) {
                 ((RightShareViewHolder) holder).layout_normal.setVisibility(View.GONE);
                 ((RightShareViewHolder) holder).live_layout.setVisibility(View.VISIBLE);
                 ((RightShareViewHolder) holder).tv_share_title.setText(lcattrsObject.getString("title"));
                 ((RightShareViewHolder) holder).tv_live_share.setText(lcattrsObject.getString("content"));
                 getImageSize(((RightShareViewHolder) holder).iv_live_share);
-                ImageDisplay.loadNetImage(mContext, lcattrsObject.getString("thumUrl"), ((RightShareViewHolder) holder).iv_live_share);
+                ImageDisplay.loadImage(mContext, lcattrsObject.getString("thumUrl"), ((RightShareViewHolder) holder).iv_live_share);
             }
 
             showMessageTime(position, ((RightShareViewHolder) holder).message_time);

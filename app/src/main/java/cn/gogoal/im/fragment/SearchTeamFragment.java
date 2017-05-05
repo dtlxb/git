@@ -26,7 +26,6 @@ import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +39,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.RecommendBean;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
@@ -59,6 +59,8 @@ public class SearchTeamFragment extends BaseFragment {
     XLayout xLayout;
 
     private RecommendAdapter adapter;
+
+    private int loadType= AppConst.REFRESH_TYPE_FIRST;
 
     private ArrayList<RecommendBean.DataBean> dataBeanList;
     private List<String> groupMembers;
@@ -92,14 +94,25 @@ public class SearchTeamFragment extends BaseFragment {
 
         recyclerView.setAdapter(adapter);
 
-        getRecommendGroup("");
+        getRecommendGroup(AppConst.REFRESH_TYPE_FIRST,"");
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getRecommendGroup(AppConst.REFRESH_TYPE_SWIPEREFRESH,"");
+    }
+
     @Subscriber(tag = "SEARCH_TEAM_TAG")
-    private void getRecommendGroup(final String keyword) {
-        dataBeanList.clear();
-        xLayout.setStatus(XLayout.Loading);
+    void searchTeam(String keyWord){
+        getRecommendGroup(AppConst.REFRESH_TYPE_PARENT_BUTTON,keyWord);
+    }
+
+    private void getRecommendGroup(final int loadType, final String keyword) {
+        if (loadType==AppConst.REFRESH_TYPE_FIRST) {
+            xLayout.setStatus(XLayout.Loading);
+        }
         Map<String, String> map = new HashMap<>();
         map.put("token", UserUtils.getToken());
         if (!TextUtils.isEmpty(keyword)) {
@@ -113,6 +126,7 @@ public class SearchTeamFragment extends BaseFragment {
                 KLog.e(responseInfo);
 
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                    dataBeanList.clear();
                     RecommendBean recommendBean = JSONObject.parseObject(responseInfo, RecommendBean.class);
                     if (null != recommendBean.getData()) {
                         dataBeanList.addAll(recommendBean.getData());
@@ -131,7 +145,8 @@ public class SearchTeamFragment extends BaseFragment {
                 xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
                     @Override
                     public void onReload(View v) {
-                        getRecommendGroup(keyword);
+                        getRecommendGroup(AppConst.REFRESH_TYPE_SWIPEREFRESH,
+                                loadType==AppConst.REFRESH_TYPE_PARENT_BUTTON?keyword:"");
                     }
                 });
 
@@ -246,7 +261,7 @@ public class SearchTeamFragment extends BaseFragment {
                             bundle.putString("square_name", dataBeanList.get(position - 1).getName());
                             bundle.putParcelable("bitmap_avatar", groupAvatarBitmap);
                             bundle.putString("square_creater", dataBeanList.get(position - 1).getC());
-                            bundle.putSerializable("square_members", (Serializable) dataBeanList.get(position - 1).getM());
+                            bundle.putParcelableArrayList("square_members",data.getM());
                             in.putExtras(bundle);
                             startActivity(in);
                         }

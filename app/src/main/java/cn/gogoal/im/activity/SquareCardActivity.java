@@ -80,7 +80,7 @@ public class SquareCardActivity extends BaseActivity {
         conversationId = getIntent().getExtras().getString("conversation_id");
         squareName = getIntent().getExtras().getString("square_name");
         squareCreater = getIntent().getExtras().getString("square_creater");
-        mBeanList = (List<RecommendBean.DataBean.MBean>) getIntent().getExtras().getSerializable("square_members");
+        mBeanList = getIntent().getParcelableArrayListExtra("square_members");
         mPersonInfoAdapter = new IMPersonSetAdapter(1002, SquareCardActivity.this, R.layout.item_square_chat_set, squareCreater, contactBeens);
         personlistRecycler.setAdapter(mPersonInfoAdapter);
         //初始化界面
