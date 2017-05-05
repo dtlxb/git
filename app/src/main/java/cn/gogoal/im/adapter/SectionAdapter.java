@@ -72,7 +72,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionTouYanData, B
         } else {
             itemView.setClickable(true);
             itemView.setEnabled(true);
-            ImageDisplay.loadNetImage(context, item.getIconUrl(), itemIcon, true);
+            ImageDisplay.loadImage(context, item.getIconUrl(), itemIcon);
             itemTvDesc.setText(item.getDesc());
 
             if (TextUtils.isEmpty(item.getIconUrl()) || item.getShowHotFlag() == 0) {//不显示
@@ -85,7 +85,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionTouYanData, B
                     ContextCompat.getColor(context, R.color.textColor_333333) :
                     ContextCompat.getColor(context, R.color.textColor_999999));
 
-            ImageDisplay.loadNetImage(context, item.getIconUrl(), itemIcon);
+            ImageDisplay.loadImage(context, item.getIconUrl(), itemIcon);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -101,7 +101,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionTouYanData, B
                             NormalIntentUtils.go2WebActivity(
                                     v.getContext(),
                                     item.getUrl(),
-                                    item.getDesc());
+                                    item.getDesc(),true);
                         } else {
                             new ComingSoonDialog().show(context.getSupportFragmentManager());
                         }

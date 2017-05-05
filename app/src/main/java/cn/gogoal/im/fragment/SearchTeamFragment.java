@@ -4,6 +4,7 @@ package cn.gogoal.im.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,8 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.Target;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -40,6 +43,8 @@ import cn.gogoal.im.bean.RecommendBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -106,6 +111,7 @@ public class SearchTeamFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
+
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     RecommendBean recommendBean = JSONObject.parseObject(responseInfo, RecommendBean.class);
                     if (null != recommendBean.getData()) {
@@ -136,6 +142,7 @@ public class SearchTeamFragment extends BaseFragment {
 
     private class RecommendAdapter extends CommonAdapter<RecommendBean.DataBean, BaseViewHolder> {
 
+        private Bitmap groupAvatarBitmap;
         RecommendAdapter(List<RecommendBean.DataBean> datas) {
             super(R.layout.item_search_type_persion, datas);
         }
@@ -178,52 +185,72 @@ public class SearchTeamFragment extends BaseFragment {
 
             Glide.get(getContext()).clearMemory();
 
+            //群主没有设置过群头像，拼接
+            if (StringUtils.isActuallyEmpty(data.getAttr().getAvatar())) {
+                GroupFaceImage.getInstance(getActivity(), getImageAvatar(data.getM())
+                ).load(new GroupFaceImage.OnMatchingListener() {
+                    @Override
+                    public void onSuccess(final Bitmap mathingBitmap) {
 
-            GroupFaceImage.getInstance(getActivity(), getImageAvatar(data.getM())
-            ).load(new GroupFaceImage.OnMatchingListener() {
-                @Override
-                public void onSuccess(final Bitmap mathingBitmap) {
+                        groupAvatarBitmap=mathingBitmap;
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            imageView.setImageBitmap(mathingBitmap);
-                        }
-                    });
-
-                    itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent in = new Intent(v.getContext(), SquareChatRoomActivity.class);
-                            if (data.isIs_in()) {//我在群里
-                                // TODO: 进入聊天
-                                in.putExtra("squareName", data.getName());
-                                in.putExtra("conversation_id", data.getConv_id());
-                                startActivity(in);
-                            } else {//TODO: 申请加群
-                                in = new Intent(getActivity(), SquareCardActivity.class);
-                                if (position > 0) {
-                                    for (int i = 0; i < dataBeanList.get(position - 1).getM().size(); i++) {
-                                        groupMembers.add(String.valueOf(dataBeanList.get(position - 1).getM().get(i).getAccount_id()));
-                                    }
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("conversation_id", dataBeanList.get(position - 1).getConv_id());
-                                    bundle.putString("square_name", dataBeanList.get(position - 1).getName());
-                                    bundle.putParcelable("bitmap_avatar", mathingBitmap);
-                                    bundle.putString("square_creater", dataBeanList.get(position - 1).getC());
-                                    bundle.putSerializable("square_members", (Serializable) dataBeanList.get(position - 1).getM());
-                                    in.putExtras(bundle);
-                                    startActivity(in);
-                                }
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                imageView.setImageBitmap(mathingBitmap);
                             }
-                        }
-                    });
+                        });
+                    }
 
+                    @Override
+                    public void onError(Exception e) {
+                        groupAvatarBitmap= BitmapFactory.decodeResource(
+                                getResources(),R.mipmap.image_placeholder);
+                    }
+                });
+            }else {
+                ImageDisplay.loadImage(getContext(),data.getAttr().getAvatar(),imageView);
+                try {
+                    groupAvatarBitmap=Glide.with(getContext())
+                            .load(data.getAttr().getAvatar())
+                            .asBitmap() //必须
+                            .centerCrop()
+                            .skipMemoryCache(true)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                            .get();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    groupAvatarBitmap= BitmapFactory.decodeResource(
+                            getResources(),R.mipmap.image_placeholder);
                 }
+            }
 
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onError(Exception e) {
-
+                public void onClick(View v) {
+                    Intent in = new Intent(v.getContext(), SquareChatRoomActivity.class);
+                    if (data.isIs_in()) {//我在群里
+                        // TODO: 进入聊天
+                        in.putExtra("squareName", data.getName());
+                        in.putExtra("conversation_id", data.getConv_id());
+                        startActivity(in);
+                    } else {//TODO: 申请加群
+                        in = new Intent(getActivity(), SquareCardActivity.class);
+                        if (position > 0) {
+                            for (int i = 0; i < dataBeanList.get(position - 1).getM().size(); i++) {
+                                groupMembers.add(String.valueOf(dataBeanList.get(position - 1).getM().get(i).getAccount_id()));
+                            }
+                            Bundle bundle = new Bundle();
+                            bundle.putString("conversation_id", dataBeanList.get(position - 1).getConv_id());
+                            bundle.putString("square_name", dataBeanList.get(position - 1).getName());
+                            bundle.putParcelable("bitmap_avatar", groupAvatarBitmap);
+                            bundle.putString("square_creater", dataBeanList.get(position - 1).getC());
+                            bundle.putSerializable("square_members", (Serializable) dataBeanList.get(position - 1).getM());
+                            in.putExtras(bundle);
+                            startActivity(in);
+                        }
+                    }
                 }
             });
 

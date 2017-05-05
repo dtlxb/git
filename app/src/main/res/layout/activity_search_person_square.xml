@@ -26,37 +26,7 @@
         app:tabSelectedTextColor="@color/colorPrimary"
         app:tabTextColor="@color/textColor_333333" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/shape_search_activity_edit"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/flag_search_icon"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_margin="10dp"
-            android:contentDescription="@null"
-            android:src="@mipmap/img_search"
-            android:visibility="gone" />
-
-        <cn.gogoal.im.ui.view.HintCenterEditText
-            android:id="@+id/layout_2search"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@android:color/transparent"
-            android:gravity="center_vertical"
-            android:textSize="14sp"
-            android:drawablePadding="5dp"
-            android:drawableLeft="@mipmap/img_search"
-            android:hint="@string/str_search_man_square"
-            android:imeOptions="actionSearch"
-            android:singleLine="true" />
-
-    </LinearLayout>
+        <include layout="@layout/include_search_edit"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_search_persion_team"

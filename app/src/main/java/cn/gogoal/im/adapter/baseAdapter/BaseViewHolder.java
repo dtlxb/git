@@ -114,13 +114,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     public BaseViewHolder setImageUrl(int viewId, String imageUrl) {
         ImageView view = getView(viewId);
-        ImageDisplay.loadNetImage(convertView.getContext(),imageUrl,view);
-        return this;
-    }
-
-    public BaseViewHolder setImageUrl(int viewId, String imageUrl,boolean skipMemoryCache) {
-        ImageView view = getView(viewId);
-        ImageDisplay.loadNetImage(convertView.getContext(),imageUrl,view,skipMemoryCache);
+        ImageDisplay.loadImage(convertView.getContext(),imageUrl,view);
         return this;
     }
 
@@ -607,4 +601,6 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public void setAssociatedObject(Object associatedObject) {
         this.associatedObject = associatedObject;
     }
+
+
 }

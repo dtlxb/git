@@ -85,7 +85,7 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <ImageView
+            <cn.gogoal.im.ui.view.CircleImageView
                 android:id="@+id/relater_avatar"
                 android:layout_width="20dp"
                 android:layout_height="20dp"

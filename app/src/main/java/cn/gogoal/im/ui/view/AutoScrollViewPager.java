@@ -26,6 +26,8 @@ import java.lang.reflect.Field;
 
 public class AutoScrollViewPager extends ViewPager {
 
+    private boolean needIndicator;
+
     public interface OnPageClickListener {
         void onPageClick(AutoScrollViewPager pager, int position);
     }
@@ -49,12 +51,10 @@ public class AutoScrollViewPager extends ViewPager {
     private int touchSlop;
     private OnPageClickListener onPageClickListener;
 
-    private boolean needIndicator=true;
     private Paint paint;
-    private int dotSelectedColor=0xffFF8200;
-    private int dotUnSelectedColor=0xFFD9D9D9;
-    private float dotPadding=1.2f;
-
+    private int dotSelectedColor = 0xffFF8200;
+    private int dotUnSelectedColor = 0xFFD9D9D9;
+    private float dotPadding = 1.2f;
 
 
     private class H extends Handler {
@@ -84,9 +84,7 @@ public class AutoScrollViewPager extends ViewPager {
 
     private void init() {
         requestDisallowInterceptTouchEvent(true);
-        if (needIndicator) {
-            paint = new Paint();
-        }
+        paint = new Paint();
         listener = new InnerOnPageChangeListener();
         super.addOnPageChangeListener(listener);
 
@@ -100,15 +98,18 @@ public class AutoScrollViewPager extends ViewPager {
         drawCycle(canvas);
     }
 
-    public void showIndicator(boolean need){
-        needIndicator=need;
+    public void showIndicator(boolean need) {
+        needIndicator = need;
     }
-    public void setDotSelectedColor(int dotSelectedColor){
-        this.dotSelectedColor=dotSelectedColor;
+
+    public void setDotSelectedColor(int dotSelectedColor) {
+        this.dotSelectedColor = dotSelectedColor;
     }
-    public void setDotUnSelectedColor(int dotUnSelectedColor){
-        this.dotUnSelectedColor=dotUnSelectedColor;
+
+    public void setDotUnSelectedColor(int dotUnSelectedColor) {
+        this.dotUnSelectedColor = dotUnSelectedColor;
     }
+
     private void drawCycle(Canvas canvas) {
         canvas.save();
         canvas.translate(getScrollX(), getScrollY());
@@ -120,19 +121,21 @@ public class AutoScrollViewPager extends ViewPager {
         float density = getContext().getResources().getDisplayMetrics().density;
         int itemWidth = (int) (11 * density);
         int itemHeight = itemWidth / 2;
-        int x = (getWidth() - count * itemWidth)/2;
+        int x = (getWidth() - count * itemWidth) / 2;
         int y = getHeight() - itemWidth;
         int minItemHeight = (int) ((float) itemHeight * 0.8F);
         paint.setAntiAlias(true);
 
         paint.setStyle(Paint.Style.FILL);
-        for (int i = 0; i < count; i++) {
-            if (select == i) {
-                paint.setColor(dotSelectedColor);
-                canvas.drawCircle(x + itemWidth * dotPadding*i + itemWidth / 2, y, minItemHeight, paint);
-            } else {
-                paint.setColor(dotUnSelectedColor);
-                canvas.drawCircle(x + itemWidth * dotPadding*i + itemWidth / 2, y, minItemHeight, paint);
+        if (count > 1) {
+            for (int i = 0; i < count; i++) {
+                if (select == i) {
+                    paint.setColor(dotSelectedColor);
+                    canvas.drawCircle(x + itemWidth * dotPadding * i + itemWidth / 2, y, minItemHeight, paint);
+                } else {
+                    paint.setColor(dotUnSelectedColor);
+                    canvas.drawCircle(x + itemWidth * dotPadding * i + itemWidth / 2, y, minItemHeight, paint);
+                }
             }
         }
         canvas.restore();
@@ -315,6 +318,7 @@ public class AutoScrollViewPager extends ViewPager {
         }
         return 0;
     }
+
     /**
      * 设置动画
      */
@@ -429,6 +433,7 @@ public class AutoScrollViewPager extends ViewPager {
             super.startScroll(startX, startY, dx, dy, (int) (duration * factor));
         }
     }
+
     private class AutoScrollPagerAdapter extends PagerAdapter {
 
         private PagerAdapter wrappedAdapter;

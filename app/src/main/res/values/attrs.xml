@@ -73,30 +73,38 @@
     <declare-styleable name="XEditText">
         <!--功能的类型-->
         <attr name="funcType">
-            <enum name="normal" value="-1"/>
-            <enum name="canClear" value="0"/>
+            <enum name="normal" value="-1" />
+            <enum name="canClear" value="0" />
             <enum name="canWatchPwd" value="1" />
         </attr>
         <!--关闭查看密码的图标-->
-        <attr name="eyeClose" format="reference"/>
+        <attr name="eyeClose" format="reference" />
         <!--开启查看密码的图标-->
-        <attr name="eyeOpen" format="reference"/>
+        <attr name="eyeOpen" format="reference" />
         <!--左侧Drawable的宽度-->
-        <attr name="leftDrawableWidth" format="dimension"/>
+        <attr name="leftDrawableWidth" format="dimension" />
         <!--左侧Drawable的高度-->
-        <attr name="leftDrawableHeight" format="dimension"/>
+        <attr name="leftDrawableHeight" format="dimension" />
         <!--右侧Drawable的宽度-->
-        <attr name="rightDrawableWidth" format="dimension"/>
+        <attr name="rightDrawableWidth" format="dimension" />
         <!--右侧Drawable的高度-->
-        <attr name="rightDrawableHeight" format="dimension"/>
+        <attr name="rightDrawableHeight" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="UnSlidingViewPager">
-        <attr name="canScroll" format="boolean"/>
+        <attr name="canScroll" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="ImageWithTextView">
         <attr name="MiddleImg" format="reference" />
         <attr name="MiddleString" format="string|reference" />
     </declare-styleable>
+
+    <declare-styleable name="CircleImageView">
+        <attr name="borderWidth" format="dimension" />
+        <attr name="borderColor" format="color" />
+        <attr name="borderOverlay" format="boolean" />
+        <attr name="fillColor" format="color" />
+    </declare-styleable>
+
 </resources>

@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -30,9 +29,10 @@ import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.dialog.BottomSheetListDialog;
+import cn.gogoal.im.ui.view.CircleImageView;
 import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XTitle;
-import cn.gogoal.im.ui.dialog.BottomSheetListDialog;
 
 /**
  * Created by huangxx on 2017/4/18.
@@ -46,7 +46,7 @@ public class EditPersonInfoActivity extends BaseActivity {
     FrameLayout layoutPersonHeadpic;
 
     @BindView(R.id.image_person_headpic)
-    ImageView imagePersonHeadpic;
+    CircleImageView imagePersonHeadpic;
 
     @BindView(R.id.edit_person_name)
     EditText editPersonName;
@@ -70,7 +70,7 @@ public class EditPersonInfoActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         initTitle();
-        ImageDisplay.loadResAvatar(EditPersonInfoActivity.this, R.mipmap.logo, imagePersonHeadpic);
+        ImageDisplay.loadCircleImage(EditPersonInfoActivity.this,R.mipmap.logo,imagePersonHeadpic);
     }
 
     private void initTitle() {
@@ -128,7 +128,7 @@ public class EditPersonInfoActivity extends BaseActivity {
             public void success(List<String> uriPaths, boolean isOriginalPic) {
                 if (uriPaths != null && (!uriPaths.isEmpty())) {
                     File chooseAvatar = new File(uriPaths.get(0));
-                    ImageDisplay.loadNetAvatar(getActivity(), uriPaths.get(0), imagePersonHeadpic);
+                    ImageDisplay.loadCircleImage(getActivity(), uriPaths.get(0), imagePersonHeadpic);
                     uploadAvatar(chooseAvatar);
                 }
             }

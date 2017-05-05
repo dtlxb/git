@@ -12,12 +12,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -42,11 +44,11 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.view.RectangleView;
 
 /**
  * Created by huangxx on 2017/3/20.
@@ -59,7 +61,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     RecyclerView personlistRecycler;
 
     @BindView(R.id.iv_square_head)
-    RectangleView iv_square_head;
+    ImageView iv_square_head;
 
     @BindView(R.id.tv_square_name)
     TextView tvSquareName;
@@ -208,8 +210,14 @@ public class IMSquareChatSetActivity extends BaseActivity {
             }
         });
         if (!ImageUtils.getBitmapFilePaht(conversationId, "imagecache").equals("")) {
-            //ImageDisplay.loadFileImage(IMSquareChatSetActivity.this, new File(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")), iv_square_head);
-            iv_square_head.setImageURI(Uri.parse(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")));
+//            iv_square_head.setImageURI(Uri.parse(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")));
+            Glide.with(IMSquareChatSetActivity.this)
+                    .load(Uri.parse(ImageUtils.getBitmapFilePaht(conversationId, "imagecache"))).into(iv_square_head);
+            ImageDisplay.loadRoundedRectangleImage(
+                    IMSquareChatSetActivity.this,
+                    iv_square_head,
+                    4,
+                    Uri.parse(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")));
         }
         getGroupInfo();
     }

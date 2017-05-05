@@ -3,12 +3,16 @@ package cn.gogoal.im.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import cn.gogoal.im.common.ShareType;
+
 /**
  * author wangjd on 2017/5/4 0004.
  * Staff_id 1375
  * phone 18930640263
  * description :${
  * <p>
+ *
+ *     分享的数据实体
  * /**
  * {
  * "desc":"一分钟了解股价走势与业绩相关性",
@@ -16,13 +20,15 @@ import android.os.Parcelable;
  * "title":"平安银行  000001"
  * }
  */
-public class WebShareEntity implements Parcelable{
+public class GGShareEntity implements Parcelable {
 
     private String desc;
 
     private String icon;
 
     private String title;
+
+    private ShareType shareType;
 
     public String getDesc() {
         return desc;
@@ -48,6 +54,13 @@ public class WebShareEntity implements Parcelable{
         this.title = title;
     }
 
+    public ShareType getShareType() {
+        return shareType;
+    }
+
+    public void setShareType(ShareType shareType) {
+        this.shareType = shareType;
+    }
 
     @Override
     public int describeContents() {
@@ -59,26 +72,29 @@ public class WebShareEntity implements Parcelable{
         dest.writeString(this.desc);
         dest.writeString(this.icon);
         dest.writeString(this.title);
+        dest.writeInt(this.shareType == null ? -1 : this.shareType.ordinal());
     }
 
-    public WebShareEntity() {
+    public GGShareEntity() {
     }
 
-    protected WebShareEntity(Parcel in) {
+    protected GGShareEntity(Parcel in) {
         this.desc = in.readString();
         this.icon = in.readString();
         this.title = in.readString();
+        int tmpShareType = in.readInt();
+        this.shareType = tmpShareType == -1 ? null : ShareType.values()[tmpShareType];
     }
 
-    public static final Creator<WebShareEntity> CREATOR = new Creator<WebShareEntity>() {
+    public static final Creator<GGShareEntity> CREATOR = new Creator<GGShareEntity>() {
         @Override
-        public WebShareEntity createFromParcel(Parcel source) {
-            return new WebShareEntity(source);
+        public GGShareEntity createFromParcel(Parcel source) {
+            return new GGShareEntity(source);
         }
 
         @Override
-        public WebShareEntity[] newArray(int size) {
-            return new WebShareEntity[size];
+        public GGShareEntity[] newArray(int size) {
+            return new GGShareEntity[size];
         }
     };
 }

@@ -15,8 +15,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.socks.library.KLog;
-
 import java.util.LinkedList;
 
 /**
@@ -484,7 +482,6 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
 
     public void setActionText(TextAction textaction,String text){
         TextView view = (TextView) getViewByAction(textaction);
-        KLog.e(view);
         view.setText(TextUtils.isEmpty(text)?"":text);
     }
 

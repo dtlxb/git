@@ -39,6 +39,7 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.PlayerUtils.TextAndImage;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
+import cn.gogoal.im.ui.view.CircleImageView;
 import cn.gogoal.im.ui.widget.PopupWindowHelper;
 
 import static cn.gogoal.im.base.BaseActivity.initRecycleView;
@@ -325,7 +326,7 @@ public class WatchBottomFragment extends BaseFragment {
         TextView anchor_position = (TextView) anchorIntroduction.findViewById(R.id.anchor_position);
         final TextView anchor_achieve = (TextView) anchorIntroduction.findViewById(R.id.anchor_achieve);
 
-        ImageDisplay.loadNetImage(getContext(), anchor.getString("face_url"), anchor_avatar);
+        ImageDisplay.loadImage(getContext(), anchor.getString("face_url"), anchor_avatar);
         anchor_name.setText(anchor.getString("anchor_name"));
         anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
 
@@ -354,7 +355,7 @@ public class WatchBottomFragment extends BaseFragment {
         TextView anchor_position = (TextView) anchorIntroduction.findViewById(R.id.anchor_position);
         final TextView anchor_achieve = (TextView) anchorIntroduction.findViewById(R.id.anchor_achieve);
 
-        ImageDisplay.loadNetImage(getContext(), anchor.getString("face_url"), anchor_avatar);
+        ImageDisplay.loadImage(getContext(), anchor.getString("face_url"), anchor_avatar);
         anchor_name.setText(anchor.getString("anchor_name"));
         anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
 
@@ -398,11 +399,11 @@ public class WatchBottomFragment extends BaseFragment {
                 holder.setVisible(R.id.relative_player, false);
             }
             ImageView relater_img = holder.getView(R.id.relater_img);
-            ImageDisplay.loadNetImage(getActivity(), data.getVideo_img_url(), relater_img);
+            ImageDisplay.loadImage(getActivity(), data.getVideo_img_url(), relater_img);
             holder.setText(R.id.relater_tittle, data.getVideo_name());
             holder.setText(R.id.relater_play_count, data.getPlay_base() + "次");
-            ImageView relater_avatar = holder.getView(R.id.relater_avatar);
-            ImageDisplay.loadCircleNetImage(getActivity(), data.getFace_url(), relater_avatar);
+            CircleImageView relater_avatar = holder.getView(R.id.relater_avatar);
+            ImageDisplay.loadCircleImage(getActivity(), data.getFace_url(), relater_avatar);
             holder.setText(R.id.relater_name, data.getAnchor_name());
             holder.setText(R.id.relater_content, data.getProgramme_name());
 

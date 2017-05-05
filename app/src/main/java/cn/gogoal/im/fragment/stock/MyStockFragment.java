@@ -242,6 +242,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
                 } else if (code == 1001) {
                     myStockDatas.clear();
+                    StockUtils.clearLocalMyStock();
                     myStockAdapter.notifyDataSetChanged();
                     noData(true);
                 } else {

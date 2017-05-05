@@ -39,6 +39,6 @@ public class ChatFunctionAdapter extends CommonAdapter<FoundData.ItemPojos,BaseV
         view.setLayoutParams(layoutParams);
 
         holder.setText(R.id.tv, data.getItemTextDescription());
-        ImageDisplay.loadResImage(mContex, data.getIconRes(), (ImageView) holder.getView(R.id.iv));
+        ImageDisplay.loadImage(mContex, data.getIconRes(), (ImageView) holder.getView(R.id.iv));
     }
 }

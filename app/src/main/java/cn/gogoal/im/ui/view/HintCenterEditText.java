@@ -20,36 +20,38 @@ public class HintCenterEditText extends AppCompatEditText {
 
     public HintCenterEditText(Context context) {
         super(context);
-        init(context);
+        init(context, null);
     }
 
     public HintCenterEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init(context, attrs);
     }
 
     public HintCenterEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        init(context, attrs);
     }
 
-    private void init(Context context) {
-        drawables=getCompoundDrawables();
+    private void init(Context context, AttributeSet attrs) {
+        drawables = getCompoundDrawables();
 
         HintCenterEditText.this.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length()>0){
-                    HintCenterEditText.this.setCompoundDrawables(null,null,null,null);
-                }else {
+                if (s.length() > 0) {
+                    HintCenterEditText.this.setCompoundDrawables(null, null, null, null);
+                } else {
                     HintCenterEditText.this.setCompoundDrawables(drawables[0],
-                            drawables[1],drawables[2],drawables[3]);
+                            drawables[1], drawables[2], drawables[3]);
                 }
             }
         });
@@ -60,12 +62,15 @@ public class HintCenterEditText extends AppCompatEditText {
         if (drawables != null) {
             Drawable drawableLeft = drawables[0];
             if (drawableLeft != null) {
-                float textWidth = getPaint().measureText(getText().toString());
+                float textWidth =
+                        HintCenterEditText.this.getPaint().measureText(getHint().toString());
+
                 int drawablePadding = getCompoundDrawablePadding();
-                int drawableWidth;
-                drawableWidth = drawableLeft.getIntrinsicWidth();
+                int drawableWidth = drawableLeft.getIntrinsicWidth();
+
                 float bodyWidth = textWidth + drawableWidth + drawablePadding;
-                canvas.translate((getWidth() - bodyWidth) / 3, 0);
+
+                canvas.translate((getWidth() - bodyWidth) / 2, 0);
             }
         }
         super.onDraw(canvas);

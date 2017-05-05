@@ -157,7 +157,7 @@ public class OfficialAccountsActivity extends BaseActivity {
             }
 
             if (!TextUtils.isEmpty(lcattrsBean.getImg_url())) {
-                ImageDisplay.loadNetImage(getActivity(), lcattrsBean.getImg_url(), official_image);
+                ImageDisplay.loadImage(getActivity(), lcattrsBean.getImg_url(), official_image);
             }
         }
     }

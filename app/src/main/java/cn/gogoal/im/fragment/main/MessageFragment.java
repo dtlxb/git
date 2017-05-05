@@ -59,13 +59,13 @@ import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
-import cn.gogoal.im.ui.view.XTitle;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
 import static cn.gogoal.im.base.BaseActivity.initRecycleView;
@@ -355,11 +355,11 @@ public class MessageFragment extends BaseFragment {
                         avatarIv.setImageURI(Uri.parse(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")));
                     }
                 } else if (chatType == 1004) {
-                    Glide.with(getActivity()).load(R.mipmap.chat_new_friend).asBitmap().into(avatarIv);
-                    //ImageDisplay.loadRoundedRectangleImage(getActivity(), avatarIv, AppDevice.dp2px(getActivity(), 4), R.mipmap.chat_new_friend);
+//                    Glide.with(getActivity()).load(R.mipmap.chat_new_friend).asBitmap().into(avatarIv);
+                    ImageDisplay.loadRoundedRectangleImage(getActivity(), avatarIv, AppDevice.dp2px(getActivity(), 4), R.mipmap.chat_new_friend);
                 } else {
-                    Glide.with(getActivity()).load(messageBean.getAvatar()).asBitmap().into(avatarIv);
-                    //ImageDisplay.loadRoundedRectangleImage(getActivity(), avatarIv, AppDevice.dp2px(getActivity(), 4), messageBean.getAvatar());
+//                    Glide.with(getActivity()).load(messageBean.getAvatar()).asBitmap().into(avatarIv);
+                    ImageDisplay.loadRoundedRectangleImage(getActivity(), avatarIv, AppDevice.dp2px(getActivity(), 4), messageBean.getAvatar());
                 }
 
                 switch (_lctype) {

@@ -27,7 +27,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <cn.gogoal.im.ui.view.RectangleView
+                    <ImageView
                         android:id="@+id/iv_square_head"
                         android:layout_width="64dp"
                         android:layout_height="64dp"

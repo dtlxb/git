@@ -8,7 +8,7 @@
     android:paddingStart="17dp"
     android:paddingTop="9dp">
 
-    <cn.gogoal.im.ui.view.RectangleView
+    <ImageView
         android:id="@+id/item_user_avatar"
         android:layout_width="55dp"
         android:layout_height="55dp"
@@ -32,7 +32,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="middle"
             android:singleLine="true"
-            android:text="粉红色款到发货可视对讲涸鲋得水"
             android:textColor="@color/textColor_333333"
             android:textSize="16sp" />
 
@@ -43,7 +42,6 @@
             android:layout_marginTop="5dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="地方就是快发货速度快混"
             android:textColor="@color/textColor_999999"
             android:textSize="15sp" />
 

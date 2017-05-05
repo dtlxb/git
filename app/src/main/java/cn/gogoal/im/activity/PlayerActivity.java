@@ -56,6 +56,7 @@ import cn.gogoal.im.common.PlayerUtils.StatusListener;
 import cn.gogoal.im.common.PlayerUtils.TextAndImage;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
+import cn.gogoal.im.ui.view.CircleImageView;
 import cn.gogoal.im.ui.widget.PopupWindowHelper;
 
 /**
@@ -77,7 +78,7 @@ public class PlayerActivity extends BaseActivity {
     @BindView(R.id.textTitle)
     TextView textTitle;
     @BindView(R.id.imgPalyer)
-    ImageView imgPalyer;
+    CircleImageView imgPalyer;
     @BindView(R.id.textCompany)
     TextView textCompany;
     @BindView(R.id.textMarInter)
@@ -234,7 +235,7 @@ public class PlayerActivity extends BaseActivity {
                     JSONObject data = object.getJSONArray("data").getJSONObject(0);
                     //直播详情
                     textTitle.setText(data.getString("video_name")); //直播名称
-                    ImageDisplay.loadCircleNetImage(getContext(), data.getString("face_url"), imgPalyer);
+                    ImageDisplay.loadCircleImage(getContext(), data.getString("face_url"), imgPalyer);
                     textCompany.setText(data.getString("anchor_name"));
                     textMarInter.setText(data.getString("programme_name"));
                     //主播介绍
@@ -1000,7 +1001,7 @@ public class PlayerActivity extends BaseActivity {
         TextView anchor_position = (TextView) anchorIntroduction.findViewById(R.id.anchor_position);
         final TextView anchor_achieve = (TextView) anchorIntroduction.findViewById(R.id.anchor_achieve);
 
-        ImageDisplay.loadNetImage(getContext(), anchor.getString("face_url"), anchor_avatar);
+        ImageDisplay.loadImage(getContext(), anchor.getString("face_url"), anchor_avatar);
         anchor_name.setText(anchor.getString("anchor_name"));
         anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
 
@@ -1030,7 +1031,7 @@ public class PlayerActivity extends BaseActivity {
         TextView anchor_position = (TextView) anchorIntroduction.findViewById(R.id.anchor_position);
         final TextView anchor_achieve = (TextView) anchorIntroduction.findViewById(R.id.anchor_achieve);
 
-        ImageDisplay.loadNetImage(getContext(), anchor.getString("face_url"), anchor_avatar);
+        ImageDisplay.loadImage(getContext(), anchor.getString("face_url"), anchor_avatar);
         anchor_name.setText(anchor.getString("anchor_name"));
         anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
 
@@ -1109,11 +1110,11 @@ public class PlayerActivity extends BaseActivity {
                 holder.setVisible(R.id.relative_player, false);
             }
             ImageView relater_img = holder.getView(R.id.relater_img);
-            ImageDisplay.loadNetImage(getActivity(), data.getVideo_img_url(), relater_img);
+            ImageDisplay.loadImage(getActivity(), data.getVideo_img_url(), relater_img);
             holder.setText(R.id.relater_tittle, data.getVideo_name());
             holder.setText(R.id.relater_play_count, data.getPlay_base() + "次");
-            ImageView relater_avatar = holder.getView(R.id.relater_avatar);
-            ImageDisplay.loadCircleNetImage(getActivity(), data.getFace_url(), relater_avatar);
+            CircleImageView relater_avatar = holder.getView(R.id.relater_avatar);
+            ImageDisplay.loadCircleImage(getActivity(), data.getFace_url(), relater_avatar);
             holder.setText(R.id.relater_name, data.getAnchor_name());
             holder.setText(R.id.relater_content, data.getProgramme_name());
 
