@@ -16,7 +16,6 @@ import com.alibaba.fastjson.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
@@ -24,9 +23,11 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.bean.StockNewsType;
 import cn.gogoal.im.bean.stock.MyStockTabNewsBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -50,25 +51,30 @@ public class MyStockTabNewsFragment extends BaseFragment {
     @BindView(R.id.xLayout)
     XLayout xLayout;
 
-    private int refreshType = AppConst.REFRESH_TYPE_AUTO;
-
-    private int parentIndex;
-
     private int defaultPage = 1;
-
-    private static final int TYPE_NEWS = 7;
-    private static final int TYPE_GONGGAO = 3;
 
     private MyStockNewsAdapter newsAdapter;
 
     private List<MyStockTabNewsBean> stockNewsDatas = new ArrayList<>();
 
-    private int type;//类型，是我的自选股中的，还是个股中的
+    private StockNewsType stockNewsType;
 
     public static Fragment getInstance(int position) {
         MyStockTabNewsFragment fragment = new MyStockTabNewsFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("position", position);
+        StockNewsType stockNewsType = null;
+        switch (position) {
+            case 0:
+                stockNewsType = new StockNewsType(7, "新闻", AppConst.SOURCE_TYPE_NEWS);
+                break;
+            case 1:
+                stockNewsType = new StockNewsType(3, "公告", AppConst.SOURCE_TYPE_GONGGAO);
+                break;
+            case 2:
+                stockNewsType = new StockNewsType(9, "研报", AppConst.SOURCE_TYPE_YANBAO);
+                break;
+        }
+        bundle.putParcelable("stock_news_type", stockNewsType);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -80,6 +86,8 @@ public class MyStockTabNewsFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
+        stockNewsType = getArguments().getParcelable("stock_news_type");
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext) {
             @Override
             public boolean canScrollVertically() {
@@ -92,145 +100,115 @@ public class MyStockTabNewsFragment extends BaseFragment {
 
         rvNews.setHasFixedSize(true);
         rvNews.setNestedScrollingEnabled(false);
-        parentIndex = getArguments().getInt("position");
-        newsAdapter = new MyStockNewsAdapter(stockNewsDatas);
+        newsAdapter = new MyStockNewsAdapter(stockNewsDatas, stockNewsType.getNewsSource());
         rvNews.addItemDecoration(new NormalItemDecoration(mContext));
         rvNews.setLayoutManager(layoutManager);
         BaseActivity.iniRefresh(swiperefreshlayout);
         rvNews.setAdapter(newsAdapter);
-        switch (parentIndex) {
-            case 0:
-                getStockNews(TYPE_NEWS, defaultPage);
-                break;
-            case 1:
-                getStockNews(TYPE_GONGGAO, defaultPage);
-                break;
-            case 2:
-                getYanBaoDatas(defaultPage);
-                break;
-        }
+
+        getStockNews(AppConst.REFRESH_TYPE_FIRST);
 
         swiperefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshType = AppConst.REFRESH_TYPE_SWIPEREFRESH;
-                switch (parentIndex) {
-                    case 0:
-                        getStockNews(TYPE_NEWS, defaultPage);
-                        break;
-                    case 1:
-                        getStockNews(TYPE_GONGGAO, defaultPage);
-                        break;
-                    case 2:
-                        getYanBaoDatas(defaultPage);
-                        break;
-                }
+                getStockNews(AppConst.REFRESH_TYPE_SWIPEREFRESH);
+                swiperefreshlayout.setRefreshing(false);
             }
         });
+
+        newsAdapter.setOnLoadMoreListener(new CommonAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                if (defaultPage <= 50) {
+                    defaultPage++;
+                    newsAdapter.loadMoreEnd(false);
+                    getStockNews(AppConst.REFRESH_TYPE_LOAD_MORE);
+                } else {
+                    newsAdapter.loadMoreEnd(true);
+                    newsAdapter.setEnableLoadMore(false);
+                    UIHelper.toast(getActivity(), "没有更多数据");
+
+                }
+                newsAdapter.loadMoreComplete();
+            }
+        }, rvNews);
     }
 
     /**
      * 请求[新闻][公告]
      */
-    private void getStockNews(final int type, final int page) {
-        stockNewsDatas.clear();
-        if (refreshType != AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+    private void getStockNews(final int refreshType) {
+        newsAdapter.setEnableLoadMore(false);
+
+        if (refreshType == AppConst.REFRESH_TYPE_FIRST) {
             xLayout.setStatus(XLayout.Loading);
         }
-        final Map<String, String> param = new HashMap<>();
-        param.put("stock_code", StockUtils.getMyStockString());
-        param.put("type", type + "");
-        param.put("page", page + "");
-        param.put("rows", "10");
+        new GGOKHTTP(getParams(),
+                stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_YANBAO ? GGOKHTTP.REPORT_LIST : GGOKHTTP.GET_STOCK_NEWS,
+                new GGOKHTTP.GGHttpInterface() {
+                    @Override
+                    public void onSuccess(String responseInfo) {
+                        int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                        if (code == 0) {
+                            JSONArray jsonArray = JSONObject.parseObject(responseInfo).getJSONArray("data");
+                            for (int i = 0; i < jsonArray.size(); i++) {
+                                JSONObject object = (JSONObject) jsonArray.get(i);
 
-        new GGOKHTTP(param, GGOKHTTP.GET_STOCK_NEWS, new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
-                if (code == 0) {
-                    JSONArray jsonArray = JSONObject.parseObject(responseInfo).getJSONArray("data");
-                    for (int i = 0; i < jsonArray.size(); i++) {
-                        JSONObject object = (JSONObject) jsonArray.get(i);
-                        stockNewsDatas.add(new MyStockTabNewsBean(object.getString("title"),
-                                ((JSONObject) object.getJSONArray("stock").get(0)).getString("stock_code"),
-                                ((JSONObject) object.getJSONArray("stock").get(0)).getString("stock_name"),
-                                object.getString("date"), String.valueOf(object.getIntValue("origin_id"))));
+                                if (stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_YANBAO) {
+                                    stockNewsDatas.add(new MyStockTabNewsBean(object.getString("report_title"),
+                                            object.getString("stock_code"),
+                                            object.getString("stock_name"),
+                                            object.getString("create_date"),
+                                            object.getString("guid")));
+                                } else {
+                                    String originLink;
+                                    try {
+                                        originLink = object.getString("origin_link");
+                                    } catch (Exception e) {
+                                        originLink = "";
+                                    }
+                                    stockNewsDatas.add(new MyStockTabNewsBean(
+                                            object.getString("title"),
+                                            ((JSONObject) object.getJSONArray("stock").get(0)).getString("stock_code"),
+                                            ((JSONObject) object.getJSONArray("stock").get(0)).getString("stock_name"),
+                                            object.getString("date"),
+                                            String.valueOf(object.getIntValue("origin_id")),
+                                            originLink));
+                                }
+                            }
+                            newsAdapter.notifyDataSetChanged();
+                            newsAdapter.setEnableLoadMore(true);
+                            newsAdapter.loadMoreComplete();
+                            xLayout.setStatus(XLayout.Success);
+
+                            if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+                                UIHelper.toast(getActivity(), getString(R.string.str_refresh_ok));
+                            }
+                        } else {
+                            xLayout.setStatus(XLayout.Error);
+                        }
                     }
-                    newsAdapter.notifyDataSetChanged();
-                    swiperefreshlayout.setRefreshing(false);
-                    xLayout.setStatus(XLayout.Success);
 
-                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
-                        UIHelper.toast(getActivity(), getString(R.string.str_refresh_ok));
+                    @Override
+                    public void onFailure(String msg) {
+                        UIHelper.toastError(getActivity(), msg, xLayout);
                     }
-                } else if (code == 1001) {
-                    xLayout.setStatus(XLayout.Error);
-                } else {
-                    xLayout.setStatus(XLayout.Error);
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                UIHelper.toastError(getActivity(), msg, xLayout);
-            }
-        }).startGet();
-    }
-
-    private void getYanBaoDatas(final int page) {
-        final Map<String, String> param = new HashMap<>();
-        param.put("summary_auth", "1");
-        param.put("stock_code", StockUtils.getMyStockString());
-        param.put("token", UserUtils.getToken());
-        param.put("first_class", "公司报告");
-        param.put("page", page + "");
-        param.put("rows", "10");
-
-        final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
-                if (code == 0) {
-                    JSONArray array = JSONObject.parseObject(responseInfo).getJSONArray("data");
-                    for (int i = 0; i < array.size(); i++) {
-                        JSONObject object = (JSONObject) array.get(i);
-                        stockNewsDatas.add(new MyStockTabNewsBean(object.getString("report_title"),
-                                object.getString("stock_code"),
-                                object.getString("stock_name"),
-                                object.getString("create_date"),
-                                object.getString("guid")));
-                    }
-                    newsAdapter.notifyDataSetChanged();
-                    swiperefreshlayout.setRefreshing(false);
-                    xLayout.setStatus(XLayout.Success);
-                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
-                        UIHelper.toast(getActivity(), "更新数据成功");
-                    }
-                } else if (code == 1001) {
-
-                } else {
-
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                UIHelper.toastError(getActivity(), msg, xLayout);
-            }
-        };
-        new GGOKHTTP(param, GGOKHTTP.REPORT_LIST, ggHttpInterface).startGet();
+                }).startGet();
     }
 
     private class MyStockNewsAdapter extends CommonAdapter<MyStockTabNewsBean, BaseViewHolder> {
 
-        private MyStockNewsAdapter(List<MyStockTabNewsBean> datas) {
+        private int newsSource;
+
+        private MyStockNewsAdapter(List<MyStockTabNewsBean> datas, int newsSource) {
             super(R.layout.item_mystock_news, datas);
+            this.newsSource = newsSource;
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, MyStockTabNewsBean data, int position) {
+        protected void convert(BaseViewHolder holder, final MyStockTabNewsBean data, int position) {
             TextView tvNewsTitle = holder.getView(R.id.tv_mystock_news_title);
-            if (parentIndex != 2) {
+            if (newsSource != AppConst.SOURCE_TYPE_YANBAO) {
                 tvNewsTitle.setMaxLines(1);
                 tvNewsTitle.setEllipsize(TextUtils.TruncateAt.END);
             } else {
@@ -246,9 +224,36 @@ public class MyStockTabNewsFragment extends BaseFragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO 跳转 新闻页
+                    if (stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_GONGGAO) {
+                        NormalIntentUtils.go2PdfDisplayActivity(v.getContext(),data.getOrigin_link(),"");
+                    } else {
+                        NormalIntentUtils.go2WebActivity(v.getContext(),
+                                AppConst.WEB_NEWS + data.getNewsId() + "?source=" + stockNewsType.getNewsSource(),
+                                null, true);
+                    }
                 }
             });
+
         }
+    }
+
+    public HashMap<String, String> getParams() {
+        final HashMap<String, String> param = new HashMap<>();
+        if (stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_YANBAO) {
+            param.clear();
+            param.put("summary_auth", "1");
+            param.put("stock_code", StockUtils.getMyStockString());
+            param.put("token", UserUtils.getToken());
+            param.put("first_class", "公司报告");
+            param.put("page", defaultPage + "");
+            param.put("rows", "10");
+        } else {
+            param.clear();
+            param.put("stock_code", StockUtils.getMyStockString());
+            param.put("type", String.valueOf(stockNewsType.getNewsType()));
+            param.put("page", String.valueOf(defaultPage));
+            param.put("rows", "10");
+        }
+        return param;
     }
 }

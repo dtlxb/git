@@ -3,21 +3,17 @@ package cn.gogoal.im.fragment.main;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
-import java.util.ArrayList;
+import org.simple.eventbus.Subscriber;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,14 +23,12 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.CreateLiveActivity;
 import cn.gogoal.im.activity.LiveActivity;
-import cn.gogoal.im.activity.ScreenActivity;
+import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.adapter.SocialLiveAdapter;
 import cn.gogoal.im.adapter.SocialRecordAdapter;
-import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
-import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.bean.BoxScreenData;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.SocialLiveBean;
 import cn.gogoal.im.bean.SocialLiveData;
 import cn.gogoal.im.bean.SocialRecordBean;
@@ -43,9 +37,6 @@ import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.widget.PopupWindowHelper;
-
-import static cn.gogoal.im.base.BaseActivity.initRecycleView;
 
 /**
  * author wangjd on 2017/4/7 0007.
@@ -82,9 +73,7 @@ public class SocialContactFragment extends BaseFragment {
     private SocialLiveAdapter liveAdapter;
     private SocialRecordAdapter recordAdapter;
 
-    private PopupWindowHelper screenHelper;
-
-    private int mSelectedPos = 0;
+    private String programme_name;
 
     @Override
     public int bindLayout() {
@@ -108,17 +97,34 @@ public class SocialContactFragment extends BaseFragment {
         refreshSocial.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getLiveData(1);
-                getLiveData(2);
-                getRecordData(1);
+                getLiveData(1, null);
+                getLiveData(2, null);
+                getRecordData(1, null);
             }
         });
 
-        getLiveData(1);
-        getLiveData(2);
-        getRecordData(1);
+        getLiveData(1, null);
+        getLiveData(2, null);
+        getRecordData(1, null);
 
-        getScreenData();
+        ((MainActivity) getActivity()).setCloseCallBack(new MainActivity.drawerCloseCallBack() {
+            @Override
+            public void closeDrawer() {
+                boxScreen.setChecked(false);
+                boxScreen.setTextColor(getResColor(R.color.textColor_333333));
+            }
+        });
+    }
+
+    @Subscriber(tag = "setScreen")
+    private void setScreen(BaseMessage s) {
+        programme_name = s.getMsg();
+
+        //perLiveLinear.setVisibility(View.GONE);
+
+        getLiveData(1, programme_name);
+        getLiveData(2, programme_name);
+        getRecordData(1, programme_name);
     }
 
     @OnClick({R.id.imgFloatAction, R.id.boxScreen})
@@ -129,9 +135,10 @@ public class SocialContactFragment extends BaseFragment {
                 break;
             case R.id.boxScreen: //筛选
                 if (boxScreen.isChecked()) {
-                    screenHelper.showScreenFromRight(relaterTittle);
+                    ((MainActivity) getActivity()).openMenu();
                     boxScreen.setTextColor(getResColor(R.color.stock_red));
                 } else {
+                    ((MainActivity) getActivity()).closeMenu();
                     boxScreen.setTextColor(getResColor(R.color.textColor_333333));
                 }
                 break;
@@ -180,10 +187,13 @@ public class SocialContactFragment extends BaseFragment {
     /**
      * 获取直播列表数据
      */
-    private void getLiveData(final int live_source) {
+    private void getLiveData(final int live_source, String programme_id) {
         final Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
         param.put("live_source", live_source + "");
+        if (programme_id != null) {
+            param.put("programme_id", programme_id);
+        }
         param.put("page", "1");
         param.put("rows", "100");
 
@@ -229,8 +239,11 @@ public class SocialContactFragment extends BaseFragment {
     /**
      * 获取录播列表数据
      */
-    private void getRecordData(final int page) {
+    private void getRecordData(final int page, String programme_id) {
         final Map<String, String> param = new HashMap<>();
+        if (programme_id != null) {
+            param.put("programme_id", programme_id);
+        }
         param.put("page", page + "");
         param.put("rows", "10");
 
@@ -264,109 +277,4 @@ public class SocialContactFragment extends BaseFragment {
         new GGOKHTTP(param, GGOKHTTP.GET_RECORD_LIST, ggHttpInterface).startGet();
     }
 
-    /**
-     * 获取筛选列表数据
-     */
-    private void getScreenData() {
-
-        final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
-                JSONObject object = JSONObject.parseObject(responseInfo);
-                if (object.getIntValue("code") == 0) {
-                    JSONArray data = object.getJSONArray("data");
-                    List<BoxScreenData> screenData = new ArrayList<>();
-
-                    if (data != null) {
-                        for (int i = 0; i < data.size(); i++) {
-                            screenData.add(new BoxScreenData(data.getJSONObject(i).getString("programme_name"),
-                                    data.getJSONObject(i).getString("programme_id"), false));
-                        }
-                    }
-
-                    screenData.add(0, new BoxScreenData("全部", "all", true));
-                    showBoxScreen(screenData);
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                UIHelper.toast(getContext(), R.string.net_erro_hint);
-            }
-        };
-        new GGOKHTTP(null, GGOKHTTP.GET_PROGRAMME_GUIDE, ggHttpInterface).startGet();
-    }
-
-    /**
-     * 设置筛选弹窗
-     */
-    private void showBoxScreen(final List<BoxScreenData> screenData) {
-        View dialogBoxScreen = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_box_screen, null);
-        screenHelper = new PopupWindowHelper(dialogBoxScreen);
-
-        screenHelper.setMissCallBack(new PopupWindowHelper.PopDismissCallBack() {
-            @Override
-            public void setBoxScreen() {
-                boxScreen.setChecked(false);
-                boxScreen.setTextColor(getResColor(R.color.textColor_333333));
-            }
-        });
-
-        RecyclerView recyScreen = (RecyclerView) dialogBoxScreen.findViewById(R.id.recyScreen);
-        initRecycleView(recyScreen, null);
-        recyScreen.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-
-        final BoxScreenAdapter adapter = new BoxScreenAdapter(getActivity(), screenData);
-        recyScreen.setAdapter(adapter);
-
-        Button btnScreen = (Button) dialogBoxScreen.findViewById(R.id.btnScreen);
-        btnScreen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mSelectedPos != 0) {
-                    Intent intent = new Intent(getActivity(), ScreenActivity.class);
-                    intent.putExtra("programme_name", screenData.get(mSelectedPos).getProgramme_name());
-                    intent.putExtra("programme_id", screenData.get(mSelectedPos).getProgramme_id());
-                    startActivity(intent);
-                }
-
-                screenHelper.dismiss();
-                adapter.notifyDataSetChanged();
-            }
-        });
-    }
-
-    class BoxScreenAdapter extends CommonAdapter<BoxScreenData, BaseViewHolder> {
-
-        private List<BoxScreenData> mDatas;
-
-        public BoxScreenAdapter(Context context, List<BoxScreenData> list) {
-            super(R.layout.item_box_screen, list);
-            this.mDatas = list;
-        }
-
-        @Override
-        protected void convert(BaseViewHolder holder, final BoxScreenData data, final int position) {
-            final TextView textProName = holder.getView(R.id.textProName);
-
-            textProName.setSelected(data.isSelected());
-            textProName.setText(data.getProgramme_name());
-
-            textProName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    mSelectedPos = position;
-
-                    for (BoxScreenData data : mDatas) {
-                        data.setSelected(false);
-                    }
-
-                    mDatas.get(mSelectedPos).setSelected(true);
-                    notifyDataSetChanged();
-                }
-            });
-        }
-    }
 }

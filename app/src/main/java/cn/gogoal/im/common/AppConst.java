@@ -50,6 +50,8 @@ public class AppConst {
 
     public static final int REFRESH_TYPE_SWIPEREFRESH = 0x50013;    //下拉刷新
 
+    public static final int REFRESH_TYPE_LOAD_MORE = 0x50015;    //上拉加载刷新数据
+
     public static final int REFRESH_TYPE_PARENT_BUTTON = 0x50014;   //父activity的刷新按钮
 
     //创建群的方式
@@ -80,7 +82,7 @@ public class AppConst {
 
     //开发环境
 //    public static final String WEB_URL = "http://192.168.72.155:9000/#";
-//    public static final String WEB_URL = "http://192.168.52.156:9000/#";
+    public static final String WEB_URL_LLJ = "http://192.168.52.156:9000/#";
     private static final String WEB_URL = "http://ggmobile.sandbox.go-goal.cn/#";
     //预正式环境
 //    public static final String WEB_URL = "http://192.168.52.156:9000/#";

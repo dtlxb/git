@@ -78,7 +78,7 @@
                     android:id="@+id/textTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/textBlank"
+                    android:text="@string/text_empty"
                     android:textColor="@android:color/white"
                     android:textSize="14dp" />
 
@@ -100,7 +100,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:singleLine="true"
-                        android:text="@string/textBlank"
+                        android:text="@string/text_empty"
                         android:textColor="@android:color/white"
                         android:textSize="12dp" />
 
@@ -111,7 +111,7 @@
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/shape_player_market_interpre"
                         android:singleLine="true"
-                        android:text="@string/textBlank"
+                        android:text="@string/text_empty"
                         android:textColor="@android:color/white"
                         android:textSize="11dp" />
 
@@ -147,7 +147,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@drawable/shape_player_online_number"
-            android:text="@string/textBlank"
+            android:text="@string/text_empty"
             android:textColor="@android:color/white"
             android:textSize="11dp" />
 

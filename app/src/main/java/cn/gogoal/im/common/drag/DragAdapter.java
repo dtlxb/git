@@ -50,7 +50,7 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
         this.itemTouchHelper = itemTouchHelper;
     }
 
-    public void setOnCheckedChangeListener(OnCheckedChangeListener mOnCheckedChangeListener) {
+    public void setOnItemCheckedChangeListener(OnCheckedChangeListener mOnCheckedChangeListener) {
         this.mOnCheckedChangeListener = mOnCheckedChangeListener;
     }
 
@@ -71,22 +71,11 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
                 notifyDataSetChanged();
             }
         });
-
-        holder.mTvName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.mCbCheck.performClick();
-            }
-        });
     }
 
     @Override
     public int getItemCount() {
         return dataList == null ? 0 : dataList.size();
-    }
-
-    public MyStockData getData(int position) {
-        return dataList.get(position);
     }
 
     public String getStockName(int position) {
@@ -105,7 +94,7 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
         void onItemCheckedChange(CompoundButton view, int position, boolean checked);
     }
 
-    class MainContentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnTouchListener {
+    class MainContentViewHolder extends RecyclerView.ViewHolder{
 
         private TextView mTvName;
         private ImageView mIvTouch;
@@ -119,8 +108,33 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
             mIvTouch = (ImageView) itemView.findViewById(R.id.img_drag);
             mIv2Top = (ImageView) itemView.findViewById(R.id.img_2_top);
 
-            mCbCheck.setOnClickListener(this);
-            mIvTouch.setOnTouchListener(this);
+            mIvTouch.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                        itemTouchHelper.startDrag(MainContentViewHolder.this);
+                    return false;
+                }
+            });
+
+            mCbCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (mOnCheckedChangeListener != null){
+                        mOnCheckedChangeListener.onItemCheckedChange(
+                                mCbCheck,
+                                getAdapterPosition(),
+                                isChecked);
+                        getData(getAdapterPosition()).setCheck(mCbCheck.isChecked());
+                    }
+                }
+            });
+
+            mTvName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mCbCheck.performClick();
+                }
+            });
         }
 
         public void setData() {
@@ -129,19 +143,10 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
             mCbCheck.setChecked(data.isCheck());
         }
 
-        @Override
-        public void onClick(View view) {
-            if (view == mCbCheck && mOnCheckedChangeListener != null) {
-                mOnCheckedChangeListener.onItemCheckedChange(mCbCheck, getAdapterPosition(), mCbCheck.isChecked());
-            }
-        }
+    }
 
-        @Override
-        public boolean onTouch(View view, MotionEvent event) {
-            if (view == mIvTouch)
-                itemTouchHelper.startDrag(this);
-            return false;
-        }
+    public MyStockData getData(int position) {
+        return dataList.get(position);
     }
 
     /**

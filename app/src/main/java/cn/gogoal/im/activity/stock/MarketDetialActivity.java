@@ -288,7 +288,7 @@ public class MarketDetialActivity extends BaseActivity {
                     break;
                 case 2://换手率
                     holder.setText(R.id.tv_stock_ranklist_rate, StringUtils.saveSignificand(
-                            StringUtils.getStockDouble(data.getRate()) * 100, 2) + "%");
+                            StringUtils.pareseStringDouble(data.getRate()) * 100, 2) + "%");
                     break;
                 case 3://振幅榜
                     holder.setText(R.id.tv_stock_ranklist_rate, StringUtils.saveSignificand(data.getRate(), 2) + "%");
@@ -326,7 +326,7 @@ public class MarketDetialActivity extends BaseActivity {
 
                 TextView rateView = holder.getView(R.id.tv_stock_ranklist_currentPrice);
 
-                rateView.setText(StockUtils.plusMinus(""+StringUtils.getStockDouble(data.getIndustry_rate()),true));// TODO: 2017/4/7 0007
+                rateView.setText(StockUtils.plusMinus(""+StringUtils.pareseStringDouble(data.getIndustry_rate()),true));// TODO: 2017/4/7 0007
 
                 holder.setText(R.id.tv_stock_ranklist_rate, data.getStock_name());
 

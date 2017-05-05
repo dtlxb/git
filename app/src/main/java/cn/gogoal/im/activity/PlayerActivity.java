@@ -247,7 +247,7 @@ public class PlayerActivity extends BaseActivity {
                         linearPlayerProfiles.setVisibility(View.VISIBLE);
                     }
 
-                    mURI = data.getString("video_url");
+                    mURI = data.getString("video_file");
 
                     textOnlineNumber.setText("0人在线");
 

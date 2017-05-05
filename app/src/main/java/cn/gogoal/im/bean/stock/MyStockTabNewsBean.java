@@ -13,12 +13,33 @@ public class MyStockTabNewsBean {
     private String date;
     private String newsId;
 
+    private String origin_link;
+    //"http://www.cninfo.com.cn/finalpage/2017-05-03/1203473631.DOCX";
+    //"http://www.cninfo.com.cn/finalpage/2017-05-04/1203474660.PDF"
+
     public MyStockTabNewsBean(String newsTitle, String stockCode, String stockName, String date, String newsId) {
         this.newsTitle = newsTitle;
         this.stockCode = stockCode;
         this.stockName = stockName;
         this.date = date;
         this.newsId = newsId;
+    }
+
+    public MyStockTabNewsBean(String newsTitle, String stockCode, String stockName, String date, String newsId, String origin_link) {
+        this.newsTitle = newsTitle;
+        this.stockCode = stockCode;
+        this.stockName = stockName;
+        this.date = date;
+        this.newsId = newsId;
+        this.origin_link = origin_link;
+    }
+
+    public String getOrigin_link() {
+        return origin_link;
+    }
+
+    public void setOrigin_link(String origin_link) {
+        this.origin_link = origin_link;
     }
 
     public String getNewsTitle() {

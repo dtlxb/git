@@ -19,7 +19,7 @@
             android:id="@+id/tv_stock_ranklist_stockName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/default__"
+            android:text="@string/text_empty"
             android:textColor="@color/stock_text_black"
             android:textSize="16sp" />
 
@@ -27,7 +27,7 @@
             android:id="@+id/tv_stock_ranklist_stockCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/default__"
+            android:text="@string/text_empty"
             android:textColor="#aaa"
             android:textSize="13sp" />
 
@@ -37,7 +37,7 @@
         android:id="@+id/tv_stock_ranklist_currentPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/default__"
+        android:text="@string/text_empty"
         android:textColor="@color/stock_text_black"
         android:layout_centerInParent="true"
         android:textSize="15sp" />
@@ -49,7 +49,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:layout_alignEnd="@+id/tv_stock_ranklist_currentPrice"
-        android:text="@string/default__"
+        android:text="@string/text_empty"
         android:textColor="@color/stock_text_gray"
         android:textSize="15sp" />
 

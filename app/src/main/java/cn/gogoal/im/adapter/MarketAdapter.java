@@ -199,10 +199,11 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
                 case 3:
                     holder.setText(R.id.tv_stock_ranklist_rate, StockUtils.plusMinus(data.getRate(), true));
                     holder.setTextResColor(R.id.tv_stock_ranklist_rate, data.getPriceColor());
+                    holder.setTextResColor(R.id.tv_stock_ranklist_currentPrice, data.getPriceColor());
                     break;
                 case 4://换手率
                     holder.setText(R.id.tv_stock_ranklist_rate, StringUtils.saveSignificand(
-                            StringUtils.getStockDouble(data.getRate()) * 100, 2) + "%");
+                            StringUtils.pareseStringDouble(data.getRate()) * 100, 2) + "%");
                     break;
                 case 5://振幅榜
                     holder.setText(R.id.tv_stock_ranklist_rate, StringUtils.saveSignificand(data.getRate(), 2) + "%");

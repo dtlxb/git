@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.PushService;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
@@ -217,6 +218,9 @@ public class TypeLoginActivity extends BaseActivity {
                                     loginDialog.dismiss(true);
                                 }
                             });
+
+                            PushService.subscribe(TypeLoginActivity.this, data.getString("account_id"), MainActivity.class);
+
                         } catch (Exception ignored) {
                             loginButton.setClickable(true);
                             loginDialog.dismiss(true);

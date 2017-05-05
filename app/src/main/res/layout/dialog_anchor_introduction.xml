@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:text="@string/textBlank"
+                android:text="@string/text_empty"
                 android:textColor="@color/textColor_333333"
                 android:textSize="16dp" />
 
@@ -57,7 +57,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:text="@string/textBlank"
+                android:text="@string/text_empty"
                 android:textColor="@color/textColor_666666"
                 android:textSize="13dp" />
 

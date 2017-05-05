@@ -48,7 +48,16 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".receiver.pushReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="com.avos.UPDATE_STATUS" />
+                <action android:name="com.gogoal.action" />
             </intent-filter>
         </receiver>
         <!-- 实时通信模块 END -->
@@ -167,8 +176,9 @@
         <activity android:name=".activity.SingleEditActivity" />
         <activity android:name=".activity.RedGreenSettingActivity" />
         <activity android:name=".activity.ChangePhoneNumber" />
-        <activity android:name=".activity.copy.StockDetailNewsListDataActivity" />
-        <activity android:name=".activity.StockNewsAllListActivity" />
+        <activity android:name=".activity.stock.StockNewsAllListActivity" />
+
+        <activity android:name=".activity.ShareMessageActivity"/>
         <activity android:name=".activity.ScreenActivity" />
     </application>
 
