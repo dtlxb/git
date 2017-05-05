@@ -81,7 +81,14 @@ public class MessageFragment extends BaseFragment {
     @BindView(R.id.recyclerView)
     RecyclerView message_recycler;
 
-    private XTitle xTitle;
+    @BindView(R.id.iv_go_contancts)
+    ImageView goContancts;
+
+    @BindView(R.id.iv_add_person)
+    ImageView addPerson;
+
+    @BindView(R.id.tv_xtitle)
+    TextView xTitle;
 
     private List<IMMessageBean> IMMessageBeans = new ArrayList<>();
 
@@ -109,23 +116,18 @@ public class MessageFragment extends BaseFragment {
     }
 
     private void initTitle() {
-        xTitle = setFragmentTitle(R.string.title_message);
-        //添加action
-        XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_person)) {
+        goContancts.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void actionClick(View view) {
+            public void onClick(View v) {
                 startActivity(new Intent(getActivity(), ContactsActivity.class));
             }
-        };
-        XTitle.ImageAction addAction = new XTitle.ImageAction(ContextCompat.getDrawable(getContext(), R.mipmap.contact_add_message)) {
+        });
+        addPerson.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void actionClick(View view) {
-                popuMore(view);
+            public void onClick(View v) {
+                popuMore(v);
             }
-        };
-        xTitle.addAction(personAction, 0);
-        xTitle.addAction(addAction, 1);
-
+        });
     }
 
     @Override
@@ -479,9 +481,9 @@ public class MessageFragment extends BaseFragment {
     @Subscriber(tag = "connection_status")
     public void clientStatus(String msg) {
         if (msg.equals("connection_paused")) {
-            xTitle.setTitle(R.string.title_status);
+            xTitle.setText(R.string.title_status);
         } else if (msg.equals("connection_resume")) {
-            xTitle.setTitle(R.string.title_message);
+            xTitle.setText(R.string.title_message);
         }
     }
 

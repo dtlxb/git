@@ -111,7 +111,7 @@ public class AppConst {
     //设置页关于
     public static final String GG_SETTING_ABOUT = WEB_URL + "/help/about";
     //设置页免责申明
-    public static final String GG_DISCLAIMER= WEB_URL + "/help/disclaimer";
+    public static final String GG_DISCLAIMER = WEB_URL + "/help/disclaimer";
     //设置页服务协议
     public static final String GG_SERVICE_AGREEMENT = WEB_URL + "/help/service";
 

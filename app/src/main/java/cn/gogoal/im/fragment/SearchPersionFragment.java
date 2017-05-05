@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
@@ -23,7 +24,9 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -87,7 +90,7 @@ public class SearchPersionFragment extends BaseFragment {
                     adapter.notifyDataSetChanged();
                     xLayout.setStatus(XLayout.Success);
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
-                    xLayout.setEmptyText(String.format(getString(R.string.str_result),keyword)+"的用户");
+                    xLayout.setEmptyText(String.format(getString(R.string.str_result), keyword) + "的用户");
                     xLayout.setStatus(XLayout.Empty);
                 } else {
                     UIHelper.toastResponseError(getActivity(), responseInfo);
@@ -102,14 +105,14 @@ public class SearchPersionFragment extends BaseFragment {
                         searchPersion(keyword);
                     }
                 });
-                UIHelper.toastError(getActivity(), msg,xLayout);
+                UIHelper.toastError(getActivity(), msg, xLayout);
 
             }
         };
         new GGOKHTTP(param, GGOKHTTP.SEARCH_FRIEND, ggHttpInterface).startGet();
     }
 
-    private class SearchPersionResultAdapter extends CommonAdapter<ContactBean,BaseViewHolder> {
+    private class SearchPersionResultAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
 
         SearchPersionResultAdapter(List<ContactBean> datas) {
             super(R.layout.item_search_type_persion, datas);
@@ -118,8 +121,10 @@ public class SearchPersionFragment extends BaseFragment {
         @Override
         protected void convert(BaseViewHolder holder, final ContactBean data, int position) {
             KLog.e(JSONObject.toJSONString(data));
-            holder.setText(R.id.item_tv_search_result_name, data.getNickname());
+            ImageView imageView = holder.getView(R.id.item_user_avatar);
+            //holder.setText(R.id.item_tv_search_result_name, data.getNickname());
             try {
+                ImageDisplay.loadRoundedRectangleImage(mContext, imageView, AppDevice.dp2px(mContext, 4), (String) data.getAvatar());
                 holder.setImageUrl(R.id.item_user_avatar, (String) data.getAvatar());
             } catch (Exception e) {
                 KLog.e(e.getMessage());
@@ -129,8 +134,8 @@ public class SearchPersionFragment extends BaseFragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent=new Intent(v.getContext(), IMPersonDetailActivity.class);
-                    intent.putExtra("account_id",data.getUserId());
+                    Intent intent = new Intent(v.getContext(), IMPersonDetailActivity.class);
+                    intent.putExtra("account_id", data.getUserId());
                     KLog.e(data.getUserId());
                     startActivity(intent);
                 }

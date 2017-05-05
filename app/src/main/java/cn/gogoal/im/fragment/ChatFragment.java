@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -18,8 +20,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.alibaba.fastjson.JSON;
@@ -49,16 +51,15 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ChooseContactActivity;
-import cn.gogoal.im.activity.copy.StockSearchActivity;
 import cn.gogoal.im.adapter.ChatFunctionAdapter;
 import cn.gogoal.im.adapter.IMChatAdapter;
-import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.EmojiBean;
 import cn.gogoal.im.bean.FoundData;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
@@ -68,7 +69,6 @@ import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
-import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UFileUpload;
@@ -78,8 +78,6 @@ import cn.gogoal.im.common.recording.MediaManager;
 import cn.gogoal.im.ui.KeyboardLaunchLinearLayout;
 import cn.gogoal.im.ui.view.SwitchImageView;
 import cn.gogoal.im.ui.view.VoiceButton;
-import top.zibin.luban.Luban;
-import top.zibin.luban.OnCompressListener;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -89,16 +87,11 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class ChatFragment extends BaseFragment {
 
-    private final static int GET_STOCK = 0x01;
-
     @BindView(R.id.message_swipe)
     SwipeRefreshLayout message_swipe;
 
     @BindView(R.id.message_list)
     RecyclerView message_recycler;
-
-    @BindView(R.id.functions_recycler)
-    RecyclerView functions_recycler;
 
     @BindView(R.id.find_more_layout)
     RelativeLayout find_more_layout;
@@ -109,11 +102,11 @@ public class ChatFragment extends BaseFragment {
     @BindView(R.id.et_input)
     EditText etInput;
 
-    /*@BindView(R.id.img_emoji)
-    ImageButton imgEmoji;*/
+    @BindView(R.id.img_emoji)
+    CheckBox EmojiCheckBox;
 
     @BindView(R.id.img_function)
-    ImageButton imgFunction;
+    CheckBox functionCheckBox;
 
     @BindView(R.id.btn_send)
     Button btnSend;
@@ -136,15 +129,24 @@ public class ChatFragment extends BaseFragment {
     private AVIMConversation imConversation;
     private List<AVIMMessage> messageList = new ArrayList<>();
     private IMChatAdapter imChatAdapter;
-    private ChatFunctionAdapter chatFunctionAdapter;
     private List<FoundData.ItemPojos> itemPojosList;
     private JSONArray jsonArray;
     private ContactBean<String> contactBean;
+    private EmojiFragment emojiFragment;
+    private FunctionFragment functionFragment;
+    private FragmentTransaction transaction;
+    private FragmentManager childManager;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         listener = (MyListener) context;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        childManager = getChildFragmentManager();
     }
 
     @Override
@@ -161,13 +163,12 @@ public class ChatFragment extends BaseFragment {
         imChatAdapter = new IMChatAdapter(getActivity(), messageList);
         message_recycler.setAdapter(imChatAdapter);
 
+        initFragment();
+
         //多功能消息框
         itemPojosList = new ArrayList<>();
         itemPojosList.add(new FoundData.ItemPojos("照片", R.mipmap.chat_add_photo, "tag"));
         itemPojosList.add(new FoundData.ItemPojos("股票", R.mipmap.chat_add_stock, "tag"));
-        functions_recycler.setLayoutManager(new GridLayoutManager(getContext(), 4));
-        chatFunctionAdapter = new ChatFunctionAdapter(getContext(), itemPojosList);
-        functions_recycler.setAdapter(chatFunctionAdapter);
 
         int keyBordHeight = SPTools.getInt("soft_keybord_height", AppDevice.dp2px(getActivity(), 220));
         setContentHeight(keyBordHeight);
@@ -200,49 +201,6 @@ public class ChatFragment extends BaseFragment {
                         message_swipe.setRefreshing(false);
                     }
                 });
-            }
-        });
-
-        //多功能消息发送
-        chatFunctionAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(CommonAdapter adapter, View view, int position) {
-                switch (position) {
-                    case 0:
-                        //发照片
-                        ImageTakeUtils.getInstance().takePhoto(getContext(), 9, false, new ITakePhoto() {
-                            @Override
-                            public void success(List<String> uriPaths, boolean isOriginalPic) {
-                                if (uriPaths != null) {
-                            /*//返回的图片集合不为空，执行上传操作
-                            if (isOriginalPic) {
-                                //批量发送至公司后台
-                                doUpload(uriPaths);
-                            } else {
-                            }*/
-                                    //压缩后上传
-                                    compressPhoto(uriPaths);
-                                }
-                            }
-
-                            @Override
-                            public void error() {
-
-                            }
-                        });
-                        break;
-                    case 1:
-                        //跳转股票页面发送股票
-                        Intent intent = new Intent(getActivity(), StockSearchActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("num", 2);
-                        bundle.putBoolean("show_add_btn", false);
-                        intent.putExtras(bundle);
-                        startActivityForResult(intent, GET_STOCK);
-                        break;
-                    default:
-                        break;
-                }
             }
         });
 
@@ -350,8 +308,9 @@ public class ChatFragment extends BaseFragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                //stringBuilder.append(etInput.getText().toString());
                 if (etInput.getText().toString().trim().equals("")) {
-                    imgFunction.setVisibility(View.VISIBLE);
+                    functionCheckBox.setVisibility(View.VISIBLE);
                     btnSend.setVisibility(View.INVISIBLE);
                 } else if (etInput.getText().toString().trim().equals("@") && chatType == 1002) {
                     //@过后跳转加人
@@ -362,7 +321,7 @@ public class ChatFragment extends BaseFragment {
                     intent.putExtras(bundle);
                     startActivityForResult(intent, AppConst.SQUARE_ROOM_AT_SOMEONE);
                 } else {
-                    imgFunction.setVisibility(View.INVISIBLE);
+                    functionCheckBox.setVisibility(View.INVISIBLE);
                     btnSend.setVisibility(View.VISIBLE);
                 }
             }
@@ -371,12 +330,12 @@ public class ChatFragment extends BaseFragment {
         etInput.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (chatType == 1002 && keyCode == KeyEvent.KEYCODE_DEL) {
+                if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_UP) {
                     String backString = StringUtils.StringFilter(etInput.getText().toString());
                     etInput.setText(backString);
                     etInput.setSelection(backString.length());
                 }
-                return false;
+                return true;
             }
         });
 
@@ -388,30 +347,55 @@ public class ChatFragment extends BaseFragment {
                 sendVoiceToUCloud(seconds, filePath);
             }
         });
+
+        //子碎片
+    }
+
+    private void initFragment() {
+        functionFragment = new FunctionFragment();
+        emojiFragment = new EmojiFragment();
     }
 
     //输入框内元素点击事件
-    @OnClick({R.id.img_function})
+    @OnClick({R.id.img_function, R.id.img_emoji})
     void chatClick(View view) {
+        transaction = childManager.beginTransaction();
         switch (view.getId()) {
             case R.id.img_function:
                 find_more_layout.setVisibility(View.VISIBLE);
-                getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
-                KLog.e(view.getTag());
-                if (view.getTag().equals("un_expanded")) {
-                    etInput.clearFocus();
-                    InputMethodManager manager = (InputMethodManager) etInput.getContext().getSystemService(INPUT_METHOD_SERVICE);
-                    manager.hideSoftInputFromWindow(etInput.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                    view.setTag("expanded");
-                } else if (view.getTag().equals("expanded")) {
-                    etInput.requestFocus();
-                    InputMethodManager inputMethodManager = (InputMethodManager) etInput.getContext().getSystemService(INPUT_METHOD_SERVICE);
-                    inputMethodManager.showSoftInput(etInput, 0);
-                    view.setTag("un_expanded");
+                if (!functionFragment.isAdded()) {
+                    transaction.add(R.id.find_more_layout, functionFragment, "FunctionFragment");
                 }
+                transaction.show(functionFragment).hide(emojiFragment);
+                getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+                (EmojiCheckBox).setChecked(false);
+                checkAction(view);
+                break;
+            case R.id.img_emoji:
+                find_more_layout.setVisibility(View.VISIBLE);
+                if (!emojiFragment.isAdded()) {
+                    transaction.add(R.id.find_more_layout, emojiFragment, "EmojiFragment");
+                }
+                transaction.show(emojiFragment).hide(functionFragment);
+                getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+                (functionCheckBox).setChecked(false);
+                checkAction(view);
                 break;
             default:
                 break;
+        }
+        transaction.commit();
+    }
+
+    public void checkAction(View view) {
+        if (((CheckBox) view).isChecked()) {
+            etInput.clearFocus();
+            InputMethodManager manager = (InputMethodManager) etInput.getContext().getSystemService(INPUT_METHOD_SERVICE);
+            manager.hideSoftInputFromWindow(etInput.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        } else {
+            etInput.requestFocus();
+            InputMethodManager inputMethodManager = (InputMethodManager) etInput.getContext().getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.showSoftInput(etInput, 0);
         }
     }
 
@@ -461,32 +445,6 @@ public class ChatFragment extends BaseFragment {
         };
         new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
 
-    }
-
-    private void compressPhoto(List<String> uriPaths) {
-        KLog.e(uriPaths);
-        for (int i = 0; i < uriPaths.size(); i++) {
-            Luban.get(getActivity())
-                    .load(new File(uriPaths.get(i)))                     //传人要压缩的图片
-                    .putGear(Luban.THIRD_GEAR)                           //设定压缩档次，默认三挡
-                    .setCompressListener(new OnCompressListener() {      //设置回调
-
-                        @Override
-                        public void onStart() {
-
-                        }
-
-                        @Override
-                        public void onSuccess(final File file) {
-                            sendImageToZyyx(file);
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
-                        }
-                    }).launch();
-        }
     }
 
     private void sendStockMessage(String stockCode, String stockName) {
@@ -848,22 +806,58 @@ public class ChatFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != 0) {
             if (requestCode == AppConst.SQUARE_ROOM_AT_SOMEONE) {
-                StringBuilder stringBuilder = new StringBuilder();
+                StringBuilder strBuilder = new StringBuilder();
 
                 List<ContactBean> changeContactBeens = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
                 for (int i = 0; i < changeContactBeens.size(); i++) {
-                    stringBuilder.append("@" + changeContactBeens.get(i).getTarget() + " ");
+                    strBuilder.append("@" + changeContactBeens.get(i).getTarget() + " ");
                 }
-                etInput.setText(stringBuilder.toString());
-                etInput.setSelection(stringBuilder.toString().length());
-            } else if (requestCode == GET_STOCK) {
-                find_more_layout.setVisibility(View.GONE);
-                if (!TextUtils.isEmpty(data.getStringExtra("stock_name")) && !TextUtils.isEmpty(data.getStringExtra("stock_code"))) {
-                    sendStockMessage(data.getStringExtra("stock_code"), data.getStringExtra("stock_name"));
-                }
+                etInput.setText(strBuilder.toString());
+                etInput.setSelection(strBuilder.toString().length());
             }
         }
 
+    }
+
+    /**
+     * 表情处理
+     */
+    @Subscriber(tag = "oneEmoji")
+    public void getOneEmoji(BaseMessage baseMessage) {
+        Map map = baseMessage.getOthers();
+        EmojiBean emojiBean = (EmojiBean) map.get("emojiBean");
+        if (emojiBean.getEmojiName().equals("[擦掉]")) {
+            etInput.setText(StringUtils.StringFilter(etInput.getText().toString()));
+        } else {
+            etInput.setText(etInput.getText().toString() + emojiBean.getEmojiName());
+        }
+        etInput.setSelection(etInput.length());
+    }
+
+    /**
+     * 图片处理
+     */
+    @Subscriber(tag = "onePhoto")
+    public void getOnePhoto(BaseMessage baseMessage) {
+        Map map = baseMessage.getOthers();
+        File file = (File) map.get("photoFile");
+        sendImageToZyyx(file);
+    }
+
+    /**
+     * 股票处理
+     */
+    @Subscriber(tag = "oneStock")
+    public void getOneStock(BaseMessage baseMessage) {
+        find_more_layout.setVisibility(View.GONE);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+        Map map = baseMessage.getOthers();
+        String stockName = (String) map.get("stock_name");
+        String stockCode = (String) map.get("stock_code");
+        if (!TextUtils.isEmpty(stockName) && !TextUtils.isEmpty(stockCode)) {
+            sendStockMessage(stockCode, stockName);
+        }
     }
 
     /**

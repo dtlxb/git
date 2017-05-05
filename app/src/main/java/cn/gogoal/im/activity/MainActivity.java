@@ -28,6 +28,7 @@ import cn.gogoal.im.BuildConfig;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.BaseIconText;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.FileUtil;
@@ -65,6 +66,9 @@ public class MainActivity extends BaseActivity {
     @BindArray(R.array.main_tab)
     String[] mainTabArray;
 
+    /*@BindArray(R.array.emoji_array)
+    String[] emojis;*/
+
     private BadgeView badge;
 
     @Override
@@ -97,6 +101,9 @@ public class MainActivity extends BaseActivity {
             //拉取好友列表
             getFriendList();
         }
+        /*for (int i=0;i<emojis.length;i++){
+            int red=getResources().getIdentifier("img_emoji_"+i,"mipmap",getPackageName());
+        }*/
 
         List<Fragment> tabFragments = new ArrayList<>();
         tabFragments.add(messageFragment);
@@ -255,6 +262,7 @@ public class MainActivity extends BaseActivity {
                 badge.setBadgeGravity(Gravity.TOP | Gravity.END);
                 badge.setBadgeTextSize(12, true);
                 badge.setBadgePadding(5, true);
+                badge.setBackgroundResource(getResColor(R.color.message_tag_red));
 
                 String uriStr = "android.resource://" + this.getPackageName() + "/" + R.raw.ding;
 

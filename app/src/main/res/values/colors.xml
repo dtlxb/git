@@ -100,4 +100,7 @@
     <color name="social_live_status_yellow">#c8ffa200</color>
     <color name="social_live_online_time">#99000000</color>
 
+    <color name="screen_bg_checked">#feebeb</color>
+    <color name="screen_bg_unchecked">#ececec</color>
+
 </resources>

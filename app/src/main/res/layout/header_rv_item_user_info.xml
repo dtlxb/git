@@ -12,6 +12,7 @@
     <ImageView
         android:id="@+id/image_user_info_avatar"
         android:layout_width="60dp"
+        android:src="@mipmap/image_placeholder"
         android:layout_height="60dp"
         android:contentDescription="@null" />
 

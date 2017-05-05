@@ -1,6 +1,11 @@
 package cn.gogoal.im.common;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.widget.EditText;
 
 import com.socks.library.KLog;
@@ -9,8 +14,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -145,6 +152,43 @@ public class StringUtils {
     }
 
     /**
+     * 判断字符串是否是表情
+     */
+    public static SpannableString isOurEmoji(Context context, String str, int textSize) {
+        String regx = "\\[[a-zA-Z0-9\\/\\u4e00-\\u9fa5]+\\]";
+        SpannableString spannableString = new SpannableString(str);
+        Pattern pattern = Pattern.compile(regx, Pattern.CASE_INSENSITIVE);
+        try {
+            dealExpression(context, spannableString, textSize, pattern, 0);
+        } catch (Exception e) {
+            KLog.e(e.toString());
+        }
+        return spannableString;
+    }
+
+    private static void dealExpression(Context context, SpannableString spannableString, int textSize, Pattern pattern, int start) {
+        Matcher matcher = pattern.matcher(spannableString);
+        while (matcher.find()) {
+            String key = matcher.group();
+            if (matcher.start() < start) {
+                continue;
+            }
+            int resId = GGEmoticons.GGEmoticonHashMap.get(key);
+            if (0 != resId) {
+                Drawable drawable = context.getResources().getDrawable(resId, null);
+                drawable.setBounds(0, 0, textSize, textSize);
+                ImageSpan imageSpan = new ImageSpan(drawable);
+                int end = matcher.start() + key.length();
+                spannableString.setSpan(imageSpan, matcher.start(), end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                if (end < spannableString.length()) {
+                    dealExpression(context, spannableString, textSize, pattern, end);
+                }
+                break;
+            }
+        }
+    }
+
+    /**
      * 判断字符串是否有相同
      */
     public static boolean isSame(String str) {
@@ -169,11 +213,10 @@ public class StringUtils {
 
     /**
      * 校验验证码
-     * */
-    public static boolean checkVerificationCode(String veriCode){
-        return (!TextUtils.isEmpty(veriCode)) && veriCode.length()>=6;
+     */
+    public static boolean checkVerificationCode(String veriCode) {
+        return (!TextUtils.isEmpty(veriCode)) && veriCode.length() >= 6;
     }
-
 
 
     /**
@@ -405,27 +448,36 @@ public class StringUtils {
     public static String StringFilter(String str) {
         // 清除掉某人
         //String regEx = "@*[\\S]*[ \r\n]";
-        String newString = "";
+        if (TextUtils.isEmpty(str)) {
+            return "";
+        }
         if (str.endsWith(" ")) {
             int postionAt = str.lastIndexOf("@");
             KLog.e(postionAt);
             if (postionAt != -1) {
-                newString = str.substring(0, postionAt + 1);
+                return str.substring(0, postionAt);
             } else {
-                newString = str;
             }
         } else {
-            newString = str;
         }
-        KLog.e(newString);
-        return newString;
+        if (str.endsWith("]")) {
+            int postionAt = str.lastIndexOf("[");
+            KLog.e(postionAt);
+            if (postionAt != -1) {
+                return str.substring(0, postionAt);
+            } else {
+            }
+        } else {
+        }
+
+        return str.substring(0, str.length() - 1);
     }
 
     /**
      * 查询@字符串中是否含有自己
      */
     public static Boolean StringFilter(String str, String regEx) {
-        String newString = "";
+        String newString;
         Boolean haveMe = false;
         Pattern pattern = Pattern.compile(regEx);
         Matcher matcher = pattern.matcher(str);
@@ -483,11 +535,11 @@ public class StringUtils {
     }
 
     public static String map2ggParameter(Map<String, String> map) {
-        String params="";
+        String params = "";
         for (String keyString : map.keySet()) {
             String str = map.get(keyString);
-            params+=keyString+"="+str+"&";
+            params += keyString + "=" + str + "&";
         }
-        return params.substring(0,params.length()-1);
+        return params.substring(0, params.length() - 1);
     }
 }

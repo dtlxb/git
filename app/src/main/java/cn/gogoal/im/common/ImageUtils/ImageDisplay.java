@@ -178,7 +178,6 @@ public class ImageDisplay {
     public static void loadRoundedRectangleImage(Context context, ImageView imageView, int radius, String imageUrl) {
         Glide.with(context)
                 .load(imageUrl)
-                .placeholder(R.mipmap.image_placeholder)
                 .bitmapTransform(new RoundedCornersTransformation(context, radius, 0))
                 .into(imageView);
     }
