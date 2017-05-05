@@ -20,8 +20,8 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -44,6 +44,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -60,7 +61,7 @@ public class SearchTeamFragment extends BaseFragment {
 
     private RecommendAdapter adapter;
 
-    private int loadType= AppConst.REFRESH_TYPE_FIRST;
+    private int loadType = AppConst.REFRESH_TYPE_FIRST;
 
     private ArrayList<RecommendBean.DataBean> dataBeanList;
     private List<String> groupMembers;
@@ -94,23 +95,23 @@ public class SearchTeamFragment extends BaseFragment {
 
         recyclerView.setAdapter(adapter);
 
-        getRecommendGroup(AppConst.REFRESH_TYPE_FIRST,"");
+        getRecommendGroup(AppConst.REFRESH_TYPE_FIRST, "");
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getRecommendGroup(AppConst.REFRESH_TYPE_SWIPEREFRESH,"");
+        getRecommendGroup(AppConst.REFRESH_TYPE_SWIPEREFRESH, "");
     }
 
     @Subscriber(tag = "SEARCH_TEAM_TAG")
-    void searchTeam(String keyWord){
-        getRecommendGroup(AppConst.REFRESH_TYPE_PARENT_BUTTON,keyWord);
+    void searchTeam(String keyWord) {
+        getRecommendGroup(AppConst.REFRESH_TYPE_PARENT_BUTTON, keyWord);
     }
 
     private void getRecommendGroup(final int loadType, final String keyword) {
-        if (loadType==AppConst.REFRESH_TYPE_FIRST) {
+        if (loadType == AppConst.REFRESH_TYPE_FIRST) {
             xLayout.setStatus(XLayout.Loading);
         }
         Map<String, String> map = new HashMap<>();
@@ -123,8 +124,6 @@ public class SearchTeamFragment extends BaseFragment {
         new GGOKHTTP(map, GGOKHTTP.SEARCH_GROUP, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
-
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     dataBeanList.clear();
                     RecommendBean recommendBean = JSONObject.parseObject(responseInfo, RecommendBean.class);
@@ -146,7 +145,7 @@ public class SearchTeamFragment extends BaseFragment {
                     @Override
                     public void onReload(View v) {
                         getRecommendGroup(AppConst.REFRESH_TYPE_SWIPEREFRESH,
-                                loadType==AppConst.REFRESH_TYPE_PARENT_BUTTON?keyword:"");
+                                loadType == AppConst.REFRESH_TYPE_PARENT_BUTTON ? keyword : "");
                     }
                 });
 
@@ -158,6 +157,7 @@ public class SearchTeamFragment extends BaseFragment {
     private class RecommendAdapter extends CommonAdapter<RecommendBean.DataBean, BaseViewHolder> {
 
         private Bitmap groupAvatarBitmap;
+
         RecommendAdapter(List<RecommendBean.DataBean> datas) {
             super(R.layout.item_search_type_persion, datas);
         }
@@ -184,7 +184,7 @@ public class SearchTeamFragment extends BaseFragment {
                 addView.setTextColor(Color.parseColor("#a9a9a9"));
                 addView.setClickable(false);
                 addView.setEnabled(false);
-            }else {
+            } else {
                 addView.setBackgroundResource(R.drawable.shape_search_group_add_btn);
                 addView.setText("加入");
                 addView.setTextColor(Color.parseColor("#a9a9a9"));
@@ -207,7 +207,7 @@ public class SearchTeamFragment extends BaseFragment {
                     @Override
                     public void onSuccess(final Bitmap mathingBitmap) {
 
-                        groupAvatarBitmap=mathingBitmap;
+                        groupAvatarBitmap = mathingBitmap;
 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -219,26 +219,23 @@ public class SearchTeamFragment extends BaseFragment {
 
                     @Override
                     public void onError(Exception e) {
-                        groupAvatarBitmap= BitmapFactory.decodeResource(
-                                getResources(),R.mipmap.image_placeholder);
+                        KLog.e("使用占位图头像--拼接出错");
+                        groupAvatarBitmap = BitmapFactory.decodeResource(
+                                getResources(), R.mipmap.image_placeholder);
                     }
                 });
-            }else {
-                ImageDisplay.loadImage(getContext(),data.getAttr().getAvatar(),imageView);
-                try {
-                    groupAvatarBitmap=Glide.with(getContext())
-                            .load(data.getAttr().getAvatar())
-                            .asBitmap() //必须
-                            .centerCrop()
-                            .skipMemoryCache(true)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                            .get();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    groupAvatarBitmap= BitmapFactory.decodeResource(
-                            getResources(),R.mipmap.image_placeholder);
-                }
+            } else {
+                final String groupUrl = data.getAttr().getAvatar();
+
+                ImageDisplay.loadImage(getContext(), groupUrl, imageView);
+
+                ImageUtils.getUrlBitmap(getActivity(), groupUrl, new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        groupAvatarBitmap=resource;
+                    }
+                });
+
             }
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -261,7 +258,7 @@ public class SearchTeamFragment extends BaseFragment {
                             bundle.putString("square_name", dataBeanList.get(position - 1).getName());
                             bundle.putParcelable("bitmap_avatar", groupAvatarBitmap);
                             bundle.putString("square_creater", dataBeanList.get(position - 1).getC());
-                            bundle.putParcelableArrayList("square_members",data.getM());
+                            bundle.putParcelableArrayList("square_members", data.getM());
                             in.putExtras(bundle);
                             startActivity(in);
                         }

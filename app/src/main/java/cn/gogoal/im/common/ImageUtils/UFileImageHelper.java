@@ -30,7 +30,7 @@ public class UFileImageHelper {
     /**
      * 获取UCloud的实际图片URL
      */
-    public String getUFileOriginalImage(String miniUrl) {
+    public static String getUFileOriginalImage(String miniUrl) {
         return miniUrl.contains("?iopcmd") ? miniUrl.substring(0, miniUrl.indexOf("?iopcmd")) : miniUrl;
     }
 
