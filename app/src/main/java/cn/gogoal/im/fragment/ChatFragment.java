@@ -350,7 +350,6 @@ public class ChatFragment extends BaseFragment {
             }
         });
 
-        //子碎片
     }
 
     private void initFragment() {
