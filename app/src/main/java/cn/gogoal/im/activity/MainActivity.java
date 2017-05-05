@@ -5,12 +5,18 @@ import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hply.imagepicker.view.StatusBarUtil;
 import com.socks.library.KLog;
@@ -27,9 +33,11 @@ import butterknife.BindView;
 import cn.gogoal.im.BuildConfig;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.BaseIconText;
 import cn.gogoal.im.bean.BaseMessage;
+import cn.gogoal.im.bean.BoxScreenData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -54,9 +62,19 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.main_view_mask)
     View mainViewMask;
 
+    //侧滑模块
+    @BindView(R.id.drawer_main)
+    DrawerLayout mDrawerLayout;
+    @BindView(R.id.lay_right_menu)
+    RelativeLayout menuLayout;
+    @BindView(R.id.recyScreen)
+    RecyclerView recyScreen;
+
     private StatusBarUtil barUtil;
 
     public MainStockFragment mainStockFragment;
+
+    private int mSelectedPos = 0;
 
     @Override
     public int bindLayout() {
@@ -73,7 +91,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-
 
         KLog.e("width===" + AppDevice.getWidth(mContext) + ";height===" + AppDevice.getHeight(mContext));
         KLog.e("DpValueWidth===" + AppDevice.px2dp(mContext, AppDevice.getWidth(mContext)) +
@@ -155,6 +172,9 @@ public class MainActivity extends BaseActivity {
                 mainStockFragment.dismissMarket();
             }
         });
+
+        //侧滑
+        getScreenData();
     }
 
     public void changeItem(int index) {
@@ -212,11 +232,17 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mainStockFragment.isMaskViewVisiable()) {
-                mainStockFragment.dismissMarket();
+            if (mDrawerLayout.isDrawerOpen(menuLayout)) {
+                mDrawerLayout.closeDrawer(menuLayout);
+                exitTime = 0;
             } else {
-                exitBy2Click();
+                if (mainStockFragment.isMaskViewVisiable()) {
+                    mainStockFragment.dismissMarket();
+                } else {
+                    exitBy2Click();
+                }
             }
+
             return true;
         } else if (keyCode == KeyEvent.KEYCODE_MENU) {
             startActivity(new Intent(getActivity(), TestActivity.class));
@@ -271,4 +297,101 @@ public class MainActivity extends BaseActivity {
             }
         }
     }
+
+    //暴露给外部展开菜单的方法
+    public void openMenu() {
+        mDrawerLayout.openDrawer(menuLayout);
+    }
+
+    //暴露给外部收起菜单的方法
+    public void closeMenu() {
+        mDrawerLayout.closeDrawer(menuLayout);
+    }
+
+    /**
+     * 获取筛选列表数据
+     */
+    private void getScreenData() {
+
+        final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONArray data = object.getJSONArray("data");
+                    List<BoxScreenData> screenData = new ArrayList<>();
+
+                    if (data != null) {
+                        for (int i = 0; i < data.size(); i++) {
+                            screenData.add(new BoxScreenData(data.getJSONObject(i).getString("programme_name"),
+                                    data.getJSONObject(i).getString("programme_id"), false));
+                        }
+                    }
+
+                    screenData.add(0, new BoxScreenData("全部", "all", true));
+                    showBoxScreen(screenData);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(getActivity(), R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(null, GGOKHTTP.GET_PROGRAMME_GUIDE, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 设置筛选弹窗
+     */
+    private void showBoxScreen(final List<BoxScreenData> screenData) {
+
+        initRecycleView(recyScreen, null);
+        recyScreen.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+
+        final BoxScreenAdapter adapter = new BoxScreenAdapter(getActivity(), screenData);
+        recyScreen.setAdapter(adapter);
+    }
+
+    class BoxScreenAdapter extends CommonAdapter<BoxScreenData, BaseViewHolder> {
+
+        private List<BoxScreenData> mDatas;
+
+        public BoxScreenAdapter(Context context, List<BoxScreenData> list) {
+            super(R.layout.item_box_screen, list);
+            this.mDatas = list;
+        }
+
+        @Override
+        protected void convert(BaseViewHolder holder, final BoxScreenData data, final int position) {
+            final TextView textProName = holder.getView(R.id.textProName);
+
+            textProName.setSelected(data.isSelected());
+            textProName.setText(data.getProgramme_name());
+
+            textProName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    mSelectedPos = position;
+
+                    for (BoxScreenData data : mDatas) {
+                        data.setSelected(false);
+                    }
+
+                    mDatas.get(mSelectedPos).setSelected(true);
+                    notifyDataSetChanged();
+
+                    if (mSelectedPos != 0) {
+                        Intent intent = new Intent(getActivity(), ScreenActivity.class);
+                        intent.putExtra("programme_name", data.getProgramme_name());
+                        intent.putExtra("programme_id", data.getProgramme_id());
+                        startActivity(intent);
+                    }
+                }
+            });
+        }
+    }
+
 }

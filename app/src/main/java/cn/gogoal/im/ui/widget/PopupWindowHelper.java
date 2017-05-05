@@ -83,24 +83,6 @@ public class PopupWindowHelper {
     }
 
     /**
-     * 特殊需求的弹窗
-     */
-    public void showScreenFromRight(View anchor) {
-        mPopupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        setCancelable(true);
-        mPopupWindow.setAnimationStyle(R.style.AnimationFromRight);
-        mPopupWindow.showAsDropDown(anchor, 0, 0, Gravity.RIGHT);
-
-        mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                missCallBack.setBoxScreen();
-            }
-        });
-    }
-
-    /**
      * touch outside dismiss the popupwindow, default is ture
      *
      * @param isCancelable
@@ -131,19 +113,5 @@ public class PopupWindowHelper {
 
     private int getStatusBarHeight() {
         return Math.round(25 * Resources.getSystem().getDisplayMetrics().density);
-    }
-
-    PopDismissCallBack missCallBack;
-
-    public PopDismissCallBack getMissCallBack() {
-        return missCallBack;
-    }
-
-    public void setMissCallBack(PopDismissCallBack missCallBack) {
-        this.missCallBack = missCallBack;
-    }
-
-    public interface PopDismissCallBack {
-        public void setBoxScreen();
     }
 }
