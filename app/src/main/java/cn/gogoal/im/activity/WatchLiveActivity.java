@@ -1168,14 +1168,20 @@ public class WatchLiveActivity extends BaseActivity {
                     JSONObject object = JSONObject.parseObject(responseInfo);
                     JSONObject data = object.getJSONObject("data");
                     if (object.getIntValue("code") == 0 && data.getBooleanValue("success")) {
-                        if (data.getBooleanValue("result")) {
-                            //缓存推流URL和主播的短延迟播放URL
-                            mPushUrl = data.getString("push_stream_url");
-                            mSmallDelayPlayUrl = data.getString("short_play_url");
-                            //开始连麦
-                            startLaunchChat();
+                        if (data.getBooleanValue("startmix_result")) {
+                            if (data.getBooleanValue("result")) {
+                                //缓存推流URL和主播的短延迟播放URL
+                                mPushUrl = data.getString("push_stream_url");
+                                mSmallDelayPlayUrl = data.getString("short_play_url");
+                                //开始连麦
+                                startLaunchChat();
+                            } else {
+                                mChatStatus = VideoChatStatus.UNCHAT;
+                            }
                         } else {
                             mChatStatus = VideoChatStatus.UNCHAT;
+                            DialogHelp.getMessageDialog(getActivity(), getString(R.string.not_link_live)).setCancelable(false)
+                                    .setTitle(R.string.merge_stream_failed).show();
                         }
                     }
                 }

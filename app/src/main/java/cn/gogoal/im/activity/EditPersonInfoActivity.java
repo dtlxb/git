@@ -70,7 +70,7 @@ public class EditPersonInfoActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         initTitle();
-        ImageDisplay.loadResAvatar(EditPersonInfoActivity.this, R.mipmap.login_gogoal, imagePersonHeadpic);
+        ImageDisplay.loadResAvatar(EditPersonInfoActivity.this, R.mipmap.logo, imagePersonHeadpic);
     }
 
     private void initTitle() {

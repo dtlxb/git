@@ -23,13 +23,6 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <!-- iBeancon功能所需权限 -->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <!-- 个推3.0电子围栏功能所需权限 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
     <!-- 连麦功能所需权限 -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
@@ -42,7 +35,7 @@
     <application
         android:name=".base.MyApp"
         android:allowBackup="true"
-        android:icon="@mipmap/login_gogoal"
+        android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -60,15 +53,6 @@
         </receiver>
         <!-- 实时通信模块 END -->
 
-
-        <!-- 配置SDK核心服务 -->
-        <service
-            android:name=".servise.PushService"
-            android:exported="true"
-            android:label="PushService"
-            android:process=":pushservice" />
-        <service android:name=".servise.IntentService" />
-
         <activity android:name=".activity.TypeLoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -77,7 +61,7 @@
             </intent-filter>
         </activity>
 
-        <!--authorities="你的包名+fileprovider" -->
+        <!-- authorities="你的包名+fileprovider" -->
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="cn.gogoal.im.fileprovider"
@@ -91,7 +75,6 @@
         <activity
             android:name=".activity.MainActivity"
             android:windowSoftInputMode="adjustPan" />
-
         <activity
             android:name=".activity.RigisterActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
@@ -156,7 +139,6 @@
         <activity
             android:name=".activity.WatchLiveActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".activity.stock.MarketActivity" />
         <activity android:name=".activity.stock.MarketDetialActivity" />
         <activity android:name=".activity.stock.MyStockNewsActivity" />
         <activity android:name=".activity.ContactsActivity" />
@@ -165,17 +147,15 @@
         <!-- <activity android:name=".activity.Test2Activity"></activity> -->
 
         <activity android:name=".activity.copy.CopyStockDetailActivity" />
-        <activity android:name=".activity.copy.NewsContentActivity" />
         <activity
             android:name=".activity.copy.StockDetailChartsActivity"
+            android:configChanges="orientation|screenSize|keyboard"
             android:screenOrientation="landscape" />
         <activity android:name=".activity.copy.CommentActivity" />
         <activity
             android:name=".activity.copy.StockDetailMarketIndexActivity"
             android:screenOrientation="portrait" />
-
         <activity android:name=".activity.copy.StockSearchActivity" />
-
         <activity android:name=".activity.EditMyInfoActivity" />
         <activity android:name=".activity.ImageDetailActivity" />
         <activity android:name=".activity.CreateLiveActivity" />
@@ -187,8 +167,9 @@
         <activity android:name=".activity.SingleEditActivity" />
         <activity android:name=".activity.RedGreenSettingActivity" />
         <activity android:name=".activity.ChangePhoneNumber" />
-        <activity android:name=".adapter.copy.StockDetailNewsListDataActivity" />
-
+        <activity android:name=".activity.copy.StockDetailNewsListDataActivity" />
+        <activity android:name=".activity.StockNewsAllListActivity" />
+        <activity android:name=".activity.ScreenActivity" />
     </application>
 
 </manifest>

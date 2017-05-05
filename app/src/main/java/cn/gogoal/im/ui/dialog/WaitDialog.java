@@ -23,6 +23,7 @@ public class WaitDialog extends BaseCentDailog {
     private RotateAnimation animation;
     private ImageView imgIcon;
     private TextView textView;
+    private boolean cancelOutside;
 
     public static WaitDialog getInstance(String text, int iconRes, boolean loading) {
         WaitDialog dialog = new WaitDialog();
@@ -49,20 +50,29 @@ public class WaitDialog extends BaseCentDailog {
         int dialogIcon = getArguments().getInt("DIALOG_ICON", 0);
         String dialogText = getArguments().getString("DIALOG_TEXT", "提示");
 
-        imgIcon= (ImageView) v.findViewById(R.id.img_dialog_gg_submit);
-        textView= (TextView) v.findViewById(R.id.tv_dialog_gg_submit);
+        imgIcon = (ImageView) v.findViewById(R.id.img_dialog_gg_submit);
+        textView = (TextView) v.findViewById(R.id.tv_dialog_gg_submit);
 
-        if (dialogIcon!=0) {
+        if (dialogIcon != 0) {
             imgIcon.setImageResource(dialogIcon);
             if (getArguments().getBoolean("DIALOG_LOADING")) {
                 animation = AnimationUtils.getInstance().setLoadingAnime(imgIcon, dialogIcon);
                 animation.startNow();
-            }else {
+            } else {
                 imgIcon.setImageResource(dialogIcon);
             }
         }
 
         textView.setText(dialogText);
+    }
+
+    @Override
+    public boolean getCancelOutside() {
+        return cancelOutside;
+    }
+
+    public void setCancelOutside(boolean cancelOutside) {
+        this.cancelOutside = cancelOutside;
     }
 
     @Override
@@ -72,16 +82,16 @@ public class WaitDialog extends BaseCentDailog {
 
     @Override
     public int getHeight() {
-        return 5 * AppDevice.getWidth(getActivity()) / 12;
+        return 0;
     }
 
-    public WaitDialog updataText(String text){
-       textView.setText(text);
+    public WaitDialog updataText(String text) {
+        textView.setText(text);
         return this;
     }
 
-    public WaitDialog updataIcon(@DrawableRes int imgId){
-       imgIcon.setImageResource(imgId);
+    public WaitDialog updataIcon(@DrawableRes int imgId) {
+        imgIcon.setImageResource(imgId);
         return this;
     }
 
@@ -89,17 +99,17 @@ public class WaitDialog extends BaseCentDailog {
     public void onDestroyView() {
         super.onDestroyView();
         try {
-            if (null!=animation)
-            animation.cancel();
-        }catch (Exception e){
+            if (null != animation)
+                animation.cancel();
+        } catch (Exception e) {
             e.getMessage();
         }
     }
 
     public void dismiss(boolean immediately) {
-        if (immediately){
+        if (immediately) {
             super.dismiss();
-        }else {
+        } else {
             new android.os.Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {

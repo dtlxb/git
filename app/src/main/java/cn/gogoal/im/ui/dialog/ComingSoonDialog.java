@@ -10,7 +10,7 @@ import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
  * author wangjd on 2017/4/25 0025.
  * Staff_id 1375
  * phone 18930640263
- * description :开发中
+ * description :努力开发中封装的弹窗
  */
 public class ComingSoonDialog extends BaseCentDailog {
     @Override

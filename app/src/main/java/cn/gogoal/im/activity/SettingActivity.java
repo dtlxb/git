@@ -10,8 +10,6 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.bumptech.glide.Glide;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,10 +21,11 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.UserDetailInfo;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.ImageUtils.GlideCacheUtil;
-import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.ui.view.SelectorButton;
 
 /**
@@ -114,7 +113,22 @@ public class SettingActivity extends BaseActivity {
                         clearMyAppCache();
                         break;
                     case 8:
-                        UIHelper.toast(getActivity(), "Item" + position);
+                        NormalIntentUtils.go2WebActivity(getActivity(),
+                                AppConst.GG_SETTING_ABOUT,
+                                "关于我们");
+                        break;
+                    case 9:
+                        NormalIntentUtils.go2WebActivity(
+                                getActivity(),
+                                AppConst.GG_DISCLAIMER,
+                                "免责申明");
+                        break;
+
+                    case 10:
+                        NormalIntentUtils.go2WebActivity(
+                                getActivity(),
+                                AppConst.GG_SERVICE_AGREEMENT,
+                                "服务协议");
                         break;
                     default:
                         break;

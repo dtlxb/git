@@ -103,7 +103,7 @@ public class HotSearchAdapter extends MyBaseAdapter<HotSearchStockData> {
 
                         } else {
                             //登录时
-                            StockUtils.reqAddStock(v.getContext(),
+                            StockUtils.addMyStock(v.getContext(),
                                     list.get(position).getStock_name(),
                                     list.get(position).getStock_code());
 

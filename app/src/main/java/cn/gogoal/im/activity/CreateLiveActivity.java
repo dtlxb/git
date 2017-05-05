@@ -57,7 +57,7 @@ public class CreateLiveActivity extends BaseActivity {
                 mContext,
                 imgLive,
                 AppDevice.dp2px(mContext, 5),//圆角弧度
-                R.mipmap.gogoal);
+                R.mipmap.logo);
     }
 
     @OnClick({R.id.imgClose, R.id.imgLive, R.id.btnStartLive, R.id.textAgreement})
@@ -144,10 +144,10 @@ public class CreateLiveActivity extends BaseActivity {
 
     private void getStartLive() {
 
-        if (liveLargeImg == null) {
+        /*if (liveLargeImg == null) {
             UIHelper.toast(this, "请更换封面");
             return;
-        }
+        }*/
 
         String title = editLive.getText().toString();
         if (title.equals("")) {

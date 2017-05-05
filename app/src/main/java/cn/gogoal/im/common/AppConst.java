@@ -7,6 +7,7 @@ package cn.gogoal.im.common;
  */
 public class AppConst {
 
+    public static final int MAX_PAGE = 50;//刷新页数上限
     //LeanCloud参数(沙盒)
 //    public static final String LEANCLOUD_APP_ID = "R7vH8N41V1rqJIqrlTQ1mMnR-gzGzoHsz";
 //    public static final String LEANCLOUD_APP_KEY = "4iXr2Ylh1VwVyYjaxs3ufFmo";
@@ -74,31 +75,22 @@ public class AppConst {
     public static final String businessId = "video_live";
     public static final String accessKeyId = "LTAI1KypPpiBhPAx";
     public static final String accessKeySecret = "vb0kunzWvhxV6WHrH4Znv1BeJFJ2xV";
-    //正式用
-    public static final String WEB_DAMIN = "http://ggmobile.go-goal.cn/";
-    public static final int RESULT_OK = 0;
-    public static final int MAX_PAGE = 50;
-    public static final int DISS_XCHART_DATA = 1;
-    public static final int DISPLAY_XCHART_TIME_DATA = 2;
-    public static final int XCHART_FLING = 3;
-    public static final int FINSH_WECHARTLONGIN = 4;
-    public static final int DISPLAY_FIVEDAYXCHART_TIME_DATA = 5;
-    public static final int DISPLAY_XCHART_K_DATA = 6;
     public static final int DISS_PROGRESSBAR = 7;
-    public static final int UPDATE_DISCUSS = 8;
-    public static final int SUCESSACTIVITY_FINSH = 9;
-    public static final int REFRESH_KLINE_DATA = 10;
-    /**
-     * webView地址
-     */
+
+
     //开发环境
 //    public static final String WEB_URL = "http://192.168.72.155:9000/#";
 //    public static final String WEB_URL = "http://192.168.52.156:9000/#";
-    public static final String WEB_URL = "http://ggmobile.sandbox.go-goal.cn/#";
+    private static final String WEB_URL = "http://ggmobile.sandbox.go-goal.cn/#";
     //预正式环境
 //    public static final String WEB_URL = "http://192.168.52.156:9000/#";
     //正式环境
 //    public static final String WEB_URL = "http://211.144.193.162:8085/#";
+
+    //个股-交易五档
+    public static final int TREAT_TYPE_WU_DANG = 952;
+    //个股-交易明细
+    public static final int TREAT_TYPE_MING_XI = 459;
 
     //直播分享
     public static final String GG_LIVE_SHARE = WEB_URL + "/live/share/";
@@ -120,4 +112,12 @@ public class AppConst {
     public static final String GG_DISCLAIMER = WEB_URL + "/help/disclaimer";
     //设置页服务协议
     public static final String GG_SERVICE_AGREEMENT = WEB_URL + "/help/service";
+
+    public static final int SOURCE_TYPE_YANBAO = 102;//个股 研报
+    public static final int SOURCE_TYPE_GONGGAO = 105;//个股 公告
+    public static final String WEB_NEWS = WEB_URL+"/report/info/";
+
+    //新闻远端
+    public static final int SOURCE_TYPE_NEWS = 100;//个股 新闻
+
 }

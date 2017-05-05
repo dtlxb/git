@@ -29,12 +29,6 @@ android {
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
-        manifestPlaceholders = [
-                GETUI_APP_ID    : "Kb4fbbPem39Psl4xC3ta34",
-                GETUI_APP_KEY   : "finYiVZzSaAGjpE0sTb9S4",
-                GETUI_APP_SECRET: "a6CrMypVHMArwEScTt43E4"
-        ]
-
         multiDexEnabled true
 
 //        ndk {
@@ -124,8 +118,6 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.1.6'
     compile 'top.zibin:Luban:1.0.9'
-    //个推
-    compile 'com.getui:sdk:2.9.5.0'
     //牛股
     compile project(':niugu')
     //阿里云播放器

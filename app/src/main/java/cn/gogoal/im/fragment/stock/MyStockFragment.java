@@ -3,9 +3,11 @@ package cn.gogoal.im.fragment.stock;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,9 +29,12 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.copy.StockDetailMarketIndexActivity;
+import cn.gogoal.im.activity.stock.EditMyStockActivity;
 import cn.gogoal.im.activity.stock.MyStockNewsActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
+import cn.gogoal.im.base.AppManager;
+import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.MyStockBean;
 import cn.gogoal.im.bean.stock.MyStockData;
@@ -40,12 +44,14 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.MyStockSortInteface;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.main.MainStockFragment;
 import cn.gogoal.im.ui.NormalItemDecoration;
+import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.view.SortView;
 
 /**
@@ -92,6 +98,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     @BindView(R.id.layout_tiny_market)
     LinearLayout layoutTinyMarket;
 
+    @BindView(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout refreshLayout;
+
     //自选股集合
     private ArrayList<MyStockData> myStockDatas = new ArrayList<>();
     private MyStockAdapter myStockAdapter;
@@ -103,17 +112,35 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
     @Override
     public void doBusiness(Context mContext) {
+
+        BaseActivity.iniRefresh(refreshLayout);
+
         initSortTitle(mContext);
 
         iniMyStockList();
 
-        getMyStockData(AppConst.REFRESH_TYPE_FIRST);
+        refreshMyStock(AppConst.REFRESH_TYPE_FIRST);
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //刷新自选股，大盘缩略
+                refreshMyStock(AppConst.REFRESH_TYPE_SWIPEREFRESH);
+
+                refreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    public void refreshMyStock(int refreshType) {
+        AppManager.getInstance().sendMessage("market_start_animation_refresh");
+        getMyStockData(refreshType);
     }
 
     private void iniMyStockList() {
-        myStockAdapter=new MyStockAdapter(myStockDatas);
+        myStockAdapter = new MyStockAdapter(myStockDatas);
 
-        LinearLayoutManager layoutManager=new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rvMyStock.setLayoutManager(layoutManager);
         rvMyStock.addItemDecoration(new NormalItemDecoration(getContext()));
 
@@ -125,9 +152,13 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
      * 切换指数缩略
      */
     public void changeIitem(final MyStockMarketBean.MyStockMarketData data) {
+        if (data == null) {
+            return;
+        }
+
         tvTinyMarketName.setText(data.getName());
         tvTinyMarketPrice.setText(StringUtils.saveSignificand(data.getPrice(), 2));
-        tvTinyMarketpriceChange$Rate.setText(StockUtils.plusMinus(String.valueOf(data.getPrice_change()) + "", false) + "  " +
+        tvTinyMarketpriceChange$Rate.setText(StockUtils.plusMinus(data.getPrice_change() + "", false) + "  " +
                 StockUtils.plusMinus(String.valueOf(data.getPrice_change_rate()), true));
 
         tvTinyMarketPrice.setTextColor(ContextCompat.getColor(getContext(),
@@ -174,17 +205,16 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
-
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     myStockDatas.clear();
+
+                    TextView editView = editEnable(true);
+
                     List<MyStockData> parseData = JSONObject.parseObject(responseInfo, MyStockBean.class).getData();
-                    for (MyStockData data : parseData) {
-                        if (data.getStock_type() == 1) {
-                            myStockDatas.add(data);
-                        }
-                    }
+
+                    myStockDatas.addAll(parseData);
+
                     myStockAdapter.notifyDataSetChanged();
 
                     //缓存自选股
@@ -194,19 +224,46 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                         UIHelper.toast(getActivity(), getString(R.string.str_refresh_ok));
                     }
 
+                    editView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent =new Intent(v.getContext(), EditMyStockActivity.class);
+                            Bundle bundle=new Bundle();
+                            bundle.putSerializable("my_stock_edit_list",myStockDatas);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    });
+
                 } else if (code == 1001) {
                     //没有数据
+                    editEnable(false);
+
                 } else {
                     UIHelper.toastResponseError(getActivity(), responseInfo);
+                    editEnable(false);
                 }
+                AppManager.getInstance().sendMessage("market_stop_animation_refresh");
             }
 
             @Override
             public void onFailure(String msg) {
+                AppManager.getInstance().sendMessage("market_stop_animation_refresh");
                 UIHelper.toastError(getActivity(), msg);
+                editEnable(false);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.GET_MYSTOCKS, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 没有正确加载自选股列表的时候(没网络，请求出错，或者没有自选股)时，不允许编辑
+     */
+    TextView editEnable(boolean enable) {
+        final TextView tvEditMyStock = ((MainStockFragment) getParentFragment()).getTvMystockEdit();
+        tvEditMyStock.setEnabled(enable);
+        tvEditMyStock.setClickable(enable);
+        return tvEditMyStock;
     }
 
     @OnClick({R.id.img_show_tinymarket_dialog, R.id.tv_mystock_news,
@@ -245,15 +302,15 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         startActivity(intent);
     }
 
-    private void setAppBarLayout(AppBarLayout appBarLayout,boolean scroll){
-        LinearLayout layout= (LinearLayout) appBarLayout.getChildAt(0);
+    private void setAppBarLayout(AppBarLayout appBarLayout, boolean scroll) {
+        LinearLayout layout = (LinearLayout) appBarLayout.getChildAt(0);
         AppBarLayout.LayoutParams mParams = (AppBarLayout.LayoutParams)
                 layout.getLayoutParams();
         if (!scroll) {
             mParams.setScrollFlags(0);
             appBarLayout.setExpanded(true);
-        }else {
-            mParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL|
+        } else {
+            mParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL |
                     AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
         }
         layout.setLayoutParams(mParams);
@@ -261,7 +318,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
     @Override
     public void doSort(final View view, final int sortType) {
-        ArrayList<MyStockData> cloneData= (ArrayList<MyStockData>) myStockDatas.clone();
+        ArrayList<MyStockData> cloneData = (ArrayList<MyStockData>) myStockDatas.clone();
         Collections.sort(myStockDatas, new Comparator<MyStockData>() {
             @Override
             public int compare(MyStockData o1, MyStockData o2) {
@@ -322,6 +379,29 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
             priceView.setText(StringUtils.saveSignificand(data.getPrice(), 2));
 
+            //自作主张
+            TextView typeView = holder.getView(R.id.tv_stock_type);
+            switch (data.getSymbol_type()) {
+                case 1:
+                    typeView.setVisibility(View.GONE);
+                    break;
+                case 2:
+                    typeView.setVisibility(View.VISIBLE);
+                    typeView.setText("指数");
+                    break;
+                case 3:
+                    typeView.setVisibility(View.VISIBLE);
+                    typeView.setText("基金");
+                    break;
+                case 4:
+                    typeView.setVisibility(View.VISIBLE);
+                    typeView.setText("债券");
+                    break;
+                default:
+                    typeView.setVisibility(View.GONE);
+                    break;
+            }
+
             if (data.getStock_type() == 1) {
                 rateView.setText(StockUtils.plusMinus(data.getChange_rate(), true));
                 priceView.setTextColor(ContextCompat.getColor(getActivity(),
@@ -338,8 +418,16 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    StockUtils.go2StockDetail(v.getContext(),
-                            data.getStock_code(), data.getStock_name());
+                    if (data.getSymbol_type()==1) {
+                        NormalIntentUtils.go2StockDetail(v.getContext(),
+                                data.getStock_code(), data.getStock_name());
+                    }else {
+                        WaitDialog waitDialog = WaitDialog.getInstance("暂无 " +
+                                        StockUtils.getSympolType(data.getSymbol_type()) + " 详情页面",
+                                R.mipmap.login_error, false);
+                        waitDialog.show(getActivity().getSupportFragmentManager());
+                        waitDialog.dismiss(false);
+                    }
                 }
             });
 
@@ -351,7 +439,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                             .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    StockUtils.reqDelStock(getContext(),
+                                    StockUtils.deleteMyStock(getContext(),
                                             data.getStock_name(),
                                             data.getSource() + data.getStock_code(),
                                             new StockUtils.ToggleMyStockCallBack() {

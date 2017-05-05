@@ -96,14 +96,14 @@ public class TypeLoginActivity extends BaseActivity {
 //        loginUserName.setText("E00003645");
 //        loginPassWord.setText("147258369");
 
-        loginUserName.setText("E00002639");
-        loginPassWord.setText("412174");
+//        loginUserName.setText("E00002639");
+//        loginPassWord.setText("412174");
 
         /*loginUserName.setText("E00020181");
         loginPassWord.setText("394495");*/
 
-//        loginUserName.setText("E00002638");
-//        loginPassWord.setText("123456");
+        loginUserName.setText("E00002638");
+        loginPassWord.setText("123456");
 
         /*loginUserName.setText("E010399");
         loginPassWord.setText("198122");*/
@@ -168,6 +168,7 @@ public class TypeLoginActivity extends BaseActivity {
     private void Login() {
         final WaitDialog loginDialog=WaitDialog.getInstance("登录中",R.mipmap.login_loading,true);
         loginDialog.show(getSupportFragmentManager());
+        loginDialog.setCancelable(false);
 
         String name = loginUserName.getText().toString().toUpperCase(Locale.ENGLISH);
         String word = loginPassWord.getText().toString();
@@ -211,9 +212,9 @@ public class TypeLoginActivity extends BaseActivity {
                                 @Override
                                 public void done(AVIMClient avimClient, AVIMException e) {
                                     loginButton.setClickable(true);
-                                    loginDialog.dismiss(true);
                                     startActivity(intent);
                                     finish();
+                                    loginDialog.dismiss(true);
                                 }
                             });
                         } catch (Exception ignored) {

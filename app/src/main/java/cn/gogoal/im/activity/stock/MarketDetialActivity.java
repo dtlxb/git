@@ -23,6 +23,7 @@ import cn.gogoal.im.bean.stock.HotIndustryBean;
 import cn.gogoal.im.bean.stock.RankListStockBean;
 import cn.gogoal.im.bean.stock.StockMarketBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -297,7 +298,7 @@ public class MarketDetialActivity extends BaseActivity {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    StockUtils.go2StockDetail(getActivity(),
+                    NormalIntentUtils.go2StockDetail(getActivity(),
                             data.getStock_code(),data.getStock_name());
                 }
             });
@@ -362,13 +363,12 @@ public class MarketDetialActivity extends BaseActivity {
                     rateView.setTextColor(getResColor(R.color.stock_gray));
                     holder.setTextResColor(R.id.tv_stock_ranklist_currentPrice, R.color.stock_gray);
 
-
                 }
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        StockUtils.go2StockDetail(getActivity(),
+                        NormalIntentUtils.go2StockDetail(getActivity(),
                                 data.getStock_code(),data.getStock_name());
                     }
                 });

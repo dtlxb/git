@@ -38,7 +38,6 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.RecommendBean;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.UIHelper;
@@ -107,7 +106,6 @@ public class SearchTeamFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
-                FileUtil.writeRequestResponse(responseInfo, "推荐群");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     RecommendBean recommendBean = JSONObject.parseObject(responseInfo, RecommendBean.class);
                     if (null != recommendBean.getData()) {
@@ -162,7 +160,21 @@ public class SearchTeamFragment extends BaseFragment {
                 addView.setBackgroundColor(Color.TRANSPARENT);
                 addView.setText("已加入");
                 addView.setTextColor(Color.parseColor("#a9a9a9"));
+                addView.setClickable(false);
+                addView.setEnabled(false);
+            }else {
+                addView.setBackgroundResource(R.drawable.shape_search_group_add_btn);
+                addView.setText("加入");
+                addView.setTextColor(Color.parseColor("#a9a9a9"));
+                addView.setClickable(true);
+                addView.setEnabled(true);
             }
+            addView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO 申请加入
+                }
+            });
 
             Glide.get(getContext()).clearMemory();
 

@@ -12,9 +12,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.socks.library.KLog;
-
-import java.util.Collections;
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -32,7 +29,7 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
     /**
      * 数据
      */
-    private List<MyStockData> dataList = null;
+    private List<MyStockData> dataList;
 
     /**
      * Item拖拽滑动帮助
@@ -63,14 +60,15 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
     }
 
     @Override
-    public void onBindViewHolder(final MainContentViewHolder holder, final int position) {
+    public void onBindViewHolder(final MainContentViewHolder holder, int position) {
         holder.setData();
         holder.mIv2Top.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                KLog.e("name=="+dataList.get(position).getStock_name()+";pos=="+position);
-                Collections.swap(dataList,position,0);
-                DragAdapter.this.notifyDataSetChanged();
+                MyStockData remove = dataList.remove(holder.getAdapterPosition());
+                notifyDataSetChanged();
+                dataList.add(0,remove);
+                notifyDataSetChanged();
             }
         });
 

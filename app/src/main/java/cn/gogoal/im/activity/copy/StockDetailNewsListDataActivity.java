@@ -1,7 +1,8 @@
-package cn.gogoal.im.adapter.copy;
+package cn.gogoal.im.activity.copy;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -17,7 +18,10 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.copy.NewsContentActivity;
+import cn.gogoal.im.activity.FunctionActivity;
+import cn.gogoal.im.adapter.copy.StockDetailNewsAdapter;
+import cn.gogoal.im.adapter.copy.StockDetailOverviewAdapter;
+import cn.gogoal.im.adapter.copy.StockDetailResearchAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
@@ -69,7 +73,7 @@ public class StockDetailNewsListDataActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         init();
         //设置状态栏
-        StatusBarUtil.with(this).setColor(getResColor(R.color.main_header_bg));
+        StatusBarUtil.with(this).setColor(Color.WHITE);
     }
 
     private void init() {
@@ -95,7 +99,7 @@ public class StockDetailNewsListDataActivity extends BaseActivity {
             list_research.clear();
             InitList(stockCode, type, page);
         } else if (type == 9) {
-            adapter_overview=new StockDetailOverviewAdapter(list_overview);
+            adapter_overview = new StockDetailOverviewAdapter(list_overview);
             data_list.setAdapter(adapter_overview);
             list_news.clear();
             list_overview.clear();
@@ -117,7 +121,7 @@ public class StockDetailNewsListDataActivity extends BaseActivity {
                 switch (type) {
                     case 7:
                         if (list_news != null) {
-                            Intent intent = new Intent(StockDetailNewsListDataActivity.this, NewsContentActivity.class);
+                            Intent intent = new Intent(StockDetailNewsListDataActivity.this, FunctionActivity.class);
                             intent.putExtra("id", list_news.get(position).getOrigin_id());
                             intent.putExtra("type", "100");
                             intent.putExtra("favor_type", "1");
@@ -133,7 +137,7 @@ public class StockDetailNewsListDataActivity extends BaseActivity {
                         break;
                     case 3:
                         if (list_news != null) {
-                            Intent intent = new Intent(StockDetailNewsListDataActivity.this, NewsContentActivity.class);
+                            Intent intent = new Intent(StockDetailNewsListDataActivity.this, FunctionActivity.class);
                             intent.putExtra("id", list_news.get(position).getOrigin_id());
                             intent.putExtra("type", "105");
                             intent.putExtra("newstitle", list_news.get(position).getTitle());
@@ -148,7 +152,7 @@ public class StockDetailNewsListDataActivity extends BaseActivity {
                         break;
                     case 0:
                         if (list_research != null) {
-                            Intent intent = new Intent(StockDetailNewsListDataActivity.this, NewsContentActivity.class);
+                            Intent intent = new Intent(StockDetailNewsListDataActivity.this, FunctionActivity.class);
                             intent.putExtra("id", list_research.get(position).getGuid());
                             intent.putExtra("type", "102");
                             intent.putExtra("newstitle", list_research.get(position).getReport_title());
@@ -163,7 +167,7 @@ public class StockDetailNewsListDataActivity extends BaseActivity {
                         break;
                     case 9:
                         if (list_overview != null) {
-                            Intent intent = new Intent(StockDetailNewsListDataActivity.this, NewsContentActivity.class);
+                            Intent intent = new Intent(StockDetailNewsListDataActivity.this, FunctionActivity.class);
                             intent.putExtra("id", list_overview.get(position).getGuid());
                             intent.putExtra("type", "102");
                             intent.putExtra("favor_type", "5");
@@ -202,7 +206,7 @@ public class StockDetailNewsListDataActivity extends BaseActivity {
     }
 
     private void InitList(String stock_code, final int type, final int page) {
-        final Map<String, String> param = new HashMap<String, String>();
+        final Map<String, String> param = new HashMap<>();
         param.put("stock_code", stock_code);
         param.put("type", type + "");
         param.put("page", page + "");
@@ -216,8 +220,8 @@ public class StockDetailNewsListDataActivity extends BaseActivity {
                     ArrayList<StockDetailNewsData> info = bean.getData();
                     list_news.addAll(info);
                     adapter_news.notifyDataSetChanged();
-                } else if(bean.getCode().equals("1001")){
-                    if(page!=1) {
+                } else if (bean.getCode().equals("1001")) {
+                    if (page != 1) {
                         UIHelper.toast(StockDetailNewsListDataActivity.this, R.string.nomoredata_hint);
                     }
                 }
@@ -233,7 +237,7 @@ public class StockDetailNewsListDataActivity extends BaseActivity {
         new GGOKHTTP(param, GGOKHTTP.GET_STOCK_NEWS, ggHttpInterface).startGet();
     }
 
-    private void InitResearch(String stock_code,final int page) {
+    private void InitResearch(String stock_code, final int page) {
         final Map<String, String> param = new HashMap<String, String>();
         //判断是否登录
         if (!UserUtils.isLogin()) {
@@ -258,8 +262,8 @@ public class StockDetailNewsListDataActivity extends BaseActivity {
                     ArrayList<StockDetailResearchData> info = bean.getData();
                     list_research.addAll(info);
                     adapter_research.notifyDataSetChanged();
-                } else if(bean.getCode().equals("1001")){
-                    if(page!=1) {
+                } else if (bean.getCode().equals("1001")) {
+                    if (page != 1) {
                         UIHelper.toast(StockDetailNewsListDataActivity.this, R.string.nomoredata_hint);
                     }
                 }
@@ -310,7 +314,7 @@ public class StockDetailNewsListDataActivity extends BaseActivity {
 //        new GGOKHTTP(param, GGOKHTTP.REPORT_RM, ggHttpInterface).startGet();
 //    }
 
-    private void refresh(){
+    private void refresh() {
         data_list.loadMoreComplate();
         load_animation.setVisibility(View.GONE);
     }

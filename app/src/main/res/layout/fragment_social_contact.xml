@@ -9,7 +9,36 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/include_title" />
+        <RelativeLayout
+            android:id="@+id/relaterTittle"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/titlebar_size"
+            android:background="@drawable/shape_line_bottom">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/title_live"
+                android:textColor="@color/textColor_333333"
+                android:textSize="18dp" />
+
+            <CheckBox
+                android:id="@+id/boxScreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:button="@null"
+                android:drawablePadding="6dp"
+                android:drawableRight="@drawable/social_fragment_screen"
+                android:text="筛选"
+                android:textColor="@color/textColor_333333"
+                android:textSize="16dp" />
+
+        </RelativeLayout>
+
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swiperefresh_social"
@@ -28,101 +57,114 @@
                     android:focusableInTouchMode="true"
                     android:orientation="vertical">
 
-                    <cn.gogoal.im.ui.view.AutoScrollViewPager
-                        android:id="@+id/socialViewPager"
-                        android:layout_width="match_parent"
-                        android:layout_height="155dp"
-                        android:adjustViewBounds="true"
-                        android:contentDescription="@null" />
-
-                    <LinearLayout xmlns:imagetext="http://schemas.android.com/apk/res-auto"
+                    <LinearLayout
+                        android:id="@+id/perLiveLinear"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@android:color/white"
-                        android:orientation="horizontal"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp">
+                        android:orientation="vertical">
 
-                        <cn.gogoal.im.ui.view.ImageWithTextView
-                            android:id="@+id/linearLive"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            imagetext:MiddleImg="@mipmap/social_live"
-                            imagetext:MiddleString="直播" />
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/perLiveRecycler"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
 
-                        <cn.gogoal.im.ui.view.ImageWithTextView
-                            android:id="@+id/linearConference"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            imagetext:MiddleImg="@mipmap/social_conference"
-                            imagetext:MiddleString="会务" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="15dp"
+                            android:background="@color/stock_market_bg" />
 
-                        <cn.gogoal.im.ui.view.ImageWithTextView
-                            android:id="@+id/linearRoadshow"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            imagetext:MiddleImg="@mipmap/social_roadshow"
-                            imagetext:MiddleString="路演" />
-
-                        <cn.gogoal.im.ui.view.ImageWithTextView
-                            android:id="@+id/linearClub"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            imagetext:MiddleImg="@mipmap/social_club"
-                            imagetext:MiddleString="俱乐部" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:background="@color/colorGriddivider" />
 
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="15dp"
-                        android:background="@color/stock_market_bg" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:background="@color/colorGriddivider" />
-
-                    <RelativeLayout
+                    <LinearLayout
+                        android:id="@+id/orgLiveLinear"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@android:color/white"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:paddingTop="10dp">
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"
-                            android:text="@string/social_newest"
-                            android:textColor="@color/textColor_333333"
-                            android:textSize="16dp" />
+                            android:background="@android:color/white"
+                            android:paddingBottom="10dp"
+                            android:paddingLeft="12dp"
+                            android:paddingRight="12dp"
+                            android:paddingTop="10dp">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerVertical="true"
+                                android:text="@string/newest_live"
+                                android:textColor="@color/textColor_333333"
+                                android:textSize="16dp" />
+
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:background="@color/colorGriddivider" />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/orgLiveRecycler"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="15dp"
+                            android:background="@color/stock_market_bg" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:background="@color/colorGriddivider" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/recordLinear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:src="@mipmap/img_more" />
+                            android:background="@android:color/white"
+                            android:paddingBottom="10dp"
+                            android:paddingLeft="12dp"
+                            android:paddingRight="12dp"
+                            android:paddingTop="10dp">
 
-                    </RelativeLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerVertical="true"
+                                android:text="@string/great_video"
+                                android:textColor="@color/textColor_333333"
+                                android:textSize="16dp" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:background="@color/colorGriddivider" />
+                        </RelativeLayout>
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/socialRecycler"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:background="@color/colorGriddivider" />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recordRecycler"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

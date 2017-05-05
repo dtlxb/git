@@ -17,6 +17,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.stock.MarkteBean;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 
@@ -38,6 +39,8 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder holder, final MarkteBean data, final int position) {
         RecyclerView recyclerView = holder.getView(R.id.item_stock_rank_rv);
+        recyclerView.setFocusable(false);
+        recyclerView.setFocusableInTouchMode(false);
 
         recyclerView.setTag(position);
         switch (position) {
@@ -209,7 +212,7 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    StockUtils.go2StockDetail(context,data.getCode(),data.getStockName());
+                    NormalIntentUtils.go2StockDetail(context,data.getCode(),data.getStockName());
                 }
             });
         }

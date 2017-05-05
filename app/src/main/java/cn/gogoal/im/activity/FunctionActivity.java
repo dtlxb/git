@@ -1,12 +1,12 @@
 package cn.gogoal.im.activity;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -15,12 +15,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.lzyzsd.jsbridge.BridgeHandler;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.github.lzyzsd.jsbridge.DefaultHandler;
+import com.socks.library.KLog;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.PdfData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.common.NormalIntentUtils;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.WebViewUtil;
 import cn.gogoal.im.ui.view.XTitle;
@@ -37,20 +41,41 @@ public class FunctionActivity extends BaseActivity {
     BridgeWebView webView;
 
     private String title;
+    private boolean needShare;
+    private XTitle xTitle;
 
     @Override
     public int bindLayout() {
         return R.layout.activity_function;
     }
-//    d4d0f74e3c87483cb3bf91dd10dc53f8
+
+    //    d4d0f74e3c87483cb3bf91dd10dc53f8
     @Override
     public void doBusiness(final Context mContext) {
 
+        getSupportFragmentManager().beginTransaction();
+        //接收传值
         title = getIntent().getStringExtra("title");
         String url = getIntent().getStringExtra("function_url");
+        KLog.e(url);
+        needShare = getIntent().getBooleanExtra("need_share", false);
 
-        setMyTitle(title, true);
-        //设置返回
+        //初始化标题
+        if (!StringUtils.isActuallyEmpty(title)) {
+            xTitle = setMyTitle(title, true);
+        } else {
+            xTitle = setMyTitle("", true);
+        }
+
+        //分享web页
+        if (needShare) {
+            xTitle.addAction(new XTitle.TextAction(getString(R.string.str_share)) {
+                @Override
+                public void actionClick(View view) {
+                    //TODO web页分享
+                }
+            });
+        }
 
         initWebView(webView);
 
@@ -59,13 +84,6 @@ public class FunctionActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WebView.setWebContentsDebuggingEnabled(true);
         }
-        //添加让web获取用户信息
-        /*webView.registerHandler("getUserInfo", new BridgeHandler() {
-            @Override
-            public void handler(String data, ValueCallback<String> function) {
-                function.onReceiveValue(UserUtils.getUserInfo().toJSONString());
-            }
-        });*/
 
 //        // H5页面跳转时获取页面title和url
         webView.setOnWebChangeListener(new BridgeWebView.WebChangeListener() {
@@ -126,15 +144,7 @@ public class FunctionActivity extends BaseActivity {
             @Override
             public void handler(final String data, ValueCallback<String> function) {
                 if (AppDevice.getNetworkType(getContext()) == 2 || AppDevice.getNetworkType(getContext()) == 3) {
-                    new AlertDialog.Builder(mContext, R.style.HoloDialogStyle).setTitle("提示")
-                            .setMessage("阁下当前网络为数据流量\t是否继续?")
-                            .setPositiveButton("确定,有的是流量", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    showPdf(data);
-                                }
-                            }).setNegativeButton("取消", null).show();
-
+                    showPdf(data);
                 } else if (AppDevice.getNetworkType(getContext()) == 1) {
                     showPdf(data);
                 } else {
@@ -159,9 +169,11 @@ public class FunctionActivity extends BaseActivity {
 
     private void showPdf(String data) {
         if (!TextUtils.isEmpty(data)) {
-            Intent intent = new Intent(getContext(), PdfDisplayActivity.class);
-            intent.putExtra("pdf_data", data);
-            startActivity(intent);
+            PdfData pdfData = JSONObject.parseObject(data, PdfData.class);
+            NormalIntentUtils.go2PdfDisplayActivity(
+                    getActivity(),
+                    pdfData.getPdfUrl(),
+                    pdfData.getTitle());
         }
     }
 

@@ -8,7 +8,6 @@ import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -131,7 +130,6 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
     //最新的时分数据
     private double closePrice;
 
-    private FragmentManager fragmentManager;
     private List<Fragment> fragmentList;
 
     private List<TextView> authority_tv;
@@ -194,7 +192,6 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
         //获取个股信息
         initGetData();
 
-        fragmentManager = getSupportFragmentManager();
         fragmentList = new ArrayList<>();
 
         //将碎片加入碎片集合
@@ -204,6 +201,7 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
         if (stockType == STOCK_MARKE_INDEX) {
             authority_blog.setVisibility(View.GONE);
         }
+
         initFragment();
 
         addFragments();
@@ -348,7 +346,7 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
     private void addFragmentToStack(int cur) {
         Bundle args = new Bundle();
         args.putString("stock", stockName + "&" + stockCode);
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = fragmentList.get(cur);
         if (!fragment.isAdded()) {
             fragmentTransaction.add(hply.com.niugu.R.id.fragment_stock_detail, fragment);

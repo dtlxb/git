@@ -1,7 +1,6 @@
 package cn.gogoal.im.fragment.main;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -19,7 +18,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.FunctionActivity;
 import cn.gogoal.im.adapter.SectionAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BannerBean;
@@ -28,6 +26,7 @@ import cn.gogoal.im.bean.TouYan;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.AutoScrollViewPager;
@@ -68,10 +67,11 @@ public class InvestmentResearchFragment extends BaseFragment {
         setFragmentTitle(R.string.title_found).addAction(new XTitle.TextAction(getString(R.string.str_helper)) {
             @Override
             public void actionClick(View view) {
-                Intent intent=new Intent(view.getContext(), FunctionActivity.class);
-                intent.putExtra("title",getString(R.string.str_helper));
-                intent.putExtra("function_url", AppConst.GG_HELP);
-                startActivity(intent);
+
+                NormalIntentUtils.go2WebActivity(
+                        view.getContext(),
+                        AppConst.GG_HELP,
+                        getString(R.string.str_helper));
             }
         });
 

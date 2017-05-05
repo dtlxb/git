@@ -101,6 +101,7 @@
         <item name="android:windowExitAnimation">@anim/alpha_out</item>
     </style>
 
+
     <!--分享弹窗按钮样式-->
     <style name="ShareDialogButton">
         <item name="android:layout_height">wrap_content</item>

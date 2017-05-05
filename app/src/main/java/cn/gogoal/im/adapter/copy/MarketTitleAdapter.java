@@ -9,7 +9,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.common.StockUtils;
+import cn.gogoal.im.common.NormalIntentUtils;
 import hply.com.niugu.StringUtils;
 import hply.com.niugu.bean.StockData;
 
@@ -72,7 +72,7 @@ public class MarketTitleAdapter extends MyBaseAdapter<StockData> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StockUtils.go2StockDetail(parent.getContext(),
+                NormalIntentUtils.go2StockDetail(parent.getContext(),
                         list.get(position).getStock_code(),
                         list.get(position).getStock_name());
             }

@@ -55,6 +55,15 @@
     <string name="title_activity_stock_detail">StockDetailActivity</string>
     <string name="title_activity_stock_detail_charts">StockDetailChartsActivity</string>
 
+    <!--个股和大盘页面图表表头-->
+    <string-array name="stock_detail_chart_titles">
+        <item>@string/times</item>
+        <item>@string/five_days</item>
+        <item>@string/day_k</item>
+        <item>@string/week_k</item>
+        <item>@string/month_k</item>
+    </string-array>
+
 
     <!-- 股票详细信息界面 -->
     <string name="volume">成交</string>
