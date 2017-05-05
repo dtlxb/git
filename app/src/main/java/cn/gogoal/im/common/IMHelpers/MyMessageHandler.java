@@ -191,7 +191,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
         JSONObject lcattrs = content.getJSONObject("_lcattrs");
         String push = lcattrs.getString("push");
         if (push != null) {
-            if (AppDevice.isBackground(MyApp.getAppContext())) {
+            if (AppDevice.isAppOnForeground(MyApp.getAppContext())) {
                 try {
                     Intent resultIntent = new Intent(MyApp.getAppContext(), MainActivity.class);
                     PendingIntent pendingIntent = PendingIntent.getActivity(MyApp.getAppContext(), 0,
