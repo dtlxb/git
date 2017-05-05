@@ -17,6 +17,7 @@ import cn.gogoal.im.bean.AddressBean;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.StringPicker;
+import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.dialog.base.BaseBottomDialog;
 
 
@@ -75,22 +76,31 @@ public class AddressPicker extends BaseBottomDialog {
                 final String cityChoose = provinceList.get(pickerProvince.getValue()).getCity().get(pickerCity.getValue()).getCity();
 //                UIHelper.toast(v.getContext(),provinceChoose+" "+cityChoose);
 
-                Map<String,String> addMap=new HashMap<>();
-                addMap.put("province",provinceChoose);
-                addMap.put("city",cityChoose);
+                Map<String, String> addMap = new HashMap<>();
+                addMap.put("province", provinceChoose);
+                addMap.put("city", cityChoose);
+
+                final WaitDialog loadingDialog = WaitDialog.getInstance("修改中...", R.mipmap.login_loading, true);
+                loadingDialog.show(getActivity().getSupportFragmentManager());
 
                 UserUtils.updataNetUserInfo(addMap, new UserUtils.UpdataListener() {
                     @Override
                     public void success(String responseInfo) {
                         //更新本地缓存
-                        UserUtils.updataLocalUserInfo("city",provinceChoose+" "+cityChoose);
+                        UserUtils.updataLocalUserInfo("city", provinceChoose + " " + cityChoose);
                         //发消息更新当前列表
-                        AppManager.getInstance().sendMessage("updata_userinfo","弹窗中更新");
+                        AppManager.getInstance().sendMessage("updata_userinfo", "true");
+                        loadingDialog.dismiss();
                     }
 
                     @Override
                     public void failed(String errorMsg) {
-                        UIHelper.toast(getActivity(),"更新出错");
+                        loadingDialog.dismiss();
+                        UIHelper.toast(getActivity(), "更新出错");
+
+                        final WaitDialog errorDialog = WaitDialog.getInstance("修改出错,请重试", R.mipmap.login_error, false);
+                        errorDialog.show(getActivity().getSupportFragmentManager());
+                        errorDialog.dismiss(false);
                     }
                 });
 

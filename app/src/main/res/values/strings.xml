@@ -156,7 +156,7 @@
     <string name="str_cancle">取消</string>
 
     <string name="str_search">\u0020&#xe62c; 搜索</string>
-    <string name="str_search_man_square">\u0020&#xe62c; 手机号/Go-Goal账号</string>
+    <string name="str_search_man_square">手机号/Go-Goal账号</string>
     <string name="str_title_ok">确定%s</string>
     <string name="str_title_del">删除%s</string>
     <string name="finish_live">完成直播</string>
@@ -198,4 +198,36 @@
     <string name="str_helper">帮助</string>
 
 
+    <!--<string-array name="emoji_array">
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+        <item>fafadf</item>
+    </string-array>-->
 </resources>

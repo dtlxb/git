@@ -39,7 +39,6 @@
             android:layout_marginLeft="6dp"
             android:layout_marginRight="10dp"
             android:contentDescription="@null"
-            android:paddingLeft="5dp"
             android:src="@mipmap/chat_voice" />
 
         <EditText
@@ -71,30 +70,24 @@
             android:text="按住 说话"
             android:visibility="gone" />
 
-        <ImageButton
+        <CheckBox
             android:id="@+id/img_emoji"
-            style="@style/BottomImageStyle"
+            android:layout_width="29dp"
+            android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="7dp"
-            android:contentDescription="@null"
-            android:src="@mipmap/chat_face"
-            android:visibility="gone" />
+            android:button="@drawable/selector_emoji_choese" />
 
         <FrameLayout
             android:id="@+id/flag_layout_send"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp">
+            android:layout_height="match_parent">
 
-            <ImageButton
+            <CheckBox
                 android:id="@+id/img_function"
                 android:layout_width="29dp"
-                android:layout_height="29dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:contentDescription="@null"
-                android:src="@mipmap/chat_add"
-                android:tag="un_expanded" />
+                android:button="@mipmap/chat_add" />
 
             <Button
                 android:id="@+id/btn_send"
@@ -121,13 +114,8 @@
         android:layout_height="220dp"
         android:layout_above="@+id/space"
         android:background="@color/colorchatGrid"
-        android:gravity="center"
         android:visibility="gone">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/functions_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </RelativeLayout>
 
 </cn.gogoal.im.ui.KeyboardLaunchLinearLayout>

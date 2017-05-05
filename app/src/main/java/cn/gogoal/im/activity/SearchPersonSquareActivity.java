@@ -19,7 +19,6 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.IconFontUtils;
 import cn.gogoal.im.fragment.SearchPersionFragment;
 import cn.gogoal.im.fragment.SearchTeamFragment;
 
@@ -49,8 +48,6 @@ public class SearchPersonSquareActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         setMyTitle(R.string.square_collcet_add, true);
-
-        IconFontUtils.setFont(mContext, layout2search, "iconfont/search.ttf");
 
         final int searchIndex = getIntent().getIntExtra("search_index", 0);
 

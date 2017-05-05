@@ -228,8 +228,9 @@ public class ChatGroupHelper {
             public void onSuccess(Bitmap mathingBitmap) {
                 String groupFaceImageName = "_" + ConversationId + ".png";
                 ImageUtils.cacheBitmapFile(MyApp.getAppContext(), mathingBitmap, "imagecache", groupFaceImageName);
-
-                AppManager.getInstance().sendMessage(msgTag, 0 + "");
+                if (null != mathingBitmap) {
+                    AppManager.getInstance().sendMessage(msgTag, 0 + "");
+                }
             }
 
             @Override

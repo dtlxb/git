@@ -74,7 +74,7 @@ public class AVImClientManager {
      */
     public Map<String, String> userBaseInfo() {
         Map<String, String> attr = new HashMap<>();
-        attr.put("username", UserUtils.getUserName());
+        attr.put("username", UserUtils.getNickname());
         attr.put("avatar", UserUtils.getUserAvatar());
         return attr;
     }

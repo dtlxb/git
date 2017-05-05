@@ -5,12 +5,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
 
 import java.util.List;
+
+import cn.gogoal.im.R;
 
 /**
  * author wangjd on 2017/3/1 0001.
@@ -23,6 +26,8 @@ public class SuspendedDecoration extends RecyclerView.ItemDecoration {
 
     private Paint mPaint;
 
+    private Paint mPaintBottom;
+
     private Rect mBounds;//用于存放测量文字Rect
 
     private int mTitleHeight;//title的高
@@ -34,12 +39,19 @@ public class SuspendedDecoration extends RecyclerView.ItemDecoration {
 
     private int mHeaderViewCount = 0;
 
+    private Context context;
+
     public SuspendedDecoration(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public SuspendedDecoration(Context context, List<? extends ISuspensionInterface> datas) {
         super();
+        this.context = context;
+        init(context, datas);
+    }
+
+    private void init(Context context, List<? extends ISuspensionInterface> datas) {
         COLOR_TITLE_BG = 0xfff8f8f8;
         mDatas = datas;
         mPaint = new Paint();
@@ -50,6 +62,13 @@ public class SuspendedDecoration extends RecyclerView.ItemDecoration {
         int mTitleFontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, context.getResources().getDisplayMetrics());
         mPaint.setTextSize(mTitleFontSize);
         mPaint.setAntiAlias(true);
+
+        mPaintBottom = new Paint();
+        mPaintBottom.setDither(true);
+        mPaintBottom.setStrokeWidth(1);
+        mPaintBottom.setStyle(Paint.Style.FILL);
+
+        mPaintBottom.setColor(ContextCompat.getColor(context, R.color.contactDividerColor));
     }
 
 
@@ -107,7 +126,6 @@ public class SuspendedDecoration extends RecyclerView.ItemDecoration {
             if (position > -1) {
                 if (position == 0) {//等于0肯定要有title的
                     drawTitleArea(c, left, right, child, params, position);
-
                 } else {//其他的通过判断
                     if (null != mDatas.get(position).getSuspensionTag() && !mDatas.get(position).getSuspensionTag().equals(mDatas.get(position - 1).getSuspensionTag())) {
                         //不为空 且跟前一个tag不一样了，说明是新的分类，也要title
@@ -128,11 +146,15 @@ public class SuspendedDecoration extends RecyclerView.ItemDecoration {
         mPaint.setColor(COLOR_TITLE_BG);
         c.drawRect(left, child.getTop() - params.topMargin - mTitleHeight, right, child.getTop() - params.topMargin, mPaint);
         mPaint.setColor(COLOR_TITLE_FONT);
+        c.drawLine(left,
+                child.getTop() - params.topMargin - 1
+                , right,
+                child.getTop() - params.topMargin - 1, mPaintBottom);
 
         try {
             mPaint.getTextBounds(mDatas.get(position).getSuspensionTag(), 0, mDatas.get(position).getSuspensionTag().length(), mBounds);
             c.drawText(mDatas.get(position).getSuspensionTag(), child.getPaddingLeft(), child.getTop() - params.topMargin - (mTitleHeight / 2 - mBounds.height() / 2), mPaint);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
     }

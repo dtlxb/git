@@ -1,9 +1,5 @@
 package cn.gogoal.im.common.GGOKHTTP;
 
-import android.util.Log;
-
-import com.alibaba.fastjson.JSON;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;

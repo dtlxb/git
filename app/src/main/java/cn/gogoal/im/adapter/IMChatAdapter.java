@@ -1,11 +1,16 @@
 package cn.gogoal.im.adapter;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -35,8 +40,11 @@ import cn.gogoal.im.activity.ImageDetailActivity;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
+import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.common.GGEmoticons;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.recording.MediaManager;
@@ -132,7 +140,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                     headPicUrl = (String) lcattrsObject.get("avatar");
                 }
             }
-            ImageDisplay.loadRoundedRectangleImage(mContext, ((IMCHatViewHolder) holder).user_head_photo, AppDevice.dp2px(mContext, 4), headPicUrl);
+            ImageDisplay.loadRoundedRectangleImage(mContext, ((IMCHatViewHolder) holder).user_head_photo, AppDevice.dp2px(mContext, 4), UFileImageHelper.load(headPicUrl).compress(33).get());
             //点击头像展开详情
             ((IMCHatViewHolder) holder).user_head_photo.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -145,19 +153,36 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         } else {
         }
         if (holder instanceof LeftTextViewHolder) {
-            AVIMTextMessage textMessage = (AVIMTextMessage) avimMessage;
+            final AVIMTextMessage textMessage = (AVIMTextMessage) avimMessage;
             ((LeftTextViewHolder) holder).user_name.setText((String) textMessage.getAttrs().get("username"));
-            ((LeftTextViewHolder) holder).what_user_send.setText(textMessage.getText());
-
             showMessageTime(position, ((LeftTextViewHolder) holder).message_time);
+            SpannableString spannableString = StringUtils.isOurEmoji(mContext, textMessage.getText(), AppDevice.sp2px(mContext,
+                    ((LeftTextViewHolder) holder).what_user_send.getTextSize() / 2));
+            ((LeftTextViewHolder) holder).what_user_send.setText(spannableString);
+            //复制消息
+            ((LeftTextViewHolder) holder).what_user_send.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    textClickAction(textMessage);
+                    return false;
+                }
+            });
 
         } else if (holder instanceof RightTextViewHolder) {
-            AVIMTextMessage textMessage = (AVIMTextMessage) avimMessage;
-            ((RightTextViewHolder) holder).what_user_send.setText(textMessage.getText());
+            final AVIMTextMessage textMessage = (AVIMTextMessage) avimMessage;
             ((RightTextViewHolder) holder).user_name.setVisibility(View.GONE);
-
             showMessageTime(position, ((RightTextViewHolder) holder).message_time);
-
+            SpannableString spannableString = StringUtils.isOurEmoji(mContext, textMessage.getText(), AppDevice.sp2px(mContext,
+                    ((RightTextViewHolder) holder).what_user_send.getTextSize() / 2));
+            ((RightTextViewHolder) holder).what_user_send.setText(spannableString);
+            //复制消息
+            ((RightTextViewHolder) holder).what_user_send.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    textClickAction(textMessage);
+                    return false;
+                }
+            });
         } else if (holder instanceof LeftImageViewHolder) {
             final AVIMImageMessage imageMessage = (AVIMImageMessage) avimMessage;
             ((LeftImageViewHolder) holder).user_name.setText((String) imageMessage.getAttrs().get("username"));
@@ -446,6 +471,17 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         intent.putStringArrayListExtra("image_urls", (ArrayList<String>) urls);
         intent.putExtra("account_Id", "");
         mContext.startActivity(intent);
+    }
+
+    private void textClickAction(final AVIMTextMessage imageMessage) {
+        DialogHelp.getSelectDialog(mContext, "", new String[]{"复制文字"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ClipboardManager cm = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                cm.setText(imageMessage.getText());
+                //cm.setPrimaryClip(ClipData.newPlainText("data", imageMessage.getText()));
+            }
+        }, false).show();
     }
 
     private static class IMCHatViewHolder extends RecyclerView.ViewHolder {

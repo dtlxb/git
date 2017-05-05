@@ -13,6 +13,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -144,6 +145,7 @@ public class SearchTeamFragment extends BaseFragment {
         @Override
         protected void convert(final BaseViewHolder holder, final RecommendBean.DataBean data, final int position) {
             TextView addView = holder.getView(R.id.btn_search_group_add);
+            final ImageView imageView = holder.getView(R.id.item_user_avatar);
 
             final View itemView = holder.itemView;
 
@@ -173,7 +175,7 @@ public class SearchTeamFragment extends BaseFragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            holder.setImageBitmap(R.id.item_user_avatar, mathingBitmap);
+                            imageView.setImageBitmap(mathingBitmap);
                         }
                     });
 

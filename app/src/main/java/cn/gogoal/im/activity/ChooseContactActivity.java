@@ -401,7 +401,7 @@ public class ChooseContactActivity extends BaseActivity {
         private List<ContactBean> datas;
 
         ChooseAdapter(List<ContactBean> datas) {
-            super(R.layout.item_contacts, datas);
+            super(R.layout.item_choose_contact, datas);
             this.datas = datas;
             initMap();
         }
@@ -617,7 +617,7 @@ public class ChooseContactActivity extends BaseActivity {
         private List<ContactBean> datas;
 
         private DeleteAdapter(List<ContactBean> datas) {
-            super(R.layout.item_contacts, datas);
+            super(R.layout.item_choose_contact, datas);
             this.datas = datas;
             initMap();
         }

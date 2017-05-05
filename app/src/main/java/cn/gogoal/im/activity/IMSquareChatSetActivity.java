@@ -253,11 +253,14 @@ public class IMSquareChatSetActivity extends BaseActivity {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {
                 String groupFaceImageName = "_" + conversationId + ".png";
+                KLog.e(groupFaceImageName);
                 ImageUtils.cacheBitmapFile(getActivity(), mathingBitmap, "imagecache", groupFaceImageName);
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("mathing_bitmap", mathingBitmap);
-                BaseMessage baseMessage = new BaseMessage("bitmapMessage", map);
-                AppManager.getInstance().sendMessage("set_square_avatar", baseMessage);
+                if (null != mathingBitmap) {
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("mathing_bitmap", mathingBitmap);
+                    BaseMessage baseMessage = new BaseMessage("bitmapMessage", map);
+                    AppManager.getInstance().sendMessage("set_square_avatar", baseMessage);
+                }
             }
 
             @Override
@@ -295,7 +298,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
         UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, groupMembers, conversationId, new UserUtils.getSquareInfo() {
             @Override
             public void squareGetSuccess(JSONObject object) {
-                getAllContacts(object.getJSONArray("accountList"));
+                if (null != object.get("accountList")) {
+                    getAllContacts(object.getJSONArray("accountList"));
+                }
             }
 
             @Override

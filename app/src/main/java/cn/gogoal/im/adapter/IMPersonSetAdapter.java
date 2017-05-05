@@ -15,6 +15,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
 import cn.gogoal.im.ui.view.RectangleView;
 
 /**
@@ -59,7 +60,7 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean, BaseViewHolde
 
         personName.setText(contactBean.getNickname());
         if (avatar instanceof String) {
-            Glide.with(mContext).load(avatar.toString()).asBitmap().placeholder(R.mipmap.image_placeholder).into(imageIcon);
+            Glide.with(mContext).load(UFileImageHelper.load(avatar.toString()).compress(10).get()).asBitmap().into(imageIcon);
         } else if (avatar instanceof Integer) {
             imageIcon.setImageResource((Integer) avatar);
         }

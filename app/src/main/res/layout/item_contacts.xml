@@ -51,14 +51,4 @@
 
     </RelativeLayout>
 
-    <com.hply.imagepicker.view.SuperCheckBox
-        android:id="@+id/check_user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|center_vertical"
-        android:clickable="false"
-        android:focusable="false"
-        android:padding="10dp"
-        android:visibility="gone" />
-
 </LinearLayout>

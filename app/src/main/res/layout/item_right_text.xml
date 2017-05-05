@@ -3,16 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="15dp"
-    android:paddingRight="10dp"
-    android:paddingLeft="10dp">
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
 
     <TextView
-        android:layout_marginTop="15dp"
         android:id="@+id/message_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/item_chat_time_bg"
         android:gravity="center"
         android:paddingBottom="2dp"
@@ -27,7 +27,8 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/message_time" />
+        android:layout_below="@+id/message_time"
+        android:src="@mipmap/image_placeholder" />
 
 
     <RelativeLayout
@@ -56,10 +57,10 @@
             android:background="@drawable/message_me_said"
             android:gravity="center_vertical"
             android:minHeight="40dp"
-            android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:paddingLeft="9dp"
             android:paddingRight="16dp"
+            android:paddingTop="10dp"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
 
