@@ -222,6 +222,21 @@ public class AppDevice {
         return false;
     }
 
+    /**
+     * 判断当前应用程序是否后台运行
+     */
+    public static boolean isAppOnForeground(Context context) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = activityManager.getRunningTasks(1);
+        if (tasks.size() > 0) {
+            if (context.getPackageName().equals(tasks.get(0).topActivity.getPackageName())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /*通过三原色调配*/
     public static int getColor(@ColorInt int color, int alpha) {
         float a = 1 - alpha / 255f;
