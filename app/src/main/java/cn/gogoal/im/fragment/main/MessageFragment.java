@@ -356,10 +356,12 @@ public class MessageFragment extends BaseFragment {
                     }
                 } else if (chatType == 1004) {
 //                    Glide.with(getActivity()).load(R.mipmap.chat_new_friend).asBitmap().into(avatarIv);
-                    ImageDisplay.loadRoundedRectangleImage(getActivity(), avatarIv, AppDevice.dp2px(getActivity(), 4), R.mipmap.chat_new_friend);
+                    ImageDisplay.loadRoundedRectangleImage(getActivity(), avatarIv,
+                            R.mipmap.chat_new_friend);
                 } else {
 //                    Glide.with(getActivity()).load(messageBean.getAvatar()).asBitmap().into(avatarIv);
-                    ImageDisplay.loadRoundedRectangleImage(getActivity(), avatarIv, AppDevice.dp2px(getActivity(), 4), messageBean.getAvatar());
+                    ImageDisplay.loadRoundedRectangleImage(getActivity(), avatarIv,
+                            messageBean.getAvatar());
                 }
 
                 switch (_lctype) {

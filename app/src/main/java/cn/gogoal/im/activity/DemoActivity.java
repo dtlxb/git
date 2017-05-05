@@ -20,7 +20,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
@@ -58,7 +57,6 @@ public class DemoActivity extends BaseActivity {
         ImageDisplay.loadRoundedRectangleImage(
                 mContext,
                 imageView,
-                AppDevice.dp2px(mContext, 5),//圆角弧度
                 R.mipmap.image_found_top_ad);
 
         UFileImageHelper.load("")

@@ -216,7 +216,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
             ImageDisplay.loadRoundedRectangleImage(
                     IMSquareChatSetActivity.this,
                     iv_square_head,
-                    4,
                     Uri.parse(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")));
         }
         getGroupInfo();

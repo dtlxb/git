@@ -145,7 +145,10 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                     headPicUrl = (String) lcattrsObject.get("avatar");
                 }
             }
-            ImageDisplay.loadRoundedRectangleImage(mContext, ((IMCHatViewHolder) holder).user_head_photo, AppDevice.dp2px(mContext, 4), UFileImageHelper.load(headPicUrl).compress(33).get());
+            ImageDisplay.loadRoundedRectangleImage(
+                    mContext,
+                    ((IMCHatViewHolder) holder).user_head_photo,
+                    UFileImageHelper.load(headPicUrl).compress(33).get());
             //点击头像展开详情
             ((IMCHatViewHolder) holder).user_head_photo.setOnClickListener(new View.OnClickListener() {
                 @Override

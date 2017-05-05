@@ -67,7 +67,6 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean, BaseViewHolde
             ImageDisplay.loadRoundedRectangleImage(
                     mContext,
                     imageIcon,
-                    4,
                     UFileImageHelper.load(avatar.toString()).compress(10).get());
         } else if (avatar instanceof Integer) {
             imageIcon.setImageResource((Integer) avatar);

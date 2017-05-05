@@ -12,6 +12,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.ui.view.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
@@ -118,6 +119,17 @@ public class ImageDisplay {
         Glide.with(context)
                 .load(image)
                 .bitmapTransform(new RoundedCornersTransformation(context, radius, 0))
+                .into(imageView);
+    }
+
+    /**
+     * @param context 上下文对象
+     * @param image   图片资源
+     */
+    public static <T> void loadRoundedRectangleImage(Context context, ImageView imageView, T image) {
+        Glide.with(context)
+                .load(image)
+                .bitmapTransform(new RoundedCornersTransformation(context, AppDevice.dp2px(context,4), 0))
                 .into(imageView);
     }
 
