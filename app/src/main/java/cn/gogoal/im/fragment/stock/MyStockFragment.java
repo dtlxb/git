@@ -3,6 +3,7 @@ package cn.gogoal.im.fragment.stock;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.percent.PercentRelativeLayout;
@@ -13,10 +14,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +32,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.copy.StockDetailMarketIndexActivity;
+import cn.gogoal.im.activity.copy.StockSearchActivity;
 import cn.gogoal.im.activity.stock.EditMyStockActivity;
 import cn.gogoal.im.activity.stock.MyStockNewsActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
@@ -101,6 +105,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout refreshLayout;
 
+    @BindView(R.id.app_bar_layout)
+    AppBarLayout appBarLayout;
+
     //自选股集合
     private ArrayList<MyStockData> myStockDatas = new ArrayList<>();
     private MyStockAdapter myStockAdapter;
@@ -130,6 +137,12 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 refreshLayout.setRefreshing(false);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshMyStock(AppConst.REFRESH_TYPE_FIRST);
     }
 
     public void refreshMyStock(int refreshType) {
@@ -205,11 +218,14 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
+                    noData(false);
                     myStockDatas.clear();
 
-                    TextView editView = editEnable(true);
+                    editEnable(true);
 
                     List<MyStockData> parseData = JSONObject.parseObject(responseInfo, MyStockBean.class).getData();
 
@@ -224,21 +240,10 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                         UIHelper.toast(getActivity(), getString(R.string.str_refresh_ok));
                     }
 
-                    editView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent =new Intent(v.getContext(), EditMyStockActivity.class);
-                            Bundle bundle=new Bundle();
-                            bundle.putSerializable("my_stock_edit_list",myStockDatas);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                        }
-                    });
-
                 } else if (code == 1001) {
-                    //没有数据
-                    editEnable(false);
-
+                    myStockDatas.clear();
+                    myStockAdapter.notifyDataSetChanged();
+                    noData(true);
                 } else {
                     UIHelper.toastResponseError(getActivity(), responseInfo);
                     editEnable(false);
@@ -259,11 +264,21 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     /**
      * 没有正确加载自选股列表的时候(没网络，请求出错，或者没有自选股)时，不允许编辑
      */
-    TextView editEnable(boolean enable) {
+    void editEnable(boolean enable) {
         final TextView tvEditMyStock = ((MainStockFragment) getParentFragment()).getTvMystockEdit();
         tvEditMyStock.setEnabled(enable);
         tvEditMyStock.setClickable(enable);
-        return tvEditMyStock;
+        tvEditMyStock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =new Intent(v.getContext(), EditMyStockActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putParcelableArrayList("my_stock_edit_list",myStockDatas);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+        tvEditMyStock.setTextColor(enable?Color.BLACK:Color.GRAY);
     }
 
     @OnClick({R.id.img_show_tinymarket_dialog, R.id.tv_mystock_news,
@@ -302,6 +317,24 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         startActivity(intent);
     }
 
+    void noData(boolean nadata){
+        editEnable(!nadata);
+        itemMystock.setVisibility(nadata?View.GONE:View.VISIBLE);
+        refreshLayout.setEnabled(!nadata);
+        setAppBarLayout(appBarLayout,!nadata);
+
+        if (nadata){
+            myStockAdapter.setEmptyView(R.layout.layout_no_mystock,
+                    (ViewGroup) rvMyStock.getParent());
+            myStockAdapter.getEmptyView().findViewById(R.id.flag_img).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(v.getContext(), StockSearchActivity.class));
+                }
+            });
+        }
+    }
+
     private void setAppBarLayout(AppBarLayout appBarLayout, boolean scroll) {
         LinearLayout layout = (LinearLayout) appBarLayout.getChildAt(0);
         AppBarLayout.LayoutParams mParams = (AppBarLayout.LayoutParams)
@@ -325,9 +358,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 if (view.getId() == R.id.tv_mystock_price) {
                     tvMystockRate.setViewStateNormal();
                     if (sortType == -1) {
-                        return StringUtils.getStockDouble(o2.getPrice()).compareTo(StringUtils.getStockDouble(o1.getPrice()));
+                        return StringUtils.pareseStringDouble(o2.getPrice()).compareTo(StringUtils.pareseStringDouble(o1.getPrice()));
                     } else if (sortType == 1) {
-                        return StringUtils.getStockDouble(o1.getPrice()).compareTo(StringUtils.getStockDouble(o2.getPrice()));
+                        return StringUtils.pareseStringDouble(o1.getPrice()).compareTo(StringUtils.pareseStringDouble(o2.getPrice()));
                     } else {
                         try {
                             return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()), CalendarUtils.parseString2Long(o1.getInsertdate()));
@@ -339,9 +372,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 } else if (view.getId() == R.id.tv_mystock_rate) {
                     tvMystockPrice.setViewStateNormal();
                     if (sortType == -1) {
-                        return StringUtils.getStockDouble(o2.getChange_rate()).compareTo(StringUtils.getStockDouble(o1.getChange_rate()));
+                        return StringUtils.pareseStringDouble(o2.getChange_rate()).compareTo(StringUtils.pareseStringDouble(o1.getChange_rate()));
                     } else if (sortType == 1) {
-                        return StringUtils.getStockDouble(o1.getChange_rate()).compareTo(StringUtils.getStockDouble(o2.getChange_rate()));
+                        return StringUtils.pareseStringDouble(o1.getChange_rate()).compareTo(StringUtils.pareseStringDouble(o2.getChange_rate()));
                     } else {
                         try {
                             return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()), CalendarUtils.parseString2Long(o1.getInsertdate()));
@@ -439,9 +472,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                             .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    StockUtils.deleteMyStock(getContext(),
-                                            data.getStock_name(),
-                                            data.getSource() + data.getStock_code(),
+                                    StockUtils.deleteMyStock(
+                                            getContext(),
+                                            data.getSource() + data.getStock_code(),//使用股票代码+股票source
                                             new StockUtils.ToggleMyStockCallBack() {
                                                 @Override
                                                 public void success() {
@@ -450,10 +483,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
                                                 @Override
                                                 public void failed(String msg) {
-                                                    //TODO 本来应该成功返回code==0才刷新列表，
-                                                    // TODO 现在TM的返回的是1001 但是删除成功
-                                                    MyStockAdapter.this.removeItem(data);
-//                                                    UIHelper.toast(getActivity(), msg);
+                                                    UIHelper.toast(getActivity(), msg);
                                                 }
                                             });
                                 }

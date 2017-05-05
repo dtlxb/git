@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,11 +20,14 @@ import hply.com.niugu.stock.StockMinuteData;
 import hply.com.niugu.stock.StockUtils;
 import hply.com.niugu.stock.TimesFivesBitmap;
 
+import static hply.com.niugu.ColorUtils.outCircleColor;
+
 
 /**
  * Created by huangxx on 2017/valentine's day.
  */
 public class LandScapeChartView extends View {
+
     private Bitmap bitmap = null;
     private Paint paint;
     private Paint circlepaint;
@@ -93,7 +95,7 @@ public class LandScapeChartView extends View {
     }
 
     private void drawNow(Canvas canvas) {
-        circlepaint.setColor(ContextCompat.getColor(getContext(),R.color.decision_tab));
+        circlepaint.setColor(ColorUtils.decisionTabColor);
         circlepaint.setStrokeWidth(3);
         circlepaint.setAntiAlias(true);
         fenshiData = timesList.get(timesList.size() - 1);
@@ -106,7 +108,7 @@ public class LandScapeChartView extends View {
             priceX=dataSpacing*(timesList.size() - 1);
         }
         canvas.drawCircle(priceX + margin, priceY, in_r, circlepaint);
-        circlepaint.setColor(ContextCompat.getColor(getContext(),R.color.out_circle));
+        circlepaint.setColor(outCircleColor);
         if (out_r < 2.5 * in_r) {
             out_r += in_r * 0.01;
             alph -= alph * 0.01;

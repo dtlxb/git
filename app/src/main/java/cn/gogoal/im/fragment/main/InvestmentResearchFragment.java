@@ -246,6 +246,7 @@ public class InvestmentResearchFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     UIHelper.toast(v.getContext(), "banner::" + position);
+                    NormalIntentUtils.go2WebActivity(v.getContext(),AppConst.WEB_URL_LLJ,"this is title");
                 }
             });
             return view;

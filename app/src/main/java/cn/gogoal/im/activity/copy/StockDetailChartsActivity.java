@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import org.simple.eventbus.EventBus;
 
@@ -33,6 +34,7 @@ import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.fragment.copy.FiveDayFragment;
 import cn.gogoal.im.fragment.copy.KChartsFragment;
@@ -51,8 +53,6 @@ import hply.com.niugu.view.KChartsView;
  * Created by Lizn on 2015/9/24.
  */
 public class StockDetailChartsActivity extends FragmentActivity implements View.OnClickListener {
-
-    private static final String TAG = "StockDetailChartsActivity";
 
     public static final int STOCK_MARKE_INDEX = 0;
     public static final int STOCK_COMMON = 1;
@@ -138,7 +138,7 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
     private String stockName;
     private String stockCode;
     private int stockType;
-    private double price;
+    private String price;
     private String volume;
     private int width;
     private int height;
@@ -159,6 +159,7 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
     //加载中
     private boolean isLoading = true;
     private int stock_charge_type;
+    private int INTERVAL_TIME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,7 +243,7 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
     private void initGetData() {
         stockName = getIntent().getStringExtra("stockName");
         stockCode = getIntent().getStringExtra("stockCode");
-        price = getIntent().getDoubleExtra("price", 0);
+        price = getIntent().getStringExtra("price");
         volume = getIntent().getStringExtra("volume");
         tv_time.setText(getIntent().getStringExtra("time").substring(10, getIntent().getStringExtra("time").lastIndexOf(":")));
         showItem = SPTools.getInt("showItem", 0);
@@ -252,6 +253,8 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
 
         stockType = getIntent().getIntExtra("stockType", 0);
         stock_charge_type = getIntent().getIntExtra("stock_charge_type", 1);
+
+        KLog.e(price);
     }
 
     private void addFragments() {
@@ -277,7 +280,7 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
             weekKBundle.putInt("stockType", STOCK_MARKE_INDEX);
             monthKBundle.putInt("stockType", STOCK_MARKE_INDEX);
         } else if (stockType == STOCK_COMMON) {
-            ArrayList arrayList = getIntent().getParcelableArrayListExtra("priceVolumDatas");
+            ArrayList<String> arrayList = getIntent().getStringArrayListExtra("priceVolumDatas");
             timesBundle.putInt("type", STOCK_COMMON);
             timesBundle.putStringArrayList("priceVolumDatas", arrayList);
 
@@ -326,8 +329,8 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
 
     @Override
     protected void onStop() {
-        myHandler = null;
         super.onStop();
+        handler.removeCallbacks(runnable);
     }
 
     @Override
@@ -414,7 +417,7 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
         }
         tv_stock_price.setText(StringUtils.save2Significand(this.price));
         tv_stock_price.setTextColor(Color.GRAY);
-        if (closePrice < price) {
+        if (closePrice < StringUtils.pareseStringDouble(price)) {
             tv_stock_price.setTextColor(Color.RED);
         } else {
             tv_stock_price.setTextColor(Color.GREEN);
@@ -522,8 +525,8 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
                     String mData = stockMinuteData.getDate();
                     tv_times_date.setText(mData.substring(10, mData.lastIndexOf(":")));
 
-                    double price = StringUtils.getStockDouble(stockMinuteData.getPrice());
-                    double tRate = StringUtils.getStockDouble(stockMinuteData.getPrice_change_rate());
+                    double price = StringUtils.pareseStringDouble(stockMinuteData.getPrice());
+                    double tRate = StringUtils.pareseStringDouble(stockMinuteData.getPrice_change_rate());
                     tv_times_price.setText(StringUtils.save2Significand(price));
                     tv_times_price_rate.setText(StringUtils.save2Significand(tRate) + "%");
                     tv_times_price.setTextColor(gray);
@@ -550,7 +553,7 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
                         tv_times_volume.setText(s + "手");
                     }
 
-                    double avg_price = StringUtils.getStockDouble(stockMinuteData.getAvg_price());
+                    double avg_price = StringUtils.pareseStringDouble(stockMinuteData.getAvg_price());
                     tv_times_avg_price.setText(StringUtils.save2Significand(avg_price));
                     tv_times_avg_price.setTextColor(gray);
                     if (closePrice < price) {
@@ -665,39 +668,38 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
         }
     }
 
-    private Handler handler = new Handler();
-    private Runnable runnable = new Runnable() {
-        public void run() {
-            update();
-            handler.postDelayed(this, 5000);
-        }
-    };
-
-    //定时任务
-    private void update() {
-//        Log.e("TAG","===定时任务开始===StockDetailChartActivity===");
-//        initGetData();
-//        initFragment();
-        initData();
-        getStockTimeDetial(stockCode);
-        AppManager.getInstance().sendMessage("stockinfo_updata");
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
-//        开始计时
-        handler.removeCallbacks(runnable);
-        handler.postDelayed(runnable, 5000);
+        INTERVAL_TIME=SPTools.getInt("interval_time",15000);
+        if (StockUtils.isTradeTime()) {//交易时间段
+            handler.postDelayed(runnable, INTERVAL_TIME);//启动定时刷新
+        }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-//        停止计时
-        handler.removeCallbacks(runnable);
-//        Log.e("TAG","===定时任务结束===StockDetailChartActivity===");
+    //定时任务
+    private void update() {
+        initData();
+        getStockTimeDetial(stockCode);
+        AppManager.getInstance().sendMessage("updata_treat_data");
     }
+
+    //定时刷新
+    Handler handler = new Handler();
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                handler.postDelayed(this, INTERVAL_TIME);
+
+                update();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
 
     @Override

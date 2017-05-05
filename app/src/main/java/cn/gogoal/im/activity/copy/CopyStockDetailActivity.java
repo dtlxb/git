@@ -33,6 +33,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hply.imagepicker.view.StatusBarUtil;
+import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -219,7 +220,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     private int pixels = -85;
     private String stockName;
     private String stockCode;
-    private List<String> priceVolumDatas = new ArrayList<>();
+    private ArrayList<String> priceVolumDatas = new ArrayList<>();
     //定时刷新
     private Timer timer;
     //数据集合
@@ -539,12 +540,14 @@ public class CopyStockDetailActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if (stockCode != null && stockName != null && info != null) {
+                    KLog.e(JSONObject.toJSONString(info));
+
                     Intent intent = new Intent(CopyStockDetailActivity.this, StockDetailChartsActivity.class);
                     Bundle bundle = new Bundle();
                     intent.putExtras(bundle);
                     intent.putExtra("position", showItem);
                     intent.putExtra("closePrice", closePrice);
-                    intent.putStringArrayListExtra("priceVolumDatas", (ArrayList<String>) priceVolumDatas);
+                    intent.putStringArrayListExtra("priceVolumDatas",priceVolumDatas);
                     intent.putExtra("stockCode", stockCode);
                     intent.putExtra("stockName", stockName);
                     intent.putExtra("price", info.getPrice());
@@ -642,7 +645,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         startAnimation();
         initList(stockCode);
         refreshChart(showItem);
-        setNewsTab();
+//        setNewsTab();
         AppManager.getInstance().sendMessage("updata_treat_data");
 //        "updata_treat_data"
     }
@@ -993,7 +996,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         long refreshtime = SPTools.getLong("interval_time", 15000);
-
+        KLog.e("自动刷新时间间隔==="+refreshtime);
         width = AppDevice.getWidth(CopyStockDetailActivity.this) - AppDevice.dp2px(CopyStockDetailActivity.this, 22);
         height = AppDevice.dp2px(CopyStockDetailActivity.this, 190);
         timer = new Timer();
@@ -1060,14 +1063,14 @@ public class CopyStockDetailActivity extends BaseActivity {
                     stock_start.setText(StringUtils.getStockDouble(info.getOpen_price(), 2));//开盘价
 
                     //涨跌
-                    if (StringUtils.getStockDouble(info.getChange_value()) > 0) {
+                    if (StringUtils.pareseStringDouble(info.getChange_value()) > 0) {
                         setStatusColor(R.color.header_red);
                         relative_header.setBackgroundColor(getResColor(R.color.header_red));
                         linear_header.setBackgroundColor(getResColor(R.color.header_red));
                         initRefreshStyle(R.color.header_red);
                         stock_detail_tv1.setText("+" + StringUtils.getStockDouble(info.getChange_value(), 2));
                         stock_detail_tv2.setText("+" + StringUtils.getStockDouble(info.getChange_rate(), 2) + "%");
-                    } else if (StringUtils.getStockDouble(info.getChange_value()) < 0) {
+                    } else if (StringUtils.pareseStringDouble(info.getChange_value()) < 0) {
                         setStatusColor(R.color.header_green);
                         relative_header.setBackgroundColor(getResColor(R.color.header_green));
                         linear_header.setBackgroundColor(getResColor(R.color.header_green));
@@ -1088,14 +1091,14 @@ public class CopyStockDetailActivity extends BaseActivity {
                     } else {
                         if (info.getVolume().length() > 6) {
 
-                            stock_volume.setText(StringUtils.save2Significand(StringUtils.getStockDouble(info.getVolume()) / 1000000) + "万手");//成交量
+                            stock_volume.setText(StringUtils.save2Significand(StringUtils.pareseStringDouble(info.getVolume()) / 1000000) + "万手");//成交量
                         } else {
                             String volume = String.valueOf((Double.parseDouble(info.getVolume()) / 100));
                             stock_volume.setText(StringUtils.getIntegerData(volume) + "手");
                         }
                     }
                     stock_turnover_rate.setText(StringUtils.save2Significand(
-                            StringUtils.getStockDouble(info.getTurnover_rate()) * 100) + "%");//换手率
+                            StringUtils.pareseStringDouble(info.getTurnover_rate()) * 100) + "%");//换手率
                     if (info.getHigh_price() == null) {
                         stock_detail_tv3.setText("0.00");//最高
                     } else {
@@ -1164,21 +1167,21 @@ public class CopyStockDetailActivity extends BaseActivity {
                     }
                     DecimalFormat df = new DecimalFormat("0.0");
                     if (StringUtils.save2Significand(info.getTcap()).length() > 10) {
-                        stock_detail_tv10.setText(df.format(StringUtils.getStockDouble(info.getTcap()) / 100000000) + "万亿");//市值
+                        stock_detail_tv10.setText(df.format(StringUtils.pareseStringDouble(info.getTcap()) / 100000000) + "万亿");//市值
                     } else {
                         try {
-                            stock_detail_tv10.setText(df.format(StringUtils.getStockDouble(info.getTcap()) / 10000) + "亿");//市值
+                            stock_detail_tv10.setText(df.format(StringUtils.pareseStringDouble(info.getTcap()) / 10000) + "亿");//市值
                         } catch (Exception e) {
                         }
                     }
                     if (StringUtils.save2Significand(info.getMcap()).length() > 10) {
                         try {
-                            stock_detail_tv11.setText(df.format(StringUtils.getStockDouble(info.getMcap()) / 100000000) + "万亿");//流通市值
+                            stock_detail_tv11.setText(df.format(StringUtils.pareseStringDouble(info.getMcap()) / 100000000) + "万亿");//流通市值
                         } catch (Exception e) {
                         }
                     } else {
                         try {
-                            stock_detail_tv11.setText(df.format(StringUtils.getStockDouble(info.getMcap()) / 10000) + "亿");//流通市值
+                            stock_detail_tv11.setText(df.format(StringUtils.pareseStringDouble(info.getMcap()) / 10000) + "亿");//流通市值
                         } catch (Exception e) {
                         }
                     }
@@ -1255,7 +1258,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     }
 
     private double $(String volume_outer) {
-        return StringUtils.getStockDouble(volume_outer);
+        return StringUtils.pareseStringDouble(volume_outer);
     }
 
     private void setStatusColor(int color) {

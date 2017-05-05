@@ -10,24 +10,14 @@ import android.os.Parcelable;
  * Description :== 个股中新闻、公告、研报类型实体 ==
  */
 public class StockNewsType implements Parcelable {
-    private int index;
     private int newsType;       /*7(新闻)、3(公告)、9(看点，去掉)*/
     private String title;        /*标题*/
     private int newsSource;     /*个股研报(102)、个股新闻(100)、个股公告(105)*/
 
-    public StockNewsType(int index, int newsType, String title, int newsSource) {
-        this.index = index;
+    public StockNewsType(int newsType, String title, int newsSource) {
         this.newsType = newsType;
         this.title = title;
         this.newsSource = newsSource;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
     }
 
     public int getNewsType() {
@@ -61,7 +51,6 @@ public class StockNewsType implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.index);
         dest.writeInt(this.newsType);
         dest.writeString(this.title);
         dest.writeInt(this.newsSource);
@@ -71,7 +60,6 @@ public class StockNewsType implements Parcelable {
     }
 
     protected StockNewsType(Parcel in) {
-        this.index = in.readInt();
         this.newsType = in.readInt();
         this.title = in.readString();
         this.newsSource = in.readInt();

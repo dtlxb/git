@@ -4,14 +4,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import hply.com.niugu.R;
 import hply.com.niugu.StringUtils;
 
 /**
@@ -67,7 +65,7 @@ public class BitmapChartView extends View {
     }
 
     private void drawNow(Canvas canvas) {
-        circlepaint.setColor(ContextCompat.getColor(getContext(),R.color.decision_tab));
+        circlepaint.setColor(0x1a79ff);
         circlepaint.setStrokeWidth(3);
         circlepaint.setAntiAlias(true);
         fenshiData = timesList.get(timesList.size() - 1);
@@ -80,7 +78,7 @@ public class BitmapChartView extends View {
             priceX = dataSpacing * (timesList.size() - 1);
         }
         canvas.drawCircle(priceX + margin, priceY, (float) (0.9 * in_r), circlepaint);
-        circlepaint.setColor(ContextCompat.getColor(getContext(),R.color.out_circle));
+        circlepaint.setColor(0xff4b94fa);
         if (out_r < 2 * in_r) {
             out_r += in_r * 0.008;
             alph -= alph * 0.008;

@@ -223,6 +223,9 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     private int height;
     private boolean canRefreshLine = true;
 
+    @BindView(R.id.flag_layout_treat)
+    LinearLayout layoutTreat;
+
     //k线数据设置
     private int dayk1;
     private int dayk2;
@@ -241,6 +244,8 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         barUtil = StatusBarUtil.with(this);
+        layoutTreat.setVisibility(View.GONE);
+
         rotateAnimation = AnimationUtils.getInstance().setLoadingAnime(btnRefresh, R.mipmap.loading_white);
         //获取股票数据
         stockName = getIntent().getStringExtra("stockName");

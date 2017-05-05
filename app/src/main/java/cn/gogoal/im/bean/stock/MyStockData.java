@@ -1,6 +1,7 @@
 package cn.gogoal.im.bean.stock;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * author wangjd on 2017/4/10 0010.
@@ -8,7 +9,7 @@ import java.io.Serializable;
  * phone 18930640263
  * description :${annotated}.
  */
-public class MyStockData implements Serializable {
+public class MyStockData implements Parcelable {
     /**
      * group_id : 137269
      * date : 2016-10-13 17:50:46
@@ -47,7 +48,9 @@ public class MyStockData implements Serializable {
     private String full_code;
 //    private Tag tag; 好公司 标志
 
-    private boolean check;
+    //添加选择的字段
+    private boolean check=false;
+
     private int group_id;
     private String date;
     private int remind_headlines;
@@ -345,4 +348,102 @@ public class MyStockData implements Serializable {
     public boolean equals(Object obj) {
         return (obj instanceof MyStockData) && ((MyStockData) obj).getStock_code().equalsIgnoreCase(this.getStock_code());
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.eps_y2);
+        dest.writeInt(this.symbol_type);
+        dest.writeString(this.open_price);
+        dest.writeInt(this.id);
+        dest.writeString(this.pe_y2);
+        dest.writeString(this.pe_y1);
+        dest.writeInt(this.turnover);
+        dest.writeString(this.pe_y0);
+        dest.writeInt(this.is_keypoint);
+        dest.writeDouble(this.close_price);
+        dest.writeString(this.eps_y0);
+        dest.writeString(this.industry_name);
+        dest.writeString(this.mcap);
+        dest.writeString(this.eps_y1);
+        dest.writeString(this.capitalization);
+        dest.writeString(this.high_price);
+        dest.writeString(this.insertdate);
+        dest.writeString(this.source);
+        dest.writeInt(this.low_price);
+        dest.writeString(this.turnover_rate);
+        dest.writeLong(this.volume);
+        dest.writeString(this.full_code);
+        dest.writeByte(this.check ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.group_id);
+        dest.writeString(this.date);
+        dest.writeInt(this.remind_headlines);
+        dest.writeInt(this.remind_notice);
+        dest.writeInt(this.stock_class);
+        dest.writeString(this.stock_code);
+        dest.writeInt(this.stock_sort);
+        dest.writeString(this.stock_name);
+        dest.writeString(this.change_value);
+        dest.writeString(this.price);
+        dest.writeString(this.change_rate);
+        dest.writeInt(this.stock_type);
+    }
+
+    public MyStockData() {
+    }
+
+    protected MyStockData(Parcel in) {
+        this.eps_y2 = in.readString();
+        this.symbol_type = in.readInt();
+        this.open_price = in.readString();
+        this.id = in.readInt();
+        this.pe_y2 = in.readString();
+        this.pe_y1 = in.readString();
+        this.turnover = in.readInt();
+        this.pe_y0 = in.readString();
+        this.is_keypoint = in.readInt();
+        this.close_price = in.readDouble();
+        this.eps_y0 = in.readString();
+        this.industry_name = in.readString();
+        this.mcap = in.readString();
+        this.eps_y1 = in.readString();
+        this.capitalization = in.readString();
+        this.high_price = in.readString();
+        this.insertdate = in.readString();
+        this.source = in.readString();
+        this.low_price = in.readInt();
+        this.turnover_rate = in.readString();
+        this.volume = in.readLong();
+        this.full_code = in.readString();
+        this.check = in.readByte() != 0;
+        this.group_id = in.readInt();
+        this.date = in.readString();
+        this.remind_headlines = in.readInt();
+        this.remind_notice = in.readInt();
+        this.stock_class = in.readInt();
+        this.stock_code = in.readString();
+        this.stock_sort = in.readInt();
+        this.stock_name = in.readString();
+        this.change_value = in.readString();
+        this.price = in.readString();
+        this.change_rate = in.readString();
+        this.stock_type = in.readInt();
+    }
+
+    public static final Creator<MyStockData> CREATOR = new Creator<MyStockData>() {
+        @Override
+        public MyStockData createFromParcel(Parcel source) {
+            return new MyStockData(source);
+        }
+
+        @Override
+        public MyStockData[] newArray(int size) {
+            return new MyStockData[size];
+        }
+    };
 }

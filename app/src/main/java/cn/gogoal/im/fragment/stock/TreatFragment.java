@@ -100,7 +100,7 @@ public class TreatFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-
+        recyclerView.setVerticalScrollBarEnabled(false);
         stockCode = getArguments().getString("stock_code");
         type = getArguments().getInt("type");
         fromStockDetail = getArguments().getBoolean("from_stock_detail");
@@ -172,7 +172,7 @@ public class TreatFragment extends BaseFragment {
 
                     wudangAdapter.notifyDataSetChanged();
 
-                    closePrice = StringUtils.getStockDouble(treatData.getClose_price());
+                    closePrice = StringUtils.pareseStringDouble(treatData.getClose_price());
                 }
             }
 

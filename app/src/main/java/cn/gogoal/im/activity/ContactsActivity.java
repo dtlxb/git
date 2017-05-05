@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -180,7 +181,7 @@ public class ContactsActivity extends BaseActivity {
     private void getData() {
         //缓存的联系人请求数据
         String friendResponseInfo = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", "");
-        if (friendResponseInfo.equals("")) {
+        if (TextUtils.isEmpty(friendResponseInfo)) {
             getFriendList(contactBeanList);
         } else {
             if (!JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()) {
@@ -233,7 +234,7 @@ public class ContactsActivity extends BaseActivity {
     /**更新底部好友人数统计*/
     public void upDataFootCount(List<ContactBean> list) {
         if (list.size()>0) {
-            textViewFooter.setText(list.size() + "位联系人");
+            textViewFooter.setText(String.format(getString(R.string.str_friends_count),list.size()));
         }else {
             textViewFooter.setText("你还没有好友，赶快去添加一些吧");
         }

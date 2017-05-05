@@ -6,16 +6,20 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.stock.MyStockData;
+import cn.gogoal.im.common.ArrayUtils;
+import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.drag.DefaultItemTouchHelpCallback;
 import cn.gogoal.im.common.drag.DefaultItemTouchHelper;
 import cn.gogoal.im.common.drag.DragAdapter;
@@ -38,16 +42,23 @@ public class EditMyStockActivity extends BaseActivity {
     @BindView(R.id.tv_drag_delete)
     TextView tvDragDelete;
 
+    private SelectedListener listener;
+
+    public void setOnSelectedListener(SelectedListener listener) {
+        this.listener = listener;
+    }
+
     /**
      * 数据源
      */
-    private List<MyStockData> myStockList = new ArrayList<>();
+    private List<MyStockData> myStockList = null;
 
     /*
-     * 结果
+     * 选中结果
      */
-    private List<MyStockData> result = new ArrayList<>();
+//    private List<MyStockData> result = new ArrayList<>();
 
+//    private List<String> resultFullCode = new ArrayList<>();
     /**
      * 数据适配器
      */
@@ -63,27 +74,21 @@ public class EditMyStockActivity extends BaseActivity {
         setMyTitle("自选股", true).addAction(new XTitle.TextAction(getString(R.string.complete)) {
             @Override
             public void actionClick(View view) {
-                List<String> code = new ArrayList<>();
-                List<MyStockData> resultDatas = dragAdapter.getData();
-                for (MyStockData data : resultDatas) {
-                    code.add(data.getStock_code());
-                }
-                KLog.e("剩下："+code.toString());
+                finish();
             }
         });
 
-        BaseActivity.initRecycleView(rvEditDrag,0);
+        BaseActivity.initRecycleView(rvEditDrag, 0);
 
-        myStockList.addAll((ArrayList<MyStockData>) getIntent().getSerializableExtra("my_stock_edit_list"));
+        myStockList = getIntent().getParcelableArrayListExtra("my_stock_edit_list");
+
+        KLog.e(JSONObject.toJSONString(myStockList));
+
 
         dragAdapter = new DragAdapter(mContext, myStockList);
-        dragAdapter.setOnCheckedChangeListener(onCheckedChangeListener);
+        dragAdapter.setOnItemCheckedChangeListener(onCheckedChangeListener);
         rvEditDrag.setAdapter(dragAdapter);
 
-        // 把ItemTouchHelper和itemTouchHelper绑定
-        /*
-      滑动拖拽的帮助类
-     */
         DefaultItemTouchHelper itemTouchHelper = DefaultItemTouchHelper.init(onItemTouchCallbackListener);
         itemTouchHelper.attachToRecyclerView(rvEditDrag);
 
@@ -91,35 +96,74 @@ public class EditMyStockActivity extends BaseActivity {
 
         itemTouchHelper.setDragEnable(true);
 
+        //选中数据集
+        final LinkedHashSet<MyStockData> result = new LinkedHashSet<>();
+        //选中数据集FullCode
+        final List<String> fullCodeDatas = new ArrayList<>();
+
+        this.setOnSelectedListener(new SelectedListener() {
+            @Override
+            public void add(MyStockData data) {
+                result.add(data);
+                notifCountText(result.size());
+            }
+
+            @Override
+            public void remove(MyStockData data) {
+                result.remove(data);
+                notifCountText(result.size());
+            }
+        });
+
         tvDragSelectorAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int i = 0; i < myStockList.size(); i++) {
-                    if (myStockList.get(i).isCheck()) {
-                        myStockList.get(i).setCheck(false);
-                        result.remove(dragAdapter.getStockData(i));
-
-                    } else {
-                        myStockList.get(i).setCheck(true);
-                        result.add(dragAdapter.getData(i));
+                if (isSelectedAll(myStockList)) {
+                    for (MyStockData da : myStockList) {
+                        da.setCheck(false);
+                        if (listener != null) {
+                            listener.remove(da);
+                        }
                     }
-                    dragAdapter.notifyItemChanged(i);
-                    notifCountText(result.size());
+                } else {
+                    for (MyStockData da : myStockList) {
+                        da.setCheck(true);
+                        if (listener != null) {
+                            listener.add(da);
+                        }
+                    }
                 }
+                dragAdapter.notifyDataSetChanged();
             }
+
         });
 
         tvDragDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 for (MyStockData data : result) {
+                    fullCodeDatas.add(data.getSource() + data.getStock_code());
                     dragAdapter.removeItem(data);
                 }
                 result.clear();
                 notifCountText(0);
+                StockUtils.deleteMyStock(getActivity(),
+                        ArrayUtils.mosaicListElement(fullCodeDatas), null);
             }
         });
 
+    }
+
+    /**
+     * 是否全选
+     */
+    private boolean isSelectedAll(List<MyStockData> myStockList) {
+        for (MyStockData da : myStockList) {
+            if (!da.isCheck()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void notifCountText(int selectedCount) {
@@ -165,14 +209,21 @@ public class EditMyStockActivity extends BaseActivity {
     private DragAdapter.OnCheckedChangeListener onCheckedChangeListener = new DragAdapter.OnCheckedChangeListener() {
         @Override
         public void onItemCheckedChange(CompoundButton view, int position, boolean checked) {
-//            UIHelper.toast(getActivity(), dragAdapter.getName(position) + (checked ? "选中" : "被反选"));
             if (checked) {
-                result.add(dragAdapter.getStockData(position));
+                if (listener != null) {
+                    listener.add(dragAdapter.getStockData(position));
+                }
             } else {
-                result.remove(dragAdapter.getStockData(position));
+                if (listener != null) {
+                    listener.remove(dragAdapter.getStockData(position));
+                }
             }
-            notifCountText(result.size());
         }
     };
 
+    private interface SelectedListener {
+        void add(MyStockData data);
+
+        void remove(MyStockData data);
+    }
 }

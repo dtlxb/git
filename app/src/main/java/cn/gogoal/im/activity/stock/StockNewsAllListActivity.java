@@ -1,4 +1,4 @@
-package cn.gogoal.im.activity;
+package cn.gogoal.im.activity.stock;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -157,7 +157,7 @@ public class StockNewsAllListActivity extends BaseActivity {
     }
 
     /*请求研报数据*/
-    private void getYanBao(boolean loadMore) {
+    private void getYanBao(final boolean loadMore) {
         if (!loadMore) {
             xLayout.setStatus(XLayout.Loading);
         }
@@ -174,6 +174,9 @@ public class StockNewsAllListActivity extends BaseActivity {
             @Override
             public void onSuccess(String responseInfo) {
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                    if (!loadMore) {
+                        dataListsResearch.clear();
+                    }
                     dataListsResearch.addAll(
                             JSONObject.parseObject(
                                     responseInfo, StockDetailResearchBean.class).getData());

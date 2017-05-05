@@ -27,10 +27,8 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
-import hply.com.niugu.ConstantUtils;
 import hply.com.niugu.DeviceUtil;
 import hply.com.niugu.LandScapeChartView;
-import hply.com.niugu.MessageHandlerList;
 import hply.com.niugu.stock.StockMinuteBean;
 import hply.com.niugu.stock.StockMinuteData;
 import hply.com.niugu.stock.TimesFivesBitmap;
@@ -146,7 +144,6 @@ public class TimesFragment extends BaseFragment {
                         mTimesView.setBitmap(bitmap);
                         mTimesView.setData(timesBitmap, stock_charge_type);
                     }
-                    MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISS_PROGRESSBAR, 0);
                     ((StockDetailChartsActivity) getActivity()).setLoading(false);
                 } else {
 

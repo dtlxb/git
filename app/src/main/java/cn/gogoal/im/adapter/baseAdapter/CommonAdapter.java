@@ -1175,7 +1175,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
         setEmptyView(layoutResId, getRecyclerView());
     }
 
-    public void setEmptyView(View emptyView) {
+    private void setEmptyView(View emptyView) {
         boolean insert = false;
         if (mEmptyLayout == null) {
             mEmptyLayout = new FrameLayout(emptyView.getContext());

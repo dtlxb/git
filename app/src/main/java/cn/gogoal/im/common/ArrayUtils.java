@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import cn.gogoal.im.bean.ContactBean;
 
@@ -69,9 +70,27 @@ public class ArrayUtils {
         KLog.e(SPTools.getJsonArray("search_history",null).toString());
     }
 
-    /**清空搜索记录*/
-    public static void clearHistory(){
-        SPTools.clearItem("search_history");
+    /**
+     * 集合拼Srtring
+     */
+    public static String mosaicListElement(Set<String> myStockArr) {
+        StringBuilder builder = new StringBuilder();
+        for (String stockCode : myStockArr) {
+            builder.append(stockCode);
+            builder.append(";");
+        }
+        return builder.toString().substring(0, builder.length() - 1);
+    }
+    /**
+     * 集合拼Srtring
+     */
+    public static String mosaicListElement(List<String> myStockArr) {
+        StringBuilder builder = new StringBuilder();
+        for (String stockCode : myStockArr) {
+            builder.append(stockCode);
+            builder.append(";");
+        }
+        return builder.toString().substring(0, builder.length() - 1);
     }
 
     public static boolean isEmpty(Collection c){

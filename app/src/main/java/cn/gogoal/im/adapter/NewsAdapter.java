@@ -38,7 +38,7 @@ public class NewsAdapter extends CommonAdapter<StockDetailNewsData, BaseViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (stockNewsType.getIndex()==0) {
+                if (stockNewsType.getNewsSource()==AppConst.SOURCE_TYPE_NEWS) {
                     NormalIntentUtils.go2WebActivity(v.getContext(),
                             AppConst.WEB_NEWS + data.getOrigin_id() + "?source=" + stockNewsType.getNewsSource(),
                             null, true);

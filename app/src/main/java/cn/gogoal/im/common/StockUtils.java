@@ -46,19 +46,7 @@ public class StockUtils {
      * 获取本地自选股缓存
      */
     public static String getMyStockString() {
-        return cacheMyStock(getMyStockSet());
-    }
-
-    /**
-     * 集合拼Srtring
-     */
-    private static String cacheMyStock(Set<String> myStockArr) {
-        StringBuilder builder = new StringBuilder();
-        for (String stockCode : myStockArr) {
-            builder.append(stockCode);
-            builder.append(";");
-        }
-        return builder.toString().substring(0, builder.length() - 1);
+        return ArrayUtils.mosaicListElement(getMyStockSet());
     }
 
     /**
@@ -342,7 +330,7 @@ public class StockUtils {
     /**
      * 删除自选股
      */
-    public static void deleteMyStock(final Context context, final String stock_name, final String stock_code, final ToggleMyStockCallBack callBack) {
+    public static void deleteMyStock(final Context context, final String stock_code, final ToggleMyStockCallBack callBack) {
         final Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
         param.put("group_id", "0");
@@ -357,11 +345,15 @@ public class StockUtils {
 
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 int code = (int) result.get("code");
-                if (code == 0) {
+                if (code == 0 || code == 1001) {
                     UIHelper.toast(context, "删除自选成功");
-                    callBack.success();
+                    if (callBack!=null) {
+                        callBack.success();
+                    }
                 } else {
-                    callBack.failed(JSONObject.parseObject(responseInfo).getString("message"));
+                    if (callBack!=null) {
+                        callBack.failed(JSONObject.parseObject(responseInfo).getString("message"));
+                    }
                 }
             }
 

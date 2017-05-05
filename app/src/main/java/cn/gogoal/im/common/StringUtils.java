@@ -250,7 +250,7 @@ public class StringUtils {
         return Character.toUpperCase(lastCode) == checkCodeList[idSum % 11];
     }
 
-    public static Double getStockDouble(String value) {
+    public static Double pareseStringDouble(String value) {
         if (StringUtils.isActuallyEmpty(value)) {
             return 0.0d;
         }
@@ -258,7 +258,7 @@ public class StringUtils {
     }
 
     public static String getStockDouble(String value, int unit) {
-        return saveSignificand(getStockDouble(value), unit);
+        return saveSignificand(pareseStringDouble(value), unit);
     }
 
     /**

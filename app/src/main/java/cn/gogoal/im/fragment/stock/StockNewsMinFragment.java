@@ -18,7 +18,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.StockNewsAllListActivity;
+import cn.gogoal.im.activity.stock.StockNewsAllListActivity;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.adapter.NewsAdapter;
 import cn.gogoal.im.adapter.ResearchAdapter;
@@ -82,13 +82,13 @@ public class StockNewsMinFragment extends BaseFragment {
         StockNewsType stockNewsType =null;
         switch (position) {
             case 0:
-                stockNewsType = new StockNewsType(0,7, "新闻", AppConst.SOURCE_TYPE_NEWS);
+                stockNewsType = new StockNewsType(7, "新闻", AppConst.SOURCE_TYPE_NEWS);
                 break;
             case 1:
-                stockNewsType =new StockNewsType(1,3,"公告",AppConst.SOURCE_TYPE_GONGGAO);
+                stockNewsType =new StockNewsType(3,"公告",AppConst.SOURCE_TYPE_GONGGAO);
                 break;
             case 2:
-                stockNewsType =new StockNewsType(2,9,"研报",AppConst.SOURCE_TYPE_YANBAO);
+                stockNewsType =new StockNewsType(9,"研报",AppConst.SOURCE_TYPE_YANBAO);
                 break;
         }
         b.putParcelable("stock_news_type", stockNewsType);
@@ -156,8 +156,10 @@ public class StockNewsMinFragment extends BaseFragment {
 
     void showFootView() {
         if (parentPosition != 2) {
+            newsAdapter.removeAllFooterView();
             newsAdapter.addFooterView(footView);
         } else {
+            researchadapter.removeAllFooterView();
             researchadapter.addFooterView(footView);
         }
         footView.setVisibility(View.VISIBLE);

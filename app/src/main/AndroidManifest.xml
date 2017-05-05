@@ -186,8 +186,10 @@
         <activity android:name=".activity.SingleEditActivity" />
         <activity android:name=".activity.RedGreenSettingActivity" />
         <activity android:name=".activity.ChangePhoneNumber" />
-        <activity android:name=".activity.copy.StockDetailNewsListDataActivity" />
-        <activity android:name=".activity.StockNewsAllListActivity" />
+        <activity android:name=".activity.stock.StockNewsAllListActivity" />
+
+        <activity android:name=".activity.ShareMessageActivity"/>
+        
     </application>
 
 </manifest>
