@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.PushService;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
@@ -166,7 +167,7 @@ public class TypeLoginActivity extends BaseActivity {
     }
 
     private void Login() {
-        final WaitDialog loginDialog=WaitDialog.getInstance("登录中",R.mipmap.login_loading,true);
+        final WaitDialog loginDialog = WaitDialog.getInstance("登录中", R.mipmap.login_loading, true);
         loginDialog.show(getSupportFragmentManager());
         loginDialog.setCancelable(false);
 
@@ -217,19 +218,22 @@ public class TypeLoginActivity extends BaseActivity {
                                     loginDialog.dismiss(true);
                                 }
                             });
+
+                            PushService.subscribe(TypeLoginActivity.this, data.getString("account_id"), MainActivity.class);
+
                         } catch (Exception ignored) {
                             loginButton.setClickable(true);
                             loginDialog.dismiss(true);
-                            WaitDialog errorDialog=WaitDialog.getInstance(getString(R.string.str_login_code_error),
-                                    R.mipmap.login_error,false);
+                            WaitDialog errorDialog = WaitDialog.getInstance(getString(R.string.str_login_code_error),
+                                    R.mipmap.login_error, false);
                             errorDialog.show(getSupportFragmentManager());
                             errorDialog.dismiss(false);
                         }
                     } else {
                         loginButton.setClickable(true);
                         loginDialog.dismiss(true);
-                        WaitDialog errorDialog=WaitDialog.getInstance(getString(R.string.str_login_code_error),
-                                R.mipmap.login_error,false);
+                        WaitDialog errorDialog = WaitDialog.getInstance(getString(R.string.str_login_code_error),
+                                R.mipmap.login_error, false);
                         errorDialog.show(getSupportFragmentManager());
                         errorDialog.dismiss(false);
 
@@ -237,8 +241,8 @@ public class TypeLoginActivity extends BaseActivity {
                 } else {
                     loginButton.setClickable(true);
                     loginDialog.dismiss(true);
-                    WaitDialog errorDialog=WaitDialog.getInstance(getString(R.string.str_login_code_error),
-                            R.mipmap.login_error,false);
+                    WaitDialog errorDialog = WaitDialog.getInstance(getString(R.string.str_login_code_error),
+                            R.mipmap.login_error, false);
                     errorDialog.show(getSupportFragmentManager());
                     errorDialog.dismiss(false);
                 }
@@ -249,8 +253,8 @@ public class TypeLoginActivity extends BaseActivity {
                 KLog.e(msg);
                 loginDialog.dismiss(true);
                 loginButton.setClickable(true);
-                WaitDialog errorDialog=WaitDialog.getInstance(getString(R.string.str_login_no_net),
-                        R.mipmap.login_without_net,false);
+                WaitDialog errorDialog = WaitDialog.getInstance(getString(R.string.str_login_no_net),
+                        R.mipmap.login_without_net, false);
                 errorDialog.show(getSupportFragmentManager());
                 errorDialog.dismiss(false);
             }
