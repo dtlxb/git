@@ -1,7 +1,5 @@
 package cn.gogoal.im.common.IMHelpers;
 
-import android.graphics.Bitmap;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -13,24 +11,17 @@ import com.avos.avoscloud.im.v2.AVIMMessageHandler;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.socks.library.KLog;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import cn.gogoal.im.base.AppManager;
-import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
-import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
-import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
 
 /**
  * Created by huangxx on 2017/2/20.
  */
-
 public class MyMessageHandler extends AVIMMessageHandler {
 
     @Override
@@ -174,5 +165,13 @@ public class MyMessageHandler extends AVIMMessageHandler {
 
         BaseMessage baseMessage = new BaseMessage("IM_Info", map);
         AppManager.getInstance().sendMessage((chatType == 1009 || chatType == 1008) ? "Live_Message" : "IM_Message", baseMessage);
+    }
+
+
+    /**
+     * 推送Notification
+     */
+    private void showNotification() {
+
     }
 }
