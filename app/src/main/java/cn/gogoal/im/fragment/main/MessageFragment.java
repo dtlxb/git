@@ -356,23 +356,13 @@ public class MessageFragment extends BaseFragment {
                         avatarIv.setImageURI(Uri.parse(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")));
                     }
                 } else if (chatType == 1004) {
-<<<<<<< HEAD
-                    //Glide.with(getActivity()).load(R.mipmap.chat_new_friend).asBitmap().into(avatarIv);
-                    ImageDisplay.loadRoundedRectangleImage(getActivity(), avatarIv,
-                            R.mipmap.chat_new_friend);
-                } else {
-                    //Glide.with(getActivity()).load(messageBean.getAvatar()).asBitmap().into(avatarIv);
-                    ImageDisplay.loadRoundedRectangleImage(getActivity(), avatarIv,
-                            messageBean.getAvatar());
-=======
 //                    Glide.with(getActivity()).load(R.mipmap.chat_new_friend).asBitmap().into(avatarIv);
-                    ImageDisplay.loadRoundedRectangleImage(getActivity(),R.mipmap.chat_new_friend, avatarIv
-                            );
+                    ImageDisplay.loadRoundedRectangleImage(getActivity(), R.mipmap.chat_new_friend, avatarIv
+                    );
                 } else {
 //                    Glide.with(getActivity()).load(messageBean.getAvatar()).asBitmap().into(avatarIv);
                     ImageDisplay.loadRoundedRectangleImage(getActivity(),
                             messageBean.getAvatar(), avatarIv);
->>>>>>> 44bd27f01cd5c2f8ab9219dc98e8c2da1973a8c9
                 }
 
                 switch (_lctype) {
