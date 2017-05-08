@@ -191,16 +191,20 @@ public class ChatFragment extends BaseFragment {
         message_swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                imConversation.queryMessages(messageList.get(0).getMessageId(), messageList.get(0).getTimestamp(), 15, new AVIMMessagesQueryCallback() {
-                    @Override
-                    public void done(List<AVIMMessage> list, AVIMException e) {
-                        if (e == null && null != list && list.size() > 0) {
-                            messageList.addAll(0, list);
-                            imChatAdapter.notifyItemRangeInserted(0, list.size());
+                if (null != messageList && messageList.size() > 0) {
+                    imConversation.queryMessages(messageList.get(0).getMessageId(), messageList.get(0).getTimestamp(), 15, new AVIMMessagesQueryCallback() {
+                        @Override
+                        public void done(List<AVIMMessage> list, AVIMException e) {
+                            if (e == null && null != list && list.size() > 0) {
+                                messageList.addAll(0, list);
+                                imChatAdapter.notifyItemRangeInserted(0, list.size());
+                            }
+                            message_swipe.setRefreshing(false);
                         }
-                        message_swipe.setRefreshing(false);
-                    }
-                });
+                    });
+                } else {
+                    message_swipe.setRefreshing(false);
+                }
             }
         });
 
@@ -235,7 +239,7 @@ public class ChatFragment extends BaseFragment {
                 //显示自己的文字消息
                 AVIMTextMessage mTextMessage = new AVIMTextMessage();
                 HashMap<String, Object> attrsMap = new HashMap<>();
-                attrsMap.put("username", UserUtils.getUserName());
+                attrsMap.put("username", UserUtils.getNickname());
                 attrsMap.put("avatar", UserUtils.getUserAvatar());
                 mTextMessage.setAttrs(attrsMap);
                 mTextMessage.setTimestamp(CalendarUtils.getCurrentTime());
@@ -308,7 +312,6 @@ public class ChatFragment extends BaseFragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                //stringBuilder.append(etInput.getText().toString());
                 if (etInput.getText().toString().trim().equals("")) {
                     functionCheckBox.setVisibility(View.VISIBLE);
                     btnSend.setVisibility(View.INVISIBLE);
@@ -503,7 +506,7 @@ public class ChatFragment extends BaseFragment {
 
         //显示自己的图片消息
         HashMap<String, Object> attrsMap = new HashMap<>();
-        attrsMap.put("username", UserUtils.getUserName());
+        attrsMap.put("username", UserUtils.getNickname());
         attrsMap.put("avatar", UserUtils.getUserAvatar());
         final AVIMImageMessage mImageMessage = new AVIMImageMessage(imagefile);
         mImageMessage.setFrom(UserUtils.getMyAccountId());
@@ -577,7 +580,7 @@ public class ChatFragment extends BaseFragment {
 
                 //自己显示语音消息
                 HashMap<String, Object> attrsMap = new HashMap<>();
-                attrsMap.put("username", UserUtils.getUserName());
+                attrsMap.put("username", UserUtils.getNickname());
                 attrsMap.put("avatar", UserUtils.getUserAvatar());
 
                 //封装一个AVfile对象
@@ -685,6 +688,7 @@ public class ChatFragment extends BaseFragment {
                             if (chatType == 1001) {
                                 if (null != contactBean) {
                                     //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息
+                                    KLog.e(contactBean);
                                     imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0",
                                             null != contactBean.getTarget() ? contactBean.getTarget() : "",
                                             String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), lastMessage);
