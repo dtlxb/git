@@ -105,7 +105,7 @@ public class SocialContactFragment extends BaseFragment {
             public void onRefresh() {
                 getLiveData(1, null);
                 getLiveData(2, null);
-                //getRecordData(1, null);
+                getRecordData(1, null);
             }
         });
 
@@ -147,6 +147,9 @@ public class SocialContactFragment extends BaseFragment {
         programme_name = s.getMsg();
 
         //perLiveLinear.setVisibility(View.GONE);
+
+        recordPage = 1;
+        recordData.clear();
 
         getLiveData(1, programme_name);
         getLiveData(2, programme_name);
@@ -268,10 +271,6 @@ public class SocialContactFragment extends BaseFragment {
     private void getRecordData(final int page, String programme_id) {
 
         recordAdapter.setEnableLoadMore(false);
-        if (page == 1) {
-            recordPage = 1;
-            recordData.clear();
-        }
 
         final Map<String, String> param = new HashMap<>();
         if (programme_id != null) {
