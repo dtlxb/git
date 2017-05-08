@@ -14,6 +14,7 @@ import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.adapter.SocialLiveAdapter;
 import cn.gogoal.im.adapter.SocialRecordAdapter;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
@@ -73,7 +75,11 @@ public class SocialContactFragment extends BaseFragment {
     private SocialLiveAdapter liveAdapter;
     private SocialRecordAdapter recordAdapter;
 
-    private String programme_name;
+    private ArrayList<SocialRecordData> recordData = new ArrayList<SocialRecordData>();
+
+    private String programme_name = null;
+
+    private int recordPage = 1;
 
     @Override
     public int bindLayout() {
@@ -103,10 +109,6 @@ public class SocialContactFragment extends BaseFragment {
             }
         });
 
-        getLiveData(1, null);
-        getLiveData(2, null);
-        getRecordData(1, null);
-
         ((MainActivity) getActivity()).setCloseCallBack(new MainActivity.drawerCloseCallBack() {
             @Override
             public void closeDrawer() {
@@ -114,6 +116,30 @@ public class SocialContactFragment extends BaseFragment {
                 boxScreen.setTextColor(getResColor(R.color.textColor_333333));
             }
         });
+
+        recordAdapter = new SocialRecordAdapter(getActivity(), recordData);
+        recordRecycler.setAdapter(recordAdapter);
+
+        //上拉加载
+        recordAdapter.setOnLoadMoreListener(new CommonAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                if (recordPage <= 10) {
+                    recordPage++;
+                    recordAdapter.loadMoreEnd(false);
+                    getRecordData(recordPage, programme_name);
+                } else {
+                    recordAdapter.loadMoreEnd(true);
+                    recordAdapter.setEnableLoadMore(false);
+                    UIHelper.toast(getActivity(), R.string.nomoredata_hint);
+                }
+                recordAdapter.loadMoreComplete();
+            }
+        }, recordRecycler);
+
+        getLiveData(1, null);
+        getLiveData(2, null);
+        getRecordData(1, null);
     }
 
     @Subscriber(tag = "setScreen")
@@ -121,6 +147,9 @@ public class SocialContactFragment extends BaseFragment {
         programme_name = s.getMsg();
 
         //perLiveLinear.setVisibility(View.GONE);
+
+        recordPage = 1;
+        recordData.clear();
 
         getLiveData(1, programme_name);
         getLiveData(2, programme_name);
@@ -240,11 +269,14 @@ public class SocialContactFragment extends BaseFragment {
      * 获取录播列表数据
      */
     private void getRecordData(final int page, String programme_id) {
+
+        recordAdapter.setEnableLoadMore(false);
+
         final Map<String, String> param = new HashMap<>();
         if (programme_id != null) {
             param.put("programme_id", programme_id);
         }
-        param.put("page", page + "");
+        param.put("page", String.valueOf(page));
         param.put("rows", "10");
 
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
@@ -254,9 +286,12 @@ public class SocialContactFragment extends BaseFragment {
                 SocialRecordBean object = JSONObject.parseObject(responseInfo, SocialRecordBean.class);
                 if (object.getCode() == 0) {
                     recordLinear.setVisibility(View.VISIBLE);
-                    List<SocialRecordData> recordData = object.getData();
-                    recordAdapter = new SocialRecordAdapter(getActivity(), recordData);
-                    recordRecycler.setAdapter(recordAdapter);
+                    ArrayList<SocialRecordData> data = object.getData();
+                    recordData.addAll(data);
+                    recordAdapter.notifyDataSetChanged();
+                    recordAdapter.setEnableLoadMore(true);
+                    recordAdapter.loadMoreComplete();
+
                 } else if (object.getCode() == 1001) {
                     if (page == 1) {
                         recordLinear.setVisibility(View.GONE);
