@@ -227,7 +227,7 @@ public class SearchTeamFragment extends BaseFragment {
             } else {
                 final String groupUrl = data.getAttr().getAvatar();
 
-                ImageDisplay.loadRoundedRectangleImage(getContext(),imageView,groupUrl);
+                ImageDisplay.loadRoundedRectangleImage(getContext(),groupUrl,imageView);
 
                 ImageUtils.getUrlBitmap(getActivity(), groupUrl, new SimpleTarget<Bitmap>() {
                     @Override

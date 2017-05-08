@@ -54,8 +54,8 @@ public class CreateLiveActivity extends BaseActivity {
         //对显示图片圆角矩形处理
         ImageDisplay.loadRoundedRectangleImage(
                 mContext,
-                imgLive,
-                R.mipmap.logo);
+                R.mipmap.logo,
+                imgLive);
     }
 
     @OnClick({R.id.imgClose, R.id.imgLive, R.id.btnStartLive, R.id.textAgreement})
@@ -117,8 +117,8 @@ public class CreateLiveActivity extends BaseActivity {
 
                         ImageDisplay.loadRoundedRectangleImage(
                                 getContext(),
-                                imgLive,
-                                onlineUri);
+                                onlineUri,
+                                imgLive);
                     }
 
                     @Override

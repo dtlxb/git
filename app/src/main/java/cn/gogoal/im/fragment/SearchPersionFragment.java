@@ -24,7 +24,6 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ContactBean;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
@@ -127,8 +126,8 @@ public class SearchPersionFragment extends BaseFragment {
             holder.setText(R.id.item_tv_search_result_intro,data.getDuty());
             try {
                 ImageDisplay.loadRoundedRectangleImage(mContext,
-                        imageView,
-                        data.getAvatar());
+                        data.getAvatar(),
+                        imageView);
             } catch (Exception e) {
                 KLog.e(e.getMessage());
             }

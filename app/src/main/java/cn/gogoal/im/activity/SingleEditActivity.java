@@ -61,7 +61,7 @@ public class SingleEditActivity extends BaseActivity {
         final String[] typeString = {getString(R.string.str_setting_name), getString(R.string.str_setting_company),
                 getString(R.string.str_setting_duty)};
 
-        String title = typeString[editType];
+        final String title = typeString[editType];
 
         switch (editType) {
             case EDIT_MY_INFO_TYPE_NAME:
@@ -95,12 +95,15 @@ public class SingleEditActivity extends BaseActivity {
                     UserUtils.updataNetUserInfo(map, new UserUtils.UpdataListener() {
                         @Override
                         public void success(String responseInfo) {
-
+                            loadingDialog.dismiss(true);
                             //TODO 更新本地缓存，刷新上一个页面
                             UserUtils.updataLocalUserInfo(localCacheKey, svEditInfo.getQuery().toString());
                             AppManager.getInstance().sendMessage("updata_userinfo", "更新用户信息");
 
-                            SingleEditActivity.this.finish();
+                            final WaitDialog waitDialog = WaitDialog.getInstance(title+"信息修改成功",
+                                    R.mipmap.login_success, false);
+                            waitDialog.show(getSupportFragmentManager());
+                            waitDialog.dismiss(false,true);
                         }
 
                         @Override

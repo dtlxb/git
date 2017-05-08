@@ -21,6 +21,8 @@ import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
 
+import static cn.gogoal.im.common.UserUtils.getToken;
+
 /**
  * Created by huangxx on 2017/4/14.
  */
@@ -30,7 +32,7 @@ public class ChatGroupHelper {
     //添加群成员
     public static void addAnyone(List<Integer> idList, String conversationId, final chatGroupManager groupManager) {
         Map<String, String> params = new HashMap<>();
-        params.put("token", UserUtils.getToken());
+        params.put("token", getToken());
         params.put("id_list", JSONObject.toJSONString(idList));
         params.put("conv_id", conversationId);
 
@@ -59,7 +61,7 @@ public class ChatGroupHelper {
     //删除群成员
     public static void deleteAnyone(final List<Integer> idSet, String conversationId, final chatGroupManager groupManager) {
         Map<String, String> params = new HashMap<>();
-        params.put("token", UserUtils.getToken());
+        params.put("token", getToken());
         params.put("id_list", JSONObject.toJSONString(idSet));
         params.put("conv_id", conversationId);
 
@@ -88,7 +90,7 @@ public class ChatGroupHelper {
     //收藏群
     public static void collcetGroup(String conversationId, final chatGroupManager groupManager) {
         Map<String, String> params = new HashMap<>();
-        params.put("token", UserUtils.getToken());
+        params.put("token", getToken());
         params.put("conv_id", conversationId);
         KLog.e(params);
 
@@ -117,7 +119,7 @@ public class ChatGroupHelper {
     //取消群收藏
     public static void deleteGroup(String conversationId, final chatGroupManager groupManager) {
         Map<String, String> params = new HashMap<>();
-        params.put("token", UserUtils.getToken());
+        params.put("token", getToken());
         params.put("conv_id", conversationId);
         KLog.e(params);
 
@@ -148,20 +150,18 @@ public class ChatGroupHelper {
         JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", new JSONArray());
         KLog.e(spAccountArray.toString());
         boolean hasThisGuy = false;
-        if (spAccountArray != null) {
-            //有这个人修改
-            for (int i = 0; i < spAccountArray.size(); i++) {
-                JSONObject oldObject = (JSONObject) spAccountArray.get(i);
-                if (oldObject.getInteger("friend_id") == friendId) {
-                    ((JSONObject) spAccountArray.get(i)).put("avatar", avatar);
-                    ((JSONObject) spAccountArray.get(i)).put("nickname", nickname);
-                    ((JSONObject) spAccountArray.get(i)).put("friend_id", friendId);
-                    hasThisGuy = true;
-                }
+        //有这个人修改
+        for (int i = 0; i < spAccountArray.size(); i++) {
+            JSONObject oldObject = (JSONObject) spAccountArray.get(i);
+            if (oldObject.getInteger("friend_id") == friendId) {
+                ((JSONObject) spAccountArray.get(i)).put("avatar", avatar);
+                ((JSONObject) spAccountArray.get(i)).put("nickname", nickname);
+                ((JSONObject) spAccountArray.get(i)).put("friend_id", friendId);
+                hasThisGuy = true;
             }
-            if (hasThisGuy) {
-                SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", spAccountArray);
-            }
+        }
+        if (hasThisGuy) {
+            SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", spAccountArray);
         }
     }
 
@@ -238,6 +238,68 @@ public class ChatGroupHelper {
             }
         });
     }
+
+    /**
+     * 现拼头像
+     */
+    public static void createGroupImage(final String ConversationId, final GroupInfoResponse response) {
+        AVImClientManager.getInstance().findConversationById(ConversationId, new AVImClientManager.ChatJoinManager() {
+            @Override
+            public void joinSuccess(AVIMConversation conversation) {
+                if (conversation.getMembers()==null || conversation.getMembers().isEmpty()){
+                    response.getInfoFailed(new Exception("群成员为空"));
+                    return;
+                }
+                Map<String, String> params = new HashMap<>();
+                params.put("token", getToken());
+                params.put("conv_id", ConversationId);
+                params.put("id_list", conversation.getMembers().toString());
+                KLog.e(params);
+
+                GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+                    @Override
+                    public void onSuccess(String responseInfo) {
+                        JSONObject result = JSONObject.parseObject(responseInfo);
+                        KLog.e(responseInfo);
+                        if ((int) result.get("code") == 0) {
+                            if (null != result.getJSONObject("data")) {
+                                if (null != response) {
+                                    response.getInfoSuccess(result.getJSONObject("data"));
+                                }
+                            }else {
+                                response.getInfoFailed(new Exception("请求出错:"+result.getString("message")));
+                            }
+                        }else {
+                            response.getInfoFailed(new Exception("群信息为空"));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        if (null != response) {
+                            response.getInfoFailed(new Exception(msg));
+                        }
+                    }
+                };
+                new GGOKHTTP(params, GGOKHTTP.GET_MEMBER_INFO, ggHttpInterface).startGet();
+            }
+
+            @Override
+            public void joinFail(String error) {
+                KLog.e(error);
+            }
+        });
+    }
+
+    /**
+     * 获取群信息
+     */
+    public interface GroupInfoResponse {
+        void getInfoSuccess(JSONObject groupInfo);
+
+        void getInfoFailed(Exception e);
+    }
+
 
     /**
      * 群管理类

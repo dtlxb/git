@@ -40,25 +40,27 @@ public class GroupFaceImage<T> {
     }
 
     public static <T> GroupFaceImage<T> getInstance(Context context, List<T> imageUrls) {
+        if (imageUrls.size() > 9) {
+            imageUrls = imageUrls.subList(0, 9);
+        }
         GroupFaceImage<T> instance = new GroupFaceImage<>(context, imageUrls);
-        if (null != imageUrls) {
-            switch (imageUrls.size()) {
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                    minItemH = 17 * INNER_DIVIDER;
-                    break;
-                case 5:
-                case 6:
-                case 7:
-                case 8:
-                case 9:
-                    minItemH = 11 * INNER_DIVIDER;
-                    break;
-                default:
-                    break;
-            }
+        switch (imageUrls.size()) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                minItemH = 17 * INNER_DIVIDER;
+                break;
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+                minItemH = 11 * INNER_DIVIDER;
+                break;
+            default:
+                minItemH = 17 * INNER_DIVIDER;
+                break;
         }
         return instance;
     }
@@ -67,14 +69,9 @@ public class GroupFaceImage<T> {
         this.matchingListener = listener;
         final List<Bitmap> bitmaps = new ArrayList<>();
         if (null == imageUrls || imageUrls.isEmpty()) {
-//            throw new NullPointerException("图像集合不能为空");
             listener.onSuccess(BitmapFactory.decodeResource(context.getResources(), R.mipmap.image_placeholder));
             return;
         }
-        if (imageUrls.size() > 9) {
-            imageUrls = imageUrls.subList(0, 9);//最多只取前九张
-        }
-
         AsyncTaskUtil.doAsync(new AsyncTaskUtil.AsyncCallBack() {
             public void onPreExecute() {
             }

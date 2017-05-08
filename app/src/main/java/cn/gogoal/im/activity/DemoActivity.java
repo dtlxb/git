@@ -56,8 +56,8 @@ public class DemoActivity extends BaseActivity {
         //对显示图片圆角矩形处理
         ImageDisplay.loadRoundedRectangleImage(
                 mContext,
-                imageView,
-                R.mipmap.image_found_top_ad);
+                R.mipmap.image_found_top_ad,
+                imageView);
 
         UFileImageHelper.load("")
                 .compress(40)
