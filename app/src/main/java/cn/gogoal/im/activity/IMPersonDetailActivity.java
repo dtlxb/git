@@ -2,7 +2,6 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -19,14 +18,12 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.IMChatAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseInfo;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.UserDetailInfo;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
@@ -178,7 +175,7 @@ public class IMPersonDetailActivity extends BaseActivity {
             switch (holder.getItemViewType()) {
                 case UserDetailInfo.HEAD:
                     ImageView imageAvatar = holder.getView(R.id.image_user_info_avatar);
-                    ImageDisplay.loadRoundedRectangleImage(mContext, imageAvatar, AppDevice.dp2px(mContext, 4), (String) data.getAvatar());
+                    ImageDisplay.loadRoundedRectangleImage(mContext, imageAvatar,(String) data.getAvatar());
                     imageAvatar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

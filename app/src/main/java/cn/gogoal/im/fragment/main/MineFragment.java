@@ -2,14 +2,11 @@ package cn.gogoal.im.fragment.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Looper;
-import android.os.Message;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.socks.library.KLog;
@@ -33,8 +30,8 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.common.WeakReferenceHandler;
 import cn.gogoal.im.ui.NormalItemDecoration;
+import cn.gogoal.im.ui.view.CircleImageView;
 
 /**
  * 我的
@@ -45,7 +42,7 @@ public class MineFragment extends BaseFragment {
     RecyclerView rvMine;
 
     @BindView(R.id.img_mine_avatar)
-    ImageView imageAvatar;
+    CircleImageView imageAvatar;
 
     @BindView(R.id.tv_mine_title)
     TextView mTitleText;
@@ -68,12 +65,6 @@ public class MineFragment extends BaseFragment {
     private MineAdapter mineAdapter;
 
     private List<MineItem> mineItems;
-
-    private WeakReferenceHandler<MineFragment> handler = new WeakReferenceHandler<MineFragment>(Looper.getMainLooper(), this) {
-        @Override
-        protected void handleMessage(MineFragment fragment, Message message) {
-        }
-    };
 
     public MineFragment() {
     }
@@ -120,10 +111,10 @@ public class MineFragment extends BaseFragment {
         UserUtils.cacheUserAvatar();//缓存用户头像大图
         if (null != UserUtils.getUserCacheAvatarFile() &&
                 (!(UserUtils.getUserCacheAvatarFile().getAbsolutePath()).equalsIgnoreCase(UserUtils.getMyAvatarCacheName()))) {
-            ImageDisplay.loadCircleFileImageWithBoard(mContext, UserUtils.getUserCacheAvatarFile(), imageAvatar);
+            ImageDisplay.loadCircleImage(mContext, UserUtils.getUserCacheAvatarFile(), imageAvatar);
             KLog.e("用的缓存");
         } else {
-            ImageDisplay.loadNetAvatarWithBorder(mContext, UserUtils.getUserAvatar(),imageAvatar);
+            ImageDisplay.loadCircleImage(mContext, UserUtils.getUserAvatar(),imageAvatar);
             UserUtils.cacheUserAvatar();//缓存用户头像大图
             KLog.e("用的线上");
         }
@@ -160,7 +151,7 @@ public class MineFragment extends BaseFragment {
     @Subscriber(tag = "updata_cache_avatar")
     void updataCacheAvatar(String newAvatarUrl) {
         KLog.e(newAvatarUrl);
-        ImageDisplay.loadNetAvatarWithBorder(getContext(), UserUtils.getUserAvatar(), imageAvatar);
+        ImageDisplay.loadCircleImage(getContext(), UserUtils.getUserAvatar(), imageAvatar);
 
     }
 

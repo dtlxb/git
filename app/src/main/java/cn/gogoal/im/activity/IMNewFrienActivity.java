@@ -136,7 +136,7 @@ public class IMNewFrienActivity extends BaseActivity {
             nickName = lcattrsObject.getString("nickname");
 
 
-            ImageDisplay.loadNetImage(IMNewFrienActivity.this, avatar, avatarIv);
+            ImageDisplay.loadImage(IMNewFrienActivity.this, avatar, avatarIv);
             holder.setText(R.id.nickname, nickName);
             holder.setText(R.id.last_message, message + "\t\t" + dateStr);
             KLog.e(mIMNewFriendBean);

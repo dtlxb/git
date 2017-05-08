@@ -7,32 +7,6 @@
     android:orientation="vertical"
     tools:context="cn.gogoal.im.fragment.main.MineFragment">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/titlebar_size"
-        android:background="@color/colorMineHead">
-
-        <TextView
-            android:id="@+id/tv_mine_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:alpha="0.0"
-            android:text="个人中心"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/img_my_qrcode"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:paddingEnd="20dp"
-            android:paddingStart="20dp"
-            android:src="@mipmap/img_qr_code" />
-    </RelativeLayout>
-
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scrollView_mine"
         android:layout_width="match_parent"
@@ -52,15 +26,16 @@
                 android:layout_height="130dp"
                 android:background="@color/colorMineHead"
                 android:orientation="vertical"
-                android:paddingStart="15dp"
-                android:paddingEnd="20dp">
+                android:paddingEnd="20dp"
+                android:paddingStart="15dp">
 
-                <android.support.v7.widget.AppCompatImageView
+                <cn.gogoal.im.ui.view.CircleImageView
                     android:id="@+id/img_mine_avatar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    app:srcCompat="@mipmap/image_placeholder" />
+                    app:borderColor="#e0e0e0"
+                    app:borderWidth="2dp"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -113,4 +88,31 @@
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/titlebar_size"
+        android:background="@color/colorMineHead">
+
+        <TextView
+            android:id="@+id/tv_mine_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:alpha="0.0"
+            android:text="个人中心"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/img_my_qrcode"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
+            android:src="@mipmap/img_qr_code" />
+    </RelativeLayout>
+
 </LinearLayout>

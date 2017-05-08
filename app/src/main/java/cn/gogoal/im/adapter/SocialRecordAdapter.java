@@ -14,6 +14,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.SocialRecordData;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.ui.view.CircleImageView;
 
 /**
  * Created by dave.
@@ -39,7 +40,7 @@ public class SocialRecordAdapter extends CommonAdapter<SocialRecordData, BaseVie
         holder.setVisible(R.id.btnPcOrder, false);
 
         ImageView imgPcCover = holder.getView(R.id.imgPcCover);
-        ImageDisplay.loadNetImage(mContext, data.getVideo_img_url(), imgPcCover);
+        ImageDisplay.loadImage(mContext, data.getVideo_img_url(), imgPcCover);
 
         holder.setText(R.id.textPcStatus, "回放 " + update_time);
         holder.setBackgroundRes(R.id.textPcStatus, R.drawable.shape_social_live_status_gray);
@@ -47,8 +48,8 @@ public class SocialRecordAdapter extends CommonAdapter<SocialRecordData, BaseVie
         holder.setText(R.id.textPcTime, data.getPlay_base());
 
         holder.setText(R.id.textPcTitle, data.getVideo_name());
-        ImageView imgPcIcon = holder.getView(R.id.imgPcIcon);
-        ImageDisplay.loadCircleNetImage(mContext, data.getAnchor().getFace_url(), imgPcIcon);
+        CircleImageView imgPcIcon = holder.getView(R.id.imgPcIcon);
+        ImageDisplay.loadCircleImage(mContext, data.getAnchor().getFace_url(), imgPcIcon);
         holder.setText(R.id.textCompanTitle, data.getAnchor().getOrganization() == null ? "--"
                 : data.getAnchor().getOrganization() + " | " + data.getAnchor().getAnchor_position()
                 == null ? "--" : data.getAnchor().getAnchor_position());

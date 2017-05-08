@@ -26,6 +26,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.view.CircleImageView;
 
 /**
  * Created by dave.
@@ -55,7 +56,7 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
             holder.setVisible(R.id.linearPc, true);
 
             ImageView imgPcCover = holder.getView(R.id.imgPcCover);
-            ImageDisplay.loadNetImage(mContext, data.getLive_large_img(), imgPcCover);
+            ImageDisplay.loadImage(mContext, data.getLive_large_img(), imgPcCover);
 
             //预约
             final CheckBox btnPcOrder = holder.getView(R.id.btnPcOrder);
@@ -119,8 +120,8 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
             }
 
             holder.setText(R.id.textPcTitle, data.getVideo_name());
-            ImageView imgPcIcon = holder.getView(R.id.imgPcIcon);
-            ImageDisplay.loadCircleNetImage(mContext, data.getAnchor().getFace_url(), imgPcIcon);
+            CircleImageView imgPcIcon = holder.getView(R.id.imgPcIcon);
+            ImageDisplay.loadCircleImage(mContext, data.getAnchor().getFace_url(), imgPcIcon);
             holder.setText(R.id.textCompanTitle, data.getAnchor().getOrganization() == null ? "--"
                     : data.getAnchor().getOrganization() + " | " + data.getAnchor().getAnchor_position()
                     == null ? "--" : data.getAnchor().getAnchor_position());
@@ -132,8 +133,8 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
             holder.setVisible(R.id.framePc, false);
             holder.setVisible(R.id.linearPc, false);
 
-            ImageView imgAnchorAvatar = holder.getView(R.id.imgAnchorAvatar);
-            ImageDisplay.loadCircleNetImage(mContext, data.getAnchor().getFace_url(), imgAnchorAvatar);
+            CircleImageView imgAnchorAvatar = holder.getView(R.id.imgAnchorAvatar);
+            ImageDisplay.loadCircleImage(mContext, data.getAnchor().getFace_url(), imgAnchorAvatar);
             holder.setText(R.id.textAnchorName, data.getAnchor().getAnchor_name());
             holder.setText(R.id.textAnchorTitle, data.getAnchor().getOrganization() == null ? "--"
                     : data.getAnchor().getOrganization() + " | " + data.getAnchor().getAnchor_position()
@@ -143,7 +144,7 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
             final CheckBox btnPhoneOrder = holder.getView(R.id.btnPhoneOrder);
 
             ImageView imgPhoneCover = holder.getView(R.id.imgPhoneCover);
-            ImageDisplay.loadNetImage(mContext, data.getLive_large_img(), imgPhoneCover);
+            ImageDisplay.loadImage(mContext, data.getLive_large_img(), imgPhoneCover);
 
             //直播状态
             if (data.getLive_status() == 1) {

@@ -1,6 +1,5 @@
 package cn.gogoal.im.adapter;
 
-import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -30,7 +28,6 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +40,6 @@ import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
-import cn.gogoal.im.common.GGEmoticons;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
@@ -131,7 +127,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         final JSONObject lcattrsObject = (JSONObject) contentObject.get("_lcattrs");
         String messageType = contentObject.getString("_lctype");
         String headPicUrl;
-        KLog.e(messageType);
         if (!messageType.equals("5") && !messageType.equals("6") && !messageType.equals("8")) {
             if (chatType == 1001) {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.GONE);
@@ -150,7 +145,10 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                     headPicUrl = (String) lcattrsObject.get("avatar");
                 }
             }
-            ImageDisplay.loadRoundedRectangleImage(mContext, ((IMCHatViewHolder) holder).user_head_photo, AppDevice.dp2px(mContext, 4), UFileImageHelper.load(headPicUrl).compress(33).get());
+            ImageDisplay.loadRoundedRectangleImage(
+                    mContext,
+                    ((IMCHatViewHolder) holder).user_head_photo,
+                    UFileImageHelper.load(headPicUrl).compress(33).get());
             //点击头像展开详情
             ((IMCHatViewHolder) holder).user_head_photo.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -201,7 +199,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((LeftImageViewHolder) holder).image_user_send.getLayoutParams();
             setImageSize(params, imageMessage);
             ((LeftImageViewHolder) holder).image_user_send.setLayoutParams(params);
-            ImageDisplay.loadNetImage(mContext, imageMessage.getAVFile().getUrl(), ((LeftImageViewHolder) holder).image_user_send);
+            ImageDisplay.loadImage(mContext, imageMessage.getAVFile().getUrl(), ((LeftImageViewHolder) holder).image_user_send);
             showMessageTime(position, ((LeftImageViewHolder) holder).message_time);
 
             ((LeftImageViewHolder) holder).image_user_send.setOnClickListener(new View.OnClickListener() {
@@ -218,7 +216,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((RightImageViewHolder) holder).image_user_send.getLayoutParams();
             setImageSize(params, imageMessage);
             ((RightImageViewHolder) holder).image_user_send.setLayoutParams(params);
-            ImageDisplay.loadNetImage(mContext, imageMessage.getAVFile().getUrl(), ((RightImageViewHolder) holder).image_user_send);
+            ImageDisplay.loadImage(mContext, imageMessage.getAVFile().getUrl(), ((RightImageViewHolder) holder).image_user_send);
             showMessageTime(position, ((RightImageViewHolder) holder).message_time);
 
             ((RightImageViewHolder) holder).image_user_send.setOnClickListener(new View.OnClickListener() {
@@ -360,14 +358,14 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 ((LeftShareViewHolder) holder).live_layout.setVisibility(View.GONE);
                 ((LeftShareViewHolder) holder).tv_share_title.setText(lcattrsObject.getString("title"));
                 ((LeftShareViewHolder) holder).tv_share.setText(lcattrsObject.getString("content"));
-                ImageDisplay.loadNetImage(mContext, lcattrsObject.getString("thumUrl"), ((LeftShareViewHolder) holder).iv_share);
+                ImageDisplay.loadImage(mContext, lcattrsObject.getString("thumUrl"), ((LeftShareViewHolder) holder).iv_share);
             } else if (lcattrsObject.getString("toolType").equals("2")) {
                 ((LeftShareViewHolder) holder).layout_normal.setVisibility(View.GONE);
                 ((LeftShareViewHolder) holder).live_layout.setVisibility(View.VISIBLE);
                 ((LeftShareViewHolder) holder).tv_share_title.setText(lcattrsObject.getString("title"));
                 ((LeftShareViewHolder) holder).tv_live_share.setText(lcattrsObject.getString("content"));
                 getImageSize(((LeftShareViewHolder) holder).iv_live_share);
-                ImageDisplay.loadNetImage(mContext, lcattrsObject.getString("thumUrl"), ((LeftShareViewHolder) holder).iv_live_share);
+                ImageDisplay.loadImage(mContext, lcattrsObject.getString("thumUrl"), ((LeftShareViewHolder) holder).iv_live_share);
             }
 
             ((LeftShareViewHolder) holder).card_layout.setOnClickListener(new View.OnClickListener() {
@@ -384,14 +382,14 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 ((RightShareViewHolder) holder).live_layout.setVisibility(View.GONE);
                 ((RightShareViewHolder) holder).tv_share_title.setText(lcattrsObject.getString("title"));
                 ((RightShareViewHolder) holder).tv_share.setText(lcattrsObject.getString("content"));
-                ImageDisplay.loadNetImage(mContext, lcattrsObject.getString("thumUrl"), ((RightShareViewHolder) holder).iv_share);
+                ImageDisplay.loadImage(mContext, lcattrsObject.getString("thumUrl"), ((RightShareViewHolder) holder).iv_share);
             } else if (lcattrsObject.getString("toolType").equals("2")) {
                 ((RightShareViewHolder) holder).layout_normal.setVisibility(View.GONE);
                 ((RightShareViewHolder) holder).live_layout.setVisibility(View.VISIBLE);
                 ((RightShareViewHolder) holder).tv_share_title.setText(lcattrsObject.getString("title"));
                 ((RightShareViewHolder) holder).tv_live_share.setText(lcattrsObject.getString("content"));
                 getImageSize(((RightShareViewHolder) holder).iv_live_share);
-                ImageDisplay.loadNetImage(mContext, lcattrsObject.getString("thumUrl"), ((RightShareViewHolder) holder).iv_live_share);
+                ImageDisplay.loadImage(mContext, lcattrsObject.getString("thumUrl"), ((RightShareViewHolder) holder).iv_live_share);
             }
 
             showMessageTime(position, ((RightShareViewHolder) holder).message_time);

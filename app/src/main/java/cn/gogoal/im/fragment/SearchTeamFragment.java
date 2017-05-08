@@ -4,6 +4,7 @@ package cn.gogoal.im.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,11 +20,12 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,9 +39,13 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.RecommendBean;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.ImageUtils.ImageUtils;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -54,6 +60,8 @@ public class SearchTeamFragment extends BaseFragment {
     XLayout xLayout;
 
     private RecommendAdapter adapter;
+
+    private int loadType = AppConst.REFRESH_TYPE_FIRST;
 
     private ArrayList<RecommendBean.DataBean> dataBeanList;
     private List<String> groupMembers;
@@ -87,14 +95,25 @@ public class SearchTeamFragment extends BaseFragment {
 
         recyclerView.setAdapter(adapter);
 
-        getRecommendGroup("");
+        getRecommendGroup(AppConst.REFRESH_TYPE_FIRST, "");
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getRecommendGroup(AppConst.REFRESH_TYPE_SWIPEREFRESH, "");
+    }
+
     @Subscriber(tag = "SEARCH_TEAM_TAG")
-    private void getRecommendGroup(final String keyword) {
-        dataBeanList.clear();
-        xLayout.setStatus(XLayout.Loading);
+    void searchTeam(String keyWord) {
+        getRecommendGroup(AppConst.REFRESH_TYPE_PARENT_BUTTON, keyWord);
+    }
+
+    private void getRecommendGroup(final int loadType, final String keyword) {
+        if (loadType == AppConst.REFRESH_TYPE_FIRST) {
+            xLayout.setStatus(XLayout.Loading);
+        }
         Map<String, String> map = new HashMap<>();
         map.put("token", UserUtils.getToken());
         if (!TextUtils.isEmpty(keyword)) {
@@ -105,8 +124,8 @@ public class SearchTeamFragment extends BaseFragment {
         new GGOKHTTP(map, GGOKHTTP.SEARCH_GROUP, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                    dataBeanList.clear();
                     RecommendBean recommendBean = JSONObject.parseObject(responseInfo, RecommendBean.class);
                     if (null != recommendBean.getData()) {
                         dataBeanList.addAll(recommendBean.getData());
@@ -125,7 +144,8 @@ public class SearchTeamFragment extends BaseFragment {
                 xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
                     @Override
                     public void onReload(View v) {
-                        getRecommendGroup(keyword);
+                        getRecommendGroup(AppConst.REFRESH_TYPE_SWIPEREFRESH,
+                                loadType == AppConst.REFRESH_TYPE_PARENT_BUTTON ? keyword : "");
                     }
                 });
 
@@ -135,6 +155,8 @@ public class SearchTeamFragment extends BaseFragment {
     }
 
     private class RecommendAdapter extends CommonAdapter<RecommendBean.DataBean, BaseViewHolder> {
+
+        private Bitmap groupAvatarBitmap;
 
         RecommendAdapter(List<RecommendBean.DataBean> datas) {
             super(R.layout.item_search_type_persion, datas);
@@ -162,7 +184,7 @@ public class SearchTeamFragment extends BaseFragment {
                 addView.setTextColor(Color.parseColor("#a9a9a9"));
                 addView.setClickable(false);
                 addView.setEnabled(false);
-            }else {
+            } else {
                 addView.setBackgroundResource(R.drawable.shape_search_group_add_btn);
                 addView.setText("加入");
                 addView.setTextColor(Color.parseColor("#a9a9a9"));
@@ -178,52 +200,69 @@ public class SearchTeamFragment extends BaseFragment {
 
             Glide.get(getContext()).clearMemory();
 
+            //群主没有设置过群头像，拼接
+            if (StringUtils.isActuallyEmpty(data.getAttr().getAvatar())) {
+                GroupFaceImage.getInstance(getActivity(), getImageAvatar(data.getM())
+                ).load(new GroupFaceImage.OnMatchingListener() {
+                    @Override
+                    public void onSuccess(final Bitmap mathingBitmap) {
 
-            GroupFaceImage.getInstance(getActivity(), getImageAvatar(data.getM())
-            ).load(new GroupFaceImage.OnMatchingListener() {
-                @Override
-                public void onSuccess(final Bitmap mathingBitmap) {
+                        groupAvatarBitmap = mathingBitmap;
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            imageView.setImageBitmap(mathingBitmap);
-                        }
-                    });
-
-                    itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent in = new Intent(v.getContext(), SquareChatRoomActivity.class);
-                            if (data.isIs_in()) {//我在群里
-                                // TODO: 进入聊天
-                                in.putExtra("squareName", data.getName());
-                                in.putExtra("conversation_id", data.getConv_id());
-                                startActivity(in);
-                            } else {//TODO: 申请加群
-                                in = new Intent(getActivity(), SquareCardActivity.class);
-                                if (position > 0) {
-                                    for (int i = 0; i < dataBeanList.get(position - 1).getM().size(); i++) {
-                                        groupMembers.add(String.valueOf(dataBeanList.get(position - 1).getM().get(i).getAccount_id()));
-                                    }
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("conversation_id", dataBeanList.get(position - 1).getConv_id());
-                                    bundle.putString("square_name", dataBeanList.get(position - 1).getName());
-                                    bundle.putParcelable("bitmap_avatar", mathingBitmap);
-                                    bundle.putString("square_creater", dataBeanList.get(position - 1).getC());
-                                    bundle.putSerializable("square_members", (Serializable) dataBeanList.get(position - 1).getM());
-                                    in.putExtras(bundle);
-                                    startActivity(in);
-                                }
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                imageView.setImageBitmap(mathingBitmap);
                             }
-                        }
-                    });
+                        });
+                    }
 
-                }
+                    @Override
+                    public void onError(Exception e) {
+                        KLog.e("使用占位图头像--拼接出错");
+                        groupAvatarBitmap = BitmapFactory.decodeResource(
+                                getResources(), R.mipmap.image_placeholder);
+                    }
+                });
+            } else {
+                final String groupUrl = data.getAttr().getAvatar();
 
+                ImageDisplay.loadRoundedRectangleImage(getContext(),imageView,groupUrl);
+
+                ImageUtils.getUrlBitmap(getActivity(), groupUrl, new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        groupAvatarBitmap=resource;
+                    }
+                });
+
+            }
+
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onError(Exception e) {
-
+                public void onClick(View v) {
+                    Intent in = new Intent(v.getContext(), SquareChatRoomActivity.class);
+                    if (data.isIs_in()) {//我在群里
+                        // TODO: 进入聊天
+                        in.putExtra("squareName", data.getName());
+                        in.putExtra("conversation_id", data.getConv_id());
+                        startActivity(in);
+                    } else {//TODO: 申请加群
+                        in = new Intent(getActivity(), SquareCardActivity.class);
+                        if (position > 0) {
+                            for (int i = 0; i < dataBeanList.get(position - 1).getM().size(); i++) {
+                                groupMembers.add(String.valueOf(dataBeanList.get(position - 1).getM().get(i).getAccount_id()));
+                            }
+                            Bundle bundle = new Bundle();
+                            bundle.putString("conversation_id", dataBeanList.get(position - 1).getConv_id());
+                            bundle.putString("square_name", dataBeanList.get(position - 1).getName());
+                            bundle.putParcelable("bitmap_avatar", groupAvatarBitmap);
+                            bundle.putString("square_creater", dataBeanList.get(position - 1).getC());
+                            bundle.putParcelableArrayList("square_members", data.getM());
+                            in.putExtras(bundle);
+                            startActivity(in);
+                        }
+                    }
                 }
             });
 

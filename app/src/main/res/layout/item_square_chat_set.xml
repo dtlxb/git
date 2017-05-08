@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <cn.gogoal.im.ui.view.RectangleView
+        <ImageView
             android:id="@+id/iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

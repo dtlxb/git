@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
@@ -29,6 +28,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
+import cn.gogoal.im.ui.view.CircleImageView;
 import cn.gogoal.im.ui.widget.AddressPicker;
 
 
@@ -68,15 +68,15 @@ public class EditMyInfoActivity extends BaseActivity {
     }
 
     private void getMyInfo() {
-        HashMap<String,String> map=new HashMap<>();
-        map.put("token",UserUtils.getToken());
+        HashMap<String, String> map = new HashMap<>();
+        map.put("token", UserUtils.getToken());
         new GGOKHTTP(map, GGOKHTTP.GET_MY_INFO, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
-                if (JSONObject.parseObject(responseInfo).getIntValue("code")==0){
+                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     EditInfoBean.EditInfoData editInfoData = JSONObject.parseObject(responseInfo, EditInfoBean.class).getData();
-                    UserUtils.updataLocalUserInfo("city",editInfoData.getCity());
+                    UserUtils.updataLocalUserInfo("city", editInfoData.getCity());
                     updataUserInfo("");
                 }
             }
@@ -90,7 +90,7 @@ public class EditMyInfoActivity extends BaseActivity {
 
     private void iniListDatas() {
         String[] userInfoValue = {UserUtils.getNickname(), UserUtils.getUserName(), UserUtils.getPhoneNumber(),
-                UserUtils.getorgName(), UserUtils.getDuty(), UserUtils.getOrganizationAddress(),UserUtils.getOrganizationAddress()};
+                UserUtils.getorgName(), UserUtils.getDuty(), UserUtils.getOrganizationAddress(), UserUtils.getOrganizationAddress()};
 
         editInfos.add(new UserDetailInfo<>(UserDetailInfo.HEAD, UserUtils.getUserCacheAvatarFile()));
         for (int i = 0; i < edidInfoArray.length; i++) {
@@ -114,15 +114,15 @@ public class EditMyInfoActivity extends BaseActivity {
 
         @Override
         protected void convert(BaseViewHolder holder, UserDetailInfo data, final int position) {
-
+            CircleImageView circleImageView = holder.getView(R.id.image_user_info_avatar);
             switch (holder.getItemViewType()) {
                 case UserDetailInfo.HEAD:
                     if (null != UserUtils.getUserCacheAvatarFile() &&
                             (!(UserUtils.getUserCacheAvatarFile().getAbsolutePath()).equalsIgnoreCase(UserUtils.getMyAvatarCacheName()))) {
-                        ImageDisplay.loadCircleFileImageWithBoard(mContext, UserUtils.getUserCacheAvatarFile(), (ImageView) holder.getView(R.id.image_user_info_avatar));
+                        ImageDisplay.loadCircleImage(mContext, UserUtils.getUserCacheAvatarFile(),circleImageView);
                         KLog.e("用的缓存");
                     } else {
-                        ImageDisplay.loadNetAvatarWithBorder(mContext, UserUtils.getUserAvatar(), (ImageView) holder.getView(R.id.image_user_info_avatar));
+                        ImageDisplay.loadCircleImage(mContext, UserUtils.getUserAvatar(),circleImageView);
                         UserUtils.cacheUserAvatar();//缓存用户头像大图
                         KLog.e("用的线上");
                     }
@@ -147,7 +147,7 @@ public class EditMyInfoActivity extends BaseActivity {
 
                     holder.setText(R.id.tv_info_key, data.getItemKey());
 
-                    holder.setText(R.id.tv_info_value, TextUtils.isEmpty(data.getItemValue())?"未设置":data.getItemValue());
+                    holder.setText(R.id.tv_info_value, TextUtils.isEmpty(data.getItemValue()) ? "未设置" : data.getItemValue());
 
                     holder.getView(R.id.flag_img_more).setVisibility(data.isHaveMore() ? View.VISIBLE : View.GONE);
 
@@ -158,20 +158,20 @@ public class EditMyInfoActivity extends BaseActivity {
 //                            UIHelper.toast(v.getContext(), getString(R.string.str_coming_soon) + "::" + position);
                             switch (position) {
                                 case 1://姓名、昵称
-                                    intent.putExtra(SingleEditActivity.EDIT_MY_INFO_TYPE,SingleEditActivity.EDIT_MY_INFO_TYPE_NAME);
+                                    intent.putExtra(SingleEditActivity.EDIT_MY_INFO_TYPE, SingleEditActivity.EDIT_MY_INFO_TYPE_NAME);
                                     startActivity(intent);
                                     break;
                                 case 2://不支持修改
                                     break;
                                 case 3://
-                                    startActivity(new Intent(v.getContext(),ChangePhoneNumber.class));
+                                    startActivity(new Intent(v.getContext(), ChangePhoneNumber.class));
                                     break;
                                 case 4://公司
-                                    intent.putExtra(SingleEditActivity.EDIT_MY_INFO_TYPE,SingleEditActivity.EDIT_MY_INFO_TYPE_COMPANY);
+                                    intent.putExtra(SingleEditActivity.EDIT_MY_INFO_TYPE, SingleEditActivity.EDIT_MY_INFO_TYPE_COMPANY);
                                     startActivity(intent);
                                     break;
                                 case 5://职位
-                                    intent.putExtra(SingleEditActivity.EDIT_MY_INFO_TYPE,SingleEditActivity.EDIT_MY_INFO_TYPE_DUTY);
+                                    intent.putExtra(SingleEditActivity.EDIT_MY_INFO_TYPE, SingleEditActivity.EDIT_MY_INFO_TYPE_DUTY);
                                     startActivity(intent);
                                     break;
                                 case 6://工作地区
@@ -195,7 +195,7 @@ public class EditMyInfoActivity extends BaseActivity {
     }
 
     @Subscriber(tag = "updata_userinfo")
-    void updataUserInfo(String msg){
+    void updataUserInfo(String msg) {
         editInfos.clear();
         iniListDatas();
     }

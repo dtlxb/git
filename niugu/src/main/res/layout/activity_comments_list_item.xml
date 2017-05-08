@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:descendantFocusability="blocksDescendants"
-              android:orientation="horizontal">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal">
 
-    <ImageView
+    <cn.gogoal.im.ui.view.CircleImageView
         android:id="@+id/comment_head_iv"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="13dp"
         android:background="@drawable/my_header_image"
-        android:src="@drawable/weixin"/>
+        android:src="@drawable/weixin" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="13dp"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -38,7 +38,7 @@
                 android:lines="2"
                 android:text="用户名"
                 android:textColor="@color/footer_text_color_selected"
-                android:textSize="@dimen/text_size_16"/>
+                android:textSize="@dimen/text_size_16" />
 
             <RelativeLayout
                 android:id="@+id/comment_thumb_up"
@@ -48,25 +48,25 @@
                 android:layout_marginRight="10dp"
                 android:gravity="right|center_vertical">
 
-         <TextView
-             android:id="@+id/comment_number"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_alignBottom="@+id/comment_thumb_up_iv"
-             android:layout_marginRight="6dp"
-             android:layout_toLeftOf="@+id/comment_thumb_up_iv"
-             android:gravity="bottom"
-             android:text="000"
-             android:textColor="@color/text_color_light"
-             android:textSize="@dimen/text_size_12"/>
+                <TextView
+                    android:id="@+id/comment_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/comment_thumb_up_iv"
+                    android:layout_marginRight="6dp"
+                    android:layout_toLeftOf="@+id/comment_thumb_up_iv"
+                    android:gravity="bottom"
+                    android:text="000"
+                    android:textColor="@color/text_color_light"
+                    android:textSize="@dimen/text_size_12" />
 
-            <ImageView
-                android:id="@+id/comment_thumb_up_iv"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="8dp"
-                android:background="@drawable/activity_comment_list_item_thumb_up"/>
+                <ImageView
+                    android:id="@+id/comment_thumb_up_iv"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/activity_comment_list_item_thumb_up" />
 
             </RelativeLayout>
 
@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:text="00分钟前"
             android:textColor="@color/text_color_light"
-            android:textSize="@dimen/text_size_12"/>
+            android:textSize="@dimen/text_size_12" />
 
         <TextView
             android:id="@+id/comment_content"
@@ -87,7 +87,7 @@
             android:layout_marginTop="6dp"
             android:text="支持股票上市"
             android:textColor="@color/text_color_normal"
-            android:textSize="@dimen/text_size_15"/>
+            android:textSize="@dimen/text_size_15" />
 
         <TextView
             android:id="@+id/comment_text"
@@ -97,7 +97,7 @@
             android:text="显示全部"
             android:textColor="@color/blue_light"
             android:textSize="@dimen/text_size_14"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <hply.com.niugu.view.InnerListView
             android:id="@+id/comment_lv"
@@ -106,8 +106,7 @@
             android:layout_marginTop="10dp"
             android:background="@color/gray_white"
             android:divider="@null"
-            android:listSelector="@color/transparent">
-        </hply.com.niugu.view.InnerListView>
+            android:listSelector="@color/transparent"></hply.com.niugu.view.InnerListView>
 
     </LinearLayout>
 

@@ -224,13 +224,11 @@ public class MyStockTabNewsFragment extends BaseFragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_GONGGAO) {
-                        NormalIntentUtils.go2PdfDisplayActivity(v.getContext(),data.getOrigin_link(),"");
-                    } else {
-                        NormalIntentUtils.go2WebActivity(v.getContext(),
+                        NormalIntentUtils.go2WebActivity(
+                                v.getContext(),
                                 AppConst.WEB_NEWS + data.getNewsId() + "?source=" + stockNewsType.getNewsSource(),
-                                null, true);
-                    }
+                                null,
+                                stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_GONGGAO);
                 }
             });
 

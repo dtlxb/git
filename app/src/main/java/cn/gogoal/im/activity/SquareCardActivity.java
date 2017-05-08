@@ -9,13 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
-
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,11 +28,9 @@ import cn.gogoal.im.adapter.IMPersonSetAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.RecommendBean;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.view.RectangleView;
 import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XTitle;
 
@@ -47,7 +43,8 @@ public class SquareCardActivity extends BaseActivity {
     private XTitle xTitle;
 
     @BindView(R.id.iv_square_head)
-    RectangleView iv_square_head;
+    ImageView iv_square_head;
+
     @BindView(R.id.personlist_recycler)
     RecyclerView personlistRecycler;
     @BindView(R.id.square_notice)
@@ -83,7 +80,7 @@ public class SquareCardActivity extends BaseActivity {
         conversationId = getIntent().getExtras().getString("conversation_id");
         squareName = getIntent().getExtras().getString("square_name");
         squareCreater = getIntent().getExtras().getString("square_creater");
-        mBeanList = (List<RecommendBean.DataBean.MBean>) getIntent().getExtras().getSerializable("square_members");
+        mBeanList = getIntent().getParcelableArrayListExtra("square_members");
         mPersonInfoAdapter = new IMPersonSetAdapter(1002, SquareCardActivity.this, R.layout.item_square_chat_set, squareCreater, contactBeens);
         personlistRecycler.setAdapter(mPersonInfoAdapter);
         //初始化界面

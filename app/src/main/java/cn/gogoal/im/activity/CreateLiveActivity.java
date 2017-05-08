@@ -21,7 +21,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -56,7 +55,6 @@ public class CreateLiveActivity extends BaseActivity {
         ImageDisplay.loadRoundedRectangleImage(
                 mContext,
                 imgLive,
-                AppDevice.dp2px(mContext, 5),//圆角弧度
                 R.mipmap.logo);
     }
 
@@ -120,7 +118,6 @@ public class CreateLiveActivity extends BaseActivity {
                         ImageDisplay.loadRoundedRectangleImage(
                                 getContext(),
                                 imgLive,
-                                AppDevice.dp2px(getContext(), 5),//圆角弧度
                                 onlineUri);
                     }
 

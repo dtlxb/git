@@ -41,7 +41,7 @@ public class ImageDetailFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        ImageDisplay.loadNetImage(getActivity(),imageUrl,image);
+        ImageDisplay.loadImage(getActivity(),imageUrl,image);
     }
 
     public static ImageDetailFragment getInstance(String imageUrl) {
@@ -54,6 +54,6 @@ public class ImageDetailFragment extends BaseFragment {
 
     @Subscriber(tag = "updata_cache_avatar")
     void updataCacheAvatar(String newAvatarUrl){
-        ImageDisplay.loadNetImage(getActivity(),newAvatarUrl,image);
+        ImageDisplay.loadImage(getActivity(),newAvatarUrl,image);
     }
 }

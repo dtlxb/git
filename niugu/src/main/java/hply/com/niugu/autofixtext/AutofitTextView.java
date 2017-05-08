@@ -1,6 +1,7 @@
 package hply.com.niugu.autofixtext;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.TextView;
@@ -12,7 +13,7 @@ import android.widget.TextView;
  * @attr ref R.styleable.AutofitTextView_minTextSize
  * @attr ref R.styleable.AutofitTextView_precision
  */
-public class AutofitTextView extends TextView implements AutofitHelper.OnTextSizeChangeListener {
+public class AutofitTextView extends AppCompatTextView implements AutofitHelper.OnTextSizeChangeListener {
 
     private AutofitHelper mHelper;
 

@@ -17,7 +17,7 @@
         android:paddingTop="8dp"
         android:visibility="gone">
 
-        <ImageView
+        <cn.gogoal.im.ui.view.CircleImageView
             android:id="@+id/imgAnchorAvatar"
             android:layout_width="40dp"
             android:layout_height="40dp" />
@@ -233,7 +233,7 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <ImageView
+                <cn.gogoal.im.ui.view.CircleImageView
                     android:id="@+id/imgPcIcon"
                     android:layout_width="21dp"
                     android:layout_height="21dp" />

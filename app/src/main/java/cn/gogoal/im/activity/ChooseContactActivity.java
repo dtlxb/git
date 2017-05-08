@@ -187,8 +187,6 @@ public class ChooseContactActivity extends BaseActivity {
                     rvSelectedContacts.getLayoutManager().scrollToPosition(datas.size() - 1);
                 }
 
-                KLog.e("状态" + (isAdd ? "+" : "-") + "=======>>>>>size==" + datas.size() + "======>>>>>>>" + rvSelectedContacts.getWidth());
-
                 if (isAdd) {
                     if (datas.size() >= 8)
                         topListWidth = rvSelectedContacts.getWidth();
@@ -401,7 +399,7 @@ public class ChooseContactActivity extends BaseActivity {
         private List<ContactBean> datas;
 
         ChooseAdapter(List<ContactBean> datas) {
-            super(R.layout.item_choose_contact, datas);
+            super(R.layout.item_contacts, datas);
             this.datas = datas;
             initMap();
         }
@@ -525,15 +523,8 @@ public class ChooseContactActivity extends BaseActivity {
     * */
     private class SelectedAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
 
-        private List<ContactBean> datas;
-
         public SelectedAdapter(List<ContactBean> datas) {
             super(R.layout.item_selected_contact_rv, datas);
-            this.datas = datas;
-        }
-
-        public void setDatas(List<ContactBean> datas) {
-            this.datas = datas;
         }
 
         @Override
@@ -542,7 +533,7 @@ public class ChooseContactActivity extends BaseActivity {
             if (TextUtils.isEmpty((CharSequence) data.getAvatar())) {
                 ivHeader.setImageResource(R.mipmap.image_placeholder);
             } else {
-                ImageDisplay.loadNetImage(getActivity(), data.getAvatar().toString(), ivHeader);
+                ImageDisplay.loadImage(getActivity(), data.getAvatar().toString(), ivHeader);
             }
 
 //            if (isAdd) {
@@ -617,7 +608,7 @@ public class ChooseContactActivity extends BaseActivity {
         private List<ContactBean> datas;
 
         private DeleteAdapter(List<ContactBean> datas) {
-            super(R.layout.item_choose_contact, datas);
+            super(R.layout.item_contacts, datas);
             this.datas = datas;
             initMap();
         }

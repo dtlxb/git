@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +28,6 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.NormalIntentUtils;
-import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.AutoScrollViewPager;
 import cn.gogoal.im.ui.view.XTitle;
@@ -109,6 +109,8 @@ public class InvestmentResearchFragment extends BaseFragment {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     bannerImageUrls.addAll(JSONObject.parseObject(responseInfo, BannerBean.class).getData());
+                    KLog.e(bannerImageUrls.size());
+
                     if (bannerImageUrls.size() > 1) {
                         bannerPager.startAutoScroll(3000);
                         bannerPager.showIndicator(true);
@@ -242,11 +244,15 @@ public class InvestmentResearchFragment extends BaseFragment {
             view.setScaleType(ImageView.ScaleType.CENTER_CROP);
             Glide.with(getActivity()).load(imageUrls.get(position).getImage()).into(view);
             container.addView(view);
+
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UIHelper.toast(v.getContext(), "banner::" + position);
-                    NormalIntentUtils.go2WebActivity(v.getContext(),AppConst.WEB_URL_LLJ,"this is title");
+                    NormalIntentUtils.go2WebActivity(
+                            v.getContext(),
+                            AppConst.WEB_URL_LLJ,
+                            "this is title",
+                            true);
                 }
             });
             return view;

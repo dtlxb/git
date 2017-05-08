@@ -16,6 +16,9 @@ import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -112,6 +115,10 @@ public class ImageUtils {
         }
         return bitmap;
 
+    }
+
+    public static void getUrlBitmap(Context mContext,String url, SimpleTarget<Bitmap> simpleTarget){
+        Glide.with(mContext).load(url).asBitmap().into(simpleTarget);
     }
 
     /**

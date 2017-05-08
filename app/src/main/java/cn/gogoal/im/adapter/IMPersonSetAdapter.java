@@ -4,9 +4,8 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -15,8 +14,8 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
-import cn.gogoal.im.ui.view.RectangleView;
 
 /**
  * Created by huangxx on 2017/3/20.
@@ -45,7 +44,8 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean, BaseViewHolde
         view.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.white));
         view.setLayoutParams(layoutParams);
 
-        RectangleView imageIcon = holder.getView(R.id.iv);
+        ImageView imageIcon = holder.getView(R.id.iv);
+
         TextView personName = holder.getView(R.id.tv);
         TextView squareManTag = holder.getView(R.id.square_man_tag);
         ViewGroup.LayoutParams viewParams = imageIcon.getLayoutParams();
@@ -60,7 +60,14 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean, BaseViewHolde
 
         personName.setText(contactBean.getNickname());
         if (avatar instanceof String) {
-            Glide.with(mContext).load(UFileImageHelper.load(avatar.toString()).compress(10).get()).asBitmap().into(imageIcon);
+//            Glide.with(mContext)
+//                    .load(UFileImageHelper.load(avatar.toString()).compress(10).get())
+//                    .asBitmap()
+//                    .into(imageIcon);
+            ImageDisplay.loadRoundedRectangleImage(
+                    mContext,
+                    imageIcon,
+                    UFileImageHelper.load(avatar.toString()).compress(10).get());
         } else if (avatar instanceof Integer) {
             imageIcon.setImageResource((Integer) avatar);
         }

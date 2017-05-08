@@ -20,12 +20,12 @@ import com.socks.library.KLog;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.PdfData;
-import cn.gogoal.im.bean.WebShareEntity;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.NormalIntentUtils;
+import cn.gogoal.im.common.ShareType;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.WebViewUtil;
@@ -55,7 +55,6 @@ public class FunctionActivity extends BaseActivity {
     @Override
     public void doBusiness(final Context mContext) {
 
-        getSupportFragmentManager().beginTransaction();
         //接收传值
         title = getIntent().getStringExtra("title");
         String url = getIntent().getStringExtra("function_url");
@@ -69,36 +68,31 @@ public class FunctionActivity extends BaseActivity {
             xTitle = setMyTitle("", true);
         }
 
-        xTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                shareWeb
-                webView.callHandler("shareWeb", CalendarUtils.getCurrentTime("yyyy-MM-dd HH:mm:ss"), new ValueCallback<String>() {
-                    @Override
-                    public void onReceiveValue(String value) {
-                        /**
-                         * {
-                         * "desc":"一分钟了解股价走势与业绩相关性",
-                         * "icon":"http://hackfile.ufile.ucloud.cn/ggimages/aicon/2dcc4122.png",
-                         * "title":"平安银行  000001"
-                         * }
-                         * */
-                        if (!TextUtils.isEmpty(value)){
-                            WebShareEntity shareEntity = JSONObject.parseObject(value, WebShareEntity.class);
-                            Intent intent=new Intent(getContext(),ShareMessageActivity.class);
-                            intent.putExtra("share_web_data",shareEntity);
-                            startActivity(intent);
-                        }
-                    }
-                });
-            }
-        });
         //分享web页
         if (needShare) {
             xTitle.addAction(new XTitle.TextAction(getString(R.string.str_share)) {
                 @Override
                 public void actionClick(View view) {
-                    //TODO web页分享
+                    webView.callHandler("shareWeb", "", new ValueCallback<String>() {
+                        @Override
+                        public void onReceiveValue(String value) {
+                            KLog.e(value);
+                            if (StringUtils.isActuallyEmpty(value)) {
+                                GGShareEntity entity = new GGShareEntity();
+                                entity.setDesc("测试数据测试数据测试数据测试数据测试数据测试数据测试数据");
+                                entity.setIcon("http://www.go-goal.com/sample/ACC/ftx/forum/library/ucloud_C317F15BB2B3AA91.jpg");
+                                entity.setTitle("测试数据-标题");
+
+                                value=JSONObject.toJSONString(entity);
+
+                            }
+                            GGShareEntity shareEntity = JSONObject.parseObject(value, GGShareEntity.class);
+                            shareEntity.setShareType(ShareType.WEB);
+                            Intent intent = new Intent(getContext(), ShareMessageActivity.class);
+                            intent.putExtra("share_web_data", shareEntity);
+                            startActivity(intent);
+                        }
+                    });
                 }
             });
         }
@@ -196,7 +190,7 @@ public class FunctionActivity extends BaseActivity {
         webView.registerHandler("showJSAlert", new BridgeHandler() {
             @Override
             public void handler(String data, ValueCallback<String> function) {
-                DialogHelp.getMessageDialog(getContext(),data).show();
+                DialogHelp.getMessageDialog(getContext(), data).show();
             }
         });
     }

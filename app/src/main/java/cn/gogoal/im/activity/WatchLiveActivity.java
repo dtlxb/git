@@ -70,6 +70,7 @@ import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 import cn.gogoal.im.common.linkUtils.VideoChatStatus;
 import cn.gogoal.im.fragment.WatchBottomFragment;
 import cn.gogoal.im.ui.dialog.LiveCloseDialog;
+import cn.gogoal.im.ui.view.CircleImageView;
 
 /*
 * 观看直播页面
@@ -92,7 +93,7 @@ public class WatchLiveActivity extends BaseActivity {
     @BindView(R.id.textTitle)
     TextView textTitle;
     @BindView(R.id.imgPalyer)
-    ImageView imgPalyer;
+    CircleImageView imgPalyer;
     @BindView(R.id.textCompany)
     TextView textCompany;
     @BindView(R.id.textMarInter)
@@ -944,7 +945,7 @@ public class WatchLiveActivity extends BaseActivity {
                     JSONObject data = object.getJSONArray("data").getJSONObject(0);
                     //直播详情
                     textTitle.setText(data.getString("video_name")); //直播名称
-                    ImageDisplay.loadCircleNetImage(getContext(), data.getString("face_url"), imgPalyer);
+                    ImageDisplay.loadCircleImage(getContext(), data.getString("face_url"), imgPalyer);
                     textCompany.setText(data.getString("anchor_name"));
                     textMarInter.setText(data.getString("programme_name"));
                     //主播介绍

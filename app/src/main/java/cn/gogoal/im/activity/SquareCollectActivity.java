@@ -227,7 +227,7 @@ public class SquareCollectActivity extends BaseActivity {
                     getNicePicture(urls, groupObject.getString("conv_id"), String.valueOf(position));
                 }
             } else {
-                ImageDisplay.loadFileImage(getActivity(), new File(ImageUtils.getBitmapFilePaht(groupObject.getString("conv_id"), "imagecache")), avatarIv);
+                ImageDisplay.loadImage(getActivity(), new File(ImageUtils.getBitmapFilePaht(groupObject.getString("conv_id"), "imagecache")), avatarIv);
             }
             holder.setText(R.id.last_message, groupObject.getJSONObject("attr").getString("intro") != null ? groupObject.getJSONObject("attr").getString("intro") : "");
             nameView.setText(groupObject.getString("name"));

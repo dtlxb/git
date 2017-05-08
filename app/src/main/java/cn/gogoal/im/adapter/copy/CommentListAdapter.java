@@ -3,7 +3,6 @@ package cn.gogoal.im.adapter.copy;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,6 +18,7 @@ import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.ui.view.CircleImageView;
 import hply.com.niugu.bean.CommentData;
 import hply.com.niugu.bean.CommentData_Sons;
 import hply.com.niugu.view.InnerListView;
@@ -43,7 +43,7 @@ public class CommentListAdapter extends MyBaseAdapter<CommentData> {
     if (convertView == null) {
       holdView = new HoldView();
       convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_comments_list_item, parent,false);
-      holdView.comment_head_iv = (ImageView) convertView.findViewById(R.id.comment_head_iv);
+      holdView.comment_head_iv = (CircleImageView) convertView.findViewById(R.id.comment_head_iv);
       holdView.comment_useName = (TextView) convertView.findViewById(R.id.comment_useName);
       holdView.comment_number = (TextView) convertView.findViewById(R.id.comment_number);
       holdView.comment_thumb_up = (RelativeLayout) convertView.findViewById(R.id.comment_thumb_up);
@@ -57,8 +57,10 @@ public class CommentListAdapter extends MyBaseAdapter<CommentData> {
       resetHolder(holdView);
     }
     final CommentData on_data = list.get(position);
+
+
     //加载头像
-    ImageDisplay.loadCircleNetImage(parent.getContext(),on_data.getAvoter(), holdView.comment_head_iv);
+    ImageDisplay.loadCircleImage(parent.getContext(),on_data.getAvoter(), holdView.comment_head_iv);
 
     holdView.comment_useName.setText(on_data.getUsername());
     holdView.comment_number.setText(on_data.getPraise_sum() + "");
@@ -132,7 +134,7 @@ public class CommentListAdapter extends MyBaseAdapter<CommentData> {
   }
 
   class HoldView {
-    ImageView comment_head_iv;
+    CircleImageView comment_head_iv;
     TextView comment_useName;
     TextView comment_number;
     RelativeLayout comment_thumb_up;
