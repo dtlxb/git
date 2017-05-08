@@ -1,6 +1,6 @@
 package cn.gogoal.im.bean;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by dave.
@@ -11,7 +11,7 @@ import java.util.List;
 public class SocialRecordBean {
 
     private int code;
-    private List<SocialRecordData> data;
+    private ArrayList<SocialRecordData> data;
 
     public int getCode() {
         return code;
@@ -21,11 +21,11 @@ public class SocialRecordBean {
         this.code = code;
     }
 
-    public List<SocialRecordData> getData() {
+    public ArrayList<SocialRecordData> getData() {
         return data;
     }
 
-    public void setData(List<SocialRecordData> data) {
+    public void setData(ArrayList<SocialRecordData> data) {
         this.data = data;
     }
 }
