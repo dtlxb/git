@@ -322,7 +322,7 @@ public class MessageFragment extends BaseFragment {
             ImageView avatarIv = holder.getView(R.id.head_image);
             TextView messageTv = holder.getView(R.id.last_message);
             TextView countTv = holder.getView(R.id.count_tv);
-
+            KLog.e(messageBean.getConversationID());
             //未读数
             setCountTag(countTv, messageBean.getUnReadCounts());
             if (messageBean.getUnReadCounts().equals("0")) {
@@ -356,11 +356,11 @@ public class MessageFragment extends BaseFragment {
                         avatarIv.setImageURI(Uri.parse(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")));
                     }
                 } else if (chatType == 1004) {
-//                    Glide.with(getActivity()).load(R.mipmap.chat_new_friend).asBitmap().into(avatarIv);
+                    //Glide.with(getActivity()).load(R.mipmap.chat_new_friend).asBitmap().into(avatarIv);
                     ImageDisplay.loadRoundedRectangleImage(getActivity(), avatarIv,
                             R.mipmap.chat_new_friend);
                 } else {
-//                    Glide.with(getActivity()).load(messageBean.getAvatar()).asBitmap().into(avatarIv);
+                    //Glide.with(getActivity()).load(messageBean.getAvatar()).asBitmap().into(avatarIv);
                     ImageDisplay.loadRoundedRectangleImage(getActivity(), avatarIv,
                             messageBean.getAvatar());
                 }
@@ -478,6 +478,7 @@ public class MessageFragment extends BaseFragment {
      */
     @Subscriber(tag = "set_avatar")
     public void setAvatar(String code) {
+        KLog.e(code);
         listAdapter.notifyItemChanged(Integer.parseInt(code));
     }
 

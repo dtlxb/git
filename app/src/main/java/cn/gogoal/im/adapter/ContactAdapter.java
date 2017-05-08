@@ -50,7 +50,7 @@ public class ContactAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
 
         Object avatar = contactBean.getAvatar();
         if (avatar instanceof String) {
-            holder.setImageUrl(R.id.item_contacts_iv_icon, avatar.toString());
+            holder.setImageUrl(R.id.item_contacts_iv_icon, avatar.toString(), false);
         } else if (avatar instanceof Integer) {
             holder.setImageResource(R.id.item_contacts_iv_icon, (Integer) avatar);
         } else if (avatar instanceof Bitmap) {

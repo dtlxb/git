@@ -28,7 +28,7 @@
         android:adjustViewBounds="true"
         android:contentDescription="@null"
         android:scaleType="centerCrop"
-        android:src="@mipmap/contacts_new_friend" />
+        android:src="@mipmap/image_placeholder" />
 
     <RelativeLayout
         android:layout_width="0dp"

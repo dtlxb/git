@@ -162,7 +162,7 @@
             android:name=".activity.copy.StockDetailChartsActivity"
             android:configChanges="orientation|screenSize|keyboard"
             android:screenOrientation="landscape" />
-        <activity android:name=".activity.copy.CommentActivity" />
+        <!--<activity android:name=".activity.copy.CommentActivity" />-->
         <activity
             android:name=".activity.copy.StockDetailMarketIndexActivity"
             android:screenOrientation="portrait" />
