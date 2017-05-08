@@ -59,7 +59,7 @@ public class GroupFaceImage<T> {
                 minItemH = 11 * INNER_DIVIDER;
                 break;
             default:
-                minItemH = 17 * INNER_DIVIDER;
+                minItemH = 11 * INNER_DIVIDER;
                 break;
         }
         return instance;
