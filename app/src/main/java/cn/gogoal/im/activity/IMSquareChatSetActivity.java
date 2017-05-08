@@ -457,7 +457,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
                         }
                     });
-                    Log.e("+++urls1", urls.toString());
                     PersonContactBeens.addAll(addContactBeens);
                     getNicePicture(urls);
                     contactBeens.clear();

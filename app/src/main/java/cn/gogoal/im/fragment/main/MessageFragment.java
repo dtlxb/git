@@ -344,23 +344,17 @@ public class MessageFragment extends BaseFragment {
                 nickName = messageBean.getNickname();
                 //头像设置
                 if (chatType == 1002) {
-                    if (lcattrsObject != null) {
-                        squareMessageFrom = (lcattrsObject.get("username")) == null ? "" : lcattrsObject.getString("username");
+                    if (lcattrsObject != null && lcattrsObject.get("username") != null) {
+                        squareMessageFrom = UserUtils.getUserName().equals(lcattrsObject.get("username")) ? "" : lcattrsObject.getString("username");
                     }
                     if (ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache").equals("")) {
-                        KLog.e("跑得这里么？？？1");
                         ChatGroupHelper.createGroupImage(messageBean.getConversationID(), gruopMemberMap.get(messageBean.getConversationID()), "set_avatar");
                     } else {
-                        KLog.e("跑得这里么？？？2");
-                        //ImageDisplay.loadFileImage(getActivity(), new File(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")), avatarIv);
-                        avatarIv.setImageURI(Uri.parse(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")));
+                        ImageDisplay.loadRoundedRectangleImage(getActivity(), ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache"), avatarIv);
                     }
                 } else if (chatType == 1004) {
-//                    Glide.with(getActivity()).load(R.mipmap.chat_new_friend).asBitmap().into(avatarIv);
-                    ImageDisplay.loadRoundedRectangleImage(getActivity(), R.mipmap.chat_new_friend, avatarIv
-                    );
+                    ImageDisplay.loadRoundedRectangleImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
                 } else {
-//                    Glide.with(getActivity()).load(messageBean.getAvatar()).asBitmap().into(avatarIv);
                     ImageDisplay.loadRoundedRectangleImage(getActivity(),
                             messageBean.getAvatar(), avatarIv);
                 }

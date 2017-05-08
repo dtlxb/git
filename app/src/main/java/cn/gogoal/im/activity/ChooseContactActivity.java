@@ -128,7 +128,7 @@ public class ChooseContactActivity extends BaseActivity {
         //actionType = 1102,1103,1104
         String teamId = getIntent().getStringExtra("conversation_id");
 
-        switch (actionType){
+        switch (actionType) {
             case AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE:
 //                GGShareEntity shareEntity
                 break;
@@ -298,6 +298,10 @@ public class ChooseContactActivity extends BaseActivity {
      * 创建群组
      */
     public void createChatGroup(final TreeSet<Integer> userIdList) {
+        if (userIdList.size() < 3) {
+            UIHelper.toast(ChooseContactActivity.this, "三个成员以上才能创建群组");
+            return;
+        }
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
         params.put("id_list", JSONObject.toJSONString(userIdList));
@@ -317,7 +321,6 @@ public class ChooseContactActivity extends BaseActivity {
                     intent.putExtras(mbundle);
                     startActivity(intent);
 
-                    UIHelper.toast(ChooseContactActivity.this, "群组创建成功!!!");
                     finish();
                 } else {
                     UIHelper.toastResponseError(getActivity(), responseInfo);
