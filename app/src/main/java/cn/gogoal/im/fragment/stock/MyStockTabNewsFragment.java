@@ -126,7 +126,7 @@ public class MyStockTabNewsFragment extends BaseFragment {
                 } else {
                     newsAdapter.loadMoreEnd(true);
                     newsAdapter.setEnableLoadMore(false);
-                    UIHelper.toast(getActivity(), "没有更多数据");
+                    UIHelper.toast(getActivity(), R.string.nomoredata_hint);
 
                 }
                 newsAdapter.loadMoreComplete();
@@ -224,11 +224,11 @@ public class MyStockTabNewsFragment extends BaseFragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        NormalIntentUtils.go2WebActivity(
-                                v.getContext(),
-                                AppConst.WEB_NEWS + data.getNewsId() + "?source=" + stockNewsType.getNewsSource(),
-                                null,
-                                stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_GONGGAO);
+                    NormalIntentUtils.go2WebActivity(
+                            v.getContext(),
+                            AppConst.WEB_NEWS + data.getNewsId() + "?source=" + stockNewsType.getNewsSource(),
+                            null,
+                            stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_GONGGAO);
                 }
             });
 
