@@ -103,9 +103,11 @@ public class SocialContactFragment extends BaseFragment {
         refreshSocial.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                recordPage = 1;
+
                 getLiveData(1, null);
                 getLiveData(2, null);
-                getRecordData(1, null);
+                getRecordData(null);
             }
         });
 
@@ -127,7 +129,7 @@ public class SocialContactFragment extends BaseFragment {
                 if (recordPage <= 10) {
                     recordPage++;
                     recordAdapter.loadMoreEnd(false);
-                    getRecordData(recordPage, programme_name);
+                    getRecordData(programme_name);
                 } else {
                     recordAdapter.loadMoreEnd(true);
                     recordAdapter.setEnableLoadMore(false);
@@ -139,7 +141,7 @@ public class SocialContactFragment extends BaseFragment {
 
         getLiveData(1, null);
         getLiveData(2, null);
-        getRecordData(1, null);
+        getRecordData(null);
     }
 
     @Subscriber(tag = "setScreen")
@@ -153,7 +155,7 @@ public class SocialContactFragment extends BaseFragment {
 
         getLiveData(1, programme_name);
         getLiveData(2, programme_name);
-        getRecordData(1, programme_name);
+        getRecordData(programme_name);
     }
 
     @OnClick({R.id.imgFloatAction, R.id.boxScreen})
@@ -268,7 +270,7 @@ public class SocialContactFragment extends BaseFragment {
     /**
      * 获取录播列表数据
      */
-    private void getRecordData(final int page, String programme_id) {
+    private void getRecordData(String programme_id) {
 
         recordAdapter.setEnableLoadMore(false);
 
@@ -276,7 +278,7 @@ public class SocialContactFragment extends BaseFragment {
         if (programme_id != null) {
             param.put("programme_id", programme_id);
         }
-        param.put("page", String.valueOf(page));
+        param.put("page", String.valueOf(recordPage));
         param.put("rows", "10");
 
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
@@ -293,7 +295,7 @@ public class SocialContactFragment extends BaseFragment {
                     recordAdapter.loadMoreComplete();
 
                 } else if (object.getCode() == 1001) {
-                    if (page == 1) {
+                    if (recordPage == 1) {
                         recordLinear.setVisibility(View.GONE);
                     }
                 } else {
