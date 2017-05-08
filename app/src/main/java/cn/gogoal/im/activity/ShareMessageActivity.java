@@ -198,7 +198,6 @@ public class ShareMessageActivity extends BaseActivity {
                                     intent.putExtra("square_action", AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE);
                                     intent.putExtra("share_web_data",shareEntity);
                                     startActivity(intent);
-
                                     break;
                                 case 2://我的群组列表
                                     break;

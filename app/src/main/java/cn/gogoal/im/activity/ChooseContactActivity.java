@@ -33,6 +33,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ArrayUtils;
@@ -64,6 +65,7 @@ public class ChooseContactActivity extends BaseActivity {
     private int topListWidth;
 
     private boolean isAdd;
+    private GGShareEntity shareEntity;
 
     public void setOnItemCheckListener(ICheckItemListener<ContactBean> listener) {
         this.listener = listener;
@@ -123,31 +125,8 @@ public class ChooseContactActivity extends BaseActivity {
          * 1205.分享消息给很多好友
          * */
         actionType = getIntent().getIntExtra("square_action", 0);
-
-        KLog.e(actionType);
-        //actionType = 1102,1103,1104
         String teamId = getIntent().getStringExtra("conversation_id");
-
-        switch (actionType){
-            case AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE:
-//                GGShareEntity shareEntity
-                break;
-        }
-        if (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE || actionType == AppConst.LIVE_CONTACT_SOMEBODY) {
-            rvDel.setVisibility(View.VISIBLE);
-            rvDel.addItemDecoration(new NormalItemDecoration(mContext));
-            rvDel.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-            rvDel.setAdapter(new DeleteAdapter(UserUtils.getOthersInTeam(teamId, actionType)));
-        }
-
-        //1100
         itContactBean = (ContactBean) getIntent().getSerializableExtra("seri");
-
-        if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE) {
-            mSelectedTeamMemberAccounts.addAll(UserUtils.getFriendsInTeam(teamId));
-        } else if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
-            mSelectedTeamMemberAccounts.add(itContactBean);
-        }
 
         textAction = initTitleAction(teamId);
 
@@ -164,17 +143,33 @@ public class ChooseContactActivity extends BaseActivity {
 
         AppDevice.setViewWidth$Height(tvConstactsFlag, AppDevice.getWidth(mContext) / 4, AppDevice.getWidth(mContext) / 4);
 
-        KLog.e(mSelectedTeamMemberAccounts);
+        switch (actionType) {
+            case AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE:
+                shareEntity = getIntent().getParcelableExtra("share_web_data");
+                userContacts = UserUtils.getUserContacts();
+                break;
+            case AppConst.SQUARE_ROOM_DELETE_ANYONE:
+            case AppConst.LIVE_CONTACT_SOMEBODY:
 
-        if (actionType == AppConst.SQUARE_ROOM_AT_SOMEONE) {
-            userContacts = UserUtils.getFriendsInTeam(teamId);
-        } else {
-            userContacts = UserUtils.getUserContacts();
+                userContacts = UserUtils.getUserContacts();
+
+                rvDel.setVisibility(View.VISIBLE);
+                rvDel.addItemDecoration(new NormalItemDecoration(mContext));
+                rvDel.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+                rvDel.setAdapter(new DeleteAdapter(UserUtils.getOthersInTeam(teamId, actionType)));
+                break;
+            case AppConst.SQUARE_ROOM_ADD_ANYONE:
+                userContacts = UserUtils.getUserContacts();
+                mSelectedTeamMemberAccounts.addAll(UserUtils.getFriendsInTeam(teamId));
+                break;
+            case AppConst.CREATE_SQUARE_ROOM_BY_ONE:
+                userContacts = UserUtils.getUserContacts();
+                mSelectedTeamMemberAccounts.add(itContactBean);
+                break;
+            case AppConst.SQUARE_ROOM_AT_SOMEONE:
+                userContacts = UserUtils.getFriendsInTeam(teamId);
+                break;
         }
-
-        /*if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE && itContactBean != null) {
-            userContacts.add(itContactBean);
-        }*/
 
         showContact();//设置列表
 
