@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:text="@string/text_empty"
             android:textColor="@color/textColor_333333"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/text_empty"
                 android:textColor="#b2b2b2"
-                android:textSize="13sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_stock_type"

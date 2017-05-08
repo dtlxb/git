@@ -21,6 +21,8 @@
         <item name="tabTextAppearance">@style/NormalTabItem</item>
     </style>
 
+    <style name="DialogEditText" parent="Widget.AppCompat.EditText"/>
+
     <style name="RadioTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@android:color/transparent</item>
         <item name="tabIndicatorHeight">0dp</item>
@@ -81,6 +83,18 @@
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowAnimationStyle">@style/BaseCenterDialogStyle</item>
         <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+    </style>
+
+    <!--分享消息弹窗封装-->
+    <style name="CenterShareDialog" parent="Base.Theme.AppCompat.Light.Dialog">
+        <item name="android:windowTitleStyle">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowAnimationStyle">@style/BaseCenterDialogStyle</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="editTextStyle">@style/DialogEditText</item>
     </style>
 
     <!--弹窗动画底部-->

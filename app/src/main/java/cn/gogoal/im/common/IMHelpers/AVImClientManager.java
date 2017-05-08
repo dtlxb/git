@@ -19,8 +19,6 @@ import cn.gogoal.im.common.UserUtils;
 
 /**
  * Created by huangxx on 17/02/20.
- * <p>
- * edit by wangjd:修改单利为双重校验锁模式，懒汉加锁方式的单利效率低
  */
 public class AVImClientManager {
 
@@ -92,7 +90,6 @@ public class AVImClientManager {
         conversationQuery.findInBackground(new AVIMConversationQueryCallback() {
             @Override
             public void done(List<AVIMConversation> list, AVIMException e) {
-
                 if (null == e) {
                     if (null != list && (!list.isEmpty())) {
                         if (null != mChatJoinManager) {
@@ -100,12 +97,12 @@ public class AVImClientManager {
                         }
                     } else {
                         if (null != mChatJoinManager) {
-                            mChatJoinManager.joinFail("服务器连接中...");
+                            mChatJoinManager.joinFail("没有会话数据");
                         }
                     }
                 } else {
                     if (null != mChatJoinManager) {
-                        mChatJoinManager.joinFail("服务器连接中...");
+                        mChatJoinManager.joinFail(e.getMessage());
                     }
                 }
             }

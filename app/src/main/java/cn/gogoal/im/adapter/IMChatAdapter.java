@@ -147,8 +147,8 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             }
             ImageDisplay.loadRoundedRectangleImage(
                     mContext,
-                    ((IMCHatViewHolder) holder).user_head_photo,
-                    UFileImageHelper.load(headPicUrl).compress(33).get());
+                    UFileImageHelper.load(headPicUrl).compress(33).get(),
+                    ((IMCHatViewHolder) holder).user_head_photo);
             //点击头像展开详情
             ((IMCHatViewHolder) holder).user_head_photo.setOnClickListener(new View.OnClickListener() {
                 @Override

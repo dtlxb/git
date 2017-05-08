@@ -41,7 +41,7 @@ public class AppConst {
 
     public static final String LEAN_CLOUD_CONVERSATION_ID = "58aaa02d8d6d8100636e8be9";
 
-    //关于刷新的一些类型，抗干扰
+    //======================关于刷新的一些类型，抗干扰===============================================
     public static final int REFRESH_TYPE_FIRST = 0x50010;            //首次进入刷新
 
     public static final int REFRESH_TYPE_AUTO = 0x50011;            //自动刷新
@@ -54,13 +54,21 @@ public class AppConst {
 
     public static final int REFRESH_TYPE_PARENT_BUTTON = 0x50014;   //父activity的刷新按钮
 
-    //创建群的方式
+    //======================关于ChooseContactActivity类型，选择好友列表==============================
+    // ChooseContactActivity类型——选择好友和单聊好友创建群
     public static final int CREATE_SQUARE_ROOM_BY_ONE = 1100;
+    // ChooseContactActivity类型——创群
     public static final int CREATE_SQUARE_ROOM_BUILD = 1101;
-    //群加人删人@人
+    // ChooseContactActivity类型——原来存在的群继续添加好友
     public static final int SQUARE_ROOM_ADD_ANYONE = 1102;
+    // ChooseContactActivity类型——原来存在的群中移除好友
     public static final int SQUARE_ROOM_DELETE_ANYONE = 1103;
+    // ChooseContactActivity类型——群@人
     public static final int SQUARE_ROOM_AT_SOMEONE = 1104;
+    //ChooseContactActivity类型——分享到好友
+    public static final int SQUARE_ROOM_AT_SHARE_MESSAGE = 1205;
+
+
     //改群名，改群简介
     public static final int SQUARE_ROOM_EDIT_NAME = 1105;
     public static final int SQUARE_ROOM_EDIT_BRIEF = 1106;
@@ -117,7 +125,7 @@ public class AppConst {
 
     public static final int SOURCE_TYPE_YANBAO = 102;//个股 研报
     public static final int SOURCE_TYPE_GONGGAO = 105;//个股 公告
-    public static final String WEB_NEWS = WEB_URL+"/report/info/";
+    public static final String WEB_NEWS = WEB_URL + "/report/info/";
 
     //新闻远端
     public static final int SOURCE_TYPE_NEWS = 100;//个股 新闻

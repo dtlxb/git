@@ -1,6 +1,9 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -10,7 +13,8 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.bumptech.glide.Glide;
+import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +24,19 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ShareListBean;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
+import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.dialog.ShareMessageDialog;
 import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.view.XTitle;
 
@@ -47,6 +59,7 @@ public class ShareMessageActivity extends BaseActivity {
 
     private List<ShareListBean> datas;
     private ShareListAdapter adapter;
+    private GGShareEntity shareEntity;
 
     @Override
     public int bindLayout() {
@@ -55,9 +68,10 @@ public class ShareMessageActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        titleBar.setVisibility(View.VISIBLE);
-        titleBar.setTitle("选择联系人").setLeftText("\u3000取消");
+        initTitle();
         BaseActivity.initRecycleView(recyclerView, 0);
+
+        shareEntity = getIntent().getParcelableExtra("share_web_data");//分享的数据
 
         datas = new ArrayList<>();
         adapter = new ShareListAdapter(datas);
@@ -65,10 +79,23 @@ public class ShareMessageActivity extends BaseActivity {
         recyclerView.setAdapter(adapter);
 
         datas.add(new ShareListBean(ShareListBean.LIST_TYPE_SEARCH));
-        datas.add(addFunctionHead("新朋友", R.mipmap.contacts_new_friend));
+        datas.add(addFunctionHead("我的朋友", R.mipmap.contacts_new_friend));
         datas.add(addFunctionHead("我的群组", R.mipmap.group_contacts));
 
         getRecentConversation();
+    }
+
+    private void initTitle() {
+        titleBar.setVisibility(View.VISIBLE);
+        titleBar.setTitle("选择联系人").setLeftText("\u3000取消");
+        titleBar.setLeftTextColor(Color.BLACK);
+        titleBar.setTitleColor(Color.BLACK);
+        titleBar.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private ShareListBean addFunctionHead(String name, int iconId) {
@@ -78,23 +105,63 @@ public class ShareMessageActivity extends BaseActivity {
         return bean;
     }
 
+    /**获取最近会话*/
     public void getRecentConversation() {
         JSONArray recentArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", null);
         if (recentArray != null) {
             datas.add(new ShareListBean(ShareListBean.LIST_TYPE_SECTION));
             List<IMMessageBean> messageBeen = JSON.parseArray(recentArray.toJSONString(), IMMessageBean.class);
             for (IMMessageBean bean : messageBeen) {
-                ShareListBean<String> shareListBean = new ShareListBean<>(
-                        ShareListBean.LIST_TYPE_ITEM, bean.getAvatar(), bean.getNickname(), bean);
-                datas.add(shareListBean);
+                if (bean.getChatType() == 1001) {
+                    ShareListBean<String> shareListFriend = new ShareListBean<>(
+                            ShareListBean.LIST_TYPE_ITEM, bean.getAvatar(), bean.getNickname(), bean);
+                    datas.add(shareListFriend);
+                }else if (bean.getChatType()==1002){
+                    final ShareListBean group=new ShareListBean<>(ShareListBean.LIST_TYPE_ITEM);
+                    group.setText(bean.getNickname());
+                    group.setBean(bean);
+                    String imagecache = ImageUtils.getBitmapFilePaht(bean.getConversationID(), "imagecache");
+                    if (!StringUtils.isActuallyEmpty(imagecache)){
+                        group.setItemImage(imagecache);
+                    }else {//没有缓存就拼
+                        final List<String> avatarString=new ArrayList<>();
+                        ChatGroupHelper.createGroupImage(bean.getConversationID(), new ChatGroupHelper.GroupInfoResponse() {
+                            @Override
+                            public void getInfoSuccess(JSONObject groupInfo) {
+                                JSONArray accountList = groupInfo.getJSONArray("accountList");
+                                for (int i=0;i<accountList.size();i++){
+                                    avatarString.add(((JSONObject)accountList.get(i)).getString("avatar"));
+                                }
+                                GroupFaceImage.getInstance(getActivity(),avatarString).load(new GroupFaceImage.OnMatchingListener() {
+                                    @Override
+                                    public void onSuccess(Bitmap mathingBitmap) {
+                                        group.setItemImage(mathingBitmap);
+                                    }
+                                    @Override
+                                    public void onError(Exception e) {
+                                        KLog.e(e.getMessage());
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void getInfoFailed(Exception e) {
+                                KLog.e(e.getMessage());
+                            }
+                        });
+                    }
+
+                    datas.add(group);
+                }
             }
         }
         adapter.notifyDataSetChanged();
 
     }
 
+    /**分享选择列表*/
     private class ShareListAdapter extends BaseMultiItemQuickAdapter<ShareListBean, BaseViewHolder> {
-        public ShareListAdapter(List<ShareListBean> data) {
+        private ShareListAdapter(List<ShareListBean> data) {
             super(data);
             addItemType(ShareListBean.LIST_TYPE_SEARCH, R.layout.include_search_edit);
             addItemType(ShareListBean.LIST_TYPE_SECTION, android.R.layout.simple_list_item_1);
@@ -102,31 +169,46 @@ public class ShareMessageActivity extends BaseActivity {
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, ShareListBean data, int position) {
+        protected void convert(BaseViewHolder holder, final ShareListBean data, final int position) {
             switch (holder.getItemViewType()) {
                 case ShareListBean.LIST_TYPE_SEARCH:
                     EditText etSearch = holder.getView(R.id.layout_2search);
-
+                    // TODO: 2017/5/8 0008 搜索匹配
                     break;
                 case ShareListBean.LIST_TYPE_SECTION:
                     TextView sectionView = holder.getView(android.R.id.text1);
                     sectionView.setText("最近会话");
                     AppDevice.setViewWidth$Height(sectionView,
                             LinearLayout.LayoutParams.MATCH_PARENT,
-                            AppDevice.dp2px(ShareMessageActivity.this,30));
-
+                            AppDevice.dp2px(ShareMessageActivity.this, 30));
                     sectionView.setTextColor(0xff888888);
                     sectionView.setBackgroundColor(0xffe8e8e8);
                     break;
                 case ShareListBean.LIST_TYPE_ITEM:
-                    AppCompatImageView icon = holder.getView(R.id.item_contacts_iv_icon);
-                    if (data.getItemImage() instanceof Integer) {
-                        icon.setImageResource((Integer) data.getItemImage());
-                    } else if (data.getItemImage() instanceof String) {
-                        Glide.with(ShareMessageActivity.this).load((String) data.getItemImage())
-                                .into(icon);
-                    }
                     holder.setText(R.id.item_contacts_tv_nickname, data.getText());
+                    final AppCompatImageView icon = holder.getView(R.id.item_contacts_iv_icon);
+                    ImageDisplay.loadRoundedRectangleImage(ShareMessageActivity.this, data.getItemImage(), icon);
+
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            switch (position) {
+                                case 1://好友列表
+                                    Intent intent=new Intent(v.getContext(),ChooseContactActivity.class);
+                                    intent.putExtra("square_action", AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE);
+                                    intent.putExtra("share_web_data",shareEntity);
+                                    startActivity(intent);
+
+                                    break;
+                                case 2://我的群组列表
+                                    break;
+                                default:
+                                    ShareMessageDialog.newInstance(shareEntity,data).show(getSupportFragmentManager());
+                                    break;
+                            }
+                        }
+                    });
+
                     break;
             }
         }

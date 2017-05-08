@@ -1,5 +1,8 @@
 package cn.gogoal.im.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.avos.avoscloud.im.v2.AVIMMessage;
 
 import java.util.List;
@@ -8,7 +11,7 @@ import java.util.List;
  * Created by huangxx on 2017/2/23.
  */
 
-public class IMMessageBean {
+public class IMMessageBean implements Parcelable{
     private String conversationID;
     private int chatType;
     private Long lastTime;
@@ -87,6 +90,7 @@ public class IMMessageBean {
         this.chatType = chatType;
     }
 
+
     @Override
     public String toString() {
         return "IMMessageBean{" +
@@ -111,4 +115,44 @@ public class IMMessageBean {
         this.avatar = avatar;
         this.lastMessage = lastMessage;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.conversationID);
+        dest.writeInt(this.chatType);
+        dest.writeValue(this.lastTime);
+        dest.writeString(this.unReadCounts);
+        dest.writeString(this.nickname);
+        dest.writeString(this.friend_id);
+        dest.writeString(this.avatar);
+        dest.writeParcelable(this.lastMessage, flags);
+    }
+
+    protected IMMessageBean(Parcel in) {
+        this.conversationID = in.readString();
+        this.chatType = in.readInt();
+        this.lastTime = (Long) in.readValue(Long.class.getClassLoader());
+        this.unReadCounts = in.readString();
+        this.nickname = in.readString();
+        this.friend_id = in.readString();
+        this.avatar = in.readString();
+        this.lastMessage = in.readParcelable(AVIMMessage.class.getClassLoader());
+    }
+
+    public static final Creator<IMMessageBean> CREATOR = new Creator<IMMessageBean>() {
+        @Override
+        public IMMessageBean createFromParcel(Parcel source) {
+            return new IMMessageBean(source);
+        }
+
+        @Override
+        public IMMessageBean[] newArray(int size) {
+            return new IMMessageBean[size];
+        }
+    };
 }

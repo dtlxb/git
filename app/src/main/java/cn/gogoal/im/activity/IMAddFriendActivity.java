@@ -1,10 +1,7 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
@@ -17,8 +14,8 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**
@@ -31,7 +28,6 @@ public class IMAddFriendActivity extends BaseActivity {
     @BindView(R.id.edit_your_message)
     SearchView editYourMessage;
     private int userId = -1;
-    private Handler handler;
 
     @Override
     public int bindLayout() {
@@ -65,18 +61,11 @@ public class IMAddFriendActivity extends BaseActivity {
             }
         };
         titleBar.addAction(sendAction);
-
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                IMAddFriendActivity.this.finish();
-            }
-        };
     }
 
     public void addFirend(int userId) {
-
+        final WaitDialog waitDialog = WaitDialog.getInstance("请求发送中...", R.mipmap.login_loading, true);
+        waitDialog.show(getSupportFragmentManager());
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
         params.put("friend_id", String.valueOf(userId));
@@ -86,20 +75,34 @@ public class IMAddFriendActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                Log.e("=========responseInfo", responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 JSONObject data = result.getJSONObject("data");
                 if (data.getBoolean("success")) {
-                    UIHelper.toast(IMAddFriendActivity.this, "好友请求发送成功!");
-                    handler.sendEmptyMessageDelayed(0x01, 1000);
+                    waitDialog.dismiss(true);
+                    WaitDialog sucessDialog = WaitDialog.getInstance("好友请求发送成功",
+                            R.mipmap.login_success, false);
+                    sucessDialog.show(getSupportFragmentManager());
+                    sucessDialog.dismiss(false,true);
+
+//                    UIHelper.toast(IMAddFriendActivity.this, "好友请求发送成功!");
                 } else {
-                    UIHelper.toast(IMAddFriendActivity.this, "好友请求发送失败!请重试");
+                    waitDialog.dismiss(true);
+                    final WaitDialog essrrDialog = WaitDialog.getInstance("好友请求发送失败!请重试",
+                            R.mipmap.login_error, false);
+                    essrrDialog.show(getSupportFragmentManager());
+                    essrrDialog.dismiss(false);
+//                    UIHelper.toast(IMAddFriendActivity.this, "好友请求发送失败!请重试");
                 }
             }
 
             @Override
             public void onFailure(String msg) {
                 KLog.json(msg);
+                waitDialog.dismiss(true);
+                final WaitDialog essrrDialog = WaitDialog.getInstance(msg,
+                        R.mipmap.login_error, false);
+                essrrDialog.show(getSupportFragmentManager());
+                essrrDialog.dismiss(false);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.ADD_FRIEND, ggHttpInterface).startGet();

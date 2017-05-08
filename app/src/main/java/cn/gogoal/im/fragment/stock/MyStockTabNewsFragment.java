@@ -42,7 +42,7 @@ import cn.gogoal.im.ui.view.XLayout;
  */
 public class MyStockTabNewsFragment extends BaseFragment {
 
-    @BindView(R.id.rv_news)
+    @BindView(R.id.recyclerView)
     RecyclerView rvNews;
 
     @BindView(R.id.swiperefreshlayout)
@@ -81,28 +81,18 @@ public class MyStockTabNewsFragment extends BaseFragment {
 
     @Override
     public int bindLayout() {
-        return R.layout.fragment_mystock_news_tab;
+        return R.layout.layout_normal_list_with_refresh;
     }
 
     @Override
     public void doBusiness(Context mContext) {
         stockNewsType = getArguments().getParcelable("stock_news_type");
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext) {
-            @Override
-            public boolean canScrollVertically() {
-                return true;
-            }
-        };
+        rvNews.setVerticalScrollBarEnabled(true);
 
-        layoutManager.setSmoothScrollbarEnabled(true);
-        layoutManager.setAutoMeasureEnabled(true);
-
-        rvNews.setHasFixedSize(true);
-        rvNews.setNestedScrollingEnabled(false);
         newsAdapter = new MyStockNewsAdapter(stockNewsDatas, stockNewsType.getNewsSource());
         rvNews.addItemDecoration(new NormalItemDecoration(mContext));
-        rvNews.setLayoutManager(layoutManager);
+        rvNews.setLayoutManager(new LinearLayoutManager(mContext));
         BaseActivity.iniRefresh(swiperefreshlayout);
         rvNews.setAdapter(newsAdapter);
 
@@ -224,11 +214,11 @@ public class MyStockTabNewsFragment extends BaseFragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        NormalIntentUtils.go2WebActivity(
-                                v.getContext(),
-                                AppConst.WEB_NEWS + data.getNewsId() + "?source=" + stockNewsType.getNewsSource(),
-                                null,
-                                stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_GONGGAO);
+                    NormalIntentUtils.go2WebActivity(
+                            v.getContext(),
+                            AppConst.WEB_NEWS + data.getNewsId() + "?source=" + stockNewsType.getNewsSource(),
+                            null,
+                            stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_GONGGAO);
                 }
             });
 

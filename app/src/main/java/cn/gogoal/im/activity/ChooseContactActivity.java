@@ -115,11 +115,12 @@ public class ChooseContactActivity extends BaseActivity {
 
         /*
          * 选择好友类型：
-         * 1101.选择好友直接创建群，
          * 1100.选择好友和单聊好友创建群，
+         * 1101.选择好友直接创建群，
          * 1102.原来存在的群继续添加好友，
          * 1103.原来存在的群中移除好友
          * 1104.群@人
+         * 1205.分享消息给很多好友
          * */
         actionType = getIntent().getIntExtra("square_action", 0);
 
@@ -127,6 +128,11 @@ public class ChooseContactActivity extends BaseActivity {
         //actionType = 1102,1103,1104
         String teamId = getIntent().getStringExtra("conversation_id");
 
+        switch (actionType){
+            case AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE:
+//                GGShareEntity shareEntity
+                break;
+        }
         if (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE || actionType == AppConst.LIVE_CONTACT_SOMEBODY) {
             rvDel.setVisibility(View.VISIBLE);
             rvDel.addItemDecoration(new NormalItemDecoration(mContext));
@@ -258,22 +264,31 @@ public class ChooseContactActivity extends BaseActivity {
 
                 TreeSet<Integer> userFriendsIdList = UserUtils.getUserFriendsIdList(result.values());
 
-                if (actionType == AppConst.CREATE_SQUARE_ROOM_BUILD) {
-                    userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getMyAccountId()));
-                    createChatGroup(userFriendsIdList);
-                } else if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
-                    userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getMyAccountId()));
-                    userFriendsIdList.add(itContactBean.getFriend_id());
-                    createChatGroup(userFriendsIdList);
-                } else {
-                    Intent intent = new Intent();
-                    intent.putExtra("square_action", actionType);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("choose_friend_array", new ArrayList<>(result.values()));
-                    intent.putExtras(bundle);
-                    setResult(actionType, intent);
-                    //UIHelper.toast(getActivity(), actionType == AppConst.SQUARE_ROOM_ADD_ANYONE ? "添加成功" : "移除成功");
-                    finish();
+                switch (actionType) {
+                    case AppConst.CREATE_SQUARE_ROOM_BUILD:
+                        userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getMyAccountId()));
+                        createChatGroup(userFriendsIdList);
+                        break;
+                    case AppConst.CREATE_SQUARE_ROOM_BY_ONE:
+                        userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getMyAccountId()));
+                        userFriendsIdList.add(itContactBean.getFriend_id());
+                        createChatGroup(userFriendsIdList);
+                        break;
+                    case AppConst.SQUARE_ROOM_ADD_ANYONE://加人
+                    case AppConst.SQUARE_ROOM_DELETE_ANYONE://删人
+                    case AppConst.SQUARE_ROOM_AT_SOMEONE://@人
+                        Intent intent = new Intent();
+                        intent.putExtra("square_action", actionType);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("choose_friend_array", new ArrayList<>(result.values()));
+                        intent.putExtras(bundle);
+                        setResult(actionType, intent);
+                        //UIHelper.toast(getActivity(), actionType == AppConst.SQUARE_ROOM_ADD_ANYONE ? "添加成功" : "移除成功");
+                        finish();
+                        break;
+                    case AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE://分享给很多人
+
+                        break;
                 }
             }
         };
@@ -371,7 +386,7 @@ public class ChooseContactActivity extends BaseActivity {
                 .invalidate();
 
         rvContacts.addItemDecoration(mDecoration);
-        KLog.e(userContacts);
+
         contactAdapter = new ChooseAdapter(userContacts);
 
         contactAdapter.notifyDataSetChanged();
