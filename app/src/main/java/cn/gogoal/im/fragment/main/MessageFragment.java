@@ -4,7 +4,6 @@ package cn.gogoal.im.fragment.main;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -322,7 +321,6 @@ public class MessageFragment extends BaseFragment {
             ImageView avatarIv = holder.getView(R.id.head_image);
             TextView messageTv = holder.getView(R.id.last_message);
             TextView countTv = holder.getView(R.id.count_tv);
-            KLog.e(messageBean.getConversationID());
             //未读数
             setCountTag(countTv, messageBean.getUnReadCounts());
             if (messageBean.getUnReadCounts().equals("0")) {
