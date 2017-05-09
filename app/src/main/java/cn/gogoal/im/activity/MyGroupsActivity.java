@@ -29,6 +29,7 @@ import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.GroupCollectionData;
 import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
@@ -111,6 +112,9 @@ public class MyGroupsActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                FileUtil.writeRequestResponse(responseInfo,"我的qun");
+
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     List<GroupCollectionData.DataBean> data =
                             JSONObject.parseObject(responseInfo, GroupCollectionData.class).getData();
