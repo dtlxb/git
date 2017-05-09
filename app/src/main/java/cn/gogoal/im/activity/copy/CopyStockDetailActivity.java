@@ -1038,29 +1038,29 @@ public class CopyStockDetailActivity extends BaseActivity {
                     StockUtils.savaColseprice((float) closePrice);
                     priceVolumDatas.clear();
                     //卖
-                    priceVolumDatas.add(StringUtils.getStockDouble(info.getSell5_price(), 2));
+                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getSell5_price(), 2));
                     priceVolumDatas.add(info.getSell5_volume() + "");
-                    priceVolumDatas.add(StringUtils.getStockDouble(info.getSell4_price(), 2));
+                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getSell4_price(), 2));
                     priceVolumDatas.add(info.getSell4_volume() + "");
-                    priceVolumDatas.add(StringUtils.getStockDouble(info.getSell3_price(), 2));
+                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getSell3_price(), 2));
                     priceVolumDatas.add(info.getSell3_volume() + "");
-                    priceVolumDatas.add(StringUtils.getStockDouble(info.getSell2_price(), 2));
+                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getSell2_price(), 2));
                     priceVolumDatas.add(info.getSell2_volume() + "");
-                    priceVolumDatas.add(StringUtils.getStockDouble(info.getSell1_price(), 2));
+                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getSell1_price(), 2));
                     priceVolumDatas.add(info.getSell1_volume() + "");
                     //买
-                    priceVolumDatas.add(StringUtils.getStockDouble(info.getBuy1_price(), 2));
+                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getBuy1_price(), 2));
                     priceVolumDatas.add(info.getBuy1_volume() + "");
-                    priceVolumDatas.add(StringUtils.getStockDouble(info.getBuy2_price(), 2));
+                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getBuy2_price(), 2));
                     priceVolumDatas.add(info.getBuy2_volume() + "");
-                    priceVolumDatas.add(StringUtils.getStockDouble(info.getBuy3_price(), 2));
+                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getBuy3_price(), 2));
                     priceVolumDatas.add(info.getBuy3_volume() + "");
-                    priceVolumDatas.add(StringUtils.getStockDouble(info.getBuy4_price(), 2));
+                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getBuy4_price(), 2));
                     priceVolumDatas.add(info.getBuy4_volume() + "");
-                    priceVolumDatas.add(StringUtils.getStockDouble(info.getBuy5_price(), 2));
+                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getBuy5_price(), 2));
                     priceVolumDatas.add(info.getBuy5_volume() + "");
-                    stock_price.setText(StringUtils.getStockDouble(info.getPrice(), 2));//股票价格
-                    stock_start.setText(StringUtils.getStockDouble(info.getOpen_price(), 2));//开盘价
+                    stock_price.setText(StringUtils.pareseStringDouble(info.getPrice(), 2));//股票价格
+                    stock_start.setText(StringUtils.pareseStringDouble(info.getOpen_price(), 2));//开盘价
 
                     //涨跌
                     if (StringUtils.pareseStringDouble(info.getChange_value()) > 0) {
@@ -1068,22 +1068,22 @@ public class CopyStockDetailActivity extends BaseActivity {
                         relative_header.setBackgroundColor(getResColor(R.color.header_red));
                         linear_header.setBackgroundColor(getResColor(R.color.header_red));
                         initRefreshStyle(R.color.header_red);
-                        stock_detail_tv1.setText("+" + StringUtils.getStockDouble(info.getChange_value(), 2));
-                        stock_detail_tv2.setText("+" + StringUtils.getStockDouble(info.getChange_rate(), 2) + "%");
+                        stock_detail_tv1.setText("+" + StringUtils.pareseStringDouble(info.getChange_value(), 2));
+                        stock_detail_tv2.setText("+" + StringUtils.pareseStringDouble(info.getChange_rate(), 2) + "%");
                     } else if (StringUtils.pareseStringDouble(info.getChange_value()) < 0) {
                         setStatusColor(R.color.header_green);
                         relative_header.setBackgroundColor(getResColor(R.color.header_green));
                         linear_header.setBackgroundColor(getResColor(R.color.header_green));
                         initRefreshStyle(R.color.header_green);
-                        stock_detail_tv1.setText(StringUtils.getStockDouble(info.getChange_value(), 2));
-                        stock_detail_tv2.setText(StringUtils.getStockDouble(info.getChange_rate(), 2) + "%");
+                        stock_detail_tv1.setText(StringUtils.pareseStringDouble(info.getChange_value(), 2));
+                        stock_detail_tv2.setText(StringUtils.pareseStringDouble(info.getChange_rate(), 2) + "%");
                     } else {
                         setStatusColor(R.color.header_gray);
                         relative_header.setBackgroundColor(getResColor(R.color.header_gray));
                         linear_header.setBackgroundColor(getResColor(R.color.header_gray));
                         initRefreshStyle(R.color.header_gray);
-                        stock_detail_tv1.setText(StringUtils.getStockDouble(info.getChange_value(), 2));
-                        stock_detail_tv2.setText(StringUtils.getStockDouble(info.getChange_rate(), 2) + "%");
+                        stock_detail_tv1.setText(StringUtils.pareseStringDouble(info.getChange_value(), 2));
+                        stock_detail_tv2.setText(StringUtils.pareseStringDouble(info.getChange_rate(), 2) + "%");
                     }
 
                     if (info.getVolume() == null) {

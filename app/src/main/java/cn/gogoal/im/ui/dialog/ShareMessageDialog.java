@@ -7,8 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.bean.GGShareEntity;
-import cn.gogoal.im.bean.ShareListBean;
+import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
@@ -45,19 +44,17 @@ public class ShareMessageDialog extends BaseCentDailog {
         return super.getDimAmount();
     }
 
-    public static ShareMessageDialog newInstance(GGShareEntity entity, ShareListBean data) {
+    public static ShareMessageDialog newInstance(ShareItemInfo info) {
         ShareMessageDialog dialog = new ShareMessageDialog();
         Bundle bundle = new Bundle();
-        bundle.putParcelable("gg_share_entity", entity);
-        bundle.putSerializable("gg_share_list_bean", data);
+        bundle.putSerializable("gg_share_list_info", info);
         dialog.setArguments(bundle);
         return dialog;
     }
 
     @Override
     public void bindView(View v) {
-        GGShareEntity entity = getArguments().getParcelable("gg_share_entity");
-        final ShareListBean data = (ShareListBean) getArguments().getSerializable("gg_share_list_bean");
+        ShareItemInfo entity = (ShareItemInfo) getArguments().getSerializable("gg_share_list_info");
 
         ImageView icon = (ImageView) v.findViewById(R.id.item_contacts_iv_icon);
         TextView name = (TextView) v.findViewById(R.id.item_contacts_tv_nickname);
@@ -67,13 +64,14 @@ public class ShareMessageDialog extends BaseCentDailog {
         TextView tvCancle = (TextView) v.findViewById(R.id.btn_dialog_share_msg_cancle);
         TextView tvSend = (TextView) v.findViewById(R.id.btn_dialog_share_msg_send);
 
-        if (data != null) {
-            ImageDisplay.loadRoundedRectangleImage(v.getContext(), data.getItemImage(), icon);
-            name.setText(data.getText());
-
-        }
         if (entity != null) {
-            tvShareMsgDesc.setText(entity.getDesc());
+            try {
+                ImageDisplay.loadRoundedRectangleImage(v.getContext(), entity.getAvatar(), icon);
+            }catch (Exception e){
+                ImageDisplay.loadImage(v.getContext(), entity.getAvatar(), icon);
+            }
+            name.setText(entity.getName());
+            tvShareMsgDesc.setText(entity.getEntity().getDesc());
         }
 
         tvCancle.setOnClickListener(new View.OnClickListener() {

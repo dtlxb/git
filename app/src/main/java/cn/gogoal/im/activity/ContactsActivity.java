@@ -138,7 +138,7 @@ public class ContactsActivity extends BaseActivity {
                     intent.putExtra("add_type", 0x01);
                     startActivity(intent);
                 } else if (position == 1) {
-                    intent = new Intent(getActivity(), SquareCollectActivity.class);
+                    intent = new Intent(getActivity(), MyGroupsActivity.class);
                     startActivity(intent);
                 } else {
                     intent = new Intent(getActivity(), SingleChatRoomActivity.class);

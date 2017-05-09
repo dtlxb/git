@@ -118,7 +118,7 @@
         <activity
             android:name=".activity.SearchPersonSquareActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".activity.SquareCollectActivity" />
+        <activity android:name=".activity.MyGroupsActivity" />
         <activity android:name=".activity.OfficialAccountsActivity" />
         <activity android:name=".activity.EditSquareBriefActivity" />
         <activity

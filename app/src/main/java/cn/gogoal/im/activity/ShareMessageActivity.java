@@ -26,6 +26,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.IMMessageBean;
+import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.bean.ShareListBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
@@ -200,9 +201,16 @@ public class ShareMessageActivity extends BaseActivity {
                                     startActivity(intent);
                                     break;
                                 case 2://我的群组列表
+                                    Intent intent1=new Intent(v.getContext(),MyGroupsActivity.class);
+                                    intent1.putExtra("action_type",AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE);
+                                    intent1.putExtra("share_web_data",shareEntity);
+                                    startActivity(intent1);
                                     break;
                                 default:
-                                    ShareMessageDialog.newInstance(shareEntity,data).show(getSupportFragmentManager());
+                                    ShareMessageDialog.newInstance(
+                                            new ShareItemInfo(data.getItemImage(),
+                                                    data.getText(),
+                                                    shareEntity)).show(getSupportFragmentManager());
                                     break;
                             }
                         }
