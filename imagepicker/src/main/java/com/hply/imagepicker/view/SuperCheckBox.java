@@ -20,7 +20,7 @@ public class SuperCheckBox extends AppCompatCheckBox {
 
     public SuperCheckBox(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, android.R.attr.checkboxStyle);
-        init(context);
+//        init(context);
     }
 
     private void init(Context context) {

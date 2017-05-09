@@ -235,7 +235,7 @@ public class TreatFragment extends BaseFragment {
 
             holder.setText(R.id.tv_treat_name, data.getName());
 
-            String price = StringUtils.getStockDouble(data.getPrice(), 2);
+            String price = StringUtils.pareseStringDouble(data.getPrice(), 2);
 
             tvTreatPrice.setText(price);
 
@@ -305,7 +305,7 @@ public class TreatFragment extends BaseFragment {
 
             holder.setText(R.id.tv_treat_name, CalendarUtils.getHour$Min(data.getUpdate_time()));
             TextView tvDealPrice = holder.getView(R.id.tv_treat_price);
-            tvDealPrice.setText(StringUtils.getStockDouble(data.getPrice(), 2));
+            tvDealPrice.setText(StringUtils.pareseStringDouble(data.getPrice(), 2));
             if (data.getLast_price_change() > 0) {
                 tvDealPrice.setTextColor(Color.parseColor("#F34957"));
             } else {

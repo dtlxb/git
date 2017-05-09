@@ -138,7 +138,7 @@ public class ContactsActivity extends BaseActivity {
                     intent.putExtra("add_type", 0x01);
                     startActivity(intent);
                 } else if (position == 1) {
-                    intent = new Intent(ContactsActivity.this, SquareCollectActivity.class);
+                    intent = new Intent(ContactsActivity.this, MyGroupsActivity.class);
                     startActivity(intent);
                 } else if (position == 2) {
                     intent = new Intent(ContactsActivity.this, PhoneContactsActivity.class);

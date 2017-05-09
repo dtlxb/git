@@ -2,6 +2,7 @@ package cn.gogoal.im.common;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -14,10 +15,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -175,7 +174,7 @@ public class StringUtils {
             }
             int resId = GGEmoticons.GGEmoticonHashMap.get(key);
             if (0 != resId) {
-                Drawable drawable = context.getResources().getDrawable(resId, null);
+                Drawable drawable = ContextCompat.getDrawable(context,resId);
                 drawable.setBounds(0, 0, textSize, textSize);
                 ImageSpan imageSpan = new ImageSpan(drawable);
                 int end = matcher.start() + key.length();
@@ -293,6 +292,10 @@ public class StringUtils {
         return Character.toUpperCase(lastCode) == checkCodeList[idSum % 11];
     }
 
+    public static String getNotNullString(String orderStr){
+        return isActuallyEmpty(orderStr)?"":orderStr;
+    }
+
     public static Double pareseStringDouble(String value) {
         if (StringUtils.isActuallyEmpty(value)) {
             return 0.0d;
@@ -300,7 +303,7 @@ public class StringUtils {
         return Double.parseDouble(value);
     }
 
-    public static String getStockDouble(String value, int unit) {
+    public static String pareseStringDouble(String value, int unit) {
         return saveSignificand(pareseStringDouble(value), unit);
     }
 
@@ -308,8 +311,7 @@ public class StringUtils {
      * 保留有效数字
      */
     public static String saveSignificand(double doubleData, int significand) {
-        String result = String.format("%." + significand + "f", doubleData);
-        return result;
+        return String.format("%." + significand + "f", doubleData);
     }
 
     /**
@@ -327,11 +329,7 @@ public class StringUtils {
     }
 
     public static String saveSignificand(String strDoubleData, int significand) {
-        try {
-            return String.format("%." + significand + "f", Double.parseDouble(strDoubleData));
-        } catch (Exception e) {
-            return "--";
-        }
+        return pareseStringDouble(strDoubleData,significand);
     }
 
     /**

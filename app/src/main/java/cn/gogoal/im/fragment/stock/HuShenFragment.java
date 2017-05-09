@@ -25,6 +25,7 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.XLayout;
 
@@ -152,7 +153,7 @@ public class HuShenFragment extends BaseFragment {
             StockMarketBean.DataBean.HostIndustrylistBean industrylistBean = marketData.getHostIndustrylist().get(i);
             MarkteBean.MarketItemData itemData = new MarkteBean.MarketItemData(
                     industrylistBean.getIndustry_name(),
-                    industrylistBean.getCurrent_price(),
+                    StringUtils.pareseStringDouble(industrylistBean.getCurrent_price()),
                     "",
                     industrylistBean.getRate(),
                     industrylistBean.getIndustry_rate(),
@@ -185,7 +186,7 @@ public class HuShenFragment extends BaseFragment {
         for (int i = 0; i < list.size(); i++) {
             MarkteBean.MarketItemData itemData = new MarkteBean.MarketItemData(
                     null,
-                    list.get(i).getCurrent_price(),
+                    StringUtils.pareseStringDouble(list.get(i).getCurrent_price()),
                     "",
                     list.get(i).getRate(),
                     "",
