@@ -30,7 +30,7 @@ import static cn.gogoal.im.common.UserUtils.getToken;
 public class ChatGroupHelper {
 
     //添加群成员
-    public static void addAnyone(List<Integer> idList, String conversationId, final chatGroupManager groupManager) {
+    public static void addAnyone(List<Integer> idList, final String conversationId, final chatGroupManager groupManager) {
         Map<String, String> params = new HashMap<>();
         params.put("token", getToken());
         params.put("id_list", JSONObject.toJSONString(idList));
@@ -42,6 +42,7 @@ public class ChatGroupHelper {
                 KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if ((int) result.get("code") == 0) {
+                    AVImClientManager.getInstance().refreshConversation(conversationId);
                     if (null != groupManager) {
                         groupManager.groupActionSuccess(result);
                     }
@@ -59,7 +60,7 @@ public class ChatGroupHelper {
     }
 
     //删除群成员
-    public static void deleteAnyone(final List<Integer> idSet, String conversationId, final chatGroupManager groupManager) {
+    public static void deleteAnyone(final List<Integer> idSet, final String conversationId, final chatGroupManager groupManager) {
         Map<String, String> params = new HashMap<>();
         params.put("token", getToken());
         params.put("id_list", JSONObject.toJSONString(idSet));
@@ -70,6 +71,7 @@ public class ChatGroupHelper {
             public void onSuccess(String responseInfo) {
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if ((int) result.get("code") == 0) {
+                    AVImClientManager.getInstance().refreshConversation(conversationId);
                     if (null != groupManager) {
                         groupManager.groupActionSuccess(result);
                     }
@@ -246,7 +248,7 @@ public class ChatGroupHelper {
         AVImClientManager.getInstance().findConversationById(ConversationId, new AVImClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
-                if (conversation.getMembers()==null || conversation.getMembers().isEmpty()){
+                if (conversation.getMembers() == null || conversation.getMembers().isEmpty()) {
                     response.getInfoFailed(new Exception("群成员为空"));
                     return;
                 }
@@ -266,10 +268,10 @@ public class ChatGroupHelper {
                                 if (null != response) {
                                     response.getInfoSuccess(result.getJSONObject("data"));
                                 }
-                            }else {
-                                response.getInfoFailed(new Exception("请求出错:"+result.getString("message")));
+                            } else {
+                                response.getInfoFailed(new Exception("请求出错:" + result.getString("message")));
                             }
-                        }else {
+                        } else {
                             response.getInfoFailed(new Exception("群信息为空"));
                         }
                     }

@@ -209,7 +209,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 }
             }
         });
-        if (!ImageUtils.getBitmapFilePaht(conversationId, "imagecache").equals("")) {
+        if (!ImageUtils.getBitmapFilePaht(conversationId, "imagecache ").equals("")) {
 //            iv_square_head.setImageURI(Uri.parse(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")));
             Glide.with(IMSquareChatSetActivity.this)
                     .load(Uri.parse(ImageUtils.getBitmapFilePaht(conversationId, "imagecache"))).into(iv_square_head);

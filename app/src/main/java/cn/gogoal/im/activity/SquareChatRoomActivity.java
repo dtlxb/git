@@ -87,6 +87,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
                 //joinSquare(conversation);
                 chatFragment.setConversation(conversation, need_update, actionType);
                 groupMembers.addAll(conversation.getMembers());
+                KLog.e(groupMembers.toString());
                 if (squareName.equals("")) {
                     initTitle(conversation.getName(), conversation.getConversationId());
                 }
