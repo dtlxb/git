@@ -27,7 +27,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.IMPersonSetAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
-import cn.gogoal.im.bean.RecommendBean;
+import cn.gogoal.im.bean.GroupCollectionData;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -64,7 +64,7 @@ public class SquareCardActivity extends BaseActivity {
     private String conversationId;
     private String squareName;
     private String squareCreater;
-    private List<RecommendBean.DataBean.MBean> mBeanList;
+    private List<GroupCollectionData.DataBean.MInfoBean> mBeanList;
     private boolean isIn;
 
     @Override
@@ -130,10 +130,10 @@ public class SquareCardActivity extends BaseActivity {
         xTitle.addAction(imageAction, 0);*/
     }
 
-    private void getAllContacts(List<RecommendBean.DataBean.MBean> MBeanList) {
+    private void getAllContacts(List<GroupCollectionData.DataBean.MInfoBean> MBeanList) {
         KLog.e(MBeanList);
         for (int i = 0; i < MBeanList.size(); i++) {
-            RecommendBean.DataBean.MBean mBean = mBeanList.get(i);
+            GroupCollectionData.DataBean.MInfoBean mBean = mBeanList.get(i);
             contactBeens.add(addNomoralFuns(mBean.getNickname(), mBean.getAccount_id(), mBean.getAvatar(), mBean.getAccount_name()));
         }
         PersonContactBeens.addAll(contactBeens);

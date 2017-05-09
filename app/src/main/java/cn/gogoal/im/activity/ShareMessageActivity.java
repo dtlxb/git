@@ -210,7 +210,7 @@ public class ShareMessageActivity extends BaseActivity {
                                     ShareMessageDialog.newInstance(
                                             new ShareItemInfo(data.getItemImage(),
                                                     data.getText(),
-                                                    shareEntity)).show(getSupportFragmentManager());
+                                                    shareEntity,data.getBean().getConversationID())).show(getSupportFragmentManager());
                                     break;
                             }
                         }

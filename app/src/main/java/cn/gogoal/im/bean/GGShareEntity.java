@@ -28,6 +28,8 @@ public class GGShareEntity implements Parcelable {
 
     private String title;
 
+    private String link;//分享的url
+
     private ShareType shareType;
 
     public String getDesc() {
@@ -54,6 +56,14 @@ public class GGShareEntity implements Parcelable {
         this.title = title;
     }
 
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
     public ShareType getShareType() {
         return shareType;
     }
@@ -61,6 +71,7 @@ public class GGShareEntity implements Parcelable {
     public void setShareType(ShareType shareType) {
         this.shareType = shareType;
     }
+
 
     @Override
     public int describeContents() {
@@ -72,6 +83,7 @@ public class GGShareEntity implements Parcelable {
         dest.writeString(this.desc);
         dest.writeString(this.icon);
         dest.writeString(this.title);
+        dest.writeString(this.link);
         dest.writeInt(this.shareType == null ? -1 : this.shareType.ordinal());
     }
 
@@ -82,6 +94,7 @@ public class GGShareEntity implements Parcelable {
         this.desc = in.readString();
         this.icon = in.readString();
         this.title = in.readString();
+        this.link = in.readString();
         int tmpShareType = in.readInt();
         this.shareType = tmpShareType == -1 ? null : ShareType.values()[tmpShareType];
     }

@@ -188,7 +188,7 @@ public class MyGroupsActivity extends BaseActivity {
             }
 
             holder.setText(R.id.tv_my_group_name, StringUtils.getNotNullString(data.getName()));
-            holder.setText(R.id.tv_my_group_name_member_count, "(" + data.getM_size() + ")");
+            holder.setText(R.id.tv_my_group_name_member_count, "(" + data.getM().size() + ")");
             holder.setText(R.id.tv_my_group_intro, StringUtils.getNotNullString(data.getAttr().getIntro()));
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -205,7 +205,7 @@ public class MyGroupsActivity extends BaseActivity {
                         startActivity(intent);
                     }else {
                         ShareMessageDialog.newInstance(new ShareItemInfo<>(
-                                groupAvatar[0],data.getName(),entity)).show(getSupportFragmentManager());
+                                groupAvatar[0],data.getName(),entity,data.getConv_id())).show(getSupportFragmentManager());
                     }
                 }
             });
