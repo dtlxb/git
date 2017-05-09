@@ -93,11 +93,11 @@ public class ContactsActivity extends BaseActivity {
         tvParams.height = AppDevice.getWidth(getActivity()) / 4;
         tvConstactsFlag.setLayoutParams(tvParams);
 
-        textViewFooter=new TextView(mContext);
-        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(-1,-2);
-        textViewFooter.setPadding(0,AppDevice.dp2px(mContext,15),0,AppDevice.dp2px(mContext,45));
+        textViewFooter = new TextView(mContext);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -2);
+        textViewFooter.setPadding(0, AppDevice.dp2px(mContext, 15), 0, AppDevice.dp2px(mContext, 45));
         textViewFooter.setLayoutParams(params);
-        textViewFooter.setTextSize(TypedValue.COMPLEX_UNIT_SP,18);
+        textViewFooter.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         textViewFooter.setGravity(Gravity.CENTER);
         textViewFooter.setTextColor(getResColor(R.color.textColor_666666));
 
@@ -117,7 +117,7 @@ public class ContactsActivity extends BaseActivity {
 
         getData();//联系人列表数据
 
-        contactAdapter = new ContactAdapter(getActivity(), contactBeanList);
+        contactAdapter = new ContactAdapter(getActivity(), contactBeanList, 0);
 
         contactAdapter.addFooterView(textViewFooter);
 
@@ -134,11 +134,15 @@ public class ContactsActivity extends BaseActivity {
                 Intent intent;
                 //单聊处理
                 if (position == 0) {
-                    intent = new Intent(getActivity(), IMNewFrienActivity.class);
+                    intent = new Intent(ContactsActivity.this, IMNewFrienActivity.class);
                     intent.putExtra("add_type", 0x01);
                     startActivity(intent);
                 } else if (position == 1) {
                     intent = new Intent(getActivity(), MyGroupsActivity.class);
+                    intent = new Intent(ContactsActivity.this, MyGroupsActivity.class);
+                    startActivity(intent);
+                } else if (position == 2) {
+                    intent = new Intent(ContactsActivity.this, PhoneContactsActivity.class);
                     startActivity(intent);
                 } else {
                     intent = new Intent(getActivity(), SingleChatRoomActivity.class);
@@ -196,8 +200,8 @@ public class ContactsActivity extends BaseActivity {
     private void addContactHead() {
         contactBeanList.add(addFunctionHead("新朋友", R.mipmap.contacts_new_friend));
         contactBeanList.add(addFunctionHead("我的群组", R.mipmap.group_contacts));
-        /*contactBeanList.add(addFunctionHead("标签", R.mipmap.cache_img_contacts_2));
-        contactBeanList.add(addFunctionHead("公众号", R.mipmap.cache_img_contacts_3));*/
+        contactBeanList.add(addFunctionHead("手机通讯录", R.mipmap.chat_phone_contacts));
+        //contactBeanList.add(addFunctionHead("公众号", R.mipmap.cache_img_contacts_3));
     }
 
     private ContactBean<Integer> addFunctionHead(String name, @DrawableRes int iconId) {
@@ -231,11 +235,13 @@ public class ContactsActivity extends BaseActivity {
         new GGOKHTTP(param, GGOKHTTP.del_friend, ggHttpInterface).startGet();
     }
 
-    /**更新底部好友人数统计*/
+    /**
+     * 更新底部好友人数统计
+     */
     public void upDataFootCount(List<ContactBean> list) {
-        if (list.size()>0) {
-            textViewFooter.setText(String.format(getString(R.string.str_friends_count),list.size()));
-        }else {
+        if (list.size() > 0) {
+            textViewFooter.setText(String.format(getString(R.string.str_friends_count), list.size()));
+        } else {
             textViewFooter.setText("你还没有好友，赶快去添加一些吧");
         }
     }

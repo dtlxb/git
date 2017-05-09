@@ -114,13 +114,19 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     public BaseViewHolder setImageUrl(int viewId, String imageUrl) {
         ImageView view = getView(viewId);
-        ImageDisplay.loadImage(convertView.getContext(),imageUrl,view);
+        ImageDisplay.loadImage(convertView.getContext(), imageUrl, view);
+        return this;
+    }
+
+    public BaseViewHolder setImageUrl(int viewId, String imageUrl, boolean needPlaceholdeer) {
+        ImageView view = getView(viewId);
+        ImageDisplay.loadImage(convertView.getContext(), imageUrl, view, needPlaceholdeer);
         return this;
     }
 
     public BaseViewHolder setTextResColor(int viewId, @ColorRes int colorId) {
         TextView view = getView(viewId);
-        view.setTextColor(ContextCompat.getColor(MyApp.getAppContext(),colorId));
+        view.setTextColor(ContextCompat.getColor(MyApp.getAppContext(), colorId));
         return this;
     }
 

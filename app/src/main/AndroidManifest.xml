@@ -31,6 +31,8 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- 获取联系人列表 -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:name=".base.MyApp"
@@ -51,7 +53,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".receiver.pushReceiver" >
+        <receiver android:name=".receiver.pushReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
@@ -160,7 +162,7 @@
             android:name=".activity.copy.StockDetailChartsActivity"
             android:configChanges="orientation|screenSize|keyboard"
             android:screenOrientation="landscape" />
-        <activity android:name=".activity.copy.CommentActivity" />
+        <!--<activity android:name=".activity.copy.CommentActivity" />-->
         <activity
             android:name=".activity.copy.StockDetailMarketIndexActivity"
             android:screenOrientation="portrait" />
@@ -176,9 +178,10 @@
         <activity android:name=".activity.SingleEditActivity" />
         <activity android:name=".activity.RedGreenSettingActivity" />
         <activity android:name=".activity.ChangePhoneNumber" />
+        <activity android:name=".activity.PhoneContactsActivity" />
         <activity android:name=".activity.stock.StockNewsAllListActivity" />
 
-        <activity android:name=".activity.ShareMessageActivity"/>
+        <activity android:name=".activity.ShareMessageActivity" />
         <activity android:name=".activity.ScreenActivity" />
     </application>
 

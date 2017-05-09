@@ -70,7 +70,8 @@ public class EditPersonInfoActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         initTitle();
-        ImageDisplay.loadCircleImage(EditPersonInfoActivity.this,R.mipmap.logo,imagePersonHeadpic);
+        ImageDisplay.loadCircleImage(EditPersonInfoActivity.this, UserUtils.getUserAvatar().equals("")
+                ? R.mipmap.logo : UserUtils.getUserAvatar(), imagePersonHeadpic);
     }
 
     private void initTitle() {
@@ -88,6 +89,10 @@ public class EditPersonInfoActivity extends BaseActivity {
         xTitle.addAction(jumpAction, 0);
         TextView rigisterView = (TextView) xTitle.getViewByAction(jumpAction);
         rigisterView.setTextColor(getResColor(R.color.colorPrimary));
+
+        editPersonName.setText(UserUtils.getUserName());
+        editCompanyName.setText(UserUtils.getorgName());
+        editJobName.setText(UserUtils.getDuty());
     }
 
     //上传头像到ufile

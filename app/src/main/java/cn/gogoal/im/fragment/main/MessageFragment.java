@@ -322,7 +322,7 @@ public class MessageFragment extends BaseFragment {
             ImageView avatarIv = holder.getView(R.id.head_image);
             TextView messageTv = holder.getView(R.id.last_message);
             TextView countTv = holder.getView(R.id.count_tv);
-
+            KLog.e(messageBean.getConversationID());
             //未读数
             setCountTag(countTv, messageBean.getUnReadCounts());
             if (messageBean.getUnReadCounts().equals("0")) {
@@ -342,24 +342,19 @@ public class MessageFragment extends BaseFragment {
                 JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
                 String _lctype = contentObject.getString("_lctype");
                 nickName = messageBean.getNickname();
-
                 //头像设置
                 if (chatType == 1002) {
-                    if (lcattrsObject != null) {
-                        squareMessageFrom = (lcattrsObject.get("username")) == null ? "" : lcattrsObject.getString("username");
+                    if (lcattrsObject != null && lcattrsObject.get("username") != null) {
+                        squareMessageFrom = UserUtils.getUserName().equals(lcattrsObject.get("username")) ? "" : lcattrsObject.getString("username");
                     }
                     if (ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache").equals("")) {
                         ChatGroupHelper.createGroupImage(messageBean.getConversationID(), gruopMemberMap.get(messageBean.getConversationID()), "set_avatar");
                     } else {
-                        //ImageDisplay.loadFileImage(getActivity(), new File(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")), avatarIv);
-                        avatarIv.setImageURI(Uri.parse(ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache")));
+                        ImageDisplay.loadRoundedRectangleImage(getActivity(), ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache"), avatarIv);
                     }
                 } else if (chatType == 1004) {
-//                    Glide.with(getActivity()).load(R.mipmap.chat_new_friend).asBitmap().into(avatarIv);
-                    ImageDisplay.loadRoundedRectangleImage(getActivity(),R.mipmap.chat_new_friend, avatarIv
-                            );
+                    ImageDisplay.loadRoundedRectangleImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
                 } else {
-//                    Glide.with(getActivity()).load(messageBean.getAvatar()).asBitmap().into(avatarIv);
                     ImageDisplay.loadRoundedRectangleImage(getActivity(),
                             messageBean.getAvatar(), avatarIv);
                 }
@@ -477,6 +472,7 @@ public class MessageFragment extends BaseFragment {
      */
     @Subscriber(tag = "set_avatar")
     public void setAvatar(String code) {
+        KLog.e(code);
         listAdapter.notifyItemChanged(Integer.parseInt(code));
     }
 
@@ -513,7 +509,7 @@ public class MessageFragment extends BaseFragment {
         JSONObject contentObject = JSON.parseObject(message.getContent());
         JSONObject lcattrsObject = contentObject.getJSONObject("_lcattrs");
         String _lctype = contentObject.getString("_lctype");
-
+        KLog.e(contentObject);
         switch (_lctype) {
             case "-1":
                 //文字
@@ -527,7 +523,7 @@ public class MessageFragment extends BaseFragment {
             case "3":
             case "13":
                 //好友加入通讯录
-                nickName = lcattrsObject.getString("nickname");
+                nickName = lcattrsObject.getString("username");
                 break;
             case "4":
                 //好友从通讯录移除
@@ -612,6 +608,7 @@ public class MessageFragment extends BaseFragment {
             IMMessageBeans.add(imMessageBean);
         }
 
+        KLog.e(lcattrsObject);
         //保存
         IMMessageBean imMessageBean = new IMMessageBean(ConversationId, chatType, message.getTimestamp(),
                 isTheSame ? String.valueOf(unreadmessage) : "1", nickName, friend_id, avatar, message);
