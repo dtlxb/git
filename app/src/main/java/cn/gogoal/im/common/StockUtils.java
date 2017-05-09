@@ -56,6 +56,7 @@ public class StockUtils {
         Set<String> myStockSet = getMyStockSet();
         myStockSet.add(object.getString("stock_code"));
         SPTools.saveSetData("my_stock_set", myStockSet);
+        KLog.e(myStockSet.size()+";==="+myStockSet.toString());
     }
 
     /**
@@ -77,9 +78,15 @@ public class StockUtils {
      */
     public static void removeStock(String stockCode) {
         Set<String> myStockSet = getMyStockSet();
+
+        KLog.e(myStockSet.size()+";==="+myStockSet.toString());
+
         if (myStockSet.remove(stockCode)) {
             SPTools.saveSetData("my_stock_set", myStockSet);
+        }else {
+            myStockSet.remove(stockCode.substring(2));
         }
+        KLog.e(myStockSet.size()+";==="+myStockSet.toString());
     }
 
     /**
@@ -293,6 +300,7 @@ public class StockUtils {
      * 添加自选股
      */
     public static void addMyStock(final Context context, final String stock_name, final String stock_code) {
+        KLog.e("添加自选股");
         final Map<String, String> param = new HashMap<String, String>();
         param.put("token", UserUtils.getToken());
         param.put("group_id", "0");
@@ -305,16 +313,17 @@ public class StockUtils {
 
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e("添加自选",responseInfo);
+
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                int data = (int) result.get("code");
-                if (data == 0) {
+                if (result.getIntValue("code") == 0) {
                     JSONObject singlestock = new JSONObject();
                     singlestock.put("stock_name", stock_name);
                     singlestock.put("stock_code", stock_code);
                     singlestock.put("stock_type", 1);
                     singlestock.put("price", 0);
                     singlestock.put("change_rate", 0);
-
+                    StockUtils.addStock2MyStock(singlestock);
                     AppManager.getInstance().sendMessage("updata_my_stock_data");
                 }
             }
@@ -328,15 +337,13 @@ public class StockUtils {
     }
 
     /**
-     * 删除自选股
+     * 删除自选股 新接口
      */
-    public static void deleteMyStock(final Context context, final String stock_code, final ToggleMyStockCallBack callBack) {
+    public static void deleteMyStock(final Context context, final String full_code, final ToggleMyStockCallBack callBack) {
         final Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
         param.put("group_id", "0");
-        param.put("full_codes", stock_code);
-
-        KLog.e(StringUtils.map2ggParameter(param));
+        param.put("full_codes", full_code);
 
         GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -350,6 +357,7 @@ public class StockUtils {
                     if (callBack!=null) {
                         callBack.success();
                     }
+                    removeStock(full_code.substring(2));
                 } else {
                     if (callBack!=null) {
                         callBack.failed(JSONObject.parseObject(responseInfo).getString("message"));
@@ -364,6 +372,42 @@ public class StockUtils {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.DELETE_MY_STOCKS, httpInterface).startGet();
+    }
+    /**
+     * 删除自选股
+     */
+    public static void deleteMyStockOld(final Context context, final String stock_code, final ToggleMyStockCallBack callBack) {
+        final Map<String, String> param = new HashMap<>();
+        param.put("token", UserUtils.getToken());
+        param.put("stock_code", stock_code);
+
+        GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                int code = (int) result.get("code");
+                if (code == 0 || code == 1001) {
+                    UIHelper.toast(context, "删除自选成功");
+                    if (callBack!=null) {
+                        callBack.success();
+                    }
+                    removeStock(stock_code);
+                } else {
+                    if (callBack!=null) {
+                        callBack.failed(JSONObject.parseObject(responseInfo).getString("message"));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                callBack.failed(msg);
+                UIHelper.toastError(context, msg);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.MYSTOCK_DELETE, httpInterface).startGet();
     }
 
     public interface ToggleMyStockCallBack {

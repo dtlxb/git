@@ -102,6 +102,7 @@ public class AppConst {
     //个股-交易明细
     public static final int TREAT_TYPE_MING_XI = 459;
 
+    //=================================关于跳转web页的配置=========================================
     //直播分享
     public static final String GG_LIVE_SHARE = WEB_URL + "/live/share/";
     //直播录播列表
@@ -110,8 +111,13 @@ public class AppConst {
     public static final String GG_RESEARCH = WEB_URL + "/research";
     //精要研报
     public static final String GG_REPORT = WEB_URL + "/report";
+
     //文字一分钟
-    public static final String GG_TEXT = WEB_URL + "/text";
+    public static final String GG_TEXT1MINUTE = WEB_URL + "/text";
+    //数据一分钟
+    public static final String GG_DATA1MINUTE = WEB_URL + "/data";
+    //同业比较
+    public static final String GG_TONG_YE = WEB_URL + "/industry";
 
     //投研页帮助
     public static final String GG_HELP = WEB_URL + "/help/index";
@@ -123,9 +129,10 @@ public class AppConst {
     //设置页服务协议
     public static final String GG_SERVICE_AGREEMENT = WEB_URL + "/help/service";
 
+    public static final String WEB_NEWS = WEB_URL + "/report/info/";
+
     public static final int SOURCE_TYPE_YANBAO = 102;//个股 研报
     public static final int SOURCE_TYPE_GONGGAO = 105;//个股 公告
-    public static final String WEB_NEWS = WEB_URL + "/report/info/";
 
     //新闻远端
     public static final int SOURCE_TYPE_NEWS = 100;//个股 新闻

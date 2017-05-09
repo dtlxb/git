@@ -39,14 +39,13 @@ import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.fragment.copy.FiveDayFragment;
 import cn.gogoal.im.fragment.copy.KChartsFragment;
 import cn.gogoal.im.fragment.copy.TimesFragment;
+import cn.gogoal.im.ui.stock.KChartsView;
 import hply.com.niugu.ConstantUtils;
 import hply.com.niugu.DeviceUtil;
-import hply.com.niugu.MessageHandlerList;
 import hply.com.niugu.ProgressWheel;
 import hply.com.niugu.bean.TimeDetialBean;
 import hply.com.niugu.bean.TimeDetialData;
 import hply.com.niugu.stock.StockMinuteData;
-import hply.com.niugu.view.KChartsView;
 
 
 /**
@@ -156,8 +155,6 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
     private Integer authority_type;
 
     private String[] tabTitles = {"分 时", "五 日", "日 K", "周 K", "月 K"};
-    //加载中
-    private boolean isLoading = true;
     private int stock_charge_type;
     private int INTERVAL_TIME;
 
@@ -454,7 +451,7 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
         new GGOKHTTP(param, GGOKHTTP.GET_STOCK_TIME_DETIAL, ggHttpInterface).startGet();
     }
 
-    private void showProgressbar(boolean flag) {
+    public void showProgressbar(boolean flag) {
         if (flag) {
             load_animation.setVisibility(View.VISIBLE);
             fragment.setVisibility(View.INVISIBLE);
@@ -495,12 +492,6 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
             authority_tv.get(authority_type).setTextColor(ContextCompat.getColor(getContext(),hply.com.niugu.R.color.piechart_bule));
         } else {
             authority_blog.setVisibility(View.GONE);
-        }
-
-        if (position == flagIndex) {
-            if (!isLoading)
-                showProgressbar(false);
-            return;
         }
 
         this.flagIndex = position;
@@ -705,10 +696,6 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-    }
-
-    public void setLoading(boolean loading) {
-        this.isLoading = loading;
     }
 
 }

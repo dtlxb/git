@@ -19,6 +19,7 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.copy.MessageHandlerList;
 import cn.gogoal.im.activity.copy.StockDetailChartsActivity;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.common.AppConst;
@@ -27,7 +28,6 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
 import hply.com.niugu.LandScapeChartView;
-import hply.com.niugu.MessageHandlerList;
 import hply.com.niugu.stock.StockMinuteBean;
 import hply.com.niugu.stock.TimesFivesBitmap;
 
@@ -68,7 +68,7 @@ public class FiveDayFragment extends Fragment {
     }
 
     private void getFiveData() {
-        ((StockDetailChartsActivity)getActivity()).setLoading(true);
+        ((StockDetailChartsActivity)getActivity()).showProgressbar(true);
         HashMap<String, String> param = new HashMap<>();
         param.put("day", "5");
         if (StockDetailChartsActivity.STOCK_COMMON == stockType) {
@@ -86,7 +86,7 @@ public class FiveDayFragment extends Fragment {
                 if (bean.getCode() == 0) {
                     new BitmapTask().execute();
                     MessageHandlerList.sendMessage(StockDetailChartsActivity.class, AppConst.DISS_PROGRESSBAR, 0);
-                    ((StockDetailChartsActivity)getActivity()).setLoading(false);
+                    ((StockDetailChartsActivity)getActivity()).showProgressbar(false);
                 }
             }
 

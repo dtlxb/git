@@ -60,7 +60,7 @@ import hply.com.niugu.stock.StockMinuteBean;
 import hply.com.niugu.stock.StockMinuteData;
 import hply.com.niugu.stock.TimesFivesBitmap;
 import hply.com.niugu.view.InnerListView;
-import hply.com.niugu.view.KChartsBitmap;
+import cn.gogoal.im.ui.stock.KChartsBitmap;
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;

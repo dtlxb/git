@@ -15,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.ui.view.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
@@ -62,7 +63,7 @@ public class ImageDisplay {
         }
     }
 
-    public static <T> void loadImage(Context context, T image, ImageView imageView) {
+    public static <T> void loadImage(final Context context, final T image, final ImageView imageView) {
         try {
             Glide.with(context)
                     .load(image)
@@ -72,14 +73,29 @@ public class ImageDisplay {
                     .thumbnail(0.1f)
                     .into(imageView);
         } catch (Exception e) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ((Bitmap) image).compress(Bitmap.CompressFormat.PNG, 100, baos);
-            byte[] bytes = baos.toByteArray();
-            Glide.with(context).load(bytes).skipMemoryCache(true)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .placeholder(R.mipmap.image_placeholder)
-                    .thumbnail(0.1f)
-                    .into(imageView);
+            AsyncTaskUtil.doAsync(new AsyncTaskUtil.AsyncCallBack() {
+                @Override
+                public void onPreExecute() {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    ((Bitmap) image).compress(Bitmap.CompressFormat.PNG, 100, baos);
+                    byte[] bytes = baos.toByteArray();
+                    Glide.with(context).load(bytes).skipMemoryCache(true)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .placeholder(R.mipmap.image_placeholder)
+                            .thumbnail(0.1f)
+                            .into(imageView);
+                }
+
+                @Override
+                public void doInBackground() {
+
+                }
+
+                @Override
+                public void onPostExecute() {
+
+                }
+            });
         }
     }
 

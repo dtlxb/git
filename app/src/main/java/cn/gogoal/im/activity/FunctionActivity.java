@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
@@ -26,6 +25,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.ShareType;
+import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.WebViewUtil;
@@ -174,6 +174,41 @@ public class FunctionActivity extends BaseActivity {
             }
         });
 
+        //添加自选股
+        webView.registerHandler("addMyStock", new BridgeHandler() {
+            @Override
+            public void handler(String data, ValueCallback<String> function) {
+                KLog.e("添加",data);
+                JSONObject stockObject = JSONObject.parseObject(data);
+                StockUtils.addMyStock(getContext(),
+                        stockObject.getString("stock_name"),
+                        stockObject.getString("stock_code"));
+            }
+        });
+
+        //移除自选股
+        webView.registerHandler("deleteMyStock", new BridgeHandler() {
+            @Override
+            public void handler(String data, ValueCallback<String> function) {
+                KLog.e("移除",data);
+                JSONObject stockObject = JSONObject.parseObject(data);
+                StockUtils.deleteMyStockOld(getContext(),
+                        stockObject.getString("stock_code"),null);
+            }
+        });
+
+        //是否是我的自选股
+        webView.registerHandler("makeEnquiries", new BridgeHandler() {
+            @Override
+            public void handler(String data, ValueCallback<String> function) {
+                KLog.e("查询",data);
+                String stockCode=JSONObject.parseObject(data).getString("stock_code");
+                function.onReceiveValue(StockUtils.isMyStock(stockCode)?"0":"1");
+
+                KLog.e(StockUtils.isMyStock(stockCode)?"0":"1");
+            }
+        });
+
         //添加发起直播填写信息中的页面跳转
         webView.registerHandler("applyComplete", new BridgeHandler() {
             @Override
@@ -216,12 +251,6 @@ public class FunctionActivity extends BaseActivity {
         });
     }*/
 
-    private void loadUrl(String url) {
-        if (!TextUtils.isEmpty(url)) {
-            webView.loadUrl(url);
-        }
-    }
-
     private FunctionActivity getContext() {
         return FunctionActivity.this;
     }
@@ -249,12 +278,4 @@ public class FunctionActivity extends BaseActivity {
         settings.setAppCacheEnabled(true);
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && webView.canGoBack()) {
-            webView.goBack();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 }

@@ -112,7 +112,7 @@ public class TimesFragment extends BaseFragment {
     }
 
     private void GetMinLineData() {
-        ((StockDetailChartsActivity) getActivity()).setLoading(true);
+        ((StockDetailChartsActivity) getActivity()).showProgressbar(true);
         HashMap<String, String> param = new HashMap<>();
         if (StockDetailChartsActivity.STOCK_COMMON == stockType) {
             param.put("stock_code", stockCode);
@@ -144,7 +144,7 @@ public class TimesFragment extends BaseFragment {
                         mTimesView.setBitmap(bitmap);
                         mTimesView.setData(timesBitmap, stock_charge_type);
                     }
-                    ((StockDetailChartsActivity) getActivity()).setLoading(false);
+                    ((StockDetailChartsActivity) getActivity()).showProgressbar(false);
                 } else {
 
                 }
