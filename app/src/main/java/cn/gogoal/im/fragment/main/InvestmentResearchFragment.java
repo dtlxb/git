@@ -10,7 +10,6 @@ import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -109,7 +108,6 @@ public class InvestmentResearchFragment extends BaseFragment {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     bannerImageUrls.addAll(JSONObject.parseObject(responseInfo, BannerBean.class).getData());
-                    KLog.e(bannerImageUrls.size());
 
                     if (bannerImageUrls.size() > 1) {
                         bannerPager.startAutoScroll(3000);
