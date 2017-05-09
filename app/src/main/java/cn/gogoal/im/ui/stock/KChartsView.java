@@ -1,4 +1,4 @@
-package hply.com.niugu.view;
+package cn.gogoal.im.ui.stock;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,12 +18,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.gogoal.im.activity.copy.MessageHandlerList;
+import cn.gogoal.im.activity.copy.StockDetailChartsActivity;
 import hply.com.niugu.ConstantUtils;
 import hply.com.niugu.StringUtils;
 import hply.com.niugu.bean.KDJBean;
 import hply.com.niugu.bean.MACDBean;
 import hply.com.niugu.bean.MALineBean;
 import hply.com.niugu.bean.RSIBean;
+import hply.com.niugu.view.GridChart;
 
 public class KChartsView extends GridChart implements GridChart.OnTabClickListener {
     public static final String TAG = "KChartsView";
@@ -407,7 +410,7 @@ public class KChartsView extends GridChart implements GridChart.OnTabClickListen
 
             float w, h;
             h = rValues.get("sPriceH");
-//            MessageHandlerList.sendMessage(StockDetailChartsActivity.class, 6 , mOHLCData, selectIndex);
+            MessageHandlerList.sendMessage(StockDetailChartsActivity.class, 6 , mOHLCData, selectIndex);
             if (dataMore) {
                 if ((mStartX > leftMargin && mStartX < getWidth())) {
                     if (follow) {
@@ -491,7 +494,7 @@ public class KChartsView extends GridChart implements GridChart.OnTabClickListen
 
                     }
                 } else {
-//                    MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISS_XCHART_DATA, 0);
+                    MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISS_XCHART_DATA, 0);
                     TOUCH_MODE = NONE;
                     postInvalidate();
                 }
@@ -577,7 +580,7 @@ public class KChartsView extends GridChart implements GridChart.OnTabClickListen
                                 leftTitlePaint);
                     }
                 } else {
-//                    MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISS_XCHART_DATA, 0);
+                    MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISS_XCHART_DATA, 0);
                     TOUCH_MODE = NONE;
                     postInvalidate();
                 }
@@ -1018,7 +1021,7 @@ public class KChartsView extends GridChart implements GridChart.OnTabClickListen
             case MotionEvent.ACTION_POINTER_UP:
                 TOUCH_MODE = NONE;
                 showDetails = false;
-//                MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISS_XCHART_DATA, 0);
+                MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISS_XCHART_DATA, 0);
                 postInvalidate();
                 break;
             case MotionEvent.ACTION_CANCEL:
@@ -1064,7 +1067,7 @@ public class KChartsView extends GridChart implements GridChart.OnTabClickListen
                             Message msg = Message.obtain();
                             msg.arg1 = chartsType;
                             msg.what = ConstantUtils.REFRESH_KLINE_DATA;
-//                            MessageHandlerList.getHandler(StockDetailChartsActivity.class.getName()).sendMessage(msg);
+                            MessageHandlerList.getHandler(StockDetailChartsActivity.class.getName()).sendMessage(msg);
                         }
 
                         setCurrentData();
@@ -1311,7 +1314,7 @@ public class KChartsView extends GridChart implements GridChart.OnTabClickListen
                 msg.obj = v;
                 msg.arg1 = chartsType;
                 msg.what = ConstantUtils.XCHART_FLING;
-//                MessageHandlerList.getHandler(StockDetailChartsActivity.class.getName()).sendMessage(msg);
+                MessageHandlerList.getHandler(StockDetailChartsActivity.class.getName()).sendMessage(msg);
             }
             return false;
         }
@@ -1336,7 +1339,7 @@ public class KChartsView extends GridChart implements GridChart.OnTabClickListen
             msg.obj = v;
             msg.arg1 = chartsType;
             msg.what = ConstantUtils.XCHART_FLING;
-//            MessageHandlerList.getHandler(StockDetailChartsActivity.class.getName()).sendMessageDelayed(msg, 50);
+            MessageHandlerList.getHandler(StockDetailChartsActivity.class.getName()).sendMessageDelayed(msg, 50);
         } else {
             flingCount = 0;
         }

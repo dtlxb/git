@@ -112,11 +112,9 @@ public class MineFragment extends BaseFragment {
         if (null != UserUtils.getUserCacheAvatarFile() &&
                 (!(UserUtils.getUserCacheAvatarFile().getAbsolutePath()).equalsIgnoreCase(UserUtils.getMyAvatarCacheName()))) {
             ImageDisplay.loadCircleImage(mContext, UserUtils.getUserCacheAvatarFile(), imageAvatar);
-            KLog.e("用的缓存");
         } else {
             ImageDisplay.loadCircleImage(mContext, UserUtils.getUserAvatar(),imageAvatar);
             UserUtils.cacheUserAvatar();//缓存用户头像大图
-            KLog.e("用的线上");
         }
         tvMineUserName.setText(UserUtils.getUserName());
         tvMineIntroduction.setText(UserUtils.getDuty());

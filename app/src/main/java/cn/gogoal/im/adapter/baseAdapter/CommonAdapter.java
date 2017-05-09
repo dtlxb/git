@@ -36,8 +36,6 @@ import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.avos.avoscloud.im.v2.AVIMMessage;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Constructor;
@@ -397,7 +395,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
         this(0, data);
     }
 
-    public CommonAdapter(Context context, int layoutResId, List<AVIMMessage> datas) {
+    public CommonAdapter(Context context, int layoutResId, List<T> datas) {
         this(layoutResId, null);
     }
 

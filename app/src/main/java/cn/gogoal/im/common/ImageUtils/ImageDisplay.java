@@ -1,5 +1,6 @@
 package cn.gogoal.im.common.ImageUtils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
@@ -62,7 +63,7 @@ public class ImageDisplay {
         }
     }
 
-    public static <T> void loadImage(Context context, T image, ImageView imageView) {
+    public static <T> void loadImage(Context context, T image, final ImageView imageView) {
         try {
             Glide.with(context)
                     .load(image)
@@ -75,11 +76,16 @@ public class ImageDisplay {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ((Bitmap) image).compress(Bitmap.CompressFormat.PNG, 100, baos);
             byte[] bytes = baos.toByteArray();
-            Glide.with(context).load(bytes).skipMemoryCache(true)
+            final DrawableRequestBuilder<byte[]> thumbnail = Glide.with(context).load(bytes).skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.mipmap.image_placeholder)
-                    .thumbnail(0.1f)
-                    .into(imageView);
+                    .thumbnail(0.1f);
+            ((Activity)context).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    thumbnail.into(imageView) ;
+                }
+            });
         }
     }
 

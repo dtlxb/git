@@ -1,4 +1,4 @@
-package hply.com.niugu;
+package cn.gogoal.im.activity.copy;
 
 import android.os.Handler;
 import android.os.Message;

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -14,14 +13,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -70,13 +65,14 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.stock.ImageChartFragment;
 import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
+import cn.gogoal.im.ui.dialog.StockPopuDialog;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
 import hply.com.niugu.HeaderView;
 import hply.com.niugu.autofixtext.AutofitTextView;
 import hply.com.niugu.stock.BitmapChartView;
 import hply.com.niugu.stock.StockMinuteBean;
 import hply.com.niugu.stock.TimesFivesBitmap;
-import hply.com.niugu.view.KChartsBitmap;
+import cn.gogoal.im.ui.stock.KChartsBitmap;
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -1421,7 +1417,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     public void allBtnClick(View v) {
         switch (v.getId()) {
             case R.id.stock_detail_diagnose:
-                showPopupWindow();
+                StockPopuDialog.newInstance(stockCode,stockName).show(getSupportFragmentManager());
                 break;
             case R.id.stock_detail_choose:
                 addOptionalShare();//TODO 更换新的删除自选股接口
@@ -1429,95 +1425,6 @@ public class CopyStockDetailActivity extends BaseActivity {
         }
     }
 
-    //诊断弹窗
-    private void showPopupWindow() {
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.diagnose_view, null);
-        LinearLayout words_minute = (LinearLayout) view.findViewById(R.id.diagnose_words_minute);
-        LinearLayout data_minute = (LinearLayout) view.findViewById(R.id.diagnose_data_minute);
-        LinearLayout profession_compare = (LinearLayout) view.findViewById(R.id.diagnose_profession_compare);
-        LinearLayout interactive_investor = (LinearLayout) view.findViewById(R.id.diagnose_interactive_investor);
-        TextView btn_cancel = (TextView) view.findViewById(R.id.btn_cancel);
-        //取消按钮
-        btn_cancel.setOnClickListener(new OnClickListener() {
-
-            public void onClick(View v) {
-                //销毁弹出框
-                mPopupWindow.dismiss();
-            }
-        });
-
-        //设置按钮监听
-        words_minute.setOnClickListener(PopupItemsOnClick);
-        data_minute.setOnClickListener(PopupItemsOnClick);
-        profession_compare.setOnClickListener(PopupItemsOnClick);
-        interactive_investor.setOnClickListener(PopupItemsOnClick);
-
-        mPopupWindow = new PopupWindow(view);
-        //设置SelectPicPopupWindow的View
-        mPopupWindow.setContentView(view);
-        //设置SelectPicPopupWindow弹出窗体的宽
-        mPopupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        //设置SelectPicPopupWindow弹出窗体的高
-        mPopupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        //设置SelectPicPopupWindow弹出窗体可点击
-        mPopupWindow.setFocusable(true);
-        //设置SelectPicPopupWindow弹出窗体动画效果
-        mPopupWindow.setAnimationStyle(R.style.popwin_anim_style);
-        //实例化一个ColorDrawable颜色为半透明
-        ColorDrawable dw = new ColorDrawable(0xb0000000);
-        //设置SelectPicPopupWindow弹出窗体的背景
-        mPopupWindow.setBackgroundDrawable(dw);
-
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.alpha = 0.4f;
-        getWindow().setAttributes(lp);
-        //mMenuView添加OnTouchListener监听判断获取触屏位置如果在选择框外面则销毁弹出框
-        view.setOnTouchListener(new View.OnTouchListener() {
-
-            public boolean onTouch(View v, MotionEvent event) {
-
-                int height = view.findViewById(R.id.diagnose_view).getTop();
-                int y = (int) event.getY();
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (y < height) {
-                        mPopupWindow.dismiss();
-                    }
-                }
-                return true;
-            }
-        });
-
-        mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            //在dismiss中恢复透明度
-            public void onDismiss() {
-                WindowManager.LayoutParams lp = getWindow().getAttributes();
-                lp.alpha = 1f;
-                getWindow().setAttributes(lp);
-            }
-        });
-
-        mPopupWindow.showAtLocation(this.findViewById(R.id.stock_detail_linear),
-                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-    }
-
-    //为弹出窗口实现监听类
-    private OnClickListener PopupItemsOnClick = new OnClickListener() {
-
-        public void onClick(View v) {
-            mPopupWindow.dismiss();
-            switch (v.getId()) {
-                case R.id.diagnose_words_minute:
-                    break;
-                case R.id.diagnose_data_minute:
-                    break;
-                case R.id.diagnose_profession_compare:
-                    break;
-                case R.id.diagnose_interactive_investor:
-                    break;
-            }
-        }
-    };
 
     //添加自选股
     private void addOptionalShare() {

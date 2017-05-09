@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    android:gravity="center_vertical"
-    android:orientation="vertical">
+    android:background="@android:color/white">
 
     <LinearLayout
+        android:id="@+id/layout_dialog_function"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -45,17 +44,14 @@
 
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/wx_share_line" />
-
     <TextView
         android:id="@+id/tv_dialog_cancle"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center"
+        android:background="@drawable/shape_line_top"
         android:text="@string/share_clone"
+        android:layout_below="@+id/layout_dialog_function"
         android:textColor="@color/textColor_333333"
         android:textSize="16sp" />
-</LinearLayout>
+</RelativeLayout>

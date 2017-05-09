@@ -55,7 +55,7 @@
     function jsDialogWithCallBack() {
         WebViewJavascriptBridge.callHandler('naviveDialogWithCallBack', "是否要添加数据？？？", function(res) {
             alert(res);
-            console.log("回调结果==="+res);//res
+            //console.log("回调结果==="+res);//res
             addText(res);
         });
     }

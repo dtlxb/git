@@ -17,6 +17,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.copy.MessageHandlerList;
 import cn.gogoal.im.activity.copy.StockDetailChartsActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
@@ -25,9 +26,8 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
-import hply.com.niugu.MessageHandlerList;
+import cn.gogoal.im.ui.stock.KChartsView;
 import hply.com.niugu.bean.OHLCBean;
-import hply.com.niugu.view.KChartsView;
 
 
 public class KChartsFragment extends BaseFragment {
@@ -95,7 +95,7 @@ public class KChartsFragment extends BaseFragment {
 
     public void GetKLineDataPage(final Boolean is_authroity, final boolean is_need_animation) {
         page++;
-        ((StockDetailChartsActivity) getActivity()).setLoading(true);
+        ((StockDetailChartsActivity) getActivity()).showProgressbar(true);
 
         HashMap<String, String> param = new HashMap<>();
         if (StockDetailChartsActivity.STOCK_COMMON == stockType) {
@@ -133,7 +133,7 @@ public class KChartsFragment extends BaseFragment {
                             }
                             mMyChartsView.setOHLCData(mOHLCData, is_need_animation);
                             mMyChartsView.setIsRefresh(true);
-                            ((StockDetailChartsActivity) getActivity()).setLoading(false);
+                            ((StockDetailChartsActivity) getActivity()).showProgressbar(false);
                             MessageHandlerList.sendMessage(StockDetailChartsActivity.class, AppConst.DISS_PROGRESSBAR, 0);
                         }
                     }
