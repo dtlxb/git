@@ -6,6 +6,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
+
 import cn.gogoal.im.R;
 import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.AppDevice;
@@ -55,7 +58,7 @@ public class ShareMessageDialog extends BaseCentDailog {
 
     @Override
     public void bindView(View v) {
-        ShareItemInfo entity = (ShareItemInfo) getArguments().getSerializable("gg_share_list_info");
+        final ShareItemInfo entity = (ShareItemInfo) getArguments().getSerializable("gg_share_list_info");
 
         ImageView icon = (ImageView) v.findViewById(R.id.item_contacts_iv_icon);
         TextView name = (TextView) v.findViewById(R.id.item_contacts_tv_nickname);
@@ -86,7 +89,17 @@ public class ShareMessageDialog extends BaseCentDailog {
             @Override
             public void onClick(View v) {
                 //发送
-                //ChatGroupHelper.sendShareMessage();
+                ChatGroupHelper.sendShareMessage(entity, new ChatGroupHelper.GroupInfoResponse() {
+                    @Override
+                    public void getInfoSuccess(JSONObject groupInfo) {
+                        getActivity().finish();
+                    }
+
+                    @Override
+                    public void getInfoFailed(Exception e) {
+
+                    }
+                });
             }
         });
     }

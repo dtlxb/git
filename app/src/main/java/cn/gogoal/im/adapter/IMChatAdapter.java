@@ -377,6 +377,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             showMessageTime(position, ((LeftShareViewHolder) holder).message_time);
         } else if (holder instanceof RightShareViewHolder) {
             getLayoutSize(((RightShareViewHolder) holder).user_layout);
+            ((RightShareViewHolder) holder).user_name.setVisibility(View.GONE);
             if (lcattrsObject.getString("toolType").equals("1")) {
                 ((RightShareViewHolder) holder).layout_normal.setVisibility(View.VISIBLE);
                 ((RightShareViewHolder) holder).live_layout.setVisibility(View.GONE);

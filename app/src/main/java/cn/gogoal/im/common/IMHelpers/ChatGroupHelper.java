@@ -19,6 +19,7 @@ import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.IMMessageBean;
+import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -331,8 +332,6 @@ public class ChatGroupHelper {
         mMessage.setTimestamp(CalendarUtils.getCurrentTime());
         mMessage.setFrom(UserUtils.getMyAccountId());
 
-        final int chatType = 1001;
-
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
@@ -345,18 +344,69 @@ public class ChatGroupHelper {
                     }
                     //头像暂时未保存
                     IMMessageBean imMessageBean = null;
-                    KLog.e(mMessage.getContent());
-                    if (chatType == 1001) {
-                        if (null != contactBean) {
-                            imMessageBean = new IMMessageBean(contactBean.getConv_id(), chatType, System.currentTimeMillis(),
-                                    "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), mMessage);
-                        }
-                    } else if (chatType == 1002) {
-                        imMessageBean = new IMMessageBean(contactBean.getConv_id(), chatType, System.currentTimeMillis(),
-                                "0", "", "", "", mMessage);
-                    } else {
-
+                    if (null != contactBean) {
+                        imMessageBean = new IMMessageBean(contactBean.getConv_id(), 1001, System.currentTimeMillis(),
+                                "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), mMessage);
                     }
+                    MessageUtils.saveMessageInfo(SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray()), imMessageBean);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                response.getInfoFailed(new Exception(msg));
+            }
+        };
+        new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
+    }
+
+    public static void sendShareMessage(final ShareItemInfo shareItemInfo, final GroupInfoResponse response) {
+        Map<Object, Object> lcattrsMap = new HashMap<>();
+        lcattrsMap.put("username", UserUtils.getNickname());
+        lcattrsMap.put("avatar", UserUtils.getUserAvatar());
+        lcattrsMap.put("content", shareItemInfo.getEntity().getDesc());
+        lcattrsMap.put("title", shareItemInfo.getEntity().getTitle());
+        lcattrsMap.put("thumUrl", shareItemInfo.getEntity().getIcon());
+        lcattrsMap.put("link", shareItemInfo.getEntity().getLink());
+        lcattrsMap.put("toolType", shareItemInfo.getEntity().getShareType());
+
+        Map<Object, Object> messageMap = new HashMap<>();
+        messageMap.put("_lctype", "13");
+        messageMap.put("_lctext", shareItemInfo.getEntity().getTitle());
+        messageMap.put("_lcattrs", lcattrsMap);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", UserUtils.getToken());
+        params.put("conv_id", shareItemInfo.getImMessageBean().getConversationID());
+        params.put("chat_type", String.valueOf(shareItemInfo.getImMessageBean().getChatType()));
+        params.put("message", JSONObject.toJSONString(messageMap));
+        KLog.e(params);
+
+        //消息
+        final AVIMMessage mMessage = new AVIMMessage();
+        JSONObject contentObject = new JSONObject();
+        contentObject.put("_lcattrs", lcattrsMap);
+        contentObject.put("_lctype", "13");
+        contentObject.put("_lctext", shareItemInfo.getEntity().getTitle());
+        mMessage.setContent(JSON.toJSONString(contentObject));
+        mMessage.setTimestamp(CalendarUtils.getCurrentTime());
+        mMessage.setFrom(UserUtils.getMyAccountId());
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                KLog.e(result.get("code"));
+                if ((int) result.get("code") == 0) {
+                    if (null != response) {
+                        response.getInfoSuccess(result.getJSONObject("data"));
+                    }
+
+                    //头像暂时未保存
+                    IMMessageBean imMessageBean = shareItemInfo.getImMessageBean();
+                    imMessageBean.setLastMessage(mMessage);
+                    imMessageBean.setLastTime(System.currentTimeMillis());
                     MessageUtils.saveMessageInfo(SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray()), imMessageBean);
                 }
             }

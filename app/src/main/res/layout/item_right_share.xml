@@ -46,7 +46,8 @@
             android:layout_marginTop="-3dp"
             android:text="what the fag say"
             android:textColor="@color/textColor_333333"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/card_layout"

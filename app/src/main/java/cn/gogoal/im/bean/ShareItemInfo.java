@@ -8,18 +8,19 @@ import java.io.Serializable;
  * phone 18930640263
  * description :分享数据
  */
-public class ShareItemInfo<T> implements Serializable{
+public class ShareItemInfo<T> implements Serializable {
     private T avatar;//分享目标用户头像
     private String name;//分享目标用户名字
-    private String conversationId;//与分享目标用户会话Id
+    private IMMessageBean imMessageBean;
     private GGShareEntity entity;//分享的数据,包含url,title,icon,desc
 
-    public ShareItemInfo(T avatar, String name, GGShareEntity entity,String conversationId) {
+    public ShareItemInfo(T avatar, String name, GGShareEntity entity, IMMessageBean imMessageBean) {
         this.avatar = avatar;
         this.name = name;
         this.entity = entity;
-        this.conversationId=conversationId;
+        this.imMessageBean = imMessageBean;
     }
+
 
     public T getAvatar() {
         return avatar;
@@ -45,11 +46,21 @@ public class ShareItemInfo<T> implements Serializable{
         this.entity = entity;
     }
 
-    public String getConversationId() {
-        return conversationId;
+    public IMMessageBean getImMessageBean() {
+        return imMessageBean;
     }
 
-    public void setConversationId(String conversationId) {
-        this.conversationId = conversationId;
+    public void setImMessageBean(IMMessageBean imMessageBean) {
+        this.imMessageBean = imMessageBean;
+    }
+
+    @Override
+    public String toString() {
+        return "ShareItemInfo{" +
+                "avatar=" + avatar +
+                ", name='" + name + '\'' +
+                ", imMessageBean=" + imMessageBean +
+                ", entity=" + entity +
+                '}';
     }
 }

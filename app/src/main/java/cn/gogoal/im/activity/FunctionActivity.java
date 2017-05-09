@@ -76,17 +76,24 @@ public class FunctionActivity extends BaseActivity {
                         @Override
                         public void onReceiveValue(String value) {
                             KLog.e(value);
-                            if (StringUtils.isActuallyEmpty(value)) {//TODO 目前没有分享，肯定是空咯
-                                GGShareEntity entity = new GGShareEntity();
-                                entity.setDesc("测试数据测试数据测试数据测试数据测试数据测试数据测试数据");
-                                entity.setIcon("http://www.go-goal.com/sample/ACC/ftx/forum/library/ucloud_C317F15BB2B3AA91.jpg");
-                                entity.setTitle("测试数据-标题");
-
-                                value = JSONObject.toJSONString(entity);
-
+//                            if (StringUtils.isActuallyEmpty(value)) {//TODO 目前没有分享，肯定是空咯
+//                                GGShareEntity entity = new GGShareEntity();
+//                                entity.setDesc("测试数据测试数据测试数据测试数据测试数据测试数据测试数据");
+//                                entity.setIcon("http://www.go-goal.com/sample/ACC/ftx/forum/library/ucloud_C317F15BB2B3AA91.jpg");
+//                                entity.setTitle("测试数据-标题");
+//
+//                                value = JSONObject.toJSONString(entity);
+//
+//                                if ()
+//                            }
+                            if (StringUtils.isActuallyEmpty(value)) {
+                                return;
                             }
                             GGShareEntity shareEntity = JSONObject.parseObject(value, GGShareEntity.class);
                             shareEntity.setShareType("1");
+                            if (StringUtils.isActuallyEmpty(shareEntity.getLink())) {
+                                shareEntity.setLink(webView.getUrl());
+                            }
                             Intent intent = new Intent(getContext(), ShareMessageActivity.class);
                             intent.putExtra("share_web_data", shareEntity);
                             startActivity(intent);
