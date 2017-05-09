@@ -98,7 +98,7 @@ public class SquareCollectActivity extends BaseActivity {
             }
         }
         KLog.e(groupList);
-        listAdapter = new ListAdapter(SquareCollectActivity.this, R.layout.item_square_collect, groupList);
+        listAdapter = new ListAdapter(R.layout.item_square_collect, groupList);
         squareRoomRecycler.setAdapter(listAdapter);
 
         //短按跳转
@@ -203,7 +203,7 @@ public class SquareCollectActivity extends BaseActivity {
 
     private class ListAdapter extends CommonAdapter<JSONObject, BaseViewHolder> {
 
-        private ListAdapter(Context context, int layoutId, List<JSONObject> datas) {
+        private ListAdapter(int layoutId, List<JSONObject> datas) {
             super(layoutId, datas);
         }
 
@@ -227,7 +227,7 @@ public class SquareCollectActivity extends BaseActivity {
                     getNicePicture(urls, groupObject.getString("conv_id"), String.valueOf(position));
                 }
             } else {
-                ImageDisplay.loadImage(getActivity(), new File(ImageUtils.getBitmapFilePaht(groupObject.getString("conv_id"), "imagecache")), avatarIv);
+                ImageDisplay.loadRoundedRectangleImage(getActivity(), ImageUtils.getBitmapFilePaht(groupObject.getString("conv_id"), "imagecache"), avatarIv);
             }
             holder.setText(R.id.last_message, groupObject.getJSONObject("attr").getString("intro") != null ? groupObject.getJSONObject("attr").getString("intro") : "");
             nameView.setText(groupObject.getString("name"));

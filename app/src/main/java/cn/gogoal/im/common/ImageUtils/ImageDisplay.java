@@ -115,7 +115,7 @@ public class ImageDisplay {
      * @param radius  圆角矩形角度
      * @param image   图片资源
      */
-    public static <T> void loadRoundedRectangleImage(Context context, ImageView imageView, int radius, T image) {
+    public static <T> void loadRoundedRectangleImage(Context context,T image, ImageView imageView, int radius) {
         Glide.with(context)
                 .load(image)
                 .bitmapTransform(new RoundedCornersTransformation(context, radius, 0))
@@ -126,10 +126,10 @@ public class ImageDisplay {
      * @param context 上下文对象
      * @param image   图片资源
      */
-    public static <T> void loadRoundedRectangleImage(Context context, ImageView imageView, T image) {
+    public static <T> void loadRoundedRectangleImage(Context context,T image, ImageView imageView) {
         Glide.with(context)
                 .load(image)
-                .bitmapTransform(new RoundedCornersTransformation(context, AppDevice.dp2px(context,4), 0))
+                .bitmapTransform(new RoundedCornersTransformation(context, AppDevice.dp2px(context,5), 0))
                 .into(imageView);
     }
 

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/shape_dialog_share_message_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="发送给:"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+
+    <include layout="@layout/item_contacts" />
+
+    <TextView
+        android:id="@+id/tv_dialog_share_msg_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:background="#F7F7F7"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:padding="10dp"
+        android:text="[链接]【马警方确认一名涉金正男遇刺案嫌犯为朝鲜大使馆工作人员balabalababalabalababalabalababalabalababalabalababalabalababalabalaba】" />
+
+    <EditText
+        android:id="@+id/et_dialog_share_msg_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:maxLines="3"
+        android:hint="给对方留言" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/btn_dialog_share_msg_cancle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:background="@android:color/transparent"
+            android:text="取消" />
+
+        <TextView
+            android:id="@+id/btn_dialog_share_msg_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:padding="16dp"
+            android:background="@android:color/transparent"
+            android:text="发送" />
+    </LinearLayout>
+</LinearLayout>

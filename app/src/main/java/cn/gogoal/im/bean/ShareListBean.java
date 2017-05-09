@@ -1,14 +1,16 @@
 package cn.gogoal.im.bean;
 
+import java.io.Serializable;
+
 import cn.gogoal.im.adapter.baseAdapter.entity.MultiItemEntity;
 
 /**
  * author wangjd on 2017/5/5 0005.
  * Staff_id 1375
  * phone 18930640263
- * description :${annotated}.
+ * description :去分享的页面列表item实体
  */
-public class ShareListBean<T> implements MultiItemEntity {
+public class ShareListBean<T> implements MultiItemEntity,Serializable{
 
     public static final int LIST_TYPE_SEARCH = 0x0001;
 
@@ -69,4 +71,5 @@ public class ShareListBean<T> implements MultiItemEntity {
     public int getItemType() {
         return listType;
     }
+
 }

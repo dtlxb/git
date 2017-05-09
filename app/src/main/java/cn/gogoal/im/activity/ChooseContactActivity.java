@@ -33,6 +33,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ArrayUtils;
@@ -64,6 +65,7 @@ public class ChooseContactActivity extends BaseActivity {
     private int topListWidth;
 
     private boolean isAdd;
+    private GGShareEntity shareEntity;
 
     public void setOnItemCheckListener(ICheckItemListener<ContactBean> listener) {
         this.listener = listener;
@@ -115,33 +117,16 @@ public class ChooseContactActivity extends BaseActivity {
 
         /*
          * 选择好友类型：
-         * 1101.选择好友直接创建群，
          * 1100.选择好友和单聊好友创建群，
+         * 1101.选择好友直接创建群，
          * 1102.原来存在的群继续添加好友，
          * 1103.原来存在的群中移除好友
          * 1104.群@人
+         * 1205.分享消息给很多好友
          * */
         actionType = getIntent().getIntExtra("square_action", 0);
-
-        KLog.e(actionType);
-        //actionType = 1102,1103,1104
         String teamId = getIntent().getStringExtra("conversation_id");
-
-        if (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE || actionType == AppConst.LIVE_CONTACT_SOMEBODY) {
-            rvDel.setVisibility(View.VISIBLE);
-            rvDel.addItemDecoration(new NormalItemDecoration(mContext));
-            rvDel.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-            rvDel.setAdapter(new DeleteAdapter(UserUtils.getOthersInTeam(teamId, actionType)));
-        }
-
-        //1100
         itContactBean = (ContactBean) getIntent().getSerializableExtra("seri");
-
-        if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE) {
-            mSelectedTeamMemberAccounts.addAll(UserUtils.getFriendsInTeam(teamId));
-        } else if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
-            mSelectedTeamMemberAccounts.add(itContactBean);
-        }
 
         textAction = initTitleAction(teamId);
 
@@ -158,17 +143,38 @@ public class ChooseContactActivity extends BaseActivity {
 
         AppDevice.setViewWidth$Height(tvConstactsFlag, AppDevice.getWidth(mContext) / 4, AppDevice.getWidth(mContext) / 4);
 
-        KLog.e(mSelectedTeamMemberAccounts);
+        switch (actionType) {
+            case AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE:
+                shareEntity = getIntent().getParcelableExtra("share_web_data");
+                userContacts = UserUtils.getUserContacts();
+                break;
+            case AppConst.SQUARE_ROOM_DELETE_ANYONE:
+            case AppConst.LIVE_CONTACT_SOMEBODY:
 
-        if (actionType == AppConst.SQUARE_ROOM_AT_SOMEONE) {
-            userContacts = UserUtils.getFriendsInTeam(teamId);
-        } else {
-            userContacts = UserUtils.getUserContacts();
+                userContacts = UserUtils.getUserContacts();
+
+                rvDel.setVisibility(View.VISIBLE);
+                rvDel.addItemDecoration(new NormalItemDecoration(mContext));
+                rvDel.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+                rvDel.setAdapter(new DeleteAdapter(UserUtils.getOthersInTeam(teamId, actionType)));
+                break;
+            case AppConst.SQUARE_ROOM_ADD_ANYONE:
+                userContacts = UserUtils.getUserContacts();
+                mSelectedTeamMemberAccounts.addAll(UserUtils.getFriendsInTeam(teamId));
+                break;
+            case AppConst.CREATE_SQUARE_ROOM_BY_ONE:
+                userContacts = UserUtils.getUserContacts();
+                mSelectedTeamMemberAccounts.add(itContactBean);
+                break;
+            case AppConst.SQUARE_ROOM_AT_SOMEONE:
+                userContacts = UserUtils.getFriendsInTeam(teamId);
+                break;
+            case AppConst.CREATE_SQUARE_ROOM_BUILD:
+                userContacts = UserUtils.getUserContacts();
+                break;
+            default:
+                break;
         }
-
-        /*if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE && itContactBean != null) {
-            userContacts.add(itContactBean);
-        }*/
 
         showContact();//设置列表
 
@@ -258,22 +264,31 @@ public class ChooseContactActivity extends BaseActivity {
 
                 TreeSet<Integer> userFriendsIdList = UserUtils.getUserFriendsIdList(result.values());
 
-                if (actionType == AppConst.CREATE_SQUARE_ROOM_BUILD) {
-                    userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getMyAccountId()));
-                    createChatGroup(userFriendsIdList);
-                } else if (actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
-                    userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getMyAccountId()));
-                    userFriendsIdList.add(itContactBean.getFriend_id());
-                    createChatGroup(userFriendsIdList);
-                } else {
-                    Intent intent = new Intent();
-                    intent.putExtra("square_action", actionType);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("choose_friend_array", new ArrayList<>(result.values()));
-                    intent.putExtras(bundle);
-                    setResult(actionType, intent);
-                    //UIHelper.toast(getActivity(), actionType == AppConst.SQUARE_ROOM_ADD_ANYONE ? "添加成功" : "移除成功");
-                    finish();
+                switch (actionType) {
+                    case AppConst.CREATE_SQUARE_ROOM_BUILD:
+                        userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getMyAccountId()));
+                        createChatGroup(userFriendsIdList);
+                        break;
+                    case AppConst.CREATE_SQUARE_ROOM_BY_ONE:
+                        userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getMyAccountId()));
+                        userFriendsIdList.add(itContactBean.getFriend_id());
+                        createChatGroup(userFriendsIdList);
+                        break;
+                    case AppConst.SQUARE_ROOM_ADD_ANYONE://加人
+                    case AppConst.SQUARE_ROOM_DELETE_ANYONE://删人
+                    case AppConst.SQUARE_ROOM_AT_SOMEONE://@人
+                        Intent intent = new Intent();
+                        intent.putExtra("square_action", actionType);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("choose_friend_array", new ArrayList<>(result.values()));
+                        intent.putExtras(bundle);
+                        setResult(actionType, intent);
+                        //UIHelper.toast(getActivity(), actionType == AppConst.SQUARE_ROOM_ADD_ANYONE ? "添加成功" : "移除成功");
+                        finish();
+                        break;
+                    case AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE://分享给很多人
+
+                        break;
                 }
             }
         };
@@ -283,6 +298,10 @@ public class ChooseContactActivity extends BaseActivity {
      * 创建群组
      */
     public void createChatGroup(final TreeSet<Integer> userIdList) {
+        if (userIdList.size() < 3) {
+            UIHelper.toast(ChooseContactActivity.this, "三个成员以上才能创建群组");
+            return;
+        }
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
         params.put("id_list", JSONObject.toJSONString(userIdList));
@@ -302,7 +321,6 @@ public class ChooseContactActivity extends BaseActivity {
                     intent.putExtras(mbundle);
                     startActivity(intent);
 
-                    UIHelper.toast(ChooseContactActivity.this, "群组创建成功!!!");
                     finish();
                 } else {
                     UIHelper.toastResponseError(getActivity(), responseInfo);
@@ -371,7 +389,7 @@ public class ChooseContactActivity extends BaseActivity {
                 .invalidate();
 
         rvContacts.addItemDecoration(mDecoration);
-        KLog.e(userContacts);
+
         contactAdapter = new ChooseAdapter(userContacts);
 
         contactAdapter.notifyDataSetChanged();

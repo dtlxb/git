@@ -64,9 +64,10 @@
                 android:id="@+id/tv_share_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="文字一分钟"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textColor="@color/textColor_333333"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <RelativeLayout
                 android:id="@+id/layout_normal"

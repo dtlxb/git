@@ -215,8 +215,8 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     .load(Uri.parse(ImageUtils.getBitmapFilePaht(conversationId, "imagecache"))).into(iv_square_head);
             ImageDisplay.loadRoundedRectangleImage(
                     IMSquareChatSetActivity.this,
-                    iv_square_head,
-                    Uri.parse(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")));
+                    Uri.parse(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")),
+                    iv_square_head);
         }
         getGroupInfo();
     }
@@ -457,7 +457,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
                         }
                     });
-                    Log.e("+++urls1", urls.toString());
                     PersonContactBeens.addAll(addContactBeens);
                     getNicePicture(urls);
                     contactBeens.clear();

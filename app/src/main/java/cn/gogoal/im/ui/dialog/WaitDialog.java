@@ -118,4 +118,19 @@ public class WaitDialog extends BaseCentDailog {
             }, 1000);
         }
     }
+    public void dismiss(boolean immediately, final boolean finish) {
+        if (immediately) {
+            super.dismiss();
+        } else {
+            new android.os.Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    WaitDialog.this.dismiss();
+                    if (finish){
+                        WaitDialog.this.getActivity().finish();
+                    }
+                }
+            }, 1000);
+        }
+    }
 }

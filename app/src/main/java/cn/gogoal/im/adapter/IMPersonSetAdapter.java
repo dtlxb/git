@@ -60,14 +60,11 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean, BaseViewHolde
 
         personName.setText(contactBean.getNickname());
         if (avatar instanceof String) {
-//            Glide.with(mContext)
-//                    .load(UFileImageHelper.load(avatar.toString()).compress(10).get())
-//                    .asBitmap()
-//                    .into(imageIcon);
             ImageDisplay.loadRoundedRectangleImage(
                     mContext,
-                    imageIcon,
-                    UFileImageHelper.load(avatar.toString()).compress(10).get());
+                    UFileImageHelper.load(avatar.toString()).compress(10).get(),
+                    imageIcon
+            );
         } else if (avatar instanceof Integer) {
             imageIcon.setImageResource((Integer) avatar);
         }

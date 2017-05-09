@@ -1,6 +1,7 @@
 package cn.gogoal.im.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,30 +20,41 @@ import cn.gogoal.im.bean.ContactBean;
  */
 public class ContactAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
     List<ContactBean> list;
+    private int type;
 
-    public ContactAdapter(Context context, List<ContactBean> datas) {
+    public ContactAdapter(Context context, List<ContactBean> datas, int type) {
         super(R.layout.item_contacts, datas);
         list = datas;
+        this.type = type;
     }
 
     @Override
     protected void convert(BaseViewHolder holder, ContactBean contactBean, int position) {
         TextView textView = holder.getView(R.id.item_contacts_tv_duty);
+        TextView tvInvite = holder.getView(R.id.tv_invite);
         holder.setText(R.id.item_contacts_tv_nickname, contactBean.getTarget());
         if (contactBean.getContactType() == ContactBean.ContactType.FUNCTION_ITEM) {
             textView.setVisibility(View.GONE);
         } else {
             textView.setVisibility(View.VISIBLE);
-            textView.setText(contactBean.getDuty());
+            if (type == 0) {
+                tvInvite.setVisibility(View.GONE);
+                textView.setText(contactBean.getDuty());
+            } else if (type == 1) {
+                tvInvite.setVisibility(View.VISIBLE);
+                textView.setText(contactBean.getPhone());
+            }
         }
 
         holder.itemView.setBackgroundResource(R.drawable.selector_normal_write2gray);
 
         Object avatar = contactBean.getAvatar();
         if (avatar instanceof String) {
-            holder.setImageUrl(R.id.item_contacts_iv_icon, avatar.toString());
+            holder.setImageUrl(R.id.item_contacts_iv_icon, avatar.toString(), false);
         } else if (avatar instanceof Integer) {
             holder.setImageResource(R.id.item_contacts_iv_icon, (Integer) avatar);
+        } else if (avatar instanceof Bitmap) {
+            holder.setImageBitmap(R.id.item_contacts_iv_icon, (Bitmap) avatar);
         }
 
     }

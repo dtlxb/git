@@ -38,6 +38,7 @@ public abstract class BaseDialog extends DialogFragment {
             window.requestFeature(Window.FEATURE_NO_TITLE);
         }
         getDialog().setCanceledOnTouchOutside(getCancelOutside());
+
         View rootView = inflater.inflate(getLayoutRes(), container, false);
         bindView(rootView);
         EventBus.getDefault().register(this);
@@ -99,4 +100,5 @@ public abstract class BaseDialog extends DialogFragment {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
     }
+
 }
