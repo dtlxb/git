@@ -66,6 +66,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:text="分享消息"
                 android:textColor="@color/textColor_333333"
                 android:textSize="14sp" />
 
@@ -107,8 +108,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/timg" />
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:id="@+id/tv_live_share"

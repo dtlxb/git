@@ -9,6 +9,7 @@ import android.widget.TextView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
 
@@ -67,7 +68,7 @@ public class ShareMessageDialog extends BaseCentDailog {
         if (entity != null) {
             try {
                 ImageDisplay.loadRoundedRectangleImage(v.getContext(), entity.getAvatar(), icon);
-            }catch (Exception e){
+            } catch (Exception e) {
                 ImageDisplay.loadImage(v.getContext(), entity.getAvatar(), icon);
             }
             name.setText(entity.getName());
@@ -85,6 +86,7 @@ public class ShareMessageDialog extends BaseCentDailog {
             @Override
             public void onClick(View v) {
                 //发送
+                //ChatGroupHelper.sendShareMessage();
             }
         });
     }

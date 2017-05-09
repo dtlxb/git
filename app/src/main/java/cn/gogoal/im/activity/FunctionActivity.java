@@ -25,7 +25,6 @@ import cn.gogoal.im.bean.PdfData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.NormalIntentUtils;
-import cn.gogoal.im.common.ShareType;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.WebViewUtil;
@@ -83,11 +82,11 @@ public class FunctionActivity extends BaseActivity {
                                 entity.setIcon("http://www.go-goal.com/sample/ACC/ftx/forum/library/ucloud_C317F15BB2B3AA91.jpg");
                                 entity.setTitle("测试数据-标题");
 
-                                value=JSONObject.toJSONString(entity);
+                                value = JSONObject.toJSONString(entity);
 
                             }
                             GGShareEntity shareEntity = JSONObject.parseObject(value, GGShareEntity.class);
-                            shareEntity.setShareType(ShareType.WEB);
+                            shareEntity.setShareType("1");
                             Intent intent = new Intent(getContext(), ShareMessageActivity.class);
                             intent.putExtra("share_web_data", shareEntity);
                             startActivity(intent);
