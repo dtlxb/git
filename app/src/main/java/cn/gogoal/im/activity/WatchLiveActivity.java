@@ -3,6 +3,7 @@ package cn.gogoal.im.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
@@ -55,6 +56,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
@@ -421,7 +423,16 @@ public class WatchLiveActivity extends BaseActivity {
         }
 
         @Override
-        public int onswitchCamera() {
+        public void onSwitchFullScreen() {
+            if (AppDevice.isLandscape(getContext())) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            } else if (AppDevice.isPortrait(getContext())) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            }
+        }
+
+        @Override
+        public int onSwitchCamera() {
             if (mChatParter != null) {
                 mChatParter.switchCamera();
             }

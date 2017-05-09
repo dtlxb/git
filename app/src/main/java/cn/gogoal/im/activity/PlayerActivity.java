@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -964,10 +965,17 @@ public class PlayerActivity extends BaseActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    @OnClick({R.id.imgPlayerProfiles, R.id.imgPlayerRelaterVideo, R.id.imgPlayerShare,
-            R.id.imgPlayerClose})
+    @OnClick({R.id.imgPlayerFullScreen, R.id.imgPlayerProfiles, R.id.imgPlayerRelaterVideo,
+            R.id.imgPlayerShare, R.id.imgPlayerClose})
     public void setClickFunctionBar(View v) {
         switch (v.getId()) {
+            case R.id.imgPlayerFullScreen: //全屏
+                if (AppDevice.isLandscape(getContext())) {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                } else if (AppDevice.isPortrait(getContext())) {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                }
+                break;
             case R.id.imgPlayerProfiles: //主播介绍
                 if (AppDevice.isLandscape(getContext())) {
                     anchorHelperLand.showFromRight(v);
@@ -1035,18 +1043,20 @@ public class PlayerActivity extends BaseActivity {
         anchor_name.setText(anchor.getString("anchor_name"));
         anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
 
-        anchor_achieve.setText(anchor.getString("anchor_introduction"));
+        if (anchor.getString("anchor_introduction") != null) {
+            anchor_achieve.setText(anchor.getString("anchor_introduction"));
 
-        final ViewTreeObserver observer = anchor_avatar.getViewTreeObserver();
-        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                anchor_avatar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                int finalHeight = anchor_avatar.getMeasuredHeight();
-                int finalWidth = anchor_avatar.getMeasuredWidth();
-                TextAndImage.makeSpan(finalHeight, finalWidth, anchor_achieve);
-            }
-        });
+            final ViewTreeObserver observer = anchor_avatar.getViewTreeObserver();
+            observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    anchor_avatar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    int finalHeight = anchor_avatar.getMeasuredHeight();
+                    int finalWidth = anchor_avatar.getMeasuredWidth();
+                    TextAndImage.makeSpan(finalHeight, finalWidth, anchor_achieve);
+                }
+            });
+        }
     }
 
     private void showRelaterVideo() {

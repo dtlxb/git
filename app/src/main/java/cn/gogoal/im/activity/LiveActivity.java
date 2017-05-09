@@ -436,7 +436,11 @@ public class LiveActivity extends BaseActivity {
         }
 
         @Override
-        public int onswitchCamera() {
+        public void onSwitchFullScreen() {
+        }
+
+        @Override
+        public int onSwitchCamera() {
             if (mChatHost != null) {
                 mChatHost.switchCamera();
             }

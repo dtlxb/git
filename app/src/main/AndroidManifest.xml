@@ -51,7 +51,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".receiver.pushReceiver" >
+        <receiver android:name=".receiver.pushReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
@@ -147,6 +147,7 @@
         <activity android:name=".activity.LiveActivity" />
         <activity
             android:name=".activity.WatchLiveActivity"
+            android:configChanges="screenSize|keyboardHidden|orientation"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.stock.MarketDetialActivity" />
         <activity android:name=".activity.stock.MyStockNewsActivity" />
@@ -178,7 +179,7 @@
         <activity android:name=".activity.ChangePhoneNumber" />
         <activity android:name=".activity.stock.StockNewsAllListActivity" />
 
-        <activity android:name=".activity.ShareMessageActivity"/>
+        <activity android:name=".activity.ShareMessageActivity" />
         <activity android:name=".activity.ScreenActivity" />
     </application>
 
