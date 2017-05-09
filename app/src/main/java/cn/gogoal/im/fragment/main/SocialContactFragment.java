@@ -284,7 +284,6 @@ public class SocialContactFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 SocialRecordBean object = JSONObject.parseObject(responseInfo, SocialRecordBean.class);
                 if (object.getCode() == 0) {
                     recordLinear.setVisibility(View.VISIBLE);

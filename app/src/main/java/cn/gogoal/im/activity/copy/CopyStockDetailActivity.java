@@ -996,7 +996,6 @@ public class CopyStockDetailActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         long refreshtime = SPTools.getLong("interval_time", 15000);
-        KLog.e("自动刷新时间间隔==="+refreshtime);
         width = AppDevice.getWidth(CopyStockDetailActivity.this) - AppDevice.dp2px(CopyStockDetailActivity.this, 22);
         height = AppDevice.dp2px(CopyStockDetailActivity.this, 190);
         timer = new Timer();

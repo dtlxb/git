@@ -16,7 +16,6 @@ import com.avos.avoscloud.PushService;
 import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
-import com.socks.library.KLog;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -158,7 +157,6 @@ public class MyApp extends LitePalApplication {
 
         @Override
         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-            KLog.e(activity.getClass().getSimpleName());
             AppManager.getInstance().addActivity(activity);
         }
 
