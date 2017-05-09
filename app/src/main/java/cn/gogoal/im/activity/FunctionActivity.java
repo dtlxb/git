@@ -77,7 +77,7 @@ public class FunctionActivity extends BaseActivity {
                         @Override
                         public void onReceiveValue(String value) {
                             KLog.e(value);
-                            if (StringUtils.isActuallyEmpty(value)) {
+                            if (StringUtils.isActuallyEmpty(value)) {//TODO 目前没有分享，肯定是空咯
                                 GGShareEntity entity = new GGShareEntity();
                                 entity.setDesc("测试数据测试数据测试数据测试数据测试数据测试数据测试数据");
                                 entity.setIcon("http://www.go-goal.com/sample/ACC/ftx/forum/library/ucloud_C317F15BB2B3AA91.jpg");
