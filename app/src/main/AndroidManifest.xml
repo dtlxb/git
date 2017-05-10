@@ -149,6 +149,7 @@
         <activity android:name=".activity.LiveActivity" />
         <activity
             android:name=".activity.WatchLiveActivity"
+            android:configChanges="screenSize|keyboardHidden|orientation"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.stock.MarketDetialActivity" />
         <activity android:name=".activity.stock.MyStockNewsActivity" />

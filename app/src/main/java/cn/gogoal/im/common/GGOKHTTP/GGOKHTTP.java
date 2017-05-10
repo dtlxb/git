@@ -586,6 +586,8 @@ public class GGOKHTTP {
      * token    用户token     String     用户token   是
      * equipment_id   设备id   String    设备id      是
      * type    统计类型   Number    统计类型：1播放，2分享。（默认播放）  是
+     * video_type 视频类型 Number 视频类型：1直播2录播 否
+     * product_line 产品线id  Number   产品线id，（默认4机构版）否
      */
     public static final String ADD_PALY_DATE = "v1/video_studio/add_paly_date";
 
@@ -615,6 +617,21 @@ public class GGOKHTTP {
      * 获取节目单
      */
     public static final String GET_PROGRAMME_GUIDE = "v1/video_studio/get_programme_guide";
+
+    /**
+     * 验证邀请码
+     * @prama invite_code 邀请码
+     * @prama user_token  token
+     * @prama video_id    视频id
+     */
+    public static final String VALIDATE_CODE = "v1/video_auth/validate_code";
+
+    /**
+     * 验证本地邀请码
+     * @prama video_id    视频的id
+     * @prama identifies  本地的邀请码
+     */
+    public static final String VALIDATE_IDENTIFIES = "v1/video_auth/validate_identifies";
 
 //--------------------------------------------------------------------------------------------------
 

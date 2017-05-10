@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/relative_player"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/player_info">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/functionBar"
@@ -19,14 +18,31 @@
             android:id="@+id/linearPlayerChat"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:layout_weight="1.5"
+            android:paddingLeft="10dp"
+            android:gravity="left">
 
             <ImageView
                 android:id="@+id/imgPlayerChat"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@mipmap/player_chat" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearPlayerFullScreen"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imgPlayerFullScreen"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/player_full_screen" />
 
         </LinearLayout>
 
@@ -46,35 +62,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearPlayerRelaterVideo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageView
-                android:id="@+id/imgPlayerRelaterVideo"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/player_related_video" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageView
-                android:id="@+id/imgPlayerShare"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/player_share" />
-
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/linearPlayerShotCut"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -87,6 +74,21 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@mipmap/player_shot_cut" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imgPlayerShare"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/player_share" />
 
         </LinearLayout>
 

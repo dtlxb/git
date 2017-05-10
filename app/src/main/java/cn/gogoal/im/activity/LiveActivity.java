@@ -103,16 +103,14 @@ public class LiveActivity extends BaseActivity {
     ImageView imgPlayClose;
 
     //详情相关控件
-    @BindView(R.id.textTitle)
-    TextView textTitle;
     @BindView(R.id.imgPalyer)
     CircleImageView imgPalyer;
     @BindView(R.id.textCompany)
     TextView textCompany;
-    @BindView(R.id.textMarInter)
-    TextView textMarInter;
     @BindView(R.id.textOnlineNumber)
     TextView textOnlineNumber;
+    @BindView(R.id.recyAudience)
+    RecyclerView recyAudience;
     //倒计时
     @BindView(R.id.countDownTimer)
     CountDownTimerView countDownTimer;
@@ -236,6 +234,8 @@ public class LiveActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+
+        StatusBarUtil.with(this).setColor(Color.BLACK);
 
         live_id = getIntent().getStringExtra("live_id");
 
@@ -430,7 +430,11 @@ public class LiveActivity extends BaseActivity {
         }
 
         @Override
-        public int onswitchCamera() {
+        public void onSwitchFullScreen() {
+        }
+
+        @Override
+        public int onSwitchCamera() {
             if (mChatHost != null) {
                 mChatHost.switchCamera();
             }
@@ -1094,10 +1098,8 @@ public class LiveActivity extends BaseActivity {
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONArray("data").getJSONObject(0);
                     //直播详情
-                    textTitle.setText(data.getString("video_name")); //直播名称
                     ImageDisplay.loadCircleImage(getContext(), data.getString("face_url"), imgPalyer);
                     textCompany.setText(data.getString("anchor_name"));
-                    textMarInter.setText(data.getString("programme_name"));
                     //主播介绍
                     anchor = data.getJSONObject("anchor");
 
@@ -1174,7 +1176,7 @@ public class LiveActivity extends BaseActivity {
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
-                    textOnlineNumber.setText(data.getIntValue("result") + "人在线");
+                    textOnlineNumber.setText(data.getIntValue("result") + "在线");
                 }
             }
 

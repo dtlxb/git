@@ -178,6 +178,10 @@ public class MyGroupsActivity extends BaseActivity {
                                         ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
                                     }
                                 });
+/*=======
+                            public void onSuccess(Bitmap mathingBitmap) {
+                                ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
+>>>>>>> feature/fixLive*/
                                 groupAvatar[0] = mathingBitmap;
                             }
                             @Override
