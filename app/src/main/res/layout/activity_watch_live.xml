@@ -20,80 +20,68 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:orientation="vertical">
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="7dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:orientation="horizontal"
-            android:paddingRight="10dp">
+            android:layout_marginRight="3dp"
+            android:background="@drawable/shape_player_anchor_info"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <cn.gogoal.im.ui.view.CircleImageView
+                android:id="@+id/imgPalyer"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/shape_player_info"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="3dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textTitle"
+                    android:id="@+id/textCompany"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
                     android:text="@string/text_empty"
                     android:textColor="@android:color/white"
-                    android:textSize="14dp" />
+                    android:textSize="12dp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/textOnlineNumber"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <cn.gogoal.im.ui.view.CircleImageView
-                        android:id="@+id/imgPalyer"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:background="@mipmap/player_chat" />
-
-                    <TextView
-                        android:id="@+id/textCompany"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:singleLine="true"
-                        android:text="@string/text_empty"
-                        android:textColor="@android:color/white"
-                        android:textSize="12dp" />
-
-                    <TextView
-                        android:id="@+id/textMarInter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:background="@drawable/shape_player_market_interpre"
-                        android:singleLine="true"
-                        android:text="@string/text_empty"
-                        android:textColor="@android:color/white"
-                        android:textSize="11dp" />
-
-                </LinearLayout>
+                    android:layout_marginTop="3dp"
+                    android:singleLine="true"
+                    android:text="@string/text_empty"
+                    android:textColor="@android:color/white"
+                    android:textSize="10dp" />
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/textAddFriend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_player_add_friend"
+                android:text="@string/add_friend"
+                android:textColor="@android:color/white"
+                android:textSize="11dp" />
+
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textOnlineNumber"
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyAudience"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/shape_player_online_number"
-            android:text="@string/text_empty"
-            android:textColor="@android:color/white"
-            android:textSize="11dp" />
+            android:layout_weight="1" />
 
     </LinearLayout>
 

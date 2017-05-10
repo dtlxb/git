@@ -76,14 +76,10 @@ public class PlayerActivity extends BaseActivity {
     LinearLayout linearPlayerRelaterVideo;
 
     //详情相关控件
-    @BindView(R.id.textTitle)
-    TextView textTitle;
     @BindView(R.id.imgPalyer)
     CircleImageView imgPalyer;
     @BindView(R.id.textCompany)
     TextView textCompany;
-    @BindView(R.id.textMarInter)
-    TextView textMarInter;
     @BindView(R.id.textOnlineNumber)
     TextView textOnlineNumber;
 
@@ -196,7 +192,7 @@ public class PlayerActivity extends BaseActivity {
 
         live_id = getIntent().getStringExtra("live_id");
 
-        PlayDataStatistics.getStatisticalData(getContext(), live_id, "2", "1");
+        PlayDataStatistics.getStatisticalData(getContext(), "2", live_id, "2", "1");
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -235,10 +231,9 @@ public class PlayerActivity extends BaseActivity {
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONArray("data").getJSONObject(0);
                     //直播详情
-                    textTitle.setText(data.getString("video_name")); //直播名称
                     ImageDisplay.loadCircleImage(getContext(), data.getString("face_url"), imgPalyer);
                     textCompany.setText(data.getString("anchor_name"));
-                    textMarInter.setText(data.getString("programme_name"));
+                    textOnlineNumber.setText("0人在线");
                     //主播介绍
                     anchor = data.getJSONObject("anchor");
                     if (anchor == null) {
@@ -250,8 +245,6 @@ public class PlayerActivity extends BaseActivity {
                     }
 
                     mURI = data.getString("video_file");
-
-                    textOnlineNumber.setText("0人在线");
 
                     startToPlay(mURI);
 
@@ -991,7 +984,7 @@ public class PlayerActivity extends BaseActivity {
                 }
                 break;
             case R.id.imgPlayerShare: //分享
-                PlayDataStatistics.getStatisticalData(getContext(), live_id, "2", "2");
+                PlayDataStatistics.getStatisticalData(getContext(), "2", live_id, "2", "2");
                 DialogHelp.showShareDialog(getContext(), AppConst.GG_LIVE_SHARE + live_id + "?video", "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
                 break;
             case R.id.imgPlayerClose: //退出

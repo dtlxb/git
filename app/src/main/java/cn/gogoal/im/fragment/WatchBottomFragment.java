@@ -211,7 +211,7 @@ public class WatchBottomFragment extends BaseFragment {
                 }
                 break;
             case R.id.imgPlayerShare: //分享
-                PlayDataStatistics.getStatisticalData(getContext(), live_id, "2", "2");
+                PlayDataStatistics.getStatisticalData(getContext(), "1", live_id, "2", "2");
                 DialogHelp.showShareDialog(getActivity(), AppConst.GG_LIVE_SHARE + live_id + "?live", "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
                 break;
             case R.id.imgPlayerShotCut: //切摄像头
