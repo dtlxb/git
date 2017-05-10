@@ -17,6 +17,7 @@ import java.util.Map;
 
 import cn.gogoal.im.common.UserUtils;
 
+import static com.avos.avoscloud.AVQuery.CachePolicy.CACHE_THEN_NETWORK;
 import static com.avos.avoscloud.AVQuery.CachePolicy.NETWORK_ONLY;
 
 /**
@@ -88,6 +89,8 @@ public class AVImClientManager {
         AVIMConversationQuery conversationQuery = avimClient.getQuery();
         // 根据conversationId查找房间
         conversationQuery.whereEqualTo("objectId", conversationId);
+        //查找策略
+        conversationQuery.setQueryPolicy(CACHE_THEN_NETWORK);
         // 查找聊天
         conversationQuery.findInBackground(new AVIMConversationQueryCallback() {
             @Override
@@ -116,11 +119,10 @@ public class AVImClientManager {
      */
     public void refreshConversation(String conversationId) {
         AVIMConversationQuery conversationQuery = avimClient.getQuery();
-
-        conversationQuery.setQueryPolicy(NETWORK_ONLY);
-
         // 根据conversationId查找房间
         conversationQuery.whereEqualTo("objectId", conversationId);
+        //查找策略
+        conversationQuery.setQueryPolicy(NETWORK_ONLY);
         // 查找聊天
         conversationQuery.findInBackground(new AVIMConversationQueryCallback() {
             @Override
