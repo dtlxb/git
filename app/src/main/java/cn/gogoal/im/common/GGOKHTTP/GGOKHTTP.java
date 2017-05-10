@@ -134,7 +134,7 @@ public class GGOKHTTP {
 
     /**
      * 个股新闻、公告、投资者互动
-     *
+     * <p>
      * params stock_code=002285&
      * params type=7(新闻)、3(公告)、9(看点);
      */
@@ -499,6 +499,27 @@ public class GGOKHTTP {
      * token                         用户token
      */
     public static final String GET_TOUYAN_LIST = "v1/ggm_icon/get_icon_list";
+
+    /*
+     *  获取全部小工具
+     *  @prama token
+     */
+    public static final String GET_ALLCOLUMN = "v1/ggm_app/get_allapplist";
+
+    /*
+     *  获取用户添加的小工具
+     *  @prama token
+     */
+    public static final String GET_USERCOLUMN = "v1/ggm_app/get_myapplist";
+
+    /*
+     *  首页小工具的编辑
+     *
+     *  @prama token
+     *  @prama showid  展示应用id    多个已“；”隔开
+     *  @prama nshowid 取消展示应用id    多个已“；”隔开
+     */
+    public static final String GET_EDITE_USERCOLUMN = "v1/ggm_app/set_isshow";
 
     /**
      * banner

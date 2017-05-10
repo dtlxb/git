@@ -1,6 +1,7 @@
 package cn.gogoal.im.fragment.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,15 +20,18 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.ToolsSettingActivity;
 import cn.gogoal.im.adapter.SectionAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BannerBean;
-import cn.gogoal.im.bean.SectionTouYanData;
-import cn.gogoal.im.bean.TouYan;
+import cn.gogoal.im.bean.SectionToolsData;
+import cn.gogoal.im.bean.ToolBean;
+import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.NormalIntentUtils;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.AutoScrollViewPager;
 import cn.gogoal.im.ui.view.XTitle;
@@ -47,7 +52,7 @@ public class InvestmentResearchFragment extends BaseFragment {
     @BindView(R.id.vp_fund_banner)
     AutoScrollViewPager bannerPager;
 
-    private List<SectionTouYanData> mData;
+    private List<SectionToolsData> mData;
     private SectionAdapter sectionAdapter;
 
     /**
@@ -63,14 +68,17 @@ public class InvestmentResearchFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle(R.string.title_found).addAction(new XTitle.TextAction(getString(R.string.str_helper)) {
+        setFragmentTitle(R.string.title_found).addAction(new XTitle.TextAction(getString(R.string.str_setting)) {
             @Override
             public void actionClick(View view) {
 
+                /*//跳帮助
                 NormalIntentUtils.go2WebActivity(
                         view.getContext(),
                         AppConst.GG_HELP,
-                        getString(R.string.str_helper));
+                        getString(R.string.str_helper));*/
+                //跳设置小工具
+                startActivity(new Intent(view.getContext(), ToolsSettingActivity.class));
             }
         });
 
@@ -140,19 +148,21 @@ public class InvestmentResearchFragment extends BaseFragment {
         mData.clear();
         Map<String, String> map = new HashMap<>();
         map.put("token", UserUtils.getToken());
+        KLog.e(StringUtils.map2ggParameter(map));
 
-        new GGOKHTTP(map, GGOKHTTP.GET_TOUYAN_LIST, new GGOKHTTP.GGHttpInterface() {
+        new GGOKHTTP(map, GGOKHTTP.GET_USERCOLUMN, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
-                    List<TouYan.DataBean> touYanList = JSONObject.parseObject(responseInfo, TouYan.class).getData();
-                    for (int i = 0; i < touYanList.size(); i++) {
-                        TouYan.DataBean dataBean = touYanList.get(i);
-                        mData.add(new SectionTouYanData(true, dataBean.getTitle()));
-                        List<TouYan.DataBean.Item> itemList = dataBean.getDatas();
-                        for (TouYan.DataBean.Item item : itemList) {
-                            mData.add(new SectionTouYanData(item, false));
+                    List<ToolData> toolDatas = JSONObject.parseObject(responseInfo, ToolBean.class).getData();
+                    for (int i = 0; i < toolDatas.size(); i++) {
+                        ToolData toolData = toolDatas.get(i);
+                        mData.add(new SectionToolsData(true, toolData.getTitle()));
+                        List<ToolData.Tool> itemList = toolData.getDatas();
+                        for (ToolData.Tool item : itemList) {
+                            mData.add(new SectionToolsData(item, false));
                         }
 
                         //模拟填充空数据
@@ -175,8 +185,8 @@ public class InvestmentResearchFragment extends BaseFragment {
 
     }
 
-    private void creatSpaceItem(List<TouYan.DataBean.Item> itemList) {
-        TouYan.DataBean.Item spaceItem = new TouYan.DataBean.Item();
+    private void creatSpaceItem(List<ToolData.Tool> itemList) {
+        ToolData.Tool spaceItem = new ToolData.Tool();
         spaceItem.setDesc("");
         spaceItem.setIconUrl("");
         spaceItem.setIsShow(0);
@@ -186,26 +196,26 @@ public class InvestmentResearchFragment extends BaseFragment {
         if (AppDevice.isLowDpi()) {
             switch (itemList.size() % 3) {
                 case 1:
-                    mData.add(new SectionTouYanData(spaceItem, true));
-                    mData.add(new SectionTouYanData(spaceItem, true));
+                    mData.add(new SectionToolsData(spaceItem, true));
+                    mData.add(new SectionToolsData(spaceItem, true));
                     break;
                 case 2:
-                    mData.add(new SectionTouYanData(spaceItem, true));
+                    mData.add(new SectionToolsData(spaceItem, true));
                     break;
             }
         } else {
             switch (itemList.size() % 4) {
                 case 1:
-                    mData.add(new SectionTouYanData(spaceItem, true));
-                    mData.add(new SectionTouYanData(spaceItem, true));
-                    mData.add(new SectionTouYanData(spaceItem, true));
+                    mData.add(new SectionToolsData(spaceItem, true));
+                    mData.add(new SectionToolsData(spaceItem, true));
+                    mData.add(new SectionToolsData(spaceItem, true));
                     break;
                 case 2:
-                    mData.add(new SectionTouYanData(spaceItem, true));
-                    mData.add(new SectionTouYanData(spaceItem, true));
+                    mData.add(new SectionToolsData(spaceItem, true));
+                    mData.add(new SectionToolsData(spaceItem, true));
                     break;
                 case 3:
-                    mData.add(new SectionTouYanData(spaceItem, true));
+                    mData.add(new SectionToolsData(spaceItem, true));
                     break;
             }
         }

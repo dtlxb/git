@@ -197,6 +197,7 @@
     <string name="str_helper">帮助</string>
     <string name="str_share">分享</string>
     <string name="str_friends_count">%d位联系人</string>
+    <string name="str_setting">设置</string>
 
 
     <!--<string-array name="emoji_array">

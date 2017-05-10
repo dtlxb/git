@@ -183,6 +183,7 @@
 
         <activity android:name=".activity.ShareMessageActivity" />
         <activity android:name=".activity.ScreenActivity" />
+        <activity android:name=".activity.ToolsSettingActivity"/>
     </application>
 
 </manifest>

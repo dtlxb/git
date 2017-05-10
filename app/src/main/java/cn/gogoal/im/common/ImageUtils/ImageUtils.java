@@ -556,6 +556,7 @@ public class ImageUtils {
             if (fileList[i].equals("_" + conversationID + ".png")) {
                 bitmapPath = filesDir.getPath() + "/" + fileList[i];
             }
+            break;
         }
         return bitmapPath;
     }
