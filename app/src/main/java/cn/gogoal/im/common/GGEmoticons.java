@@ -49,6 +49,10 @@ public class GGEmoticons {
         GGEmoticonHashMap.put("[呕吐]", R.mipmap.img_emoji_33);
         GGEmoticonHashMap.put("[亲亲]", R.mipmap.img_emoji_34);
         //GGEmoticonHashMap.put("[自带表情]", R.mipmap.img_emoji_35);
+        GGEmoticonHashMap.put("[ok]", R.mipmap.img_emoji_36);
+        GGEmoticonHashMap.put("[握手]", R.mipmap.img_emoji_37);
+        GGEmoticonHashMap.put("[赞]", R.mipmap.img_emoji_38);
+        GGEmoticonHashMap.put("[鼓掌]", R.mipmap.img_emoji_39);
     }
 
 }

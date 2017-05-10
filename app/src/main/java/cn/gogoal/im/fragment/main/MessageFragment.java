@@ -168,7 +168,7 @@ public class MessageFragment extends BaseFragment {
                         Intent intent;
                         Bundle bundle = new Bundle();
                         switch (chat_type) {
-                            case 1001:
+                            case AppConst.IM_CHAT_TYPE_SINGLE:
                                 //单聊处理
                                 intent = new Intent(getContext(), SingleChatRoomActivity.class);
                                 bundle.putString("conversation_id", conversation_id);
@@ -177,7 +177,7 @@ public class MessageFragment extends BaseFragment {
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                                 break;
-                            case 1002:
+                            case AppConst.IM_CHAT_TYPE_SQUARE:
                                 //群聊处理
                                 intent = new Intent(getContext(), SquareChatRoomActivity.class);
                                 bundle.putString("conversation_id", conversation_id);
@@ -186,26 +186,26 @@ public class MessageFragment extends BaseFragment {
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                                 break;
-                            case 1003:
+                            case AppConst.IM_CHAT_TYPE_LIVE:
                                 //直播处理
                                 intent = new Intent(getContext(), SquareChatRoomActivity.class);
                                 intent.putExtra("conversation_id", conversation_id);
                                 startActivity(intent);
                                 break;
-                            case 1004:
+                            case AppConst.IM_CHAT_TYPE_SYSTEM:
                                 //系统处理
                                 intent = new Intent(getContext(), IMNewFrienActivity.class);
                                 intent.putExtra("conversation_id", conversation_id);
                                 intent.putExtra("add_type", 0x01);
                                 startActivity(intent);
                                 break;
-                            case 1006:
+                            case AppConst.IM_CHAT_TYPE_CONSULTATION:
                                 //公众号(直播)
                                 intent = new Intent(getContext(), OfficialAccountsActivity.class);
                                 intent.putExtra("conversation_id", conversation_id);
                                 startActivity(intent);
                                 break;
-                            case 1007:
+                            case AppConst.IM_CHAT_TYPE_SQUARE_REQUEST:
                                 //入群申请
                                 intent = new Intent(getContext(), IMNewFrienActivity.class);
                                 intent.putExtra("conversation_id", conversation_id);
@@ -341,7 +341,7 @@ public class MessageFragment extends BaseFragment {
                 String _lctype = contentObject.getString("_lctype");
                 nickName = messageBean.getNickname();
                 //头像设置
-                if (chatType == 1002) {
+                if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                     if (lcattrsObject != null && lcattrsObject.get("username") != null) {
                         squareMessageFrom = UserUtils.getUserName().equals(lcattrsObject.get("username")) ? "" : lcattrsObject.getString("username");
                     }
@@ -350,7 +350,7 @@ public class MessageFragment extends BaseFragment {
                     } else {
                         ImageDisplay.loadRoundedRectangleImage(getActivity(), ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache"), avatarIv);
                     }
-                } else if (chatType == 1004) {
+                } else if (chatType == AppConst.IM_CHAT_TYPE_SYSTEM) {
                     ImageDisplay.loadRoundedRectangleImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
                 } else {
                     ImageDisplay.loadRoundedRectangleImage(getActivity(),
@@ -358,38 +358,38 @@ public class MessageFragment extends BaseFragment {
                 }
 
                 switch (_lctype) {
-                    case "-1":
+                    case AppConst.IM_MESSAGE_TYPE_TEXT:
                         //文字
                         message = contentObject.getString("_lctext");
                         if (StringUtils.StringFilter(message, "@*[\\S]*[ \r\n]")) {
                             message = "[有人@了你]" + contentObject.getString("_lctext");
                         }
                         break;
-                    case "-2":
+                    case AppConst.IM_MESSAGE_TYPE_PHOTO:
                         //图片
                         message = "[图片]";
                         break;
-                    case "-3":
+                    case AppConst.IM_MESSAGE_TYPE_AUDIO:
                         //语音
                         message = "[语音]";
                         break;
-                    case "1":
+                    case AppConst.IM_MESSAGE_TYPE_FRIEND_ADD:
 
                         break;
 
-                    case "2":
+                    case AppConst.IM_MESSAGE_TYPE_FRIEND_DEL:
                         //加好友
                         nickName = "新的好友";
                         message = messageBean.getNickname() + "请求添加你为好友";
                         break;
-                    case "3":
+                    case AppConst.IM_MESSAGE_TYPE_CONTACT_ADD:
 
                         break;
-                    case "4":
+                    case AppConst.IM_MESSAGE_TYPE_CONTACT_DEL:
 
                         break;
-                    case "5":
-                    case "6":
+                    case AppConst.IM_MESSAGE_TYPE_SQUARE_ADD:
+                    case AppConst.IM_MESSAGE_TYPE_SQUARE_DEL:
                         //群加人，踢人
                         JSONArray accountArray;
                         String squareMessage;
@@ -403,24 +403,24 @@ public class MessageFragment extends BaseFragment {
                         }
                         message = squareMessage;
                         break;
-                    case "7":
+                    case AppConst.IM_MESSAGE_TYPE_SQUARE_REQUEST:
                         //群通知
                         nickName = "申请入群";
                         message = messageBean.getNickname() + "请求加入" + messageBean.getFriend_id();
                         Glide.with(getActivity()).load(messageBean.getAvatar()).into(avatarIv);
                         break;
-                    case "8":
+                    case AppConst.IM_MESSAGE_TYPE_SQUARE_DETIAL:
                         //群公告,群简介
                         message = contentObject.getString("_lctext");
                         break;
-                    case "9":
+                    case AppConst.IM_MESSAGE_TYPE_PUBLIC:
                         message = "公众号消息";
                         break;
-                    case "11":
+                    case AppConst.IM_MESSAGE_TYPE_STOCK:
                         //股票消息
                         message = "发来一条股票消息";
                         break;
-                    case "13":
+                    case AppConst.IM_MESSAGE_TYPE_SHARE:
                         message = "发来一条分享消息";
                         break;
                     default:
@@ -509,46 +509,47 @@ public class MessageFragment extends BaseFragment {
         String _lctype = contentObject.getString("_lctype");
         KLog.e(contentObject);
         switch (_lctype) {
-            case "-1":
+            case AppConst.IM_MESSAGE_TYPE_TEXT
+                    :
                 //文字
-            case "-2":
+            case AppConst.IM_MESSAGE_TYPE_PHOTO:
                 //图片
-            case "-3":
+            case AppConst.IM_MESSAGE_TYPE_AUDIO:
                 //语音
-            case "1":
-            case "2":
+            case AppConst.IM_MESSAGE_TYPE_FRIEND_ADD:
+            case AppConst.IM_MESSAGE_TYPE_FRIEND_DEL:
                 //加好友
-            case "3":
-            case "13":
+            case AppConst.IM_MESSAGE_TYPE_CONTACT_ADD:
+            case AppConst.IM_MESSAGE_TYPE_SHARE:
                 //好友加入通讯录
                 nickName = lcattrsObject.getString("username");
                 break;
-            case "4":
+            case AppConst.IM_MESSAGE_TYPE_CONTACT_DEL:
                 //好友从通讯录移除
                 break;
-            case "5":
-            case "6":
+            case AppConst.IM_MESSAGE_TYPE_SQUARE_ADD:
+            case AppConst.IM_MESSAGE_TYPE_SQUARE_DEL:
                 //好友入群
                 //群删除好友(每次删除后重新生成群头像)
                 KLog.e(gruopMemberMap.toString());
                 //createGroupImage(ConversationId, 0);
                 break;
-            case "7":
+            case AppConst.IM_MESSAGE_TYPE_SQUARE_REQUEST:
                 //申请入群
                 nickName = lcattrsObject.getString("nickname");
                 friend_id = lcattrsObject.getString("group_name");
                 break;
-            case "8":
+            case AppConst.IM_MESSAGE_TYPE_SQUARE_DETIAL:
                 //群公告,群简介
                 nickName = lcattrsObject.getString("nickname");
                 friend_id = lcattrsObject.getString("group_name");
                 break;
-            case "9":
+            case AppConst.IM_MESSAGE_TYPE_PUBLIC:
                 //公众号
                 avatar = (String) conversation.getAttribute("avatar");
                 nickName = conversation.getName();
                 break;
-            case "11":
+            case AppConst.IM_MESSAGE_TYPE_STOCK:
                 //股票消息
                 break;
             default:
@@ -557,25 +558,25 @@ public class MessageFragment extends BaseFragment {
 
         switch (chatType) {
             //单聊,群聊,加好友请求
-            case 1001:
+            case AppConst.IM_CHAT_TYPE_SINGLE:
                 avatar = lcattrsObject.getString("avatar");
                 break;
-            case 1002:
+            case AppConst.IM_CHAT_TYPE_SQUARE:
                 nickName = conversation.getName();
                 break;
-            case 1004:
+            case AppConst.IM_CHAT_TYPE_SYSTEM:
                 break;
             //直播
-            case 1003:
+            case AppConst.IM_CHAT_TYPE_LIVE:
                 break;
             //操纵通讯录
-            case 1005:
+            case AppConst.IM_CHAT_TYPE_SQUARE_ACTION:
                 break;
             //公众号模块
-            case 1006:
+            case AppConst.IM_CHAT_TYPE_CONSULTATION:
                 break;
             //群通知
-            case 1007:
+            case AppConst.IM_CHAT_TYPE_SQUARE_REQUEST:
                 avatar = lcattrsObject.getString("avatar");
                 break;
             default:

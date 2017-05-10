@@ -25,6 +25,7 @@ import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
@@ -54,7 +55,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
 
                             final int chatType = (int) conversation.getAttribute("chat_type");
                             switch (chatType) {
-                                case 1001:
+                                case AppConst.IM_CHAT_TYPE_SINGLE:
                                     //单聊
                                     sendIMMessage(message, conversation);
                                     //更新通讯录
@@ -63,13 +64,13 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     UserUtils.upDataContactInfo(Integer.parseInt(message.getFrom()), lcattrsObject.getString("avatar"),
                                             lcattrsObject.getString("username"), lcattrsObject.getString("conv_id"));
                                     break;
-                                case 1002:
+                                case AppConst.IM_CHAT_TYPE_SQUARE:
                                     //群聊
                                     //更新对话
                                     final JSONObject content_object = JSON.parseObject(message.getContent());
                                     final String _lctype = content_object.getString("_lctype");
                                     JSONObject lcattrsGroup = content_object.getJSONObject("_lcattrs");
-                                    if ("5".equals(_lctype) || "6".equals(_lctype)) {
+                                    if (AppConst.IM_MESSAGE_TYPE_SQUARE_ADD.equals(_lctype) || AppConst.IM_MESSAGE_TYPE_SQUARE_DEL.equals(_lctype)) {
                                         conversation.fetchInfoInBackground(new AVIMConversationCallback() {
                                             @Override
                                             public void done(AVIMException e) {
@@ -92,11 +93,11 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     }
 
                                     break;
-                                case 1003:
+                                case AppConst.IM_CHAT_TYPE_LIVE:
                                     //直播
                                     sendIMMessage(message, conversation);
                                     break;
-                                case 1004:
+                                case AppConst.IM_CHAT_TYPE_SYSTEM:
                                     //接收到消息，发送出去
                                     sendIMMessage(message, conversation);
 
@@ -108,7 +109,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     jsonArray.add(jsonObject);
                                     SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_newFriendList", jsonArray);
                                     break;
-                                case 1005:
+                                case AppConst.IM_CHAT_TYPE_SQUARE_ACTION:
                                     //好友更新
                                     JSONObject contentObjec1 = JSON.parseObject(message.getContent());
                                     JSONObject lcattrsObject1 = contentObjec1.getJSONObject("_lcattrs");
@@ -127,11 +128,11 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     KLog.e(SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", ""));
                                     break;
 
-                                case 1006:
+                                case AppConst.IM_CHAT_TYPE_CONSULTATION:
                                     //公众号
                                     sendIMMessage(message, conversation);
                                     break;
-                                case 1007:
+                                case AppConst.IM_CHAT_TYPE_SQUARE_REQUEST:
                                     //群通知
                                     sendIMMessage(message, conversation);
                                     //加好友
@@ -142,11 +143,11 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     unAddArray.add(unAddjsonObject);
                                     SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversation.getConversationId() + "_unadd_accountList_beans", unAddArray);
                                     break;
-                                case 1008:
+                                case AppConst.IM_CHAT_TYPE_LIVE_MESSAGE:
                                     //直播消息
                                     sendIMMessage(message, conversation);
                                     break;
-                                case 1009:
+                                case AppConst.IM_CHAT_TYPE_LIVE_REQUEST:
                                     //直播消息
                                     sendIMMessage(message, conversation);
                                     break;
@@ -178,7 +179,8 @@ public class MyMessageHandler extends AVIMMessageHandler {
         int chatType = (int) conversation.getAttribute("chat_type");
 
         BaseMessage baseMessage = new BaseMessage("IM_Info", map);
-        AppManager.getInstance().sendMessage((chatType == 1009 || chatType == 1008) ? "Live_Message" : "IM_Message", baseMessage);
+        AppManager.getInstance().sendMessage((chatType == AppConst.IM_CHAT_TYPE_LIVE_REQUEST ||
+                chatType == AppConst.IM_CHAT_TYPE_LIVE_MESSAGE) ? "Live_Message" : "IM_Message", baseMessage);
     }
 
 

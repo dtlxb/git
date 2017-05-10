@@ -345,16 +345,19 @@ public class ChooseContactActivity extends BaseActivity {
                 KLog.e(responseInfo);
                 JSONObject resultJson = JSONObject.parseObject(responseInfo);
                 if (resultJson.getIntValue("code") == 0) {
+                    JSONObject jsonObject = resultJson.getJSONObject("data");
+                    boolean success = jsonObject.getBoolean("success");
+                    if (success) {
+                        Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
+                        Bundle mbundle = new Bundle();
+                        mbundle.putInt("square_action", actionType);
+                        mbundle.putString("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
+                        intent.putExtras(mbundle);
+                        startActivity(intent);
 
-                    Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
-                    Bundle mbundle = new Bundle();
-                    mbundle.putInt("square_action", actionType);
-                    mbundle.putString("conversation_id", resultJson.getJSONObject("data").getString("conv_id"));
-                    intent.putExtras(mbundle);
-                    startActivity(intent);
-
-                    UIHelper.toast(ChooseContactActivity.this, "群组创建成功!!!");
-                    finish();
+                        UIHelper.toast(ChooseContactActivity.this, "群组创建成功!!!");
+                        finish();
+                    }
                 } else {
                     UIHelper.toastResponseError(getActivity(), responseInfo);
                 }

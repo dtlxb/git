@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hply.imagepicker.ITakePhoto;
+import com.socks.library.KLog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -90,7 +91,7 @@ public class EditPersonInfoActivity extends BaseActivity {
         TextView rigisterView = (TextView) xTitle.getViewByAction(jumpAction);
         rigisterView.setTextColor(getResColor(R.color.colorPrimary));
 
-        editPersonName.setText(UserUtils.getUserName());
+        editPersonName.setText(UserUtils.getNickname());
         editCompanyName.setText(UserUtils.getorgName());
         editJobName.setText(UserUtils.getDuty());
     }
@@ -174,6 +175,12 @@ public class EditPersonInfoActivity extends BaseActivity {
             case R.id.login_cofirm:
                 //资料上传后台
                 Map<String, String> map = new HashMap<>();
+                if (TextUtils.isEmpty(imageUri) && editJobName.getText().toString().equals(UserUtils.getDuty())
+                        && editCompanyName.getText().toString().equals(UserUtils.getorgName()) && editPersonName.getText().toString().equals(UserUtils.getNickname())) {
+                    goToNextPage();
+                    return;
+                }
+
                 if (!TextUtils.isEmpty(imageUri)) {
                     UserUtils.updataLocalUserInfo("simple_avatar", imageUri);
                     map.put("avatar", imageUri);
@@ -201,10 +208,7 @@ public class EditPersonInfoActivity extends BaseActivity {
                             boolean success = data.getBoolean("success");
                             if (success) {
                                 UIHelper.toast(EditPersonInfoActivity.this, "资料修改成功！");
-                                Intent intent = new Intent(EditPersonInfoActivity.this, MainActivity.class);
-                                intent.putExtra("isFromLogin", true);
-                                startActivity(intent);
-                                finish();
+                                goToNextPage();
                             } else {
                                 UIHelper.toast(EditPersonInfoActivity.this, "资料修改失败！");
                             }
@@ -216,7 +220,7 @@ public class EditPersonInfoActivity extends BaseActivity {
                     @Override
                     public void failed(String errorMsg) {
                         loginCofirm.setClickable(true);
-                        UIHelper.toast(EditPersonInfoActivity.this, R.string.net_erro_hint);
+                        UIHelper.toast(EditPersonInfoActivity.this, errorMsg);
                     }
                 });
 
@@ -230,5 +234,12 @@ public class EditPersonInfoActivity extends BaseActivity {
             default:
                 break;
         }
+    }
+
+    private void goToNextPage() {
+        Intent intent = new Intent(EditPersonInfoActivity.this, MainActivity.class);
+        intent.putExtra("isFromLogin", true);
+        startActivity(intent);
+        finish();
     }
 }
