@@ -75,8 +75,6 @@ public class MainActivity extends BaseActivity {
 
     public MainStockFragment mainStockFragment;
 
-    private int mSelectedPos = 0;
-
     @Override
     public int bindLayout() {
         return R.layout.activity_main;
@@ -368,9 +366,17 @@ public class MainActivity extends BaseActivity {
 
         private List<BoxScreenData> mDatas;
 
+        private int mSelectedPos = -1;
+
         public BoxScreenAdapter(Context context, List<BoxScreenData> list) {
             super(R.layout.item_box_screen, list);
             this.mDatas = list;
+
+            for (int i = 0; i < mDatas.size(); i++) {
+                if (mDatas.get(i).isSelected()) {
+                    mSelectedPos = i;
+                }
+            }
         }
 
         @Override
@@ -384,14 +390,15 @@ public class MainActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
 
-                    mSelectedPos = position;
-
-                    for (BoxScreenData data : mDatas) {
-                        data.setSelected(false);
+                    if (mSelectedPos != position) {
+                        //先取消上个item的勾选状态
+                        mDatas.get(mSelectedPos).setSelected(false);
+                        notifyItemChanged(mSelectedPos);
+                        //设置新Item的勾选状态
+                        mSelectedPos = position;
+                        mDatas.get(mSelectedPos).setSelected(true);
+                        notifyItemChanged(mSelectedPos);
                     }
-
-                    mDatas.get(mSelectedPos).setSelected(true);
-                    notifyDataSetChanged();
 
                     closeMenu();
 
