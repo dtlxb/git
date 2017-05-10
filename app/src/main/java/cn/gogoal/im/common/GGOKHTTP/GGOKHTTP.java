@@ -586,6 +586,8 @@ public class GGOKHTTP {
      * token    用户token     String     用户token   是
      * equipment_id   设备id   String    设备id      是
      * type    统计类型   Number    统计类型：1播放，2分享。（默认播放）  是
+     * video_type 视频类型 Number 视频类型：1直播2录播 否
+     * product_line 产品线id  Number   产品线id，（默认4机构版）否
      */
     public static final String ADD_PALY_DATE = "v1/video_studio/add_paly_date";
 

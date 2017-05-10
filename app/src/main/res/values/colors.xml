@@ -41,6 +41,8 @@
     <color name="black_transprent_80">#cc000000</color>
     <color name="white_alpha_30">#4dffffff</color>
     <color name="live_close_title_color">#FFB5A2F1</color>
+    <color name="player_anchor_info">#4c000000</color>
+    <color name="player_add_friend">#f53f3f</color>
 
     <color name="relater_playback">#000000</color>
 
