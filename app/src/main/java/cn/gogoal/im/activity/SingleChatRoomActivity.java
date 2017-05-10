@@ -39,9 +39,6 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
         String conversation_id = (String) StringUtils.objectNullDeal(this.getIntent().getStringExtra("conversation_id"));
         String nickname = (String) StringUtils.objectNullDeal(this.getIntent().getStringExtra("nickname"));
         boolean need_update = this.getIntent().getBooleanExtra("need_update", false);
-        KLog.e(conversation_id);
-        KLog.e(nickname);
-        KLog.e(need_update);
         initTitle(nickname, conversation_id);
 
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
