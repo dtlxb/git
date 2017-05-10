@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -27,14 +28,17 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.GroupCollectionData;
+import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
+import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -113,7 +117,7 @@ public class MyGroupsActivity extends BaseActivity {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
-                FileUtil.writeRequestResponse(responseInfo,"我的qun");
+                FileUtil.writeRequestResponse(responseInfo, "我的qun");
 
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     List<GroupCollectionData.DataBean> data =
@@ -149,7 +153,7 @@ public class MyGroupsActivity extends BaseActivity {
         }
 
         @Override
-        protected  void  convert(BaseViewHolder holder, final GroupCollectionData.DataBean data, final int position) {
+        protected void convert(BaseViewHolder holder, final GroupCollectionData.DataBean data, final int position) {
             final ImageView imgAvatar = holder.getView(R.id.img_my_group_avatar);
             final Bitmap[] groupAvatar = new Bitmap[1];
             final String imagecache = ImageUtils.getBitmapFilePaht(data.getConv_id(), "imagecache");
@@ -168,6 +172,7 @@ public class MyGroupsActivity extends BaseActivity {
                         }
                         GroupFaceImage.getInstance(getActivity(), avatarString).load(new GroupFaceImage.OnMatchingListener() {
                             @Override
+<<<<<<< HEAD
                             public void onSuccess(final Bitmap mathingBitmap) {
                                 MyGroupsActivity.this.runOnUiThread(new Runnable() {
                                     @Override
@@ -176,6 +181,11 @@ public class MyGroupsActivity extends BaseActivity {
                                     }
                                 });
                                 groupAvatar[0] =mathingBitmap;
+=======
+                            public void onSuccess(Bitmap mathingBitmap) {
+                                ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
+                                groupAvatar[0] = mathingBitmap;
+>>>>>>> 0e9368bbb6bd94e56f9ff5c98fe83055e8ad0d9d
                             }
 
                             @Override
@@ -208,9 +218,10 @@ public class MyGroupsActivity extends BaseActivity {
                         bundle.putBoolean("need_update", false);
                         intent.putExtras(bundle);
                         startActivity(intent);
-                    }else {
+                    } else {
                         ShareMessageDialog.newInstance(new ShareItemInfo<>(
-                                groupAvatar[0],data.getName(),entity,data.getConv_id())).show(getSupportFragmentManager());
+                                groupAvatar[0], data.getName(), entity, MessageUtils.getIMMessageBeanById(SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans",
+                                new JSONArray()), data.getConv_id()))).show(getSupportFragmentManager());
                     }
                 }
             });
@@ -218,7 +229,7 @@ public class MyGroupsActivity extends BaseActivity {
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    if (actionType==0) {
+                    if (actionType == 0) {
                         DialogHelp.getSelectDialog(getActivity(), "", new String[]{"从通讯录移除"}, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

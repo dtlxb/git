@@ -24,7 +24,6 @@ import cn.gogoal.im.bean.PdfData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.NormalIntentUtils;
-import cn.gogoal.im.common.ShareType;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -77,17 +76,24 @@ public class FunctionActivity extends BaseActivity {
                         @Override
                         public void onReceiveValue(String value) {
                             KLog.e(value);
-                            if (StringUtils.isActuallyEmpty(value)) {//TODO 目前没有分享，肯定是空咯
-                                GGShareEntity entity = new GGShareEntity();
-                                entity.setDesc("测试数据测试数据测试数据测试数据测试数据测试数据测试数据");
-                                entity.setIcon("http://www.go-goal.com/sample/ACC/ftx/forum/library/ucloud_C317F15BB2B3AA91.jpg");
-                                entity.setTitle("测试数据-标题");
-
-                                value=JSONObject.toJSONString(entity);
-
+//                            if (StringUtils.isActuallyEmpty(value)) {//TODO 目前没有分享，肯定是空咯
+//                                GGShareEntity entity = new GGShareEntity();
+//                                entity.setDesc("测试数据测试数据测试数据测试数据测试数据测试数据测试数据");
+//                                entity.setIcon("http://www.go-goal.com/sample/ACC/ftx/forum/library/ucloud_C317F15BB2B3AA91.jpg");
+//                                entity.setTitle("测试数据-标题");
+//
+//                                value = JSONObject.toJSONString(entity);
+//
+//                                if ()
+//                            }
+                            if (StringUtils.isActuallyEmpty(value)) {
+                                return;
                             }
                             GGShareEntity shareEntity = JSONObject.parseObject(value, GGShareEntity.class);
-                            shareEntity.setShareType(ShareType.WEB);
+                            shareEntity.setShareType("1");
+                            if (StringUtils.isActuallyEmpty(shareEntity.getLink())) {
+                                shareEntity.setLink(webView.getUrl());
+                            }
                             Intent intent = new Intent(getContext(), ShareMessageActivity.class);
                             intent.putExtra("share_web_data", shareEntity);
                             startActivity(intent);
@@ -178,7 +184,7 @@ public class FunctionActivity extends BaseActivity {
         webView.registerHandler("addMyStock", new BridgeHandler() {
             @Override
             public void handler(String data, ValueCallback<String> function) {
-                KLog.e("添加",data);
+                KLog.e("添加", data);
                 JSONObject stockObject = JSONObject.parseObject(data);
                 StockUtils.addMyStock(getContext(),
                         stockObject.getString("stock_name"),
@@ -190,10 +196,10 @@ public class FunctionActivity extends BaseActivity {
         webView.registerHandler("deleteMyStock", new BridgeHandler() {
             @Override
             public void handler(String data, ValueCallback<String> function) {
-                KLog.e("移除",data);
+                KLog.e("移除", data);
                 JSONObject stockObject = JSONObject.parseObject(data);
                 StockUtils.deleteMyStockOld(getContext(),
-                        stockObject.getString("stock_code"),null);
+                        stockObject.getString("stock_code"), null);
             }
         });
 
@@ -201,11 +207,11 @@ public class FunctionActivity extends BaseActivity {
         webView.registerHandler("makeEnquiries", new BridgeHandler() {
             @Override
             public void handler(String data, ValueCallback<String> function) {
-                KLog.e("查询",data);
-                String stockCode=JSONObject.parseObject(data).getString("stock_code");
-                function.onReceiveValue(StockUtils.isMyStock(stockCode)?"0":"1");
+                KLog.e("查询", data);
+                String stockCode = JSONObject.parseObject(data).getString("stock_code");
+                function.onReceiveValue(StockUtils.isMyStock(stockCode) ? "0" : "1");
 
-                KLog.e(StockUtils.isMyStock(stockCode)?"0":"1");
+                KLog.e(StockUtils.isMyStock(stockCode) ? "0" : "1");
             }
         });
 

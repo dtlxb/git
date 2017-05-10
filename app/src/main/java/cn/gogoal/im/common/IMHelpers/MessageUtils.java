@@ -70,6 +70,18 @@ public class MessageUtils {
         }
     }
 
+    public static IMMessageBean getIMMessageBeanById(JSONArray thisJsonArray, String conv_id) {
+        if (thisJsonArray != null && !TextUtils.isEmpty(conv_id)) {
+            for (int i = 0; i < thisJsonArray.size(); i++) {
+                if (thisJsonArray.getJSONObject(i).get("conversationID").equals(conv_id)) {
+                    return JSON.parseObject(String.valueOf(thisJsonArray.get(i)), IMMessageBean.class);
+                } else {
+                }
+            }
+        }
+        return new IMMessageBean(conv_id, 1002, System.currentTimeMillis(), "0", "", "", "", null);
+    }
+
     //消息列表：移除消息
     public static void removeMessageInfo(String conversationID) {
         JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());

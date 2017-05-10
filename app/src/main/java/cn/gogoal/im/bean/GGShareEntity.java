@@ -3,16 +3,14 @@ package cn.gogoal.im.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import cn.gogoal.im.common.ShareType;
-
 /**
  * author wangjd on 2017/5/4 0004.
  * Staff_id 1375
  * phone 18930640263
  * description :${
  * <p>
- *
- *     分享的数据实体
+ * <p>
+ * 分享的数据实体
  * /**
  * {
  * "desc":"一分钟了解股价走势与业绩相关性",
@@ -30,7 +28,7 @@ public class GGShareEntity implements Parcelable {
 
     private String link;//分享的url
 
-    private ShareType shareType;
+    private String shareType;
 
     public String getDesc() {
         return desc;
@@ -64,11 +62,11 @@ public class GGShareEntity implements Parcelable {
         this.link = link;
     }
 
-    public ShareType getShareType() {
+    public String getShareType() {
         return shareType;
     }
 
-    public void setShareType(ShareType shareType) {
+    public void setShareType(String shareType) {
         this.shareType = shareType;
     }
 
@@ -84,7 +82,7 @@ public class GGShareEntity implements Parcelable {
         dest.writeString(this.icon);
         dest.writeString(this.title);
         dest.writeString(this.link);
-        dest.writeInt(this.shareType == null ? -1 : this.shareType.ordinal());
+        dest.writeString(this.shareType);
     }
 
     public GGShareEntity() {
@@ -95,8 +93,7 @@ public class GGShareEntity implements Parcelable {
         this.icon = in.readString();
         this.title = in.readString();
         this.link = in.readString();
-        int tmpShareType = in.readInt();
-        this.shareType = tmpShareType == -1 ? null : ShareType.values()[tmpShareType];
+        this.shareType = in.readString();
     }
 
     public static final Creator<GGShareEntity> CREATOR = new Creator<GGShareEntity>() {

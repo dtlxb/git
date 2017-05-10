@@ -14,7 +14,12 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONWriter;
+import com.avos.avoscloud.im.v2.AVIMMessage;
+import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.github.promeg.pinyinhelper.Pinyin;
 import com.hply.imagepicker.view.SuperCheckBox;
 import com.socks.library.KLog;
@@ -34,12 +39,18 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.GGShareEntity;
+import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ArrayUtils;
+import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ICheckItemListener;
+import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
+import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -47,6 +58,8 @@ import cn.gogoal.im.ui.index.IndexBar;
 import cn.gogoal.im.ui.index.SuspendedDecoration;
 import cn.gogoal.im.ui.view.XTitle;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
+
+import static android.R.id.message;
 
 
 /**
@@ -241,7 +254,7 @@ public class ChooseContactActivity extends BaseActivity {
      */
     private XTitle.TextAction initTitleAction(String teamId) {
 
-        String titleText;
+        final String titleText;
         if (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
             titleText = "删除";
             title.setActionTextColor(Color.RED);
@@ -288,12 +301,29 @@ public class ChooseContactActivity extends BaseActivity {
                         finish();
                         break;
                     case AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE://分享给很多人
+                        //文字消息基本信息
+                        for (int i = 0; i < result.values().size(); i++) {
+                            final int finalI = i;
+                            ChatGroupHelper.sendShareMessage((ContactBean) result.values().toArray()[i], entity, new ChatGroupHelper.GroupInfoResponse() {
+                                @Override
+                                public void getInfoSuccess(JSONObject groupInfo) {
+                                    if (finalI == result.values().size() - 1) {
+                                        finish();
+                                    }
+                                }
 
+                                @Override
+                                public void getInfoFailed(Exception e) {
+                                    UIHelper.toast(getActivity(), "分享消息发送失败");
+                                }
+                            });
+                        }
                         break;
                 }
             }
         };
     }
+
 
     /**
      * 创建群组

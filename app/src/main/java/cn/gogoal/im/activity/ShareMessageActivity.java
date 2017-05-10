@@ -106,7 +106,9 @@ public class ShareMessageActivity extends BaseActivity {
         return bean;
     }
 
-    /**获取最近会话*/
+    /**
+     * 获取最近会话
+     */
     public void getRecentConversation() {
         JSONArray recentArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", null);
         if (recentArray != null) {
@@ -117,27 +119,28 @@ public class ShareMessageActivity extends BaseActivity {
                     ShareListBean<String> shareListFriend = new ShareListBean<>(
                             ShareListBean.LIST_TYPE_ITEM, bean.getAvatar(), bean.getNickname(), bean);
                     datas.add(shareListFriend);
-                }else if (bean.getChatType()==1002){
-                    final ShareListBean group=new ShareListBean<>(ShareListBean.LIST_TYPE_ITEM);
+                } else if (bean.getChatType() == 1002) {
+                    final ShareListBean group = new ShareListBean<>(ShareListBean.LIST_TYPE_ITEM);
                     group.setText(bean.getNickname());
                     group.setBean(bean);
                     String imagecache = ImageUtils.getBitmapFilePaht(bean.getConversationID(), "imagecache");
-                    if (!StringUtils.isActuallyEmpty(imagecache)){
+                    if (!StringUtils.isActuallyEmpty(imagecache)) {
                         group.setItemImage(imagecache);
-                    }else {//没有缓存就拼
-                        final List<String> avatarString=new ArrayList<>();
+                    } else {//没有缓存就拼
+                        final List<String> avatarString = new ArrayList<>();
                         ChatGroupHelper.createGroupImage(bean.getConversationID(), new ChatGroupHelper.GroupInfoResponse() {
                             @Override
                             public void getInfoSuccess(JSONObject groupInfo) {
                                 JSONArray accountList = groupInfo.getJSONArray("accountList");
-                                for (int i=0;i<accountList.size();i++){
-                                    avatarString.add(((JSONObject)accountList.get(i)).getString("avatar"));
+                                for (int i = 0; i < accountList.size(); i++) {
+                                    avatarString.add(((JSONObject) accountList.get(i)).getString("avatar"));
                                 }
-                                GroupFaceImage.getInstance(getActivity(),avatarString).load(new GroupFaceImage.OnMatchingListener() {
+                                GroupFaceImage.getInstance(getActivity(), avatarString).load(new GroupFaceImage.OnMatchingListener() {
                                     @Override
                                     public void onSuccess(Bitmap mathingBitmap) {
                                         group.setItemImage(mathingBitmap);
                                     }
+
                                     @Override
                                     public void onError(Exception e) {
                                         KLog.e(e.getMessage());
@@ -160,7 +163,9 @@ public class ShareMessageActivity extends BaseActivity {
 
     }
 
-    /**分享选择列表*/
+    /**
+     * 分享选择列表
+     */
     private class ShareListAdapter extends BaseMultiItemQuickAdapter<ShareListBean, BaseViewHolder> {
         private ShareListAdapter(List<ShareListBean> data) {
             super(data);
@@ -195,22 +200,22 @@ public class ShareMessageActivity extends BaseActivity {
                         public void onClick(View v) {
                             switch (position) {
                                 case 1://好友列表
-                                    Intent intent=new Intent(v.getContext(),ChooseContactActivity.class);
+                                    Intent intent = new Intent(v.getContext(), ChooseContactActivity.class);
                                     intent.putExtra("square_action", AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE);
-                                    intent.putExtra("share_web_data",shareEntity);
+                                    intent.putExtra("share_web_data", shareEntity);
                                     startActivity(intent);
                                     break;
                                 case 2://我的群组列表
-                                    Intent intent1=new Intent(v.getContext(),MyGroupsActivity.class);
-                                    intent1.putExtra("action_type",AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE);
-                                    intent1.putExtra("share_web_data",shareEntity);
+                                    Intent intent1 = new Intent(v.getContext(), MyGroupsActivity.class);
+                                    intent1.putExtra("action_type", AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE);
+                                    intent1.putExtra("share_web_data", shareEntity);
                                     startActivity(intent1);
                                     break;
                                 default:
                                     ShareMessageDialog.newInstance(
                                             new ShareItemInfo(data.getItemImage(),
                                                     data.getText(),
-                                                    shareEntity,data.getBean().getConversationID())).show(getSupportFragmentManager());
+                                                    shareEntity, data.getBean())).show(getSupportFragmentManager());
                                     break;
                             }
                         }
