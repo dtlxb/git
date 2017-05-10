@@ -335,10 +335,6 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     }
 
-    @Override
-    public void setStatusBar(boolean light) {
-    }
-
     /***/
     private void setNewsTab() {
         viewPagerNews.setOffscreenPageLimit(3);

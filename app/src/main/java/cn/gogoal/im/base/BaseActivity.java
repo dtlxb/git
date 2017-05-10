@@ -29,8 +29,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.hply.imagepicker.view.StatusBarUtil;
-
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
@@ -84,11 +82,10 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
     @Override
     public void setContentView(View view) {
         super.setContentView(mContentView);
-        setStatusBar(false);
+        setOrientation();
     }
 
-    public void setStatusBar(boolean light) {
-        StatusBarUtil.with(BaseActivity.this).initForGogoal(light);
+    public void setOrientation() {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 

@@ -136,11 +136,6 @@ public class StockDetailActivity extends BaseActivity {
     }
 
     @Override
-    public void setStatusBar(boolean light) {
-        StatusBarUtil.with(this).setColor(getResColor(R.color.stock_green));
-    }
-
-    @Override
     public void doBusiness(Context mContext) {
         stockCode = getIntent().getStringExtra("stock_code");
         stockName = getIntent().getStringExtra("stock_name");
