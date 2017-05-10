@@ -2,7 +2,6 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -46,7 +45,6 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.common.VoiceManager;
 import cn.gogoal.im.fragment.main.InvestmentResearchFragment;
 import cn.gogoal.im.fragment.main.MainStockFragment;
 import cn.gogoal.im.fragment.main.MessageFragment;
@@ -305,8 +303,8 @@ public class MainActivity extends BaseActivity {
 
                 String uriStr = "android.resource://" + this.getPackageName() + "/" + R.raw.ding;
 
-                VoiceManager.getInstance(MainActivity.this)
-                        .startPlay(Uri.parse(uriStr));
+//                VoiceManager.getInstance(MainActivity.this)
+//                        .startPlay(Uri.parse(uriStr));
             }
         }
     }

@@ -6,7 +6,6 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -87,7 +86,6 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
                 //joinSquare(conversation);
                 chatFragment.setConversation(conversation, need_update, actionType);
                 groupMembers.addAll(conversation.getMembers());
-                KLog.e(groupMembers.toString());
                 if (squareName.equals("")) {
                     initTitle(conversation.getName(), conversation.getConversationId());
                 }

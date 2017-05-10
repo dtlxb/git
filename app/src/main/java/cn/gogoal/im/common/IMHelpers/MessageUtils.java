@@ -64,7 +64,6 @@ public class MessageUtils {
             }
 
             thisJsonArray.add(jsonObject);
-            KLog.e(jsonObject);
             SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", thisJsonArray);
         } else {
 

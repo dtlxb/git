@@ -168,8 +168,13 @@ public class MyGroupsActivity extends BaseActivity {
                         }
                         GroupFaceImage.getInstance(getActivity(), avatarString).load(new GroupFaceImage.OnMatchingListener() {
                             @Override
-                            public void onSuccess(Bitmap mathingBitmap) {
-                                ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
+                            public void onSuccess(final Bitmap mathingBitmap) {
+                                MyGroupsActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
+                                    }
+                                });
                                 groupAvatar[0] =mathingBitmap;
                             }
 
