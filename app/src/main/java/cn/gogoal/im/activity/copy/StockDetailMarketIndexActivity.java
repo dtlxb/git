@@ -432,10 +432,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         ptrFrame.addPtrUIHandler(headerView);
     }
 
-    @Override
-    public void setStatusBar(boolean light) {
-    }
-
     private void setStatusColor(int header_gray) {
         barUtil.setColor(getResColor(header_gray));
     }

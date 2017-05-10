@@ -8,12 +8,9 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
-import com.hply.imagepicker.view.StatusBarUtil;
-
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.widget.LeftWindowPopu;
 
 /**
@@ -56,17 +53,6 @@ public class TestActivity extends BaseActivity {
             }
         });
 
-    }
-
-    @Override
-    public void setStatusBar(boolean light) {
-        toolbar= (Toolbar) findViewById(R.id.toolbar);
-
-        if (drawerLayout!=null) {
-            StatusBarUtil.with(TestActivity.this).setTranslucentForDrawerLayout(drawerLayout);
-        }else {
-            UIHelper.toast(getActivity(),"出错");
-        }
     }
 
     public static class MyLeftDialog extends LeftWindowPopu {

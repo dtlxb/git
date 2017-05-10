@@ -32,15 +32,11 @@ public class ImageDetailFragment extends BaseFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void doBusiness(Context mContext) {
         if (getArguments() != null) {
             imageUrl = getArguments().getString(IMAGE_URL);
         }
-    }
 
-    @Override
-    public void doBusiness(Context mContext) {
         ImageDisplay.loadImage(getActivity(),imageUrl,image);
     }
 

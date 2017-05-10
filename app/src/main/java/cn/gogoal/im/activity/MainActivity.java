@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.hply.imagepicker.view.StatusBarUtil;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -71,8 +70,6 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.recyScreen)
     RecyclerView recyScreen;
 
-    private StatusBarUtil barUtil;
-
     public MainStockFragment mainStockFragment;
 
     private int mSelectedPos = 0;
@@ -100,7 +97,6 @@ public class MainActivity extends BaseActivity {
         if (BuildConfig.DEBUG) {
             FileUtil.writeRequestResponse(UserUtils.getToken(), "token_" + UserUtils.getUserName());
         }
-        badge = new BadgeView(MainActivity.this);
 
         MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
 
@@ -146,27 +142,6 @@ public class MainActivity extends BaseActivity {
 
         tabMain.getTabAt(2).select();
 
-        barUtil = StatusBarUtil.with(MainActivity.this);
-
-        vpMain.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (barUtil.isOperableDevice()) {
-                    barUtil.setStatusBarFontDark(position != 4);
-                    barUtil.setColor(position == 4 ? getResColor(R.color.colorMineHead) : getResColor(android.R.color.white));
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-//                contactsFragment.srcollShowIndexBar(state == 0 && vpMain.getCurrentItem() == 1);
-            }
-        });
-
         mainViewMask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,6 +161,12 @@ public class MainActivity extends BaseActivity {
         });
 
         getScreenData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        badge = new BadgeView(MainActivity.this);
     }
 
     public void changeItem(int index) {
@@ -304,6 +285,8 @@ public class MainActivity extends BaseActivity {
 //                VoiceManager.getInstance(MainActivity.this)
 //                        .startPlay(Uri.parse(uriStr));
             }
+        }else {
+            badge=new BadgeView(MainActivity.this);
         }
     }
 
@@ -362,11 +345,11 @@ public class MainActivity extends BaseActivity {
         recyScreen.setAdapter(adapter);
     }
 
-    class BoxScreenAdapter extends CommonAdapter<BoxScreenData, BaseViewHolder> {
+    private class BoxScreenAdapter extends CommonAdapter<BoxScreenData, BaseViewHolder> {
 
         private List<BoxScreenData> mDatas;
 
-        public BoxScreenAdapter(Context context, List<BoxScreenData> list) {
+        private BoxScreenAdapter(Context context, List<BoxScreenData> list) {
             super(R.layout.item_box_screen, list);
             this.mDatas = list;
         }
@@ -418,6 +401,6 @@ public class MainActivity extends BaseActivity {
     }
 
     public interface drawerCloseCallBack {
-        public void closeDrawer();
+        void closeDrawer();
     }
 }
