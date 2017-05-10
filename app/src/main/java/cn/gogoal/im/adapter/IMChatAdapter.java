@@ -37,6 +37,7 @@ import cn.gogoal.im.activity.IMPersonDetailActivity;
 import cn.gogoal.im.activity.ImageDetailActivity;
 import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
@@ -127,10 +128,11 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         final JSONObject lcattrsObject = (JSONObject) contentObject.get("_lcattrs");
         String messageType = contentObject.getString("_lctype");
         String headPicUrl;
-        if (!messageType.equals("5") && !messageType.equals("6") && !messageType.equals("8")) {
-            if (chatType == 1001) {
+        if (!messageType.equals(AppConst.IM_MESSAGE_TYPE_SQUARE_ADD) && !messageType.equals(AppConst.IM_MESSAGE_TYPE_SQUARE_DEL)
+                && !messageType.equals(AppConst.IM_MESSAGE_TYPE_SQUARE_DETIAL)) {
+            if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.GONE);
-            } else if (chatType == 1002) {
+            } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
             } else {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
@@ -274,9 +276,9 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             if (params.width > mMaxItemWidth) {
                 params.width = mMaxItemWidth;
             }
-            if (chatType == 1001) {
+            if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                 params.setMargins(0, 0, 0, 0);
-            } else if (chatType == 1002) {
+            } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                 params.setMargins(0, AppDevice.dp2px(mContext, 13), 0, 0);
             }
             ((LeftAudioViewHolder) holder).recorder_length.setLayoutParams(params);
@@ -434,35 +436,35 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         String _lctype = contentObject.getString("_lctype");
         isYourSelf = message.getFrom().equals(UserUtils.getMyAccountId());
         switch (_lctype) {
-            case "-1":
+            case AppConst.IM_MESSAGE_TYPE_TEXT:
                 if (isYourSelf) {
                     return TYPE_RIGHT_TEXT_MESSAGE;
                 } else {
                     return TYPE_LEFT_TEXT_MESSAGE;
                 }
-            case "-2":
+            case AppConst.IM_MESSAGE_TYPE_PHOTO:
                 if (isYourSelf) {
                     return TYPE_RIGHT_IMAGE_MESSAGE;
                 } else {
                     return TYPE_LEFT_IMAGE_MESSAGE;
                 }
-            case "-3":
+            case AppConst.IM_MESSAGE_TYPE_AUDIO:
                 if (isYourSelf) {
                     return TYPE_RIGHT_VOICE_MESSAGE;
                 } else {
                     return TYPE_LEFT_VOICE_MESSAGE;
                 }
-            case "5":
-            case "6":
-            case "8":
+            case AppConst.IM_MESSAGE_TYPE_SQUARE_ADD:
+            case AppConst.IM_MESSAGE_TYPE_SQUARE_DEL:
+            case AppConst.IM_MESSAGE_TYPE_SQUARE_DETIAL:
                 return TYPE_SYSTEM_MESSAGE;
-            case "11":
+            case AppConst.IM_MESSAGE_TYPE_STOCK:
                 if (isYourSelf) {
                     return TYPE_RIGHT_STOCK_MESSAGE;
                 } else {
                     return TYPE_LEFT_STOCK_MESSAGE;
                 }
-            case "13":
+            case AppConst.IM_MESSAGE_TYPE_SHARE:
                 if (isYourSelf) {
                     return TYPE_RIGHT_NORMOAL_SHARE;
                 } else {

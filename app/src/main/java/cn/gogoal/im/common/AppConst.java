@@ -137,4 +137,32 @@ public class AppConst {
     //新闻远端
     public static final int SOURCE_TYPE_NEWS = 100;//个股 新闻
 
+    //======================关于LeanCloud会话类型，消息类型==============================
+    public static final int IM_CHAT_TYPE_SINGLE = 1001;                 //聊天室类型 单聊
+    public static final int IM_CHAT_TYPE_SQUARE = 1002;                 //聊天室类型 群聊
+    public static final int IM_CHAT_TYPE_LIVE = 1003;                   //聊天室类型 直播
+    public static final int IM_CHAT_TYPE_SYSTEM = 1004;                 //聊天室类型 系统
+    public static final int IM_CHAT_TYPE_SQUARE_ACTION = 1005;          //聊天室类型 群操作
+    public static final int IM_CHAT_TYPE_CONSULTATION = 1006;           //聊天室类型 公众号
+    public static final int IM_CHAT_TYPE_SQUARE_REQUEST = 1007;         //聊天室类型 入群申请
+    public static final int IM_CHAT_TYPE_LIVE_MESSAGE = 1008;           //聊天室类型 直播消息
+    public static final int IM_CHAT_TYPE_LIVE_REQUEST = 1009;           //聊天室类型 直播连麦
+
+
+    public static final String IM_MESSAGE_TYPE_TEXT = "-1";             //消息类型 文字
+    public static final String IM_MESSAGE_TYPE_PHOTO = "-2";            //消息类型 图片
+    public static final String IM_MESSAGE_TYPE_AUDIO = "-3";            //消息类型 语音
+    public static final String IM_MESSAGE_TYPE_FRIEND_ADD = "1";        //消息类型 加好友
+    public static final String IM_MESSAGE_TYPE_FRIEND_DEL = "2";        //消息类型 加好友
+    public static final String IM_MESSAGE_TYPE_CONTACT_ADD = "3";       //消息类型 好友加入通讯录
+    public static final String IM_MESSAGE_TYPE_CONTACT_DEL = "4";       //消息类型 好友从通讯录移除
+    public static final String IM_MESSAGE_TYPE_SQUARE_ADD = "5";        //消息类型 好友入群
+    public static final String IM_MESSAGE_TYPE_SQUARE_DEL = "6";        //消息类型 群删除好友
+    public static final String IM_MESSAGE_TYPE_SQUARE_REQUEST = "7";    //消息类型 申请入群
+    public static final String IM_MESSAGE_TYPE_SQUARE_DETIAL = "8";     //消息类型 群公告,群简介
+    public static final String IM_MESSAGE_TYPE_PUBLIC = "9";            //消息类型 公众号
+    public static final String IM_MESSAGE_TYPE_STOCK = "11";            //消息类型 股票消息
+    public static final String IM_MESSAGE_TYPE_SHARE = "13";            //消息类型 分享消息
+
+
 }

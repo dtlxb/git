@@ -111,7 +111,13 @@ public class FunctionFragment extends Fragment {
         return view;
     }
 
-    private void compressPhoto(List<String> uriPaths) {
+//    private void doUpload(final List<String> uriPaths) {
+//        for (int i = 0; i < uriPaths.size(); i++) {
+//            sendImageToZyyx(new File(uriPaths.get(i)));
+//        }
+//    }
+
+    private void compressPhoto(final List<String> uriPaths) {
         KLog.e(uriPaths);
         for (int i = 0; i < uriPaths.size(); i++) {
             Luban.get(getActivity())

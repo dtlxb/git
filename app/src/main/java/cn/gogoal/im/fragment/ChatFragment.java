@@ -36,6 +36,7 @@ import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
+import com.hply.imagepicker.ITakePhoto;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -50,6 +51,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ChooseContactActivity;
+import cn.gogoal.im.adapter.ChatFunctionAdapter;
 import cn.gogoal.im.adapter.IMChatAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
@@ -313,7 +315,7 @@ public class ChatFragment extends BaseFragment {
                 if (etInput.getText().toString().trim().equals("")) {
                     functionCheckBox.setVisibility(View.VISIBLE);
                     btnSend.setVisibility(View.INVISIBLE);
-                } else if (etInput.getText().toString().trim().equals("@") && chatType == 1002) {
+                } else if (etInput.getText().toString().trim().equals("@") && chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                     //@过后跳转加人
                     Intent intent = new Intent(getActivity(), ChooseContactActivity.class);
                     Bundle bundle = new Bundle();
@@ -429,7 +431,7 @@ public class ChatFragment extends BaseFragment {
                             imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
                                     "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), message);
                         }
-                    } else if (chatType == 1002) {
+                    } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                         imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
                                 "0", imConversation.getName(), "", "", message);
                     } else {
@@ -560,12 +562,6 @@ public class ChatFragment extends BaseFragment {
         });
     }
 
-    private void doUpload(final List<String> uriPaths) {
-        for (int i = 0; i < uriPaths.size(); i++) {
-            sendImageToZyyx(new File(uriPaths.get(i)));
-        }
-    }
-
     private void sendVoiceToUCloud(final float seconds, final String voicePath) {
         AsyncTaskUtil.doAsync(new AsyncTaskUtil.AsyncCallBack() {
             @Override
@@ -657,10 +653,11 @@ public class ChatFragment extends BaseFragment {
 
                         messageList.addAll(list);
                         jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
-                        if (chatType == 1001) {
+                        KLog.e(messageList.get(list.size() - 1).getContent());
+                        if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                             //拿到对方信息
                             getSpeakToInfo(imConversation);
-                        } else if (chatType == 1002) {
+                        } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                             //加群消息特殊处理
                             for (int i = 0; i < messageList.size(); i++) {
                                 JSONObject contentObject = JSON.parseObject(messageList.get(i).getContent());
@@ -682,7 +679,7 @@ public class ChatFragment extends BaseFragment {
                         if (messageList.size() > 0 && needUpdate) {
                             IMMessageBean imMessageBean = null;
                             AVIMMessage lastMessage = messageList.get(messageList.size() - 1);
-                            if (chatType == 1001) {
+                            if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                                 if (null != contactBean) {
                                     //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息
                                     KLog.e(contactBean);
@@ -690,11 +687,12 @@ public class ChatFragment extends BaseFragment {
                                             null != contactBean.getTarget() ? contactBean.getTarget() : "",
                                             String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), lastMessage);
                                 }
-                            } else if (chatType == 1002) {
+                            } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                                 //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息(群对象和群头像暂时为空)
                                 imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0", imConversation.getName(),
                                         "", "", lastMessage);
                             }
+                            KLog.e(imConversation.getName());
                             MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
                         }
 
@@ -883,11 +881,11 @@ public class ChatFragment extends BaseFragment {
                 message_recycler.smoothScrollToPosition(messageList.size() - 1);
                 //此处头像，昵称日后有数据再改
                 IMMessageBean imMessageBean = null;
-                if (chatType == 1001) {
+                if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                     imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
                             "0", message.getFrom(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
 
-                } else if (chatType == 1002) {
+                } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                     //加人删人逻辑
                     if (_lctype.equals("5") || _lctype.equals("6")) {
                         JSONArray accountArray = contentObject.getJSONObject("_lcattrs").getJSONArray("accountList");
