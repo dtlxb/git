@@ -237,7 +237,7 @@ public class UserUtils {
                                         updataListener.failed(result.getString("msg"));
                                         break;
                                 }
-                            }else {
+                            } else {
                                 updataListener.failed(result.getString("msg"));
                             }
                         }
@@ -561,15 +561,18 @@ public class UserUtils {
                 KLog.e(responseInfo);
                 if ((int) result.get("code") == 0) {
                     if (null != result.getJSONObject("data")) {
+                        JSONObject jsonObject = result.getJSONObject("data");
                         if (null != mGetSquareInfo) {
-                            mGetSquareInfo.squareGetSuccess(result.getJSONObject("data"));
+                            mGetSquareInfo.squareGetSuccess(jsonObject);
                         }
-                        if (type == AppConst.CHAT_GROUP_CONTACT_BEANS) {
-                            SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationId + "_accountList_beans",
-                                    result.getJSONObject("data").getJSONArray("accountList"));
-                        } else if (type == AppConst.LIVE_GROUP_CONTACT_BEANS) {
-                            //缓存群通讯录
-                            SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationId + "_live_group_beans", result.getJSONObject("data").getJSONArray("accountList"));
+                        if (null != jsonObject.get("accountList")) {
+                            if (type == AppConst.CHAT_GROUP_CONTACT_BEANS) {
+                                SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationId + "_accountList_beans",
+                                        result.getJSONObject("data").getJSONArray("accountList"));
+                            } else if (type == AppConst.LIVE_GROUP_CONTACT_BEANS) {
+                                //缓存群通讯录
+                                SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationId + "_live_group_beans", result.getJSONObject("data").getJSONArray("accountList"));
+                            }
                         }
                     }
                 }
