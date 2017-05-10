@@ -649,7 +649,7 @@ public class ChatFragment extends BaseFragment {
 
                 @Override
                 public void done(List<AVIMMessage> list, AVIMException e) {
-                    if (null == e) {
+                    if (null == e && null != list && list.size() > 0) {
 
                         messageList.addAll(list);
                         jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());

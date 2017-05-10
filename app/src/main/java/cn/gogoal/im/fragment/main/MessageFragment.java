@@ -89,7 +89,7 @@ public class MessageFragment extends BaseFragment {
     @BindView(R.id.tv_xtitle)
     TextView xTitle;
 
-    private List<IMMessageBean> IMMessageBeans = new ArrayList<>();
+    private List<IMMessageBean> IMMessageBeans;
 
     private ListAdapter listAdapter;
 
@@ -112,6 +112,9 @@ public class MessageFragment extends BaseFragment {
         initTitle();
         initRecycleView(message_recycler, R.drawable.shape_divider_1px);
         message_recycler.setItemAnimator(new NoAlphaItemAnimator());
+        IMMessageBeans = new ArrayList<>();
+        listAdapter = new ListAdapter(R.layout.item_fragment_message, IMMessageBeans);
+        message_recycler.setAdapter(listAdapter);
     }
 
     private void initTitle() {
@@ -152,8 +155,7 @@ public class MessageFragment extends BaseFragment {
                 }
             });
         }
-        listAdapter = new ListAdapter(R.layout.item_fragment_message, IMMessageBeans);
-        message_recycler.setAdapter(listAdapter);
+        listAdapter.notifyDataSetChanged();
         listAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(CommonAdapter adapter, View view, final int position) {
@@ -233,6 +235,7 @@ public class MessageFragment extends BaseFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         MessageUtils.removeMessageInfo(IMMessageBeans.get(position).getConversationID());
                         listAdapter.removeItem(position);
+                        KLog.e(listAdapter.getData().size());
                     }
                 }, false).show();
                 return false;
@@ -492,6 +495,9 @@ public class MessageFragment extends BaseFragment {
     @Subscriber(tag = "IM_Message")
     public void handleMessage(BaseMessage baseMessage) {
         Map<String, Object> map = baseMessage.getOthers();
+
+        KLog.e(map.size());
+
         AVIMMessage message = (AVIMMessage) map.get("message");
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
         gruopMemberMap.put(conversation.getConversationId(), conversation.getMembers());

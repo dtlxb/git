@@ -299,8 +299,6 @@ public class MainActivity extends BaseActivity {
                 badge.setBadgeGravity(Gravity.TOP | Gravity.END);
                 badge.setBadgeTextSize(12, true);
                 badge.setBadgePadding(5, true);
-                badge.setBadgeBackgroundColor(getResColor(R.color.message_tag_red));
-
                 String uriStr = "android.resource://" + this.getPackageName() + "/" + R.raw.ding;
 
 //                VoiceManager.getInstance(MainActivity.this)
