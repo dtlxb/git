@@ -1,7 +1,9 @@
 package cn.gogoal.im.base;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.multidex.MultiDex;
 
 import com.alivc.player.AccessKey;
@@ -45,6 +47,8 @@ public class MyApp extends LitePalApplication {
         super.onCreate();
 
         app = this;
+
+        registerActivityLifecycleCallbacks(new LifeCircle());
 
         SPTools.initSharedPreferences(this);
         XLayout.getConfig()
@@ -147,5 +151,43 @@ public class MyApp extends LitePalApplication {
 
     public static Context getAppContext() {
         return app.getApplicationContext();
+    }
+
+    private class LifeCircle implements ActivityLifecycleCallbacks{
+
+        @Override
+        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+            AppManager.getInstance().addActivity(activity);
+        }
+
+        @Override
+        public void onActivityStarted(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivityResumed(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivityPaused(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivityStopped(Activity activity) {
+
+        }
+
+        @Override
+        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+        }
+
+        @Override
+        public void onActivityDestroyed(Activity activity) {
+            AppManager.getInstance().finishActivity(activity);
+        }
     }
 }

@@ -38,9 +38,10 @@ import cn.gogoal.im.activity.SquareChatRoomActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.bean.RecommendBean;
+import cn.gogoal.im.bean.GroupCollectionData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
@@ -63,7 +64,7 @@ public class SearchTeamFragment extends BaseFragment {
 
     private int loadType = AppConst.REFRESH_TYPE_FIRST;
 
-    private ArrayList<RecommendBean.DataBean> dataBeanList;
+    private ArrayList<GroupCollectionData.DataBean> dataBeanList;
     private List<String> groupMembers;
 
     @Override
@@ -124,11 +125,12 @@ public class SearchTeamFragment extends BaseFragment {
         new GGOKHTTP(map, GGOKHTTP.SEARCH_GROUP, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                FileUtil.writeRequestResponse(responseInfo,"推荐群");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     dataBeanList.clear();
-                    RecommendBean recommendBean = JSONObject.parseObject(responseInfo, RecommendBean.class);
-                    if (null != recommendBean.getData()) {
-                        dataBeanList.addAll(recommendBean.getData());
+                    GroupCollectionData groupCollectionData = JSONObject.parseObject(responseInfo, GroupCollectionData.class);
+                    if (null != groupCollectionData.getData()) {
+                        dataBeanList.addAll(groupCollectionData.getData());
                         adapter.notifyDataSetChanged();
                         xLayout.setStatus(XLayout.Success);
                     }
@@ -154,16 +156,16 @@ public class SearchTeamFragment extends BaseFragment {
         }).startGet();
     }
 
-    private class RecommendAdapter extends CommonAdapter<RecommendBean.DataBean, BaseViewHolder> {
+    private class RecommendAdapter extends CommonAdapter<GroupCollectionData.DataBean, BaseViewHolder> {
 
         private Bitmap groupAvatarBitmap;
 
-        RecommendAdapter(List<RecommendBean.DataBean> datas) {
+        RecommendAdapter(List<GroupCollectionData.DataBean> datas) {
             super(R.layout.item_search_type_persion, datas);
         }
 
         @Override
-        protected void convert(final BaseViewHolder holder, final RecommendBean.DataBean data, final int position) {
+        protected void convert(final BaseViewHolder holder, final GroupCollectionData.DataBean data, final int position) {
             TextView addView = holder.getView(R.id.btn_search_group_add);
             final ImageView imageView = holder.getView(R.id.item_user_avatar);
 
@@ -202,7 +204,7 @@ public class SearchTeamFragment extends BaseFragment {
 
             //群主没有设置过群头像，拼接
             if (StringUtils.isActuallyEmpty(data.getAttr().getAvatar())) {
-                GroupFaceImage.getInstance(getActivity(), getImageAvatar(data.getM())
+                GroupFaceImage.getInstance(getActivity(), getImageAvatar(data.getM_info())
                 ).load(new GroupFaceImage.OnMatchingListener() {
                     @Override
                     public void onSuccess(final Bitmap mathingBitmap) {
@@ -251,14 +253,14 @@ public class SearchTeamFragment extends BaseFragment {
                         in = new Intent(getActivity(), SquareCardActivity.class);
                         if (position > 0) {
                             for (int i = 0; i < dataBeanList.get(position - 1).getM().size(); i++) {
-                                groupMembers.add(String.valueOf(dataBeanList.get(position - 1).getM().get(i).getAccount_id()));
+                                groupMembers.add(String.valueOf(dataBeanList.get(position - 1).getM_info().get(i).getAccount_id()));
                             }
                             Bundle bundle = new Bundle();
                             bundle.putString("conversation_id", dataBeanList.get(position - 1).getConv_id());
                             bundle.putString("square_name", dataBeanList.get(position - 1).getName());
                             bundle.putParcelable("bitmap_avatar", groupAvatarBitmap);
                             bundle.putString("square_creater", dataBeanList.get(position - 1).getC());
-                            bundle.putParcelableArrayList("square_members", data.getM());
+                            bundle.putParcelableArrayList("square_members", data.getM_info());
                             in.putExtras(bundle);
                             startActivity(in);
                         }
@@ -276,10 +278,10 @@ public class SearchTeamFragment extends BaseFragment {
         }
     }
 
-    private List<String> getImageAvatar(List<RecommendBean.DataBean.MBean> datas) {
+    private List<String> getImageAvatar(List<GroupCollectionData.DataBean.MInfoBean> datas) {
         List<String> li = new ArrayList<>();
         if (null != datas && !datas.isEmpty()) {
-            for (RecommendBean.DataBean.MBean b : datas) {
+            for (GroupCollectionData.DataBean.MInfoBean b : datas) {
                 li.add(b.getAvatar());
             }
             return li;

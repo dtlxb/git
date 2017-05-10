@@ -10,13 +10,29 @@ public class BaseIconText<T,E> {
     private E text;
     private T iamge;
 
+    private String url;
+
     public BaseIconText(E text) {
         this.text = text;
     }
 
-    public BaseIconText(E text, T iamge) {
+    public BaseIconText(T iamge,E text) {
         this.text = text;
         this.iamge = iamge;
+    }
+
+    public BaseIconText(T iamge,E text, String url) {
+        this.text = text;
+        this.iamge = iamge;
+        this.url = url;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public E getText() {

@@ -17,6 +17,8 @@ import java.util.Map;
 
 import cn.gogoal.im.common.UserUtils;
 
+import static com.avos.avoscloud.AVQuery.CachePolicy.NETWORK_ONLY;
+
 /**
  * Created by huangxx on 17/02/20.
  */
@@ -114,6 +116,9 @@ public class AVImClientManager {
      */
     public void refreshConversation(String conversationId) {
         AVIMConversationQuery conversationQuery = avimClient.getQuery();
+
+        conversationQuery.setQueryPolicy(NETWORK_ONLY);
+
         // 根据conversationId查找房间
         conversationQuery.whereEqualTo("objectId", conversationId);
         // 查找聊天
@@ -126,8 +131,7 @@ public class AVImClientManager {
                         list.get(0).fetchInfoInBackground(new AVIMConversationCallback() {
                             @Override
                             public void done(AVIMException e) {
-                                KLog.e(list.get(0).getConversationId());
-                                KLog.e(list.get(0).getName());
+                                KLog.e(list.get(0).getMembers());
                             }
                         });
                     }

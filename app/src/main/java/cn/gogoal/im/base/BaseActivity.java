@@ -71,8 +71,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
         setContentView(mContentView);
 
-        AppManager.getInstance().addActivity(this);
-
         ButterKnife.bind(this);
 
         initView(mContentView);
@@ -326,7 +324,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        AppManager.getInstance().finishActivity(this);
         fixInputMethodManagerLeak(this);
     }
 

@@ -91,7 +91,6 @@ public class EditMyStockActivity extends BaseActivity {
 
         DefaultItemTouchHelper itemTouchHelper = DefaultItemTouchHelper.init(onItemTouchCallbackListener);
         itemTouchHelper.attachToRecyclerView(rvEditDrag);
-
         dragAdapter.setItemTouchHelper(itemTouchHelper);
 
         itemTouchHelper.setDragEnable(true);

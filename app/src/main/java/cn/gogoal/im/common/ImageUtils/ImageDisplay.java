@@ -11,6 +11,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 
+import java.io.ByteArrayOutputStream;
+
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.ui.view.CircleImageView;
@@ -60,14 +62,37 @@ public class ImageDisplay {
         }
     }
 
-    public static <T> void loadImage(Context context, T image, ImageView imageView) {
-        Glide.with(context)
-                .load(image)
-                .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.mipmap.image_placeholder)
-                .thumbnail(0.1f)
-                .into(imageView);
+    public static <T> void loadImage(Context context, T image, final ImageView imageView) {
+        try {
+            Glide.with(context)
+                    .load(image)
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.mipmap.image_placeholder)
+                    .thumbnail(0.1f)
+                    .into(imageView);
+        } catch (Exception e) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ((Bitmap) image).compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] bytes = baos.toByteArray();
+
+            Glide.with(context)
+                    .load(bytes)
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .into(imageView);
+
+//            final DrawableRequestBuilder<byte[]> thumbnail = Glide.with(context).load(bytes).skipMemoryCache(true)
+//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                    .placeholder(R.mipmap.image_placeholder)
+//                    .thumbnail(0.1f);
+//            ((Activity)context).runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    thumbnail.into(imageView) ;
+//                }
+//            });
+        }
     }
 
 //    /**
@@ -115,7 +140,7 @@ public class ImageDisplay {
      * @param radius  圆角矩形角度
      * @param image   图片资源
      */
-    public static <T> void loadRoundedRectangleImage(Context context,T image, ImageView imageView, int radius) {
+    public static <T> void loadRoundedRectangleImage(Context context, T image, ImageView imageView, int radius) {
         Glide.with(context)
                 .load(image)
                 .bitmapTransform(new RoundedCornersTransformation(context, radius, 0))
@@ -126,11 +151,22 @@ public class ImageDisplay {
      * @param context 上下文对象
      * @param image   图片资源
      */
-    public static <T> void loadRoundedRectangleImage(Context context,T image, ImageView imageView) {
-        Glide.with(context)
-                .load(image)
-                .bitmapTransform(new RoundedCornersTransformation(context, AppDevice.dp2px(context,5), 0))
-                .into(imageView);
+    public static <T> void loadRoundedRectangleImage(Context context, T image, ImageView imageView) {
+        try {
+            Glide.with(context)
+                    .load(image)
+                    .bitmapTransform(new RoundedCornersTransformation(context, AppDevice.dp2px(context, 5), 0))
+                    .into(imageView);
+        }catch (Exception e) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ((Bitmap) image).compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] bytes = baos.toByteArray();
+            Glide.with(context).load(bytes).skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.mipmap.image_placeholder)
+                    .thumbnail(0.1f)
+                    .into(imageView);
+        }
     }
 
     //=====================================加载GIF图=======================================

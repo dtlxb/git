@@ -102,6 +102,7 @@ public class AppConst {
     //个股-交易明细
     public static final int TREAT_TYPE_MING_XI = 459;
 
+    //=================================关于跳转web页的配置=========================================
     //直播分享
     public static final String GG_LIVE_SHARE = WEB_URL + "/live/share/";
     //直播录播列表
@@ -110,8 +111,13 @@ public class AppConst {
     public static final String GG_RESEARCH = WEB_URL + "/research";
     //精要研报
     public static final String GG_REPORT = WEB_URL + "/report";
+
     //文字一分钟
-    public static final String GG_TEXT = WEB_URL + "/text";
+    public static final String GG_TEXT1MINUTE = WEB_URL + "/text";
+    //数据一分钟
+    public static final String GG_DATA1MINUTE = WEB_URL + "/data";
+    //同业比较
+    public static final String GG_TONG_YE = WEB_URL + "/industry";
 
     //投研页帮助
     public static final String GG_HELP = WEB_URL + "/help/index";
@@ -123,11 +129,40 @@ public class AppConst {
     //设置页服务协议
     public static final String GG_SERVICE_AGREEMENT = WEB_URL + "/help/service";
 
+    public static final String WEB_NEWS = WEB_URL + "/report/info/";
+
     public static final int SOURCE_TYPE_YANBAO = 102;//个股 研报
     public static final int SOURCE_TYPE_GONGGAO = 105;//个股 公告
-    public static final String WEB_NEWS = WEB_URL + "/report/info/";
 
     //新闻远端
     public static final int SOURCE_TYPE_NEWS = 100;//个股 新闻
+
+    //======================关于LeanCloud会话类型，消息类型==============================
+    public static final int IM_CHAT_TYPE_SINGLE = 1001;                 //聊天室类型 单聊
+    public static final int IM_CHAT_TYPE_SQUARE = 1002;                 //聊天室类型 群聊
+    public static final int IM_CHAT_TYPE_LIVE = 1003;                   //聊天室类型 直播
+    public static final int IM_CHAT_TYPE_SYSTEM = 1004;                 //聊天室类型 系统
+    public static final int IM_CHAT_TYPE_SQUARE_ACTION = 1005;          //聊天室类型 群操作
+    public static final int IM_CHAT_TYPE_CONSULTATION = 1006;           //聊天室类型 公众号
+    public static final int IM_CHAT_TYPE_SQUARE_REQUEST = 1007;         //聊天室类型 入群申请
+    public static final int IM_CHAT_TYPE_LIVE_MESSAGE = 1008;           //聊天室类型 直播消息
+    public static final int IM_CHAT_TYPE_LIVE_REQUEST = 1009;           //聊天室类型 直播连麦
+
+
+    public static final String IM_MESSAGE_TYPE_TEXT = "-1";             //消息类型 文字
+    public static final String IM_MESSAGE_TYPE_PHOTO = "-2";            //消息类型 图片
+    public static final String IM_MESSAGE_TYPE_AUDIO = "-3";            //消息类型 语音
+    public static final String IM_MESSAGE_TYPE_FRIEND_ADD = "1";        //消息类型 加好友
+    public static final String IM_MESSAGE_TYPE_FRIEND_DEL = "2";        //消息类型 加好友
+    public static final String IM_MESSAGE_TYPE_CONTACT_ADD = "3";       //消息类型 好友加入通讯录
+    public static final String IM_MESSAGE_TYPE_CONTACT_DEL = "4";       //消息类型 好友从通讯录移除
+    public static final String IM_MESSAGE_TYPE_SQUARE_ADD = "5";        //消息类型 好友入群
+    public static final String IM_MESSAGE_TYPE_SQUARE_DEL = "6";        //消息类型 群删除好友
+    public static final String IM_MESSAGE_TYPE_SQUARE_REQUEST = "7";    //消息类型 申请入群
+    public static final String IM_MESSAGE_TYPE_SQUARE_DETIAL = "8";     //消息类型 群公告,群简介
+    public static final String IM_MESSAGE_TYPE_PUBLIC = "9";            //消息类型 公众号
+    public static final String IM_MESSAGE_TYPE_STOCK = "11";            //消息类型 股票消息
+    public static final String IM_MESSAGE_TYPE_SHARE = "13";            //消息类型 分享消息
+
 
 }

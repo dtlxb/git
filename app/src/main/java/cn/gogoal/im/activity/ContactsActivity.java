@@ -138,7 +138,7 @@ public class ContactsActivity extends BaseActivity {
                     intent.putExtra("add_type", 0x01);
                     startActivity(intent);
                 } else if (position == 1) {
-                    intent = new Intent(ContactsActivity.this, SquareCollectActivity.class);
+                    intent = new Intent(ContactsActivity.this, MyGroupsActivity.class);
                     startActivity(intent);
                 } else if (position == 2) {
                     intent = new Intent(ContactsActivity.this, PhoneContactsActivity.class);
@@ -158,7 +158,7 @@ public class ContactsActivity extends BaseActivity {
         contactAdapter.setOnItemLongClickListener(new CommonAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(CommonAdapter adapter, View view, final int position) {
-                if (position > 1) {
+                if (position > 2) {
                     DialogHelp.getSelectDialog(getActivity(), "", new String[]{"删除联系人"}, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

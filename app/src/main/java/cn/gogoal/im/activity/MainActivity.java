@@ -299,7 +299,7 @@ public class MainActivity extends BaseActivity {
                 badge.setBadgeGravity(Gravity.TOP | Gravity.END);
                 badge.setBadgeTextSize(12, true);
                 badge.setBadgePadding(5, true);
-                badge.setBackgroundResource(getResColor(R.color.message_tag_red));
+                badge.setBadgeBackgroundColor(getResColor(R.color.message_tag_red));
 
                 String uriStr = "android.resource://" + this.getPackageName() + "/" + R.raw.ding;
 
@@ -327,7 +327,6 @@ public class MainActivity extends BaseActivity {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONArray data = object.getJSONArray("data");

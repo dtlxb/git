@@ -11,6 +11,7 @@ import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.socks.library.KLog;
 
 import cn.gogoal.im.bean.IMMessageBean;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
 
@@ -64,11 +65,22 @@ public class MessageUtils {
             }
 
             thisJsonArray.add(jsonObject);
-            KLog.e(jsonObject);
             SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", thisJsonArray);
         } else {
 
         }
+    }
+
+    public static IMMessageBean getIMMessageBeanById(JSONArray thisJsonArray, String conv_id) {
+        if (thisJsonArray != null && !TextUtils.isEmpty(conv_id)) {
+            for (int i = 0; i < thisJsonArray.size(); i++) {
+                if (thisJsonArray.getJSONObject(i).get("conversationID").equals(conv_id)) {
+                    return JSON.parseObject(String.valueOf(thisJsonArray.get(i)), IMMessageBean.class);
+                } else {
+                }
+            }
+        }
+        return new IMMessageBean(conv_id, AppConst.IM_CHAT_TYPE_SQUARE, System.currentTimeMillis(), "0", "", "", "", null);
     }
 
     //消息列表：移除消息
@@ -146,7 +158,7 @@ public class MessageUtils {
     public static String getItsHeadPic(int friendId, int chatType, String conversationID) {
         JSONArray jsonArray;
         String headPicUri = "";
-        if (chatType == 1001) {
+        if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
             String string = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", null);
             if (!TextUtils.isEmpty(string)) {
                 JSONObject jsonObject = JSON.parseObject(string);
@@ -161,7 +173,7 @@ public class MessageUtils {
                     }
                 }
             }
-        } else if (chatType == 1002) {
+        } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
             jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", new JSONArray());
             if (jsonArray != null) {
                 for (int i = 0; i < jsonArray.size(); i++) {

@@ -1,4 +1,4 @@
-package hply.com.niugu.view;
+package cn.gogoal.im.ui.stock;
 
 import android.content.Context;
 import android.content.SharedPreferences;
