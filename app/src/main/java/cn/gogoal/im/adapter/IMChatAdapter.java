@@ -201,7 +201,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((LeftImageViewHolder) holder).image_user_send.getLayoutParams();
             setImageSize(params, imageMessage);
             ((LeftImageViewHolder) holder).image_user_send.setLayoutParams(params);
-            ImageDisplay.loadImage(mContext, imageMessage.getAVFile().getUrl(), ((LeftImageViewHolder) holder).image_user_send);
+            ImageDisplay.loadImage(mContext, UFileImageHelper.load(imageMessage.getAVFile().getUrl()).compress(33).get(), ((LeftImageViewHolder) holder).image_user_send);
             showMessageTime(position, ((LeftImageViewHolder) holder).message_time);
 
             ((LeftImageViewHolder) holder).image_user_send.setOnClickListener(new View.OnClickListener() {

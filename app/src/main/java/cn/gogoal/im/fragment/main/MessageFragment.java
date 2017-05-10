@@ -155,6 +155,7 @@ public class MessageFragment extends BaseFragment {
                 }
             });
         }
+        KLog.e(IMMessageBeans);
         listAdapter.notifyDataSetChanged();
         listAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override

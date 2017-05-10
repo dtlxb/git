@@ -36,7 +36,6 @@ import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
-import com.hply.imagepicker.ITakePhoto;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -645,7 +644,7 @@ public class ChatFragment extends BaseFragment {
 
     private void getHistoryMessage(final boolean needUpdate) {
         if (null != imConversation) {
-            imConversation.queryMessages(15, new AVIMMessagesQueryCallback() {
+            imConversation.queryMessagesFromCache(15, new AVIMMessagesQueryCallback() {
 
                 @Override
                 public void done(List<AVIMMessage> list, AVIMException e) {

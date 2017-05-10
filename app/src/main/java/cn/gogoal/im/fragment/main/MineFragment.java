@@ -22,6 +22,7 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.EditMyInfoActivity;
 import cn.gogoal.im.activity.SettingActivity;
+import cn.gogoal.im.activity.TestActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseFragment;
@@ -113,7 +114,7 @@ public class MineFragment extends BaseFragment {
                 (!(UserUtils.getUserCacheAvatarFile().getAbsolutePath()).equalsIgnoreCase(UserUtils.getMyAvatarCacheName()))) {
             ImageDisplay.loadCircleImage(mContext, UserUtils.getUserCacheAvatarFile(), imageAvatar);
         } else {
-            ImageDisplay.loadCircleImage(mContext, UserUtils.getUserAvatar(),imageAvatar);
+            ImageDisplay.loadCircleImage(mContext, UserUtils.getUserAvatar(), imageAvatar);
             UserUtils.cacheUserAvatar();//缓存用户头像大图
         }
         tvMineUserName.setText(UserUtils.getUserName());
@@ -154,7 +155,7 @@ public class MineFragment extends BaseFragment {
     }
 
     @Subscriber(tag = "updata_userinfo")
-    void updataUserInfo(String msg){
+    void updataUserInfo(String msg) {
         iniheadInfo(getActivity());
     }
 
@@ -182,9 +183,15 @@ public class MineFragment extends BaseFragment {
                     holder.getView(R.id.item_layout_simple_image_text).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            Intent intent;
                             switch (position) {
+                                case 2:
+                                    intent = new Intent(getActivity(), TestActivity.class);
+                                    startActivity(intent);
+                                    break;
                                 case 10:
-                                    startActivity(new Intent(v.getContext(), SettingActivity.class));
+                                    intent = new Intent(getActivity(), SettingActivity.class);
+                                    startActivity(intent);
                                     break;
                                 default:
                                     UIHelper.toast(v.getContext(), "pos=" + position);
