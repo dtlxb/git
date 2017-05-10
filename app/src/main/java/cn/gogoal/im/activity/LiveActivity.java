@@ -47,6 +47,7 @@ import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
+import com.hply.imagepicker.view.StatusBarUtil;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
