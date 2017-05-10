@@ -105,6 +105,8 @@ public class UFileUpload {
                 MD5Utils.getMD5EncryptyString16(file.getPath()) +
                 file.getPath().substring(file.getPath().lastIndexOf('.'));
 
+        KLog.e(key_name);
+
         String authorization = getAuthorization(http_method, content_md5, content_type, date, bucket, key_name);
         final UFileRequest request = new UFileRequest();
         request.setHttpMethod(http_method);

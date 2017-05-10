@@ -100,7 +100,6 @@ public class MainActivity extends BaseActivity {
         if (BuildConfig.DEBUG) {
             FileUtil.writeRequestResponse(UserUtils.getToken(), "token_" + UserUtils.getUserName());
         }
-        badge = new BadgeView(MainActivity.this);
 
         MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
 
@@ -186,6 +185,12 @@ public class MainActivity extends BaseActivity {
         });
 
         getScreenData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        badge = new BadgeView(MainActivity.this);
     }
 
     public void changeItem(int index) {
@@ -306,6 +311,8 @@ public class MainActivity extends BaseActivity {
 //                VoiceManager.getInstance(MainActivity.this)
 //                        .startPlay(Uri.parse(uriStr));
             }
+        }else {
+            badge=new BadgeView(MainActivity.this);
         }
     }
 
@@ -364,11 +371,11 @@ public class MainActivity extends BaseActivity {
         recyScreen.setAdapter(adapter);
     }
 
-    class BoxScreenAdapter extends CommonAdapter<BoxScreenData, BaseViewHolder> {
+    private class BoxScreenAdapter extends CommonAdapter<BoxScreenData, BaseViewHolder> {
 
         private List<BoxScreenData> mDatas;
 
-        public BoxScreenAdapter(Context context, List<BoxScreenData> list) {
+        private BoxScreenAdapter(Context context, List<BoxScreenData> list) {
             super(R.layout.item_box_screen, list);
             this.mDatas = list;
         }
@@ -420,6 +427,6 @@ public class MainActivity extends BaseActivity {
     }
 
     public interface drawerCloseCallBack {
-        public void closeDrawer();
+        void closeDrawer();
     }
 }

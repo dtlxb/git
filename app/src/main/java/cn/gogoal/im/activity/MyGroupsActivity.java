@@ -13,7 +13,6 @@ import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -28,7 +27,6 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.GroupCollectionData;
-import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.FileUtil;
@@ -170,9 +168,9 @@ public class MyGroupsActivity extends BaseActivity {
                         for (int i = 0; i < accountList.size(); i++) {
                             avatarString.add(((JSONObject) accountList.get(i)).getString("avatar"));
                         }
+
                         GroupFaceImage.getInstance(getActivity(), avatarString).load(new GroupFaceImage.OnMatchingListener() {
                             @Override
-<<<<<<< HEAD
                             public void onSuccess(final Bitmap mathingBitmap) {
                                 MyGroupsActivity.this.runOnUiThread(new Runnable() {
                                     @Override
@@ -180,14 +178,8 @@ public class MyGroupsActivity extends BaseActivity {
                                         ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
                                     }
                                 });
-                                groupAvatar[0] =mathingBitmap;
-=======
-                            public void onSuccess(Bitmap mathingBitmap) {
-                                ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
                                 groupAvatar[0] = mathingBitmap;
->>>>>>> 0e9368bbb6bd94e56f9ff5c98fe83055e8ad0d9d
                             }
-
                             @Override
                             public void onError(Exception e) {
                                 KLog.e(e.getMessage());

@@ -109,7 +109,18 @@ public class ImageDetailActivity extends BaseActivity {
                 dialog.dismiss();
                 switch (position) {
                     case 0:
+                        DownloadUtils.getInstance(DownloadUtils.DEFAULT_DOWNLOAD_PATH).downloadPicture(getActivity(),
+                                imageUrls.get(vpImageDetail.getCurrentItem()), null, new DownloadCallBack() {
+                                    @Override
+                                    public void success() {
+                                        UIHelper.toast(getActivity(), "图片已成功下载到相册");
+                                    }
 
+                                    @Override
+                                    public void error(String errorMsg) {
+                                        UIHelper.toast(getActivity(), "图片载出错::" + errorMsg);
+                                    }
+                                });
                         break;
                     case 1:
                         break;
