@@ -94,11 +94,11 @@ public class TypeLoginActivity extends BaseActivity {
 //        loginUserName.setText("13166270509");
 //        loginPassWord.setText("888888");
 
-//        loginUserName.setText("E00003645");
-//        loginPassWord.setText("258369");
+        loginUserName.setText("E00003645");
+        loginPassWord.setText("147369");
 
-        loginUserName.setText("E00002639");
-        loginPassWord.setText("412174");
+//        loginUserName.setText("E00002639");
+//        loginPassWord.setText("412174");
 
         /*loginUserName.setText("E00020181");
         loginPassWord.setText("394495");*/
@@ -167,6 +167,9 @@ public class TypeLoginActivity extends BaseActivity {
     }
 
     private void Login() {
+        final WaitDialog loginDialog = WaitDialog.getInstance("登录中", R.mipmap.login_loading, true);
+        loginDialog.show(getSupportFragmentManager());
+        loginDialog.setCancelable(false);
 
         String name = loginUserName.getText().toString().toUpperCase(Locale.ENGLISH);
         String word = loginPassWord.getText().toString();
@@ -176,13 +179,8 @@ public class TypeLoginActivity extends BaseActivity {
             return;
         }
 
-        if (!UIHelper.isGGPassWord(word, getActivity())) {
+        if (!UIHelper.isGGPassWord(word, getActivity()))
             return;
-        }
-        final WaitDialog loginDialog = WaitDialog.getInstance("登录中", R.mipmap.login_loading, true);
-        loginDialog.show(getSupportFragmentManager());
-        loginDialog.setCancelable(false);
-
 
         Map<String, String> param = new HashMap<>();
         param.put("login_name", name);

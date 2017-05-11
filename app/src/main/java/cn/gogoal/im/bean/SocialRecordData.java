@@ -18,7 +18,7 @@ public class SocialRecordData {
     private String sort;
     private String introduction_img;
     private String introduction;
-    private String auth;
+    private int auth;
     private String phone;
     private String update_time;
     private String programme_name;
@@ -118,11 +118,11 @@ public class SocialRecordData {
         this.introduction = introduction;
     }
 
-    public String getAuth() {
+    public int getAuth() {
         return auth;
     }
 
-    public void setAuth(String auth) {
+    public void setAuth(int auth) {
         this.auth = auth;
     }
 

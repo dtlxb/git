@@ -40,6 +40,8 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 
+import static cn.gogoal.im.base.BaseActivity.initRecycleView;
+
 /**
  * author wangjd on 2017/4/7 0007.
  * Staff_id 1375
@@ -91,13 +93,14 @@ public class SocialContactFragment extends BaseFragment {
 
         BaseActivity.iniRefresh(refreshSocial);
 
-        BaseActivity.initRecycleView(perLiveRecycler, null);
+
+        initRecycleView(perLiveRecycler, R.drawable.shape_divider_15dp);
         perLiveRecycler.setNestedScrollingEnabled(false);
 
-        BaseActivity.initRecycleView(orgLiveRecycler, null);
+        initRecycleView(orgLiveRecycler, R.drawable.shape_divider_15dp);
         orgLiveRecycler.setNestedScrollingEnabled(false);
 
-        BaseActivity.initRecycleView(recordRecycler, null);
+        initRecycleView(recordRecycler, R.drawable.shape_divider_15dp);
         recordRecycler.setNestedScrollingEnabled(false);
 
         refreshSocial.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -231,7 +234,7 @@ public class SocialContactFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-//                KLog.e(responseInfo);
+                KLog.e(responseInfo);
                 SocialLiveBean object = JSONObject.parseObject(responseInfo, SocialLiveBean.class);
                 if (object.getCode() == 0) {
                     if (live_source == 1) {

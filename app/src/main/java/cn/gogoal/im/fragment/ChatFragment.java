@@ -50,7 +50,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ChooseContactActivity;
-import cn.gogoal.im.adapter.ChatFunctionAdapter;
 import cn.gogoal.im.adapter.IMChatAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
@@ -652,7 +651,6 @@ public class ChatFragment extends BaseFragment {
 
                         messageList.addAll(list);
                         jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
-                        KLog.e(messageList.get(list.size() - 1).getContent());
                         if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                             //拿到对方信息
                             getSpeakToInfo(imConversation);
@@ -691,7 +689,6 @@ public class ChatFragment extends BaseFragment {
                                 imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0", imConversation.getName(),
                                         "", "", lastMessage);
                             }
-                            KLog.e(imConversation.getName());
                             MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
                         }
 

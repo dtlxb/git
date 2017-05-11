@@ -23,7 +23,7 @@ import cn.gogoal.im.common.permission.IPermissionListner;
  */
 public class PlayDataStatistics {
 
-    public static void getStatisticalData(final Context context, final String video_id, final String source, final String type) {
+    public static void getStatisticalData(final Context context, final String video_type, final String video_id, final String source, final String type) {
 
         // READ_PHONE_STATE
 
@@ -31,7 +31,7 @@ public class PlayDataStatistics {
                 new IPermissionListner() {
                     @Override
                     public void onUserAuthorize() {
-                        getData(context, video_id, source, type);
+                        getData(context, video_type, video_id, source, type);
                     }
 
                     @Override
@@ -40,7 +40,7 @@ public class PlayDataStatistics {
                 });
     }
 
-    private static void getData(Context context, String video_id, String source, String type) {
+    private static void getData(Context context, String video_type, String video_id, String source, String type) {
 
         String equipment_id = MD5Utils.getMD5EncryptyString16(AppDevice.getIMEI(context) + AppDevice.getIMSI(context));
 
@@ -50,6 +50,8 @@ public class PlayDataStatistics {
         param.put("token", UserUtils.getToken());
         param.put("equipment_id", equipment_id);
         param.put("type", type);
+        param.put("video_type", video_type);
+        param.put("product_line", "4");
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override

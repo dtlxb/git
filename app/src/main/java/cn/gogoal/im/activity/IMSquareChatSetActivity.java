@@ -3,7 +3,6 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.GridLayoutManager;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.bumptech.glide.Glide;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -45,8 +43,8 @@ import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 
@@ -204,14 +202,10 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 }
             }
         });
-        if (!ImageUtils.getBitmapFilePaht(conversationId, "imagecache ").equals("")) {
-//            iv_square_head.setImageURI(Uri.parse(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")));
-            Glide.with(IMSquareChatSetActivity.this)
-                    .load(Uri.parse(ImageUtils.getBitmapFilePaht(conversationId, "imagecache"))).into(iv_square_head);
-            ImageDisplay.loadRoundedRectangleImage(
-                    IMSquareChatSetActivity.this,
-                    Uri.parse(ImageUtils.getBitmapFilePaht(conversationId, "imagecache")),
-                    iv_square_head);
+        final String imagecache = ChatGroupHelper.getBitmapFilePaht(conversationId);
+        KLog.e("缓存地址：" + imagecache);
+        if (!StringUtils.isActuallyEmpty(imagecache)) {
+            ImageDisplay.loadImage(getActivity(), imagecache, iv_square_head);
         }
         getGroupInfo();
     }
@@ -254,15 +248,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         GroupFaceImage.getInstance(getActivity(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {
-                String groupFaceImageName = "_" + conversationId + ".png";
-                KLog.e(groupFaceImageName);
-                ImageUtils.cacheBitmapFile(getActivity(), mathingBitmap, "imagecache", groupFaceImageName);
-                if (null != mathingBitmap) {
-                    HashMap<String, Object> map = new HashMap<>();
-                    map.put("mathing_bitmap", mathingBitmap);
-                    BaseMessage baseMessage = new BaseMessage("bitmapMessage", map);
-                    AppManager.getInstance().sendMessage("set_square_avatar", baseMessage);
-                }
+                ChatGroupHelper.cacheGroupAvatar(conversationId, mathingBitmap);
             }
 
             @Override
@@ -322,6 +308,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 } else {
                     UIHelper.toast(getActivity(), "网络不给力");
                 }
+                KLog.e(error);
             }
         });
     }
@@ -336,7 +323,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                Log.e("=====notice", responseInfo);
+                KLog.e(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if ((int) result.get("code") == 0) {
                     the_square.setText(((JSONObject) result.get("data")).get("name") == null ? "" : ((JSONObject) result.get("data")).getString("name"));

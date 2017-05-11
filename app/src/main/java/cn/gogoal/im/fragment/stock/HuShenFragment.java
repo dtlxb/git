@@ -138,7 +138,7 @@ public class HuShenFragment extends BaseFragment {
             StockMarketBean.DataBean.HangqingBean hangqingBean = marketData.getHangqing().get(i);
             MarkteBean.MarketItemData itemData = new MarkteBean.MarketItemData(
                     hangqingBean.getName(),
-                    hangqingBean.getPrice(),
+                    StringUtils.pareseStringDouble(hangqingBean.getPrice()),
                     hangqingBean.getPrice_change(),
                     hangqingBean.getPrice_change_rate(), "", null, hangqingBean.getFullcode(),
                     StockUtils.getStockRateColor(hangqingBean.getPrice_change()));

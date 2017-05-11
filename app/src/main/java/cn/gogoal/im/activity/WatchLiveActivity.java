@@ -3,8 +3,10 @@ package cn.gogoal.im.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -39,6 +41,7 @@ import com.alivc.videochat.IVideoChatParter;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
+import com.hply.imagepicker.view.StatusBarUtil;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -55,6 +58,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
@@ -90,16 +94,16 @@ public class WatchLiveActivity extends BaseActivity {
     @BindView(R.id.iv_abort_chat)
     ImageView mIvChatClose;
     //详情相关控件
-    @BindView(R.id.textTitle)
-    TextView textTitle;
     @BindView(R.id.imgPalyer)
     CircleImageView imgPalyer;
     @BindView(R.id.textCompany)
     TextView textCompany;
-    @BindView(R.id.textMarInter)
-    TextView textMarInter;
     @BindView(R.id.textOnlineNumber)
     TextView textOnlineNumber;
+    @BindView(R.id.textAddFriend)
+    TextView textAddFriend;
+    @BindView(R.id.recyAudience)
+    RecyclerView recyAudience;
     //倒计时
     @BindView(R.id.countDownTimer)
     CountDownTimerView countDownTimer;
@@ -216,6 +220,8 @@ public class WatchLiveActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+
+        StatusBarUtil.with(this).setColor(Color.BLACK);
 
         live_id = getIntent().getStringExtra("live_id");
 
@@ -421,7 +427,16 @@ public class WatchLiveActivity extends BaseActivity {
         }
 
         @Override
-        public int onswitchCamera() {
+        public void onSwitchFullScreen() {
+            if (AppDevice.isLandscape(getContext())) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            } else if (AppDevice.isPortrait(getContext())) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            }
+        }
+
+        @Override
+        public int onSwitchCamera() {
             if (mChatParter != null) {
                 mChatParter.switchCamera();
             }
@@ -862,11 +877,6 @@ public class WatchLiveActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         KLog.e("WatchLiveActivity--> onDestroy");
@@ -944,10 +954,9 @@ public class WatchLiveActivity extends BaseActivity {
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONArray("data").getJSONObject(0);
                     //直播详情
-                    textTitle.setText(data.getString("video_name")); //直播名称
                     ImageDisplay.loadCircleImage(getContext(), data.getString("face_url"), imgPalyer);
                     textCompany.setText(data.getString("anchor_name"));
-                    textMarInter.setText(data.getString("programme_name"));
+
                     //主播介绍
                     anchor = data.getJSONObject("anchor");
 
@@ -969,7 +978,7 @@ public class WatchLiveActivity extends BaseActivity {
                     } else {
                         countDownTimer.setVisibility(View.GONE);
 
-                        PlayDataStatistics.getStatisticalData(getContext(), live_id, "2", "1");
+                        PlayDataStatistics.getStatisticalData(getContext(), "1", live_id, "2", "1");
                     }
 
                     startToPlay(mPlayUrl, mPlaySurfaceView);
@@ -1027,7 +1036,7 @@ public class WatchLiveActivity extends BaseActivity {
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
-                    textOnlineNumber.setText(data.getIntValue("result") + "人在线");
+                    textOnlineNumber.setText(data.getIntValue("result") + "在线");
                 }
             }
 

@@ -28,14 +28,13 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.GroupCollectionData;
 import cn.gogoal.im.bean.ShareItemInfo;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.DialogHelp;
-import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -94,12 +93,12 @@ public class MyGroupsActivity extends BaseActivity {
         dataBeens = new ArrayList<>();
         listAdapter = new ListAdapter(dataBeens);
         recyclerView.setAdapter(listAdapter);
-        getGroupList();
+        getGroupList(AppConst.REFRESH_TYPE_FIRST);
 
         swiperefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getGroupList();
+                getGroupList(AppConst.REFRESH_TYPE_SWIPEREFRESH);
                 swiperefreshlayout.setRefreshing(false);
             }
         });
@@ -107,23 +106,27 @@ public class MyGroupsActivity extends BaseActivity {
     }
 
     //收藏群列表
-    public void getGroupList() {
+    public void getGroupList(final int type) {
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
-        xLayout.setStatus(XLayout.Loading);
+        if (type==AppConst.REFRESH_TYPE_FIRST) {
+            xLayout.setStatus(XLayout.Loading);
+        }
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
-                FileUtil.writeRequestResponse(responseInfo, "我的qun");
-
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                    dataBeens.clear();
+
                     List<GroupCollectionData.DataBean> data =
                             JSONObject.parseObject(responseInfo, GroupCollectionData.class).getData();
                     dataBeens.addAll(data);
                     listAdapter.notifyDataSetChanged();
 
                     xLayout.setStatus(XLayout.Success);
+                    if (type==AppConst.REFRESH_TYPE_SWIPEREFRESH){
+                        UIHelper.toast(getActivity(),"更新群组数据成功");
+                    }
                 } else {
                     xLayout.setStatus(XLayout.Empty);
                 }
@@ -136,7 +139,7 @@ public class MyGroupsActivity extends BaseActivity {
                 xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
                     @Override
                     public void onReload(View v) {
-                        getGroupList();
+                        getGroupList(AppConst.REFRESH_TYPE_PARENT_BUTTON);
                     }
                 });
             }
@@ -154,41 +157,35 @@ public class MyGroupsActivity extends BaseActivity {
         protected void convert(BaseViewHolder holder, final GroupCollectionData.DataBean data, final int position) {
             final ImageView imgAvatar = holder.getView(R.id.img_my_group_avatar);
             final Bitmap[] groupAvatar = new Bitmap[1];
-            final String imagecache = ImageUtils.getBitmapFilePaht(data.getConv_id(), "imagecache");
+            final String imagecache = ChatGroupHelper.getBitmapFilePaht(data.getConv_id());
             if (!StringUtils.isActuallyEmpty(imagecache)) {
                 ImageDisplay.loadImage(getActivity(), imagecache, imgAvatar);
                 groupAvatar[0] = BitmapFactory.decodeFile(imagecache);
-
+                KLog.e("使用缓存头像："+imagecache);
             } else {//没有缓存就拼
                 final List<String> avatarString = new ArrayList<>();
-                ChatGroupHelper.createGroupImage(data.getConv_id(), new ChatGroupHelper.GroupInfoResponse() {
+                ArrayList<GroupCollectionData.DataBean.MInfoBean> mInfo = data.getM_info();
+                for (GroupCollectionData.DataBean.MInfoBean bean:mInfo){
+                    avatarString.add(bean.getAvatar());
+                }
+                GroupFaceImage.getInstance(getActivity(), avatarString).load(new GroupFaceImage.OnMatchingListener() {
                     @Override
-                    public void getInfoSuccess(JSONObject groupInfo) {
-                        JSONArray accountList = groupInfo.getJSONArray("accountList");
-                        for (int i = 0; i < accountList.size(); i++) {
-                            avatarString.add(((JSONObject) accountList.get(i)).getString("avatar"));
-                        }
+                    public void onSuccess(final Bitmap mathingBitmap) {
+                        MyGroupsActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //拼好了显示
+                                ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
+                                //拼好了存起来
+                                ChatGroupHelper.cacheGroupAvatar(data.getConv_id(),mathingBitmap);
+                                KLog.e("现拼九宫");
 
-                        GroupFaceImage.getInstance(getActivity(), avatarString).load(new GroupFaceImage.OnMatchingListener() {
-                            @Override
-                            public void onSuccess(final Bitmap mathingBitmap) {
-                                MyGroupsActivity.this.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
-                                    }
-                                });
-                                groupAvatar[0] = mathingBitmap;
-                            }
-                            @Override
-                            public void onError(Exception e) {
-                                KLog.e(e.getMessage());
                             }
                         });
+                        groupAvatar[0] = mathingBitmap;
                     }
-
                     @Override
-                    public void getInfoFailed(Exception e) {
+                    public void onError(Exception e) {
                         KLog.e(e.getMessage());
                     }
                 });
@@ -249,7 +246,6 @@ public class MyGroupsActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
                 if ((int) result.get("code") == 0) {
                     UIHelper.toast(MyGroupsActivity.this, "群已取消收藏!!!");
                 }

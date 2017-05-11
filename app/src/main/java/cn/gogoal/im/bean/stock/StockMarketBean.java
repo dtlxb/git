@@ -270,18 +270,18 @@ public class StockMarketBean {
              * md_stream_id : 900
              */
 
-            private double amplitude;
-            private double close_price;
+            private String amplitude;
+            private String close_price;
             private String code;
-            private int fall;
-            private int flat;
+            private String fall;
+            private String flat;
             private String fullcode;
-            private double high_price;
+            private String high_price;
             private String insert_time;
-            private double low_price;
+            private String low_price;
             private String name;
-            private double open_price;
-            private double price;
+            private String open_price;
+            private String price;
             private String price_change;
             private String price_change_rate;
             private int rose;
@@ -289,25 +289,25 @@ public class StockMarketBean {
             private String stage;
             private int symbol_type;
             private String tdate;
-            private double turnover;
+            private String turnover;
             private String update_time;
-            private long volume;
-            private int deal_count;
+            private String volume;
+            private String deal_count;
             private String md_stream_id;
 
-            public double getAmplitude() {
+            public String getAmplitude() {
                 return amplitude;
             }
 
-            public void setAmplitude(double amplitude) {
+            public void setAmplitude(String amplitude) {
                 this.amplitude = amplitude;
             }
 
-            public double getClose_price() {
+            public String getClose_price() {
                 return close_price;
             }
 
-            public void setClose_price(double close_price) {
+            public void setClose_price(String close_price) {
                 this.close_price = close_price;
             }
 
@@ -319,19 +319,19 @@ public class StockMarketBean {
                 this.code = code;
             }
 
-            public int getFall() {
+            public String getFall() {
                 return fall;
             }
 
-            public void setFall(int fall) {
+            public void setFall(String fall) {
                 this.fall = fall;
             }
 
-            public int getFlat() {
+            public String getFlat() {
                 return flat;
             }
 
-            public void setFlat(int flat) {
+            public void setFlat(String flat) {
                 this.flat = flat;
             }
 
@@ -343,11 +343,11 @@ public class StockMarketBean {
                 this.fullcode = fullcode;
             }
 
-            public double getHigh_price() {
+            public String getHigh_price() {
                 return high_price;
             }
 
-            public void setHigh_price(double high_price) {
+            public void setHigh_price(String high_price) {
                 this.high_price = high_price;
             }
 
@@ -359,11 +359,11 @@ public class StockMarketBean {
                 this.insert_time = insert_time;
             }
 
-            public double getLow_price() {
+            public String getLow_price() {
                 return low_price;
             }
 
-            public void setLow_price(double low_price) {
+            public void setLow_price(String low_price) {
                 this.low_price = low_price;
             }
 
@@ -375,19 +375,19 @@ public class StockMarketBean {
                 this.name = name;
             }
 
-            public double getOpen_price() {
+            public String getOpen_price() {
                 return open_price;
             }
 
-            public void setOpen_price(double open_price) {
+            public void setOpen_price(String open_price) {
                 this.open_price = open_price;
             }
 
-            public double getPrice() {
+            public String getPrice() {
                 return price;
             }
 
-            public void setPrice(double price) {
+            public void setPrice(String price) {
                 this.price = price;
             }
 
@@ -447,11 +447,11 @@ public class StockMarketBean {
                 this.tdate = tdate;
             }
 
-            public double getTurnover() {
+            public String getTurnover() {
                 return turnover;
             }
 
-            public void setTurnover(double turnover) {
+            public void setTurnover(String turnover) {
                 this.turnover = turnover;
             }
 
@@ -463,19 +463,19 @@ public class StockMarketBean {
                 this.update_time = update_time;
             }
 
-            public long getVolume() {
+            public String getVolume() {
                 return volume;
             }
 
-            public void setVolume(long volume) {
+            public void setVolume(String volume) {
                 this.volume = volume;
             }
 
-            public int getDeal_count() {
+            public String getDeal_count() {
                 return deal_count;
             }
 
-            public void setDeal_count(int deal_count) {
+            public void setDeal_count(String deal_count) {
                 this.deal_count = deal_count;
             }
 

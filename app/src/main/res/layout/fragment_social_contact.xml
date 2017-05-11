@@ -68,16 +68,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="15dp"
-                            android:background="@color/stock_market_bg" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1px"
-                            android:background="@color/colorGriddivider" />
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -86,45 +76,10 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@android:color/white"
-                            android:paddingBottom="10dp"
-                            android:paddingLeft="12dp"
-                            android:paddingRight="12dp"
-                            android:paddingTop="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"
-                                android:text="@string/newest_live"
-                                android:textColor="@color/textColor_333333"
-                                android:textSize="16dp" />
-
-                        </RelativeLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1px"
-                            android:background="@color/colorGriddivider" />
-
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/orgLiveRecycler"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="15dp"
-                            android:background="@color/stock_market_bg" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1px"
-                            android:background="@color/colorGriddivider" />
 
                     </LinearLayout>
 
@@ -133,31 +88,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@android:color/white"
-                            android:paddingBottom="10dp"
-                            android:paddingLeft="12dp"
-                            android:paddingRight="12dp"
-                            android:paddingTop="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"
-                                android:text="@string/great_video"
-                                android:textColor="@color/textColor_333333"
-                                android:textSize="16dp" />
-
-                        </RelativeLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1px"
-                            android:background="@color/colorGriddivider" />
 
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/recordRecycler"

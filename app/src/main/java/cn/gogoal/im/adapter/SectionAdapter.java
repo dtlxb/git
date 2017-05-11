@@ -14,8 +14,8 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseSectionQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
-import cn.gogoal.im.bean.SectionTouYanData;
-import cn.gogoal.im.bean.TouYan;
+import cn.gogoal.im.bean.SectionToolsData;
+import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.NormalIntentUtils;
@@ -28,11 +28,11 @@ import cn.gogoal.im.ui.dialog.ComingSoonDialog;
  * phone 18930640263
  * description :投研适配器
  */
-public class SectionAdapter extends BaseSectionQuickAdapter<SectionTouYanData, BaseViewHolder> {
+public class SectionAdapter extends BaseSectionQuickAdapter<SectionToolsData, BaseViewHolder> {
     private FragmentActivity context;
     private int innerItem;
 
-    public SectionAdapter(FragmentActivity context, List<SectionTouYanData> data) {
+    public SectionAdapter(FragmentActivity context, List<SectionToolsData> data) {
         super(R.layout.item_touyan_item, R.layout.item_touyan_title, data);
         this.context = context;
 
@@ -42,14 +42,14 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionTouYanData, B
     }
 
     @Override
-    protected void convertHead(BaseViewHolder holder, final SectionTouYanData item) {
+    protected void convertHead(BaseViewHolder holder, final SectionToolsData item) {
         holder.setText(R.id.tv_touyan_title_text, item.header);
     }
 
 
     @Override
-    protected void convert(BaseViewHolder holder, SectionTouYanData data, final int position) {
-        final TouYan.DataBean.Item item = data.t;
+    protected void convert(BaseViewHolder holder, SectionToolsData data, final int position) {
+        final ToolData.Tool item = data.t;
 
         //initView
         View itemView = holder.getView(R.id.item_touyan_item);

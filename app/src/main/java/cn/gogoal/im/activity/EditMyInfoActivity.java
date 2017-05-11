@@ -117,14 +117,11 @@ public class EditMyInfoActivity extends BaseActivity {
             CircleImageView circleImageView = holder.getView(R.id.image_user_info_avatar);
             switch (holder.getItemViewType()) {
                 case UserDetailInfo.HEAD:
-                    if (null != UserUtils.getUserCacheAvatarFile() &&
-                            (!(UserUtils.getUserCacheAvatarFile().getAbsolutePath()).equalsIgnoreCase(UserUtils.getMyAvatarCacheName()))) {
+                    if (null != UserUtils.getUserCacheAvatarFile()) {
                         ImageDisplay.loadCircleImage(mContext, UserUtils.getUserCacheAvatarFile(),circleImageView);
-                        KLog.e("用的缓存");
                     } else {
                         ImageDisplay.loadCircleImage(mContext, UserUtils.getUserAvatar(),circleImageView);
                         UserUtils.cacheUserAvatar();//缓存用户头像大图
-                        KLog.e("用的线上");
                     }
 
                     holder.getView(R.id.header_edit_my_info).setOnClickListener(new View.OnClickListener() {

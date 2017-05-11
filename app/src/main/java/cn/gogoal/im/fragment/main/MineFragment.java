@@ -110,8 +110,7 @@ public class MineFragment extends BaseFragment {
 
     private void iniheadInfo(Context mContext) {
         UserUtils.cacheUserAvatar();//缓存用户头像大图
-        if (null != UserUtils.getUserCacheAvatarFile() &&
-                (!(UserUtils.getUserCacheAvatarFile().getAbsolutePath()).equalsIgnoreCase(UserUtils.getMyAvatarCacheName()))) {
+        if (null != UserUtils.getUserCacheAvatarFile()) {
             ImageDisplay.loadCircleImage(mContext, UserUtils.getUserCacheAvatarFile(), imageAvatar);
         } else {
             ImageDisplay.loadCircleImage(mContext, UserUtils.getUserAvatar(), imageAvatar);

@@ -4,6 +4,7 @@ package cn.gogoal.im.fragment.main;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -59,7 +60,6 @@ import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -322,7 +322,7 @@ public class MessageFragment extends BaseFragment {
             String nickName = "";
             String squareMessageFrom = "";
             int chatType = messageBean.getChatType();
-            ImageView avatarIv = holder.getView(R.id.head_image);
+            final ImageView avatarIv = holder.getView(R.id.head_image);
             TextView messageTv = holder.getView(R.id.last_message);
             TextView countTv = holder.getView(R.id.count_tv);
             //未读数
@@ -349,11 +349,29 @@ public class MessageFragment extends BaseFragment {
                     if (lcattrsObject != null && lcattrsObject.get("username") != null) {
                         squareMessageFrom = UserUtils.getUserName().equals(lcattrsObject.get("username")) ? "" : lcattrsObject.getString("username");
                     }
-                    if (ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache").equals("")) {
-                        ChatGroupHelper.createGroupImage(messageBean.getConversationID(), gruopMemberMap.get(messageBean.getConversationID()), "set_avatar");
-                    } else {
-                        ImageDisplay.loadRoundedRectangleImage(getActivity(), ImageUtils.getBitmapFilePaht(messageBean.getConversationID(), "imagecache"), avatarIv);
-                    }
+//                    if (ChatGroupHelper.getBitmapFilePaht(messageBean.getConversationID()).equals("")) {
+//                        ChatGroupHelper.createGroupImage(messageBean.getConversationID(), gruopMemberMap.get(messageBean.getConversationID()), "set_avatar");
+//                    } else {
+//                        ImageDisplay.loadImage(getActivity(), ImageUtils.getBitmapFilePaht(messageBean.getConversationID()), avatarIv);
+//                    }
+                    ChatGroupHelper.setGroupAvatar(messageBean.getConversationID(), new ChatGroupHelper.GroupAvatarStitchingListener() {
+                        @Override
+                        public void success(final Bitmap bitmap) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    avatarIv.setImageBitmap(bitmap);
+                                }
+                            });
+
+                        }
+
+                        @Override
+                        public void failed(Exception e) {
+
+                        }
+                    });
+
                 } else if (chatType == AppConst.IM_CHAT_TYPE_SYSTEM) {
                     ImageDisplay.loadRoundedRectangleImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
                 } else {

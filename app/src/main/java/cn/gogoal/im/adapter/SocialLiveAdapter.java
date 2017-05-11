@@ -1,7 +1,7 @@
 package cn.gogoal.im.adapter;
 
-import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.CheckBox;
@@ -24,8 +24,10 @@ import cn.gogoal.im.bean.SocialLiveData;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.dialog.InviteAuthDialog;
 import cn.gogoal.im.ui.view.CircleImageView;
 
 /**
@@ -35,9 +37,9 @@ import cn.gogoal.im.ui.view.CircleImageView;
  */
 public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHolder> {
 
-    private Context mContext;
+    private FragmentActivity mContext;
 
-    public SocialLiveAdapter(Context mContext, List<SocialLiveData> data) {
+    public SocialLiveAdapter(FragmentActivity mContext, List<SocialLiveData> data) {
         super(R.layout.item_social_live, data);
         this.mContext = mContext;
     }
@@ -206,12 +208,22 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
             holder.setText(R.id.textPhoneTitle, data.getVideo_name());
         }
 
+        if (data.getAuth() == 1) {
+            holder.setVisible(R.id.textInvite, true);
+        } else {
+            holder.setVisible(R.id.textInvite, false);
+        }
+
         holder.setOnClickListener(R.id.linearSocial, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, WatchLiveActivity.class);
-                intent.putExtra("live_id", data.getLive_id());
-                mContext.startActivity(intent);
+                if (data.getAuth() == 1) {
+                    setInviteAuth(data.getLive_id());
+                } else {
+                    Intent intent = new Intent(mContext, WatchLiveActivity.class);
+                    intent.putExtra("live_id", data.getLive_id());
+                    mContext.startActivity(intent);
+                }
             }
         });
     }
@@ -277,5 +289,38 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
             }
         };
         new GGOKHTTP(param, GGOKHTTP.ORDER_LIVE, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 邀约
+     */
+    private void setInviteAuth(String invite_id) {
+
+        String identifies = SPTools.getString(invite_id, null);
+
+        if (identifies == null) {
+            InviteAuthDialog.newInstance("live", invite_id).show(mContext.getSupportFragmentManager());
+            return;
+        }
+
+        Map<String, String> param = new HashMap<>();
+        param.put("video_id", invite_id);
+        param.put("identifies", identifies);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONObject data = object.getJSONObject("data");
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.VALIDATE_IDENTIFIES, ggHttpInterface).startGet();
     }
 }

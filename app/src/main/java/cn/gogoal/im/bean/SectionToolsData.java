@@ -8,15 +8,15 @@ import cn.gogoal.im.adapter.baseAdapter.entity.SectionEntity;
  * phone 18930640263
  * description :${annotated}.
  */
-public class SectionTouYanData extends SectionEntity<TouYan.DataBean.Item> {
+public class SectionToolsData extends SectionEntity<ToolData.Tool> {
 
-    private boolean simulatedArg;
+    private boolean simulatedArg;//是不是模拟的空数据
 
-    public SectionTouYanData(boolean isHeader, String header) {
+    public SectionToolsData(boolean isHeader, String header) {
         super(isHeader, header);
     }
 
-    public SectionTouYanData(TouYan.DataBean.Item item,boolean simulatedArg) {
+    public SectionToolsData(ToolData.Tool item, boolean simulatedArg) {
         super(item);
         this.simulatedArg=simulatedArg;
     }

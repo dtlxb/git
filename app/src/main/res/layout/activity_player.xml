@@ -30,6 +30,52 @@
 
     <LinearLayout
         android:id="@+id/liveTelecastDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="26dp"
+        android:background="@drawable/shape_player_anchor_info"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <cn.gogoal.im.ui.view.CircleImageView
+            android:id="@+id/imgPalyer"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="3dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textCompany"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@string/text_empty"
+                android:textColor="@android:color/white"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/textOnlineNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@string/text_empty"
+                android:textColor="@android:color/white"
+                android:textSize="10dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--<LinearLayout
+        android:id="@+id/liveTelecastDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -96,26 +142,6 @@
 
             </LinearLayout>
 
-            <!--<LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:paddingRight="10dp"
-                android:paddingTop="5dp">
-
-                <TextView
-                    android:id="@+id/liveTogether"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/shape_player_live_together"
-                    android:text="@string/live_together"
-                    android:textColor="@android:color/white"
-                    android:textSize="14dp"
-                    android:visibility="visible" />
-
-            </LinearLayout>-->
-
         </LinearLayout>
 
         <TextView
@@ -128,7 +154,7 @@
             android:textColor="@android:color/white"
             android:textSize="11dp" />
 
-    </LinearLayout>
+    </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/LayoutTip"
@@ -224,55 +250,33 @@
             android:textColor="#CCCCCC" />
     </LinearLayout>
 
-    <!--<cn.gogoal.im.common.PlayerUtils.CountDownTimerView
-        android:id="@+id/countDownTimer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="13dp"
-        android:visibility="visible" />-->
-
-    <!--<android.support.v7.widget.RecyclerView
-        android:id="@+id/recycLand"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_above="@+id/LayoutProgress"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="15dp"
-        android:visibility="gone" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycPortrait"
-        android:layout_width="250dp"
-        android:layout_height="150dp"
-        android:layout_above="@+id/LayoutProgress"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="15dp" />-->
-
     <LinearLayout
         android:id="@+id/functionBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/GLViewContainer"
         android:layout_gravity="center_horizontal|bottom"
-        android:background="@drawable/shape_player_info"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="5dp">
 
-        <!--<LinearLayout
-            android:id="@+id/linearPlayerChat"
+        <LinearLayout
+            android:id="@+id/linearPlayerFullScreen"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center">
 
             <ImageView
-                android:id="@+id/imgPlayerChat"
+                android:id="@+id/imgPlayerFullScreen"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@mipmap/player_chat" />
+                android:background="@mipmap/player_full_screen" />
 
-        </LinearLayout>-->
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearPlayerProfiles"
@@ -317,20 +321,6 @@
                 android:background="@mipmap/player_share" />
 
         </LinearLayout>
-
-        <!--<LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageView
-                android:id="@+id/imgPlayerShotCut"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/player_shot_cut" />
-
-        </LinearLayout>-->
 
         <LinearLayout
             android:layout_width="0dp"
