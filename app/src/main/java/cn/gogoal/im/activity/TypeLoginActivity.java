@@ -94,11 +94,11 @@ public class TypeLoginActivity extends BaseActivity {
 //        loginUserName.setText("13166270509");
 //        loginPassWord.setText("888888");
 
-        loginUserName.setText("E00003645");
-        loginPassWord.setText("147369");
+//        loginUserName.setText("E00003645");
+//        loginPassWord.setText("147369");
 
-//        loginUserName.setText("E00002639");
-//        loginPassWord.setText("412174");
+        loginUserName.setText("E00002639");
+        loginPassWord.setText("412174");
 
         /*loginUserName.setText("E00020181");
         loginPassWord.setText("394495");*/
@@ -195,7 +195,7 @@ public class TypeLoginActivity extends BaseActivity {
                 KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
-                    JSONObject data = object.getJSONObject("data");
+                    final JSONObject data = object.getJSONObject("data");
                     if (data.getIntValue("code") == 0) {
                         final Intent intent;
                         SPTools.saveJsonObject("userInfo", data);
@@ -214,7 +214,9 @@ public class TypeLoginActivity extends BaseActivity {
                                 @Override
                                 public void done(AVIMClient avimClient, AVIMException e) {
                                     if (e == null) {
+                                        KLog.e("IM登录成功");
                                         startActivity(intent);
+                                        PushService.subscribe(TypeLoginActivity.this, data.getString("account_id"), MainActivity.class);
                                         finish();
                                     } else {
                                         KLog.e(e.toString());
@@ -225,7 +227,6 @@ public class TypeLoginActivity extends BaseActivity {
                                 }
                             });
 
-                            PushService.subscribe(TypeLoginActivity.this, data.getString("account_id"), MainActivity.class);
 
                         } catch (Exception ignored) {
                             loginButton.setClickable(true);

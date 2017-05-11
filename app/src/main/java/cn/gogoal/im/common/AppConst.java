@@ -9,6 +9,7 @@ public class AppConst {
 
     public static final int MAX_PAGE = 50;//刷新页数上限
     //LeanCloud参数(沙盒)
+    
 //    public static final String LEANCLOUD_APP_ID = "R7vH8N41V1rqJIqrlTQ1mMnR-gzGzoHsz";
 //    public static final String LEANCLOUD_APP_KEY = "4iXr2Ylh1VwVyYjaxs3ufFmo";
 

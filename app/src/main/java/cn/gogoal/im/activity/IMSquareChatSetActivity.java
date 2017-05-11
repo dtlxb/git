@@ -120,7 +120,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
             tvTeamSize.setText(groupMembers.size() + "人");
         }
 
-        getChatGroup(groupMembers);
+        getChatGroup();
 
         final JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_groups_saved", new JSONArray());
         JSONObject thisGroup = null;
@@ -202,11 +202,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 }
             }
         });
-        final String imagecache = ChatGroupHelper.getBitmapFilePaht(conversationId);
-        KLog.e("缓存地址：" + imagecache);
-        if (!StringUtils.isActuallyEmpty(imagecache)) {
-            ImageDisplay.loadImage(getActivity(), imagecache, iv_square_head);
-        }
         getGroupInfo();
     }
 
@@ -228,14 +223,30 @@ public class IMSquareChatSetActivity extends BaseActivity {
     }
 
     private void getAllContacts(JSONArray aarray) {
+        List<String> memberList = new ArrayList<>();
         for (int i = 0; i < aarray.size(); i++) {
             JSONObject accountObject = aarray.getJSONObject(i);
             contactBeens.add(addNomoralFuns(accountObject.getString("nickname"), accountObject.getInteger("friend_id"), accountObject.getString("avatar")));
+            memberList.add(accountObject.getString("account_id"));
             urls.add(accountObject.getString("avatar"));
         }
+        //获取群头像
+        if (listHasTheSame(memberList, groupMembers)) {
+            String imagecache = ChatGroupHelper.getBitmapFilePaht(conversationId);
+            KLog.e("缓存地址：" + imagecache);
+            if (!StringUtils.isActuallyEmpty(imagecache)) {
+                ImageDisplay.loadImage(getActivity(), imagecache, iv_square_head);
+            } else {
+                getNicePicture(urls);
+            }
+        } else {
+            groupMembers.clear();
+            groupMembers.addAll(memberList);
+            getNicePicture(urls);
+        }
+        tvTeamSize.setText(groupMembers.size() + "人");
         PersonContactBeens.addAll(contactBeens);
         //if (ImageUtils.getBitmapFilePaht(conversationId, "imagecache").equals("")) {
-        getNicePicture(urls);
         // }
         contactBeens.clear();
         contactBeens.addAll(squareCreaterFirst(PersonContactBeens));
@@ -243,12 +254,22 @@ public class IMSquareChatSetActivity extends BaseActivity {
         KLog.e(contactBeens);
     }
 
+
+    private boolean listHasTheSame(List listFirst, List listSecond) {
+        return (listFirst.size() == listSecond.size()) && listFirst.containsAll(listSecond);
+    }
+
+
     //生成九宫图
     private void getNicePicture(List<String> picUrls) {
         GroupFaceImage.getInstance(getActivity(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {
                 ChatGroupHelper.cacheGroupAvatar(conversationId, mathingBitmap);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("mathing_bitmap", mathingBitmap);
+                BaseMessage baseMessage = new BaseMessage("Bitmap_Info", map);
+                AppManager.getInstance().sendMessage("set_square_avatar", baseMessage);
             }
 
             @Override
@@ -282,8 +303,8 @@ public class IMSquareChatSetActivity extends BaseActivity {
     }
 
     //拉取群组信息
-    public void getChatGroup(List<String> groupMembers) {
-        UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, groupMembers, conversationId, new UserUtils.getSquareInfo() {
+    public void getChatGroup() {
+        UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, null, conversationId, new UserUtils.getSquareInfo() {
             @Override
             public void squareGetSuccess(JSONObject object) {
                 if (null != object.get("accountList")) {

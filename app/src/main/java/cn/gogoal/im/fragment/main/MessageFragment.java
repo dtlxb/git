@@ -349,11 +349,6 @@ public class MessageFragment extends BaseFragment {
                     if (lcattrsObject != null && lcattrsObject.get("username") != null) {
                         squareMessageFrom = UserUtils.getUserName().equals(lcattrsObject.get("username")) ? "" : lcattrsObject.getString("username");
                     }
-//                    if (ChatGroupHelper.getBitmapFilePaht(messageBean.getConversationID()).equals("")) {
-//                        ChatGroupHelper.createGroupImage(messageBean.getConversationID(), gruopMemberMap.get(messageBean.getConversationID()), "set_avatar");
-//                    } else {
-//                        ImageDisplay.loadImage(getActivity(), ImageUtils.getBitmapFilePaht(messageBean.getConversationID()), avatarIv);
-//                    }
                     ChatGroupHelper.setGroupAvatar(messageBean.getConversationID(), new ChatGroupHelper.GroupAvatarStitchingListener() {
                         @Override
                         public void success(final Bitmap bitmap) {
