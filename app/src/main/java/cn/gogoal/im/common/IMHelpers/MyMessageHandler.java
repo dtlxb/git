@@ -37,7 +37,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
 
     @Override
     public void onMessage(final AVIMMessage message, AVIMConversation conversation, final AVIMClient client) {
-        KLog.e(message.toString());
         KLog.e(message.getContent());
         try {
             final String clientID = AVImClientManager.getInstance().getClientId();

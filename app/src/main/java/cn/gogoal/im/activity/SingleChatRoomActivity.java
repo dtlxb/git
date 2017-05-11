@@ -82,6 +82,7 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
 
             @Override
             public void joinFail(String error) {
+                KLog.e(error);
                 UIHelper.toast(SingleChatRoomActivity.this, error);
             }
         });

@@ -209,14 +209,20 @@ public class TypeLoginActivity extends BaseActivity {
                             SPTools.saveInt(data.getInteger("account_id") + "_saved_account", data.getInteger("account_id"));
                         }
                         intent.putExtra("isFromLogin", true);
+                        KLog.e(data.getString("account_id"));
                         //登录IM
                         try {
                             AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
                                 @Override
                                 public void done(AVIMClient avimClient, AVIMException e) {
+                                    if (e == null) {
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        KLog.e(e.toString());
+                                        UIHelper.toast(getActivity(), "即时通讯登录失败");
+                                    }
                                     loginButton.setClickable(true);
-                                    startActivity(intent);
-                                    finish();
                                     loginDialog.dismiss(true);
                                 }
                             });

@@ -121,13 +121,8 @@ public class IMSquareChatSetActivity extends BaseActivity {
             groupMembers.addAll(getIntent().getExtras().getStringArrayList("group_members"));
             tvTeamSize.setText(groupMembers.size() + "人");
         }
-        //JSONArray accountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationId + "_accountList_beans", null);
-        //缓存中没有群信息则向后台拉取(取消这个)
-//        if (null != accountArray) {
-//            getAllContacts(accountArray);
-//        } else {
+
         getChatGroup(groupMembers);
-//        }
 
         final JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_groups_saved", new JSONArray());
         JSONObject thisGroup = null;
@@ -307,12 +302,26 @@ public class IMSquareChatSetActivity extends BaseActivity {
             public void squareGetSuccess(JSONObject object) {
                 if (null != object.get("accountList")) {
                     getAllContacts(object.getJSONArray("accountList"));
+                } else {
+                    JSONArray accountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationId + "_accountList_beans", null);
+                    //缓存中没有群信息则向后台拉取(取消这个)
+                    if (null != accountArray) {
+                        getAllContacts(accountArray);
+                    } else {
+                        UIHelper.toast(getActivity(), "网络不给力");
+                    }
                 }
             }
 
             @Override
             public void squareGetFail(String error) {
-
+                JSONArray accountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationId + "_accountList_beans", null);
+                //缓存中没有群信息则向后台拉取(取消这个)
+                if (null != accountArray) {
+                    getAllContacts(accountArray);
+                } else {
+                    UIHelper.toast(getActivity(), "网络不给力");
+                }
             }
         });
     }

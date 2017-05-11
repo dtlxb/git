@@ -425,7 +425,7 @@ public class ChatFragment extends BaseFragment {
                     }
                     //头像暂时未保存
                     IMMessageBean imMessageBean = null;
-                    if (chatType == 1001) {
+                    if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                         if (null != contactBean) {
                             imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
                                     "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), message);
