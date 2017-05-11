@@ -13,8 +13,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +29,8 @@ import cn.gogoal.im.bean.ShareListBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
-import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.ShareMessageDialog;
 import cn.gogoal.im.ui.view.XLayout;
@@ -123,37 +118,49 @@ public class ShareMessageActivity extends BaseActivity {
                     final ShareListBean group = new ShareListBean<>(ShareListBean.LIST_TYPE_ITEM);
                     group.setText(bean.getNickname());
                     group.setBean(bean);
-                    String imagecache = ImageUtils.getBitmapFilePaht(bean.getConversationID(), "imagecache");
-                    if (!StringUtils.isActuallyEmpty(imagecache)) {
-                        group.setItemImage(imagecache);
-                    } else {//没有缓存就拼
-                        final List<String> avatarString = new ArrayList<>();
-                        ChatGroupHelper.createGroupImage(bean.getConversationID(), new ChatGroupHelper.GroupInfoResponse() {
-                            @Override
-                            public void getInfoSuccess(JSONObject groupInfo) {
-                                JSONArray accountList = groupInfo.getJSONArray("accountList");
-                                for (int i = 0; i < accountList.size(); i++) {
-                                    avatarString.add(((JSONObject) accountList.get(i)).getString("avatar"));
-                                }
-                                GroupFaceImage.getInstance(getActivity(), avatarString).load(new GroupFaceImage.OnMatchingListener() {
-                                    @Override
-                                    public void onSuccess(Bitmap mathingBitmap) {
-                                        group.setItemImage(mathingBitmap);
-                                    }
 
-                                    @Override
-                                    public void onError(Exception e) {
-                                        KLog.e(e.getMessage());
-                                    }
-                                });
-                            }
+                    ChatGroupHelper.setGroupAvatar(bean.getConversationID(),  new ChatGroupHelper.GroupAvatarStitchingListener() {
+                        @Override
+                        public void success(Bitmap bitmap) {
+                            group.setItemImage(bitmap);
+                        }
 
-                            @Override
-                            public void getInfoFailed(Exception e) {
-                                KLog.e(e.getMessage());
-                            }
-                        });
-                    }
+                        @Override
+                        public void failed(Exception e) {
+
+                        }
+                    });
+//                    String imagecache = ChatGroupHelper.getBitmapFilePaht(bean.getConversationID());
+//                    if (!StringUtils.isActuallyEmpty(imagecache)) {
+//                        group.setItemImage(imagecache);
+//                    } else {//没有缓存就拼
+//                        final List<String> avatarString = new ArrayList<>();
+//                        ChatGroupHelper.createGroupImage(bean.getConversationID(), new ChatGroupHelper.GroupInfoResponse() {
+//                            @Override
+//                            public void getInfoSuccess(JSONObject groupInfo) {
+//                                JSONArray accountList = groupInfo.getJSONArray("accountList");
+//                                for (int i = 0; i < accountList.size(); i++) {
+//                                    avatarString.add(((JSONObject) accountList.get(i)).getString("avatar"));
+//                                }
+//                                GroupFaceImage.getInstance(getActivity(), avatarString).load(new GroupFaceImage.OnMatchingListener() {
+//                                    @Override
+//                                    public void onSuccess(Bitmap mathingBitmap) {
+//                                        group.setItemImage(mathingBitmap);
+//                                    }
+//
+//                                    @Override
+//                                    public void onError(Exception e) {
+//                                        KLog.e(e.getMessage());
+//                                    }
+//                                });
+//                            }
+//
+//                            @Override
+//                            public void getInfoFailed(Exception e) {
+//                                KLog.e(e.getMessage());
+//                            }
+//                        });
+//                    }
 
                     datas.add(group);
                 }

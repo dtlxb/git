@@ -30,12 +30,11 @@ import cn.gogoal.im.bean.GroupCollectionData;
 import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.DialogHelp;
-import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -116,8 +115,6 @@ public class MyGroupsActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
-                FileUtil.writeRequestResponse(responseInfo, "我的qun");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     dataBeens.clear();
 
@@ -160,11 +157,11 @@ public class MyGroupsActivity extends BaseActivity {
         protected void convert(BaseViewHolder holder, final GroupCollectionData.DataBean data, final int position) {
             final ImageView imgAvatar = holder.getView(R.id.img_my_group_avatar);
             final Bitmap[] groupAvatar = new Bitmap[1];
-            final String imagecache = ImageUtils.getBitmapFilePaht(data.getConv_id(), "imagecache");
+            final String imagecache = ChatGroupHelper.getBitmapFilePaht(data.getConv_id());
             if (!StringUtils.isActuallyEmpty(imagecache)) {
                 ImageDisplay.loadImage(getActivity(), imagecache, imgAvatar);
                 groupAvatar[0] = BitmapFactory.decodeFile(imagecache);
-                KLog.e("缓存头像");
+                KLog.e("使用缓存头像："+imagecache);
             } else {//没有缓存就拼
                 final List<String> avatarString = new ArrayList<>();
                 ArrayList<GroupCollectionData.DataBean.MInfoBean> mInfo = data.getM_info();
@@ -180,10 +177,9 @@ public class MyGroupsActivity extends BaseActivity {
                                 //拼好了显示
                                 ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
                                 //拼好了存起来
-                                ImageUtils.saveImageToSD(MyGroupsActivity.this,
-                                        MyGroupsActivity.this.getExternalFilesDir("imagecache").getPath()+
-                                "_"+data.getConv_id(),mathingBitmap,100);
-                                KLog.e("拼头像");
+                                ChatGroupHelper.cacheGroupAvatar(data.getConv_id(),mathingBitmap);
+                                KLog.e("现拼九宫");
+
                             }
                         });
                         groupAvatar[0] = mathingBitmap;
@@ -250,7 +246,6 @@ public class MyGroupsActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
                 if ((int) result.get("code") == 0) {
                     UIHelper.toast(MyGroupsActivity.this, "群已取消收藏!!!");
                 }

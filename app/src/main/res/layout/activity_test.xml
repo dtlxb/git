@@ -19,7 +19,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/btn_test"
@@ -33,7 +33,16 @@
             android:layout_height="wrap_content"
             android:text="禁止滑出，只允许点击" />
 
+        <Button
+            android:id="@+id/btn_test_match"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="测试群头像" />
 
+        <ImageView
+            android:id="@+id/image_test"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
     </LinearLayout>
 
     <!--navigation left-->

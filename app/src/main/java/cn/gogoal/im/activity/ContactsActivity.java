@@ -292,8 +292,6 @@ public class ContactsActivity extends BaseActivity {
 
         contactBeanList.addAll(list);
 
-        KLog.e(contactBeanList);
-
         SuspendedDecoration mDecoration = new SuspendedDecoration(getActivity());
 
         mDecoration.setmDatas(contactBeanList);

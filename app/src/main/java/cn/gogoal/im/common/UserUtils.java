@@ -4,11 +4,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.socks.library.KLog;
 
 import java.io.File;
@@ -122,20 +125,13 @@ public class UserUtils {
 
     public static void cacheUserAvatar() {
 //        //头像缓存
-        DownloadUtils.getInstance(MyApp.getAppContext().getExternalFilesDir("avatar").getAbsolutePath())
-                .ggDownloadImage(MyApp.getAppContext(),
-                        UserUtils.getUserAvatar(),
-                        "avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()), new DownloadCallBack() {
-                            @Override
-                            public void success() {
-                                KLog.e("success========================");
-                            }
-
-                            @Override
-                            public void error(String errorMsg) {
-                                KLog.e("failed========================" + errorMsg);
-                            }
-                        });
+        ImageUtils.getUrlBitmap(MyApp.getAppContext(), UserUtils.getUserAvatar(), new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                ImageUtils.saveImageToSD(MyApp.getAppContext(),getUserAvatarCacheAbsolutePath(),
+                        resource, 100);
+            }
+        });
     }
 
     /**
@@ -152,23 +148,9 @@ public class UserUtils {
     /**
      * 缓存头像的绝对路径
      */
-    public static String getUserAvatarCacheAbsolutePath() {
-        return MyApp.getAppContext().getExternalFilesDir("avatar") + File.separator + getUserAvatarCacheName();
-    }
-
-    /**
-     * 缓存我的头像的文件名
-     */
-    public static String getMyAvatarCacheName() {
-        return "avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()) +
-                ImageUtils.getImageSuffix(UserUtils.getUserAvatar());
-    }
-
-    /**
-     * 缓存头像的文件名
-     */
-    public static String getUserAvatarCacheName() {
-        return "avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()) +
+    private static String getUserAvatarCacheAbsolutePath() {
+        return MyApp.getAppContext().getExternalFilesDir("avatar") +
+                File.separator + "avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()) +
                 ImageUtils.getImageSuffix(UserUtils.getUserAvatar());
     }
 
@@ -444,6 +426,7 @@ public class UserUtils {
 
         return list;
     }
+
 
     /**
      * 找出当前群中自己的好友

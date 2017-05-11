@@ -1,6 +1,7 @@
 package cn.gogoal.im.common.IMHelpers;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -9,6 +10,7 @@ import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.socks.library.KLog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +27,9 @@ import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
+import cn.gogoal.im.common.MyFilter;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 
 import static cn.gogoal.im.common.UserUtils.getToken;
@@ -235,8 +239,7 @@ public class ChatGroupHelper {
         GroupFaceImage.getInstance(MyApp.getAppContext(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {
-                String groupFaceImageName = "_" + ConversationId + ".png";
-                ImageUtils.cacheBitmapFile(MyApp.getAppContext(), mathingBitmap, "imagecache", groupFaceImageName);
+                cacheGroupAvatar(ConversationId, mathingBitmap);
                 if (null != mathingBitmap) {
                     AppManager.getInstance().sendMessage(msgTag, 0 + "");
                 }
@@ -249,9 +252,89 @@ public class ChatGroupHelper {
     }
 
     /**
+     * 缓存群拼接的九宫头像
+     */
+    public static void cacheGroupAvatar(String conversationId, Bitmap bitmap) {
+        ImageUtils.saveImageToSD(MyApp.getAppContext(),
+                MyApp.getAppContext().getExternalFilesDir("imagecache")
+                        .getAbsolutePath() + File.separator + "_" + conversationId + ".png",
+                bitmap, 100);
+    }
+
+    public static void setGroupAvatar(String conversationId, GroupAvatarStitchingListener listener) {
+        setGroupAvatar(conversationId,listener,false);
+    }
+
+    public static void setGroupAvatar(final String conversationId,
+                                      final GroupAvatarStitchingListener listener, boolean needPlaceHolder) {
+
+        final List<String> listAvatar=new ArrayList<>();
+
+        if (StringUtils.isActuallyEmpty(getBitmapFilePaht(conversationId))) {
+            createGroupImage(conversationId, new GroupInfoResponse() {
+                @Override
+                public void getInfoSuccess(JSONObject groupInfo) {
+                    final JSONArray list = groupInfo.getJSONArray("accountList");
+                    for (int i=0;i<list.size();i++){
+                        listAvatar.add(list.getJSONObject(i).getString("avatar"));
+                    }
+
+                    GroupFaceImage.getInstance(MyApp.getAppContext(),listAvatar).load(new GroupFaceImage.OnMatchingListener() {
+                        @Override
+                        public void onSuccess(Bitmap mathingBitmap) {
+                            if (listener!=null){
+                                listener.success(mathingBitmap);
+                            }
+
+                            cacheGroupAvatar(conversationId,mathingBitmap);
+                        }
+                        public void onError(Exception e) {
+                            if (listener!=null){
+                                listener.failed(e);
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void getInfoFailed(Exception e) {
+                    KLog.e(e.getMessage());
+                }
+            });
+        } else {
+            String imagecache = MyApp.getAppContext().getExternalFilesDir("imagecache").getAbsoluteFile()
+                    + File.separator + "_" + conversationId + ".png";
+
+            if (listener!=null){
+                listener.success(BitmapFactory.decodeFile(imagecache));
+            }
+        }
+    }
+
+    /**
+     * 拿取本地缓存去群头像
+     */
+    public static String getBitmapFilePaht(String conversationID) {
+        File filesDir = MyApp.getAppContext().getExternalFilesDir("imagecache");
+        String bitmapPath = "";
+        if (filesDir==null || !filesDir.exists()) {
+            return null;
+        }
+        String[] fileList = filesDir.list(new MyFilter(".png"));
+        for (String path : fileList) {
+            if (path.equals("_" + conversationID + ".png")) {
+                bitmapPath = filesDir.getPath() + "/" + path;
+                break;
+            }
+        }
+        return bitmapPath;
+    }
+
+
+    /**
      * 现拼头像
      */
-    public static void createGroupImage(final String ConversationId, final GroupInfoResponse response) {
+    private static void createGroupImage(final String ConversationId, final GroupInfoResponse response) {
         AVImClientManager.getInstance().findConversationById(ConversationId, new AVImClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
@@ -428,6 +511,10 @@ public class ChatGroupHelper {
         void getInfoFailed(Exception e);
     }
 
+    public interface GroupAvatarStitchingListener{
+        void success(Bitmap bitmap);
+        void failed(Exception e);
+    }
 
     /**
      * 群管理类

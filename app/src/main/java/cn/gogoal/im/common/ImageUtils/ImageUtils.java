@@ -26,14 +26,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.common.FileUtil;
 
 /**
@@ -536,30 +534,6 @@ public class ImageUtils {
         return compressImage(bitmap);//压缩好比例大小后再进行质量压缩
     }
 
-    /**
-     * bitmap保存成本地图片
-     */
-    public static void cacheBitmapFile(Context context, Bitmap bitmap, String localFlag, String name) {
-//        saveImageToSD
-        saveImageToSD(context, context.getExternalFilesDir(localFlag).getAbsolutePath() + File.separator + name,
-                bitmap, 100);
-    }
-
-    /**
-     * 拿取本地缓存去群头像
-     */
-    public static String getBitmapFilePaht(String conversationID, String localFlag) {
-        File filesDir = MyApp.getAppContext().getExternalFilesDir(localFlag);
-        String bitmapPath = "";
-        String[] fileList = filesDir.list(new MyFilter(".png"));
-        for (int i = 0; i < fileList.length; i++) {
-            if (fileList[i].equals("_" + conversationID + ".png")) {
-                bitmapPath = filesDir.getPath() + "/" + fileList[i];
-            }
-            break;
-        }
-        return bitmapPath;
-    }
 
     //获取图片大小
     public static long getBitmapsize(Bitmap bitmap) {
@@ -614,18 +588,6 @@ public class ImageUtils {
         Bitmap bitmap = Bitmap.createBitmap(bgimage, 0, 0, (int) width,
                 (int) height, matrix, true);
         return bitmap;
-    }
-
-    static class MyFilter implements FilenameFilter {
-        private String type;
-
-        public MyFilter(String type) {
-            this.type = type;
-        }
-
-        public boolean accept(File dir, String name) {
-            return name.endsWith(type);
-        }
     }
 
 }
