@@ -53,8 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_name"
             android:adjustViewBounds="true"
-            android:background="@android:color/white"
-            android:scaleType="fitCenter" />
+            android:scaleType="centerCrop"
+            android:src="@mipmap/timg" />
 
     </RelativeLayout>
 

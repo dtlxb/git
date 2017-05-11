@@ -153,7 +153,7 @@ public class MyApp extends LitePalApplication {
         return app.getApplicationContext();
     }
 
-    private class LifeCircle implements ActivityLifecycleCallbacks{
+    private class LifeCircle implements ActivityLifecycleCallbacks {
 
         @Override
         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {

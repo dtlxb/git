@@ -128,7 +128,7 @@ public class UserUtils {
         ImageUtils.getUrlBitmap(MyApp.getAppContext(), UserUtils.getUserAvatar(), new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                ImageUtils.saveImageToSD(MyApp.getAppContext(),getUserAvatarCacheAbsolutePath(),
+                ImageUtils.saveImageToSD(MyApp.getAppContext(), getUserAvatarCacheAbsolutePath(),
                         resource, 100);
             }
         });
@@ -534,7 +534,9 @@ public class UserUtils {
         Map<String, String> params = new HashMap<>();
         params.put("token", getToken());
         params.put("conv_id", conversationId);
-        params.put("id_list", JSONObject.toJSONString(groupMembers));
+        if (groupMembers != null && groupMembers.size() > 0) {
+            params.put("id_list", JSONObject.toJSONString(groupMembers));
+        }
         KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {

@@ -105,6 +105,7 @@
 
     <color name="screen_bg_checked">#feebeb</color>
     <color name="screen_bg_unchecked">#ececec</color>
+    <color name="im_chat_bg">#f2f2f2</color>
 
     <color name="dialog_invite_sure">#2782d7</color>
 

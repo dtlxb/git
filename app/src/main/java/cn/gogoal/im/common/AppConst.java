@@ -9,6 +9,7 @@ public class AppConst {
 
     public static final int MAX_PAGE = 50;//刷新页数上限
     //LeanCloud参数(沙盒)
+    
 //    public static final String LEANCLOUD_APP_ID = "R7vH8N41V1rqJIqrlTQ1mMnR-gzGzoHsz";
 //    public static final String LEANCLOUD_APP_KEY = "4iXr2Ylh1VwVyYjaxs3ufFmo";
 
@@ -152,8 +153,8 @@ public class AppConst {
     public static final String IM_MESSAGE_TYPE_TEXT = "-1";             //消息类型 文字
     public static final String IM_MESSAGE_TYPE_PHOTO = "-2";            //消息类型 图片
     public static final String IM_MESSAGE_TYPE_AUDIO = "-3";            //消息类型 语音
-    public static final String IM_MESSAGE_TYPE_FRIEND_ADD = "1";        //消息类型 加好友
-    public static final String IM_MESSAGE_TYPE_FRIEND_DEL = "2";        //消息类型 加好友
+    public static final String IM_MESSAGE_TYPE_FRIEND_DEL = "1";        //消息类型 加好友
+    public static final String IM_MESSAGE_TYPE_FRIEND_ADD = "2";        //消息类型 加好友
     public static final String IM_MESSAGE_TYPE_CONTACT_ADD = "3";       //消息类型 好友加入通讯录
     public static final String IM_MESSAGE_TYPE_CONTACT_DEL = "4";       //消息类型 好友从通讯录移除
     public static final String IM_MESSAGE_TYPE_SQUARE_ADD = "5";        //消息类型 好友入群

@@ -349,11 +349,6 @@ public class MessageFragment extends BaseFragment {
                     if (lcattrsObject != null && lcattrsObject.get("username") != null) {
                         squareMessageFrom = UserUtils.getUserName().equals(lcattrsObject.get("username")) ? "" : lcattrsObject.getString("username");
                     }
-//                    if (ChatGroupHelper.getBitmapFilePaht(messageBean.getConversationID()).equals("")) {
-//                        ChatGroupHelper.createGroupImage(messageBean.getConversationID(), gruopMemberMap.get(messageBean.getConversationID()), "set_avatar");
-//                    } else {
-//                        ImageDisplay.loadImage(getActivity(), ImageUtils.getBitmapFilePaht(messageBean.getConversationID()), avatarIv);
-//                    }
                     ChatGroupHelper.setGroupAvatar(messageBean.getConversationID(), new ChatGroupHelper.GroupAvatarStitchingListener() {
                         @Override
                         public void success(final Bitmap bitmap) {
@@ -395,11 +390,11 @@ public class MessageFragment extends BaseFragment {
                         //语音
                         message = "[语音]";
                         break;
-                    case AppConst.IM_MESSAGE_TYPE_FRIEND_ADD:
+                    case AppConst.IM_MESSAGE_TYPE_FRIEND_DEL:
 
                         break;
 
-                    case AppConst.IM_MESSAGE_TYPE_FRIEND_DEL:
+                    case AppConst.IM_MESSAGE_TYPE_FRIEND_ADD:
                         //加好友
                         nickName = "新的好友";
                         message = messageBean.getNickname() + "请求添加你为好友";
@@ -534,20 +529,21 @@ public class MessageFragment extends BaseFragment {
         String _lctype = contentObject.getString("_lctype");
         KLog.e(contentObject);
         switch (_lctype) {
-            case AppConst.IM_MESSAGE_TYPE_TEXT
-                    :
+            case AppConst.IM_MESSAGE_TYPE_TEXT:
                 //文字
             case AppConst.IM_MESSAGE_TYPE_PHOTO:
                 //图片
             case AppConst.IM_MESSAGE_TYPE_AUDIO:
                 //语音
-            case AppConst.IM_MESSAGE_TYPE_FRIEND_ADD:
-            case AppConst.IM_MESSAGE_TYPE_FRIEND_DEL:
-                //加好友
             case AppConst.IM_MESSAGE_TYPE_CONTACT_ADD:
             case AppConst.IM_MESSAGE_TYPE_SHARE:
                 //好友加入通讯录
                 nickName = lcattrsObject.getString("username");
+                break;
+            case AppConst.IM_MESSAGE_TYPE_FRIEND_DEL:
+            case AppConst.IM_MESSAGE_TYPE_FRIEND_ADD:
+                //加好友
+                nickName = lcattrsObject.getString("nickname");
                 break;
             case AppConst.IM_MESSAGE_TYPE_CONTACT_DEL:
                 //好友从通讯录移除

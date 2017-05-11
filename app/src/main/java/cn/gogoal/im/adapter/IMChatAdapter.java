@@ -28,6 +28,7 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -201,7 +202,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((LeftImageViewHolder) holder).image_user_send.getLayoutParams();
             setImageSize(params, imageMessage);
             ((LeftImageViewHolder) holder).image_user_send.setLayoutParams(params);
-            ImageDisplay.loadImage(mContext, UFileImageHelper.load(imageMessage.getAVFile().getUrl()).compress(33).get(), ((LeftImageViewHolder) holder).image_user_send);
+            ImageDisplay.loadImage(mContext, UFileImageHelper.load(imageMessage.getAVFile().getUrl()).compress(20).get(), ((LeftImageViewHolder) holder).image_user_send);
             showMessageTime(position, ((LeftImageViewHolder) holder).message_time);
 
             ((LeftImageViewHolder) holder).image_user_send.setOnClickListener(new View.OnClickListener() {
@@ -218,9 +219,8 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((RightImageViewHolder) holder).image_user_send.getLayoutParams();
             setImageSize(params, imageMessage);
             ((RightImageViewHolder) holder).image_user_send.setLayoutParams(params);
-            ImageDisplay.loadImage(mContext, imageMessage.getAVFile().getUrl(), ((RightImageViewHolder) holder).image_user_send);
+            ImageDisplay.loadImage(mContext, isFromUfile(imageMessage.getAVFile().getUrl()), ((RightImageViewHolder) holder).image_user_send);
             showMessageTime(position, ((RightImageViewHolder) holder).message_time);
-
             ((RightImageViewHolder) holder).image_user_send.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -408,6 +408,15 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         } else {
 
         }
+    }
+
+    private String isFromUfile(String url) {
+        if (!TextUtils.isEmpty(url)) {
+            if (url.startsWith("http://hackfile")) {
+                return UFileImageHelper.load(url).compress(20).get();
+            }
+        }
+        return url;
     }
 
     private void getLayoutSize(RelativeLayout relativeLayout) {
