@@ -28,6 +28,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.ColorInt;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.telephony.TelephonyManager;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -1161,5 +1163,14 @@ public class AppDevice {
         mediaPlayer = null;
 
         return duration;
+    }
+
+    public static void operationRevyvler(RecyclerView recyclerView) {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(recyclerView.getContext());
+        layoutManager.setSmoothScrollbarEnabled(true);
+        layoutManager.setAutoMeasureEnabled(true);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setNestedScrollingEnabled(false);
     }
 }

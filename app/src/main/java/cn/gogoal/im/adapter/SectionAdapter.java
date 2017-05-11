@@ -1,8 +1,8 @@
 package cn.gogoal.im.adapter;
 
-import android.support.v4.app.FragmentActivity;
+import android.content.Context;
 import android.support.v4.content.ContextCompat;
-import android.text.TextUtils;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,15 +11,13 @@ import android.widget.TextView;
 import java.util.List;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.MainActivity;
+import cn.gogoal.im.activity.ToolsSettingActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseSectionQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.bean.SectionToolsData;
 import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.NormalIntentUtils;
-import cn.gogoal.im.ui.dialog.ComingSoonDialog;
 
 
 /**
@@ -29,10 +27,10 @@ import cn.gogoal.im.ui.dialog.ComingSoonDialog;
  * description :投研适配器
  */
 public class SectionAdapter extends BaseSectionQuickAdapter<SectionToolsData, BaseViewHolder> {
-    private FragmentActivity context;
+    private Context context;
     private int innerItem;
 
-    public SectionAdapter(FragmentActivity context, List<SectionToolsData> data) {
+    public SectionAdapter(Context context, List<SectionToolsData> data) {
         super(R.layout.item_touyan_item, R.layout.item_touyan_title, data);
         this.context = context;
 
@@ -48,38 +46,37 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionToolsData, Ba
 
 
     @Override
-    protected void convert(BaseViewHolder holder, SectionToolsData data, final int position) {
+    protected void convert(BaseViewHolder holder, final SectionToolsData data, final int position) {
         final ToolData.Tool item = data.t;
 
         //initView
         View itemView = holder.getView(R.id.item_touyan_item);
         ImageView itemIcon = holder.getView(R.id.img_touyan_item_icon);
-        ImageView itemHot = holder.getView(R.id.img_touyan_item_hot);
+        AppCompatImageView itemHot = holder.getView(R.id.img_touyan_operation);
         TextView itemTvDesc = holder.getView(R.id.tv_touyan_item_text);
 
         //init width and height
-        setViewHeight$Width(itemView, innerItem);//3、4格情况适配
         setViewHeight$Width(itemIcon, innerItem / 3);
         setViewHeight$Width(itemHot, innerItem / 4);
+        setViewHeight$Width(itemView,innerItem);
 
         //模拟的空item处理
         if (data.isSimulatedArg()) {
             itemView.setClickable(false);
             itemView.setEnabled(false);
-            itemHot.setVisibility(View.GONE);
-            itemIcon.setImageDrawable(ContextCompat.getDrawable(context, android.R.color.transparent));
-            holder.setText(R.id.tv_touyan_item_text, "");
+            itemHot.setVisibility(View.INVISIBLE);
+            itemTvDesc.setVisibility(View.INVISIBLE);
+            itemIcon.setVisibility(View.INVISIBLE);
+
         } else {
             itemView.setClickable(true);
             itemView.setEnabled(true);
-            ImageDisplay.loadImage(context, item.getIconUrl(), itemIcon);
-            itemTvDesc.setText(item.getDesc());
+            itemHot.setVisibility(View.VISIBLE);
+            itemTvDesc.setVisibility(View.VISIBLE);
+            itemIcon.setVisibility(View.VISIBLE);
 
-            if (TextUtils.isEmpty(item.getIconUrl()) || item.getShowHotFlag() == 0) {//不显示
-                itemHot.setVisibility(View.GONE);
-            } else {
-                itemHot.setVisibility(View.VISIBLE);
-            }
+            ImageDisplay.loadImage(context, item.getIconUrl(), itemIcon);
+            itemTvDesc.setText(item.getDesc()+"("+position+")");
 
             itemTvDesc.setTextColor(item.getIsClick() == 0 ?
                     ContextCompat.getColor(context, R.color.textColor_333333) :
@@ -90,25 +87,9 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionToolsData, Ba
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO 跳原生类型
-                    if (item.getDesc().equalsIgnoreCase("行情")) {
-                        ((MainActivity)context).changeItem(1);
-                        ((MainActivity)context).mainStockFragment.changeItem(1);
-                    } else {
-                        //TODO 跳网页类型
-                        if (item.getIsClick() == 0) {
-
-                            NormalIntentUtils.go2WebActivity(
-                                    v.getContext(),
-                                    item.getUrl(),
-                                    item.getDesc(),true);
-                        } else {
-                            new ComingSoonDialog().show(context.getSupportFragmentManager());
-                        }
-                    }
+                    ((ToolsSettingActivity) context).addSelected(data.t);
                 }
             });
-
         }
     }
 

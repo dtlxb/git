@@ -224,7 +224,7 @@ public class TypeLoginActivity extends BaseActivity {
                         } catch (Exception ignored) {
                             loginButton.setClickable(true);
                             loginDialog.dismiss(true);
-                            WaitDialog errorDialog = WaitDialog.getInstance(getString(R.string.str_login_code_error),
+                            WaitDialog errorDialog = WaitDialog.getInstance(ignored.getMessage(),
                                     R.mipmap.login_error, false);
                             errorDialog.show(getSupportFragmentManager());
                             errorDialog.dismiss(false);
@@ -232,7 +232,7 @@ public class TypeLoginActivity extends BaseActivity {
                     } else {
                         loginButton.setClickable(true);
                         loginDialog.dismiss(true);
-                        WaitDialog errorDialog = WaitDialog.getInstance(getString(R.string.str_login_code_error),
+                        WaitDialog errorDialog = WaitDialog.getInstance(data.getString("message"),
                                 R.mipmap.login_error, false);
                         errorDialog.show(getSupportFragmentManager());
                         errorDialog.dismiss(false);
@@ -241,7 +241,8 @@ public class TypeLoginActivity extends BaseActivity {
                 } else {
                     loginButton.setClickable(true);
                     loginDialog.dismiss(true);
-                    WaitDialog errorDialog = WaitDialog.getInstance(getString(R.string.str_login_code_error),
+                    WaitDialog errorDialog = WaitDialog.getInstance(
+                           object.getString("message"),
                             R.mipmap.login_error, false);
                     errorDialog.show(getSupportFragmentManager());
                     errorDialog.dismiss(false);

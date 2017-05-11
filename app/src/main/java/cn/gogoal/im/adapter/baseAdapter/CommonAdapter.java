@@ -1846,6 +1846,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
      * 删除指定数据条目
      */
     public void removeItem(T model) {
+        if (mData.contains(model))
         removeItem(mData.indexOf(model));
     }
 
@@ -1855,6 +1856,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
     public void removeItem(int position) {
         mData.remove(position);
         notifyItemRemoveWrapper(position);
+
     }
 
     /**
