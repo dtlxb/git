@@ -12,7 +12,7 @@ public class SocialLiveData {
     private String live_type;
     private String appoint_account;
     private String jump_url;
-    private String auth;
+    private int auth;
     private String phone;
     private String live_time_start;
     private String live_large_img;
@@ -79,11 +79,11 @@ public class SocialLiveData {
         this.jump_url = jump_url;
     }
 
-    public String getAuth() {
+    public int getAuth() {
         return auth;
     }
 
-    public void setAuth(String auth) {
+    public void setAuth(int auth) {
         this.auth = auth;
     }
 

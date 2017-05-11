@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <solid android:color="@color/social_live_invite" />
+
+    <corners
+        android:radius="50dp" />
+
+    <padding
+        android:bottom="14dp"
+        android:left="41dp"
+        android:right="41dp"
+        android:top="14dp" />
+
+</shape>

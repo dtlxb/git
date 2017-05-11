@@ -56,100 +56,77 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="12dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:orientation="horizontal"
-            android:paddingRight="10dp">
+            android:layout_marginTop="7dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="2"
-                android:background="@drawable/shape_player_info"
-                android:orientation="vertical">
+                android:layout_marginRight="3dp"
+                android:background="@drawable/shape_player_anchor_info"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/textTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/text_empty"
-                    android:textColor="@android:color/white"
-                    android:textSize="14dp" />
+                <cn.gogoal.im.ui.view.CircleImageView
+                    android:id="@+id/imgPalyer"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <cn.gogoal.im.ui.view.CircleImageView
-                        android:id="@+id/imgPalyer"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp" />
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="3dp"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/textCompany"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
                         android:singleLine="true"
                         android:text="@string/text_empty"
                         android:textColor="@android:color/white"
                         android:textSize="12dp" />
 
                     <TextView
-                        android:id="@+id/textMarInter"
+                        android:id="@+id/textOnlineNumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:background="@drawable/shape_player_market_interpre"
                         android:singleLine="true"
                         android:text="@string/text_empty"
                         android:textColor="@android:color/white"
-                        android:textSize="11dp" />
+                        android:textSize="10dp" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
-            <LinearLayout
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyAudience"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:paddingRight="10dp"
-                android:paddingTop="5dp">
-
-                <TextView
-                    android:id="@+id/liveTogether"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/shape_player_live_together"
-                    android:text="@string/live_together"
-                    android:textColor="@android:color/white"
-                    android:textSize="14dp"
-                    android:visibility="visible" />
-
-            </LinearLayout>
+                android:layout_weight="1" />
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textOnlineNumber"
+            android:id="@+id/liveTogether"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/shape_player_online_number"
-            android:text="@string/text_empty"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_player_live_together"
+            android:text="@string/live_together"
             android:textColor="@android:color/white"
-            android:textSize="11dp" />
+            android:textSize="14dp"
+            android:visibility="visible" />
 
     </LinearLayout>
 

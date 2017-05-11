@@ -158,7 +158,9 @@ public class CreateLiveActivity extends BaseActivity {
         Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
         param.put("live_title", title);
-        param.put("live_large_img", liveLargeImg);
+        if (liveLargeImg != null) {
+            param.put("live_large_img", liveLargeImg);
+        }
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override

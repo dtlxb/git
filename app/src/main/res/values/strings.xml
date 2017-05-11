@@ -198,6 +198,9 @@
     <string name="str_share">分享</string>
     <string name="str_friends_count">%d位联系人</string>
     <string name="str_setting">设置</string>
+    <string name="add_friend">加好友</string>
+    <string name="social_live_invite">邀约</string>
+    <string name="invite_phone">每个邀请码只能使用1次,如果没有邀请码请联系400&#8211;1818&#8211;595</string>
 
 
     <!--<string-array name="emoji_array">
