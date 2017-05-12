@@ -1042,7 +1042,6 @@ public class WatchLiveActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toast(getContext(), R.string.net_erro_hint);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_ONLINE_COUNT, ggHttpInterface).startGet();
