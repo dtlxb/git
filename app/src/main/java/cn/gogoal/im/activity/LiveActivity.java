@@ -1141,7 +1141,7 @@ public class LiveActivity extends BaseActivity {
 
                     getOnlineCount(room_id);
 
-                    mBottomFragment = WatchBottomFragment.newInstance(live_id, String.valueOf(anchor));
+                    mBottomFragment = WatchBottomFragment.newInstance(live_id, String.valueOf(anchor), data.getString("introduction_img"), data.getString("introduction"));
                     mBottomFragment.setRecordUIClickListener(mUIClickListener);
                     mBottomFragment.setActivityRootView(mRootContainer);
                     mBottomFragment.setType(0);

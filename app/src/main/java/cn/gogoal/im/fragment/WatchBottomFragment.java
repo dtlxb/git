@@ -61,16 +61,20 @@ public class WatchBottomFragment extends BaseFragment {
 
     private String live_id;
     private JSONObject anchor;
+    private String introduction_img;
+    private String introduction;
     private int type;
 
     private PopupWindowHelper anchorHelper;
     private PopupWindowHelper anchorHelperLand;
 
-    public static final WatchBottomFragment newInstance(String live_id, String anchor) {
+    public static final WatchBottomFragment newInstance(String live_id, String anchor, String introduction_img, String introduction) {
         WatchBottomFragment wbf = new WatchBottomFragment();
         Bundle bundle = new Bundle();
         bundle.putString("live_id", live_id);
         bundle.putString("anchor", anchor);
+        bundle.putString("introduction_img", introduction_img);
+        bundle.putString("introduction", introduction);
         wbf.setArguments(bundle);
         return wbf;
     }
@@ -85,6 +89,8 @@ public class WatchBottomFragment extends BaseFragment {
 
         live_id = getArguments().getString("live_id");
         anchor = JSONObject.parseObject(getArguments().getString("anchor"));
+        introduction_img = getArguments().getString("introduction_img");
+        introduction = getArguments().getString("introduction");
 
         if (anchor == null) {
             linearPlayerProfiles.setVisibility(View.GONE);
@@ -318,6 +324,8 @@ public class WatchBottomFragment extends BaseFragment {
         TextView anchor_name = (TextView) anchorIntroduction.findViewById(R.id.anchor_name);
         TextView anchor_position = (TextView) anchorIntroduction.findViewById(R.id.anchor_position);
         final TextView anchor_achieve = (TextView) anchorIntroduction.findViewById(R.id.anchor_achieve);
+        ImageView live_avatar = (ImageView) anchorIntroduction.findViewById(R.id.live_avatar);
+        TextView live_achieve = (TextView) anchorIntroduction.findViewById(R.id.live_achieve);
 
         ImageDisplay.loadImage(getContext(), anchor.getString("face_url"), anchor_avatar);
         anchor_name.setText(anchor.getString("anchor_name"));
@@ -337,6 +345,9 @@ public class WatchBottomFragment extends BaseFragment {
                 }
             });
         }
+
+        ImageDisplay.loadImage(getContext(), introduction_img, live_avatar);
+        live_achieve.setText(introduction);
     }
 
     private void showAnchorProfilesLand() {
@@ -347,6 +358,8 @@ public class WatchBottomFragment extends BaseFragment {
         TextView anchor_name = (TextView) anchorIntroduction.findViewById(R.id.anchor_name);
         TextView anchor_position = (TextView) anchorIntroduction.findViewById(R.id.anchor_position);
         final TextView anchor_achieve = (TextView) anchorIntroduction.findViewById(R.id.anchor_achieve);
+        ImageView live_avatar = (ImageView) anchorIntroduction.findViewById(R.id.live_avatar);
+        TextView live_achieve = (TextView) anchorIntroduction.findViewById(R.id.live_achieve);
 
         ImageDisplay.loadImage(getContext(), anchor.getString("face_url"), anchor_avatar);
         anchor_name.setText(anchor.getString("anchor_name"));
@@ -366,6 +379,9 @@ public class WatchBottomFragment extends BaseFragment {
                 }
             });
         }
+
+        ImageDisplay.loadImage(getContext(), introduction_img, live_avatar);
+        live_achieve.setText(introduction);
     }
 
     public void setRecordUIClickListener(RecorderUIClickListener listener) {

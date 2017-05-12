@@ -149,6 +149,8 @@ public class PlayerActivity extends BaseActivity {
 
     //弹窗
     private JSONObject anchor;
+    private String introduction_img;
+    private String introduction;
     private List<RelaterVideoData> videoDatas;
     private PopupWindowHelper anchorHelper;
     private PopupWindowHelper anchorHelperLand;
@@ -230,6 +232,8 @@ public class PlayerActivity extends BaseActivity {
                     textOnlineNumber.setText("0人在线");
                     //主播介绍
                     anchor = data.getJSONObject("anchor");
+                    introduction_img = data.getString("introduction_img");
+                    introduction = data.getString("introduction");
                     if (anchor == null) {
                         linearPlayerProfiles.setVisibility(View.GONE);
                     } else {
@@ -995,11 +999,12 @@ public class PlayerActivity extends BaseActivity {
         TextView anchor_name = (TextView) anchorIntroduction.findViewById(R.id.anchor_name);
         TextView anchor_position = (TextView) anchorIntroduction.findViewById(R.id.anchor_position);
         final TextView anchor_achieve = (TextView) anchorIntroduction.findViewById(R.id.anchor_achieve);
+        ImageView live_avatar = (ImageView) anchorIntroduction.findViewById(R.id.live_avatar);
+        TextView live_achieve = (TextView) anchorIntroduction.findViewById(R.id.live_achieve);
 
         ImageDisplay.loadImage(getContext(), anchor.getString("face_url"), anchor_avatar);
         anchor_name.setText(anchor.getString("anchor_name"));
         anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
-
 
         if (anchor.getString("anchor_introduction") != null) {
             anchor_achieve.setText(anchor.getString("anchor_introduction"));
@@ -1015,6 +1020,9 @@ public class PlayerActivity extends BaseActivity {
                 }
             });
         }
+
+        ImageDisplay.loadImage(getContext(), introduction_img, live_avatar);
+        live_achieve.setText(introduction);
     }
 
     private void showAnchorProfilesLand() {
@@ -1025,6 +1033,8 @@ public class PlayerActivity extends BaseActivity {
         TextView anchor_name = (TextView) anchorIntroduction.findViewById(R.id.anchor_name);
         TextView anchor_position = (TextView) anchorIntroduction.findViewById(R.id.anchor_position);
         final TextView anchor_achieve = (TextView) anchorIntroduction.findViewById(R.id.anchor_achieve);
+        ImageView live_avatar = (ImageView) anchorIntroduction.findViewById(R.id.live_avatar);
+        TextView live_achieve = (TextView) anchorIntroduction.findViewById(R.id.live_achieve);
 
         ImageDisplay.loadImage(getContext(), anchor.getString("face_url"), anchor_avatar);
         anchor_name.setText(anchor.getString("anchor_name"));
@@ -1044,6 +1054,9 @@ public class PlayerActivity extends BaseActivity {
                 }
             });
         }
+
+        ImageDisplay.loadImage(getContext(), introduction_img, live_avatar);
+        live_achieve.setText(introduction);
     }
 
     private void showRelaterVideo() {

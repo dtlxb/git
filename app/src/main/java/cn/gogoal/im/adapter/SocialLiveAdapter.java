@@ -294,7 +294,7 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
     /**
      * 邀约
      */
-    private void setInviteAuth(String invite_id) {
+    private void setInviteAuth(final String invite_id) {
 
         String identifies = SPTools.getString(invite_id, null);
 
@@ -314,11 +314,21 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
+                    if (data.getIntValue("code") == 101) {
+                        Intent intent = new Intent(mContext, WatchLiveActivity.class);
+                        intent.putExtra("live_id", invite_id);
+                        mContext.startActivity(intent);
+                    } else {
+                        InviteAuthDialog.newInstance("video", invite_id).show(mContext.getSupportFragmentManager());
+                    }
+                } else {
+                    InviteAuthDialog.newInstance("video", invite_id).show(mContext.getSupportFragmentManager());
                 }
             }
 
             @Override
             public void onFailure(String msg) {
+                InviteAuthDialog.newInstance("video", invite_id).show(mContext.getSupportFragmentManager());
             }
         };
         new GGOKHTTP(param, GGOKHTTP.VALIDATE_IDENTIFIES, ggHttpInterface).startGet();
