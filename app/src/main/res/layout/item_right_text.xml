@@ -27,9 +27,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/message_time"
-        android:src="@mipmap/image_placeholder" />
-
+        android:layout_below="@+id/message_time" />
 
     <RelativeLayout
         android:id="@+id/user_layout"
@@ -38,14 +36,14 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/message_time"
         android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp">
+        android:layout_marginRight="40dp">
 
         <TextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="-2dp"
-            android:text="what the fag say"
             android:textColor="@color/textColor_333333"
             android:textSize="12sp" />
 
@@ -54,6 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_name"
+            android:layout_marginRight="5dp"
             android:background="@drawable/message_me_said"
             android:gravity="center_vertical"
             android:minHeight="40dp"

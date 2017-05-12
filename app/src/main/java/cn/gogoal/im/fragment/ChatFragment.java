@@ -114,32 +114,18 @@ public class ChatFragment extends BaseFragment {
 
     @BindView(R.id.chat_root_keyboard_layout)
     KeyboardLaunchLinearLayout keyboardLayout;
-
-    private MyListener listener;
     private int chatType;
-
-    //消息类型
-    private static int TEXT_MESSAGE = -1;
-    private static int IMAGE_MESSAGE = -2;
-    private static int AUDIO_MESSAGE = -3;
-    private static int STOCK_MESSAGE = 11;
 
     private AVIMConversation imConversation;
     private List<AVIMMessage> messageList = new ArrayList<>();
     private IMChatAdapter imChatAdapter;
     private List<FoundData.ItemPojos> itemPojosList;
     private JSONArray jsonArray;
-    private ContactBean<String> contactBean;
+    private ContactBean contactBean;
     private EmojiFragment emojiFragment;
     private FunctionFragment functionFragment;
     private FragmentTransaction transaction;
     private FragmentManager childManager;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        listener = (MyListener) context;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -263,7 +249,7 @@ public class ChatFragment extends BaseFragment {
 
                 etInput.setText("");
                 //发送文字消息
-                sendAVIMMessage(TEXT_MESSAGE, params, mTextMessage);
+                sendAVIMMessage(params, mTextMessage);
 
             }
         });
@@ -274,25 +260,7 @@ public class ChatFragment extends BaseFragment {
         {
             @Override
             public void onSwitch(View view, int state) {
-                switch (state) {
-                    case 0:
-                        voiceView.setVisibility(View.GONE);
-                        etInput.setVisibility(View.VISIBLE);
-                        etInput.requestFocus();
-                        //更改键盘弹起效果(下次顶起来)
-                        AppDevice.showSoftChangeMethod(etInput);
-                        find_more_layout.setVisibility(View.GONE);
-                        imgVoice.setImageResource(R.mipmap.chat_voice);
-                        break;
-                    case 1:
-                        //更改键盘弹起效果(下次不顶)
-                        AppDevice.hideSoftChangeMethod(etInput);
-                        voiceView.setVisibility(View.VISIBLE);
-                        etInput.setVisibility(View.GONE);
-                        imgVoice.setImageResource(R.mipmap.chat_key_bord);
-                        find_more_layout.setVisibility(View.GONE);
-                        break;
-                }
+                initInputStatus(state);
             }
         });
 
@@ -353,6 +321,28 @@ public class ChatFragment extends BaseFragment {
 
     }
 
+    private void initInputStatus(int state) {
+        switch (state) {
+            case 0:
+                voiceView.setVisibility(View.GONE);
+                etInput.setVisibility(View.VISIBLE);
+                etInput.requestFocus();
+                //更改键盘弹起效果(下次顶起来)
+                AppDevice.showSoftChangeMethod(etInput);
+                find_more_layout.setVisibility(View.GONE);
+                imgVoice.setImageResource(R.mipmap.chat_voice);
+                break;
+            case 1:
+                //更改键盘弹起效果(下次不顶)
+                AppDevice.hideSoftChangeMethod(etInput);
+                voiceView.setVisibility(View.VISIBLE);
+                etInput.setVisibility(View.GONE);
+                imgVoice.setImageResource(R.mipmap.chat_key_bord);
+                find_more_layout.setVisibility(View.GONE);
+                break;
+        }
+    }
+
     private void initFragment() {
         functionFragment = new FunctionFragment();
         emojiFragment = new EmojiFragment();
@@ -362,6 +352,10 @@ public class ChatFragment extends BaseFragment {
     @OnClick({R.id.img_function, R.id.img_emoji})
     void chatClick(View view) {
         transaction = childManager.beginTransaction();
+        //设置语音输入不见
+        voiceView.setVisibility(View.GONE);
+        etInput.setVisibility(View.VISIBLE);
+        imgVoice.setImageResource(R.mipmap.chat_voice);
         switch (view.getId()) {
             case R.id.img_function:
                 find_more_layout.setVisibility(View.VISIBLE);
@@ -401,33 +395,21 @@ public class ChatFragment extends BaseFragment {
         }
     }
 
-    public void sendAVIMMessage(final int messageType, final Map<String, String> params, final AVIMMessage message) {
+    public void sendAVIMMessage(final Map<String, String> params, final AVIMMessage message) {
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
+                KLog.e(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 KLog.e(result.get("code"));
                 if ((int) result.get("code") == 0) {
-                    switch (messageType) {
-                        case -1:
-                            break;
-                        case -2:
-                            break;
-                        case -3:
-                            break;
-                        case 11:
-                            break;
-                        default:
-                            break;
-                    }
                     //头像暂时未保存
                     IMMessageBean imMessageBean = null;
                     if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                         if (null != contactBean) {
-                            imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
-                                    "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), message);
+                            imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(), "0",
+                                    null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), message);
                         }
                     } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                         imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
@@ -486,7 +468,7 @@ public class ChatFragment extends BaseFragment {
 
         etInput.setText("");
         //发送股票消息
-        sendAVIMMessage(STOCK_MESSAGE, params, mStockMessage);
+        sendAVIMMessage(params, mStockMessage);
     }
 
     private void sendImageToZyyx(final File file) {
@@ -550,7 +532,7 @@ public class ChatFragment extends BaseFragment {
                 KLog.e(params);
 
                 //发送图片消息
-                sendAVIMMessage(IMAGE_MESSAGE, params, mImageMessage);
+                sendAVIMMessage(params, mImageMessage);
             }
 
             @Override
@@ -624,7 +606,7 @@ public class ChatFragment extends BaseFragment {
                         KLog.e(params);
 
                         //发送语音消息
-                        sendAVIMMessage(AUDIO_MESSAGE, params, mAudioMessage);
+                        sendAVIMMessage(params, mAudioMessage);
                     }
 
                     @Override
@@ -641,7 +623,7 @@ public class ChatFragment extends BaseFragment {
         });
     }
 
-    private void getHistoryMessage(final boolean needUpdate) {
+    private void getHistoryMessage(final boolean needUpdate, final ContactBean contact) {
         if (null != imConversation) {
             imConversation.queryMessagesFromCache(15, new AVIMMessagesQueryCallback() {
 
@@ -653,7 +635,7 @@ public class ChatFragment extends BaseFragment {
                         jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
                         if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                             //拿到对方信息
-                            getSpeakToInfo(imConversation);
+                            contactBean = contact;
                         } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                             //加群消息特殊处理
                             for (int i = 0; i < messageList.size(); i++) {
@@ -686,6 +668,13 @@ public class ChatFragment extends BaseFragment {
                                 }
                             } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                                 //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息(群对象和群头像暂时为空)
+                                if (lastMessage instanceof AVIMTextMessage) {
+                                    String strMessage = ((AVIMTextMessage) lastMessage).getText();
+                                    if (StringUtils.StringFilter(strMessage, "@*[\\S]*[ \r\n]")) {
+                                        ((AVIMTextMessage) lastMessage).setText(strMessage.replace(" ", ""));
+                                    }
+                                    KLog.e(((AVIMTextMessage) lastMessage).getText());
+                                }
                                 imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0", imConversation.getName(),
                                         "", "", lastMessage);
                             }
@@ -703,48 +692,6 @@ public class ChatFragment extends BaseFragment {
         }
     }
 
-    private void getSpeakToInfo(AVIMConversation conversation) {
-        String responseInfo = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", "");
-        List<ContactBean<String>> contactBeanList = new ArrayList<>();
-
-        //拿到对方
-        String speakTo = "";
-        List<String> members = new ArrayList<>();
-        members.addAll(conversation.getMembers());
-        if (members.size() > 0) {
-            if (members.size() == 2) {
-                if (members.contains(UserUtils.getMyAccountId())) {
-                    members.remove(UserUtils.getMyAccountId());
-                    speakTo = members.get(0);
-                }
-            } else {
-            }
-        } else {
-        }
-        if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-            BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
-                    responseInfo,
-                    new TypeReference<BaseBeanList<ContactBean<String>>>() {
-                    });
-            List<ContactBean<String>> list = beanList.getData();
-
-            for (ContactBean<String> bean : list) {
-                bean.setContactType(ContactBean.ContactType.PERSION_ITEM);
-            }
-
-            contactBeanList.addAll(list);
-        }
-        for (int i = 0; i < contactBeanList.size(); i++) {
-            if ((contactBeanList.get(i).getFriend_id() + "").equals(speakTo)) {
-                contactBean = contactBeanList.get(i);
-                if (null != listener) {
-                    listener.setData(contactBean);
-                }
-                KLog.e(contactBean);
-            }
-        }
-    }
-
     /**
      * 设置多功能布局宽高
      */
@@ -755,14 +702,14 @@ public class ChatFragment extends BaseFragment {
     }
 
     //群会话入口
-    public void setConversation(AVIMConversation conversation, boolean needUpdate, int actionType) {
+    public void setConversation(AVIMConversation conversation, boolean needUpdate, int actionType, ContactBean contactBean) {
         if (null != conversation) {
             imConversation = conversation;
             chatType = (int) imConversation.getAttribute("chat_type");
             //(刚创建群的时候不拉消息)
             if (actionType == AppConst.CREATE_SQUARE_ROOM_BUILD || actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
             } else {
-                getHistoryMessage(needUpdate);
+                getHistoryMessage(needUpdate, contactBean);
             }
         }
     }

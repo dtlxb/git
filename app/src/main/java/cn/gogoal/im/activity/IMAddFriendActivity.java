@@ -51,7 +51,7 @@ public class IMAddFriendActivity extends BaseActivity {
 
         titleBar.setLeftText(R.string.tv_cancle);
 
-        editYourMessage.setQuery(String.format(getString(R.string.str_add_friend_remark), UserUtils.getUserName()), false);
+        editYourMessage.setQuery(String.format(getString(R.string.str_add_friend_remark), UserUtils.getNickname()), false);
 
         //添加action
         XTitle.TextAction sendAction = new XTitle.TextAction("发送") {
@@ -82,7 +82,7 @@ public class IMAddFriendActivity extends BaseActivity {
                     WaitDialog sucessDialog = WaitDialog.getInstance("好友请求发送成功",
                             R.mipmap.login_success, false);
                     sucessDialog.show(getSupportFragmentManager());
-                    sucessDialog.dismiss(false,true);
+                    sucessDialog.dismiss(false, true);
 
 //                    UIHelper.toast(IMAddFriendActivity.this, "好友请求发送成功!");
                 } else {

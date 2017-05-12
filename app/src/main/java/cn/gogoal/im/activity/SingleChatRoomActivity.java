@@ -6,15 +6,25 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.avos.avoscloud.im.v2.AVIMConversation;
+import com.avos.avoscloud.im.v2.Conversation;
 import com.socks.library.KLog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.ChatFragment;
 import cn.gogoal.im.ui.view.XTitle;
 
@@ -22,7 +32,7 @@ import cn.gogoal.im.ui.view.XTitle;
  * Created by huangxx on 2017/2/21.
  */
 
-public class SingleChatRoomActivity extends BaseActivity implements ChatFragment.MyListener {
+public class SingleChatRoomActivity extends BaseActivity {
 
     //聊天对象
     private ChatFragment chatFragment;
@@ -77,7 +87,8 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
         AVImClientManager.getInstance().findConversationById(conversation_id, new AVImClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
-                chatFragment.setConversation(conversation, need_update, 0);
+                contactBean = getYourSpeaker(conversation);
+                chatFragment.setConversation(conversation, need_update, 0, contactBean);
             }
 
             @Override
@@ -88,8 +99,47 @@ public class SingleChatRoomActivity extends BaseActivity implements ChatFragment
         });
     }
 
-    @Override
-    public void setData(ContactBean contactBean) {
-        this.contactBean = contactBean;
+    private ContactBean getYourSpeaker(AVIMConversation conversation) {
+        //拿到对方
+        String speakTo = "";
+        List<String> members = new ArrayList<>();
+        members.addAll(conversation.getMembers());
+        if (members.size() > 0) {
+            if (members.size() == 2) {
+                if (members.contains(UserUtils.getMyAccountId())) {
+                    members.remove(UserUtils.getMyAccountId());
+                    speakTo = members.get(0);
+                }
+            } else {
+            }
+        } else {
+        }
+        JSONObject object = SPTools.getJsonObject(speakTo + "", null);
+        if (null != object) {
+            return JSON.parseObject(String.valueOf(object), ContactBean.class);
+        } else {
+            String responseInfo = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", "");
+            List<ContactBean<String>> contactBeanList = new ArrayList<>();
+            if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
+                        responseInfo,
+                        new TypeReference<BaseBeanList<ContactBean<String>>>() {
+                        });
+                List<ContactBean<String>> list = beanList.getData();
+
+                for (ContactBean<String> bean : list) {
+                    bean.setContactType(ContactBean.ContactType.PERSION_ITEM);
+                }
+
+                contactBeanList.addAll(list);
+            }
+            for (int i = 0; i < contactBeanList.size(); i++) {
+                if ((contactBeanList.get(i).getFriend_id() + "").equals(speakTo)) {
+                    return contactBeanList.get(i);
+                }
+            }
+        }
+        return null;
     }
+
 }

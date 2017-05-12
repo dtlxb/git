@@ -294,6 +294,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
             UIHelper.toast(IMSquareChatSetActivity.this, "退群并删除群成功");
             //群列表删除
             SPTools.clearItem(UserUtils.getMyAccountId() + conversationId + "_accountList_beans");
+            UserUtils.deleteGroupContactInfo(conversationId);
             MessageUtils.removeByID(conversationId);
             finish();
             AppManager.getInstance().finishActivity(SquareChatRoomActivity.class);

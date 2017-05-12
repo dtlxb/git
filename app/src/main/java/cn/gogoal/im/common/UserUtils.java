@@ -26,6 +26,7 @@ import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 
 /**
@@ -427,6 +428,24 @@ public class UserUtils {
         return list;
     }
 
+    public static List<ContactBean> getAllFriendsInTeam(String conversationId) {
+        JSONArray userInTeamArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationId + "_accountList_beans", new JSONArray());
+        KLog.e(userInTeamArray);
+        //万一没有群信息
+        if (null == userInTeamArray || userInTeamArray.size() == 0) {
+            getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, null, conversationId, new getSquareInfo() {
+                @Override
+                public void squareGetSuccess(JSONObject object) {
+                }
+
+                @Override
+                public void squareGetFail(String error) {
+                }
+            });
+        }
+        //获取我的conversationId群中的全部用户
+        return JSON.parseArray(String.valueOf(userInTeamArray), ContactBean.class);
+    }
 
     /**
      * 找出当前群中自己的好友
@@ -454,6 +473,7 @@ public class UserUtils {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getFriend_id() == mySelfBean.getFriend_id()) {
                 list.remove(i);
+                break;
             }
         }
         KLog.e(list);
@@ -470,6 +490,57 @@ public class UserUtils {
         }
         return list;
     }
+
+    /**
+     * 好友通讯录信息保存
+     */
+    public static void saveGroupContactInfo(String conversationID, JSONArray jsonArray) {
+        //先整体缓存
+        SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", jsonArray);
+        //拆解缓存
+        if (!TextUtils.isEmpty(conversationID) && jsonArray != null && jsonArray.size() > 0) {
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject oneObject = (JSONObject) jsonArray.get(i);
+                SPTools.saveJsonObject(UserUtils.getMyAccountId() + conversationID + oneObject.getInteger("friend_id"), oneObject);
+            }
+        }
+    }
+
+    /**
+     * 好友通讯录信息保存
+     */
+    public static void deleteGroupContactInfo(String conversationID) {
+        //先整体缓存清除
+        SPTools.clearItem(UserUtils.getMyAccountId() + conversationID + "_accountList_beans");
+        JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", null);
+        //拆解缓存清除
+        if (!TextUtils.isEmpty(conversationID) && jsonArray != null && jsonArray.size() > 0) {
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject oneObject = (JSONObject) jsonArray.get(i);
+                SPTools.clearItem(UserUtils.getMyAccountId() + conversationID + oneObject.getInteger("friend_id"));
+            }
+        }
+    }
+
+    /**
+     * 好友通讯录信息保存
+     */
+    public static void saveContactInfo(String accountId, String responseInfo) {
+        //先整体缓存
+        SPTools.saveString(accountId + "_contact_beans", responseInfo);
+        //拆解缓存
+        if (!TextUtils.isEmpty(responseInfo)) {
+            JSONObject jsonObject = JSON.parseObject(responseInfo);
+            if (jsonObject.get("data") != null) {
+                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    JSONObject oneObject = (JSONObject) jsonArray.get(i);
+                    SPTools.saveJsonObject(oneObject.getInteger("friend_id") + "", oneObject);
+                }
+            }
+        }
+    }
+
 
     /**
      * 好友通讯录信息更新
@@ -490,6 +561,8 @@ public class UserUtils {
                         ((JSONObject) jsonArray.get(i)).put("nickname", nickname);
                         ((JSONObject) jsonArray.get(i)).put("friend_id", friendId);
                         ((JSONObject) jsonArray.get(i)).put("conv_id", conv_id);
+                        SPTools.saveJsonObject(friendId + "", ((JSONObject) jsonArray.get(i)));
+                        break;
                     }
                 }
 
@@ -517,12 +590,12 @@ public class UserUtils {
                     JSONObject thisObject = (JSONObject) jsonArray.get(i);
                     if (thisObject.getInteger("friend_id") == friendId) {
                         jsonArray.remove(jsonArray.get(i));
+                        SPTools.clearItem(thisObject.getInteger("friend_id") + "");
+                        break;
                     }
                 }
                 jsonObject.put("data", jsonArray);
-                KLog.e(jsonObject);
                 SPTools.saveString(UserUtils.getMyAccountId() + "_contact_beans", JSON.toJSONString(jsonObject));
-                KLog.e(SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", ""));
             }
         }
     }
@@ -552,8 +625,7 @@ public class UserUtils {
                         }
                         if (null != jsonObject.get("accountList")) {
                             if (type == AppConst.CHAT_GROUP_CONTACT_BEANS) {
-                                SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationId + "_accountList_beans",
-                                        result.getJSONObject("data").getJSONArray("accountList"));
+                                UserUtils.saveGroupContactInfo(conversationId, result.getJSONObject("data").getJSONArray("accountList"));
                             } else if (type == AppConst.LIVE_GROUP_CONTACT_BEANS) {
                                 //缓存群通讯录
                                 SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationId + "_live_group_beans", result.getJSONObject("data").getJSONArray("accountList"));

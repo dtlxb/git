@@ -69,6 +69,20 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     final JSONObject content_object = JSON.parseObject(message.getContent());
                                     final String _lctype = content_object.getString("_lctype");
                                     JSONObject lcattrsGroup = content_object.getJSONObject("_lcattrs");
+                                    //补全群信息(群信息没有的时候)
+                                    JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversation.getConversationId() + "_accountList_beans", new JSONArray());
+                                    if (spAccountArray == null || spAccountArray.size() == 0) {
+                                        UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, null, conversation.getConversationId(), new UserUtils.getSquareInfo() {
+                                            @Override
+                                            public void squareGetSuccess(JSONObject object) {
+                                            }
+
+                                            @Override
+                                            public void squareGetFail(String error) {
+                                            }
+                                        });
+                                    }
+
                                     if (AppConst.IM_MESSAGE_TYPE_SQUARE_ADD.equals(_lctype) || AppConst.IM_MESSAGE_TYPE_SQUARE_DEL.equals(_lctype)) {
                                         conversation.fetchInfoInBackground(new AVIMConversationCallback() {
                                             @Override
@@ -123,8 +137,8 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     contactBean.setContactType(ContactBean.ContactType.PERSION_ITEM);
                                     contactBean.setConv_id(conv_id);
                                     String friendList = UserUtils.updataFriendList(JSONObject.toJSONString(contactBean));
-                                    SPTools.saveString(UserUtils.getMyAccountId() + "_contact_beans", friendList);
-                                    KLog.e(SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", ""));
+                                    //SPTools.saveString(UserUtils.getMyAccountId() + "_contact_beans", friendList);
+                                    UserUtils.saveContactInfo(UserUtils.getMyAccountId(), friendList);
                                     break;
 
                                 case AppConst.IM_CHAT_TYPE_CONSULTATION:

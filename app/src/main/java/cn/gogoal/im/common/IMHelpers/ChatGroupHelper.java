@@ -170,11 +170,13 @@ public class ChatGroupHelper {
                 ((JSONObject) spAccountArray.get(i)).put("avatar", avatar);
                 ((JSONObject) spAccountArray.get(i)).put("nickname", nickname);
                 ((JSONObject) spAccountArray.get(i)).put("friend_id", friendId);
+                SPTools.saveJsonObject(UserUtils.getMyAccountId() + conversationID + friendId, ((JSONObject) spAccountArray.get(i)));
                 hasThisGuy = true;
+                break;
             }
         }
         if (hasThisGuy) {
-            SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", spAccountArray);
+            UserUtils.saveGroupContactInfo(conversationID, spAccountArray);
         }
     }
 
@@ -262,34 +264,35 @@ public class ChatGroupHelper {
     }
 
     public static void setGroupAvatar(String conversationId, GroupAvatarStitchingListener listener) {
-        setGroupAvatar(conversationId,listener,false);
+        setGroupAvatar(conversationId, listener, false);
     }
 
     public static void setGroupAvatar(final String conversationId,
                                       final GroupAvatarStitchingListener listener, boolean needPlaceHolder) {
 
-        final List<String> listAvatar=new ArrayList<>();
+        final List<String> listAvatar = new ArrayList<>();
 
         if (StringUtils.isActuallyEmpty(getBitmapFilePaht(conversationId))) {
             createGroupImage(conversationId, new GroupInfoResponse() {
                 @Override
                 public void getInfoSuccess(JSONObject groupInfo) {
                     final JSONArray list = groupInfo.getJSONArray("accountList");
-                    for (int i=0;i<list.size();i++){
+                    for (int i = 0; i < list.size(); i++) {
                         listAvatar.add(list.getJSONObject(i).getString("avatar"));
                     }
 
-                    GroupFaceImage.getInstance(MyApp.getAppContext(),listAvatar).load(new GroupFaceImage.OnMatchingListener() {
+                    GroupFaceImage.getInstance(MyApp.getAppContext(), listAvatar).load(new GroupFaceImage.OnMatchingListener() {
                         @Override
                         public void onSuccess(Bitmap mathingBitmap) {
-                            if (listener!=null){
+                            if (listener != null) {
                                 listener.success(mathingBitmap);
                             }
 
-                            cacheGroupAvatar(conversationId,mathingBitmap);
+                            cacheGroupAvatar(conversationId, mathingBitmap);
                         }
+
                         public void onError(Exception e) {
-                            if (listener!=null){
+                            if (listener != null) {
                                 listener.failed(e);
                             }
                         }
@@ -305,7 +308,7 @@ public class ChatGroupHelper {
             String imagecache = MyApp.getAppContext().getExternalFilesDir("imagecache").getAbsoluteFile()
                     + File.separator + "_" + conversationId + ".png";
 
-            if (listener!=null){
+            if (listener != null) {
                 listener.success(BitmapFactory.decodeFile(imagecache));
             }
         }
@@ -317,7 +320,7 @@ public class ChatGroupHelper {
     public static String getBitmapFilePaht(String conversationID) {
         File filesDir = MyApp.getAppContext().getExternalFilesDir("imagecache");
         String bitmapPath = "";
-        if (filesDir==null || !filesDir.exists()) {
+        if (filesDir == null || !filesDir.exists()) {
             return null;
         }
         String[] fileList = filesDir.list(new MyFilter(".png"));
@@ -511,8 +514,9 @@ public class ChatGroupHelper {
         void getInfoFailed(Exception e);
     }
 
-    public interface GroupAvatarStitchingListener{
+    public interface GroupAvatarStitchingListener {
         void success(Bitmap bitmap);
+
         void failed(Exception e);
     }
 

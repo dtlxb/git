@@ -23,6 +23,8 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.gogoal.im.base.MyApp;
+
 public class StringUtils {
 
     // 判断一个字符是否是中文
@@ -174,7 +176,7 @@ public class StringUtils {
             }
             int resId = GGEmoticons.GGEmoticonHashMap.get(key);
             if (0 != resId) {
-                Drawable drawable = ContextCompat.getDrawable(context,resId);
+                Drawable drawable = ContextCompat.getDrawable(context, resId);
                 drawable.setBounds(0, 0, textSize, textSize);
                 ImageSpan imageSpan = new ImageSpan(drawable);
                 int end = matcher.start() + key.length();
@@ -199,8 +201,8 @@ public class StringUtils {
         return new StringBuilder(orderStr).reverse().toString();
     }
 
-    public static boolean isActuallyEmpty(String words){
-        return TextUtils.isEmpty(words) || words.equals("null") || TextUtils.isEmpty(words.replace(" ",""));
+    public static boolean isActuallyEmpty(String words) {
+        return TextUtils.isEmpty(words) || words.equals("null") || TextUtils.isEmpty(words.replace(" ", ""));
     }
 
     /**
@@ -292,8 +294,8 @@ public class StringUtils {
         return Character.toUpperCase(lastCode) == checkCodeList[idSum % 11];
     }
 
-    public static String getNotNullString(String orderStr){
-        return isActuallyEmpty(orderStr)?"":orderStr;
+    public static String getNotNullString(String orderStr) {
+        return isActuallyEmpty(orderStr) ? "" : orderStr;
     }
 
     public static Double pareseStringDouble(String value) {
@@ -329,7 +331,7 @@ public class StringUtils {
     }
 
     public static String saveSignificand(String strDoubleData, int significand) {
-        return pareseStringDouble(strDoubleData,significand);
+        return pareseStringDouble(strDoubleData, significand);
     }
 
     /**
@@ -482,8 +484,9 @@ public class StringUtils {
 
         while (matcher.find()) {
             newString = matcher.group();
-            if (newString.equals("@" + UserUtils.getUserName() + " ")) {
+            if (newString.equals("@" + UserUtils.getNickname() + " ")) {
                 haveMe = true;
+                break;
             }
         }
         return haveMe;
