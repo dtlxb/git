@@ -14,12 +14,8 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONWriter;
-import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
+import com.bumptech.glide.Glide;
 import com.github.promeg.pinyinhelper.Pinyin;
 import com.hply.imagepicker.view.SuperCheckBox;
 import com.socks.library.KLog;
@@ -39,18 +35,13 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.GGShareEntity;
-import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ArrayUtils;
-import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ICheckItemListener;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
-import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -58,8 +49,6 @@ import cn.gogoal.im.ui.index.IndexBar;
 import cn.gogoal.im.ui.index.SuspendedDecoration;
 import cn.gogoal.im.ui.view.XTitle;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
-
-import static android.R.id.message;
 
 
 /**
@@ -467,8 +456,9 @@ public class ChooseContactActivity extends BaseActivity {
         @Override
         protected void convert(final BaseViewHolder holder, final ContactBean data, final int position) {
 
+            ImageView imagAvatar = holder.getView(R.id.item_contacts_iv_icon);
             holder.setText(R.id.item_contacts_tv_nickname, data.getTarget());
-            holder.setImageUrl(R.id.item_contacts_iv_icon, (String) data.getAvatar());
+            Glide.with(ChooseContactActivity.this).load((String) data.getAvatar()).into(imagAvatar);
 
             //设置Tag
             holder.itemView.setTag(position);
@@ -676,7 +666,9 @@ public class ChooseContactActivity extends BaseActivity {
         @Override
         protected void convert(BaseViewHolder holder, final ContactBean data, final int position) {
             holder.setText(R.id.item_contacts_tv_nickname, data.getTarget());
-            holder.setImageUrl(R.id.item_contacts_iv_icon, (String) data.getAvatar());
+
+            ImageView imageAvatar=holder.getView(R.id.item_contacts_iv_icon);
+            Glide.with(ChooseContactActivity.this).load(data.getAvatar()).into(imageAvatar);
 
             //设置Tag
             holder.itemView.setTag(position);

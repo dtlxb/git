@@ -201,6 +201,9 @@
     <string name="add_friend">加好友</string>
     <string name="social_live_invite">邀约</string>
     <string name="invite_phone">每个邀请码只能使用1次,如果没有邀请码请联系400&#8211;1818&#8211;595</string>
+    <!--<string name="str_touyan_setting_tips">投研首页常用工具 (按住拖动调整排序)</string>-->
+    <string name="str_touyan_setting_tips"><font color="#333333">投研首页常用工具 </font>
+        <font color="#999999">(按住拖动调整排序)</font></string>
 
 
     <!--<string-array name="emoji_array">

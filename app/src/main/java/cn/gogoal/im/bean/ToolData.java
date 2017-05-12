@@ -43,15 +43,15 @@ public class ToolData {
         this.datas = datas;
     }
 
-    public static class Tool implements Cloneable{
+    public static class Tool implements Cloneable {
         /**
          * id : 1           item id
-//         * title_id : 1     分组Id
+         * //         * title_id : 1     分组Id
          * desc : 研报
          * iconUrl : http://file.go-goal.cn/ggimages/aicon/5df50c7c.png
          * introduce : 测试数据
          * url : www.baidu.com
-//         * position : 1
+         * //         * position : 1
          * showHotFlag : 0
          * type : 10000         跳转类型
          * isClick : 0
@@ -79,6 +79,16 @@ public class ToolData {
         private String funintroduce;
         private String title;
         private int isShow;
+
+        private boolean simulatedArg;//是否是模拟数据
+
+        public boolean isSimulatedArg() {
+            return simulatedArg;
+        }
+
+        public void setSimulatedArg(boolean simulatedArg) {
+            this.simulatedArg = simulatedArg;
+        }
 
         public int getId() {
             return id;
@@ -209,13 +219,18 @@ public class ToolData {
         }
 
         @Override
-        public Tool clone(){
+        public Tool clone() {
             try {
                 return (Tool) super.clone();
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
                 return null;
             }
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof Tool && ((Tool) obj).getId() == getId();
         }
     }
 }

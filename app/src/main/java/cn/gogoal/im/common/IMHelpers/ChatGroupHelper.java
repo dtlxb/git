@@ -262,34 +262,35 @@ public class ChatGroupHelper {
     }
 
     public static void setGroupAvatar(String conversationId, GroupAvatarStitchingListener listener) {
-        setGroupAvatar(conversationId,listener,false);
+        setGroupAvatar(conversationId, listener, false);
     }
 
     public static void setGroupAvatar(final String conversationId,
                                       final GroupAvatarStitchingListener listener, boolean needPlaceHolder) {
 
-        final List<String> listAvatar=new ArrayList<>();
+        final List<String> listAvatar = new ArrayList<>();
 
         if (StringUtils.isActuallyEmpty(getBitmapFilePaht(conversationId))) {
             createGroupImage(conversationId, new GroupInfoResponse() {
                 @Override
                 public void getInfoSuccess(JSONObject groupInfo) {
                     final JSONArray list = groupInfo.getJSONArray("accountList");
-                    for (int i=0;i<list.size();i++){
+                    for (int i = 0; i < list.size(); i++) {
                         listAvatar.add(list.getJSONObject(i).getString("avatar"));
                     }
 
-                    GroupFaceImage.getInstance(MyApp.getAppContext(),listAvatar).load(new GroupFaceImage.OnMatchingListener() {
+                    GroupFaceImage.getInstance(MyApp.getAppContext(), listAvatar).load(new GroupFaceImage.OnMatchingListener() {
                         @Override
                         public void onSuccess(Bitmap mathingBitmap) {
-                            if (listener!=null){
+                            if (listener != null) {
                                 listener.success(mathingBitmap);
                             }
 
-                            cacheGroupAvatar(conversationId,mathingBitmap);
+                            cacheGroupAvatar(conversationId, mathingBitmap);
                         }
+
                         public void onError(Exception e) {
-                            if (listener!=null){
+                            if (listener != null) {
                                 listener.failed(e);
                             }
                         }
@@ -305,7 +306,7 @@ public class ChatGroupHelper {
             String imagecache = MyApp.getAppContext().getExternalFilesDir("imagecache").getAbsoluteFile()
                     + File.separator + "_" + conversationId + ".png";
 
-            if (listener!=null){
+            if (listener != null) {
                 listener.success(BitmapFactory.decodeFile(imagecache));
             }
         }
@@ -317,7 +318,7 @@ public class ChatGroupHelper {
     public static String getBitmapFilePaht(String conversationID) {
         File filesDir = MyApp.getAppContext().getExternalFilesDir("imagecache");
         String bitmapPath = "";
-        if (filesDir==null || !filesDir.exists()) {
+        if (filesDir == null || !filesDir.exists()) {
             return null;
         }
         String[] fileList = filesDir.list(new MyFilter(".png"));
@@ -353,16 +354,15 @@ public class ChatGroupHelper {
                     public void onSuccess(String responseInfo) {
                         JSONObject result = JSONObject.parseObject(responseInfo);
                         KLog.e(responseInfo);
-                        if ((int) result.get("code") == 0) {
-                            if (null != result.getJSONObject("data")) {
-                                if (null != response) {
-                                    response.getInfoSuccess(result.getJSONObject("data"));
-                                }
-                            } else {
-                                response.getInfoFailed(new Exception("请求出错:" + result.getString("message")));
+                        if (result.getIntValue("code") == 0) {
+                            JSONObject data = result.getJSONObject("data");
+                            if (data.getBooleanValue("success")) {
+                                response.getInfoSuccess(data);
+                            }else {
+                                response.getInfoFailed(new Exception(data.getString("msg")));
                             }
                         } else {
-                            response.getInfoFailed(new Exception("群信息为空"));
+                            response.getInfoFailed(new Exception(result.getString("message")));
                         }
                     }
 
@@ -511,8 +511,9 @@ public class ChatGroupHelper {
         void getInfoFailed(Exception e);
     }
 
-    public interface GroupAvatarStitchingListener{
+    public interface GroupAvatarStitchingListener {
         void success(Bitmap bitmap);
+
         void failed(Exception e);
     }
 

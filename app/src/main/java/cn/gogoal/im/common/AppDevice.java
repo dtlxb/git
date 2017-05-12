@@ -45,7 +45,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import java.io.File;
 import java.io.IOException;
@@ -140,7 +139,6 @@ public class AppDevice {
         ViewGroup.LayoutParams params = view.getLayoutParams();
         if (null != params) {
             params.height = height;
-            params.width = LinearLayout.LayoutParams.WRAP_CONTENT;
             params.width = width;
             view.setLayoutParams(params);
         } else {

@@ -1,7 +1,6 @@
 package cn.gogoal.im.adapter;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,9 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
  * description :投研适配器
  */
 public class SectionAdapter extends BaseSectionQuickAdapter<SectionToolsData, BaseViewHolder> {
+
     private Context context;
+
     private int innerItem;
 
     public SectionAdapter(Context context, List<SectionToolsData> data) {
@@ -52,16 +53,16 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionToolsData, Ba
         //initView
         View itemView = holder.getView(R.id.item_touyan_item);
         ImageView itemIcon = holder.getView(R.id.img_touyan_item_icon);
-        AppCompatImageView itemHot = holder.getView(R.id.img_touyan_operation);
+        final AppCompatImageView itemHot = holder.getView(R.id.img_touyan_operation);
         TextView itemTvDesc = holder.getView(R.id.tv_touyan_item_text);
 
         //init width and height
         setViewHeight$Width(itemIcon, innerItem / 3);
         setViewHeight$Width(itemHot, innerItem / 4);
-        setViewHeight$Width(itemView,innerItem);
+        setViewHeight$Width(itemView, innerItem);
 
         //模拟的空item处理
-        if (data.isSimulatedArg()) {
+        if (item.isSimulatedArg()) {
             itemView.setClickable(false);
             itemView.setEnabled(false);
             itemHot.setVisibility(View.INVISIBLE);
@@ -69,27 +70,24 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionToolsData, Ba
             itemIcon.setVisibility(View.INVISIBLE);
 
         } else {
-            itemView.setClickable(true);
-            itemView.setEnabled(true);
             itemHot.setVisibility(View.VISIBLE);
             itemTvDesc.setVisibility(View.VISIBLE);
             itemIcon.setVisibility(View.VISIBLE);
 
-            ImageDisplay.loadImage(context, item.getIconUrl(), itemIcon);
-            itemTvDesc.setText(item.getDesc()+"("+position+")");
-
-            itemTvDesc.setTextColor(item.getIsClick() == 0 ?
-                    ContextCompat.getColor(context, R.color.textColor_333333) :
-                    ContextCompat.getColor(context, R.color.textColor_999999));
+            itemView.setClickable(item.getIsShow()!=1);
+            itemView.setEnabled(item.getIsShow()!=1);
+            itemHot.setImageResource(item.getIsShow() == 1 ? R.mipmap.img_tools_added : R.mipmap.img_tools_add);
 
             ImageDisplay.loadImage(context, item.getIconUrl(), itemIcon);
+            itemTvDesc.setText(item.getDesc());
+            ImageDisplay.loadImage(context, item.getIconUrl(), itemIcon);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((ToolsSettingActivity) context).addSelected(data.t);
-                }
-            });
+           itemView.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   ((ToolsSettingActivity) context).addSelected(item);
+               }
+           });
         }
     }
 

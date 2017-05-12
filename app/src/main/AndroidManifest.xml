@@ -186,6 +186,7 @@
         <activity android:name=".activity.ShareMessageActivity" />
         <activity android:name=".activity.ScreenActivity" />
         <activity android:name=".activity.ToolsSettingActivity"/>
+        <activity android:name=".activity.ToolsListActivity"/>
     </application>
 
 </manifest>

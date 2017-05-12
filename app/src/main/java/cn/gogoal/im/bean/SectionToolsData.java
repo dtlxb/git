@@ -10,22 +10,12 @@ import cn.gogoal.im.adapter.baseAdapter.entity.SectionEntity;
  */
 public class SectionToolsData extends SectionEntity<ToolData.Tool> {
 
-    private boolean simulatedArg;//是不是模拟的空数据
-
     public SectionToolsData(boolean isHeader, String header) {
         super(isHeader, header);
     }
 
-    public SectionToolsData(ToolData.Tool item, boolean simulatedArg) {
+    public SectionToolsData(ToolData.Tool item) {
         super(item);
-        this.simulatedArg=simulatedArg;
     }
 
-    public boolean isSimulatedArg() {
-        return simulatedArg;
-    }
-
-    public void setSimulatedArg(boolean simulatedArg) {
-        this.simulatedArg = simulatedArg;
-    }
 }
