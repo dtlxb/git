@@ -10,11 +10,13 @@ import java.util.List;
  */
 public class ToolData {
     /**
-     * datas : [{"_id":1,"title_id":1,"desc":"研报","iconUrl":"http://file.go-goal.cn/ggimages/aicon/2cb16692.png","introduce":"测试数据","url":"www.baidu.com","position":1,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-04-28 12:03:59","content":"测试数据","code":"G3_001","funintroduce":"测试功能数据","title":"模块","isShow":1},{"_id":8,"title_id":1,"desc":"数据","iconUrl":"http://file.go-goal.cn/ggimages/aicon/d73b7d1b.jpg","introduce":"测试数据","content":"测试数据","url":"www.baidu.com","position":2,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-05-05 11:54:44","code":"G3_002","funintroduce":"测试功能数据","title":"模块","isShow":1},{"_id":10,"title_id":1,"desc":"诊股","iconUrl":"http://file.go-goal.cn/ggimages/aicon/9ac0f08d.jpg","introduce":"测试数据","content":"测试数据","url":"www.baidu.com","position":3,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-05-05 13:11:11","code":"G3_003","funintroduce":"测试功能数据","title":"模块","isShow":1},{"_id":12,"title_id":1,"desc":"自选","iconUrl":"http://file.go-goal.cn/ggimages/aicon/d481b7f2.jpg","introduce":"测试数据","content":"测试数据","url":"www.baidu.com","position":4,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-05-05 13:15:13","code":"G3_004","funintroduce":"测试功能数据","title":"模块","isShow":1},{"_id":9,"title_id":1,"desc":"个股","iconUrl":"http://file.go-goal.cn/ggimages/aicon/2834064c.jpg","introduce":"测试数据","content":"测试数据","url":"www.baidu.com","position":5,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-05-05 12:01:41","code":"G3_005","funintroduce":"测试功能数据","title":"模块","isShow":1},{"_id":11,"title_id":1,"desc":"行情","iconUrl":"http://file.go-goal.cn/ggimages/aicon/64396903.jpg","introduce":"测试数据","content":"测试数据","url":"www.baidu.com","position":6,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-05-05 13:12:49","code":"G3_006","funintroduce":"测试功能数据","title":"模块","isShow":1},{"_id":13,"title_id":1,"desc":"业绩","iconUrl":"http://file.go-goal.cn/ggimages/aicon/109bb942.jpg","introduce":"测试数据","content":"测试数据","code":"G3_007","url":"www.baidu.com","position":7,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-05-05 15:15:08","funintroduce":"测试功能数据","title":"模块","isShow":1},{"_id":7,"title_id":1,"desc":"主题","iconUrl":"http://file.go-goal.cn/ggimages/aicon/3c02549f.jpg","introduce":"测试数据","content":"测试数据","url":"www.baidu.com","position":8,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-05-05 11:53:50","code":"G3_008","funintroduce":"测试功能数据","title":"模块","isShow":1},{"_id":5,"title_id":1,"desc":"公告中心","iconUrl":"http://file.go-goal.cn/ggimages/aicon/ba1f4be8.jpg","introduce":"测试数据","url":"www.baidu.com","position":9,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-05-02 13:51:30","content":"测试数据","code":"G3_010","funintroduce":"测试功能数据","title":"模块","isShow":1}]
+     * datas : [{"id":1,"title_id":1,"desc":"研报","iconUrl":"http://file.go-goal.cn/ggimages/aicon/5df50c7c.png","introduce":"测试数据","url":"www.baidu.com","position":1,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-04-28 12:03:59","content":"测试数据","code":"G3_001","funintroduce":"测试功能数据","title":"模块","isShow":1},{"id":8,"title_id":1,"desc":"数据","iconUrl":"http://file.go-goal.cn/ggimages/aicon/a67be642.png","introduce":"测试数据","content":"测试数据","url":"www.baidu.com","position":2,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-05-05 11:54:44","code":"G3_002","funintroduce":"测试功能数据","title":"模块","isShow":1},{"id":10,"title_id":1,"desc":"诊股","iconUrl":"http://file.go-goal.cn/ggimages/aicon/9ce03b24.png","introduce":"测试数据","content":"测试数据","url":"www.baidu.com","position":3,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-05-05 13:11:11","code":"G3_003","funintroduce":"测试功能数据","title":"模块","isShow":1},{"id":12,"title_id":1,"desc":"自选","iconUrl":"http://file.go-goal.cn/ggimages/aicon/720e1e9b.png","introduce":"测试数据","content":"测试数据","url":"www.baidu.com","position":4,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-05-05 13:15:13","code":"G3_004","funintroduce":"测试功能数据","title":"模块","isShow":1},{"id":9,"title_id":1,"desc":"个股","iconUrl":"http://file.go-goal.cn/ggimages/aicon/1ff89061.png","introduce":"测试数据","content":"测试数据","url":"www.baidu.com","position":5,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-05-05 12:01:41","code":"G3_005","funintroduce":"测试功能数据","title":"模块","isShow":1},{"id":11,"title_id":1,"desc":"行情","iconUrl":"http://file.go-goal.cn/ggimages/aicon/c1fdc5a9.png","introduce":"测试数据","content":"测试数据","url":"www.baidu.com","position":6,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-05-05 13:12:49","code":"G3_006","funintroduce":"测试功能数据","title":"模块","isShow":1},{"id":13,"title_id":1,"desc":"业绩","iconUrl":"http://file.go-goal.cn/ggimages/aicon/116e1fdc.png","introduce":"测试数据","content":"测试数据","code":"G3_007","url":"www.baidu.com","position":7,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-05-05 15:15:08","funintroduce":"测试功能数据","title":"模块","isShow":1},{"id":7,"title_id":1,"desc":"主题","iconUrl":"http://file.go-goal.cn/ggimages/aicon/85daea43.png","introduce":"测试数据","content":"测试数据","url":"www.baidu.com","position":8,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-05-05 11:53:50","code":"G3_008","funintroduce":"测试功能数据","title":"模块","isShow":1},{"id":5,"title_id":1,"desc":"公告中心","iconUrl":"http://file.go-goal.cn/ggimages/aicon/1f809923.png","introduce":"测试数据","url":"www.baidu.com","position":9,"showHotFlag":0,"type":10000,"isClick":0,"insert_time":"2017-05-02 13:51:30","content":"测试数据","code":"G3_010","funintroduce":"测试功能数据","title":"模块","isShow":1}]
      * title : 模块
+     * title_id : 1
      */
 
     private String title;
+    private int title_id;
     private List<Tool> datas;
 
     public String getTitle() {
@@ -25,6 +27,14 @@ public class ToolData {
         this.title = title;
     }
 
+    public int getTitle_id() {
+        return title_id;
+    }
+
+    public void setTitle_id(int title_id) {
+        this.title_id = title_id;
+    }
+
     public List<Tool> getDatas() {
         return datas;
     }
@@ -33,17 +43,17 @@ public class ToolData {
         this.datas = datas;
     }
 
-    public static class Tool {
+    public static class Tool implements Cloneable {
         /**
-         * _id : 1
-         * title_id : 1
+         * id : 1           item id
+         * //         * title_id : 1     分组Id
          * desc : 研报
-         * iconUrl : http://file.go-goal.cn/ggimages/aicon/2cb16692.png
+         * iconUrl : http://file.go-goal.cn/ggimages/aicon/5df50c7c.png
          * introduce : 测试数据
          * url : www.baidu.com
-         * position : 1
+         * //         * position : 1
          * showHotFlag : 0
-         * type : 10000
+         * type : 10000         跳转类型
          * isClick : 0
          * insert_time : 2017-04-28 12:03:59
          * content : 测试数据
@@ -53,7 +63,7 @@ public class ToolData {
          * isShow : 1
          */
 
-        private int _id;
+        private int id;
         private int title_id;
         private String desc;
         private String iconUrl;
@@ -70,12 +80,22 @@ public class ToolData {
         private String title;
         private int isShow;
 
-        public int get_id() {
-            return _id;
+        private boolean simulatedArg;//是否是模拟数据
+
+        public boolean isSimulatedArg() {
+            return simulatedArg;
         }
 
-        public void set_id(int _id) {
-            this._id = _id;
+        public void setSimulatedArg(boolean simulatedArg) {
+            this.simulatedArg = simulatedArg;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
         }
 
         public int getTitle_id() {
@@ -196,6 +216,21 @@ public class ToolData {
 
         public void setIsShow(int isShow) {
             this.isShow = isShow;
+        }
+
+        @Override
+        public Tool clone() {
+            try {
+                return (Tool) super.clone();
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof Tool && ((Tool) obj).getId() == getId();
         }
     }
 }

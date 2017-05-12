@@ -199,8 +199,12 @@ public class MainStockFragment extends BaseFragment {
 
                     myAdaptetDialogMarket.notifyDataSetChanged();
 
-                    myStockFragment.changeIitem(
-                            marketDatas.get(SPTools.getInt("change_market_item", 0)));
+                    try {
+                        myStockFragment.changeIitem(
+                                marketDatas.get(SPTools.getInt("change_market_item", 0)));
+                    }catch (Exception e){
+                        e.getMessage();
+                    }
                 }
                 stopAnimation(null);
             }
@@ -400,7 +404,11 @@ public class MainStockFragment extends BaseFragment {
                     public void onClick(View v) {
                         dismissMarket();
                         SPTools.saveInt("change_market_item", position);
-                        myStockFragment.changeIitem(data);
+                        try {
+                            myStockFragment.changeIitem(data);
+                        }catch (Exception e){
+                            e.getMessage();
+                        }
                     }
                 });
             }

@@ -18,4 +18,5 @@
         android:text="朝阳组合"
         android:textColor="@color/textColor_333333"
         android:textSize="16sp" />
+
 </LinearLayout>

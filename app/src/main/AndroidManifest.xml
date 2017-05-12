@@ -86,7 +86,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTask"/>
         <activity
             android:name=".activity.RigisterActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
@@ -186,6 +186,7 @@
         <activity android:name=".activity.ShareMessageActivity" />
         <activity android:name=".activity.ScreenActivity" />
         <activity android:name=".activity.ToolsSettingActivity"/>
+        <activity android:name=".activity.ToolsListActivity"/>
     </application>
 
 </manifest>

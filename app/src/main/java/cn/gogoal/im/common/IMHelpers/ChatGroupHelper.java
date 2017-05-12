@@ -356,16 +356,15 @@ public class ChatGroupHelper {
                     public void onSuccess(String responseInfo) {
                         JSONObject result = JSONObject.parseObject(responseInfo);
                         KLog.e(responseInfo);
-                        if ((int) result.get("code") == 0) {
-                            if (null != result.getJSONObject("data")) {
-                                if (null != response) {
-                                    response.getInfoSuccess(result.getJSONObject("data"));
-                                }
-                            } else {
-                                response.getInfoFailed(new Exception("请求出错:" + result.getString("message")));
+                        if (result.getIntValue("code") == 0) {
+                            JSONObject data = result.getJSONObject("data");
+                            if (data.getBooleanValue("success")) {
+                                response.getInfoSuccess(data);
+                            }else {
+                                response.getInfoFailed(new Exception(data.getString("msg")));
                             }
                         } else {
-                            response.getInfoFailed(new Exception("群信息为空"));
+                            response.getInfoFailed(new Exception(result.getString("message")));
                         }
                     }
 

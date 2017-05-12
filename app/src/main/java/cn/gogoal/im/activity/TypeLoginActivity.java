@@ -97,14 +97,14 @@ public class TypeLoginActivity extends BaseActivity {
 //        loginUserName.setText("E00003645");
 //        loginPassWord.setText("147369");
 
-        loginUserName.setText("E00002639");
-        loginPassWord.setText("412174");
+//        loginUserName.setText("E00002639");
+//        loginPassWord.setText("412174");
 
         /*loginUserName.setText("E00020181");
         loginPassWord.setText("394495");*/
 
-//        loginUserName.setText("E00002638");
-//        loginPassWord.setText("123456");
+        loginUserName.setText("E00002638");
+        loginPassWord.setText("123456");
 
 //        loginUserName.setText("E010399");
 //        loginPassWord.setText("198122");
@@ -172,6 +172,7 @@ public class TypeLoginActivity extends BaseActivity {
 
         if (TextUtils.isEmpty(word) || TextUtils.isEmpty(name)) {
             UIHelper.toast(TypeLoginActivity.this, R.string.str_login_edit_null);
+            loginDialog.dismiss(true);
             return;
         }
 
@@ -231,7 +232,7 @@ public class TypeLoginActivity extends BaseActivity {
                         } catch (Exception ignored) {
                             loginButton.setClickable(true);
                             loginDialog.dismiss(true);
-                            WaitDialog errorDialog = WaitDialog.getInstance(getString(R.string.str_login_code_error),
+                            WaitDialog errorDialog = WaitDialog.getInstance(ignored.getMessage(),
                                     R.mipmap.login_error, false);
                             errorDialog.show(getSupportFragmentManager());
                             errorDialog.dismiss(false);
@@ -239,7 +240,7 @@ public class TypeLoginActivity extends BaseActivity {
                     } else {
                         loginButton.setClickable(true);
                         loginDialog.dismiss(true);
-                        WaitDialog errorDialog = WaitDialog.getInstance(getString(R.string.str_login_code_error),
+                        WaitDialog errorDialog = WaitDialog.getInstance(data.getString("message"),
                                 R.mipmap.login_error, false);
                         errorDialog.show(getSupportFragmentManager());
                         errorDialog.dismiss(false);
@@ -248,7 +249,8 @@ public class TypeLoginActivity extends BaseActivity {
                 } else {
                     loginButton.setClickable(true);
                     loginDialog.dismiss(true);
-                    WaitDialog errorDialog = WaitDialog.getInstance(getString(R.string.str_login_code_error),
+                    WaitDialog errorDialog = WaitDialog.getInstance(
+                           object.getString("message"),
                             R.mipmap.login_error, false);
                     errorDialog.show(getSupportFragmentManager());
                     errorDialog.dismiss(false);

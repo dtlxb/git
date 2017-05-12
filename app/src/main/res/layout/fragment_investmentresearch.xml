@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:background="@color/stock_market_bg"
     tools:context=".fragment.main.InvestmentResearchFragment">
 
     <include layout="@layout/include_title" />
@@ -17,7 +18,6 @@
             android:layout_height="wrap_content"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:background="@android:color/white"
             android:orientation="vertical">
 
             <cn.gogoal.im.ui.view.AutoScrollViewPager
@@ -32,11 +32,36 @@
                 android:layout_height="1px"
                 android:background="@color/colorGriddivider" />
 
+            <TextView
+                android:id="@+id/tv_flag_tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/shape_line_top_and_bottom"
+                android:padding="15dp"
+                android:text="常用工具"
+                android:textColor="@color/textColor_333333"
+                android:textSize="18sp" />
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/btn_tools_center"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/stock_market_bg" />
+                android:layout_marginBottom="50dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/shape_line_top_and_bottom"
+                android:drawableEnd="@mipmap/img_tools_more"
+                android:drawablePadding="10dp"
+                android:drawableStart="@mipmap/img_tools_center"
+                android:padding="15dp"
+                android:text="工具中心"
+                android:textColor="@color/textColor_333333"
+                android:textSize="18sp" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

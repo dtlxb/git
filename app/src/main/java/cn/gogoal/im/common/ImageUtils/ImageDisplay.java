@@ -51,9 +51,11 @@ public class ImageDisplay {
         if (image != null) {
             DrawableRequestBuilder<T> requestBuilder = Glide.with(context)
                     .load(image)
+                    .dontAnimate()
+                    .dontTransform()
+                    .centerCrop()
                     .skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT);
-
             if (!needPlaceholdeer) {
                 requestBuilder.into(imageView);
             } else {

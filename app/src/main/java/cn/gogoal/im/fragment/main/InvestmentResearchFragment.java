@@ -8,6 +8,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
@@ -21,11 +22,9 @@ import java.util.Map;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ToolsSettingActivity;
-import cn.gogoal.im.adapter.SectionAdapter;
+import cn.gogoal.im.adapter.InvestmentResearchAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BannerBean;
-import cn.gogoal.im.bean.SectionToolsData;
-import cn.gogoal.im.bean.ToolBean;
 import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
@@ -52,8 +51,11 @@ public class InvestmentResearchFragment extends BaseFragment {
     @BindView(R.id.vp_fund_banner)
     AutoScrollViewPager bannerPager;
 
-    private List<SectionToolsData> mData;
-    private SectionAdapter sectionAdapter;
+    @BindView(R.id.tv_flag_tools)
+    TextView tvFlagTools;
+
+    private List<ToolData.Tool> mData;
+    private InvestmentResearchAdapter toolsAdapter;
 
     /**
      * banner适配器和数据集
@@ -83,15 +85,14 @@ public class InvestmentResearchFragment extends BaseFragment {
         });
 
 
-
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(
                 AppDevice.isLowDpi() ? 3 : 4,
                 StaggeredGridLayoutManager.VERTICAL));
 
         mData = new ArrayList<>();
-        sectionAdapter = new SectionAdapter(getActivity(), mData);
-        mRecyclerView.setAdapter(sectionAdapter);
+        toolsAdapter = new InvestmentResearchAdapter(getActivity(), mData);
+        mRecyclerView.setAdapter(toolsAdapter);
 
         getBannerImage();
         getTouYan();
@@ -100,7 +101,7 @@ public class InvestmentResearchFragment extends BaseFragment {
     private void getBannerImage() {
         AppDevice.setViewWidth$Height(bannerPager,
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                245*AppDevice.getWidth(getContext()) / 750);
+                245 * AppDevice.getWidth(getContext()) / 750);
 
         bannerImageUrls = new ArrayList<>();
         bannerAdapter = new BannerAdapter(bannerImageUrls);
@@ -145,34 +146,29 @@ public class InvestmentResearchFragment extends BaseFragment {
     }
 
     public void getTouYan() {
-        mData.clear();
         Map<String, String> map = new HashMap<>();
         map.put("token", UserUtils.getToken());
+        map.put("isShow", "1");
         KLog.e(StringUtils.map2ggParameter(map));
 
         new GGOKHTTP(map, GGOKHTTP.GET_USERCOLUMN, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.json(responseInfo);
-                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                int code = object.getIntValue("code");
                 if (code == 0) {
-                    List<ToolData> toolDatas = JSONObject.parseObject(responseInfo, ToolBean.class).getData();
-                    for (int i = 0; i < toolDatas.size(); i++) {
-                        ToolData toolData = toolDatas.get(i);
-                        mData.add(new SectionToolsData(true, toolData.getTitle()));
-                        List<ToolData.Tool> itemList = toolData.getDatas();
-                        for (ToolData.Tool item : itemList) {
-                            mData.add(new SectionToolsData(item, false));
-                        }
+                    showView(true);
+                    mData.clear();
+                    List<ToolData.Tool> tools = JSONObject.parseArray(
+                            object.getJSONArray("data").toJSONString(), ToolData.Tool.class);
+                    mData.addAll(tools);
 
-                        //模拟填充空数据
-                        creatSpaceItem(itemList);
-                    }
+                    addSpace();
 
-                    sectionAdapter.notifyDataSetChanged();
+                    toolsAdapter.notifyDataSetChanged();
 
                 } else if (code == 1001) {
-
+                    showView(false);
                 } else {
 
                 }
@@ -182,43 +178,55 @@ public class InvestmentResearchFragment extends BaseFragment {
             public void onFailure(String msg) {
             }
         }).startGet();
-
     }
 
-    private void creatSpaceItem(List<ToolData.Tool> itemList) {
-        ToolData.Tool spaceItem = new ToolData.Tool();
-        spaceItem.setDesc("");
-        spaceItem.setIconUrl("");
-        spaceItem.setIsShow(0);
-        spaceItem.setPosition(0);
-        spaceItem.setType(0);
+    private void showView(boolean show) {
+        mRecyclerView.setVisibility(show ? View.VISIBLE : View.GONE);
+        tvFlagTools.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
 
+    private void addSpace() {
+        ToolData.Tool clone = mData.get(0).clone();
+        clone.setSimulatedArg(true);
         if (AppDevice.isLowDpi()) {
-            switch (itemList.size() % 3) {
+            switch (mData.size() % 3) {
+                case 0:
+                    //不添加
+                    break;
                 case 1:
-                    mData.add(new SectionToolsData(spaceItem, true));
-                    mData.add(new SectionToolsData(spaceItem, true));
+                    mData.add(clone);
+                    mData.add(clone);
                     break;
                 case 2:
-                    mData.add(new SectionToolsData(spaceItem, true));
+                    mData.add(clone);
                     break;
             }
         } else {
-            switch (itemList.size() % 4) {
+            switch (mData.size() % 4) {
+                case 0:
+                    //不添加
+                    break;
                 case 1:
-                    mData.add(new SectionToolsData(spaceItem, true));
-                    mData.add(new SectionToolsData(spaceItem, true));
-                    mData.add(new SectionToolsData(spaceItem, true));
+                    mData.add(clone);
+                    mData.add(clone);
+                    mData.add(clone);
                     break;
                 case 2:
-                    mData.add(new SectionToolsData(spaceItem, true));
-                    mData.add(new SectionToolsData(spaceItem, true));
+                    mData.add(clone);
+                    mData.add(clone);
                     break;
                 case 3:
-                    mData.add(new SectionToolsData(spaceItem, true));
+                    mData.add(clone);
                     break;
             }
+
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getTouYan();
     }
 
     private class BannerAdapter extends PagerAdapter {

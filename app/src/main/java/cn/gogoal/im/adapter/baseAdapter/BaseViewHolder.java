@@ -15,6 +15,7 @@
  */
 package cn.gogoal.im.adapter.baseAdapter;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -112,16 +113,13 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    public BaseViewHolder setImageUrl(int viewId, String imageUrl) {
+    public BaseViewHolder setImageUrl(Context context,int viewId, String imageUrl, boolean needPlaceholdeer) {
         ImageView view = getView(viewId);
-        ImageDisplay.loadImage(convertView.getContext(), imageUrl, view);
+        ImageDisplay.loadImage(context, imageUrl, view, needPlaceholdeer);
         return this;
     }
-
-    public BaseViewHolder setImageUrl(int viewId, String imageUrl, boolean needPlaceholdeer) {
-        ImageView view = getView(viewId);
-        ImageDisplay.loadImage(convertView.getContext(), imageUrl, view, needPlaceholdeer);
-        return this;
+    public BaseViewHolder setImageUrl(Context context,int viewId, String imageUrl) {
+        return setImageUrl(context,viewId,imageUrl,true);
     }
 
     public BaseViewHolder setTextResColor(int viewId, @ColorRes int colorId) {

@@ -19,12 +19,14 @@ import cn.gogoal.im.bean.ContactBean;
  * description:联系人列表适配器
  */
 public class ContactAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
-    List<ContactBean> list;
+    private List<ContactBean> list;
     private int type;
+    private Context context;
 
     public ContactAdapter(Context context, List<ContactBean> datas, int type) {
         super(R.layout.item_contacts, datas);
         list = datas;
+        this.context=context;
         this.type = type;
     }
 
@@ -50,7 +52,7 @@ public class ContactAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
 
         Object avatar = contactBean.getAvatar();
         if (avatar instanceof String) {
-            holder.setImageUrl(R.id.item_contacts_iv_icon, avatar.toString(), false);
+            holder.setImageUrl(context,R.id.item_contacts_iv_icon, avatar.toString(), false);
         } else if (avatar instanceof Integer) {
             holder.setImageResource(R.id.item_contacts_iv_icon, (Integer) avatar);
         } else if (avatar instanceof Bitmap) {

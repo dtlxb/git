@@ -21,6 +21,7 @@ import java.util.HashMap;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MainActivity;
+import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.BaseMessage;
@@ -206,9 +207,15 @@ public class MyMessageHandler extends AVIMMessageHandler {
         JSONObject lcattrs = content.getJSONObject("_lcattrs");
         String push = lcattrs.getString("push");
         if (push != null) {
-            if (AppDevice.isAppOnForeground(MyApp.getAppContext())) {
+            if (!AppDevice.isAppOnForeground(MyApp.getAppContext())) {
                 try {
-                    Intent resultIntent = new Intent(MyApp.getAppContext(), MainActivity.class);
+                    Intent resultIntent;
+                    if (UserUtils.isLogin()) {
+                        resultIntent = new Intent(MyApp.getAppContext(), MainActivity.class);
+                    } else {
+                        resultIntent = new Intent(MyApp.getAppContext(), TypeLoginActivity.class);
+                    }
+
                     PendingIntent pendingIntent = PendingIntent.getActivity(MyApp.getAppContext(), 0,
                             resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                     NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(MyApp.getAppContext())

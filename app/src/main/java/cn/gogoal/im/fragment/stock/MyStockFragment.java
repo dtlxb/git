@@ -263,20 +263,24 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
      * 没有正确加载自选股列表的时候(没网络，请求出错，或者没有自选股)时，不允许编辑
      */
     void editEnable(boolean enable) {
-        final TextView tvEditMyStock = ((MainStockFragment) getParentFragment()).getTvMystockEdit();
-        tvEditMyStock.setEnabled(enable);
-        tvEditMyStock.setClickable(enable);
-        tvEditMyStock.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent =new Intent(v.getContext(), EditMyStockActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putParcelableArrayList("my_stock_edit_list",myStockDatas);
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
-        tvEditMyStock.setTextColor(enable?Color.BLACK:Color.GRAY);
+        try {
+            final TextView tvEditMyStock = ((MainStockFragment) getParentFragment()).getTvMystockEdit();
+            tvEditMyStock.setEnabled(enable);
+            tvEditMyStock.setClickable(enable);
+            tvEditMyStock.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent =new Intent(v.getContext(), EditMyStockActivity.class);
+                    Bundle bundle=new Bundle();
+                    bundle.putParcelableArrayList("my_stock_edit_list",myStockDatas);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+            });
+            tvEditMyStock.setTextColor(enable?Color.BLACK:Color.GRAY);
+        }catch (Exception e){
+            e.getMessage();
+        }
     }
 
     @OnClick({R.id.img_show_tinymarket_dialog, R.id.tv_mystock_news,

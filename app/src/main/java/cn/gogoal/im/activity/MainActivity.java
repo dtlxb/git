@@ -161,12 +161,6 @@ public class MainActivity extends BaseActivity {
         getScreenData();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        badge = new BadgeView(MainActivity.this);
-    }
-
     public void changeItem(int index) {
         if (index > 0 && index < tabMain.getTabCount()) {
             tabMain.getTabAt(index).select();
@@ -256,11 +250,10 @@ public class MainActivity extends BaseActivity {
         int index = message.getOthers().get("index");
         int num = message.getOthers().get("number");
 
-        initBadge(num);
+        initBadge(index, num);
 
         if (index >= 0 && index < mainTabArray.length) {
             if (num > 0) {
-                badge.bindTarget(tabMain.getTabAt(index).getCustomView());
                 badge.setBadgeNumber(num);
             } else {
                 badge.hide(false);
@@ -268,13 +261,16 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void initBadge(int num) {
+    private void initBadge(int index, int num) {
         if (badge != null) {
             if (num == 0) {
                 badge.hide(false);
+                //TODO
             } else {
                 badge.setGravityOffset(0, 0, true);
                 badge.setShowShadow(false);
+
+                badge.bindTarget(tabMain.getTabAt(index).getCustomView());
 
                 badge.setBadgeGravity(Gravity.TOP | Gravity.END);
                 badge.setBadgeTextSize(12, true);
@@ -286,6 +282,7 @@ public class MainActivity extends BaseActivity {
             }
         } else {
             badge = new BadgeView(MainActivity.this);
+            badge.bindTarget(tabMain.getTabAt(index).getCustomView());
         }
     }
 
