@@ -1,9 +1,7 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -127,13 +125,6 @@ public class TypeLoginActivity extends BaseActivity {
 
     private void initTitle() {
 
-        new AlertDialog.Builder(getActivity()).setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
         xTitle = setMyTitle(R.string.str_login_in, false);
         //添加action
         XTitle.TextAction rigisterAction = new XTitle.TextAction("注册") {
@@ -176,12 +167,20 @@ public class TypeLoginActivity extends BaseActivity {
 
         if (TextUtils.isEmpty(word) || TextUtils.isEmpty(name)) {
             UIHelper.toast(TypeLoginActivity.this, R.string.str_login_edit_null);
-            loginDialog.dismiss(true);
+            loginDialog.dismiss();
+            WaitDialog dialog = WaitDialog.getInstance(getString(R.string.str_login_edit_null), R.mipmap.login_error, false);
+            dialog.show(getSupportFragmentManager());
+            dialog.dismiss(false);
             return;
         }
 
-        if (!UIHelper.isGGPassWord(word, getActivity()))
+        if (!UIHelper.isGGPassWord(word, getActivity())) {
+            loginDialog.dismiss();
+            WaitDialog dialog = WaitDialog.getInstance("密码格式错误", R.mipmap.login_error, false);
+            dialog.show(getSupportFragmentManager());
+            dialog.dismiss(false);
             return;
+        }
 
         Map<String, String> param = new HashMap<>();
         param.put("login_name", name);

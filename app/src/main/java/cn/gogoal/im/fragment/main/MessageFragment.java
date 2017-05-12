@@ -54,6 +54,7 @@ import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
@@ -349,7 +350,7 @@ public class MessageFragment extends BaseFragment {
                     if (lcattrsObject != null && lcattrsObject.get("username") != null) {
                         squareMessageFrom = UserUtils.getUserName().equals(lcattrsObject.get("username")) ? "" : lcattrsObject.getString("username");
                     }
-                    ChatGroupHelper.setGroupAvatar(messageBean.getConversationID(), new ChatGroupHelper.GroupAvatarStitchingListener() {
+                    ChatGroupHelper.setGroupAvatar(messageBean.getConversationID(), new AvatarTakeListener() {
                         @Override
                         public void success(final Bitmap bitmap) {
                             getActivity().runOnUiThread(new Runnable() {

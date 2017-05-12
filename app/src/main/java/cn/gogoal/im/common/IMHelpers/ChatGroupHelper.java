@@ -23,6 +23,7 @@ import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
@@ -261,12 +262,12 @@ public class ChatGroupHelper {
                 bitmap, 100);
     }
 
-    public static void setGroupAvatar(String conversationId, GroupAvatarStitchingListener listener) {
+    public static void setGroupAvatar(String conversationId, AvatarTakeListener listener) {
         setGroupAvatar(conversationId, listener, false);
     }
 
     public static void setGroupAvatar(final String conversationId,
-                                      final GroupAvatarStitchingListener listener, boolean needPlaceHolder) {
+                                      final AvatarTakeListener listener, boolean needPlaceHolder) {
 
         final List<String> listAvatar = new ArrayList<>();
 
@@ -353,7 +354,6 @@ public class ChatGroupHelper {
                     @Override
                     public void onSuccess(String responseInfo) {
                         JSONObject result = JSONObject.parseObject(responseInfo);
-                        KLog.e(responseInfo);
                         if (result.getIntValue("code") == 0) {
                             JSONObject data = result.getJSONObject("data");
                             if (data.getBooleanValue("success")) {
@@ -509,12 +509,6 @@ public class ChatGroupHelper {
         void getInfoSuccess(JSONObject groupInfo);
 
         void getInfoFailed(Exception e);
-    }
-
-    public interface GroupAvatarStitchingListener {
-        void success(Bitmap bitmap);
-
-        void failed(Exception e);
     }
 
     /**

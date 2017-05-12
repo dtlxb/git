@@ -641,6 +641,7 @@ public class GGOKHTTP {
 
     /**
      * 验证邀请码
+     *
      * @prama invite_code 邀请码
      * @prama user_token  token
      * @prama video_id    视频id
@@ -649,10 +650,16 @@ public class GGOKHTTP {
 
     /**
      * 验证本地邀请码
+     *
      * @prama video_id    视频的id
      * @prama identifies  本地的邀请码
      */
     public static final String VALIDATE_IDENTIFIES = "v1/video_auth/validate_identifies";
+
+    /**
+     * token=6046f43ff7ae44bb91d6f3be483d2a98
+     */
+    public static final String GET_MY_ADVISERS = "v1/user/crm_user_saler";
 
 //--------------------------------------------------------------------------------------------------
 

@@ -28,6 +28,7 @@ import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.bean.ShareListBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
@@ -119,7 +120,7 @@ public class ShareMessageActivity extends BaseActivity {
                     group.setText(bean.getNickname());
                     group.setBean(bean);
 
-                    ChatGroupHelper.setGroupAvatar(bean.getConversationID(),  new ChatGroupHelper.GroupAvatarStitchingListener() {
+                    ChatGroupHelper.setGroupAvatar(bean.getConversationID(),  new AvatarTakeListener() {
                         @Override
                         public void success(Bitmap bitmap) {
                             group.setItemImage(bitmap);

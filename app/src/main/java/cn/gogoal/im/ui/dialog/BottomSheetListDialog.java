@@ -51,7 +51,7 @@ public class BottomSheetListDialog extends BaseBottomDialog {
 
         ListView listView= (ListView) v.findViewById(R.id.lsv_dialog);
 
-        listView.setAdapter(new ArrayAdapter<String>(getContext(),R.layout.item_dialog_text_simple_1,itemTexts));
+        listView.setAdapter(new ArrayAdapter<>(getContext(),R.layout.item_dialog_text_simple_1,itemTexts));
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

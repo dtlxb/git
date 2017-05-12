@@ -2,6 +2,7 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -24,8 +25,8 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.EditInfoBean;
 import cn.gogoal.im.bean.UserDetailInfo;
+import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.CircleImageView;
@@ -92,7 +93,8 @@ public class EditMyInfoActivity extends BaseActivity {
         String[] userInfoValue = {UserUtils.getNickname(), UserUtils.getUserName(), UserUtils.getPhoneNumber(),
                 UserUtils.getorgName(), UserUtils.getDuty(), UserUtils.getOrganizationAddress(), UserUtils.getOrganizationAddress()};
 
-        editInfos.add(new UserDetailInfo<>(UserDetailInfo.HEAD, UserUtils.getUserCacheAvatarFile()));
+        editInfos.add(new UserDetailInfo<>(UserDetailInfo.HEAD));
+
         for (int i = 0; i < edidInfoArray.length; i++) {
             editInfos.add(new UserDetailInfo(
                     UserDetailInfo.TEXT_ITEM_2,
@@ -114,15 +116,19 @@ public class EditMyInfoActivity extends BaseActivity {
 
         @Override
         protected void convert(BaseViewHolder holder, UserDetailInfo data, final int position) {
-            CircleImageView circleImageView = holder.getView(R.id.image_user_info_avatar);
+            final CircleImageView circleImageView = holder.getView(R.id.image_user_info_avatar);
             switch (holder.getItemViewType()) {
                 case UserDetailInfo.HEAD:
-                    if (null != UserUtils.getUserCacheAvatarFile()) {
-                        ImageDisplay.loadCircleImage(mContext, UserUtils.getUserCacheAvatarFile(),circleImageView);
-                    } else {
-                        ImageDisplay.loadCircleImage(mContext, UserUtils.getUserAvatar(),circleImageView);
-                        UserUtils.cacheUserAvatar();//缓存用户头像大图
-                    }
+                    UserUtils.getUserAvatar(new AvatarTakeListener() {
+                        @Override
+                        public void success(Bitmap bitmap) {
+                            circleImageView.setImageBitmap(bitmap);
+                        }
+                        @Override
+                        public void failed(Exception e) {
+
+                        }
+                    });
 
                     holder.getView(R.id.header_edit_my_info).setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -130,6 +136,7 @@ public class EditMyInfoActivity extends BaseActivity {
                             Intent intent = new Intent(v.getContext(), ImageDetailActivity.class);
                             intent.putExtra("account_Id", UserUtils.getMyAccountId());
                             startActivity(intent);
+
                         }
                     });
                     break;

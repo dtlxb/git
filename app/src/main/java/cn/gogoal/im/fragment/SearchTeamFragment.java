@@ -41,7 +41,6 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.GroupCollectionData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
@@ -125,7 +124,6 @@ public class SearchTeamFragment extends BaseFragment {
         new GGOKHTTP(map, GGOKHTTP.SEARCH_GROUP, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                FileUtil.writeRequestResponse(responseInfo,"推荐群");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     dataBeanList.clear();
                     GroupCollectionData groupCollectionData = JSONObject.parseObject(responseInfo, GroupCollectionData.class);

@@ -15,6 +15,7 @@ import com.socks.library.KLog;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.ui.widget.LeftWindowPopu;
 
@@ -64,7 +65,7 @@ public class TestActivity extends BaseActivity {
         findViewById(R.id.btn_test_match).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChatGroupHelper.setGroupAvatar("5912baf58d6d810058278bd3", new ChatGroupHelper.GroupAvatarStitchingListener() {
+                ChatGroupHelper.setGroupAvatar("5912baf58d6d810058278bd3", new AvatarTakeListener() {
                     @Override
                     public void success(Bitmap bitmap) {
                         KLog.e(bitmap);

@@ -20,7 +20,9 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.ToolsListActivity;
 import cn.gogoal.im.activity.ToolsSettingActivity;
 import cn.gogoal.im.adapter.InvestmentResearchAdapter;
 import cn.gogoal.im.base.BaseFragment;
@@ -154,6 +156,7 @@ public class InvestmentResearchFragment extends BaseFragment {
         new GGOKHTTP(map, GGOKHTTP.GET_USERCOLUMN, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 int code = object.getIntValue("code");
                 if (code == 0) {
@@ -221,6 +224,11 @@ public class InvestmentResearchFragment extends BaseFragment {
             }
 
         }
+    }
+
+    @OnClick(R.id.btn_tools_center)
+    void click(View view) {
+        startActivity(new Intent(view.getContext(), ToolsListActivity.class));
     }
 
     @Override

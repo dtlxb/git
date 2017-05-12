@@ -52,7 +52,9 @@
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:digits="0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+                android:digits="0123456789
+                qwertyuiopasdfghjklzxcvbnm
+                QWERTYUIOPASDFGHJKLZXCVBNM"
                 android:drawableLeft="@mipmap/icon_code"
                 android:drawablePadding="7dp"
                 android:hint="请输入密码"

@@ -5,12 +5,18 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="20dp"
     android:background="@drawable/shape_line_top_and_bottom"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:paddingBottom="8dp"
     android:paddingEnd="15dp"
     android:paddingStart="15dp"
     android:paddingTop="8dp">
 
+    <View
+        android:id="@+id/title_flag"
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_section_title_flag"
+        android:layout_marginEnd="6dp"/>
     <TextView
         android:id="@+id/tv_touyan_title_text"
         android:layout_width="wrap_content"

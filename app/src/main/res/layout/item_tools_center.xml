@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/selector_normal_write2gray"
+    android:id="@+id/item_tools_center"
+    android:padding="15dp">
+
+    <ImageView
+        android:id="@+id/img_logo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/img_logo"
+        android:layout_toStartOf="@+id/tv_item_tools_operation"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_item_tools_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="数据一分钟"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textColor="@color/textColor_333333"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_item_tools_introduce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="数据一分钟数据一分钟数据一分钟数据一分钟数据一分钟数据一分钟"
+            android:textColor="@color/textColor_999999"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_item_tools_operation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/shape_add_friend"
+        android:padding="10dp"
+        android:layout_marginStart="15dp"
+        android:text="获取开通"
+        android:textColor="@android:color/white"
+        android:textSize="13sp" />
+</RelativeLayout>
