@@ -53,6 +53,7 @@ public class ImageDisplay {
                     .load(image)
                     .dontAnimate()
                     .dontTransform()
+                    .centerCrop()
                     .skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.RESULT);
             if (!needPlaceholdeer) {
