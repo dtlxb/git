@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.ToolsListActivity;
 import cn.gogoal.im.activity.ToolsSettingActivity;
 import cn.gogoal.im.adapter.InvestmentResearchAdapter;
 import cn.gogoal.im.base.BaseFragment;
@@ -30,7 +31,6 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.NormalIntentUtils;
-import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.AutoScrollViewPager;
 import cn.gogoal.im.ui.view.XTitle;
@@ -149,7 +149,6 @@ public class InvestmentResearchFragment extends BaseFragment {
         Map<String, String> map = new HashMap<>();
         map.put("token", UserUtils.getToken());
         map.put("isShow", "1");
-        KLog.e(StringUtils.map2ggParameter(map));
 
         new GGOKHTTP(map, GGOKHTTP.GET_USERCOLUMN, new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -221,6 +220,11 @@ public class InvestmentResearchFragment extends BaseFragment {
             }
 
         }
+    }
+
+    @OnClick(R.id.btn_tools_center)
+    void click(View view) {
+        startActivity(new Intent(view.getContext(), ToolsListActivity.class));
     }
 
     @Override

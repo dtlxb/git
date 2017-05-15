@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.ColorInt;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,14 +46,18 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import cn.gogoal.im.base.MyApp;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -896,13 +901,6 @@ public class AppDevice {
         }
     }
 
-    /**
-     * 获取本地保存的客服电话
-     */
-    public static String getOrderTel() {
-        return SPTools.getString("order_tel", "400-998-7172");
-    }
-
     /***
      * 发信息
      */
@@ -1170,5 +1168,27 @@ public class AppDevice {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setNestedScrollingEnabled(false);
+    }
+
+    /**
+     * 反射修改TabLayout的默认宽度
+     */
+    public static void setTabLayoutWidth(TabLayout t) {
+        try {
+            Class<?> tablayout = t.getClass();
+            Field tabStrip = tablayout.getDeclaredField("mTabStrip");
+            tabStrip.setAccessible(true);
+            LinearLayout ll_tab = (LinearLayout) tabStrip.get(t);
+            for (int i = 0; i < ll_tab.getChildCount(); i++) {
+                View child = ll_tab.getChildAt(i);
+                child.setPadding(0, 0, 0, 0);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+                params.setMargins(AppDevice.dp2px(MyApp.getAppContext(), 10), 0, AppDevice.dp2px(MyApp.getAppContext(), 10), 0);
+                child.setLayoutParams(params);
+                child.invalidate();
+            }
+        } catch (Exception e) {
+            e.getMessage();
+        }
     }
 }

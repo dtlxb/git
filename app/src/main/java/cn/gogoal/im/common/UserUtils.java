@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -43,6 +44,15 @@ public class UserUtils {
         JSONObject user = getUserInfo();
         if (user == null) return null;
         return user.getString("token");
+    }
+
+    /**
+     * 获取用户令牌 token请求参数
+     */
+    public static HashMap<String, String> getTokenParams() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("token", getToken());
+        return map;
     }
 
     public static String getUserId() {
@@ -124,35 +134,40 @@ public class UserUtils {
         return user.getString("simple_avatar");
     }
 
-    public static void cacheUserAvatar() {
-//        //头像缓存
-        ImageUtils.getUrlBitmap(MyApp.getAppContext(), UserUtils.getUserAvatar(), new SimpleTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                ImageUtils.saveImageToSD(MyApp.getAppContext(), getUserAvatarCacheAbsolutePath(),
-                        resource, 100);
-            }
-        });
-    }
-
-    /**
-     * 获取用户本地缓存头像
-     */
-    public static File getUserCacheAvatarFile() {
-        File file = new File(getUserAvatarCacheAbsolutePath());
-        if (file.exists()) {
-            return file;
+    public static void getUserAvatar(final AvatarTakeListener listener){
+        if (StringUtils.isActuallyEmpty(getBitmapFilePaht())){
+            ImageUtils.getUrlBitmap(MyApp.getAppContext(), UserUtils.getUserAvatar(), new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                    listener.success(resource);
+                    ImageUtils.saveImageToSD(MyApp.getAppContext(), MyApp.getAppContext().getExternalFilesDir("avatar") +
+                                    File.separator + "avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()) +
+                                    ImageUtils.getImageSuffix(UserUtils.getUserAvatar()),
+                            resource, 100);
+                }
+            });
+        }else {
+            listener.success(BitmapFactory.decodeFile(getBitmapFilePaht()));
         }
-        return null;
     }
 
     /**
-     * 缓存头像的绝对路径
+     * 拿取本地缓存的(自己)头像绝对路径
      */
-    private static String getUserAvatarCacheAbsolutePath() {
-        return MyApp.getAppContext().getExternalFilesDir("avatar") +
-                File.separator + "avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()) +
-                ImageUtils.getImageSuffix(UserUtils.getUserAvatar());
+    private static String getBitmapFilePaht() {
+        File filesDir = MyApp.getAppContext().getExternalFilesDir("avatar");
+        String bitmapPath = "";
+        if (filesDir == null || !filesDir.exists()) {
+            return null;
+        }
+        String[] fileList = filesDir.list();
+        for (String path : fileList) {
+            if (path.contains("avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()))) {
+                bitmapPath = filesDir.getAbsolutePath();
+                break;
+            }
+        }
+        return bitmapPath;
     }
 
     /**
@@ -169,8 +184,6 @@ public class UserUtils {
      * 更新用户指定字段信息
      */
     public static void updataLocalUserInfo(String key, String newValue) {
-        KLog.e(key, "value=" + newValue);
-
         JSONObject user = getUserInfo();
         if (user == null) {
             return;

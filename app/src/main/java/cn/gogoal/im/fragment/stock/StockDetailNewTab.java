@@ -27,6 +27,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.MyStockTabNewsBean;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -210,7 +211,7 @@ public class StockDetailNewTab extends BaseFragment {
         @Override
         protected void convert(BaseViewHolder holder, MyStockTabNewsBean data, int position) {
             holder.getView(R.id.tv_mystock_news_stockInfo).setVisibility(View.GONE);
-            holder.setText(tv_mystock_news_date, data.getDate());
+            holder.setText(tv_mystock_news_date, CalendarUtils.getStringDate("yyyy-MM-dd HH:mm",data.getDate()));
             holder.setText(tv_mystock_news_title, data.getNewsTitle());
         }
     }

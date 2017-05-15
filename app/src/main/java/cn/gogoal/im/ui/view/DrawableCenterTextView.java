@@ -1,14 +1,10 @@
 package cn.gogoal.im.ui.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
-import android.view.View;
-
-import cn.gogoal.im.activity.copy.StockSearchActivity;
 
 /**
  * author wangjd on 2017/4/5 0005.
@@ -35,12 +31,6 @@ public class DrawableCenterTextView extends AppCompatTextView {
     }
 
     private void init(final Context context) {
-        this.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                context.startActivity(new Intent(context, StockSearchActivity.class));
-            }
-        });
     }
 
     @Override

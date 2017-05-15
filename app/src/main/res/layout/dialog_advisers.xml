@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="cn.gogoal.im.ui.dialog.AdvisersDialog">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/flag_tv"
+        android:background="@mipmap/img_connect_advisers"
+        android:paddingBottom="20dp"
+        android:paddingEnd="15dp"
+        android:paddingStart="15dp"
+        android:paddingTop="25dp"
+        android:text="尊敬的用户：\n\n该功能为付费模块，您的权限不足，不能使用该功能。为了不影响您的使用，请及时购买。"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_advisers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_dialog_advisers"
+        android:paddingBottom="10dp" />
+
+
+    <ImageView
+        android:id="@+id/img_advisers_cancle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="50dp"
+        android:contentDescription="@null"
+        android:padding="20dp"
+        android:src="@mipmap/icon_live_close" />
+
+</LinearLayout>

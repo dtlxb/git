@@ -9,6 +9,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.StockNewsType;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.UIHelper;
 import hply.com.niugu.bean.StockDetailNewsData;
@@ -31,7 +32,7 @@ public class NewsAdapter extends CommonAdapter<StockDetailNewsData, BaseViewHold
     @Override
     protected void convert(BaseViewHolder holder, final StockDetailNewsData data, int position) {
         holder.setText(R.id.big_event_tittle_tv,data.getTitle());
-        holder.setText(R.id.big_event_date,data.getDate());
+        holder.setText(R.id.big_event_date, CalendarUtils.getStringDate("yyyy-MM-dd HH:mm",data.getDate()));
 
         UIHelper.setRippBg(holder.itemView);
 

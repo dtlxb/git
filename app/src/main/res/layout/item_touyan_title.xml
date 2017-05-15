@@ -3,20 +3,39 @@
     android:id="@+id/item_touyan_title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    android:background="@drawable/shape_line_top_and_bottom"
-    android:orientation="vertical"
-    android:paddingBottom="8dp"
-    android:paddingEnd="15dp"
-    android:paddingStart="15dp"
-    android:paddingTop="8dp">
+    android:background="@android:color/white"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_touyan_title_text"
-        android:layout_width="wrap_content"
+    <View
+        android:id="@+id/view_parent_divider"
+        android:layout_width="match_parent"
+        android:background="@drawable/shape_line_top_and_bottom_colorf0f0f0"
+        android:layout_height="15dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="朝阳组合"
-        android:textColor="@color/textColor_333333"
-        android:textSize="16sp" />
+        android:gravity="center_vertical"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:orientation="horizontal">
 
+        <View
+            android:id="@+id/title_flag"
+            android:layout_width="4dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="6dp"
+            android:background="@color/square_man_tag" />
+
+        <TextView
+            android:id="@+id/tv_touyan_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="朝阳组合"
+            android:textColor="@color/textColor_333333"
+            android:textSize="16sp" />
+    </LinearLayout>
 </LinearLayout>

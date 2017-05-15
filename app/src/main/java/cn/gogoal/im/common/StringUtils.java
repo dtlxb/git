@@ -309,6 +309,8 @@ public class StringUtils {
         return saveSignificand(pareseStringDouble(value), unit);
     }
 
+
+
     /**
      * 保留有效数字
      */
@@ -542,5 +544,15 @@ public class StringUtils {
             params += keyString + "=" + str + "&";
         }
         return params.substring(0, params.length() - 1);
+    }
+
+    public static String formatPhoneNum(String num) {
+        if (isActuallyEmpty(num)) {
+            return "";
+        } else if (num.length() <= 7) {
+            return num.substring(0, 3) + "-";
+        } else {
+            return num.substring(0, 3) + "-" + num.substring(3, 7) + "-" + num.substring(7);
+        }
     }
 }

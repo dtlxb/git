@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -26,6 +25,7 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.StockNewsType;
 import cn.gogoal.im.bean.stock.MyStockTabNewsBean;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
@@ -188,27 +188,24 @@ public class MyStockTabNewsFragment extends BaseFragment {
 
     private class MyStockNewsAdapter extends CommonAdapter<MyStockTabNewsBean, BaseViewHolder> {
 
-        private int newsSource;
-
         private MyStockNewsAdapter(List<MyStockTabNewsBean> datas, int newsSource) {
             super(R.layout.item_mystock_news, datas);
-            this.newsSource = newsSource;
         }
 
         @Override
         protected void convert(BaseViewHolder holder, final MyStockTabNewsBean data, int position) {
             TextView tvNewsTitle = holder.getView(R.id.tv_mystock_news_title);
-            if (newsSource != AppConst.SOURCE_TYPE_YANBAO) {
-                tvNewsTitle.setMaxLines(1);
-                tvNewsTitle.setEllipsize(TextUtils.TruncateAt.END);
-            } else {
-                tvNewsTitle.setMaxLines(2);
-                tvNewsTitle.setEllipsize(TextUtils.TruncateAt.END);
-            }
+//            if (newsSource != AppConst.SOURCE_TYPE_YANBAO) {
+//                tvNewsTitle.setMaxLines(1);
+//                tvNewsTitle.setEllipsize(TextUtils.TruncateAt.END);
+//            } else {
+//                tvNewsTitle.setMaxLines(2);
+//                tvNewsTitle.setEllipsize(TextUtils.TruncateAt.END);
+//            }
             tvNewsTitle.setText(data.getNewsTitle());
             holder.setText(R.id.tv_mystock_news_stockInfo,
                     data.getStockName() + " (" + data.getStockCode() + ")");
-            holder.setText(R.id.tv_mystock_news_date, data.getDate());
+            holder.setText(R.id.tv_mystock_news_date, CalendarUtils.getStringDate("yyyy-MM-dd HH:mm",data.getDate()));
             UIHelper.setRippBg(holder.itemView);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {

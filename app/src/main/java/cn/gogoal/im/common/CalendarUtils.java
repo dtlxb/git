@@ -2,7 +2,10 @@ package cn.gogoal.im.common;
 
 import android.text.TextUtils;
 
+import com.socks.library.KLog;
+
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -467,5 +470,24 @@ public class CalendarUtils {
     public static String getStringDate(String format,Date date){
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat(format,Locale.CHINA);
         return simpleDateFormat.format(date);
+    }
+
+    public static String getStringDate(String format,String dateString){
+        KLog.e(dateString);
+        if (StringUtils.isActuallyEmpty(dateString)){
+            return getCurrentTime("yyyy-MM-dd HH:mm:ss");
+        }
+        try {
+            SimpleDateFormat orderFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.getDefault());
+            Date date = orderFormat.parse(dateString, new ParsePosition(0));
+            SimpleDateFormat simpleDateFormat=new SimpleDateFormat(format,Locale.getDefault());
+            return simpleDateFormat.format(date);
+        }catch (Exception e){
+            if (dateString.length()>16){
+                return dateString.substring(0,16);
+            }else {
+                return dateString;
+            }
+        }
     }
 }

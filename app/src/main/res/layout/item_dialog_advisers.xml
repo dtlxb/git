@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingBottom="10dp"
+    android:paddingEnd="15dp"
+    android:paddingStart="15dp"
+    android:paddingTop="10dp">
+
+    <cn.gogoal.im.ui.view.CircleImageView
+        android:id="@+id/img_advisers_avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_advisers_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="刘龙杰"
+            android:textColor="@color/textColor_333333"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_advisers_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="186-6666-6666"
+            android:textColor="@color/textColor_333333"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/img_dail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        android:padding="15dp"
+        android:src="@mipmap/img_dail" />
+</LinearLayout>

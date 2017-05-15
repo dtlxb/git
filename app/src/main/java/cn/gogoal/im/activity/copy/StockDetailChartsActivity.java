@@ -21,7 +21,6 @@ import com.socks.library.KLog;
 
 import org.simple.eventbus.EventBus;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.BaseMessage;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
@@ -227,7 +227,7 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-        setTabLayoutWidth(tabLayout);//
+        AppDevice.setTabLayoutWidth(tabLayout);//
     }
 
     private void setEnvents() {
@@ -458,27 +458,6 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
         } else {
             load_animation.setVisibility(View.INVISIBLE);
             fragment.setVisibility(View.VISIBLE);
-        }
-    }
-
-    /**
-     * 反射修改TabLayout的默认宽度
-     */
-    public void setTabLayoutWidth(TabLayout t) {
-        try {
-            Class<?> tablayout = t.getClass();
-            Field tabStrip = tablayout.getDeclaredField("mTabStrip");
-            tabStrip.setAccessible(true);
-            LinearLayout ll_tab = (LinearLayout) tabStrip.get(t);
-            for (int i = 0; i < ll_tab.getChildCount(); i++) {
-                View child = ll_tab.getChildAt(i);
-                child.setPadding(0, 0, 0, 0);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
-                params.setMargins(DeviceUtil.dp2px(getContext(), 30f), 0, DeviceUtil.dp2px(getContext(), 30f), 0);
-                child.setLayoutParams(params);
-                child.invalidate();
-            }
-        } catch (Exception e) {
         }
     }
 

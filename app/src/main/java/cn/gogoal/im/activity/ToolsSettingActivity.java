@@ -2,11 +2,13 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +33,7 @@ import cn.gogoal.im.bean.SectionToolsData;
 import cn.gogoal.im.bean.ToolBean;
 import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -53,13 +56,13 @@ public class ToolsSettingActivity extends BaseActivity {
     @BindView(R.id.title_bar)
     XTitle xTitle;
 
-    @BindView(R.id.tv_flag_title)
-    TextView tvFlagTitle;
+    @BindView(R.id.tv_touyan_setting_tips)
+    TextView tvTips;
 
     private SectionAdapter adapterAllData;
 
     private List<SectionToolsData> dataAll;
-    private List<ToolData.Tool> dataOriginal =new ArrayList<>();
+    private List<ToolData.Tool> dataOriginal = new ArrayList<>();
 
     private List<ToolData.Tool> dataSelected;
     private SelectedAdapter selectedAdapter;
@@ -71,6 +74,17 @@ public class ToolsSettingActivity extends BaseActivity {
 
     @Override
     public void doBusiness(final Context mContext) {
+        SpannableString spannableString = new SpannableString("投研首页常用工具(按住拖动调整排序)");
+        spannableString.setSpan(new ForegroundColorSpan(getResColor(R.color.textColor_333333)), 0, 8,
+                Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+
+        spannableString.setSpan(new ForegroundColorSpan(getResColor(R.color.textColor_999999)),8,
+                spannableString.length(),
+                Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+
+        tvTips.setText(spannableString);
+
+
         xTitle.setVisibility(View.VISIBLE);
         xTitle.setTitle(R.string.title_found)
                 .setLeftText("\u3000取消")
@@ -140,7 +154,7 @@ public class ToolsSettingActivity extends BaseActivity {
         rvAll.setNestedScrollingEnabled(false);
         rvAll.setHasFixedSize(true);
 
-        rvAll.setLayoutManager(new StaggeredGridLayoutManager(4,
+        rvAll.setLayoutManager(new StaggeredGridLayoutManager(AppDevice.isLowDpi()?3:4,
                 StaggeredGridLayoutManager.VERTICAL));
         dataAll = new ArrayList<>();
         adapterAllData = new SectionAdapter(ToolsSettingActivity.this, dataAll);
@@ -149,15 +163,13 @@ public class ToolsSettingActivity extends BaseActivity {
     }
 
     private void setChoose() {
-        List<String> test=new ArrayList<>();
 
         String builderShow = "";
         for (ToolData.Tool tool : dataSelected) {
-            builderShow+=tool.getId()+";";
-            test.add(tool.getDesc());
+            builderShow += tool.getId() + ";";
         }
 
-        String builderHide = getHideString();
+        String builderHide = getHideIdString();
 
         Map<String, String> map = new HashMap<>();
         map.put("showid", builderShow.substring(0, builderShow.length() - 1));
@@ -168,15 +180,15 @@ public class ToolsSettingActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
-                if (object.getIntValue("code")==0){
+                if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
-                    if (data.getBooleanValue("success")){
+                    if (data.getBooleanValue("success")) {
                         finish();
-                    }else {
-                        UIHelper.toast(ToolsSettingActivity.this,data.getString("msg"));
+                    } else {
+                        UIHelper.toast(ToolsSettingActivity.this, data.getString("msg"));
                     }
-                }else {
-                    UIHelper.toastResponseError(ToolsSettingActivity.this,responseInfo);
+                } else {
+                    UIHelper.toastResponseError(ToolsSettingActivity.this, responseInfo);
                 }
             }
 
@@ -187,28 +199,25 @@ public class ToolsSettingActivity extends BaseActivity {
         }).startGet();
     }
 
-    @NonNull
-    private String getHideString() {
+    /**
+     * ☆☆☆
+     */
+    private String getHideIdString() {
+
         String builderHide = "";
-        for (int i=0;i<dataOriginal.size();i++){
-            if (contains(dataOriginal.get(i))){
-                dataOriginal.remove(dataOriginal.get(i));
-            }
+
+        List<ToolData.Tool> result = new ArrayList<>();
+        result.clear();
+        result.addAll(dataOriginal);
+        result.removeAll(dataSelected);
+
+        KLog.e(result.size());
+
+        for (ToolData.Tool tool : result) {
+            builderHide += tool.getId() + ";";
         }
 
-        for (ToolData.Tool t:dataOriginal){
-            builderHide+=t.getId()+";";
-        }
         return builderHide;
-    }
-
-    private boolean contains(ToolData.Tool t) {
-        for (ToolData.Tool to:dataSelected){
-            if (to.equals(t)){
-                return true;
-            }
-        }
-        return false;
     }
 
     private int setDivider() {
@@ -232,7 +241,7 @@ public class ToolsSettingActivity extends BaseActivity {
                         for (ToolData.Tool item : itemList) {
                             item.setSimulatedArg(false);
                             dataOriginal.add(item);
-                            dataAll.add(new SectionToolsData(item));
+                            dataAll.add(new SectionToolsData(item,itemList.size()));
                             if (item.getIsShow() == 1) {
                                 dataSelected.add(item);
                             }
@@ -240,10 +249,12 @@ public class ToolsSettingActivity extends BaseActivity {
                         addSpace(itemList);
                     }
 
-                    KLog.e(dataOriginal.size());
-                    tvFlagTitle.setVisibility(dataSelected.size() == 0 ? View.GONE : View.VISIBLE);
+                    tvTips.setVisibility(dataSelected.size() == 0 ? View.GONE : View.VISIBLE);
                     adapterAllData.notifyDataSetChanged();
                     selectedAdapter.notifyDataSetChanged();
+
+                    FileUtil.writeRequestResponse(JSONObject.toJSONString(dataOriginal), "全部投研工具");
+
                 } else if (code == 1001) {
                     UIHelper.toast(ToolsSettingActivity.this, "你没有符合权限的工具可以使用", Toast.LENGTH_LONG);
                 } else {
@@ -264,17 +275,18 @@ public class ToolsSettingActivity extends BaseActivity {
         ToolData.Tool clone = itemList.get(0).clone();
         clone.setSimulatedArg(true);
         clone.setSimulatedArg(true);
+        SectionToolsData spaceItemData = new SectionToolsData(clone, 0);
         if (AppDevice.isLowDpi()) {
             switch (itemList.size() % 3) {
                 case 0:
                     //不添加
                     break;
                 case 1:
-                    dataAll.add(new SectionToolsData(clone));
-                    dataAll.add(new SectionToolsData(clone));
+                    dataAll.add(spaceItemData);
+                    dataAll.add(spaceItemData);
                     break;
                 case 2:
-                    dataAll.add(new SectionToolsData(clone));
+                    dataAll.add(spaceItemData);
                     break;
             }
         } else {
@@ -283,16 +295,16 @@ public class ToolsSettingActivity extends BaseActivity {
                     //不添加
                     break;
                 case 1:
-                    dataAll.add(new SectionToolsData(clone));
-                    dataAll.add(new SectionToolsData(clone));
-                    dataAll.add(new SectionToolsData(clone));
+                    dataAll.add(spaceItemData);
+                    dataAll.add(spaceItemData);
+                    dataAll.add(spaceItemData);
                     break;
                 case 2:
-                    dataAll.add(new SectionToolsData(clone));
-                    dataAll.add(new SectionToolsData(clone));
+                    dataAll.add(spaceItemData);
+                    dataAll.add(spaceItemData);
                     break;
                 case 3:
-                    dataAll.add(new SectionToolsData(clone));
+                    dataAll.add(spaceItemData);
                     break;
             }
 
@@ -308,8 +320,8 @@ public class ToolsSettingActivity extends BaseActivity {
         rvSelected.smoothScrollToPosition(dataSelected.size() - 1);
         selectedAdapter.notifyDataSetChanged();
 
-        for (SectionToolsData d:dataAll){
-            if (d.t==tool){
+        for (SectionToolsData d : dataAll) {
+            if (d.t == tool) {
                 d.t.setIsShow(1);
                 if (!rvAll.isComputingLayout()) {
                     adapterAllData.notifyItemChanged(dataAll.indexOf(d));
@@ -318,7 +330,6 @@ public class ToolsSettingActivity extends BaseActivity {
                 break;
             }
         }
-        KLog.e(dataSelected.size());
     }
 
     /**
@@ -327,15 +338,15 @@ public class ToolsSettingActivity extends BaseActivity {
     public void remooveSelected(ToolData.Tool tool) {
         dataSelected.remove(tool);
         if (dataSelected.size() > 0) {
-            tvFlagTitle.setVisibility(View.VISIBLE);
+            tvTips.setVisibility(View.VISIBLE);
             rvSelected.smoothScrollToPosition(dataSelected.size() - 1);
         } else {
-            tvFlagTitle.setVisibility(View.GONE);
+            tvTips.setVisibility(View.GONE);
         }
         selectedAdapter.notifyDataSetChanged();
 
-        for (SectionToolsData d:dataAll){
-            if (d.t==tool){
+        for (SectionToolsData d : dataAll) {
+            if (d.t == tool) {
                 d.t.setIsShow(0);
                 adapterAllData.notifyItemChanged(dataAll.indexOf(d));
                 break;

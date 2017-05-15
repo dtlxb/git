@@ -2,6 +2,7 @@ package cn.gogoal.im.fragment.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.MineItem;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -109,13 +111,23 @@ public class MineFragment extends BaseFragment {
     }
 
     private void iniheadInfo(Context mContext) {
-        UserUtils.cacheUserAvatar();//缓存用户头像大图
-        if (null != UserUtils.getUserCacheAvatarFile()) {
-            ImageDisplay.loadCircleImage(mContext, UserUtils.getUserCacheAvatarFile(), imageAvatar);
-        } else {
-            ImageDisplay.loadCircleImage(mContext, UserUtils.getUserAvatar(), imageAvatar);
-            UserUtils.cacheUserAvatar();//缓存用户头像大图
-        }
+        UserUtils.getUserAvatar(new AvatarTakeListener() {
+            @Override
+            public void success(final Bitmap bitmap) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageAvatar.setImageBitmap(bitmap);
+                    }
+                });
+
+            }
+
+            @Override
+            public void failed(Exception e) {
+
+            }
+        });
         tvMineUserName.setText(UserUtils.getUserName());
         tvMineIntroduction.setText(UserUtils.getDuty());
 

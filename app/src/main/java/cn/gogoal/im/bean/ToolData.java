@@ -62,7 +62,7 @@ public class ToolData {
          * title : 模块
          * isShow : 1
          */
-
+        private int isOpen;
         private int id;
         private int title_id;
         private String desc;
@@ -80,7 +80,15 @@ public class ToolData {
         private String title;
         private int isShow;
 
-        private boolean simulatedArg;//是否是模拟数据
+        private boolean simulatedArg;//，添加字段，是否是模拟数据
+
+        public int getIsOpen() {
+            return isOpen;
+        }
+
+        public void setIsOpen(int isOpen) {
+            this.isOpen = isOpen;
+        }
 
         public boolean isSimulatedArg() {
             return simulatedArg;
