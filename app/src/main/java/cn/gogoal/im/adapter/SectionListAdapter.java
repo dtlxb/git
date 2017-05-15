@@ -48,7 +48,7 @@ public class SectionListAdapter extends BaseSectionQuickAdapter<SectionToolsData
     protected void convertHead(BaseViewHolder holder, final SectionToolsData item) {
         holder.setVisible(R.id.title_flag, true);
         holder.setVisible(R.id.view_parent_divider, holder.getAdapterPosition() != 0);
-
+        holder.setBackgroundRes(R.id.layout_section_title,android.R.color.transparent);
         holder.setText(R.id.tv_touyan_title_text, item.header);
     }
 
