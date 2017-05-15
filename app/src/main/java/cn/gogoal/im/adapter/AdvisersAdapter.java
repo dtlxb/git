@@ -48,7 +48,7 @@ public class AdvisersAdapter extends CommonAdapter<Advisers, BaseViewHolder> {
         holder.getView(R.id.img_dail).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppDevice.openCall(context,data.getSaler_mobile());
+                AppDevice.openDial(context,data.getSaler_mobile());
             }
         });
     }

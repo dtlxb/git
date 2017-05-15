@@ -23,6 +23,8 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.gogoal.im.base.MyApp;
+
 public class StringUtils {
 
     // 判断一个字符是否是中文
@@ -484,8 +486,9 @@ public class StringUtils {
 
         while (matcher.find()) {
             newString = matcher.group();
-            if (newString.equals("@" + UserUtils.getUserName() + " ")) {
+            if (newString.equals("@" + UserUtils.getNickname() + " ")) {
                 haveMe = true;
+                break;
             }
         }
         return haveMe;

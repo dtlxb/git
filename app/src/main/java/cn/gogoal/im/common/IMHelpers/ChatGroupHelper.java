@@ -171,11 +171,13 @@ public class ChatGroupHelper {
                 ((JSONObject) spAccountArray.get(i)).put("avatar", avatar);
                 ((JSONObject) spAccountArray.get(i)).put("nickname", nickname);
                 ((JSONObject) spAccountArray.get(i)).put("friend_id", friendId);
+                SPTools.saveJsonObject(UserUtils.getMyAccountId() + conversationID + friendId, ((JSONObject) spAccountArray.get(i)));
                 hasThisGuy = true;
+                break;
             }
         }
         if (hasThisGuy) {
-            SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", spAccountArray);
+            UserUtils.saveGroupContactInfo(conversationID, spAccountArray);
         }
     }
 
@@ -331,7 +333,6 @@ public class ChatGroupHelper {
         return bitmapPath;
     }
 
-
     /**
      * 现拼头像
      */
@@ -354,9 +355,9 @@ public class ChatGroupHelper {
                         JSONObject result = JSONObject.parseObject(responseInfo);
                         if (result.getIntValue("code") == 0) {
                             JSONObject data = result.getJSONObject("data");
-                            if (data.getBooleanValue("success")) {
+                            if (null != data) {
                                 response.getInfoSuccess(data);
-                            }else {
+                            } else {
                                 response.getInfoFailed(new Exception(data.getString("msg")));
                             }
                         } else {

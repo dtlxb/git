@@ -178,9 +178,9 @@ public class MainActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
 
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    SPTools.saveString(UserUtils.getMyAccountId() + "_contact_beans", responseInfo);
+                    UserUtils.saveContactInfo(responseInfo);
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
-                    SPTools.saveString(UserUtils.getMyAccountId() + "_contact_beans", "{\"code\":0,\"data\":[],\"message\":\"成功\"}");
+                    UserUtils.saveContactInfo("{\"code\":0,\"data\":[],\"message\":\"成功\"}");
                 } else {
                     UIHelper.toastError(getActivity(), GGOKHTTP.getMessage(responseInfo));
                 }
@@ -245,11 +245,10 @@ public class MainActivity extends BaseActivity {
 
     @Subscriber(tag = "correct_allmessage_count")
     public void setBadgeViewNum(BaseMessage<Integer> message) {
-
         int index = message.getOthers().get("index");
         int num = message.getOthers().get("number");
 
-        initBadge(index,num);
+        initBadge(index, num);
 
         if (index >= 0 && index < mainTabArray.length) {
             if (num > 0) {
@@ -260,7 +259,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void initBadge(int index,int num) {
+    private void initBadge(int index, int num) {
         if (badge != null) {
             if (num == 0) {
                 badge.hide(false);
@@ -279,8 +278,8 @@ public class MainActivity extends BaseActivity {
 //                VoiceManager.getInstance(MainActivity.this)
 //                        .startPlay(Uri.parse(uriStr));
             }
-        }else {
-            badge=new BadgeView(MainActivity.this);
+        } else {
+            badge = new BadgeView(MainActivity.this);
             badge.bindTarget(tabMain.getTabAt(index).getCustomView());
         }
     }

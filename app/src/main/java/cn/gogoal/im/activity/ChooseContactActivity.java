@@ -172,7 +172,7 @@ public class ChooseContactActivity extends BaseActivity {
         KLog.e(mSelectedTeamMemberAccounts);
 
         if (actionType == AppConst.SQUARE_ROOM_AT_SOMEONE) {
-            userContacts = UserUtils.getFriendsInTeam(teamId);
+            userContacts = UserUtils.getAllFriendsInTeam(teamId);
         } else {
             userContacts = UserUtils.getUserContacts();
         }

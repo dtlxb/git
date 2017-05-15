@@ -25,11 +25,10 @@ import cn.gogoal.im.ui.view.XTitle;
  * Created by huangxx on 2017/2/20.
  */
 
-public class SquareChatRoomActivity extends BaseActivity implements ChatFragment.MyListener {
+public class SquareChatRoomActivity extends BaseActivity {
 
     //聊天对象
     private ChatFragment chatFragment;
-    private ContactBean contactBean;
     XTitle xTitle;
     private List<String> groupMembers;
     private String squareName;
@@ -83,8 +82,7 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
         AVImClientManager.getInstance().findConversationById(conversationId, new AVImClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
-                //joinSquare(conversation);
-                chatFragment.setConversation(conversation, need_update, actionType);
+                chatFragment.setConversation(conversation, need_update, actionType, null);
                 groupMembers.addAll(conversation.getMembers());
                 if (squareName.equals("")) {
                     initTitle(conversation.getName(), conversation.getConversationId());
@@ -100,30 +98,12 @@ public class SquareChatRoomActivity extends BaseActivity implements ChatFragment
 
     }
 
-    /**
-     * 加入聊天室
-     */
-    /*private void joinSquare(final AVIMConversation conversation) {
-        conversation.join(new AVIMConversationCallback() {
-            @Override
-            public void done(AVIMException e) {
-                if (e == null) {
-                    chatFragment.setConversation(conversation);
-                }
-            }
-        });
-    }*/
     @Subscriber(tag = "correct_square_name")
     private void correctName(String msg) {
         //群改名字
         if (null != msg) {
             xTitle.setTitle(msg);
         }
-    }
-
-    @Override
-    public void setData(ContactBean contactBean) {
-        this.contactBean = contactBean;
     }
 
 }

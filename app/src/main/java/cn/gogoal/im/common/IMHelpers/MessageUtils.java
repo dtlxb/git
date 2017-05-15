@@ -10,13 +10,15 @@ import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.socks.library.KLog;
 
+import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 
 /**
- * Created by huangxx on 2017/2/28.
+ * Created by huangxx on 2017/2/28.00
  */
 
 public class MessageUtils {
@@ -29,6 +31,7 @@ public class MessageUtils {
             for (int i = 0; i < thisJsonArray.size(); i++) {
                 if (thisJsonArray.getJSONObject(i).get("conversationID").equals(imMessageBean.getConversationID())) {
                     thisJsonArray.remove(i);
+                    break;
                 } else {
                 }
             }
@@ -44,15 +47,14 @@ public class MessageUtils {
 
             AVIMMessage message = imMessageBean.getLastMessage();
             //判断消息类型
+
             if (message instanceof AVIMImageMessage) {
-                int mWidth = ((AVIMImageMessage) message).getFileMetaData().get("width") == null ?
-                        0 : ((Number) ((AVIMImageMessage) message).getFileMetaData().get("width")).intValue();
-
-                int mHeight = ((AVIMImageMessage) message).getFileMetaData().get("height") == null ?
-                        0 : ((Number) ((AVIMImageMessage) message).getFileMetaData().get("height")).intValue();
-
-                long mSize = ((AVIMImageMessage) message).getFileMetaData().get("size") == null ?
-                        0L : ((Number) ((AVIMImageMessage) message).getFileMetaData().get("size")).longValue();
+                double width = StringUtils.pareseStringDouble(String.valueOf(((AVIMImageMessage) message).getFileMetaData().get("width")));
+                int mWidth = (int) width;
+                double height = StringUtils.pareseStringDouble(String.valueOf(((AVIMImageMessage) message).getFileMetaData().get("height")));
+                int mHeight = (int) height;
+                double size = StringUtils.pareseStringDouble(String.valueOf(((AVIMImageMessage) message).getFileMetaData().get("size")));
+                int mSize = (int) size;
 
                 ((AVIMImageMessage) message).getFileMetaData().put("width", mWidth);
                 ((AVIMImageMessage) message).getFileMetaData().put("height", mHeight);
@@ -65,6 +67,7 @@ public class MessageUtils {
             }
 
             thisJsonArray.add(jsonObject);
+            KLog.e(jsonObject);
             SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", thisJsonArray);
         } else {
 
@@ -90,6 +93,7 @@ public class MessageUtils {
         for (int i = 0; i < jsonArray.size(); i++) {
             if (((JSONObject) jsonArray.get(i)).getString("conversationID").equals(conversationID)) {
                 jsonArray.remove(jsonArray.get(i));
+                break;
             }
         }
         KLog.e(jsonArray);
@@ -111,6 +115,7 @@ public class MessageUtils {
         for (int i = 0; i < jsonArray.size(); i++) {
             if (jsonArray.getJSONObject(i).get("conversationID").equals(conv_id)) {
                 jsonArray.remove(i);
+                break;
             } else {
             }
         }
@@ -120,13 +125,13 @@ public class MessageUtils {
     //群聊拉人加人(5:建群，拉人   6:踢人)
     public static void changeSquareInfo(String conversationID, JSONArray accountArray, String messageType) {
         JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", new JSONArray());
-        spAccountArray.addAll(accountArray);
         if (null != accountArray) {
             if (messageType.equals("5")) {
+                spAccountArray.addAll(accountArray);
             } else if (messageType.equals("6")) {
                 spAccountArray.removeAll(accountArray);
             }
-            SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", spAccountArray);
+            UserUtils.saveGroupContactInfo(conversationID, spAccountArray);
         } else {
 
         }
@@ -154,38 +159,48 @@ public class MessageUtils {
         return mSB + ms;
     }
 
-    //提取聊天对方头像
-    public static String getItsHeadPic(int friendId, int chatType, String conversationID) {
+    //提取聊天对方头像或者昵称
+    public static String getContactWhatedInfo(String whated, int friendId, int chatType, String conversationID) {
         JSONArray jsonArray;
-        String headPicUri = "";
+        JSONObject object;
         if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
-            String string = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", null);
-            if (!TextUtils.isEmpty(string)) {
-                JSONObject jsonObject = JSON.parseObject(string);
-                KLog.e(jsonObject.toString());
-                if (jsonObject.get("data") != null) {
-                    jsonArray = jsonObject.getJSONArray("data");
-                    for (int i = 0; i < jsonArray.size(); i++) {
-                        JSONObject oldObject = (JSONObject) jsonArray.get(i);
-                        if (oldObject.getInteger("friend_id") == friendId) {
-                            headPicUri = oldObject.getString("avatar");
+            object = SPTools.getJsonObject(UserUtils.getMyAccountId() + friendId + "", null);
+            if (null != object) {
+                return object.getString(whated);
+            } else {
+                String string = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", null);
+                KLog.e(string);
+                if (!TextUtils.isEmpty(string)) {
+                    JSONObject jsonObject = JSON.parseObject(string);
+                    KLog.e(jsonObject.toString());
+                    if (jsonObject.get("data") != null) {
+                        jsonArray = jsonObject.getJSONArray("data");
+                        for (int i = 0; i < jsonArray.size(); i++) {
+                            JSONObject oldObject = (JSONObject) jsonArray.get(i);
+                            if (oldObject.getInteger("friend_id") == friendId) {
+                                return oldObject.getString(whated);
+                            }
                         }
                     }
                 }
             }
         } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
-            jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", new JSONArray());
-            if (jsonArray != null) {
-                for (int i = 0; i < jsonArray.size(); i++) {
-                    JSONObject oldObject = (JSONObject) jsonArray.get(i);
-                    if (oldObject.getInteger("friend_id") == friendId) {
-                        headPicUri = oldObject.getString("avatar");
+            object = SPTools.getJsonObject(UserUtils.getMyAccountId() + conversationID + friendId, null);
+            if (null != object) {
+                return object.getString(whated);
+            } else {
+                jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", new JSONArray());
+                if (jsonArray != null) {
+                    for (int i = 0; i < jsonArray.size(); i++) {
+                        JSONObject oldObject = (JSONObject) jsonArray.get(i);
+                        if (oldObject.getInteger("friend_id") == friendId) {
+                            return oldObject.getString(whated);
+                        }
                     }
                 }
             }
         }
-
-        return headPicUri;
+        return "";
     }
 
 }

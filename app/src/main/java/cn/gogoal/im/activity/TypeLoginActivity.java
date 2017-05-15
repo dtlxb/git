@@ -249,7 +249,7 @@ public class TypeLoginActivity extends BaseActivity {
                     loginButton.setClickable(true);
                     loginDialog.dismiss(true);
                     WaitDialog errorDialog = WaitDialog.getInstance(
-                           object.getString("message"),
+                            object.getString("message"),
                             R.mipmap.login_error, false);
                     errorDialog.show(getSupportFragmentManager());
                     errorDialog.dismiss(false);

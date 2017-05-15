@@ -379,7 +379,7 @@ public class MessageFragment extends BaseFragment {
                         //文字
                         message = contentObject.getString("_lctext");
                         if (StringUtils.StringFilter(message, "@*[\\S]*[ \r\n]")) {
-                            message = "[有人@了你]" + contentObject.getString("_lctext");
+                            message = "[有人@了你]" + squareMessageFrom + ":" + contentObject.getString("_lctext");
                         }
                         break;
                     case AppConst.IM_MESSAGE_TYPE_PHOTO:
