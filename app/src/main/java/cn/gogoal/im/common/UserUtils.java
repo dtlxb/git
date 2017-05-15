@@ -135,7 +135,6 @@ public class UserUtils {
 
     public static void getUserAvatar(final AvatarTakeListener listener){
         KLog.e(getBitmapFilePaht());
-
         if (StringUtils.isActuallyEmpty(getBitmapFilePaht())){
             ImageUtils.getUrlBitmap(MyApp.getAppContext(), UserUtils.getUserAvatar(), new SimpleTarget<Bitmap>() {
                 @Override
@@ -164,7 +163,7 @@ public class UserUtils {
         String[] fileList = filesDir.list();
         for (String path : fileList) {
             if (path.contains("avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()))) {
-                bitmapPath = filesDir.getAbsolutePath()+"avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar());
+                bitmapPath = filesDir.getAbsolutePath()+File.separator+path;
                 break;
             }
         }
