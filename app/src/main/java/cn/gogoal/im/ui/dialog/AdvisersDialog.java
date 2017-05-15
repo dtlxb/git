@@ -16,6 +16,8 @@ import cn.gogoal.im.bean.Advisers;
 import cn.gogoal.im.bean.AdvisersBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
@@ -31,7 +33,6 @@ public class AdvisersDialog extends BaseCentDailog {
     private List<Advisers> datas;
 
     private AdvisersAdapter advisersAdapter;
-    private RecyclerView rvAdvisers;
 
     @Override
     public int getLayoutRes() {
@@ -50,7 +51,7 @@ public class AdvisersDialog extends BaseCentDailog {
 
     @Override
     public void bindView(View v) {
-        rvAdvisers = (RecyclerView) v.findViewById(R.id.rv_advisers);
+        RecyclerView rvAdvisers = (RecyclerView) v.findViewById(R.id.rv_advisers);
         rvAdvisers.setLayoutManager(new LinearLayoutManager(getContext()));
 
         v.findViewById(R.id.img_advisers_cancle).setOnClickListener(new View.OnClickListener() {
@@ -61,8 +62,18 @@ public class AdvisersDialog extends BaseCentDailog {
         });
 
         datas = new ArrayList<>();
-        advisersAdapter = new AdvisersAdapter(getActivity(),datas,getWidth());
+        advisersAdapter = new AdvisersAdapter(getActivity(), datas, getWidth());
         rvAdvisers.setAdapter(advisersAdapter);
+
+        //先拿缓存
+        String advisersList = SPTools.getString("ADVISERS_LIST", "");
+        if (!StringUtils.isActuallyEmpty(advisersList)) {
+            List<Advisers> list = JSONObject.parseArray(advisersList, Advisers.class);
+            datas.addAll(list);
+            advisersAdapter.notifyDataSetChanged();
+        }
+
+        //再请求覆盖
         getAdvisers();
 
     }
@@ -79,6 +90,7 @@ public class AdvisersDialog extends BaseCentDailog {
                 if (code == 0) {
                     datas.clear();
                     List<Advisers> data = JSONObject.parseObject(responseInfo, AdvisersBean.class).getData();
+                    SPTools.saveString("ADVISERS_LIST", JSONObject.toJSONString(data));
                     datas.addAll(data);
                     advisersAdapter.notifyDataSetChanged();
 

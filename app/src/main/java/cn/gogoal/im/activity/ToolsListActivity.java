@@ -83,9 +83,12 @@ public class ToolsListActivity extends BaseActivity {
                         toolsDatas.add(titleData);
 
                         List<ToolData.Tool> tools = toolData.getDatas();
-                        for (ToolData.Tool t : tools) {
-                            t.setSimulatedArg(false);
-                            toolsDatas.add(new SectionToolsData(t,tools.size()));
+                        for (int j=0;j<tools.size();j++) {
+                            tools.get(j).setSimulatedArg(false);
+                            SectionToolsData sectionToolsData = new SectionToolsData(tools.get(j), tools.size());
+                            sectionToolsData.setParentPosition(i);
+                            sectionToolsData.setChildPosition(j);
+                            toolsDatas.add(sectionToolsData);
                         }
                     }
                     sectionAdapter.notifyDataSetChanged();

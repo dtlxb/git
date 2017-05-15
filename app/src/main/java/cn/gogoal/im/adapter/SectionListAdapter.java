@@ -57,7 +57,7 @@ public class SectionListAdapter extends BaseSectionQuickAdapter<SectionToolsData
     protected void convert(BaseViewHolder holder, final SectionToolsData data, final int position) {
         final ToolData.Tool tool = data.t;
 
-        holder.setVisible(R.id.view_divider, data.getChildPosition() == data.getChildCountInParent() - 1);
+        holder.setVisible(R.id.view_divider, data.getChildPosition() != data.getChildCountInParent() - 1);
 
         holder.setText(R.id.tv_item_tools_title, tool.getDesc());
         holder.setText(R.id.tv_item_tools_introduce, tool.getIntroduce());

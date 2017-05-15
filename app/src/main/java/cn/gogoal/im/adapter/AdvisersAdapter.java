@@ -5,8 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.socks.library.KLog;
-
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -30,8 +28,6 @@ public class AdvisersAdapter extends CommonAdapter<Advisers, BaseViewHolder> {
     public AdvisersAdapter(Activity context, List<Advisers> datas, int width) {
         super(R.layout.item_dialog_advisers, datas);
         dialogSize = 4* width / 25;
-        KLog.e("宽高=" + dialogSize);
-        KLog.e("宽高dp=" + AppDevice.px2dp(context, dialogSize));
         this.context = context;
     }
 
