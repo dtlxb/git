@@ -109,7 +109,7 @@ public class MyGroupsActivity extends BaseActivity {
     public void getGroupList(final int type) {
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
-        if (type == AppConst.REFRESH_TYPE_FIRST) {
+        if (type==AppConst.REFRESH_TYPE_FIRST) {
             xLayout.setStatus(XLayout.Loading);
         }
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
@@ -124,8 +124,8 @@ public class MyGroupsActivity extends BaseActivity {
                     listAdapter.notifyDataSetChanged();
 
                     xLayout.setStatus(XLayout.Success);
-                    if (type == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
-                        UIHelper.toast(getActivity(), "更新群组数据成功");
+                    if (type==AppConst.REFRESH_TYPE_SWIPEREFRESH){
+                        UIHelper.toast(getActivity(),"更新群组数据成功");
                     }
                 } else {
                     xLayout.setStatus(XLayout.Empty);
@@ -161,25 +161,28 @@ public class MyGroupsActivity extends BaseActivity {
             if (!StringUtils.isActuallyEmpty(imagecache)) {
                 ImageDisplay.loadImage(getActivity(), imagecache, imgAvatar);
                 groupAvatar[0] = BitmapFactory.decodeFile(imagecache);
-                KLog.e("使用缓存头像：" + imagecache);
             } else {//没有缓存就拼
                 final List<String> avatarString = new ArrayList<>();
                 ArrayList<GroupCollectionData.DataBean.MInfoBean> mInfo = data.getM_info();
-                for (GroupCollectionData.DataBean.MInfoBean bean : mInfo) {
+                for (GroupCollectionData.DataBean.MInfoBean bean:mInfo){
                     avatarString.add(bean.getAvatar());
                 }
                 GroupFaceImage.getInstance(getActivity(), avatarString).load(new GroupFaceImage.OnMatchingListener() {
                     @Override
                     public void onSuccess(final Bitmap mathingBitmap) {
-                        //拼好了显示
-                        ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
-                        //拼好了存起来
-                        ChatGroupHelper.cacheGroupAvatar(data.getConv_id(), mathingBitmap);
-                        KLog.e("现拼九宫");
+                        MyGroupsActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //拼好了显示
+                                ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
+                                //拼好了存起来
+                                ChatGroupHelper.cacheGroupAvatar(data.getConv_id(),mathingBitmap);
+                                KLog.e("现拼九宫");
 
+                            }
+                        });
                         groupAvatar[0] = mathingBitmap;
                     }
-
                     @Override
                     public void onError(Exception e) {
                         KLog.e(e.getMessage());
@@ -254,5 +257,4 @@ public class MyGroupsActivity extends BaseActivity {
         };
         new GGOKHTTP(params, GGOKHTTP.CANCEL_COLLECT_GROUP, ggHttpInterface).startGet();
     }
-
 }

@@ -134,7 +134,6 @@ public class UserUtils {
     }
 
     public static void getUserAvatar(final AvatarTakeListener listener){
-        KLog.e(getBitmapFilePaht());
         if (StringUtils.isActuallyEmpty(getBitmapFilePaht())){
             ImageUtils.getUrlBitmap(MyApp.getAppContext(), UserUtils.getUserAvatar(), new SimpleTarget<Bitmap>() {
                 @Override
