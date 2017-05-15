@@ -256,4 +256,16 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
+    <!--我的Tab页等级认证-->
+    <style name="TextViewMineLevel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:background">@drawable/shape_mine_level</item>
+        <item name="android:drawablePadding">3dp</item>
+        <item name="android:padding">3dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">#ffec86</item>
+        <item name="android:textSize">10sp</item>
+    </style>
 </resources>

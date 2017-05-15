@@ -472,6 +472,16 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                                                 @Override
                                                 public void success() {
                                                     MyStockAdapter.this.removeItem(data);
+                                                    try {
+                                                        new android.os.Handler().postDelayed(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                myStockAdapter.notifyDataSetChanged();
+                                                            }
+                                                        },1000);
+                                                    }catch (Exception e){
+                                                        e.getMessage();
+                                                    }
                                                 }
 
                                                 @Override

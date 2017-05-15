@@ -82,7 +82,6 @@ public class MineFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        AppDevice.setViewWidth$Height(imageAvatar, 4 * AppDevice.getWidth(mContext) / 25, 3 * AppDevice.getWidth(mContext) / 13);
         iniheadInfo(mContext);
         initRecycler(mContext);
         initDatas();
@@ -104,6 +103,7 @@ public class MineFragment extends BaseFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         layoutManager.setSmoothScrollbarEnabled(true);
         layoutManager.setAutoMeasureEnabled(true);
+
         rvMine.setLayoutManager(layoutManager);
         rvMine.setHasFixedSize(true);
         rvMine.setNestedScrollingEnabled(false);
@@ -111,6 +111,10 @@ public class MineFragment extends BaseFragment {
     }
 
     private void iniheadInfo(Context mContext) {
+        AppDevice.setViewWidth$Height(imageAvatar,
+                4 * AppDevice.getWidth(mContext) / 25,
+                4 * AppDevice.getWidth(mContext) / 25);
+
         UserUtils.getUserAvatar(new AvatarTakeListener() {
             @Override
             public void success(final Bitmap bitmap) {

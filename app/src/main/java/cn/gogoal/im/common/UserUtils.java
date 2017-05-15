@@ -27,7 +27,6 @@ import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 
 /**
@@ -135,6 +134,8 @@ public class UserUtils {
     }
 
     public static void getUserAvatar(final AvatarTakeListener listener){
+        KLog.e(getBitmapFilePaht());
+
         if (StringUtils.isActuallyEmpty(getBitmapFilePaht())){
             ImageUtils.getUrlBitmap(MyApp.getAppContext(), UserUtils.getUserAvatar(), new SimpleTarget<Bitmap>() {
                 @Override
@@ -163,7 +164,7 @@ public class UserUtils {
         String[] fileList = filesDir.list();
         for (String path : fileList) {
             if (path.contains("avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()))) {
-                bitmapPath = filesDir.getAbsolutePath();
+                bitmapPath = filesDir.getAbsolutePath()+"avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar());
                 break;
             }
         }
