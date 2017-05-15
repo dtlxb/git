@@ -1,5 +1,8 @@
 package cn.gogoal.im.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -43,7 +46,7 @@ public class ToolData {
         this.datas = datas;
     }
 
-    public static class Tool implements Cloneable {
+    public static class Tool implements Cloneable,Parcelable {
         /**
          * id : 1           item id
          * //         * title_id : 1     分组Id
@@ -240,5 +243,69 @@ public class ToolData {
         public boolean equals(Object obj) {
             return obj instanceof Tool && ((Tool) obj).getId() == getId();
         }
+
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.isOpen);
+            dest.writeInt(this.id);
+            dest.writeInt(this.title_id);
+            dest.writeString(this.desc);
+            dest.writeString(this.iconUrl);
+            dest.writeString(this.introduce);
+            dest.writeString(this.url);
+            dest.writeInt(this.position);
+            dest.writeInt(this.showHotFlag);
+            dest.writeInt(this.type);
+            dest.writeInt(this.isClick);
+            dest.writeString(this.insert_time);
+            dest.writeString(this.content);
+            dest.writeString(this.code);
+            dest.writeString(this.funintroduce);
+            dest.writeString(this.title);
+            dest.writeInt(this.isShow);
+            dest.writeByte(this.simulatedArg ? (byte) 1 : (byte) 0);
+        }
+
+        public Tool() {
+        }
+
+        protected Tool(Parcel in) {
+            this.isOpen = in.readInt();
+            this.id = in.readInt();
+            this.title_id = in.readInt();
+            this.desc = in.readString();
+            this.iconUrl = in.readString();
+            this.introduce = in.readString();
+            this.url = in.readString();
+            this.position = in.readInt();
+            this.showHotFlag = in.readInt();
+            this.type = in.readInt();
+            this.isClick = in.readInt();
+            this.insert_time = in.readString();
+            this.content = in.readString();
+            this.code = in.readString();
+            this.funintroduce = in.readString();
+            this.title = in.readString();
+            this.isShow = in.readInt();
+            this.simulatedArg = in.readByte() != 0;
+        }
+
+        public static final Creator<Tool> CREATOR = new Creator<Tool>() {
+            @Override
+            public Tool createFromParcel(Parcel source) {
+                return new Tool(source);
+            }
+
+            @Override
+            public Tool[] newArray(int size) {
+                return new Tool[size];
+            }
+        };
     }
 }

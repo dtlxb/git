@@ -45,6 +45,7 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
+import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.index.IndexBar;
 import cn.gogoal.im.ui.index.SuspendedDecoration;
 import cn.gogoal.im.ui.view.XTitle;
@@ -67,6 +68,8 @@ public class ChooseContactActivity extends BaseActivity {
     private int topListWidth;
 
     private GGShareEntity entity;
+    private View actionView;
+    private WaitDialog waitDialog;
 
     public void setOnItemCheckListener(ICheckItemListener<ContactBean> listener) {
         this.listener = listener;
@@ -156,7 +159,7 @@ public class ChooseContactActivity extends BaseActivity {
 
         textAction = initTitleAction(teamId);
 
-        title.addAction(textAction);
+        actionView = title.addAction(textAction);
 
         //初始化
         LinearLayoutManager layoutManager;
@@ -261,6 +264,11 @@ public class ChooseContactActivity extends BaseActivity {
             @Override
             public void actionClick(View view) {
 
+                actionView.setClickable(false);
+
+                waitDialog = WaitDialog.getInstance("请稍后...", R.mipmap.login_loading, true);
+                waitDialog.show(getSupportFragmentManager());
+
                 if (result.size() == 0) {
                     return;//没有选择好友时，点击确定不执行操作
                 }
@@ -304,6 +312,10 @@ public class ChooseContactActivity extends BaseActivity {
                                 @Override
                                 public void getInfoFailed(Exception e) {
                                     UIHelper.toast(getActivity(), "分享消息发送失败");
+                                    waitDialog.dismiss();
+                                    WaitDialog dialog = WaitDialog.getInstance("分享消息发送失败", R.mipmap.login_error, false);
+                                    dialog.show(getSupportFragmentManager());
+                                    dialog.dismiss(false);
                                 }
                             });
                         }
@@ -344,17 +356,25 @@ public class ChooseContactActivity extends BaseActivity {
                         intent.putExtras(mbundle);
                         startActivity(intent);
 
-                        UIHelper.toast(ChooseContactActivity.this, "群组创建成功!!!");
+//                        UIHelper.toast(ChooseContactActivity.this, "群组创建成功!!!");
                         finish();
                     }
                 } else {
                     UIHelper.toastResponseError(getActivity(), responseInfo);
+                    waitDialog.dismiss();
+                    WaitDialog dialog = WaitDialog.getInstance("创建群组失败", R.mipmap.login_error, false);
+                    dialog.show(getSupportFragmentManager());
+                    dialog.dismiss(false);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toastError(getActivity(), msg, null);
+                waitDialog.dismiss();
+                WaitDialog dialog = WaitDialog.getInstance("创建群组失败", R.mipmap.login_error, false);
+                dialog.show(getSupportFragmentManager());
+                dialog.dismiss(false);
+//                UIHelper.toastError(getActivity(), msg, null);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.CREATE_GROUP_CHAT, ggHttpInterface).startGet();
