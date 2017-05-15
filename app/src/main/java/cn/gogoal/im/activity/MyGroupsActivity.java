@@ -161,7 +161,6 @@ public class MyGroupsActivity extends BaseActivity {
             if (!StringUtils.isActuallyEmpty(imagecache)) {
                 ImageDisplay.loadImage(getActivity(), imagecache, imgAvatar);
                 groupAvatar[0] = BitmapFactory.decodeFile(imagecache);
-                KLog.e("使用缓存头像："+imagecache);
             } else {//没有缓存就拼
                 final List<String> avatarString = new ArrayList<>();
                 ArrayList<GroupCollectionData.DataBean.MInfoBean> mInfo = data.getM_info();

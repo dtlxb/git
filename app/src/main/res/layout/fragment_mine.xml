@@ -49,7 +49,7 @@
             <RelativeLayout
                 android:id="@+id/layout_user_head"
                 android:layout_width="match_parent"
-                android:layout_height="130dp"
+                android:layout_height="wrap_content"
                 android:background="@color/colorMineHead"
                 android:orientation="vertical"
                 android:paddingEnd="20dp"
@@ -57,13 +57,15 @@
 
                 <cn.gogoal.im.ui.view.CircleImageView
                     android:id="@+id/img_mine_avatar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
                     android:layout_centerVertical="true"
+                    android:layout_marginBottom="30dp"
+                    android:src="@mipmap/logo"
                     app:borderColor="#e0e0e0"
-                    app:borderWidth="2dp"/>
+                    app:borderWidth="1dp" />
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/img_mine_avatar"
@@ -79,22 +81,38 @@
                         android:id="@+id/tv_mine_userName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="--"
+                        android:layout_alignParentTop="true"
+                        android:text="张无忌"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_authentication"
+                        style="@style/TextViewMineLevel"
+                        android:layout_toEndOf="@+id/tv_mine_userName"
+                        android:drawableStart="@mipmap/authentication"
+                        android:text="高级认证" />
+
+                    <TextView
+                        style="@style/TextViewMineLevel"
+                        android:layout_toEndOf="@+id/tv_authentication"
+                        android:drawableStart="@mipmap/img_mine_level_1"
+                        android:text="等级" />
 
                     <TextView
                         android:id="@+id/tv_mine_introduction"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_below="@+id/tv_mine_userName"
+                        android:layout_marginTop="5dp"
                         android:text="朝阳永续金融分析师"
                         android:textColor="@color/color0_8White"
                         android:textSize="12sp" />
 
-                </LinearLayout>
+                </RelativeLayout>
 
                 <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/flag_img_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"

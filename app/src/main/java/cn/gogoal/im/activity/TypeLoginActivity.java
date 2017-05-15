@@ -76,6 +76,7 @@ public class TypeLoginActivity extends BaseActivity {
         } catch (Exception e) {
             e.getMessage();
         }
+
         //存储设备是否低分屏，一定要竖屏
         SPTools.saveBoolean("low_dpi", AppDevice.getWidth(mContext) < AppDevice.DPI720P);
 

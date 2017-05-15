@@ -78,7 +78,7 @@ public class ToolsSettingActivity extends BaseActivity {
         spannableString.setSpan(new ForegroundColorSpan(getResColor(R.color.textColor_333333)), 0, 8,
                 Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 
-        spannableString.setSpan(new ForegroundColorSpan(getResColor(R.color.textColor_999999)),8,
+        spannableString.setSpan(new ForegroundColorSpan(getResColor(R.color.textColor_999999)), 8,
                 spannableString.length(),
                 Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 
@@ -154,7 +154,7 @@ public class ToolsSettingActivity extends BaseActivity {
         rvAll.setNestedScrollingEnabled(false);
         rvAll.setHasFixedSize(true);
 
-        rvAll.setLayoutManager(new StaggeredGridLayoutManager(AppDevice.isLowDpi()?3:4,
+        rvAll.setLayoutManager(new StaggeredGridLayoutManager(AppDevice.isLowDpi() ? 3 : 4,
                 StaggeredGridLayoutManager.VERTICAL));
         dataAll = new ArrayList<>();
         adapterAllData = new SectionAdapter(ToolsSettingActivity.this, dataAll);
@@ -172,8 +172,8 @@ public class ToolsSettingActivity extends BaseActivity {
         String builderHide = getHideIdString();
 
         Map<String, String> map = new HashMap<>();
-        map.put("showid", builderShow.substring(0, builderShow.length() - 1));
-        map.put("nshowid", builderHide.substring(0, builderHide.length() - 1));
+        map.put("showid", builderShow.length() > 0 ? (builderShow.substring(0, builderShow.length() - 1)) : "");
+        map.put("nshowid", builderHide.length() > 0 ? (builderHide.substring(0, builderHide.length() - 1)) : "");
         map.put("token", UserUtils.getToken());
         new GGOKHTTP(map, GGOKHTTP.GET_EDITE_USERCOLUMN, new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -211,10 +211,16 @@ public class ToolsSettingActivity extends BaseActivity {
         result.addAll(dataOriginal);
         result.removeAll(dataSelected);
 
-        KLog.e(result.size());
+        KLog.e("dataOriginal.size==" + dataOriginal.size() +
+                ";dataSelected.size==" + dataSelected.size() +
+                ";result.size==" + result.size());
 
-        for (ToolData.Tool tool : result) {
-            builderHide += tool.getId() + ";";
+        if (result.isEmpty()) {
+            return "";
+        } else {
+            for (ToolData.Tool tool : result) {
+                builderHide += tool.getId() + ";";
+            }
         }
 
         return builderHide;
@@ -241,7 +247,7 @@ public class ToolsSettingActivity extends BaseActivity {
                         for (ToolData.Tool item : itemList) {
                             item.setSimulatedArg(false);
                             dataOriginal.add(item);
-                            dataAll.add(new SectionToolsData(item,itemList.size()));
+                            dataAll.add(new SectionToolsData(item, itemList.size()));
                             if (item.getIsShow() == 1) {
                                 dataSelected.add(item);
                             }

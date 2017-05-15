@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -141,7 +142,11 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     @Override
     public void onResume() {
         super.onResume();
-        refreshMyStock(AppConst.REFRESH_TYPE_FIRST);
+        try {
+            refreshMyStock(AppConst.REFRESH_TYPE_FIRST);
+        }catch (Exception e){
+            KLog.e(e.getMessage());
+        }
     }
 
     public void refreshMyStock(int refreshType) {
@@ -312,7 +317,11 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
     void noData(boolean nadata){
         editEnable(!nadata);
-        itemMystock.setVisibility(nadata?View.GONE:View.VISIBLE);
+        try {
+            itemMystock.setVisibility(nadata?View.GONE:View.VISIBLE);
+        }catch (Exception e){
+            e.getMessage();
+        }
         refreshLayout.setEnabled(!nadata);
         setAppBarLayout(appBarLayout,!nadata);
 
@@ -472,6 +481,16 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                                                 @Override
                                                 public void success() {
                                                     MyStockAdapter.this.removeItem(data);
+                                                    try {
+                                                        new android.os.Handler().postDelayed(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                myStockAdapter.notifyDataSetChanged();
+                                                            }
+                                                        },1000);
+                                                    }catch (Exception e){
+                                                        e.getMessage();
+                                                    }
                                                 }
 
                                                 @Override

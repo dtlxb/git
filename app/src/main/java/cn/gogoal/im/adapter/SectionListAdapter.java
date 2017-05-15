@@ -48,7 +48,7 @@ public class SectionListAdapter extends BaseSectionQuickAdapter<SectionToolsData
     protected void convertHead(BaseViewHolder holder, final SectionToolsData item) {
         holder.setVisible(R.id.title_flag, true);
         holder.setVisible(R.id.view_parent_divider, holder.getAdapterPosition() != 0);
-
+        holder.setBackgroundRes(R.id.layout_section_title,android.R.color.transparent);
         holder.setText(R.id.tv_touyan_title_text, item.header);
     }
 
@@ -57,7 +57,7 @@ public class SectionListAdapter extends BaseSectionQuickAdapter<SectionToolsData
     protected void convert(BaseViewHolder holder, final SectionToolsData data, final int position) {
         final ToolData.Tool tool = data.t;
 
-        holder.setVisible(R.id.view_divider, data.getChildPosition() == data.getChildCountInParent() - 1);
+        holder.setVisible(R.id.view_divider, data.getChildPosition() != data.getChildCountInParent() - 1);
 
         holder.setText(R.id.tv_item_tools_title, tool.getDesc());
         holder.setText(R.id.tv_item_tools_introduce, tool.getIntroduce());

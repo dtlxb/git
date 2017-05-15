@@ -1,7 +1,6 @@
 package cn.gogoal.im.base;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,6 +27,8 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import com.bumptech.glide.Glide;
 
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
@@ -232,38 +233,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
                         .getDisplayMetrics()));
     }
 
-    private ProgressDialog mDialog;
-
-    protected ProgressDialog showWaitDialog(@StringRes int messageId) {
-        if (mDialog == null) {
-            if (messageId <= 0) {
-                mDialog = DialogHelp.getProgressDialog(this, true);
-            } else {
-                String message = getResources().getString(messageId);
-                mDialog = DialogHelp.getProgressDialog(this, message, true);
-            }
-        }
-        mDialog.show();
-
-        return mDialog;
-    }
-
-    /**
-     * hide waitDialog
-     */
-    protected void hideWaitDialog() {
-        ProgressDialog dialog = mDialog;
-        if (dialog != null) {
-            mDialog = null;
-            try {
-                dialog.cancel();
-                // dialog.dismiss();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
     /**
      * 修复输入法内存泄露
      */
@@ -322,6 +291,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         fixInputMethodManagerLeak(this);
+        try {
+            Glide.with(this).pauseRequests();
+        }catch (Exception e){}
     }
 
     public BaseActivity getActivity() {
