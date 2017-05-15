@@ -85,8 +85,8 @@
 
         <activity
             android:name=".activity.MainActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.RigisterActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
@@ -131,6 +131,7 @@
         <activity android:name=".activity.IMSquareChatSetActivity" />
         <activity android:name=".activity.IMGroupContactsActivity" />
         <activity android:name=".activity.SearchActivity" />
+        <activity android:name=".activity.SearchMessagesActivity" />
         <activity android:name=".wxapi.WXPayEntryActivity" />
         <activity android:name=".activity.IMAddFriendActivity" />
         <activity android:name=".wxapi.WXEntryActivity" />
@@ -185,8 +186,8 @@
 
         <activity android:name=".activity.ShareMessageActivity" />
         <activity android:name=".activity.ScreenActivity" />
-        <activity android:name=".activity.ToolsSettingActivity"/>
-        <activity android:name=".activity.ToolsListActivity"/>
+        <activity android:name=".activity.ToolsSettingActivity" />
+        <activity android:name=".activity.ToolsListActivity" />
     </application>
 
 </manifest>

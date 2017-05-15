@@ -89,10 +89,9 @@ public class IMPersonActivity extends BaseActivity {
     void function(View view) {
         switch (view.getId()) {
             case R.id.tv_do_search_conversation:
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                Intent intent = new Intent(getActivity(), SearchMessagesActivity.class);
                 intent.putExtra("conversation_id", conversationId);
                 startActivity(intent);
-                startActivity(new Intent(getActivity(), SearchActivity.class));
                 break;
             /*case R.id.getmessage_swith:
                 break;*/
