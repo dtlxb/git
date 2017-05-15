@@ -75,7 +75,6 @@ public class StockNewsMinFragment extends BaseFragment {
 
     public static StockNewsMinFragment getInstance(int position) {
         StockNewsMinFragment snf = new StockNewsMinFragment();
-
         Bundle b = new Bundle();
         b.putInt("position", position);
 

@@ -13,7 +13,7 @@ import cn.gogoal.im.activity.SearchActivity;
  * author wangjd on 2017/4/7 0007.
  * Staff_id 1375
  * phone 18930640263
- * description :通用搜索框.
+ * description :去股票搜索.
  */
 public class MySearchView extends DrawableCenterTextView {
 

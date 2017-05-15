@@ -32,7 +32,6 @@ import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
-import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,13 +65,13 @@ import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.stock.ImageChartFragment;
 import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
 import cn.gogoal.im.ui.dialog.StockPopuDialog;
+import cn.gogoal.im.ui.stock.KChartsBitmap;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
 import hply.com.niugu.HeaderView;
 import hply.com.niugu.autofixtext.AutofitTextView;
 import hply.com.niugu.stock.BitmapChartView;
 import hply.com.niugu.stock.StockMinuteBean;
 import hply.com.niugu.stock.TimesFivesBitmap;
-import cn.gogoal.im.ui.stock.KChartsBitmap;
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -369,29 +368,7 @@ public class CopyStockDetailActivity extends BaseActivity {
             }
         });
 
-        setTabLayoutWidth(tabLayoutNews);
-    }
-
-    /**
-     * 反射修改TabLayout的默认宽度
-     */
-    public void setTabLayoutWidth(TabLayout t) {
-        try {
-            Class<?> tablayout = t.getClass();
-            Field tabStrip = tablayout.getDeclaredField("mTabStrip");
-            tabStrip.setAccessible(true);
-            LinearLayout ll_tab = (LinearLayout) tabStrip.get(t);
-            for (int i = 0; i < ll_tab.getChildCount(); i++) {
-                View child = ll_tab.getChildAt(i);
-                child.setPadding(0, 0, 0, 0);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
-                params.setMargins(AppDevice.dp2px(getActivity(), 10), 0, AppDevice.dp2px(getActivity(), 10), 0);
-                child.setLayoutParams(params);
-                child.invalidate();
-            }
-        } catch (Exception e) {
-            e.getMessage();
-        }
+        AppDevice.setTabLayoutWidth(tabLayoutNews);
     }
 
     private void findView() {

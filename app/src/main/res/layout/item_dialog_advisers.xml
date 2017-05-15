@@ -10,9 +10,9 @@
     android:paddingTop="10dp">
 
     <cn.gogoal.im.ui.view.CircleImageView
+        android:id="@+id/img_advisers_avatar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/logo" />
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -39,8 +39,10 @@
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/img_dail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@null"
         android:padding="15dp"
         android:src="@mipmap/img_dail" />
 </LinearLayout>

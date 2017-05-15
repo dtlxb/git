@@ -42,6 +42,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionToolsData, Ba
 
     @Override
     protected void convertHead(BaseViewHolder holder, final SectionToolsData item) {
+        View titleView = holder.getView(R.id.item_touyan_title);
         holder.setText(R.id.tv_touyan_title_text, item.header);
     }
 

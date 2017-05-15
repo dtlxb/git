@@ -80,6 +80,11 @@
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
+
+-keep class cn.gogoal.im.common.AppDevice {
+    public void setTabLayoutWidth(android.support.design.widget.TabLayout);
+}
+
 -keep class * implements android.os.Parcelable {
   public static final android.os.Parcelable$Creator *;
 }

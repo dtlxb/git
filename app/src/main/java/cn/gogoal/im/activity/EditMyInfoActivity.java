@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -74,7 +73,6 @@ public class EditMyInfoActivity extends BaseActivity {
         new GGOKHTTP(map, GGOKHTTP.GET_MY_INFO, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     EditInfoBean.EditInfoData editInfoData = JSONObject.parseObject(responseInfo, EditInfoBean.class).getData();
                     UserUtils.updataLocalUserInfo("city", editInfoData.getCity());

@@ -7,16 +7,19 @@ package cn.gogoal.im.bean;
  * description :投资顾问
  */
 public class Advisers {
-    /**
-     * ass_saler_mobile :
-     * ass_saler_photo : http://info.china-yjy.com/Upload/Photo/newnophoto.gif
-     * ass_saler_user_id : 0
-     * saler_mobile : 4001818595
-     * saler_photo : http://info.china-yjy.com/Upload/Photo/ph2011322100116.JPG
-     * saler_user_id : 34125
-     * saler_name : 陈乃姚
-     * ass_saler_name :
-     */
+
+//    "_id":10386,
+//    "ass_saler":124442,   //副销售id
+//    "id":10386,
+//    "saler_name":"陈XX", //主销售名称
+//    "saler":34125,               //主销售id
+//    "user_name":"李XX",  //用户名称
+//    "ass_saler_mobile":"137xxxx8871", //副销售电话
+//    "user_id":108784,        //用户id
+//    "ass_saler_name":"张迎梅",  //副销售名称
+//    "saler_mobile":"137xxxx8871",  //主销售名称
+//    "saler_photo":"http://118.26.238.118:10001/Upload/Photo/null",   //主销售头像
+//    "ass_saler_photo":"http://118.26.238.118:10001/Upload/Photo/null"  //副销售头像
 
     private String ass_saler_mobile;
     private String ass_saler_photo;

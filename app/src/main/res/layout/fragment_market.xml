@@ -13,9 +13,9 @@
         android:background="#fff"
         app:elevation="0dp">
 
-        <cn.gogoal.im.ui.view.DrawableCenterTextView
+        <cn.gogoal.im.ui.view.MySearchView
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="30dp"
             android:layout_margin="10dp"
             android:background="@drawable/shape_search_activity_edit"
             android:drawableLeft="@mipmap/img_search"

@@ -174,7 +174,7 @@ public class StringUtils {
             }
             int resId = GGEmoticons.GGEmoticonHashMap.get(key);
             if (0 != resId) {
-                Drawable drawable = ContextCompat.getDrawable(context,resId);
+                Drawable drawable = ContextCompat.getDrawable(context, resId);
                 drawable.setBounds(0, 0, textSize, textSize);
                 ImageSpan imageSpan = new ImageSpan(drawable);
                 int end = matcher.start() + key.length();
@@ -199,8 +199,8 @@ public class StringUtils {
         return new StringBuilder(orderStr).reverse().toString();
     }
 
-    public static boolean isActuallyEmpty(String words){
-        return TextUtils.isEmpty(words) || words.equals("null") || TextUtils.isEmpty(words.replace(" ",""));
+    public static boolean isActuallyEmpty(String words) {
+        return TextUtils.isEmpty(words) || words.equals("null") || TextUtils.isEmpty(words.replace(" ", ""));
     }
 
     /**
@@ -292,8 +292,8 @@ public class StringUtils {
         return Character.toUpperCase(lastCode) == checkCodeList[idSum % 11];
     }
 
-    public static String getNotNullString(String orderStr){
-        return isActuallyEmpty(orderStr)?"":orderStr;
+    public static String getNotNullString(String orderStr) {
+        return isActuallyEmpty(orderStr) ? "" : orderStr;
     }
 
     public static Double pareseStringDouble(String value) {
@@ -306,6 +306,8 @@ public class StringUtils {
     public static String pareseStringDouble(String value, int unit) {
         return saveSignificand(pareseStringDouble(value), unit);
     }
+
+
 
     /**
      * 保留有效数字
@@ -329,7 +331,7 @@ public class StringUtils {
     }
 
     public static String saveSignificand(String strDoubleData, int significand) {
-        return pareseStringDouble(strDoubleData,significand);
+        return pareseStringDouble(strDoubleData, significand);
     }
 
     /**
@@ -539,5 +541,15 @@ public class StringUtils {
             params += keyString + "=" + str + "&";
         }
         return params.substring(0, params.length() - 1);
+    }
+
+    public static String formatPhoneNum(String num) {
+        if (isActuallyEmpty(num)) {
+            return "";
+        } else if (num.length() <= 7) {
+            return num.substring(0, 3) + "-";
+        } else {
+            return num.substring(0, 3) + "-" + num.substring(3, 7) + "-" + num.substring(7);
+        }
     }
 }

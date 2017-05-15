@@ -183,8 +183,6 @@ public class UserUtils {
      * 更新用户指定字段信息
      */
     public static void updataLocalUserInfo(String key, String newValue) {
-        KLog.e(key, "value=" + newValue);
-
         JSONObject user = getUserInfo();
         if (user == null) {
             return;

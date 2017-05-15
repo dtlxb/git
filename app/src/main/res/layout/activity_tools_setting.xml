@@ -19,7 +19,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_flag_title"
+                android:id="@+id/tv_touyan_setting_tips"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
@@ -32,7 +32,9 @@
                 android:id="@+id/rv_selected"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white" />
+                android:paddingBottom="10dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/shape_shadow" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_all"

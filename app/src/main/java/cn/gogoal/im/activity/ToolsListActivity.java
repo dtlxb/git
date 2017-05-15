@@ -1,11 +1,11 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,11 +49,11 @@ public class ToolsListActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         setMyTitle("工具中心", true);
 
-        toolsDatas=new ArrayList<>();
-        sectionAdapter=new SectionListAdapter(mContext,toolsDatas);
-        BaseActivity.initRecycleView(recyclerView,0);
-        recyclerView.setBackgroundColor(0xffF8F8F8);
+        toolsDatas = new ArrayList<>();
+        sectionAdapter = new SectionListAdapter(mContext, toolsDatas);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setAdapter(sectionAdapter);
+        recyclerView.setBackgroundColor(0xfff8f8f8);
         getToolsList();
 
         xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
@@ -71,18 +71,21 @@ public class ToolsListActivity extends BaseActivity {
         new GGOKHTTP(map, GGOKHTTP.GET_ALLCOLUMN, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 int code = JSONObject.parseObject(responseInfo).getInteger("code");
                 if (code == 0) {
                     toolsDatas.clear();
                     List<ToolData> data = JSONObject.parseObject(responseInfo, ToolBean.class).getData();
-                    for (int i=0;i<data.size();i++){
+                    for (int i = 0; i < data.size(); i++) {
                         ToolData toolData = data.get(i);
-                        toolsDatas.add(new SectionToolsData(true,toolData.getTitle()));
+
+                        SectionToolsData titleData = new SectionToolsData(true, toolData.getTitle());
+                        titleData.setParentPosition(-1);
+                        toolsDatas.add(titleData);
+
                         List<ToolData.Tool> tools = toolData.getDatas();
-                        for (ToolData.Tool t:tools){
+                        for (ToolData.Tool t : tools) {
                             t.setSimulatedArg(false);
-                            toolsDatas.add(new SectionToolsData(t));
+                            toolsDatas.add(new SectionToolsData(t,tools.size()));
                         }
                     }
                     sectionAdapter.notifyDataSetChanged();
@@ -95,7 +98,7 @@ public class ToolsListActivity extends BaseActivity {
             }
 
             public void onFailure(String msg) {
-                UIHelper.toastError(getActivity(),msg,xLayout);
+                UIHelper.toastError(getActivity(), msg, xLayout);
             }
         }).startGet();
     }

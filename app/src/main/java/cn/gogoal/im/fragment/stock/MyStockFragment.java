@@ -287,15 +287,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             R.id.tv_mystock_gonggao, R.id.tv_mystock_yanbao})
     void click(View view) {
         switch (view.getId()) {
-            case R.id.tv_mystock_edit:
-                /*Intent intent = new Intent(view.getContext(), EditMyStockActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("my_stock_edit", myStockDatas);
-                intent.putExtras(bundle);
-                startActivityForResult(intent, 7);*/
-                // TODO: 2017/4/27 0027 编辑自选股，传自选股集合
-                break;
-
             case R.id.img_show_tinymarket_dialog:
                 ((MainStockFragment) getParentFragment()).showMarketDialog();
                 break;

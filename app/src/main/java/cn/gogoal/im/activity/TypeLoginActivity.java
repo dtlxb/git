@@ -93,7 +93,7 @@ public class TypeLoginActivity extends BaseActivity {
 //        loginPassWord.setText("888888");
 
         loginUserName.setText("E00003645");
-        loginPassWord.setText("147369");
+        loginPassWord.setText("258369");
 
 //        loginUserName.setText("E00002639");
 //        loginPassWord.setText("412174");
@@ -207,7 +207,6 @@ public class TypeLoginActivity extends BaseActivity {
                             SPTools.saveInt(data.getInteger("account_id") + "_saved_account", data.getInteger("account_id"));
                         }
                         intent.putExtra("isFromLogin", true);
-                        KLog.e(data.getString("account_id"));
                         //登录IM
                         try {
                             AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {

@@ -300,7 +300,6 @@ public class ChatGroupHelper {
 
                 @Override
                 public void getInfoFailed(Exception e) {
-                    KLog.e(e.getMessage());
                 }
             });
         } else {
@@ -348,7 +347,6 @@ public class ChatGroupHelper {
                 params.put("token", getToken());
                 params.put("conv_id", ConversationId);
                 params.put("id_list", conversation.getMembers().toString());
-                KLog.e(params);
 
                 GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
                     @Override

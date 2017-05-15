@@ -2,8 +2,8 @@ package cn.gogoal.im.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,22 +36,19 @@ public class SectionListAdapter extends BaseSectionQuickAdapter<SectionToolsData
     private String[] status = {"获取开通", "已开通", "试用中", "免费"};
     // 数组index和isOpen对应，0 获取开通 1 已开通   2 试用中 3 免费
 
+    private int iconSize;
+
     public SectionListAdapter(Context context, List<SectionToolsData> data) {
         super(R.layout.item_tools_center, R.layout.item_touyan_title, data);
         this.context = context;
+        iconSize = 7 * AppDevice.getWidth(context) / 50;
     }
 
     @Override
     protected void convertHead(BaseViewHolder holder, final SectionToolsData item) {
         holder.setVisible(R.id.title_flag, true);
-        View titleView = holder.getView(R.id.item_touyan_title);
-        RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) titleView.getLayoutParams();
-        if (holder.getAdapterPosition() == 0) {
-            params.setMargins(0, 0, 0, 0);
-        } else {
-            params.setMargins(0, AppDevice.dp2px(context, 20), 0, 0);
-        }
-        titleView.setLayoutParams(params);
+        holder.setVisible(R.id.view_parent_divider, holder.getAdapterPosition() != 0);
+
         holder.setText(R.id.tv_touyan_title_text, item.header);
     }
 
@@ -60,15 +57,23 @@ public class SectionListAdapter extends BaseSectionQuickAdapter<SectionToolsData
     protected void convert(BaseViewHolder holder, final SectionToolsData data, final int position) {
         final ToolData.Tool tool = data.t;
 
+        holder.setVisible(R.id.view_divider, data.getChildPosition() == data.getChildCountInParent() - 1);
+
         holder.setText(R.id.tv_item_tools_title, tool.getDesc());
         holder.setText(R.id.tv_item_tools_introduce, tool.getIntroduce());
+
+        ImageView iconView = holder.getView(R.id.img_logo);
+        ViewGroup.LayoutParams params = iconView.getLayoutParams();
+        params.width = iconSize;
+        params.height = iconSize;
+        iconView.setLayoutParams(params);
 
         Glide.with(context)
                 .load(tool.getIconUrl())
                 .centerCrop()
                 .dontAnimate()
                 .dontTransform()
-                .into((ImageView) holder.getView(R.id.img_logo));
+                .into(iconView);
 
         TextView tvOperation = holder.getView(R.id.tv_item_tools_operation);
         if (tool.getIsOpen() >= 0 && tool.getIsOpen() < status.length) {
@@ -92,7 +97,7 @@ public class SectionListAdapter extends BaseSectionQuickAdapter<SectionToolsData
             }
         });
 
-        tvOperation.setOnClickListener(tool.getIsOpen() == 0 ? new DialogClickListener():null);
+        tvOperation.setOnClickListener(tool.getIsOpen() == 0 ? new DialogClickListener() : null);
 
     }
 

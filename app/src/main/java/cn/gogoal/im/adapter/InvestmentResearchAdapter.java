@@ -16,7 +16,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.NormalIntentUtils;
-import cn.gogoal.im.ui.dialog.ComingSoonDialog;
+import cn.gogoal.im.common.UIHelper;
 
 /**
  * author wangjd on 2017/5/11 0011.
@@ -52,9 +52,22 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
         imgIcon.setVisibility(data.isSimulatedArg() ? View.INVISIBLE : View.VISIBLE);
         tvDesc.setVisibility(data.isSimulatedArg() ? View.INVISIBLE : View.VISIBLE);
 
-        tvDesc.setTextColor(data.getIsClick()==0?
-                getResColor(R.color.textColor_333333):
-                getResColor(R.color.textColor_999999));
+        switch (data.getType()) {
+            case 10000:  //H5
+                break;
+            case 10001: //行情
+                break;
+            case 10002: //个股
+                break;
+            case 10003: //直播
+                break;
+            default:
+                break;
+        }
+
+        tvDesc.setTextColor(data.getType()==10000?(data.getIsClick() == 0 ?
+                getResColor(R.color.textColor_333333) :
+                getResColor(R.color.textColor_999999)):getResColor(R.color.textColor_333333));
 
         if (data.isSimulatedArg()) {//模拟数据
             imgHot.setVisibility(View.INVISIBLE);
@@ -66,8 +79,8 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
             tvDesc.setText(data.getDesc());
             imgHot.setPadding(0, 0, 0, 0);
             imgHot.setImageResource(R.mipmap.img_hot);
-            imgHot.setVisibility(data.getShowHotFlag() == 0 ? View.VISIBLE : View.GONE);
-            holder.setImageUrl(context, R.id.img_touyan_item_icon, data.getIconUrl(),false);
+            imgHot.setVisibility(data.getShowHotFlag() == 0 ? View.VISIBLE : View.INVISIBLE);
+            holder.setImageUrl(context, R.id.img_touyan_item_icon, data.getIconUrl(), false);
         }
 
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +98,8 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
                                 data.getUrl(),
                                 data.getDesc(), true);
                     } else {
-                        new ComingSoonDialog().show(((MainActivity)context).getSupportFragmentManager());
+//                        new ComingSoonDialog().show(((MainActivity) context).getSupportFragmentManager());
+                        UIHelper.toastInCenter(context,"该功能暂未开放使用");
                     }
                 }
             }

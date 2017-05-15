@@ -7,6 +7,7 @@ import android.view.View;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -27,7 +28,7 @@ import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
  */
 public class AdvisersDialog extends BaseCentDailog {
 
-//    private List<Advisers> datas;
+    private List<Advisers> datas;
 
     private AdvisersAdapter advisersAdapter;
     private RecyclerView rvAdvisers;
@@ -59,8 +60,9 @@ public class AdvisersDialog extends BaseCentDailog {
             }
         });
 
-//        datas = new ArrayList<>();
-
+        datas = new ArrayList<>();
+        advisersAdapter = new AdvisersAdapter(getActivity(),datas,getWidth());
+        rvAdvisers.setAdapter(advisersAdapter);
         getAdvisers();
 
     }
@@ -75,14 +77,15 @@ public class AdvisersDialog extends BaseCentDailog {
                 KLog.e(responseInfo);
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
-//                    datas.clear();
+                    datas.clear();
                     List<Advisers> data = JSONObject.parseObject(responseInfo, AdvisersBean.class).getData();
-//                    datas.addAll(data);
-                    advisersAdapter = new AdvisersAdapter(data);
-                    rvAdvisers.setAdapter(advisersAdapter);
-                    KLog.e(rvAdvisers.getAdapter().getItemCount());
+                    datas.addAll(data);
+                    advisersAdapter.notifyDataSetChanged();
+
                 } else if (code == 1001) {
+
                 } else {
+
                 }
             }
 
