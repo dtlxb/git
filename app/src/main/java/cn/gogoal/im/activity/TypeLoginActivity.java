@@ -1,9 +1,7 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -95,16 +93,16 @@ public class TypeLoginActivity extends BaseActivity {
 //        loginPassWord.setText("888888");
 
 //        loginUserName.setText("E00003645");
-//        loginPassWord.setText("147369");
+//        loginPassWord.setText("258369");
 
-//        loginUserName.setText("E00002639");
-//        loginPassWord.setText("412174");
+        loginUserName.setText("E00002639");
+        loginPassWord.setText("412174");
 
         /*loginUserName.setText("E00020181");
         loginPassWord.setText("394495");*/
 
-        loginUserName.setText("E00002638");
-        loginPassWord.setText("123456");
+//        loginUserName.setText("E00002638");
+//        loginPassWord.setText("123456");
 
 //        loginUserName.setText("E010399");
 //        loginPassWord.setText("198122");
@@ -126,13 +124,6 @@ public class TypeLoginActivity extends BaseActivity {
     }
 
     private void initTitle() {
-
-        new AlertDialog.Builder(getActivity()).setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
 
         xTitle = setMyTitle(R.string.str_login_in, false);
         //添加action
@@ -167,21 +158,29 @@ public class TypeLoginActivity extends BaseActivity {
     }
 
     private void Login() {
+        final WaitDialog loginDialog = WaitDialog.getInstance("登录中", R.mipmap.login_loading, true);
+        loginDialog.show(getSupportFragmentManager());
+        loginDialog.setCancelable(false);
+
         String name = loginUserName.getText().toString().toUpperCase(Locale.ENGLISH);
         String word = loginPassWord.getText().toString();
 
         if (TextUtils.isEmpty(word) || TextUtils.isEmpty(name)) {
             UIHelper.toast(TypeLoginActivity.this, R.string.str_login_edit_null);
-            loginDialog.dismiss(true);
+            loginDialog.dismiss();
+            WaitDialog dialog = WaitDialog.getInstance(getString(R.string.str_login_edit_null), R.mipmap.login_error, false);
+            dialog.show(getSupportFragmentManager());
+            dialog.dismiss(false);
             return;
         }
 
-        if (!UIHelper.isGGPassWord(word, getActivity()))
+        if (!UIHelper.isGGPassWord(word, getActivity())) {
+            loginDialog.dismiss();
+            WaitDialog dialog = WaitDialog.getInstance("密码格式错误", R.mipmap.login_error, false);
+            dialog.show(getSupportFragmentManager());
+            dialog.dismiss(false);
             return;
-
-        final WaitDialog loginDialog = WaitDialog.getInstance("登录中", R.mipmap.login_loading, true);
-        loginDialog.show(getSupportFragmentManager());
-        loginDialog.setCancelable(false);
+        }
 
         Map<String, String> param = new HashMap<>();
         param.put("login_name", name);
@@ -250,7 +249,7 @@ public class TypeLoginActivity extends BaseActivity {
                     loginButton.setClickable(true);
                     loginDialog.dismiss(true);
                     WaitDialog errorDialog = WaitDialog.getInstance(
-                           object.getString("message"),
+                            object.getString("message"),
                             R.mipmap.login_error, false);
                     errorDialog.show(getSupportFragmentManager());
                     errorDialog.dismiss(false);

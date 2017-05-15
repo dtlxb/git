@@ -14,6 +14,7 @@ import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 
 /**
@@ -46,15 +47,14 @@ public class MessageUtils {
 
             AVIMMessage message = imMessageBean.getLastMessage();
             //判断消息类型
+
             if (message instanceof AVIMImageMessage) {
-                int mWidth = ((AVIMImageMessage) message).getFileMetaData().get("width") == null ?
-                        0 : ((Number) ((AVIMImageMessage) message).getFileMetaData().get("width")).intValue();
-
-                int mHeight = ((AVIMImageMessage) message).getFileMetaData().get("height") == null ?
-                        0 : ((Number) ((AVIMImageMessage) message).getFileMetaData().get("height")).intValue();
-
-                long mSize = ((AVIMImageMessage) message).getFileMetaData().get("size") == null ?
-                        0L : ((Number) ((AVIMImageMessage) message).getFileMetaData().get("size")).longValue();
+                double width = StringUtils.pareseStringDouble(String.valueOf(((AVIMImageMessage) message).getFileMetaData().get("width")));
+                int mWidth = (int) width;
+                double height = StringUtils.pareseStringDouble(String.valueOf(((AVIMImageMessage) message).getFileMetaData().get("height")));
+                int mHeight = (int) height;
+                double size = StringUtils.pareseStringDouble(String.valueOf(((AVIMImageMessage) message).getFileMetaData().get("size")));
+                int mSize = (int) size;
 
                 ((AVIMImageMessage) message).getFileMetaData().put("width", mWidth);
                 ((AVIMImageMessage) message).getFileMetaData().put("height", mHeight);
@@ -67,6 +67,7 @@ public class MessageUtils {
             }
 
             thisJsonArray.add(jsonObject);
+            KLog.e(jsonObject);
             SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", thisJsonArray);
         } else {
 
@@ -163,7 +164,7 @@ public class MessageUtils {
         JSONArray jsonArray;
         JSONObject object;
         if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
-            object = SPTools.getJsonObject((friendId + ""), null);
+            object = SPTools.getJsonObject(UserUtils.getMyAccountId() + friendId + "", null);
             if (null != object) {
                 return object.getString(whated);
             } else {

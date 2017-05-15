@@ -525,9 +525,9 @@ public class UserUtils {
     /**
      * 好友通讯录信息保存
      */
-    public static void saveContactInfo(String accountId, String responseInfo) {
+    public static void saveContactInfo(String responseInfo) {
         //先整体缓存
-        SPTools.saveString(accountId + "_contact_beans", responseInfo);
+        SPTools.saveString(UserUtils.getMyAccountId() + "_contact_beans", responseInfo);
         //拆解缓存
         if (!TextUtils.isEmpty(responseInfo)) {
             JSONObject jsonObject = JSON.parseObject(responseInfo);
@@ -535,7 +535,7 @@ public class UserUtils {
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
                 for (int i = 0; i < jsonArray.size(); i++) {
                     JSONObject oneObject = (JSONObject) jsonArray.get(i);
-                    SPTools.saveJsonObject(oneObject.getInteger("friend_id") + "", oneObject);
+                    SPTools.saveJsonObject(UserUtils.getMyAccountId() + oneObject.getInteger("friend_id") + "", oneObject);
                 }
             }
         }

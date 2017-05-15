@@ -486,8 +486,10 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         int maxWidth = (int) (AppDevice.getWidth(mContext) * 0.4);
 //        int dpWidth = ((Number) message.getFileMetaData().get("width")).intValue();
 //        int dpHeight = ((Number) message.getFileMetaData().get("height")).intValue();
-        int dpWidth = Integer.parseInt(message.getFileMetaData().get("width").toString());
-        int dpHeight = Integer.parseInt(message.getFileMetaData().get("height").toString());
+        double width = StringUtils.pareseStringDouble(String.valueOf(message.getFileMetaData().get("width")));
+        int dpWidth = (int) width;
+        double height = StringUtils.pareseStringDouble(String.valueOf(message.getFileMetaData().get("height")));
+        int dpHeight = (int) height;
 
         if (null != message && 0 != dpWidth && dpHeight != 0) {
             if (dpWidth > maxWidth) {

@@ -92,7 +92,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                                 JSONArray accountArray = content_object.getJSONObject("_lcattrs").getJSONArray("accountList");
                                                 MessageUtils.changeSquareInfo(conversation.getConversationId(), accountArray, _lctype);
 
-                                                //生成群头像
+                                                //生成群头像(加人删人时候更改)
                                                 ChatGroupHelper.createGroupImage(conversation.getConversationId(), conversation.getMembers(), "set_avatar");
 
                                                 //发送
@@ -139,7 +139,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     contactBean.setConv_id(conv_id);
                                     String friendList = UserUtils.updataFriendList(JSONObject.toJSONString(contactBean));
                                     //SPTools.saveString(UserUtils.getMyAccountId() + "_contact_beans", friendList);
-                                    UserUtils.saveContactInfo(UserUtils.getMyAccountId(), friendList);
+                                    UserUtils.saveContactInfo(friendList);
                                     break;
 
                                 case AppConst.IM_CHAT_TYPE_CONSULTATION:

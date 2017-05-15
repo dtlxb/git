@@ -333,7 +333,6 @@ public class ChatGroupHelper {
         return bitmapPath;
     }
 
-
     /**
      * 现拼头像
      */
@@ -358,9 +357,9 @@ public class ChatGroupHelper {
                         KLog.e(responseInfo);
                         if (result.getIntValue("code") == 0) {
                             JSONObject data = result.getJSONObject("data");
-                            if (data.getBooleanValue("success")) {
+                            if (null != data) {
                                 response.getInfoSuccess(data);
-                            }else {
+                            } else {
                                 response.getInfoFailed(new Exception(data.getString("msg")));
                             }
                         } else {

@@ -257,11 +257,11 @@ public class ContactsActivity extends BaseActivity {
                 KLog.e(responseInfo);
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     //SPTools.saveString(UserUtils.getMyAccountId() + "_contact_beans", responseInfo);
-                    UserUtils.saveContactInfo(UserUtils.getMyAccountId(), responseInfo);
+                    UserUtils.saveContactInfo(responseInfo);
                     parseContactDatas(responseInfo, contactBeanList);
 
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
-                    UserUtils.saveContactInfo(UserUtils.getMyAccountId(), "{\"code\":0,\"data\":[],\"message\":\"成功\"}");
+                    UserUtils.saveContactInfo("{\"code\":0,\"data\":[],\"message\":\"成功\"}");
                 } else {
                     UIHelper.toastError(getActivity(), GGOKHTTP.getMessage(responseInfo));
                 }
