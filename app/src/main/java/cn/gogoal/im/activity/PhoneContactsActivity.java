@@ -5,13 +5,15 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts.Photo;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.PermissionChecker;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -30,37 +32,27 @@ import java.util.Random;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.PhoneContact;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.permission.IPermissionListner;
 import cn.gogoal.im.ui.index.IndexBar;
 import cn.gogoal.im.ui.view.TextDrawable;
-import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.view.XTitle;
+
+import static cn.gogoal.im.R.id.item_contacts_iv_icon;
 
 /**
  * Created by huangxx on 2017/5/8.
  */
 
 public class PhoneContactsActivity extends BaseActivity {
-
-    private XTitle xTitle;
-
-    @BindView(R.id.rv_contacts)
-    RecyclerView rvContacts;
-
-    @BindView(R.id.index_bar)
-    IndexBar indexBar;
-
-    @BindView(R.id.tv_constacts_flag)
-    TextView tvConstactsFlag;
-
-    @BindView(R.id.xLayout)
-    XLayout xLayout;
 
     // 库 phone表字段
     private static final String[] PHONES_PROJECTION = new String[]{
@@ -74,6 +66,24 @@ public class PhoneContactsActivity extends BaseActivity {
     //联系人的ID
     private static final int PHONES_CONTACT_ID_INDEX = 3;
 
+    private XTitle xTitle;
+
+    @BindView(R.id.rv_contacts)
+    RecyclerView rvContacts;
+
+    @BindView(R.id.index_bar)
+    IndexBar indexBar;
+
+    @BindView(R.id.tv_constacts_flag)
+    TextView tvConstactsFlag;
+
+    private PhoneAdapter phoneAdapter;
+
+    private List<PhoneContact> phoneContacts;
+
+    @BindView(R.id.xLayout)
+    View xLayout;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_phone_contacts;
@@ -82,27 +92,43 @@ public class PhoneContactsActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         init();
-        initXLayout();
+
+        phoneContacts = new ArrayList<>();
+        phoneAdapter = new PhoneAdapter(phoneContacts);
+        rvContacts.setAdapter(phoneAdapter);
+
+        KLog.e(ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.READ_CONTACTS));
+
+        if (ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.READ_CONTACTS) != PermissionChecker.PERMISSION_GRANTED) {
+            xLayout.setVisibility(View.VISIBLE);
+            return;
+        }
 
         BaseActivity.requestRuntimePermission(new String[]{Manifest.permission.READ_CONTACTS}, new IPermissionListner() {
             @Override
             public void onUserAuthorize() {
-                List<PhoneContact> contacts = getContacts();
-                if (contacts.isEmpty()){
-                    xLayout.setStatus(XLayout.Empty);
-                }else {
-                    xLayout.setStatus(XLayout.Success);
-                    List<Map<String,String>> mapContacts=new ArrayList<>();
-                    for (PhoneContact contact:contacts){
-                        Map<String,String> map=new HashMap<>();
-                        map.put("name",contact.getName());
-                        map.put("mobile",contact.getMobile());
+                phoneContacts.addAll(getContacts());
+
+                //TODO test
+                phoneAdapter.notifyDataSetChanged();
+
+                if (phoneContacts.isEmpty()) {
+                    xLayout.setVisibility(View.VISIBLE);
+                } else {
+                    xLayout.setVisibility(View.GONE);
+                    List<Map<String, String>> mapContacts = new ArrayList<>();
+                    for (PhoneContact contact : getContacts()) {
+                        Map<String, String> map = new HashMap<>();
+                        map.put("name", contact.getName());
+                        map.put("mobile", contact.getMobile());
                         mapContacts.add(map);
                     }
 
                     KLog.e(JSONObject.toJSONString(mapContacts));
 
-                    HashMap<String,String> map=new HashMap<String, String>();
+                    HashMap<String, String> map = new HashMap<String, String>();
                     map.put("token", UserUtils.getToken());
                     map.put("contacts", JSONObject.toJSONString(mapContacts));
 
@@ -114,20 +140,18 @@ public class PhoneContactsActivity extends BaseActivity {
 
                         @Override
                         public void onFailure(String msg) {
-
+                            KLog.e(msg);
                         }
-                    }).startGet();
+                    }).startPost();
                 }
             }
 
             @Override
             public void onRefusedAuthorize(List<String> deniedPermissions) {
+                xLayout.setVisibility(View.VISIBLE);
+                KLog.e("获取联系人权限被拒");
             }
         });
-    }
-
-    private void initXLayout() {
-        xLayout.setEmptyText("");
     }
 
     private void init() {
@@ -164,7 +188,7 @@ public class PhoneContactsActivity extends BaseActivity {
 
     private List<PhoneContact> getContacts() {
         List<PhoneContact> contacts = new ArrayList<>();
-        TextDrawable.IBuilder iBuilder = TextDrawable.builder().rect();
+        TextDrawable.IBuilder iBuilder = TextDrawable.builder().roundRect(AppDevice.dp2px(this, 4));
         ContentResolver resolver = PhoneContactsActivity.this.getContentResolver();
         Cursor phoneCursor = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, PHONES_PROJECTION, null, null, null);
         if (phoneCursor != null) {
@@ -178,20 +202,20 @@ public class PhoneContactsActivity extends BaseActivity {
                 //联系人ID
                 Long contactid = phoneCursor.getLong(PHONES_CONTACT_ID_INDEX);
                 //联系人头像
-                Bitmap contactAvatar;
+                Drawable contactAvatar;
                 if (phoneCursor.getLong(PHONES_PHOTO_ID_INDEX) > 0) {
                     Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactid);
-                    contactAvatar = BitmapFactory.decodeStream(ContactsContract.Contacts.openContactPhotoInputStream(resolver, uri));
+                    contactAvatar = ImageUtils.bitmap2Drawable(PhoneContactsActivity.this,
+                            BitmapFactory.decodeStream(ContactsContract.Contacts.openContactPhotoInputStream(resolver, uri)));
                 } else {
-                    iBuilder.build(String.valueOf(contactName.charAt(0)), getContactBgColor());
-                    contactAvatar = BitmapFactory.decodeResource(getResources(), R.mipmap.default_image);
+                    contactAvatar = iBuilder.build(String.valueOf(contactName.charAt(0)), getContactBgColor());
                 }
 
                 if (!StringUtils.isActuallyEmpty(phoneNumber)) {
                     contacts.add(
                             new PhoneContact(
                                     contactName,
-                                    phoneNumber.replaceAll("\\s","").replace("-",""),
+                                    phoneNumber.replaceAll("\\s", "").replace("-", ""),
                                     contactAvatar,
                                     contactid));
                 }
@@ -212,5 +236,22 @@ public class PhoneContactsActivity extends BaseActivity {
         int[] colors = {Color.rgb(180, 65, 56), Color.rgb(107, 112, 114),
                 Color.rgb(112, 159, 167), Color.rgb(157, 198, 176), Color.rgb(201, 134, 107)};
         return colors[new Random().nextInt(5)];
+    }
+
+    private class PhoneAdapter extends CommonAdapter<PhoneContact, BaseViewHolder> {
+
+        private PhoneAdapter(List<PhoneContact> data) {
+            super(R.layout.item_contacts, data);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder holder, PhoneContact data, int position) {
+            holder.setText(R.id.item_contacts_tv_nickname, data.getName());
+
+            holder.setVisible(R.id.item_contacts_tv_duty, true);
+            holder.setText(R.id.item_contacts_tv_duty, data.getMobile());
+
+            holder.setImageDrawable(item_contacts_iv_icon, data.getPhoneAvatar());
+        }
     }
 }

@@ -78,7 +78,7 @@ public class XLayout extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         if (getChildCount() > 1) {
-            throw new IllegalStateException("LoadingLayout can host only one direct child");
+            throw new IllegalStateException("XLayout can host only one direct child");
         }
         contentView = this.getChildAt(0);
         if (!isFirstVisible && null != contentView) {
@@ -89,6 +89,10 @@ public class XLayout extends FrameLayout {
 
     public View getEmptyView(){
         return emptyPage;
+    }
+
+    public void setEmptyPage(View emptyPage) {
+        this.emptyPage = emptyPage;
     }
 
     private void build() {

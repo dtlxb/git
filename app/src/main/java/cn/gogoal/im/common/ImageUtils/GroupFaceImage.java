@@ -22,7 +22,7 @@ import cn.gogoal.im.common.AsyncTaskUtil;
  */
 public class GroupFaceImage<T> {
 
-    private static final int INNER_DIVIDER = 4;//间距单元
+    private static final int INNER_DIVIDER = 2;//间距单元
 
     private static final int BITMAP_CANVAS = INNER_DIVIDER * 37;//画布大小，没所谓
 
