@@ -64,15 +64,4 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tv_invite"
-        android:layout_width="48dp"
-        android:layout_height="30dp"
-        android:background="@drawable/shape_add_friend"
-        android:gravity="center"
-        android:text="邀请 "
-        android:textColor="@android:color/white"
-        android:textSize="13sp"
-        android:visibility="gone" />
-
 </LinearLayout>

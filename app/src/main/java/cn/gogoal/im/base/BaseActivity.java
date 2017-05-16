@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -26,6 +25,7 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.bumptech.glide.Glide;
@@ -60,8 +60,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     private static IPermissionListner mListener;
 
-    private Handler handler;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +67,11 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         mContentView = LayoutInflater.from(this).inflate(bindLayout(), null);
 
         setContentView(mContentView);
+
+        if (isFullScreem()){
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
 
         ButterKnife.bind(this);
 
@@ -78,6 +81,10 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
         doBusiness(this);
 
+    }
+
+    public boolean isFullScreem() {
+        return false;
     }
 
     @Override

@@ -2,7 +2,6 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -25,7 +24,6 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseInfo;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.UserDetailInfo;
-import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
@@ -176,21 +174,8 @@ public class IMPersonDetailActivity extends BaseActivity {
 
             switch (holder.getItemViewType()) {
                 case UserDetailInfo.HEAD:
-                    final ImageView imageAvatar = holder.getView(R.id.image_user_info_avatar);
-//                    ImageDisplay.loadRoundedRectangleImage(mContext,data.getAvatar(), imageAvatar);
-                    UserUtils.getUserAvatar(new AvatarTakeListener() {
-                        @Override
-                        public void success(Bitmap bitmap) {
-                            ImageDisplay.loadRoundedRectangleImage(
-                                    IMPersonDetailActivity.this,
-                                    bitmap,imageAvatar);
-                        }
-
-                        @Override
-                        public void failed(Exception e) {
-
-                        }
-                    });
+                    ImageView imageAvatar = holder.getView(R.id.image_user_info_avatar);
+                    ImageDisplay.loadRoundedRectangleImage(mContext,data.getAvatar(), imageAvatar);
                     imageAvatar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

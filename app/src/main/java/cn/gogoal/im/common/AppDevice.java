@@ -1173,7 +1173,7 @@ public class AppDevice {
     /**
      * 反射修改TabLayout的默认宽度
      */
-    public static void setTabLayoutWidth(TabLayout t) {
+    public static void setTabLayoutWidth(TabLayout t,int dpMargin) {
         try {
             Class<?> tablayout = t.getClass();
             Field tabStrip = tablayout.getDeclaredField("mTabStrip");
@@ -1183,7 +1183,13 @@ public class AppDevice {
                 View child = ll_tab.getChildAt(i);
                 child.setPadding(0, 0, 0, 0);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
-                params.setMargins(AppDevice.dp2px(MyApp.getAppContext(), 10), 0, AppDevice.dp2px(MyApp.getAppContext(), 10), 0);
+
+                params.setMargins(
+                        AppDevice.dp2px(MyApp.getAppContext(), dpMargin),
+                        0,
+                        AppDevice.dp2px(MyApp.getAppContext(), dpMargin),
+                        0);
+
                 child.setLayoutParams(params);
                 child.invalidate();
             }

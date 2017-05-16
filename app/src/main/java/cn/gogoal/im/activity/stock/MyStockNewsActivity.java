@@ -10,6 +10,7 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.fragment.stock.MyStockTabNewsFragment;
 import cn.gogoal.im.ui.view.XLayout;
 
@@ -69,5 +70,7 @@ public class MyStockNewsActivity extends BaseActivity {
         } catch (Exception e) {
             e.getMessage();
         }
+
+        AppDevice.setTabLayoutWidth(tabs,25);
     }
 }

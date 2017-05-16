@@ -31,7 +31,7 @@ import hply.com.niugu.bean.StockDetailResearchData;
  * Author wangjd on 2017/5/3 0003.
  * EmployeeNumber 1375
  * Phone 18930640263
- * Description :新闻、公告、研报全部列表
+ * Description :个股 新闻、公告、研报全部列表
  */
 public class StockNewsAllListActivity extends BaseActivity {
     @BindView(R.id.recyclerView)

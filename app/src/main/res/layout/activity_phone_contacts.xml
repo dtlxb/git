@@ -33,34 +33,40 @@
         android:background="@color/normal_line_color" />
 
 
-    <FrameLayout
+    <cn.gogoal.im.ui.view.XLayout
+        android:id="@+id/xLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_contacts"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
 
-        <cn.gogoal.im.ui.index.IndexBar
-            android:id="@+id/index_bar"
-            android:layout_width="25dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="end" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_contacts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-        <TextView
-            android:id="@+id/tv_constacts_flag"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_gravity="center"
-            android:background="@drawable/shape_index_bar_bg"
-            android:gravity="center"
-            android:text="W"
-            android:textColor="@android:color/white"
-            android:textSize="40sp"
-            android:visibility="gone" />
+            <cn.gogoal.im.ui.index.IndexBar
+                android:id="@+id/index_bar"
+                android:layout_width="25dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end" />
 
-    </FrameLayout>
+            <TextView
+                android:id="@+id/tv_constacts_flag"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_gravity="center"
+                android:background="@drawable/shape_index_bar_bg"
+                android:gravity="center"
+                android:text="W"
+                android:textColor="@android:color/white"
+                android:textSize="40sp"
+                android:visibility="gone" />
+
+        </FrameLayout>
+    </cn.gogoal.im.ui.view.XLayout>
 
 </LinearLayout>

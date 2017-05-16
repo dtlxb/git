@@ -15,6 +15,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.UIHelper;
 
@@ -80,7 +81,7 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
             imgHot.setPadding(0, 0, 0, 0);
             imgHot.setImageResource(R.mipmap.img_hot);
             imgHot.setVisibility(data.getShowHotFlag() == 0 ? View.VISIBLE : View.INVISIBLE);
-            holder.setImageUrl(context, R.id.img_touyan_item_icon, data.getIconUrl(), false);
+            ImageDisplay.loadImage(context,data.getIconUrl(),imgIcon);
         }
 
         itemView.setOnClickListener(new View.OnClickListener() {

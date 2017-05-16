@@ -1,6 +1,8 @@
 package cn.gogoal.im.adapter;
 
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -29,7 +31,11 @@ public class ResearchAdapter extends CommonAdapter<StockDetailResearchData, Base
 
     @Override
     protected void convert(BaseViewHolder holder, final StockDetailResearchData data, int position) {
-        holder.setText(R.id.big_event_tittle_tv, data.getReport_title());
+        TextView textView = holder.getView(R.id.big_event_tittle_tv);
+        textView.setText(data.getReport_title());
+        textView.setSingleLine();
+        textView.setEllipsize(TextUtils.TruncateAt.END);
+
         holder.setText(R.id.big_event_date, data.getCreate_date());
 
         UIHelper.setRippBg(holder.itemView);

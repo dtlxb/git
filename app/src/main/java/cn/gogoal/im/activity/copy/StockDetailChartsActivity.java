@@ -1,5 +1,7 @@
 package cn.gogoal.im.activity.copy;
 
+import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,11 +9,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,8 +28,8 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.gogoal.im.base.AppManager;
+import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -51,7 +51,7 @@ import hply.com.niugu.stock.StockMinuteData;
 /**
  * Created by Lizn on 2015/9/24.
  */
-public class StockDetailChartsActivity extends FragmentActivity implements View.OnClickListener {
+public class StockDetailChartsActivity extends BaseActivity implements View.OnClickListener {
 
     public static final int STOCK_MARKE_INDEX = 0;
     public static final int STOCK_COMMON = 1;
@@ -159,22 +159,29 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
     private int INTERVAL_TIME;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(hply.com.niugu.R.layout.activity_stock_detail_charts);
-        EventBus.getDefault().register(this);
-        ButterKnife.bind(this);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    public int bindLayout() {
+        return hply.com.niugu.R.layout.activity_stock_detail_charts;
+    }
 
-        initView();
+    @Override
+    public boolean isFullScreem() {
+        return true;
+    }
+
+    @Override
+    public void setOrientation() {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+    }
+
+    @Override
+    public void doBusiness(Context mContext) {
         setBottomTab();
 
         totalHeight = DeviceUtil.getHeight(this);
         width = DeviceUtil.getWidth(this) - DeviceUtil.dp2px(this, 18);
         height = DeviceUtil.getHeight(this) - DeviceUtil.dp2px(this, 90);
 
-        if (!DeviceUtil.isNetworkConnected(this)) {
+        if (!DeviceUtil.isNetworkConnected(this)) {//网络不可用时移除刷新
             progressWheel.setVisibility(View.GONE);
             tvCannotGetData.setVisibility(View.VISIBLE);
             handler.removeCallbacks(runnable);
@@ -203,12 +210,59 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
         initFragment();
 
         addFragments();
-
     }
 
-    private void initView() {
-
-    }
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(hply.com.niugu.R.layout.activity_stock_detail_charts);
+//        EventBus.getDefault().register(this);
+//        ButterKnife.bind(this);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//
+//        initView();
+//        setBottomTab();
+//
+//        totalHeight = DeviceUtil.getHeight(this);
+//        width = DeviceUtil.getWidth(this) - DeviceUtil.dp2px(this, 18);
+//        height = DeviceUtil.getHeight(this) - DeviceUtil.dp2px(this, 90);
+//
+//        if (!DeviceUtil.isNetworkConnected(this)) {//网络不可用时移除刷新
+//            progressWheel.setVisibility(View.GONE);
+//            tvCannotGetData.setVisibility(View.VISIBLE);
+//            handler.removeCallbacks(runnable);
+//
+//        } else {
+//            progressWheel.setVisibility(View.VISIBLE);
+//            tvCannotGetData.setVisibility(View.GONE);
+//            handler.removeCallbacks(runnable);
+//            handler.postDelayed(runnable, 5000);
+//        }
+//        setEnvents();
+//
+//        //获取个股信息
+//        initGetData();
+//
+//        fragmentList = new ArrayList<>();
+//
+//        //将碎片加入碎片集合
+//        timesFragment = new TimesFragment();
+//        fiveDayFragment = new FiveDayFragment();
+//
+//        if (stockType == STOCK_MARKE_INDEX) {
+//            authority_blog.setVisibility(View.GONE);
+//        }
+//
+//        initFragment();
+//
+//        addFragments();
+//
+//    }
+//
+//    private void initView() {
+//
+//    }
 
     private void setBottomTab() {
         for (int i = 0; i < tabTitles.length; i++) {
@@ -227,7 +281,8 @@ public class StockDetailChartsActivity extends FragmentActivity implements View.
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-        AppDevice.setTabLayoutWidth(tabLayout);//
+        AppDevice.setTabLayoutWidth(tabLayout,30);//
+
     }
 
     private void setEnvents() {
