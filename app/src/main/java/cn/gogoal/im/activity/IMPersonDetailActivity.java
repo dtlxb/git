@@ -175,7 +175,7 @@ public class IMPersonDetailActivity extends BaseActivity {
             switch (holder.getItemViewType()) {
                 case UserDetailInfo.HEAD:
                     ImageView imageAvatar = holder.getView(R.id.image_user_info_avatar);
-                    ImageDisplay.loadRoundedRectangleImage(mContext,data.getAvatar(), imageAvatar);
+                    ImageDisplay.loadRoundedRectangleImage(mContext, data.getAvatar(), imageAvatar);
                     imageAvatar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

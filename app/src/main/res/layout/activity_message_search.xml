@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
@@ -9,45 +8,44 @@
 
     <include layout="@layout/include_title" />
 
-    <cn.gogoal.im.ui.view.XLayout
-        android:id="@+id/xLayout"
+    <cn.gogoal.im.ui.view.HintCenterEditText
+        android:id="@+id/layout_2search"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="30dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/shape_search_activity_edit"
+        android:drawableLeft="@mipmap/img_search"
+        android:drawablePadding="5dp"
+        android:gravity="center_vertical"
+        android:hint="搜索"
+        android:imeOptions="actionSearch"
+        android:singleLine="true"
+        android:textSize="14sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/wx_share_line" />
 
-            <cn.gogoal.im.ui.view.HintCenterEditText
-                android:id="@+id/layout_2search"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginBottom="7dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="7dp"
-                android:background="@drawable/shape_search_activity_edit"
-                android:drawableLeft="@mipmap/img_search"
-                android:drawablePadding="5dp"
-                android:gravity="center_vertical"
-                android:hint="搜索"
-                android:imeOptions="actionSearch"
-                android:singleLine="true"
-                android:textSize="14sp" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/wx_share_line" />
+    <TextView
+        android:id="@+id/tv_not_find"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="110dp"
+        android:gravity="center_horizontal"
+        android:text="无结果"
+        android:textColor="@color/textColor_999999"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-    </cn.gogoal.im.ui.view.XLayout>
 
 </LinearLayout>

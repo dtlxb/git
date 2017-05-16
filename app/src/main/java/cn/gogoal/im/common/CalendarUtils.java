@@ -41,7 +41,7 @@ public class CalendarUtils {
      * 指定格式返回当前系统时间
      */
     public static String getDataTime(String format) {
-        SimpleDateFormat df = new SimpleDateFormat(format,Locale.CHINA);
+        SimpleDateFormat df = new SimpleDateFormat(format, Locale.CHINA);
         return df.format(new Date());
     }
 
@@ -199,6 +199,7 @@ public class CalendarUtils {
         }
         return null;
     }
+
     /**
      * 将标准表时间搓转成毫秒值
      */
@@ -260,7 +261,7 @@ public class CalendarUtils {
     //IM消息时间显示格式
     public static String parseDateIMMessageFormat(long dateMill) {
 
-        long diff = dateMill - getCurrentTime();
+        long diff = getCurrentTime() - dateMill;
         SimpleDateFormat format = null;
         if (diff > year) {
             format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
@@ -275,7 +276,7 @@ public class CalendarUtils {
 
     //传入一个标准的完整时间戳，返回时、分
     public static String getHour$Min(String yMDHms) {
-        if (StringUtils.isActuallyEmpty(yMDHms)){
+        if (StringUtils.isActuallyEmpty(yMDHms)) {
             return "--";
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
@@ -467,25 +468,25 @@ public class CalendarUtils {
         return df.format(System.currentTimeMillis());
     }
 
-    public static String getStringDate(String format,Date date){
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat(format,Locale.CHINA);
+    public static String getStringDate(String format, Date date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.CHINA);
         return simpleDateFormat.format(date);
     }
 
-    public static String getStringDate(String format,String dateString){
+    public static String getStringDate(String format, String dateString) {
         KLog.e(dateString);
-        if (StringUtils.isActuallyEmpty(dateString)){
+        if (StringUtils.isActuallyEmpty(dateString)) {
             return getCurrentTime("yyyy-MM-dd HH:mm:ss");
         }
         try {
-            SimpleDateFormat orderFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.getDefault());
+            SimpleDateFormat orderFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             Date date = orderFormat.parse(dateString, new ParsePosition(0));
-            SimpleDateFormat simpleDateFormat=new SimpleDateFormat(format,Locale.getDefault());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.getDefault());
             return simpleDateFormat.format(date);
-        }catch (Exception e){
-            if (dateString.length()>16){
-                return dateString.substring(0,16);
-            }else {
+        } catch (Exception e) {
+            if (dateString.length() > 16) {
+                return dateString.substring(0, 16);
+            } else {
                 return dateString;
             }
         }
