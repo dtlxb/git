@@ -80,7 +80,15 @@ public class InvestmentResearchFragment extends BaseFragment {
                         AppConst.GG_HELP,
                         getString(R.string.str_helper));*/
                 //跳设置小工具
-                startActivity(new Intent(view.getContext(), ToolsSettingActivity.class));
+                Intent intent = new Intent(view.getContext(), ToolsSettingActivity.class);
+                ArrayList<ToolData.Tool> data = new ArrayList<>();
+                for (ToolData.Tool tool : mData) {
+                    if (!tool.isSimulatedArg()) {
+                        data.add(tool);
+                    }
+                }
+                intent.putParcelableArrayListExtra("selected_tools", data);
+                startActivity(intent);
             }
         });
 

@@ -4,10 +4,10 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
@@ -19,22 +19,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.ContactAdapter;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.PhoneContact;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.StringUtils;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.permission.IPermissionListner;
-import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.index.IndexBar;
-import cn.gogoal.im.ui.index.SuspendedDecoration;
+import cn.gogoal.im.ui.view.TextDrawable;
+import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**
@@ -54,6 +59,9 @@ public class PhoneContactsActivity extends BaseActivity {
     @BindView(R.id.tv_constacts_flag)
     TextView tvConstactsFlag;
 
+    @BindView(R.id.xLayout)
+    XLayout xLayout;
+
     // 库 phone表字段
     private static final String[] PHONES_PROJECTION = new String[]{
             Phone.DISPLAY_NAME, Phone.NUMBER, Photo.PHOTO_ID, Phone.CONTACT_ID};
@@ -66,10 +74,6 @@ public class PhoneContactsActivity extends BaseActivity {
     //联系人的ID
     private static final int PHONES_CONTACT_ID_INDEX = 3;
 
-    private List<ContactBean> contactBeanList;
-    private ContactAdapter contactAdapter;
-    private boolean added;
-
     @Override
     public int bindLayout() {
         return R.layout.activity_phone_contacts;
@@ -78,32 +82,52 @@ public class PhoneContactsActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         init();
+        initXLayout();
 
         BaseActivity.requestRuntimePermission(new String[]{Manifest.permission.READ_CONTACTS}, new IPermissionListner() {
             @Override
             public void onUserAuthorize() {
-                getContacts();
-                contactAdapter = new ContactAdapter(getActivity(), contactBeanList, 1);
+                List<PhoneContact> contacts = getContacts();
+                if (contacts.isEmpty()){
+                    xLayout.setStatus(XLayout.Empty);
+                }else {
+                    xLayout.setStatus(XLayout.Success);
+                    List<Map<String,String>> mapContacts=new ArrayList<>();
+                    for (PhoneContact contact:contacts){
+                        Map<String,String> map=new HashMap<>();
+                        map.put("name",contact.getName());
+                        map.put("mobile",contact.getMobile());
+                        mapContacts.add(map);
+                    }
 
-                contactAdapter.notifyDataSetChanged();
+                    KLog.e(JSONObject.toJSONString(mapContacts));
 
-                rvContacts.addItemDecoration(new NormalItemDecoration(getActivity(),
-                        getResColor(R.color.contactDividerColor)));
+                    HashMap<String,String> map=new HashMap<String, String>();
+                    map.put("token", UserUtils.getToken());
+                    map.put("contacts", JSONObject.toJSONString(mapContacts));
 
-                rvContacts.setAdapter(contactAdapter);
+                    new GGOKHTTP(map, GGOKHTTP.GET_CONTACTS, new GGOKHTTP.GGHttpInterface() {
+                        @Override
+                        public void onSuccess(String responseInfo) {
+                            KLog.e(responseInfo);
+                        }
+
+                        @Override
+                        public void onFailure(String msg) {
+
+                        }
+                    }).startGet();
+                }
             }
 
             @Override
             public void onRefusedAuthorize(List<String> deniedPermissions) {
-                UIHelper.toast(PhoneContactsActivity.this, "获取通讯录权限被拒绝,无法使用");
-                new android.os.Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        PhoneContactsActivity.this.finish();
-                    }
-                }, 1000);
             }
         });
+    }
+
+    private void initXLayout() {
+        xLayout.setEmptyText("");
     }
 
     private void init() {
@@ -116,9 +140,10 @@ public class PhoneContactsActivity extends BaseActivity {
                 startActivity(intent);*/
             }
         };
+
         xTitle.addAction(textAction, 0);
-        TextView RightText = (TextView) xTitle.getViewByAction(textAction);
-        RightText.setTextColor(getResColor(R.color.textColor_333333));
+        TextView rightText = (TextView) xTitle.getViewByAction(textAction);
+        rightText.setTextColor(getResColor(R.color.textColor_333333));
 
         ViewGroup.LayoutParams tvParams = tvConstactsFlag.getLayoutParams();
         tvParams.width = AppDevice.getWidth(getActivity()) / 4;
@@ -134,10 +159,12 @@ public class PhoneContactsActivity extends BaseActivity {
         indexBar.setmPressedShowTextView(tvConstactsFlag)//设置HintTextView
                 .setmLayoutManager(layoutManager);//设置RecyclerView的LayoutManager
 
-        contactBeanList = new ArrayList<>();
+
     }
 
-    private void getContacts() {
+    private List<PhoneContact> getContacts() {
+        List<PhoneContact> contacts = new ArrayList<>();
+        TextDrawable.IBuilder iBuilder = TextDrawable.builder().rect();
         ContentResolver resolver = PhoneContactsActivity.this.getContentResolver();
         Cursor phoneCursor = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, PHONES_PROJECTION, null, null, null);
         if (phoneCursor != null) {
@@ -156,28 +183,34 @@ public class PhoneContactsActivity extends BaseActivity {
                     Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactid);
                     contactAvatar = BitmapFactory.decodeStream(ContactsContract.Contacts.openContactPhotoInputStream(resolver, uri));
                 } else {
+                    iBuilder.build(String.valueOf(contactName.charAt(0)), getContactBgColor());
                     contactAvatar = BitmapFactory.decodeResource(getResources(), R.mipmap.default_image);
                 }
-                ContactBean contactBean = new ContactBean();
-                contactBean.setPhone(phoneNumber);
-                contactBean.setNickname(contactName);
-                contactBean.setAvatar(contactAvatar);
-                contactBean.setContactType(ContactBean.ContactType.PERSION_ITEM);
-                contactBean.setFriend_id(contactid.intValue());
-                contactBeanList.add(contactBean);
-            }
-            SuspendedDecoration mDecoration = new SuspendedDecoration(getActivity());
 
-            mDecoration.setmDatas(contactBeanList);
-
-            indexBar.setmSourceDatas(contactBeanList)//设置数据
-                    .invalidate();
-
-            if (added) {
-                rvContacts.addItemDecoration(mDecoration);
-
-                added = false;
+                if (!StringUtils.isActuallyEmpty(phoneNumber)) {
+                    contacts.add(
+                            new PhoneContact(
+                                    contactName,
+                                    phoneNumber.replaceAll("\\s","").replace("-",""),
+                                    contactAvatar,
+                                    contactid));
+                }
             }
         }
+
+        if (phoneCursor != null) {
+            phoneCursor.close();
+        }
+
+        return contacts;
+    }
+
+    /**
+     * 随机颜色背景
+     */
+    private int getContactBgColor() {
+        int[] colors = {Color.rgb(180, 65, 56), Color.rgb(107, 112, 114),
+                Color.rgb(112, 159, 167), Color.rgb(157, 198, 176), Color.rgb(201, 134, 107)};
+        return colors[new Random().nextInt(5)];
     }
 }

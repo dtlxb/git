@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSONObject;
@@ -20,14 +19,12 @@ import java.util.List;
 
 import butterknife.BindArray;
 import butterknife.BindView;
-import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ImageTextBean;
-import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.ui.NormalItemDecoration;
 
@@ -190,15 +187,6 @@ public class SearchActivity extends BaseActivity {
             list.add(new ImageTextBean<>(flagIcons[i], searchFlagArray[i]));
         }
         return list;
-    }
-
-    @OnClick({R.id.btn_cancle})
-    void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btn_cancle:
-                KLog.e(JSONObject.toJSONString(ArrayUtils.getSearchList()));
-                break;
-        }
     }
 
     /**

@@ -70,6 +70,7 @@ public class ImageDisplay {
         try {
             Glide.with(context)
                     .load(image)
+                    .centerCrop()
                     .skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.mipmap.image_placeholder)
@@ -82,6 +83,7 @@ public class ImageDisplay {
 
                 Glide.with(Looper.getMainLooper()==Looper.myLooper()?context: MyApp.getAppContext())
                         .load(bytes)
+                        .centerCrop()
                         .skipMemoryCache(true)
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .into(imageView);
@@ -161,6 +163,7 @@ public class ImageDisplay {
                     .load(image)
                     .bitmapTransform(new RoundedCornersTransformation(context, AppDevice.dp2px(context, 5), 0))
                     .into(imageView);
+
         }catch (Exception e) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ((Bitmap) image).compress(Bitmap.CompressFormat.PNG, 100, baos);

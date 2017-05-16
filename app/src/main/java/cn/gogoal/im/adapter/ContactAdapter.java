@@ -33,17 +33,14 @@ public class ContactAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder holder, ContactBean contactBean, int position) {
         TextView textView = holder.getView(R.id.item_contacts_tv_duty);
-        TextView tvInvite = holder.getView(R.id.tv_invite);
         holder.setText(R.id.item_contacts_tv_nickname, contactBean.getTarget());
         if (contactBean.getContactType() == ContactBean.ContactType.FUNCTION_ITEM) {
             textView.setVisibility(View.GONE);
         } else {
             textView.setVisibility(View.VISIBLE);
             if (type == 0) {
-                tvInvite.setVisibility(View.GONE);
                 textView.setText(contactBean.getDuty());
             } else if (type == 1) {
-                tvInvite.setVisibility(View.VISIBLE);
                 textView.setText(contactBean.getPhone());
             }
         }

@@ -368,7 +368,7 @@ public class CopyStockDetailActivity extends BaseActivity {
             }
         });
 
-        AppDevice.setTabLayoutWidth(tabLayoutNews);
+        AppDevice.setTabLayoutWidth(tabLayoutNews,15);
     }
 
     private void findView() {

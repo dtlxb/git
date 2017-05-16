@@ -661,6 +661,16 @@ public class GGOKHTTP {
      */
     public static final String GET_MY_ADVISERS = "v1/user/crm_user_saler";
 
+    /**
+     * 匹配手机通讯录
+     * <p>
+     * token=6046f43ff7ae44bb91d6f3be483d2a98
+     * contacts=[{name:***,mobile:***},{name:***,mobile:***},{name:***,mobile:***}....]
+     * 人有多号码时，拆成多个name-mobile
+     */
+    public static final String GET_CONTACTS = "v1/ggm_im/get_contacts";
+
+
 //--------------------------------------------------------------------------------------------------
 
     /**

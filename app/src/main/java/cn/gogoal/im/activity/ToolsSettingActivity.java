@@ -33,7 +33,6 @@ import cn.gogoal.im.bean.SectionToolsData;
 import cn.gogoal.im.bean.ToolBean;
 import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -105,6 +104,13 @@ public class ToolsSettingActivity extends BaseActivity {
 
         dataSelected = new ArrayList<>();
         selectedAdapter = new SelectedAdapter(mContext, dataSelected);
+
+        List<ToolData.Tool> intentDatas = getIntent().getParcelableArrayListExtra("selected_tools");
+        if (intentDatas != null && !intentDatas.isEmpty()) {
+            dataSelected.addAll(intentDatas);
+            selectedAdapter.notifyDataSetChanged();
+        }
+
 //        投研首页常用工具（按住拖动调整排序）
         ItemDragAndSwipeCallback mItemDragAndSwipeCallback = new ItemDragAndSwipeCallback(selectedAdapter);
         ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(mItemDragAndSwipeCallback);
@@ -136,12 +142,12 @@ public class ToolsSettingActivity extends BaseActivity {
 
             @Override
             public void onItemDragMoving(RecyclerView.ViewHolder source, int from, RecyclerView.ViewHolder target, int to) {
-                KLog.e("move from: " + source.getAdapterPosition() + " to: " + target.getAdapterPosition());
+//                KLog.e("move from: " + source.getAdapterPosition() + " to: " + target.getAdapterPosition());
             }
 
             @Override
             public void onItemDragEnd(RecyclerView.ViewHolder viewHolder, int pos) {
-                KLog.e("drag end");
+//                KLog.e("drag end");
                 BaseViewHolder holder = ((BaseViewHolder) viewHolder);
                 selectedAdapter.notifyDataSetChanged();
 //                holder.setTextColor(R.id.tv, Color.BLACK);
@@ -248,18 +254,12 @@ public class ToolsSettingActivity extends BaseActivity {
                             item.setSimulatedArg(false);
                             dataOriginal.add(item);
                             dataAll.add(new SectionToolsData(item, itemList.size()));
-                            if (item.getIsShow() == 1) {
-                                dataSelected.add(item);
-                            }
                         }
                         addSpace(itemList);
                     }
 
                     tvTips.setVisibility(dataSelected.size() == 0 ? View.GONE : View.VISIBLE);
                     adapterAllData.notifyDataSetChanged();
-                    selectedAdapter.notifyDataSetChanged();
-
-                    FileUtil.writeRequestResponse(JSONObject.toJSONString(dataOriginal), "全部投研工具");
 
                 } else if (code == 1001) {
                     UIHelper.toast(ToolsSettingActivity.this, "你没有符合权限的工具可以使用", Toast.LENGTH_LONG);
@@ -321,6 +321,9 @@ public class ToolsSettingActivity extends BaseActivity {
      * 增加
      */
     public void addSelected(ToolData.Tool tool) {
+        tvTips.setVisibility(View.VISIBLE);
+        rvSelected.setVisibility(View.VISIBLE);
+
         dataSelected.add(tool);
 //        selectedAdapter.notifyItemInserted(dataSelected.size());
         rvSelected.smoothScrollToPosition(dataSelected.size() - 1);
@@ -331,6 +334,8 @@ public class ToolsSettingActivity extends BaseActivity {
                 d.t.setIsShow(1);
                 if (!rvAll.isComputingLayout()) {
                     adapterAllData.notifyItemChanged(dataAll.indexOf(d));
+                }else {
+                    KLog.e("操作出错");
                 }
 //                adapterAllData.notifyDataSetChanged();
                 break;
@@ -342,22 +347,27 @@ public class ToolsSettingActivity extends BaseActivity {
      * 删减
      */
     public void remooveSelected(ToolData.Tool tool) {
-        dataSelected.remove(tool);
-        if (dataSelected.size() > 0) {
-            tvTips.setVisibility(View.VISIBLE);
-            rvSelected.smoothScrollToPosition(dataSelected.size() - 1);
-        } else {
-            tvTips.setVisibility(View.GONE);
-        }
-        selectedAdapter.notifyDataSetChanged();
+
+        KLog.e("反选："+tool.getDesc()+";id="+tool.getId()+";isShow="+tool.getIsShow());
+
+        tvTips.setVisibility(dataSelected.size() > 0?View.VISIBLE:View.GONE);
+        rvSelected.setVisibility(dataSelected.size() > 0?View.VISIBLE:View.GONE);
+
+        KLog.e(dataAll.size());
+
+        KLog.e(JSONObject.toJSONString(dataAll));
 
         for (SectionToolsData d : dataAll) {
-            if (d.t == tool) {
+            if (!d.isHeader && d.t.getId() == tool.getId()) {
                 d.t.setIsShow(0);
-                adapterAllData.notifyItemChanged(dataAll.indexOf(d));
+                adapterAllData.notifyDataSetChanged();
                 break;
             }
         }
+
+        dataSelected.remove(tool);
+
+        selectedAdapter.notifyDataSetChanged();
 
     }
 }

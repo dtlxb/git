@@ -1,6 +1,8 @@
 package cn.gogoal.im.adapter;
 
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -24,27 +26,32 @@ public class NewsAdapter extends CommonAdapter<StockDetailNewsData, BaseViewHold
 
     private StockNewsType stockNewsType;
 
-    public NewsAdapter(List<StockDetailNewsData> data,StockNewsType stockNewsType) {
+    public NewsAdapter(List<StockDetailNewsData> data, StockNewsType stockNewsType) {
         super(R.layout.stock_detail_news_item, data);
-        this.stockNewsType=stockNewsType;
+        this.stockNewsType = stockNewsType;
     }
 
     @Override
     protected void convert(BaseViewHolder holder, final StockDetailNewsData data, int position) {
-        holder.setText(R.id.big_event_tittle_tv,data.getTitle());
-        holder.setText(R.id.big_event_date, CalendarUtils.getStringDate("yyyy-MM-dd HH:mm",data.getDate()));
+
+        TextView textView = holder.getView(R.id.big_event_tittle_tv);
+        textView.setText(data.getTitle());
+        textView.setSingleLine();
+        textView.setEllipsize(TextUtils.TruncateAt.END);
+
+        holder.setText(R.id.big_event_date, CalendarUtils.getStringDate("yyyy-MM-dd HH:mm", data.getDate()));
 
         UIHelper.setRippBg(holder.itemView);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (stockNewsType.getNewsSource()==AppConst.SOURCE_TYPE_NEWS) {
+                if (stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_NEWS) {
                     NormalIntentUtils.go2WebActivity(v.getContext(),
                             AppConst.WEB_NEWS + data.getOrigin_id() + "?source=" + stockNewsType.getNewsSource(),
                             null, true);
-                }else {
-                    NormalIntentUtils.go2PdfDisplayActivity(v.getContext(),data.getOrigin_link(),"");
+                } else {
+                    NormalIntentUtils.go2PdfDisplayActivity(v.getContext(), data.getOrigin_link(), "");
                 }
 
             }
