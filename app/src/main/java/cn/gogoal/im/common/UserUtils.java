@@ -315,8 +315,7 @@ public class UserUtils {
     public static void logout(Activity mContext) {
         SPTools.clear();
         SPTools.saveBoolean("isFromLogin", false);
-//        mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
-        // TODO: 2017/2/8 0008
+        mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
         mContext.finish();
         UIHelper.toast(mContext, "退出登录成功!");
     }
