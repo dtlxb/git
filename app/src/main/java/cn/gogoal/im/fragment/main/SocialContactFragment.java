@@ -108,9 +108,9 @@ public class SocialContactFragment extends BaseFragment {
             public void onRefresh() {
                 recordPage = 1;
 
-                getLiveData(1, null);
-                getLiveData(2, null);
-                getRecordData(null);
+                getLiveData(1, programme_name);
+                getLiveData(2, programme_name);
+                getRecordData(programme_name);
             }
         });
 
