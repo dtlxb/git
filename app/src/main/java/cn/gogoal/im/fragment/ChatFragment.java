@@ -859,7 +859,8 @@ public class ChatFragment extends BaseFragment {
         int totalItemCount = layoutManager.getItemCount();
         //RecyclerView的滑动状态
         int state = recyclerView.getScrollState();
-        if (visibleItemCount > 0 && lastVisibleItemPosition == totalItemCount - 1 && state == recyclerView.SCROLL_STATE_IDLE) {
+        KLog.e(lastVisibleItemPosition);
+        if (visibleItemCount > 1 && lastVisibleItemPosition == totalItemCount - 2 && state == recyclerView.SCROLL_STATE_IDLE) {
             return true;
         } else {
             return false;
