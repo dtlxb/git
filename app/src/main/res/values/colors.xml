@@ -14,7 +14,7 @@
     <color name="decision_tab">#1a79ff</color>
     <color name="time_shadow_color">#334798fc</color>
     <color name="timeschart_line">#77adfb</color>
-    <color name="background_black">#80000000</color>
+    <color name="background_half_black">#80000000</color>
     <color name="timeschart_showdaw">#e3efff</color>
     <color name="timeschart_centerline">#4798fc</color>
     <color name="time_prive">#1a79ff</color>
@@ -27,6 +27,7 @@
 
 
     <color name="colorXLayout">#9d9d9d</color>
+    <color name="colorAgainLoad">#339d9d9d</color>
 
     <!--直播涉及颜色-->
     <color name="live_together">#3381e3</color>
@@ -108,5 +109,7 @@
     <color name="im_chat_bg">#f2f2f2</color>
 
     <color name="dialog_invite_sure">#2782d7</color>
+
+    <color name="player_line">#d4d4d4</color>
 
 </resources>

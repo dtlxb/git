@@ -36,10 +36,7 @@ public class NormalIntentUtils {
      * @param title   web页面的原生标题头
      */
     public static void go2WebActivity(Context context, String url, String title) {
-        Intent intent = new Intent(context, FunctionActivity.class);
-        intent.putExtra("function_url", url);
-        intent.putExtra("title", title);
-        context.startActivity(intent);
+        go2WebActivity(context,url,title,true);
     }
 
     /**
@@ -53,7 +50,7 @@ public class NormalIntentUtils {
     public static void go2WebActivity(Context context, String url, String title, boolean needShare) {
         Intent intent = new Intent(context, FunctionActivity.class);
         intent.putExtra("function_url", url);
-        intent.putExtra("title", title);
+        intent.putExtra("title", StringUtils.isActuallyEmpty(title)?"":title);
         intent.putExtra("need_share", needShare);
         context.startActivity(intent);
     }

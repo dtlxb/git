@@ -7,8 +7,8 @@
 
     <FrameLayout
         android:id="@+id/GLViewContainer"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="false"
         android:layout_alignParentLeft="false"
         android:layout_alignParentRight="true"
@@ -28,133 +28,43 @@
         android:paddingStart="0dp"
         android:paddingTop="0dp" />
 
-    <LinearLayout
-        android:id="@+id/liveTelecastDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="26dp"
-        android:background="@drawable/shape_player_anchor_info"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <cn.gogoal.im.ui.view.CircleImageView
-            android:id="@+id/imgPalyer"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="3dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textCompany"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="@string/text_empty"
-                android:textColor="@android:color/white"
-                android:textSize="12dp" />
-
-            <TextView
-                android:id="@+id/textOnlineNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="@string/text_empty"
-                android:textColor="@android:color/white"
-                android:textSize="10dp" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <!--<LinearLayout
-        android:id="@+id/liveTelecastDetails"
+    <RelativeLayout
+        android:id="@+id/relativeFun"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:orientation="vertical">
+        android:layout_alignParentTop="true">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/imgPlayerClose"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:layout_marginLeft="10dp"
-            android:orientation="horizontal"
-            android:paddingRight="10dp">
+            android:layout_marginTop="10dp"
+            android:background="@mipmap/player_back" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/shape_player_info"
-                android:orientation="vertical">
+        <ImageView
+            android:id="@+id/imgPlayerShare"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@mipmap/player_share" />
 
-                <TextView
-                    android:id="@+id/textTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/text_empty"
-                    android:textColor="@android:color/white"
-                    android:textSize="14dp" />
+        <ImageView
+            android:id="@+id/imgPlayerFullScreen"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/imgPlayerShare"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:background="@mipmap/player_full_screen" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <cn.gogoal.im.ui.view.CircleImageView
-                        android:id="@+id/imgPalyer"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:background="@mipmap/player_chat" />
-
-                    <TextView
-                        android:id="@+id/textCompany"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:singleLine="true"
-                        android:text="@string/text_empty"
-                        android:textColor="@android:color/white"
-                        android:textSize="12dp" />
-
-                    <TextView
-                        android:id="@+id/textMarInter"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:background="@drawable/shape_player_market_interpre"
-                        android:singleLine="true"
-                        android:text="@string/text_empty"
-                        android:textColor="@android:color/white"
-                        android:textSize="11dp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/textOnlineNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/shape_player_online_number"
-            android:text="@string/text_empty"
-            android:textColor="@android:color/white"
-            android:textSize="11dp" />
-
-    </LinearLayout>-->
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/LayoutTip"
@@ -202,7 +112,7 @@
         android:id="@+id/LayoutProgress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/functionBar"
+        android:layout_alignBottom="@+id/GLViewContainer"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_marginBottom="10dp"
         android:background="#00000000"
@@ -251,88 +161,211 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/functionBar"
+        android:id="@+id/player_line_tab"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/GLViewContainer"
-        android:layout_gravity="center_horizontal|bottom"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingBottom="5dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="5dp">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/GLViewContainer"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/linearPlayerFullScreen"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@android:color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/imgPlayerFullScreen"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/player_full_screen" />
+            <RelativeLayout
+                android:id="@+id/player_anchor_layout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/player_anchor_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_horizontal"
+                    android:text="主播"
+                    android:textColor="@color/player_add_friend"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/tv_player_anchor"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:background="@color/player_add_friend" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/player_video_layout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/player_video_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_horizontal"
+                    android:text="相关视频"
+                    android:textColor="@color/textColor_333333"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/tv_player_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:background="@color/player_add_friend"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
 
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/player_line" />
+
+        <ScrollView
+            android:id="@+id/scrollIntroduce"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:padding="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <cn.gogoal.im.ui.view.CircleImageView
+                        android:id="@+id/anchor_avatar"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:scaleType="centerCrop" />
+
+                    <LinearLayout
+                        android:id="@+id/linearMessage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/anchor_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="@string/text_empty"
+                            android:textColor="@color/textColor_333333"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:id="@+id/anchor_position"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:singleLine="true"
+                            android:text="@string/text_empty"
+                            android:textColor="@color/textColor_666666"
+                            android:textSize="13dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/anchor_achieve"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:textColor="@color/textColor_333333"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="直播介绍"
+                    android:textColor="@color/textColor_333333"
+                    android:textSize="14dp" />
+
+                <ImageView
+                    android:id="@+id/live_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/live_achieve"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_empty"
+                    android:textColor="@color/textColor_333333"
+                    android:textSize="14dp" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recy_relater"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <LinearLayout
-            android:id="@+id/linearPlayerProfiles"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:id="@+id/linearShowError"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ImageView
-                android:id="@+id/imgPlayerProfiles"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/player_profiles" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/load_error" />
 
-        </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="@string/loading_error"
+                android:textColor="@color/textColor_999999"
+                android:textSize="16dp" />
 
-        <LinearLayout
-            android:id="@+id/linearPlayerRelaterVideo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageView
-                android:id="@+id/imgPlayerRelaterVideo"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/player_related_video" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageView
-                android:id="@+id/imgPlayerShare"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/player_share" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageView
-                android:id="@+id/imgPlayerClose"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@mipmap/player_close" />
+            <TextView
+                android:id="@+id/textAgainLoad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/again_loading"
+                android:text="@string/again_load"
+                android:textColor="@color/textColor_333333"
+                android:textSize="16dp" />
 
         </LinearLayout>
 

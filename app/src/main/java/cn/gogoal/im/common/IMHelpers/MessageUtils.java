@@ -10,7 +10,6 @@ import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.socks.library.KLog;
 
-import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.SPTools;
@@ -67,7 +66,6 @@ public class MessageUtils {
             }
 
             thisJsonArray.add(jsonObject);
-            KLog.e(jsonObject);
             SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", thisJsonArray);
         } else {
 

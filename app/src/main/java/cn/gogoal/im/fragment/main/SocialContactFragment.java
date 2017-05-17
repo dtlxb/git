@@ -50,6 +50,8 @@ import static cn.gogoal.im.base.BaseActivity.initRecycleView;
  */
 public class SocialContactFragment extends BaseFragment {
 
+    private final String TAG="SocialContactFragment";
+
     @BindView(R.id.relaterTittle)
     RelativeLayout relaterTittle;
 
@@ -108,9 +110,9 @@ public class SocialContactFragment extends BaseFragment {
             public void onRefresh() {
                 recordPage = 1;
 
-                getLiveData(1, null);
-                getLiveData(2, null);
-                getRecordData(null);
+                getLiveData(1, programme_name);
+                getLiveData(2, programme_name);
+                getRecordData(programme_name);
             }
         });
 
@@ -207,12 +209,14 @@ public class SocialContactFragment extends BaseFragment {
                     }
                 } else {
                     UIHelper.toast(getContext(), R.string.net_erro_hint);
+                    KLog.e(TAG);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
                 UIHelper.toast(getContext(), R.string.net_erro_hint);
+                KLog.e(TAG);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.VIDEO_MOBILE, ggHttpInterface).startGet();
@@ -255,6 +259,7 @@ public class SocialContactFragment extends BaseFragment {
                     }
                 } else {
                     UIHelper.toast(getContext(), R.string.net_erro_hint);
+                    KLog.e(TAG);
                 }
 
                 refreshSocial.setRefreshing(false);
@@ -264,6 +269,7 @@ public class SocialContactFragment extends BaseFragment {
             public void onFailure(String msg) {
                 refreshSocial.setRefreshing(false);
                 UIHelper.toast(getContext(), R.string.net_erro_hint);
+                KLog.e(TAG);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_STUDIO_LIST, ggHttpInterface).startGet();
@@ -301,6 +307,7 @@ public class SocialContactFragment extends BaseFragment {
                     }
                 } else {
                     UIHelper.toast(getContext(), R.string.net_erro_hint);
+                    KLog.e(TAG);
                 }
 
                 refreshSocial.setRefreshing(false);
@@ -310,6 +317,7 @@ public class SocialContactFragment extends BaseFragment {
             public void onFailure(String msg) {
                 refreshSocial.setRefreshing(false);
                 UIHelper.toast(getContext(), R.string.net_erro_hint);
+                KLog.e(TAG);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_RECORD_LIST, ggHttpInterface).startGet();

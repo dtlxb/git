@@ -67,7 +67,7 @@
     </declare-styleable>
 
     <declare-styleable name="XLayout">
-        <attr name="isFirstVisible" format="boolean"></attr>
+        <attr name="isFirstVisible" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="XEditText">
@@ -105,6 +105,28 @@
         <attr name="borderColor" format="color" />
         <attr name="borderOverlay" format="boolean" />
         <attr name="fillColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="SkipProgressView">
+        <attr name="circSolidColor" format="color|reference"/>
+        <attr name="circFrameColor" format="color|reference"/>
+        <attr name="textColor" format="color|reference"/>
+        <attr name="progressColor" format="color|reference"/>
+
+    </declare-styleable>
+
+    <declare-styleable name="PasswordView">
+        <attr name="maxCount" format="integer" />
+        <attr name="circleColor" format="color" />
+        <attr name="bottomLineColor" format="color" />
+        <attr name="dotRadius" format="dimension" />
+        <attr name="divideLineWidth" format="dimension" />
+        <attr name="divideLineColor" format="color" />
+        <attr name="rectAngle" format="dimension" />
+        <attr name="psdType" format="enum">
+            <enum name="weChat" value="0" />
+            <enum name="bottomLine" value="1" />
+        </attr>
     </declare-styleable>
 
 </resources>

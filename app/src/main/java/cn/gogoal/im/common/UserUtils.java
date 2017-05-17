@@ -28,6 +28,8 @@ import java.util.TreeSet;
 
 import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.base.MyApp;
+import cn.gogoal.im.bean.Advisers;
+import cn.gogoal.im.bean.AdvisersBean;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVImClientManager;
@@ -39,6 +41,10 @@ import cn.gogoal.im.common.ImageUtils.ImageUtils;
  * phone 18930640263
  */
 public class UserUtils {
+
+    public static void saveUserInfo(JSONObject data){
+        SPTools.saveJsonObject("userInfo", data);
+    }
 
     /**
      * 获取用户令牌 token
@@ -320,9 +326,6 @@ public class UserUtils {
 
             }
         });
-        // TODO: 2017/2/8 0008
-        mContext.finish();
-        UIHelper.toast(mContext, "退出登录成功!");
     }
 
     @SuppressLint("UseSparseArrays")
@@ -623,6 +626,40 @@ public class UserUtils {
     }
 
     /**
+     * 获取投资顾问
+     */
+    public static void getAdvisers(final GetAdvisersCallback callback) {
+        new GGOKHTTP(UserUtils.getTokenParams(), GGOKHTTP.GET_MY_ADVISERS, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                if (code == 0) {
+                    List<Advisers> data = JSONObject.parseObject(responseInfo, AdvisersBean.class).getData();
+                    SPTools.saveString("ADVISERS_LIST", JSONObject.toJSONString(data));
+                    if (callback != null) {
+                        callback.onSuccess(data);
+                    }
+                } else if (code == 1001) {
+                    if (callback != null) {
+                        callback.onFailed("数据为空");
+                    }
+                } else {
+                    if (callback != null) {
+                        callback.onFailed(JSONObject.parseObject(responseInfo).getString("message"));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                if (callback != null) {
+                    callback.onFailed(msg);
+                }
+            }
+        }).startGet();
+    }
+
+    /**
      * 当群信息没有的时候 网上拉取
      */
     public static void getChatGroup(final int type, List<String> groupMembers, final String conversationId, final getSquareInfo mGetSquareInfo) {
@@ -638,7 +675,6 @@ public class UserUtils {
             @Override
             public void onSuccess(String responseInfo) {
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(responseInfo);
                 if ((int) result.get("code") == 0) {
                     if (null != result.getJSONObject("data")) {
                         JSONObject jsonObject = result.getJSONObject("data");
@@ -684,5 +720,11 @@ public class UserUtils {
         void success(String responseInfo);
 
         void failed(String errorMsg);
+    }
+
+    public interface GetAdvisersCallback {
+        void onSuccess(List<Advisers> advisersList);
+
+        void onFailed(String errorMsg);
     }
 }

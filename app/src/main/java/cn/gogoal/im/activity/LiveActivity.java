@@ -301,7 +301,7 @@ public class LiveActivity extends BaseActivity {
         List<Integer> idList = new ArrayList<>();
 
         idList.add(Integer.parseInt(UserUtils.getMyAccountId()));
-        ChatGroupHelper.addAnyone(idList, conversation.getConversationId(), new ChatGroupHelper.chatGroupManager() {
+        ChatGroupHelper.addAnyone(idList, conversation.getConversationId(), new ChatGroupHelper.ChatGroupManager() {
             @Override
             public void groupActionSuccess(JSONObject object) {
             }
@@ -320,7 +320,7 @@ public class LiveActivity extends BaseActivity {
         List<Integer> idList = new ArrayList<>();
 
         idList.add(Integer.parseInt(UserUtils.getMyAccountId()));
-        ChatGroupHelper.deleteAnyone(idList, conversation.getConversationId(), new ChatGroupHelper.chatGroupManager() {
+        ChatGroupHelper.deleteAnyone(idList, conversation.getConversationId(), new ChatGroupHelper.ChatGroupManager() {
             @Override
             public void groupActionSuccess(JSONObject object) {
 

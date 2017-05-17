@@ -3,34 +3,22 @@ package cn.gogoal.im.bean;
 import java.util.List;
 
 /**
- * author wangjd on 2017/4/17 0017.
+ * author wangjd on 2017/5/17 0017.
  * Staff_id 1375
  * phone 18930640263
  * description :${annotated}.
  */
-public class BannerBean {
+public class Bam {
 
     /**
-     * code : 0
      * message : 成功
-     * requestId : null
-     * data : [{"ad_position":7,"p_name":"投研","p_order":0,"image":"http://hackfile.ufile.ucloud.cn/ggimages/ad/dcb79b40.png","target_url":"","isout":0,"name":"","tab_id":""}]
-     * executeTime : 13
+     * data : [{"ad_position":3,"image":"http://file.go-goal.cn/ggimages/ad/f2a94b0c.png","name":"","p_name":"投研","p_order":0,"tab_id":"","target_url":"http://ggmobile.sandbox.go-goal.cn/#/help/theme","type":10000}]
+     * code : 0
      */
 
-    private int code;
     private String message;
-    private Object requestId;
-    private int executeTime;
-    private List<Banner> data;
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
+    private int code;
+    private List<DataBean> data;
 
     public String getMessage() {
         return message;
@@ -40,40 +28,32 @@ public class BannerBean {
         this.message = message;
     }
 
-    public Object getRequestId() {
-        return requestId;
+    public int getCode() {
+        return code;
     }
 
-    public void setRequestId(Object requestId) {
-        this.requestId = requestId;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public int getExecuteTime() {
-        return executeTime;
-    }
-
-    public void setExecuteTime(int executeTime) {
-        this.executeTime = executeTime;
-    }
-
-    public List<Banner> getData() {
+    public List<DataBean> getData() {
         return data;
     }
 
-    public void setData(List<Banner> data) {
+    public void setData(List<DataBean> data) {
         this.data = data;
     }
 
-    public static class Banner {
+    public static class DataBean {
         /**
-         * ad_position : 7
+         * ad_position : 3
+         * image : http://file.go-goal.cn/ggimages/ad/f2a94b0c.png
+         * name :
          * p_name : 投研
          * p_order : 0
-         * image : http://hackfile.ufile.ucloud.cn/ggimages/ad/dcb79b40.png
-         * target_url :
-         * isout : 0
-         * name :
          * tab_id :
+         * target_url : http://ggmobile.sandbox.go-goal.cn/#/help/theme
+         * type : 10000
          */
 
         private int ad_position;

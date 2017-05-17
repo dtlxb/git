@@ -510,8 +510,6 @@ public class MessageFragment extends BaseFragment {
     public void handleMessage(BaseMessage baseMessage) {
         Map<String, Object> map = baseMessage.getOthers();
 
-        KLog.e(map.size());
-
         AVIMMessage message = (AVIMMessage) map.get("message");
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
         gruopMemberMap.put(conversation.getConversationId(), conversation.getMembers());
@@ -527,7 +525,6 @@ public class MessageFragment extends BaseFragment {
         JSONObject contentObject = JSON.parseObject(message.getContent());
         JSONObject lcattrsObject = contentObject.getJSONObject("_lcattrs");
         String _lctype = contentObject.getString("_lctype");
-        KLog.e(contentObject);
         switch (_lctype) {
             case AppConst.IM_MESSAGE_TYPE_TEXT:
                 //文字

@@ -29,6 +29,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.bumptech.glide.Glide;
+import com.socks.library.KLog;
 
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;

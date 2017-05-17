@@ -670,6 +670,12 @@ public class GGOKHTTP {
      */
     public static final String GET_CONTACTS = "v1/ggm_im/get_contacts";
 
+    /**
+     * 自动登录
+     * params token 用户令牌
+     */
+    public static final String USER_AUTO_LOGIN = "v1/user/auto_login";
+
 
 //--------------------------------------------------------------------------------------------------
 

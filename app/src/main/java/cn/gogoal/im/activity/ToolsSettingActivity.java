@@ -355,8 +355,6 @@ public class ToolsSettingActivity extends BaseActivity {
 
         KLog.e(dataAll.size());
 
-        KLog.e(JSONObject.toJSONString(dataAll));
-
         for (SectionToolsData d : dataAll) {
             if (!d.isHeader && d.t.getId() == tool.getId()) {
                 d.t.setIsShow(0);

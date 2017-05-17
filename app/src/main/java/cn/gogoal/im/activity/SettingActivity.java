@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -26,6 +27,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.ImageUtils.GlideCacheUtil;
 import cn.gogoal.im.common.NormalIntentUtils;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.ui.view.SelectorButton;
 
 /**
@@ -79,6 +81,7 @@ public class SettingActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(v.getContext(), TypeLoginActivity.class));
+                SPTools.clear();
                 finish();
             }
         });
@@ -189,5 +192,15 @@ public class SettingActivity extends BaseActivity {
                     break;
             }
         }
+    }
+
+    //TODO 测试
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_MENU){
+            startActivity(new Intent(this,TestActivity.class));
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

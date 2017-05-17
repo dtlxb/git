@@ -147,7 +147,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     groupObject.put("attr", attrObject);
 
                     groupsArray.add(groupObject);
-                    ChatGroupHelper.collcetGroup(conversationId, new ChatGroupHelper.chatGroupManager() {
+                    ChatGroupHelper.collcetGroup(conversationId, new ChatGroupHelper.ChatGroupManager() {
                         @Override
                         public void groupActionSuccess(JSONObject object) {
                             UIHelper.toast(IMSquareChatSetActivity.this, "群收藏成功!!!");
@@ -160,7 +160,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     });
                 } else {
                     groupsArray.remove(finalThisGroup);
-                    ChatGroupHelper.deleteGroup(conversationId, new ChatGroupHelper.chatGroupManager() {
+                    ChatGroupHelper.deleteGroup(conversationId, new ChatGroupHelper.ChatGroupManager() {
                         @Override
                         public void groupActionSuccess(JSONObject object) {
                             UIHelper.toast(IMSquareChatSetActivity.this, "群已取消收藏!!!");
@@ -427,7 +427,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 //删除并退出群
                 final List<Integer> quitList = new ArrayList<>();
                 quitList.add(Integer.parseInt(UserUtils.getMyAccountId()));
-                ChatGroupHelper.deleteAnyone(quitList, conversationId, new ChatGroupHelper.chatGroupManager() {
+                ChatGroupHelper.deleteAnyone(quitList, conversationId, new ChatGroupHelper.ChatGroupManager() {
                     @Override
                     public void groupActionSuccess(JSONObject object) {
                         afterDeleteAnyone(quitList);
@@ -466,7 +466,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                         urls.add((String) addContactBeens.get(i).getAvatar());
                     }
                     //添加群成员
-                    ChatGroupHelper.addAnyone(addIdList, conversationId, new ChatGroupHelper.chatGroupManager() {
+                    ChatGroupHelper.addAnyone(addIdList, conversationId, new ChatGroupHelper.ChatGroupManager() {
                         @Override
                         public void groupActionSuccess(JSONObject object) {
                             UIHelper.toast(IMSquareChatSetActivity.this, "群成员添加成功!!!");
@@ -492,7 +492,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                         urls.remove((String) changeContactBeens.get(i).getAvatar());
                     }
                     //删除群成员
-                    ChatGroupHelper.deleteAnyone(idList, conversationId, new ChatGroupHelper.chatGroupManager() {
+                    ChatGroupHelper.deleteAnyone(idList, conversationId, new ChatGroupHelper.ChatGroupManager() {
                         @Override
                         public void groupActionSuccess(JSONObject object) {
                             afterDeleteAnyone(idList);
@@ -542,7 +542,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         int size;
         ContactBean contactBean = new ContactBean();
         for (int i = 0; i < contactBeanList.size(); i++) {
-            if (contactBeanList.get(i).getFriend_id() == Integer.parseInt(squareCreater)) {
+            if (contactBeanList.get(i).getFriend_id() == StringUtils.pareseStringDouble(squareCreater)) {
                 contactBean = contactBeanList.get(i);
                 contactBeanList.remove(contactBean);
             }

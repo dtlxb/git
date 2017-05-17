@@ -1,5 +1,6 @@
 package cn.gogoal.im.ui.dialog;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -7,11 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.bean.ShareItemInfo;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
@@ -60,7 +62,7 @@ public class ShareMessageDialog extends BaseCentDailog {
     public void bindView(View v) {
         final ShareItemInfo entity = (ShareItemInfo) getArguments().getSerializable("gg_share_list_info");
 
-        ImageView icon = (ImageView) v.findViewById(R.id.item_contacts_iv_icon);
+        final ImageView icon = (ImageView) v.findViewById(R.id.item_contacts_iv_icon);
         TextView name = (TextView) v.findViewById(R.id.item_contacts_tv_nickname);
         TextView tvShareMsgDesc = (TextView) v.findViewById(R.id.tv_dialog_share_msg_desc);
         EditText etMessageInput = (EditText) v.findViewById(R.id.et_dialog_share_msg_input);
@@ -69,10 +71,17 @@ public class ShareMessageDialog extends BaseCentDailog {
         TextView tvSend = (TextView) v.findViewById(R.id.btn_dialog_share_msg_send);
 
         if (entity != null) {
-            try {
+            if (entity.getImMessageBean().getChatType() == AppConst.IM_CHAT_TYPE_SINGLE) {
                 ImageDisplay.loadRoundedRectangleImage(v.getContext(), entity.getAvatar(), icon);
-            } catch (Exception e) {
-                ImageDisplay.loadImage(v.getContext(), entity.getAvatar(), icon);
+            } else if (entity.getImMessageBean().getChatType() == AppConst.IM_CHAT_TYPE_SQUARE) {
+                ChatGroupHelper.setGroupAvatar(entity.getImMessageBean().getConversationID(), new AvatarTakeListener() {
+                    @Override
+                    public void success(Bitmap bitmap) {
+                        icon.setImageBitmap(bitmap);
+                    }
+                    public void failed(Exception e) {
+                    }
+                });
             }
             name.setText(entity.getName());
             tvShareMsgDesc.setText(entity.getEntity().getDesc());
@@ -92,6 +101,7 @@ public class ShareMessageDialog extends BaseCentDailog {
                 ChatGroupHelper.sendShareMessage(entity, new ChatGroupHelper.GroupInfoResponse() {
                     @Override
                     public void getInfoSuccess(JSONObject groupInfo) {
+                        ShareMessageDialog.this.dismiss();
                         getActivity().finish();
                     }
 

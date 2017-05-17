@@ -111,11 +111,11 @@ public class ShareMessageActivity extends BaseActivity {
             datas.add(new ShareListBean(ShareListBean.LIST_TYPE_SECTION));
             List<IMMessageBean> messageBeen = JSON.parseArray(recentArray.toJSONString(), IMMessageBean.class);
             for (IMMessageBean bean : messageBeen) {
-                if (bean.getChatType() == 1001) {
+                if (bean.getChatType() == AppConst.IM_CHAT_TYPE_SINGLE) {
                     ShareListBean<String> shareListFriend = new ShareListBean<>(
                             ShareListBean.LIST_TYPE_ITEM, bean.getAvatar(), bean.getNickname(), bean);
                     datas.add(shareListFriend);
-                } else if (bean.getChatType() == 1002) {
+                } else if (bean.getChatType() == AppConst.IM_CHAT_TYPE_SQUARE) {
                     final ShareListBean group = new ShareListBean<>(ShareListBean.LIST_TYPE_ITEM);
                     group.setText(bean.getNickname());
                     group.setBean(bean);

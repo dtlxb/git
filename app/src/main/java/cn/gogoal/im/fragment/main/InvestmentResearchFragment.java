@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,10 +28,10 @@ import cn.gogoal.im.adapter.InvestmentResearchAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BannerBean;
 import cn.gogoal.im.bean.ToolData;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.BannerUtils;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.AutoScrollViewPager;
 import cn.gogoal.im.ui.view.XTitle;
@@ -54,13 +55,13 @@ public class InvestmentResearchFragment extends BaseFragment {
     @BindView(R.id.tv_flag_tools)
     TextView tvFlagTools;
 
-    private List<ToolData.Tool> mData;
+    private List<ToolData.Tool> mGridData;
     private InvestmentResearchAdapter toolsAdapter;
 
     /**
      * banner适配器和数据集
      */
-    private List<BannerBean.Banner> bannerImageUrls;
+    private List<BannerBean.Banner> bannerPagerDatas;
     private BannerAdapter bannerAdapter;
 
     @Override
@@ -82,7 +83,7 @@ public class InvestmentResearchFragment extends BaseFragment {
                 //跳设置小工具
                 Intent intent = new Intent(view.getContext(), ToolsSettingActivity.class);
                 ArrayList<ToolData.Tool> data = new ArrayList<>();
-                for (ToolData.Tool tool : mData) {
+                for (ToolData.Tool tool : mGridData) {
                     if (!tool.isSimulatedArg()) {
                         data.add(tool);
                     }
@@ -98,8 +99,8 @@ public class InvestmentResearchFragment extends BaseFragment {
                 AppDevice.isLowDpi() ? 3 : 4,
                 StaggeredGridLayoutManager.VERTICAL));
 
-        mData = new ArrayList<>();
-        toolsAdapter = new InvestmentResearchAdapter(getActivity(), mData);
+        mGridData = new ArrayList<>();
+        toolsAdapter = new InvestmentResearchAdapter(getActivity(), mGridData);
         mRecyclerView.setAdapter(toolsAdapter);
 
         getBannerImage();
@@ -111,8 +112,8 @@ public class InvestmentResearchFragment extends BaseFragment {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 245 * AppDevice.getWidth(getContext()) / 750);
 
-        bannerImageUrls = new ArrayList<>();
-        bannerAdapter = new BannerAdapter(bannerImageUrls);
+        bannerPagerDatas = new ArrayList<>();
+        bannerAdapter = new BannerAdapter(bannerPagerDatas);
         bannerPager.setAdapter(bannerAdapter);
         bannerPager.setScrollFactgor(5);
 
@@ -124,9 +125,9 @@ public class InvestmentResearchFragment extends BaseFragment {
             public void onSuccess(String responseInfo) {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
-                    bannerImageUrls.addAll(JSONObject.parseObject(responseInfo, BannerBean.class).getData());
+                    bannerPagerDatas.addAll(JSONObject.parseObject(responseInfo, BannerBean.class).getData());
 
-                    if (bannerImageUrls.size() > 1) {
+                    if (bannerPagerDatas.size() > 1) {
                         bannerPager.startAutoScroll(3000);
                         bannerPager.showIndicator(true);
                     } else {
@@ -142,7 +143,7 @@ public class InvestmentResearchFragment extends BaseFragment {
                 } else {
                     BannerBean.Banner spaceBanner = new BannerBean.Banner();
                     spaceBanner.setImage("");
-                    bannerImageUrls.add(spaceBanner);
+                    bannerPagerDatas.add(spaceBanner);
                     bannerAdapter.notifyDataSetChanged();
                 }
             }
@@ -161,14 +162,18 @@ public class InvestmentResearchFragment extends BaseFragment {
         new GGOKHTTP(map, GGOKHTTP.GET_USERCOLUMN, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+
+                FileUtil.writeRequestResponse(responseInfo,"工具");
+
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 int code = object.getIntValue("code");
                 if (code == 0) {
                     showView(true);
-                    mData.clear();
+                    mGridData.clear();
                     List<ToolData.Tool> tools = JSONObject.parseArray(
                             object.getJSONArray("data").toJSONString(), ToolData.Tool.class);
-                    mData.addAll(tools);
+                    mGridData.addAll(tools);
 
                     addSpace();
 
@@ -193,37 +198,37 @@ public class InvestmentResearchFragment extends BaseFragment {
     }
 
     private void addSpace() {
-        ToolData.Tool clone = mData.get(0).clone();
+        ToolData.Tool clone = mGridData.get(0).clone();
         clone.setSimulatedArg(true);
         if (AppDevice.isLowDpi()) {
-            switch (mData.size() % 3) {
+            switch (mGridData.size() % 3) {
                 case 0:
                     //不添加
                     break;
                 case 1:
-                    mData.add(clone);
-                    mData.add(clone);
+                    mGridData.add(clone);
+                    mGridData.add(clone);
                     break;
                 case 2:
-                    mData.add(clone);
+                    mGridData.add(clone);
                     break;
             }
         } else {
-            switch (mData.size() % 4) {
+            switch (mGridData.size() % 4) {
                 case 0:
                     //不添加
                     break;
                 case 1:
-                    mData.add(clone);
-                    mData.add(clone);
-                    mData.add(clone);
+                    mGridData.add(clone);
+                    mGridData.add(clone);
+                    mGridData.add(clone);
                     break;
                 case 2:
-                    mData.add(clone);
-                    mData.add(clone);
+                    mGridData.add(clone);
+                    mGridData.add(clone);
                     break;
                 case 3:
-                    mData.add(clone);
+                    mGridData.add(clone);
                     break;
             }
 
@@ -243,15 +248,15 @@ public class InvestmentResearchFragment extends BaseFragment {
 
     private class BannerAdapter extends PagerAdapter {
 
-        private List<BannerBean.Banner> imageUrls;
+        private List<BannerBean.Banner> banners;
 
-        private BannerAdapter(List<BannerBean.Banner> imageUrls) {
-            this.imageUrls = imageUrls;
+        private BannerAdapter(List<BannerBean.Banner> banners) {
+            this.banners = banners;
         }
 
         @Override
         public int getCount() {
-            return imageUrls == null ? 0 : imageUrls.size();
+            return banners == null ? 0 : banners.size();
         }
 
         @Override
@@ -270,17 +275,18 @@ public class InvestmentResearchFragment extends BaseFragment {
 
             view.setAdjustViewBounds(true);
             view.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            Glide.with(getActivity()).load(imageUrls.get(position).getImage()).into(view);
+            Glide.with(getActivity()).load(banners.get(position).getImage()).into(view);
             container.addView(view);
+
+            final String[] params={banners.get(position).getTarget_url()};
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    NormalIntentUtils.go2WebActivity(
+                    BannerUtils.getInstance(
                             v.getContext(),
-                            AppConst.WEB_URL_LLJ,
-                            "this is title",
-                            true);
+                            banners.get(position).getType(),
+                            params).go();
                 }
             });
             return view;
