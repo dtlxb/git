@@ -25,8 +25,8 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.PlayerUtils.TextAndImage;
 import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
+import cn.gogoal.im.ui.view.CircleImageView;
 import cn.gogoal.im.ui.widget.PopupWindowHelper;
 
 public class WatchBottomFragment extends BaseFragment {
@@ -320,32 +320,17 @@ public class WatchBottomFragment extends BaseFragment {
         View anchorIntroduction = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_anchor_introduction, null);
         anchorHelper = new PopupWindowHelper(anchorIntroduction);
 
-        final ImageView anchor_avatar = (ImageView) anchorIntroduction.findViewById(R.id.anchor_avatar);
+        final CircleImageView anchor_avatar = (CircleImageView) anchorIntroduction.findViewById(R.id.anchor_avatar);
         TextView anchor_name = (TextView) anchorIntroduction.findViewById(R.id.anchor_name);
         TextView anchor_position = (TextView) anchorIntroduction.findViewById(R.id.anchor_position);
         final TextView anchor_achieve = (TextView) anchorIntroduction.findViewById(R.id.anchor_achieve);
         ImageView live_avatar = (ImageView) anchorIntroduction.findViewById(R.id.live_avatar);
         TextView live_achieve = (TextView) anchorIntroduction.findViewById(R.id.live_achieve);
 
-        ImageDisplay.loadImage(getContext(), anchor.getString("face_url"), anchor_avatar);
+        ImageDisplay.loadCircleImage(getContext(), anchor.getString("face_url"), anchor_avatar);
         anchor_name.setText(anchor.getString("anchor_name"));
         anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
-
-        if (anchor.getString("anchor_introduction") != null) {
-            anchor_achieve.setText(anchor.getString("anchor_introduction"));
-
-            final ViewTreeObserver observer = anchor_avatar.getViewTreeObserver();
-            observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    anchor_avatar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    int finalHeight = anchor_avatar.getMeasuredHeight();
-                    int finalWidth = anchor_avatar.getMeasuredWidth();
-                    TextAndImage.makeSpan(finalHeight, finalWidth, anchor_achieve);
-                }
-            });
-        }
-
+        anchor_achieve.setText(anchor.getString("anchor_introduction"));
         ImageDisplay.loadImage(getContext(), introduction_img, live_avatar);
         live_achieve.setText(introduction);
     }
@@ -354,32 +339,17 @@ public class WatchBottomFragment extends BaseFragment {
         View anchorIntroduction = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_anchor_introduction_land, null);
         anchorHelperLand = new PopupWindowHelper(anchorIntroduction);
 
-        final ImageView anchor_avatar = (ImageView) anchorIntroduction.findViewById(R.id.anchor_avatar);
+        final CircleImageView anchor_avatar = (CircleImageView) anchorIntroduction.findViewById(R.id.anchor_avatar);
         TextView anchor_name = (TextView) anchorIntroduction.findViewById(R.id.anchor_name);
         TextView anchor_position = (TextView) anchorIntroduction.findViewById(R.id.anchor_position);
         final TextView anchor_achieve = (TextView) anchorIntroduction.findViewById(R.id.anchor_achieve);
         ImageView live_avatar = (ImageView) anchorIntroduction.findViewById(R.id.live_avatar);
         TextView live_achieve = (TextView) anchorIntroduction.findViewById(R.id.live_achieve);
 
-        ImageDisplay.loadImage(getContext(), anchor.getString("face_url"), anchor_avatar);
+        ImageDisplay.loadCircleImage(getContext(), anchor.getString("face_url"), anchor_avatar);
         anchor_name.setText(anchor.getString("anchor_name"));
         anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
-
-        if (anchor.getString("anchor_introduction") != null) {
-            anchor_achieve.setText(anchor.getString("anchor_introduction"));
-
-            final ViewTreeObserver observer = anchor_avatar.getViewTreeObserver();
-            observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    anchor_avatar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    int finalHeight = anchor_avatar.getMeasuredHeight();
-                    int finalWidth = anchor_avatar.getMeasuredWidth();
-                    TextAndImage.makeSpan(finalHeight, finalWidth, anchor_achieve);
-                }
-            });
-        }
-
+        anchor_achieve.setText(anchor.getString("anchor_introduction"));
         ImageDisplay.loadImage(getContext(), introduction_img, live_avatar);
         live_achieve.setText(introduction);
     }

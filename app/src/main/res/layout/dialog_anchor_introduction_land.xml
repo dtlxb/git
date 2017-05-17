@@ -13,35 +13,25 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/anchor_introduction"
-            android:textColor="@color/textColor_333333"
-            android:textSize="14dp" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-
-            <ImageView
+            <cn.gogoal.im.ui.view.CircleImageView
                 android:id="@+id/anchor_avatar"
-                android:layout_width="137dp"
-                android:layout_height="91dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_gravity="center_vertical" />
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:scaleType="centerCrop" />
 
             <LinearLayout
                 android:id="@+id/linearMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="13dp"
-                android:layout_toRightOf="@+id/anchor_avatar"
+                android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/anchor_name"
@@ -56,7 +46,7 @@
                     android:id="@+id/anchor_position"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
                     android:singleLine="true"
                     android:text="@string/text_empty"
                     android:textColor="@color/textColor_666666"
@@ -64,21 +54,23 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/anchor_achieve"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/linearMessage"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/textColor_333333"
-                android:textSize="14dp" />
+        </LinearLayout>
 
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/anchor_achieve"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:lineSpacingExtra="2dp"
+            android:lineSpacingMultiplier="1.5"
+            android:text="@string/text_empty"
+            android:textColor="@color/textColor_333333"
+            android:textSize="14dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="20dp"
             android:text="直播介绍"
             android:textColor="@color/textColor_333333"
             android:textSize="14dp" />
@@ -87,7 +79,7 @@
             android:id="@+id/live_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
             android:scaleType="centerCrop" />
 
@@ -95,6 +87,9 @@
             android:id="@+id/live_achieve"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:lineSpacingExtra="2dp"
+            android:lineSpacingMultiplier="1.5"
+            android:text="@string/text_empty"
             android:textColor="@color/textColor_333333"
             android:textSize="14dp" />
 
