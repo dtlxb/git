@@ -176,8 +176,8 @@ public class MyGroupsActivity extends BaseActivity {
                                 //拼好了显示
                                 ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
                                 //拼好了存起来
-                                ChatGroupHelper.cacheGroupAvatar(data.getConv_id(), mathingBitmap);
                                 KLog.e("现拼九宫");
+                                ChatGroupHelper.cacheGroupAvatar(data.getConv_id(),mathingBitmap);
 
                             }
                         });

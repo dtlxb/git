@@ -31,8 +31,6 @@ public class BannerUtils {
 
     private String[] params;
 
-    private volatile static BannerUtils instance;
-
     private BannerUtils(Context context, int type, String... params) {
         this.context = context;
         this.type = type;
@@ -40,14 +38,8 @@ public class BannerUtils {
     }
 
     public static BannerUtils getInstance(Context context, int type, String... params) {
-        if (null == instance) {
-            synchronized (BannerUtils.class) {
-                if (null == instance) {
-                    instance = new BannerUtils(context.getApplicationContext(), type, params);
-                }
-            }
-        }
-        return instance;
+        BannerUtils utils=new BannerUtils(context,type,params);
+        return utils;
     }
 
     public void go() {

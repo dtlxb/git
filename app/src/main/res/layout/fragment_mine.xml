@@ -30,6 +30,7 @@
             android:layout_centerVertical="true"
             android:paddingEnd="20dp"
             android:paddingStart="20dp"
+            android:visibility="gone"
             android:src="@mipmap/img_qr_code" />
     </RelativeLayout>
 

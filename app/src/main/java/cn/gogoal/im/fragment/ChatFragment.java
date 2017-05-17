@@ -28,7 +28,6 @@ import android.widget.RelativeLayout;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
@@ -55,7 +54,6 @@ import cn.gogoal.im.adapter.IMChatAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.EmojiBean;
@@ -245,7 +243,6 @@ public class ChatFragment extends BaseFragment {
                 params.put("conv_id", imConversation.getConversationId());
                 params.put("chat_type", String.valueOf(chatType));
                 params.put("message", JSONObject.toJSONString(messageMap));
-                KLog.e(params);
 
                 etInput.setText("");
                 //发送文字消息
