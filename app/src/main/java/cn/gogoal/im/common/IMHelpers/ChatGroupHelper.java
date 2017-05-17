@@ -42,7 +42,7 @@ import static cn.gogoal.im.common.UserUtils.getToken;
 public class ChatGroupHelper {
 
     //添加群成员
-    public static void addAnyone(List<Integer> idList, final String conversationId, final chatGroupManager groupManager) {
+    public static void addAnyone(List<Integer> idList, final String conversationId, final ChatGroupManager groupManager) {
         Map<String, String> params = new HashMap<>();
         params.put("token", getToken());
         params.put("id_list", JSONObject.toJSONString(idList));
@@ -72,7 +72,7 @@ public class ChatGroupHelper {
     }
 
     //删除群成员
-    public static void deleteAnyone(final List<Integer> idSet, final String conversationId, final chatGroupManager groupManager) {
+    public static void deleteAnyone(final List<Integer> idSet, final String conversationId, final ChatGroupManager groupManager) {
         Map<String, String> params = new HashMap<>();
         params.put("token", getToken());
         params.put("id_list", JSONObject.toJSONString(idSet));
@@ -102,7 +102,7 @@ public class ChatGroupHelper {
 
 
     //收藏群
-    public static void collcetGroup(String conversationId, final chatGroupManager groupManager) {
+    public static void collcetGroup(String conversationId, final ChatGroupManager groupManager) {
         Map<String, String> params = new HashMap<>();
         params.put("token", getToken());
         params.put("conv_id", conversationId);
@@ -131,7 +131,7 @@ public class ChatGroupHelper {
     }
 
     //取消群收藏
-    public static void deleteGroup(String conversationId, final chatGroupManager groupManager) {
+    public static void deleteGroup(String conversationId, final ChatGroupManager groupManager) {
         Map<String, String> params = new HashMap<>();
         params.put("token", getToken());
         params.put("conv_id", conversationId);
@@ -513,7 +513,7 @@ public class ChatGroupHelper {
     /**
      * 群管理类
      */
-    public interface chatGroupManager {
+    public interface ChatGroupManager {
 
         void groupActionSuccess(JSONObject object);   ///< 加入房间成功
 

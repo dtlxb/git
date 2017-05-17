@@ -84,6 +84,10 @@
 
         <activity android:name=".activity.TypeLoginActivity"/>
 
+        <service
+            android:name=".servise.AppBackServise"
+            android:exported="false"/>
+
         <activity
             android:name=".activity.MainActivity"
             android:windowSoftInputMode="adjustPan"

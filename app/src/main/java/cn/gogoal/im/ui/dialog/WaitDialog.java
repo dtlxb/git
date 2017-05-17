@@ -10,6 +10,7 @@ import android.widget.TextView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
 
 /**
@@ -61,9 +62,15 @@ public class WaitDialog extends BaseCentDailog {
             } else {
                 imgIcon.setImageResource(dialogIcon);
             }
+        }else {
+            imgIcon.setVisibility(View.GONE);
         }
 
-        textView.setText(dialogText);
+        if (!StringUtils.isActuallyEmpty(dialogText)) {
+            textView.setText(dialogText);
+        }else {
+            textView.setVisibility(View.GONE);
+        }
     }
 
     @Override

@@ -3,6 +3,8 @@ package cn.gogoal.im.fragment;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
+
 import org.simple.eventbus.Subscriber;
 
 import butterknife.BindView;
@@ -50,6 +52,6 @@ public class ImageDetailFragment extends BaseFragment {
 
     @Subscriber(tag = "updata_cache_avatar")
     void updataCacheAvatar(String newAvatarUrl){
-        ImageDisplay.loadImage(getActivity(),newAvatarUrl,image);
+        Glide.with(getActivity()).load(newAvatarUrl).into(image);
     }
 }

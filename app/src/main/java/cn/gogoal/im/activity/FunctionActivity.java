@@ -28,6 +28,7 @@ import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.WebViewUtil;
+import cn.gogoal.im.ui.dialog.AdvisersDialog;
 import cn.gogoal.im.ui.view.XTitle;
 
 /*
@@ -232,6 +233,14 @@ public class FunctionActivity extends BaseActivity {
             @Override
             public void handler(String data, ValueCallback<String> function) {
                 DialogHelp.getMessageDialog(getContext(), data).show();
+            }
+        });
+
+        //投资顾问弹窗
+        webView.registerHandler("exclusiveConsultant", new BridgeHandler() {
+            @Override
+            public void handler(String data, ValueCallback<String> function) {
+                new AdvisersDialog().show(getSupportFragmentManager());
             }
         });
     }

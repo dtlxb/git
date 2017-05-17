@@ -95,6 +95,9 @@ public class MainActivity extends BaseActivity {
             FileUtil.writeRequestResponse(UserUtils.getToken(), "token_" + UserUtils.getUserName());
         }
 
+        //TODO 登录成功获取投资顾问,缓存
+        UserUtils.getAdvisers(null);
+
         MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
 
         mainStockFragment = new MainStockFragment();                     //自选股
@@ -149,7 +152,7 @@ public class MainActivity extends BaseActivity {
         //侧滑
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-        mDrawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+        mDrawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);

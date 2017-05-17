@@ -21,28 +21,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <Button
-            android:id="@+id/btn_test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Test Dialog" />
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <CheckBox
-            android:id="@+id/checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="禁止滑出，只允许点击" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_test_match"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="测试群头像" />
+                <Button
+                    android:id="@+id/btn_test"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Test Dialog" />
 
-        <ImageView
-            android:id="@+id/image_test"
-            android:layout_width="80dp"
-            android:layout_height="80dp" />
+                <CheckBox
+                    android:id="@+id/checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="禁止滑出，只允许点击" />
+
+                <Button
+                    android:id="@+id/btn_test_match"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="测试群头像" />
+
+                <ImageView
+                    android:id="@+id/image_test"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp" />
+
+                <cn.gogoal.im.ui.view.PasswordView
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_margin="20dp" />
+
+                <Button
+                    android:id="@+id/btn_dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="全屏Dialog" />
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
     </LinearLayout>
 
     <!--navigation left-->

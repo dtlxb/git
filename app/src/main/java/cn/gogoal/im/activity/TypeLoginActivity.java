@@ -199,7 +199,8 @@ public class TypeLoginActivity extends BaseActivity {
                     final JSONObject data = object.getJSONObject("data");
                     if (data.getIntValue("code") == 0) {
                         final Intent intent;
-                        SPTools.saveJsonObject("userInfo", data);
+                        UserUtils.saveUserInfo(data);
+
                         //存在这个账号则直奔MainActivity
                         if (UserUtils.isFirstLogin(data.getInteger("account_id"))) {
                             intent = new Intent(TypeLoginActivity.this, MainActivity.class);

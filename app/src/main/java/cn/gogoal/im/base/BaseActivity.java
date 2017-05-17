@@ -29,6 +29,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.bumptech.glide.Glide;
+import com.socks.library.KLog;
 
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
@@ -68,7 +69,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
         setContentView(mContentView);
 
-        if (isFullScreem()){
+        if (isFullScreem()) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
@@ -282,14 +283,18 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
      */
     @Subscriber(tag = "show_client_status")
     public void imClientLoad(String msg) {
-        DialogHelp.getMessageDialog(getActivity(), "账号已经在其他设备登录，点击\"确定\"跳转登录页面，重新登录。", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                AppManager.getInstance().finishAllActivity();
-                startActivity(new Intent(getActivity(), TypeLoginActivity.class));
-            }
-        }).setCancelable(false)
-                .show();
+        KLog.e(getActivity().getClass().getSimpleName());
+
+        if (!AppManager.getInstance().currentActivity().getClass().equals(TypeLoginActivity.class)) {
+            DialogHelp.getMessageDialog(getActivity(), "账号已经在其他设备登录，点击\"确定\"跳转登录页面，重新登录。", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    AppManager.getInstance().finishAllActivity();
+                    startActivity(new Intent(getActivity(), TypeLoginActivity.class));
+                }
+            }).setCancelable(false)
+                    .show();
+        }
     }
 
 
@@ -300,7 +305,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         fixInputMethodManagerLeak(this);
         try {
             Glide.with(this).pauseRequests();
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
     public BaseActivity getActivity() {

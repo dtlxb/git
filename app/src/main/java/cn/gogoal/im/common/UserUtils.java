@@ -25,6 +25,8 @@ import java.util.TreeSet;
 
 import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.base.MyApp;
+import cn.gogoal.im.bean.Advisers;
+import cn.gogoal.im.bean.AdvisersBean;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
@@ -35,6 +37,10 @@ import cn.gogoal.im.common.ImageUtils.ImageUtils;
  * phone 18930640263
  */
 public class UserUtils {
+
+    public static void saveUserInfo(JSONObject data){
+        SPTools.saveJsonObject("userInfo", data);
+    }
 
     /**
      * 获取用户令牌 token
@@ -133,8 +139,8 @@ public class UserUtils {
         return user.getString("simple_avatar");
     }
 
-    public static void getUserAvatar(final AvatarTakeListener listener){
-        if (StringUtils.isActuallyEmpty(getBitmapFilePaht())){
+    public static void getUserAvatar(final AvatarTakeListener listener) {
+        if (StringUtils.isActuallyEmpty(getBitmapFilePaht())) {
             ImageUtils.getUrlBitmap(MyApp.getAppContext(), UserUtils.getUserAvatar(), new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
@@ -145,7 +151,7 @@ public class UserUtils {
                             resource, 100);
                 }
             });
-        }else {
+        } else {
             listener.success(BitmapFactory.decodeFile(getBitmapFilePaht()));
         }
     }
@@ -162,7 +168,7 @@ public class UserUtils {
         String[] fileList = filesDir.list();
         for (String path : fileList) {
             if (path.contains("avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()))) {
-                bitmapPath = filesDir.getAbsolutePath()+File.separator+path;
+                bitmapPath = filesDir.getAbsolutePath() + File.separator + path;
                 break;
             }
         }
@@ -308,7 +314,7 @@ public class UserUtils {
     /*注销*/
     public static void logout(Activity mContext) {
         SPTools.clear();
-        SPTools.saveBoolean("notFristTime", true);
+        SPTools.saveBoolean("isFromLogin", false);
 //        mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
         // TODO: 2017/2/8 0008
         mContext.finish();
@@ -613,6 +619,40 @@ public class UserUtils {
     }
 
     /**
+     * 获取投资顾问
+     */
+    public static void getAdvisers(final GetAdvisersCallback callback) {
+        new GGOKHTTP(UserUtils.getTokenParams(), GGOKHTTP.GET_MY_ADVISERS, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                if (code == 0) {
+                    List<Advisers> data = JSONObject.parseObject(responseInfo, AdvisersBean.class).getData();
+                    SPTools.saveString("ADVISERS_LIST", JSONObject.toJSONString(data));
+                    if (callback != null) {
+                        callback.onSuccess(data);
+                    }
+                } else if (code == 1001) {
+                    if (callback != null) {
+                        callback.onFailed("数据为空");
+                    }
+                } else {
+                    if (callback != null) {
+                        callback.onFailed(JSONObject.parseObject(responseInfo).getString("message"));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                if (callback != null) {
+                    callback.onFailed(msg);
+                }
+            }
+        }).startGet();
+    }
+
+    /**
      * 当群信息没有的时候 网上拉取
      */
     public static void getChatGroup(final int type, List<String> groupMembers, final String conversationId, final getSquareInfo mGetSquareInfo) {
@@ -628,7 +668,6 @@ public class UserUtils {
             @Override
             public void onSuccess(String responseInfo) {
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(responseInfo);
                 if ((int) result.get("code") == 0) {
                     if (null != result.getJSONObject("data")) {
                         JSONObject jsonObject = result.getJSONObject("data");
@@ -674,5 +713,11 @@ public class UserUtils {
         void success(String responseInfo);
 
         void failed(String errorMsg);
+    }
+
+    public interface GetAdvisersCallback {
+        void onSuccess(List<Advisers> advisersList);
+
+        void onFailed(String errorMsg);
     }
 }

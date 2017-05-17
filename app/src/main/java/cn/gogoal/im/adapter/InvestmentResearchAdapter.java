@@ -15,8 +15,8 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.BannerUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.UIHelper;
 
 /**
@@ -53,22 +53,9 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
         imgIcon.setVisibility(data.isSimulatedArg() ? View.INVISIBLE : View.VISIBLE);
         tvDesc.setVisibility(data.isSimulatedArg() ? View.INVISIBLE : View.VISIBLE);
 
-        switch (data.getType()) {
-            case 10000:  //H5
-                break;
-            case 10001: //行情
-                break;
-            case 10002: //个股
-                break;
-            case 10003: //直播
-                break;
-            default:
-                break;
-        }
-
-        tvDesc.setTextColor(data.getType()==10000?(data.getIsClick() == 0 ?
-                getResColor(R.color.textColor_333333) :
-                getResColor(R.color.textColor_999999)):getResColor(R.color.textColor_333333));
+//        tvDesc.setTextColor(data.getType()==10000?(data.getIsClick() == 0 ?
+//                getResColor(R.color.textColor_333333) :
+//                getResColor(R.color.textColor_999999)):getResColor(R.color.textColor_333333));
 
         if (data.isSimulatedArg()) {//模拟数据
             imgHot.setVisibility(View.INVISIBLE);
@@ -94,13 +81,13 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
                 } else {
                     //TODO 跳网页类型
                     if (data.getIsClick() == 0) {
-                        NormalIntentUtils.go2WebActivity(
-                                v.getContext(),
-                                data.getUrl(),
-                                data.getDesc(), true);
+                        String[] params={data.getUrl(),data.getTitle()};
+                        BannerUtils.getInstance(context,data.getType(),params).go();
                     } else {
 //                        new ComingSoonDialog().show(((MainActivity) context).getSupportFragmentManager());
                         UIHelper.toastInCenter(context,"该功能暂未开放使用");
+//                        MessageFullScreen.newInstance("该功能暂未开放使用")
+//                                .show(((MainActivity) context).getSupportFragmentManager());
                     }
                 }
             }

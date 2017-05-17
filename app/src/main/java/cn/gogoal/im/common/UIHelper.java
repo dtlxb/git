@@ -58,6 +58,7 @@ public class UIHelper {
             mToast.setText(msg);
             mToast.setDuration(Toast.LENGTH_SHORT);
         }
+        KLog.e(cont.getClass().getSimpleName());
         mToast.show();
     }
 
@@ -79,6 +80,9 @@ public class UIHelper {
             }
             mToast.setDuration(Toast.LENGTH_SHORT);
         }
+
+        KLog.e(cont.getClass().getSimpleName());
+
         mToast.show();
     }
 
@@ -92,6 +96,7 @@ public class UIHelper {
             mToast.setText(msg);
             mToast.setDuration(Toast.LENGTH_SHORT);
         }
+        KLog.e(cont.getClass().getSimpleName());
         mToast.show();
     }
 
@@ -125,6 +130,7 @@ public class UIHelper {
             }
             mToast.setDuration(Toast.LENGTH_LONG);
         }
+        KLog.e(cont.getClass().getSimpleName());
         mToast.show();
     }
 
@@ -142,6 +148,8 @@ public class UIHelper {
             mToast.setText(msg);
             mToast.setDuration(Toast.LENGTH_LONG);
         }
+        KLog.e(cont.getClass().getSimpleName());
+
         mToast.show();
     }
 
@@ -169,7 +177,8 @@ public class UIHelper {
             mToast.setDuration(Toast.LENGTH_SHORT);
             mToast.setGravity(Gravity.CENTER, 0, 0);
         } else {
-            mToast.setText(msg);
+            mToast = null;
+            toastInCenter(cont, msg);
         }
         mToast.show();
     }
