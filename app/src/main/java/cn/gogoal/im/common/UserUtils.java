@@ -42,7 +42,7 @@ import cn.gogoal.im.common.ImageUtils.ImageUtils;
  */
 public class UserUtils {
 
-    public static void saveUserInfo(JSONObject data){
+    public static void saveUserInfo(JSONObject data) {
         SPTools.saveJsonObject("userInfo", data);
     }
 
@@ -317,8 +317,6 @@ public class UserUtils {
 
     /*注销*/
     public static void logout(Activity mContext) {
-        SPTools.clear();
-        SPTools.saveBoolean("notFristTime", true);
         mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
         AVImClientManager.getInstance().close(UserUtils.getMyAccountId(), new AVIMClientCallback() {
             @Override
@@ -326,6 +324,8 @@ public class UserUtils {
 
             }
         });
+        SPTools.clear();
+        SPTools.saveBoolean("notFristTime", true);
     }
 
     @SuppressLint("UseSparseArrays")
