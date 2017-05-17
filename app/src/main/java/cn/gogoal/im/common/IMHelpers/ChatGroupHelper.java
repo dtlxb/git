@@ -18,6 +18,7 @@ import java.util.Map;
 
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.MyApp;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.IMMessageBean;
@@ -414,6 +415,13 @@ public class ChatGroupHelper {
         mMessage.setTimestamp(CalendarUtils.getCurrentTime());
         mMessage.setFrom(UserUtils.getMyAccountId());
 
+        //发送至聊天室
+        Map<Object, Object> objectMap = new HashMap<>();
+        objectMap.put("share_message", mMessage);
+        objectMap.put("share_convid", contactBean.getConv_id());
+        BaseMessage baseMessage = new BaseMessage("message_map", objectMap);
+        AppManager.getInstance().sendMessage("oneShare", baseMessage);
+
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
@@ -473,6 +481,13 @@ public class ChatGroupHelper {
         mMessage.setContent(JSON.toJSONString(contentObject));
         mMessage.setTimestamp(CalendarUtils.getCurrentTime());
         mMessage.setFrom(UserUtils.getMyAccountId());
+
+        //发送至聊天室
+        Map<Object, Object> objectMap = new HashMap<>();
+        objectMap.put("share_message", mMessage);
+        objectMap.put("share_convid", shareItemInfo.getImMessageBean().getConversationID());
+        BaseMessage baseMessage = new BaseMessage("message_map", objectMap);
+        AppManager.getInstance().sendMessage("oneShare", baseMessage);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
