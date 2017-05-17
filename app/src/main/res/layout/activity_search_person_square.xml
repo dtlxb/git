@@ -28,6 +28,11 @@
 
         <include layout="@layout/include_search_edit"/>
 
+    <View
+        android:background="@color/line_color"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_search_persion_team"
         android:layout_width="match_parent"

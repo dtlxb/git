@@ -100,7 +100,7 @@ public class SearchActivity extends BaseActivity {
             }
         });
 
-        rvFlagSearch.setAdapter(new CommonAdapter<ImageTextBean<Integer>,BaseViewHolder>(R.layout.item_search_flag, getFlagData()) {
+        rvFlagSearch.setAdapter(new CommonAdapter<ImageTextBean<Integer>, BaseViewHolder>(R.layout.item_search_flag, getFlagData()) {
             @Override
             protected void convert(BaseViewHolder holder, ImageTextBean<Integer> data, int position) {
                 holder.setImageResource(R.id.img_search_item, data.getIamge());
@@ -208,7 +208,7 @@ public class SearchActivity extends BaseActivity {
         return filteredModelList;
     }
 
-    private class SearchConversationAdapter extends CommonAdapter<IMMessageBean,BaseViewHolder> {
+    private class SearchConversationAdapter extends CommonAdapter<IMMessageBean, BaseViewHolder> {
 
         public SearchConversationAdapter(Context context, int layoutId, List<IMMessageBean> datas) {
             super(layoutId, datas);

@@ -419,7 +419,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 startActivityForResult(intent, AppConst.SQUARE_ROOM_EDIT_BRIEF);
                 break;
             case R.id.tv_search_history_tv:
-                startActivity(new Intent(getActivity(), SearchActivity.class));
+                intent = new Intent(getActivity(), SearchMessagesActivity.class);
+                intent.putExtra("conversation_id", conversationId);
+                startActivity(intent);
                 break;
             case R.id.tv_delete_square:
                 //删除并退出群

@@ -8,6 +8,8 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,11 +81,12 @@ public abstract class BaseFragment extends Fragment implements IBase {
     @Override
     public void initView(View view) {
     }
-    public int getResColor(@ColorRes int colorId){
-        return ContextCompat.getColor(getContext(),colorId);
+
+    public int getResColor(@ColorRes int colorId) {
+        return ContextCompat.getColor(getContext(), colorId);
     }
 
-    public Drawable getResDrawable(@DrawableRes int drawableid){
+    public Drawable getResDrawable(@DrawableRes int drawableid) {
         return ContextCompat.getDrawable(getContext(), drawableid);
     }
 

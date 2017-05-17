@@ -85,8 +85,8 @@ public class SearchTeamFragment extends BaseFragment {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         headView.setGravity(Gravity.CENTER_VERTICAL);
-        headView.setPadding(AppDevice.dp2px(mContext, 15), AppDevice.dp2px(mContext, 10), 0,
-                AppDevice.dp2px(mContext, 10));
+        headView.setPadding(AppDevice.dp2px(mContext, 16), AppDevice.dp2px(mContext, 10), 0,
+                AppDevice.dp2px(mContext, 9));
         headView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         headView.setTextColor(getResColor(R.color.textColor_333333));
         headView.setText("推荐");
@@ -227,12 +227,12 @@ public class SearchTeamFragment extends BaseFragment {
             } else {
                 final String groupUrl = data.getAttr().getAvatar();
 
-                ImageDisplay.loadRoundedRectangleImage(getContext(),groupUrl,imageView);
+                ImageDisplay.loadRoundedRectangleImage(getContext(), groupUrl, imageView);
 
                 ImageUtils.getUrlBitmap(getActivity(), groupUrl, new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        groupAvatarBitmap=resource;
+                        groupAvatarBitmap = resource;
                     }
                 });
 

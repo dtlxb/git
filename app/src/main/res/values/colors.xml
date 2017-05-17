@@ -27,6 +27,7 @@
 
 
     <color name="colorXLayout">#9d9d9d</color>
+    <color name="colorAgainLoad">#339d9d9d</color>
 
     <!--直播涉及颜色-->
     <color name="live_together">#3381e3</color>
@@ -108,5 +109,7 @@
     <color name="im_chat_bg">#f2f2f2</color>
 
     <color name="dialog_invite_sure">#2782d7</color>
+
+    <color name="player_line">#d4d4d4</color>
 
 </resources>

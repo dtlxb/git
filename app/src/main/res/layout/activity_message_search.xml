@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_title" />
+
+    <cn.gogoal.im.ui.view.HintCenterEditText
+        android:id="@+id/layout_2search"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/shape_search_activity_edit"
+        android:drawableLeft="@mipmap/img_search"
+        android:drawablePadding="5dp"
+        android:gravity="center_vertical"
+        android:hint="搜索"
+        android:imeOptions="actionSearch"
+        android:singleLine="true"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/wx_share_line" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/tv_not_find"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="110dp"
+        android:gravity="center_horizontal"
+        android:text="无结果"
+        android:textColor="@color/textColor_999999"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+
+</LinearLayout>

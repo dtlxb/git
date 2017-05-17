@@ -10,7 +10,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.avos.avoscloud.im.v2.AVIMConversation;
+import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.Conversation;
+import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -45,20 +47,20 @@ public class SingleChatRoomActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-
         String conversation_id = (String) StringUtils.objectNullDeal(this.getIntent().getStringExtra("conversation_id"));
         String nickname = (String) StringUtils.objectNullDeal(this.getIntent().getStringExtra("nickname"));
         boolean need_update = this.getIntent().getBooleanExtra("need_update", false);
+        List<AVIMMessage> messageChooesed = this.getIntent().getParcelableArrayListExtra("messages_chooesed");
         initTitle(nickname, conversation_id);
 
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
 
         //输入聊天对象ID，返回conversation对象
-        getSingleConversation(conversation_id, need_update);
+        getSingleConversation(conversation_id, need_update, messageChooesed);
 
     }
 
-    private void initTitle(String nickname, final String conversation_id) {
+    private void initTitle(final String nickname, final String conversation_id) {
         XTitle title = setMyTitle(nickname, true);
 
         //添加action
@@ -70,6 +72,7 @@ public class SingleChatRoomActivity extends BaseActivity {
                     Bundle mBundle = new Bundle();
                     mBundle.putSerializable("seri", contactBean);
                     mBundle.putString("conversation_id", conversation_id);
+                    mBundle.putString("nickname", nickname);
                     intent.putExtras(mBundle);
                     startActivity(intent);
                 } else {
@@ -80,7 +83,7 @@ public class SingleChatRoomActivity extends BaseActivity {
         title.addAction(personAction, 0);
     }
 
-    public void getSingleConversation(String conversation_id, final boolean need_update) {
+    public void getSingleConversation(String conversation_id, final boolean need_update, final List<AVIMMessage> messageList) {
 
         KLog.e(conversation_id);
         //获取聊天conversation
@@ -88,7 +91,7 @@ public class SingleChatRoomActivity extends BaseActivity {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
                 contactBean = getYourSpeaker(conversation);
-                chatFragment.setConversation(conversation, need_update, 0, contactBean);
+                chatFragment.setConversation(conversation, need_update, 0, contactBean, messageList);
             }
 
             @Override

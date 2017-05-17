@@ -6,6 +6,8 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import com.avos.avoscloud.im.v2.AVIMConversation;
+import com.avos.avoscloud.im.v2.AVIMMessage;
+import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 
 import org.simple.eventbus.Subscriber;
 
@@ -46,12 +48,13 @@ public class SquareChatRoomActivity extends BaseActivity {
         final String conversationID = (String) StringUtils.objectNullDeal(this.getIntent().getStringExtra("conversation_id"));
         boolean need_update = this.getIntent().getBooleanExtra("need_update", false);
         int actionType = this.getIntent().getIntExtra("square_action", 0);
+        List<AVIMMessage> messageChooesed = this.getIntent().getParcelableArrayListExtra("messages_chooesed");
 
         chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
         if (!squareName.equals("")) {
             initTitle(squareName, conversationID);
         }
-        getSquareConversation(conversationID, need_update, actionType);
+        getSquareConversation(conversationID, need_update, actionType, messageChooesed);
 
     }
 
@@ -78,11 +81,11 @@ public class SquareChatRoomActivity extends BaseActivity {
         xTitle.addAction(personAction, 0);
     }
 
-    private void getSquareConversation(String conversationId, final boolean need_update, final int actionType) {
+    private void getSquareConversation(String conversationId, final boolean need_update, final int actionType, final List<AVIMMessage> messageList) {
         AVImClientManager.getInstance().findConversationById(conversationId, new AVImClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
-                chatFragment.setConversation(conversation, need_update, actionType, null);
+                chatFragment.setConversation(conversation, need_update, actionType, null, messageList);
                 groupMembers.addAll(conversation.getMembers());
                 if (squareName.equals("")) {
                     initTitle(conversation.getName(), conversation.getConversationId());
