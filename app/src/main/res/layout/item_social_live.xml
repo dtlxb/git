@@ -133,6 +133,17 @@
             android:textColor="@android:color/white"
             android:textSize="16dp" />
 
+        <TextView
+            android:id="@+id/textPhoneInvite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/shape_social_live_invite"
+            android:text="@string/social_live_invite"
+            android:textColor="@android:color/white"
+            android:textSize="16dp"
+            android:visibility="gone" />
+
     </FrameLayout>
 
     <FrameLayout
@@ -198,7 +209,7 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/textInvite"
+            android:id="@+id/textPcInvite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

@@ -209,9 +209,9 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
         }
 
         if (data.getAuth() == 1) {
-            holder.setVisible(R.id.textInvite, true);
+            holder.setVisible(R.id.textPhoneInvite, true);
         } else {
-            holder.setVisible(R.id.textInvite, false);
+            holder.setVisible(R.id.textPhoneInvite, false);
         }
 
         holder.setOnClickListener(R.id.linearSocial, new View.OnClickListener() {
