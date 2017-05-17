@@ -32,7 +32,9 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.common.AppConst;
@@ -305,6 +307,10 @@ public class ChooseContactActivity extends BaseActivity {
                                 @Override
                                 public void getInfoSuccess(JSONObject groupInfo) {
                                     if (finalI == result.values().size() - 1) {
+                                        Map<Object, Object> messageMap = new HashMap<>();
+                                        messageMap.put("share_message", entity);
+                                        BaseMessage baseMessage = new BaseMessage("message_map", messageMap);
+                                        AppManager.getInstance().sendMessage("oneShare", baseMessage);
                                         finish();
                                     }
                                 }
@@ -687,7 +693,7 @@ public class ChooseContactActivity extends BaseActivity {
         protected void convert(BaseViewHolder holder, final ContactBean data, final int position) {
             holder.setText(R.id.item_contacts_tv_nickname, data.getTarget());
 
-            ImageView imageAvatar=holder.getView(R.id.item_contacts_iv_icon);
+            ImageView imageAvatar = holder.getView(R.id.item_contacts_iv_icon);
             Glide.with(ChooseContactActivity.this).load(data.getAvatar()).into(imageAvatar);
 
             //设置Tag

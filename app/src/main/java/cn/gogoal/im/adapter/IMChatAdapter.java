@@ -391,6 +391,12 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 ImageDisplay.loadImage(mContext, lcattrsObject.getString("thumUrl"), ((RightShareViewHolder) holder).iv_live_share);
             }
 
+            ((RightShareViewHolder) holder).card_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    shareAction(lcattrsObject);
+                }
+            });
             showMessageTime(position, ((RightShareViewHolder) holder).message_time);
         } else if (holder instanceof ChatGroupAddViewHolder) {
             showMessageTime(position, ((ChatGroupAddViewHolder) holder).message_time);
