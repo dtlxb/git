@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -554,5 +555,21 @@ public class StringUtils {
         } else {
             return num.substring(0, 3) + "-" + num.substring(3, 7) + "-" + num.substring(7);
         }
+    }
+
+    /**
+     * 生产随机数
+     * @param length
+     * @return
+     */
+    public static String getRandomString(int length){
+        String str="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random=new Random();
+        StringBuffer sb=new StringBuffer();
+        for(int i=0;i<length;i++){
+            int number=random.nextInt(62);
+            sb.append(str.charAt(number));
+        }
+        return sb.toString();
     }
 }
