@@ -128,6 +128,12 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
                     : data.getAnchor().getOrganization() + " | " + data.getAnchor().getAnchor_position()
                     == null ? "--" : data.getAnchor().getAnchor_position());
 
+            if (data.getAuth() == 1) {
+                holder.setVisible(R.id.textPcInvite, true);
+            } else {
+                holder.setVisible(R.id.textPcInvite, false);
+            }
+
         } else {
             //phone
             holder.setVisible(R.id.linearPhone, true);
@@ -206,12 +212,12 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
                 });
             }
             holder.setText(R.id.textPhoneTitle, data.getVideo_name());
-        }
 
-        if (data.getAuth() == 1) {
-            holder.setVisible(R.id.textPhoneInvite, true);
-        } else {
-            holder.setVisible(R.id.textPhoneInvite, false);
+            if (data.getAuth() == 1) {
+                holder.setVisible(R.id.textPhoneInvite, true);
+            } else {
+                holder.setVisible(R.id.textPhoneInvite, false);
+            }
         }
 
         holder.setOnClickListener(R.id.linearSocial, new View.OnClickListener() {

@@ -39,12 +39,12 @@ public class ArrayEmojiFragment extends Fragment {
     private EmojiAdapter adapter;
     private int keyBordHeight;
 
-    public static ArrayEmojiFragment newInstance(int num) {
-        return new ArrayEmojiFragment(num);
-    }
-
-    public ArrayEmojiFragment(int mNum) {
-        this.mNum = mNum;
+    public static ArrayEmojiFragment newInstance(int mNum) {
+        ArrayEmojiFragment aef = new ArrayEmojiFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("mNum", mNum);
+        aef.setArguments(bundle);
+        return aef;
     }
 
     public EmojiAdapter getAdapter() {
@@ -54,6 +54,9 @@ public class ArrayEmojiFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        mNum = getArguments().getInt("mNum");
+
         //在这里加载每个 fragment的显示的 View
         View view = inflater.inflate(R.layout.fragment_array_emoji, container, false);
         emoji_recyclerview = ((RecyclerView) view.findViewById(R.id.emoji_recyclerview));
