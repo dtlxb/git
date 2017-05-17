@@ -56,7 +56,7 @@ public class SplashActivity extends Activity {
         skipProgressView.setProgressListener(new SkipProgressView.OnProgressListener() {
             @Override
             public void onProgress(int progress) {
-                if (progress==0){
+                if (progress == 0) {
                     go2Next();
                 }
             }
@@ -72,9 +72,9 @@ public class SplashActivity extends Activity {
     }
 
     private void go2Next() {
-        if (UserUtils.isLogin()){
+        if (UserUtils.isLogin()) {
             NormalIntentUtils.go2MainActivity(SplashActivity.this);
-        }else {
+        } else {
             NormalIntentUtils.go2LoginActivity(SplashActivity.this);
         }
 

@@ -11,6 +11,9 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMClient;
+import com.avos.avoscloud.im.v2.AVIMException;
+import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.socks.library.KLog;
@@ -29,6 +32,7 @@ import cn.gogoal.im.bean.Advisers;
 import cn.gogoal.im.bean.AdvisersBean;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 
 /**
@@ -38,7 +42,7 @@ import cn.gogoal.im.common.ImageUtils.ImageUtils;
  */
 public class UserUtils {
 
-    public static void saveUserInfo(JSONObject data){
+    public static void saveUserInfo(JSONObject data) {
         SPTools.saveJsonObject("userInfo", data);
     }
 
@@ -313,11 +317,15 @@ public class UserUtils {
 
     /*注销*/
     public static void logout(Activity mContext) {
-        SPTools.clear();
-        SPTools.saveBoolean("isFromLogin", false);
         mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
-        mContext.finish();
-        UIHelper.toast(mContext, "退出登录成功!");
+        AVImClientManager.getInstance().close(UserUtils.getMyAccountId(), new AVIMClientCallback() {
+            @Override
+            public void done(AVIMClient avimClient, AVIMException e) {
+
+            }
+        });
+        SPTools.clear();
+        SPTools.saveBoolean("notFristTime", true);
     }
 
     @SuppressLint("UseSparseArrays")

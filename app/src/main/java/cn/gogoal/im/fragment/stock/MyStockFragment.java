@@ -144,7 +144,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         super.onResume();
         try {
             refreshMyStock(AppConst.REFRESH_TYPE_FIRST);
-        }catch (Exception e){
+        } catch (Exception e) {
             KLog.e(e.getMessage());
         }
     }
@@ -275,15 +275,15 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             tvEditMyStock.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent =new Intent(v.getContext(), EditMyStockActivity.class);
-                    Bundle bundle=new Bundle();
-                    bundle.putParcelableArrayList("my_stock_edit_list",myStockDatas);
+                    Intent intent = new Intent(v.getContext(), EditMyStockActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("my_stock_edit_list", myStockDatas);
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }
             });
-            tvEditMyStock.setTextColor(enable?Color.BLACK:Color.GRAY);
-        }catch (Exception e){
+            tvEditMyStock.setTextColor(enable ? Color.BLACK : Color.GRAY);
+        } catch (Exception e) {
             e.getMessage();
         }
     }
@@ -315,17 +315,17 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         startActivity(intent);
     }
 
-    void noData(boolean nadata){
+    void noData(boolean nadata) {
         editEnable(!nadata);
         try {
-            itemMystock.setVisibility(nadata?View.GONE:View.VISIBLE);
-        }catch (Exception e){
+            itemMystock.setVisibility(nadata ? View.GONE : View.VISIBLE);
+        } catch (Exception e) {
             e.getMessage();
         }
         refreshLayout.setEnabled(!nadata);
-        setAppBarLayout(appBarLayout,!nadata);
+        setAppBarLayout(appBarLayout, !nadata);
 
-        if (nadata){
+        if (nadata) {
             myStockAdapter.setEmptyView(R.layout.layout_no_mystock,
                     (ViewGroup) rvMyStock.getParent());
             myStockAdapter.getEmptyView().findViewById(R.id.flag_img).setOnClickListener(new View.OnClickListener() {
@@ -453,10 +453,10 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (data.getSymbol_type()==1) {
+                    if (data.getSymbol_type() == 1) {
                         NormalIntentUtils.go2StockDetail(v.getContext(),
                                 data.getStock_code(), data.getStock_name());
-                    }else {
+                    } else {
                         WaitDialog waitDialog = WaitDialog.getInstance("暂无 " +
                                         StockUtils.getSympolType(data.getSymbol_type()) + " 详情页面",
                                 R.mipmap.login_error, false);
@@ -487,8 +487,8 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                                                             public void run() {
                                                                 myStockAdapter.notifyDataSetChanged();
                                                             }
-                                                        },1000);
-                                                    }catch (Exception e){
+                                                        }, 1000);
+                                                    } catch (Exception e) {
                                                         e.getMessage();
                                                     }
                                                 }
