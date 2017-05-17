@@ -204,6 +204,8 @@
     <!--<string name="str_touyan_setting_tips">投研首页常用工具 (按住拖动调整排序)</string>-->
     <string name="str_touyan_setting_tips"><font color="#333333">投研首页常用工具 </font>
         <font color="#999999">(按住拖动调整排序)</font></string>
+    <string name="loading_error">加载失败...</string>
+    <string name="again_load">重新加载</string>
 
 
     <!--<string-array name="emoji_array">

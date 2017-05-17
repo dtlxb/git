@@ -18,15 +18,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -53,11 +53,9 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.PlayerUtils.PlayerControl;
 import cn.gogoal.im.common.PlayerUtils.StatusListener;
-import cn.gogoal.im.common.PlayerUtils.TextAndImage;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 import cn.gogoal.im.ui.view.CircleImageView;
-import cn.gogoal.im.ui.widget.PopupWindowHelper;
 
 /**
  * Created by dave.
@@ -68,19 +66,6 @@ public class PlayerActivity extends BaseActivity {
 
     @BindView(R.id.GLViewContainer)
     FrameLayout frameContainer;
-
-    @BindView(R.id.linearPlayerProfiles)
-    LinearLayout linearPlayerProfiles;
-    @BindView(R.id.linearPlayerRelaterVideo)
-    LinearLayout linearPlayerRelaterVideo;
-
-    //详情相关控件
-    @BindView(R.id.imgPalyer)
-    CircleImageView imgPalyer;
-    @BindView(R.id.textCompany)
-    TextView textCompany;
-    @BindView(R.id.textOnlineNumber)
-    TextView textOnlineNumber;
 
     //缓冲控件
     @BindView(R.id.LayoutTip)
@@ -100,6 +85,39 @@ public class PlayerActivity extends BaseActivity {
     @BindView(R.id.totalDuration)
     TextView totalDuration;
 
+    //介绍
+    @BindView(R.id.player_line_tab)
+    LinearLayout player_line_tab;
+    //主播
+    @BindView(R.id.player_anchor_tv)
+    TextView player_anchor_tv;
+    @BindView(R.id.tv_player_anchor)
+    TextView tv_player_anchor;
+    //相关视频
+    @BindView(R.id.player_video_tv)
+    TextView player_video_tv;
+    @BindView(R.id.tv_player_video)
+    TextView tv_player_video;
+
+    @BindView(R.id.recy_relater)
+    RecyclerView recy_relater;
+    @BindView(R.id.linearShowError)
+    LinearLayout linearShowError;
+    //主播介绍
+    @BindView(R.id.scrollIntroduce)
+    ScrollView scrollIntroduce;
+    @BindView(R.id.anchor_avatar)
+    CircleImageView anchor_avatar;
+    @BindView(R.id.anchor_name)
+    TextView anchor_name;
+    @BindView(R.id.anchor_position)
+    TextView anchor_position;
+    @BindView(R.id.anchor_achieve)
+    TextView anchor_achieve;
+    @BindView(R.id.live_avatar)
+    ImageView live_avatar;
+    @BindView(R.id.live_achieve)
+    TextView live_achieve;
 
     private boolean mEnableUpdateProgress = true;
 
@@ -123,6 +141,7 @@ public class PlayerActivity extends BaseActivity {
     private AliVcMediaPlayer mPlayer = null;
     private SurfaceHolder mSurfaceHolder = null;
     private SurfaceView mSurfaceView = null;
+
     private GestureDetector mGestureDetector;
 
     private StatusListener mStatusListener = null;
@@ -147,14 +166,9 @@ public class PlayerActivity extends BaseActivity {
 
     private String live_id;
 
-    //弹窗
-    private JSONObject anchor;
-    private String introduction_img;
-    private String introduction;
-    private List<RelaterVideoData> videoDatas;
-    private PopupWindowHelper anchorHelper;
-    private PopupWindowHelper anchorHelperLand;
-    private PopupWindowHelper relaterHelper;
+    private RelaterVideoAdapter adapter;
+
+    private int screenWidth;
 
     private Handler mTimerHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -191,9 +205,13 @@ public class PlayerActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
+        screenWidth = AppDevice.getWidth(this);
+
         live_id = getIntent().getStringExtra("live_id");
 
         PlayDataStatistics.getStatisticalData(getContext(), "2", live_id, "2", "1");
+
+        initRecycleView(recy_relater, null);
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -226,20 +244,29 @@ public class PlayerActivity extends BaseActivity {
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONArray("data").getJSONObject(0);
-                    //直播详情
-                    ImageDisplay.loadCircleImage(getContext(), data.getString("face_url"), imgPalyer);
-                    textCompany.setText(data.getString("anchor_name"));
-                    textOnlineNumber.setText("0人在线");
                     //主播介绍
-                    anchor = data.getJSONObject("anchor");
-                    introduction_img = data.getString("introduction_img");
-                    introduction = data.getString("introduction");
-                    if (anchor == null) {
-                        linearPlayerProfiles.setVisibility(View.GONE);
+                    JSONObject anchor = data.getJSONObject("anchor");
+
+                    //初始化
+                    player_anchor_tv.setTextColor(getResColor(R.color.player_add_friend));
+                    tv_player_anchor.setVisibility(View.VISIBLE);
+                    player_video_tv.setTextColor(getResColor(R.color.textColor_333333));
+                    tv_player_video.setVisibility(View.GONE);
+
+                    if (anchor != null) {
+                        linearShowError.setVisibility(View.GONE);
+                        scrollIntroduce.setVisibility(View.VISIBLE);
+                        recy_relater.setVisibility(View.GONE);
+
+                        ImageDisplay.loadCircleImage(getContext(), anchor.getString("face_url"), anchor_avatar);
+                        anchor_name.setText(anchor.getString("anchor_name"));
+                        anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
+                        anchor_achieve.setText(anchor.getString("anchor_introduction"));
+                        ImageDisplay.loadImage(getContext(), data.getString("introduction_img"), live_avatar);
+                        live_achieve.setText(data.getString("introduction"));
                     } else {
-                        showAnchorProfiles();
-                        showAnchorProfilesLand();
-                        linearPlayerProfiles.setVisibility(View.VISIBLE);
+                        linearShowError.setVisibility(View.VISIBLE);
+                        scrollIntroduce.setVisibility(View.GONE);
                     }
 
                     mURI = data.getString("video_file");
@@ -381,8 +408,7 @@ public class PlayerActivity extends BaseActivity {
         mGestureDetector = new GestureDetector(this, new MyGestureListener());
 
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.MATCH_PARENT);
+                FrameLayout.LayoutParams.MATCH_PARENT, (int) (screenWidth * 9.0f / 16));
         params.gravity = Gravity.CENTER;
         mSurfaceView.setLayoutParams(params);
         // 为避免重复添加,事先remove子view
@@ -557,7 +583,7 @@ public class PlayerActivity extends BaseActivity {
             KLog.json("onPrepared");
             if (mPlayer != null) {
                 //VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING  |  VIDEO_SCALING_MODE_SCALE_TO_FIT
-                mPlayer.setVideoScalingMode(MediaPlayer.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT);
+                mPlayer.setVideoScalingMode(MediaPlayer.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
                 update_total_duration(mPlayer.getDuration());
                 mTimerHandler.postDelayed(mRunnable, 1000);
                 //show_progress_ui(true);
@@ -951,34 +977,26 @@ public class PlayerActivity extends BaseActivity {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             isStopPlayer = true;
+
+            if (AppDevice.isLandscape(getContext())) {
+                setProtrait();
+            } else if (AppDevice.isPortrait(getContext())) {
+                finish();
+            }
         }
 
         return super.onKeyDown(keyCode, event);
     }
 
-    @OnClick({R.id.imgPlayerFullScreen, R.id.imgPlayerProfiles, R.id.imgPlayerRelaterVideo,
-            R.id.imgPlayerShare, R.id.imgPlayerClose})
+    @OnClick({R.id.imgPlayerFullScreen, R.id.imgPlayerShare, R.id.imgPlayerClose,
+            R.id.player_anchor_layout, R.id.player_video_layout, R.id.textAgainLoad})
     public void setClickFunctionBar(View v) {
         switch (v.getId()) {
-            case R.id.imgPlayerFullScreen: //全屏
+            case R.id.imgPlayerFullScreen: //横竖屏切换
                 if (AppDevice.isLandscape(getContext())) {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    setProtrait();
                 } else if (AppDevice.isPortrait(getContext())) {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                }
-                break;
-            case R.id.imgPlayerProfiles: //主播介绍
-                if (AppDevice.isLandscape(getContext())) {
-                    anchorHelperLand.showFromRight(v);
-                } else {
-                    anchorHelper.showFromBottom(v);
-                }
-                break;
-            case R.id.imgPlayerRelaterVideo: //相关视频
-                if (AppDevice.isLandscape(getContext())) {
-                    relaterHelper.showFromRight(v);
-                } else {
-                    relaterHelper.showFromBottom(v);
+                    setLandscape();
                 }
                 break;
             case R.id.imgPlayerShare: //分享
@@ -986,87 +1004,76 @@ public class PlayerActivity extends BaseActivity {
                 DialogHelp.showShareDialog(getContext(), AppConst.GG_LIVE_SHARE + live_id + "?video", "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
                 break;
             case R.id.imgPlayerClose: //退出
-                finish();
+                if (AppDevice.isLandscape(getContext())) {
+                    setProtrait();
+                } else if (AppDevice.isPortrait(getContext())) {
+                    finish();
+                }
+                break;
+            case R.id.player_anchor_layout: //主播
+                if (tv_player_anchor.getVisibility() == View.GONE) {
+                    player_anchor_tv.setTextColor(getResColor(R.color.player_add_friend));
+                    tv_player_anchor.setVisibility(View.VISIBLE);
+                    player_video_tv.setTextColor(getResColor(R.color.textColor_333333));
+                    tv_player_video.setVisibility(View.GONE);
+
+                    scrollIntroduce.setVisibility(View.VISIBLE);
+                    recy_relater.setVisibility(View.GONE);
+                }
+                break;
+            case R.id.player_video_layout: //相关视频
+                if (tv_player_video.getVisibility() == View.GONE) {
+                    player_anchor_tv.setTextColor(getResColor(R.color.textColor_333333));
+                    tv_player_anchor.setVisibility(View.GONE);
+                    player_video_tv.setTextColor(getResColor(R.color.player_add_friend));
+                    tv_player_video.setVisibility(View.VISIBLE);
+
+                    scrollIntroduce.setVisibility(View.GONE);
+                    recy_relater.setVisibility(View.VISIBLE);
+                }
+                break;
+            case R.id.textAgainLoad:
+                getRelaterVideoInfo();
                 break;
         }
     }
 
-    private void showAnchorProfiles() {
-        View anchorIntroduction = LayoutInflater.from(this).inflate(R.layout.dialog_anchor_introduction, null);
-        anchorHelper = new PopupWindowHelper(anchorIntroduction);
+    //设置横屏
+    private void setLandscape() {
 
-        final ImageView anchor_avatar = (ImageView) anchorIntroduction.findViewById(R.id.anchor_avatar);
-        TextView anchor_name = (TextView) anchorIntroduction.findViewById(R.id.anchor_name);
-        TextView anchor_position = (TextView) anchorIntroduction.findViewById(R.id.anchor_position);
-        final TextView anchor_achieve = (TextView) anchorIntroduction.findViewById(R.id.anchor_achieve);
-        ImageView live_avatar = (ImageView) anchorIntroduction.findViewById(R.id.live_avatar);
-        TextView live_achieve = (TextView) anchorIntroduction.findViewById(R.id.live_achieve);
+        player_line_tab.setVisibility(View.GONE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
-        ImageDisplay.loadImage(getContext(), anchor.getString("face_url"), anchor_avatar);
-        anchor_name.setText(anchor.getString("anchor_name"));
-        anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
+        if (mSurfaceView != null) {
+            //隐藏状态栏
+            this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            mSurfaceView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
-        if (anchor.getString("anchor_introduction") != null) {
-            anchor_achieve.setText(anchor.getString("anchor_introduction"));
-
-            final ViewTreeObserver observer = anchor_avatar.getViewTreeObserver();
-            observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    anchor_avatar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    int finalHeight = anchor_avatar.getMeasuredHeight();
-                    int finalWidth = anchor_avatar.getMeasuredWidth();
-                    TextAndImage.makeSpan(finalHeight, finalWidth, anchor_achieve);
-                }
-            });
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT);
+            params.gravity = Gravity.CENTER;
+            mSurfaceView.setLayoutParams(params);
         }
-
-        ImageDisplay.loadImage(getContext(), introduction_img, live_avatar);
-        live_achieve.setText(introduction);
     }
 
-    private void showAnchorProfilesLand() {
-        View anchorIntroduction = LayoutInflater.from(this).inflate(R.layout.dialog_anchor_introduction_land, null);
-        anchorHelperLand = new PopupWindowHelper(anchorIntroduction);
+    //设置竖屏
+    private void setProtrait() {
 
-        final ImageView anchor_avatar = (ImageView) anchorIntroduction.findViewById(R.id.anchor_avatar);
-        TextView anchor_name = (TextView) anchorIntroduction.findViewById(R.id.anchor_name);
-        TextView anchor_position = (TextView) anchorIntroduction.findViewById(R.id.anchor_position);
-        final TextView anchor_achieve = (TextView) anchorIntroduction.findViewById(R.id.anchor_achieve);
-        ImageView live_avatar = (ImageView) anchorIntroduction.findViewById(R.id.live_avatar);
-        TextView live_achieve = (TextView) anchorIntroduction.findViewById(R.id.live_achieve);
+        player_line_tab.setVisibility(View.VISIBLE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        ImageDisplay.loadImage(getContext(), anchor.getString("face_url"), anchor_avatar);
-        anchor_name.setText(anchor.getString("anchor_name"));
-        anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
+        if (mSurfaceView != null) {
+            //显示状态栏
+            this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            mSurfaceView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
 
-        if (anchor.getString("anchor_introduction") != null) {
-            anchor_achieve.setText(anchor.getString("anchor_introduction"));
-
-            final ViewTreeObserver observer = anchor_avatar.getViewTreeObserver();
-            observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    anchor_avatar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    int finalHeight = anchor_avatar.getMeasuredHeight();
-                    int finalWidth = anchor_avatar.getMeasuredWidth();
-                    TextAndImage.makeSpan(finalHeight, finalWidth, anchor_achieve);
-                }
-            });
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, (int) (screenWidth * 9.0f / 16));
+            params.gravity = Gravity.CENTER;
+            mSurfaceView.setLayoutParams(params);
         }
-
-        ImageDisplay.loadImage(getContext(), introduction_img, live_avatar);
-        live_achieve.setText(introduction);
-    }
-
-    private void showRelaterVideo() {
-        View relaterVideo = LayoutInflater.from(this).inflate(R.layout.dialog_relater_video, null);
-        relaterHelper = new PopupWindowHelper(relaterVideo);
-
-        RecyclerView recy_relater = (RecyclerView) relaterVideo.findViewById(R.id.recy_relater);
-        initRecycleView(recy_relater, null);
-
-        recy_relater.setAdapter(new RelaterVideoAdapter(getContext(), videoDatas));
     }
 
     /*
@@ -1081,23 +1088,23 @@ public class PlayerActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
-                    videoDatas = JSONObject.parseArray(String.valueOf(object.getJSONArray("data")), RelaterVideoData.class);
-                    if (videoDatas == null) {
-                        linearPlayerRelaterVideo.setVisibility(View.GONE);
-                    } else {
-                        linearPlayerRelaterVideo.setVisibility(View.VISIBLE);
-                        showRelaterVideo();
-                    }
+                    recy_relater.setVisibility(View.VISIBLE);
+                    linearShowError.setVisibility(View.GONE);
+
+                    List<RelaterVideoData> videoDatas = JSONObject.parseArray(String.valueOf(object.getJSONArray("data")), RelaterVideoData.class);
+                    adapter = new RelaterVideoAdapter(getContext(), videoDatas);
+                    recy_relater.setAdapter(adapter);
                 } else {
-                    linearPlayerRelaterVideo.setVisibility(View.GONE);
+                    recy_relater.setVisibility(View.GONE);
+                    linearShowError.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                KLog.json(msg);
                 UIHelper.toast(getContext(), R.string.net_erro_hint);
             }
         };
@@ -1120,11 +1127,11 @@ public class PlayerActivity extends BaseActivity {
                 holder.setVisible(R.id.relative_player, false);
             }
             ImageView relater_img = holder.getView(R.id.relater_img);
-            ImageDisplay.loadImage(getActivity(), data.getVideo_img_url(), relater_img);
+            ImageDisplay.loadImage(getContext(), data.getVideo_img_url(), relater_img);
             holder.setText(R.id.relater_tittle, data.getVideo_name());
             holder.setText(R.id.relater_play_count, data.getPlay_base() + "次");
             CircleImageView relater_avatar = holder.getView(R.id.relater_avatar);
-            ImageDisplay.loadCircleImage(getActivity(), data.getFace_url(), relater_avatar);
+            ImageDisplay.loadCircleImage(getContext(), data.getFace_url(), relater_avatar);
             holder.setText(R.id.relater_name, data.getAnchor_name());
             holder.setText(R.id.relater_content, data.getProgramme_name());
 
