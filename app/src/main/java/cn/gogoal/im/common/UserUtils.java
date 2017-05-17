@@ -629,34 +629,43 @@ public class UserUtils {
      * 获取投资顾问
      */
     public static void getAdvisers(final GetAdvisersCallback callback) {
-        new GGOKHTTP(UserUtils.getTokenParams(), GGOKHTTP.GET_MY_ADVISERS, new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
-                if (code == 0) {
-                    List<Advisers> data = JSONObject.parseObject(responseInfo, AdvisersBean.class).getData();
-                    SPTools.saveString("ADVISERS_LIST", JSONObject.toJSONString(data));
-                    if (callback != null) {
-                        callback.onSuccess(data);
-                    }
-                } else if (code == 1001) {
-                    if (callback != null) {
-                        callback.onFailed("数据为空");
-                    }
-                } else {
-                    if (callback != null) {
-                        callback.onFailed(JSONObject.parseObject(responseInfo).getString("message"));
-                    }
-                }
-            }
 
-            @Override
-            public void onFailure(String msg) {
-                if (callback != null) {
-                    callback.onFailed(msg);
-                }
+        String advisersList = SPTools.getString("ADVISERS_LIST", "");
+        if (!StringUtils.isActuallyEmpty(advisersList)) {
+            List<Advisers> list = JSONObject.parseArray(advisersList, Advisers.class);
+            if (callback!=null) {
+                callback.onSuccess(list);
             }
-        }).startGet();
+        } else {
+            new GGOKHTTP(UserUtils.getTokenParams(), GGOKHTTP.GET_MY_ADVISERS, new GGOKHTTP.GGHttpInterface() {
+                @Override
+                public void onSuccess(String responseInfo) {
+                    int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                    if (code == 0) {
+                        List<Advisers> data = JSONObject.parseObject(responseInfo, AdvisersBean.class).getData();
+                        SPTools.saveString("ADVISERS_LIST", JSONObject.toJSONString(data));
+                        if (callback != null) {
+                            callback.onSuccess(data);
+                        }
+                    } else if (code == 1001) {
+                        if (callback != null) {
+                            callback.onFailed("数据为空");
+                        }
+                    } else {
+                        if (callback != null) {
+                            callback.onFailed(JSONObject.parseObject(responseInfo).getString("message"));
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(String msg) {
+                    if (callback != null) {
+                        callback.onFailed(msg);
+                    }
+                }
+            }).startGet();
+        }
     }
 
     /**

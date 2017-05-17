@@ -13,7 +13,7 @@
         android:layout_marginBottom="8dp"
         android:layout_weight="1"
         android:background="@android:color/white"
-        android:divider="@color/wx_share_line"
+        android:divider="@color/colorDivider_e4e4e4"
         android:dividerHeight="2px" />
 
     <TextView

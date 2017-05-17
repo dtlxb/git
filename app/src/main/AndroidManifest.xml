@@ -195,6 +195,7 @@
         <activity android:name=".activity.ScreenActivity" />
         <activity android:name=".activity.ToolsSettingActivity" />
         <activity android:name=".activity.ToolsListActivity" />
+        <activity android:name=".activity.MyAdvisersActivity"/>
     </application>
 
 </manifest>

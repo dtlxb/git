@@ -35,6 +35,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/colorGriddivider" />
+        android:background="@color/colorDivider_d9d9d9" />
 
 </LinearLayout>
