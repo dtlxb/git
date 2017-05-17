@@ -190,7 +190,7 @@ public class ImageDisplay {
             Glide.with(context).load(image)
                     .asBitmap()
                     .thumbnail(0.1f)
-                    .placeholder(R.mipmap.image_placeholder)
+                    .placeholder(R.mipmap.avatar_place)
                     .into(imageView);
         }
     }
@@ -201,7 +201,7 @@ public class ImageDisplay {
                     .asBitmap()
                     .thumbnail(0.1f);
             if (needPlaveHolder) {
-                builder.placeholder(R.mipmap.image_placeholder).into(imageView);
+                builder.placeholder(R.mipmap.avatar_place).into(imageView);
             } else {
                 builder.into(imageView);
             }
