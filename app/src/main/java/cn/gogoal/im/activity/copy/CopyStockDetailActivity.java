@@ -402,15 +402,9 @@ public class CopyStockDetailActivity extends BaseActivity {
         dpi = AppDevice.getWidth(CopyStockDetailActivity.this);
         if (StockUtils.getMyStockSet() != null) {
             if (StockUtils.isMyStock(stockCode)) {
-//                stock_detail_choose.setBackgroundResource(R.drawable.not_choose_stock);
-//                stock_detail_choose.setText("已自选");
-//                isChoose = true;
-                toggleIsMyStock(true);
+                toggleIsMyStock(true,false);
             } else {
-//                stock_detail_choose_iv.setBackgroundResource(R.drawable.choose_stock);
-//                stock_detail_choose.setText("加自选");
-//                isChoose = false;
-                toggleIsMyStock(false);
+                toggleIsMyStock(false,false);
             }
         }
 
@@ -1405,11 +1399,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         if (isChoose) {
             if (!UserUtils.isLogin()) {
                 StockUtils.removeStock(stockCode);
-//                isChoose = false;
-//                stock_detail_choose_iv.setBackgroundResource(R.drawable.choose_stock);
-//                stock_detail_choose_tv.setText("加自选");
-                toggleIsMyStock(false);
-                UIHelper.toast(CopyStockDetailActivity.this, "删除自选成功");
+                toggleIsMyStock(false,true);
             } else {
                 //登录时
                 final Map<String, String> param = new HashMap<String, String>();
@@ -1423,11 +1413,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                         JSONObject result = JSONObject.parseObject(responseInfo);
                         int data = (int) result.get("code");
                         if (data == 0) {
-//                            isChoose = false;
-//                            stock_detail_choose_iv.setBackgroundResource(R.drawable.choose_stock);
-//                            stock_detail_choose.setText("加自选");
-                            toggleIsMyStock(false);
-                            UIHelper.toast(CopyStockDetailActivity.this, "删除自选成功");
+                            toggleIsMyStock(false,true);
                         }
                     }
 
@@ -1448,11 +1434,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                 singlestock.put("change_rate", 0);
                 StockUtils.addStock2MyStock(singlestock);
 
-                toggleIsMyStock(true);
-//                isChoose = true;
-//                stock_detail_choose_iv.setBackgroundResource(R.drawable.not_choose_stock);
-//                stock_detail_choose.setText("已自选");
-//                UIHelper.toast(CopyStockDetailActivity.this, "添加自选成功");
+                toggleIsMyStock(true,true);
             } else {
                 //登录时
                 final Map<String, String> param = new HashMap<String, String>();
@@ -1478,11 +1460,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                             singlestock.put("change_rate", 0);
                             StockUtils.addStock2MyStock(singlestock);
 
-                            toggleIsMyStock(true);
-//                            isChoose = true;
-//                            stock_detail_choose_iv.setBackgroundResource(R.drawable.not_choose_stock);
-//                            stock_detail_choose_tv.setText("已自选");
-//                            UIHelper.toast(CopyStockDetailActivity.this, "添加自选成功");
+                            toggleIsMyStock(true,true);
                         }
                     }
 
@@ -1496,29 +1474,21 @@ public class CopyStockDetailActivity extends BaseActivity {
         }
     }
 
-    private boolean flag=true;
+    public void toggleIsMyStock(boolean addMyStock, boolean needToast) {
 
-    public void toggleIsMyStock(boolean addMyStock) {
-        if (addMyStock) {
-            isChoose = true;
+        Drawable drawable = ContextCompat.getDrawable(this,
+                addMyStock ? R.drawable.not_choose_stock : R.drawable.choose_stock);
 
-            Drawable drawable = ContextCompat.getDrawable(this,R.drawable.not_choose_stock);
-            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            stock_detail_choose.setCompoundDrawables(null,drawable, null, null);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        stock_detail_choose.setCompoundDrawables(null, drawable, null, null);
 
-            stock_detail_choose.setText("已自选");
-            if (!flag) {
-                UIHelper.toast(CopyStockDetailActivity.this, "添加自选成功");
-                flag=false;
-            }
-        } else {
-            Drawable drawable = ContextCompat.getDrawable(this,R.drawable.choose_stock);
-            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            stock_detail_choose.setCompoundDrawables( null, drawable,null, null);
+        stock_detail_choose.setText(addMyStock ? "已自选" : "加自选");
 
-            stock_detail_choose.setText("加自选");
-            isChoose = false;
+        if (needToast) {
+            UIHelper.toast(CopyStockDetailActivity.this, addMyStock ?"添加自选成功":"删除自选成功");
         }
+
+        isChoose = addMyStock;
     }
 
 

@@ -27,6 +27,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
@@ -41,11 +42,16 @@
                 android:id="@+id/tv_stock_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:visibility="gone"
-                android:textColor="@color/colorPrimary"
+                android:layout_marginStart="4dp"
                 android:background="@drawable/shape_stock_type_bg"
-                android:text="--"/>
+                android:paddingBottom="2dp"
+                android:paddingEnd="4dp"
+                android:paddingStart="4dp"
+                android:paddingTop="2dp"
+                android:text="--"
+                android:textColor="@color/colorPrimary"
+                android:textSize="10dp"
+                android:visibility="gone" />
 
         </LinearLayout>
     </LinearLayout>

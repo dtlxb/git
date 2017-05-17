@@ -6,8 +6,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -94,18 +92,19 @@ public class TestActivity extends BaseActivity {
             }
         });
 
-        final ImageView img_bg= (ImageView) findViewById(R.id.image_bg);
-        final ImageView img_force= (ImageView) findViewById(R.id.image_force);
-        img_bg.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                ViewGroup.LayoutParams params = img_force.getLayoutParams();
-                params.height=img_bg.getHeight();
-                params.width=img_bg.getWidth();
-                img_force.setLayoutParams(params);
-                img_bg.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
-        });
+//        final ImageView img_bg= (ImageView) findViewById(R.id.image_bg);
+//        final ImageView img_force= (ImageView) findViewById(R.id.image_force);
+//        img_bg.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                ViewGroup.LayoutParams params = img_force.getLayoutParams();
+//                params.height=img_bg.getHeight();
+//                params.width=img_bg.getWidth();
+//                img_force.setLayoutParams(params);
+//                img_bg.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//            }
+//        });
+
     }
 
     public static class MyLeftDialog extends LeftWindowPopu {

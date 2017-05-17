@@ -56,7 +56,7 @@ public class StockUtils {
         Set<String> myStockSet = getMyStockSet();
         myStockSet.add(object.getString("stock_code"));
         SPTools.saveSetData("my_stock_set", myStockSet);
-        KLog.e(myStockSet.size()+";==="+myStockSet.toString());
+//        KLog.e(myStockSet.size()+";==="+myStockSet.toString());
     }
 
     /**

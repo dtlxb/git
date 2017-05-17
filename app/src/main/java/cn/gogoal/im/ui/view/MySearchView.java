@@ -35,6 +35,7 @@ public class MySearchView extends DrawableCenterTextView {
         this.setBackgroundResource(R.drawable.shape_search_activity_edit);
 
         this.setOnClickListener(new OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 context.startActivity(new Intent(context, StockSearchActivity.class));

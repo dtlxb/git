@@ -6,17 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -25,6 +23,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.bumptech.glide.Glide;
+import com.cpiz.android.bubbleview.BubbleLinearLayout;
+import com.cpiz.android.bubbleview.BubblePopupWindow;
+import com.cpiz.android.bubbleview.RelativePos;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -99,6 +100,7 @@ public class MessageFragment extends BaseFragment {
     private Map<String, List<String>> gruopMemberMap = new HashMap<>();
 
     private int allCount;
+    private BubbleLinearLayout mBubbleView;
 
     public MessageFragment() {
     }
@@ -110,6 +112,7 @@ public class MessageFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
+
         initTitle();
         initRecycleView(message_recycler, R.drawable.shape_divider_1px);
         message_recycler.setItemAnimator(new NoAlphaItemAnimator());
@@ -117,6 +120,8 @@ public class MessageFragment extends BaseFragment {
         listAdapter = new ListAdapter(R.layout.item_fragment_message, IMMessageBeans);
         message_recycler.setAdapter(listAdapter);
     }
+
+    private BubblePopupWindow mBubblePopupWindow;
 
     private void initTitle() {
         goContancts.setOnClickListener(new View.OnClickListener() {
@@ -257,39 +262,41 @@ public class MessageFragment extends BaseFragment {
     private void popuMore(View clickView) {
         final View popuView = LayoutInflater.from(clickView.getContext()).
                 inflate(R.layout.chat_message_more,
-                        new LinearLayout(getActivity().getApplicationContext()), false);
+                        new LinearLayout(getActivity()), false);
+        mBubbleView= (BubbleLinearLayout) popuView.findViewById(R.id.chat_message_more);
 
+        mBubbleView.setArrowPosDelta(AppDevice.dp2px(getContext(),5));
 
-        PopupWindow popuWindow = new PopupWindow(popuView,
-                (int) (AppDevice.getWidth(getContext()) * 0.4), -2, //// 弹窗宽、高
-                true);// 是否获取焦点（能使用返回键能关闭而不是退出）
-        initPopu(popuView, popuWindow);
-        popuWindow.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.chat_popu_more));
-        popuWindow.setOutsideTouchable(true);// 点击周边可关闭
-        popuWindow.showAsDropDown(clickView, AppDevice.dp2px(getContext(), 5), AppDevice.dp2px(getContext(), 6));
+        View includeView = popuView.findViewById(R.id.include_line);
+        ViewGroup.LayoutParams params = includeView.getLayoutParams();
+        params.width= AppDevice.getWidth(getActivity())/3;
+        includeView.setLayoutParams(params);
 
-    }
+        mBubblePopupWindow = new BubblePopupWindow(popuView, mBubbleView);
 
-    //初始化弹窗
-    private void initPopu(View popuView, PopupWindow popupWindow) {
-        RelativeLayout find_man_layout = (RelativeLayout) popuView.findViewById(R.id.find_man_layout);
-        RelativeLayout take_square_layout = (RelativeLayout) popuView.findViewById(R.id.take_square_layout);
-        find_man_layout.setOnClickListener(new PopuClick(popupWindow));
-        take_square_layout.setOnClickListener(new PopuClick(popupWindow));
+        popuView.findViewById(R.id.find_man_layout)
+                .setOnClickListener(new PopuClick(mBubblePopupWindow));
+        popuView.findViewById(R.id.take_square_layout)
+                .setOnClickListener(new PopuClick(mBubblePopupWindow));
+
+        if (getActivity().hasWindowFocus()) {
+            mBubblePopupWindow.showArrowTo(addPerson
+                    , new RelativePos(RelativePos.ALIGN_RIGHT, RelativePos.BELOW)
+                    , AppDevice.dp2px(getActivity(),5), 0);
+        }
+
     }
 
     //弹窗监听事件
     private class PopuClick implements View.OnClickListener {
+        BubblePopupWindow popupWindow;
 
-        PopupWindow popupWindow;
-
-        PopuClick(PopupWindow popupWindow) {
-            this.popupWindow = popupWindow;
+        public PopuClick(BubblePopupWindow style) {
+            this.popupWindow = style;
         }
 
         @Override
         public void onClick(View v) {
-            popupWindow.dismiss();
             Intent intent;
             switch (v.getId()) {
                 case R.id.find_man_layout:
@@ -305,6 +312,8 @@ public class MessageFragment extends BaseFragment {
                     startActivity(intent);
                     break;
             }
+
+            popupWindow.dismiss();
         }
     }
 
@@ -653,4 +662,11 @@ public class MessageFragment extends BaseFragment {
         listAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mBubblePopupWindow != null) {
+            mBubblePopupWindow.dismiss();
+        }
+    }
 }
