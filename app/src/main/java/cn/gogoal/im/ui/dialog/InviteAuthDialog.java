@@ -19,6 +19,7 @@ import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
 
@@ -108,8 +109,10 @@ public class InviteAuthDialog extends BaseCentDailog {
             return;
         }
 
+        final String filename= StringUtils.getRandomString(10);
+
         Map<String, String> param = new HashMap<>();
-        param.put("user_token", UserUtils.getToken());
+        param.put("user_token", filename);
         param.put("video_id", invite_id);
         param.put("invite_code", invite_code);
 
@@ -122,7 +125,7 @@ public class InviteAuthDialog extends BaseCentDailog {
                     JSONObject data = object.getJSONObject("data");
                     if (data.getIntValue("code") == 101) {
 
-                        SPTools.saveString(invite_id, invite_code);
+                        SPTools.saveString(invite_id, filename);
 
                         InviteAuthDialog.this.dismiss();
 
