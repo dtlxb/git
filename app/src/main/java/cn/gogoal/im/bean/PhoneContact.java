@@ -1,6 +1,6 @@
 package cn.gogoal.im.bean;
 
-import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 
 /**
  * author wangjd on 2017/5/16 0016.
@@ -11,10 +11,10 @@ import android.graphics.Bitmap;
 public class PhoneContact {
     private String name;            //联系人备注名
     private String mobile;          //联系人手机号
-    private Bitmap phoneAvatar;     //联系人头像
+    private Drawable phoneAvatar;     //联系人头像
     private long contactid;         //联系人Id
 
-    public PhoneContact(String name, String mobile, Bitmap phoneAvatar, long contactid) {
+    public PhoneContact(String name, String mobile, Drawable phoneAvatar, long contactid) {
         this.name = name;
         this.mobile = mobile;
         this.phoneAvatar = phoneAvatar;
@@ -37,11 +37,11 @@ public class PhoneContact {
         this.mobile = mobile;
     }
 
-    public Bitmap getPhoneAvatar() {
+    public Drawable getPhoneAvatar() {
         return phoneAvatar;
     }
 
-    public void setPhoneAvatar(Bitmap phoneAvatar) {
+    public void setPhoneAvatar(Drawable phoneAvatar) {
         this.phoneAvatar = phoneAvatar;
     }
 

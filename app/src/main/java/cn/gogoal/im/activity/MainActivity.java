@@ -1,7 +1,6 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -229,7 +228,7 @@ public class MainActivity extends BaseActivity {
 
             return true;
         } else if (keyCode == KeyEvent.KEYCODE_MENU) {
-            startActivity(new Intent(getActivity(), TestActivity.class));
+//            startActivity(new Intent(getActivity(), TestActivity.class));
         }
         return super.onKeyDown(keyCode, event);
     }

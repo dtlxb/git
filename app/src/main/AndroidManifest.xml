@@ -25,7 +25,6 @@
 
     <!-- 连麦功能所需权限 -->
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
     <!-- release时可去掉 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
@@ -64,7 +63,7 @@
         </receiver>
         <!-- 实时通信模块 END -->
 
-        <activity android:name=".activity.TypeLoginActivity">
+        <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -82,6 +81,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
+
+        <activity android:name=".activity.TypeLoginActivity"/>
 
         <activity
             android:name=".activity.MainActivity"

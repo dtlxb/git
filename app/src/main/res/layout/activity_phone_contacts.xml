@@ -33,40 +33,61 @@
         android:background="@color/normal_line_color" />
 
 
-    <cn.gogoal.im.ui.view.XLayout
-        android:id="@+id/xLayout"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
 
-        <FrameLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_contacts"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_contacts"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+        <cn.gogoal.im.ui.index.IndexBar
+            android:id="@+id/index_bar"
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end" />
 
-            <cn.gogoal.im.ui.index.IndexBar
-                android:id="@+id/index_bar"
-                android:layout_width="25dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="end" />
+        <TextView
+            android:id="@+id/tv_constacts_flag"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center"
+            android:background="@drawable/shape_index_bar_bg"
+            android:gravity="center"
+            android:text="W"
+            android:textColor="@android:color/white"
+            android:textSize="40sp"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/xLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:background="@android:color/white">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/empty_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:adjustViewBounds="true"
+                android:contentDescription="@null"
+                android:src="@mipmap/img_get_contacts_erro" />
 
             <TextView
-                android:id="@+id/tv_constacts_flag"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_gravity="center"
-                android:background="@drawable/shape_index_bar_bg"
-                android:gravity="center"
-                android:text="W"
-                android:textColor="@android:color/white"
-                android:textSize="40sp"
-                android:visibility="gone" />
-
-        </FrameLayout>
-    </cn.gogoal.im.ui.view.XLayout>
+                android:id="@+id/empty_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/empty_img"
+                android:layout_marginTop="25dp"
+                android:text="@string/str_get_contacts_erro"
+                android:textColor="@color/textColor_999999"
+                android:textSize="16sp" />
+        </RelativeLayout>
+    </FrameLayout>
 
 </LinearLayout>

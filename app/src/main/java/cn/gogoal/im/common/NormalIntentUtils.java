@@ -6,7 +6,9 @@ import android.content.Intent;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.gogoal.im.activity.FunctionActivity;
+import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.activity.PdfDisplayActivity;
+import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.bean.PdfData;
 
@@ -81,6 +83,25 @@ public class NormalIntentUtils {
     public static void go2PdfDisplayActivity(Context context, String url,String pdfTitle) {
         Intent intent = new Intent(context, PdfDisplayActivity.class);
         intent.putExtra("pdf_data", JSONObject.toJSONString(new PdfData(url,pdfTitle)));
+        context.startActivity(intent);
+    }
+
+    /**
+     * 跳网页Web pdf预览
+     *
+     * @param context   上下文
+     */
+    public static void go2MainActivity(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
+    }
+    /**
+     * 跳网页Web pdf预览
+     *
+     * @param context   上下文
+     */
+    public static void go2LoginActivity(Context context) {
+        Intent intent = new Intent(context, TypeLoginActivity.class);
         context.startActivity(intent);
     }
 }

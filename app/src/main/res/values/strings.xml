@@ -203,6 +203,9 @@
     <string name="invite_phone">每个邀请码只能使用1次,如果没有邀请码请联系400&#8211;1818&#8211;595</string>
     <string name="str_touyan_setting_tips"><font color="#333333">投研首页常用工具 </font>
         <font color="#999999">(按住拖动调整排序)</font></string>
+    <string name="str_get_contacts_erro">取通讯录失败，原因可能有：\n
+        1.Go-Goal没有权限访问你的通讯录。请先退出Go-Goal，在系统设置或手机安全软件中，授权Go-Goal访问通讯录。\n
+        2. 手机通讯录中没有联系人资料。</string>
 
 
     <!--<string-array name="emoji_array">
