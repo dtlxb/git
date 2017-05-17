@@ -42,6 +42,7 @@ import butterknife.ButterKnife;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.permission.IPermissionListner;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.XTitle;
@@ -283,18 +284,13 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
      */
     @Subscriber(tag = "show_client_status")
     public void imClientLoad(String msg) {
-        KLog.e(getActivity().getClass().getSimpleName());
-
-        if (!AppManager.getInstance().currentActivity().getClass().equals(TypeLoginActivity.class)) {
-            DialogHelp.getMessageDialog(getActivity(), "账号已经在其他设备登录，点击\"确定\"跳转登录页面，重新登录。", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    AppManager.getInstance().finishAllActivity();
-                    startActivity(new Intent(getActivity(), TypeLoginActivity.class));
-                }
-            }).setCancelable(false)
-                    .show();
-        }
+        DialogHelp.getMessageDialog(getActivity(), "账号已经在其他设备登录，点击\"确定\"跳转登录页面，重新登录。", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                UserUtils.logout(getActivity());
+            }
+        }).setCancelable(false)
+                .show();
     }
 
 

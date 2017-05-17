@@ -1,7 +1,9 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<cn.gogoal.im.ui.view.XLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/xLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/black"
     tools:context="cn.gogoal.im.fragment.ImageDetailFragment">
 
     <uk.co.senab.photoview.PhotoView
@@ -9,4 +11,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</FrameLayout>
+</cn.gogoal.im.ui.view.XLayout>

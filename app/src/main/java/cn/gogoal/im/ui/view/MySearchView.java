@@ -7,7 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.SearchActivity;
+import cn.gogoal.im.activity.copy.StockSearchActivity;
 
 /**
  * author wangjd on 2017/4/7 0007.
@@ -37,7 +37,7 @@ public class MySearchView extends DrawableCenterTextView {
         this.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, SearchActivity.class));
+                context.startActivity(new Intent(context, StockSearchActivity.class));
             }
         });
     }

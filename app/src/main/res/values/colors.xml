@@ -22,9 +22,7 @@
     <color name="out_circle">#4b94fa</color>
     <color name="square_man_tag">#72b2f2</color>
 
-    <color name="colorGriddivider">#D2D2D2</color>
     <color name="colorchatGrid">#f5f5f7</color>
-
 
     <color name="colorXLayout">#9d9d9d</color>
     <color name="colorAgainLoad">#339d9d9d</color>
@@ -49,13 +47,14 @@
 
     <color name="wx_share_line">#e4e4e4</color>
 
+    <color name="colorDivider_d9d9d9">#d9d9d9</color>
+    <color name="colorDivider_e4e4e4">#e4e4e4</color>
+
     <color name="edit_hint">#9a9a9a</color>
     <color name="edit_bag">#FAFAFA</color>
     <color name="send_text">#0076ff</color>
 
     <color name="live_chat">#c8ffffff</color>
-
-    <color name="contactDividerColor">@color/colorGriddivider</color>
 
     <color name="live_chat_level1">#ee514d</color>
     <color name="live_chat_level2">#1d8fe1</color>

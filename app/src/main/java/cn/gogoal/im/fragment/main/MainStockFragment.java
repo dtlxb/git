@@ -418,7 +418,7 @@ public class MainStockFragment extends BaseFragment {
     private class RvDialogMarketDvider extends XDividerItemDecoration {
 
         private RvDialogMarketDvider(Context context) {
-            super(context, 1, ContextCompat.getColor(context, R.color.wx_share_line));
+            super(context, 1, ContextCompat.getColor(context, R.color.colorDivider_d9d9d9));
         }
 
         @Override

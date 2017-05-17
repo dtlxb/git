@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
@@ -21,7 +23,6 @@ import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -202,15 +203,15 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     //诊断
     @BindView(R.id.stock_detail_diagnose)
-    RelativeLayout stock_detail_diagnose;
+    TextView stock_detail_diagnose;
     //加自选
     @BindView(R.id.stock_detail_choose)
-    RelativeLayout stock_detail_choose;
+    TextView stock_detail_choose;
 
-    @BindView(R.id.stock_detail_choose_iv)
-    ImageView stock_detail_choose_iv;
-    @BindView(R.id.stock_detail_choose_tv)
-    TextView stock_detail_choose_tv;
+//    @BindView(R.id.stock_detail_choose_iv)
+//    ImageView stock_detail_choose_iv;
+//    @BindView(R.id.stock_detail_choose_tv)
+//    TextView stock_detail_choose_tv;
 
     private int pixels = -85;
     private String stockName;
@@ -232,8 +233,6 @@ public class CopyStockDetailActivity extends BaseActivity {
     private boolean isChoose = true;
     private int dpi;
 
-    private View view;
-    private PopupWindow mPopupWindow;
 
     //k线数据设置
     private int dayk1;
@@ -368,13 +367,13 @@ public class CopyStockDetailActivity extends BaseActivity {
             }
         });
 
-        AppDevice.setTabLayoutWidth(tabLayoutNews,15);
+        AppDevice.setTabLayoutWidth(tabLayoutNews, 15);
     }
 
     private void findView() {
         scrollView.smoothScrollTo(0, 20);
         headerView = (HeaderView) LayoutInflater.from(this).inflate(
-                R.layout.header_layout, new LinearLayout(getActivity()),false);
+                R.layout.header_layout, new LinearLayout(getActivity()), false);
     }
 
     //初始化
@@ -388,13 +387,13 @@ public class CopyStockDetailActivity extends BaseActivity {
         setStockCode(stockCode);
         setStockName(stockName);
 
-        TreatAdapter treatAdapter = new TreatAdapter(getSupportFragmentManager(),getActivity(),stockCode,true);
+        TreatAdapter treatAdapter = new TreatAdapter(getSupportFragmentManager(), getActivity(), stockCode, true);
         vpTreat.setAdapter(treatAdapter);
         tabLayoutTreat.setupWithViewPager(vpTreat);
 
-        for (int i=0;i<2;i++){
+        for (int i = 0; i < 2; i++) {
             TabLayout.Tab tabAt = tabLayoutTreat.getTabAt(i);
-            if (tabAt!=null){
+            if (tabAt != null) {
                 tabAt.setCustomView(treatAdapter.getTabView(i));
             }
         }
@@ -403,13 +402,15 @@ public class CopyStockDetailActivity extends BaseActivity {
         dpi = AppDevice.getWidth(CopyStockDetailActivity.this);
         if (StockUtils.getMyStockSet() != null) {
             if (StockUtils.isMyStock(stockCode)) {
-                stock_detail_choose_iv.setBackgroundResource(R.drawable.not_choose_stock);
-                stock_detail_choose_tv.setText("已自选");
-                isChoose = true;
+//                stock_detail_choose.setBackgroundResource(R.drawable.not_choose_stock);
+//                stock_detail_choose.setText("已自选");
+//                isChoose = true;
+                toggleIsMyStock(true);
             } else {
-                stock_detail_choose_iv.setBackgroundResource(R.drawable.choose_stock);
-                stock_detail_choose_tv.setText("加自选");
-                isChoose = false;
+//                stock_detail_choose_iv.setBackgroundResource(R.drawable.choose_stock);
+//                stock_detail_choose.setText("加自选");
+//                isChoose = false;
+                toggleIsMyStock(false);
             }
         }
 
@@ -516,7 +517,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                     intent.putExtras(bundle);
                     intent.putExtra("position", showItem);
                     intent.putExtra("closePrice", closePrice);
-                    intent.putStringArrayListExtra("priceVolumDatas",priceVolumDatas);
+                    intent.putStringArrayListExtra("priceVolumDatas", priceVolumDatas);
                     intent.putExtra("stockCode", stockCode);
                     intent.putExtra("stockName", stockName);
                     intent.putExtra("price", info.getPrice());
@@ -1390,7 +1391,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     public void allBtnClick(View v) {
         switch (v.getId()) {
             case R.id.stock_detail_diagnose:
-                StockPopuDialog.newInstance(stockCode,stockName).show(getSupportFragmentManager());
+                StockPopuDialog.newInstance(stockCode, stockName).show(getSupportFragmentManager());
                 break;
             case R.id.stock_detail_choose:
                 addOptionalShare();//TODO 更换新的删除自选股接口
@@ -1404,9 +1405,10 @@ public class CopyStockDetailActivity extends BaseActivity {
         if (isChoose) {
             if (!UserUtils.isLogin()) {
                 StockUtils.removeStock(stockCode);
-                isChoose = false;
-                stock_detail_choose_iv.setBackgroundResource(R.drawable.choose_stock);
-                stock_detail_choose_tv.setText("加自选");
+//                isChoose = false;
+//                stock_detail_choose_iv.setBackgroundResource(R.drawable.choose_stock);
+//                stock_detail_choose_tv.setText("加自选");
+                toggleIsMyStock(false);
                 UIHelper.toast(CopyStockDetailActivity.this, "删除自选成功");
             } else {
                 //登录时
@@ -1421,9 +1423,10 @@ public class CopyStockDetailActivity extends BaseActivity {
                         JSONObject result = JSONObject.parseObject(responseInfo);
                         int data = (int) result.get("code");
                         if (data == 0) {
-                            isChoose = false;
-                            stock_detail_choose_iv.setBackgroundResource(R.drawable.choose_stock);
-                            stock_detail_choose_tv.setText("加自选");
+//                            isChoose = false;
+//                            stock_detail_choose_iv.setBackgroundResource(R.drawable.choose_stock);
+//                            stock_detail_choose.setText("加自选");
+                            toggleIsMyStock(false);
                             UIHelper.toast(CopyStockDetailActivity.this, "删除自选成功");
                         }
                     }
@@ -1444,10 +1447,12 @@ public class CopyStockDetailActivity extends BaseActivity {
                 singlestock.put("price", 0);
                 singlestock.put("change_rate", 0);
                 StockUtils.addStock2MyStock(singlestock);
-                isChoose = true;
-                stock_detail_choose_iv.setBackgroundResource(R.drawable.not_choose_stock);
-                stock_detail_choose_tv.setText("已自选");
-                UIHelper.toast(CopyStockDetailActivity.this, "添加自选成功");
+
+                toggleIsMyStock(true);
+//                isChoose = true;
+//                stock_detail_choose_iv.setBackgroundResource(R.drawable.not_choose_stock);
+//                stock_detail_choose.setText("已自选");
+//                UIHelper.toast(CopyStockDetailActivity.this, "添加自选成功");
             } else {
                 //登录时
                 final Map<String, String> param = new HashMap<String, String>();
@@ -1472,10 +1477,12 @@ public class CopyStockDetailActivity extends BaseActivity {
                             singlestock.put("price", 0);
                             singlestock.put("change_rate", 0);
                             StockUtils.addStock2MyStock(singlestock);
-                            isChoose = true;
-                            stock_detail_choose_iv.setBackgroundResource(R.drawable.not_choose_stock);
-                            stock_detail_choose_tv.setText("已自选");
-                            UIHelper.toast(CopyStockDetailActivity.this, "添加自选成功");
+
+                            toggleIsMyStock(true);
+//                            isChoose = true;
+//                            stock_detail_choose_iv.setBackgroundResource(R.drawable.not_choose_stock);
+//                            stock_detail_choose_tv.setText("已自选");
+//                            UIHelper.toast(CopyStockDetailActivity.this, "添加自选成功");
                         }
                     }
 
@@ -1488,6 +1495,32 @@ public class CopyStockDetailActivity extends BaseActivity {
             }
         }
     }
+
+    private boolean flag=true;
+
+    public void toggleIsMyStock(boolean addMyStock) {
+        if (addMyStock) {
+            isChoose = true;
+
+            Drawable drawable = ContextCompat.getDrawable(this,R.drawable.not_choose_stock);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            stock_detail_choose.setCompoundDrawables(null,drawable, null, null);
+
+            stock_detail_choose.setText("已自选");
+            if (!flag) {
+                UIHelper.toast(CopyStockDetailActivity.this, "添加自选成功");
+                flag=false;
+            }
+        } else {
+            Drawable drawable = ContextCompat.getDrawable(this,R.drawable.choose_stock);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            stock_detail_choose.setCompoundDrawables( null, drawable,null, null);
+
+            stock_detail_choose.setText("加自选");
+            isChoose = false;
+        }
+    }
+
 
     private void parseObjects(String params) {
         JSONObject result = JSONObject.parseObject(params);

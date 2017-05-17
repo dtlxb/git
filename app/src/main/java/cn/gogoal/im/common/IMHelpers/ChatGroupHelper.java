@@ -18,6 +18,7 @@ import java.util.Map;
 
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.MyApp;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.IMMessageBean;
@@ -162,7 +163,6 @@ public class ChatGroupHelper {
     //群通讯录更新
     public static void upDataGroupContactInfo(String conversationID, int friendId, String avatar, String nickname) {
         JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", new JSONArray());
-        KLog.e(spAccountArray.toString());
         boolean hasThisGuy = false;
         //有这个人修改
         for (int i = 0; i < spAccountArray.size(); i++) {
@@ -414,6 +414,13 @@ public class ChatGroupHelper {
         mMessage.setTimestamp(CalendarUtils.getCurrentTime());
         mMessage.setFrom(UserUtils.getMyAccountId());
 
+        //发送至聊天室
+        Map<Object, Object> objectMap = new HashMap<>();
+        objectMap.put("share_message", mMessage);
+        objectMap.put("share_convid", contactBean.getConv_id());
+        BaseMessage baseMessage = new BaseMessage("message_map", objectMap);
+        AppManager.getInstance().sendMessage("oneShare", baseMessage);
+
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
@@ -473,6 +480,13 @@ public class ChatGroupHelper {
         mMessage.setContent(JSON.toJSONString(contentObject));
         mMessage.setTimestamp(CalendarUtils.getCurrentTime());
         mMessage.setFrom(UserUtils.getMyAccountId());
+
+        //发送至聊天室
+        Map<Object, Object> objectMap = new HashMap<>();
+        objectMap.put("share_message", mMessage);
+        objectMap.put("share_convid", shareItemInfo.getImMessageBean().getConversationID());
+        BaseMessage baseMessage = new BaseMessage("message_map", objectMap);
+        AppManager.getInstance().sendMessage("oneShare", baseMessage);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override

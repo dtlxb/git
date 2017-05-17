@@ -9,7 +9,12 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import cn.gogoal.im.R;
+import cn.gogoal.im.base.AppManager;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
@@ -79,6 +84,7 @@ public class ShareMessageDialog extends BaseCentDailog {
                     public void success(Bitmap bitmap) {
                         icon.setImageBitmap(bitmap);
                     }
+
                     public void failed(Exception e) {
                     }
                 });

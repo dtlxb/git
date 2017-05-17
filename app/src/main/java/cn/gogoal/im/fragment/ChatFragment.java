@@ -28,7 +28,6 @@ import android.widget.RelativeLayout;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
@@ -55,12 +54,12 @@ import cn.gogoal.im.adapter.IMChatAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.EmojiBean;
 import cn.gogoal.im.bean.FoundData;
 import cn.gogoal.im.bean.IMMessageBean;
+import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AsyncTaskUtil;
@@ -244,7 +243,6 @@ public class ChatFragment extends BaseFragment {
                 params.put("conv_id", imConversation.getConversationId());
                 params.put("chat_type", String.valueOf(chatType));
                 params.put("message", JSONObject.toJSONString(messageMap));
-                KLog.e(params);
 
                 etInput.setText("");
                 //发送文字消息
@@ -795,6 +793,21 @@ public class ChatFragment extends BaseFragment {
     }
 
     /**
+     * 分享消息(分享后返回这个页面)
+     */
+    @Subscriber(tag = "oneShare")
+    public void getOneShare(BaseMessage baseMessage) {
+        Map map = baseMessage.getOthers();
+        String share_convid = (String) map.get("share_convid");
+        if (share_convid.equals(imConversation.getConversationId())) {
+            AVIMMessage mShareMessage = (AVIMMessage) map.get("share_message");
+            imChatAdapter.addItem(mShareMessage);
+            imChatAdapter.notifyItemInserted(messageList.size() - 1);
+            message_recycler.smoothScrollToPosition(messageList.size() - 1);
+        }
+    }
+
+    /**
      * 表情处理
      */
     @Subscriber(tag = "oneEmoji")
@@ -846,7 +859,8 @@ public class ChatFragment extends BaseFragment {
         int totalItemCount = layoutManager.getItemCount();
         //RecyclerView的滑动状态
         int state = recyclerView.getScrollState();
-        if (visibleItemCount > 0 && lastVisibleItemPosition == totalItemCount - 1 && state == recyclerView.SCROLL_STATE_IDLE) {
+        KLog.e(lastVisibleItemPosition);
+        if (visibleItemCount > 1 && lastVisibleItemPosition == totalItemCount - 2 && state == recyclerView.SCROLL_STATE_IDLE) {
             return true;
         } else {
             return false;

@@ -44,5 +44,5 @@
         android:layout_height="wrap_content"
         android:contentDescription="@null"
         android:padding="15dp"
-        android:src="@mipmap/img_dail" />
+        android:src="@mipmap/img_dail_000" />
 </LinearLayout>

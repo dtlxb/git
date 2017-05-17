@@ -10,8 +10,9 @@
     <TextView
         android:id="@+id/tv_dialog_toast"
         android:layout_width="match_parent"
+        android:gravity="center"
         android:layout_height="match_parent"
         android:textColor="@color/textColor_333333"
-        android:textSize="18sp" />
+        android:textSize="20sp" />
 
 </ScrollView>

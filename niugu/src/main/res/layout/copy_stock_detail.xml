@@ -88,12 +88,12 @@
             android:id="@+id/fragment_rotate_header_with_view_group_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/linear"
             android:background="@color/white"
             app:ptr_duration_to_close="200"
             app:ptr_duration_to_close_header="1000"
             app:ptr_keep_header_when_refresh="true"
             app:ptr_pull_to_fresh="false"
-            android:layout_above="@+id/linear"
             app:ptr_ratio_of_header_height_to_refresh="1.2"
             app:ptr_resistance="1.7">
 
@@ -552,7 +552,7 @@
                     <android.support.v4.view.ViewPager
                         android:id="@+id/vp_news_"
                         android:layout_width="match_parent"
-                        android:layout_height="270dp"/>
+                        android:layout_height="270dp" />
 
                     <android.support.design.widget.TabLayout
                         android:id="@+id/tablayout_chatImg"
@@ -563,7 +563,7 @@
                         app:tabMode="fixed"
                         app:tabSelectedTextColor="@color/tabSelected"
                         app:tabTextAppearance="@style/TabLayoutTextStyle"
-                        app:tabTextColor="@color/tabUnSelected"/>
+                        app:tabTextColor="@color/tabUnSelected" />
 
                     <FrameLayout
                         android:id="@+id/layout_imgchart_and_nodata"
@@ -583,8 +583,8 @@
                         android:id="@+id/tablayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
                         android:background="@drawable/layerlist_tablayout_bottom"
+                        android:visibility="gone"
                         app:tabIndicatorColor="@color/tabSelected"
                         app:tabMode="fixed"
                         app:tabSelectedTextColor="@color/tabSelected"
@@ -599,7 +599,7 @@
 
                     </FrameLayout>
 
-                    <include layout="@layout/line_space_line"/>
+                    <include layout="@layout/line_space_line" />
                 </LinearLayout>
 
             </android.support.v4.widget.NestedScrollView>
@@ -610,75 +610,37 @@
             android:id="@+id/linear"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
             android:background="#E4000000"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_alignParentBottom="true"
             android:paddingLeft="5dp"
             android:paddingRight="5dp">
 
-
-            <RelativeLayout
+            <TextView
                 android:id="@+id/stock_detail_diagnose"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:drawableTop="@drawable/diagnose_stock"
                 android:gravity="center"
-                android:padding="5dp">
+                android:paddingTop="7dp"
+                android:text="诊断"
+                android:textColor="@color/stock_detail_bottom"
+                android:textSize="@dimen/text_size_9" />
 
-                <ImageView
-                    android:id="@+id/stock_detail_diagnose_iv"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:background="@drawable/diagnose_stock" />
-
-                <TextView
-                    android:id="@+id/stock_detail_diagnose_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/stock_detail_diagnose_iv"
-                    android:layout_centerHorizontal="true"
-                    android:text="诊断"
-                    android:textColor="@color/stock_detail_bottom"
-                    android:textSize="@dimen/text_size_9" />
-            </RelativeLayout>
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="3dp"
-                android:layout_marginBottom="3dp"
-                android:background="#999"/>
-
-            <RelativeLayout
+            <TextView
                 android:id="@+id/stock_detail_choose"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:drawableTop="@drawable/choose_stock"
                 android:gravity="center"
-                android:padding="5dp">
-
-                <ImageView
-                    android:id="@+id/stock_detail_choose_iv"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:background="@drawable/choose_stock" />
-
-                <TextView
-                    android:id="@+id/stock_detail_choose_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/stock_detail_choose_iv"
-                    android:layout_centerHorizontal="true"
-                    android:text="加自选"
-                    android:textColor="@color/stock_detail_bottom"
-                    android:textSize="@dimen/text_size_9" />
-            </RelativeLayout>
+                android:paddingTop="7dp"
+                android:text="加自选"
+                android:textColor="@color/stock_detail_bottom"
+                android:textSize="@dimen/text_size_9" />
 
         </LinearLayout>
 
