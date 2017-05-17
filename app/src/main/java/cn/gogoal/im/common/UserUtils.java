@@ -11,6 +11,9 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMClient;
+import com.avos.avoscloud.im.v2.AVIMException;
+import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.socks.library.KLog;
@@ -27,6 +30,7 @@ import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 
 /**
@@ -133,8 +137,8 @@ public class UserUtils {
         return user.getString("simple_avatar");
     }
 
-    public static void getUserAvatar(final AvatarTakeListener listener){
-        if (StringUtils.isActuallyEmpty(getBitmapFilePaht())){
+    public static void getUserAvatar(final AvatarTakeListener listener) {
+        if (StringUtils.isActuallyEmpty(getBitmapFilePaht())) {
             ImageUtils.getUrlBitmap(MyApp.getAppContext(), UserUtils.getUserAvatar(), new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
@@ -145,7 +149,7 @@ public class UserUtils {
                             resource, 100);
                 }
             });
-        }else {
+        } else {
             listener.success(BitmapFactory.decodeFile(getBitmapFilePaht()));
         }
     }
@@ -162,7 +166,7 @@ public class UserUtils {
         String[] fileList = filesDir.list();
         for (String path : fileList) {
             if (path.contains("avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()))) {
-                bitmapPath = filesDir.getAbsolutePath()+File.separator+path;
+                bitmapPath = filesDir.getAbsolutePath() + File.separator + path;
                 break;
             }
         }
@@ -309,7 +313,13 @@ public class UserUtils {
     public static void logout(Activity mContext) {
         SPTools.clear();
         SPTools.saveBoolean("notFristTime", true);
-//        mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
+        mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
+        AVImClientManager.getInstance().close(UserUtils.getMyAccountId(), new AVIMClientCallback() {
+            @Override
+            public void done(AVIMClient avimClient, AVIMException e) {
+
+            }
+        });
         // TODO: 2017/2/8 0008
         mContext.finish();
         UIHelper.toast(mContext, "退出登录成功!");

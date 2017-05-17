@@ -54,6 +54,15 @@ public class AVImClientManager {
         avimClient.open(callback);
     }
 
+    /**
+     * 关闭连接，返回Client对象
+     */
+    public void close(String clientId, AVIMClientCallback callback) {
+        this.clientId = clientId;
+        avimClient = AVIMClient.getInstance(clientId, clientId);
+        avimClient.close(callback);
+    }
+
     public AVIMClient getClient() {
         return avimClient;
     }
