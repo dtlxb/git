@@ -68,7 +68,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
         setContentView(mContentView);
 
-        if (isFullScreem()){
+        if (isFullScreem()) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
@@ -300,7 +300,8 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         fixInputMethodManagerLeak(this);
         try {
             Glide.with(this).pauseRequests();
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
     public BaseActivity getActivity() {

@@ -310,7 +310,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             if (null != lcattrsObject) {
                 final String stockCode = lcattrsObject.getString("stockCode");
                 SpannableStringBuilder stringBuilder = new SpannableStringBuilder("$ " + stockCode + " " + lcattrsObject.getString("stockName"));
-                ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor("#f53f3f")); // 设置字体颜色
+                ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor("#3381E3")); // 设置字体颜色
                 stringBuilder.setSpan(fcs, 2, stockCode.length() + 2, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
                 ((LeftStockViewHolder) holder).what_user_send.setText(stringBuilder);
@@ -331,7 +331,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             if (null != lcattrsObject) {
                 final String stockCode = lcattrsObject.getString("stockCode");
                 SpannableStringBuilder stringBuilder = new SpannableStringBuilder("$ " + stockCode + " " + lcattrsObject.getString("stockName"));
-                ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor("#f53f3f")); // 设置字体颜色
+                ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor("#3381E3")); // 设置字体颜色
                 stringBuilder.setSpan(fcs, 2, stockCode.length() + 2, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
                 ((RightStockViewHolder) holder).what_user_send.setText(stringBuilder);

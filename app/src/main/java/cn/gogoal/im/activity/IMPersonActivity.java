@@ -34,6 +34,7 @@ public class IMPersonActivity extends BaseActivity {
     private IMPersonSetAdapter mPersonInfoAdapter;
     private List<ContactBean> contactBeens = new ArrayList<>();
     private String conversationId;
+    private String nickname;
 
     @Override
     public int bindLayout() {
@@ -46,6 +47,7 @@ public class IMPersonActivity extends BaseActivity {
         initRecycleView(personlistRecycler, null);
         final ContactBean contactBean = (ContactBean) getIntent().getSerializableExtra("seri");
         conversationId = getIntent().getStringExtra("conversation_id");
+        nickname = getIntent().getStringExtra("nickname");
         contactBeens.add(contactBean);
         contactBeens.add(addFunctionHead("", R.mipmap.person_add));
 
@@ -91,6 +93,7 @@ public class IMPersonActivity extends BaseActivity {
             case R.id.tv_do_search_conversation:
                 Intent intent = new Intent(getActivity(), SearchMessagesActivity.class);
                 intent.putExtra("conversation_id", conversationId);
+                intent.putExtra("nickname", nickname);
                 startActivity(intent);
                 break;
             /*case R.id.getmessage_swith:

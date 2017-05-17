@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -186,8 +187,6 @@ public class ChatFragment extends BaseFragment {
                             message_swipe.setRefreshing(false);
                         }
                     });
-                } else {
-                    message_swipe.setRefreshing(false);
                 }
             }
         });
@@ -638,74 +637,95 @@ public class ChatFragment extends BaseFragment {
         });
     }
 
-    private void getHistoryMessage(final boolean needUpdate) {
+    private void getHistoryMessage(final boolean needUpdate, List<AVIMMessage> avimMessages) {
         if (null != imConversation) {
-            imConversation.queryMessagesFromCache(15, new AVIMMessagesQueryCallback() {
-
-                @Override
-                public void done(List<AVIMMessage> list, AVIMException e) {
-                    if (null == e && null != list && list.size() > 0) {
-
-                        messageList.addAll(list);
-                        if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
-                            //加群消息特殊处理
-                            for (int i = 0; i < messageList.size(); i++) {
-                                JSONObject contentObject = JSON.parseObject(messageList.get(i).getContent());
-                                String _lctype = contentObject.getString("_lctype");
-                                if (_lctype.equals("5") || _lctype.equals("6")) {
-                                    if (null != contentObject.getJSONObject("_lcattrs") && null != contentObject.getJSONObject("_lcattrs").getJSONArray("accountList")) {
-                                        HashMap<String, String> map = new HashMap<>();
-                                        JSONArray accountArray = contentObject.getJSONObject("_lcattrs").getJSONArray("accountList");
-                                        String _lctext = MessageUtils.findSquarePeople(accountArray, _lctype);
-                                        map.put("_lctext", _lctext);
-                                        map.put("_lctype", _lctype);
-                                        messageList.get(i).setContent(JSON.toJSONString(map));
-                                    }
+            //查询消息处理
+            if (null != avimMessages && avimMessages.size() > 0) {
+                KLog.e(avimMessages.size());
+                messageList.addAll(avimMessages);
+                dealSquareMessae();
+                imChatAdapter.setChatType(chatType);
+                imChatAdapter.notifyDataSetChanged();
+                message_recycler.getLayoutManager().scrollToPosition(0);
+            } else {
+                imConversation.queryMessagesFromCache(15, new AVIMMessagesQueryCallback() {
+                    @Override
+                    public void done(List<AVIMMessage> list, AVIMException e) {
+                        if (null == e && null != list && list.size() > 0) {
+                            dealMessages(list, needUpdate);
+                        } else {
+                            imConversation.queryMessages(15, new AVIMMessagesQueryCallback() {
+                                @Override
+                                public void done(List<AVIMMessage> list, AVIMException e) {
+                                    dealMessages(list, needUpdate);
                                 }
-                            }
+                            });
                         }
+                    }
+                });
+            }
+        }
+    }
 
-                        //单聊，群聊处理(没发消息的时候不保存)
-                        if (messageList.size() > 0 && needUpdate) {
-                            IMMessageBean imMessageBean = null;
-                            AVIMMessage lastMessage = messageList.get(messageList.size() - 1);
-                            if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
-                                if (null != contactBean) {
-                                    //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息
-                                    KLog.e(contactBean);
-                                    imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0",
-                                            null != contactBean.getTarget() ? contactBean.getTarget() : "",
-                                            String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), lastMessage);
-                                }
-                            } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
-                                //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息(群对象和群头像暂时为空)
-                                if (lastMessage instanceof AVIMTextMessage) {
-                                    String strMessage = ((AVIMTextMessage) lastMessage).getText();
-                                    if (StringUtils.StringFilter(strMessage, "@*[\\S]*[ \r\n]")) {
-                                        ((AVIMTextMessage) lastMessage).setText(strMessage.replace(" ", ""));
-                                    }
-                                    KLog.e(((AVIMTextMessage) lastMessage).getText());
-                                }
-                                imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0", imConversation.getName(),
-                                        "", "", lastMessage);
-                            }
-                            MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
-                        }
+    private void dealMessages(List<AVIMMessage> list, boolean needUpdate) {
+        messageList.addAll(list);
+        dealSquareMessae();
+        //单聊，群聊处理(没发消息的时候不保存)
+        if (messageList.size() > 0 && needUpdate) {
+            IMMessageBean imMessageBean = null;
+            AVIMMessage lastMessage = messageList.get(messageList.size() - 1);
+            if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
+                if (null != contactBean) {
+                    //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息
+                    KLog.e(contactBean);
+                    imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0",
+                            null != contactBean.getTarget() ? contactBean.getTarget() : "",
+                            String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), lastMessage);
+                }
+            } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
+                //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息(群对象和群头像暂时为空)
+                if (lastMessage instanceof AVIMTextMessage) {
+                    String strMessage = ((AVIMTextMessage) lastMessage).getText();
+                    if (StringUtils.StringFilter(strMessage, "@*[\\S]*[ \r\n]")) {
+                        ((AVIMTextMessage) lastMessage).setText(strMessage.replace(" ", ""));
+                    }
+                    KLog.e(((AVIMTextMessage) lastMessage).getText());
+                }
+                imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0", imConversation.getName(),
+                        "", "", lastMessage);
+            }
+            MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
+        }
 
-                        imChatAdapter.setChatType(chatType);
-                        imChatAdapter.notifyDataSetChanged();
+        imChatAdapter.setChatType(chatType);
+        imChatAdapter.notifyDataSetChanged();
+        message_recycler.getLayoutManager().scrollToPosition(messageList.size() - 1);
+    }
 
-                        message_recycler.getLayoutManager().scrollToPosition(messageList.size() - 1);
+    private void dealSquareMessae() {
+        if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
+            //加群消息特殊处理
+            for (int i = 0; i < messageList.size(); i++) {
+                JSONObject contentObject = JSON.parseObject(messageList.get(i).getContent());
+                String _lctype = contentObject.getString("_lctype");
+                if (_lctype.equals("5") || _lctype.equals("6")) {
+                    if (null != contentObject.getJSONObject("_lcattrs") && null != contentObject.getJSONObject("_lcattrs").getJSONArray("accountList")) {
+                        HashMap<String, String> map = new HashMap<>();
+                        JSONArray accountArray = contentObject.getJSONObject("_lcattrs").getJSONArray("accountList");
+                        String _lctext = MessageUtils.findSquarePeople(accountArray, _lctype);
+                        map.put("_lctext", _lctext);
+                        map.put("_lctype", _lctype);
+                        messageList.get(i).setContent(JSON.toJSONString(map));
                     }
                 }
-            });
-
+            }
         }
     }
 
     /**
      * 设置多功能布局宽高
      */
+
     private void setContentHeight(int keyBordHeight) {
         ViewGroup.LayoutParams params = find_more_layout.getLayoutParams();
         params.height = keyBordHeight;
@@ -713,7 +733,7 @@ public class ChatFragment extends BaseFragment {
     }
 
     //群会话入口
-    public void setConversation(AVIMConversation conversation, boolean needUpdate, int actionType, ContactBean contact) {
+    public void setConversation(AVIMConversation conversation, boolean needUpdate, int actionType, ContactBean contact, List<AVIMMessage> messageList) {
         if (null != conversation) {
             imConversation = conversation;
             chatType = (int) imConversation.getAttribute("chat_type");
@@ -724,7 +744,7 @@ public class ChatFragment extends BaseFragment {
             //(刚创建群的时候不拉消息)
             if (actionType == AppConst.CREATE_SQUARE_ROOM_BUILD || actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
             } else {
-                getHistoryMessage(needUpdate);
+                getHistoryMessage(needUpdate, messageList);
             }
         }
     }
@@ -815,6 +835,24 @@ public class ChatFragment extends BaseFragment {
         }
     }
 
+    //判断recycleview是否停留在底部
+    public static boolean isVisBottom(RecyclerView recyclerView) {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        //屏幕中最后一个可见子项的position
+        int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+        //当前屏幕所看到的子项个数
+        int visibleItemCount = layoutManager.getChildCount();
+        //当前RecyclerView的所有子项个数
+        int totalItemCount = layoutManager.getItemCount();
+        //RecyclerView的滑动状态
+        int state = recyclerView.getScrollState();
+        if (visibleItemCount > 0 && lastVisibleItemPosition == totalItemCount - 1 && state == recyclerView.SCROLL_STATE_IDLE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * 消息接收
      */
@@ -832,7 +870,9 @@ public class ChatFragment extends BaseFragment {
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
                 imChatAdapter.addItem(message);
                 imChatAdapter.notifyItemInserted(messageList.size() - 1);
-                message_recycler.smoothScrollToPosition(messageList.size() - 1);
+                if (isVisBottom(message_recycler)) {
+                    message_recycler.smoothScrollToPosition(messageList.size() - 1);
+                }
                 //此处头像，昵称日后有数据再改
                 IMMessageBean imMessageBean = null;
                 if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {

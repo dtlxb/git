@@ -3,6 +3,7 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -16,15 +17,11 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVHistoryMessage;
-import com.avos.avoscloud.AVHistoryMessageQuery;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,9 +51,11 @@ public class SearchMessagesActivity extends BaseActivity {
     @BindView(R.id.tv_not_find)
     TextView notFind;
     private List<AVIMTextMessage> messageList;
+    private List<AVIMMessage> allMessages;
     private MessageListAdapter messageListAdapter;
     private List<AVIMTextMessage> textMessages;
     private int chatType;
+    private String nickname;
 
     @Override
     public int bindLayout() {
@@ -66,10 +65,12 @@ public class SearchMessagesActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         setMyTitle(R.string.im_str_look_message, true);
-        String conversationID = getIntent().getStringExtra("conversation_id");
+        final String conversationID = getIntent().getStringExtra("conversation_id");
+        nickname = getIntent().getStringExtra("nickname");
 
         messageList = new ArrayList<>();
         textMessages = new ArrayList<>();
+        allMessages = new ArrayList<>();
         messageListAdapter = new MessageListAdapter(R.layout.item_fragment_message, textMessages);
         initRecycleView(recyclerView, R.drawable.shape_divider_1px);
         recyclerView.setAdapter(messageListAdapter);
@@ -133,9 +134,10 @@ public class SearchMessagesActivity extends BaseActivity {
                     @Override
                     public void done(List<AVIMMessage> list, AVIMException e) {
                         if (e == null) {
-                            for (int i = 0; i < list.size(); i++) {
-                                if (list.get(i) instanceof AVIMTextMessage) {
-                                    messageList.add((AVIMTextMessage) list.get(i));
+                            allMessages.addAll(list);
+                            for (int i = 0; i < allMessages.size(); i++) {
+                                if (allMessages.get(i) instanceof AVIMTextMessage) {
+                                    messageList.add((AVIMTextMessage) allMessages.get(i));
                                 }
                             }
                         }
@@ -164,9 +166,20 @@ public class SearchMessagesActivity extends BaseActivity {
                     intent = new Intent(SearchMessagesActivity.this, SquareChatRoomActivity.class);
                 }
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("message_chooesed", textMessages.get(position));
+                List<AVIMMessage> messagesChooesed = new ArrayList<>();
+                int index = allMessages.indexOf(textMessages.get(position));
+                if (index > 0) {
+                    messagesChooesed.addAll(allMessages.subList(index - 1, allMessages.size()));
+                } else if (index == 0) {
+                    messagesChooesed.addAll(allMessages);
+                }
+
+                bundle.putParcelableArrayList("messages_chooesed", (ArrayList<? extends Parcelable>) messagesChooesed);
+                intent.putExtra("conversation_id", conversationID);
+                intent.putExtra("nickname", nickname);
                 intent.putExtras(bundle);
                 startActivity(intent);
+                AppDevice.hideSoftKeyboard(layout2search);
                 SearchMessagesActivity.this.finish();
             }
         });
