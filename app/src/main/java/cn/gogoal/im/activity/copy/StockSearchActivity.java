@@ -40,14 +40,14 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.copy.InnerListView;
+import cn.gogoal.im.ui.copy.MyGridView;
 import hply.com.niugu.DeviceUtil;
 import hply.com.niugu.bean.HistorySearchData;
 import hply.com.niugu.bean.HotSearchStockBean;
 import hply.com.niugu.bean.HotSearchStockData;
 import hply.com.niugu.bean.SearchStockBean;
 import hply.com.niugu.bean.SearchStockData;
-import hply.com.niugu.view.InnerListView;
-import hply.com.niugu.view.MyGridView;
 
 /**
  * author wangjd on 2017/4/14 0014.
@@ -181,11 +181,12 @@ public class StockSearchActivity extends BaseActivity {
                         NormalIntentUtils.go2StockDetail(getActivity(), stockcode, stockname);
 
                         JSONObject historyStock = new JSONObject();
-                        historyStock.put("stock_name", stockname);
-                        historyStock.put("stock_code", stockcode);
-                        StockUtils.addStock2MyStock(historyStock);
+                        historyStock.put("stock_name", list_hot.get(position).getStock_name());
+                        historyStock.put("stock_code", list_hot.get(position).getStock_code());
+                        StockUtils.addSearchedStock(historyStock);
 
                         InitSaveHots(stockname, stockcode);
+
                         break;
                     case 2:
                         Intent intent1 = new Intent();
@@ -249,9 +250,9 @@ public class StockSearchActivity extends BaseActivity {
                             list_hot.get(position).getStock_name());
 
                     JSONObject historyStock = new JSONObject();
-                    historyStock.put("stock_name", stockname);
-                    historyStock.put("stock_code", stockcode);
-                    StockUtils.addStock2MyStock(historyStock);
+                    historyStock.put("stock_name", list_hot.get(position).getStock_name());
+                    historyStock.put("stock_code", list_hot.get(position).getStock_code());
+                    StockUtils.addSearchedStock(historyStock);
                 }
             }
         });

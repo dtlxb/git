@@ -91,7 +91,7 @@ public class SPTools {
     }
 
     public static Set<String> getSetData(String key, Set<String> defSet) {
-        return mPreference.getStringSet(key, null);
+        return mPreference.getStringSet(key, defSet);
     }
 
 

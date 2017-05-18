@@ -79,7 +79,11 @@ public class ArrayUtils {
             builder.append(stockCode);
             builder.append(";");
         }
-        return builder.toString().substring(0, builder.length() - 1);
+        if (builder.length()>0) {
+            return builder.toString().substring(0, builder.length() - 1);
+        }else {
+            return "";
+        }
     }
     /**
      * 集合拼Srtring

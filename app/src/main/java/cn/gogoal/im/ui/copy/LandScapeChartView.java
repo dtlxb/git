@@ -1,4 +1,4 @@
-package hply.com.niugu;
+package cn.gogoal.im.ui.copy;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,9 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.gogoal.im.common.StockUtils;
+import hply.com.niugu.ColorUtils;
+import hply.com.niugu.StringUtils;
 import hply.com.niugu.stock.StockMinuteData;
-import hply.com.niugu.stock.StockUtils;
-import hply.com.niugu.stock.TimesFivesBitmap;
 
 import static hply.com.niugu.ColorUtils.outCircleColor;
 

@@ -66,14 +66,14 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.stock.ImageChartFragment;
 import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
+import cn.gogoal.im.ui.copy.BitmapChartView;
+import cn.gogoal.im.ui.copy.TimesFivesBitmap;
 import cn.gogoal.im.ui.dialog.StockPopuDialog;
 import cn.gogoal.im.ui.stock.KChartsBitmap;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
 import hply.com.niugu.HeaderView;
 import hply.com.niugu.autofixtext.AutofitTextView;
-import hply.com.niugu.stock.BitmapChartView;
 import hply.com.niugu.stock.StockMinuteBean;
-import hply.com.niugu.stock.TimesFivesBitmap;
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -402,12 +402,13 @@ public class CopyStockDetailActivity extends BaseActivity {
 
         textHeadTitle.setText(stockName + "(" + stockCode + ")");
         dpi = AppDevice.getWidth(CopyStockDetailActivity.this);
-        if (StockUtils.getMyStockSet() != null) {
-            if (StockUtils.isMyStock(stockCode)) {
-                toggleIsMyStock(true, false);
-            } else {
-                toggleIsMyStock(false, false);
-            }
+
+        if (StockUtils.isMyStock(stockCode)) {
+            toggleIsMyStock(true, false);
+            KLog.e("true",stockCode);
+        } else {
+            toggleIsMyStock(false, false);
+            KLog.e("false",stockCode);
         }
 
         textView1.setAlpha((float) 0.7);
@@ -1403,80 +1404,65 @@ public class CopyStockDetailActivity extends BaseActivity {
     //添加自选股
     private void addOptionalShare() {
         if (isChoose) {
-            if (!UserUtils.isLogin()) {
-                StockUtils.removeStock(stockCode);
-                toggleIsMyStock(false, true);
-            } else {
-                //登录时
-                final Map<String, String> param = new HashMap<String, String>();
-                param.put("token", UserUtils.getToken());
-                param.put("stock_code", stockCode);
+            //登录时
+            final Map<String, String> param = new HashMap<String, String>();
+            param.put("token", UserUtils.getToken());
+            param.put("stock_code", stockCode);
 
-                GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
-                    @Override
-                    public void onSuccess(String responseInfo) {
+            GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
+                @Override
+                public void onSuccess(String responseInfo) {
 
-                        JSONObject result = JSONObject.parseObject(responseInfo);
-                        int data = (int) result.get("code");
-                        if (data == 0) {
-                            toggleIsMyStock(false, true);
-                        }
+                    JSONObject result = JSONObject.parseObject(responseInfo);
+                    int data = (int) result.get("code");
+                    if (data == 0) {
+                        toggleIsMyStock(false, true);
+                        StockUtils.removeStock(stockCode);
                     }
+                }
 
-                    @Override
-                    public void onFailure(String msg) {
-                        UIHelper.toast(CopyStockDetailActivity.this, "请检查网络");
-                    }
-                };
-                new GGOKHTTP(param, GGOKHTTP.MYSTOCK_DELETE, httpInterface).startGet();
-            }
+                @Override
+                public void onFailure(String msg) {
+                    UIHelper.toast(CopyStockDetailActivity.this, "请检查网络");
+                }
+            };
+            new GGOKHTTP(param, GGOKHTTP.MYSTOCK_DELETE, httpInterface).startGet();
         } else {
-            if (!UserUtils.isLogin()) {
-                JSONObject singlestock = new JSONObject();
-                singlestock.put("stock_name", stockName);
-                singlestock.put("stock_code", stockCode);
-                singlestock.put("stock_type", 1);
-                singlestock.put("price", 0);
-                singlestock.put("change_rate", 0);
-                StockUtils.addStock2MyStock(singlestock);
+            //登录时
+            final Map<String, String> param = new HashMap<String, String>();
+            param.put("token", UserUtils.getToken());
+            param.put("group_id", "0");
+            param.put("stock_code", stockCode);
+            param.put("stock_class", "0");
+            param.put("source", "9");
+            param.put("group_class", "1");
 
-                toggleIsMyStock(true, true);
-            } else {
-                //登录时
-                final Map<String, String> param = new HashMap<String, String>();
-                param.put("token", UserUtils.getToken());
-                param.put("group_id", "0");
-                param.put("stock_code", stockCode);
-                param.put("stock_class", "0");
-                param.put("source", "9");
-                param.put("group_class", "1");
+            GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
+                @Override
+                public void onSuccess(String responseInfo) {
+                    JSONObject result = JSONObject.parseObject(responseInfo);
 
-                GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
-                    @Override
-                    public void onSuccess(String responseInfo) {
-                        JSONObject result = JSONObject.parseObject(responseInfo);
+                    int data = (int) result.get("code");
+                    if (data == 0) {
+                        JSONObject singlestock = new JSONObject();
+                        singlestock.put("stock_name", stockName);
+                        singlestock.put("stock_code", stockCode);
+                        singlestock.put("stock_type", 1);
+                        singlestock.put("price", 0);
+                        singlestock.put("change_rate", 0);
 
-                        int data = (int) result.get("code");
-                        if (data == 0) {
-                            JSONObject singlestock = new JSONObject();
-                            singlestock.put("stock_name", stockName);
-                            singlestock.put("stock_code", stockCode);
-                            singlestock.put("stock_type", 1);
-                            singlestock.put("price", 0);
-                            singlestock.put("change_rate", 0);
-                            StockUtils.addStock2MyStock(singlestock);
+                        toggleIsMyStock(true, true);
+                        StockUtils.addStock2MyStock(stockCode);
 
-                            toggleIsMyStock(true, true);
-                        }
                     }
+                }
 
-                    @Override
-                    public void onFailure(String msg) {
-                        UIHelper.toast(CopyStockDetailActivity.this, "请检查网络");
-                    }
-                };
-                new GGOKHTTP(param, GGOKHTTP.MYSTOCK_ADD, httpInterface).startGet();
-            }
+                @Override
+                public void onFailure(String msg) {
+                    UIHelper.toast(CopyStockDetailActivity.this, "请检查网络");
+                }
+            };
+            new GGOKHTTP(param, GGOKHTTP.MYSTOCK_ADD, httpInterface).startGet();
         }
     }
 

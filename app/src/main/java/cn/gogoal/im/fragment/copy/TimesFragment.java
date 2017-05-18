@@ -26,12 +26,12 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.ui.copy.LandScapeChartView;
+import cn.gogoal.im.ui.copy.TimesFivesBitmap;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
 import hply.com.niugu.DeviceUtil;
-import hply.com.niugu.LandScapeChartView;
 import hply.com.niugu.stock.StockMinuteBean;
 import hply.com.niugu.stock.StockMinuteData;
-import hply.com.niugu.stock.TimesFivesBitmap;
 
 public class TimesFragment extends BaseFragment {
     @BindView(R.id.times_view)
