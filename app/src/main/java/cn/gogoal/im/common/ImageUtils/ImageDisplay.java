@@ -2,7 +2,6 @@ package cn.gogoal.im.common.ImageUtils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Looper;
 import android.widget.ImageView;
 
 import com.bumptech.glide.BitmapRequestBuilder;
@@ -15,7 +14,6 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import java.io.ByteArrayOutputStream;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.ui.view.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -80,14 +78,14 @@ public class ImageDisplay {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ((Bitmap) image).compress(Bitmap.CompressFormat.PNG, 100, baos);
             byte[] bytes = baos.toByteArray();
-
-                Glide.with(Looper.getMainLooper()==Looper.myLooper()?context: MyApp.getAppContext())
-                        .load(bytes)
-                        .centerCrop()
-                        .skipMemoryCache(true)
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                        .into(imageView);
-
+                if (context!=null) {
+                    Glide.with(context)
+                            .load(bytes)
+                            .centerCrop()
+                            .skipMemoryCache(true)
+                            .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                            .into(imageView);
+                }
 //            final DrawableRequestBuilder<byte[]> thumbnail = Glide.with(context).load(bytes).skipMemoryCache(true)
 //                    .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                    .placeholder(R.mipmap.image_placeholder)

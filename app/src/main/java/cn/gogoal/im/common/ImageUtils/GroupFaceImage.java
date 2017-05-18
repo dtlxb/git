@@ -47,6 +47,8 @@ public class GroupFaceImage<T> {
 
         if (imageUrls.size() > 9) {
             imgUrls = imageUrls.subList(0, 9);
+        } else {
+            imgUrls.addAll(imageUrls);
         }
 
         GroupFaceImage<T> instance = new GroupFaceImage<>(context, imgUrls);
@@ -73,6 +75,9 @@ public class GroupFaceImage<T> {
     }
 
     public void load(OnMatchingListener listener) {
+        KLog.e(imageUrls.size());
+
+
         this.matchingListener = listener;
         final List<Bitmap> bitmaps = new ArrayList<>();
         if (null == imageUrls || imageUrls.isEmpty()) {

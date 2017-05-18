@@ -9,7 +9,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -57,7 +56,6 @@ public class ImageDetailFragment extends BaseFragment {
             @Override
             public void onPhotoTap(View view, float x, float y) {
                 getActivity().finish();
-                KLog.e("image点击");
             }
         });
 
@@ -75,7 +73,6 @@ public class ImageDetailFragment extends BaseFragment {
             @Override
             public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
                 super.onResourceReady(resource, animation);
-                KLog.e("onResourceReady");
                 xLayout.setStatus(XLayout.Success);
             }
 

@@ -1,5 +1,7 @@
 package cn.gogoal.im.common.GGOKHTTP;
 
+import android.util.Log;
+
 import com.alibaba.fastjson.JSONObject;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -705,6 +707,7 @@ public class GGOKHTTP {
                     .execute(new StringCallback() {
                         @Override
                         public void onError(Call call, Exception e, int id) {
+                            Log.e("TAG","====================出错日志：："+url);
                             if (httpInterface != null) httpInterface.onFailure(e.toString());
                         }
 
@@ -715,6 +718,7 @@ public class GGOKHTTP {
                     });
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e("TAG","====================出错日志："+url);
             if (httpInterface != null) httpInterface.onFailure(e.toString());
         }
     }

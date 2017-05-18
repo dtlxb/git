@@ -362,7 +362,7 @@ public class StockSearchActivity extends BaseActivity {
             @Override
             public void onFailure(String msg) {
                 load_animation.setVisibility(View.GONE);
-                UIHelper.toastError(getApplicationContext(), msg);
+                UIHelper.toastError(getActivity(), msg);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.STOCK_GET_HOTS, ggHttpInterface).startGet();
