@@ -86,9 +86,9 @@ public class SearchPersonSquareActivity extends BaseActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     if (!TextUtils.isEmpty(layout2search.getText())) {
-                        if (vpSearchPersionTeam.getCurrentItem()==0) {
+                        if (vpSearchPersionTeam.getCurrentItem() == 0) {
                             AppManager.getInstance().sendMessage("SEARCH_PERSION_TAG", layout2search.getText().toString());
-                        }else {
+                        } else {
                             AppManager.getInstance().sendMessage("SEARCH_TEAM_TAG", layout2search.getText().toString());
                         }
                         AppDevice.hideSoftKeyboard(layout2search);
