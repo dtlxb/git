@@ -243,7 +243,7 @@ public class SearchTeamFragment extends BaseFragment {
                 public void onClick(View v) {
                     Intent in = new Intent(v.getContext(), SquareChatRoomActivity.class);
                     if (data.isIs_in()) {//我在群里
-                        // TODO: 进入聊天
+                        //TODO: 进入聊天
                         in.putExtra("squareName", data.getName());
                         in.putExtra("conversation_id", data.getConv_id());
                         startActivity(in);

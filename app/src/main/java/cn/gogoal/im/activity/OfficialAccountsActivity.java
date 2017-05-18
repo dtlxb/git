@@ -8,6 +8,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -146,7 +147,8 @@ public class OfficialAccountsActivity extends BaseActivity {
                         stringBuffer.append("\n");
                     }
                     for (int j = 0; j < lcattrsBean.getCoustom_list().get(i).size(); j++) {
-                        ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor(lcattrsBean.getCoustom_list().get(i).get(j).getColor()));
+                        ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor(
+                                lcattrsBean.getCoustom_list().get(i).get(j).getColor().trim().replace(" ", "")));
                         lastLength = stringBuffer.length();
                         stringBuffer.append(lcattrsBean.getCoustom_list().get(i).get(j).getWord());
                         stringLength = stringBuffer.length();
@@ -158,6 +160,11 @@ public class OfficialAccountsActivity extends BaseActivity {
 
             if (!TextUtils.isEmpty(lcattrsBean.getImg_url())) {
                 ImageDisplay.loadImage(getActivity(), lcattrsBean.getImg_url(), official_image);
+            } else {
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) official_image.getLayoutParams();
+                params.height = 0;
+                params.width = 0;
+                official_image.setLayoutParams(params);
             }
         }
     }
