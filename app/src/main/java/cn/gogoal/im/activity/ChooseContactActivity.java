@@ -265,15 +265,10 @@ public class ChooseContactActivity extends BaseActivity {
         return new XTitle.TextAction(titleText) {
             @Override
             public void actionClick(View view) {
-
-                actionView.setClickable(false);
-
-                waitDialog = WaitDialog.getInstance("请稍后...", R.mipmap.login_loading, true);
-                waitDialog.show(getSupportFragmentManager());
-
                 if (result.size() == 0) {
                     return;//没有选择好友时，点击确定不执行操作
                 }
+                actionView.setClickable(false);
 
                 TreeSet<Integer> userFriendsIdList = UserUtils.getUserFriendsIdList(result.values());
 
@@ -300,6 +295,10 @@ public class ChooseContactActivity extends BaseActivity {
                         finish();
                         break;
                     case AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE://分享给很多人
+                        //弹窗
+                        waitDialog = WaitDialog.getInstance("请稍后...", R.mipmap.login_loading, true);
+                        waitDialog.show(getSupportFragmentManager());
+
                         //文字消息基本信息
                         for (int i = 0; i < result.values().size(); i++) {
                             final int finalI = i;
@@ -341,6 +340,11 @@ public class ChooseContactActivity extends BaseActivity {
             UIHelper.toast(ChooseContactActivity.this, "三个人以上才可以创建群组");
             return;
         }
+
+        //弹窗
+        waitDialog = WaitDialog.getInstance("请稍后...", R.mipmap.login_loading, true);
+        waitDialog.show(getSupportFragmentManager());
+
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
         params.put("id_list", JSONObject.toJSONString(userIdList));

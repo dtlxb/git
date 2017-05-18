@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -349,23 +350,30 @@ public class MessageFragment extends BaseFragment {
                     if (lcattrsObject != null && lcattrsObject.get("username") != null) {
                         squareMessageFrom = UserUtils.getUserName().equals(lcattrsObject.get("username")) ? "" : lcattrsObject.getString("username");
                     }
-                    ChatGroupHelper.setGroupAvatar(messageBean.getConversationID(), new AvatarTakeListener() {
-                        @Override
-                        public void success(final Bitmap bitmap) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    avatarIv.setImageBitmap(bitmap);
-                                }
-                            });
 
-                        }
+                    KLog.e(messageBean.getAvatar());
+                    if (messageBean.getAvatar() != null && !TextUtils.isEmpty(messageBean.getAvatar())) {
+                        ImageDisplay.loadRoundedRectangleImage(getActivity(),
+                                messageBean.getAvatar(), avatarIv);
+                    } else {
+                        ChatGroupHelper.setGroupAvatar(messageBean.getConversationID(), new AvatarTakeListener() {
+                            @Override
+                            public void success(final Bitmap bitmap) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        avatarIv.setImageBitmap(bitmap);
+                                    }
+                                });
 
-                        @Override
-                        public void failed(Exception e) {
+                            }
 
-                        }
-                    });
+                            @Override
+                            public void failed(Exception e) {
+
+                            }
+                        });
+                    }
 
                 } else if (chatType == AppConst.IM_CHAT_TYPE_SYSTEM) {
                     ImageDisplay.loadRoundedRectangleImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
@@ -581,6 +589,7 @@ public class MessageFragment extends BaseFragment {
                 break;
             case AppConst.IM_CHAT_TYPE_SQUARE:
                 nickName = conversation.getName();
+                avatar = (String) conversation.getAttribute("avatar");
                 break;
             case AppConst.IM_CHAT_TYPE_SYSTEM:
                 break;

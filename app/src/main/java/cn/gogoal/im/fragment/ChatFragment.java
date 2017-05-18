@@ -197,8 +197,7 @@ public class ChatFragment extends BaseFragment {
                 InputMethodManager manager = (InputMethodManager) etInput.getContext().getSystemService(INPUT_METHOD_SERVICE);
                 manager.hideSoftInputFromWindow(etInput.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
-                find_more_layout.setVisibility(View.GONE);
+                initChecked();
                 return false;
             }
 
@@ -335,9 +334,21 @@ public class ChatFragment extends BaseFragment {
                 voiceView.setVisibility(View.VISIBLE);
                 etInput.setVisibility(View.GONE);
                 imgVoice.setImageResource(R.mipmap.chat_key_bord);
-                find_more_layout.setVisibility(View.GONE);
+                initChecked();
                 break;
         }
+    }
+
+    private void initChecked() {
+        find_more_layout.setVisibility(View.GONE);
+        if (emojiFragment != null && emojiFragment.isAdded()) {
+            transaction.remove(emojiFragment);
+        }
+        if (functionFragment != null && functionFragment.isAdded()) {
+            transaction.remove(functionFragment);
+        }
+        EmojiCheckBox.setChecked(false);
+        functionCheckBox.setChecked(false);
     }
 
     private void initFragment() {
@@ -361,7 +372,7 @@ public class ChatFragment extends BaseFragment {
                 }
                 transaction.show(functionFragment).hide(emojiFragment);
                 getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
-                (EmojiCheckBox).setChecked(false);
+                EmojiCheckBox.setChecked(false);
                 checkAction(view);
                 break;
             case R.id.img_emoji:
@@ -371,7 +382,7 @@ public class ChatFragment extends BaseFragment {
                 }
                 transaction.show(emojiFragment).hide(functionFragment);
                 getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
-                (functionCheckBox).setChecked(false);
+                functionCheckBox.setChecked(false);
                 checkAction(view);
                 break;
             default:
@@ -690,7 +701,7 @@ public class ChatFragment extends BaseFragment {
                     KLog.e(((AVIMTextMessage) lastMessage).getText());
                 }
                 imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0", imConversation.getName(),
-                        "", "", lastMessage);
+                        "", imConversation.getAttribute("avatar") != null ? (String) imConversation.getAttribute("avatar") : "", lastMessage);
             }
             MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
         }

@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -92,8 +93,9 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                                 MessageUtils.changeSquareInfo(conversation.getConversationId(), accountArray, _lctype);
 
                                                 //生成群头像(加人删人时候更改)
-                                                ChatGroupHelper.createGroupImage(conversation.getConversationId(), conversation.getMembers(), "set_avatar");
-
+                                                if (conversation.getAttribute("avatar") == null || TextUtils.isEmpty((String) conversation.getAttribute("avatar"))) {
+                                                    ChatGroupHelper.createGroupImage(conversation.getConversationId(), conversation.getMembers(), "set_avatar");
+                                                }
                                                 //发送
                                                 sendIMMessage(message, conversation);
                                             }
