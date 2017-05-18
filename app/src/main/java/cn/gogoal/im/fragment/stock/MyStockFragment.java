@@ -46,6 +46,7 @@ import cn.gogoal.im.bean.stock.MyStockMarketBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.MyStockSortInteface;
 import cn.gogoal.im.common.NormalIntentUtils;
@@ -222,6 +223,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                FileUtil.writeRequestResponse(responseInfo,"我的自选");
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     noData(false);
@@ -439,6 +441,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
             if (data.getStock_type() == 1) {
                 rateView.setText(StockUtils.plusMinus(data.getChange_rate(), true));
+
                 priceView.setTextColor(ContextCompat.getColor(getActivity(),
                         StockUtils.getStockRateColor(data.getChange_rate())));
                 rateView.setTextColor(ContextCompat.getColor(getActivity(),

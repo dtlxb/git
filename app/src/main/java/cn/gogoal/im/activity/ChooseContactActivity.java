@@ -174,8 +174,6 @@ public class ChooseContactActivity extends BaseActivity {
 
         AppDevice.setViewWidth$Height(tvConstactsFlag, AppDevice.getWidth(mContext) / 4, AppDevice.getWidth(mContext) / 4);
 
-        KLog.e(mSelectedTeamMemberAccounts);
-
         if (actionType == AppConst.SQUARE_ROOM_AT_SOMEONE) {
             userContacts = UserUtils.getAllFriendsInTeam(teamId);
         } else {

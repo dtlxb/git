@@ -573,7 +573,7 @@
 
                 </RelativeLayout>
 
-                <hply.com.niugu.view.InnerListView
+                <cn.gogoal.im.ui.copy.InnerListView
                     android:id="@+id/stock_lv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

@@ -198,6 +198,7 @@
         <activity android:name=".activity.ToolsSettingActivity" />
         <activity android:name=".activity.ToolsListActivity" />
         <activity android:name=".activity.MyAdvisersActivity" />
+        <activity android:name=".activity.stock.InteractiveInvestorActivity" />
     </application>
 
 </manifest>

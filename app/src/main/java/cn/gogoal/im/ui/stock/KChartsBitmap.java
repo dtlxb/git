@@ -18,7 +18,7 @@ import hply.com.niugu.bean.KDJBean;
 import hply.com.niugu.bean.MACDBean;
 import hply.com.niugu.bean.MALineBean;
 import hply.com.niugu.bean.RSIBean;
-import hply.com.niugu.stock.Grid;
+import cn.gogoal.im.ui.copy.Grid;
 
 /**
  * Created by Lizn on 2015/10/15.

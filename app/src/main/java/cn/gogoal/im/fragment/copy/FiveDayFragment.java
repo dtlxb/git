@@ -27,9 +27,9 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
-import hply.com.niugu.LandScapeChartView;
+import cn.gogoal.im.ui.copy.LandScapeChartView;
+import cn.gogoal.im.ui.copy.TimesFivesBitmap;
 import hply.com.niugu.stock.StockMinuteBean;
-import hply.com.niugu.stock.TimesFivesBitmap;
 
 public class FiveDayFragment extends Fragment {
     @BindView(R.id.fiveday_bitmapchartview)

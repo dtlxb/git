@@ -18,10 +18,10 @@ import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.ui.copy.InnerListView;
 import cn.gogoal.im.ui.view.CircleImageView;
 import hply.com.niugu.bean.CommentData;
 import hply.com.niugu.bean.CommentData_Sons;
-import hply.com.niugu.view.InnerListView;
 
 
 /**

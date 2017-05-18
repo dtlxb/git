@@ -62,13 +62,13 @@ public class WaitDialog extends BaseCentDailog {
             } else {
                 imgIcon.setImageResource(dialogIcon);
             }
-        }else {
+        } else {
             imgIcon.setVisibility(View.GONE);
         }
 
         if (!StringUtils.isActuallyEmpty(dialogText)) {
             textView.setText(dialogText);
-        }else {
+        } else {
             textView.setVisibility(View.GONE);
         }
     }
@@ -125,6 +125,7 @@ public class WaitDialog extends BaseCentDailog {
             }, 1000);
         }
     }
+
     public void dismiss(boolean immediately, final boolean finish) {
         if (immediately) {
             super.dismiss();
@@ -133,11 +134,54 @@ public class WaitDialog extends BaseCentDailog {
                 @Override
                 public void run() {
                     WaitDialog.this.dismiss();
-                    if (finish){
+                    if (finish) {
                         WaitDialog.this.getActivity().finish();
                     }
                 }
             }, 1000);
         }
+    }
+
+    public void dismiss(boolean immediately, final DialogDismiss dialogDismiss) {
+        if (immediately) {
+            super.dismiss();
+        } else {
+            new android.os.Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    WaitDialog.this.dismiss();
+                    dialogDismiss.dialogDismiss();
+                }
+            }, 1000);
+        }
+    }
+
+    public enum GGDialogType {
+        SUCCESS(0), LOADING(1), ERROR(2);
+
+        private int dialogType;
+
+        GGDialogType(int dialogType) {
+            this.dialogType = dialogType;
+        }
+    }
+
+
+    public interface DialogDismiss {
+        void dialogDismiss();
+    }
+
+    public static WaitDialog showNormalDialog(String dialogText, GGDialogType type) {
+
+        WaitDialog dialog = WaitDialog.getInstance(dialogText,
+                type == GGDialogType.LOADING ? R.mipmap.login_loading :
+                        (type == GGDialogType.SUCCESS ? R.mipmap.login_success : R.mipmap.login_error),
+                type == GGDialogType.LOADING);
+
+        if (type == GGDialogType.ERROR) {
+            dialog.dismiss(false);
+        }
+
+        return dialog;
     }
 }

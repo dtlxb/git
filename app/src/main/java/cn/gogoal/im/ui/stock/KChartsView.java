@@ -20,13 +20,13 @@ import java.util.Map;
 
 import cn.gogoal.im.activity.copy.MessageHandlerList;
 import cn.gogoal.im.activity.copy.StockDetailChartsActivity;
+import cn.gogoal.im.ui.copy.GridChart;
 import hply.com.niugu.ConstantUtils;
 import hply.com.niugu.StringUtils;
 import hply.com.niugu.bean.KDJBean;
 import hply.com.niugu.bean.MACDBean;
 import hply.com.niugu.bean.MALineBean;
 import hply.com.niugu.bean.RSIBean;
-import hply.com.niugu.view.GridChart;
 
 public class KChartsView extends GridChart implements GridChart.OnTabClickListener {
     public static final String TAG = "KChartsView";

@@ -226,7 +226,7 @@
                 android:orientation="horizontal"
                 android:padding="10dp">
 
-                <hply.com.niugu.stock.BitmapChartView
+                <cn.gogoal.im.ui.copy.BitmapChartView
                     android:id="@+id/stock_detail_fragment_time_line"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"

@@ -45,8 +45,8 @@ import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.fragment.stock.ImageChartFragment;
 import cn.gogoal.im.fragment.stock.StockDetailNewTab;
+import cn.gogoal.im.ui.copy.TimesFivesBitmap;
 import cn.gogoal.im.ui.view.XTitle;
-import hply.com.niugu.stock.TimesFivesBitmap;
 
 
 /**

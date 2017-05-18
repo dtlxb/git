@@ -255,6 +255,7 @@ public class ToolsSettingActivity extends BaseActivity {
                             dataOriginal.add(item);
                             dataAll.add(new SectionToolsData(item, itemList.size()));
                         }
+
                         addSpace(itemList);
                     }
 
@@ -347,8 +348,6 @@ public class ToolsSettingActivity extends BaseActivity {
      * 删减
      */
     public void remooveSelected(ToolData.Tool tool) {
-
-        KLog.e("反选："+tool.getDesc()+";id="+tool.getId()+";isShow="+tool.getIsShow());
 
         tvTips.setVisibility(dataSelected.size() > 0?View.VISIBLE:View.GONE);
         rvSelected.setVisibility(dataSelected.size() > 0?View.VISIBLE:View.GONE);

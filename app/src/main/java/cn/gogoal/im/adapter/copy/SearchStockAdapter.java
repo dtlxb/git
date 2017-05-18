@@ -40,7 +40,7 @@ public class SearchStockAdapter extends MyBaseAdapter<SearchStockData> {
         super(list);
         myStockSet = StockUtils.getMyStockSet();
         this.list = list;
-        this.editText=editText;
+        this.editText = editText;
     }
 
     @Override
@@ -58,23 +58,23 @@ public class SearchStockAdapter extends MyBaseAdapter<SearchStockData> {
             holder = (ViewHolder) convertView.getTag();
         }
         int index;
-        String search=editText.getQuery().toString();
-        ForegroundColorSpan span=new ForegroundColorSpan(parent.getContext().getResources().getColor(R.color.search_stock_key));
-        SpannableStringBuilder builder=new SpannableStringBuilder(list.get(position).getStock_name());
-        index=list.get(position).getStock_name().indexOf(search);
-        if(index!=-1){
-            builder.setSpan(span,index,index+search.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        String search = editText.getQuery().toString();
+        ForegroundColorSpan span = new ForegroundColorSpan(parent.getContext().getResources().getColor(R.color.search_stock_key));
+        SpannableStringBuilder builder = new SpannableStringBuilder(list.get(position).getStock_name());
+        index = list.get(position).getStock_name().indexOf(search);
+        if (index != -1) {
+            builder.setSpan(span, index, index + search.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.stock_name.setText(builder);
             holder.stock_code.setText(list.get(position).getStock_code());
-        }else{
+        } else {
             holder.stock_name.setText(list.get(position).getStock_name());
 
-            builder=new SpannableStringBuilder(list.get(position).getStock_code());
-            index=list.get(position).getStock_code().indexOf(search);
-            if(index!=-1){
-                builder.setSpan(span,index,index+search.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder = new SpannableStringBuilder(list.get(position).getStock_code());
+            index = list.get(position).getStock_code().indexOf(search);
+            if (index != -1) {
+                builder.setSpan(span, index, index + search.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 holder.stock_code.setText(builder);
-            }else{
+            } else {
                 holder.stock_code.setText(list.get(position).getStock_code());
             }
         }
@@ -94,26 +94,11 @@ public class SearchStockAdapter extends MyBaseAdapter<SearchStockData> {
                 holder.stock_add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!UserUtils.isLogin()) {
-                            JSONObject singlestock = new JSONObject();
-                            singlestock.put("stock_name", list.get(position).getStock_name());
-                            singlestock.put("stock_code", list.get(position).getStock_code());
-                            singlestock.put("stock_type", 1);
-                            singlestock.put("price", 0);
-                            singlestock.put("change_rate", 0);
-                            StockUtils.addStock2MyStock(singlestock);
-
-                            holder.stock_add.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                            holder.stock_add.setText("已添加");
-                            holder.stock_add.setClickable(false);
-
-                        } else {
-                            //登录时
-                            InitList(v.getContext(),list.get(position).getStock_name(), list.get(position).getStock_code());
-                            holder.stock_add.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                            holder.stock_add.setText("已添加");
-                            holder.stock_add.setClickable(false);
-                        }
+                        //登录时
+                        InitList(v.getContext(), list.get(position).getStock_name(), list.get(position).getStock_code());
+                        holder.stock_add.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                        holder.stock_add.setText("已添加");
+                        holder.stock_add.setClickable(false);
                     }
                 });
             }
@@ -129,7 +114,6 @@ public class SearchStockAdapter extends MyBaseAdapter<SearchStockData> {
     }
 
     private boolean handleSearchStock(String stockCode) {
-
         boolean flag = false;
         for (String stockCode1 : myStockSet) {
             if (stockCode.equals(stockCode1)) {
@@ -168,7 +152,7 @@ public class SearchStockAdapter extends MyBaseAdapter<SearchStockData> {
                     singlestock.put("stock_type", 1);
                     singlestock.put("price", 0);
                     singlestock.put("change_rate", 0);
-                    StockUtils.addStock2MyStock(singlestock);
+                    StockUtils.addStock2MyStock(stock_code);
                 }
             }
 

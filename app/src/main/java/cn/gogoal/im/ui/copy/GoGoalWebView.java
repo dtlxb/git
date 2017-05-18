@@ -1,4 +1,4 @@
-package hply.com.niugu.view;
+package cn.gogoal.im.ui.copy;
 
 import android.content.Context;
 import android.graphics.Bitmap;

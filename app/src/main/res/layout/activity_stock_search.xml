@@ -100,14 +100,12 @@
 
                 </RelativeLayout>
 
-                <hply.com.niugu.view.MyGridView
+                <cn.gogoal.im.ui.copy.MyGridView
                     android:id="@+id/search_history_grid"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="10dp"
-                    android:numColumns="3">
-
-                </hply.com.niugu.view.MyGridView>
+                    android:numColumns="3"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -136,7 +134,7 @@
                     android:textColor="@color/search_history"
                     android:textSize="@dimen/text_size_13" />
 
-                <hply.com.niugu.view.InnerListView
+                <cn.gogoal.im.ui.copy.InnerListView
                     android:id="@+id/search_hot_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>

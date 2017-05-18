@@ -39,7 +39,7 @@ public class StockUtils {
      * 获取本地自选股集合
      */
     public static Set<String> getMyStockSet() {
-        return SPTools.getSetData("my_stock_set", null);
+        return SPTools.getSetData("my_stock_set", new HashSet<String>());
     }
 
     /**
@@ -52,18 +52,13 @@ public class StockUtils {
     /**
      * 添加单个股票到自选股
      */
-    public static void addStock2MyStock(JSONObject object) {
+    public static void addStock2MyStock(String stockCode) {
+        if (stockCode==null){
+            return;
+        }
         Set<String> myStockSet = getMyStockSet();
-        myStockSet.add(object.getString("stock_code"));
+        myStockSet.add(stockCode);
         SPTools.saveSetData("my_stock_set", myStockSet);
-//        KLog.e(myStockSet.size()+";==="+myStockSet.toString());
-    }
-
-    /**
-     * 判断股票是否在自选股中
-     */
-    public static boolean isMyStock(JSONObject object) {
-        return getMyStockSet().contains(object.getString("stock_code"));
     }
 
     /**
@@ -77,6 +72,7 @@ public class StockUtils {
      * 我的自选股移除
      */
     public static void removeStock(String stockCode) {
+
         Set<String> myStockSet = getMyStockSet();
 
         KLog.e(myStockSet.size()+";==="+myStockSet.toString());
@@ -87,16 +83,6 @@ public class StockUtils {
             myStockSet.remove(stockCode.substring(2));
         }
         KLog.e(myStockSet.size()+";==="+myStockSet.toString());
-    }
-
-    /**
-     * 我的自选股移除
-     */
-    public static void removeStock(JSONObject jsonObject) {
-        Set<String> myStockSet = getMyStockSet();
-        if (myStockSet.remove(jsonObject.getString("stock_code"))) {
-            SPTools.saveSetData("my_stock_set", myStockSet);
-        }
     }
 
     /**
@@ -168,7 +154,6 @@ public class StockUtils {
         if (TextUtils.isEmpty(rateOrPriceString) || rateOrPriceString.equals("null")) {
             return R.color.stock_gray;
         }
-
         double rateOrPrice = Double.parseDouble(rateOrPriceString);
 
         return rateOrPrice == Double.NaN ? R.color.stock_gray : (rateOrPrice > 0 ? R.color.stock_red : (rateOrPrice == 0 ? R.color.stock_gray :
@@ -189,6 +174,7 @@ public class StockUtils {
 
     /**
      * 获取股票状态信息
+     * stock_charge_type
      */
     public static String getStockStatus(int stockType) {
         switch (stockType) {
@@ -317,13 +303,7 @@ public class StockUtils {
 
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if (result.getIntValue("code") == 0) {
-                    JSONObject singlestock = new JSONObject();
-                    singlestock.put("stock_name", stock_name);
-                    singlestock.put("stock_code", stock_code);
-                    singlestock.put("stock_type", 1);
-                    singlestock.put("price", 0);
-                    singlestock.put("change_rate", 0);
-                    StockUtils.addStock2MyStock(singlestock);
+                    StockUtils.addStock2MyStock(stock_code);
                     AppManager.getInstance().sendMessage("updata_my_stock_data");
                 }
             }

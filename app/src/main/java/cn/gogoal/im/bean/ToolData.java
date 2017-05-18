@@ -244,6 +244,10 @@ public class ToolData {
             return obj instanceof Tool && ((Tool) obj).getId() == getId();
         }
 
+        @Override
+        public int hashCode() {
+            return getId();
+        }
 
         @Override
         public int describeContents() {

@@ -105,8 +105,6 @@ public class TreatFragment extends BaseFragment {
         type = getArguments().getInt("type");
         fromStockDetail = getArguments().getBoolean("from_stock_detail");
 
-        KLog.e("stockCode=" + stockCode + ";type=" + type + ";fromStockDetail=" + fromStockDetail);
-
         if (stockCode != null) {
             if (type == AppConst.TREAT_TYPE_WU_DANG) {
                 threeTexts = new ArrayList<>();

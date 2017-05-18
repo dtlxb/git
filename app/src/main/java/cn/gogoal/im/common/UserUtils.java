@@ -678,6 +678,7 @@ public class UserUtils {
         if (groupMembers != null && groupMembers.size() > 0) {
             params.put("id_list", JSONObject.toJSONString(groupMembers));
         }
+
         KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {

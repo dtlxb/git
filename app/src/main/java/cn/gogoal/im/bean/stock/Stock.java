@@ -1,18 +1,31 @@
 package cn.gogoal.im.bean.stock;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * author wangjd on 2017/4/7 0007.
  * Staff_id 1375
  * phone 18930640263
- * description :${annotated}.
+ * description :传值时需要的股票信息
  */
-public class Stock implements Serializable{
+public class Stock implements Parcelable {
+
     private String current_price;
     private String stock_code;
     private String stock_name;
     private int stock_type;
+
+    private String changeValue;
+    private int stock_charge_type;
+    private double closePrice;
+
+    //双参
+    public Stock(String stock_code, String stock_name) {
+        this.stock_code = stock_code;
+        this.stock_name = stock_name;
+    }
+
 
     public String getCurrent_price() {
         return current_price;
@@ -46,22 +59,66 @@ public class Stock implements Serializable{
         this.stock_type = stock_type;
     }
 
-    public enum StockType{
-
-        SUSPENDED(0),  //停牌
-
-        NORMAL(1),      //正常
-
-        SUSPENSION(2),  //暂停上市
-
-        DELISTING(-1),  //退市
-
-        UNLISTED(-2);   //未上市
-
-        private int type;
-
-        StockType(int type) {
-            this.type = type;
-        }
+    public String getChangeValue() {
+        return changeValue;
     }
+
+    public void setChangeValue(String changeValue) {
+        this.changeValue = changeValue;
+    }
+
+    public int getStock_charge_type() {
+        return stock_charge_type;
+    }
+
+    public void setStock_charge_type(int stock_charge_type) {
+        this.stock_charge_type = stock_charge_type;
+    }
+
+    public double getClosePrice() {
+        return closePrice;
+    }
+
+    public void setClosePrice(double closePrice) {
+        this.closePrice = closePrice;
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.current_price);
+        dest.writeString(this.stock_code);
+        dest.writeString(this.stock_name);
+        dest.writeInt(this.stock_type);
+        dest.writeString(this.changeValue);
+        dest.writeInt(this.stock_charge_type);
+        dest.writeDouble(this.closePrice);
+    }
+
+    protected Stock(Parcel in) {
+        this.current_price = in.readString();
+        this.stock_code = in.readString();
+        this.stock_name = in.readString();
+        this.stock_type = in.readInt();
+        this.changeValue = in.readString();
+        this.stock_charge_type = in.readInt();
+        this.closePrice = in.readDouble();
+    }
+
+    public static final Creator<Stock> CREATOR = new Creator<Stock>() {
+        @Override
+        public Stock createFromParcel(Parcel source) {
+            return new Stock(source);
+        }
+
+        @Override
+        public Stock[] newArray(int size) {
+            return new Stock[size];
+        }
+    };
 }

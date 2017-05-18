@@ -432,7 +432,18 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable{
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof ContactBean) &&((ContactBean) obj).getFriend_id() == this.getFriend_id();
+    public boolean equals(Object o) {
+        try {
+            ContactBean other = (ContactBean) o;
+            return ((ContactBean) o).getFriend_id() == other.getFriend_id();
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return getFriend_id();
     }
 }

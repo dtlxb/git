@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hply.imagepicker.ITakePhoto;
-import com.socks.library.KLog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,6 +30,7 @@ import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.BottomSheetListDialog;
+import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.view.CircleImageView;
 import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XTitle;
@@ -175,8 +175,10 @@ public class EditPersonInfoActivity extends BaseActivity {
             case R.id.login_cofirm:
                 //资料上传后台
                 Map<String, String> map = new HashMap<>();
-                if (TextUtils.isEmpty(imageUri) && editJobName.getText().toString().equals(UserUtils.getDuty())
-                        && editCompanyName.getText().toString().equals(UserUtils.getorgName()) && editPersonName.getText().toString().equals(UserUtils.getNickname())) {
+                if (TextUtils.isEmpty(imageUri) &&
+                        editJobName.getText().toString().equals(UserUtils.getDuty()) &&
+                        editCompanyName.getText().toString().equals(UserUtils.getorgName()) &&
+                        editPersonName.getText().toString().equals(UserUtils.getNickname())) {
                     goToNextPage();
                     return;
                 }
@@ -198,6 +200,10 @@ public class EditPersonInfoActivity extends BaseActivity {
                     map.put("duty", editJobName.getText().toString());
                 }
                 loginCofirm.setClickable(false);
+
+                final WaitDialog waitDialog = WaitDialog.getInstance("请稍后", R.mipmap.login_loading, true);
+                waitDialog.show(getSupportFragmentManager());
+
                 UserUtils.updataNetUserInfo(map, new UserUtils.UpdataListener() {
                     @Override
                     public void success(String responce) {
@@ -207,20 +213,36 @@ public class EditPersonInfoActivity extends BaseActivity {
                             JSONObject data = result.getJSONObject("data");
                             boolean success = data.getBoolean("success");
                             if (success) {
-                                UIHelper.toast(EditPersonInfoActivity.this, "资料修改成功！");
-                                goToNextPage();
+                                waitDialog.dismiss();
+                                WaitDialog successDialog = WaitDialog.getInstance("资料修改成功", R.mipmap.login_success, false);
+                                successDialog.show(getSupportFragmentManager());
+                                successDialog.dismiss(false, new WaitDialog.DialogDismiss() {
+                                    @Override
+                                    public void dialogDismiss() {
+                                        goToNextPage();
+                                    }
+                                });
                             } else {
-                                UIHelper.toast(EditPersonInfoActivity.this, "资料修改失败！");
+                                waitDialog.dismiss();
+                                WaitDialog errorDialog = WaitDialog.getInstance("资料修改失败", R.mipmap.login_error, false);
+                                errorDialog.show(getSupportFragmentManager());
+                                errorDialog.dismiss(false);
                             }
                         } else {
-                            UIHelper.toast(EditPersonInfoActivity.this, "资料修改失败！");
+                            waitDialog.dismiss();
+                            WaitDialog errorDialog = WaitDialog.getInstance("资料修改失败", R.mipmap.login_error, false);
+                            errorDialog.show(getSupportFragmentManager());
+                            errorDialog.dismiss(false);
                         }
                     }
 
                     @Override
                     public void failed(String errorMsg) {
                         loginCofirm.setClickable(true);
-                        UIHelper.toast(EditPersonInfoActivity.this, errorMsg);
+                        waitDialog.dismiss();
+                        WaitDialog errorDialog = WaitDialog.getInstance("资料修改失败", R.mipmap.login_error, false);
+                        errorDialog.show(getSupportFragmentManager());
+                        errorDialog.dismiss(false);
                     }
                 });
 

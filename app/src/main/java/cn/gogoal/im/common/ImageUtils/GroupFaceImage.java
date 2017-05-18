@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -40,11 +41,17 @@ public class GroupFaceImage<T> {
     }
 
     public static <T> GroupFaceImage<T> getInstance(Context context, List<T> imageUrls) {
+        List<T> imgUrls=new ArrayList<>();
+
+        imageUrls=new ArrayList<>(new HashSet<>(imageUrls));
+
         if (imageUrls.size() > 9) {
-            imageUrls = imageUrls.subList(0, 9);
+            imgUrls = imageUrls.subList(0, 9);
         }
-        GroupFaceImage<T> instance = new GroupFaceImage<>(context, imageUrls);
-        switch (imageUrls.size()) {
+
+        GroupFaceImage<T> instance = new GroupFaceImage<>(context, imgUrls);
+
+        switch (imgUrls.size()) {
             case 1:
             case 2:
             case 3:

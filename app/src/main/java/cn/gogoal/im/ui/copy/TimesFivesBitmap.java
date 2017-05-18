@@ -1,4 +1,4 @@
-package hply.com.niugu.stock;
+package cn.gogoal.im.ui.copy;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -19,7 +19,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import cn.gogoal.im.common.StockUtils;
 import hply.com.niugu.StringUtils;
+import hply.com.niugu.stock.StockMinuteBean;
+import hply.com.niugu.stock.StockMinuteData;
 
 
 /**

@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -89,13 +87,7 @@ public class HotSearchAdapter extends MyBaseAdapter<HotSearchStockData> {
                     @Override
                     public void onClick(View v) {
                         if (!UserUtils.isLogin()) {
-                            JSONObject singlestock = new JSONObject();
-                            singlestock.put("stock_name", list.get(position).getStock_name());
-                            singlestock.put("stock_code", list.get(position).getStock_code());
-                            singlestock.put("stock_type", 1);
-                            singlestock.put("price", 0);
-                            singlestock.put("change_rate", 0);
-                            StockUtils.addStock2MyStock(singlestock);
+                            StockUtils.addStock2MyStock(list.get(position).getStock_code());
 
                             holder.stock_add.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                             holder.stock_add.setText("已添加");

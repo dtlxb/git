@@ -1,4 +1,4 @@
-package hply.com.niugu.stock;
+package cn.gogoal.im.ui.copy;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hply.com.niugu.StringUtils;
+import hply.com.niugu.stock.StockMinuteData;
+
 
 /**
  * Created by huangxx on 2015/10/14.
