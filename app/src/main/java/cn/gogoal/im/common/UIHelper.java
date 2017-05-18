@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -34,7 +35,6 @@ import java.io.InputStreamReader;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.openServices.weixin.WechatOperator;
-import cn.gogoal.im.ui.view.XEditText;
 import cn.gogoal.im.ui.view.XLayout;
 import okhttp3.Call;
 
@@ -372,7 +372,7 @@ public class UIHelper {
         }
     }
 
-    public static void passwordToggle(final XEditText etPsw, final CheckBox chToggle) {
+    public static void passwordToggle(final EditText etPsw, final CheckBox chToggle) {
         etPsw.setTransformationMethod(PasswordTransformationMethod
                 .getInstance());  //以密文显示
 
@@ -392,6 +392,5 @@ public class UIHelper {
                 }
             }
         });
-
     }
 }

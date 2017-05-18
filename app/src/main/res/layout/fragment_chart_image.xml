@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.AppCompatImageView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/image_fragment"
+<cn.gogoal.im.ui.view.XLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/xLayout"
     android:orientation="vertical">
 
-</android.support.v7.widget.AppCompatImageView>
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</cn.gogoal.im.ui.view.XLayout>

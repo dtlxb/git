@@ -53,6 +53,7 @@ import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.stock.ChartImageBean;
+import cn.gogoal.im.bean.stock.Stock;
 import cn.gogoal.im.bean.stock.StockDetail;
 import cn.gogoal.im.bean.stock.TreatData;
 import cn.gogoal.im.common.AnimationUtils;
@@ -267,6 +268,7 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     @BindView(R.id.vp_treat)
     UnSlidingViewPager vpTreat;
+    private String change_value;
 
     @Override
     public int bindLayout() {
@@ -402,9 +404,9 @@ public class CopyStockDetailActivity extends BaseActivity {
         dpi = AppDevice.getWidth(CopyStockDetailActivity.this);
         if (StockUtils.getMyStockSet() != null) {
             if (StockUtils.isMyStock(stockCode)) {
-                toggleIsMyStock(true,false);
+                toggleIsMyStock(true, false);
             } else {
-                toggleIsMyStock(false,false);
+                toggleIsMyStock(false, false);
             }
         }
 
@@ -997,7 +999,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                     //保存收盘价
                     stock_charge_type = info.getStock_type();
                     closePrice = hply.com.niugu.StringUtils.getDouble(String.valueOf(info.getClose_price()));
-
+                    change_value = info.getChange_value();
                     StockUtils.savaColseprice((float) closePrice);
                     priceVolumDatas.clear();
                     //卖
@@ -1385,7 +1387,11 @@ public class CopyStockDetailActivity extends BaseActivity {
     public void allBtnClick(View v) {
         switch (v.getId()) {
             case R.id.stock_detail_diagnose:
-                StockPopuDialog.newInstance(stockCode, stockName).show(getSupportFragmentManager());
+                Stock stock = new Stock(stockCode, stockName);
+                stock.setChangeValue(StringUtils.save2Significand(change_value));
+                stock.setStock_charge_type(stock_charge_type);
+                stock.setClosePrice(closePrice);
+                StockPopuDialog.newInstance(stock).show(getSupportFragmentManager());
                 break;
             case R.id.stock_detail_choose:
                 addOptionalShare();//TODO 更换新的删除自选股接口
@@ -1399,7 +1405,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         if (isChoose) {
             if (!UserUtils.isLogin()) {
                 StockUtils.removeStock(stockCode);
-                toggleIsMyStock(false,true);
+                toggleIsMyStock(false, true);
             } else {
                 //登录时
                 final Map<String, String> param = new HashMap<String, String>();
@@ -1413,7 +1419,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                         JSONObject result = JSONObject.parseObject(responseInfo);
                         int data = (int) result.get("code");
                         if (data == 0) {
-                            toggleIsMyStock(false,true);
+                            toggleIsMyStock(false, true);
                         }
                     }
 
@@ -1434,7 +1440,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                 singlestock.put("change_rate", 0);
                 StockUtils.addStock2MyStock(singlestock);
 
-                toggleIsMyStock(true,true);
+                toggleIsMyStock(true, true);
             } else {
                 //登录时
                 final Map<String, String> param = new HashMap<String, String>();
@@ -1460,7 +1466,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                             singlestock.put("change_rate", 0);
                             StockUtils.addStock2MyStock(singlestock);
 
-                            toggleIsMyStock(true,true);
+                            toggleIsMyStock(true, true);
                         }
                     }
 
@@ -1485,7 +1491,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         stock_detail_choose.setText(addMyStock ? "已自选" : "加自选");
 
         if (needToast) {
-            UIHelper.toast(CopyStockDetailActivity.this, addMyStock ?"添加自选成功":"删除自选成功");
+            UIHelper.toast(CopyStockDetailActivity.this, addMyStock ? "添加自选成功" : "删除自选成功");
         }
 
         isChoose = addMyStock;

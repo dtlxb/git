@@ -91,6 +91,10 @@ public class XLayout extends FrameLayout {
         return emptyPage;
     }
 
+    public View getErrorView(){
+        return errorPage;
+    }
+
     public void setEmptyPage(View emptyPage) {
         this.emptyPage = emptyPage;
     }

@@ -189,6 +189,7 @@ public class StockUtils {
 
     /**
      * 获取股票状态信息
+     * stock_charge_type
      */
     public static String getStockStatus(int stockType) {
         switch (stockType) {

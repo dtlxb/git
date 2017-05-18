@@ -2,8 +2,6 @@ package cn.gogoal.im.common;
 
 import android.text.TextUtils;
 
-import com.socks.library.KLog;
-
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -474,7 +472,6 @@ public class CalendarUtils {
     }
 
     public static String getStringDate(String format, String dateString) {
-        KLog.e(dateString);
         if (StringUtils.isActuallyEmpty(dateString)) {
             return getCurrentTime("yyyy-MM-dd HH:mm:ss");
         }

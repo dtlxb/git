@@ -346,7 +346,7 @@ public class SkipProgressView extends TextView {
                 int x = (int) event.getX();
                 int y = (int) event.getY();
                 if (Math.abs(x - (mBounds.centerX())) <= (circRadius) * 2 && Math.abs(y - (mBounds.centerY())) <= (circRadius) * 2) {
-                    Log.e("countDownProgressView", "-----------------onTouchEvent---------------------");
+//                    Log.e("countDownProgressView", "-----------------onTouchEvent---------------------");
                 }
                 break;
             default:

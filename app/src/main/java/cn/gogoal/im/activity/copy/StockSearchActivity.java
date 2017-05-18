@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.hply.imagepicker.view.StatusBarUtil;
 
 import org.simple.eventbus.Subscriber;
 
@@ -104,10 +103,6 @@ public class StockSearchActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-
-        StatusBarUtil barUtil = StatusBarUtil.with(this);
-
-        barUtil.setStatusBarFontDark(true);
 
         init();
         Intent intent = getIntent();

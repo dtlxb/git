@@ -1,5 +1,6 @@
 package cn.gogoal.im.ui.dialog;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,9 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.stock.InteractiveInvestorActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.BaseIconText;
+import cn.gogoal.im.bean.stock.Stock;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.NormalIntentUtils;
@@ -29,11 +32,10 @@ import cn.gogoal.im.ui.dialog.base.BaseBottomDialog;
  */
 public class StockPopuDialog extends BaseBottomDialog {
 
-    public static StockPopuDialog newInstance(String stockCode, String stockName) {
+    public static StockPopuDialog newInstance(Stock stockInfo) {
         StockPopuDialog dialog = new StockPopuDialog();
         Bundle bundle = new Bundle();
-        bundle.putString("stock_code", stockCode);
-        bundle.putString("stock_name", stockName);
+        bundle.putParcelable("stock_info", stockInfo);
         dialog.setArguments(bundle);
         return dialog;
     }
@@ -49,8 +51,7 @@ public class StockPopuDialog extends BaseBottomDialog {
     public void bindView(View v) {
         imgSize = 14 * AppDevice.getWidth(getActivity()) / 100;
 
-        String stockCode = getArguments().getString("stock_code");
-        String stockName = getArguments().getString("stock_name");
+        Stock stock = getArguments().getParcelable("stock_info");
 
         RecyclerView rvShareList = (RecyclerView) v.findViewById(R.id.rv_share_list);
         TextView tvShareCancle = (TextView) v.findViewById(R.id.tv_dialog_cancle);
@@ -59,7 +60,7 @@ public class StockPopuDialog extends BaseBottomDialog {
                 (new GridLayoutManager(
                         v.getContext(), 4));
 
-        rvShareList.setAdapter(new BottomSheetAdapter(getDatas(), stockCode, stockName));
+        rvShareList.setAdapter(new BottomSheetAdapter(getDatas(), stock));
 
         tvShareCancle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,13 +87,11 @@ public class StockPopuDialog extends BaseBottomDialog {
 
     private class BottomSheetAdapter extends CommonAdapter<BaseIconText<Integer, String>, BaseViewHolder> {
 
-        private String stockCode;
-        private String stockName;
+        private Stock stock;
 
-        private BottomSheetAdapter(List<BaseIconText<Integer, String>> data, String stockCode, String stockName) {
+        private BottomSheetAdapter(List<BaseIconText<Integer, String>> data, Stock stock) {
             super(R.layout.item_dialog_bottom_sheet, data);
-            this.stockCode = stockCode;
-            this.stockName = stockName;
+            this.stock = stock;
         }
 
         @Override
@@ -109,11 +108,23 @@ public class StockPopuDialog extends BaseBottomDialog {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (position != 3) {
-                        NormalIntentUtils.go2WebActivity(
-                                v.getContext(),
-                                data.getUrl() + "?stock_code=" + stockCode + "&stock_name=" + stockName,
-                                data.getText(), true);
+                    switch (position) {
+                        case 0:
+                        case 1:
+                        case 2:
+                            NormalIntentUtils.go2WebActivity(
+                                    v.getContext(),
+                                    data.getUrl() + "?stock_code=" + stock.getStock_code() + "&stock_name=" + stock.getStock_name(),
+                                    data.getText(), true);
+                            break;
+                        case 3:
+                            if (stock==null){
+                                return;
+                            }
+                            Intent intent = new Intent(v.getContext(), InteractiveInvestorActivity.class);
+                            intent.putExtra("stock_info", stock);
+                            startActivity(intent);
+                            break;
                     }
 
                     StockPopuDialog.this.dismiss();

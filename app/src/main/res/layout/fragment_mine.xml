@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/titlebar_size"
+        android:layout_height="35dp"
         android:background="@color/colorMineHead">
 
         <TextView
@@ -19,6 +19,7 @@
             android:layout_centerInParent="true"
             android:alpha="0.0"
             android:text="个人中心"
+            android:visibility="gone"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
 

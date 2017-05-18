@@ -287,7 +287,7 @@ public class DialogHelp {
     }
 
     /**
-     * 好用到只需传一个数据的列表类弹窗
+     * 好用到只需传一个数组的列表类弹窗
      */
     public static void getBottomSheetListDialog(FragmentActivity context, ArrayList<String> list, BottomSheetListDialog.DialogItemClick listener) {
         final BottomSheetListDialog listDialog = BottomSheetListDialog.getInstance(list);
@@ -303,7 +303,4 @@ public class DialogHelp {
         shareDialog.show(context.getSupportFragmentManager());
     }
 
-    public static void showSubmitDialog(FragmentActivity activity, final String text, int iconRes) {
-
-    }
 }
