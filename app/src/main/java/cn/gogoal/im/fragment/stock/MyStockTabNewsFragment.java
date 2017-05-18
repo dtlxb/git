@@ -129,61 +129,60 @@ public class MyStockTabNewsFragment extends BaseFragment {
      */
     private void getStockNews(final int refreshType) {
         newsAdapter.setEnableLoadMore(false);
-
         if (refreshType == AppConst.REFRESH_TYPE_FIRST) {
             xLayout.setStatus(XLayout.Loading);
         }
-        new GGOKHTTP(getParams(),
-                stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_YANBAO ? GGOKHTTP.REPORT_LIST : GGOKHTTP.GET_STOCK_NEWS,
-                new GGOKHTTP.GGHttpInterface() {
-                    @Override
-                    public void onSuccess(String responseInfo) {
-                        int code = JSONObject.parseObject(responseInfo).getIntValue("code");
-                        if (code == 0) {
-                            JSONArray jsonArray = JSONObject.parseObject(responseInfo).getJSONArray("data");
-                            for (int i = 0; i < jsonArray.size(); i++) {
-                                JSONObject object = (JSONObject) jsonArray.get(i);
+        new GGOKHTTP(getParams(), stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_YANBAO ?
+                GGOKHTTP.REPORT_LIST : GGOKHTTP.GET_STOCK_NEWS, new GGOKHTTP.GGHttpInterface() {
 
-                                if (stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_YANBAO) {
-                                    stockNewsDatas.add(new MyStockTabNewsBean(object.getString("report_title"),
-                                            object.getString("stock_code"),
-                                            object.getString("stock_name"),
-                                            object.getString("create_date"),
-                                            object.getString("guid")));
-                                } else {
-                                    String originLink;
-                                    try {
-                                        originLink = object.getString("origin_link");
-                                    } catch (Exception e) {
-                                        originLink = "";
-                                    }
-                                    stockNewsDatas.add(new MyStockTabNewsBean(
-                                            object.getString("title"),
-                                            ((JSONObject) object.getJSONArray("stock").get(0)).getString("stock_code"),
-                                            ((JSONObject) object.getJSONArray("stock").get(0)).getString("stock_name"),
-                                            object.getString("date"),
-                                            String.valueOf(object.getIntValue("origin_id")),
-                                            originLink));
-                                }
-                            }
-                            newsAdapter.notifyDataSetChanged();
-                            newsAdapter.setEnableLoadMore(true);
-                            newsAdapter.loadMoreComplete();
-                            xLayout.setStatus(XLayout.Success);
+            @Override
+            public void onSuccess(String responseInfo) {
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                if (code == 0) {
+                    JSONArray jsonArray = JSONObject.parseObject(responseInfo).getJSONArray("data");
+                    for (int i = 0; i < jsonArray.size(); i++) {
+                        JSONObject object = (JSONObject) jsonArray.get(i);
 
-                            if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
-                                UIHelper.toast(getActivity(), getString(R.string.str_refresh_ok));
-                            }
+                        if (stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_YANBAO) {
+                            stockNewsDatas.add(new MyStockTabNewsBean(object.getString("report_title"),
+                                    object.getString("stock_code"),
+                                    object.getString("stock_name"),
+                                    object.getString("create_date"),
+                                    object.getString("guid")));
                         } else {
-                            xLayout.setStatus(XLayout.Error);
+                            String originLink;
+                            try {
+                                originLink = object.getString("origin_link");
+                            } catch (Exception e) {
+                                originLink = "";
+                            }
+                            stockNewsDatas.add(new MyStockTabNewsBean(
+                                    object.getString("title"),
+                                    ((JSONObject) object.getJSONArray("stock").get(0)).getString("stock_code"),
+                                    ((JSONObject) object.getJSONArray("stock").get(0)).getString("stock_name"),
+                                    object.getString("date"),
+                                    String.valueOf(object.getIntValue("origin_id")),
+                                    originLink));
                         }
                     }
+                    newsAdapter.notifyDataSetChanged();
+                    newsAdapter.setEnableLoadMore(true);
+                    newsAdapter.loadMoreComplete();
+                    xLayout.setStatus(XLayout.Success);
 
-                    @Override
-                    public void onFailure(String msg) {
-                        UIHelper.toastError(getActivity(), msg, xLayout);
+                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+                        UIHelper.toast(getActivity(), getString(R.string.str_refresh_ok));
                     }
-                }).startGet();
+                } else {
+                    xLayout.setStatus(XLayout.Error);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toastError(getActivity(), msg, xLayout);
+            }
+        }).startGet();
     }
 
     private class MyStockNewsAdapter extends CommonAdapter<MyStockTabNewsBean, BaseViewHolder> {
@@ -205,7 +204,7 @@ public class MyStockTabNewsFragment extends BaseFragment {
             tvNewsTitle.setText(data.getNewsTitle());
             holder.setText(R.id.tv_mystock_news_stockInfo,
                     data.getStockName() + " (" + data.getStockCode() + ")");
-            holder.setText(R.id.tv_mystock_news_date, CalendarUtils.getStringDate("yyyy-MM-dd HH:mm",data.getDate()));
+            holder.setText(R.id.tv_mystock_news_date, CalendarUtils.getStringDate("yyyy-MM-dd HH:mm", data.getDate()));
             UIHelper.setRippBg(holder.itemView);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {

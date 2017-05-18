@@ -27,10 +27,12 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.stock.InteractiveBean;
 import cn.gogoal.im.bean.stock.InteractiveData;
 import cn.gogoal.im.bean.stock.Stock;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.XDividerItemDecoration;
 import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.view.XTitle;
@@ -51,11 +53,12 @@ public class InteractiveInvestorActivity extends BaseActivity {
 
     @BindView(R.id.title_bar)
     XTitle titleBar;
-    private int page = 0;
+    private int defaultPage = 1;
 
     private InteractiveInvestorAdapter adapter;
 
     private List<InteractiveData> datas;
+    private String stockCode;
 
     @Override
     public int bindLayout() {
@@ -66,6 +69,7 @@ public class InteractiveInvestorActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         Stock stock = getIntent().getParcelableExtra("stock_info");
         iniHead(stock);
+        stockCode = stock.getStock_code();
 
         datas = new ArrayList<>();
         adapter = new InteractiveInvestorAdapter(mContext, datas);
@@ -75,7 +79,24 @@ public class InteractiveInvestorActivity extends BaseActivity {
 
         recyclerView.setAdapter(adapter);
 
-        getInteractiveInvestorData(stock.getStock_code());
+        getInteractiveInvestorData(AppConst.REFRESH_TYPE_FIRST);
+
+        adapter.setOnLoadMoreListener(new CommonAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                if (defaultPage <= 50) {
+                    defaultPage++;
+                    adapter.loadMoreEnd(false);
+                    getInteractiveInvestorData(AppConst.REFRESH_TYPE_LOAD_MORE);
+                } else {
+                    adapter.loadMoreEnd(true);
+                    adapter.setEnableLoadMore(false);
+                    UIHelper.toast(getActivity(), R.string.nomoredata_hint);
+
+                }
+                adapter.loadMoreComplete();
+            }
+        },recyclerView);
 
     }
 
@@ -101,13 +122,17 @@ public class InteractiveInvestorActivity extends BaseActivity {
     }
 
 
-    private void getInteractiveInvestorData(String stockCode) {
-        xLayout.setStatus(XLayout.Loading);
+    private void getInteractiveInvestorData(int refreshType) {
+        adapter.setEnableLoadMore(false);
+
+        if (refreshType == AppConst.REFRESH_TYPE_FIRST) {
+            xLayout.setStatus(XLayout.Loading);
+        }
 
         final Map<String, String> param = new HashMap<String, String>();
         param.put("stock_code", stockCode);
         param.put("type", "9");
-        param.put("page", page + "");
+        param.put("page", defaultPage + "");
         param.put("rows", "20");
 
         new GGOKHTTP(param, GGOKHTTP.GET_STOCK_NEWS, new GGOKHTTP.GGHttpInterface() {
@@ -122,6 +147,8 @@ public class InteractiveInvestorActivity extends BaseActivity {
                     datas.addAll(interactiveDatas);
 
                     adapter.notifyDataSetChanged();
+                    adapter.setEnableLoadMore(true);
+                    adapter.loadMoreComplete();
 
                     xLayout.setStatus(XLayout.Success);
                 } else if (code == 1001) {
@@ -189,7 +216,7 @@ public class InteractiveInvestorActivity extends BaseActivity {
 
     private class Divider extends XDividerItemDecoration {
 
-        public Divider() {
+        private Divider() {
             super(InteractiveInvestorActivity.this, 10,
                     ContextCompat.getColor(InteractiveInvestorActivity.this, R.color.interval));
         }
@@ -197,7 +224,8 @@ public class InteractiveInvestorActivity extends BaseActivity {
         @Override
         public boolean[] getItemSidesIsHaveOffsets(int itemPosition) {
             boolean[] showDivider = new boolean[4];
-            showDivider[3] = itemPosition != (datas.size() - 1);
+            showDivider[3] = (itemPosition != (datas.size() - 1));
+            showDivider[1] = (itemPosition == 0);
             return showDivider;
         }
     }
