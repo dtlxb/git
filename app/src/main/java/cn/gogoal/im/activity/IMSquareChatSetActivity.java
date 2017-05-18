@@ -544,7 +544,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         for (int i = 0; i < contactBeanList.size(); i++) {
             if (contactBeanList.get(i).getFriend_id() == StringUtils.pareseStringDouble(squareCreater)) {
                 contactBean = contactBeanList.get(i);
-                contactBeanList.remove(contactBean);
+                contactBeanList.remove(i);
             }
         }
         contactBeanList.add(0, contactBean);

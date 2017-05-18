@@ -60,6 +60,7 @@ public class SocialContactFragment extends BaseFragment {
 
     @BindView(R.id.swiperefresh_social)
     SwipeRefreshLayout refreshSocial;
+
     //个人发起直播
     @BindView(R.id.perLiveLinear)
     LinearLayout perLiveLinear;
@@ -238,6 +239,8 @@ public class SocialContactFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+
                 SocialLiveBean object = JSONObject.parseObject(responseInfo, SocialLiveBean.class);
                 if (object.getCode() == 0) {
                     if (live_source == 1) {
@@ -315,7 +318,9 @@ public class SocialContactFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
+                if (refreshSocial!=null)
                 refreshSocial.setRefreshing(false);
+
                 UIHelper.toast(getContext(), R.string.net_erro_hint);
                 KLog.e(TAG);
             }

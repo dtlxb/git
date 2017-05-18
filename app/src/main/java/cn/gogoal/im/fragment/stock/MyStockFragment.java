@@ -223,7 +223,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                FileUtil.writeRequestResponse(responseInfo,"我的自选");
+                FileUtil.writeRequestResponse(responseInfo, "我的自选");
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     noData(false);
@@ -317,17 +317,20 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         startActivity(intent);
     }
 
-    void noData(boolean nadata) {
-        editEnable(!nadata);
+    void noData(boolean noData) {
+        editEnable(!noData);
         try {
-            itemMystock.setVisibility(nadata ? View.GONE : View.VISIBLE);
+            itemMystock.setVisibility(noData ? View.GONE : View.VISIBLE);
         } catch (Exception e) {
             e.getMessage();
         }
-        refreshLayout.setEnabled(!nadata);
-        setAppBarLayout(appBarLayout, !nadata);
+        try {
+            refreshLayout.setEnabled(!noData);
+        } catch (Exception e) {
+            e.getMessage();
+        }
 
-        if (nadata) {
+        if (noData && rvMyStock != null) {
             myStockAdapter.setEmptyView(R.layout.layout_no_mystock,
                     (ViewGroup) rvMyStock.getParent());
             myStockAdapter.getEmptyView().findViewById(R.id.flag_img).setOnClickListener(new View.OnClickListener() {

@@ -1,0 +1,9 @@
+diff a/app/src/main/java/cn/gogoal/im/common/IMHelpers/MyMessageHandler.java b/app/src/main/java/cn/gogoal/im/common/IMHelpers/MyMessageHandler.java	(rejected hunks)
+@@ -93,7 +93,6 @@
+                                                 MessageUtils.changeSquareInfo(conversation.getConversationId(), accountArray, _lctype);
+ 
+                                                 //生成群头像(加人删人时候更改)
+-                                                ChatGroupHelper.createGroupImage(conversation.getConversationId(), conversation.getMembers(), "set_avatar");
+                                                 if (conversation.getAttribute("avatar") == null || TextUtils.isEmpty((String) conversation.getAttribute("avatar"))) {
+                                                     ChatGroupHelper.createGroupImage(conversation.getConversationId(), conversation.getMembers(), "set_avatar");
+                                                 }
