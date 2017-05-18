@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -41,9 +42,8 @@ public class GroupFaceImage<T> {
     }
 
     public static <T> GroupFaceImage<T> getInstance(Context context, List<T> imageUrls) {
-        List<T> imgUrls=new ArrayList<>();
-
-        imageUrls=new ArrayList<>(new HashSet<>(imageUrls));
+        List<T> imgUrls = new ArrayList<>();
+        imageUrls = new ArrayList<>(new HashSet<>(imageUrls));
 
         if (imageUrls.size() > 9) {
             imgUrls = imageUrls.subList(0, 9);

@@ -679,8 +679,6 @@ public class UserUtils {
             params.put("id_list", JSONObject.toJSONString(groupMembers));
         }
 
-        KLog.e(params);
-
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {

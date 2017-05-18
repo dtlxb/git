@@ -56,6 +56,7 @@ public class IMSearchLocalActivity extends BaseActivity {
     @BindView(R.id.rv_flag_search)
     RecyclerView rvFlagSearch;
 
+
     private List<SearchBean> allBeans;
 
     @Override

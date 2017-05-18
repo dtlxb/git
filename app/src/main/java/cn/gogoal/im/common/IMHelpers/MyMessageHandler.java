@@ -91,7 +91,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                                 //通讯录
                                                 JSONArray accountArray = content_object.getJSONObject("_lcattrs").getJSONArray("accountList");
                                                 MessageUtils.changeSquareInfo(conversation.getConversationId(), accountArray, _lctype);
-
+                                                KLog.e(conversation.getAttribute("avatar"));
                                                 //生成群头像(加人删人时候更改)
                                                 if (conversation.getAttribute("avatar") == null || TextUtils.isEmpty((String) conversation.getAttribute("avatar"))) {
                                                     ChatGroupHelper.createGroupImage(conversation.getConversationId(), conversation.getMembers(), "set_avatar");
