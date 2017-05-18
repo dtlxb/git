@@ -1,6 +1,7 @@
 package cn.gogoal.im.fragment;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 
@@ -44,32 +45,50 @@ public class ImageDetailFragment extends BaseFragment {
     }
 
     @Override
-    public void doBusiness(Context mContext) {
+    public void doBusiness(final Context mContext) {
         if (getArguments() != null) {
             imageUrl = getArguments().getString(IMAGE_URL);
         }
-        xLayout.setStatus(XLayout.Loading);
+//        xLayout.setStatus(XLayout.Loading);
 
-        KLog.e(imageUrl);
-
-        Glide.with(mContext).load(imageUrl).into(new GlideDrawableImageViewTarget(image) {
-            @Override
-            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
-                super.onResourceReady(resource, animation);
-            }
-
-            @Override
-            public void onStop() {
-                super.onStop();
-                xLayout.setStatus(XLayout.Success);
-            }
-        });
+        loadImage(mContext);
 
         image.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
             @Override
             public void onPhotoTap(View view, float x, float y) {
                 getActivity().finish();
                 KLog.e("image点击");
+            }
+        });
+
+        xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
+            @Override
+            public void onReload(View v) {
+                loadImage(mContext);
+            }
+        });
+    }
+
+    private void loadImage(Context mContext) {
+        Glide.with(mContext).load(imageUrl)
+                .fitCenter().into(new GlideDrawableImageViewTarget(image) {
+            @Override
+            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
+                super.onResourceReady(resource, animation);
+                KLog.e("onResourceReady");
+                xLayout.setStatus(XLayout.Success);
+            }
+
+            @Override
+            public void onLoadStarted(Drawable placeholder) {
+                super.onLoadStarted(placeholder);
+                xLayout.setStatus(XLayout.Loading);
+            }
+
+            @Override
+            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                super.onLoadFailed(e, errorDrawable);
+                xLayout.setStatus(XLayout.Error);
             }
         });
     }

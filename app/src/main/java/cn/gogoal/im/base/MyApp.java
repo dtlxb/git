@@ -155,9 +155,57 @@ public class MyApp extends LitePalApplication {
 
     private class LifeCircle implements ActivityLifecycleCallbacks {
 
+//        private BroadcastReceiver networkReceiver = new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(final Context context, Intent intent) {
+//                if (NetworkAvailable()) {
+//                    AVImClientManager.getInstance().open(UserUtils.getMyAccountId(), new AVIMClientCallback() {
+//                        @Override
+//                        public void done(AVIMClient avimClient, AVIMException e) {
+//                            if (e == null) {
+//                                KLog.e("IM登录成功");
+//                            } else {
+//                                UIHelper.toast(context, "即时通讯登录失败");
+//                            }
+//                        }
+//                    });
+//
+//                } else {
+//                    Toast.makeText(context, "请检查网络环境", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        };
+//
+//        /**
+//         * 检测网络是否连接
+//         */
+//        private boolean NetworkAvailable() {
+//            ConnectivityManager manager;
+//            try {
+//                Thread.sleep(600);
+//                //得到网络连接信息
+//                manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//                if (manager != null) {
+//                    // 获取NetworkInfo对象
+//                    NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+//                    //去进行判断网络是否连接
+//                    if (networkInfo!=null && networkInfo.isAvailable()) {
+//                        return true;
+//                    }
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return false;
+//        }
+
         @Override
         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
             AppManager.getInstance().addActivity(activity);
+
+//            IntentFilter intentFilter = new IntentFilter();
+//            intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+//            registerReceiver(networkReceiver, intentFilter);
         }
 
         @Override
@@ -167,7 +215,6 @@ public class MyApp extends LitePalApplication {
 
         @Override
         public void onActivityResumed(Activity activity) {
-
         }
 
         @Override
@@ -188,6 +235,11 @@ public class MyApp extends LitePalApplication {
         @Override
         public void onActivityDestroyed(Activity activity) {
             AppManager.getInstance().finishActivity(activity);
+//            try {
+//                unregisterReceiver(networkReceiver);
+//            }catch (Exception e){
+//                e.getMessage();
+//            }
         }
     }
 }

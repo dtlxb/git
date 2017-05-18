@@ -22,8 +22,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.EditMyInfoActivity;
+import cn.gogoal.im.activity.MyAdvisersActivity;
 import cn.gogoal.im.activity.SettingActivity;
-import cn.gogoal.im.activity.TestActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseFragment;
@@ -201,7 +201,7 @@ public class MineFragment extends BaseFragment {
                             Intent intent;
                             switch (position) {
                                 case 2:
-                                    intent = new Intent(getActivity(), TestActivity.class);
+                                    intent = new Intent(getActivity(), MyAdvisersActivity.class);
                                     startActivity(intent);
                                     break;
                                 case 10:

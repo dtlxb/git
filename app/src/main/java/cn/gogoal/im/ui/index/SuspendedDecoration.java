@@ -69,7 +69,7 @@ public class SuspendedDecoration extends RecyclerView.ItemDecoration {
         mPaintBottom.setStrokeWidth(1);
         mPaintBottom.setStyle(Paint.Style.FILL);
 
-        mPaintBottom.setColor(ContextCompat.getColor(context, R.color.contactDividerColor));
+        mPaintBottom.setColor(ContextCompat.getColor(context, R.color.colorDivider_d9d9d9));
     }
 
 

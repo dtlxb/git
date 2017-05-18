@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import java.util.List;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.MyAdvisersActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.Advisers;
@@ -27,7 +28,7 @@ public class AdvisersAdapter extends CommonAdapter<Advisers, BaseViewHolder> {
 
     public AdvisersAdapter(Activity context, List<Advisers> datas, int width) {
         super(R.layout.item_dialog_advisers, datas);
-        dialogSize = 4* width / 25;
+        dialogSize = width;
         this.context = context;
     }
 
@@ -45,10 +46,18 @@ public class AdvisersAdapter extends CommonAdapter<Advisers, BaseViewHolder> {
 
         holder.setText(R.id.tv_advisers_name, data.getSaler_name());
 
-        holder.getView(R.id.img_dail).setOnClickListener(new View.OnClickListener() {
+        ImageView imgDail = holder.getView(R.id.img_dail);
+
+        if (context instanceof MyAdvisersActivity){
+            imgDail.setImageResource(R.mipmap.img_dail_f00);
+        }else {
+            imgDail.setImageResource(R.mipmap.img_dail_000);
+        }
+
+        imgDail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppDevice.openDial(context,data.getSaler_mobile());
+                AppDevice.openDial(context, data.getSaler_mobile());
             }
         });
     }

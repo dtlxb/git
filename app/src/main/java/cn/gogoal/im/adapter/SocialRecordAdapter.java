@@ -63,9 +63,9 @@ public class SocialRecordAdapter extends CommonAdapter<SocialRecordData, BaseVie
                 == null ? "--" : data.getAnchor().getAnchor_position());
 
         if (data.getAuth() == 1) {
-            holder.setVisible(R.id.textInvite, true);
+            holder.setVisible(R.id.textPcInvite, true);
         } else {
-            holder.setVisible(R.id.textInvite, false);
+            holder.setVisible(R.id.textPcInvite, false);
         }
 
         holder.setOnClickListener(R.id.linearSocial, new View.OnClickListener() {

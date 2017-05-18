@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/test_root_view"
     android:layout_width="match_parent"
@@ -65,30 +66,30 @@
                     android:layout_height="wrap_content"
                     android:text="全屏Dialog" />
 
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="50dp"
-                    android:background="#bbb"
-                    android:clipChildren="false">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/image_bg"
+                    <com.cpiz.android.bubbleview.BubbleFrameLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:src="@mipmap/img_dialog_coming_soon" />
+                        android:layout_marginBottom="50dp"
+                        android:background="#bbb"
+                        android:clipChildren="false"
+                        app:bb_arrowDirection="Right">
 
-                    <ImageView
-                        android:id="@+id/image_force"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:layout_gravity="right"
-                        android:background="@drawable/im_right_image_bg" />
+                        <ImageView
+                            android:id="@+id/image_bg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:adjustViewBounds="true"
+                            android:contentDescription="@null"
+                            android:src="@mipmap/img_dialog_coming_soon" />
 
-                </FrameLayout>
+                    </com.cpiz.android.bubbleview.BubbleFrameLayout>
 
+                    
+                </LinearLayout>
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>

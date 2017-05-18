@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginTop="15dp"
-        android:background="@color/wx_share_line" />
+        android:background="@color/colorDivider_d9d9d9" />
 
     <RadioGroup
         android:id="@+id/group_redgreen"
@@ -37,7 +37,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/wx_share_line" />
+            android:background="@color/colorDivider_d9d9d9" />
 
         <RadioButton
             android:id="@+id/greenup_rb"
@@ -59,6 +59,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/wx_share_line" />
+        android:background="@color/colorDivider_d9d9d9" />
 
 </LinearLayout>

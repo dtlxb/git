@@ -37,6 +37,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.PhoneContact;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.StringUtils;
@@ -97,9 +98,6 @@ public class PhoneContactsActivity extends BaseActivity {
         phoneAdapter = new PhoneAdapter(phoneContacts);
         rvContacts.setAdapter(phoneAdapter);
 
-        KLog.e(ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.READ_CONTACTS));
-
         if (ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.READ_CONTACTS) != PermissionChecker.PERMISSION_GRANTED) {
             xLayout.setVisibility(View.VISIBLE);
@@ -109,7 +107,11 @@ public class PhoneContactsActivity extends BaseActivity {
         BaseActivity.requestRuntimePermission(new String[]{Manifest.permission.READ_CONTACTS}, new IPermissionListner() {
             @Override
             public void onUserAuthorize() {
+
                 phoneContacts.addAll(getContacts());
+
+                String jsonString = JSONObject.toJSONString(phoneContacts);
+                FileUtil.writeSDcard(jsonString, "gg_contacts.txt");
 
                 //TODO test
                 phoneAdapter.notifyDataSetChanged();

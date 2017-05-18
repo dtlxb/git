@@ -60,6 +60,8 @@ public class ImageDetailActivity extends BaseActivity {
         isEditMyAvatar = accountId.equalsIgnoreCase(UserUtils.getMyAccountId());
         XTitle title = setMyTitle(isEditMyAvatar ? "个人头像" : "", true);
 
+        title.setVisibility(isEditMyAvatar?View.VISIBLE:View.GONE);
+
         title.addAction(new XTitle.ImageAction(getResDrawable(R.drawable.ic_more_horiz_black_24dp)) {
 
             @Override

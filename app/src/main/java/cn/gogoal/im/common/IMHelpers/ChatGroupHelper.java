@@ -163,7 +163,6 @@ public class ChatGroupHelper {
     //群通讯录更新
     public static void upDataGroupContactInfo(String conversationID, int friendId, String avatar, String nickname) {
         JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", new JSONArray());
-        KLog.e(spAccountArray.toString());
         boolean hasThisGuy = false;
         //有这个人修改
         for (int i = 0; i < spAccountArray.size(); i++) {

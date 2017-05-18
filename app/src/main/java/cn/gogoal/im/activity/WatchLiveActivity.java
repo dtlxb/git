@@ -3,6 +3,7 @@ package cn.gogoal.im.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -177,6 +178,8 @@ public class WatchLiveActivity extends BaseActivity {
     private String room_id;
 
     private String live_id;
+
+    private String appoint_account;
 
     //弹窗
     private JSONObject anchor;
@@ -812,8 +815,8 @@ public class WatchLiveActivity extends BaseActivity {
         if (mPlaySurfaceView != null) {
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mPlaySurfaceView.getLayoutParams();
             if (layoutParams == null) {
-                layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
-                        , ViewGroup.LayoutParams.MATCH_PARENT);
+                layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT);
             } else {
                 layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
                 layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -898,11 +901,16 @@ public class WatchLiveActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.iv_abort_chat})
+    @OnClick({R.id.iv_abort_chat, R.id.textAddFriend})
     public void setClickFunctionBar(View v) {
         switch (v.getId()) {
             case R.id.iv_abort_chat: //关闭播放
                 showChatCloseConfirmDialog();
+                break;
+            case R.id.textAddFriend: //加好友
+                Intent intent = new Intent(getContext(), IMAddFriendActivity.class);
+                intent.putExtra("user_id", appoint_account);
+                startActivity(intent);
                 break;
         }
     }
@@ -956,6 +964,16 @@ public class WatchLiveActivity extends BaseActivity {
                     //直播详情
                     ImageDisplay.loadCircleImage(getContext(), data.getString("face_url"), imgPalyer);
                     textCompany.setText(data.getString("anchor_name"));
+                    appoint_account = data.getString("appoint_account");
+                    if (appoint_account != null) {
+                        if (UserUtils.isMyFriend(data.getIntValue("appoint_account"))) {
+                            textAddFriend.setVisibility(View.GONE);
+                        } else {
+                            textAddFriend.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        textAddFriend.setVisibility(View.GONE);
+                    }
 
                     //主播介绍
                     anchor = data.getJSONObject("anchor");
@@ -1052,7 +1070,6 @@ public class WatchLiveActivity extends BaseActivity {
      */
     @Subscriber(tag = "Live_Message")
     public void handleMessage(BaseMessage baseMessage) {
-
 
         if (null != imConversation && null != baseMessage) {
             Map<String, Object> map = baseMessage.getOthers();

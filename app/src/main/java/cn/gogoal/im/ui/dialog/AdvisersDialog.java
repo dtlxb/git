@@ -5,8 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +12,6 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.AdvisersAdapter;
 import cn.gogoal.im.bean.Advisers;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
@@ -60,16 +56,8 @@ public class AdvisersDialog extends BaseCentDailog {
         });
 
         datas = new ArrayList<>();
-        advisersAdapter = new AdvisersAdapter(getActivity(), datas, getWidth());
+        advisersAdapter = new AdvisersAdapter(getActivity(), datas, 4*getWidth()/25);
         rvAdvisers.setAdapter(advisersAdapter);
-
-        //先拿缓存
-        String advisersList = SPTools.getString("ADVISERS_LIST", "");
-        if (!StringUtils.isActuallyEmpty(advisersList)) {
-            List<Advisers> list = JSONObject.parseArray(advisersList, Advisers.class);
-            datas.addAll(list);
-            advisersAdapter.notifyDataSetChanged();
-        }
 
         //再请求覆盖
         UserUtils.getAdvisers(new UserUtils.GetAdvisersCallback() {
