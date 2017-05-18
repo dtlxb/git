@@ -238,6 +238,7 @@ public class ChatGroupHelper {
             JSONObject personObject = array.getJSONObject(i);
             picUrls.add(personObject.getString("avatar"));
         }
+        KLog.e(picUrls);
         //九宫图拼接
         GroupFaceImage.getInstance(MyApp.getAppContext(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
             @Override
@@ -258,6 +259,7 @@ public class ChatGroupHelper {
      * 缓存群拼接的九宫头像
      */
     public static void cacheGroupAvatar(String conversationId, Bitmap bitmap) {
+        KLog.e("跑这儿没！！！！！！！");
         ImageUtils.saveImageToSD(MyApp.getAppContext(),
                 MyApp.getAppContext().getExternalFilesDir("imagecache")
                         .getAbsolutePath() + File.separator + "_" + conversationId + ".png",

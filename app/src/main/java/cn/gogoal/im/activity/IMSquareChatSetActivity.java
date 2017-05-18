@@ -227,13 +227,13 @@ public class IMSquareChatSetActivity extends BaseActivity {
         for (int i = 0; i < aarray.size(); i++) {
             JSONObject accountObject = aarray.getJSONObject(i);
             contactBeens.add(addNomoralFuns(accountObject.getString("nickname"), accountObject.getInteger("friend_id"), accountObject.getString("avatar")));
-            memberList.add(accountObject.getString("account_id"));
+            memberList.add(accountObject.getString("friend_id"));
             urls.add(accountObject.getString("avatar"));
         }
         //获取群头像
         if (listHasTheSame(memberList, groupMembers)) {
             String imagecache = ChatGroupHelper.getBitmapFilePaht(conversationId);
-            KLog.e("缓存地址：" + imagecache);
+            Log.e("+++urls1", imagecache+"");
             if (!StringUtils.isActuallyEmpty(imagecache)) {
                 ImageDisplay.loadImage(getActivity(), imagecache, iv_square_head);
             } else {
@@ -246,12 +246,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
         }
         tvTeamSize.setText(groupMembers.size() + "人");
         PersonContactBeens.addAll(contactBeens);
-        //if (ImageUtils.getBitmapFilePaht(conversationId, "imagecache").equals("")) {
-        // }
         contactBeens.clear();
         contactBeens.addAll(squareCreaterFirst(PersonContactBeens));
         mPersonInfoAdapter.notifyDataSetChanged();
-        KLog.e(contactBeens);
     }
 
 
@@ -265,6 +262,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         GroupFaceImage.getInstance(getActivity(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {
+                Log.e("+++urls2", "跑这儿没？？？");
                 ChatGroupHelper.cacheGroupAvatar(conversationId, mathingBitmap);
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("mathing_bitmap", mathingBitmap);
@@ -285,6 +283,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     public void setAvatar(BaseMessage<Bitmap> baseMessage) {
         Map<String, Bitmap> map = baseMessage.getOthers();
         Bitmap bitmap = map.get("mathing_bitmap");
+        Log.e("+++mathing", bitmap.toString());
         iv_square_head.setImageBitmap(bitmap);
     }
 
@@ -504,7 +503,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
                         }
                     });
                     PersonContactBeens.removeAll(changeContactBeens);
-                    Log.e("+++urls", urls.toString());
                     getNicePicture(urls);
                     contactBeens.clear();
                     contactBeens.addAll(squareCreaterFirst(PersonContactBeens));
@@ -548,7 +546,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
             }
         }
         contactBeanList.add(0, contactBean);
-
         if (squareCreater.equals(UserUtils.getMyAccountId())) {
             if (contactBeanList.size() > 4) {
                 size = 4;
