@@ -187,8 +187,12 @@ public class InvestmentResearchFragment extends BaseFragment {
     }
 
     private void showView(boolean show) {
-        mRecyclerView.setVisibility(show ? View.VISIBLE : View.GONE);
-        tvFlagTools.setVisibility(show ? View.VISIBLE : View.GONE);
+        try {
+            mRecyclerView.setVisibility(show ? View.VISIBLE : View.GONE);
+            tvFlagTools.setVisibility(show ? View.VISIBLE : View.GONE);
+        }catch (Exception e){
+            e.getMessage();
+        }
     }
 
     private void addSpace() {

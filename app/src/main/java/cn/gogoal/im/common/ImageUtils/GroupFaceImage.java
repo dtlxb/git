@@ -28,7 +28,7 @@ public class GroupFaceImage<T> {
 
     private static final int BITMAP_CANVAS = INNER_DIVIDER * 37;//画布大小，没所谓
 
-    private static int minItemH;//每个小头像宽高
+    private int minItemH;//每个小头像宽高
 
     private List<T> imageUrls;//头像url集合
 
@@ -42,35 +42,19 @@ public class GroupFaceImage<T> {
     }
 
     public static <T> GroupFaceImage<T> getInstance(Context context, List<T> imageUrls) {
-        List<T> imgUrls = new ArrayList<>();
 
         imageUrls = new ArrayList<>(new HashSet<>(imageUrls));
 
         if (imageUrls.size() > 9) {
-            imgUrls = imageUrls.subList(0, 9);
-        } else {
-            imgUrls.addAll(imageUrls);
+            imageUrls = imageUrls.subList(0, 9);
         }
 
-        GroupFaceImage<T> instance = new GroupFaceImage<>(context, imgUrls);
+        GroupFaceImage<T> instance = new GroupFaceImage<>(context, imageUrls);
 
-        switch (imgUrls.size()) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-                minItemH = 17 * INNER_DIVIDER;
-                break;
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-                minItemH = 11 * INNER_DIVIDER;
-                break;
-            default:
-                minItemH = 11 * INNER_DIVIDER;
-                break;
+        if (imageUrls.size() > 4) {
+            instance.minItemH = 11 * INNER_DIVIDER;
+        } else {
+            instance.minItemH = 17 * INNER_DIVIDER;
         }
         return instance;
     }

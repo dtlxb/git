@@ -35,10 +35,11 @@ public class AppBackServise extends Service {
             GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
                 @Override
                 public void onSuccess(String responseInfo) {
-                    KLog.e("刷新Token成功", responseInfo);
+                    KLog.e(responseInfo);
                     JSONObject result = JSONObject.parseObject(responseInfo);
                     int code = result.getIntValue("code");
                     if (code == 0) {
+                        KLog.e("刷新Token成功");
                         final JSONObject data = result.getJSONObject("data");
                         UserUtils.saveUserInfo(data);
 
@@ -71,10 +72,6 @@ public class AppBackServise extends Service {
                 }
             };
             new GGOKHTTP(map, GGOKHTTP.USER_AUTO_LOGIN, ggHttpInterface).startGet();
-        }
-
-        public boolean checkLogin() {
-            return UserUtils.isLogin();
         }
 
     }
