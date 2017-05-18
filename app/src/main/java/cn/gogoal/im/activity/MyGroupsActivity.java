@@ -8,11 +8,14 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -35,6 +38,7 @@ import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -158,37 +162,44 @@ public class MyGroupsActivity extends BaseActivity {
             final ImageView imgAvatar = holder.getView(R.id.img_my_group_avatar);
             final Bitmap[] groupAvatar = new Bitmap[1];
             final String imagecache = ChatGroupHelper.getBitmapFilePaht(data.getConv_id());
-            if (!StringUtils.isActuallyEmpty(imagecache)) {
-                ImageDisplay.loadImage(getActivity(), imagecache, imgAvatar);
-                groupAvatar[0] = BitmapFactory.decodeFile(imagecache);
-            } else {//没有缓存就拼
-                final List<String> avatarString = new ArrayList<>();
-                ArrayList<GroupCollectionData.DataBean.MInfoBean> mInfo = data.getM_info();
-                for (GroupCollectionData.DataBean.MInfoBean bean : mInfo) {
-                    avatarString.add(bean.getAvatar());
+
+            final String groupUrl = data.getAttr().getAvatar();
+
+            if (!TextUtils.isEmpty(groupUrl)) {
+                ImageDisplay.loadRoundedRectangleImage(getActivity(), groupUrl, imgAvatar);
+            } else {
+                if (!StringUtils.isActuallyEmpty(imagecache)) {
+                    ImageDisplay.loadImage(getActivity(), imagecache, imgAvatar);
+                    groupAvatar[0] = BitmapFactory.decodeFile(imagecache);
+                } else {//没有缓存就拼
+                    final List<String> avatarString = new ArrayList<>();
+                    ArrayList<GroupCollectionData.DataBean.MInfoBean> mInfo = data.getM_info();
+                    for (GroupCollectionData.DataBean.MInfoBean bean : mInfo) {
+                        avatarString.add(bean.getAvatar());
+                    }
+                    GroupFaceImage.getInstance(getActivity(), avatarString).load(new GroupFaceImage.OnMatchingListener() {
+                        @Override
+                        public void onSuccess(final Bitmap mathingBitmap) {
+                            MyGroupsActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //拼好了显示
+                                    ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
+                                    //拼好了存起来
+                                    KLog.e("现拼九宫");
+                                    ChatGroupHelper.cacheGroupAvatar(data.getConv_id(), mathingBitmap);
+
+                                }
+                            });
+                            groupAvatar[0] = mathingBitmap;
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            KLog.e(e.getMessage());
+                        }
+                    });
                 }
-                GroupFaceImage.getInstance(getActivity(), avatarString).load(new GroupFaceImage.OnMatchingListener() {
-                    @Override
-                    public void onSuccess(final Bitmap mathingBitmap) {
-                        MyGroupsActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                //拼好了显示
-                                ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
-                                //拼好了存起来
-                                KLog.e("现拼九宫");
-                                ChatGroupHelper.cacheGroupAvatar(data.getConv_id(),mathingBitmap);
-
-                            }
-                        });
-                        groupAvatar[0] = mathingBitmap;
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        KLog.e(e.getMessage());
-                    }
-                });
             }
 
             holder.setText(R.id.tv_my_group_name, StringUtils.getNotNullString(data.getName()));
