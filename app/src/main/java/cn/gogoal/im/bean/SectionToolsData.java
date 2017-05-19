@@ -42,9 +42,9 @@ public class SectionToolsData extends SectionEntity<ToolData.Tool> {
         super(isHeader, header);
     }
 
-    public SectionToolsData(ToolData.Tool item,int childCountInParent) {
+    public SectionToolsData(ToolData.Tool item, int childCountInParent) {
         super(item);
-        this.childCountInParent=childCountInParent;
+        this.childCountInParent = childCountInParent;
     }
 
 }

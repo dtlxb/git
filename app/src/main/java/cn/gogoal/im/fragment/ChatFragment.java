@@ -734,7 +734,6 @@ public class ChatFragment extends BaseFragment {
     /**
      * 设置多功能布局宽高
      */
-
     private void setContentHeight(int keyBordHeight) {
         ViewGroup.LayoutParams params = find_more_layout.getLayoutParams();
         params.height = keyBordHeight;

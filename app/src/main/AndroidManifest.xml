@@ -38,8 +38,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:resizeableActivity="false"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
         <!-- 实时通信模块、推送（均需要加入以下声明） START -->
@@ -83,12 +83,13 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
-        <activity android:name=".activity.TypeLoginActivity"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name=".activity.TypeLoginActivity"
+            android:launchMode="singleTask" />
 
         <service
             android:name=".servise.AppBackServise"
-            android:exported="false"/>
+            android:exported="false" />
 
         <activity
             android:name=".activity.MainActivity"
@@ -137,6 +138,7 @@
         <activity android:name=".activity.IMPersonActivity" />
         <activity android:name=".activity.IMSquareChatSetActivity" />
         <activity android:name=".activity.IMGroupContactsActivity" />
+        <activity android:name=".activity.IMSearchLocalActivity" />
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".activity.SearchMessagesActivity" />
         <activity android:name=".wxapi.WXPayEntryActivity" />

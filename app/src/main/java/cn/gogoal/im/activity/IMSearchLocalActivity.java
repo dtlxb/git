@@ -3,11 +3,8 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.text.TextUtils;
-import android.view.View;
 import android.widget.LinearLayout;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.socks.library.KLog;
@@ -28,6 +25,7 @@ import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.GroupCollectionData;
 import cn.gogoal.im.bean.ImageTextBean;
 import cn.gogoal.im.bean.SearchBean;
+import cn.gogoal.im.bean.SearchData;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
@@ -56,8 +54,7 @@ public class IMSearchLocalActivity extends BaseActivity {
     @BindView(R.id.rv_flag_search)
     RecyclerView rvFlagSearch;
 
-
-    private List<SearchBean> allBeans;
+    private List<SearchData> dataList;
 
     @Override
     public int bindLayout() {
@@ -80,7 +77,7 @@ public class IMSearchLocalActivity extends BaseActivity {
     }
 
     private void getDatas() {
-        allBeans = new ArrayList<>();
+        List<SearchBean> searchBeans = new ArrayList<>();
         //联系人列表
         String friendResponseInfo = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", "");
         List<ContactBean> list = new ArrayList<>();
@@ -90,6 +87,14 @@ public class IMSearchLocalActivity extends BaseActivity {
                 });
         list.clear();
         list.addAll(beanList.getData());
+        SearchData searchData = new SearchData(true, "朋友");
+        searchData.setParentPosition(-1);
+        dataList.add(searchData);
+        /*for (int i = 0; i < list.size(); i++) {
+            SearchBean searchBean = new SearchBean(list.get(i).getAvatar(), list.get(i).getNickname(), "");
+            SearchData searchContactsData = new SearchData(searchBean, "朋友");
+            searchBeans.add(searchBean);
+        }*/
 
         //群组列表
         getGroupList();
@@ -127,6 +132,12 @@ public class IMSearchLocalActivity extends BaseActivity {
 
                     List<GroupCollectionData.DataBean> data =
                             JSONObject.parseObject(responseInfo, GroupCollectionData.class).getData();
+                    List<SearchBean> searchBeans = new ArrayList<>();
+                    for (int i = 0; i < data.size(); i++) {
+                        searchBeans.add(new SearchBean(data.get(i).getAttr().getAvatar(), data.get(i).getName(),
+                                data.get(i).getAttr().getIntro()));
+                    }
+
                 } else {
                 }
             }
@@ -138,4 +149,5 @@ public class IMSearchLocalActivity extends BaseActivity {
         };
         new GGOKHTTP(params, GGOKHTTP.GET_GROUP_LIST, ggHttpInterface).startGet();
     }
+
 }

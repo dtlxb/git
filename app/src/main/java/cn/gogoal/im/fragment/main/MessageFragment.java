@@ -43,6 +43,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ChooseContactActivity;
 import cn.gogoal.im.activity.ContactsActivity;
 import cn.gogoal.im.activity.IMNewFrienActivity;
+import cn.gogoal.im.activity.IMSearchLocalActivity;
 import cn.gogoal.im.activity.OfficialAccountsActivity;
 import cn.gogoal.im.activity.SearchActivity;
 import cn.gogoal.im.activity.SearchPersonSquareActivity;
@@ -251,7 +252,7 @@ public class MessageFragment extends BaseFragment {
         tv_to_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                Intent intent = new Intent(getActivity(), IMSearchLocalActivity.class);
                 startActivity(intent);
             }
         });
@@ -264,13 +265,13 @@ public class MessageFragment extends BaseFragment {
         final View popuView = LayoutInflater.from(clickView.getContext()).
                 inflate(R.layout.chat_message_more,
                         new LinearLayout(getActivity()), false);
-        mBubbleView= (BubbleLinearLayout) popuView.findViewById(R.id.chat_message_more);
+        mBubbleView = (BubbleLinearLayout) popuView.findViewById(R.id.chat_message_more);
 
-        mBubbleView.setArrowPosDelta(AppDevice.dp2px(getContext(),5));
+        mBubbleView.setArrowPosDelta(AppDevice.dp2px(getContext(), 5));
 
         View includeView = popuView.findViewById(R.id.include_line);
         ViewGroup.LayoutParams params = includeView.getLayoutParams();
-        params.width= AppDevice.getWidth(getActivity())/3;
+        params.width = AppDevice.getWidth(getActivity()) / 3;
         includeView.setLayoutParams(params);
 
         mBubblePopupWindow = new BubblePopupWindow(popuView, mBubbleView);
@@ -283,7 +284,7 @@ public class MessageFragment extends BaseFragment {
         if (getActivity().hasWindowFocus()) {
             mBubblePopupWindow.showArrowTo(addPerson
                     , new RelativePos(RelativePos.ALIGN_RIGHT, RelativePos.BELOW)
-                    , AppDevice.dp2px(getActivity(),5), 0);
+                    , AppDevice.dp2px(getActivity(), 5), 0);
         }
 
     }
