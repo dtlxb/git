@@ -74,7 +74,7 @@ public class StockNewsAllListActivity extends BaseActivity {
 
         if (stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_YANBAO) {
             dataListsResearch = new ArrayList<>();
-            researchadapter = new ResearchAdapter(dataListsResearch, stockNewsType.getNewsSource());
+            researchadapter = new ResearchAdapter(dataListsResearch, stockNewsType.getNewsSource(),false);
             recyclerView.setAdapter(researchadapter);
             getYanBao(false);
             researchadapter.setOnLoadMoreListener(new CommonAdapter.RequestLoadMoreListener() {
@@ -95,7 +95,7 @@ public class StockNewsAllListActivity extends BaseActivity {
 
         } else {
             dataListsNews = new ArrayList<>();
-            newsAdapter = new NewsAdapter(dataListsNews, stockNewsType);
+            newsAdapter = new NewsAdapter(dataListsNews, stockNewsType,false);
             recyclerView.setAdapter(newsAdapter);
             getNews(false);
             newsAdapter.setOnLoadMoreListener(new CommonAdapter.RequestLoadMoreListener() {

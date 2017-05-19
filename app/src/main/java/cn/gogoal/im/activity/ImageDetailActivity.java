@@ -49,6 +49,8 @@ public class ImageDetailActivity extends BaseActivity {
 
     private boolean isEditMyAvatar;
 
+    public View addAction;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_edit_avatar;
@@ -56,13 +58,18 @@ public class ImageDetailActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        final String accountId = getIntent().getStringExtra("account_Id");
-        isEditMyAvatar = accountId.equalsIgnoreCase(UserUtils.getMyAccountId());
+//        final String accountId = getIntent().getStringExtra("account_Id");
+//        isEditMyAvatar = accountId.equalsIgnoreCase(UserUtils.getMyAccountId());
+
+        isEditMyAvatar=getIntent().getBooleanExtra("is_change_avatar",false);
+
         XTitle title = setMyTitle(isEditMyAvatar ? "个人头像" : "", true);
 
-        title.setVisibility(isEditMyAvatar?View.VISIBLE:View.GONE);
+        title.setVisibility(isEditMyAvatar ? View.VISIBLE : View.GONE);
 
-        title.addAction(new XTitle.ImageAction(getResDrawable(R.drawable.ic_more_horiz_black_24dp)) {
+        //自己头像,查看修改
+        //其他类型
+        addAction = title.addAction(new XTitle.ImageAction(getResDrawable(R.drawable.ic_more_horiz_black_24dp)) {
 
             @Override
             public void actionClick(View view) {

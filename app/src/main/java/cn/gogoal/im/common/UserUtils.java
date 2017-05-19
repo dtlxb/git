@@ -261,6 +261,14 @@ public class UserUtils {
         }).startGet();
     }
 
+    /*
+    * 保存用户是否第一次登录标示
+    * @return
+    */
+    public static void saveFirstLogin(int accountId) {
+        SPTools.saveInt(accountId + "_saved_account", accountId);
+    }
+
     /* 判断用户是否第一次登录
     *
     * @return
@@ -317,6 +325,10 @@ public class UserUtils {
 
     /*注销*/
     public static void logout(Activity mContext) {
+        SPTools.clear();
+        int acc= (int) StringUtils.pareseStringDouble(UserUtils.getMyAccountId()).doubleValue();
+        UserUtils.saveFirstLogin(acc);
+
         mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
         AVImClientManager.getInstance().close(UserUtils.getMyAccountId(), new AVIMClientCallback() {
             @Override
@@ -324,8 +336,6 @@ public class UserUtils {
 
             }
         });
-        SPTools.clear();
-        SPTools.saveBoolean("notFristTime", true);
     }
 
     @SuppressLint("UseSparseArrays")
@@ -633,7 +643,7 @@ public class UserUtils {
         String advisersList = SPTools.getString("ADVISERS_LIST", "");
         if (!StringUtils.isActuallyEmpty(advisersList)) {
             List<Advisers> list = JSONObject.parseArray(advisersList, Advisers.class);
-            if (callback!=null) {
+            if (callback != null) {
                 callback.onSuccess(list);
             }
         } else {

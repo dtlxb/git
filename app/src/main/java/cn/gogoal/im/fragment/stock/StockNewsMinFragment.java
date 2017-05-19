@@ -66,6 +66,7 @@ public class StockNewsMinFragment extends BaseFragment {
     private String stockName;
 
     private StockNewsType stockNewsType;//实现反序列化接口，类型
+
     @Override
     public void onAttach(Context activity) {
         super.onAttach(activity);
@@ -78,16 +79,16 @@ public class StockNewsMinFragment extends BaseFragment {
         Bundle b = new Bundle();
         b.putInt("position", position);
 
-        StockNewsType stockNewsType =null;
+        StockNewsType stockNewsType = null;
         switch (position) {
             case 0:
                 stockNewsType = new StockNewsType(7, "新闻", AppConst.SOURCE_TYPE_NEWS);
                 break;
             case 1:
-                stockNewsType =new StockNewsType(3,"公告",AppConst.SOURCE_TYPE_GONGGAO);
+                stockNewsType = new StockNewsType(3, "公告", AppConst.SOURCE_TYPE_GONGGAO);
                 break;
             case 2:
-                stockNewsType =new StockNewsType(9,"研报",AppConst.SOURCE_TYPE_YANBAO);
+                stockNewsType = new StockNewsType(9, "研报", AppConst.SOURCE_TYPE_YANBAO);
                 break;
         }
         b.putParcelable("stock_news_type", stockNewsType);
@@ -102,7 +103,7 @@ public class StockNewsMinFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        stockNewsType =getArguments().getParcelable("stock_news_type");
+        stockNewsType = getArguments().getParcelable("stock_news_type");
 
         parentPosition = getArguments().getInt("position");
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
@@ -111,18 +112,30 @@ public class StockNewsMinFragment extends BaseFragment {
         recyclerView.addItemDecoration(new NormalItemDecoration(mContext));
         iniFootView();
 
-        if (parentPosition!=2){
+        getDatas();
+
+        xLayout.setEmptyText("暂无" + stockNewsType.getTitle() + "数据");
+
+        xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
+            @Override
+            public void onReload(View v) {
+                getDatas();
+            }
+        });
+    }
+
+    private void getDatas() {
+        if (parentPosition != 2) {
             dataListsNews = new ArrayList<>();
-            newsAdapter = new NewsAdapter(dataListsNews,stockNewsType);
+            newsAdapter = new NewsAdapter(dataListsNews, stockNewsType,true);
             recyclerView.setAdapter(newsAdapter);
             getNews(stockNewsType.getNewsType());
-        }else {
+        } else {
             dataListsResearch = new ArrayList<>();
-            researchadapter = new ResearchAdapter(dataListsResearch, stockNewsType.getNewsSource());
+            researchadapter = new ResearchAdapter(dataListsResearch, stockNewsType.getNewsSource(),true);
             recyclerView.setAdapter(researchadapter);
             getYanBao();
         }
-        xLayout.setEmptyText("暂无" + stockNewsType.getTitle() + "数据");
     }
 
     //初始化底部"查看更多按钮"
@@ -138,7 +151,7 @@ public class StockNewsMinFragment extends BaseFragment {
                 Intent intent = new Intent(getActivity(), StockNewsAllListActivity.class);
                 intent.putExtra("stockCode", stockCode);
                 intent.putExtra("stockName", stockName);
-                intent.putExtra("stock_news_type",stockNewsType);
+                intent.putExtra("stock_news_type", stockNewsType);
                 startActivity(intent);
             }
         });

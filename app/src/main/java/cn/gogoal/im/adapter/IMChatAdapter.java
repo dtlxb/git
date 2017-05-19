@@ -28,7 +28,6 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -559,7 +558,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         urls.add(imageMessage.getAVFile().getUrl());
         Intent intent = new Intent(mContext, ImageDetailActivity.class);
         intent.putStringArrayListExtra("image_urls", (ArrayList<String>) urls);
-        intent.putExtra("account_Id", "");
         mContext.startActivity(intent);
     }
 

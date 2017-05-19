@@ -183,7 +183,6 @@ public class IMPersonDetailActivity extends BaseActivity {
                             urls.add((String) data.getAvatar());
                             Intent intent = new Intent(mContext, ImageDetailActivity.class);
                             intent.putStringArrayListExtra("image_urls", (ArrayList<String>) urls);
-                            intent.putExtra("account_Id", "");
                             mContext.startActivity(intent);
                         }
                     });

@@ -24,16 +24,19 @@ public class ResearchAdapter extends CommonAdapter<StockDetailResearchData, Base
 
     private int newsSource;
 
-    public ResearchAdapter(List<StockDetailResearchData> data, int newsSource) {
+    private boolean singleLineTitle;
+
+    public ResearchAdapter(List<StockDetailResearchData> data, int newsSource, boolean singleLineTitle) {
         super(R.layout.stock_detail_news_item, data);
         this.newsSource = newsSource;
+        this.singleLineTitle = singleLineTitle;
     }
 
     @Override
     protected void convert(BaseViewHolder holder, final StockDetailResearchData data, int position) {
         TextView textView = holder.getView(R.id.big_event_tittle_tv);
         textView.setText(data.getReport_title());
-        textView.setSingleLine();
+        textView.setSingleLine(singleLineTitle);
         textView.setEllipsize(TextUtils.TruncateAt.END);
 
         holder.setText(R.id.big_event_date, data.getCreate_date());

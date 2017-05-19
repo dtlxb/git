@@ -96,8 +96,8 @@ public class TypeLoginActivity extends BaseActivity {
 //        loginUserName.setText("E00003645");
 //        loginPassWord.setText("258369");
 
-        loginUserName.setText("E00002639");
-        loginPassWord.setText("412174");
+        loginUserName.setText("E00018279");
+        loginPassWord.setText("600255");
 
         /*loginUserName.setText("E00020181");
         loginPassWord.setText("394495");*/
@@ -206,7 +206,7 @@ public class TypeLoginActivity extends BaseActivity {
                             intent = new Intent(TypeLoginActivity.this, MainActivity.class);
                         } else {
                             intent = new Intent(TypeLoginActivity.this, EditPersonInfoActivity.class);
-                            SPTools.saveInt(data.getInteger("account_id") + "_saved_account", data.getInteger("account_id"));
+                            UserUtils.saveFirstLogin(data.getIntValue("account_id"));
                         }
                         intent.putExtra("isFromLogin", true);
                         //登录IM

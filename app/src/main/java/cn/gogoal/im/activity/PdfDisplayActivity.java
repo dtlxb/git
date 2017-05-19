@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -14,7 +13,6 @@ import android.view.KeyEvent;
 import com.alibaba.fastjson.JSONObject;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
-import com.hply.imagepicker.view.StatusBarUtil;
 import com.socks.library.KLog;
 
 import java.io.File;
@@ -60,12 +58,6 @@ public class PdfDisplayActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-
-        if (StatusBarUtil.with(this).isOperableDevice()) {
-            StatusBarUtil.with(this).setStatusBarFontDark(true);
-        } else {
-            StatusBarUtil.with(this).setColor(Color.BLACK);
-        }
 
         String jsonData = getIntent().getStringExtra("pdf_data");
 
