@@ -14,6 +14,7 @@ import org.simple.eventbus.Subscriber;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.ImageDetailActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
 import cn.gogoal.im.ui.view.XLayout;
@@ -63,6 +64,14 @@ public class ImageDetailFragment extends BaseFragment {
             @Override
             public void onReload(View v) {
                 loadImage(mContext);
+            }
+        });
+
+        image.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ((ImageDetailActivity) getActivity()).addAction.performClick();
+                return true;
             }
         });
     }

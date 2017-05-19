@@ -26,9 +26,12 @@ public class NewsAdapter extends CommonAdapter<StockDetailNewsData, BaseViewHold
 
     private StockNewsType stockNewsType;
 
-    public NewsAdapter(List<StockDetailNewsData> data, StockNewsType stockNewsType) {
+    private boolean singleLineTitle;
+
+    public NewsAdapter(List<StockDetailNewsData> data, StockNewsType stockNewsType, boolean singleLineTitle) {
         super(R.layout.stock_detail_news_item, data);
         this.stockNewsType = stockNewsType;
+        this.singleLineTitle = singleLineTitle;
     }
 
     @Override
@@ -36,8 +39,13 @@ public class NewsAdapter extends CommonAdapter<StockDetailNewsData, BaseViewHold
 
         TextView textView = holder.getView(R.id.big_event_tittle_tv);
         textView.setText(data.getTitle());
-        textView.setSingleLine();
-        textView.setEllipsize(TextUtils.TruncateAt.END);
+
+        if (singleLineTitle) {
+            textView.setSingleLine();
+            textView.setEllipsize(TextUtils.TruncateAt.END);
+        }else {
+            textView.setSingleLine(false);
+        }
 
         holder.setText(R.id.big_event_date, CalendarUtils.getStringDate("yyyy-MM-dd HH:mm", data.getDate()));
 

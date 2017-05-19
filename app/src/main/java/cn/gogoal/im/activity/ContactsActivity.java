@@ -65,9 +65,6 @@ public class ContactsActivity extends BaseActivity {
 
     private TextView textViewFooter;
 
-    public ContactsActivity() {
-    }
-
     @Override
     public int bindLayout() {
         return R.layout.activity_contacts;

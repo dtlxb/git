@@ -227,13 +227,14 @@ public class ChooseContactActivity extends BaseActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (newText.length() > 0) {
-                    List<ContactBean> filterList = filter(UserUtils.getUserContacts(), newText);
-
-                    contactAdapter.setFilter(filterList);
-                    rvContacts.scrollToPosition(0);
-                } else {
-                    contactAdapter.setFilter(UserUtils.getUserContacts());
+                if (contactAdapter != null) {
+                    if (newText.length() > 0) {
+                        List<ContactBean> filterList = filter(UserUtils.getUserContacts(), newText);
+                        contactAdapter.setFilter(filterList);
+                        rvContacts.scrollToPosition(0);
+                    } else {
+                        contactAdapter.setFilter(UserUtils.getUserContacts());
+                    }
                 }
                 return true;
             }
@@ -564,9 +565,9 @@ public class ChooseContactActivity extends BaseActivity {
 
             if (null != contactBeanList && !contactBeanList.isEmpty()) {
                 datas.addAll(contactBeanList);
+                notifyDataSetChanged();
             }
 
-            notifyDataSetChanged();
         }
 
     }
