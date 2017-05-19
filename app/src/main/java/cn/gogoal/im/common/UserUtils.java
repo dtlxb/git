@@ -22,8 +22,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 import cn.gogoal.im.activity.TypeLoginActivity;
@@ -262,26 +264,26 @@ public class UserUtils {
     }
 
     /*
-    * 保存用户是否第一次登录标示
+    * 保存用户是登录记录
     * @return
     */
-    public static void saveFirstLogin(int accountId) {
-        SPTools.saveInt(accountId + "_saved_account", accountId);
+    public static void saveLoginHistory(String accountId) {
+        Set<String> loginHistory = SPTools.getSetData("login_history", new HashSet<String>());
+        loginHistory.add(accountId);
+        SPTools.saveSetData("login_history", loginHistory);
     }
 
-    /* 判断用户是否第一次登录
-    *
-    * @return
-    */
-    public static Boolean isFirstLogin(int accountId) {
-        int savedAccountId = SPTools.getInt(accountId + "_saved_account", -1);
-        return accountId == savedAccountId;
+    /**
+     *   判断用户是否第一次登录
+     */
+    public static Boolean hadLogin(String accountId) {
+        Set<String> loginHistory = SPTools.getSetData("login_history", new HashSet<String>());
+
+        return !loginHistory.isEmpty() && loginHistory.contains(accountId);
     }
 
     /**
      * 获取职务
-     *
-     * @return
      */
     public static String getDuty() {
         JSONObject user = getUserInfo();
@@ -325,9 +327,6 @@ public class UserUtils {
 
     /*注销*/
     public static void logout(Activity mContext) {
-        SPTools.clear();
-        int acc= (int) StringUtils.pareseStringDouble(UserUtils.getMyAccountId()).doubleValue();
-        UserUtils.saveFirstLogin(acc);
 
         mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
         AVImClientManager.getInstance().close(UserUtils.getMyAccountId(), new AVIMClientCallback() {

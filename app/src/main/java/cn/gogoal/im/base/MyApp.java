@@ -50,7 +50,11 @@ public class MyApp extends LitePalApplication {
 
         registerActivityLifecycleCallbacks(new LifeCircle());
 
-        SPTools.initSharedPreferences(this);
+        if (!SPTools.isSpInited()) {
+            SPTools.initSharedPreferences(this);
+        }
+
+
         XLayout.getConfig()
                 .setErrorText("出错啦~请稍后重试！")
                 .setEmptyText("抱歉，暂无数据")
@@ -200,7 +204,7 @@ public class MyApp extends LitePalApplication {
 //        }
 
         @Override
-        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+        public void onActivityCreated(final Activity activity, Bundle savedInstanceState) {
             AppManager.getInstance().addActivity(activity);
 
 //            IntentFilter intentFilter = new IntentFilter();
