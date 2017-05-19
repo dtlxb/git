@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -44,6 +45,7 @@ import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.permission.IPermissionListner;
 import cn.gogoal.im.ui.index.IndexBar;
+import cn.gogoal.im.ui.view.DrawableCenterTextView;
 import cn.gogoal.im.ui.view.TextDrawable;
 import cn.gogoal.im.ui.view.XTitle;
 
@@ -78,6 +80,9 @@ public class PhoneContactsActivity extends BaseActivity {
     @BindView(R.id.tv_constacts_flag)
     TextView tvConstactsFlag;
 
+    @BindView(R.id.tv_to_search)
+    DrawableCenterTextView tv_to_search;
+
     private PhoneAdapter phoneAdapter;
 
     private List<PhoneContact> phoneContacts;
@@ -103,6 +108,14 @@ public class PhoneContactsActivity extends BaseActivity {
             xLayout.setVisibility(View.VISIBLE);
             return;
         }
+
+        tv_to_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), IMSearchLocalActivity.class);
+                startActivity(intent);
+            }
+        });
 
         BaseActivity.requestRuntimePermission(new String[]{Manifest.permission.READ_CONTACTS}, new IPermissionListner() {
             @Override
@@ -157,7 +170,7 @@ public class PhoneContactsActivity extends BaseActivity {
     }
 
     private void init() {
-        xTitle = setMyTitle(R.string.title_contacts, true);
+        xTitle = setMyTitle(R.string.im_phone_num, true);
         XTitle.TextAction textAction = new XTitle.TextAction("添加") {
             @Override
             public void actionClick(View view) {

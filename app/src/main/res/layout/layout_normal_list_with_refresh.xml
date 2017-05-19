@@ -1,13 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <!--通用列表布局——title+list+下拉刷新-->
 
-    <include layout="@layout/include_title"/>
+    <include layout="@layout/include_title" />
+
+    <cn.gogoal.im.ui.view.DrawableCenterTextView
+        android:id="@+id/tv_to_search"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/shape_search_activity_edit"
+        android:drawableLeft="@mipmap/img_search"
+        android:drawablePadding="5dp"
+        android:gravity="center_vertical"
+        android:text="搜索"
+        android:textColor="@color/colorXLayout"
+        android:textSize="14sp"
+        app:layout_scrollFlags="scroll|enterAlways" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/colorDivider_d9d9d9" />
 
     <cn.gogoal.im.ui.view.XLayout
         android:id="@+id/xLayout"
@@ -25,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
-                android:scrollbars="vertical"/>
+                android:scrollbars="vertical" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
 

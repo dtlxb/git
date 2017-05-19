@@ -8,6 +8,17 @@ public class SearchBean<T> {
     private T avatar;//头像URL
     private String nickname;//昵称
     private String intro;//简介
+    private String conversationId;
+    private int chatType;
+
+
+    public SearchBean(T avatar, String nickname, String intro, String conversationId, int chatType) {
+        this.avatar = avatar;
+        this.nickname = nickname;
+        this.intro = intro;
+        this.conversationId = conversationId;
+        this.chatType = chatType;
+    }
 
     public T getAvatar() {
         return avatar;
@@ -33,10 +44,20 @@ public class SearchBean<T> {
         this.intro = intro;
     }
 
-    public SearchBean(T avatar, String nickname, String intro) {
-        this.avatar = avatar;
-        this.nickname = nickname;
-        this.intro = intro;
+    public String getConversationId() {
+        return conversationId;
+    }
+
+    public void setConversationId(String conversationId) {
+        this.conversationId = conversationId;
+    }
+
+    public int getChatType() {
+        return chatType;
+    }
+
+    public void setChatType(int chatType) {
+        this.chatType = chatType;
     }
 
     @Override
@@ -45,6 +66,8 @@ public class SearchBean<T> {
                 "avatar=" + avatar +
                 ", nickname='" + nickname + '\'' +
                 ", intro='" + intro + '\'' +
+                ", conversationId='" + conversationId + '\'' +
+                ", chatType=" + chatType +
                 '}';
     }
 }

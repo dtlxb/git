@@ -1,9 +1,13 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
@@ -17,6 +21,7 @@ import java.util.Map;
 import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.adapter.SearchListAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
@@ -26,8 +31,10 @@ import cn.gogoal.im.bean.GroupCollectionData;
 import cn.gogoal.im.bean.ImageTextBean;
 import cn.gogoal.im.bean.SearchBean;
 import cn.gogoal.im.bean.SearchData;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 
 /**
@@ -54,7 +61,14 @@ public class IMSearchLocalActivity extends BaseActivity {
     @BindView(R.id.rv_flag_search)
     RecyclerView rvFlagSearch;
 
+    @BindView(R.id.tips_layout)
+    RelativeLayout tips_layout;
+
     private List<SearchData> dataList;
+    private List<SearchData> searchDatas;
+    private List<SearchData> personData;
+    private List<SearchData> groupsData;
+    private SearchListAdapter searchListAdapter;
 
     @Override
     public int bindLayout() {
@@ -72,12 +86,71 @@ public class IMSearchLocalActivity extends BaseActivity {
                 holder.setText(R.id.tv_search_item, data.getText());
             }
         });
-
+        //获取本地所有对话
         getDatas();
+
+        //输入框监听
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchDatas.clear();
+                groupsData.clear();
+                personData.clear();
+                if (!TextUtils.isEmpty(newText)) {
+                    for (int i = 0; i < dataList.size(); i++) {
+                        if (!dataList.get(i).isHeader) {
+                            String conversationName = dataList.get(i).t.getNickname();
+                            int chatType = dataList.get(i).t.getChatType();
+                            if (conversationName.contains(newText)) {
+                                if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
+                                    personData.add(dataList.get(i));
+                                } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
+                                    groupsData.add(dataList.get(i));
+                                }
+                            }
+                        }
+                    }
+                    if (personData.size() > 0 || groupsData.size() > 0) {
+                        if (personData.size() > 0) {
+                            SearchData searchData1 = new SearchData(true, "朋友");
+                            searchDatas.add(searchData1);
+                            searchDatas.addAll(personData);
+                        }
+                        if (groupsData.size() > 0) {
+                            SearchData searchData2 = new SearchData(true, "群组");
+                            searchDatas.add(searchData2);
+                            searchDatas.addAll(groupsData);
+                        }
+
+                        tips_layout.setVisibility(View.GONE);
+                        rvHistory.setVisibility(View.VISIBLE);
+                        searchListAdapter.notifyDataSetChanged();
+                    } else {
+                        tips_layout.setVisibility(View.VISIBLE);
+                        rvHistory.setVisibility(View.GONE);
+                    }
+                } else {
+                    tips_layout.setVisibility(View.VISIBLE);
+                    rvHistory.setVisibility(View.GONE);
+                }
+                return false;
+            }
+        });
     }
 
     private void getDatas() {
-        List<SearchBean> searchBeans = new ArrayList<>();
+        dataList = new ArrayList<>();
+        searchDatas = new ArrayList<>();
+        personData = new ArrayList<>();
+        groupsData = new ArrayList<>();
+        searchListAdapter = new SearchListAdapter(IMSearchLocalActivity.this, searchDatas);
+        initRecycleView(rvHistory, R.drawable.shape_divider_1px);
+        rvHistory.setAdapter(searchListAdapter);
         //联系人列表
         String friendResponseInfo = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", "");
         List<ContactBean> list = new ArrayList<>();
@@ -88,13 +161,14 @@ public class IMSearchLocalActivity extends BaseActivity {
         list.clear();
         list.addAll(beanList.getData());
         SearchData searchData = new SearchData(true, "朋友");
-        searchData.setParentPosition(-1);
+        searchData.setParentPosition(0);
         dataList.add(searchData);
-        /*for (int i = 0; i < list.size(); i++) {
-            SearchBean searchBean = new SearchBean(list.get(i).getAvatar(), list.get(i).getNickname(), "");
-            SearchData searchContactsData = new SearchData(searchBean, "朋友");
-            searchBeans.add(searchBean);
-        }*/
+        for (int i = 0; i < list.size(); i++) {
+            SearchBean searchBean = new SearchBean(list.get(i).getAvatar(), list.get(i).getNickname(), "", list.get(i).getConv_id(), AppConst.IM_CHAT_TYPE_SINGLE);
+            SearchData searchContactsData = new SearchData(searchBean, list.size());
+            searchContactsData.setChildPosition(i);
+            dataList.add(searchContactsData);
+        }
 
         //群组列表
         getGroupList();
@@ -132,12 +206,17 @@ public class IMSearchLocalActivity extends BaseActivity {
 
                     List<GroupCollectionData.DataBean> data =
                             JSONObject.parseObject(responseInfo, GroupCollectionData.class).getData();
-                    List<SearchBean> searchBeans = new ArrayList<>();
-                    for (int i = 0; i < data.size(); i++) {
-                        searchBeans.add(new SearchBean(data.get(i).getAttr().getAvatar(), data.get(i).getName(),
-                                data.get(i).getAttr().getIntro()));
-                    }
 
+                    SearchData searchData = new SearchData(true, "群组");
+                    searchData.setParentPosition(1);
+                    dataList.add(searchData);
+                    for (int i = 0; i < data.size(); i++) {
+                        SearchBean searchBean = new SearchBean(data.get(i).getAttr().getAvatar(), data.get(i).getName(),
+                                data.get(i).getAttr().getIntro(), data.get(i).getConv_id(), AppConst.IM_CHAT_TYPE_SQUARE);
+                        SearchData searchGroupData = new SearchData(searchBean, data.size());
+                        searchGroupData.setChildPosition(i);
+                        dataList.add(searchGroupData);
+                    }
                 } else {
                 }
             }

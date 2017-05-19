@@ -1,10 +1,12 @@
 package cn.gogoal.im.bean;
 
+import cn.gogoal.im.adapter.baseAdapter.entity.SectionEntity;
+
 /**
  * Created by huangxx on 2017/5/19.
  */
 
-public class SearchData extends SearchEntity<SearchBean> {
+public class SearchData extends SectionEntity<SearchBean> {
 
     private int parentPosition;
     private int childPosition;

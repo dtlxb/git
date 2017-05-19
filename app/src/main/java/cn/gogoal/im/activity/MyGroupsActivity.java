@@ -44,6 +44,7 @@ import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.ShareMessageDialog;
+import cn.gogoal.im.ui.view.DrawableCenterTextView;
 import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.view.XTitle;
 
@@ -63,6 +64,9 @@ public class MyGroupsActivity extends BaseActivity {
 
     @BindView(R.id.swiperefreshlayout)
     SwipeRefreshLayout swiperefreshlayout;
+
+    @BindView(R.id.tv_to_search)
+    DrawableCenterTextView tv_to_search;
 
     private ListAdapter listAdapter;
     private List<GroupCollectionData.DataBean> dataBeens;
@@ -104,6 +108,14 @@ public class MyGroupsActivity extends BaseActivity {
             public void onRefresh() {
                 getGroupList(AppConst.REFRESH_TYPE_SWIPEREFRESH);
                 swiperefreshlayout.setRefreshing(false);
+            }
+        });
+
+        tv_to_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), IMSearchLocalActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -41,6 +41,7 @@ import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.index.IndexBar;
 import cn.gogoal.im.ui.index.SuspendedDecoration;
+import cn.gogoal.im.ui.view.DrawableCenterTextView;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**
@@ -58,6 +59,9 @@ public class ContactsActivity extends BaseActivity {
 
     @BindView(R.id.tv_constacts_flag)
     TextView tvConstactsFlag;
+
+    @BindView(R.id.tv_to_search)
+    DrawableCenterTextView tvSearch;
 
     private boolean added = true;
     private ContactAdapter contactAdapter;
@@ -124,6 +128,14 @@ public class ContactsActivity extends BaseActivity {
                 getResColor(R.color.colorDivider_d9d9d9)));
 
         rvContacts.setAdapter(contactAdapter);
+
+        tvSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), IMSearchLocalActivity.class);
+                startActivity(intent);
+            }
+        });
 
         contactAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
