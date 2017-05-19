@@ -142,6 +142,7 @@
         <activity android:name=".activity.IMPersonActivity" />
         <activity android:name=".activity.IMSquareChatSetActivity" />
         <activity android:name=".activity.IMGroupContactsActivity" />
+        <activity android:name=".activity.IMSearchLocalActivity" />
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".activity.SearchMessagesActivity" />
         <activity android:name=".wxapi.WXPayEntryActivity" />

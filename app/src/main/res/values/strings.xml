@@ -208,6 +208,7 @@
         2. 手机通讯录中没有联系人资料。</string>
     <string name="loading_error">加载失败...</string>
     <string name="again_load">重新加载</string>
+    <string name="im_phone_num">手机通讯录</string>
 
     <!--<string-array name="emoji_array">
         <item>fafadf</item>

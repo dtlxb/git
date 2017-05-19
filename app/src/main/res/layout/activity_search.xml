@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    android:background="@android:color/white"
     tools:context=".activity.SearchActivity">
 
-    <include layout="@layout/include_title"/>
+    <include layout="@layout/include_title" />
 
     <android.support.v7.widget.SearchView
         android:id="@+id/searchView"
@@ -24,7 +24,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/colorDivider_d9d9d9"/>
+        android:background="@color/colorDivider_d9d9d9" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -56,6 +56,7 @@
                     app:reverseLayout="true" />
 
                 <RelativeLayout
+                    android:id="@+id/tips_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="30dp">
@@ -100,7 +101,7 @@
                         android:layout_centerInParent="true"
                         android:layout_marginTop="24dp"
                         app:layoutManager="android.support.v7.widget.GridLayoutManager"
-                        app:spanCount="3">
+                        app:spanCount="2">
 
                     </android.support.v7.widget.RecyclerView>
 

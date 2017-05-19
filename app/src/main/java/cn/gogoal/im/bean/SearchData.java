@@ -3,24 +3,14 @@ package cn.gogoal.im.bean;
 import cn.gogoal.im.adapter.baseAdapter.entity.SectionEntity;
 
 /**
- * author wangjd on 2017/4/14 0014.
- * Staff_id 1375
- * phone 18930640263
- * description :${annotated}.
+ * Created by huangxx on 2017/5/19.
  */
-public class SectionToolsData extends SectionEntity<ToolData.Tool> {
+
+public class SearchData extends SectionEntity<SearchBean> {
 
     private int parentPosition;
     private int childPosition;
     private int childCountInParent;
-
-    public int getChildCountInParent() {
-        return childCountInParent;
-    }
-
-    public void setChildCountInParent(int childCountInParent) {
-        this.childCountInParent = childCountInParent;
-    }
 
     public int getParentPosition() {
         return parentPosition;
@@ -38,13 +28,20 @@ public class SectionToolsData extends SectionEntity<ToolData.Tool> {
         this.childPosition = childPosition;
     }
 
-    public SectionToolsData(boolean isHeader, String header) {
-        super(isHeader, header);
+    public int getChildCountInParent() {
+        return childCountInParent;
     }
 
-    public SectionToolsData(ToolData.Tool item, int childCountInParent) {
-        super(item);
+    public void setChildCountInParent(int childCountInParent) {
         this.childCountInParent = childCountInParent;
     }
 
+    public SearchData(boolean isHeader, String header) {
+        super(isHeader, header);
+    }
+
+    public SearchData(SearchBean searchBean, int childCountInParent) {
+        super(searchBean);
+        this.childCountInParent = childCountInParent;
+    }
 }
