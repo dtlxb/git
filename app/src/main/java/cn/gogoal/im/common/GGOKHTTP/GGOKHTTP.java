@@ -707,7 +707,7 @@ public class GGOKHTTP {
                     .execute(new StringCallback() {
                         @Override
                         public void onError(Call call, Exception e, int id) {
-                            Log.e("TAG","====================出错日志：："+url);
+                            Log.e("TAG","==出错日志==出错接口："+url+"=="+e.getMessage()+"==");
                             if (httpInterface != null) httpInterface.onFailure(e.toString());
                         }
 
@@ -718,7 +718,7 @@ public class GGOKHTTP {
                     });
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("TAG","====================出错日志："+url);
+            Log.e("TAG","==出错日志==出错接口："+url+"=="+e.getMessage()+"==");
             if (httpInterface != null) httpInterface.onFailure(e.toString());
         }
     }
