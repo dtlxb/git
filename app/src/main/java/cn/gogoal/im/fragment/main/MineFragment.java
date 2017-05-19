@@ -185,7 +185,7 @@ public class MineFragment extends BaseFragment {
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, MineItem data, final int position) {
+        protected void convert(BaseViewHolder holder, final MineItem data, final int position) {
             switch (holder.getItemViewType()) {
                 case MineItem.TYPE_HEAD:
                     break;
@@ -204,12 +204,13 @@ public class MineFragment extends BaseFragment {
                                     intent = new Intent(getActivity(), MyAdvisersActivity.class);
                                     startActivity(intent);
                                     break;
-                                case 10:
+                                case 9:
                                     intent = new Intent(getActivity(), SettingActivity.class);
                                     startActivity(intent);
                                     break;
                                 default:
-                                    UIHelper.toast(v.getContext(), "pos=" + position);
+                                    KLog.e("pos=" + position + ";item=" + data.getItemText());
+                                    UIHelper.toastInCenter(getActivity(),"该功能暂未开放使用");
                                     break;
                             }
                         }

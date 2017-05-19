@@ -56,13 +56,13 @@
                 android:background="@color/colorMineHead"
                 android:orientation="vertical"
                 android:paddingEnd="20dp"
-                android:paddingTop="35dp"
                 android:paddingStart="15dp">
 
                 <cn.gogoal.im.ui.view.CircleImageView
                     android:id="@+id/img_mine_avatar"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
+                    android:layout_marginTop="35dp"
                     android:layout_centerVertical="true"
                     android:layout_marginBottom="30dp"
                     android:src="@mipmap/logo"
@@ -131,6 +131,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="none"
+                android:layout_marginBottom="45dp"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         </LinearLayout>

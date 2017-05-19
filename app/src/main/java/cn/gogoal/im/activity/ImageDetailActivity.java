@@ -58,8 +58,11 @@ public class ImageDetailActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        final String accountId = getIntent().getStringExtra("account_Id");
-        isEditMyAvatar = accountId.equalsIgnoreCase(UserUtils.getMyAccountId());
+//        final String accountId = getIntent().getStringExtra("account_Id");
+//        isEditMyAvatar = accountId.equalsIgnoreCase(UserUtils.getMyAccountId());
+
+        isEditMyAvatar=getIntent().getBooleanExtra("is_change_avatar",false);
+
         XTitle title = setMyTitle(isEditMyAvatar ? "个人头像" : "", true);
 
         title.setVisibility(isEditMyAvatar ? View.VISIBLE : View.GONE);

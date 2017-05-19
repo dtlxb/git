@@ -40,7 +40,7 @@
         <item>会务</item>
         <item>直播</item>
         <item>路演</item>
-        <item>隐私策略</item>
+        <!--<item>隐私策略</item>-->
         <item>设置</item>
     </string-array>
 
