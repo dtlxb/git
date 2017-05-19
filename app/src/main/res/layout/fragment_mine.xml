@@ -46,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="true"
+            android:background="#f8f8f8"
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
