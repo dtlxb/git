@@ -69,13 +69,13 @@ android {
         exclude 'META-INF/NOTICE.txt'
     }
 
-//    splits {
-//        abi {
-//            enable true
-//            reset()
-//            include 'armeabi-v7a'
-//        }
-//    }
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi-v7a'
+        }
+    }
 }
 
 dependencies {
