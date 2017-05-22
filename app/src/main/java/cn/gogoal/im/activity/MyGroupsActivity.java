@@ -14,8 +14,6 @@ import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -35,10 +33,9 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
-import cn.gogoal.im.common.IMHelpers.MessageUtils;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -232,8 +229,7 @@ public class MyGroupsActivity extends BaseActivity {
                         startActivity(intent);
                     } else {
                         ShareItemInfo shareItemInfo = new ShareItemInfo<>(groupAvatar[0], data.getName(), entity,
-                                MessageUtils.getIMMessageBeanById(SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans",
-                                        new JSONArray()), data.getConv_id()));
+                                MessageListUtils.getIMMessageBeanById(UserUtils.getMessageListInfo(), data.getConv_id()));
                         ShareMessageDialog.newInstance(shareItemInfo).show(getSupportFragmentManager());
                     }
                 }

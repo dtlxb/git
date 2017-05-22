@@ -106,8 +106,8 @@ public class ShareMessageActivity extends BaseActivity {
      * 获取最近会话
      */
     public void getRecentConversation() {
-        JSONArray recentArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", null);
-        if (recentArray != null) {
+        JSONArray recentArray = UserUtils.getMessageListInfo();
+        if (recentArray != null && recentArray.size() > 0) {
             datas.add(new ShareListBean(ShareListBean.LIST_TYPE_SECTION));
             List<IMMessageBean> messageBeen = JSON.parseArray(recentArray.toJSONString(), IMMessageBean.class);
             for (IMMessageBean bean : messageBeen) {
@@ -120,7 +120,7 @@ public class ShareMessageActivity extends BaseActivity {
                     group.setText(bean.getNickname());
                     group.setBean(bean);
 
-                    ChatGroupHelper.setGroupAvatar(bean.getConversationID(),  new AvatarTakeListener() {
+                    ChatGroupHelper.setGroupAvatar(bean.getConversationID(), new AvatarTakeListener() {
                         @Override
                         public void success(Bitmap bitmap) {
                             group.setItemImage(bitmap);

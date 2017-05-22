@@ -62,7 +62,7 @@ import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.PlayerUtils.CountDownTimerView;
@@ -398,7 +398,7 @@ public class WatchLiveActivity extends BaseActivity {
                 Map<Object, Object> messageMap = new HashMap<>();
                 messageMap.put("_lctype", "-1");
                 messageMap.put("_lctext", player_edit.getText().toString());
-                messageMap.put("_lcattrs", AVImClientManager.getInstance().userBaseInfo());
+                messageMap.put("_lcattrs", AVIMClientManager.getInstance().userBaseInfo());
 
                 HashMap<String, String> params = new HashMap<>();
                 params.put("token", UserUtils.getToken());
@@ -1003,7 +1003,7 @@ public class WatchLiveActivity extends BaseActivity {
 
                     room_id = data.getString("room_id");
 
-                    AVImClientManager.getInstance().findConversationById(room_id, new AVImClientManager.ChatJoinManager() {
+                    AVIMClientManager.getInstance().findConversationById(room_id, new AVIMClientManager.ChatJoinManager() {
                         @Override
                         public void joinSuccess(AVIMConversation conversation) {
                             imConversation = conversation;

@@ -32,7 +32,7 @@ import cn.gogoal.im.bean.Advisers;
 import cn.gogoal.im.bean.AdvisersBean;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 
 /**
@@ -326,11 +326,11 @@ public class UserUtils {
     /*注销*/
     public static void logout(Activity mContext) {
         SPTools.clear();
-        int acc= (int) StringUtils.pareseStringDouble(UserUtils.getMyAccountId()).doubleValue();
+        int acc = (int) StringUtils.pareseStringDouble(UserUtils.getMyAccountId()).doubleValue();
         UserUtils.saveFirstLogin(acc);
 
         mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
-        AVImClientManager.getInstance().close(UserUtils.getMyAccountId(), new AVIMClientCallback() {
+        AVIMClientManager.getInstance().close(UserUtils.getMyAccountId(), new AVIMClientCallback() {
             @Override
             public void done(AVIMClient avimClient, AVIMException e) {
 
@@ -446,7 +446,7 @@ public class UserUtils {
      */
     public static List<ContactBean> getFriendsInTeam(String conversationId) {
 
-        JSONArray userInTeamArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationId + "_accountList_beans", new JSONArray());
+        JSONArray userInTeamArray = getGroupContactInfo(conversationId);
 
         KLog.e(userInTeamArray);
 
@@ -463,8 +463,11 @@ public class UserUtils {
         return list;
     }
 
+    /**
+     * 获取群好友
+     */
     public static List<ContactBean> getAllFriendsInTeam(String conversationId) {
-        JSONArray userInTeamArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationId + "_accountList_beans", new JSONArray());
+        JSONArray userInTeamArray = getGroupContactInfo(conversationId);
         KLog.e(userInTeamArray);
         //万一没有群信息
         if (null == userInTeamArray || userInTeamArray.size() == 0) {
@@ -488,7 +491,7 @@ public class UserUtils {
     public static List<ContactBean> getOthersInTeam(String conversationId, int fromWhere) {
         JSONArray userInTeamArray = null;
         if (fromWhere == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
-            userInTeamArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationId + "_accountList_beans", new JSONArray());
+            userInTeamArray = getGroupContactInfo(conversationId);
         } else if (fromWhere == AppConst.LIVE_CONTACT_SOMEBODY) {
             userInTeamArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationId + "_live_group_beans", new JSONArray());
         } else {
@@ -527,7 +530,21 @@ public class UserUtils {
     }
 
     /**
-     * 好友通讯录信息保存
+     * 保存消息列表
+     */
+    public static void saveMessageListInfo(JSONArray jsonArray) {
+        SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", jsonArray);
+    }
+
+    /**
+     * 获取消息列表
+     */
+    public static JSONArray getMessageListInfo() {
+        return SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
+    }
+
+    /**
+     * 群通讯录信息保存
      */
     public static void saveGroupContactInfo(String conversationID, JSONArray jsonArray) {
         //先整体缓存
@@ -542,12 +559,19 @@ public class UserUtils {
     }
 
     /**
-     * 好友通讯录信息保存
+     * 群通讯录信息获取
+     */
+    public static JSONArray getGroupContactInfo(String conversationID) {
+        return SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", new JSONArray());
+    }
+
+    /**
+     * 群通讯录信息删除
      */
     public static void deleteGroupContactInfo(String conversationID) {
         //先整体缓存清除
         SPTools.clearItem(UserUtils.getMyAccountId() + conversationID + "_accountList_beans");
-        JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", null);
+        JSONArray jsonArray = getGroupContactInfo(conversationID);
         //拆解缓存清除
         if (!TextUtils.isEmpty(conversationID) && jsonArray != null && jsonArray.size() > 0) {
             for (int i = 0; i < jsonArray.size(); i++) {

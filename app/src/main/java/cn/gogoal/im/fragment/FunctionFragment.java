@@ -1,8 +1,6 @@
 package cn.gogoal.im.fragment;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,9 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.alibaba.fastjson.JSONObject;
-import com.avos.avoscloud.AVFile;
-import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.hply.imagepicker.ITakePhoto;
 import com.socks.library.KLog;
 
@@ -22,7 +17,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.copy.StockSearchActivity;
@@ -30,15 +24,8 @@ import cn.gogoal.im.adapter.ChatFunctionAdapter;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.BaseMessage;
-import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.FoundData;
-import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.CalendarUtils;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
-import cn.gogoal.im.common.UFileUpload;
-import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.common.UserUtils;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 

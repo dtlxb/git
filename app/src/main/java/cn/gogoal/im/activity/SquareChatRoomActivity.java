@@ -7,7 +7,6 @@ import android.view.View;
 
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 
 import org.simple.eventbus.Subscriber;
 
@@ -16,8 +15,7 @@ import java.util.List;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.ContactBean;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.fragment.ChatFragment;
@@ -35,6 +33,7 @@ public class SquareChatRoomActivity extends BaseActivity {
     private List<String> groupMembers;
     private String squareName;
     private String squareCreater;
+    private String headAvatar;
 
     @Override
     public int bindLayout() {
@@ -73,6 +72,7 @@ public class SquareChatRoomActivity extends BaseActivity {
                 Intent intent = new Intent(SquareChatRoomActivity.this, IMSquareChatSetActivity.class);
                 intent.putStringArrayListExtra("group_members", (ArrayList<String>) groupMembers);
                 intent.putExtra("conversation_id", conversation_id);
+                intent.putExtra("head_avatar", headAvatar);
                 intent.putExtra("square_creater", squareCreater);
                 intent.putExtra("squareName", squareName);
                 startActivity(intent);
@@ -82,7 +82,7 @@ public class SquareChatRoomActivity extends BaseActivity {
     }
 
     private void getSquareConversation(String conversationId, final boolean need_update, final int actionType, final List<AVIMMessage> messageList) {
-        AVImClientManager.getInstance().findConversationById(conversationId, new AVImClientManager.ChatJoinManager() {
+        AVIMClientManager.getInstance().findConversationById(conversationId, new AVIMClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
                 chatFragment.setConversation(conversation, need_update, actionType, null, messageList);
@@ -90,6 +90,7 @@ public class SquareChatRoomActivity extends BaseActivity {
                 if (squareName.equals("")) {
                     initTitle(conversation.getName(), conversation.getConversationId());
                 }
+                headAvatar = (String) conversation.getAttribute("avatar");
                 squareCreater = conversation.getCreator();
             }
 

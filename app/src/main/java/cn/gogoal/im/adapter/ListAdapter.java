@@ -33,7 +33,7 @@
 //import cn.gogoal.im.common.DialogHelp;
 //import cn.gogoal.im.common.IMHelpers.AVImClientManager;
 //import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
-//import cn.gogoal.im.common.IMHelpers.MessageUtils;
+//import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 //import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 //import cn.gogoal.im.common.ImageUtils.ImageUtils;
 //import cn.gogoal.im.common.SPTools;
@@ -143,7 +143,7 @@
 //                    String squareMessage;
 //                    if (null != lcattrsObject && null != lcattrsObject.getJSONArray("accountList")) {
 //                        accountArray = lcattrsObject.getJSONArray("accountList");
-//                        squareMessage = MessageUtils.findSquarePeople(accountArray, _lctype);
+//                        squareMessage = MessageListUtils.findSquarePeople(accountArray, _lctype);
 //                        //群消息记录
 //                        SPTools.saveString(UserUtils.getMyAccountId() + messageBean.getConversationID() + "_square_message", squareMessage);
 //                    } else {
@@ -199,7 +199,7 @@
 //                DialogHelp.getSelectDialog(context, "", new String[]{"删除聊天"}, new DialogInterface.OnClickListener() {
 //                    @Override
 //                    public void onClick(DialogInterface dialog, int which) {
-//                        MessageUtils.removeMessageInfo(messageBean.getConversationID());
+//                        MessageListUtils.removeMessageInfo(messageBean.getConversationID());
 //                        removeItem(position);
 //                    }
 //                }, false).show();
@@ -210,7 +210,7 @@
 //
 //        KLog.e(conversation_id);
 //
-//        AVImClientManager.getInstance().findConversationById(conversation_id, new AVImClientManager.ChatJoinManager() {
+//        AVIMClientManager.getInstance().findConversationById(conversation_id, new AVIMClientManager.ChatJoinManager() {
 //            @Override
 //            public void joinSuccess(AVIMConversation conversation) {
 //                int chat_type = (int) conversation.getAttribute("chat_type");

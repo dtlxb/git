@@ -45,7 +45,6 @@ import cn.gogoal.im.activity.ContactsActivity;
 import cn.gogoal.im.activity.IMNewFrienActivity;
 import cn.gogoal.im.activity.IMSearchLocalActivity;
 import cn.gogoal.im.activity.OfficialAccountsActivity;
-import cn.gogoal.im.activity.SearchActivity;
 import cn.gogoal.im.activity.SearchPersonSquareActivity;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
@@ -60,9 +59,9 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
-import cn.gogoal.im.common.IMHelpers.MessageUtils;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
@@ -143,15 +142,15 @@ public class MessageFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
-        allCount = MessageUtils.getAllMessageUnredCount(jsonArray);
+        jsonArray = UserUtils.getMessageListInfo();
+        allCount = MessageListUtils.getAllMessageUnreadCount(jsonArray);
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("index", 0);
         map.put("number", allCount);
         BaseMessage baseMessage = new BaseMessage("message_count", map);
         AppManager.getInstance().sendMessage("correct_allmessage_count", baseMessage);
-
+        KLog.e(jsonArray);
         IMMessageBeans.clear();
         IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
@@ -171,7 +170,7 @@ public class MessageFragment extends BaseFragment {
 
                 KLog.e(conversation_id);
 
-                AVImClientManager.getInstance().findConversationById(conversation_id, new AVImClientManager.ChatJoinManager() {
+                AVIMClientManager.getInstance().findConversationById(conversation_id, new AVIMClientManager.ChatJoinManager() {
                     @Override
                     public void joinSuccess(AVIMConversation conversation) {
                         int chat_type = (int) conversation.getAttribute("chat_type");
@@ -241,7 +240,7 @@ public class MessageFragment extends BaseFragment {
                 DialogHelp.getSelectDialog(getActivity(), "", new String[]{"删除聊天"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        MessageUtils.removeMessageInfo(IMMessageBeans.get(position).getConversationID());
+                        MessageListUtils.removeMessageInfo(IMMessageBeans.get(position).getConversationID());
                         listAdapter.removeItem(position);
                         KLog.e(listAdapter.getData().size());
                     }
@@ -430,7 +429,7 @@ public class MessageFragment extends BaseFragment {
                         String squareMessage;
                         if (null != lcattrsObject && null != lcattrsObject.getJSONArray("accountList")) {
                             accountArray = lcattrsObject.getJSONArray("accountList");
-                            squareMessage = MessageUtils.findSquarePeople(accountArray, _lctype);
+                            squareMessage = MessageListUtils.findSquarePeople(accountArray, _lctype);
                             //群消息记录
                             SPTools.saveString(UserUtils.getMyAccountId() + messageBean.getConversationID() + "_square_message", squareMessage);
                         } else {
@@ -464,17 +463,29 @@ public class MessageFragment extends BaseFragment {
             }
 
             if (chatType == 1002) {
-                if (message.length() > 7 && message.substring(0, 7).equals("[有人@了你]")) {
+                if (message.length() > 7 && message.startsWith("[有人@了你]")) {
                     SpannableStringBuilder sb = new SpannableStringBuilder(message); // 包装字体内容
                     ForegroundColorSpan fcs = new ForegroundColorSpan(getResColor(R.color.stock_red)); // 设置字体颜色
                     sb.setSpan(fcs, 0, 7, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    messageTv.setText(sb);
+                } else if (message.length() > 5 && message.startsWith("[草稿] ")) {
+                    SpannableStringBuilder sb = new SpannableStringBuilder(message);
+                    ForegroundColorSpan fcs = new ForegroundColorSpan(getResColor(R.color.stock_red));
+                    sb.setSpan(fcs, 0, 5, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                     messageTv.setText(sb);
                 } else {
                     messageTv.setText(squareMessageFrom.equals("") ? message : squareMessageFrom + ": " +
                             message);
                 }
             } else {
-                messageTv.setText(message);
+                if (message.length() > 5 && message.startsWith("[草稿] ")) {
+                    SpannableStringBuilder sb = new SpannableStringBuilder(message);
+                    ForegroundColorSpan fcs = new ForegroundColorSpan(getResColor(R.color.stock_red));
+                    sb.setSpan(fcs, 0, 5, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    messageTv.setText(sb);
+                } else {
+                    messageTv.setText(message);
+                }
             }
             //holder.setText(R.id.last_message, unRead + message);
             holder.setText(R.id.whose_message, nickName);
@@ -649,7 +660,7 @@ public class MessageFragment extends BaseFragment {
         IMMessageBean imMessageBean = new IMMessageBean(ConversationId, chatType, message.getTimestamp(),
                 isTheSame ? String.valueOf(unreadmessage) : "1", nickName, friend_id, avatar, message);
         KLog.e(imMessageBean);
-        MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
+        MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
         allCount++;
 
         //发送消息更改消息总数

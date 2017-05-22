@@ -29,7 +29,7 @@ import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.IMNewFriendBean;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.IMHelpers.MessageUtils;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
@@ -64,12 +64,12 @@ public class IMNewFrienActivity extends BaseActivity {
         conversationId = getIntent().getStringExtra("conversation_id");
         titleBar = setMyTitle(R.string.title_message, true);
         //未读数清零
-        messageListJsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
+        messageListJsonArray = UserUtils.getMessageListInfo();
         IMMessageBeans.addAll(JSON.parseArray(String.valueOf(messageListJsonArray), IMMessageBean.class));
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(conversationId)) {
                 IMMessageBeans.get(i).setUnReadCounts("0");
-                MessageUtils.saveMessageInfo(messageListJsonArray, IMMessageBeans.get(i));
+                MessageListUtils.saveMessageInfo(messageListJsonArray, IMMessageBeans.get(i));
             }
         }
 
@@ -262,7 +262,7 @@ public class IMNewFrienActivity extends BaseActivity {
                         JSONArray accountArray = new JSONArray();
                         accountArray.add(jsonObject);
 
-                        MessageUtils.changeSquareInfo(lcattrsObject.getString("conv_id"), accountArray, "5");
+                        MessageListUtils.changeSquareInfo(lcattrsObject.getString("conv_id"), accountArray, "5");
 
                     }
                 }

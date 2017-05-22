@@ -30,6 +30,7 @@ import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -37,11 +38,13 @@ import cn.gogoal.im.activity.IMPersonDetailActivity;
 import cn.gogoal.im.activity.ImageDetailActivity;
 import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
+import cn.gogoal.im.base.AppManager;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
-import cn.gogoal.im.common.IMHelpers.MessageUtils;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
 import cn.gogoal.im.common.NormalIntentUtils;
@@ -132,12 +135,12 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
             }
             //头像
-            if (isYourSelf) {
+            if (avimMessage.getFrom().equals(UserUtils.getMyAccountId())) {
                 headPicUrl = UserUtils.getUserAvatar();
                 speakerName = UserUtils.getNickname();
             } else {
-                headPicUrl = MessageUtils.getContactWhatedInfo("avatar", Integer.parseInt(avimMessage.getFrom()), chatType, avimMessage.getConversationId());
-                speakerName = MessageUtils.getContactWhatedInfo("nickname", Integer.parseInt(avimMessage.getFrom()), chatType, avimMessage.getConversationId());
+                headPicUrl = MessageListUtils.getContactWantedInfo("avatar", Integer.parseInt(avimMessage.getFrom()), chatType, avimMessage.getConversationId());
+                speakerName = MessageListUtils.getContactWantedInfo("nickname", Integer.parseInt(avimMessage.getFrom()), chatType, avimMessage.getConversationId());
                 if (TextUtils.isEmpty(headPicUrl)) {
                     headPicUrl = (String) lcattrsObject.get("avatar");
                 }
@@ -158,6 +161,20 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                     Intent intent = new Intent(mContext, IMPersonDetailActivity.class);
                     intent.putExtra("account_id", Integer.parseInt(avimMessage.getFrom()));
                     mContext.startActivity(intent);
+                }
+            });
+            //长按头像AT某人
+            final String finalSpeakerName = speakerName;
+            ((IMCHatViewHolder) holder).user_head_photo.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (chatType == 1002 && !avimMessage.getFrom().equals(UserUtils.getMyAccountId())) {
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("speakerName", finalSpeakerName);
+                        BaseMessage baseMessage = new BaseMessage("someone", map);
+                        AppManager.getInstance().sendMessage("oneSpeaker", baseMessage);
+                    }
+                    return true;
                 }
             });
         } else {
