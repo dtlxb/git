@@ -21,7 +21,7 @@
 //import java.util.List;
 //
 //import cn.gogoal.im.R;
-//import cn.gogoal.im.activity.IMNewFrienActivity;
+//import cn.gogoal.im.activity.IMNewFriendActivity;
 //import cn.gogoal.im.activity.OfficialAccountsActivity;
 //import cn.gogoal.im.activity.SingleChatRoomActivity;
 //import cn.gogoal.im.activity.SquareChatRoomActivity;
@@ -243,7 +243,7 @@
 //                        break;
 //                    case AppConst.IM_CHAT_TYPE_SYSTEM:
 //                        //系统处理
-//                        intent = new Intent(context, IMNewFrienActivity.class);
+//                        intent = new Intent(context, IMNewFriendActivity.class);
 //                        intent.putExtra("conversation_id", conversation_id);
 //                        intent.putExtra("add_type", 0x01);
 //                        context.startActivity(intent);
@@ -256,7 +256,7 @@
 //                        break;
 //                    case AppConst.IM_CHAT_TYPE_SQUARE_REQUEST:
 //                        //入群申请
-//                        intent = new Intent(context, IMNewFrienActivity.class);
+//                        intent = new Intent(context, IMNewFriendActivity.class);
 //                        intent.putExtra("conversation_id", conversation_id);
 //                        intent.putExtra("add_type", 0x02);
 //                        context.startActivity(intent);

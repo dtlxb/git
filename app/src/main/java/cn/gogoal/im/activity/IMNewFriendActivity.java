@@ -40,7 +40,7 @@ import cn.gogoal.im.ui.view.XTitle;
  * Created by huangxx on 2017/3/13.
  */
 
-public class IMNewFrienActivity extends BaseActivity {
+public class IMNewFriendActivity extends BaseActivity {
 
     XTitle titleBar;
     private List<IMNewFriendBean> newFriendBeans = new ArrayList<>();
@@ -99,7 +99,7 @@ public class IMNewFrienActivity extends BaseActivity {
             });
         }
 
-        listAdapter = new ListAdapter(IMNewFrienActivity.this, R.layout.item_new_friend, newFriendBeans);
+        listAdapter = new ListAdapter(IMNewFriendActivity.this, R.layout.item_new_friend, newFriendBeans);
         newFriendList.setAdapter(listAdapter);
     }
 
@@ -135,19 +135,18 @@ public class IMNewFrienActivity extends BaseActivity {
             final String firend_id = lcattrsObject.getString("account_id");
             nickName = lcattrsObject.getString("nickname");
 
-
-            ImageDisplay.loadImage(IMNewFrienActivity.this, avatar, avatarIv);
+            ImageDisplay.loadImage(IMNewFriendActivity.this, avatar, avatarIv);
             holder.setText(R.id.nickname, nickName);
             holder.setText(R.id.last_message, message + "\t\t" + dateStr);
-            KLog.e(mIMNewFriendBean);
             if (mIMNewFriendBean.getIsYourFriend()) {
                 if (addType == 0x01) {
                     addView.setText("已添加");
                 } else if (addType == 0x02) {
                     addView.setText("已通过");
                 }
-                addView.setTextColor(ContextCompat.getColor(IMNewFrienActivity.this, R.color.relater_play_count));
+                addView.setTextColor(ContextCompat.getColor(IMNewFriendActivity.this, R.color.relater_play_count));
                 addView.setBackgroundColor(Color.WHITE);
+                addView.setClickable(false);
             } else {
                 if (addType == 0x01) {
                     addView.setText("添加");
@@ -155,18 +154,19 @@ public class IMNewFrienActivity extends BaseActivity {
                     addView.setText("通过");
                 }
                 addView.setBackgroundResource(R.drawable.shape_add_friend);
-                addView.setTextColor(ContextCompat.getColor(IMNewFrienActivity.this, android.R.color.white));
+                addView.setTextColor(ContextCompat.getColor(IMNewFriendActivity.this, android.R.color.white));
+                addView.setClickable(true);
             }
 
             addView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (addType == 0x01) {
-                        addFirend(mIMNewFriendBean, firend_id, addView);
+                        addFriend(mIMNewFriendBean, firend_id, addView);
                     } else if (addType == 0x02) {
                         List<String> idList = new ArrayList<>();
                         idList.add(firend_id);
-                        agreenToGroup(mIMNewFriendBean, idList, addView);
+                        agreeToGroup(mIMNewFriendBean, idList, addView);
                     }
                     addView.setClickable(false);
                 }
@@ -174,7 +174,7 @@ public class IMNewFrienActivity extends BaseActivity {
         }
     }
 
-    public void addFirend(final IMNewFriendBean mIMNewFriendBean, String friend_id, final TextView view) {
+    public void addFriend(final IMNewFriendBean mIMNewFriendBean, String friend_id, final TextView view) {
 
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
@@ -187,13 +187,12 @@ public class IMNewFrienActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(result.get("code"));
                 if ((int) result.get("code") == 0) {
                     if (view.getText().toString().equals("添加")) {
                         view.setText("已添加");
-                        view.setTextColor(ContextCompat.getColor(IMNewFrienActivity.this, R.color.relater_play_count));
+                        view.setTextColor(ContextCompat.getColor(IMNewFriendActivity.this, R.color.relater_play_count));
                         view.setBackgroundResource(android.R.color.white);
-                        view.setClickable(true);
+                        view.setClickable(false);
 
                         //列表缓存
                         for (int i = 0; i < jsonArray.size(); i++) {
@@ -213,14 +212,13 @@ public class IMNewFrienActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                KLog.json(msg);
                 view.setClickable(true);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.ADD_FRIEND, ggHttpInterface).startGet();
     }
 
-    public void agreenToGroup(final IMNewFriendBean mIMNewFriendBean, List idList, final TextView view) {
+    public void agreeToGroup(final IMNewFriendBean mIMNewFriendBean, List idList, final TextView view) {
 
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
@@ -237,9 +235,9 @@ public class IMNewFrienActivity extends BaseActivity {
                 if ((int) result.get("code") == 0) {
                     if (view.getText().toString().equals("通过")) {
                         view.setText("已通过");
-                        view.setTextColor(ContextCompat.getColor(IMNewFrienActivity.this, R.color.relater_play_count));
+                        view.setTextColor(ContextCompat.getColor(IMNewFriendActivity.this, R.color.relater_play_count));
                         view.setBackgroundResource(android.R.color.white);
-                        view.setClickable(true);
+                        view.setClickable(false);
 
                         for (int i = 0; i < jsonArray.size(); i++) {
                             JSONObject jsonObject = (JSONObject) jsonArray.get(i);
@@ -270,7 +268,6 @@ public class IMNewFrienActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                KLog.json(msg);
                 view.setClickable(true);
             }
         };

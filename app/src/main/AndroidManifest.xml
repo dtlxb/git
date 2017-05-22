@@ -128,7 +128,7 @@
             android:name=".activity.ChatRoomActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".activity.DemoActivity" />
-        <activity android:name=".activity.IMNewFrienActivity" />
+        <activity android:name=".activity.IMNewFriendActivity" />
         <activity android:name=".activity.IMPersonDetailActivity" />
         <activity
             android:name=".activity.SearchPersonSquareActivity"

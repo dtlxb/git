@@ -83,15 +83,12 @@ public class IMAddFriendActivity extends BaseActivity {
                             R.mipmap.login_success, false);
                     sucessDialog.show(getSupportFragmentManager());
                     sucessDialog.dismiss(false, true);
-
-//                    UIHelper.toast(IMAddFriendActivity.this, "好友请求发送成功!");
                 } else {
                     waitDialog.dismiss(true);
                     final WaitDialog essrrDialog = WaitDialog.getInstance("好友请求发送失败!请重试",
                             R.mipmap.login_error, false);
                     essrrDialog.show(getSupportFragmentManager());
                     essrrDialog.dismiss(false);
-//                    UIHelper.toast(IMAddFriendActivity.this, "好友请求发送失败!请重试");
                 }
             }
 
