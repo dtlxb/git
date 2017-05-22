@@ -148,6 +148,8 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         } catch (Exception e) {
             KLog.e(e.getMessage());
         }
+
+            setAppBarLayout(appBarLayout,!(myStockDatas!=null && myStockDatas.size()<5));
     }
 
     public void refreshMyStock(int refreshType) {

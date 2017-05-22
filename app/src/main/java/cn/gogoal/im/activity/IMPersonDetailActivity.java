@@ -2,10 +2,13 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
@@ -65,6 +68,7 @@ public class IMPersonDetailActivity extends BaseActivity {
 
         personDetailRecycler.setLayoutManager(new LinearLayoutManager(mContext));
         personDetailRecycler.addItemDecoration(new NormalItemDecoration(mContext));
+
         accountId = getIntent().getIntExtra("account_id", -1);
 
         if (String.valueOf(accountId).equals(UserUtils.getMyAccountId())) {
@@ -102,10 +106,10 @@ public class IMPersonDetailActivity extends BaseActivity {
                     infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, false, "职位", contactBean.getDuty()));
                     infos.add(new UserDetailInfo(UserDetailInfo.SPACE));
                     infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, false, "个人描述", contactBean.getDuty()));
-                    infos.add(new UserDetailInfo(UserDetailInfo.SPACE));
-                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, true, "研网活动(5)", ""));
-                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, true, "参加活动活动(4)", ""));
-                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, true, "加入群组(3)", ""));
+//                    infos.add(new UserDetailInfo(UserDetailInfo.SPACE));
+//                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, true, "研网活动(5)", ""));
+//                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, true, "参加活动活动(4)", ""));
+//                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, true, "加入群组(3)", ""));
 
                     personDetailRecycler.setAdapter(new UserInfoAdapter(infos));
 
@@ -186,8 +190,21 @@ public class IMPersonDetailActivity extends BaseActivity {
                             mContext.startActivity(intent);
                         }
                     });
-                    holder.setText(R.id.person_name, data.getFullName());
-                    holder.setText(R.id.person_mark, data.getNickName());
+
+                    holder.setText(R.id.person_name, data.getNickName());
+
+                    /*设置备注，暂无接口*/
+                  TextView tvRemark = holder.getView(R.id.person_mark);
+                    tvRemark.setText(String.valueOf(accountId).equals(UserUtils.getMyAccountId()) ?
+                            "账号：" + UserUtils.getGoGoalId() : "备注：");
+
+                    Drawable drawable = String.valueOf(accountId).equals(UserUtils.getMyAccountId()) ?
+                            null: ContextCompat.getDrawable(IMPersonDetailActivity.this,R.mipmap.img_edit_remark);
+                    if (drawable!=null) {
+                        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    }
+                    tvRemark.setCompoundDrawables(null,null,drawable,null);
+
                     break;
                 case UserDetailInfo.SPACE:
                     break;

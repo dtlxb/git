@@ -28,7 +28,7 @@ public class SPTools {
         isInited = true;
     }
 
-    public static boolean IsInited() {
+    public static boolean isSpInited() {
         return isInited;
     }
 

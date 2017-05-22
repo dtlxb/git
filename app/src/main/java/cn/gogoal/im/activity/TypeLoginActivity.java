@@ -93,8 +93,8 @@ public class TypeLoginActivity extends BaseActivity {
 //        loginUserName.setText("13166270509");
 //        loginPassWord.setText("888888");
 
-//        loginUserName.setText("E00003645");
-//        loginPassWord.setText("258369");
+        loginUserName.setText("E00003645");
+        loginPassWord.setText("258369");
 
 //        loginUserName.setText("E00018279");
 //        loginPassWord.setText("600255");
@@ -205,16 +205,19 @@ public class TypeLoginActivity extends BaseActivity {
                         UserUtils.saveUserInfo(data);
 
                         //存在这个账号则直奔MainActivity
-                        if (UserUtils.isFirstLogin(data.getInteger("account_id"))) {
+
+                        if (UserUtils.hadLogin(data.getString("account_id"))) {
                             intent = new Intent(TypeLoginActivity.this, MainActivity.class);
                         } else {
                             intent = new Intent(TypeLoginActivity.this, EditPersonInfoActivity.class);
-                            UserUtils.saveFirstLogin(data.getIntValue("account_id"));
+                            UserUtils.saveLoginHistory(data.getString("account_id"));
                         }
+
                         intent.putExtra("isFromLogin", true);
                         //登录IM
                         try {
                             AVIMClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
+
                                 @Override
                                 public void done(AVIMClient avimClient, AVIMException e) {
                                     if (e == null) {

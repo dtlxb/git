@@ -25,8 +25,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/person_detail"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_height="wrap_content"/>
 
             <cn.gogoal.im.ui.view.SelectorButton
                 android:id="@+id/add_friend_button"
@@ -39,9 +38,9 @@
                 android:text="添加好友"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
-                app:normalBackgroundColor="@color/colorPrimary"
+                app:normalBackgroundColor="@color/player_add_friend"
                 app:pressedBackgroundColor="#f68d8d"
-                app:radius="8dp" />
+                app:radius="5dp" />
         </LinearLayout>
     </cn.gogoal.im.ui.view.XLayout>
 </LinearLayout>

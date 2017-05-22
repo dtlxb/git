@@ -27,7 +27,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.ImageUtils.GlideCacheUtil;
 import cn.gogoal.im.common.NormalIntentUtils;
-import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.SelectorButton;
 
 /**
@@ -80,8 +80,7 @@ public class SettingActivity extends BaseActivity {
         selectorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), TypeLoginActivity.class));
-                SPTools.clear();
+                UserUtils.logout(SettingActivity.this);
                 finish();
             }
         });
