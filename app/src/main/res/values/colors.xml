@@ -54,7 +54,9 @@
     <color name="edit_bag">#FAFAFA</color>
     <color name="send_text">#0076ff</color>
 
-    <color name="live_chat">#c8ffffff</color>
+    <color name="live_chat">#4c000000</color>
+    <color name="live_chat_white">#ffffff</color>
+    <color name="live_chat_yellow">#f9cd38</color>
 
     <color name="live_chat_level1">#ee514d</color>
     <color name="live_chat_level2">#1d8fe1</color>

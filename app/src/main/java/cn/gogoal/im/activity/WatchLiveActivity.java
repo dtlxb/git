@@ -394,33 +394,40 @@ public class WatchLiveActivity extends BaseActivity {
                 JSONObject contentObject = JSON.parseObject(message.getContent());
                 JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
                 String _lctype = contentObject.getString("_lctype");
+                String label = "";
+                String content = "";
                 String username = "";
-                String textString = "";
                 if (_lctype.equals("-1")) {
-                    username = lcattrsObject.getString("username") + ": ";
-                    textString = username + contentObject.getString("_lctext");
+                    label = lcattrsObject.getString("username") + ": ";
+                    content = contentObject.getString("_lctext");
                 } else if (_lctype.equals("5") || _lctype.equals("6")) {
                     if (null != lcattrsObject.get("accountList")) {
                         JSONArray jsonArray = lcattrsObject.getJSONArray("accountList");
                         if (jsonArray.size() > 0) {
                             username = ((JSONObject) jsonArray.get(0)).getString("nickname");
+                            label = "系统消息: ";
                         }
                         if (_lctype.equals("5")) {
-                            textString = (username + "加入直播聊天室");
+                            content = (username + "加入了直播间");
                         } else {
-                            textString = (username + "离开直播聊天室");
+                            content = (username + "离开了直播间");
                         }
                     }
                 } else {
 
                 }
-                textSend.setText(textString);
+                textSend.setText(label + content);
 
                 SpannableStringBuilder builder = new SpannableStringBuilder(textSend.getText().toString());
-                ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.live_chat_level1));
-                ForegroundColorSpan Span2 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.textColor_333333));
-                builder.setSpan(Span1, 0, username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                builder.setSpan(Span2, username.length(), textSend.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.live_chat_yellow));
+                ForegroundColorSpan Span2 = null;
+                if (_lctype.equals("-1")) {
+                    Span2 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.live_chat_white));
+                } else if (_lctype.equals("5") || _lctype.equals("6")) {
+                    Span2 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.live_start_text));
+                }
+                builder.setSpan(Span1, 0, label.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(Span2, label.length(), textSend.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 textSend.setText(builder);
             }
         }
