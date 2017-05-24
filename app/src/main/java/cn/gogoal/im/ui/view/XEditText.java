@@ -32,7 +32,6 @@ public class XEditText extends AppCompatEditText{
     /**自带密码查看功能的类型*/
     public static final int TYPE_CAN_WATCH_PWD = 1;
 
-
     /**
      * 右侧图标的Drawable对象
      */

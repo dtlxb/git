@@ -19,7 +19,6 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
-import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.UserDetailInfo;
 import cn.gogoal.im.common.AppConst;
@@ -85,60 +84,6 @@ public class SettingActivity extends BaseActivity {
             }
         });
 
-        settingAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(CommonAdapter adapter, View view, int position) {
-                Intent intent;
-
-                switch (position) {
-                    case 0:
-                        break;
-                    case 1:
-                        break;
-                    case 3:
-                        //行情刷新频率
-                        intent = new Intent(SettingActivity.this, SetStockRefreshActivity.class);
-                        startActivity(intent);
-                        break;
-                    case 4:
-                        //K线设置
-                        intent = new Intent(SettingActivity.this, KlineSettingActivity.class);
-                        startActivity(intent);
-                        break;
-                    case 5:
-                        //涨跌幅显示
-                        intent = new Intent(SettingActivity.this, RedGreenSettingActivity.class);
-                        startActivity(intent);
-                        break;
-                    case 6:
-                        //清除缓存
-                        clearMyAppCache();
-                        break;
-                    case 8:
-                        NormalIntentUtils.go2WebActivity(getActivity(),
-//                                AppConst.GG_SETTING_ABOUT,
-                                "http://192.168.52.156:9000/#/hello",
-                                "关于我们");
-                        break;
-                    case 9:
-                        NormalIntentUtils.go2WebActivity(
-                                getActivity(),
-                                AppConst.GG_DISCLAIMER,
-                                "免责申明");
-                        break;
-
-                    case 10:
-                        NormalIntentUtils.go2WebActivity(
-                                getActivity(),
-                                AppConst.GG_SERVICE_AGREEMENT,
-                                "服务协议");
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-
         settingAdapter.addFooterView(selectorButton);
 
         iniSettingData();
@@ -167,8 +112,8 @@ public class SettingActivity extends BaseActivity {
         for (String s : strings) {
             settingDatas.add(new UserDetailInfo<>(UserDetailInfo.TEXT_ITEM_2, s));
         }
-        settingDatas.add(2, new UserDetailInfo<String>(UserDetailInfo.SPACE));
-        settingDatas.add(7, new UserDetailInfo<String>(UserDetailInfo.SPACE));
+        settingDatas.add(1, new UserDetailInfo<String>(UserDetailInfo.SPACE));
+        settingDatas.add(6, new UserDetailInfo<String>(UserDetailInfo.SPACE));
         settingAdapter.notifyDataSetChanged();
     }
 
@@ -181,14 +126,69 @@ public class SettingActivity extends BaseActivity {
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, UserDetailInfo<String> data, final int position) {
+        protected void convert(BaseViewHolder holder, final UserDetailInfo<String> data, final int position) {
 
             switch (holder.getItemViewType()) {
                 case UserDetailInfo.SPACE:
                     break;
                 case UserDetailInfo.TEXT_ITEM_2:
-                    holder.getView(R.id.tv_info_value).setVisibility(View.INVISIBLE);
                     holder.setText(R.id.tv_info_key, data.getAvatar());
+
+                    holder.getView(R.id.tv_info_value).setVisibility(View.INVISIBLE);
+
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent;
+                            switch (position) {
+                                case 0:
+                                    startActivity(new Intent(v.getContext(),AccountSafeActivity.class));
+                                    break;
+                                case 1:
+                                    break;
+                                case 3:
+                                    //行情刷新频率
+                                    intent = new Intent(SettingActivity.this, SetStockRefreshActivity.class);
+                                    startActivity(intent);
+                                    break;
+                                case 4:
+                                    //K线设置
+                                    intent = new Intent(SettingActivity.this, KlineSettingActivity.class);
+                                    startActivity(intent);
+                                    break;
+                                case 5:
+                                    //涨跌幅显示
+                                    intent = new Intent(SettingActivity.this, RedGreenSettingActivity.class);
+                                    startActivity(intent);
+                                    break;
+                                case 6:
+                                    //清除缓存
+                                    clearMyAppCache();
+                                    break;
+                                case 8:
+                                    NormalIntentUtils.go2WebActivity(getActivity(),
+//                                AppConst.GG_SETTING_ABOUT,
+                                            "http://192.168.52.156:9000/#/hello",
+                                            "关于我们");
+                                    break;
+                                case 9:
+                                    NormalIntentUtils.go2WebActivity(
+                                            getActivity(),
+                                            AppConst.GG_DISCLAIMER,
+                                            "免责申明");
+                                    break;
+
+                                case 10:
+                                    NormalIntentUtils.go2WebActivity(
+                                            getActivity(),
+                                            AppConst.GG_SERVICE_AGREEMENT,
+                                            "服务协议");
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    });
                     break;
             }
         }
