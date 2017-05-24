@@ -157,7 +157,7 @@
 //                    message = messageBean.getNickname() + "请求加入" + messageBean.getFriend_id();
 //                    Glide.with(context).load(messageBean.getAvatar()).into(avatarIv);
 //                    break;
-//                case AppConst.IM_MESSAGE_TYPE_SQUARE_DETIAL:
+//                case AppConst.IM_MESSAGE_TYPE_SQUARE_DETAIL:
 //                    //群公告,群简介
 //                    message = contentObject.getString("_lctext");
 //                    break;

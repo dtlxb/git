@@ -39,6 +39,16 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="40dp">
 
+        <ImageView
+            android:id="@+id/iv_send_fail"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/what_user_send"
+            android:src="@mipmap/message_send_fail"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
@@ -46,13 +56,15 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="-2dp"
             android:textColor="@color/textColor_333333"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/what_user_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/user_name"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/user_name"
             android:layout_marginRight="5dp"
             android:background="@drawable/message_me_said"
             android:gravity="center_vertical"

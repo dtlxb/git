@@ -63,6 +63,7 @@ import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -363,7 +364,7 @@ public class MessageFragment extends BaseFragment {
                     KLog.e(messageBean.getAvatar());
                     if (messageBean.getAvatar() != null && !TextUtils.isEmpty(messageBean.getAvatar())) {
                         ImageDisplay.loadRoundedRectangleImage(getActivity(),
-                                messageBean.getAvatar(), avatarIv);
+                                UFileImageHelper.load(messageBean.getAvatar()).compress(20).get(), avatarIv);
                     } else {
                         ChatGroupHelper.setGroupAvatar(messageBean.getConversationID(), new AvatarTakeListener() {
                             @Override
@@ -388,7 +389,7 @@ public class MessageFragment extends BaseFragment {
                     ImageDisplay.loadRoundedRectangleImage(getActivity(), R.mipmap.chat_new_friend, avatarIv);
                 } else {
                     ImageDisplay.loadRoundedRectangleImage(getActivity(),
-                            messageBean.getAvatar(), avatarIv);
+                            UFileImageHelper.load(messageBean.getAvatar()).compress(20).get(), avatarIv);
                 }
 
                 switch (_lctype) {
@@ -410,7 +411,6 @@ public class MessageFragment extends BaseFragment {
                     case AppConst.IM_MESSAGE_TYPE_FRIEND_DEL:
 
                         break;
-
                     case AppConst.IM_MESSAGE_TYPE_FRIEND_ADD:
                         //加好友
                         nickName = "新的好友";
@@ -441,9 +441,9 @@ public class MessageFragment extends BaseFragment {
                         //群通知
                         nickName = "申请入群";
                         message = messageBean.getNickname() + "请求加入" + messageBean.getFriend_id();
-                        Glide.with(getActivity()).load(messageBean.getAvatar()).into(avatarIv);
+                        Glide.with(getActivity()).load(UFileImageHelper.load(messageBean.getAvatar()).compress(20).get()).into(avatarIv);
                         break;
-                    case AppConst.IM_MESSAGE_TYPE_SQUARE_DETIAL:
+                    case AppConst.IM_MESSAGE_TYPE_SQUARE_DETAIL:
                         //群公告,群简介
                         message = contentObject.getString("_lctext");
                         break;
@@ -586,7 +586,7 @@ public class MessageFragment extends BaseFragment {
                 nickName = lcattrsObject.getString("nickname");
                 friend_id = lcattrsObject.getString("group_name");
                 break;
-            case AppConst.IM_MESSAGE_TYPE_SQUARE_DETIAL:
+            case AppConst.IM_MESSAGE_TYPE_SQUARE_DETAIL:
                 //群公告,群简介
                 nickName = lcattrsObject.getString("nickname");
                 friend_id = lcattrsObject.getString("group_name");

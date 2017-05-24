@@ -15,6 +15,7 @@ import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageHandler;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
+import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.avos.avospush.notification.NotificationCompat;
 import com.socks.library.KLog;
 
@@ -50,10 +51,11 @@ public class MyMessageHandler extends AVIMMessageHandler {
                     if (clientID.equals(client.getClientId())) {
                         //剔除自己消息
                         if (!message.getFrom().equals(clientID)) {
-
                             showNotification(message);
 
                             final int chatType = (int) conversation.getAttribute("chat_type");
+                            KLog.e(message instanceof AVIMToolMessage);
+                            KLog.e(chatType);
                             switch (chatType) {
                                 case AppConst.IM_CHAT_TYPE_SINGLE:
                                     //单聊
@@ -203,7 +205,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
      */
     private void showNotification(AVIMMessage message) {
         JSONObject content = JSONObject.parseObject(message.getContent());
-        KLog.e(content);
         JSONObject lcattrs = content.getJSONObject("_lcattrs");
         String push = lcattrs.getString("push");
         if (push != null) {
