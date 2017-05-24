@@ -23,6 +23,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.RotateAnimation;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,6 +48,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.RelaterVideoData;
+import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
@@ -70,11 +73,11 @@ public class PlayerActivity extends BaseActivity {
     //缓冲控件
     @BindView(R.id.LayoutTip)
     LinearLayout LayoutTip;
+    @BindView(R.id.text_tip)
+    ImageView text_tip;
     //暂停
-    @BindView(R.id.LayoutPause)
-    LinearLayout LayoutPause;
     @BindView(R.id.imgPause)
-    ImageView imgPause;
+    CheckBox imgPause;
     //进度条
     @BindView(R.id.LayoutProgress)
     LinearLayout LayoutProgress;
@@ -93,6 +96,10 @@ public class PlayerActivity extends BaseActivity {
     TextView player_anchor_tv;
     @BindView(R.id.tv_player_anchor)
     TextView tv_player_anchor;
+
+    @BindView(R.id.linearPlayerFun)
+    LinearLayout linearPlayerFun;
+
     //相关视频
     @BindView(R.id.player_video_tv)
     TextView player_video_tv;
@@ -118,6 +125,8 @@ public class PlayerActivity extends BaseActivity {
     ImageView live_avatar;
     @BindView(R.id.live_achieve)
     TextView live_achieve;
+
+    private RotateAnimation animation;
 
     private boolean mEnableUpdateProgress = true;
 
@@ -208,6 +217,9 @@ public class PlayerActivity extends BaseActivity {
         screenWidth = AppDevice.getWidth(this);
 
         live_id = getIntent().getStringExtra("live_id");
+
+        animation = AnimationUtils.getInstance().setLoadingAnime(text_tip, R.mipmap.login_loading);
+        animation.startNow();
 
         PlayDataStatistics.getStatisticalData(getContext(), "2", live_id, "2", "1");
 
@@ -432,19 +444,22 @@ public class PlayerActivity extends BaseActivity {
                 }
 
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (mPlayer != null && !mPlayer.isPlaying() && mPlayer.getDuration() > 0) {
-                        start();
-                        return false;
+                    KLog.e("位置1");
+
+                    if (LayoutProgress.getVisibility() == View.GONE) {
+                        show_progress_ui(true);
+                        mTimerHandler.postDelayed(mUIRunnable, 5000);
+                    } else {
+                        show_progress_ui(false);
+                        mTimerHandler.removeCallbacks(mUIRunnable);
                     }
 
                     //just show the progress bar
                     if ((System.currentTimeMillis() - mLastDownTimestamp) > 200) {
-                        show_progress_ui(true);
-                        mTimerHandler.postDelayed(mUIRunnable, 3000);
+                        KLog.e("位置2");
                         return true;
                     } else {
-                        if (mPlayer != null && mPlayer.getDuration() > 0)
-                            pause();
+                        KLog.e("位置3");
                     }
                     return false;
                 }
@@ -586,7 +601,6 @@ public class PlayerActivity extends BaseActivity {
                 mPlayer.setVideoScalingMode(MediaPlayer.VideoScalingMode.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
                 update_total_duration(mPlayer.getDuration());
                 mTimerHandler.postDelayed(mRunnable, 1000);
-                //show_progress_ui(true);
                 mTimerHandler.postDelayed(mUIRunnable, 3000);
             }
         }
@@ -616,6 +630,8 @@ public class PlayerActivity extends BaseActivity {
     private class VideoErrorListener implements MediaPlayer.MediaPlayerErrorListener {
 
         public void onError(int what, int extra) {
+
+            KLog.json("Error what = " + what + " extra = " + extra);
 
             if (mPlayer == null) {
                 return;
@@ -687,6 +703,8 @@ public class PlayerActivity extends BaseActivity {
                         KLog.json("on Info first render start : "
                                 + ((long) mPlayer.getPropertyDouble(AliVcMediaPlayer.FFP_PROP_DOUBLE_1st_VFRAME_SHOW_TIME, -1)
                                 - (long) mPlayer.getPropertyDouble(AliVcMediaPlayer.FFP_PROP_DOUBLE_OPEN_STREAM_TIME, -1)));
+
+                    show_buffering_ui(false);
                     break;
             }
         }
@@ -756,22 +774,9 @@ public class PlayerActivity extends BaseActivity {
     * */
     private void show_buffering_ui(boolean bShowTip) {
         LayoutTip.setVisibility(bShowTip ? View.VISIBLE : View.GONE);
-    }
-
-    /*
-    * 暂停显示
-    * */
-    private void show_pause_ui(boolean bShowPauseBtn) {
-
-        if (!bShowPauseBtn) {
-            LayoutPause.setVisibility(View.GONE);
-        } else {
-            LayoutPause.setVisibility(View.VISIBLE);
+        if (animation != null) {
+            animation.cancel();
         }
-
-        imgPause.setVisibility(bShowPauseBtn ? View.VISIBLE : View.GONE);
-
-        return;
     }
 
     /*
@@ -834,7 +839,6 @@ public class PlayerActivity extends BaseActivity {
     * */
     private void resetUI() {
         mSeekBar.setProgress(0);
-        show_pause_ui(false);
         show_progress_ui(false);
     }
 
@@ -848,8 +852,6 @@ public class PlayerActivity extends BaseActivity {
             if (mStatusListener != null) {
                 mStatusListener.notifyStatus(STATUS_RESUME);
             }
-            show_pause_ui(false);
-            show_progress_ui(false);
         }
     }
 
@@ -862,8 +864,6 @@ public class PlayerActivity extends BaseActivity {
             if (mStatusListener != null) {
                 mStatusListener.notifyStatus(STATUS_PAUSE);
             }
-            show_pause_ui(true);
-            show_progress_ui(true);
         }
     }
 
@@ -915,8 +915,6 @@ public class PlayerActivity extends BaseActivity {
             if (!isPausedByUser) {
                 isPausePlayer = false;
                 mPlayer.play();
-                show_pause_ui(false);
-                show_progress_ui(false);
             }
         }
     }
@@ -989,7 +987,7 @@ public class PlayerActivity extends BaseActivity {
     }
 
     @OnClick({R.id.imgPlayerFullScreen, R.id.imgPlayerShare, R.id.imgPlayerClose,
-            R.id.player_anchor_layout, R.id.player_video_layout, R.id.textAgainLoad})
+            R.id.player_anchor_layout, R.id.player_video_layout, R.id.textAgainLoad, R.id.imgPause})
     public void setClickFunctionBar(View v) {
         switch (v.getId()) {
             case R.id.imgPlayerFullScreen: //横竖屏切换
@@ -1032,8 +1030,16 @@ public class PlayerActivity extends BaseActivity {
                     recy_relater.setVisibility(View.VISIBLE);
                 }
                 break;
-            case R.id.textAgainLoad:
+            case R.id.textAgainLoad: //重新加载
                 getRelaterVideoInfo();
+                break;
+            case R.id.imgPause: //播放暂停/开始
+                if (imgPause.isChecked()) {
+                    if (mPlayer != null && mPlayer.getDuration() > 0) pause();
+                } else {
+                    if (mPlayer != null && !mPlayer.isPlaying() && mPlayer.getDuration() > 0)
+                        start();
+                }
                 break;
         }
     }
@@ -1041,6 +1047,7 @@ public class PlayerActivity extends BaseActivity {
     //设置横屏
     private void setLandscape() {
 
+        linearPlayerFun.setVisibility(View.GONE);
         player_line_tab.setVisibility(View.GONE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
@@ -1061,6 +1068,7 @@ public class PlayerActivity extends BaseActivity {
     //设置竖屏
     private void setProtrait() {
 
+        linearPlayerFun.setVisibility(View.VISIBLE);
         player_line_tab.setVisibility(View.VISIBLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 

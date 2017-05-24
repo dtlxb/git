@@ -42,6 +42,8 @@
     <color name="live_close_title_color">#FFB5A2F1</color>
     <color name="player_anchor_info">#4c000000</color>
     <color name="player_add_friend">#f53f3f</color>
+    <color name="play_progress_text">#fefefe</color>
+    <color name="play_progress_color">#307bf5</color>
 
     <color name="relater_playback">#000000</color>
 
