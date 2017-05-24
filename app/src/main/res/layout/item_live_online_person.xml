@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="5dp">
+
+    <ImageView
+        android:id="@+id/viewGrade"
+        android:layout_width="33dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:background="@mipmap/live_person_top1"
+        android:visibility="gone"/>
+
+    <com.hply.roundimage.roundImage.RoundedImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/imgAvatar"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="8dp"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/avatar_place"
+        app:riv_oval="true" />
+
+</RelativeLayout>

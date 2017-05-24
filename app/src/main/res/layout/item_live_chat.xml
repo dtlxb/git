@@ -3,7 +3,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginBottom="7dp"
-    android:background="@drawable/shape_item_live_chat"
     android:orientation="vertical">
 
     <TextView
@@ -12,6 +11,10 @@
         android:layout_height="wrap_content"
         android:text="here you are"
         android:textColor="@color/textColor_333333"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:shadowColor="@color/live_chat"
+        android:shadowDx="0"
+        android:shadowDy="1"
+        android:shadowRadius="0"/>
 
 </LinearLayout>
