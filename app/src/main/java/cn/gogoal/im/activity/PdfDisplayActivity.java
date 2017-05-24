@@ -50,6 +50,10 @@ public class PdfDisplayActivity extends BaseActivity {
     private String pdfUrl;
 
 //    http://rlrw.bnu.edu.cn/NewsImage/2012410100744.pdf
+    @Override
+    public void setOrientation() {
+        // do nothing
+    }
 
     @Override
     public int bindLayout() {
@@ -214,6 +218,7 @@ public class PdfDisplayActivity extends BaseActivity {
             pdfView.fromFile(new File(getExternalFilesDir("cachePdf").getPath(), MD5Utils.getMD5EncryptyString32(pdfUrl)))
                     .defaultPage(0)
                     .enableSwipe(true)
+                    .swipeHorizontal(true)
                     .enableAnnotationRendering(true)
                     .scrollHandle(new DefaultScrollHandle(PdfDisplayActivity.this))
                     .enableAnnotationRendering(true)
