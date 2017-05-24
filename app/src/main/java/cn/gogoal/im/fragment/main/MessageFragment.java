@@ -271,7 +271,7 @@ public class MessageFragment extends BaseFragment {
 
         View includeView = popuView.findViewById(R.id.include_line);
         ViewGroup.LayoutParams params = includeView.getLayoutParams();
-        params.width = AppDevice.getWidth(getActivity()) / 3;
+        params.width = 5*AppDevice.getWidth(getActivity()) / 12;
         includeView.setLayoutParams(params);
 
         mBubblePopupWindow = new BubblePopupWindow(popuView, mBubbleView);

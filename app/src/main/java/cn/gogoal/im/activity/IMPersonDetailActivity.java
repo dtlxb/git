@@ -215,12 +215,12 @@ public class IMPersonDetailActivity extends BaseActivity {
                     holder.getView(R.id.flag_img_more).setVisibility(data.isHaveMore() ? View.VISIBLE : View.GONE);
 
                     UIHelper.setRippBg(holder.itemView);
-                    holder.itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            UIHelper.toast(v.getContext(), getString(R.string.str_coming_soon));
-                        }
-                    });
+//                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            UIHelper.toast(v.getContext(), getString(R.string.str_coming_soon));
+//                        }
+//                    });
                     break;
             }
         }
