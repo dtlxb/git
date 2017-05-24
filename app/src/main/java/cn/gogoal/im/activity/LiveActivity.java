@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -65,6 +66,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.LiveOnlinePersonData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -189,6 +191,12 @@ public class LiveActivity extends BaseActivity {
     private List<AVIMMessage> messageList = new ArrayList<>();
     private LiveChatAdapter mLiveChatAdapter;
     private AVIMConversation imConversation;
+    //在线人头像显示
+    private List<LiveOnlinePersonData> audienceList = new ArrayList<>();
+    private LiveOnlineAdapter audienceAdapter;
+
+    private String appoint_account;
+
     private String room_id;
 
     private String live_id;
@@ -267,9 +275,22 @@ public class LiveActivity extends BaseActivity {
         mLiveChatAdapter = new LiveChatAdapter(R.layout.item_live_chat, messageList);
         recyler_chat.setAdapter(mLiveChatAdapter);
 
+        initHorizontalRecycleView(recyAudience);
+        audienceAdapter = new LiveOnlineAdapter(audienceList);
+        recyAudience.setAdapter(audienceAdapter);
+
         getPlayerInfo();
 
         downTimer();
+    }
+
+    /**
+     * 初始化水平方向的列表
+     */
+    private void initHorizontalRecycleView(RecyclerView rvHorizontal) {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvHorizontal.setLayoutManager(layoutManager);
     }
 
     // 初始化计时器
@@ -311,6 +332,38 @@ public class LiveActivity extends BaseActivity {
 
             }
         });
+
+        //获取当前群聊天人信息
+        if (conversation != null) {
+            conversation.fetchInfoInBackground(new AVIMConversationCallback() {
+                @Override
+                public void done(AVIMException e) {
+                    //拉取群通讯录并缓存本地
+                    UserUtils.getChatGroup(AppConst.LIVE_GROUP_CONTACT_BEANS, conversation.getMembers(), conversation.getConversationId(), new UserUtils.getSquareInfo() {
+                        @Override
+                        public void squareGetSuccess(JSONObject object) {
+                            KLog.e(object.toJSONString());
+                            List<LiveOnlinePersonData> accountList = JSONArray.parseArray(String.valueOf(object.getJSONArray("accountList")), LiveOnlinePersonData.class);
+                            if (accountList != null) {
+                                for (int i = 0; i < accountList.size(); i++) {
+                                    if (accountList.get(i).getFriend_id().equals(appoint_account)) {
+                                        accountList.remove(i);
+                                    }
+                                }
+                                audienceList.clear();
+                                audienceList.addAll(accountList);
+                                audienceAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void squareGetFail(String error) {
+
+                        }
+                    });
+                }
+            });
+        }
     }
 
     /**
@@ -346,33 +399,40 @@ public class LiveActivity extends BaseActivity {
                 JSONObject contentObject = JSON.parseObject(message.getContent());
                 JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
                 String _lctype = contentObject.getString("_lctype");
+                String label = "";
+                String content = "";
                 String username = "";
-                String textString = "";
                 if (_lctype.equals("-1")) {
-                    username = lcattrsObject.getString("username") + ": ";
-                    textString = username + contentObject.getString("_lctext");
+                    label = lcattrsObject.getString("username") + ": ";
+                    content = contentObject.getString("_lctext");
                 } else if (_lctype.equals("5") || _lctype.equals("6")) {
                     if (null != lcattrsObject.get("accountList")) {
                         JSONArray jsonArray = lcattrsObject.getJSONArray("accountList");
                         if (jsonArray.size() > 0) {
                             username = ((JSONObject) jsonArray.get(0)).getString("nickname");
+                            label = "系统消息: ";
                         }
                         if (_lctype.equals("5")) {
-                            textString = (username + "加入直播聊天室");
+                            content = (username + "加入了直播间");
                         } else {
-                            textString = (username + "离开直播聊天室");
+                            content = (username + "离开了直播间");
                         }
                     }
                 } else {
 
                 }
-                textSend.setText(textString);
+                textSend.setText(label + content);
 
                 SpannableStringBuilder builder = new SpannableStringBuilder(textSend.getText().toString());
-                ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.live_chat_level1));
-                ForegroundColorSpan Span2 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.textColor_333333));
-                builder.setSpan(Span1, 0, username.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                builder.setSpan(Span2, username.length(), textSend.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                ForegroundColorSpan Span1 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.live_chat_yellow));
+                ForegroundColorSpan Span2 = null;
+                if (_lctype.equals("-1")) {
+                    Span2 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.live_chat_white));
+                } else if (_lctype.equals("5") || _lctype.equals("6")) {
+                    Span2 = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.live_start_text));
+                }
+                builder.setSpan(Span1, 0, label.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(Span2, label.length(), textSend.getText().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 textSend.setText(builder);
             }
         }
@@ -976,6 +1036,10 @@ public class LiveActivity extends BaseActivity {
         if (mPermissionRun != null) {
             mHandler.removeCallbacks(mPermissionRun);
         }
+
+        if (null != imConversation) {
+            quiteSquare(imConversation);
+        }
     }
 
     /**
@@ -1004,10 +1068,6 @@ public class LiveActivity extends BaseActivity {
             KLog.e("LiveActivity-->mChatHost.finishPublishing()");
             mChatHost.finishPublishing();
             mIsLive = false;
-        }
-
-        if (null != imConversation) {
-            quiteSquare(imConversation);
         }
     }
 
@@ -1101,6 +1161,8 @@ public class LiveActivity extends BaseActivity {
                     //直播详情
                     ImageDisplay.loadCircleImage(getContext(), data.getString("face_url"), imgPalyer);
                     textCompany.setText(data.getString("anchor_name"));
+                    appoint_account = data.getString("appoint_account");
+
                     //主播介绍
                     anchor = data.getJSONObject("anchor");
 
@@ -1199,7 +1261,7 @@ public class LiveActivity extends BaseActivity {
         UserUtils.getChatGroup(AppConst.LIVE_GROUP_CONTACT_BEANS, conversation.getMembers(), conversation.getConversationId(), new UserUtils.getSquareInfo() {
             @Override
             public void squareGetSuccess(JSONObject object) {
-                KLog.json(object.toJSONString());
+                KLog.e(object.toJSONString());
                 JSONArray accountList = object.getJSONArray("accountList");
                 if (accountList.size() >= 2) {
                     Intent intent = new Intent(LiveActivity.this, ChooseContactActivity.class);
@@ -1286,6 +1348,8 @@ public class LiveActivity extends BaseActivity {
             AVIMMessage message = (AVIMMessage) map.get("message");
             AVIMConversation conversation = (AVIMConversation) map.get("conversation");
 
+            JSONObject contentObject = JSON.parseObject(message.getContent());
+            int _lctype = contentObject.getIntValue("_lctype");
             KLog.e(message.getContent());
             int chatType = (int) conversation.getAttribute("chat_type");
 
@@ -1294,6 +1358,25 @@ public class LiveActivity extends BaseActivity {
                 messageList.add(message);
                 mLiveChatAdapter.notifyDataSetChanged();
                 recyler_chat.smoothScrollToPosition(messageList.size());
+
+                //显示头像
+                JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
+                JSONArray jsonArray = lcattrsObject.getJSONArray("accountList");
+                List<LiveOnlinePersonData> personData = JSONObject.parseArray(String.valueOf(jsonArray), LiveOnlinePersonData.class);
+                if (!personData.get(0).getFriend_id().equals(appoint_account)) {
+                    if (_lctype == 5) {
+                        audienceList.addAll(0, personData);
+                        audienceAdapter.notifyDataSetChanged();
+                    } else if (_lctype == 6) {
+                        for (int i = 0; i < audienceList.size(); i++) {
+                            if (audienceList.get(i).getFriend_id().equals(personData.get(0).getFriend_id())) {
+                                audienceList.remove(i);
+                            }
+                        }
+                        audienceAdapter.notifyDataSetChanged();
+                    }
+                }
+
             } else if (chatType == 1008) {
                 //连麦动作处理
                 JSONObject content = JSONObject.parseObject(message.getContent());
@@ -1419,5 +1502,35 @@ public class LiveActivity extends BaseActivity {
 
         DialogHelp.getMessageDialog(getActivity(), getString(R.string.close_video_call_notify_message))
                 .setCancelable(false).setTitle(R.string.close_video_call_title).show();
+    }
+
+    /**
+     * 显示在线观众头像适配器
+     */
+    class LiveOnlineAdapter extends CommonAdapter<LiveOnlinePersonData, BaseViewHolder> {
+
+        public LiveOnlineAdapter(List<LiveOnlinePersonData> datas) {
+            super(R.layout.item_live_online_person, datas);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder holder, LiveOnlinePersonData personList, int position) {
+            ImageView viewGrade = holder.getView(R.id.viewGrade);
+            if (position == 0) {
+                viewGrade.setVisibility(View.VISIBLE);
+                viewGrade.setBackground(getResDrawable(R.mipmap.live_person_top1));
+            } else if (position == 1) {
+                viewGrade.setVisibility(View.VISIBLE);
+                viewGrade.setBackground(getResDrawable(R.mipmap.live_person_top2));
+            } else if (position == 2) {
+                viewGrade.setVisibility(View.VISIBLE);
+                viewGrade.setBackground(getResDrawable(R.mipmap.live_person_top3));
+            } else {
+                viewGrade.setVisibility(View.GONE);
+            }
+
+            RoundedImageView imgAvatar = holder.getView(R.id.imgAvatar);
+            ImageDisplay.loadCircleImage(getContext(), personList.getAvatar(), imgAvatar);
+        }
     }
 }

@@ -42,6 +42,8 @@
     <color name="live_close_title_color">#FFB5A2F1</color>
     <color name="player_anchor_info">#4c000000</color>
     <color name="player_add_friend">#f53f3f</color>
+    <color name="play_progress_text">#fefefe</color>
+    <color name="play_progress_color">#307bf5</color>
 
     <color name="relater_playback">#000000</color>
 
@@ -54,7 +56,9 @@
     <color name="edit_bag">#FAFAFA</color>
     <color name="send_text">#0076ff</color>
 
-    <color name="live_chat">#c8ffffff</color>
+    <color name="live_chat">#4c000000</color>
+    <color name="live_chat_white">#ffffff</color>
+    <color name="live_chat_yellow">#f9cd38</color>
 
     <color name="live_chat_level1">#ee514d</color>
     <color name="live_chat_level2">#1d8fe1</color>

@@ -7,28 +7,54 @@
     android:layout_height="match_parent"
     android:clipToPadding="false">
 
-    <FrameLayout
-        android:id="@+id/GLViewContainer"
+    <RelativeLayout
+        android:id="@+id/relative_Container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="false"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="false"
-        android:layout_alignParentTop="false"
-        android:layout_margin="0dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginTop="0dp"
-        android:background="@color/black"
-        android:padding="0dp"
-        android:paddingBottom="0dp"
-        android:paddingEnd="0dp"
-        android:paddingLeft="0dp"
-        android:paddingRight="0dp"
-        android:paddingStart="0dp"
-        android:paddingTop="0dp" />
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:id="@+id/GLViewContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentTop="false"
+            android:layout_margin="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="0dp"
+            android:background="@color/black"
+            android:padding="0dp"
+            android:paddingBottom="0dp"
+            android:paddingEnd="0dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingStart="0dp"
+            android:paddingTop="0dp">
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/LayoutTip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/text_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/login_loading" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/relativeFun"
@@ -46,98 +72,71 @@
             android:layout_marginTop="10dp"
             android:background="@mipmap/player_back" />
 
-        <ImageView
-            android:id="@+id/imgPlayerShare"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+        <LinearLayout
+            android:id="@+id/linearPlayerFun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:background="@mipmap/player_share" />
+            android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imgPlayerFullScreen"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/imgPlayerShare"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="15dp"
-            android:background="@mipmap/player_full_screen" />
+            <ImageView
+                android:id="@+id/imgPlayerShare"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/player_share" />
+
+            <ImageView
+                android:id="@+id/imgPlayerFullScreen"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="15dp"
+                android:background="@mipmap/player_full_screen" />
+
+        </LinearLayout>
 
     </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/LayoutTip"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/text_tip"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:text="正在缓冲"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#00AA00" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/LayoutPause"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="false"
-        android:layout_below="@+id/LayoutTip"
-        android:layout_centerInParent="true"
-        android:background="#00FFFFFF"
-        android:gravity="center|center_horizontal"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <ImageView
-            android:id="@+id/imgPause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@mipmap/vp_play" />
-
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/LayoutProgress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/GLViewContainer"
+        android:layout_alignBottom="@+id/relative_Container"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="10dp"
-        android:background="#00000000"
+        android:background="#99000000"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:paddingBottom="12dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="12dp"
         android:visibility="gone">
+
+        <CheckBox
+            android:id="@+id/imgPause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_play_pause"
+            android:button="@null" />
 
         <TextView
             android:id="@+id/currentDuration"
-            android:layout_width="50dp"
-            android:layout_height="fill_parent"
-            android:layout_marginTop="5dp"
-            android:background="#00FFFFFF"
-            android:gravity="right"
-            android:paddingLeft="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
             android:text="00:00"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="#CCCCCC" />
+            android:textColor="@color/play_progress_text"
+            android:textSize="11dp" />
 
         <SeekBar
             android:id="@+id/progress"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
+            android:layout_weight="1"
             android:focusable="true"
             android:max="100000000"
             android:maxHeight="6dp"
@@ -146,27 +145,25 @@
             android:paddingRight="10dp"
             android:progress="0"
             android:progressDrawable="@drawable/seekbar_style"
-            android:thumb="@mipmap/seek_thumb"
-            android:thumbOffset="1dip" />
+            android:thumb="@mipmap/vp_progress"
+            android:thumbOffset="0dp" />
 
         <TextView
             android:id="@+id/totalDuration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="#00FFFFFF"
-            android:clickable="false"
-            android:paddingRight="2dp"
+            android:gravity="center"
             android:text="00:00"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="#CCCCCC" />
+            android:textColor="@color/play_progress_text"
+            android:textSize="11dp" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/player_line_tab"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/GLViewContainer"
+        android:layout_below="@+id/relative_Container"
         android:orientation="vertical">
 
         <LinearLayout
@@ -247,10 +244,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/white"
+            android:paddingBottom="10dp"
             android:paddingLeft="15dp"
-            android:paddingTop="15dp"
             android:paddingRight="15dp"
-            android:paddingBottom="10dp">
+            android:paddingTop="15dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
