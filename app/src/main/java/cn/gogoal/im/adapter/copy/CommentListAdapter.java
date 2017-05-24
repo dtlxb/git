@@ -19,7 +19,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.copy.InnerListView;
-import cn.gogoal.im.ui.view.CircleImageView;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import hply.com.niugu.bean.CommentData;
 import hply.com.niugu.bean.CommentData_Sons;
 
@@ -43,7 +43,7 @@ public class CommentListAdapter extends MyBaseAdapter<CommentData> {
     if (convertView == null) {
       holdView = new HoldView();
       convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_comments_list_item, parent,false);
-      holdView.comment_head_iv = (CircleImageView) convertView.findViewById(R.id.comment_head_iv);
+      holdView.comment_head_iv = (RoundedImageView) convertView.findViewById(R.id.comment_head_iv);
       holdView.comment_useName = (TextView) convertView.findViewById(R.id.comment_useName);
       holdView.comment_number = (TextView) convertView.findViewById(R.id.comment_number);
       holdView.comment_thumb_up = (RelativeLayout) convertView.findViewById(R.id.comment_thumb_up);
@@ -134,7 +134,7 @@ public class CommentListAdapter extends MyBaseAdapter<CommentData> {
   }
 
   class HoldView {
-    CircleImageView comment_head_iv;
+    RoundedImageView comment_head_iv;
     TextView comment_useName;
     TextView comment_number;
     RelativeLayout comment_thumb_up;

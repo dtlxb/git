@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -121,7 +121,7 @@ public class SearchPersionFragment extends BaseFragment {
         protected void convert(BaseViewHolder holder, final ContactBean data, int position) {
             holder.getView(R.id.btn_search_group_add).setVisibility(View.GONE);
 
-            ImageView imageView = holder.getView(R.id.item_user_avatar);
+            RoundedImageView imageView = holder.getView(R.id.item_user_avatar);
             holder.setText(R.id.item_tv_search_result_name, data.getNickname());
             holder.setText(R.id.item_tv_search_result_intro,data.getDuty());
             try {

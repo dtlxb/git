@@ -95,7 +95,6 @@ public class DefaultItemTouchHelpCallback extends ItemTouchHelper.Callback {
             int dragFlag = 0;
             int swipeFlag = 0;
 
-            // 为了方便理解，相当于分为横着的ListView和竖着的ListView
             if (orientation == LinearLayoutManager.HORIZONTAL) {// 如果是横向的布局
                 swipeFlag = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
                 dragFlag = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;

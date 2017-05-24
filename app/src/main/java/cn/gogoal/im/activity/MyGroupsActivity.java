@@ -7,15 +7,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -30,6 +29,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.GroupCollectionData;
+import cn.gogoal.im.bean.GroupData;
 import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.DialogHelp;
@@ -38,11 +38,11 @@ import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageUtils;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.dialog.ShareMessageDialog;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
 import cn.gogoal.im.ui.view.XLayout;
@@ -69,7 +69,7 @@ public class MyGroupsActivity extends BaseActivity {
     DrawableCenterTextView tv_to_search;
 
     private ListAdapter listAdapter;
-    private List<GroupCollectionData.DataBean> dataBeens;
+    private List<GroupData> dataBeens;
 
     private int actionType;
     private GGShareEntity entity;
@@ -96,7 +96,11 @@ public class MyGroupsActivity extends BaseActivity {
             entity = getIntent().getParcelableExtra("share_web_data");
         }
         xLayout.setEmptyText("你还没有群组\n\r赶快找到属于你的组织吧");
-        initRecycleView(recyclerView, R.drawable.shape_divider_1px);
+
+        recyclerView.setLayoutManager(
+                new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
+
+        recyclerView.addItemDecoration(new NormalItemDecoration(mContext));
 
         dataBeens = new ArrayList<>();
         listAdapter = new ListAdapter(dataBeens);
@@ -131,14 +135,14 @@ public class MyGroupsActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     dataBeens.clear();
 
-                    List<GroupCollectionData.DataBean> data =
+                    List<GroupData> data =
                             JSONObject.parseObject(responseInfo, GroupCollectionData.class).getData();
                     dataBeens.addAll(data);
                     listAdapter.notifyDataSetChanged();
-
                     xLayout.setStatus(XLayout.Success);
                     if (type == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
                         UIHelper.toast(getActivity(), "更新群组数据成功");
@@ -163,15 +167,15 @@ public class MyGroupsActivity extends BaseActivity {
         new GGOKHTTP(params, GGOKHTTP.GET_GROUP_LIST, ggHttpInterface).startGet();
     }
 
-    private class ListAdapter extends CommonAdapter<GroupCollectionData.DataBean, BaseViewHolder> {
+    private class ListAdapter extends CommonAdapter<GroupData, BaseViewHolder> {
 
-        private ListAdapter(List<GroupCollectionData.DataBean> datas) {
+        private ListAdapter(List<GroupData> datas) {
             super(R.layout.item_my_group_list, datas);
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, final GroupCollectionData.DataBean data, final int position) {
-            final ImageView imgAvatar = holder.getView(R.id.img_my_group_avatar);
+        protected void convert(BaseViewHolder holder, final GroupData data, final int position) {
+            final RoundedImageView imgAvatar = holder.getView(R.id.img_my_group_avatar);
             final Bitmap[] groupAvatar = new Bitmap[1];
             final String imagecache = ChatGroupHelper.getBitmapFilePaht(data.getConv_id());
 
@@ -185,10 +189,11 @@ public class MyGroupsActivity extends BaseActivity {
                     groupAvatar[0] = BitmapFactory.decodeFile(imagecache);
                 } else {//没有缓存就拼
                     final List<String> avatarString = new ArrayList<>();
-                    ArrayList<GroupCollectionData.DataBean.MInfoBean> mInfo = data.getM_info();
-                    for (GroupCollectionData.DataBean.MInfoBean bean : mInfo) {
+                    ArrayList<GroupData.MInfoBean> mInfo = data.getM_info();
+                    for (GroupData.MInfoBean bean : mInfo) {
                         avatarString.add(bean.getAvatar());
                     }
+
                     GroupFaceImage.getInstance(getActivity(), avatarString).load(new GroupFaceImage.OnMatchingListener() {
                         @Override
                         public void onSuccess(final Bitmap mathingBitmap) {
@@ -198,7 +203,6 @@ public class MyGroupsActivity extends BaseActivity {
                                     //拼好了显示
                                     ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
                                     //拼好了存起来
-                                    KLog.e("现拼九宫");
                                     ChatGroupHelper.cacheGroupAvatar(data.getConv_id(), mathingBitmap);
 
                                 }

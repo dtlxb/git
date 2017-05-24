@@ -1,4 +1,4 @@
-package cn.gogoal.im.common;
+package cn.gogoal.im.download;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,6 +15,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import okhttp3.Call;
 

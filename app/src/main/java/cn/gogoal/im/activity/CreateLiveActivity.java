@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hply.imagepicker.ITakePhoto;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import java.io.File;
@@ -35,7 +35,7 @@ import cn.gogoal.im.common.UserUtils;
 public class CreateLiveActivity extends BaseActivity {
 
     @BindView(R.id.imgLive)
-    ImageView imgLive;
+    RoundedImageView imgLive;
 
     @BindView(R.id.editLive)
     EditText editLive;

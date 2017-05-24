@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item_contacts_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -21,14 +23,16 @@
         android:padding="10dp"
         android:visibility="gone" />
 
-    <ImageView
+    <com.hply.roundimage.roundImage.RoundedImageView
         android:id="@+id/item_contacts_iv_icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
         android:scaleType="centerCrop"
-        android:src="@mipmap/image_placeholder" />
+        android:src="@mipmap/image_placeholder"
+        app:riv_corner_radius="5dp"
+        />
 
     <RelativeLayout
         android:layout_width="0dp"

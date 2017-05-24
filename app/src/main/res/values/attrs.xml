@@ -107,13 +107,6 @@
         <attr name="fillColor" format="color" />
     </declare-styleable>
 
-    <declare-styleable name="SkipProgressView">
-        <attr name="circSolidColor" format="color|reference"/>
-        <attr name="circFrameColor" format="color|reference"/>
-        <attr name="textColor" format="color|reference"/>
-        <attr name="progressColor" format="color|reference"/>
-
-    </declare-styleable>
 
     <declare-styleable name="PasswordView">
         <attr name="maxCount" format="integer" />

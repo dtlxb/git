@@ -12,7 +12,6 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -22,6 +21,7 @@ import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
+import com.hply.roundimage.roundImage.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -194,7 +194,7 @@ public class SearchMessagesActivity extends BaseActivity {
 
         @Override
         protected void convert(BaseViewHolder holder, AVIMTextMessage message, int position) {
-            ImageView avatarIv = holder.getView(R.id.head_image);
+            RoundedImageView avatarIv = holder.getView(R.id.head_image);
             holder.setText(R.id.last_message, message.getText());
             //时间
             String dateStr = CalendarUtils.parseDateIMMessageFormat(message.getTimestamp());

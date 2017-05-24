@@ -32,9 +32,9 @@
                 style="@style/MainTabStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/layer_list_main_tab"
                 app:tabGravity="fill"
                 app:tabMode="fixed"
+                app:tabBackground="@drawable/layer_list_main_tab"
                 app:tabSelectedTextColor="@color/colorPrimary" />
 
             <View

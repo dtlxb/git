@@ -11,7 +11,7 @@
     android:paddingStart="15dp"
     android:paddingTop="10dp">
 
-    <ImageView
+    <com.hply.roundimage.roundImage.RoundedImageView
         android:id="@+id/img_my_group_avatar"
         android:layout_width="48dp"
         android:layout_height="48dp"

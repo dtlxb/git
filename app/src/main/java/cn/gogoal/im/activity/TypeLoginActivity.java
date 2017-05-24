@@ -262,7 +262,6 @@ public class TypeLoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                KLog.e(msg);
                 loginDialog.dismiss(true);
                 loginButton.setClickable(true);
                 WaitDialog errorDialog = WaitDialog.getInstance(getString(R.string.str_login_no_net),

@@ -1,4 +1,4 @@
-package com.hply.imagepicker;
+package com.hply.roundimage;
 
 import org.junit.Test;
 

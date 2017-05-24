@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -193,7 +192,7 @@ public class TreatFragment extends BaseFragment {
                     timeDetialDatas.clear();
                     List<TimeDetialData> cacheData =
                             JSONObject.parseObject(responseInfo, TimeDetialBean.class).getData();
-                    if (fromStockDetail) {
+                    if (fromStockDetail && cacheData.size()>=8) {
                         timeDetialDatas.addAll(cacheData.subList(0, 8));
                     } else {
                         timeDetialDatas.addAll(cacheData);

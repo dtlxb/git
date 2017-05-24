@@ -153,7 +153,9 @@
             android:name="com.google.android.maps"
             android:required="false" />
 
-        <activity android:name=".activity.PdfDisplayActivity" />
+        <activity android:name=".activity.PdfDisplayActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+
         <activity
             android:name=".activity.ChooseContactActivity"
             android:windowSoftInputMode="adjustPan" />

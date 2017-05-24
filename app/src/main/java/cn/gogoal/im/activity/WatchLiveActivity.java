@@ -75,7 +75,7 @@ import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 import cn.gogoal.im.common.linkUtils.VideoChatStatus;
 import cn.gogoal.im.fragment.WatchBottomFragment;
 import cn.gogoal.im.ui.dialog.LiveCloseDialog;
-import cn.gogoal.im.ui.view.CircleImageView;
+import com.hply.roundimage.roundImage.RoundedImageView;
 
 /*
 * 观看直播页面
@@ -96,7 +96,7 @@ public class WatchLiveActivity extends BaseActivity {
     ImageView mIvChatClose;
     //详情相关控件
     @BindView(R.id.imgPalyer)
-    CircleImageView imgPalyer;
+    RoundedImageView imgPalyer;
     @BindView(R.id.textCompany)
     TextView textCompany;
     @BindView(R.id.textOnlineNumber)

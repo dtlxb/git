@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -60,9 +59,6 @@ public class GroupFaceImage<T> {
     }
 
     public void load(OnMatchingListener listener) {
-        KLog.e(imageUrls.size());
-
-
         this.matchingListener = listener;
         final List<Bitmap> bitmaps = new ArrayList<>();
         if (null == imageUrls || imageUrls.isEmpty()) {

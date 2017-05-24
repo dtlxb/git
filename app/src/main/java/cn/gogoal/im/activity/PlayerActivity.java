@@ -55,7 +55,7 @@ import cn.gogoal.im.common.PlayerUtils.PlayerControl;
 import cn.gogoal.im.common.PlayerUtils.StatusListener;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
-import cn.gogoal.im.ui.view.CircleImageView;
+import com.hply.roundimage.roundImage.RoundedImageView;
 
 /**
  * Created by dave.
@@ -107,7 +107,7 @@ public class PlayerActivity extends BaseActivity {
     @BindView(R.id.scrollIntroduce)
     ScrollView scrollIntroduce;
     @BindView(R.id.anchor_avatar)
-    CircleImageView anchor_avatar;
+    RoundedImageView anchor_avatar;
     @BindView(R.id.anchor_name)
     TextView anchor_name;
     @BindView(R.id.anchor_position)
@@ -1130,7 +1130,7 @@ public class PlayerActivity extends BaseActivity {
             ImageDisplay.loadImage(getContext(), data.getVideo_img_url(), relater_img);
             holder.setText(R.id.relater_tittle, data.getVideo_name());
             holder.setText(R.id.relater_play_count, data.getPlay_base() + "次");
-            CircleImageView relater_avatar = holder.getView(R.id.relater_avatar);
+            RoundedImageView relater_avatar = holder.getView(R.id.relater_avatar);
             ImageDisplay.loadCircleImage(getContext(), data.getFace_url(), relater_avatar);
             holder.setText(R.id.relater_name, data.getAnchor_name());
             holder.setText(R.id.relater_content, data.getProgramme_name());

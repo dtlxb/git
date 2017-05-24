@@ -1,7 +1,6 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
@@ -28,13 +27,13 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.GroupCollectionData;
+import cn.gogoal.im.bean.GroupData;
 import cn.gogoal.im.bean.ImageTextBean;
 import cn.gogoal.im.bean.SearchBean;
 import cn.gogoal.im.bean.SearchData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 
 /**
@@ -204,7 +203,7 @@ public class IMSearchLocalActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
 
-                    List<GroupCollectionData.DataBean> data =
+                    List<GroupData> data =
                             JSONObject.parseObject(responseInfo, GroupCollectionData.class).getData();
 
                     SearchData searchData = new SearchData(true, "群组");

@@ -328,6 +328,8 @@ public class UserUtils {
     /*注销*/
     public static void logout(Activity mContext) {
 
+        SPTools.clearItem("userInfo");
+
         mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
         AVImClientManager.getInstance().close(UserUtils.getMyAccountId(), new AVIMClientCallback() {
             @Override

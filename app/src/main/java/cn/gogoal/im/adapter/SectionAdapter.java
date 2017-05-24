@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -51,8 +53,10 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionToolsData, Ba
     protected void convert(BaseViewHolder holder, final SectionToolsData data, final int position) {
         final ToolData.Tool item = data.t;
 
+//        holder.setVisible(R.id.rdb_check,true);
+
         //initView
-        View itemView = holder.getView(R.id.item_touyan_item);
+        final View itemView = holder.getView(R.id.item_touyan_item);
         ImageView itemIcon = holder.getView(R.id.img_touyan_item_icon);
         final AppCompatImageView itemHot = holder.getView(R.id.img_touyan_operation);
         TextView itemTvDesc = holder.getView(R.id.tv_touyan_item_text);
@@ -79,7 +83,9 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionToolsData, Ba
             itemView.setEnabled(item.getIsShow()!=1);
             itemHot.setImageResource(item.getIsShow() == 1 ? R.mipmap.img_tools_added : R.mipmap.img_tools_add);
 
-            ImageDisplay.loadImage(context, item.getIconUrl(), itemIcon);
+//            ImageDisplay.loadImage(context, item.getIconUrl(), itemIcon);
+            Glide.with(context).load(item.getIconUrl()).dontAnimate().dontTransform().into(itemIcon);
+
             itemTvDesc.setText(item.getDesc());
             ImageDisplay.loadImage(context, item.getIconUrl(), itemIcon);
 
@@ -87,6 +93,8 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionToolsData, Ba
                @Override
                public void onClick(View v) {
                    ((ToolsSettingActivity) context).addSelected(item);
+                   itemView.setEnabled(false);
+                   itemView.setClickable(false);
                }
            });
         }

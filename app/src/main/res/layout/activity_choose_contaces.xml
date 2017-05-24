@@ -4,79 +4,86 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:fitsSystemWindows="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
     tools:context=".activity.ChooseContactActivity">
 
     <include layout="@layout/include_title" />
 
+    <include layout="@layout/include_search_edit" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/layer_list_build_team">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_selected_contacts"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true" />
-
-            <android.support.v7.widget.SearchView
-                style="@style/NormalSearchView"
-                android:id="@+id/search_choose"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/rv_selected_contacts"
-                android:background="@android:color/transparent"
-                app:defaultQueryHint="搜索"/>
-        </RelativeLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_contacts"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <cn.gogoal.im.ui.index.IndexBar
-                android:id="@+id/index_bar"
-                android:layout_width="25dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="end" />
-
-            <TextView
-                android:id="@+id/tv_constacts_flag"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:layout_gravity="center"
-                android:background="@drawable/shape_index_bar_bg"
-                android:gravity="center"
-                android:text="W"
-                android:textColor="@android:color/white"
-                android:textSize="30sp"
-                android:visibility="gone" />
-
-        </FrameLayout>
+        android:layout_weight="1">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_del"
+            android:id="@+id/rv_contacts"
             android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <cn.gogoal.im.ui.index.IndexBar
+            android:id="@+id/index_bar"
+            android:layout_width="25dp"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
+            android:layout_gravity="end" />
+
+        <TextView
+            android:id="@+id/tv_constacts_flag"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center"
+            android:background="@drawable/shape_index_bar_bg"
+            android:gravity="center"
+            android:text="W"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
             android:visibility="gone" />
 
     </FrameLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@drawable/shape_shadow" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingEnd="7.5dp"
+        android:paddingStart="7.5dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_selected_contacts"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="7.5dp"
+            android:layout_marginStart="7.5dp"
+            android:layout_weight="1" />
+
+        <cn.gogoal.im.ui.view.SelectorButton
+            android:id="@+id/btn_action_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="7.5dp"
+            android:layout_marginStart="7.5dp"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:paddingBottom="7dp"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
+            android:paddingTop="7dp"
+            android:text="确定"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            app:pressedBackgroundColor="@android:color/holo_red_dark"
+            app:radius="5dp" />
+    </LinearLayout>
+
 </LinearLayout>

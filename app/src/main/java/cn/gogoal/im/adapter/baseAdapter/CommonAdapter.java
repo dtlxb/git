@@ -147,9 +147,10 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
         }
     }
 
-    public int getResColor(@ColorRes int colorRes){
-        return ContextCompat.getColor(mContext,colorRes);
+    public int getResColor(@ColorRes int colorRes) {
+        return ContextCompat.getColor(mContext, colorRes);
     }
+
     /**
      * same as recyclerView.setAdapter(), and save the instance of recyclerView
      */
@@ -775,7 +776,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
 
         switch (viewType) {
             case 0:
-                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()),positions);
+                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()), positions);
                 break;
             case LOADING_VIEW:
                 mLoadMoreView.convert(holder);
@@ -787,7 +788,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
             case FOOTER_VIEW:
                 break;
             default:
-                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()),positions);
+                convert(holder, mData.get(holder.getLayoutPosition() - getHeaderLayoutCount()), positions);
                 break;
         }
     }
@@ -1321,7 +1322,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
     }
 
 
-    public interface RequestLoadMoreListener{
+    public interface RequestLoadMoreListener {
 
         void onLoadMoreRequested();
 
@@ -1846,8 +1847,9 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
      * 删除指定数据条目
      */
     public void removeItem(T model) {
-        if (mData.contains(model))
-        removeItem(mData.indexOf(model));
+        if (mData.contains(model)) {
+            removeItem(mData.indexOf(model));
+        }
     }
 
     /**
@@ -1856,7 +1858,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
     public void removeItem(int position) {
         mData.remove(position);
         notifyItemRemoveWrapper(position);
-
+        notifyItemRangeChanged(position, mData.size() - position);
     }
 
     /**

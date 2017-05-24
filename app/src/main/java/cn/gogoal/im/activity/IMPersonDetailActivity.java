@@ -7,10 +7,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -178,7 +178,7 @@ public class IMPersonDetailActivity extends BaseActivity {
 
             switch (holder.getItemViewType()) {
                 case UserDetailInfo.HEAD:
-                    ImageView imageAvatar = holder.getView(R.id.image_user_info_avatar);
+                    RoundedImageView imageAvatar = holder.getView(R.id.image_user_info_avatar);
                     ImageDisplay.loadRoundedRectangleImage(mContext, data.getAvatar(), imageAvatar);
                     imageAvatar.setOnClickListener(new View.OnClickListener() {
                         @Override

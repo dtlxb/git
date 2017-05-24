@@ -4,17 +4,12 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.hply.roundimage.roundImage.RoundedImageView;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.base.AppManager;
-import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
@@ -67,7 +62,7 @@ public class ShareMessageDialog extends BaseCentDailog {
     public void bindView(View v) {
         final ShareItemInfo entity = (ShareItemInfo) getArguments().getSerializable("gg_share_list_info");
 
-        final ImageView icon = (ImageView) v.findViewById(R.id.item_contacts_iv_icon);
+        final RoundedImageView icon = (RoundedImageView) v.findViewById(R.id.item_contacts_iv_icon);
         TextView name = (TextView) v.findViewById(R.id.item_contacts_tv_nickname);
         TextView tvShareMsgDesc = (TextView) v.findViewById(R.id.tv_dialog_share_msg_desc);
         EditText etMessageInput = (EditText) v.findViewById(R.id.et_dialog_share_msg_input);

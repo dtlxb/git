@@ -24,8 +24,6 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cn.gogoal.im.base.MyApp;
-
 public class StringUtils {
 
     // 判断一个字符是否是中文
@@ -571,5 +569,9 @@ public class StringUtils {
             sb.append(str.charAt(number));
         }
         return sb.toString();
+    }
+
+    public static boolean isEmpty(CharSequence trim) {
+        return TextUtils.isEmpty(trim) || TextUtils.isEmpty(trim.toString().replace(" ",""));
     }
 }

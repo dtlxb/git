@@ -59,7 +59,7 @@
                 android:paddingEnd="20dp"
                 android:paddingStart="15dp">
 
-                <cn.gogoal.im.ui.view.CircleImageView
+                <com.hply.roundimage.roundImage.RoundedImageView
                     android:id="@+id/img_mine_avatar"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
@@ -67,8 +67,9 @@
                     android:layout_centerVertical="true"
                     android:layout_marginBottom="30dp"
                     android:src="@mipmap/logo"
-                    app:borderColor="#e0e0e0"
-                    app:borderWidth="1dp" />
+                    app:riv_border_width="1dp"
+                    app:riv_border_color="#e0e0e0"
+                    app:riv_oval="true"/>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"

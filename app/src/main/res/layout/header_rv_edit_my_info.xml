@@ -18,7 +18,7 @@
         android:textColor="@color/textColor_333333"
         android:textSize="18sp" />
 
-    <cn.gogoal.im.ui.view.CircleImageView
+    <com.hply.roundimage.roundImage.RoundedImageView
         android:id="@+id/image_user_info_avatar"
         android:layout_width="70dp"
         android:layout_height="70dp"
@@ -27,8 +27,9 @@
         android:layout_toStartOf="@+id/flag_img_more"
         android:contentDescription="@null"
         android:src="@mipmap/image_placeholder"
-        app:borderWidth="2dp"
-        app:borderColor="#e0e0e0"/>
+        app:riv_oval="true"
+        app:riv_border_width="2dp"
+        app:riv_border_color="#e0e0e0"/>
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/flag_img_more"

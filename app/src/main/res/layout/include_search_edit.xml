@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="30dp"
     android:layout_margin="10dp"
     android:background="@drawable/shape_search_activity_edit"
     android:gravity="center_vertical"
@@ -24,7 +24,7 @@
         android:drawableLeft="@mipmap/img_search"
         android:drawablePadding="5dp"
         android:gravity="center_vertical"
-        android:hint="@string/str_search_man_square"
+        android:hint="搜索"
         android:imeOptions="actionSearch"
         android:singleLine="true"
         android:textSize="14sp" />

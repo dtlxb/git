@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hply.imagepicker.ITakePhoto;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import java.io.File;
@@ -44,7 +44,7 @@ import static cn.gogoal.im.base.MyApp.getAppContext;
 public class DemoActivity extends BaseActivity {
 
     @BindView(R.id.image_ad)
-    ImageView imageView;
+    RoundedImageView imageView;
 
     @Override
     public int bindLayout() {

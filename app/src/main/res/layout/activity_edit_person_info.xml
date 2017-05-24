@@ -29,12 +29,13 @@
                 android:layout_marginBottom="39dp"
                 android:layout_marginTop="39dp">
 
-                <cn.gogoal.im.ui.view.CircleImageView
+                <com.hply.roundimage.roundImage.RoundedImageView
                     android:id="@+id/image_person_headpic"
                     android:layout_width="78dp"
                     android:layout_height="78dp"
                     android:layout_gravity="center"
-                    android:src="@mipmap/logo" />
+                    android:src="@mipmap/logo"
+                    app:riv_oval="true"/>
 
                 <ImageView
                     android:layout_width="22dp"

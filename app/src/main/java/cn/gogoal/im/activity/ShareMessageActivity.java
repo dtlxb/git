@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.hply.roundimage.roundImage.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -200,7 +200,7 @@ public class ShareMessageActivity extends BaseActivity {
                     break;
                 case ShareListBean.LIST_TYPE_ITEM:
                     holder.setText(R.id.item_contacts_tv_nickname, data.getText());
-                    final AppCompatImageView icon = holder.getView(R.id.item_contacts_iv_icon);
+                    final RoundedImageView icon = holder.getView(R.id.item_contacts_iv_icon);
                     ImageDisplay.loadRoundedRectangleImage(ShareMessageActivity.this, data.getItemImage(), icon);
 
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -212,12 +212,14 @@ public class ShareMessageActivity extends BaseActivity {
                                     intent.putExtra("square_action", AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE);
                                     intent.putExtra("share_web_data", shareEntity);
                                     startActivity(intent);
+                                    finish();
                                     break;
                                 case 2://我的群组列表
                                     Intent intent1 = new Intent(v.getContext(), MyGroupsActivity.class);
                                     intent1.putExtra("action_type", AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE);
                                     intent1.putExtra("share_web_data", shareEntity);
                                     startActivity(intent1);
+                                    finish();
                                     break;
                                 default:
                                     ShareMessageDialog.newInstance(

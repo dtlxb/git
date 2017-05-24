@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity {
 
         MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
 
-        mainStockFragment = new MainStockFragment();                     //自选股
+        mainStockFragment = new MainStockFragment();                                //自选股
 
         InvestmentResearchFragment foundFragment = new InvestmentResearchFragment(); // TAB3 投研
 

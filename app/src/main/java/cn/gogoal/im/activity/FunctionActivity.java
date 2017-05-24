@@ -88,6 +88,7 @@ public class FunctionActivity extends BaseActivity {
 //                                if ()
 //                            }
                             if (StringUtils.isActuallyEmpty(value)) {
+                                UIHelper.toast(getContext(),"暂无分享信息");
                                 return;
                             }
                             GGShareEntity shareEntity = JSONObject.parseObject(value, GGShareEntity.class);

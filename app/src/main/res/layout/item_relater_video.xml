@@ -87,12 +87,14 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <cn.gogoal.im.ui.view.CircleImageView
+            <com.hply.roundimage.roundImage.RoundedImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/relater_avatar"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center_vertical"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                app:riv_oval="true"/>
 
             <TextView
                 android:id="@+id/relater_name"

@@ -28,6 +28,7 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
+import com.hply.roundimage.roundImage.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -573,7 +574,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
     private static class IMCHatViewHolder extends RecyclerView.ViewHolder {
 
-        protected ImageView user_head_photo;
+        protected RoundedImageView user_head_photo;
         protected RelativeLayout user_layout;
         protected TextView user_name;
         protected TextView message_time;
@@ -583,7 +584,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
             user_name = (TextView) itemView.findViewById(R.id.user_name);
             message_time = (TextView) itemView.findViewById(R.id.message_time);
-            user_head_photo = (ImageView) itemView.findViewById(R.id.user_head_photo);
+            user_head_photo = (RoundedImageView) itemView.findViewById(R.id.user_head_photo);
             user_layout = (RelativeLayout) itemView.findViewById(R.id.user_layout);
 
             user_layout.setOnClickListener(new View.OnClickListener() {

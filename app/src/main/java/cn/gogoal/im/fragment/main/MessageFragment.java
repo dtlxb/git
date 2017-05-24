@@ -27,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.cpiz.android.bubbleview.BubbleLinearLayout;
 import com.cpiz.android.bubbleview.BubblePopupWindow;
 import com.cpiz.android.bubbleview.RelativePos;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -45,7 +46,6 @@ import cn.gogoal.im.activity.ContactsActivity;
 import cn.gogoal.im.activity.IMNewFrienActivity;
 import cn.gogoal.im.activity.IMSearchLocalActivity;
 import cn.gogoal.im.activity.OfficialAccountsActivity;
-import cn.gogoal.im.activity.SearchActivity;
 import cn.gogoal.im.activity.SearchPersonSquareActivity;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
@@ -333,7 +333,7 @@ public class MessageFragment extends BaseFragment {
             String nickName = "";
             String squareMessageFrom = "";
             int chatType = messageBean.getChatType();
-            final ImageView avatarIv = holder.getView(R.id.head_image);
+            final RoundedImageView avatarIv = holder.getView(R.id.head_image);
             TextView messageTv = holder.getView(R.id.last_message);
             TextView countTv = holder.getView(R.id.count_tv);
             //未读数

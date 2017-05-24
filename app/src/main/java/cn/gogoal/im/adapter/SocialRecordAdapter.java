@@ -22,7 +22,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.ui.dialog.InviteAuthDialog;
-import cn.gogoal.im.ui.view.CircleImageView;
+import com.hply.roundimage.roundImage.RoundedImageView;
 
 /**
  * Created by dave.
@@ -56,7 +56,7 @@ public class SocialRecordAdapter extends CommonAdapter<SocialRecordData, BaseVie
         holder.setText(R.id.textPcTime, data.getPlay_base());
 
         holder.setText(R.id.textPcTitle, data.getVideo_name());
-        CircleImageView imgPcIcon = holder.getView(R.id.imgPcIcon);
+        RoundedImageView imgPcIcon = holder.getView(R.id.imgPcIcon);
         ImageDisplay.loadCircleImage(mContext, data.getAnchor().getFace_url(), imgPcIcon);
         holder.setText(R.id.textCompanTitle, data.getAnchor().getOrganization() == null ? "--"
                 : data.getAnchor().getOrganization() + " | " + data.getAnchor().getAnchor_position()

@@ -15,10 +15,9 @@ import java.io.ByteArrayOutputStream;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.ui.view.CircleImageView;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import jp.wasabeef.glide.transformations.gpu.PixelationFilterTransformation;
 
 /**
@@ -144,10 +143,10 @@ public class ImageDisplay {
      * @param radius  圆角矩形角度
      * @param image   图片资源
      */
-    public static <T> void loadRoundedRectangleImage(Context context, T image, ImageView imageView, int radius) {
+    public static <T> void loadRoundedRectangleImage(Context context, T image, RoundedImageView imageView, int radius) {
+        imageView.setCornerRadius(radius);
         Glide.with(context)
                 .load(image)
-                .bitmapTransform(new RoundedCornersTransformation(context, radius, 0))
                 .into(imageView);
     }
 
@@ -155,11 +154,11 @@ public class ImageDisplay {
      * @param context 上下文对象
      * @param image   图片资源
      */
-    public static <T> void loadRoundedRectangleImage(Context context, T image, ImageView imageView) {
+    public static <T> void loadRoundedRectangleImage(Context context, T image, RoundedImageView imageView) {
+        imageView.setCornerRadius(AppDevice.dp2px(context,5));
         try {
             Glide.with(context)
                     .load(image)
-                    .bitmapTransform(new RoundedCornersTransformation(context, AppDevice.dp2px(context, 5), 0))
                     .into(imageView);
 
         }catch (Exception e) {
@@ -183,7 +182,8 @@ public class ImageDisplay {
 
     //=====================================加载圆形图=======================================
 
-    public static <T> void loadCircleImage(Context context, T image, CircleImageView imageView) {
+    public static <T> void loadCircleImage(Context context, T image, RoundedImageView imageView) {
+        imageView.setOval(true);
         if (image != null) {
             Glide.with(context).load(image)
                     .asBitmap()
@@ -193,7 +193,8 @@ public class ImageDisplay {
         }
     }
 
-    public static <T> void loadCircleImage(Context context, T image, CircleImageView imageView, boolean needPlaveHolder) {
+    public static <T> void loadCircleImage(Context context, T image, RoundedImageView imageView, boolean needPlaveHolder) {
+        imageView.setOval(true);
         if (image != null) {
             BitmapRequestBuilder<T, Bitmap> builder = Glide.with(context).load(image)
                     .asBitmap()

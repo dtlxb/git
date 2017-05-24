@@ -80,7 +80,7 @@ import cn.gogoal.im.common.linkUtils.HeadsetMonitor;
 import cn.gogoal.im.common.linkUtils.LinkConst;
 import cn.gogoal.im.common.linkUtils.VideoChatStatus;
 import cn.gogoal.im.fragment.WatchBottomFragment;
-import cn.gogoal.im.ui.view.CircleImageView;
+import com.hply.roundimage.roundImage.RoundedImageView;
 
 /*
 * 推流直播页面
@@ -105,7 +105,7 @@ public class LiveActivity extends BaseActivity {
 
     //详情相关控件
     @BindView(R.id.imgPalyer)
-    CircleImageView imgPalyer;
+    RoundedImageView imgPalyer;
     @BindView(R.id.textCompany)
     TextView textCompany;
     @BindView(R.id.textOnlineNumber)
