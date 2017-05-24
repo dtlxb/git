@@ -54,8 +54,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
                             showNotification(message);
 
                             final int chatType = (int) conversation.getAttribute("chat_type");
-                            KLog.e(message instanceof AVIMToolMessage);
-                            KLog.e(chatType);
                             switch (chatType) {
                                 case AppConst.IM_CHAT_TYPE_SINGLE:
                                     //单聊

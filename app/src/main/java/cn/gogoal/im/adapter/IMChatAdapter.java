@@ -41,6 +41,7 @@ import cn.gogoal.im.activity.ImageDetailActivity;
 import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.base.AppManager;
+import cn.gogoal.im.bean.AudioViewInfo;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
@@ -278,9 +279,10 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                     //播放动画
                     ((RightAudioViewHolder) holder).animView.setBackgroundResource(R.drawable.right_play_anim);
                     AnimationDrawable anim = (AnimationDrawable) ((RightAudioViewHolder) holder).animView.getBackground();
+                    AudioViewInfo audioViewInfo = new AudioViewInfo(((RightAudioViewHolder) holder).animView, audioMessage.getAVFile().getUrl(), 1);
                     anim.start();
                     //播放音频
-                    MediaManager.playSound(audioMessage.getAVFile().getUrl(), new MediaPlayer.OnCompletionListener() {
+                    MediaManager.playSound(audioViewInfo, new MediaPlayer.OnCompletionListener() {
 
                         @Override
                         public void onCompletion(MediaPlayer mp) {
@@ -321,9 +323,10 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                     //播放动画
                     ((LeftAudioViewHolder) holder).animView.setBackgroundResource(R.drawable.left_play_anim);
                     AnimationDrawable anim = (AnimationDrawable) ((LeftAudioViewHolder) holder).animView.getBackground();
+                    AudioViewInfo audioViewInfo = new AudioViewInfo(((LeftAudioViewHolder) holder).animView, audioMessage.getAVFile().getUrl(), 0);
                     anim.start();
                     //播放音频
-                    MediaManager.playSound(audioMessage.getAVFile().getUrl(), new MediaPlayer.OnCompletionListener() {
+                    MediaManager.playSound(audioViewInfo, new MediaPlayer.OnCompletionListener() {
 
                         @Override
                         public void onCompletion(MediaPlayer mp) {

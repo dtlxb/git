@@ -196,13 +196,13 @@ public class ChatRoomActivity extends BaseActivity {
                     AnimationDrawable anim = (AnimationDrawable) animView.getBackground();
                     anim.start();
                     //播放音频
-                    MediaManager.playSound(recorder.getFilePath(), new MediaPlayer.OnCompletionListener() {
-
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-                            animView.setBackgroundResource(R.drawable.v_anim3);
-                        }
-                    });
+//                    MediaManager.playSound(recorder.getFilePath(), new MediaPlayer.OnCompletionListener() {
+//
+//                        @Override
+//                        public void onCompletion(MediaPlayer mp) {
+//                            animView.setBackgroundResource(R.drawable.v_anim3);
+//                        }
+//                    });
                 }
             });
         }
