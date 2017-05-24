@@ -318,9 +318,7 @@ public class SocialContactFragment extends BaseFragment {
             public void onFailure(String msg) {
                 if (refreshSocial!=null)
                 refreshSocial.setRefreshing(false);
-
                 UIHelper.toast(getContext(), R.string.net_erro_hint);
-                KLog.e(TAG);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_RECORD_LIST, ggHttpInterface).startGet();

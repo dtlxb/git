@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_contacts_layout"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@drawable/selector_normal_write2gray"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingBottom="10dp"
+    android:paddingEnd="16dp"
+    android:paddingStart="16dp"
+    android:paddingTop="10dp">
+
+    <ImageView
+        android:id="@+id/item_contacts_iv_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/image_placeholder" />
+
+    <TextView
+        android:id="@+id/tv_item_contacts_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@+id/item_contacts_iv_icon"
+        android:layout_toStartOf="@+id/tv_invite"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="王尼玛"
+        android:textColor="@color/textColor_333333"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_item_contacts_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/tv_item_contacts_name"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/tv_item_contacts_name"
+        android:layout_gravity="bottom"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="188-8888-8888"
+        android:textColor="@color/textColor_999999"
+        android:textSize="12sp" />
+
+    <!--添加、已添加、邀请、等待验证-->
+    <TextView
+        android:id="@+id/tv_invite"
+        android:layout_width="55dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/shape_add_friend"
+        android:gravity="center"
+        android:text="邀请 "
+        android:textColor="@android:color/white"
+        android:textSize="13sp" />
+
+</RelativeLayout>

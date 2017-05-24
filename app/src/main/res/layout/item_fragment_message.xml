@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="68dp"
     android:layout_centerVertical="true">
@@ -17,7 +19,8 @@
             android:layout_height="48dp"
             android:layout_gravity="center"
             android:contentDescription="@null"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            app:riv_corner_radius="4dp"/>
 
         <TextView
             android:id="@+id/count_tv"

@@ -45,6 +45,7 @@
         <cn.gogoal.im.ui.index.IndexBar
             android:id="@+id/index_bar"
             android:layout_width="25dp"
+            android:visibility="gone"
             android:layout_height="match_parent"
             android:layout_gravity="end" />
 
@@ -61,7 +62,7 @@
             android:visibility="gone" />
 
         <RelativeLayout
-            android:id="@+id/xLayout"
+            android:id="@+id/empty_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="15dp"

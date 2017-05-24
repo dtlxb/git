@@ -58,7 +58,6 @@ public class UIHelper {
             mToast.setText(msg);
             mToast.setDuration(Toast.LENGTH_SHORT);
         }
-        KLog.e(cont.getClass().getSimpleName());
         mToast.show();
     }
 

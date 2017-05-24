@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts.Photo;
@@ -36,14 +37,16 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.PhoneContact;
+import cn.gogoal.im.bean.PhoneContactData;
+import cn.gogoal.im.bean.PhoneContactsInfo;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.StringUtils;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.permission.IPermissionListner;
+import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.index.IndexBar;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
 import cn.gogoal.im.ui.view.TextDrawable;
@@ -53,7 +56,7 @@ import static cn.gogoal.im.R.id.item_contacts_iv_icon;
 
 /**
  * Created by huangxx on 2017/5/8.拉联系人
- *
+ * <p>
  * Edit by wangjd 发请求匹配联系人，根据是否是gogoal用户，是否好友区分展示
  */
 
@@ -87,10 +90,11 @@ public class PhoneContactsActivity extends BaseActivity {
 
     private PhoneAdapter phoneAdapter;
 
-    private List<PhoneContact> phoneContacts;
+    private List<PhoneContactData> phoneContacts;
 
-    @BindView(R.id.xLayout)
-    View xLayout;
+    @BindView(R.id.empty_layout)
+    View emptyLayout;
+    private List<PhoneContactData> phoneContactDatas;
 
     @Override
     public int bindLayout() {
@@ -100,14 +104,11 @@ public class PhoneContactsActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         init();
-
         phoneContacts = new ArrayList<>();
-        phoneAdapter = new PhoneAdapter(phoneContacts);
-        rvContacts.setAdapter(phoneAdapter);
 
         if (ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.READ_CONTACTS) != PermissionChecker.PERMISSION_GRANTED) {
-            xLayout.setVisibility(View.VISIBLE);
+            emptyLayout.setVisibility(View.VISIBLE);
             return;
         }
 
@@ -122,50 +123,13 @@ public class PhoneContactsActivity extends BaseActivity {
         BaseActivity.requestRuntimePermission(new String[]{Manifest.permission.READ_CONTACTS}, new IPermissionListner() {
             @Override
             public void onUserAuthorize() {
-
-                phoneContacts.addAll(getContacts());
-
-                String jsonString = JSONObject.toJSONString(phoneContacts);
-                FileUtil.writeSDcard(jsonString, "gg_contacts.txt");
-
-                //TODO test
-                phoneAdapter.notifyDataSetChanged();
-
-                if (phoneContacts.isEmpty()) {
-                    xLayout.setVisibility(View.VISIBLE);
-                } else {
-                    xLayout.setVisibility(View.GONE);
-                    List<Map<String, String>> mapContacts = new ArrayList<>();
-                    for (PhoneContact contact : getContacts()) {
-                        Map<String, String> map = new HashMap<>();
-                        map.put("name", contact.getName());
-                        map.put("mobile", contact.getMobile());
-                        mapContacts.add(map);
-                    }
-
-                    KLog.e(JSONObject.toJSONString(mapContacts));
-
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("token", UserUtils.getToken());
-                    map.put("contacts", JSONObject.toJSONString(mapContacts));
-
-                    new GGOKHTTP(map, GGOKHTTP.GET_CONTACTS, new GGOKHTTP.GGHttpInterface() {
-                        @Override
-                        public void onSuccess(String responseInfo) {
-                            KLog.e(responseInfo);
-                        }
-
-                        @Override
-                        public void onFailure(String msg) {
-                            KLog.e(msg);
-                        }
-                    }).startPost();
-                }
+                //异步获取联系人
+                new GetContacts().execute("");
             }
 
             @Override
             public void onRefusedAuthorize(List<String> deniedPermissions) {
-                xLayout.setVisibility(View.VISIBLE);
+                emptyLayout.setVisibility(View.VISIBLE);
                 KLog.e("获取联系人权限被拒");
             }
         });
@@ -203,8 +167,86 @@ public class PhoneContactsActivity extends BaseActivity {
 
     }
 
-    private List<PhoneContact> getContacts() {
-        List<PhoneContact> contacts = new ArrayList<>();
+    private class GetContacts extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            phoneContactDatas = getContacts();//读联系人
+
+            phoneAdapter = new PhoneAdapter(phoneContacts);
+            return "Executed";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            rvContacts.setAdapter(phoneAdapter);
+            rvContacts.addItemDecoration(new NormalItemDecoration(PhoneContactsActivity.this));
+
+            if (phoneContactDatas.isEmpty()) {
+                emptyLayout.setVisibility(View.VISIBLE);
+            } else {
+                emptyLayout.setVisibility(View.GONE);
+                List<Map<String, String>> mapContacts = new ArrayList<>();
+                for (PhoneContactData contact : phoneContactDatas) {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("name", contact.getName());
+                    map.put("mobile", contact.getMobile());
+                    mapContacts.add(map);
+                }
+
+                KLog.e(JSONObject.toJSONString(mapContacts));
+
+                HashMap<String, String> map = new HashMap<>();
+                map.put("token", UserUtils.getToken());
+                map.put("contacts", JSONObject.toJSONString(mapContacts));
+
+                new GGOKHTTP(map, GGOKHTTP.GET_CONTACTS, new GGOKHTTP.GGHttpInterface() {
+                    @Override
+                    public void onSuccess(String responseInfo) {
+                        KLog.e(responseInfo);
+                        if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                            phoneContacts.clear();
+
+                            List<PhoneContactData> datas =
+                                    JSONObject.parseObject(responseInfo, PhoneContactsInfo.class)
+                                            .getData();
+
+                            for (PhoneContactData data : datas) {
+                                data.setPhoneAvatar(getContactAvatar(data.getMobile()));
+                            }
+
+                            phoneContacts.addAll(datas);
+                            phoneAdapter.notifyDataSetChanged();
+
+                        } else {
+                            UIHelper.toast(getActivity(), "something wrong");
+                            emptyLayout.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        UIHelper.toast(getActivity(), "接口异常(ggm_im/get_contacts)");
+                    }
+                }).startPost();
+            }
+        }
+
+        private Drawable getContactAvatar(String mobile) {
+            for (PhoneContactData data : phoneContactDatas) {
+                if (data.getMobile().equalsIgnoreCase(mobile)) {
+                    return data.getPhoneAvatar();
+                }
+            }
+            return TextDrawable
+                    .builder()
+                    .roundRect(AppDevice.dp2px(PhoneContactsActivity.this, 4))
+                    .build("未", getContactBgColor());
+        }
+    }
+
+    private List<PhoneContactData> getContacts() {
+        List<PhoneContactData> contacts = new ArrayList<>();
         TextDrawable.IBuilder iBuilder = TextDrawable.builder().roundRect(AppDevice.dp2px(this, 4));
         ContentResolver resolver = PhoneContactsActivity.this.getContentResolver();
         Cursor phoneCursor = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, PHONES_PROJECTION, null, null, null);
@@ -229,12 +271,13 @@ public class PhoneContactsActivity extends BaseActivity {
                 }
 
                 if (!StringUtils.isActuallyEmpty(phoneNumber)) {
-                    contacts.add(
-                            new PhoneContact(
-                                    contactName,
-                                    phoneNumber.replaceAll("\\s", "").replace("-", ""),
-                                    contactAvatar,
-                                    contactid));
+                    PhoneContactData data = new PhoneContactData();
+                    data.setName(contactName);
+                    data.setMobile(phoneNumber.replaceAll("\\s", "").replace("-", ""));
+                    data.setPhoneAvatar(contactAvatar);
+                    data.setContactid(contactid);
+
+                    contacts.add(data);
                 }
             }
         }
@@ -255,20 +298,55 @@ public class PhoneContactsActivity extends BaseActivity {
         return colors[new Random().nextInt(5)];
     }
 
-    private class PhoneAdapter extends CommonAdapter<PhoneContact, BaseViewHolder> {
+    private class PhoneAdapter extends CommonAdapter<PhoneContactData, BaseViewHolder> {
 
-        private PhoneAdapter(List<PhoneContact> data) {
-            super(R.layout.item_contacts, data);
+        private PhoneAdapter(List<PhoneContactData> data) {
+            super(R.layout.item_phone_contact, data);
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, PhoneContact data, int position) {
-            holder.setText(R.id.item_contacts_tv_nickname, data.getName());
+        protected void convert(BaseViewHolder holder, final PhoneContactData data, int position) {
+            TextView tvInvite = holder.getView(R.id.tv_invite);
 
-            holder.setVisible(R.id.item_contacts_tv_duty, true);
-            holder.setText(R.id.item_contacts_tv_duty, data.getMobile());
+            holder.setText(R.id.tv_item_contacts_name, data.getName());
+
+            holder.setText(R.id.tv_item_contacts_phone, data.getMobile());
 
             holder.setImageDrawable(item_contacts_iv_icon, data.getPhoneAvatar());
+
+            if (data.isIn_use()) {//是gogoal用户
+                if (data.is_friend()) {//是不是好友
+                    tvInvite.setText("已添加");
+                    tvInvite.setTextColor(getResColor(R.color.textColor_999999));
+                    tvInvite.setBackgroundColor(Color.TRANSPARENT);
+                } else {
+                    tvInvite.setText("添加");
+                    tvInvite.setTextColor(getResColor(R.color.textColor_333333));
+                    tvInvite.setBackgroundResource(R.drawable.shape_btn_rounded_rectangle_hollow);
+                }
+            } else {//不是gogoal用户
+                tvInvite.setText("邀请");
+                tvInvite.setTextColor(Color.WHITE);
+                tvInvite.setBackgroundResource(R.drawable.shape_add_friend);
+            }
+
+            tvInvite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (data.isIn_use()) {
+                        if (!data.is_friend()) {
+//                            不是好友，添加好友
+                            Intent intent = new Intent(getActivity(), IMAddFriendActivity.class);
+                            intent.putExtra("user_id", data.getAccount_info().getAccount_id());
+                            startActivity(intent);
+                        } else {
+                            //是好友，do nothing
+                        }
+                    } else {
+                        //TODO 邀请，暂无接口
+                    }
+                }
+            });
         }
     }
 }

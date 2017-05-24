@@ -3,8 +3,6 @@ package cn.gogoal.im.common.linkUtils;
 import android.Manifest;
 import android.content.Context;
 
-import com.socks.library.KLog;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +54,7 @@ public class PlayDataStatistics {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
+//                KLog.e(responseInfo);
             }
 
             @Override

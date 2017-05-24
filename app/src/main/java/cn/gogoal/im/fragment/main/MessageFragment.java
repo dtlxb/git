@@ -362,7 +362,6 @@ public class MessageFragment extends BaseFragment {
                         squareMessageFrom = UserUtils.getUserName().equals(lcattrsObject.get("username")) ? "" : lcattrsObject.getString("username");
                     }
 
-                    KLog.e(messageBean.getAvatar());
                     if (messageBean.getAvatar() != null && !TextUtils.isEmpty(messageBean.getAvatar())) {
                         ImageDisplay.loadRoundedRectangleImage(getActivity(),
                                 UFileImageHelper.load(messageBean.getAvatar()).compress(20).get(), avatarIv);

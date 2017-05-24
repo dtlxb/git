@@ -56,7 +56,7 @@ public class AdvisersDialog extends BaseCentDailog {
         });
 
         datas = new ArrayList<>();
-        advisersAdapter = new AdvisersAdapter(getActivity(), datas, 4*getWidth()/25);
+        advisersAdapter = new AdvisersAdapter(getActivity(),this, datas, 4*getWidth()/25);
         rvAdvisers.setAdapter(advisersAdapter);
 
         //先取缓存，再请求覆盖

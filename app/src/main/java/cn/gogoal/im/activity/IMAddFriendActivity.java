@@ -70,7 +70,6 @@ public class IMAddFriendActivity extends BaseActivity {
         params.put("token", UserUtils.getToken());
         params.put("friend_id", String.valueOf(userId));
         params.put("text", editYourMessage.getQuery().toString());
-        KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override

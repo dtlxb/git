@@ -33,6 +33,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.alivc.player.AliVcMediaPlayer;
 import com.alivc.player.MediaPlayer;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import java.util.HashMap;
@@ -55,7 +56,6 @@ import cn.gogoal.im.common.PlayerUtils.PlayerControl;
 import cn.gogoal.im.common.PlayerUtils.StatusListener;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
-import com.hply.roundimage.roundImage.RoundedImageView;
 
 /**
  * Created by dave.
@@ -1088,7 +1088,6 @@ public class PlayerActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     recy_relater.setVisibility(View.VISIBLE);

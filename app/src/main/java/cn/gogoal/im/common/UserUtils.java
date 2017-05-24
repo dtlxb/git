@@ -665,12 +665,15 @@ public class UserUtils {
      */
     public static void getAdvisers(final GetAdvisersCallback callback) {
 
-        String advisersList = SPTools.getString("ADVISERS_LIST", "");
+        String advisersList = SPTools.getString(UserUtils.getMyAccountId()+"_ADVISERS_LIST", "");
+
         if (!StringUtils.isActuallyEmpty(advisersList)) {
             List<Advisers> list = JSONObject.parseArray(advisersList, Advisers.class);
             if (callback != null) {
                 callback.onSuccess(list);
+                SPTools.clearItem(UserUtils.getMyAccountId()+"_ADVISERS_LIST");
             }
+
         } else {
             new GGOKHTTP(UserUtils.getTokenParams(), GGOKHTTP.GET_MY_ADVISERS, new GGOKHTTP.GGHttpInterface() {
                 @Override
@@ -678,7 +681,7 @@ public class UserUtils {
                     int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                     if (code == 0) {
                         List<Advisers> data = JSONObject.parseObject(responseInfo, AdvisersBean.class).getData();
-                        SPTools.saveString("ADVISERS_LIST", JSONObject.toJSONString(data));
+                        SPTools.saveString(UserUtils.getMyAccountId()+"_ADVISERS_LIST", JSONObject.toJSONString(data));
                         if (callback != null) {
                             callback.onSuccess(data);
                         }

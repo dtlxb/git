@@ -10,12 +10,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
+import com.hply.roundimage.roundImage.RoundedImageView;
 
 import java.io.ByteArrayOutputStream;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.AppDevice;
-import com.hply.roundimage.roundImage.RoundedImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.GrayscaleTransformation;
 import jp.wasabeef.glide.transformations.gpu.PixelationFilterTransformation;
@@ -155,7 +155,7 @@ public class ImageDisplay {
      * @param image   图片资源
      */
     public static <T> void loadRoundedRectangleImage(Context context, T image, RoundedImageView imageView) {
-        imageView.setCornerRadius(AppDevice.dp2px(context,5));
+        imageView.setCornerRadius(AppDevice.dp2px(context,4));
         try {
             Glide.with(context)
                     .load(image)
