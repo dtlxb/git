@@ -192,20 +192,16 @@ public class MyStockTabNewsFragment extends BaseFragment {
 
     private class MyStockNewsAdapter extends CommonAdapter<MyStockTabNewsBean, BaseViewHolder> {
 
+        private int newsSource;
+
         private MyStockNewsAdapter(List<MyStockTabNewsBean> datas, int newsSource) {
             super(R.layout.item_mystock_news, datas);
+            this.newsSource=newsSource;
         }
 
         @Override
         protected void convert(BaseViewHolder holder, final MyStockTabNewsBean data, int position) {
             TextView tvNewsTitle = holder.getView(R.id.tv_mystock_news_title);
-//            if (newsSource != AppConst.SOURCE_TYPE_YANBAO) {
-//                tvNewsTitle.setMaxLines(1);
-//                tvNewsTitle.setEllipsize(TextUtils.TruncateAt.END);
-//            } else {
-//                tvNewsTitle.setMaxLines(2);
-//                tvNewsTitle.setEllipsize(TextUtils.TruncateAt.END);
-//            }
             tvNewsTitle.setText(data.getNewsTitle());
             holder.setText(R.id.tv_mystock_news_stockInfo,
                     data.getStockName() + " (" + data.getStockCode() + ")");
@@ -215,11 +211,19 @@ public class MyStockTabNewsFragment extends BaseFragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    NormalIntentUtils.go2WebActivity(
-                            v.getContext(),
-                            AppConst.WEB_NEWS + data.getNewsId() + "?source=" + stockNewsType.getNewsSource(),
-                            null,
-                            stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_GONGGAO);
+                    if (newsSource!=AppConst.SOURCE_TYPE_GONGGAO) {
+                        NormalIntentUtils.go2WebActivity(
+                                v.getContext(),
+                                AppConst.WEB_NEWS + data.getNewsId() + "?source=" + stockNewsType.getNewsSource(),
+                                null,
+                                stockNewsType.getNewsSource() == AppConst.SOURCE_TYPE_GONGGAO);
+                    }else {
+                        NormalIntentUtils.go2PdfDisplayActivity(
+                                v.getContext(),
+                                data.getOrigin_link(),
+                                ""
+                        );
+                    }
                 }
             });
 

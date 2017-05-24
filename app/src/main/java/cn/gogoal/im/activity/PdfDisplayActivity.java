@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.barteksc.pdfviewer.PDFView;
+import com.github.barteksc.pdfviewer.listener.OnRenderListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 import com.socks.library.KLog;
 
@@ -49,7 +50,7 @@ public class PdfDisplayActivity extends BaseActivity {
 
     private String pdfUrl;
 
-//    http://rlrw.bnu.edu.cn/NewsImage/2012410100744.pdf
+    //    http://rlrw.bnu.edu.cn/NewsImage/2012410100744.pdf
     @Override
     public void setOrientation() {
         // do nothing
@@ -215,14 +216,22 @@ public class PdfDisplayActivity extends BaseActivity {
             }
             super.onPostExecute(result);
 
-            pdfView.fromFile(new File(getExternalFilesDir("cachePdf").getPath(), MD5Utils.getMD5EncryptyString32(pdfUrl)))
-                    .defaultPage(0)
-                    .enableSwipe(true)
-                    .swipeHorizontal(true)
-                    .enableAnnotationRendering(true)
-                    .scrollHandle(new DefaultScrollHandle(PdfDisplayActivity.this))
-                    .enableAnnotationRendering(true)
-                    .load();
+            PDFView.Configurator configurator =
+                    pdfView.fromFile(new File(getExternalFilesDir("cachePdf").getPath(), MD5Utils.getMD5EncryptyString32(pdfUrl)))
+                            .defaultPage(0)
+                            .enableSwipe(true)
+                            .enableAnnotationRendering(true)
+                            .scrollHandle(new DefaultScrollHandle(PdfDisplayActivity.this))
+                            .enableAnnotationRendering(true);
+            configurator.load();
+
+            configurator.onRender(new OnRenderListener() {
+                @Override
+                public void onInitiallyRendered(int pages, float pageWidth, float pageHeight) {
+                    pdfView.fitToWidth(); // optionally pass page number
+                }
+            });
+
 
         }
 

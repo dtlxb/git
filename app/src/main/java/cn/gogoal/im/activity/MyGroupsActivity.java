@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
@@ -32,13 +30,12 @@ import cn.gogoal.im.bean.GroupCollectionData;
 import cn.gogoal.im.bean.GroupData;
 import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
-import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -184,38 +181,52 @@ public class MyGroupsActivity extends BaseActivity {
             if (!TextUtils.isEmpty(groupUrl)) {
                 ImageDisplay.loadRoundedRectangleImage(getActivity(), groupUrl, imgAvatar);
             } else {
-                if (!StringUtils.isActuallyEmpty(imagecache)) {
-                    ImageDisplay.loadImage(getActivity(), imagecache, imgAvatar);
-                    groupAvatar[0] = BitmapFactory.decodeFile(imagecache);
-                } else {//没有缓存就拼
-                    final List<String> avatarString = new ArrayList<>();
-                    ArrayList<GroupData.MInfoBean> mInfo = data.getM_info();
-                    for (GroupData.MInfoBean bean : mInfo) {
-                        avatarString.add(bean.getAvatar());
+//                if (!StringUtils.isActuallyEmpty(imagecache)) {
+//                    ImageDisplay.loadImage(getActivity(), imagecache, imgAvatar);
+//                    groupAvatar[0] = BitmapFactory.decodeFile(imagecache);
+//                } else {//没有缓存就拼
+//                    final List<String> avatarString = new ArrayList<>();
+//                    ArrayList<GroupData.MInfoBean> mInfo = data.getM_info();
+//                    for (GroupData.MInfoBean bean : mInfo) {
+//                        avatarString.add(bean.getAvatar());
+//                    }
+//
+//                    GroupFaceImage.getInstance(getActivity(), avatarString).load(new GroupFaceImage.OnMatchingListener() {
+//                        @Override
+//                        public void onSuccess(final Bitmap mathingBitmap) {
+//                            MyGroupsActivity.this.runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    //拼好了显示
+//                                    ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
+//                                    //拼好了存起来
+//                                    ChatGroupHelper.cacheGroupAvatar(data.getConv_id(), mathingBitmap);
+//
+//                                }
+//                            });
+//                            groupAvatar[0] = mathingBitmap;
+//                        }
+//
+//                        @Override
+//                        public void onError(Exception e) {
+//                            KLog.e(e.getMessage());
+//                        }
+//                    });
+//                }
+                ChatGroupHelper.setGroupAvatar(data.getConv_id(), new AvatarTakeListener() {
+                    @Override
+                    public void success(final Bitmap bitmap) {
+                        MyGroupsActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                imgAvatar.setImageBitmap(bitmap);
+                            }
+                        });
                     }
+                    public void failed(Exception e) {
+                    }
+                });
 
-                    GroupFaceImage.getInstance(getActivity(), avatarString).load(new GroupFaceImage.OnMatchingListener() {
-                        @Override
-                        public void onSuccess(final Bitmap mathingBitmap) {
-                            MyGroupsActivity.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    //拼好了显示
-                                    ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
-                                    //拼好了存起来
-                                    ChatGroupHelper.cacheGroupAvatar(data.getConv_id(), mathingBitmap);
-
-                                }
-                            });
-                            groupAvatar[0] = mathingBitmap;
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-                            KLog.e(e.getMessage());
-                        }
-                    });
-                }
             }
 
             holder.setText(R.id.tv_my_group_name, StringUtils.getNotNullString(data.getName()));
