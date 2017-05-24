@@ -54,10 +54,22 @@
             android:id="@+id/image_user_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_below="@+id/user_name"
             android:layout_marginRight="5dp"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:src="@mipmap/timg" />
+
+        <ImageView
+            android:id="@+id/iv_send_fail"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@id/image_user_send"
+            android:src="@mipmap/message_send_fail"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

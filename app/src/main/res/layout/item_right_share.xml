@@ -39,6 +39,15 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="40dp">
 
+        <ImageView
+            android:id="@+id/iv_send_fail"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/card_layout"
+            android:src="@mipmap/message_send_fail"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"

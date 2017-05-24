@@ -35,7 +35,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 
 /**
@@ -125,7 +125,7 @@ public class SearchMessagesActivity extends BaseActivity {
 
             }
         });
-        AVImClientManager.getInstance().findConversationById(conversationID, new AVImClientManager.ChatJoinManager() {
+        AVIMClientManager.getInstance().findConversationById(conversationID, new AVIMClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
                 chatType = (int) conversation.getAttribute("chat_type");

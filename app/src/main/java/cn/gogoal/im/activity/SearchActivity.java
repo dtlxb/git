@@ -25,7 +25,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ImageTextBean;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.ui.NormalItemDecoration;
 
 
@@ -81,7 +81,7 @@ public class SearchActivity extends BaseActivity {
 
         KLog.e(conversationId);
 
-        AVImClientManager.getInstance().findConversationById(conversationId, new AVImClientManager.ChatJoinManager() {
+        AVIMClientManager.getInstance().findConversationById(conversationId, new AVIMClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
                 conversation.queryMessagesFromCache(1000, new AVIMMessagesQueryCallback() {

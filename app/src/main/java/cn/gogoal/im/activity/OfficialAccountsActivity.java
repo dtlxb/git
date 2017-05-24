@@ -30,8 +30,8 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.LcattrsBean;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
-import cn.gogoal.im.common.IMHelpers.MessageUtils;
+import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
@@ -65,19 +65,20 @@ public class OfficialAccountsActivity extends BaseActivity {
         officialRecycler.setAdapter(messagesAdapter);
 
         //未读数清零
-        JSONArray messageListJsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
+        JSONArray messageListJsonArray = UserUtils.getMessageListInfo();
+
         List<IMMessageBean> iMMessageBeans = new ArrayList<>();
         iMMessageBeans.addAll(JSON.parseArray(String.valueOf(messageListJsonArray), IMMessageBean.class));
         for (int i = 0; i < iMMessageBeans.size(); i++) {
             if (iMMessageBeans.get(i).getConversationID().equals(conversationID)) {
                 iMMessageBeans.get(i).setUnReadCounts("0");
-                MessageUtils.saveMessageInfo(messageListJsonArray, iMMessageBeans.get(i));
+                MessageListUtils.saveMessageInfo(messageListJsonArray, iMMessageBeans.get(i));
             }
         }
     }
 
     private void getAllMessages(String conversationID) {
-        AVImClientManager.getInstance().findConversationById(conversationID, new AVImClientManager.ChatJoinManager() {
+        AVIMClientManager.getInstance().findConversationById(conversationID, new AVIMClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
 

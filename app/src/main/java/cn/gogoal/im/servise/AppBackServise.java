@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 
@@ -44,7 +44,7 @@ public class AppBackServise extends Service {
                         UserUtils.saveUserInfo(data);
 
                         try {
-                            AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
+                            AVIMClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
                                 @Override
                                 public void done(AVIMClient avimClient, AVIMException e) {
                                     if (e == null) {

@@ -15,6 +15,7 @@ import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageHandler;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
+import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.avos.avospush.notification.NotificationCompat;
 import com.socks.library.KLog;
 
@@ -40,9 +41,9 @@ public class MyMessageHandler extends AVIMMessageHandler {
     @Override
     public void onMessage(final AVIMMessage message, AVIMConversation conversation, final AVIMClient client) {
         try {
-            final String clientID = AVImClientManager.getInstance().getClientId();
+            final String clientID = AVIMClientManager.getInstance().getClientId();
 
-            AVImClientManager.getInstance().findConversationById(conversation.getConversationId(), new AVImClientManager.ChatJoinManager() {
+            AVIMClientManager.getInstance().findConversationById(conversation.getConversationId(), new AVIMClientManager.ChatJoinManager() {
                 @Override
                 public void joinSuccess(final AVIMConversation conversation) {
 
@@ -50,10 +51,11 @@ public class MyMessageHandler extends AVIMMessageHandler {
                     if (clientID.equals(client.getClientId())) {
                         //剔除自己消息
                         if (!message.getFrom().equals(clientID)) {
-
                             showNotification(message);
 
                             final int chatType = (int) conversation.getAttribute("chat_type");
+                            KLog.e(message instanceof AVIMToolMessage);
+                            KLog.e(chatType);
                             switch (chatType) {
                                 case AppConst.IM_CHAT_TYPE_SINGLE:
                                     //单聊
@@ -71,7 +73,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     final String _lctype = content_object.getString("_lctype");
                                     JSONObject lcattrsGroup = content_object.getJSONObject("_lcattrs");
                                     //补全群信息(群信息没有的时候)
-                                    JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversation.getConversationId() + "_accountList_beans", new JSONArray());
+                                    JSONArray spAccountArray = UserUtils.getGroupContactInfo(conversation.getConversationId());
                                     if (spAccountArray == null || spAccountArray.size() == 0) {
                                         UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, null, conversation.getConversationId(), new UserUtils.getSquareInfo() {
                                             @Override
@@ -90,8 +92,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                             public void done(AVIMException e) {
                                                 //通讯录
                                                 JSONArray accountArray = content_object.getJSONObject("_lcattrs").getJSONArray("accountList");
-                                                MessageUtils.changeSquareInfo(conversation.getConversationId(), accountArray, _lctype);
-                                                KLog.e(conversation.getAttribute("avatar"));
+                                                MessageListUtils.changeSquareInfo(conversation.getConversationId(), accountArray, _lctype);
                                                 //生成群头像(加人删人时候更改)
                                                 if (conversation.getAttribute("avatar") == null || TextUtils.isEmpty((String) conversation.getAttribute("avatar"))) {
                                                     ChatGroupHelper.createGroupImage(conversation.getConversationId(), conversation.getMembers(), "set_avatar");
@@ -152,10 +153,10 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     sendIMMessage(message, conversation);
                                     //加好友
                                     JSONArray unAddArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversation.getConversationId() + "_unadd_accountList_beans", new JSONArray());
-                                    JSONObject unAddjsonObject = new JSONObject();
-                                    unAddjsonObject.put("message", message);
-                                    unAddjsonObject.put("isYourFriend", false);
-                                    unAddArray.add(unAddjsonObject);
+                                    JSONObject unAddJsonObject = new JSONObject();
+                                    unAddJsonObject.put("message", message);
+                                    unAddJsonObject.put("isYourFriend", false);
+                                    unAddArray.add(unAddJsonObject);
                                     SPTools.saveJsonArray(UserUtils.getMyAccountId() + conversation.getConversationId() + "_unadd_accountList_beans", unAddArray);
                                     break;
                                 case AppConst.IM_CHAT_TYPE_LIVE_MESSAGE:
@@ -204,7 +205,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
      */
     private void showNotification(AVIMMessage message) {
         JSONObject content = JSONObject.parseObject(message.getContent());
-        KLog.e(content);
         JSONObject lcattrs = content.getJSONObject("_lcattrs");
         String push = lcattrs.getString("push");
         if (push != null) {

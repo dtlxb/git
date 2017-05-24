@@ -138,7 +138,7 @@ public class AppConst {
     //新闻远端
     public static final int SOURCE_TYPE_NEWS = 100;//个股 新闻
 
-    //======================关于LeanCloud会话类型，消息类型==============================
+    //======================关于LeanCloud会话类型，消息类型，发送失败类型==============================
     public static final int IM_CHAT_TYPE_SINGLE = 1001;                 //聊天室类型 单聊
     public static final int IM_CHAT_TYPE_SQUARE = 1002;                 //聊天室类型 群聊
     public static final int IM_CHAT_TYPE_LIVE = 1003;                   //聊天室类型 直播
@@ -160,10 +160,18 @@ public class AppConst {
     public static final String IM_MESSAGE_TYPE_SQUARE_ADD = "5";        //消息类型 好友入群
     public static final String IM_MESSAGE_TYPE_SQUARE_DEL = "6";        //消息类型 群删除好友
     public static final String IM_MESSAGE_TYPE_SQUARE_REQUEST = "7";    //消息类型 申请入群
-    public static final String IM_MESSAGE_TYPE_SQUARE_DETIAL = "8";     //消息类型 群公告,群简介
+    public static final String IM_MESSAGE_TYPE_SQUARE_DETAIL = "8";     //消息类型 群公告,群简介
     public static final String IM_MESSAGE_TYPE_PUBLIC = "9";            //消息类型 公众号
     public static final String IM_MESSAGE_TYPE_STOCK = "11";            //消息类型 股票消息
     public static final String IM_MESSAGE_TYPE_SHARE = "13";            //消息类型 分享消息
+    public static final String IM_MESSAGE_TYPE_SEND_FAIL = "14";        //消息类型 发送失败
+
+    public static final int MESSAGE_SEND_FAIL_PARAMS_LACK = 101;        //失败类型 缺少参数
+    public static final int MESSAGE_SEND_FAIL_NOT_FRIEND = 102;         //失败类型 不是好友
+    public static final int MESSAGE_SEND_FAIL_NET_ERROR = 103;          //失败类型 网络异常
+    public static final int MESSAGE_SEND_FAIL_NOT_MEMBER = 112;         //失败类型 不是群成员
+    public static final int MESSAGE_SEND_FAIL_DISCONNECT = 119;         //失败类型 链接断开
+    public static final int MESSAGE_SEND_FAIL_MEMBER_LIMIT = 120;       //失败类型 群员超限
 
 
 }

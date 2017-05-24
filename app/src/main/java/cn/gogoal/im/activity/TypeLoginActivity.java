@@ -28,7 +28,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -93,11 +93,14 @@ public class TypeLoginActivity extends BaseActivity {
 //        loginUserName.setText("13166270509");
 //        loginPassWord.setText("888888");
 
-        loginUserName.setText("E00003645");
-        loginPassWord.setText("258369");
+//        loginUserName.setText("E00003645");
+//        loginPassWord.setText("258369");
 
 //        loginUserName.setText("E00018279");
 //        loginPassWord.setText("600255");
+
+        loginUserName.setText("E00002639");
+        loginPassWord.setText("412174");
 
         /*loginUserName.setText("E00020181");
         loginPassWord.setText("394495");*/
@@ -213,8 +216,8 @@ public class TypeLoginActivity extends BaseActivity {
                         intent.putExtra("isFromLogin", true);
                         //登录IM
                         try {
+                            AVIMClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
 
-                            AVImClientManager.getInstance().open(data.getString("account_id"), new AVIMClientCallback() {
                                 @Override
                                 public void done(AVIMClient avimClient, AVIMException e) {
                                     if (e == null) {

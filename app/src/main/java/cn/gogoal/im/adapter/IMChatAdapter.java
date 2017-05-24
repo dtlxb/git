@@ -28,9 +28,10 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
-import com.hply.roundimage.roundImage.RoundedImageView;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -38,11 +39,13 @@ import cn.gogoal.im.activity.IMPersonDetailActivity;
 import cn.gogoal.im.activity.ImageDetailActivity;
 import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
+import cn.gogoal.im.base.AppManager;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
-import cn.gogoal.im.common.IMHelpers.MessageUtils;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
 import cn.gogoal.im.common.NormalIntentUtils;
@@ -69,8 +72,8 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     private static int TYPE_LEFT_STOCK_MESSAGE = 0x07;
     private static int TYPE_RIGHT_STOCK_MESSAGE = 0x08;
     //分享
-    private static int TYPE_LEFT_NORMOAL_SHARE = 0x11;
-    private static int TYPE_RIGHT_NORMOAL_SHARE = 0x12;
+    private static int TYPE_LEFT_NORMAL_SHARE = 0x11;
+    private static int TYPE_RIGHT_NORMAL_SHARE = 0x12;
     //系统,未知
     private static int TYPE_SYSTEM_MESSAGE = 0x13;
     private List<AVIMMessage> messageList;
@@ -103,9 +106,9 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             return new RightStockViewHolder(mLayoutInflater.inflate(R.layout.item_right_text, parent, false));
         } else if (viewType == TYPE_LEFT_STOCK_MESSAGE) {
             return new LeftStockViewHolder(mLayoutInflater.inflate(R.layout.item_left_text, parent, false));
-        } else if (viewType == TYPE_RIGHT_NORMOAL_SHARE) {
+        } else if (viewType == TYPE_RIGHT_NORMAL_SHARE) {
             return new RightShareViewHolder(mLayoutInflater.inflate(R.layout.item_right_share, parent, false));
-        } else if (viewType == TYPE_LEFT_NORMOAL_SHARE) {
+        } else if (viewType == TYPE_LEFT_NORMAL_SHARE) {
             return new LeftShareViewHolder(mLayoutInflater.inflate(R.layout.item_left_share, parent, false));
         } else if (viewType == TYPE_SYSTEM_MESSAGE) {
             return new ChatGroupAddViewHolder(mLayoutInflater.inflate(R.layout.item_system_notify, parent, false));
@@ -123,8 +126,9 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         String messageType = contentObject.getString("_lctype");
         String headPicUrl;
         String speakerName;
+
         if (!messageType.equals(AppConst.IM_MESSAGE_TYPE_SQUARE_ADD) && !messageType.equals(AppConst.IM_MESSAGE_TYPE_SQUARE_DEL)
-                && !messageType.equals(AppConst.IM_MESSAGE_TYPE_SQUARE_DETIAL)) {
+                && !messageType.equals(AppConst.IM_MESSAGE_TYPE_SQUARE_DETAIL) && !messageType.equals(AppConst.IM_MESSAGE_TYPE_SEND_FAIL)) {
             if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.GONE);
             } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
@@ -133,12 +137,20 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
             }
             //头像
-            if (isYourSelf) {
+            if (avimMessage.getFrom().equals(UserUtils.getMyAccountId())) {
                 headPicUrl = UserUtils.getUserAvatar();
                 speakerName = UserUtils.getNickname();
+                KLog.e(contentObject.get("status"));
+                //判断消息状态
+                if (null != contentObject.get("status") && contentObject.getString("status").equals("4")) {
+                    ((IMCHatViewHolder) holder).send_fail.setVisibility(View.VISIBLE);
+                } else {
+                    ((IMCHatViewHolder) holder).send_fail.setVisibility(View.GONE);
+                }
+
             } else {
-                headPicUrl = MessageUtils.getContactWhatedInfo("avatar", Integer.parseInt(avimMessage.getFrom()), chatType, avimMessage.getConversationId());
-                speakerName = MessageUtils.getContactWhatedInfo("nickname", Integer.parseInt(avimMessage.getFrom()), chatType, avimMessage.getConversationId());
+                headPicUrl = MessageListUtils.getContactWantedInfo("avatar", Integer.parseInt(avimMessage.getFrom()), chatType, avimMessage.getConversationId());
+                speakerName = MessageListUtils.getContactWantedInfo("nickname", Integer.parseInt(avimMessage.getFrom()), chatType, avimMessage.getConversationId());
                 if (TextUtils.isEmpty(headPicUrl)) {
                     headPicUrl = (String) lcattrsObject.get("avatar");
                 }
@@ -159,6 +171,20 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                     Intent intent = new Intent(mContext, IMPersonDetailActivity.class);
                     intent.putExtra("account_id", Integer.parseInt(avimMessage.getFrom()));
                     mContext.startActivity(intent);
+                }
+            });
+            //长按头像AT某人
+            final String finalSpeakerName = speakerName;
+            ((IMCHatViewHolder) holder).user_head_photo.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (chatType == 1002 && !avimMessage.getFrom().equals(UserUtils.getMyAccountId())) {
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("speakerName", finalSpeakerName);
+                        BaseMessage baseMessage = new BaseMessage("someone", map);
+                        AppManager.getInstance().sendMessage("oneSpeaker", baseMessage);
+                    }
+                    return true;
                 }
             });
         } else {
@@ -472,13 +498,13 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 }
             case AppConst.IM_MESSAGE_TYPE_SHARE:
                 if (isYourSelf) {
-                    return TYPE_RIGHT_NORMOAL_SHARE;
+                    return TYPE_RIGHT_NORMAL_SHARE;
                 } else {
-                    return TYPE_LEFT_NORMOAL_SHARE;
+                    return TYPE_LEFT_NORMAL_SHARE;
                 }
             /*case AppConst.IM_MESSAGE_TYPE_SQUARE_ADD:
             case AppConst.IM_MESSAGE_TYPE_SQUARE_DEL:
-            case AppConst.IM_MESSAGE_TYPE_SQUARE_DETIAL:
+            case AppConst.IM_MESSAGE_TYPE_SQUARE_DETAIL:
                 return TYPE_SYSTEM_MESSAGE;*/
             default:
                 return TYPE_SYSTEM_MESSAGE;
@@ -574,18 +600,20 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
     private static class IMCHatViewHolder extends RecyclerView.ViewHolder {
 
-        protected RoundedImageView user_head_photo;
+        protected ImageView user_head_photo;
         protected RelativeLayout user_layout;
         protected TextView user_name;
         protected TextView message_time;
+        protected ImageView send_fail;
 
         IMCHatViewHolder(View itemView) {
             super(itemView);
 
             user_name = (TextView) itemView.findViewById(R.id.user_name);
             message_time = (TextView) itemView.findViewById(R.id.message_time);
-            user_head_photo = (RoundedImageView) itemView.findViewById(R.id.user_head_photo);
+            user_head_photo = (ImageView) itemView.findViewById(R.id.user_head_photo);
             user_layout = (RelativeLayout) itemView.findViewById(R.id.user_layout);
+            send_fail = (ImageView) itemView.findViewById(R.id.iv_send_fail);
 
             user_layout.setOnClickListener(new View.OnClickListener() {
                 @Override

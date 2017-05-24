@@ -55,7 +55,7 @@ public class ChatGroupHelper {
                 KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if ((int) result.get("code") == 0) {
-                    AVImClientManager.getInstance().refreshConversation(conversationId);
+                    AVIMClientManager.getInstance().refreshConversation(conversationId);
                     if (null != groupManager) {
                         groupManager.groupActionSuccess(result);
                     }
@@ -84,7 +84,7 @@ public class ChatGroupHelper {
             public void onSuccess(String responseInfo) {
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if ((int) result.get("code") == 0) {
-                    AVImClientManager.getInstance().refreshConversation(conversationId);
+                    AVIMClientManager.getInstance().refreshConversation(conversationId);
                     if (null != groupManager) {
                         groupManager.groupActionSuccess(result);
                     }
@@ -162,7 +162,7 @@ public class ChatGroupHelper {
 
     //群通讯录更新
     public static void upDataGroupContactInfo(String conversationID, int friendId, String avatar, String nickname) {
-        JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", new JSONArray());
+        JSONArray spAccountArray = UserUtils.getGroupContactInfo(conversationID);
         boolean hasThisGuy = false;
         //有这个人修改
         for (int i = 0; i < spAccountArray.size(); i++) {
@@ -184,14 +184,13 @@ public class ChatGroupHelper {
     //获取群头像并且缓存SD
     public static void createGroupImage(final String ConversationId, List<String> gruopMemberMap, final String msgTag) {
         //群删除好友(每次删除后重新生成群头像)
-        JSONArray accountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + ConversationId + "_accountList_beans", new JSONArray());
-
+        JSONArray accountArray = UserUtils.getGroupContactInfo(ConversationId);
         if (null != accountArray && accountArray.size() > 0) {
             getNinePic(accountArray, ConversationId, msgTag);
         } else {
             //如果不存在则先找这个会话
             if (gruopMemberMap == null || gruopMemberMap.size() == 0) {
-                AVImClientManager.getInstance().findConversationById(ConversationId, new AVImClientManager.ChatJoinManager() {
+                AVIMClientManager.getInstance().findConversationById(ConversationId, new AVIMClientManager.ChatJoinManager() {
                     @Override
                     public void joinSuccess(AVIMConversation conversation) {
                         UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, conversation.getMembers(), ConversationId, new UserUtils.getSquareInfo() {
@@ -338,7 +337,7 @@ public class ChatGroupHelper {
      * 现拼头像
      */
     private static void createGroupImage(final String ConversationId, final GroupInfoResponse response) {
-        AVImClientManager.getInstance().findConversationById(ConversationId, new AVImClientManager.ChatJoinManager() {
+        AVIMClientManager.getInstance().findConversationById(ConversationId, new AVIMClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
                 if (conversation.getMembers() == null || conversation.getMembers().isEmpty()) {
@@ -438,7 +437,7 @@ public class ChatGroupHelper {
                         imMessageBean = new IMMessageBean(contactBean.getConv_id(), 1001, System.currentTimeMillis(),
                                 "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), mMessage);
                     }
-                    MessageUtils.saveMessageInfo(SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray()), imMessageBean);
+                    MessageListUtils.saveMessageInfo(UserUtils.getMessageListInfo(), imMessageBean);
                 }
             }
 
@@ -504,7 +503,7 @@ public class ChatGroupHelper {
                     IMMessageBean imMessageBean = shareItemInfo.getImMessageBean();
                     imMessageBean.setLastMessage(mMessage);
                     imMessageBean.setLastTime(System.currentTimeMillis());
-                    MessageUtils.saveMessageInfo(SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray()), imMessageBean);
+                    MessageListUtils.saveMessageInfo(UserUtils.getMessageListInfo(), imMessageBean);
                 }
             }
 

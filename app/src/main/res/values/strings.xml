@@ -209,37 +209,7 @@
     <string name="loading_error">加载失败...</string>
     <string name="again_load">重新加载</string>
     <string name="im_phone_num">手机通讯录</string>
+    <string name="im_message_send_fail">对方开启了好友验证，您还不是他（她）的好友。请发起朋友验证请求，
+        对方验证通过后，才可以聊天。发送朋友验证</string>
 
-    <!--<string-array name="emoji_array">
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-        <item>fafadf</item>
-    </string-array>-->
 </resources>

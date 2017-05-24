@@ -25,7 +25,7 @@ import java.util.List;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.IMHelpers.MyConversationHandler;
 import cn.gogoal.im.common.IMHelpers.MyMessageHandler;
 import cn.gogoal.im.common.SPTools;
@@ -84,9 +84,9 @@ public class MyApp extends LitePalApplication {
         AVIMMessageManager.registerMessageHandler(AVIMMessage.class, new MyMessageHandler());
         AVIMMessageManager.setConversationEventHandler(new MyConversationHandler());
         //相互踢监听
-        AVImClientManager.setEventHandler();
+        AVIMClientManager.setEventHandler();
         //连接服务器
-            /*AVImClientManager.getInstance().open(UserUtils.getMyAccountId(), new AVIMClientCallback() {
+            /*AVIMClientManager.getInstance().open(UserUtils.getMyAccountId(), new AVIMClientCallback() {
                 @Override
                 public void done(AVIMClient avimClient, AVIMException e) {
                     //KLog.e(e.getAppCode()+";"+e.getMessage());
@@ -163,7 +163,7 @@ public class MyApp extends LitePalApplication {
 //            @Override
 //            public void onReceive(final Context context, Intent intent) {
 //                if (NetworkAvailable()) {
-//                    AVImClientManager.getInstance().open(UserUtils.getMyAccountId(), new AVIMClientCallback() {
+//                    AVIMClientManager.getInstance().open(UserUtils.getMyAccountId(), new AVIMClientCallback() {
 //                        @Override
 //                        public void done(AVIMClient avimClient, AVIMException e) {
 //                            if (e == null) {

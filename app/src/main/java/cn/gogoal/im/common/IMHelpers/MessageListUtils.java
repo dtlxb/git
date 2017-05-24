@@ -18,11 +18,14 @@ import cn.gogoal.im.common.UserUtils;
 
 /**
  * Created by huangxx on 2017/2/28.00
+ * 消息列表缓存处理
  */
 
-public class MessageUtils {
+public class MessageListUtils {
 
-    //消息列表：保存消息
+    /**
+     * 消息列表：保存消息
+     */
     public static void saveMessageInfo(JSONArray thisJsonArray, IMMessageBean imMessageBean) {
 
         JSONObject jsonObject = new JSONObject();
@@ -46,7 +49,6 @@ public class MessageUtils {
 
             AVIMMessage message = imMessageBean.getLastMessage();
             //判断消息类型
-
             if (message instanceof AVIMImageMessage) {
                 double width = StringUtils.pareseStringDouble(String.valueOf(((AVIMImageMessage) message).getFileMetaData().get("width")));
                 int mWidth = (int) width;
@@ -66,12 +68,17 @@ public class MessageUtils {
             }
 
             thisJsonArray.add(jsonObject);
-            SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", thisJsonArray);
+            KLog.e(jsonObject);
+            UserUtils.saveMessageListInfo(thisJsonArray);
         } else {
 
         }
     }
 
+
+    /**
+     * 根据对话id寻找消息
+     */
     public static IMMessageBean getIMMessageBeanById(JSONArray thisJsonArray, String conv_id) {
         if (thisJsonArray != null && !TextUtils.isEmpty(conv_id)) {
             for (int i = 0; i < thisJsonArray.size(); i++) {
@@ -84,9 +91,11 @@ public class MessageUtils {
         return new IMMessageBean(conv_id, AppConst.IM_CHAT_TYPE_SQUARE, System.currentTimeMillis(), "0", "", "", "", null);
     }
 
-    //消息列表：移除消息
+    /**
+     * 消息列表：移除消息
+     */
     public static void removeMessageInfo(String conversationID) {
-        JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
+        JSONArray jsonArray = UserUtils.getMessageListInfo();
         KLog.e(conversationID);
         for (int i = 0; i < jsonArray.size(); i++) {
             if (((JSONObject) jsonArray.get(i)).getString("conversationID").equals(conversationID)) {
@@ -95,10 +104,13 @@ public class MessageUtils {
             }
         }
         KLog.e(jsonArray);
-        SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", jsonArray);
+        UserUtils.saveMessageListInfo(jsonArray);
     }
 
-    public static int getAllMessageUnredCount(JSONArray jsonArray) {
+    /**
+     * 消息列表：获取未读数
+     */
+    public static int getAllMessageUnreadCount(JSONArray jsonArray) {
         int count = 0;
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject = (JSONObject) jsonArray.get(i);
@@ -107,35 +119,9 @@ public class MessageUtils {
         return count;
     }
 
-    //根据conversationID移除
-    public static void removeByID(String conv_id) {
-        JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
-        for (int i = 0; i < jsonArray.size(); i++) {
-            if (jsonArray.getJSONObject(i).get("conversationID").equals(conv_id)) {
-                jsonArray.remove(i);
-                break;
-            } else {
-            }
-        }
-        SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", jsonArray);
-    }
-
-    //群聊拉人加人(5:建群，拉人   6:踢人)
-    public static void changeSquareInfo(String conversationID, JSONArray accountArray, String messageType) {
-        JSONArray spAccountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", new JSONArray());
-        if (null != accountArray) {
-            if (messageType.equals("5")) {
-                spAccountArray.addAll(accountArray);
-            } else if (messageType.equals("6")) {
-                spAccountArray.removeAll(accountArray);
-            }
-            UserUtils.saveGroupContactInfo(conversationID, spAccountArray);
-        } else {
-
-        }
-    }
-
-    //从群消息提取出人名
+    /**
+     * 从群消息提取出人名
+     */
     public static String findSquarePeople(JSONArray accountArray, String messageType) {
         StringBuilder mSB = new StringBuilder();
         String ms = "";
@@ -157,14 +143,16 @@ public class MessageUtils {
         return mSB + ms;
     }
 
-    //提取聊天对方头像或者昵称
-    public static String getContactWhatedInfo(String whated, int friendId, int chatType, String conversationID) {
+    /**
+     * 获取所需要的字段
+     */
+    public static String getContactWantedInfo(String wanted, int friendId, int chatType, String conversationID) {
         JSONArray jsonArray;
         JSONObject object;
         if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
             object = SPTools.getJsonObject(UserUtils.getMyAccountId() + friendId + "", null);
             if (null != object) {
-                return object.getString(whated);
+                return object.getString(wanted);
             } else {
                 String string = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", null);
                 KLog.e(string);
@@ -176,7 +164,7 @@ public class MessageUtils {
                         for (int i = 0; i < jsonArray.size(); i++) {
                             JSONObject oldObject = (JSONObject) jsonArray.get(i);
                             if (oldObject.getInteger("friend_id") == friendId) {
-                                return oldObject.getString(whated);
+                                return oldObject.getString(wanted);
                             }
                         }
                     }
@@ -185,20 +173,35 @@ public class MessageUtils {
         } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
             object = SPTools.getJsonObject(UserUtils.getMyAccountId() + conversationID + friendId, null);
             if (null != object) {
-                return object.getString(whated);
+                return object.getString(wanted);
             } else {
-                jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationID + "_accountList_beans", new JSONArray());
+                jsonArray = UserUtils.getGroupContactInfo(conversationID);
                 if (jsonArray != null) {
                     for (int i = 0; i < jsonArray.size(); i++) {
                         JSONObject oldObject = (JSONObject) jsonArray.get(i);
                         if (oldObject.getInteger("friend_id") == friendId) {
-                            return oldObject.getString(whated);
+                            return oldObject.getString(wanted);
                         }
                     }
                 }
             }
         }
         return "";
+    }
+
+    //群聊拉人加人(5:建群，拉人   6:踢人)
+    public static void changeSquareInfo(String conversationID, JSONArray accountArray, String messageType) {
+        JSONArray spAccountArray = UserUtils.getGroupContactInfo(conversationID);
+        if (null != accountArray) {
+            if (messageType.equals("5")) {
+                spAccountArray.addAll(accountArray);
+            } else if (messageType.equals("6")) {
+                spAccountArray.removeAll(accountArray);
+            }
+            UserUtils.saveGroupContactInfo(conversationID, spAccountArray);
+        } else {
+
+        }
     }
 
 }

@@ -11,8 +11,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.avos.avoscloud.im.v2.Conversation;
-import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -22,7 +20,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -87,7 +85,7 @@ public class SingleChatRoomActivity extends BaseActivity {
 
         KLog.e(conversation_id);
         //获取聊天conversation
-        AVImClientManager.getInstance().findConversationById(conversation_id, new AVImClientManager.ChatJoinManager() {
+        AVIMClientManager.getInstance().findConversationById(conversation_id, new AVIMClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
                 contactBean = getYourSpeaker(conversation);

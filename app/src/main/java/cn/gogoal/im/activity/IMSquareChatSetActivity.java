@@ -8,7 +8,6 @@ import android.support.annotation.DrawableRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -40,7 +39,7 @@ import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
-import cn.gogoal.im.common.IMHelpers.MessageUtils;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
@@ -92,6 +91,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     private String squareCreater;
     private List<String> groupMembers;
     private String squareName;
+    private String headAvatar;
     private List<String> urls;
 
     @Override
@@ -104,6 +104,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         setMyTitle(R.string.title_chat_person_detial, true);
         //初始化
         squareCreater = getIntent().getExtras().getString("square_creater");
+        headAvatar = getIntent().getExtras().getString("head_avatar");
         personlistRecycler.setLayoutManager(new GridLayoutManager(this, 6));
         mPersonInfoAdapter = new IMPersonSetAdapter(1002, IMSquareChatSetActivity.this, R.layout.item_square_chat_set, squareCreater, contactBeens);
         personlistRecycler.setAdapter(mPersonInfoAdapter);
@@ -231,18 +232,21 @@ public class IMSquareChatSetActivity extends BaseActivity {
             urls.add(accountObject.getString("avatar"));
         }
         //获取群头像
-        if (listHasTheSame(memberList, groupMembers)) {
-            String imagecache = ChatGroupHelper.getBitmapFilePaht(conversationId);
-            Log.e("+++urls1", imagecache+"");
-            if (!StringUtils.isActuallyEmpty(imagecache)) {
-                ImageDisplay.loadImage(getActivity(), imagecache, iv_square_head);
+        if (!TextUtils.isEmpty(headAvatar)) {
+            ImageDisplay.loadRoundedRectangleImage(IMSquareChatSetActivity.this, headAvatar, iv_square_head);
+        } else {
+            if (listHasTheSame(memberList, groupMembers)) {
+                String imageCache = ChatGroupHelper.getBitmapFilePaht(conversationId);
+                if (!StringUtils.isActuallyEmpty(imageCache)) {
+                    ImageDisplay.loadImage(getActivity(), imageCache, iv_square_head);
+                } else {
+                    getNicePicture(urls);
+                }
             } else {
+                groupMembers.clear();
+                groupMembers.addAll(memberList);
                 getNicePicture(urls);
             }
-        } else {
-            groupMembers.clear();
-            groupMembers.addAll(memberList);
-            getNicePicture(urls);
         }
         tvTeamSize.setText(groupMembers.size() + "人");
         PersonContactBeens.addAll(contactBeens);
@@ -262,7 +266,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
         GroupFaceImage.getInstance(getActivity(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
             @Override
             public void onSuccess(Bitmap mathingBitmap) {
-                Log.e("+++urls2", "跑这儿没？？？");
                 ChatGroupHelper.cacheGroupAvatar(conversationId, mathingBitmap);
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("mathing_bitmap", mathingBitmap);
@@ -283,7 +286,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
     public void setAvatar(BaseMessage<Bitmap> baseMessage) {
         Map<String, Bitmap> map = baseMessage.getOthers();
         Bitmap bitmap = map.get("mathing_bitmap");
-        Log.e("+++mathing", bitmap.toString());
         iv_square_head.setImageBitmap(bitmap);
     }
 
@@ -292,9 +294,8 @@ public class IMSquareChatSetActivity extends BaseActivity {
         if (idList.size() == 1 && idList.get(0) == (Integer.parseInt(UserUtils.getMyAccountId()))) {
             UIHelper.toast(IMSquareChatSetActivity.this, "退群并删除群成功");
             //群列表删除
-            SPTools.clearItem(UserUtils.getMyAccountId() + conversationId + "_accountList_beans");
             UserUtils.deleteGroupContactInfo(conversationId);
-            MessageUtils.removeByID(conversationId);
+            MessageListUtils.removeMessageInfo(conversationId);
             finish();
             AppManager.getInstance().finishActivity(SquareChatRoomActivity.class);
         } else {
@@ -310,9 +311,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 if (null != object.get("accountList")) {
                     getAllContacts(object.getJSONArray("accountList"));
                 } else {
-                    JSONArray accountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationId + "_accountList_beans", null);
+                    JSONArray accountArray = UserUtils.getGroupContactInfo(conversationId);
                     //缓存中没有群信息则向后台拉取(取消这个)
-                    if (null != accountArray) {
+                    if (null != accountArray && accountArray.size() > 0) {
                         getAllContacts(accountArray);
                     } else {
                         UIHelper.toast(getActivity(), "网络不给力");
@@ -322,9 +323,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
             @Override
             public void squareGetFail(String error) {
-                JSONArray accountArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + conversationId + "_accountList_beans", null);
+                JSONArray accountArray = UserUtils.getGroupContactInfo(conversationId);
                 //缓存中没有群信息则向后台拉取(取消这个)
-                if (null != accountArray) {
+                if (null != accountArray && accountArray.size() > 0) {
                     getAllContacts(accountArray);
                 } else {
                     UIHelper.toast(getActivity(), "网络不给力");

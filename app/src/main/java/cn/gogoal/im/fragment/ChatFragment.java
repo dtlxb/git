@@ -29,9 +29,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.AVFile;
+import com.avos.avoscloud.RefreshCallback;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
+import com.avos.avoscloud.im.v2.AVIMMessage.AVIMMessageStatus;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
@@ -45,6 +47,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -59,14 +62,13 @@ import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.EmojiBean;
 import cn.gogoal.im.bean.FoundData;
 import cn.gogoal.im.bean.IMMessageBean;
-import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
-import cn.gogoal.im.common.IMHelpers.MessageUtils;
+import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UFileUpload;
@@ -203,7 +205,6 @@ public class ChatFragment extends BaseFragment {
 
         });
 
-
         //发送文字消息(向公司服务器发送消息，然后后台再处理给LeanCloud发送消息)
         btnSend.setOnClickListener(new View.OnClickListener()
 
@@ -218,24 +219,14 @@ public class ChatFragment extends BaseFragment {
                 }
 
                 //显示自己的文字消息
-                AVIMTextMessage mTextMessage = new AVIMTextMessage();
-                HashMap<String, Object> attrsMap = new HashMap<>();
-                attrsMap.put("username", UserUtils.getNickname());
-                attrsMap.put("avatar", UserUtils.getUserAvatar());
-                mTextMessage.setAttrs(attrsMap);
-                mTextMessage.setTimestamp(CalendarUtils.getCurrentTime());
-                mTextMessage.setFrom(UserUtils.getMyAccountId());
-                mTextMessage.setText(etInput.getText().toString());
-
-                imChatAdapter.addItem(mTextMessage);
-                imChatAdapter.notifyItemInserted(messageList.size() - 1);
-                message_recycler.smoothScrollToPosition(messageList.size() - 1);
+                AVIMTextMessage mTextMessage = createTextMessage(etInput.getText().toString());
+                refreshRecyclerView(mTextMessage, true);
 
                 //文字消息基本信息
                 Map<Object, Object> messageMap = new HashMap<>();
                 messageMap.put("_lctype", "-1");
                 messageMap.put("_lctext", etInput.getText().toString());
-                messageMap.put("_lcattrs", AVImClientManager.getInstance().userBaseInfo());
+                messageMap.put("_lcattrs", AVIMClientManager.getInstance().userBaseInfo());
 
                 Map<String, String> params = new HashMap<>();
                 params.put("token", UserUtils.getToken());
@@ -244,6 +235,7 @@ public class ChatFragment extends BaseFragment {
                 params.put("message", JSONObject.toJSONString(messageMap));
 
                 etInput.setText("");
+                SPTools.clearItem(imConversation.getConversationId());
                 //发送文字消息
                 sendAVIMMessage(params, mTextMessage);
 
@@ -315,6 +307,36 @@ public class ChatFragment extends BaseFragment {
             }
         });
 
+    }
+
+    //生成未读消息
+    private AVIMMessage crateBaseMessage(String text) {
+        AVIMMessage baseMessage = new AVIMMessage();
+        baseMessage.setTimestamp(CalendarUtils.getCurrentTime());
+        baseMessage.setFrom(UserUtils.getMyAccountId());
+        baseMessage.setMessageId(UUID.randomUUID().toString());
+
+        Map<String, String> lcattrsMap = AVIMClientManager.getInstance().userBaseInfo();
+        Map<Object, Object> messageMap = new HashMap<>();
+        messageMap.put("_lctype", AppConst.IM_MESSAGE_TYPE_SEND_FAIL);
+        messageMap.put("_lctext", text);
+        messageMap.put("_lcattrs", lcattrsMap);
+        baseMessage.setContent(JSON.toJSONString(messageMap));
+
+        return baseMessage;
+    }
+
+    //生成草稿消息
+    private AVIMTextMessage createTextMessage(String text) {
+        AVIMTextMessage mTextMessage = new AVIMTextMessage();
+        HashMap<String, Object> attrsMap = new HashMap<>();
+        attrsMap.put("username", UserUtils.getNickname());
+        attrsMap.put("avatar", UserUtils.getUserAvatar());
+        mTextMessage.setAttrs(attrsMap);
+        mTextMessage.setTimestamp(CalendarUtils.getCurrentTime());
+        mTextMessage.setFrom(UserUtils.getMyAccountId());
+        mTextMessage.setText(text);
+        return mTextMessage;
     }
 
     private void initInputStatus(int state) {
@@ -411,21 +433,46 @@ public class ChatFragment extends BaseFragment {
                 KLog.e(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if ((int) result.get("code") == 0) {
-                    //头像暂时未保存
-                    IMMessageBean imMessageBean = null;
-                    if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
-                        if (null != contactBean) {
-                            imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(), "0",
-                                    null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), message);
-                        }
-                    } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
-                        imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
-                                "0", imConversation.getName(), "", "", message);
+                    JSONObject data = result.getJSONObject("data");
+                    if (data.getBoolean("success")) {
+                        saveToMessageList(message);
                     } else {
 
-                    }
-                    MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
+                        /*AVIMMessage newMessage = messageAddStatus(message);
+                        refreshRecyclerView(newMessage, true);*/
 
+                        AVIMMessage failMessage = null;
+                        switch (data.getInteger("code")) {
+                            case AppConst.MESSAGE_SEND_FAIL_PARAMS_LACK:
+                                //缺少参数
+                                //crateBaseMessage();
+                                break;
+                            case AppConst.MESSAGE_SEND_FAIL_NOT_FRIEND:
+                                failMessage = crateBaseMessage(getResources().getString(R.string.im_message_send_fail));
+                                //不是好友
+                                break;
+                            case AppConst.MESSAGE_SEND_FAIL_NET_ERROR:
+                                //网络异常
+                                //crateBaseMessage();
+                                break;
+                            case AppConst.MESSAGE_SEND_FAIL_NOT_MEMBER:
+                                //不是群成员
+                                //crateBaseMessage();
+                                break;
+                            case AppConst.MESSAGE_SEND_FAIL_DISCONNECT:
+                                //长连接断开
+                                //crateBaseMessage();
+                                break;
+                            case AppConst.MESSAGE_SEND_FAIL_MEMBER_LIMIT:
+                                //群成员超限
+                                //crateBaseMessage();
+                                break;
+                            default:
+                                //crateBaseMessage();
+                                break;
+                        }
+                        refreshRecyclerView(failMessage, true);
+                    }
                 }
             }
 
@@ -436,6 +483,38 @@ public class ChatFragment extends BaseFragment {
         };
         new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
 
+    }
+
+    private AVIMMessage messageAddStatus(AVIMMessage avimMessage) {
+        JSONObject contentObject = JSON.parseObject(avimMessage.getContent());
+        AVIMMessage message = new AVIMMessage();
+        if (null != contentObject) {
+            contentObject.put("status", "4");
+            message.setTimestamp(avimMessage.getTimestamp());
+            message.setMessageId(avimMessage.getMessageId());
+            message.setConversationId(avimMessage.getConversationId());
+            message.setFrom(avimMessage.getFrom());
+            message.setContent(JSON.toJSONString(contentObject));
+        }
+        return message;
+    }
+
+    //缓存消息至消息列表
+    private void saveToMessageList(AVIMMessage message) {
+        //头像暂时未保存
+        IMMessageBean imMessageBean = null;
+        if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
+            if (null != contactBean) {
+                imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(), "0",
+                        null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), message);
+            }
+        } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
+            imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
+                    "0", imConversation.getName(), "", "", message);
+        } else {
+
+        }
+        MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
     }
 
     private void sendStockMessage(String stockCode, String stockName) {
@@ -451,7 +530,7 @@ public class ChatFragment extends BaseFragment {
 
         //添加股票信息
         Map<String, String> lcattrsMap;
-        lcattrsMap = AVImClientManager.getInstance().userBaseInfo();
+        lcattrsMap = AVIMClientManager.getInstance().userBaseInfo();
         lcattrsMap.put("stockCode", stockCode);
         lcattrsMap.put("stockName", stockName);
 
@@ -469,13 +548,21 @@ public class ChatFragment extends BaseFragment {
         KLog.e(params);
 
         mStockMessage.setContent(JSONObject.toJSONString(messageMap));
-        imChatAdapter.addItem(mStockMessage);
-        imChatAdapter.notifyItemInserted(messageList.size() - 1);
-        message_recycler.smoothScrollToPosition(messageList.size() - 1);
+        refreshRecyclerView(mStockMessage, true);
 
         etInput.setText("");
         //发送股票消息
         sendAVIMMessage(params, mStockMessage);
+    }
+
+    private void refreshRecyclerView(AVIMMessage avimMessage, boolean needJump) {
+        if (avimMessage != null) {
+            imChatAdapter.addItem(avimMessage);
+            imChatAdapter.notifyItemInserted(messageList.size() - 1);
+            if (needJump) {
+                message_recycler.smoothScrollToPosition(messageList.size() - 1);
+            }
+        }
     }
 
     private void sendImageToZyyx(final File file) {
@@ -499,12 +586,7 @@ public class ChatFragment extends BaseFragment {
         mImageMessage.setAttrs(attrsMap);
         mImageMessage.setTimestamp(CalendarUtils.getCurrentTime());
 
-        imChatAdapter.addItem(mImageMessage);
-        imChatAdapter.notifyItemInserted(messageList.size() - 1);
-        message_recycler.smoothScrollToPosition(messageList.size() - 1);
-        //message_recycler.getLayoutManager().scrollToPosition(messageList.size()-1);
-
-        KLog.e(file.getPath());
+        refreshRecyclerView(mImageMessage, true);
 
         AsyncTaskUtil.doAsync(new AsyncTaskUtil.AsyncCallBack() {
             @Override
@@ -533,7 +615,7 @@ public class ChatFragment extends BaseFragment {
                         Map<Object, Object> messageMap = new HashMap<>();
                         messageMap.put("_lctype", "-2");
                         messageMap.put("_lctext", "");
-                        messageMap.put("_lcattrs", AVImClientManager.getInstance().userBaseInfo());
+                        messageMap.put("_lcattrs", AVIMClientManager.getInstance().userBaseInfo());
                         messageMap.put("url", onlineUri);
                         messageMap.put("name", file.getPath());
                         messageMap.put("format", "jpg");
@@ -596,7 +678,7 @@ public class ChatFragment extends BaseFragment {
                 map.put("audio_message", mAudioMessage);
                 BaseMessage baseMessage = new BaseMessage("audio_info", map);
                 AppManager.getInstance().sendMessage("refresh_recyle", baseMessage);
-                message_recycler.smoothScrollToPosition(messageList.size() - 1);
+
 
                 UFileUpload.getInstance().upload(new File(voicePath), UFileUpload.Type.AUDIO, new UFileUpload.UploadListener() {
                     @Override
@@ -616,7 +698,7 @@ public class ChatFragment extends BaseFragment {
                         Map<Object, Object> messageMap = new HashMap<>();
                         messageMap.put("_lctype", "-3");
                         messageMap.put("_lctext", "");
-                        messageMap.put("_lcattrs", AVImClientManager.getInstance().userBaseInfo());
+                        messageMap.put("_lcattrs", AVIMClientManager.getInstance().userBaseInfo());
                         messageMap.put("url", onlineUri);
                         messageMap.put("format", "amr");
                         messageMap.put("duration", String.valueOf(seconds));
@@ -652,7 +734,7 @@ public class ChatFragment extends BaseFragment {
             if (null != avimMessages && avimMessages.size() > 0) {
                 KLog.e(avimMessages.size());
                 messageList.addAll(avimMessages);
-                dealSquareMessae();
+                dealSquareMessage();
                 imChatAdapter.setChatType(chatType);
                 imChatAdapter.notifyDataSetChanged();
                 message_recycler.getLayoutManager().scrollToPosition(0);
@@ -676,9 +758,28 @@ public class ChatFragment extends BaseFragment {
         }
     }
 
+    //寻找信息  显示草稿
+    private void setCacheMessage() {
+        IMMessageBean imMessageBean = MessageListUtils.getIMMessageBeanById(UserUtils.getMessageListInfo(), imConversation.getConversationId());
+        if (imMessageBean != null && imMessageBean.getLastMessage() != null) {
+            JSONObject contentObject = JSON.parseObject(imMessageBean.getLastMessage().getContent());
+            String _lctype = contentObject.getString("_lctype");
+            if (_lctype.equals(AppConst.IM_MESSAGE_TYPE_TEXT)) {
+                String messageText = contentObject.getString("_lctext");
+                if (messageText.startsWith("[草稿] ")) {
+                    String text = messageText.substring(5, messageText.length());
+                    etInput.setText(text);
+                    etInput.setSelection(messageText.substring(5, messageText.length()).length());
+                    AppDevice.showSoftChangeMethod(etInput);
+                }
+            }
+        }
+    }
+
     private void dealMessages(List<AVIMMessage> list, boolean needUpdate) {
         messageList.addAll(list);
-        dealSquareMessae();
+        dealSquareMessage();
+        setCacheMessage();
         //单聊，群聊处理(没发消息的时候不保存)
         if (messageList.size() > 0 && needUpdate) {
             IMMessageBean imMessageBean = null;
@@ -703,7 +804,7 @@ public class ChatFragment extends BaseFragment {
                 imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0", imConversation.getName(),
                         "", imConversation.getAttribute("avatar") != null ? (String) imConversation.getAttribute("avatar") : "", lastMessage);
             }
-            MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
+            MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
         }
 
         imChatAdapter.setChatType(chatType);
@@ -711,7 +812,7 @@ public class ChatFragment extends BaseFragment {
         message_recycler.getLayoutManager().scrollToPosition(messageList.size() - 1);
     }
 
-    private void dealSquareMessae() {
+    private void dealSquareMessage() {
         if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
             //加群消息特殊处理
             for (int i = 0; i < messageList.size(); i++) {
@@ -721,7 +822,7 @@ public class ChatFragment extends BaseFragment {
                     if (null != contentObject.getJSONObject("_lcattrs") && null != contentObject.getJSONObject("_lcattrs").getJSONArray("accountList")) {
                         HashMap<String, String> map = new HashMap<>();
                         JSONArray accountArray = contentObject.getJSONObject("_lcattrs").getJSONArray("accountList");
-                        String _lctext = MessageUtils.findSquarePeople(accountArray, _lctype);
+                        String _lctext = MessageListUtils.findSquarePeople(accountArray, _lctype);
                         map.put("_lctext", _lctext);
                         map.put("_lctype", _lctype);
                         messageList.get(i).setContent(JSON.toJSONString(map));
@@ -745,7 +846,7 @@ public class ChatFragment extends BaseFragment {
         if (null != conversation) {
             imConversation = conversation;
             chatType = (int) imConversation.getAttribute("chat_type");
-            jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
+            jsonArray = UserUtils.getMessageListInfo();
             if (chatType == AppConst.IM_CHAT_TYPE_SINGLE && contact != null) {
                 contactBean = contact;
             }
@@ -760,6 +861,10 @@ public class ChatFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
+        if (!TextUtils.isEmpty(etInput.getText())) {
+            AVIMTextMessage mTextMessage = createTextMessage("[草稿] " + etInput.getText());
+            saveToMessageList(mTextMessage);
+        }
         MediaManager.pause();
     }
 
@@ -778,9 +883,7 @@ public class ChatFragment extends BaseFragment {
     @Subscriber(tag = "refresh_recyle")
     public void audioRefresh(BaseMessage<AVIMAudioMessage> message) {
         AVIMAudioMessage audioMessage = message.getOthers().get("audio_message");
-        imChatAdapter.addItem(audioMessage);
-        imChatAdapter.notifyItemInserted(messageList.size() - 1);
-        message_recycler.smoothScrollToPosition(messageList.size() - 1);
+        refreshRecyclerView(audioMessage, true);
     }
 
     @Override
@@ -811,9 +914,7 @@ public class ChatFragment extends BaseFragment {
         String share_convid = (String) map.get("share_convid");
         if (share_convid.equals(imConversation.getConversationId())) {
             AVIMMessage mShareMessage = (AVIMMessage) map.get("share_message");
-            imChatAdapter.addItem(mShareMessage);
-            imChatAdapter.notifyItemInserted(messageList.size() - 1);
-            message_recycler.smoothScrollToPosition(messageList.size() - 1);
+            refreshRecyclerView(mShareMessage, true);
         }
     }
 
@@ -830,6 +931,21 @@ public class ChatFragment extends BaseFragment {
             etInput.setText(etInput.getText().toString() + emojiBean.getEmojiName());
         }
         etInput.setSelection(etInput.length());
+    }
+
+    /**
+     * 长按@某人
+     */
+    @Subscriber(tag = "oneSpeaker")
+    public void getOneSpeaker(BaseMessage baseMessage) {
+        Map map = baseMessage.getOthers();
+        String speakerName = (String) map.get("speakerName");
+        String etString = etInput.getText().toString();
+        if (!etString.contains("@" + speakerName + " ")) {
+            etInput.setText(etString + "@" + speakerName + " ");
+        }
+        etInput.setSelection(etInput.length());
+        //AppDevice.showSoftChangeMethod(etInput);
     }
 
     /**
@@ -892,11 +1008,7 @@ public class ChatFragment extends BaseFragment {
             KLog.e(contentObject);
             //判断房间一致然后做消息接收处理
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
-                imChatAdapter.addItem(message);
-                imChatAdapter.notifyItemInserted(messageList.size() - 1);
-                if (isVisBottom(message_recycler)) {
-                    message_recycler.smoothScrollToPosition(messageList.size() - 1);
-                }
+                refreshRecyclerView(message, isVisBottom(message_recycler));
                 //此处头像，昵称日后有数据再改
                 IMMessageBean imMessageBean = null;
                 if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
@@ -907,7 +1019,7 @@ public class ChatFragment extends BaseFragment {
                     //加人删人逻辑
                     if (_lctype.equals("5") || _lctype.equals("6")) {
                         JSONArray accountArray = contentObject.getJSONObject("_lcattrs").getJSONArray("accountList");
-                        String _lctext = MessageUtils.findSquarePeople(accountArray, _lctype);
+                        String _lctext = MessageListUtils.findSquarePeople(accountArray, _lctype);
                         map.put("_lctext", _lctext);
                         map.put("_lctype", _lctype);
                         message.setContent(JSON.toJSONString(map));
@@ -918,7 +1030,7 @@ public class ChatFragment extends BaseFragment {
                             "0", conversation.getName(), "", "", message);
                 }
 
-                MessageUtils.saveMessageInfo(jsonArray, imMessageBean);
+                MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
             }
         }
     }

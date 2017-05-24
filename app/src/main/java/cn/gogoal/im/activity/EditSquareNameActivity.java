@@ -20,7 +20,7 @@ import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.IMHelpers.AVImClientManager;
+import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -83,16 +83,15 @@ public class EditSquareNameActivity extends BaseActivity {
                 if ((int) result.get("code") == 0) {
                     UIHelper.toast(getActivity(), "群名称修改成功");
                     //刷新conversation
-                    KLog.e(conversationID);
-                    AVImClientManager.getInstance().refreshConversation(conversationID);
-                    JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
+                    AVIMClientManager.getInstance().refreshConversation(conversationID);
+                    JSONArray jsonArray = UserUtils.getMessageListInfo();
                     for (int i = 0; i < jsonArray.size(); i++) {
                         JSONObject jsonObject = (JSONObject) jsonArray.get(i);
                         if (jsonObject.get("conversationID").equals(conversationID)) {
                             ((JSONObject) jsonArray.get(i)).put("nickname", editSquareName.getText().toString());
                         }
                     }
-                    SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", jsonArray);
+                    UserUtils.saveMessageListInfo(jsonArray);
                     AppManager.getInstance().sendMessage("correct_square_name", editSquareName.getText().toString());
                 } else {
                     UIHelper.toast(getActivity(), "群名称修改失败");

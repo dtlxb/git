@@ -143,7 +143,7 @@ public class ContactsActivity extends BaseActivity {
                 Intent intent;
                 //单聊处理
                 if (position == 0) {
-                    intent = new Intent(ContactsActivity.this, IMNewFrienActivity.class);
+                    intent = new Intent(ContactsActivity.this, IMNewFriendActivity.class);
                     intent.putExtra("add_type", 0x01);
                     startActivity(intent);
                 } else if (position == 1) {

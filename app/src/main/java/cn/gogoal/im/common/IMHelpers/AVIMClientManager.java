@@ -23,21 +23,21 @@ import static com.avos.avoscloud.AVQuery.CachePolicy.NETWORK_ONLY;
 /**
  * Created by huangxx on 17/02/20.
  */
-public class AVImClientManager {
+public class AVIMClientManager {
 
-    private volatile static AVImClientManager imClientManager;
+    private volatile static AVIMClientManager imClientManager;
 
     public AVIMClient avimClient;               //< 连接server
     private String clientId;                    //< 连接serverID
 
-    private AVImClientManager() {
+    private AVIMClientManager() {
     }
 
-    public static AVImClientManager getInstance() {
+    public static AVIMClientManager getInstance() {
         if (null == imClientManager) {
-            synchronized (AVImClientManager.class) {
+            synchronized (AVIMClientManager.class) {
                 if (null == imClientManager) {
-                    imClientManager = new AVImClientManager();
+                    imClientManager = new AVIMClientManager();
                 }
             }
         }
@@ -71,7 +71,7 @@ public class AVImClientManager {
 
     public String getClientId() {
         if (TextUtils.isEmpty(clientId)) {
-            throw new IllegalStateException("Please call AVImClientManager.open first");
+            throw new IllegalStateException("Please call AVIMClientManager.open first");
         }
         return clientId;
     }
