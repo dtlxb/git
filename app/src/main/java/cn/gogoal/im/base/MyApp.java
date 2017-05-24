@@ -26,6 +26,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
+import cn.gogoal.im.common.IMHelpers.AVIMToolMessage;
 import cn.gogoal.im.common.IMHelpers.MyConversationHandler;
 import cn.gogoal.im.common.IMHelpers.MyMessageHandler;
 import cn.gogoal.im.common.SPTools;
@@ -81,7 +82,14 @@ public class MyApp extends LitePalApplication {
         //AVOSCloud.useAVCloudUS();
         //必须在启动的时候注册 MessageHandler
         //注册默认的消息处理逻辑
-        AVIMMessageManager.registerMessageHandler(AVIMMessage.class, new MyMessageHandler());
+
+        MyMessageHandler handler = new MyMessageHandler();
+
+        AVIMMessageManager.registerMessageHandler(AVIMMessage.class, handler);
+//        AVIMMessageManager.registerAVIMMessageType(AVIMToolMessage.class);
+//        AVIMMessageManager.registerMessageHandler(AVIMToolMessage.class, handler);
+
+
         AVIMMessageManager.setConversationEventHandler(new MyConversationHandler());
         //相互踢监听
         AVIMClientManager.setEventHandler();
