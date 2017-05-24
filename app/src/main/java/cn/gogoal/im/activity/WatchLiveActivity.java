@@ -338,7 +338,7 @@ public class WatchLiveActivity extends BaseActivity {
                             List<LiveOnlinePersonData> accountList = JSONArray.parseArray(String.valueOf(object.getJSONArray("accountList")), LiveOnlinePersonData.class);
                             if (accountList != null) {
                                 for (int i = 0; i < accountList.size(); i++) {
-                                    if (accountList.get(i).getFriend_id().equals(appoint_account)) {
+                                    if (accountList.get(i).getFriend_id().equals(appoint_account) || accountList.get(i).getFriend_id().equals(UserUtils.getMyAccountId())) {
                                         accountList.remove(i);
                                     }
                                 }
@@ -1155,9 +1155,8 @@ public class WatchLiveActivity extends BaseActivity {
                 List<LiveOnlinePersonData> personData = JSONObject.parseArray(String.valueOf(jsonArray), LiveOnlinePersonData.class);
                 if (!personData.get(0).getFriend_id().equals(appoint_account)) {
                     if (_lctype == 5) {
-                        audienceList.addAll(personData);
+                        audienceList.addAll(0, personData);
                         audienceAdapter.notifyDataSetChanged();
-                        recyAudience.smoothScrollToPosition(audienceList.size());
                     } else if (_lctype == 6) {
                         for (int i = 0; i < audienceList.size(); i++) {
                             if (audienceList.get(i).getFriend_id().equals(personData.get(0).getFriend_id())) {
