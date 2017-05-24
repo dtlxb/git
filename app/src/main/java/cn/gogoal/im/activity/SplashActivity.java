@@ -8,7 +8,6 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -20,7 +19,6 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.servise.AppBackServise;
-import cn.gogoal.im.ui.view.SkipProgressView;
 
 /**
  * author wangjd on 2017/5/16 0016.
@@ -32,9 +30,6 @@ public class SplashActivity extends Activity {
 
     @BindView(R.id.img_splash)
     ImageView imgSplash;
-
-    @BindView(R.id.skip_view)
-    SkipProgressView skipProgressView;
 
     private ServiceConnection sc;
 
@@ -51,23 +46,12 @@ public class SplashActivity extends Activity {
 
         Glide.with(this).load(R.mipmap.splash).centerCrop().into(imgSplash);
 
-        skipProgressView.setTimeMillis(5000);
-        skipProgressView.start();
-        skipProgressView.setProgressListener(new SkipProgressView.OnProgressListener() {
+        new android.os.Handler().postDelayed(new Runnable() {
             @Override
-            public void onProgress(int progress) {
-                if (progress == 0) {
-                    go2Next();
-                }
-            }
-        });
-        skipProgressView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            public void run() {
                 go2Next();
             }
-        });
-
+        },1000);
 
     }
 

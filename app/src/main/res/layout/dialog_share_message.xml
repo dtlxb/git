@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:background="@drawable/shape_dialog_share_message_bg"
     android:orientation="vertical">
 
@@ -36,7 +38,10 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
         android:maxLines="3"
-        android:hint="给对方留言" />
+        android:textSize="14sp"
+        android:background="@drawable/dialog_invite_auth"
+        android:padding="7dp"
+        android:hint="给朋友留言" />
 
     <LinearLayout
         android:layout_width="match_parent"

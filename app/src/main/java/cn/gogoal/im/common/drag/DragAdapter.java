@@ -1,7 +1,6 @@
 package cn.gogoal.im.common.drag;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
@@ -11,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.hply.imagepicker.view.SuperCheckBox;
 
 import java.util.List;
 
@@ -99,11 +100,11 @@ public class DragAdapter extends RecyclerView.Adapter<DragAdapter.MainContentVie
         private TextView mTvName;
         private ImageView mIvTouch;
         private ImageView mIv2Top;
-        private AppCompatCheckBox mCbCheck;
+        private SuperCheckBox mCbCheck;
 
         private MainContentViewHolder(View itemView) {
             super(itemView);
-            mCbCheck = (AppCompatCheckBox) itemView.findViewById(R.id.checker);
+            mCbCheck = (SuperCheckBox) itemView.findViewById(R.id.checker);
             mTvName = (TextView) itemView.findViewById(R.id.tv_drag_stock_name);
             mIvTouch = (ImageView) itemView.findViewById(R.id.img_drag);
             mIv2Top = (ImageView) itemView.findViewById(R.id.img_2_top);

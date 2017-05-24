@@ -212,58 +212,6 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
         addFragments();
     }
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(hply.com.niugu.R.layout.activity_stock_detail_charts);
-//        EventBus.getDefault().register(this);
-//        ButterKnife.bind(this);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//
-//        initView();
-//        setBottomTab();
-//
-//        totalHeight = DeviceUtil.getHeight(this);
-//        width = DeviceUtil.getWidth(this) - DeviceUtil.dp2px(this, 18);
-//        height = DeviceUtil.getHeight(this) - DeviceUtil.dp2px(this, 90);
-//
-//        if (!DeviceUtil.isNetworkConnected(this)) {//网络不可用时移除刷新
-//            progressWheel.setVisibility(View.GONE);
-//            tvCannotGetData.setVisibility(View.VISIBLE);
-//            handler.removeCallbacks(runnable);
-//
-//        } else {
-//            progressWheel.setVisibility(View.VISIBLE);
-//            tvCannotGetData.setVisibility(View.GONE);
-//            handler.removeCallbacks(runnable);
-//            handler.postDelayed(runnable, 5000);
-//        }
-//        setEnvents();
-//
-//        //获取个股信息
-//        initGetData();
-//
-//        fragmentList = new ArrayList<>();
-//
-//        //将碎片加入碎片集合
-//        timesFragment = new TimesFragment();
-//        fiveDayFragment = new FiveDayFragment();
-//
-//        if (stockType == STOCK_MARKE_INDEX) {
-//            authority_blog.setVisibility(View.GONE);
-//        }
-//
-//        initFragment();
-//
-//        addFragments();
-//
-//    }
-//
-//    private void initView() {
-//
-//    }
-
     private void setBottomTab() {
         for (int i = 0; i < tabTitles.length; i++) {
             tabLayout.addTab(tabLayout.newTab().setText(tabTitles[i]),i==getIntent().getIntExtra("position",0));

@@ -67,7 +67,7 @@
     </declare-styleable>
 
     <declare-styleable name="XLayout">
-        <attr name="isFirstVisible" format="boolean"/>
+        <attr name="isFirstVisible" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="XEditText">
@@ -107,13 +107,6 @@
         <attr name="fillColor" format="color" />
     </declare-styleable>
 
-    <declare-styleable name="SkipProgressView">
-        <attr name="circSolidColor" format="color|reference"/>
-        <attr name="circFrameColor" format="color|reference"/>
-        <attr name="textColor" format="color|reference"/>
-        <attr name="progressColor" format="color|reference"/>
-
-    </declare-styleable>
 
     <declare-styleable name="PasswordView">
         <attr name="maxCount" format="integer" />
@@ -129,4 +122,26 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="SwitchView">
+        <attr name="sv_shadow_radius" format="reference|dimension" />
+        <attr name="sv_shadow_offset" format="reference|dimension" />
+        <attr name="sv_shadow_color" format="reference|color" />
+        <attr name="sv_uncheck_color" format="reference|color" />
+        <attr name="sv_checked_color" format="reference|color" />
+
+        <attr name="sv_border_width" format="reference|dimension" />
+        <attr name="sv_checkline_color" format="reference|color" />
+        <attr name="sv_checkline_width" format="reference|dimension" />
+        <attr name="sv_uncheckcircle_color" format="reference|color" />
+        <attr name="sv_uncheckcircle_width" format="reference|dimension" />
+        <attr name="sv_uncheckcircle_radius" format="reference|dimension" />
+
+        <attr name="sv_checked" format="reference|boolean" />
+        <attr name="sv_shadow_effect" format="reference|boolean" />
+        <attr name="sv_effect_duration" format="reference|integer" />
+        <attr name="sv_button_color" format="reference|color" />
+        <attr name="sv_show_indicator" format="reference|boolean" />
+        <attr name="sv_background" format="reference|color" />
+        <attr name="sv_enable_effect" format="reference|boolean" />
+    </declare-styleable>
 </resources>

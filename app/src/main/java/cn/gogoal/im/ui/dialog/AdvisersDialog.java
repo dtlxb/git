@@ -59,7 +59,7 @@ public class AdvisersDialog extends BaseCentDailog {
         advisersAdapter = new AdvisersAdapter(getActivity(), datas, 4*getWidth()/25);
         rvAdvisers.setAdapter(advisersAdapter);
 
-        //再请求覆盖
+        //先取缓存，再请求覆盖
         UserUtils.getAdvisers(new UserUtils.GetAdvisersCallback() {
             @Override
             public void onSuccess(List<Advisers> advisersList) {
@@ -73,6 +73,7 @@ public class AdvisersDialog extends BaseCentDailog {
                 UIHelper.toast(getActivity(), errorMsg, Toast.LENGTH_LONG);
             }
         });
+
     }
 
 //    /**

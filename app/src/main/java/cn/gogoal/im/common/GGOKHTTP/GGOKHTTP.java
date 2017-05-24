@@ -718,7 +718,7 @@ public class GGOKHTTP {
                     });
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("TAG","==出错日志==出错接口："+url+"=="+e.getMessage()+"==");
+            Log.e("TAG","==出错日志==e.getMessage()==出错接口："+url+"==");
             if (httpInterface != null) httpInterface.onFailure(e.toString());
         }
     }

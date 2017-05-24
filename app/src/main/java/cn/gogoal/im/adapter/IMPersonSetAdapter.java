@@ -4,8 +4,9 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.hply.roundimage.roundImage.RoundedImageView;
 
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean, BaseViewHolde
         view.setBackgroundColor(ContextCompat.getColor(mContext, android.R.color.white));
         view.setLayoutParams(layoutParams);
 
-        ImageView imageIcon = holder.getView(R.id.iv);
+        RoundedImageView imageIcon = holder.getView(R.id.iv);
 
         TextView personName = holder.getView(R.id.tv);
         TextView squareManTag = holder.getView(R.id.square_man_tag);

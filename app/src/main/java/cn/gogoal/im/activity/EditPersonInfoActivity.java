@@ -31,7 +31,7 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.BottomSheetListDialog;
 import cn.gogoal.im.ui.dialog.WaitDialog;
-import cn.gogoal.im.ui.view.CircleImageView;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XTitle;
 
@@ -47,7 +47,7 @@ public class EditPersonInfoActivity extends BaseActivity {
     FrameLayout layoutPersonHeadpic;
 
     @BindView(R.id.image_person_headpic)
-    CircleImageView imagePersonHeadpic;
+    RoundedImageView imagePersonHeadpic;
 
     @BindView(R.id.edit_person_name)
     EditText editPersonName;

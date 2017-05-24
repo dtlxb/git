@@ -51,15 +51,11 @@ public class SortView extends AppCompatTextView {
     }
 
     private void init(Context context) {
+
         Typeface iconfont = Typeface.createFromAsset(context.getAssets(), "iconfont/sort.ttf");
         this.setTypeface(iconfont);
-//        if (TextUtils.isEmpty(defaultText)) {
-//            this.setClickable(false);
-//            this.setFocusable(false);
-//        }else {
         this.setClickable(true);
         this.setOnClickListener(new SortClick());
-//        }
     }
 
     private class SortClick implements OnClickListener {
@@ -75,7 +71,7 @@ public class SortView extends AppCompatTextView {
                     sortInteface.doSort(v, -1);
                     setViewStateDown();
                 }
-            } else if (sortType ==-1) {
+            } else if (sortType == -1) {
                 if (sortInteface != null) {
                     sortInteface.doSort(v, 0);
                     setViewStateNormal();
@@ -91,13 +87,13 @@ public class SortView extends AppCompatTextView {
     }
 
     public void setViewStateDown() {
-        sortType=-1;
+        sortType = -1;
         setText(String.format(getContext().getString(R.string.mystock_sort_down), defaultText));
         this.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
     }
 
     public void setViewStateUp() {
-        sortType=1;
+        sortType = 1;
         setText(String.format(getContext().getString(R.string.mystock_sort_up), defaultText));
         this.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
     }

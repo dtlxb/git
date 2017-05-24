@@ -28,7 +28,7 @@ import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
-import cn.gogoal.im.ui.view.CircleImageView;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import cn.gogoal.im.ui.widget.AddressPicker;
 
 
@@ -114,7 +114,7 @@ public class EditMyInfoActivity extends BaseActivity {
 
         @Override
         protected void convert(BaseViewHolder holder, UserDetailInfo data, final int position) {
-            final CircleImageView circleImageView = holder.getView(R.id.image_user_info_avatar);
+            final RoundedImageView circleImageView = holder.getView(R.id.image_user_info_avatar);
             switch (holder.getItemViewType()) {
                 case UserDetailInfo.HEAD:
                     UserUtils.getUserAvatar(new AvatarTakeListener() {

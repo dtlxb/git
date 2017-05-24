@@ -62,7 +62,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="1px"
         android:layout_marginTop="16dp"
         android:background="@color/relater_play_count" />
 
@@ -83,7 +83,7 @@
             android:textSize="16dp" />
 
         <View
-            android:layout_width="1dp"
+            android:layout_width="1px"
             android:layout_height="match_parent"
             android:background="@color/relater_play_count" />
 

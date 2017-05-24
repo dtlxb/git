@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:background="@color/white">
 
-    <hply.com.niugu.LandScapeChartView
+    <cn.gogoal.im.ui.copy.LandScapeChartView
         android:id="@+id/fiveday_bitmapchartview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -13,12 +13,4 @@
         android:layout_height="match_parent"
         android:contentDescription="@null" />
 
-    <cn.gogoal.im.ui.view.SkipProgressView
-        android:id="@+id/skip_view"
-        android:layout_width="45dp"
-        android:layout_margin="16dp"
-        android:layout_height="45dp"
-        android:layout_gravity="top|right"
-        />
-
 </FrameLayout>

@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:gravity="center">
 
-        <ImageView
+        <com.hply.roundimage.roundImage.RoundedImageView
             android:id="@+id/head_image"
             android:layout_width="48dp"
             android:layout_height="48dp"

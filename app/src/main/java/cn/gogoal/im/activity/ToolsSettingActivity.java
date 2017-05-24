@@ -1,6 +1,7 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -103,7 +104,7 @@ public class ToolsSettingActivity extends BaseActivity {
         });
 
         dataSelected = new ArrayList<>();
-        selectedAdapter = new SelectedAdapter(mContext, dataSelected);
+        selectedAdapter = new SelectedAdapter(rvSelected, dataSelected);
 
         List<ToolData.Tool> intentDatas = getIntent().getParcelableArrayListExtra("selected_tools");
         if (intentDatas != null && !intentDatas.isEmpty()) {
@@ -119,11 +120,8 @@ public class ToolsSettingActivity extends BaseActivity {
         mItemDragAndSwipeCallback.setSwipeMoveFlags(ItemTouchHelper.START | ItemTouchHelper.END);
         selectedAdapter.disableSwipeItem();
         selectedAdapter.enableDragItem(mItemTouchHelper);
-        GridLayoutManager selectdLayoutManager = new GridLayoutManager(mContext, AppDevice.isLowDpi() ? 3 : 4);
-        selectdLayoutManager.setAutoMeasureEnabled(true);
-        rvSelected.setLayoutManager(selectdLayoutManager);
+        rvSelected.setLayoutManager(new GridLayoutManager(mContext, AppDevice.isLowDpi() ? 3 : 4));
         rvSelected.setAdapter(selectedAdapter);
-        rvSelected.setNestedScrollingEnabled(false);
         rvSelected.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
@@ -136,8 +134,10 @@ public class ToolsSettingActivity extends BaseActivity {
         selectedAdapter.setOnItemDragListener(new OnItemDragListener() {
             @Override
             public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos) {
+                viewHolder.itemView.setBackgroundColor(getResColor(R.color.textColor_999999));
+
                 BaseViewHolder holder = ((BaseViewHolder) viewHolder);
-//                holder.setTextColor(R.id.tv, Color.WHITE);
+                holder.setTextColor(R.id.tv_touyan_item_text, Color.WHITE);
             }
 
             @Override
@@ -147,18 +147,17 @@ public class ToolsSettingActivity extends BaseActivity {
 
             @Override
             public void onItemDragEnd(RecyclerView.ViewHolder viewHolder, int pos) {
-//                KLog.e("drag end");
                 BaseViewHolder holder = ((BaseViewHolder) viewHolder);
+                viewHolder.itemView.setBackgroundResource(R.drawable.shape_line_bottom_right);
+
+                holder.setTextResColor(R.id.tv_touyan_item_text, R.color.textColor_666666);
+
                 selectedAdapter.notifyDataSetChanged();
 //                holder.setTextColor(R.id.tv, Color.BLACK);
             }
         });
 
-        rvSelected.setNestedScrollingEnabled(false);
-        rvSelected.setHasFixedSize(true);
         //=========================================================
-        rvAll.setNestedScrollingEnabled(false);
-        rvAll.setHasFixedSize(true);
 
         rvAll.setLayoutManager(new StaggeredGridLayoutManager(AppDevice.isLowDpi() ? 3 : 4,
                 StaggeredGridLayoutManager.VERTICAL));
@@ -322,9 +321,6 @@ public class ToolsSettingActivity extends BaseActivity {
      * 增加
      */
     public void addSelected(ToolData.Tool tool) {
-        tvTips.setVisibility(View.VISIBLE);
-        rvSelected.setVisibility(View.VISIBLE);
-
         dataSelected.add(tool);
 //        selectedAdapter.notifyItemInserted(dataSelected.size());
         rvSelected.smoothScrollToPosition(dataSelected.size() - 1);
@@ -342,17 +338,16 @@ public class ToolsSettingActivity extends BaseActivity {
                 break;
             }
         }
+
+        tvTips.setVisibility(View.VISIBLE);
+
+        rvSelected.setVisibility(View.VISIBLE);
     }
 
     /**
      * 删减
      */
     public void remooveSelected(ToolData.Tool tool) {
-
-        tvTips.setVisibility(dataSelected.size() > 0?View.VISIBLE:View.GONE);
-        rvSelected.setVisibility(dataSelected.size() > 0?View.VISIBLE:View.GONE);
-
-        KLog.e(dataAll.size());
 
         for (SectionToolsData d : dataAll) {
             if (!d.isHeader && d.t.getId() == tool.getId()) {
@@ -365,6 +360,10 @@ public class ToolsSettingActivity extends BaseActivity {
         dataSelected.remove(tool);
 
         selectedAdapter.notifyDataSetChanged();
+
+        tvTips.setVisibility(dataSelected.size() > 0?View.VISIBLE:View.GONE);
+
+        rvSelected.setVisibility(dataSelected.size() > 0?View.VISIBLE:View.GONE);
 
     }
 }

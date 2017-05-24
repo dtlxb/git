@@ -14,7 +14,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,6 +21,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -39,6 +39,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.GroupCollectionData;
+import cn.gogoal.im.bean.GroupData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -63,7 +64,7 @@ public class SearchTeamFragment extends BaseFragment {
 
     private int loadType = AppConst.REFRESH_TYPE_FIRST;
 
-    private ArrayList<GroupCollectionData.DataBean> dataBeanList;
+    private ArrayList<GroupData> dataBeanList;
     private List<String> groupMembers;
 
     @Override
@@ -154,18 +155,18 @@ public class SearchTeamFragment extends BaseFragment {
         }).startGet();
     }
 
-    private class RecommendAdapter extends CommonAdapter<GroupCollectionData.DataBean, BaseViewHolder> {
+    private class RecommendAdapter extends CommonAdapter<GroupData, BaseViewHolder> {
 
         private Bitmap groupAvatarBitmap;
 
-        RecommendAdapter(List<GroupCollectionData.DataBean> datas) {
+        RecommendAdapter(List<GroupData> datas) {
             super(R.layout.item_search_type_persion, datas);
         }
 
         @Override
-        protected void convert(final BaseViewHolder holder, final GroupCollectionData.DataBean data, final int position) {
+        protected void convert(final BaseViewHolder holder, final GroupData data, final int position) {
             TextView addView = holder.getView(R.id.btn_search_group_add);
-            final ImageView imageView = holder.getView(R.id.item_user_avatar);
+            final RoundedImageView imageView = holder.getView(R.id.item_user_avatar);
 
             final View itemView = holder.itemView;
 
@@ -178,7 +179,7 @@ public class SearchTeamFragment extends BaseFragment {
             }
 
             addView.setVisibility(View.VISIBLE);
-            if (data.isIs_in()) {
+            if (data.is_in()) {
                 addView.setBackgroundColor(Color.TRANSPARENT);
                 addView.setText("已加入");
                 addView.setTextColor(Color.parseColor("#a9a9a9"));
@@ -242,7 +243,7 @@ public class SearchTeamFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     Intent in = new Intent(v.getContext(), SquareChatRoomActivity.class);
-                    if (data.isIs_in()) {//我在群里
+                    if (data.is_in()) {//我在群里
                         //TODO: 进入聊天
                         in.putExtra("squareName", data.getName());
                         in.putExtra("conversation_id", data.getConv_id());
@@ -276,10 +277,10 @@ public class SearchTeamFragment extends BaseFragment {
         }
     }
 
-    private List<String> getImageAvatar(List<GroupCollectionData.DataBean.MInfoBean> datas) {
+    private List<String> getImageAvatar(List<GroupData.MInfoBean> datas) {
         List<String> li = new ArrayList<>();
         if (null != datas && !datas.isEmpty()) {
-            for (GroupCollectionData.DataBean.MInfoBean b : datas) {
+            for (GroupData.MInfoBean b : datas) {
                 li.add(b.getAvatar());
             }
             return li;

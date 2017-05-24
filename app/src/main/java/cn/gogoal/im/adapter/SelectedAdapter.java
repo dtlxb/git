@@ -1,8 +1,8 @@
 package cn.gogoal.im.adapter;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -27,32 +27,33 @@ import cn.gogoal.im.common.AppDevice;
  */
 public class SelectedAdapter extends BaseItemDraggableAdapter<ToolData.Tool, BaseViewHolder> {
 
-    private int innerItem;
-
     private int fullInnerItem;
 
-    private Context context;
+    private RecyclerView contextView;
 
-    public SelectedAdapter(Context context, List<ToolData.Tool> data) {
-        super(R.layout.item_touyan_item, data);
-        this.context=context;
+    private List<ToolData.Tool> datas;
 
-        fullInnerItem = AppDevice.isLowDpi() ?
-                AppDevice.getWidth(context) / 3 :
-                AppDevice.getWidth(context) / 4;
+    public SelectedAdapter(RecyclerView contextView, List<ToolData.Tool> datas) {
+        super(R.layout.item_touyan_item, datas);
 
-        innerItem = AppDevice.isLowDpi() ?
-                (AppDevice.getWidth(context)-AppDevice.dp2px(context,30)) / 3 :
-                (AppDevice.getWidth(context)-AppDevice.dp2px(context,40)) / 4;
+        this.contextView = contextView;
+        this.datas = datas;
+
+        fullInnerItem = AppDevice.getWidth(contextView.getContext()) / (AppDevice.isLowDpi() ? 3 : 4);
+
+//        innerItem = AppDevice.isLowDpi() ?
+//                (AppDevice.getWidth(context)-AppDevice.dp2px(context,30)) / 3 :
+//                (AppDevice.getWidth(context)-AppDevice.dp2px(context,40)) / 4;
     }
 
     @Override
     protected void convert(final BaseViewHolder holder, final ToolData.Tool data, final int position) {
-        TextView tvDesc=holder.getView(R.id.tv_touyan_item_text);
-        tvDesc.setText(data.getDesc());
-        tvDesc.setPadding(0,0,0,AppDevice.dp2px(context,10));
 
-        View itemView = holder.getView(R.id.item_touyan_item);
+        TextView tvDesc = holder.getView(R.id.tv_touyan_item_text);
+        tvDesc.setText(data.getDesc());
+        tvDesc.setPadding(0, 0, 0, AppDevice.dp2px(contextView.getContext(), 10));
+
+        final View itemView = holder.getView(R.id.item_touyan_item);
         ImageView itemIcon = holder.getView(R.id.img_touyan_item_icon);
         AppCompatImageView itemHot = holder.getView(R.id.img_touyan_operation);
 
@@ -65,14 +66,35 @@ public class SelectedAdapter extends BaseItemDraggableAdapter<ToolData.Tool, Bas
 
         holder.setBackgroundColor(R.id.item_touyan_item, Color.parseColor("#f6f6f6"));
 
-        Glide.with(context).load(data.getIconUrl()).dontAnimate().dontTransform().into(itemIcon);
+        Glide.with(contextView.getContext()).load(data.getIconUrl()).dontAnimate().dontTransform().into(itemIcon);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((ToolsSettingActivity)context).remooveSelected(data);
+                ((ToolsSettingActivity) contextView.getContext()).remooveSelected(data);
             }
         });
+
+        ViewGroup.LayoutParams params = contextView.getLayoutParams();
+        if (AppDevice.isLowDpi()) {
+            if (datas.size() > 4) {
+                params.height = fullInnerItem * 2;
+            } else {
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            }
+        } else {
+            if (datas.size() > 9) {
+                params.height = fullInnerItem * 3;
+            } else {
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            }
+        }
+//        params.height = (datas.size() > (AppDevice.isLowDpi() ? 3 : 8)) ?
+//                fullInnerItem * (AppDevice.isLowDpi() ? 2 : 3) : ViewGroup.LayoutParams.WRAP_CONTENT;
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        contextView.setLayoutParams(params);
+
+        contextView.requestLayout();
     }
 
     //动态设置item视图宽高

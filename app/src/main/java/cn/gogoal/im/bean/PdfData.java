@@ -7,13 +7,14 @@ package cn.gogoal.im.bean;
  * description :${annotated}.
  */
 public class PdfData {
+
+    /**
+     * pdfUrl : http://zyyxrptfiles.go-goal.cn/report/a19b0a54-33d5-4063-b2e5-3e9ad0bcf328.pdf?UCloudPublicKey=ucloudgcqin%40go-goal.com13648682571239575500&Signature=h%2B8Ue8CdSx3jlKLDRgg6eJYKqVs%3D
+     * title : 原文
+     */
+
     private String pdfUrl;
     private String title;
-
-    public PdfData(String pdfUrl, String title) {
-        this.pdfUrl = pdfUrl;
-        this.title = title;
-    }
 
     public String getPdfUrl() {
         return pdfUrl;

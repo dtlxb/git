@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal">
 
-    <cn.gogoal.im.ui.view.CircleImageView
+    <com.hply.roundimage.roundImage.RoundedImageView
         android:id="@+id/comment_head_iv"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="13dp"
         android:background="@drawable/my_header_image"
-        android:src="@drawable/weixin" />
+        android:src="@drawable/weixin"
+        app:riv_oval="true"/>
 
     <LinearLayout
         android:layout_width="match_parent"

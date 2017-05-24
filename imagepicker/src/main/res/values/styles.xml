@@ -22,11 +22,6 @@
         <item name="android:background">@color/status_bar</item>
     </style>
 
-    <!--SuperCheckbox的样式-->
-    <style name="SuperCheckboxTheme" parent="Base.Widget.AppCompat.CompoundButton.CheckBox">
-        <item name="android:button">@drawable/selector_item_checked</item>
-    </style>
-
     <style name="popupwindow_anim_style">
         <!-- 指定显示的动画xml -->
         <item name="android:windowEnterAnimation">@anim/show_from_bottom</item>

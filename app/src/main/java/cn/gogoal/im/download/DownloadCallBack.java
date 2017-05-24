@@ -1,4 +1,4 @@
-package cn.gogoal.im.common;
+package cn.gogoal.im.download;
 
 /**
  * author wangjd on 2017/4/18 0018.
@@ -6,7 +6,7 @@ package cn.gogoal.im.common;
  * phone 18930640263
  * description :下载回调.
  */
-public interface DownloadCallBack {
+public interface DownloadCallBack{
     void success();
 
     void error(String errorMsg);

@@ -405,10 +405,8 @@ public class CopyStockDetailActivity extends BaseActivity {
 
         if (StockUtils.isMyStock(stockCode)) {
             toggleIsMyStock(true, false);
-            KLog.e("true",stockCode);
         } else {
             toggleIsMyStock(false, false);
-            KLog.e("false",stockCode);
         }
 
         textView1.setAlpha((float) 0.7);

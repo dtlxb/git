@@ -28,7 +28,7 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.InviteAuthDialog;
-import cn.gogoal.im.ui.view.CircleImageView;
+import com.hply.roundimage.roundImage.RoundedImageView;
 
 /**
  * Created by dave.
@@ -122,7 +122,7 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
             }
 
             holder.setText(R.id.textPcTitle, data.getVideo_name());
-            CircleImageView imgPcIcon = holder.getView(R.id.imgPcIcon);
+            RoundedImageView imgPcIcon = holder.getView(R.id.imgPcIcon);
             ImageDisplay.loadCircleImage(mContext, data.getAnchor().getFace_url(), imgPcIcon);
             holder.setText(R.id.textCompanTitle, data.getAnchor().getOrganization() == null ? "--"
                     : data.getAnchor().getOrganization() + " | " + data.getAnchor().getAnchor_position()
@@ -141,7 +141,7 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
             holder.setVisible(R.id.framePc, false);
             holder.setVisible(R.id.linearPc, false);
 
-            CircleImageView imgAnchorAvatar = holder.getView(R.id.imgAnchorAvatar);
+            RoundedImageView imgAnchorAvatar = holder.getView(R.id.imgAnchorAvatar);
             ImageDisplay.loadCircleImage(mContext, data.getAnchor().getFace_url(), imgAnchorAvatar);
             holder.setText(R.id.textAnchorName, data.getAnchor().getAnchor_name());
             holder.setText(R.id.textAnchorTitle, data.getAnchor().getOrganization() == null ? "--"

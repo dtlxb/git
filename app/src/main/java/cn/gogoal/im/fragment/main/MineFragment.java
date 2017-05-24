@@ -34,7 +34,7 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
-import cn.gogoal.im.ui.view.CircleImageView;
+import com.hply.roundimage.roundImage.RoundedImageView;
 
 /**
  * 我的
@@ -45,7 +45,7 @@ public class MineFragment extends BaseFragment {
     RecyclerView rvMine;
 
     @BindView(R.id.img_mine_avatar)
-    CircleImageView imageAvatar;
+    RoundedImageView imageAvatar;
 
     @BindView(R.id.tv_mine_title)
     TextView mTitleText;
@@ -87,16 +87,16 @@ public class MineFragment extends BaseFragment {
         initDatas();
         rvMine.setAdapter(mineAdapter);
 
-        //滚动监听
-        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (oldScrollY < AppDevice.dp2px(getContext(), 150)) {
-                    mTitleText.setAlpha(scrollY * 1.0f / AppDevice.dp2px(getContext(), 150));
-                    layoutHead.setAlpha(1 - scrollY * 1.0f / AppDevice.dp2px(getContext(), 150));
-                }
-            }
-        });
+//        //滚动监听
+//        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+//            @Override
+//            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                if (oldScrollY < AppDevice.dp2px(getContext(), 150)) {
+//                    mTitleText.setAlpha(scrollY * 1.0f / AppDevice.dp2px(getContext(), 150));
+//                    layoutHead.setAlpha(1 - scrollY * 1.0f / AppDevice.dp2px(getContext(), 150));
+//                }
+//            }
+//        });
     }
 
     private void initRecycler(Context mContext) {

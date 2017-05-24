@@ -24,7 +24,7 @@
 
             <FrameLayout>
 
-                <ImageView
+                <com.hply.roundimage.roundImage.RoundedImageView
                     android:id="@+id/image_ad"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

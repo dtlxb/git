@@ -6,8 +6,9 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.hply.roundimage.roundImage.RoundedImageView;
 
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class SearchListAdapter extends BaseSectionQuickAdapter<SearchData, BaseV
         final SearchBean searchBean = data.t;
 
         TextView textView = holder.getView(R.id.item_contacts_tv_duty);
-        final ImageView imageView = holder.getView(R.id.item_contacts_iv_icon);
+        final RoundedImageView imageView = holder.getView(R.id.item_contacts_iv_icon);
         holder.setText(R.id.item_contacts_tv_nickname, searchBean.getNickname());
 
         if (!TextUtils.isEmpty(searchBean.getIntro())) {

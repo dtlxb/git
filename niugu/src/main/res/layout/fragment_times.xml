@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <hply.com.niugu.LandScapeChartView
+    <cn.gogoal.im.ui.copy.LandScapeChartView
         android:id="@+id/times_view"
         android:layout_width="0dp"
         android:layout_height="match_parent"

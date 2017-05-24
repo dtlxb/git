@@ -116,7 +116,8 @@ public class SettingActivity extends BaseActivity {
                         break;
                     case 8:
                         NormalIntentUtils.go2WebActivity(getActivity(),
-                                AppConst.GG_SETTING_ABOUT,
+//                                AppConst.GG_SETTING_ABOUT,
+                                "http://192.168.52.156:9000/#/hello",
                                 "关于我们");
                         break;
                     case 9:

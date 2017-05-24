@@ -6,8 +6,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -18,6 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.github.promeg.pinyinhelper.Pinyin;
 import com.hply.imagepicker.view.SuperCheckBox;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
@@ -43,13 +46,14 @@ import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ICheckItemListener;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
-import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.index.IndexBar;
 import cn.gogoal.im.ui.index.SuspendedDecoration;
+import cn.gogoal.im.ui.view.HintCenterEditText;
+import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XTitle;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
@@ -67,10 +71,9 @@ public class ChooseContactActivity extends BaseActivity {
     private int actionType;
     private List<ContactBean> userContacts;
     private ContactBean itContactBean;
-    private int topListWidth;
 
     private GGShareEntity entity;
-    private View actionView;
+
     private WaitDialog waitDialog;
 
     public void setOnItemCheckListener(ICheckItemListener<ContactBean> listener) {
@@ -80,8 +83,8 @@ public class ChooseContactActivity extends BaseActivity {
     @BindView(R.id.rv_selected_contacts)
     RecyclerView rvSelectedContacts;
 
-    @BindView(R.id.search_choose)
-    SearchView searchChoose;
+    @BindView(R.id.layout_2search)
+    HintCenterEditText searchChoose;
 
     @BindView(R.id.rv_contacts)
     RecyclerView rvContacts;
@@ -92,12 +95,11 @@ public class ChooseContactActivity extends BaseActivity {
     @BindView(R.id.tv_constacts_flag)
     TextView tvConstactsFlag;
 
-    @BindView(R.id.rv_del)
-    RecyclerView rvDel;
-
     private XTitle title;
 
-    XTitle.TextAction textAction;
+    @BindView(R.id.btn_action_down)
+    SelectorButton btnActionDown;
+
 
     private ChooseAdapter contactAdapter;
 
@@ -135,20 +137,14 @@ public class ChooseContactActivity extends BaseActivity {
         if (actionType == AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE) {
             entity = getIntent().getParcelableExtra("share_web_data");
         }
-        //actionType = 1102,1103,1104
+
         String teamId = getIntent().getStringExtra("conversation_id");
 
-        switch (actionType) {
-            case AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE:
-//                GGShareEntity shareEntity
-                break;
-        }
-        if (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE || actionType == AppConst.LIVE_CONTACT_SOMEBODY) {
-            rvDel.setVisibility(View.VISIBLE);
-            rvDel.addItemDecoration(new NormalItemDecoration(mContext));
-            rvDel.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-            rvDel.setAdapter(new DeleteAdapter(UserUtils.getOthersInTeam(teamId, actionType)));
-        }
+//        if (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE || actionType == AppConst.LIVE_CONTACT_SOMEBODY) {
+//            rvContacts.addItemDecoration(new NormalItemDecoration(mContext));
+//            rvContacts.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+//            rvDel.setAdapter(new DeleteAdapter());
+//        }
 
         //1100
         itContactBean = (ContactBean) getIntent().getSerializableExtra("seri");
@@ -159,9 +155,7 @@ public class ChooseContactActivity extends BaseActivity {
             mSelectedTeamMemberAccounts.add(itContactBean);
         }
 
-        textAction = initTitleAction(teamId);
-
-        actionView = title.addAction(textAction);
+        initTitle(teamId);
 
         //初始化
         LinearLayoutManager layoutManager;
@@ -176,7 +170,9 @@ public class ChooseContactActivity extends BaseActivity {
 
         if (actionType == AppConst.SQUARE_ROOM_AT_SOMEONE) {
             userContacts = UserUtils.getAllFriendsInTeam(teamId);
-        } else {
+        } else if (actionType==AppConst.SQUARE_ROOM_DELETE_ANYONE){
+            userContacts=UserUtils.getOthersInTeam(teamId, actionType);
+        }else {
             userContacts = UserUtils.getUserContacts();
         }
 
@@ -186,147 +182,144 @@ public class ChooseContactActivity extends BaseActivity {
 
         showContact();//设置列表
 
-        rvSelectedContacts.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+        rvSelectedContacts.setLayoutManager(
+                new LinearLayoutManager(
+                        mContext,
+                        LinearLayoutManager.HORIZONTAL,
+                        false));
 
 
         //增减监听
         this.setOnItemCheckListener(new ICheckItemListener<ContactBean>() {
             @Override
             public void checked(Set<ContactBean> datas, ContactBean data, boolean isAdd) {
-                if (actionType != AppConst.SQUARE_ROOM_DELETE_ANYONE) {
-                    selectedAdapter = new SelectedAdapter(new ArrayList<>(datas));
-                    rvSelectedContacts.setAdapter(selectedAdapter);
-                    rvSelectedContacts.getLayoutManager().scrollToPosition(datas.size() - 1);
-                }
-
-                if (isAdd) {
-                    if (datas.size() >= 8)
-                        topListWidth = rvSelectedContacts.getWidth();
-                    AppDevice.setViewWidth$Height(searchChoose, AppDevice.getWidth(mContext) - topListWidth, -2);
-                } else {
-                    if (datas.size() >= 6) {
-                        AppDevice.setViewWidth$Height(searchChoose, AppDevice.getWidth(mContext) - topListWidth, -2);
-                    }
-                }
+                selectedAdapter = new SelectedAdapter(new ArrayList<>(datas));
+                rvSelectedContacts.setAdapter(selectedAdapter);
+                rvSelectedContacts.getLayoutManager().scrollToPosition(datas.size() - 1);
 
                 //更改标题数量统计
-                title.setActionText(textAction,
-                        String.format(getString(actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE ?
-                                        R.string.str_title_del : R.string.str_title_ok),
-                                (result.size() + (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE ? 0 : mSelectedTeamMemberAccounts.size()) > 0 ?
-                                        "(" + (result.size() + (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE ? 0 : mSelectedTeamMemberAccounts.size())) + ")" : "")));
+                btnActionDown.setText(String.format(getString(actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE ?
+                                R.string.str_title_del : R.string.str_title_ok),
+                        (result.size() + (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE ?
+                                0 : mSelectedTeamMemberAccounts.size()) > 0 ?
+                                "(" + (result.size() + (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE ?
+                                        0 : mSelectedTeamMemberAccounts.size())) + ")" : "")));
 
             }
         });
 
-        searchChoose.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchChoose.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
                 if (contactAdapter != null) {
-                    if (newText.length() > 0) {
-                        List<ContactBean> filterList = filter(UserUtils.getUserContacts(), newText);
+                    if (s.length() > 0) {
+                        List<ContactBean> filterList = filter(UserUtils.getUserContacts(), s.toString());
                         contactAdapter.setFilter(filterList);
                         rvContacts.scrollToPosition(0);
                     } else {
                         contactAdapter.setFilter(UserUtils.getUserContacts());
                     }
                 }
-                return true;
             }
         });
-
     }
 
     /**
      * 初始化标题
      */
-    private XTitle.TextAction initTitleAction(String teamId) {
+    private void initTitle(String teamId) {
 
         final String titleText;
         if (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
             titleText = "删除";
-            title.setActionTextColor(Color.RED);
 
             title.setTitle("移除聊天成员");
         } else if (actionType == AppConst.SQUARE_ROOM_ADD_ANYONE) {
-            titleText = String.format(getString(R.string.str_title_ok), UserUtils.getFriendsInTeam(teamId).size() > 0 ? "(" + mSelectedTeamMemberAccounts.size() + ")" : "");
+            titleText = String.format(
+                    getString(R.string.str_title_ok),
+                    UserUtils.getFriendsInTeam(teamId).size() > 0 ? "(" + mSelectedTeamMemberAccounts.size() + ")" : "");
         } else if (actionType == AppConst.LIVE_CONTACT_SOMEBODY) {
             titleText = "";
         } else {
             titleText = "完成";
         }
 
-        return new XTitle.TextAction(titleText) {
-            @Override
-            public void actionClick(View view) {
-                if (result.size() == 0) {
-                    return;//没有选择好友时，点击确定不执行操作
-                }
-                actionView.setClickable(false);
+        btnActionDown.setText(titleText);
+    }
 
-                TreeSet<Integer> userFriendsIdList = UserUtils.getUserFriendsIdList(result.values());
+    @OnClick(R.id.btn_action_down)
+    void dowm(View view) {
+        if (result.size() == 0) {
+            return;//没有选择好友时，点击确定不执行操作
+        }
 
-                switch (actionType) {
-                    case AppConst.CREATE_SQUARE_ROOM_BUILD:
-                        userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getMyAccountId()));
-                        createChatGroup(userFriendsIdList);
-                        break;
-                    case AppConst.CREATE_SQUARE_ROOM_BY_ONE:
-                        userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getMyAccountId()));
-                        userFriendsIdList.add(itContactBean.getFriend_id());
-                        createChatGroup(userFriendsIdList);
-                        break;
-                    case AppConst.SQUARE_ROOM_ADD_ANYONE://加人
-                    case AppConst.SQUARE_ROOM_DELETE_ANYONE://删人
-                    case AppConst.SQUARE_ROOM_AT_SOMEONE://@人
-                        Intent intent = new Intent();
-                        intent.putExtra("square_action", actionType);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("choose_friend_array", new ArrayList<>(result.values()));
-                        intent.putExtras(bundle);
-                        setResult(actionType, intent);
-                        //UIHelper.toast(getActivity(), actionType == AppConst.SQUARE_ROOM_ADD_ANYONE ? "添加成功" : "移除成功");
-                        finish();
-                        break;
-                    case AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE://分享给很多人
-                        //弹窗
-                        waitDialog = WaitDialog.getInstance("请稍后...", R.mipmap.login_loading, true);
-                        waitDialog.show(getSupportFragmentManager());
+        btnActionDown.setClickable(false);
 
-                        //文字消息基本信息
-                        for (int i = 0; i < result.values().size(); i++) {
-                            final int finalI = i;
-                            ChatGroupHelper.sendShareMessage((ContactBean) result.values().toArray()[i], entity, new ChatGroupHelper.GroupInfoResponse() {
-                                @Override
-                                public void getInfoSuccess(JSONObject groupInfo) {
-                                    if (finalI == result.values().size() - 1) {
-                                        Map<Object, Object> messageMap = new HashMap<>();
-                                        messageMap.put("share_message", entity);
-                                        BaseMessage baseMessage = new BaseMessage("message_map", messageMap);
-                                        AppManager.getInstance().sendMessage("oneShare", baseMessage);
-                                        finish();
-                                    }
-                                }
+        TreeSet<Integer> userFriendsIdList = UserUtils.getUserFriendsIdList(result.values());
 
-                                @Override
-                                public void getInfoFailed(Exception e) {
-                                    UIHelper.toast(getActivity(), "分享消息发送失败");
-                                    waitDialog.dismiss();
-                                    WaitDialog dialog = WaitDialog.getInstance("分享消息发送失败", R.mipmap.login_error, false);
-                                    dialog.show(getSupportFragmentManager());
-                                    dialog.dismiss(false);
-                                }
-                            });
+        switch (actionType) {
+            case AppConst.CREATE_SQUARE_ROOM_BUILD:
+                userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getMyAccountId()));
+                createChatGroup(userFriendsIdList);
+                break;
+            case AppConst.CREATE_SQUARE_ROOM_BY_ONE:
+                userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getMyAccountId()));
+                userFriendsIdList.add(itContactBean.getFriend_id());
+                createChatGroup(userFriendsIdList);
+                break;
+            case AppConst.SQUARE_ROOM_ADD_ANYONE://加人
+            case AppConst.SQUARE_ROOM_DELETE_ANYONE://删人
+            case AppConst.SQUARE_ROOM_AT_SOMEONE://@人
+                Intent intent = new Intent();
+                intent.putExtra("square_action", actionType);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("choose_friend_array", new ArrayList<>(result.values()));
+                intent.putExtras(bundle);
+                setResult(actionType, intent);
+                //UIHelper.toast(getActivity(), actionType == AppConst.SQUARE_ROOM_ADD_ANYONE ? "添加成功" : "移除成功");
+                finish();
+                break;
+            case AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE://分享给很多人
+                //弹窗
+                waitDialog = WaitDialog.getInstance("请稍后...", R.mipmap.login_loading, true);
+                waitDialog.show(getSupportFragmentManager());
+
+                //文字消息基本信息
+                for (int i = 0; i < result.values().size(); i++) {
+                    final int finalI = i;
+                    ChatGroupHelper.sendShareMessage((ContactBean) result.values().toArray()[i], entity, new ChatGroupHelper.GroupInfoResponse() {
+                        @Override
+                        public void getInfoSuccess(JSONObject groupInfo) {
+                            if (finalI == result.values().size() - 1) {
+                                Map<Object, Object> messageMap = new HashMap<>();
+                                messageMap.put("share_message", entity);
+                                BaseMessage baseMessage = new BaseMessage("message_map", messageMap);
+                                AppManager.getInstance().sendMessage("oneShare", baseMessage);
+                                finish();
+                            }
                         }
-                        break;
+
+                        @Override
+                        public void getInfoFailed(Exception e) {
+                            UIHelper.toast(getActivity(), "分享消息发送失败");
+                            waitDialog.dismiss();
+                            WaitDialog dialog = WaitDialog.getInstance("分享消息发送失败", R.mipmap.login_error, false);
+                            dialog.show(getSupportFragmentManager());
+                            dialog.dismiss(false);
+                        }
+                    });
                 }
-            }
-        };
+                break;
+        }
     }
 
 
@@ -337,6 +330,7 @@ public class ChooseContactActivity extends BaseActivity {
 
         if (userIdList.size() < 3) {
             UIHelper.toast(ChooseContactActivity.this, "三个人以上才可以创建群组");
+            btnActionDown.setClickable(true);
             return;
         }
 
@@ -367,6 +361,8 @@ public class ChooseContactActivity extends BaseActivity {
 
 //                        UIHelper.toast(ChooseContactActivity.this, "群组创建成功!!!");
                         finish();
+                    } else {
+                        btnActionDown.setClickable(true);
                     }
                 } else {
                     UIHelper.toastResponseError(getActivity(), responseInfo);
@@ -374,11 +370,13 @@ public class ChooseContactActivity extends BaseActivity {
                     WaitDialog dialog = WaitDialog.getInstance("创建群组失败", R.mipmap.login_error, false);
                     dialog.show(getSupportFragmentManager());
                     dialog.dismiss(false);
+                    btnActionDown.setClickable(true);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
+                btnActionDown.setClickable(true);
                 waitDialog.dismiss();
                 WaitDialog dialog = WaitDialog.getInstance("创建群组失败", R.mipmap.login_error, false);
                 dialog.show(getSupportFragmentManager());
@@ -450,14 +448,7 @@ public class ChooseContactActivity extends BaseActivity {
 
         rvContacts.addItemDecoration(new NormalItemDecoration(getActivity(), Color.parseColor("#D9D9D9")));
 
-//        if (actionType==AppConst.CREATE_SQUARE_ROOM_BUILD){
-//            HeaderAndFooterWrapper wrapper=new HeaderAndFooterWrapper(contactAdapter);
-//            View headView= LayoutInflater.from(getActivity()).inflate(R.layout.header_group_cheat_rv,new LinearLayout(getActivity()));
-//            wrapper.addHeaderView(headView);
-//            rvContacts.setAdapter(wrapper);
-//        }else {
         rvContacts.setAdapter(contactAdapter);
-//        }
     }
 
     /**
@@ -485,7 +476,7 @@ public class ChooseContactActivity extends BaseActivity {
         @Override
         protected void convert(final BaseViewHolder holder, final ContactBean data, final int position) {
 
-            ImageView imagAvatar = holder.getView(R.id.item_contacts_iv_icon);
+            RoundedImageView imagAvatar = holder.getView(R.id.item_contacts_iv_icon);
             holder.setText(R.id.item_contacts_tv_nickname, data.getTarget());
             Glide.with(ChooseContactActivity.this).load((String) data.getAvatar()).into(imagAvatar);
 
@@ -545,11 +536,7 @@ public class ChooseContactActivity extends BaseActivity {
             } else {
                 map.put(selectItemId, true);
             }
-            if (position != -1) {
-                notifyItemChanged(position);
-            } else {
-                notifyDataSetChanged();
-            }
+            notifyDataSetChanged();
         }
 
         private int dataGetPosition(ContactBean contactBean) {
@@ -596,7 +583,7 @@ public class ChooseContactActivity extends BaseActivity {
     * */
     private class SelectedAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
 
-        public SelectedAdapter(List<ContactBean> datas) {
+        private SelectedAdapter(List<ContactBean> datas) {
             super(R.layout.item_selected_contact_rv, datas);
         }
 
@@ -606,22 +593,13 @@ public class ChooseContactActivity extends BaseActivity {
             if (TextUtils.isEmpty((CharSequence) data.getAvatar())) {
                 ivHeader.setImageResource(R.mipmap.image_placeholder);
             } else {
-                ImageDisplay.loadImage(getActivity(), data.getAvatar().toString(), ivHeader);
+//                ImageDisplay.loadImage(getActivity(), data.getAvatar().toString(), ivHeader);
+                Glide.with(getActivity())
+                        .load(data.getAvatar().toString())
+                        .asBitmap()
+                        .placeholder(R.mipmap.image_placeholder)
+                        .into(ivHeader);
             }
-
-//            if (isAdd) {
-//                if (datas.size() >=9) {//8个item宽度
-//                    AppDevice.setViewWidth$Height(rvSelectedContacts, topListWidth, -2);
-//                } else {
-//                    AppDevice.setViewWidth$Height(rvSelectedContacts, -2, -2);
-//                }
-//            }else {
-//                if (datas.size() >= 7) {
-//                    AppDevice.setViewWidth$Height(rvSelectedContacts, topListWidth, -2);
-//                } else {
-//                    AppDevice.setViewWidth$Height(rvSelectedContacts, -2, -2);
-//                }
-//            }
 
             holder.setOnClickListener(R.id.item_selected_contact, new View.OnClickListener() {
                 @Override
@@ -654,7 +632,7 @@ public class ChooseContactActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (searchChoose.getQuery().length() > 0) {
+            if (searchChoose.getText().length() > 0) {
                 searchChoose.findViewById(R.id.search_close_btn).performClick();
                 contactAdapter.setFilter(UserUtils.getUserContacts());
                 searchChoose.clearFocus();
@@ -665,93 +643,6 @@ public class ChooseContactActivity extends BaseActivity {
         }
 
         return super.onKeyDown(keyCode, event);
-    }
-
-    /**
-     * 删除好友列表
-     */
-    private class DeleteAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
-
-        // 存储勾选框状态的map集合
-        private Map<Integer, Boolean> map = new HashMap<>();
-
-        //是否显示单选框,默认false
-        private boolean isshowBox = false;
-
-        private List<ContactBean> datas;
-
-        private DeleteAdapter(List<ContactBean> datas) {
-            super(R.layout.item_contacts, datas);
-            this.datas = datas;
-            initMap();
-        }
-
-        private void initMap() {
-            for (int i = 0; i < datas.size(); i++) {
-                map.put(datas.get(i).getFriend_id(), false);
-            }
-        }
-
-        @Override
-        protected void convert(BaseViewHolder holder, final ContactBean data, final int position) {
-            holder.setText(R.id.item_contacts_tv_nickname, data.getTarget());
-
-            ImageView imageAvatar = holder.getView(R.id.item_contacts_iv_icon);
-            Glide.with(ChooseContactActivity.this).load(data.getAvatar()).into(imageAvatar);
-
-            //设置Tag
-            holder.itemView.setTag(position);
-
-            final SuperCheckBox checkBox = holder.getView(R.id.check_user);
-            checkBox.setVisibility(View.VISIBLE);
-
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    map.put(data.getFriend_id(), isChecked);
-                }
-            });
-
-            // 设置CheckBox的状态
-            if (map.get(data.getFriend_id()) == null) {
-                map.put(data.getFriend_id(), false);
-            }
-            checkBox.setChecked(map.get(data.getFriend_id()));
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
-                        if (checkBox.isChecked()) {
-                            removeFriends(data);
-                        } else {
-                            addFriend(data);
-                        }
-                        setSelectItem(data.getFriend_id(), position);
-                    } else {
-                        checkBox.setChecked(true);
-                        Intent intent = new Intent();
-                        intent.putExtra("square_action", actionType);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("choose_connect_livebean", data);
-                        intent.putExtras(bundle);
-                        setResult(actionType, intent);
-                        finish();
-                    }
-                }
-            });
-
-        }
-
-        private void setSelectItem(int selectItemId, int position) {
-            //checkbox 及其Item 对当前状态取反
-            if (map.get(selectItemId)) {
-                map.put(selectItemId, false);
-            } else {
-                map.put(selectItemId, true);
-            }
-            notifyItemChanged(position);
-        }
     }
 
 }

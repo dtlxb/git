@@ -7,10 +7,15 @@ package cn.gogoal.im.bean.stock;
  * Description :==我的自选股新闻、公告、研报实体==
  */
 public class MyStockTabNewsBean {
+
     private String newsTitle;
+
     private String stockCode;
+
     private String stockName;
+
     private String date;
+
     private String newsId;
 
     private String origin_link;

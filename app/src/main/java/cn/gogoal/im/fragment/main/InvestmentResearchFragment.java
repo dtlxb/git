@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.AutoScrollViewPager;
 import cn.gogoal.im.ui.view.XTitle;
+import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
 /**
  * author wangjd on 2017/4/19 0019.
@@ -93,6 +95,8 @@ public class InvestmentResearchFragment extends BaseFragment {
 
 
         mRecyclerView.setNestedScrollingEnabled(false);
+        mRecyclerView.setItemAnimator(new NoAlphaItemAnimator());
+
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(
                 AppDevice.isLowDpi() ? 3 : 4,
                 StaggeredGridLayoutManager.VERTICAL));
@@ -160,6 +164,9 @@ public class InvestmentResearchFragment extends BaseFragment {
         new GGOKHTTP(map, GGOKHTTP.GET_USERCOLUMN, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+
+
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 int code = object.getIntValue("code");
                 if (code == 0) {
@@ -175,6 +182,7 @@ public class InvestmentResearchFragment extends BaseFragment {
 
                 } else if (code == 1001) {
                     showView(false);
+                    mGridData.clear();
                 } else {
 
                 }

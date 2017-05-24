@@ -26,7 +26,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
-import cn.gogoal.im.ui.view.CircleImageView;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import cn.gogoal.im.ui.widget.PopupWindowHelper;
 
 public class WatchBottomFragment extends BaseFragment {
@@ -320,7 +320,7 @@ public class WatchBottomFragment extends BaseFragment {
         View anchorIntroduction = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_anchor_introduction, null);
         anchorHelper = new PopupWindowHelper(anchorIntroduction);
 
-        final CircleImageView anchor_avatar = (CircleImageView) anchorIntroduction.findViewById(R.id.anchor_avatar);
+        final RoundedImageView anchor_avatar = (RoundedImageView) anchorIntroduction.findViewById(R.id.anchor_avatar);
         TextView anchor_name = (TextView) anchorIntroduction.findViewById(R.id.anchor_name);
         TextView anchor_position = (TextView) anchorIntroduction.findViewById(R.id.anchor_position);
         final TextView anchor_achieve = (TextView) anchorIntroduction.findViewById(R.id.anchor_achieve);
@@ -339,7 +339,7 @@ public class WatchBottomFragment extends BaseFragment {
         View anchorIntroduction = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_anchor_introduction_land, null);
         anchorHelperLand = new PopupWindowHelper(anchorIntroduction);
 
-        final CircleImageView anchor_avatar = (CircleImageView) anchorIntroduction.findViewById(R.id.anchor_avatar);
+        final RoundedImageView anchor_avatar = (RoundedImageView) anchorIntroduction.findViewById(R.id.anchor_avatar);
         TextView anchor_name = (TextView) anchorIntroduction.findViewById(R.id.anchor_name);
         TextView anchor_position = (TextView) anchorIntroduction.findViewById(R.id.anchor_position);
         final TextView anchor_achieve = (TextView) anchorIntroduction.findViewById(R.id.anchor_achieve);

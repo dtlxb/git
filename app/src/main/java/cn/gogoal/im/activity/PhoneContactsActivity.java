@@ -52,7 +52,9 @@ import cn.gogoal.im.ui.view.XTitle;
 import static cn.gogoal.im.R.id.item_contacts_iv_icon;
 
 /**
- * Created by huangxx on 2017/5/8.
+ * Created by huangxx on 2017/5/8.拉联系人
+ *
+ * Edit by wangjd 发请求匹配联系人，根据是否是gogoal用户，是否好友区分展示
  */
 
 public class PhoneContactsActivity extends BaseActivity {

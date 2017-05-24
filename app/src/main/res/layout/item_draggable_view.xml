@@ -6,7 +6,7 @@
     android:paddingEnd="0dp"
     android:paddingStart="15dp">
 
-    <android.support.v7.widget.AppCompatCheckBox
+    <com.hply.imagepicker.view.SuperCheckBox
         android:id="@+id/checker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

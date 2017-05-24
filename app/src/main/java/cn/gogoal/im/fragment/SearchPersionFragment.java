@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -20,6 +23,7 @@ import java.util.Map;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.IMPersonDetailActivity;
+import cn.gogoal.im.activity.PhoneContactsActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
@@ -56,7 +60,7 @@ public class SearchPersionFragment extends BaseFragment {
     }
 
     @Override
-    public void doBusiness(Context mContext) {
+    public void doBusiness(final Context mContext) {
         recyclerView.addItemDecoration(new NormalItemDecoration(mContext));
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
@@ -65,6 +69,23 @@ public class SearchPersionFragment extends BaseFragment {
         adapter = new SearchPersionResultAdapter(searchResultList);
 
         recyclerView.setAdapter(adapter);
+
+        View headView= LayoutInflater.from(mContext)
+                .inflate(R.layout.item_contacts,new LinearLayout(mContext),false);
+        RoundedImageView headImage= (RoundedImageView)
+                headView.findViewById(R.id.item_contacts_iv_icon);
+        TextView headText= (TextView)
+                headView.findViewById(R.id.item_contacts_tv_nickname);
+        headImage.setImageResource(R.mipmap.chat_phone_contacts);
+        headText.setText(R.string.im_phone_num);
+        headView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mContext, PhoneContactsActivity.class));
+            }
+        });
+
+        adapter.addHeaderView(headView);
 
     }
 
@@ -88,6 +109,9 @@ public class SearchPersionFragment extends BaseFragment {
                     searchResultList.addAll(resultList);
                     adapter.notifyDataSetChanged();
                     xLayout.setStatus(XLayout.Success);
+
+                    adapter.removeAllHeaderView();
+
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
                     xLayout.setEmptyText(String.format(getString(R.string.str_result), keyword) + "的用户");
                     xLayout.setStatus(XLayout.Empty);
@@ -121,7 +145,7 @@ public class SearchPersionFragment extends BaseFragment {
         protected void convert(BaseViewHolder holder, final ContactBean data, int position) {
             holder.getView(R.id.btn_search_group_add).setVisibility(View.GONE);
 
-            ImageView imageView = holder.getView(R.id.item_user_avatar);
+            RoundedImageView imageView = holder.getView(R.id.item_user_avatar);
             holder.setText(R.id.item_tv_search_result_name, data.getNickname());
             holder.setText(R.id.item_tv_search_result_intro,data.getDuty());
             try {

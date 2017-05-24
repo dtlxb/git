@@ -93,14 +93,14 @@ public class TypeLoginActivity extends BaseActivity {
 //        loginUserName.setText("13166270509");
 //        loginPassWord.setText("888888");
 
-//        loginUserName.setText("E00003645");
-//        loginPassWord.setText("258369");
+        loginUserName.setText("E00003645");
+        loginPassWord.setText("258369");
 
-//        loginUserName.setText("E00018279");
+//        loginUserName.setText("E00018279");冷
 //        loginPassWord.setText("600255");
 
-        loginUserName.setText("E00002639");
-        loginPassWord.setText("412174");
+//        loginUserName.setText("E00002639");
+//        loginPassWord.setText("412174");
 
         /*loginUserName.setText("E00020181");
         loginPassWord.setText("394495");*/
@@ -265,7 +265,6 @@ public class TypeLoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                KLog.e(msg);
                 loginDialog.dismiss(true);
                 loginButton.setClickable(true);
                 WaitDialog errorDialog = WaitDialog.getInstance(getString(R.string.str_login_no_net),

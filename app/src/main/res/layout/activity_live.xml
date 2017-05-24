@@ -74,10 +74,12 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <cn.gogoal.im.ui.view.CircleImageView
+                <com.hply.roundimage.roundImage.RoundedImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/imgPalyer"
                     android:layout_width="30dp"
-                    android:layout_height="30dp" />
+                    android:layout_height="30dp"
+                    app:riv_oval="true" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"

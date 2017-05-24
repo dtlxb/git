@@ -1,6 +1,8 @@
 package cn.gogoal.im.adapter.baseAdapter;
 
+import android.content.Context;
 import android.graphics.Canvas;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
@@ -56,7 +58,7 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
         if (mItemTouchHelper != null && itemDragEnabled && viewType != LOADING_VIEW && viewType != HEADER_VIEW
                 && viewType != EMPTY_VIEW && viewType != FOOTER_VIEW) {
             if (mToggleViewId != NO_TOGGLE_VIEW) {
-                View toggleView = ((BaseViewHolder) holder).getView(mToggleViewId);
+                View toggleView = (holder).getView(mToggleViewId);
                 if (toggleView != null) {
                     toggleView.setTag(R.id.BaseQuickAdapter_viewholder_support, holder);
                     if (mDragOnLongPress) {
@@ -73,12 +75,12 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
     }
 
 
-        /**
-         * Set the toggle view's id which will trigger drag event.
-         * If the toggle view id is not set, drag event will be triggered when the item is long pressed.
-         *
-         * @param toggleViewId the toggle view's id
-         */
+    /**
+     * Set the toggle view's id which will trigger drag event.
+     * If the toggle view id is not set, drag event will be triggered when the item is long pressed.
+     *
+     * @param toggleViewId the toggle view's id
+     */
     public void setToggleViewId(int toggleViewId) {
         mToggleViewId = toggleViewId;
     }
@@ -98,7 +100,16 @@ public abstract class BaseItemDraggableAdapter<T, K extends BaseViewHolder> exte
                 public boolean onLongClick(View v) {
                     if (mItemTouchHelper != null && itemDragEnabled) {
                         mItemTouchHelper.startDrag((RecyclerView.ViewHolder) v.getTag(R.id.BaseQuickAdapter_viewholder_support));
-                        v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+
+                        //strong
+                        Vibrator vib = (Vibrator) v.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+                        if (vib.hasVibrator()) {
+                            vib.vibrate(150);
+                        } else {
+                            //weak
+                            v.performHapticFeedback(
+                                    HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        }
                     }
                     return true;
                 }

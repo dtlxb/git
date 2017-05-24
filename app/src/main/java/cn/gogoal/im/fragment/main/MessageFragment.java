@@ -27,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.cpiz.android.bubbleview.BubbleLinearLayout;
 import com.cpiz.android.bubbleview.BubblePopupWindow;
 import com.cpiz.android.bubbleview.RelativePos;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -271,7 +272,7 @@ public class MessageFragment extends BaseFragment {
 
         View includeView = popuView.findViewById(R.id.include_line);
         ViewGroup.LayoutParams params = includeView.getLayoutParams();
-        params.width = AppDevice.getWidth(getActivity()) / 3;
+        params.width = 5*AppDevice.getWidth(getActivity()) / 12;
         includeView.setLayoutParams(params);
 
         mBubblePopupWindow = new BubblePopupWindow(popuView, mBubbleView);
@@ -333,7 +334,7 @@ public class MessageFragment extends BaseFragment {
             String nickName = "";
             String squareMessageFrom = "";
             int chatType = messageBean.getChatType();
-            final ImageView avatarIv = holder.getView(R.id.head_image);
+            final RoundedImageView avatarIv = holder.getView(R.id.head_image);
             TextView messageTv = holder.getView(R.id.last_message);
             TextView countTv = holder.getView(R.id.count_tv);
             //未读数

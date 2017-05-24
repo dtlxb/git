@@ -10,13 +10,13 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -58,7 +58,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     RecyclerView personlistRecycler;
 
     @BindView(R.id.iv_square_head)
-    ImageView iv_square_head;
+    RoundedImageView iv_square_head;
 
     @BindView(R.id.tv_square_name)
     TextView tvSquareName;

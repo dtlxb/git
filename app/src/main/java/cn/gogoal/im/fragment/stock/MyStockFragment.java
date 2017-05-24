@@ -63,7 +63,7 @@ import cn.gogoal.im.ui.view.SortView;
  * author wangjd on 2017/4/27 0027.
  * Staff_id 1375
  * phone 18930640263
- * description :${annotated}.
+ * description :自选股
  */
 public class MyStockFragment extends BaseFragment implements MyStockSortInteface {
 
@@ -149,7 +149,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             KLog.e(e.getMessage());
         }
 
-            setAppBarLayout(appBarLayout,!(myStockDatas!=null && myStockDatas.size()<5));
+//            setAppBarLayout(appBarLayout,!(myStockDatas!=null && myStockDatas.size()<5));
     }
 
     public void refreshMyStock(int refreshType) {
