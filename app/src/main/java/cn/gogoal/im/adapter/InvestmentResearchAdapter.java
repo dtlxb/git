@@ -7,6 +7,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -16,7 +19,6 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.BannerUtils;
-import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 
 /**
@@ -68,7 +70,14 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
             imgHot.setPadding(0, 0, 0, 0);
             imgHot.setImageResource(R.mipmap.img_hot);
             imgHot.setVisibility(data.getShowHotFlag() == 0 ? View.VISIBLE : View.INVISIBLE);
-            ImageDisplay.loadImage(context,data.getIconUrl(),imgIcon);
+
+            Glide.with(context)
+                    .load(data.getIconUrl())
+                    .centerCrop()
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .thumbnail(0.1f)
+                    .into(imgIcon);
         }
 
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -81,11 +90,11 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
                 } else {
                     //TODO 跳网页类型
                     if (data.getIsClick() == 0) {
-                        String[] params={data.getUrl(),data.getDesc()};
-                        BannerUtils.getInstance(context,data.getType(),params).go();
+                        String[] params = {data.getUrl(), data.getDesc()};
+                        BannerUtils.getInstance(context, data.getType(), params).go();
                     } else {
 //                        new ComingSoonDialog().show(((MainActivity) context).getSupportFragmentManager());
-                        UIHelper.toastInCenter(context,"该功能暂未开放使用");
+                        UIHelper.toastInCenter(context, "该功能暂未开放使用");
 //                        MessageFullScreen.newInstance("该功能暂未开放使用")
 //                                .show(((MainActivity) context).getSupportFragmentManager());
                     }

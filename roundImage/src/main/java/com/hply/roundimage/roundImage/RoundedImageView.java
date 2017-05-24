@@ -254,6 +254,7 @@ public class RoundedImageView extends AppCompatImageView {
   @Override public void setImageURI(Uri uri) {
     super.setImageURI(uri);
     setImageDrawable(getDrawable());
+
   }
 
   private Drawable resolveResource() {

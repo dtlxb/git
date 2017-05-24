@@ -78,8 +78,12 @@ public class NormalIntentUtils {
      * @param url       pdf url
      */
     public static void go2PdfDisplayActivity(Context context, String url,String pdfTitle) {
+        PdfData data=new PdfData();
+        data.setPdfUrl(url);
+        data.setTitle(pdfTitle);
+
         Intent intent = new Intent(context, PdfDisplayActivity.class);
-        intent.putExtra("pdf_data", JSONObject.toJSONString(new PdfData(url,pdfTitle)));
+        intent.putExtra("pdf_data", JSONObject.toJSONString(data));
         context.startActivity(intent);
     }
 

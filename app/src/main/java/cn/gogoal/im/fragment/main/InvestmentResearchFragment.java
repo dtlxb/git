@@ -34,6 +34,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.AutoScrollViewPager;
 import cn.gogoal.im.ui.view.XTitle;
+import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
 /**
  * author wangjd on 2017/4/19 0019.
@@ -94,6 +95,8 @@ public class InvestmentResearchFragment extends BaseFragment {
 
 
         mRecyclerView.setNestedScrollingEnabled(false);
+        mRecyclerView.setItemAnimator(new NoAlphaItemAnimator());
+
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(
                 AppDevice.isLowDpi() ? 3 : 4,
                 StaggeredGridLayoutManager.VERTICAL));

@@ -178,41 +178,10 @@ public class MyGroupsActivity extends BaseActivity {
 
             final String groupUrl = data.getAttr().getAvatar();
 
-            if (!TextUtils.isEmpty(groupUrl)) {
+            if (!TextUtils.isEmpty(groupUrl)) {//
                 ImageDisplay.loadRoundedRectangleImage(getActivity(), groupUrl, imgAvatar);
             } else {
-//                if (!StringUtils.isActuallyEmpty(imagecache)) {
-//                    ImageDisplay.loadImage(getActivity(), imagecache, imgAvatar);
-//                    groupAvatar[0] = BitmapFactory.decodeFile(imagecache);
-//                } else {//没有缓存就拼
-//                    final List<String> avatarString = new ArrayList<>();
-//                    ArrayList<GroupData.MInfoBean> mInfo = data.getM_info();
-//                    for (GroupData.MInfoBean bean : mInfo) {
-//                        avatarString.add(bean.getAvatar());
-//                    }
-//
-//                    GroupFaceImage.getInstance(getActivity(), avatarString).load(new GroupFaceImage.OnMatchingListener() {
-//                        @Override
-//                        public void onSuccess(final Bitmap mathingBitmap) {
-//                            MyGroupsActivity.this.runOnUiThread(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    //拼好了显示
-//                                    ImageDisplay.loadImage(getActivity(), mathingBitmap, imgAvatar);
-//                                    //拼好了存起来
-//                                    ChatGroupHelper.cacheGroupAvatar(data.getConv_id(), mathingBitmap);
-//
-//                                }
-//                            });
-//                            groupAvatar[0] = mathingBitmap;
-//                        }
-//
-//                        @Override
-//                        public void onError(Exception e) {
-//                            KLog.e(e.getMessage());
-//                        }
-//                    });
-//                }
+
                 ChatGroupHelper.setGroupAvatar(data.getConv_id(), new AvatarTakeListener() {
                     @Override
                     public void success(final Bitmap bitmap) {

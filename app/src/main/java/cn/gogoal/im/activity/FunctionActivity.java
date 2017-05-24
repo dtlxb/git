@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
-import android.text.TextUtils;
 import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
@@ -23,6 +22,7 @@ import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.PdfData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
@@ -88,7 +88,7 @@ public class FunctionActivity extends BaseActivity {
 //                                if ()
 //                            }
                             if (StringUtils.isActuallyEmpty(value)) {
-                                UIHelper.toast(getContext(),"暂无分享信息");
+                                UIHelper.toast(getContext(), "暂无分享信息");
                                 return;
                             }
                             GGShareEntity shareEntity = JSONObject.parseObject(value, GGShareEntity.class);
@@ -171,13 +171,10 @@ public class FunctionActivity extends BaseActivity {
         webView.registerHandler("loadPdfFromWeb", new BridgeHandler() {
             @Override
             public void handler(final String data, ValueCallback<String> function) {
-                if (AppDevice.getNetworkType(getContext()) == 2 || AppDevice.getNetworkType(getContext()) == 3) {
-                    showPdf(data);
-                } else if (AppDevice.getNetworkType(getContext()) == 1) {
-                    showPdf(data);
-                } else {
-                    UIHelper.toastError(mContext, "跳转出错", null);
-                }
+
+                FileUtil.writeRequestResponse(data,"pdf");
+
+                showPdf(data.replaceAll("\\s",""));
 
             }
         });
@@ -247,7 +244,7 @@ public class FunctionActivity extends BaseActivity {
     }
 
     private void showPdf(String data) {
-        if (!TextUtils.isEmpty(data)) {
+        if (!StringUtils.isActuallyEmpty(data)) {
             PdfData pdfData = JSONObject.parseObject(data, PdfData.class);
             NormalIntentUtils.go2PdfDisplayActivity(
                     getActivity(),
@@ -255,17 +252,6 @@ public class FunctionActivity extends BaseActivity {
                     pdfData.getTitle());
         }
     }
-
-    /*@OnClick(R.id.fab)
-    void doJs(View view) {
-        webView.callHandler("methodFromJs", "这是一段来自java的数据", new ValueCallback<String>() {
-            @Override
-            public void onReceiveValue(String data) {
-                //调通js方法methodFromJs后的返回
-                DialogHelp.getMessageDialog(FunctionActivity.this, "调用js方法后的回调==" + data).show();
-            }
-        });
-    }*/
 
     private FunctionActivity getContext() {
         return FunctionActivity.this;
