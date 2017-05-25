@@ -1,7 +1,5 @@
 package cn.gogoal.im.bean.address;
 
-import java.util.List;
-
 /**
  * author wangjd on 2017/5/25 0025.
  * Staff_id 1375
@@ -12,7 +10,7 @@ public class CityBean{
 
     private String id;
     private String city;
-    private List<DistrictBean> district;
+//    private List<DistrictBean> district;
 
     public String getId() {
         return id;
@@ -30,12 +28,12 @@ public class CityBean{
         this.city = city;
     }
 
-    public List<DistrictBean> getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(List<DistrictBean> district) {
-        this.district = district;
-    }
+//    public List<DistrictBean> getDistrict() {
+//        return district;
+//    }
+//
+//    public void setDistrict(List<DistrictBean> district) {
+//        this.district = district;
+//    }
 
 }

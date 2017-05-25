@@ -37,6 +37,8 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 
+import static com.alibaba.fastjson.JSON.parseObject;
+
 /**
  * author wangjd on 2017/2/8 0008.
  * Staff_id 1375
@@ -227,8 +229,8 @@ public class UserUtils {
             @Override
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
-                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    JSONObject result = JSONObject.parseObject(responseInfo).getJSONObject("data");
+                if (parseObject(responseInfo).getIntValue("code") == 0) {
+                    JSONObject result = parseObject(responseInfo).getJSONObject("data");
                     boolean success = result.getBoolean("success");
                     if (success) {
                         if (null != updataListener)
@@ -250,7 +252,7 @@ public class UserUtils {
                         }
                     }
                 } else {
-                    updataListener.failed(JSONObject.parseObject(responseInfo).getString("message"));
+                    updataListener.failed(parseObject(responseInfo).getString("message"));
                 }
             }
 
@@ -346,10 +348,10 @@ public class UserUtils {
         if (TextUtils.isEmpty(newFriendJson)) {
             return null;
         }
-        JSONObject jsonObject = JSONObject.parseObject(responseInfo);
+        JSONObject jsonObject = parseObject(responseInfo);
         JSONArray friendList = (JSONArray) jsonObject.remove("data");
 
-        JSONObject newObject = JSONObject.parseObject(newFriendJson);
+        JSONObject newObject = parseObject(newFriendJson);
 
         HashMap<Integer, JSONObject> friendMap = new HashMap<>();
 
@@ -373,10 +375,10 @@ public class UserUtils {
         if (TextUtils.isEmpty(newFriendJson)) {
             return null;
         }
-        JSONObject jsonObject = JSONObject.parseObject(responseInfo);
+        JSONObject jsonObject = parseObject(responseInfo);
         JSONArray friendList = (JSONArray) jsonObject.remove("data");
 
-        JSONObject newObject = JSONObject.parseObject(newFriendJson);
+        JSONObject newObject = parseObject(newFriendJson);
 
         HashMap<Integer, JSONObject> friendMap = new HashMap<>();
 
@@ -414,7 +416,7 @@ public class UserUtils {
         if (TextUtils.isEmpty(contactStringRes)) {
             return new ArrayList<>();
         }
-        String contactArray = JSONObject.parseObject(contactStringRes).getJSONArray("data").toJSONString();
+        String contactArray = parseObject(contactStringRes).getJSONArray("data").toJSONString();
 
         return JSONObject.parseArray(contactArray, ContactBean.class);
     }
@@ -590,7 +592,7 @@ public class UserUtils {
         SPTools.saveString(UserUtils.getMyAccountId() + "_contact_beans", responseInfo);
         //拆解缓存
         if (!TextUtils.isEmpty(responseInfo)) {
-            JSONObject jsonObject = JSON.parseObject(responseInfo);
+            JSONObject jsonObject = parseObject(responseInfo);
             if (jsonObject.get("data") != null) {
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
                 for (int i = 0; i < jsonArray.size(); i++) {
@@ -609,7 +611,7 @@ public class UserUtils {
         String string = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", null);
         KLog.e(string);
         if (!TextUtils.isEmpty(string)) {
-            JSONObject jsonObject = JSON.parseObject(string);
+            JSONObject jsonObject = parseObject(string);
             KLog.e(jsonObject.toString());
             if (jsonObject.get("data") != null) {
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
@@ -641,7 +643,7 @@ public class UserUtils {
         KLog.e(string);
         //清除缓存中的这个人
         if (!TextUtils.isEmpty(string)) {
-            JSONObject jsonObject = JSON.parseObject(string);
+            JSONObject jsonObject = parseObject(string);
             KLog.e(jsonObject.toString());
             if (jsonObject.get("data") != null) {
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
@@ -661,27 +663,104 @@ public class UserUtils {
     }
 
     /**
+     * 登录时需要拉取
+     * 我收藏的群列表
+     */
+    public static void getMyGroupList(final ResponCallback callback) {
+        new GGOKHTTP(UserUtils.getTokenParams(), GGOKHTTP.GET_GROUP_LIST, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                JSONObject mainObject = JSONObject.parseObject(responseInfo);
+
+                //返回数据是否为空
+                if (StringUtils.isActuallyEmpty(responseInfo)) {
+                    if (callback != null) callback.onError("responseInfo null");
+                }
+                //返回的json是否包含code字段
+                else if (!mainObject.containsKey("code")) {
+                    if (callback != null) callback.onError("code null");
+                } else {
+                    //code ==0 正常
+                    if (mainObject.getIntValue("code") == 0) {
+                        String resp = mainObject.containsKey("data") ? mainObject.getString("data") : null;
+                        if (callback != null) {
+                            if (resp == null) {
+                                callback.onError("data null");
+                            } else {
+                                callback.onSuccess(resp);
+                                SPTools.saveString(UserUtils.getMyAccountId()+"_my_group_list",resp);
+                            }
+                        }
+                    }
+
+                    //code 1001 没有获取到数据
+                    else if (mainObject.getIntValue("code") == 1001) {
+                        if (callback != null) callback.onEmpty();
+                    }
+
+                    //其他code 出错
+                    else {
+                        if (callback != null)
+                            callback.onError(mainObject.getString("message"));
+                    }
+                }
+            }
+
+            public void onFailure(String msg) {
+                if (callback != null) callback.onError(msg);
+            }
+        }).startGet();
+    }
+
+    /**
+     * 获取本地缓存的【我的群组】集
+     * */
+    public static JSONArray getLocalMyGooupList(){
+        return SPTools.getJsonArray(UserUtils.getMyAccountId()+"_my_group_list",new JSONArray());
+    }
+
+    /**
+     * 添加群组到本地缓存的【我的群组】集
+     * */
+    public static boolean addGroup2LocalMyGooupList(JSONObject groupObject){
+        JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_my_group_list", new JSONArray());
+        boolean add = jsonArray.add(groupObject);
+        SPTools.saveJsonArray(UserUtils.getMyAccountId()+"_my_group_list",jsonArray);
+        return add;
+    }
+    /**
+     * 移除群组到本地缓存的【我的群组】集
+     * */
+    public static boolean removeGroup2LocalMyGooupList(JSONObject groupObject){
+        JSONArray array = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_my_group_list", new JSONArray());
+        boolean remove = array.remove(groupObject);
+        SPTools.saveJsonArray(UserUtils.getMyAccountId()+"_my_group_list",array);
+        return remove;
+    }
+
+
+    /**
      * 获取投资顾问
      */
     public static void getAdvisers(final GetAdvisersCallback callback) {
 
-        String advisersList = SPTools.getString(UserUtils.getMyAccountId()+"_ADVISERS_LIST", "");
+        String advisersList = SPTools.getString(UserUtils.getMyAccountId() + "_ADVISERS_LIST", "");
 
         if (!StringUtils.isActuallyEmpty(advisersList)) {
             List<Advisers> list = JSONObject.parseArray(advisersList, Advisers.class);
             if (callback != null) {
                 callback.onSuccess(list);
-                SPTools.clearItem(UserUtils.getMyAccountId()+"_ADVISERS_LIST");
+                SPTools.clearItem(UserUtils.getMyAccountId() + "_ADVISERS_LIST");
             }
 
         } else {
             new GGOKHTTP(UserUtils.getTokenParams(), GGOKHTTP.GET_MY_ADVISERS, new GGOKHTTP.GGHttpInterface() {
                 @Override
                 public void onSuccess(String responseInfo) {
-                    int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                    int code = parseObject(responseInfo).getIntValue("code");
                     if (code == 0) {
-                        List<Advisers> data = JSONObject.parseObject(responseInfo, AdvisersBean.class).getData();
-                        SPTools.saveString(UserUtils.getMyAccountId()+"_ADVISERS_LIST", JSONObject.toJSONString(data));
+                        List<Advisers> data = parseObject(responseInfo, AdvisersBean.class).getData();
+                        SPTools.saveString(UserUtils.getMyAccountId() + "_ADVISERS_LIST", JSONObject.toJSONString(data));
                         if (callback != null) {
                             callback.onSuccess(data);
                         }
@@ -691,7 +770,7 @@ public class UserUtils {
                         }
                     } else {
                         if (callback != null) {
-                            callback.onFailed(JSONObject.parseObject(responseInfo).getString("message"));
+                            callback.onFailed(parseObject(responseInfo).getString("message"));
                         }
                     }
                 }
@@ -720,7 +799,7 @@ public class UserUtils {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                JSONObject result = JSONObject.parseObject(responseInfo);
+                JSONObject result = parseObject(responseInfo);
                 if ((int) result.get("code") == 0) {
                     if (null != result.getJSONObject("data")) {
                         JSONObject jsonObject = result.getJSONObject("data");

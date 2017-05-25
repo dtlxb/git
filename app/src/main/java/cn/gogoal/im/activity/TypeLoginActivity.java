@@ -222,6 +222,10 @@ public class TypeLoginActivity extends BaseActivity {
                                 public void done(AVIMClient avimClient, AVIMException e) {
                                     if (e == null) {
                                         KLog.e("IM登录成功");
+
+                                        //缓存我的群组
+                                        UserUtils.getMyGroupList(null);
+
                                         startActivity(intent);
                                         PushService.subscribe(TypeLoginActivity.this, data.getString("account_id"), MainActivity.class);
                                         finish();

@@ -137,7 +137,7 @@ public class IMSearchLocalActivity extends BaseActivity {
                     tips_layout.setVisibility(View.VISIBLE);
                     rvHistory.setVisibility(View.GONE);
                 }
-                return false;
+                return true;
             }
         });
     }

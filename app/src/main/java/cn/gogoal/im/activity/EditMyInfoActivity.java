@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hply.roundimage.roundImage.RoundedImageView;
 
 import org.simple.eventbus.Subscriber;
 
@@ -28,7 +29,6 @@ import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
-import com.hply.roundimage.roundImage.RoundedImageView;
 import cn.gogoal.im.ui.dialog.AddressPicker;
 
 
@@ -151,7 +151,7 @@ public class EditMyInfoActivity extends BaseActivity {
 
                     holder.setText(R.id.tv_info_value, TextUtils.isEmpty(data.getItemValue()) ? "未设置" : data.getItemValue());
 
-                    holder.getView(R.id.flag_img_more).setVisibility(data.isHaveMore() ? View.VISIBLE : View.GONE);
+                    holder.getView(R.id.flag_img_more).setVisibility(data.isHaveMore() ? View.VISIBLE : View.INVISIBLE);
 
                     final Intent intent = new Intent(getActivity(), SingleEditActivity.class);
                     itemView.setOnClickListener(new View.OnClickListener() {
