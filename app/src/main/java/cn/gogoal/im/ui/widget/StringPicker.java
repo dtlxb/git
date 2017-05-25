@@ -1,4 +1,4 @@
-package cn.gogoal.im.ui.dialog;
+package cn.gogoal.im.ui.widget;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
@@ -85,26 +85,6 @@ public class StringPicker extends NumberPicker {
                     }
                     break;
             }
-//            if (pf.getName().equals("mSelectionDivider")) {
-//                pf.setAccessible(true);
-//                try {
-//                    //设置分割线的颜色值
-//                    pf.set(numberPicker, new ColorDrawable(0xff999999));
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                break;
-//            }
-//            if (pf.getName().equals("mSelectionDividerHeight")){
-//                pf.setAccessible(true);
-//                try {
-//                    //设置分割线的颜色值
-//                    pf.set(numberPicker, new ColorDrawable(0xff999999));
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                break;
-//            }
         }
     }
 }

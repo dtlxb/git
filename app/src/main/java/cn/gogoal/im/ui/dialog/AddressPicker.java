@@ -1,4 +1,4 @@
-package cn.gogoal.im.ui.widget;
+package cn.gogoal.im.ui.dialog;
 
 import android.view.View;
 import android.widget.NumberPicker;
@@ -13,12 +13,13 @@ import java.util.Map;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.AppManager;
-import cn.gogoal.im.bean.AddressBean;
+import cn.gogoal.im.bean.address.AddressBean;
+import cn.gogoal.im.bean.address.CityBean;
+import cn.gogoal.im.bean.address.ProvinceBean;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.dialog.StringPicker;
-import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.dialog.base.BaseBottomDialog;
+import cn.gogoal.im.ui.widget.StringPicker;
 
 
 /**
@@ -46,13 +47,14 @@ public class AddressPicker extends BaseBottomDialog {
         noInput(pickerProvince);
         noInput(pickerCity);
 
-        String addressString = UIHelper.getRawString(getContext(), R.raw.address_juhe);
+        String addressString = UIHelper.getRawString(getContext(), R.raw.address_juhe_3_level);
+
         AddressBean addressbean = JSONObject.parseObject(addressString, AddressBean.class);
 
         //省数据
-        final List<AddressBean.ProvinceBean> provinceList = addressbean.getResult();
+        final List<ProvinceBean> provinceList = addressbean.getResult();
         List<String> provinceNameList = new ArrayList<>();
-        for (AddressBean.ProvinceBean pro : provinceList) {
+        for (ProvinceBean pro : provinceList) {
             provinceNameList.add(pro.getProvince());
         }
         pickerProvince.setMaxValue(provinceNameList.size() - 1);
@@ -111,10 +113,10 @@ public class AddressPicker extends BaseBottomDialog {
         });
     }
 
-    private void setCityData(List<AddressBean.ProvinceBean.CityBean> cityList) {
+    private void setCityData(List<CityBean> cityList) {
         //市数据
         cityNameLists.clear();
-        for (AddressBean.ProvinceBean.CityBean cityBean : cityList) {
+        for (CityBean cityBean : cityList) {
             cityNameLists.add(cityBean.getCity());
         }
         try {

@@ -16,7 +16,7 @@
             android:layout_height="0dp"
             android:layout_centerHorizontal="true" />
 
-        <cn.gogoal.im.ui.dialog.StringPicker
+        <cn.gogoal.im.ui.widget.StringPicker
             android:id="@+id/picker_province"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
             android:layout_toStartOf="@+id/space"
             android:divider="#f00" />
 
-        <cn.gogoal.im.ui.dialog.StringPicker
+        <cn.gogoal.im.ui.widget.StringPicker
             android:id="@+id/picker_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

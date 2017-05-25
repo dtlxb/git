@@ -16,7 +16,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.AddressBean;
+import cn.gogoal.im.bean.address.AddressBean;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.index.IndexBar;
 
@@ -52,7 +52,7 @@ public class AddressActivity extends BaseActivity {
         int provincePosition = getIntent().getIntExtra("province_position", 0);
         int cityPosition = getIntent().getIntExtra("city_position", 0);
 
-        String addressString = UIHelper.getRawString(mContext, R.raw.address_juhe);
+        String addressString = UIHelper.getRawString(mContext, R.raw.address_juhe_3_level);
         AddressBean city = JSONObject.parseObject(addressString, AddressBean.class);
 
         //省

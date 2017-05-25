@@ -29,7 +29,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import cn.gogoal.im.ui.widget.AddressPicker;
+import cn.gogoal.im.ui.dialog.AddressPicker;
 
 
 /**
