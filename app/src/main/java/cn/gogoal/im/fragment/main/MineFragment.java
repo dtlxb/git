@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -21,9 +22,14 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.ContactsActivity;
 import cn.gogoal.im.activity.EditMyInfoActivity;
+import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.activity.MyAdvisersActivity;
+import cn.gogoal.im.activity.MyGroupsActivity;
+import cn.gogoal.im.activity.PhoneContactsActivity;
 import cn.gogoal.im.activity.SettingActivity;
+import cn.gogoal.im.activity.SettingStockActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseFragment;
@@ -34,7 +40,6 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
-import com.hply.roundimage.roundImage.RoundedImageView;
 
 /**
  * 我的
@@ -132,21 +137,21 @@ public class MineFragment extends BaseFragment {
 
             }
         });
-        tvMineUserName.setText(UserUtils.getUserName());
+        tvMineUserName.setText(UserUtils.getNickname());
         tvMineIntroduction.setText(UserUtils.getDuty());
 
     }
 
     private void initDatas() {
         mineItems = new ArrayList<>();
+        mineItems.add(new MineItem(MineItem.TYPE_SPACE));
         mineItems.add(new MineItem(MineItem.TYPE_HEAD));
+        mineItems.add(new MineItem(MineItem.TYPE_SPACE));
         for (int i = 0; i < mineTitle.length; i++) {
             int iconId = getResources().getIdentifier("img_mine_item_" + i, "mipmap", getActivity().getPackageName());
             mineItems.add(new MineItem(MineItem.TYPE_ICON_TEXT_ITEM, iconId, mineTitle[i]));
         }
-        mineItems.add(1, new MineItem(MineItem.TYPE_SPACE));
         mineItems.add(4, new MineItem(MineItem.TYPE_SPACE));
-        mineItems.add(8, new MineItem(MineItem.TYPE_SPACE));
         mineAdapter = new MineAdapter(mineItems);
     }
 
@@ -188,6 +193,15 @@ public class MineFragment extends BaseFragment {
         protected void convert(BaseViewHolder holder, final MineItem data, final int position) {
             switch (holder.getItemViewType()) {
                 case MineItem.TYPE_HEAD:
+
+                    route(holder,R.id.btn_mine_my_friend, ContactsActivity.class);//我的好友
+
+                    route(holder,R.id.btn_mine_my_group, MyGroupsActivity.class);//我的群组
+
+                    route(holder,R.id.btn_mine_my_phone_contacts, PhoneContactsActivity.class);//手机通讯录
+
+                    route(holder,R.id.btn_mine_inviting_friends, ContactsActivity.class);//邀请好友
+
                     break;
                 case MineItem.TYPE_SPACE:
                     break;
@@ -198,18 +212,25 @@ public class MineFragment extends BaseFragment {
                     holder.getView(R.id.item_layout_simple_image_text).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            KLog.e("pos=" + position + ";item=" + data.getItemText());
                             Intent intent;
                             switch (position) {
-                                case 2:
+                                case 3://我要直播
+                                    ((MainActivity)getActivity()).socialContactFragment.getUserValid();
+                                    break;
+                                case 5://自选股设置
+                                    intent=new Intent(getActivity(),SettingStockActivity.class);
+                                    startActivity(intent);
+                                    break;
+                                case 6:
                                     intent = new Intent(getActivity(), MyAdvisersActivity.class);
                                     startActivity(intent);
                                     break;
-                                case 9:
+                                case 7:
                                     intent = new Intent(getActivity(), SettingActivity.class);
                                     startActivity(intent);
                                     break;
                                 default:
-                                    KLog.e("pos=" + position + ";item=" + data.getItemText());
                                     UIHelper.toastInCenter(getActivity(),"该功能暂未开放使用");
                                     break;
                             }
@@ -217,6 +238,15 @@ public class MineFragment extends BaseFragment {
                     });
                     break;
             }
+        }
+
+        private void route(BaseViewHolder holder, int id, final Class<?> cazz) {
+            holder.getView(id).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(v.getContext(),cazz));
+                }
+            });
         }
     }
 

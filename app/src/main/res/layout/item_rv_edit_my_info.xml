@@ -4,7 +4,7 @@
     android:id="@+id/item_rv_edit_my_info"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
+    android:background="@drawable/selector_normal_write2gray"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingBottom="12dp"

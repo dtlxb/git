@@ -98,7 +98,7 @@ public class RoundedImageView extends AppCompatImageView {
       setScaleType(SCALE_TYPES[index]);
     } else {
       // default scaletype to FIT_CENTER
-      setScaleType(ScaleType.FIT_CENTER);
+      setScaleType(ScaleType.FIT_XY);
     }
 
     float cornerRadiusOverride =

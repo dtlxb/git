@@ -39,7 +39,8 @@
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scrollView_mine"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorTitle">
 
         <LinearLayout
             android:id="@+id/app_bar_layout"
@@ -88,7 +89,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
-                        android:text="张无忌"
+                        android:text="朝阳永续六小龄童"
+                        android:maxLength="8"
+                        android:singleLine="true"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 

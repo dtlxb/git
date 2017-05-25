@@ -325,7 +325,7 @@
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
 
-                <Switch
+                <android.support.v7.widget.SwitchCompat
                     android:id="@+id/save_switch"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"

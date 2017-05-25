@@ -14,7 +14,6 @@ import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import butterknife.BindArray;
@@ -65,17 +64,6 @@ public class SearchActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         iniTitle();
-
-        HashSet<String> testSet = new HashSet<>();
-        testSet.add("qwer");
-        testSet.add("yruru");
-        testSet.add("vsvvdfv");
-        testSet.add("6456");
-        testSet.add("23fsdf");
-
-        for (String s : testSet) {
-//            ArrayUtils.addSearchKeyword(s);
-        }
 
         final String conversationId = getIntent().getStringExtra("conversation_id");
 
@@ -128,34 +116,6 @@ public class SearchActivity extends BaseActivity {
 
     }
 
-//    private HeaderAndFooterWrapper setHistory() {
-//        final List<String> listHistory=ArrayUtils.jsonArr2List(ArrayUtils.getSearchList());
-//
-//        CommonAdapter<String> historyAdapter = new CommonAdapter<String>(getActivity(), R.layout.item_search_history, listHistory) {
-//            @Override
-//            protected void convert(ViewHolder holder, String data, int position) {
-//                holder.setText(R.id.tv_search_history,data);
-//            }
-//        };
-//
-//        final HeaderAndFooterWrapper headerWrapper = new HeaderAndFooterWrapper(historyAdapter);
-//        final View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.header_search_history, new LinearLayout(getActivity()),false);
-//        headerView.findViewById(R.id.btn_clear_history).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ArrayUtils.clearHistory();
-//                setHistory();
-//            }
-//        });
-//
-//        if (!listHistory.isEmpty()) {
-//            headerWrapper.addFootView(headerView);
-//        }
-//
-//        rvHistory.setAdapter(headerWrapper);
-//
-//        return headerWrapper;
-//    }
 
     //初始化标题
     private void iniTitle() {

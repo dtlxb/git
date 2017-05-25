@@ -70,6 +70,7 @@ public class MainActivity extends BaseActivity {
     RecyclerView recyScreen;
 
     public MainStockFragment mainStockFragment;
+    public SocialContactFragment socialContactFragment;
 
     @Override
     public int bindLayout() {
@@ -104,7 +105,8 @@ public class MainActivity extends BaseActivity {
 
         InvestmentResearchFragment foundFragment = new InvestmentResearchFragment(); // TAB3 投研
 
-        SocialContactFragment socialContactFragment = new SocialContactFragment();   //社交
+        //社交
+        socialContactFragment = new SocialContactFragment();
 
         final MineFragment mineFragment = new MineFragment();                       // TAB4 我的
 
