@@ -4,23 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/functionBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginTop="3dp"
         android:layout_marginBottom="3dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_marginTop="3dp"
+        android:gravity="center_vertical">
 
         <LinearLayout
             android:id="@+id/linearPlayerChat"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:paddingLeft="10dp"
-            android:gravity="left">
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="10dp">
 
             <ImageView
                 android:id="@+id/imgPlayerChat"
@@ -32,10 +30,10 @@
 
         <LinearLayout
             android:id="@+id/linearPlayerFullScreen"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/linearPlayerProfiles"
             android:visibility="gone">
 
             <ImageView
@@ -48,10 +46,10 @@
 
         <LinearLayout
             android:id="@+id/linearPlayerProfiles"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/linearPlayerShotCut">
 
             <ImageView
                 android:id="@+id/imgPlayerProfiles"
@@ -63,10 +61,10 @@
 
         <LinearLayout
             android:id="@+id/linearPlayerShotCut"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/linearPlayerShare"
             android:visibility="gone">
 
             <ImageView
@@ -78,10 +76,11 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/linearPlayerShare"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/linearPlayerClose"
             android:visibility="gone">
 
             <ImageView
@@ -93,10 +92,11 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/linearPlayerClose"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp">
 
             <ImageView
                 android:id="@+id/imgPlayerClose"
@@ -106,7 +106,7 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/player_linear"
