@@ -29,6 +29,7 @@ import cn.gogoal.im.activity.MyAdvisersActivity;
 import cn.gogoal.im.activity.MyGroupsActivity;
 import cn.gogoal.im.activity.PhoneContactsActivity;
 import cn.gogoal.im.activity.SettingActivity;
+import cn.gogoal.im.activity.SettingStockActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseFragment;
@@ -218,6 +219,8 @@ public class MineFragment extends BaseFragment {
                                     ((MainActivity)getActivity()).socialContactFragment.getUserValid();
                                     break;
                                 case 5://自选股设置
+                                    intent=new Intent(getActivity(),SettingStockActivity.class);
+                                    startActivity(intent);
                                     break;
                                 case 6:
                                     intent = new Intent(getActivity(), MyAdvisersActivity.class);

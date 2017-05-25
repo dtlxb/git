@@ -55,7 +55,7 @@
                 android:id="@+id/layout_user_head"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorAlipay"
+                android:background="@color/colorMineHead"
                 android:orientation="vertical"
                 android:paddingEnd="20dp"
                 android:paddingStart="15dp">

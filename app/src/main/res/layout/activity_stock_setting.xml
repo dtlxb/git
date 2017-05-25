@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_setting_stock"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:divider="@drawable/shape_divider_1px"
+    app:showDividers="middle|end"
+    tools:context=".activity.SettingStockActivity">
+
+    <TextView
+        android:id="@+id/tv_set_stock_refresh_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_normal_write2gray"
+        android:drawableEnd="@mipmap/img_more"
+        android:padding="15dp"
+        android:text="行情刷新频率"
+        android:textColor="@color/textColor_333333"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/tv_set_stock_k_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_normal_write2gray"
+        android:drawableEnd="@mipmap/img_more"
+        android:padding="15dp"
+        android:text="K线设置"
+        android:textColor="@color/textColor_333333"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/tv_set_stock_up_and_down_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_normal_write2gray"
+        android:drawableEnd="@mipmap/img_more"
+        android:padding="15dp"
+        android:text="涨跌显示设置"
+        android:textColor="@color/textColor_333333"
+        android:textSize="17sp" />
+
+</android.support.v7.widget.LinearLayoutCompat>

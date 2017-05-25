@@ -207,6 +207,7 @@
         <activity android:name=".activity.stock.InteractiveInvestorActivity" />
         <activity android:name=".activity.AccountSafeActivity"/>
         <activity android:name=".activity.ChangePasswordActivity"/>
+        <activity android:name=".activity.SettingStockActivity"/>
     </application>
 
 </manifest>

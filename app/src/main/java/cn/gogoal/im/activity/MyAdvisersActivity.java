@@ -30,6 +30,8 @@ public class MyAdvisersActivity extends BaseActivity {
 
     @Override
     public void doBusiness(final Context mContext) {
+        setMyTitle("我的专属顾问",true);
+
         BaseActivity.initRecycleView(rvAdvisers, 0);
 
         UserUtils.getAdvisers(new UserUtils.GetAdvisersCallback() {

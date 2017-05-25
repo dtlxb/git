@@ -149,21 +149,6 @@ public class SettingActivity extends BaseActivity {
                                 case 1:
                                     startActivity(new Intent(v.getContext(),AccountSafeActivity.class));
                                     break;
-//                                case 2:
-//                                    //行情刷新频率
-//                                    intent = new Intent(SettingActivity.this, SetStockRefreshActivity.class);
-//                                    startActivity(intent);
-//                                    break;
-//                                case 4:
-//                                    //K线设置
-//                                    intent = new Intent(SettingActivity.this, KlineSettingActivity.class);
-//                                    startActivity(intent);
-//                                    break;
-//                                case 5:
-//                                    //涨跌幅显示
-//                                    intent = new Intent(SettingActivity.this, RedGreenSettingActivity.class);
-//                                    startActivity(intent);
-//                                    break;
                                 case 3:
                                     //清除缓存
                                     clearMyAppCache();

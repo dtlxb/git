@@ -53,7 +53,7 @@ public class AccountSafeActivity extends BaseActivity {
     }
 
     private void iniListDatas() {
-        String[] userInfoValue = {UserUtils.getNickname(), UserUtils.getPhoneNumber(), ""};
+        String[] userInfoValue = {UserUtils.getGoGoalId(), UserUtils.getPhoneNumber(), ""};
 
         accountsafeInfos.add(new UserDetailInfo<>(UserDetailInfo.SPACE));
 
