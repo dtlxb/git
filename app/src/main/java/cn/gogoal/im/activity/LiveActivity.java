@@ -1,19 +1,13 @@
 package cn.gogoal.im.activity;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,6 +43,7 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.hply.imagepicker.view.StatusBarUtil;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -82,7 +77,6 @@ import cn.gogoal.im.common.linkUtils.HeadsetMonitor;
 import cn.gogoal.im.common.linkUtils.LinkConst;
 import cn.gogoal.im.common.linkUtils.VideoChatStatus;
 import cn.gogoal.im.fragment.WatchBottomFragment;
-import com.hply.roundimage.roundImage.RoundedImageView;
 
 /*
 * 推流直播页面
@@ -123,29 +117,6 @@ public class LiveActivity extends BaseActivity {
     //直播开始倒数
     @BindView(R.id.textCount)
     TextView textCount;
-
-    /*
-    * 权限所需定义参数
-    * */
-    private final int PERMISSION_REQUEST_CODE = 1;
-    private final int PERMISSION_DELAY = 100;
-    private final String[] permissionManifest = {
-            Manifest.permission.CAMERA,
-            Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-    };
-    private final int[] noPermissionTip = {
-            R.string.no_camera_permission,
-            R.string.no_record_audio_permission,
-            R.string.no_read_phone_state_permission,
-            R.string.no_write_external_storage_permission,
-            R.string.no_read_external_storage_permission
-    };
-    private int mNoPermissionIndex = 0;
-
-    private Runnable mPermissionRun = null;
 
     /**
      * 如果正在连麦的时候有新的连麦邀请过来，则在同意连麦的情况下会主动关闭之前的连麦
@@ -247,18 +218,6 @@ public class LiveActivity extends BaseActivity {
         StatusBarUtil.with(this).setColor(Color.BLACK);
 
         live_id = getIntent().getStringExtra("live_id");
-
-        if (permissionCheck()) {
-            // 更新权限状态
-            mHasPermission = true;
-        } else {
-            if (Build.VERSION.SDK_INT >= 23) {
-                ActivityCompat.requestPermissions(this, permissionManifest, PERMISSION_REQUEST_CODE);
-            } else {
-                UIHelper.toast(getContext(), noPermissionTip[mNoPermissionIndex]);
-                finish();
-            }
-        }
 
         mPreviewSurfaceView.getHolder().addCallback(mPreviewCallback);
         mPreviewSurfaceView.setOnTouchListener(mOnTouchListener);
@@ -554,49 +513,6 @@ public class LiveActivity extends BaseActivity {
         new GGOKHTTP(param, GGOKHTTP.VIDEOCALL_CLOSE_LIVE, ggHttpInterface).startGet();
     }
 
-    /**
-     * 权限检查（适配6.0以上手机）
-     */
-    private boolean permissionCheck() {
-        int permissionCheck = PackageManager.PERMISSION_GRANTED;
-        String permission = null;
-        for (int i = 0; i < permissionManifest.length; i++) {
-            permission = permissionManifest[i];
-            mNoPermissionIndex = i;
-            if (PermissionChecker.checkSelfPermission(this, permission)
-                    != PackageManager.PERMISSION_GRANTED) {
-                permissionCheck = PackageManager.PERMISSION_DENIED;
-            }
-        }
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case PERMISSION_REQUEST_CODE:
-                boolean hasPermission = true;
-                for (int i = 0; i < permissions.length; i++) {
-                    if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                        int toastTip = noPermissionTip[i];
-                        mNoPermissionIndex = i;
-                        if (toastTip != 0) {
-                            UIHelper.toast(getContext(), toastTip);
-                            hasPermission = false;
-                            finish();
-                        }
-                    }
-                }
-                mHasPermission = hasPermission;
-                break;
-        }
-    }
-
     SurfaceHolder.Callback mPreviewCallback = new SurfaceHolder.Callback() {
         @Override
         public void surfaceCreated(final SurfaceHolder holder) {
@@ -633,34 +549,11 @@ public class LiveActivity extends BaseActivity {
      * 开启预览
      */
     public void startPreView(final SurfaceHolder holder) {
-        //需要先检查是否已经授权（6.0的动态权限请求是异步行为）
-        if (mHasPermission) {
-            //开启预览
-            KLog.d("LiveActivity-->mChatHost.prepareToPublish()");
-            mChatHost.prepareToPublish(holder.getSurface(), 360, 640, mMediaParam);
-            if (mCameraFacing == AlivcMediaFormat.CAMERA_FACING_FRONT) {
-                mChatHost.setFilterParam(mFilterMap);
-            }
-        } else {
-            /**
-             * 如果没有授权，需要判断当前系统版本是否是6.0以上，如果是6.0以上，因为动态请求权限属于异步行为，所以需要等待授权结果，
-             * 采用postDelay的方式，一秒后再重新请求一次，如果是低于6.0则直接给出没有权限的提醒，并且finish掉
-             */
-            if (Build.VERSION.SDK_INT < 23) {
-                if (mNoPermissionIndex >= 0 && mNoPermissionIndex < noPermissionTip.length) {
-                    UIHelper.toast(getContext(), noPermissionTip[mNoPermissionIndex]);
-                }
-                finish();
-            } else {
-                mPermissionRun = new Runnable() {
-                    @Override
-                    public void run() {
-                        mPermissionRun = null;
-                        startPreView(holder);
-                    }
-                };
-                mHandler.postDelayed(mPermissionRun, PERMISSION_DELAY);
-            }
+        //开启预览
+        KLog.d("LiveActivity-->mChatHost.prepareToPublish()");
+        mChatHost.prepareToPublish(holder.getSurface(), 360, 640, mMediaParam);
+        if (mCameraFacing == AlivcMediaFormat.CAMERA_FACING_FRONT) {
+            mChatHost.setFilterParam(mFilterMap);
         }
     }
 
@@ -683,7 +576,7 @@ public class LiveActivity extends BaseActivity {
                 } else {
                     //显示结束连麦失败的
                     KLog.e("Close chatting failed");
-                    UIHelper.toast(LiveActivity.this, R.string.close_chat_failed_for_new_chat);
+                    UIHelper.toast(getContext(), R.string.close_chat_failed_for_new_chat);
                 }
             }
 
@@ -1033,9 +926,6 @@ public class LiveActivity extends BaseActivity {
 
     public void onLiveDestroy() {
         releaseRecorder();      //释放推流器资源
-        if (mPermissionRun != null) {
-            mHandler.removeCallbacks(mPermissionRun);
-        }
 
         if (null != imConversation) {
             quiteSquare(imConversation);
@@ -1251,10 +1141,6 @@ public class LiveActivity extends BaseActivity {
         new GGOKHTTP(param, GGOKHTTP.GET_ONLINE_COUNT, ggHttpInterface).startGet();
     }
 
-    private LiveActivity getContext() {
-        return LiveActivity.this;
-    }
-
 
     //获取群通讯录
     private void getChatGroupInfos(final AVIMConversation conversation) {
@@ -1264,7 +1150,7 @@ public class LiveActivity extends BaseActivity {
                 KLog.e(object.toJSONString());
                 JSONArray accountList = object.getJSONArray("accountList");
                 if (accountList.size() >= 2) {
-                    Intent intent = new Intent(LiveActivity.this, ChooseContactActivity.class);
+                    Intent intent = new Intent(getContext(), ChooseContactActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putInt("square_action", AppConst.LIVE_CONTACT_SOMEBODY);
                     bundle.putString("conversation_id", conversation.getConversationId());
@@ -1532,5 +1418,9 @@ public class LiveActivity extends BaseActivity {
             RoundedImageView imgAvatar = holder.getView(R.id.imgAvatar);
             ImageDisplay.loadCircleImage(getContext(), personList.getAvatar(), imgAvatar);
         }
+    }
+
+    private LiveActivity getContext() {
+        return LiveActivity.this;
     }
 }

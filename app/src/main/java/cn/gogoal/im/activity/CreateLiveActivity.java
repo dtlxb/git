@@ -2,7 +2,6 @@ package cn.gogoal.im.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
 
@@ -28,6 +27,7 @@ import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 
 /*
 * 创建直播
@@ -171,10 +171,7 @@ public class CreateLiveActivity extends BaseActivity {
                     JSONObject data = object.getJSONObject("data");
                     if (data.getIntValue("code") == 1) {
                         if (data.getString("live_id") != null) {
-                            finish();
-                            Intent intent = new Intent(getContext(), LiveActivity.class);
-                            intent.putExtra("live_id", data.getString("live_id"));
-                            startActivity(intent);
+                            PlayDataStatistics.enterLiveAuthorize(true, getContext(), data.getString("live_id"), true);
                         } else {
                             UIHelper.toast(getContext(), "创建直播失败");
                         }
