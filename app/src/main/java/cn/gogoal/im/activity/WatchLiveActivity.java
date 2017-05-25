@@ -26,6 +26,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.RotateAnimation;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -65,6 +66,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.LiveOnlinePersonData;
+import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
@@ -117,9 +119,14 @@ public class WatchLiveActivity extends BaseActivity {
     //缓冲控件
     @BindView(R.id.LayoutTip)
     LinearLayout LayoutTip;
+    @BindView(R.id.text_tip)
+    ImageView text_tip;
+
     //聊天显示列表
     @BindView(R.id.recycPortrait)
     RecyclerView recyler_chat;
+
+    private RotateAnimation animation;
 
     /*
     * 权限所需定义参数
@@ -236,6 +243,9 @@ public class WatchLiveActivity extends BaseActivity {
         StatusBarUtil.with(this).setColor(Color.BLACK);
 
         live_id = getIntent().getStringExtra("live_id");
+
+        animation = AnimationUtils.getInstance().setLoadingAnime(text_tip, R.mipmap.login_loading);
+        animation.startNow();
 
         if (Build.VERSION.SDK_INT >= 23) {
             permissionCheck();
@@ -624,7 +634,7 @@ public class WatchLiveActivity extends BaseActivity {
                     //开始缓冲
                     synchronized (isCaching) {
                         if (!isCaching) {
-                            mHandler.postDelayed(mShowInterruptRun, LinkConst.INTERRUPT_DELAY);
+                            show_buffering_ui(true);
                             isCaching = true;
                         }
                     }
@@ -632,8 +642,7 @@ public class WatchLiveActivity extends BaseActivity {
                 case MediaPlayer.MEDIA_INFO_BUFFERING_END:
                     synchronized (isCaching) {
                         if (isCaching) {
-                            mHandler.removeCallbacks(mShowInterruptRun);
-                            LayoutTip.setVisibility(View.GONE);
+                            show_buffering_ui(false);
                             // 结束缓冲
                             isCaching = false;
                         }
@@ -641,11 +650,11 @@ public class WatchLiveActivity extends BaseActivity {
                     break;
                 case MediaError.ALIVC_INFO_PLAYER_FIRST_FRAME_RENDERED:
                     // 首帧显示时间
-                    UIHelper.toast(getContext(), R.string.show_first_frame);
                     if (!isChatting()) {
                         //计算首帧耗时
                         KLog.e("首帧耗时: " + (System.currentTimeMillis() - mStartTime) + "ms");
                     }
+                    show_buffering_ui(false);
                     break;
                 case MediaError.ALIVC_INFO_PUBLISH_DISPLAY_FIRST_FRAME:
                     //预览首帧渲染完成
@@ -921,8 +930,24 @@ public class WatchLiveActivity extends BaseActivity {
         @Override
         public void run() {
             LayoutTip.setVisibility(View.VISIBLE);
+            animation.startNow();
         }
     };
+
+    /*
+    * 缓冲显示
+    * */
+    private void show_buffering_ui(boolean bShowTip) {
+        if (bShowTip) {
+            mHandler.postDelayed(mShowInterruptRun, LinkConst.INTERRUPT_DELAY);
+        } else {
+            mHandler.removeCallbacks(mShowInterruptRun);
+            LayoutTip.setVisibility(View.GONE);
+            if (animation != null) {
+                animation.cancel();
+            }
+        }
+    }
 
     @Override
     protected void onResume() {
@@ -943,7 +968,7 @@ public class WatchLiveActivity extends BaseActivity {
 
         mediaPause();
         isCaching = false;
-        mHandler.removeCallbacks(mShowInterruptRun);
+        show_buffering_ui(false);
     }
 
     @Override
