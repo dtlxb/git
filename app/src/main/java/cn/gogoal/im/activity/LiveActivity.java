@@ -49,6 +49,7 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.hply.imagepicker.view.StatusBarUtil;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -82,7 +83,6 @@ import cn.gogoal.im.common.linkUtils.HeadsetMonitor;
 import cn.gogoal.im.common.linkUtils.LinkConst;
 import cn.gogoal.im.common.linkUtils.VideoChatStatus;
 import cn.gogoal.im.fragment.WatchBottomFragment;
-import com.hply.roundimage.roundImage.RoundedImageView;
 
 /*
 * 推流直播页面
@@ -683,7 +683,7 @@ public class LiveActivity extends BaseActivity {
                 } else {
                     //显示结束连麦失败的
                     KLog.e("Close chatting failed");
-                    UIHelper.toast(LiveActivity.this, R.string.close_chat_failed_for_new_chat);
+                    UIHelper.toast(getContext(), R.string.close_chat_failed_for_new_chat);
                 }
             }
 
@@ -1251,10 +1251,6 @@ public class LiveActivity extends BaseActivity {
         new GGOKHTTP(param, GGOKHTTP.GET_ONLINE_COUNT, ggHttpInterface).startGet();
     }
 
-    private LiveActivity getContext() {
-        return LiveActivity.this;
-    }
-
 
     //获取群通讯录
     private void getChatGroupInfos(final AVIMConversation conversation) {
@@ -1264,7 +1260,7 @@ public class LiveActivity extends BaseActivity {
                 KLog.e(object.toJSONString());
                 JSONArray accountList = object.getJSONArray("accountList");
                 if (accountList.size() >= 2) {
-                    Intent intent = new Intent(LiveActivity.this, ChooseContactActivity.class);
+                    Intent intent = new Intent(getContext(), ChooseContactActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putInt("square_action", AppConst.LIVE_CONTACT_SOMEBODY);
                     bundle.putString("conversation_id", conversation.getConversationId());
@@ -1532,5 +1528,9 @@ public class LiveActivity extends BaseActivity {
             RoundedImageView imgAvatar = holder.getView(R.id.imgAvatar);
             ImageDisplay.loadCircleImage(getContext(), personList.getAvatar(), imgAvatar);
         }
+    }
+
+    private LiveActivity getContext() {
+        return LiveActivity.this;
     }
 }
