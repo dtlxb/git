@@ -26,11 +26,25 @@ public class WaitDialog extends BaseCentDailog {
     private TextView textView;
     private boolean cancelOutside;
 
+    private float mask;
+
     public static WaitDialog getInstance(String text, int iconRes, boolean loading) {
         WaitDialog dialog = new WaitDialog();
         Bundle bundle = new Bundle();
         bundle.putInt("DIALOG_ICON", iconRes);
         bundle.putString("DIALOG_TEXT", text);
+        bundle.putBoolean("DIALOG_LOADING", loading);
+        dialog.setArguments(bundle);
+
+        return dialog;
+    }
+
+    public static WaitDialog getInstance(float mask,String text, int iconRes, boolean loading) {
+        WaitDialog dialog = new WaitDialog();
+        Bundle bundle = new Bundle();
+        bundle.putInt("DIALOG_ICON", iconRes);
+        bundle.putString("DIALOG_TEXT", text);
+        bundle.putFloat("mask",mask);
         bundle.putBoolean("DIALOG_LOADING", loading);
         dialog.setArguments(bundle);
         return dialog;
@@ -43,13 +57,14 @@ public class WaitDialog extends BaseCentDailog {
 
     @Override
     public float getDimAmount() {
-        return 0;
+        return mask;
     }
 
     @Override
     public void bindView(View v) {
         int dialogIcon = getArguments().getInt("DIALOG_ICON", 0);
         String dialogText = getArguments().getString("DIALOG_TEXT", "提示");
+        mask=getArguments().getFloat("mask");
 
         imgIcon = (ImageView) v.findViewById(R.id.img_dialog_gg_submit);
         textView = (TextView) v.findViewById(R.id.tv_dialog_gg_submit);

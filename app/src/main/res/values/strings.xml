@@ -24,7 +24,9 @@
     <string name="title_choose_address">选择地区</string>
     <string name="title_change_phone_number">更换手机号</string>
     <string name="title_user_information">详细资料</string>
+    <string name="title_account_safe">账号与安全</string>
 
+    <string name="phone_num">手机号</string>
 
     <string name="square_collcet_add">添加</string>
     <string name="square_publish_create">创建</string>
@@ -211,5 +213,6 @@
     <string name="im_phone_num">手机通讯录</string>
     <string name="im_message_send_fail">对方开启了好友验证，您还不是他（她）的好友。请发起朋友验证请求，
         对方验证通过后，才可以聊天。发送朋友验证</string>
+    <string name="title_change_phone">更换手机号</string>
 
 </resources>

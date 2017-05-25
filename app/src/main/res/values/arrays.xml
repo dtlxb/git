@@ -114,7 +114,6 @@
     
     <string-array name="settingArray">
         <item>账号与安全</item>
-        <item>推送设置</item>
         <item>行情刷新频率</item>
         <item>K线设置</item>
         <item>涨跌显示设置</item>

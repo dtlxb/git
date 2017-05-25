@@ -7,7 +7,7 @@
     android:background="@color/stock_market_bg"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".activity.ChangePhoneNumber">
+    tools:context=".activity.ChangePhoneNumberActivity">
 
     <include layout="@layout/include_title" />
 
@@ -15,21 +15,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="更换手机号后，下次登录可使用新手机号登录" />
+        android:gravity="center"
+        android:text="更换手机号后\n下次登录可使用新手机号登录" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:orientation="vertical"
-        android:paddingEnd="20dp"
-        android:paddingStart="20dp">
+        android:padding="20dp">
 
         <cn.gogoal.im.ui.view.XEditText
             android:id="@+id/et_change_phone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_height="50dp"
             android:background="@drawable/login_edit_border"
             android:drawableLeft="@mipmap/icon_number"
             android:drawablePadding="9dp"
@@ -48,7 +47,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginTop="25dp"
             android:orientation="horizontal">
 
@@ -88,20 +87,20 @@
 
         </LinearLayout>
 
-
-        <cn.gogoal.im.ui.view.SelectorButton
-            android:id="@+id/btn_ok"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="25dp"
-            android:lines="1"
-            android:text="验证手机号"
-            android:textColor="@android:color/white"
-            android:textSize="17sp"
-            app:normalBackgroundColor="@color/colorPrimary"
-            app:pressedBackgroundColor="#f68d8d"
-            app:radius="4dp"
-            />
-
     </LinearLayout>
+
+    <cn.gogoal.im.ui.view.SelectorButton
+        android:id="@+id/btn_ok"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="25dp"
+        android:lines="1"
+        android:text="验证手机号"
+        android:textColor="@android:color/white"
+        android:textSize="17sp"
+        app:normalBackgroundColor="@color/player_add_friend"
+        app:pressedBackgroundColor="#f68d8d"
+        app:radius="4dp"
+        />
+
 </LinearLayout>

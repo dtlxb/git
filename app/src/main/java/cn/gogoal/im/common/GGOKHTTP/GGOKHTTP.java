@@ -626,6 +626,13 @@ public class GGOKHTTP {
      *  获取个人信息
      */
     public static final String GET_MY_INFO = "v1/user/get_info";
+    /*
+     *  token
+     *  old_pwd
+     *  new_pwd
+     *  修改个人密码——根据原密码
+     */
+    public static final String RESET_PASSWORD = "v1/ggm_im/reset_password";
 
     /**
      * 预约直播
@@ -707,7 +714,7 @@ public class GGOKHTTP {
                     .execute(new StringCallback() {
                         @Override
                         public void onError(Call call, Exception e, int id) {
-                            Log.e("TAG","==出错日志==出错接口："+url+"=="+e.getMessage()+"==");
+                            Log.e("TAG", "==出错日志==出错接口：" + url + "==" + e.getMessage() + "==");
                             if (httpInterface != null) httpInterface.onFailure(e.toString());
                         }
 
@@ -718,7 +725,7 @@ public class GGOKHTTP {
                     });
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("TAG","==出错日志==e.getMessage()==出错接口："+url+"==");
+            Log.e("TAG", "==出错日志==e.getMessage()==出错接口：" + url + "==");
             if (httpInterface != null) httpInterface.onFailure(e.toString());
         }
     }

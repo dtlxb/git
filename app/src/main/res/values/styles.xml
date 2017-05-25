@@ -24,7 +24,7 @@
         <item name="tabTextAppearance">@style/NormalTabItem</item>
     </style>
 
-    <style name="DialogEditText" parent="Widget.AppCompat.EditText"/>
+    <style name="DialogEditText" parent="Widget.AppCompat.EditText" />
 
     <style name="RadioTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@android:color/transparent</item>
@@ -268,4 +268,30 @@
         <item name="android:textColor">#ffec86</item>
         <item name="android:textSize">10sp</item>
     </style>
+
+    <!--修改密码页 提示文本-->
+    <style name="TvChangePsw">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/textColor_333333</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+
+    <!--修改密码页 TableRow-->
+    <style name="TabRowChangePsw">
+        <item name="android:paddingStart">15dp</item>
+        <item name="android:paddingEnd">15dp</item>
+    </style>
+    <!--修改密码页 输入框-->
+    <style name="EtChangePsw">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_marginStart">25dp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:textColor">@color/textColor_333333</item>
+        <item name="android:textColorHint">@color/textColor_999999</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:inputType">textPassword</item>
+    </style>
+
+
 </resources>

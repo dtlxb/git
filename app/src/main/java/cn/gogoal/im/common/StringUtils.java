@@ -200,15 +200,16 @@ public class StringUtils {
         return new StringBuilder(orderStr).reverse().toString();
     }
 
-    public static boolean isActuallyEmpty(String words) {
-        return TextUtils.isEmpty(words) || words.equals("null") || TextUtils.isEmpty(words.replace(" ", ""));
+    public static boolean isActuallyEmpty(CharSequence words) {
+        return TextUtils.isEmpty(words) || words.equals("null") ||
+                TextUtils.isEmpty(words.toString().replace(" ", ""));
     }
 
     /**
      * 输入的手机号是否合法
      */
-    public static boolean checkPhoneString(String phoneNumber) {
-        return phoneNumber.matches("^1[3-57-9]\\d{9}$");
+    public static boolean checkPhoneString(CharSequence phoneNumber) {
+        return !isActuallyEmpty(phoneNumber) && phoneNumber.toString().matches("^1[3-57-9]\\d{9}$");
     }
 
     /**

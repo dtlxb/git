@@ -166,7 +166,7 @@ public class EditMyInfoActivity extends BaseActivity {
                                 case 2://不支持修改
                                     break;
                                 case 3://
-                                    startActivity(new Intent(v.getContext(), ChangePhoneNumber.class));
+                                    startActivity(new Intent(v.getContext(), ChangePhoneNumberActivity.class));
                                     break;
                                 case 4://公司
                                     intent.putExtra(SingleEditActivity.EDIT_MY_INFO_TYPE, SingleEditActivity.EDIT_MY_INFO_TYPE_COMPANY);

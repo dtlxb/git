@@ -30,9 +30,9 @@ import cn.gogoal.im.ui.view.XEditText;
  * author wangjd on 2017/4/25 0025.
  * Staff_id 1375
  * phone 18930640263
- * description :${annotated}.
+ * description :更换手机号绑定
  */
-public class ChangePhoneNumber extends BaseActivity {
+public class ChangePhoneNumberActivity extends BaseActivity {
 
     @BindView(R.id.et_change_phone)
     XEditText etChangePhone;
