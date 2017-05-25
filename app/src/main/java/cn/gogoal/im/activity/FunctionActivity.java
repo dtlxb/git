@@ -28,6 +28,7 @@ import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.WebViewUtil;
+import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 import cn.gogoal.im.ui.dialog.AdvisersDialog;
 import cn.gogoal.im.ui.view.XTitle;
 
@@ -172,9 +173,9 @@ public class FunctionActivity extends BaseActivity {
             @Override
             public void handler(final String data, ValueCallback<String> function) {
 
-                FileUtil.writeRequestResponse(data,"pdf");
+                FileUtil.writeRequestResponse(data, "pdf");
 
-                showPdf(data.replaceAll("\\s",""));
+                showPdf(data.replaceAll("\\s", ""));
 
             }
         });
@@ -219,10 +220,8 @@ public class FunctionActivity extends BaseActivity {
             @Override
             public void handler(String data, ValueCallback<String> function) {
                 JSONObject object = JSONObject.parseObject(data);
-                Intent intent = new Intent(getContext(), LiveActivity.class);
-                intent.putExtra("live_id", object.getString("live_id"));
-                startActivity(intent);
-                finish();
+
+                PlayDataStatistics.enterLiveAuthorize(true, getContext(), object.getString("live_id"), true);
             }
         });
 

@@ -1,12 +1,15 @@
 package cn.gogoal.im.common.linkUtils;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -21,6 +24,23 @@ import cn.gogoal.im.common.permission.IPermissionListner;
  */
 public class PlayDataStatistics {
 
+    private static final String[] permissionManifest = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+    };
+
+    /**
+     * 统计直播录播
+     *
+     * @param context
+     * @param video_type
+     * @param video_id
+     * @param source
+     * @param type
+     */
     public static void getStatisticalData(final Context context, final String video_type, final String video_id, final String source, final String type) {
 
         // READ_PHONE_STATE
@@ -62,5 +82,37 @@ public class PlayDataStatistics {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.ADD_PALY_DATE, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 进入直播授权
+     * @param isLive
+     * @param mContext
+     * @param live_id
+     * @param isFinish
+     */
+    public static void enterLiveAuthorize(final boolean isLive, final Activity mContext, final String live_id, final boolean isFinish) {
+        //申请授权
+        BaseActivity.requestRuntimePermission(permissionManifest, new IPermissionListner() {
+            @Override
+            public void onUserAuthorize() {
+                if (isFinish) {
+                    mContext.finish();
+                }
+
+                if (isLive) {
+                    Intent intent = new Intent(mContext, LiveActivity.class);
+                    intent.putExtra("live_id", live_id);
+                    mContext.startActivity(intent);
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onRefusedAuthorize(List<String> deniedPermissions) {
+
+            }
+        });
     }
 }

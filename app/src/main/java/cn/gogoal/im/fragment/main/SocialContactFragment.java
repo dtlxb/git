@@ -23,7 +23,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.CreateLiveActivity;
-import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.adapter.SocialLiveAdapter;
 import cn.gogoal.im.adapter.SocialRecordAdapter;
@@ -39,6 +38,7 @@ import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 
 import static cn.gogoal.im.base.BaseActivity.initRecycleView;
 
@@ -50,7 +50,7 @@ import static cn.gogoal.im.base.BaseActivity.initRecycleView;
  */
 public class SocialContactFragment extends BaseFragment {
 
-    private final String TAG="SocialContactFragment";
+    private final String TAG = "SocialContactFragment";
 
     @BindView(R.id.relaterTittle)
     RelativeLayout relaterTittle;
@@ -199,9 +199,7 @@ public class SocialContactFragment extends BaseFragment {
                     JSONObject data = object.getJSONObject("data");
                     if (data.getIntValue("code") == 1) {
                         if (data.getString("live_id") != null) {
-                            Intent intent = new Intent(getContext(), LiveActivity.class);
-                            intent.putExtra("live_id", data.getString("live_id"));
-                            startActivity(intent);
+                            PlayDataStatistics.enterLiveAuthorize(true, getActivity(), data.getString("live_id"), false);
                         } else {
                             startActivity(new Intent(getActivity(), CreateLiveActivity.class));
                         }
@@ -316,8 +314,8 @@ public class SocialContactFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                if (refreshSocial!=null)
-                refreshSocial.setRefreshing(false);
+                if (refreshSocial != null)
+                    refreshSocial.setRefreshing(false);
                 UIHelper.toast(getContext(), R.string.net_erro_hint);
             }
         };
