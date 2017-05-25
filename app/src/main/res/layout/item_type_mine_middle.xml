@@ -10,10 +10,10 @@
     android:paddingTop="20dp">
 
     <Button
-        android:id="@+id/btn_mine_friend_dynamic"
+        android:id="@+id/btn_mine_my_friend"
         style="@style/MineMiddleButtonStyle"
-        android:drawableTop="@mipmap/img_mine_friend_dynamic"
-        android:text="好友动态" />
+        android:drawableTop="@mipmap/img_mine_my_friend"
+        android:text="我的好友" />
 
     <View
         android:layout_width="1px"
@@ -21,9 +21,9 @@
         android:background="@color/colorDivider_d9d9d9" />
 
     <Button
-        android:id="@+id/btn_mine_group_chat"
+        android:id="@+id/btn_mine_my_group"
         style="@style/MineMiddleButtonStyle"
-        android:drawableTop="@mipmap/img_mine_friend_dynamic"
+        android:drawableTop="@mipmap/img_mine_my_group"
         android:text="群组" />
 
     <View
@@ -32,10 +32,10 @@
         android:background="@color/colorDivider_d9d9d9" />
 
     <Button
-        android:id="@+id/btn_mine_twice_persion"
+        android:id="@+id/btn_mine_my_phone_contacts"
         style="@style/MineMiddleButtonStyle"
-        android:drawableTop="@mipmap/img_mine_friend_dynamic"
-        android:text="二度人脉" />
+        android:drawableTop="@mipmap/img_mine_my_phone_contact"
+        android:text="手机通讯录" />
 
     <View
         android:layout_width="1px"
@@ -43,8 +43,8 @@
         android:background="@color/colorDivider_d9d9d9" />
 
     <Button
-        android:id="@+id/btn_mine_my_visitor"
+        android:id="@+id/btn_mine_inviting_friends"
         style="@style/MineMiddleButtonStyle"
-        android:drawableTop="@mipmap/img_mine_friend_dynamic"
-        android:text="谁看过我" />
+        android:drawableTop="@mipmap/img_mine_inviting_friends"
+        android:text="邀请好友" />
 </LinearLayout>

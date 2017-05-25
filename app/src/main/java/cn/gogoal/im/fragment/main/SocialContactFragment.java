@@ -185,7 +185,7 @@ public class SocialContactFragment extends BaseFragment {
     /**
      * 能否发起直播
      */
-    private void getUserValid() {
+    public void getUserValid() {
 
         Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());

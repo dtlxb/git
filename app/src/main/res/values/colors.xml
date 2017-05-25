@@ -4,6 +4,8 @@
     <color name="colorAccent">#38ADFF</color>
     <color name="colorMineHead">#c72b2c</color>
 
+    <color name="colorAlipay">#1B82D2</color><!--支付宝蓝-->
+
     <color name="textColor_333333">#333333</color> <!--主字黑-->
     <color name="textColor_999999">#999999</color> <!--字亮灰-->
     <color name="textColor_666666">#666666</color> <!--字深灰-->

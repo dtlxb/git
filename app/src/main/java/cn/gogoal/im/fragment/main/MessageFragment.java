@@ -152,7 +152,7 @@ public class MessageFragment extends BaseFragment {
         map.put("number", allCount);
         BaseMessage baseMessage = new BaseMessage("message_count", map);
         AppManager.getInstance().sendMessage("correct_allmessage_count", baseMessage);
-        KLog.e(jsonArray);
+//        KLog.e(jsonArray);
         IMMessageBeans.clear();
         IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
