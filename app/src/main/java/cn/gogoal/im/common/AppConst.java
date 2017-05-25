@@ -153,7 +153,7 @@ public class AppConst {
     public static final String IM_MESSAGE_TYPE_TEXT = "-1";             //消息类型 文字
     public static final String IM_MESSAGE_TYPE_PHOTO = "-2";            //消息类型 图片
     public static final String IM_MESSAGE_TYPE_AUDIO = "-3";            //消息类型 语音
-    public static final String IM_MESSAGE_TYPE_FRIEND_DEL = "1";        //消息类型 加好友
+    public static final String IM_MESSAGE_TYPE_FRIEND_DEL = "1";        //消息类型 删好友
     public static final String IM_MESSAGE_TYPE_FRIEND_ADD = "2";        //消息类型 加好友
     public static final String IM_MESSAGE_TYPE_CONTACT_ADD = "3";       //消息类型 好友加入通讯录
     public static final String IM_MESSAGE_TYPE_CONTACT_DEL = "4";       //消息类型 好友从通讯录移除

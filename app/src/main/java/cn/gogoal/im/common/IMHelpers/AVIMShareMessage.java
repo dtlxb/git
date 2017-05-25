@@ -1,35 +1,34 @@
 package cn.gogoal.im.common.IMHelpers;
 
-
-import java.util.Map;
-
 import com.avos.avoscloud.im.v2.AVIMMessageCreator;
 import com.avos.avoscloud.im.v2.AVIMMessageField;
 import com.avos.avoscloud.im.v2.AVIMMessageType;
 import com.avos.avoscloud.im.v2.AVIMTypedMessage;
 
+import java.util.Map;
+
 /**
- * Created by huangxx on 2017/5/23.
+ * Created by huangxx on 2017/5/25.
  */
 
 @AVIMMessageType(
         type = 13
 )
-public class AVIMToolMessage extends AVIMTypedMessage {
-
+public class AVIMShareMessage extends AVIMTypedMessage {
     @AVIMMessageField(
             name = "_lctext"
     )
-    String text;
+    private String text;
+
     @AVIMMessageField(
             name = "_lcattrs"
     )
-    Map<String, Object> attrs;
+    private Map<String, Object> attrs;
 
     @SuppressWarnings("unchecked")
-    public static final Creator<AVIMToolMessage> CREATOR = new AVIMMessageCreator(AVIMToolMessage.class);
+    public static final Creator<AVIMShareMessage> CREATOR = new AVIMMessageCreator(AVIMShareMessage.class);
 
-    public AVIMToolMessage() {
+    public AVIMShareMessage() {
     }
 
     public String getText() {
@@ -47,4 +46,5 @@ public class AVIMToolMessage extends AVIMTypedMessage {
     public void setAttrs(Map<String, Object> attrs) {
         this.attrs = attrs;
     }
+
 }

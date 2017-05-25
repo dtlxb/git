@@ -13,6 +13,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import com.socks.library.KLog;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.IMPersonDetailActivity;
@@ -47,10 +49,14 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.common.IMHelpers.AVIMShareMessage;
+import cn.gogoal.im.common.IMHelpers.AVIMStockMessage;
+import cn.gogoal.im.common.IMHelpers.AVIMSystemMessage;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
 import cn.gogoal.im.common.NormalIntentUtils;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.recording.MediaManager;
@@ -83,6 +89,9 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     private LayoutInflater mLayoutInflater;
     private int chatType;
     private Boolean isYourSelf;
+    private HashMap<String, Object> itemMap = new HashMap<>();
+
+    private String playModelId;
 
     public IMChatAdapter(Context mContext, List<AVIMMessage> messageList) {
         this.mLayoutInflater = LayoutInflater.from(mContext);
@@ -123,14 +132,10 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
 
         final AVIMMessage avimMessage = messageList.get(position);
-        JSONObject contentObject = JSON.parseObject(avimMessage.getContent());
-        final JSONObject lcattrsObject = (JSONObject) contentObject.get("_lcattrs");
-        String messageType = contentObject.getString("_lctype");
         String headPicUrl;
         String speakerName;
 
-        if (!messageType.equals(AppConst.IM_MESSAGE_TYPE_SQUARE_ADD) && !messageType.equals(AppConst.IM_MESSAGE_TYPE_SQUARE_DEL)
-                && !messageType.equals(AppConst.IM_MESSAGE_TYPE_SQUARE_DETAIL) && !messageType.equals(AppConst.IM_MESSAGE_TYPE_SEND_FAIL)) {
+        if (!(avimMessage instanceof AVIMSystemMessage)) {
             if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.GONE);
             } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
@@ -142,21 +147,26 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             if (avimMessage.getFrom().equals(UserUtils.getMyAccountId())) {
                 headPicUrl = UserUtils.getUserAvatar();
                 speakerName = UserUtils.getNickname();
-                KLog.e(contentObject.get("status"));
+                /*KLog.e(contentObject.get("status"));
                 //判断消息状态
                 if (null != contentObject.get("status") && contentObject.getString("status").equals("4")) {
                     ((IMCHatViewHolder) holder).send_fail.setVisibility(View.VISIBLE);
                 } else {
                     ((IMCHatViewHolder) holder).send_fail.setVisibility(View.GONE);
-                }
+                }*/
 
             } else {
                 headPicUrl = MessageListUtils.getContactWantedInfo("avatar", Integer.parseInt(avimMessage.getFrom()), chatType, avimMessage.getConversationId());
                 speakerName = MessageListUtils.getContactWantedInfo("nickname", Integer.parseInt(avimMessage.getFrom()), chatType, avimMessage.getConversationId());
+
                 if (TextUtils.isEmpty(headPicUrl)) {
+                    JSONObject contentObject = JSON.parseObject(avimMessage.getContent());
+                    JSONObject lcattrsObject = (JSONObject) contentObject.get("_lcattrs");
                     headPicUrl = (String) lcattrsObject.get("avatar");
                 }
                 if (TextUtils.isEmpty(speakerName)) {
+                    JSONObject contentObject = JSON.parseObject(avimMessage.getContent());
+                    JSONObject lcattrsObject = (JSONObject) contentObject.get("_lcattrs");
                     speakerName = (String) lcattrsObject.get("username");
                 }
             }
@@ -191,9 +201,9 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             });
         } else {
         }
+        showMessageTime(position, ((IMCHatViewHolder) holder).message_time);
         if (holder instanceof LeftTextViewHolder) {
             final AVIMTextMessage textMessage = (AVIMTextMessage) avimMessage;
-            showMessageTime(position, ((LeftTextViewHolder) holder).message_time);
             SpannableString spannableString = StringUtils.isOurEmoji(mContext, textMessage.getText(), AppDevice.sp2px(mContext,
                     ((LeftTextViewHolder) holder).what_user_send.getTextSize() / 2));
             ((LeftTextViewHolder) holder).what_user_send.setText(spannableString);
@@ -207,9 +217,9 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             });
 
         } else if (holder instanceof RightTextViewHolder) {
+
             final AVIMTextMessage textMessage = (AVIMTextMessage) avimMessage;
             ((RightTextViewHolder) holder).user_name.setVisibility(View.GONE);
-            showMessageTime(position, ((RightTextViewHolder) holder).message_time);
             SpannableString spannableString = StringUtils.isOurEmoji(mContext, textMessage.getText(), AppDevice.sp2px(mContext,
                     ((RightTextViewHolder) holder).what_user_send.getTextSize() / 2));
             ((RightTextViewHolder) holder).what_user_send.setText(spannableString);
@@ -228,7 +238,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             setImageSize(params, imageMessage);
             ((LeftImageViewHolder) holder).image_user_send.setLayoutParams(params);
             ImageDisplay.loadImage(mContext, UFileImageHelper.load(imageMessage.getAVFile().getUrl()).compress(10).get(), ((LeftImageViewHolder) holder).image_user_send);
-            showMessageTime(position, ((LeftImageViewHolder) holder).message_time);
 
             ((LeftImageViewHolder) holder).image_user_send.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -244,8 +253,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((RightImageViewHolder) holder).image_user_send.getLayoutParams();
             setImageSize(params, imageMessage);
             ((RightImageViewHolder) holder).image_user_send.setLayoutParams(params);
-            ImageDisplay.loadImage(mContext, isFromUfile(imageMessage.getAVFile().getUrl()), ((RightImageViewHolder) holder).image_user_send);
-            showMessageTime(position, ((RightImageViewHolder) holder).message_time);
+            ImageDisplay.loadImage(mContext, isFromUFile(imageMessage.getAVFile().getUrl()), ((RightImageViewHolder) holder).image_user_send);
             ((RightImageViewHolder) holder).image_user_send.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -254,9 +262,15 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             });
 
         } else if (holder instanceof RightAudioViewHolder) {
-            final AVIMAudioMessage audioMessage = (AVIMAudioMessage) avimMessage;
+
+            final GGAudioMessage audioMessage = (GGAudioMessage) avimMessage;
+
+            // holder 牵引 model
+            RightAudioViewHolder rightAudioHolder = (RightAudioViewHolder) holder;
+            rightAudioHolder.setMessage(audioMessage);
+
             ((RightAudioViewHolder) holder).user_name.setVisibility(View.GONE);
-            double duration = ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue();
+            double duration = audioMessage.getDuration();
             //设置语音宽度
             ViewGroup.LayoutParams params = ((RightAudioViewHolder) holder).recorder_length.getLayoutParams();
             int mMaxItemWidth = AppDevice.getWidth(mContext) - AppDevice.dp2px(mContext, 160);
@@ -276,26 +290,20 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             ((RightAudioViewHolder) holder).recorder_length.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //播放动画
-                    ((RightAudioViewHolder) holder).animView.setBackgroundResource(R.drawable.right_play_anim);
-                    AnimationDrawable anim = (AnimationDrawable) ((RightAudioViewHolder) holder).animView.getBackground();
-                    AudioViewInfo audioViewInfo = new AudioViewInfo(((RightAudioViewHolder) holder).animView, audioMessage.getAVFile().getUrl(), 1);
-                    anim.start();
-                    //播放音频
-                    MediaManager.playSound(audioViewInfo, new MediaPlayer.OnCompletionListener() {
-
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-                            ((RightAudioViewHolder) holder).animView.setBackgroundResource(R.mipmap.right_voice_anime3);
-                        }
-                    });
+                    onTouchGGAudioMessage(audioMessage);
                 }
             });
 
-            showMessageTime(position, ((RightAudioViewHolder) holder).message_time);
         } else if (holder instanceof LeftAudioViewHolder) {
-            final AVIMAudioMessage audioMessage = (AVIMAudioMessage) avimMessage;
-            double duration = ((Number) audioMessage.getFileMetaData().get("duration")).doubleValue();
+
+            final GGAudioMessage audioMessage = (GGAudioMessage) avimMessage;
+
+            // holder 牵引 model
+            LeftAudioViewHolder leftAudioHolder = (LeftAudioViewHolder) holder;
+            leftAudioHolder.setMessage(audioMessage);
+
+            final Boolean haveListen = SPTools.getBoolean(UserUtils.getMyAccountId() + audioMessage.getMessageId(), false);
+            double duration = audioMessage.getDuration();
             //设置语音宽度
             final RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((LeftAudioViewHolder) holder).recorder_length.getLayoutParams();
             int mMaxItemWidth = AppDevice.getWidth(mContext) - AppDevice.dp2px(mContext, 160);
@@ -310,157 +318,134 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 params.setMargins(0, AppDevice.dp2px(mContext, 13), 0, 0);
             }
             ((LeftAudioViewHolder) holder).recorder_length.setLayoutParams(params);
+            //设置红点可见
+            if (null != audioMessage.getAttrs().get("read") && (Boolean) audioMessage.getAttrs().get("read")) {
+                ((LeftAudioViewHolder) holder).iv_unread_tag.setVisibility(View.GONE);
+            } else {
+                ((LeftAudioViewHolder) holder).iv_unread_tag.setVisibility(View.VISIBLE);
+            }
+
             //设置语音时长
             if ((int) duration > 60) {
                 ((LeftAudioViewHolder) holder).recorder_time.setText(60 + "\"");
             } else {
                 ((LeftAudioViewHolder) holder).recorder_time.setText((int) duration + "\"");
             }
+
+            if (haveListen) {
+                ((LeftAudioViewHolder) holder).iv_unread_tag.setVisibility(View.GONE);
+            } else {
+                ((LeftAudioViewHolder) holder).iv_unread_tag.setVisibility(View.VISIBLE);
+            }
+
             //点击播放语音
             ((LeftAudioViewHolder) holder).recorder_length.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //播放动画
-                    ((LeftAudioViewHolder) holder).animView.setBackgroundResource(R.drawable.left_play_anim);
-                    AnimationDrawable anim = (AnimationDrawable) ((LeftAudioViewHolder) holder).animView.getBackground();
-                    AudioViewInfo audioViewInfo = new AudioViewInfo(((LeftAudioViewHolder) holder).animView, audioMessage.getAVFile().getUrl(), 0);
-                    anim.start();
-                    //播放音频
-                    MediaManager.playSound(audioViewInfo, new MediaPlayer.OnCompletionListener() {
-
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-                            ((LeftAudioViewHolder) holder).animView.setBackgroundResource(R.mipmap.left_voice_anime3);
-                        }
-                    });
+                    onTouchGGAudioMessage(audioMessage);
                 }
             });
 
-            showMessageTime(position, ((LeftAudioViewHolder) holder).message_time);
         } else if (holder instanceof LeftStockViewHolder) {
-            if (null != lcattrsObject) {
-                final String stockCode = lcattrsObject.getString("stockCode");
-                SpannableStringBuilder stringBuilder = new SpannableStringBuilder("$ " + stockCode + " " + lcattrsObject.getString("stockName"));
-                ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor("#3381E3")); // 设置字体颜色
-                stringBuilder.setSpan(fcs, 2, stockCode.length() + 2, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            AVIMStockMessage stockMessage = (AVIMStockMessage) avimMessage;
+            Map<String, Object> attrMap = stockMessage.getAttrs();
+            final String stockCode = String.valueOf(attrMap.get("stockCode"));
+            final String stockName = String.valueOf(attrMap.get("stockName"));
 
-                ((LeftStockViewHolder) holder).what_user_send.setText(stringBuilder);
+            ((LeftStockViewHolder) holder).what_user_send.setText(formatStockMessage(stockCode, stockName));
 
-                ((LeftStockViewHolder) holder).what_user_send.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(mContext, CopyStockDetailActivity.class);
-                        intent.putExtra("stock_code", stockCode);
-                        intent.putExtra("stock_name", lcattrsObject.getString("stockName"));
-                        mContext.startActivity(intent);
-                    }
-                });
-            }
+            ((LeftStockViewHolder) holder).what_user_send.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, CopyStockDetailActivity.class);
+                    intent.putExtra("stock_code", stockCode);
+                    intent.putExtra("stock_name", stockName);
+                    mContext.startActivity(intent);
+                }
+            });
 
-            showMessageTime(position, ((LeftStockViewHolder) holder).message_time);
         } else if (holder instanceof RightStockViewHolder) {
-            if (null != lcattrsObject) {
-                final String stockCode = lcattrsObject.getString("stockCode");
-                SpannableStringBuilder stringBuilder = new SpannableStringBuilder("$ " + stockCode + " " + lcattrsObject.getString("stockName"));
-                ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor("#3381E3")); // 设置字体颜色
-                stringBuilder.setSpan(fcs, 2, stockCode.length() + 2, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            AVIMStockMessage stockMessage = (AVIMStockMessage) avimMessage;
+            Map<String, Object> attrMap = stockMessage.getAttrs();
+            final String stockCode = String.valueOf(attrMap.get("stockCode"));
+            final String stockName = String.valueOf(attrMap.get("stockName"));
 
-                ((RightStockViewHolder) holder).what_user_send.setText(stringBuilder);
-                ((RightStockViewHolder) holder).user_name.setVisibility(View.GONE);
+            ((RightStockViewHolder) holder).what_user_send.setText(formatStockMessage(stockCode, stockName));
+            ((RightStockViewHolder) holder).user_name.setVisibility(View.GONE);
 
-                ((RightStockViewHolder) holder).what_user_send.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(mContext, CopyStockDetailActivity.class);
-                        intent.putExtra("stock_code", stockCode);
-                        intent.putExtra("stock_name", lcattrsObject.getString("stockName"));
-                        mContext.startActivity(intent);
-                    }
-                });
-            }
+            ((RightStockViewHolder) holder).what_user_send.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, CopyStockDetailActivity.class);
+                    intent.putExtra("stock_code", stockCode);
+                    intent.putExtra("stock_name", stockName);
+                    mContext.startActivity(intent);
+                }
+            });
 
-            showMessageTime(position, ((RightStockViewHolder) holder).message_time);
         } else if (holder instanceof LeftShareViewHolder) {
+            AVIMShareMessage shareMessage = (AVIMShareMessage) avimMessage;
+            final Map<String, Object> shareMap = shareMessage.getAttrs();
             getLayoutSize(((LeftShareViewHolder) holder).user_layout);
-            if (lcattrsObject.getString("toolType").equals("1")) {
+            if (shareMap.get("toolType").equals("1")) {
                 ((LeftShareViewHolder) holder).layout_normal.setVisibility(View.VISIBLE);
                 ((LeftShareViewHolder) holder).live_layout.setVisibility(View.GONE);
-                ((LeftShareViewHolder) holder).tv_share_title.setText(lcattrsObject.getString("title"));
-                ((LeftShareViewHolder) holder).tv_share.setText(lcattrsObject.getString("content"));
-                ImageDisplay.loadImage(mContext, lcattrsObject.getString("thumUrl"), ((LeftShareViewHolder) holder).iv_share);
-            } else if (lcattrsObject.getString("toolType").equals("2")) {
+                ((LeftShareViewHolder) holder).tv_share_title.setText(String.valueOf(shareMap.get("title")));
+                ((LeftShareViewHolder) holder).tv_share.setText(String.valueOf(shareMap.get("content")));
+                ImageDisplay.loadImage(mContext, String.valueOf(shareMap.get("thumUrl")), ((LeftShareViewHolder) holder).iv_share);
+            } else if (shareMap.get("toolType").equals("2")) {
                 ((LeftShareViewHolder) holder).layout_normal.setVisibility(View.GONE);
                 ((LeftShareViewHolder) holder).live_layout.setVisibility(View.VISIBLE);
-                ((LeftShareViewHolder) holder).tv_share_title.setText(lcattrsObject.getString("title"));
-                ((LeftShareViewHolder) holder).tv_live_share.setText(lcattrsObject.getString("content"));
+                ((LeftShareViewHolder) holder).tv_share_title.setText(String.valueOf(shareMap.get("title")));
+                ((LeftShareViewHolder) holder).tv_live_share.setText(String.valueOf(shareMap.get("content")));
                 getImageSize(((LeftShareViewHolder) holder).iv_live_share);
-                ImageDisplay.loadImage(mContext, lcattrsObject.getString("thumUrl"), ((LeftShareViewHolder) holder).iv_live_share);
+                ImageDisplay.loadImage(mContext, String.valueOf(shareMap.get("thumUrl")), ((LeftShareViewHolder) holder).iv_live_share);
             }
 
             ((LeftShareViewHolder) holder).card_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    shareAction(lcattrsObject);
+                    shareAction(shareMap);
                 }
             });
-            showMessageTime(position, ((LeftShareViewHolder) holder).message_time);
         } else if (holder instanceof RightShareViewHolder) {
+            AVIMShareMessage shareMessage = (AVIMShareMessage) avimMessage;
+            final Map<String, Object> shareMap = shareMessage.getAttrs();
+
             getLayoutSize(((RightShareViewHolder) holder).user_layout);
             ((RightShareViewHolder) holder).user_name.setVisibility(View.GONE);
-            if (lcattrsObject.getString("toolType").equals("1")) {
+            if (String.valueOf(shareMap.get("toolType")).equals("1")) {
                 ((RightShareViewHolder) holder).layout_normal.setVisibility(View.VISIBLE);
                 ((RightShareViewHolder) holder).live_layout.setVisibility(View.GONE);
-                ((RightShareViewHolder) holder).tv_share_title.setText(lcattrsObject.getString("title"));
-                ((RightShareViewHolder) holder).tv_share.setText(lcattrsObject.getString("content"));
-                ImageDisplay.loadImage(mContext, lcattrsObject.getString("thumUrl"), ((RightShareViewHolder) holder).iv_share);
-            } else if (lcattrsObject.getString("toolType").equals("2")) {
+                ((RightShareViewHolder) holder).tv_share_title.setText(String.valueOf(shareMap.get("title")));
+                ((RightShareViewHolder) holder).tv_share.setText(String.valueOf(shareMap.get("content")));
+                ImageDisplay.loadImage(mContext, String.valueOf(shareMap.get("thumUrl")), ((RightShareViewHolder) holder).iv_share);
+            } else if (String.valueOf(shareMap.get("toolType")).equals("2")) {
                 ((RightShareViewHolder) holder).layout_normal.setVisibility(View.GONE);
                 ((RightShareViewHolder) holder).live_layout.setVisibility(View.VISIBLE);
-                ((RightShareViewHolder) holder).tv_share_title.setText(lcattrsObject.getString("title"));
-                ((RightShareViewHolder) holder).tv_live_share.setText(lcattrsObject.getString("content"));
+                ((RightShareViewHolder) holder).tv_share_title.setText(String.valueOf(shareMap.get("title")));
+                ((RightShareViewHolder) holder).tv_live_share.setText(String.valueOf(shareMap.get("content")));
                 getImageSize(((RightShareViewHolder) holder).iv_live_share);
-                ImageDisplay.loadImage(mContext, lcattrsObject.getString("thumUrl"), ((RightShareViewHolder) holder).iv_live_share);
+                ImageDisplay.loadImage(mContext, String.valueOf(shareMap.get("thumUrl")), ((RightShareViewHolder) holder).iv_live_share);
             }
 
             ((RightShareViewHolder) holder).card_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    shareAction(lcattrsObject);
+                    shareAction(shareMap);
                 }
             });
-            showMessageTime(position, ((RightShareViewHolder) holder).message_time);
         } else if (holder instanceof ChatGroupAddViewHolder) {
-            showMessageTime(position, ((ChatGroupAddViewHolder) holder).message_time);
-            if (contentObject.get("_lctext") != null) {
-                ((ChatGroupAddViewHolder) holder).message_content.setText(contentObject.getString("_lctext"));
+            AVIMSystemMessage systemMessage = (AVIMSystemMessage) avimMessage;
+            if (systemMessage.getText() != null) {
+                ((ChatGroupAddViewHolder) holder).message_content.setText(systemMessage.getText());
             } else {
                 ((ChatGroupAddViewHolder) holder).message_content.setText("未知消息,请升级APP");
             }
+
         } else {
 
         }
-    }
-
-    private String isFromUfile(String url) {
-        if (!TextUtils.isEmpty(url)) {
-            if (url.startsWith("http://hackfile")) {
-                return UFileImageHelper.load(url).compress(10).get();
-            }
-        }
-        return url;
-    }
-
-    private void getLayoutSize(RelativeLayout relativeLayout) {
-        ViewGroup.LayoutParams params = relativeLayout.getLayoutParams();
-        params.width = (AppDevice.getWidth(mContext) * 3) / 5;
-        relativeLayout.setLayoutParams(params);
-    }
-
-    private void getImageSize(ImageView iv_share) {
-        ViewGroup.LayoutParams params = iv_share.getLayoutParams();
-        params.width = (AppDevice.getWidth(mContext) * 3) / 5 - AppDevice.dp2px(mContext, 28);
-        params.height = (int) (params.width / 1.82);
-        iv_share.setLayoutParams(params);
     }
 
     @Override
@@ -471,7 +456,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         AVIMMessage message = messageList.get(position);
-
         JSONObject contentObject = JSON.parseObject(message.getContent());
         String _lctype = contentObject.getString("_lctype");
         isYourSelf = message.getFrom().equals(UserUtils.getMyAccountId());
@@ -506,14 +490,129 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 } else {
                     return TYPE_LEFT_NORMAL_SHARE;
                 }
-            /*case AppConst.IM_MESSAGE_TYPE_SQUARE_ADD:
-            case AppConst.IM_MESSAGE_TYPE_SQUARE_DEL:
-            case AppConst.IM_MESSAGE_TYPE_SQUARE_DETAIL:
-                return TYPE_SYSTEM_MESSAGE;*/
             default:
                 return TYPE_SYSTEM_MESSAGE;
         }
     }
+
+    //连续播放
+    private void onTouchGGAudioMessage(final GGAudioMessage audioMessage) {
+
+        final boolean haveRead = SPTools.getBoolean(UserUtils.getMyAccountId() + audioMessage.getMessageId(), false);
+        if (null != playModelId) {
+            if (playModelId.equals(audioMessage.getMessageId())) {
+                MediaManager.playStop();
+                playModelId = null;
+                return;
+            }
+        }
+        playModelId = audioMessage.getMessageId();
+
+        //把消息改为已读
+        if (audioMessage.getListItem() instanceof LeftAudioViewHolder) {
+            LeftAudioViewHolder holder = (LeftAudioViewHolder) audioMessage.getListItem();
+            holder.iv_unread_tag.setVisibility(View.GONE);
+
+            if (!haveRead) {
+                SPTools.saveBoolean(UserUtils.getMyAccountId() + audioMessage.getMessageId(), true);
+            }
+        }
+
+        MediaManager.playAudio(new MediaManager.GGMediaPlayInterface() {
+            @Override
+            public void audioWillPlay() {
+                if (audioMessage.getListItem() instanceof RightAudioViewHolder) {
+                    RightAudioViewHolder holder = (RightAudioViewHolder) audioMessage.getListItem();
+                    if (null != holder) {
+                        ((RightAudioViewHolder) audioMessage.getListItem()).startAnimation();
+                    }
+                } else if (audioMessage.getListItem() instanceof LeftAudioViewHolder) {
+                    LeftAudioViewHolder holder = (LeftAudioViewHolder) audioMessage.getListItem();
+                    if (null != holder) {
+                        ((LeftAudioViewHolder) audioMessage.getListItem()).startAnimation();
+                    }
+                }
+            }
+
+            @Override
+            public void audioWillEnd() {
+                if (audioMessage.getListItem() instanceof RightAudioViewHolder) {
+                    RightAudioViewHolder holder = (RightAudioViewHolder) audioMessage.getListItem();
+                    if (null != holder) {
+                        ((RightAudioViewHolder) audioMessage.getListItem()).stopAnimation();
+                    }
+                } else if (audioMessage.getListItem() instanceof LeftAudioViewHolder) {
+                    LeftAudioViewHolder holder = (LeftAudioViewHolder) audioMessage.getListItem();
+                    if (null != holder) {
+                        ((LeftAudioViewHolder) audioMessage.getListItem()).stopAnimation();
+                    }
+                    //续播
+                    if (!haveRead) {
+                        Integer index = messageList.indexOf(audioMessage);
+                        for (Integer i = index + 1; i < messageList.size(); i++) {
+                            AVIMMessage msg = messageList.get(i);
+                            if (msg instanceof GGAudioMessage && ((GGAudioMessage) msg).getListItem()
+                                    instanceof LeftAudioViewHolder) {
+                                onTouchGGAudioMessage((GGAudioMessage) msg);
+                                return;
+                            }
+                        }
+                    } else {
+                        return;
+                    }
+
+                }
+            }
+
+            @Override
+            public void audioWillStop() {
+                if (audioMessage.getListItem() instanceof RightAudioViewHolder) {
+                    RightAudioViewHolder holder = (RightAudioViewHolder) audioMessage.getListItem();
+                    if (null != holder) {
+                        ((RightAudioViewHolder) audioMessage.getListItem()).stopAnimation();
+                    }
+                } else if (audioMessage.getListItem() instanceof LeftAudioViewHolder) {
+                    LeftAudioViewHolder holder = (LeftAudioViewHolder) audioMessage.getListItem();
+                    if (null != holder) {
+                        ((LeftAudioViewHolder) audioMessage.getListItem()).stopAnimation();
+                    }
+                }
+
+            }
+        }, audioMessage.getAVFile().getUrl());
+    }
+
+    //股票消息格式化
+    private SpannableStringBuilder formatStockMessage(String stockCode, String stockName) {
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder("$ " + stockCode + " " + stockName);
+        ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor("#3381E3")); // 设置字体颜色
+        stringBuilder.setSpan(fcs, 2, stockCode.length() + 2, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        return stringBuilder;
+    }
+
+    //图片来源
+    private String isFromUFile(String url) {
+        if (!TextUtils.isEmpty(url)) {
+            if (url.startsWith("http://hackfile")) {
+                return UFileImageHelper.load(url).compress(10).get();
+            }
+        }
+        return url;
+    }
+
+    private void getLayoutSize(RelativeLayout relativeLayout) {
+        ViewGroup.LayoutParams params = relativeLayout.getLayoutParams();
+        params.width = (AppDevice.getWidth(mContext) * 3) / 5;
+        relativeLayout.setLayoutParams(params);
+    }
+
+    private void getImageSize(ImageView iv_share) {
+        ViewGroup.LayoutParams params = iv_share.getLayoutParams();
+        params.width = (AppDevice.getWidth(mContext) * 3) / 5 - AppDevice.dp2px(mContext, 28);
+        params.height = (int) (params.width / 1.82);
+        iv_share.setLayoutParams(params);
+    }
+
 
     /**
      * 图片大小计算
@@ -521,8 +620,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     private void setImageSize(RelativeLayout.LayoutParams params, AVIMImageMessage message) {
         String rateText;
         int maxWidth = (int) (AppDevice.getWidth(mContext) * 0.4);
-//        int dpWidth = ((Number) message.getFileMetaData().get("width")).intValue();
-//        int dpHeight = ((Number) message.getFileMetaData().get("height")).intValue();
         double width = StringUtils.pareseStringDouble(String.valueOf(message.getFileMetaData().get("width")));
         int dpWidth = (int) width;
         double height = StringUtils.pareseStringDouble(String.valueOf(message.getFileMetaData().get("height")));
@@ -573,12 +670,12 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     }
 
 
-    private void shareAction(JSONObject jsonObject) {
-        if (jsonObject.getString("toolType").equals("1")) {
-            NormalIntentUtils.go2WebActivity(mContext, jsonObject.getString("link"), jsonObject.getString("title"));
-        } else if (jsonObject.getString("toolType").equals("2")) {
+    private void shareAction(Map<String, Object> shareMap) {
+        if (String.valueOf(shareMap.get("toolType")).equals("1")) {
+            NormalIntentUtils.go2WebActivity(mContext, String.valueOf(shareMap.get("link")), String.valueOf(shareMap.get("title")));
+        } else if (String.valueOf(shareMap.get("toolType")).equals("2")) {
             Intent intent = new Intent(mContext, WatchLiveActivity.class);
-            intent.putExtra("live_id", jsonObject.getString("live_id"));
+            intent.putExtra("live_id", String.valueOf(shareMap.get("live_id")));
             mContext.startActivity(intent);
         }
     }
@@ -676,6 +773,34 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         private View animView;
         private TextView recorder_time;
 
+        // 语音类型
+        private GGAudioMessage message;
+
+        public GGAudioMessage getMessage() {
+            return message;
+        }
+
+        public void setMessage(GGAudioMessage ggAudioMessage) {
+
+            if (null != this.message) {
+                this.message.refreshItem();
+            }
+
+            this.message = ggAudioMessage;
+            KLog.e(this);
+            this.message.setListItem(this);
+        }
+
+        private void startAnimation() {
+            this.animView.setBackgroundResource(R.drawable.right_play_anim);
+            AnimationDrawable anim = (AnimationDrawable) this.animView.getBackground();
+            anim.start();
+        }
+
+        private void stopAnimation() {
+            this.animView.setBackgroundResource(R.mipmap.right_voice_anime3);
+        }
+
         RightAudioViewHolder(View itemView) {
             super(itemView);
             recorder_length = (FrameLayout) itemView.findViewById(R.id.recorder_length);
@@ -689,12 +814,40 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         private FrameLayout recorder_length;
         private View animView;
         private TextView recorder_time;
+        private ImageView iv_unread_tag;
+
+
+        // 语音类型
+        private GGAudioMessage message;
+
+        public GGAudioMessage getMessage() {
+            return message;
+        }
+
+        public void setMessage(GGAudioMessage message) {
+            if (null != this.message) {
+                this.message.refreshItem();
+            }
+            this.message = message;
+            this.message.setListItem(this);
+        }
+
+        private void startAnimation() {
+            this.animView.setBackgroundResource(R.drawable.left_play_anim);
+            AnimationDrawable anim = (AnimationDrawable) this.animView.getBackground();
+            anim.start();
+        }
+
+        private void stopAnimation() {
+            this.animView.setBackgroundResource(R.mipmap.left_voice_anime3);
+        }
 
         LeftAudioViewHolder(View itemView) {
             super(itemView);
             recorder_length = (FrameLayout) itemView.findViewById(R.id.recorder_length);
             animView = itemView.findViewById(R.id.recorder_anim);
             recorder_time = (TextView) itemView.findViewById(R.id.recorder_time);
+            iv_unread_tag = (ImageView) itemView.findViewById(R.id.iv_unread_tag);
         }
     }
 

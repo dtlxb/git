@@ -24,6 +24,7 @@ import java.util.HashMap;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.activity.TypeLoginActivity;
+import cn.gogoal.im.adapter.GGAudioMessage;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.BaseMessage;
@@ -52,8 +53,12 @@ public class MyMessageHandler extends AVIMMessageHandler {
                         //剔除自己消息
                         if (!message.getFrom().equals(clientID)) {
                             showNotification(message);
+                            KLog.e(message.getContent());
+
+                            KLog.e(message instanceof GGAudioMessage);
 
                             final int chatType = (int) conversation.getAttribute("chat_type");
+                            KLog.e(chatType);
                             switch (chatType) {
                                 case AppConst.IM_CHAT_TYPE_SINGLE:
                                     //单聊
@@ -99,6 +104,9 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                                 sendIMMessage(message, conversation);
                                             }
                                         });
+                                    } else if (AppConst.IM_MESSAGE_TYPE_SQUARE_DETAIL.equals(_lctype)) {
+                                        //群公告，群简介
+                                        sendIMMessage(message, conversation);
                                     } else {
                                         //更新群通讯录
                                         ChatGroupHelper.upDataGroupContactInfo(conversation.getConversationId(), Integer.parseInt(message.getFrom()),

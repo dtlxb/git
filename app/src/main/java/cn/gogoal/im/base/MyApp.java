@@ -24,9 +24,14 @@ import java.util.List;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MainActivity;
+import cn.gogoal.im.adapter.GGAudioMessage;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
-import cn.gogoal.im.common.IMHelpers.AVIMToolMessage;
+import cn.gogoal.im.common.IMHelpers.AVIMGroupAddMessage;
+import cn.gogoal.im.common.IMHelpers.AVIMGroupDelMessage;
+import cn.gogoal.im.common.IMHelpers.AVIMGroupEditMessage;
+import cn.gogoal.im.common.IMHelpers.AVIMShareMessage;
+import cn.gogoal.im.common.IMHelpers.AVIMStockMessage;
 import cn.gogoal.im.common.IMHelpers.MyConversationHandler;
 import cn.gogoal.im.common.IMHelpers.MyMessageHandler;
 import cn.gogoal.im.common.SPTools;
@@ -85,8 +90,16 @@ public class MyApp extends LitePalApplication {
 
         MyMessageHandler handler = new MyMessageHandler();
 
+        //注册自定义消息
+        AVIMMessageManager.registerAVIMMessageType(AVIMStockMessage.class);
+        AVIMMessageManager.registerAVIMMessageType(AVIMShareMessage.class);
+        AVIMMessageManager.registerAVIMMessageType(AVIMGroupAddMessage.class);
+        AVIMMessageManager.registerAVIMMessageType(AVIMGroupDelMessage.class);
+        AVIMMessageManager.registerAVIMMessageType(AVIMGroupEditMessage.class);
+        AVIMMessageManager.registerAVIMMessageType(AVIMStockMessage.class);
+        AVIMMessageManager.registerAVIMMessageType(GGAudioMessage.class);
+
         AVIMMessageManager.registerMessageHandler(AVIMMessage.class, handler);
-//        AVIMMessageManager.registerAVIMMessageType(AVIMToolMessage.class);
 //        AVIMMessageManager.registerMessageHandler(AVIMToolMessage.class, handler);
 
 

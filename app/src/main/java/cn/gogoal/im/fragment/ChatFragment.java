@@ -29,11 +29,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.AVFile;
-import com.avos.avoscloud.RefreshCallback;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.avos.avoscloud.im.v2.AVIMMessage.AVIMMessageStatus;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
 import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
@@ -53,6 +51,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ChooseContactActivity;
+import cn.gogoal.im.adapter.GGAudioMessage;
 import cn.gogoal.im.adapter.IMChatAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
@@ -68,6 +67,12 @@ import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
+import cn.gogoal.im.common.IMHelpers.AVIMGroupAddMessage;
+import cn.gogoal.im.common.IMHelpers.AVIMGroupDelMessage;
+import cn.gogoal.im.common.IMHelpers.AVIMShareMessage;
+import cn.gogoal.im.common.IMHelpers.AVIMStockMessage;
+import cn.gogoal.im.common.IMHelpers.AVIMSystemMessage;
+import cn.gogoal.im.common.IMHelpers.AVIMUnReadMessage;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
@@ -243,9 +248,7 @@ public class ChatFragment extends BaseFragment {
         });
 
         //语音和文字切换
-        imgVoice.setOnSwitchListener(new SwitchImageView.OnSwitchListener()
-
-        {
+        imgVoice.setOnSwitchListener(new SwitchImageView.OnSwitchListener() {
             @Override
             public void onSwitch(View view, int state) {
                 initInputStatus(state);
@@ -310,20 +313,17 @@ public class ChatFragment extends BaseFragment {
     }
 
     //生成未读消息
-    private AVIMMessage crateBaseMessage(String text) {
-        AVIMMessage baseMessage = new AVIMMessage();
-        baseMessage.setTimestamp(CalendarUtils.getCurrentTime());
-        baseMessage.setFrom(UserUtils.getMyAccountId());
-        baseMessage.setMessageId(UUID.randomUUID().toString());
+    private AVIMUnReadMessage createUnReadMessage(String text) {
+        Map<String, Object> lcattrsMap = AVIMClientManager.getInstance().userBaseInfo();
+        AVIMUnReadMessage unReadMessage = new AVIMUnReadMessage();
+        unReadMessage.setTimestamp(CalendarUtils.getCurrentTime());
+        unReadMessage.setFrom(UserUtils.getMyAccountId());
+        unReadMessage.setMessageId(UUID.randomUUID().toString());
 
-        Map<String, String> lcattrsMap = AVIMClientManager.getInstance().userBaseInfo();
-        Map<Object, Object> messageMap = new HashMap<>();
-        messageMap.put("_lctype", AppConst.IM_MESSAGE_TYPE_SEND_FAIL);
-        messageMap.put("_lctext", text);
-        messageMap.put("_lcattrs", lcattrsMap);
-        baseMessage.setContent(JSON.toJSONString(messageMap));
+        unReadMessage.setText(text);
+        unReadMessage.setAttrs(lcattrsMap);
 
-        return baseMessage;
+        return unReadMessage;
     }
 
     //生成草稿消息
@@ -441,34 +441,34 @@ public class ChatFragment extends BaseFragment {
                         /*AVIMMessage newMessage = messageAddStatus(message);
                         refreshRecyclerView(newMessage, true);*/
 
-                        AVIMMessage failMessage = null;
+                        AVIMUnReadMessage failMessage = null;
                         switch (data.getInteger("code")) {
                             case AppConst.MESSAGE_SEND_FAIL_PARAMS_LACK:
                                 //缺少参数
-                                //crateBaseMessage();
+                                //createUnReadMessage();
                                 break;
                             case AppConst.MESSAGE_SEND_FAIL_NOT_FRIEND:
-                                failMessage = crateBaseMessage(getResources().getString(R.string.im_message_send_fail));
+                                failMessage = createUnReadMessage(getResources().getString(R.string.im_message_send_fail));
                                 //不是好友
                                 break;
                             case AppConst.MESSAGE_SEND_FAIL_NET_ERROR:
                                 //网络异常
-                                //crateBaseMessage();
+                                //createUnReadMessage();
                                 break;
                             case AppConst.MESSAGE_SEND_FAIL_NOT_MEMBER:
                                 //不是群成员
-                                //crateBaseMessage();
+                                //createUnReadMessage();
                                 break;
                             case AppConst.MESSAGE_SEND_FAIL_DISCONNECT:
                                 //长连接断开
-                                //crateBaseMessage();
+                                //createUnReadMessage();
                                 break;
                             case AppConst.MESSAGE_SEND_FAIL_MEMBER_LIMIT:
                                 //群成员超限
-                                //crateBaseMessage();
+                                //createUnReadMessage();
                                 break;
                             default:
-                                //crateBaseMessage();
+                                //createUnReadMessage();
                                 break;
                         }
                         refreshRecyclerView(failMessage, true);
@@ -523,13 +523,13 @@ public class ChatFragment extends BaseFragment {
             UIHelper.toast(getActivity(), R.string.network_busy);
             return;
         }
-        //股票消息(消息type:11,加上stockCode,stockName);
-        AVIMMessage mStockMessage = new AVIMMessage();
+
+        AVIMStockMessage mStockMessage = new AVIMStockMessage();
         mStockMessage.setTimestamp(CalendarUtils.getCurrentTime());
         mStockMessage.setFrom(UserUtils.getMyAccountId());
 
         //添加股票信息
-        Map<String, String> lcattrsMap;
+        Map<String, Object> lcattrsMap;
         lcattrsMap = AVIMClientManager.getInstance().userBaseInfo();
         lcattrsMap.put("stockCode", stockCode);
         lcattrsMap.put("stockName", stockName);
@@ -547,7 +547,9 @@ public class ChatFragment extends BaseFragment {
         params.put("message", JSONObject.toJSONString(messageMap));
         KLog.e(params);
 
-        mStockMessage.setContent(JSONObject.toJSONString(messageMap));
+        mStockMessage.setText("股票消息");
+        mStockMessage.setAttrs(lcattrsMap);
+        KLog.e(mStockMessage.getAttrs().toString());
         refreshRecyclerView(mStockMessage, true);
 
         etInput.setText("");
@@ -662,12 +664,12 @@ public class ChatFragment extends BaseFragment {
                 attrsMap.put("username", UserUtils.getNickname());
                 attrsMap.put("avatar", UserUtils.getUserAvatar());
 
-                //封装一个AVfile对象
+                //封装一个AVFile对象
                 HashMap<String, Object> metaData = new HashMap<>();
                 metaData.put("duration", seconds);
-                AVFile Audiofile = new AVFile("Audiofile", voicePath, metaData);
+                AVFile AudioFile = new AVFile("Audiofile", voicePath, metaData);
 
-                final AVIMAudioMessage mAudioMessage = new AVIMAudioMessage(Audiofile);
+                final GGAudioMessage mAudioMessage = new GGAudioMessage(AudioFile);
 
                 KLog.e(mAudioMessage.getAVFile().getUrl());
                 mAudioMessage.setFrom(UserUtils.getMyAccountId());
@@ -762,10 +764,9 @@ public class ChatFragment extends BaseFragment {
     private void setCacheMessage() {
         IMMessageBean imMessageBean = MessageListUtils.getIMMessageBeanById(UserUtils.getMessageListInfo(), imConversation.getConversationId());
         if (imMessageBean != null && imMessageBean.getLastMessage() != null) {
-            JSONObject contentObject = JSON.parseObject(imMessageBean.getLastMessage().getContent());
-            String _lctype = contentObject.getString("_lctype");
-            if (_lctype.equals(AppConst.IM_MESSAGE_TYPE_TEXT)) {
-                String messageText = contentObject.getString("_lctext");
+            if (imMessageBean.getLastMessage() instanceof AVIMTextMessage) {
+                AVIMTextMessage textMessage = (AVIMTextMessage) imMessageBean.getLastMessage();
+                String messageText = textMessage.getText();
                 if (messageText.startsWith("[草稿] ")) {
                     String text = messageText.substring(5, messageText.length());
                     etInput.setText(text);
@@ -816,18 +817,13 @@ public class ChatFragment extends BaseFragment {
         if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
             //加群消息特殊处理
             for (int i = 0; i < messageList.size(); i++) {
-                JSONObject contentObject = JSON.parseObject(messageList.get(i).getContent());
-                String _lctype = contentObject.getString("_lctype");
-                if (_lctype.equals("5") || _lctype.equals("6")) {
-                    if (null != contentObject.getJSONObject("_lcattrs") && null != contentObject.getJSONObject("_lcattrs").getJSONArray("accountList")) {
-                        HashMap<String, String> map = new HashMap<>();
-                        JSONArray accountArray = contentObject.getJSONObject("_lcattrs").getJSONArray("accountList");
-                        String _lctext = MessageListUtils.findSquarePeople(accountArray, _lctype);
-                        map.put("_lctext", _lctext);
-                        map.put("_lctype", _lctype);
-                        messageList.get(i).setContent(JSON.toJSONString(map));
-                    }
+                if (messageList.get(i) instanceof AVIMGroupAddMessage || messageList.get(i) instanceof AVIMGroupDelMessage) {
+                    AVIMSystemMessage systemMessage = (AVIMSystemMessage) messageList.get(i);
+                    JSONArray accountArray = (JSONArray) systemMessage.getAttrs().get("accountList");
+                    String _lctext = MessageListUtils.findSquarePeople(accountArray, String.valueOf(systemMessage.getMessageType()));
+                    systemMessage.setText(_lctext);
                 }
+
             }
         }
     }
@@ -913,7 +909,7 @@ public class ChatFragment extends BaseFragment {
         Map map = baseMessage.getOthers();
         String share_convid = (String) map.get("share_convid");
         if (share_convid.equals(imConversation.getConversationId())) {
-            AVIMMessage mShareMessage = (AVIMMessage) map.get("share_message");
+            AVIMShareMessage mShareMessage = (AVIMShareMessage) map.get("share_message");
             refreshRecyclerView(mShareMessage, true);
         }
     }
@@ -1002,10 +998,7 @@ public class ChatFragment extends BaseFragment {
             Map map = baseMessage.getOthers();
             AVIMMessage message = (AVIMMessage) map.get("message");
             AVIMConversation conversation = (AVIMConversation) map.get("conversation");
-            JSONObject contentObject = JSON.parseObject(message.getContent());
-            String _lctype = contentObject.getString("_lctype");
 
-            KLog.e(contentObject);
             //判断房间一致然后做消息接收处理
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
                 refreshRecyclerView(message, isVisBottom(message_recycler));
@@ -1017,12 +1010,11 @@ public class ChatFragment extends BaseFragment {
 
                 } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                     //加人删人逻辑
-                    if (_lctype.equals("5") || _lctype.equals("6")) {
-                        JSONArray accountArray = contentObject.getJSONObject("_lcattrs").getJSONArray("accountList");
-                        String _lctext = MessageListUtils.findSquarePeople(accountArray, _lctype);
-                        map.put("_lctext", _lctext);
-                        map.put("_lctype", _lctype);
-                        message.setContent(JSON.toJSONString(map));
+                    if (message instanceof AVIMGroupDelMessage || message instanceof AVIMGroupAddMessage) {
+                        AVIMSystemMessage systemMessage = (AVIMSystemMessage) message;
+                        JSONArray accountArray = (JSONArray) systemMessage.getAttrs().get("accountList");
+                        String _lctext = MessageListUtils.findSquarePeople(accountArray, String.valueOf(systemMessage.getMessageType()));
+                        systemMessage.setText(_lctext);
                     }
 
                     //群对象和群头像暂时为空
