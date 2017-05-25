@@ -11,6 +11,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.socks.library.KLog;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,11 +111,13 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void iniSettingData() {
+        settingDatas.add(new UserDetailInfo<String>(UserDetailInfo.SPACE));
         for (String s : strings) {
             settingDatas.add(new UserDetailInfo<>(UserDetailInfo.TEXT_ITEM_2, s));
         }
-        settingDatas.add(1, new UserDetailInfo<String>(UserDetailInfo.SPACE));
-        settingDatas.add(6, new UserDetailInfo<String>(UserDetailInfo.SPACE));
+
+        settingDatas.add(2, new UserDetailInfo<String>(UserDetailInfo.SPACE));
+        settingDatas.add(4, new UserDetailInfo<String>(UserDetailInfo.SPACE));
         settingAdapter.notifyDataSetChanged();
     }
 
@@ -139,46 +143,45 @@ public class SettingActivity extends BaseActivity {
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            KLog.e("pos="+position+";itemText="+data.getItemKey());
                             Intent intent;
                             switch (position) {
-                                case 0:
+                                case 1:
                                     startActivity(new Intent(v.getContext(),AccountSafeActivity.class));
                                     break;
-                                case 1:
-                                    break;
+//                                case 2:
+//                                    //行情刷新频率
+//                                    intent = new Intent(SettingActivity.this, SetStockRefreshActivity.class);
+//                                    startActivity(intent);
+//                                    break;
+//                                case 4:
+//                                    //K线设置
+//                                    intent = new Intent(SettingActivity.this, KlineSettingActivity.class);
+//                                    startActivity(intent);
+//                                    break;
+//                                case 5:
+//                                    //涨跌幅显示
+//                                    intent = new Intent(SettingActivity.this, RedGreenSettingActivity.class);
+//                                    startActivity(intent);
+//                                    break;
                                 case 3:
-                                    //行情刷新频率
-                                    intent = new Intent(SettingActivity.this, SetStockRefreshActivity.class);
-                                    startActivity(intent);
-                                    break;
-                                case 4:
-                                    //K线设置
-                                    intent = new Intent(SettingActivity.this, KlineSettingActivity.class);
-                                    startActivity(intent);
-                                    break;
-                                case 5:
-                                    //涨跌幅显示
-                                    intent = new Intent(SettingActivity.this, RedGreenSettingActivity.class);
-                                    startActivity(intent);
-                                    break;
-                                case 6:
                                     //清除缓存
                                     clearMyAppCache();
                                     break;
-                                case 8:
+                                case 5:
                                     NormalIntentUtils.go2WebActivity(getActivity(),
-//                                AppConst.GG_SETTING_ABOUT,
-                                            "http://192.168.52.156:9000/#/hello",
+                                AppConst.GG_SETTING_ABOUT,
+//                                            "http://192.168.52.156:9000/#/hello",
                                             "关于我们");
                                     break;
-                                case 9:
+                                case 6:
                                     NormalIntentUtils.go2WebActivity(
                                             getActivity(),
                                             AppConst.GG_DISCLAIMER,
                                             "免责申明");
                                     break;
 
-                                case 10:
+                                case 7:
                                     NormalIntentUtils.go2WebActivity(
                                             getActivity(),
                                             AppConst.GG_SERVICE_AGREEMENT,

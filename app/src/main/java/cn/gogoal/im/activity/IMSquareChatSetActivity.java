@@ -7,11 +7,11 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -82,7 +82,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     RelativeLayout the_notice;
 
     @BindView(R.id.save_switch)
-    Switch saveGroup;
+    SwitchCompat saveGroup;
 
     private IMPersonSetAdapter mPersonInfoAdapter;
     private List<ContactBean> contactBeens = new ArrayList<>();

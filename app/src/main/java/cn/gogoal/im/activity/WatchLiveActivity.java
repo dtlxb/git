@@ -21,6 +21,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -46,6 +47,7 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.hply.imagepicker.view.StatusBarUtil;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -80,7 +82,6 @@ import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 import cn.gogoal.im.common.linkUtils.VideoChatStatus;
 import cn.gogoal.im.fragment.WatchBottomFragment;
 import cn.gogoal.im.ui.dialog.LiveCloseDialog;
-import com.hply.roundimage.roundImage.RoundedImageView;
 
 /*
 * 观看直播页面
@@ -492,8 +493,12 @@ public class WatchLiveActivity extends BaseActivity {
         @Override
         public void onSwitchFullScreen() {
             if (AppDevice.isLandscape(getContext())) {
+                mBottomFragment.showChatView();
+                recyler_chat.setVisibility(View.VISIBLE);
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             } else if (AppDevice.isPortrait(getContext())) {
+                mBottomFragment.hideChatView();
+                recyler_chat.setVisibility(View.GONE);
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             }
         }
@@ -508,12 +513,14 @@ public class WatchLiveActivity extends BaseActivity {
 
         @Override
         public void onFinish() {
-            //finish();
-            isPlaying = false;
-            onBackPressed();
-//            if (null != imConversation) {
-//                quiteSquare(imConversation);
-//            }
+            if (AppDevice.isLandscape(getContext())) {
+                mBottomFragment.showChatView();
+                recyler_chat.setVisibility(View.VISIBLE);
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            } else if (AppDevice.isPortrait(getContext())) {
+                isPlaying = false;
+                onBackPressed();
+            }
         }
 
     };
@@ -1402,6 +1409,23 @@ public class WatchLiveActivity extends BaseActivity {
             RoundedImageView imgAvatar = holder.getView(R.id.imgAvatar);
             ImageDisplay.loadCircleImage(getContext(), personList.getAvatar(), imgAvatar);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (AppDevice.isLandscape(getContext())) {
+                mBottomFragment.showChatView();
+                recyler_chat.setVisibility(View.VISIBLE);
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            } else if (AppDevice.isPortrait(getContext())) {
+                isPlaying = false;
+                onBackPressed();
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     private WatchLiveActivity getContext() {

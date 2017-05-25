@@ -89,7 +89,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
-                        android:text="张无忌"
+                        android:text="朝阳永续六小龄童"
+                        android:maxLength="8"
+                        android:singleLine="true"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 

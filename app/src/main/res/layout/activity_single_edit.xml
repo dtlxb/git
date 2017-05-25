@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <cn.gogoal.im.ui.KeyboardLaunchLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/keyboard_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,13 +11,15 @@
 
     <include layout="@layout/include_title" />
 
-    <android.support.v7.widget.SearchView
+    <cn.gogoal.im.ui.view.XEditText
         android:id="@+id/sv_edit_info"
-        style="@style/NormalSearchView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:layout_marginTop="15dp"
-        android:background="@android:color/white" />
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:background="@android:color/white"
+        app:funcType="canClear"/>
 
     <TextView
         android:id="@+id/tv_single_edit_flag"

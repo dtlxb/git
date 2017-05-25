@@ -12,9 +12,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import butterknife.BindView;
@@ -26,13 +28,12 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
-import com.hply.roundimage.roundImage.RoundedImageView;
 import cn.gogoal.im.ui.widget.PopupWindowHelper;
 
 public class WatchBottomFragment extends BaseFragment {
 
     @BindView(R.id.functionBar)
-    LinearLayout functionBar;
+    RelativeLayout functionBar;
 
     @BindView(R.id.player_linear)
     LinearLayout player_linear;
@@ -43,6 +44,8 @@ public class WatchBottomFragment extends BaseFragment {
     @BindView(R.id.send_text)
     TextView btnSend;
 
+    @BindView(R.id.linearPlayerChat)
+    LinearLayout linearPlayerChat;
     @BindView(R.id.linearPlayerProfiles)
     LinearLayout linearPlayerProfiles;
     @BindView(R.id.linearPlayerShotCut)
@@ -151,17 +154,31 @@ public class WatchBottomFragment extends BaseFragment {
     }
 
     /**
-     * 显示推流时相关的操作UI（切换摄像头）
+     * 显示推流时相关的操作UI（切换横竖屏）
      */
     public void showFullScreen() {
         linearPlayerFullScreen.setVisibility(View.VISIBLE);
     }
 
     /**
-     * 隐藏推流时相关的操作UI（切换摄像头）
+     * 隐藏推流时相关的操作UI（切换横竖屏）
      */
     public void hideFullScreen() {
         linearPlayerFullScreen.setVisibility(View.GONE);
+    }
+
+    /**
+     * 显示推流时相关的操作UI（显隐聊天）
+     */
+    public void showChatView() {
+        linearPlayerChat.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 隐藏推流时相关的操作UI（显隐聊天）
+     */
+    public void hideChatView() {
+        linearPlayerChat.setVisibility(View.GONE);
     }
 
     @Override

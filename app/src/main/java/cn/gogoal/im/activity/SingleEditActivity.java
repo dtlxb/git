@@ -1,8 +1,7 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.v7.widget.SearchView;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -11,14 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.KeyboardLaunchLinearLayout;
 import cn.gogoal.im.ui.dialog.WaitDialog;
+import cn.gogoal.im.ui.view.XEditText;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**
@@ -29,7 +27,9 @@ import cn.gogoal.im.ui.view.XTitle;
  */
 public class SingleEditActivity extends BaseActivity {
 
-    public static String EDIT_MY_INFO_TYPE = "edit_my_info_type";
+    private final static int INPUT_MAX_LENGTH = 8;// 昵称最大输入限制
+
+    public final static String EDIT_MY_INFO_TYPE = "edit_my_info_type";
 
     public static final int EDIT_MY_INFO_TYPE_NAME = 0;//名字
 
@@ -38,7 +38,7 @@ public class SingleEditActivity extends BaseActivity {
     public static final int EDIT_MY_INFO_TYPE_DUTY = 2;//职位
 
     @BindView(R.id.sv_edit_info)
-    SearchView svEditInfo;
+    XEditText svEditInfo;
 
     @BindView(R.id.tv_single_edit_flag)
     TextView tvSingleEditFlag;
@@ -65,18 +65,23 @@ public class SingleEditActivity extends BaseActivity {
 
         switch (editType) {
             case EDIT_MY_INFO_TYPE_NAME:
-                svEditInfo.setQuery(UserUtils.getNickname(), false);
+                svEditInfo.setText(UserUtils.getNickname());
+
+                svEditInfo.setFilters(
+                        new InputFilter[]{
+                                new InputFilter.LengthFilter(INPUT_MAX_LENGTH)});
+
                 tvSingleEditFlag.setVisibility(View.VISIBLE);
                 localCacheKey = "nickname";
                 break;
             case EDIT_MY_INFO_TYPE_COMPANY:
                 tvSingleEditFlag.setVisibility(View.GONE);
-                svEditInfo.setQuery(UserUtils.getorgName(), false);
+                svEditInfo.setText(UserUtils.getorgName());
                 localCacheKey = "organization_name";
                 break;
             case EDIT_MY_INFO_TYPE_DUTY:
                 tvSingleEditFlag.setVisibility(View.GONE);
-                svEditInfo.setQuery(UserUtils.getDuty(), false);
+                svEditInfo.setText(UserUtils.getDuty());
                 localCacheKey = "duty";
                 break;
         }
@@ -89,21 +94,21 @@ public class SingleEditActivity extends BaseActivity {
                 final WaitDialog loadingDialog = WaitDialog.getInstance("修改中...", R.mipmap.login_loading, true);
                 loadingDialog.show(getSupportFragmentManager());
 
-                if (!TextUtils.isEmpty(svEditInfo.getQuery())) {
+                if (!TextUtils.isEmpty(svEditInfo.getText())) {
                     Map<String, String> map = new HashMap<>();
-                    map.put(mapReqKey[editType], svEditInfo.getQuery().toString());
+                    map.put(mapReqKey[editType], svEditInfo.getText().toString());
                     UserUtils.updataNetUserInfo(map, new UserUtils.UpdataListener() {
                         @Override
                         public void success(String responseInfo) {
                             loadingDialog.dismiss(true);
                             //TODO 更新本地缓存，刷新上一个页面
-                            UserUtils.updataLocalUserInfo(localCacheKey, svEditInfo.getQuery().toString());
+                            UserUtils.updataLocalUserInfo(localCacheKey, svEditInfo.getText().toString());
                             AppManager.getInstance().sendMessage("updata_userinfo", "更新用户信息");
 
-                            final WaitDialog waitDialog = WaitDialog.getInstance(title+"信息修改成功",
+                            final WaitDialog waitDialog = WaitDialog.getInstance(title + "信息修改成功",
                                     R.mipmap.login_success, false);
                             waitDialog.show(getSupportFragmentManager());
-                            waitDialog.dismiss(false,true);
+                            waitDialog.dismiss(false, true);
                         }
 
                         @Override
@@ -123,25 +128,6 @@ public class SingleEditActivity extends BaseActivity {
             }
         });
 
-        svEditInfo.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!keyboardLayout.isSoftKeyboardPop()) {
-                    if (!hasFocus) {
-                        finish();
-                    }
-                } else {
-                    AppDevice.hideSoftKeyboard(svEditInfo);
-                }
-            }
-        });
-
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }
