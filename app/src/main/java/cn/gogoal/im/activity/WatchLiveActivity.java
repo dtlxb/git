@@ -1,19 +1,14 @@
 package cn.gogoal.im.activity;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +21,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.RotateAnimation;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -65,6 +61,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.LiveOnlinePersonData;
+import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
@@ -117,29 +114,14 @@ public class WatchLiveActivity extends BaseActivity {
     //缓冲控件
     @BindView(R.id.LayoutTip)
     LinearLayout LayoutTip;
+    @BindView(R.id.text_tip)
+    ImageView text_tip;
+
     //聊天显示列表
     @BindView(R.id.recycPortrait)
     RecyclerView recyler_chat;
 
-    /*
-    * 权限所需定义参数
-    * */
-    private final int PERMISSION_REQUEST_CODE = 1;
-    private final String[] permissionManifest = {
-            Manifest.permission.CAMERA,
-            Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-    };
-
-    private final int[] noPermissionTip = {
-            R.string.no_camera_permission,
-            R.string.no_record_audio_permission,
-            R.string.no_read_phone_state_permission,
-            R.string.no_write_external_storage_permission,
-            R.string.no_read_external_storage_permission
-    };
+    private RotateAnimation animation;
 
     /*
     * 直播所需定义参数
@@ -237,9 +219,8 @@ public class WatchLiveActivity extends BaseActivity {
 
         live_id = getIntent().getStringExtra("live_id");
 
-        if (Build.VERSION.SDK_INT >= 23) {
-            permissionCheck();
-        }
+        animation = AnimationUtils.getInstance().setLoadingAnime(text_tip, R.mipmap.login_loading);
+        animation.startNow();
 
         initHorizontalRecycleView(recyAudience);
         audienceAdapter = new LiveOnlineAdapter(audienceList);
@@ -272,39 +253,6 @@ public class WatchLiveActivity extends BaseActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvHorizontal.setLayoutManager(layoutManager);
-    }
-
-    /**
-     * 权限检查（适配6.0以上手机）
-     */
-    private void permissionCheck() {
-        int permissionCheck = PackageManager.PERMISSION_GRANTED;
-        for (String permission : permissionManifest) {
-            if (PermissionChecker.checkSelfPermission(this, permission)
-                    != PackageManager.PERMISSION_GRANTED) {
-                permissionCheck = PackageManager.PERMISSION_DENIED;
-            }
-        }
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, permissionManifest, PERMISSION_REQUEST_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case PERMISSION_REQUEST_CODE:
-                for (int i = 0; i < permissions.length; i++) {
-                    if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                        int toastTip = noPermissionTip[i];
-                        if (toastTip != 0) {
-                            UIHelper.toast(getContext(), toastTip);
-                        }
-                    }
-                }
-                break;
-        }
     }
 
     /**
@@ -624,7 +572,7 @@ public class WatchLiveActivity extends BaseActivity {
                     //开始缓冲
                     synchronized (isCaching) {
                         if (!isCaching) {
-                            mHandler.postDelayed(mShowInterruptRun, LinkConst.INTERRUPT_DELAY);
+                            show_buffering_ui(true);
                             isCaching = true;
                         }
                     }
@@ -632,8 +580,7 @@ public class WatchLiveActivity extends BaseActivity {
                 case MediaPlayer.MEDIA_INFO_BUFFERING_END:
                     synchronized (isCaching) {
                         if (isCaching) {
-                            mHandler.removeCallbacks(mShowInterruptRun);
-                            LayoutTip.setVisibility(View.GONE);
+                            show_buffering_ui(false);
                             // 结束缓冲
                             isCaching = false;
                         }
@@ -641,11 +588,11 @@ public class WatchLiveActivity extends BaseActivity {
                     break;
                 case MediaError.ALIVC_INFO_PLAYER_FIRST_FRAME_RENDERED:
                     // 首帧显示时间
-                    UIHelper.toast(getContext(), R.string.show_first_frame);
                     if (!isChatting()) {
                         //计算首帧耗时
                         KLog.e("首帧耗时: " + (System.currentTimeMillis() - mStartTime) + "ms");
                     }
+                    show_buffering_ui(false);
                     break;
                 case MediaError.ALIVC_INFO_PUBLISH_DISPLAY_FIRST_FRAME:
                     //预览首帧渲染完成
@@ -921,8 +868,24 @@ public class WatchLiveActivity extends BaseActivity {
         @Override
         public void run() {
             LayoutTip.setVisibility(View.VISIBLE);
+            animation.startNow();
         }
     };
+
+    /*
+    * 缓冲显示
+    * */
+    private void show_buffering_ui(boolean bShowTip) {
+        if (bShowTip) {
+            mHandler.postDelayed(mShowInterruptRun, LinkConst.INTERRUPT_DELAY);
+        } else {
+            mHandler.removeCallbacks(mShowInterruptRun);
+            LayoutTip.setVisibility(View.GONE);
+            if (animation != null) {
+                animation.cancel();
+            }
+        }
+    }
 
     @Override
     protected void onResume() {
@@ -943,7 +906,7 @@ public class WatchLiveActivity extends BaseActivity {
 
         mediaPause();
         isCaching = false;
-        mHandler.removeCallbacks(mShowInterruptRun);
+        show_buffering_ui(false);
     }
 
     @Override

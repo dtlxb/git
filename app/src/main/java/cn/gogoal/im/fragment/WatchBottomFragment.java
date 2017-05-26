@@ -321,9 +321,6 @@ public class WatchBottomFragment extends BaseFragment {
 
             int rootInvisibleHeight = view.getRootView().getHeight() - rootRect.bottom;
 
-            KLog.e("GlobalLayout", "decorView.top = "
-                    + view.getTop() + ", decorView.bottom = "
-                    + view.getBottom() + ", viewHeight = " + rootInvisibleHeight);
             if (hasShowInputMethod && rootInvisibleHeight == 0) {//软件盘隐藏
                 hideCommentEditUI();
                 hasShowInputMethod = false;

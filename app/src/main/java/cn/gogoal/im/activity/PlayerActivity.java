@@ -774,8 +774,12 @@ public class PlayerActivity extends BaseActivity {
     * */
     private void show_buffering_ui(boolean bShowTip) {
         LayoutTip.setVisibility(bShowTip ? View.VISIBLE : View.GONE);
-        if (animation != null) {
-            animation.cancel();
+        if (bShowTip) {
+            animation.startNow();
+        } else {
+            if (animation != null) {
+                animation.cancel();
+            }
         }
     }
 
@@ -795,8 +799,7 @@ public class PlayerActivity extends BaseActivity {
         int var = (int) (ms / 1000.0f + 0.5f);
         int min = var / 60;
         int sec = var % 60;
-        totalDuration.setText("" + min + ":" + sec);
-
+        totalDuration.setText((min >= 10 ? min : "0" + min) + ":" + (sec >= 10 ? sec : "0" + sec));
 
         SeekBar sb = (SeekBar) findViewById(R.id.progress);
         sb.setMax(ms);
@@ -811,7 +814,7 @@ public class PlayerActivity extends BaseActivity {
                 int min = var / 60;
                 int sec = var % 60;
                 String strCur = String.format("%1$d:%2$d", min, sec);
-                currentDuration.setText(strCur);
+                currentDuration.setText((min >= 10 ? min : "0" + min) + ":" + (sec >= 10 ? sec : "0" + sec));
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
