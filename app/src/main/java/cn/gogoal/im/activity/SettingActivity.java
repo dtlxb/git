@@ -59,15 +59,17 @@ public class SettingActivity extends BaseActivity {
 
         settingAdapter = new SettingAdapter(settingDatas);
 
-        initRecycleView(rvSetting, 0);
+        initRecycleView(rvSetting, null);
         rvSetting.setAdapter(settingAdapter);
+        rvSetting.setBackgroundColor(getResColor(R.color.colorTitle));
+
 
         SelectorButton selectorButton = new SelectorButton(mContext);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        params.setMargins(AppDevice.dp2px(mContext, 15), AppDevice.dp2px(mContext, 55)
+        params.setMargins(AppDevice.dp2px(mContext, 15), AppDevice.dp2px(mContext, 15)
                 , AppDevice.dp2px(mContext, 15), AppDevice.dp2px(mContext, 20));
         selectorButton.setLayoutParams(params);
 
@@ -140,14 +142,16 @@ public class SettingActivity extends BaseActivity {
 
                     holder.getView(R.id.tv_info_value).setVisibility(View.INVISIBLE);
 
+                    holder.setBackgroundRes(R.id.item_rv_edit_my_info,
+                            position == 6 ? R.drawable.shape_line_top_and_bottom:R.drawable.selector_normal_write2gray);
+
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            KLog.e("pos="+position+";itemText="+data.getItemKey());
-                            Intent intent;
+                            KLog.e("pos=" + position + ";itemText=" + data.getItemKey());
                             switch (position) {
                                 case 1:
-                                    startActivity(new Intent(v.getContext(),AccountSafeActivity.class));
+                                    startActivity(new Intent(v.getContext(), AccountSafeActivity.class));
                                     break;
                                 case 3:
                                     //清除缓存
@@ -155,7 +159,7 @@ public class SettingActivity extends BaseActivity {
                                     break;
                                 case 5:
                                     NormalIntentUtils.go2WebActivity(getActivity(),
-                                AppConst.GG_SETTING_ABOUT,
+                                            AppConst.GG_SETTING_ABOUT,
 //                                            "http://192.168.52.156:9000/#/hello",
                                             "关于我们");
                                     break;
@@ -185,8 +189,8 @@ public class SettingActivity extends BaseActivity {
     //TODO 测试
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode==KeyEvent.KEYCODE_MENU){
-            startActivity(new Intent(this,TestActivity.class));
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            startActivity(new Intent(this, TestActivity.class));
             return true;
         }
         return super.onKeyDown(keyCode, event);
