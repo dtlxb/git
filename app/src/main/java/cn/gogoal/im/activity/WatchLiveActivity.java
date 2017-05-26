@@ -797,7 +797,7 @@ public class WatchLiveActivity extends BaseActivity {
                 } else {
                     //显示结束连麦失败的
                     KLog.e("Close video chat failed");
-                    UIHelper.toast(WatchLiveActivity.this, R.string.close_video_chatting_failed);
+                    UIHelper.toast(getContext(), R.string.close_video_chatting_failed);
                 }
             }
 
