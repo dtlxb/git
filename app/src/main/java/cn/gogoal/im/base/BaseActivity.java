@@ -131,7 +131,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
                     for (int i = 0; i < grantResults.length; i++) {
                         if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                             deniedPermissionList.add(permissions[i]);
-                            return;
+                            break;
                         }
                     }
                     if (deniedPermissionList.isEmpty()) {

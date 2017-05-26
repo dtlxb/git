@@ -1012,6 +1012,8 @@ public class WatchLiveActivity extends BaseActivity {
 
                     //倒计时
                     if (data.getLongValue("launch_time") > 0) {
+                        show_buffering_ui(false);
+
                         countDownTimer.setVisibility(View.VISIBLE);
                         countDownTimer.addTime(data.getString("live_time_start"));
                         countDownTimer.start();
