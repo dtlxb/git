@@ -995,7 +995,8 @@ public class WatchLiveActivity extends BaseActivity {
                     ImageDisplay.loadCircleImage(getContext(), data.getString("face_url"), imgPalyer);
                     textCompany.setText(data.getString("anchor_name"));
                     appoint_account = data.getString("appoint_account");
-                    if (appoint_account != null) {
+
+                    /*if (appoint_account != null) {
                         if (UserUtils.isMyFriend(data.getIntValue("appoint_account"))) {
                             textAddFriend.setVisibility(View.GONE);
                         } else {
@@ -1003,7 +1004,7 @@ public class WatchLiveActivity extends BaseActivity {
                         }
                     } else {
                         textAddFriend.setVisibility(View.GONE);
-                    }
+                    }*/
 
                     //主播介绍
                     anchor = data.getJSONObject("anchor");
