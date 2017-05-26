@@ -797,7 +797,7 @@ public class WatchLiveActivity extends BaseActivity {
                 } else {
                     //显示结束连麦失败的
                     KLog.e("Close video chat failed");
-                    UIHelper.toast(WatchLiveActivity.this, R.string.close_video_chatting_failed);
+                    UIHelper.toast(getContext(), R.string.close_video_chatting_failed);
                 }
             }
 
@@ -1012,6 +1012,8 @@ public class WatchLiveActivity extends BaseActivity {
 
                     //倒计时
                     if (data.getLongValue("launch_time") > 0) {
+                        show_buffering_ui(false);
+
                         countDownTimer.setVisibility(View.VISIBLE);
                         countDownTimer.addTime(data.getString("live_time_start"));
                         countDownTimer.start();

@@ -1,6 +1,5 @@
 package cn.gogoal.im.adapter;
 
-import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -10,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import java.util.HashMap;
@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.SocialLiveData;
@@ -27,8 +26,8 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 import cn.gogoal.im.ui.dialog.InviteAuthDialog;
-import com.hply.roundimage.roundImage.RoundedImageView;
 
 /**
  * Created by dave.
@@ -226,9 +225,7 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
                 if (data.getAuth() == 1) {
                     setInviteAuth(data.getLive_id());
                 } else {
-                    Intent intent = new Intent(mContext, WatchLiveActivity.class);
-                    intent.putExtra("live_id", data.getLive_id());
-                    mContext.startActivity(intent);
+                    PlayDataStatistics.enterLiveAuthorize(false, mContext, data.getLive_id(), false);
                 }
             }
         });
@@ -321,9 +318,7 @@ public class SocialLiveAdapter extends CommonAdapter<SocialLiveData, BaseViewHol
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
                     if (data.getIntValue("code") == 101) {
-                        Intent intent = new Intent(mContext, WatchLiveActivity.class);
-                        intent.putExtra("live_id", invite_id);
-                        mContext.startActivity(intent);
+                        PlayDataStatistics.enterLiveAuthorize(false, mContext, invite_id, false);
                     } else {
                         InviteAuthDialog.newInstance("video", invite_id).show(mContext.getSupportFragmentManager());
                     }

@@ -1,5 +1,6 @@
 package cn.gogoal.im.adapter;
 
+import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -38,7 +39,6 @@ import java.util.List;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.IMPersonDetailActivity;
 import cn.gogoal.im.activity.ImageDetailActivity;
-import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.AudioViewInfo;
@@ -53,6 +53,7 @@ import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 import cn.gogoal.im.common.recording.MediaManager;
 
 /**
@@ -79,12 +80,12 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     //系统,未知
     private static int TYPE_SYSTEM_MESSAGE = 0x13;
     private List<AVIMMessage> messageList;
-    private Context mContext;
+    private Activity mContext;
     private LayoutInflater mLayoutInflater;
     private int chatType;
     private Boolean isYourSelf;
 
-    public IMChatAdapter(Context mContext, List<AVIMMessage> messageList) {
+    public IMChatAdapter(Activity mContext, List<AVIMMessage> messageList) {
         this.mLayoutInflater = LayoutInflater.from(mContext);
         this.mContext = mContext;
         this.messageList = messageList;
@@ -577,9 +578,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         if (jsonObject.getString("toolType").equals("1")) {
             NormalIntentUtils.go2WebActivity(mContext, jsonObject.getString("link"), jsonObject.getString("title"));
         } else if (jsonObject.getString("toolType").equals("2")) {
-            Intent intent = new Intent(mContext, WatchLiveActivity.class);
-            intent.putExtra("live_id", jsonObject.getString("live_id"));
-            mContext.startActivity(intent);
+            PlayDataStatistics.enterLiveAuthorize(false, mContext, jsonObject.getString("live_id"), false);
         }
     }
 
