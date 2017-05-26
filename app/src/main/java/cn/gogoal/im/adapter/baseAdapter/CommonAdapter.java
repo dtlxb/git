@@ -396,10 +396,6 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
         this(0, data);
     }
 
-    public CommonAdapter(Context context, int layoutResId, List<T> datas) {
-        this(layoutResId, null);
-    }
-
     /**
      * setting up a new instance to data;
      *

@@ -216,10 +216,6 @@ public class ToolsSettingActivity extends BaseActivity {
         result.addAll(dataOriginal);
         result.removeAll(dataSelected);
 
-        KLog.e("dataOriginal.size==" + dataOriginal.size() +
-                ";dataSelected.size==" + dataSelected.size() +
-                ";result.size==" + result.size());
-
         if (result.isEmpty()) {
             return "";
         } else {
