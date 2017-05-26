@@ -1,19 +1,14 @@
 package cn.gogoal.im.activity;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -129,26 +124,6 @@ public class WatchLiveActivity extends BaseActivity {
     private RotateAnimation animation;
 
     /*
-    * 权限所需定义参数
-    * */
-    private final int PERMISSION_REQUEST_CODE = 1;
-    private final String[] permissionManifest = {
-            Manifest.permission.CAMERA,
-            Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-    };
-
-    private final int[] noPermissionTip = {
-            R.string.no_camera_permission,
-            R.string.no_record_audio_permission,
-            R.string.no_read_phone_state_permission,
-            R.string.no_write_external_storage_permission,
-            R.string.no_read_external_storage_permission
-    };
-
-    /*
     * 直播所需定义参数
     * */
     enum SurfaceStatus {
@@ -247,10 +222,6 @@ public class WatchLiveActivity extends BaseActivity {
         animation = AnimationUtils.getInstance().setLoadingAnime(text_tip, R.mipmap.login_loading);
         animation.startNow();
 
-        if (Build.VERSION.SDK_INT >= 23) {
-            permissionCheck();
-        }
-
         initHorizontalRecycleView(recyAudience);
         audienceAdapter = new LiveOnlineAdapter(audienceList);
         recyAudience.setAdapter(audienceAdapter);
@@ -282,39 +253,6 @@ public class WatchLiveActivity extends BaseActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvHorizontal.setLayoutManager(layoutManager);
-    }
-
-    /**
-     * 权限检查（适配6.0以上手机）
-     */
-    private void permissionCheck() {
-        int permissionCheck = PackageManager.PERMISSION_GRANTED;
-        for (String permission : permissionManifest) {
-            if (PermissionChecker.checkSelfPermission(this, permission)
-                    != PackageManager.PERMISSION_GRANTED) {
-                permissionCheck = PackageManager.PERMISSION_DENIED;
-            }
-        }
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, permissionManifest, PERMISSION_REQUEST_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case PERMISSION_REQUEST_CODE:
-                for (int i = 0; i < permissions.length; i++) {
-                    if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                        int toastTip = noPermissionTip[i];
-                        if (toastTip != 0) {
-                            UIHelper.toast(getContext(), toastTip);
-                        }
-                    }
-                }
-                break;
-        }
     }
 
     /**

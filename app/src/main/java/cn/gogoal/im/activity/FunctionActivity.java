@@ -156,15 +156,15 @@ public class FunctionActivity extends BaseActivity {
             @Override
             public void handler(String data, ValueCallback<String> function) {
                 JSONObject object = JSONObject.parseObject(data);
-                Intent intent = null;
                 if (object.getString("source").equals("live")) {
-                    intent = new Intent(getContext(), WatchLiveActivity.class);
+                    PlayDataStatistics.enterLiveAuthorize(false, getContext(), object.getString("live_id"), false);
                 } else if (object.getString("source").equals("video")) {
-                    intent = new Intent(getContext(), PlayerActivity.class);
+                    Intent intent = new Intent(getContext(), PlayerActivity.class);
+                    intent.putExtra("live_id", object.getString("live_id"));
+                    startActivity(intent);
                 }
 
-                intent.putExtra("live_id", object.getString("live_id"));
-                startActivity(intent);
+
             }
         });
 

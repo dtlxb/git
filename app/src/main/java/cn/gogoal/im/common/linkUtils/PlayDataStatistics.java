@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.gogoal.im.activity.LiveActivity;
+import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -86,6 +87,7 @@ public class PlayDataStatistics {
 
     /**
      * 进入直播授权
+     *
      * @param isLive
      * @param mContext
      * @param live_id
@@ -100,13 +102,14 @@ public class PlayDataStatistics {
                     mContext.finish();
                 }
 
+                Intent intent = null;
                 if (isLive) {
-                    Intent intent = new Intent(mContext, LiveActivity.class);
-                    intent.putExtra("live_id", live_id);
-                    mContext.startActivity(intent);
+                    intent = new Intent(mContext, LiveActivity.class);
                 } else {
-
+                    intent = new Intent(mContext, WatchLiveActivity.class);
                 }
+                intent.putExtra("live_id", live_id);
+                mContext.startActivity(intent);
             }
 
             @Override
