@@ -52,9 +52,6 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.img_mine_avatar)
     RoundedImageView imageAvatar;
 
-    @BindView(R.id.tv_mine_title)
-    TextView mTitleText;
-
     @BindView(R.id.tv_mine_userName)
     TextView tvMineUserName;
 
@@ -87,21 +84,13 @@ public class MineFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
+        setFragmentTitle("我");
+
         iniheadInfo(mContext);
         initRecycler(mContext);
         initDatas();
         rvMine.setAdapter(mineAdapter);
 
-//        //滚动监听
-//        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-//            @Override
-//            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//                if (oldScrollY < AppDevice.dp2px(getContext(), 150)) {
-//                    mTitleText.setAlpha(scrollY * 1.0f / AppDevice.dp2px(getContext(), 150));
-//                    layoutHead.setAlpha(1 - scrollY * 1.0f / AppDevice.dp2px(getContext(), 150));
-//                }
-//            }
-//        });
     }
 
     private void initRecycler(Context mContext) {
@@ -144,23 +133,19 @@ public class MineFragment extends BaseFragment {
 
     private void initDatas() {
         mineItems = new ArrayList<>();
-        mineItems.add(new MineItem(MineItem.TYPE_SPACE));
         mineItems.add(new MineItem(MineItem.TYPE_HEAD));
         mineItems.add(new MineItem(MineItem.TYPE_SPACE));
         for (int i = 0; i < mineTitle.length; i++) {
             int iconId = getResources().getIdentifier("img_mine_item_" + i, "mipmap", getActivity().getPackageName());
             mineItems.add(new MineItem(MineItem.TYPE_ICON_TEXT_ITEM, iconId, mineTitle[i]));
         }
-        mineItems.add(4, new MineItem(MineItem.TYPE_SPACE));
+        mineItems.add(3, new MineItem(MineItem.TYPE_SPACE));
         mineAdapter = new MineAdapter(mineItems);
     }
 
-    @OnClick({R.id.img_my_qrcode, R.id.layout_user_head})
+    @OnClick({R.id.layout_user_head})
     void onClick(View view) {
         switch (view.getId()) {
-            case R.id.img_my_qrcode:
-                UIHelper.toast(view.getContext(), "二维码");
-                break;
             case R.id.layout_user_head:
                 startActivity(new Intent(view.getContext(), EditMyInfoActivity.class));
                 break;

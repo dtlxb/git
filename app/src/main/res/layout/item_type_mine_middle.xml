@@ -3,11 +3,10 @@
     android:id="@+id/item_layout_simple_image_text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/selector_normal_write2gray"
+    android:background="@android:color/white"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingBottom="20dp"
-    android:paddingTop="20dp">
+    android:paddingBottom="17dp">
 
     <Button
         android:id="@+id/btn_mine_my_friend"

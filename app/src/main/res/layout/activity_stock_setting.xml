@@ -10,6 +10,8 @@
     app:showDividers="middle|end"
     tools:context=".activity.SettingStockActivity">
 
+    <include layout="@layout/include_title"/>
+
     <TextView
         android:id="@+id/tv_set_stock_refresh_time"
         android:layout_width="match_parent"

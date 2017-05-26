@@ -7,34 +7,7 @@
     android:orientation="vertical"
     tools:context="cn.gogoal.im.fragment.main.MineFragment">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:visibility="gone"
-        android:background="@color/colorMineHead">
-
-        <TextView
-            android:id="@+id/tv_mine_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:alpha="0.0"
-            android:text="个人中心"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/img_my_qrcode"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:paddingEnd="20dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingStart="20dp"
-            android:src="@mipmap/img_qr_code" />
-    </RelativeLayout>
+    <include layout="@layout/include_title"/>
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scrollView_mine"
@@ -46,8 +19,8 @@
             android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="true"
             android:background="#f8f8f8"
+            android:focusable="true"
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
@@ -55,7 +28,7 @@
                 android:id="@+id/layout_user_head"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorMineHead"
+                android:background="@android:color/white"
                 android:orientation="vertical"
                 android:paddingEnd="20dp"
                 android:paddingStart="15dp">
@@ -64,13 +37,13 @@
                     android:id="@+id/img_mine_avatar"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
-                    android:layout_marginTop="35dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginBottom="30dp"
                     android:src="@mipmap/logo"
-                    app:riv_border_width="1dp"
                     app:riv_border_color="#e0e0e0"
-                    app:riv_oval="true"/>
+                    app:riv_border_width="1dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
+                    app:riv_oval="true" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -89,10 +62,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
-                        android:text="朝阳永续六小龄童"
                         android:maxLength="8"
                         android:singleLine="true"
-                        android:textColor="@android:color/white"
+                        android:text="朝阳永续六小龄童"
+                        android:textColor="@color/textColor_333333"
                         android:textSize="16sp" />
 
                     <TextView
@@ -102,11 +75,6 @@
                         android:drawableStart="@mipmap/authentication"
                         android:text="高级认证" />
 
-                    <TextView
-                        style="@style/TextViewMineLevel"
-                        android:layout_toEndOf="@+id/tv_authentication"
-                        android:drawableStart="@mipmap/img_mine_level_1"
-                        android:text="等级" />
 
                     <TextView
                         android:id="@+id/tv_mine_introduction"
@@ -115,7 +83,7 @@
                         android:layout_below="@+id/tv_mine_userName"
                         android:layout_marginTop="5dp"
                         android:text="朝阳永续金融分析师"
-                        android:textColor="@color/color0_8White"
+                        android:textColor="@color/textColor_666666"
                         android:textSize="12sp" />
 
                 </RelativeLayout>
@@ -126,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    app:srcCompat="@mipmap/img_more_255" />
+                    app:srcCompat="@mipmap/img_more" />
 
             </RelativeLayout>
 
@@ -135,8 +103,8 @@
                 android:id="@+id/rv_mine"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="none"
                 android:layout_marginBottom="45dp"
+                android:scrollbars="none"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         </LinearLayout>
