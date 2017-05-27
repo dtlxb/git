@@ -15,7 +15,6 @@ import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageHandler;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
-import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.avos.avospush.notification.NotificationCompat;
 import com.socks.library.KLog;
 
@@ -52,7 +51,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
                         //剔除自己消息
                         if (!message.getFrom().equals(clientID)) {
                             showNotification(message);
-
                             final int chatType = (int) conversation.getAttribute("chat_type");
                             switch (chatType) {
                                 case AppConst.IM_CHAT_TYPE_SINGLE:
@@ -99,6 +97,9 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                                 sendIMMessage(message, conversation);
                                             }
                                         });
+                                    } else if (AppConst.IM_MESSAGE_TYPE_SQUARE_DETAIL.equals(_lctype)) {
+                                        //群公告，群简介
+                                        sendIMMessage(message, conversation);
                                     } else {
                                         //更新群通讯录
                                         ChatGroupHelper.upDataGroupContactInfo(conversation.getConversationId(), Integer.parseInt(message.getFrom()),
@@ -191,6 +192,10 @@ public class MyMessageHandler extends AVIMMessageHandler {
         map.put("message", message);
         map.put("conversation", conversation);
         int chatType = (int) conversation.getAttribute("chat_type");
+
+        if (message instanceof GGAudioMessage) {
+            SPTools.saveBoolean(UserUtils.getMyAccountId() + message.getMessageId(), true);
+        }
 
         BaseMessage baseMessage = new BaseMessage("IM_Info", map);
         AppManager.getInstance().sendMessage((chatType == AppConst.IM_CHAT_TYPE_LIVE_REQUEST ||

@@ -3,11 +3,9 @@ package cn.gogoal.im.common.IMHelpers;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.socks.library.KLog;
 
 import java.io.File;
@@ -383,7 +381,7 @@ public class ChatGroupHelper {
     }
 
     public static void sendShareMessage(final ContactBean contactBean, GGShareEntity shareEntity, final GroupInfoResponse response) {
-        Map<Object, Object> lcattrsMap = new HashMap<>();
+        Map<String, Object> lcattrsMap = new HashMap<>();
         lcattrsMap.put("username", UserUtils.getNickname());
         lcattrsMap.put("avatar", UserUtils.getUserAvatar());
         lcattrsMap.put("content", shareEntity.getDesc());
@@ -404,19 +402,16 @@ public class ChatGroupHelper {
         params.put("message", JSONObject.toJSONString(messageMap));
         KLog.e(params);
 
-        //消息
-        final AVIMMessage mMessage = new AVIMMessage();
-        JSONObject contentObject = new JSONObject();
-        contentObject.put("_lcattrs", lcattrsMap);
-        contentObject.put("_lctype", "13");
-        contentObject.put("_lctext", shareEntity.getTitle());
-        mMessage.setContent(JSON.toJSONString(contentObject));
-        mMessage.setTimestamp(CalendarUtils.getCurrentTime());
-        mMessage.setFrom(UserUtils.getMyAccountId());
+        //分享消息
+        final GGShareMessage shareMessage = new GGShareMessage();
+        shareMessage.setAttrs(lcattrsMap);
+        shareMessage.setText(shareEntity.getTitle());
+        shareMessage.setTimestamp(CalendarUtils.getCurrentTime());
+        shareMessage.setFrom(UserUtils.getMyAccountId());
 
         //发送至聊天室
         Map<Object, Object> objectMap = new HashMap<>();
-        objectMap.put("share_message", mMessage);
+        objectMap.put("share_message", shareMessage);
         objectMap.put("share_convid", contactBean.getConv_id());
         BaseMessage baseMessage = new BaseMessage("message_map", objectMap);
         AppManager.getInstance().sendMessage("oneShare", baseMessage);
@@ -435,7 +430,7 @@ public class ChatGroupHelper {
                     IMMessageBean imMessageBean = null;
                     if (null != contactBean) {
                         imMessageBean = new IMMessageBean(contactBean.getConv_id(), 1001, System.currentTimeMillis(),
-                                "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), mMessage);
+                                "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), shareMessage);
                     }
                     MessageListUtils.saveMessageInfo(UserUtils.getMessageListInfo(), imMessageBean);
                 }
@@ -450,7 +445,7 @@ public class ChatGroupHelper {
     }
 
     public static void sendShareMessage(final ShareItemInfo shareItemInfo, final GroupInfoResponse response) {
-        Map<Object, Object> lcattrsMap = new HashMap<>();
+        Map<String, Object> lcattrsMap = new HashMap<>();
         lcattrsMap.put("username", UserUtils.getNickname());
         lcattrsMap.put("avatar", UserUtils.getUserAvatar());
         lcattrsMap.put("content", shareItemInfo.getEntity().getDesc());
@@ -471,19 +466,16 @@ public class ChatGroupHelper {
         params.put("message", JSONObject.toJSONString(messageMap));
         KLog.e(params);
 
-        //消息
-        final AVIMMessage mMessage = new AVIMMessage();
-        JSONObject contentObject = new JSONObject();
-        contentObject.put("_lcattrs", lcattrsMap);
-        contentObject.put("_lctype", "13");
-        contentObject.put("_lctext", shareItemInfo.getEntity().getTitle());
-        mMessage.setContent(JSON.toJSONString(contentObject));
-        mMessage.setTimestamp(CalendarUtils.getCurrentTime());
-        mMessage.setFrom(UserUtils.getMyAccountId());
+        //分享消息
+        final GGShareMessage shareMessage = new GGShareMessage();
+        shareMessage.setAttrs(lcattrsMap);
+        shareMessage.setText(shareItemInfo.getEntity().getTitle());
+        shareMessage.setTimestamp(CalendarUtils.getCurrentTime());
+        shareMessage.setFrom(UserUtils.getMyAccountId());
 
         //发送至聊天室
         Map<Object, Object> objectMap = new HashMap<>();
-        objectMap.put("share_message", mMessage);
+        objectMap.put("share_message", shareMessage);
         objectMap.put("share_convid", shareItemInfo.getImMessageBean().getConversationID());
         BaseMessage baseMessage = new BaseMessage("message_map", objectMap);
         AppManager.getInstance().sendMessage("oneShare", baseMessage);
@@ -501,7 +493,7 @@ public class ChatGroupHelper {
 
                     //头像暂时未保存
                     IMMessageBean imMessageBean = shareItemInfo.getImMessageBean();
-                    imMessageBean.setLastMessage(mMessage);
+                    imMessageBean.setLastMessage(shareMessage);
                     imMessageBean.setLastTime(System.currentTimeMillis());
                     MessageListUtils.saveMessageInfo(UserUtils.getMessageListInfo(), imMessageBean);
                 }

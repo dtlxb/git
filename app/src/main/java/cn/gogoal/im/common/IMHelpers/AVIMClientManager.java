@@ -58,7 +58,7 @@ public class AVIMClientManager {
      * 关闭连接，返回Client对象
      */
     public void close(String clientId, AVIMClientCallback callback) {
-        if (clientId!=null) {
+        if (clientId != null) {
             this.clientId = clientId;
             avimClient = AVIMClient.getInstance(clientId, clientId);
             avimClient.close(callback);
@@ -84,8 +84,8 @@ public class AVIMClientManager {
     /**
      * 返回用户的基本信息头像，昵称
      */
-    public Map<String, String> userBaseInfo() {
-        Map<String, String> attr = new HashMap<>();
+    public Map<String, Object> userBaseInfo() {
+        Map<String, Object> attr = new HashMap<>();
         attr.put("username", UserUtils.getNickname());
         attr.put("avatar", UserUtils.getUserAvatar());
         return attr;
@@ -119,6 +119,7 @@ public class AVIMClientManager {
                 } else {
                     if (null != mChatJoinManager) {
                         mChatJoinManager.joinFail(e.getMessage());
+                        KLog.e(e.getMessage());
                     }
                 }
             }
