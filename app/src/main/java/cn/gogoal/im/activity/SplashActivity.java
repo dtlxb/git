@@ -11,11 +11,10 @@ import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.gogoal.im.R;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.servise.AppBackServise;
@@ -44,7 +43,7 @@ public class SplashActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        Glide.with(this).load(R.mipmap.splash).centerCrop().into(imgSplash);
+        ImageDisplay.loadImage(this,R.mipmap.splash,imgSplash);
 
         new android.os.Handler().postDelayed(new Runnable() {
             @Override

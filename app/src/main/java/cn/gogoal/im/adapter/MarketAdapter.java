@@ -187,7 +187,7 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
 
         private RankListAdapter(List<MarkteBean.MarketItemData> datas, int typePostion) {
 //            super(R.layout.item_stock_rank_list, datas);
-            super(R.layout.item_my_stock, datas);
+            super(R.layout.item_stock_rank_list, datas);
             this.typePostion = typePostion;
         }
 

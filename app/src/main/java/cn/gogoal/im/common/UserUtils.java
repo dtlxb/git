@@ -14,8 +14,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.socks.library.KLog;
 
 import java.io.File;
@@ -151,7 +151,7 @@ public class UserUtils {
         if (StringUtils.isActuallyEmpty(getBitmapFilePaht())) {
             ImageUtils.getUrlBitmap(MyApp.getAppContext(), UserUtils.getUserAvatar(), new SimpleTarget<Bitmap>() {
                 @Override
-                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                     listener.success(resource);
                     ImageUtils.saveImageToSD(MyApp.getAppContext(), MyApp.getAppContext().getExternalFilesDir("avatar") +
                                     File.separator + "avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()) +

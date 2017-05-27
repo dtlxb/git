@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -18,6 +16,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseItemDraggableAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 
 /**
  * author wangjd on 2017/5/11 0011.
@@ -66,7 +65,8 @@ public class SelectedAdapter extends BaseItemDraggableAdapter<ToolData.Tool, Bas
 
         holder.setBackgroundColor(R.id.item_touyan_item, Color.parseColor("#f6f6f6"));
 
-        Glide.with(contextView.getContext()).load(data.getIconUrl()).dontAnimate().dontTransform().into(itemIcon);
+//        Glide.with(contextView.getContext()).load(data.getIconUrl()).dontAnimate().dontTransform().into(itemIcon);
+        ImageDisplay.loadImage(contextView.getContext(),data.getIconUrl(),itemIcon);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override

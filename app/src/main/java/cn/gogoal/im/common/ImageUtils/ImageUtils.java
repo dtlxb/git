@@ -18,6 +18,7 @@ import android.util.Base64;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -115,8 +116,13 @@ public class ImageUtils {
 
     }
 
-    public static void getUrlBitmap(Context mContext,String url, SimpleTarget<Bitmap> simpleTarget){
-        Glide.with(mContext).load(url).asBitmap().into(simpleTarget);
+    public static void getUrlBitmap(Context mContext, String url, final SimpleTarget<Bitmap> simpleTarget){
+        Glide.with(mContext).load(url).into(new SimpleTarget<Drawable>() {
+            @Override
+            public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+                simpleTarget.onResourceReady(drawableToBitmap(resource),null);
+            }
+        });
     }
 
     /**

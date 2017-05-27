@@ -100,6 +100,8 @@ public class TreatFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setVerticalScrollBarEnabled(false);
+        recyclerView.setNestedScrollingEnabled(false);
+
         stockCode = getArguments().getString("stock_code");
         type = getArguments().getInt("type");
         fromStockDetail = getArguments().getBoolean("from_stock_detail");

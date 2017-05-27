@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -83,8 +81,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionToolsData, Ba
             itemView.setEnabled(item.getIsShow()!=1);
             itemHot.setImageResource(item.getIsShow() == 1 ? R.mipmap.img_tools_added : R.mipmap.img_tools_add);
 
-//            ImageDisplay.loadImage(context, item.getIconUrl(), itemIcon);
-            Glide.with(context).load(item.getIconUrl()).dontAnimate().dontTransform().into(itemIcon);
+            ImageDisplay.loadImage(context, item.getIconUrl(), itemIcon);
 
             itemTvDesc.setText(item.getDesc());
             ImageDisplay.loadImage(context, item.getIconUrl(), itemIcon);

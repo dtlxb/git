@@ -3,12 +3,15 @@ package cn.gogoal.im.fragment;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 
 import org.simple.eventbus.Subscriber;
 
@@ -77,26 +80,44 @@ public class ImageDetailFragment extends BaseFragment {
     }
 
     private void loadImage(Context mContext) {
-        Glide.with(mContext).load(imageUrl)
-                .fitCenter().into(new GlideDrawableImageViewTarget(image) {
-            @Override
-            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
-                super.onResourceReady(resource, animation);
-                xLayout.setStatus(XLayout.Success);
-            }
+//        Glide.with(mContext).load(imageUrl)
+//                .fitCenter().into(new GlideDrawableImageViewTarget(image) {
+//            @Override
+//            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
+//                super.onResourceReady(resource, animation);
+//                xLayout.setStatus(XLayout.Success);
+//            }
+//
+//            @Override
+//            public void onLoadStarted(Drawable placeholder) {
+//                super.onLoadStarted(placeholder);
+//                xLayout.setStatus(XLayout.Loading);
+//            }
+//
+//            @Override
+//            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+//                super.onLoadFailed(e, errorDrawable);
+//                xLayout.setStatus(XLayout.Error);
+//            }
+//        });
+        RequestOptions options=new RequestOptions();
+        options.fitCenter();
 
+        Glide.with(mContext).load(imageUrl).apply(options).listener(new RequestListener<Drawable>() {
             @Override
-            public void onLoadStarted(Drawable placeholder) {
-                super.onLoadStarted(placeholder);
-                xLayout.setStatus(XLayout.Loading);
-            }
-
-            @Override
-            public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                super.onLoadFailed(e, errorDrawable);
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 xLayout.setStatus(XLayout.Error);
+                return false;
             }
-        });
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                xLayout.setStatus(XLayout.Success);
+                return false;
+            }
+        }).into(image);
+
+
     }
 
     public static ImageDetailFragment getInstance(String imageUrl) {

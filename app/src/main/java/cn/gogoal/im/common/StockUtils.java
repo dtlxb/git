@@ -323,7 +323,6 @@ public class StockUtils {
      * 添加自选股
      */
     public static void addMyStock(final Context context, final String stock_name, final String stock_code) {
-        KLog.e("添加自选股");
         final Map<String, String> param = new HashMap<String, String>();
         param.put("token", UserUtils.getToken());
         param.put("group_id", "0");
@@ -336,8 +335,6 @@ public class StockUtils {
 
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e("添加自选", responseInfo);
-
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if (result.getIntValue("code") == 0) {
                     StockUtils.addStock2MyStock(stock_code);

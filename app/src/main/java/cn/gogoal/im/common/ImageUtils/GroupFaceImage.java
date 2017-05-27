@@ -4,9 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -72,15 +74,16 @@ public class GroupFaceImage<T> {
             public void doInBackground() {
                 for (int i = 0; i < imageUrls.size(); i++) {
                     try {
-                        Bitmap myBitmap = Glide.with(context)
+                        RequestOptions options = new RequestOptions();
+                        options.dontAnimate().centerCrop().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.ALL);
+
+                        Drawable drawable = Glide.with(context)
                                 .load(imageUrls.get(i))
-                                .asBitmap() //必须
-                                .centerCrop()
-                                .skipMemoryCache(true)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .apply(options)
+//                                .asBitmap() //必须
                                 .into(minItemH, minItemH)
                                 .get();
-                        bitmaps.add(myBitmap);
+                        bitmaps.add(ImageUtils.drawableToBitmap(drawable));
                     } catch (Exception e) {
                         e.printStackTrace();
                         matchingListener.onError(e);

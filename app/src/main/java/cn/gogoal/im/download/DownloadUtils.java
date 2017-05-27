@@ -5,13 +5,13 @@ import android.graphics.Bitmap;
 import android.os.Environment;
 import android.text.TextUtils;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -57,11 +57,25 @@ public class DownloadUtils {
         if (mCallBack != null) {
             callBack = mCallBack;
         }
-        Glide.with(context).load(imageUrl).asBitmap().toBytes().into(new SimpleTarget<byte[]>() {
+//        Glide.with(context).load(imageUrl).toBytes().into(new SimpleTarget<byte[]>() {
+//            @Override
+//            public void onResourceReady(byte[] bytes, GlideAnimation<? super byte[]> glideAnimation) {
+//                try {
+//                    savaFileToSD(saveName, ImageUtils.getImageSuffix(imageUrl), bytes);
+//                } catch (Exception e) {
+//                    if (callBack != null) {
+//                        callBack.error(e.getMessage());
+//                    }
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+
+        ImageUtils.getUrlBitmap(context, imageUrl, new SimpleTarget<Bitmap>() {
             @Override
-            public void onResourceReady(byte[] bytes, GlideAnimation<? super byte[]> glideAnimation) {
+            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                 try {
-                    savaFileToSD(saveName, ImageUtils.getImageSuffix(imageUrl), bytes);
+                    savaFileToSD(saveName, ImageUtils.getImageSuffix(imageUrl), resource);
                 } catch (Exception e) {
                     if (callBack != null) {
                         callBack.error(e.getMessage());
@@ -102,7 +116,10 @@ public class DownloadUtils {
     }
 
     //往SD卡写入文件的方法
-    private void savaFileToSD(String filename, String suffer, byte[] bytes) {
+    private void savaFileToSD(String filename, String suffer, Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             File dir1 = new File(dirs);
             if (!dir1.exists()) {
@@ -117,7 +134,7 @@ public class DownloadUtils {
 
                 output = new FileOutputStream(iamgeFile);
                 bos = new BufferedOutputStream(output);
-                bos.write(bytes);
+                bos.write(baos.toByteArray());
                 //将bytes写入到输出流中
 //                Toast.makeText(context, "图片已成功保存到" + filePath, Toast.LENGTH_SHORT).show();
                 if (callBack != null) {

@@ -19,8 +19,8 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
@@ -232,7 +232,7 @@ public class SearchTeamFragment extends BaseFragment {
 
                 ImageUtils.getUrlBitmap(getActivity(), groupUrl, new SimpleTarget<Bitmap>() {
                     @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                         groupAvatarBitmap = resource;
                     }
                 });

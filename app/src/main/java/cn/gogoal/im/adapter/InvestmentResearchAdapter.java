@@ -7,9 +7,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -19,6 +16,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.BannerUtils;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 
 /**
@@ -71,13 +69,16 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
             imgHot.setImageResource(R.mipmap.img_hot);
             imgHot.setVisibility(data.getShowHotFlag() == 0 ? View.VISIBLE : View.INVISIBLE);
 
-            Glide.with(context)
-                    .load(data.getIconUrl())
-                    .centerCrop()
-                    .skipMemoryCache(true)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .thumbnail(0.1f)
-                    .into(imgIcon);
+//            Glide.with(context)
+//                    .load(data.getIconUrl())
+//                    .centerCrop()
+//                    .skipMemoryCache(true)
+//                    .dontAnimate()
+//                    .dontTransform()
+//                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+//                    .thumbnail(0.1f)
+//                    .into(imgIcon);
+            ImageDisplay.loadImage(context,data.getIconUrl(),imgIcon);
         }
 
         itemView.setOnClickListener(new View.OnClickListener() {

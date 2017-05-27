@@ -99,6 +99,10 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     //日志框架
     compile 'com.github.zhaokaiqiang.klog:library:1.6.0'
+
+    compile 'com.github.bumptech.glide:glide:4.0.0-RC0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC0'
+
     //图像处理
     compile 'jp.wasabeef:glide-transformations:2.0.1'
     // If you want to use the GPU Filters

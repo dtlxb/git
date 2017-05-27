@@ -271,7 +271,7 @@ public class MarketDetialActivity extends BaseActivity {
             , BaseViewHolder> {
 
         RankAdapter(List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> datas) {
-            super(R.layout.item_my_stock, datas);
+            super(R.layout.item_stock_rank_list, datas);
         }
 
         @Override
@@ -322,7 +322,7 @@ public class MarketDetialActivity extends BaseActivity {
     private class IndustryAdapter extends CommonAdapter<HotIndustryBean.DataBean, BaseViewHolder> {
 
         private IndustryAdapter(List<HotIndustryBean.DataBean> datas) {
-            super(R.layout.item_my_stock, datas);
+            super(R.layout.item_stock_rank_list, datas);
         }
 
         @Override

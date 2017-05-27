@@ -6,9 +6,6 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -81,9 +78,6 @@ public class EditMyStockActivity extends BaseActivity {
         BaseActivity.initRecycleView(rvEditDrag, 0);
 
         myStockList = getIntent().getParcelableArrayListExtra("my_stock_edit_list");
-
-        KLog.e(JSONObject.toJSONString(myStockList));
-
 
         dragAdapter = new DragAdapter(mContext, myStockList);
         dragAdapter.setOnItemCheckedChangeListener(onCheckedChangeListener);

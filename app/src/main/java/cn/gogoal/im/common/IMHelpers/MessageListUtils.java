@@ -68,8 +68,8 @@ public class MessageListUtils {
             }
 
             thisJsonArray.add(jsonObject);
-            KLog.e(jsonObject);
             UserUtils.saveMessageListInfo(thisJsonArray);
+
         } else {
 
         }

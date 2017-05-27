@@ -4,13 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
-import com.bumptech.glide.BitmapRequestBuilder;
-import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.RequestOptions;
 import com.hply.roundimage.roundImage.RoundedImageView;
+import com.socks.library.KLog;
 
 import java.io.ByteArrayOutputStream;
 
@@ -43,58 +41,46 @@ public class ImageDisplay {
      *
      */
 
-    private static LoadNetImageListener mListener;
-
     //是否需要占位图
     public static <T> void loadImage(Context context, T image, ImageView imageView, boolean needPlaceholdeer) {
         if (image != null) {
-            DrawableRequestBuilder<T> requestBuilder = Glide.with(context)
-                    .load(image)
-                    .dontAnimate()
-                    .dontTransform()
-                    .centerCrop()
-                    .skipMemoryCache(true)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT);
-            if (!needPlaceholdeer) {
-                requestBuilder.into(imageView);
-            } else {
-                requestBuilder.placeholder(R.mipmap.image_placeholder).into(imageView);
+
+            RequestOptions options = new RequestOptions();
+            options.dontAnimate().dontTransform().centerCrop().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.ALL);
+
+            if (needPlaceholdeer) {
+                options.placeholder(R.mipmap.image_placeholder);
             }
+            Glide.with(context).applyDefaultRequestOptions(options).load(image).into(imageView);
         }
     }
 
     public static <T> void loadImage(Context context, T image, final ImageView imageView) {
+        RequestOptions options = new RequestOptions();
+        options.dontAnimate()
+                .dontTransform()
+                .centerCrop()
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.ALL);
         try {
             Glide.with(context)
                     .load(image)
-                    .centerCrop()
-                    .skipMemoryCache(true)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .placeholder(R.mipmap.image_placeholder)
+                    .apply(options)
                     .thumbnail(0.1f)
                     .into(imageView);
+
         } catch (Exception e) {
+            KLog.e("出错了！！！！");
+
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ((Bitmap) image).compress(Bitmap.CompressFormat.PNG, 100, baos);
             byte[] bytes = baos.toByteArray();
-                if (context!=null) {
-                    Glide.with(context)
-                            .load(bytes)
-                            .centerCrop()
-                            .skipMemoryCache(true)
-                            .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                            .into(imageView);
-                }
-//            final DrawableRequestBuilder<byte[]> thumbnail = Glide.with(context).load(bytes).skipMemoryCache(true)
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                    .placeholder(R.mipmap.image_placeholder)
-//                    .thumbnail(0.1f);
-//            ((Activity)context).runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    thumbnail.into(imageView) ;
-//                }
-//            });
+            if (context != null) {
+                Glide.with(context)
+                        .load(bytes)
+                        .apply(options)
+                        .into(imageView);
+            }
         }
     }
 
@@ -155,104 +141,59 @@ public class ImageDisplay {
      * @param image   图片资源
      */
     public static <T> void loadRoundedRectangleImage(Context context, T image, RoundedImageView imageView) {
-        imageView.setCornerRadius(AppDevice.dp2px(context,4));
+        imageView.setCornerRadius(AppDevice.dp2px(context, 4));
         try {
             Glide.with(context)
                     .load(image)
                     .into(imageView);
-
-        }catch (Exception e) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ((Bitmap) image).compress(Bitmap.CompressFormat.PNG, 100, baos);
-            byte[] bytes = baos.toByteArray();
-            Glide.with(context).load(bytes).skipMemoryCache(true)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .placeholder(R.mipmap.image_placeholder)
-                    .thumbnail(0.1f)
-                    .into(imageView);
+        } catch (Exception e) {
         }
-    }
-
-    //=====================================加载GIF图=======================================
-    public static <T> void loadGifImage(Context context, T resId, ImageView view) {
-        Glide.with(context).load(resId)
-                .asGif()
-                .into(view);
     }
 
     //=====================================加载圆形图=======================================
 
     public static <T> void loadCircleImage(Context context, T image, RoundedImageView imageView) {
         imageView.setOval(true);
+
+        RequestOptions op = new RequestOptions();
+        op.placeholder(R.mipmap.image_placeholder);
+        op.dontAnimate();
+
         if (image != null) {
             Glide.with(context).load(image)
-                    .asBitmap()
                     .thumbnail(0.1f)
-                    .placeholder(R.mipmap.avatar_place)
+                    .apply(op)
                     .into(imageView);
         }
     }
 
     public static <T> void loadCircleImage(Context context, T image, RoundedImageView imageView, boolean needPlaveHolder) {
         imageView.setOval(true);
+
+        RequestOptions op = new RequestOptions();
+        if (needPlaveHolder) {
+            op.placeholder(R.mipmap.image_placeholder);
+        }
+        op.dontAnimate();
+
         if (image != null) {
-            BitmapRequestBuilder<T, Bitmap> builder = Glide.with(context).load(image)
-                    .asBitmap()
-                    .thumbnail(0.1f);
-            if (needPlaveHolder) {
-                builder.placeholder(R.mipmap.avatar_place).into(imageView);
-            } else {
-                builder.into(imageView);
-            }
+            Glide.with(context).load(image)
+                    .apply(op)
+                    .thumbnail(0.1f)
+                    .into(imageView);
         }
     }
-
-//    /**
-//     * 加载回调
-//     */
-//    public static void loadCircleNetImage(Context context, String url, ImageView imageView, LoadNetImageListener listener) {
-//        mListener = listener;
-//        if (!TextUtils.isEmpty(url)) {
-//            Glide.with(context)
-//                    .load(url)
-//                    .placeholder(R.mipmap.image_placeholder)
-//                    .bitmapTransform(new CropCircleTransformation(context))
-//                    .thumbnail(0.1f)
-//                    .into(new GlideDrawableImageViewTarget(imageView) {
-//                        @Override
-//                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
-//                            super.onResourceReady(resource, animation);
-//                            mListener.onResourceReady(resource, animation);//资源加载完成
-//                        }
-//
-//                        @Override
-//                        public void onStart() {
-//                            super.onStart();
-//                            mListener.onStart();
-//                        }
-//
-//                        @Override
-//                        public void onStop() {
-//                            super.onStop();
-//                            mListener.onStop();
-//                        }
-//
-//                        @Override
-//                        protected void setResource(GlideDrawable resource) {
-//                            super.setResource(resource);
-//                            mListener.setResource(resource);
-//                        }
-//                    });
-//        }
-//    }
 
     /**
      * 图片模糊处理
      */
     public static void BlurImage(Context context, String url, ImageView imageView) {
+        RequestOptions options = RequestOptions.bitmapTransform(new BlurTransformation(context));
+        options.dontAnimate();
+
         Glide.with(context)
                 .load(url)
-                .bitmapTransform(new BlurTransformation(context))
+                .apply(options)
                 .into(imageView);
     }
 
@@ -260,10 +201,12 @@ public class ImageDisplay {
      * 图片马赛克处理
      */
     public static void mosaicImage(Context context, String url, ImageView imageView) {
+        RequestOptions options = RequestOptions.bitmapTransform(new PixelationFilterTransformation(context, 10));
+        options.dontAnimate();
+
         Glide.with(context)
                 .load(url)
-                .bitmapTransform(new BlurTransformation(context))
-                .bitmapTransform(new PixelationFilterTransformation(context, 10))
+                .apply(options)
                 .into(imageView);
     }
 
@@ -271,23 +214,13 @@ public class ImageDisplay {
      * 图片灰度、黑白处理
      */
     public static void GrayImage(Context context, String url, ImageView imageView) {
+        RequestOptions options = RequestOptions.bitmapTransform(new GrayscaleTransformation(context));
+        options.dontAnimate();
+
         Glide.with(context)
                 .load(url)
-                .bitmapTransform(new GrayscaleTransformation(context))
+                .apply(options)
                 .into(imageView);
     }
 
-
-    /**
-     * 网络图片加载的监听接口
-     */
-    private interface LoadNetImageListener {
-        void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation);
-
-        void onStart();
-
-        void onStop();
-
-        void setResource(GlideDrawable resource);
-    }
 }

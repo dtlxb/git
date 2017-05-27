@@ -14,7 +14,8 @@
         android:layout_above="@+id/flag_tv"
         android:adjustViewBounds="true"
         android:src="@mipmap/img_add_my_stock"
-        app:layout_widthPercent="13%"/>
+        app:layout_widthPercent="13%"
+        android:contentDescription="@null" />
 
     <TextView
         android:id="@+id/flag_tv"

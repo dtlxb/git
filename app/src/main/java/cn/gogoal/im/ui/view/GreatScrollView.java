@@ -1,10 +1,10 @@
 package cn.gogoal.im.ui.view;
 
 import android.content.Context;
+import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
-import android.widget.ScrollView;
 
 /**
  * author wangjd on 2016/11/29 0029.
@@ -17,7 +17,7 @@ import android.widget.ScrollView;
  * 继承CallBack 可以实现指定的View悬浮
  */
 
-public class GreatScrollView extends ScrollView {
+public class GreatScrollView extends NestedScrollView {
     private int downY;
     private int mTouchSlop;
 

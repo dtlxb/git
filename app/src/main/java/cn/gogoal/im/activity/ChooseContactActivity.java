@@ -46,6 +46,7 @@ import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ICheckItemListener;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -593,12 +594,7 @@ public class ChooseContactActivity extends BaseActivity {
             if (TextUtils.isEmpty((CharSequence) data.getAvatar())) {
                 ivHeader.setImageResource(R.mipmap.image_placeholder);
             } else {
-//                ImageDisplay.loadImage(getActivity(), data.getAvatar().toString(), ivHeader);
-                Glide.with(getActivity())
-                        .load(data.getAvatar().toString())
-                        .asBitmap()
-                        .placeholder(R.mipmap.image_placeholder)
-                        .into(ivHeader);
+                ImageDisplay.loadImage(getActivity(), data.getAvatar().toString(), ivHeader);
             }
 
             holder.setOnClickListener(R.id.item_selected_contact, new View.OnClickListener() {

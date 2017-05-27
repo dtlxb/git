@@ -3,14 +3,16 @@ package cn.gogoal.im.fragment.stock;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
@@ -52,21 +54,23 @@ public class ImageChartFragment extends BaseFragment {
         xLayout.getErrorView().findViewById(R.id.error_reload_btn).setVisibility(View.GONE);
 
         if (!TextUtils.isEmpty(imageUrl)) {
-            Glide.with(getActivity()).load(imageUrl).into(new GlideDrawableImageViewTarget(imageFragment){
+            Glide.with(getActivity()).load(imageUrl).listener(new RequestListener<Drawable>() {
                 @Override
-                public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                    super.onLoadFailed(e, errorDrawable);
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                     xLayout.setStatus(XLayout.Error);
+                    return false;
                 }
 
                 @Override
-                public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
-                    super.onResourceReady(resource, animation);
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                     xLayout.setStatus(XLayout.Success);
+                    return false;
                 }
-            });
+            }).into(imageFragment);
+
         }else {
             xLayout.setStatus(XLayout.Empty);
         }
+
     }
 }

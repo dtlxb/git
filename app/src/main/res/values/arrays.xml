@@ -37,7 +37,7 @@
     <string-array name="mine_arr">
         <item>我要直播</item>
         <item>自选股设置</item>
-        <item>专属顾问</item>
+        <!--<item>专属顾问</item>-->
         <!--<item>邀请好友</item>
         <item>会务</item>
         <item>路演</item>-->

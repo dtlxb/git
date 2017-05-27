@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -19,6 +17,7 @@ import cn.gogoal.im.bean.SectionToolsData;
 import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.ui.dialog.AdvisersDialog;
 
@@ -68,12 +67,7 @@ public class SectionListAdapter extends BaseSectionQuickAdapter<SectionToolsData
         params.height = iconSize;
         iconView.setLayoutParams(params);
 
-        Glide.with(context)
-                .load(tool.getIconUrl())
-                .centerCrop()
-                .dontAnimate()
-                .dontTransform()
-                .into(iconView);
+        ImageDisplay.loadImage(context,tool.getIconUrl(),iconView);
 
         TextView tvOperation = holder.getView(R.id.tv_item_tools_operation);
         if (tool.getIsOpen() >= 0 && tool.getIsOpen() < status.length) {
