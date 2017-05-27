@@ -6,31 +6,26 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
-import android.media.MediaPlayer;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
-import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
-import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,15 +38,17 @@ import cn.gogoal.im.activity.ImageDetailActivity;
 import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.base.AppManager;
-import cn.gogoal.im.bean.AudioViewInfo;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
-import cn.gogoal.im.common.IMHelpers.AVIMShareMessage;
-import cn.gogoal.im.common.IMHelpers.AVIMStockMessage;
-import cn.gogoal.im.common.IMHelpers.AVIMSystemMessage;
+import cn.gogoal.im.common.IMHelpers.GGImageMessage;
+import cn.gogoal.im.common.IMHelpers.GGShareMessage;
+import cn.gogoal.im.common.IMHelpers.GGStockMessage;
+import cn.gogoal.im.common.IMHelpers.GGSystemMessage;
+import cn.gogoal.im.common.IMHelpers.GGAudioMessage;
+import cn.gogoal.im.common.IMHelpers.GGTextMessage;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
@@ -89,9 +86,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     private LayoutInflater mLayoutInflater;
     private int chatType;
     private Boolean isYourSelf;
-    private HashMap<String, Object> itemMap = new HashMap<>();
-
-    private String playModelId;
 
     public IMChatAdapter(Context mContext, List<AVIMMessage> messageList) {
         this.mLayoutInflater = LayoutInflater.from(mContext);
@@ -135,7 +129,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         String headPicUrl;
         String speakerName;
 
-        if (!(avimMessage instanceof AVIMSystemMessage)) {
+        if (!(avimMessage instanceof GGSystemMessage)) {
             if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.GONE);
             } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
@@ -147,14 +141,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             if (avimMessage.getFrom().equals(UserUtils.getMyAccountId())) {
                 headPicUrl = UserUtils.getUserAvatar();
                 speakerName = UserUtils.getNickname();
-                /*KLog.e(contentObject.get("status"));
-                //判断消息状态
-                if (null != contentObject.get("status") && contentObject.getString("status").equals("4")) {
-                    ((IMCHatViewHolder) holder).send_fail.setVisibility(View.VISIBLE);
-                } else {
-                    ((IMCHatViewHolder) holder).send_fail.setVisibility(View.GONE);
-                }*/
-
             } else {
                 headPicUrl = MessageListUtils.getContactWantedInfo("avatar", Integer.parseInt(avimMessage.getFrom()), chatType, avimMessage.getConversationId());
                 speakerName = MessageListUtils.getContactWantedInfo("nickname", Integer.parseInt(avimMessage.getFrom()), chatType, avimMessage.getConversationId());
@@ -203,7 +189,8 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         }
         showMessageTime(position, ((IMCHatViewHolder) holder).message_time);
         if (holder instanceof LeftTextViewHolder) {
-            final AVIMTextMessage textMessage = (AVIMTextMessage) avimMessage;
+            final GGTextMessage textMessage = (GGTextMessage) avimMessage;
+
             SpannableString spannableString = StringUtils.isOurEmoji(mContext, textMessage.getText(), AppDevice.sp2px(mContext,
                     ((LeftTextViewHolder) holder).what_user_send.getTextSize() / 2));
             ((LeftTextViewHolder) holder).what_user_send.setText(spannableString);
@@ -217,9 +204,20 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             });
 
         } else if (holder instanceof RightTextViewHolder) {
-
-            final AVIMTextMessage textMessage = (AVIMTextMessage) avimMessage;
+            final GGTextMessage textMessage = (GGTextMessage) avimMessage;
             ((RightTextViewHolder) holder).user_name.setVisibility(View.GONE);
+
+            if (textMessage.getMessageSendStatus() == AppConst.MESSAGE_SEND_STATUS_SENDING) {
+                ((RightTextViewHolder) holder).pb_sending.setVisibility(View.VISIBLE);
+                ((RightTextViewHolder) holder).send_fail.setVisibility(View.GONE);
+            } else if (textMessage.getMessageSendStatus() == AppConst.MESSAGE_SEND_STATUS_FAIL) {
+                ((RightTextViewHolder) holder).pb_sending.setVisibility(View.GONE);
+                ((RightTextViewHolder) holder).send_fail.setVisibility(View.VISIBLE);
+            } else {
+                ((RightTextViewHolder) holder).pb_sending.setVisibility(View.GONE);
+                ((RightTextViewHolder) holder).send_fail.setVisibility(View.GONE);
+            }
+
             SpannableString spannableString = StringUtils.isOurEmoji(mContext, textMessage.getText(), AppDevice.sp2px(mContext,
                     ((RightTextViewHolder) holder).what_user_send.getTextSize() / 2));
             ((RightTextViewHolder) holder).what_user_send.setText(spannableString);
@@ -232,7 +230,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 }
             });
         } else if (holder instanceof LeftImageViewHolder) {
-            final AVIMImageMessage imageMessage = (AVIMImageMessage) avimMessage;
+            final GGImageMessage imageMessage = (GGImageMessage) avimMessage;
             //获取后台图片大小设置
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((LeftImageViewHolder) holder).image_user_send.getLayoutParams();
             setImageSize(params, imageMessage);
@@ -247,7 +245,17 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             });
 
         } else if (holder instanceof RightImageViewHolder) {
-            final AVIMImageMessage imageMessage = (AVIMImageMessage) avimMessage;
+            final GGImageMessage imageMessage = (GGImageMessage) avimMessage;
+            if (imageMessage.getMessageSendStatus() == AppConst.MESSAGE_SEND_STATUS_SENDING) {
+                ((RightImageViewHolder) holder).pb_sending.setVisibility(View.VISIBLE);
+                ((RightImageViewHolder) holder).send_fail.setVisibility(View.GONE);
+            } else if (imageMessage.getMessageSendStatus() == AppConst.MESSAGE_SEND_STATUS_FAIL) {
+                ((RightImageViewHolder) holder).pb_sending.setVisibility(View.GONE);
+                ((RightImageViewHolder) holder).send_fail.setVisibility(View.VISIBLE);
+            } else {
+                ((RightImageViewHolder) holder).pb_sending.setVisibility(View.GONE);
+                ((RightImageViewHolder) holder).send_fail.setVisibility(View.GONE);
+            }
             ((RightImageViewHolder) holder).user_name.setVisibility(View.GONE);
             //获取后台图片大小设置
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((RightImageViewHolder) holder).image_user_send.getLayoutParams();
@@ -262,12 +270,26 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             });
 
         } else if (holder instanceof RightAudioViewHolder) {
-
             final GGAudioMessage audioMessage = (GGAudioMessage) avimMessage;
+            if (audioMessage.getMessageSendStatus() == AppConst.MESSAGE_SEND_STATUS_SENDING) {
+                ((RightAudioViewHolder) holder).pb_sending.setVisibility(View.VISIBLE);
+                ((RightAudioViewHolder) holder).send_fail.setVisibility(View.GONE);
+            } else if (audioMessage.getMessageSendStatus() == AppConst.MESSAGE_SEND_STATUS_FAIL) {
+                ((RightAudioViewHolder) holder).pb_sending.setVisibility(View.GONE);
+                ((RightAudioViewHolder) holder).send_fail.setVisibility(View.VISIBLE);
+            } else {
+                ((RightAudioViewHolder) holder).pb_sending.setVisibility(View.GONE);
+                ((RightAudioViewHolder) holder).send_fail.setVisibility(View.GONE);
+            }
 
             // holder 牵引 model
             RightAudioViewHolder rightAudioHolder = (RightAudioViewHolder) holder;
             rightAudioHolder.setMessage(audioMessage);
+            if (audioMessage.getAudioStatus() == 0) {
+                rightAudioHolder.stopAnimation();
+            } else {
+                rightAudioHolder.startAnimation();
+            }
 
             ((RightAudioViewHolder) holder).user_name.setVisibility(View.GONE);
             double duration = audioMessage.getDuration();
@@ -295,12 +317,15 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             });
 
         } else if (holder instanceof LeftAudioViewHolder) {
-
             final GGAudioMessage audioMessage = (GGAudioMessage) avimMessage;
-
             // holder 牵引 model
             LeftAudioViewHolder leftAudioHolder = (LeftAudioViewHolder) holder;
             leftAudioHolder.setMessage(audioMessage);
+            if (audioMessage.getAudioStatus() == 0) {
+                leftAudioHolder.stopAnimation();
+            } else {
+                leftAudioHolder.startAnimation();
+            }
 
             final Boolean haveListen = SPTools.getBoolean(UserUtils.getMyAccountId() + audioMessage.getMessageId(), false);
             double duration = audioMessage.getDuration();
@@ -318,12 +343,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 params.setMargins(0, AppDevice.dp2px(mContext, 13), 0, 0);
             }
             ((LeftAudioViewHolder) holder).recorder_length.setLayoutParams(params);
-            //设置红点可见
-            if (null != audioMessage.getAttrs().get("read") && (Boolean) audioMessage.getAttrs().get("read")) {
-                ((LeftAudioViewHolder) holder).iv_unread_tag.setVisibility(View.GONE);
-            } else {
-                ((LeftAudioViewHolder) holder).iv_unread_tag.setVisibility(View.VISIBLE);
-            }
 
             //设置语音时长
             if ((int) duration > 60) {
@@ -332,10 +351,11 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 ((LeftAudioViewHolder) holder).recorder_time.setText((int) duration + "\"");
             }
 
+            //设置红点可见
             if (haveListen) {
-                ((LeftAudioViewHolder) holder).iv_unread_tag.setVisibility(View.GONE);
-            } else {
                 ((LeftAudioViewHolder) holder).iv_unread_tag.setVisibility(View.VISIBLE);
+            } else {
+                ((LeftAudioViewHolder) holder).iv_unread_tag.setVisibility(View.GONE);
             }
 
             //点击播放语音
@@ -347,7 +367,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             });
 
         } else if (holder instanceof LeftStockViewHolder) {
-            AVIMStockMessage stockMessage = (AVIMStockMessage) avimMessage;
+            GGStockMessage stockMessage = (GGStockMessage) avimMessage;
             Map<String, Object> attrMap = stockMessage.getAttrs();
             final String stockCode = String.valueOf(attrMap.get("stockCode"));
             final String stockName = String.valueOf(attrMap.get("stockName"));
@@ -365,7 +385,18 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             });
 
         } else if (holder instanceof RightStockViewHolder) {
-            AVIMStockMessage stockMessage = (AVIMStockMessage) avimMessage;
+            GGStockMessage stockMessage = (GGStockMessage) avimMessage;
+            if (stockMessage.getMessageSendStatus() == AppConst.MESSAGE_SEND_STATUS_SENDING) {
+                ((RightStockViewHolder) holder).pb_sending.setVisibility(View.VISIBLE);
+                ((RightStockViewHolder) holder).send_fail.setVisibility(View.GONE);
+            } else if (stockMessage.getMessageSendStatus() == AppConst.MESSAGE_SEND_STATUS_FAIL) {
+                ((RightStockViewHolder) holder).pb_sending.setVisibility(View.GONE);
+                ((RightStockViewHolder) holder).send_fail.setVisibility(View.VISIBLE);
+            } else {
+                ((RightStockViewHolder) holder).pb_sending.setVisibility(View.GONE);
+                ((RightStockViewHolder) holder).send_fail.setVisibility(View.GONE);
+            }
+
             Map<String, Object> attrMap = stockMessage.getAttrs();
             final String stockCode = String.valueOf(attrMap.get("stockCode"));
             final String stockName = String.valueOf(attrMap.get("stockName"));
@@ -384,7 +415,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             });
 
         } else if (holder instanceof LeftShareViewHolder) {
-            AVIMShareMessage shareMessage = (AVIMShareMessage) avimMessage;
+            GGShareMessage shareMessage = (GGShareMessage) avimMessage;
             final Map<String, Object> shareMap = shareMessage.getAttrs();
             getLayoutSize(((LeftShareViewHolder) holder).user_layout);
             if (shareMap.get("toolType").equals("1")) {
@@ -409,7 +440,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 }
             });
         } else if (holder instanceof RightShareViewHolder) {
-            AVIMShareMessage shareMessage = (AVIMShareMessage) avimMessage;
+            GGShareMessage shareMessage = (GGShareMessage) avimMessage;
             final Map<String, Object> shareMap = shareMessage.getAttrs();
 
             getLayoutSize(((RightShareViewHolder) holder).user_layout);
@@ -436,7 +467,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 }
             });
         } else if (holder instanceof ChatGroupAddViewHolder) {
-            AVIMSystemMessage systemMessage = (AVIMSystemMessage) avimMessage;
+            GGSystemMessage systemMessage = (GGSystemMessage) avimMessage;
             if (systemMessage.getText() != null) {
                 ((ChatGroupAddViewHolder) holder).message_content.setText(systemMessage.getText());
             } else {
@@ -499,28 +530,30 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     private void onTouchGGAudioMessage(final GGAudioMessage audioMessage) {
 
         final boolean haveRead = SPTools.getBoolean(UserUtils.getMyAccountId() + audioMessage.getMessageId(), false);
-        if (null != playModelId) {
-            if (playModelId.equals(audioMessage.getMessageId())) {
-                MediaManager.playStop();
-                playModelId = null;
-                return;
-            }
+
+        // 如果当前语音正在读, 停止播放。
+        if (audioMessage.getIsPlaying()) {
+            MediaManager.playStop();
+            return;
         }
-        playModelId = audioMessage.getMessageId();
 
         //把消息改为已读
         if (audioMessage.getListItem() instanceof LeftAudioViewHolder) {
             LeftAudioViewHolder holder = (LeftAudioViewHolder) audioMessage.getListItem();
             holder.iv_unread_tag.setVisibility(View.GONE);
 
-            if (!haveRead) {
-                SPTools.saveBoolean(UserUtils.getMyAccountId() + audioMessage.getMessageId(), true);
+            if (haveRead) {
+                SPTools.saveBoolean(UserUtils.getMyAccountId() + audioMessage.getMessageId(), false);
             }
         }
 
         MediaManager.playAudio(new MediaManager.GGMediaPlayInterface() {
             @Override
             public void audioWillPlay() {
+
+                audioMessage.setAudioStatus(1);
+                audioMessage.setIsPlaying(true);
+
                 if (audioMessage.getListItem() instanceof RightAudioViewHolder) {
                     RightAudioViewHolder holder = (RightAudioViewHolder) audioMessage.getListItem();
                     if (null != holder) {
@@ -536,6 +569,10 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
             @Override
             public void audioWillEnd() {
+
+                audioMessage.setAudioStatus(0);
+                audioMessage.setIsPlaying(false);
+
                 if (audioMessage.getListItem() instanceof RightAudioViewHolder) {
                     RightAudioViewHolder holder = (RightAudioViewHolder) audioMessage.getListItem();
                     if (null != holder) {
@@ -547,7 +584,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                         ((LeftAudioViewHolder) audioMessage.getListItem()).stopAnimation();
                     }
                     //续播
-                    if (!haveRead) {
+                    if (haveRead) {
                         Integer index = messageList.indexOf(audioMessage);
                         for (Integer i = index + 1; i < messageList.size(); i++) {
                             AVIMMessage msg = messageList.get(i);
@@ -566,6 +603,10 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
             @Override
             public void audioWillStop() {
+
+                audioMessage.setAudioStatus(0);
+                audioMessage.setIsPlaying(false);
+
                 if (audioMessage.getListItem() instanceof RightAudioViewHolder) {
                     RightAudioViewHolder holder = (RightAudioViewHolder) audioMessage.getListItem();
                     if (null != holder) {
@@ -617,7 +658,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     /**
      * 图片大小计算
      */
-    private void setImageSize(RelativeLayout.LayoutParams params, AVIMImageMessage message) {
+    private void setImageSize(RelativeLayout.LayoutParams params, GGImageMessage message) {
         String rateText;
         int maxWidth = (int) (AppDevice.getWidth(mContext) * 0.4);
         double width = StringUtils.pareseStringDouble(String.valueOf(message.getFileMetaData().get("width")));
@@ -681,7 +722,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     }
 
 
-    private void imageClickAction(AVIMImageMessage imageMessage) {
+    private void imageClickAction(GGImageMessage imageMessage) {
         List<String> urls = new ArrayList<>();
         urls.add(imageMessage.getAVFile().getUrl());
         Intent intent = new Intent(mContext, ImageDetailActivity.class);
@@ -689,7 +730,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         mContext.startActivity(intent);
     }
 
-    private void textClickAction(final AVIMTextMessage imageMessage) {
+    private void textClickAction(final GGTextMessage imageMessage) {
         DialogHelp.getSelectDialog(mContext, "", new String[]{"复制文字"}, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -706,6 +747,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         protected TextView user_name;
         protected TextView message_time;
         protected ImageView send_fail;
+        protected ProgressBar pb_sending;
 
         IMCHatViewHolder(View itemView) {
             super(itemView);
@@ -715,6 +757,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             user_head_photo = (RoundedImageView) itemView.findViewById(R.id.user_head_photo);
             user_layout = (RelativeLayout) itemView.findViewById(R.id.user_layout);
             send_fail = (ImageView) itemView.findViewById(R.id.iv_send_fail);
+            pb_sending = (ProgressBar) itemView.findViewById(R.id.pb_sending);
 
             user_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -781,13 +824,10 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         }
 
         public void setMessage(GGAudioMessage ggAudioMessage) {
-
             if (null != this.message) {
                 this.message.refreshItem();
             }
-
             this.message = ggAudioMessage;
-            KLog.e(this);
             this.message.setListItem(this);
         }
 

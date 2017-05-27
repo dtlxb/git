@@ -8,13 +8,15 @@ import com.avos.avoscloud.im.v2.AVIMTypedMessage;
 import java.util.Map;
 
 /**
- * Created by huangxx on 2017/5/25.
+ * Created by huangxx on 2017/5/24.
  */
 
 @AVIMMessageType(
-        type = 13
+        type = -7
 )
-public class AVIMShareMessage extends AVIMTypedMessage {
+public class GGSystemMessage extends AVIMTypedMessage {
+
+
     @AVIMMessageField(
             name = "_lctext"
     )
@@ -26,9 +28,9 @@ public class AVIMShareMessage extends AVIMTypedMessage {
     private Map<String, Object> attrs;
 
     @SuppressWarnings("unchecked")
-    public static final Creator<AVIMShareMessage> CREATOR = new AVIMMessageCreator(AVIMShareMessage.class);
+    public static final Creator<GGSystemMessage> CREATOR = new AVIMMessageCreator(GGSystemMessage.class);
 
-    public AVIMShareMessage() {
+    public GGSystemMessage() {
     }
 
     public String getText() {

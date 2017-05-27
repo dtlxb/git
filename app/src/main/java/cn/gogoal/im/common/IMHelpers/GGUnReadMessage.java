@@ -10,12 +10,12 @@ import com.avos.avoscloud.im.v2.AVIMMessageType;
 @AVIMMessageType(
         type = 14
 )
-public class AVIMUnReadMessage extends AVIMSystemMessage {
+public class GGUnReadMessage extends GGSystemMessage {
 
     @SuppressWarnings("unchecked")
-    public static final Creator<AVIMUnReadMessage> CREATOR = new AVIMMessageCreator(AVIMUnReadMessage.class);
+    public static final Creator<GGUnReadMessage> CREATOR = new AVIMMessageCreator(GGUnReadMessage.class);
 
-    public AVIMUnReadMessage() {
+    public GGUnReadMessage() {
         super();
     }
 

@@ -49,6 +49,14 @@
             android:src="@mipmap/message_send_fail"
             android:visibility="gone" />
 
+        <ProgressBar
+            android:id="@+id/pb_sending"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/what_user_send" />
+
         <TextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"

@@ -10,12 +10,12 @@ import com.avos.avoscloud.im.v2.AVIMMessageType;
 @AVIMMessageType(
         type = 8
 )
-public class AVIMGroupEditMessage extends AVIMSystemMessage {
+public class GGGroupEditMessage extends GGSystemMessage {
 
     @SuppressWarnings("unchecked")
-    public static final Creator<AVIMGroupEditMessage> CREATOR = new AVIMMessageCreator(AVIMGroupEditMessage.class);
+    public static final Creator<GGGroupEditMessage> CREATOR = new AVIMMessageCreator(GGGroupEditMessage.class);
 
-    public AVIMGroupEditMessage() {
+    public GGGroupEditMessage() {
         super();
     }
 }

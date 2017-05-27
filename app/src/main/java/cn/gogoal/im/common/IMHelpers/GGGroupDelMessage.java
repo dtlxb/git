@@ -7,15 +7,14 @@ import com.avos.avoscloud.im.v2.AVIMMessageType;
  * Created by huangxx on 2017/5/24.
  */
 @AVIMMessageType(
-        type = 5
+        type = 6
 )
-public class AVIMGroupAddMessage extends AVIMSystemMessage {
+public class GGGroupDelMessage extends GGSystemMessage {
 
     @SuppressWarnings("unchecked")
-    public static final Creator<AVIMGroupAddMessage> CREATOR = new AVIMMessageCreator(AVIMGroupAddMessage.class);
+    public static final Creator<GGGroupDelMessage> CREATOR = new AVIMMessageCreator(GGGroupDelMessage.class);
 
-    public AVIMGroupAddMessage() {
+    public GGGroupDelMessage() {
         super();
     }
-
 }

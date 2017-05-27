@@ -3,11 +3,9 @@ package cn.gogoal.im.common.IMHelpers;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.socks.library.KLog;
 
 import java.io.File;
@@ -405,7 +403,7 @@ public class ChatGroupHelper {
         KLog.e(params);
 
         //分享消息
-        final AVIMShareMessage shareMessage = new AVIMShareMessage();
+        final GGShareMessage shareMessage = new GGShareMessage();
         shareMessage.setAttrs(lcattrsMap);
         shareMessage.setText(shareEntity.getTitle());
         shareMessage.setTimestamp(CalendarUtils.getCurrentTime());
@@ -469,7 +467,7 @@ public class ChatGroupHelper {
         KLog.e(params);
 
         //分享消息
-        final AVIMShareMessage shareMessage = new AVIMShareMessage();
+        final GGShareMessage shareMessage = new GGShareMessage();
         shareMessage.setAttrs(lcattrsMap);
         shareMessage.setText(shareItemInfo.getEntity().getTitle());
         shareMessage.setTimestamp(CalendarUtils.getCurrentTime());

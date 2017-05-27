@@ -173,5 +173,9 @@ public class AppConst {
     public static final int MESSAGE_SEND_FAIL_DISCONNECT = 119;         //失败类型 链接断开
     public static final int MESSAGE_SEND_FAIL_MEMBER_LIMIT = 120;       //失败类型 群员超限
 
+    public static final int MESSAGE_SEND_STATUS_SENDING = 1200;         //消息正在发送
+    public static final int MESSAGE_SEND_STATUS_SUCCESS = 1201;         //消息发送成功
+    public static final int MESSAGE_SEND_STATUS_FAIL = 1202;            //消息发送失败
+
 
 }

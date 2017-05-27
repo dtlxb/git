@@ -7,16 +7,15 @@ import com.avos.avoscloud.im.v2.AVIMTypedMessage;
 
 import java.util.Map;
 
+import cn.gogoal.im.common.AppConst;
+
 /**
  * Created by huangxx on 2017/5/24.
  */
-
 @AVIMMessageType(
-        type = -7
+        type = 11
 )
-public class AVIMSystemMessage extends AVIMTypedMessage {
-
-
+public class GGStockMessage extends AVIMTypedMessage {
     @AVIMMessageField(
             name = "_lctext"
     )
@@ -27,10 +26,12 @@ public class AVIMSystemMessage extends AVIMTypedMessage {
     )
     private Map<String, Object> attrs;
 
-    @SuppressWarnings("unchecked")
-    public static final Creator<AVIMSystemMessage> CREATOR = new AVIMMessageCreator(AVIMSystemMessage.class);
+    private int messageSendStatus = AppConst.MESSAGE_SEND_STATUS_SUCCESS;
 
-    public AVIMSystemMessage() {
+    @SuppressWarnings("unchecked")
+    public static final Creator<GGStockMessage> CREATOR = new AVIMMessageCreator(GGStockMessage.class);
+
+    public GGStockMessage() {
     }
 
     public String getText() {
@@ -49,4 +50,11 @@ public class AVIMSystemMessage extends AVIMTypedMessage {
         this.attrs = attrs;
     }
 
+    public int getMessageSendStatus() {
+        return messageSendStatus;
+    }
+
+    public void setMessageSendStatus(int messageSendStatus) {
+        this.messageSendStatus = messageSendStatus;
+    }
 }

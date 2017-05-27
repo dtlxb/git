@@ -15,7 +15,6 @@ import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageHandler;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
-import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.avos.avospush.notification.NotificationCompat;
 import com.socks.library.KLog;
 
@@ -24,7 +23,6 @@ import java.util.HashMap;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.activity.TypeLoginActivity;
-import cn.gogoal.im.adapter.GGAudioMessage;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.BaseMessage;
@@ -53,12 +51,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                         //剔除自己消息
                         if (!message.getFrom().equals(clientID)) {
                             showNotification(message);
-                            KLog.e(message.getContent());
-
-                            KLog.e(message instanceof GGAudioMessage);
-
                             final int chatType = (int) conversation.getAttribute("chat_type");
-                            KLog.e(chatType);
                             switch (chatType) {
                                 case AppConst.IM_CHAT_TYPE_SINGLE:
                                     //单聊
@@ -199,6 +192,10 @@ public class MyMessageHandler extends AVIMMessageHandler {
         map.put("message", message);
         map.put("conversation", conversation);
         int chatType = (int) conversation.getAttribute("chat_type");
+
+        if (message instanceof GGAudioMessage) {
+            SPTools.saveBoolean(UserUtils.getMyAccountId() + message.getMessageId(), true);
+        }
 
         BaseMessage baseMessage = new BaseMessage("IM_Info", map);
         AppManager.getInstance().sendMessage((chatType == AppConst.IM_CHAT_TYPE_LIVE_REQUEST ||
