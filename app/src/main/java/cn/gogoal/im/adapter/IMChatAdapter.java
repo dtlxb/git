@@ -39,6 +39,7 @@ import java.util.List;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.IMPersonDetailActivity;
 import cn.gogoal.im.activity.ImageDetailActivity;
+import cn.gogoal.im.activity.PlayerActivity;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.AudioViewInfo;
@@ -53,7 +54,6 @@ import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 import cn.gogoal.im.common.recording.MediaManager;
 
 /**
@@ -578,7 +578,13 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         if (jsonObject.getString("toolType").equals("1")) {
             NormalIntentUtils.go2WebActivity(mContext, jsonObject.getString("link"), jsonObject.getString("title"));
         } else if (jsonObject.getString("toolType").equals("2")) {
-            PlayDataStatistics.enterLiveAuthorize(false, mContext, jsonObject.getString("live_id"), false);
+
+            //jsonObject.getString("source"); //video\live
+            //PlayDataStatistics.enterLiveAuthorize(false, mContext, jsonObject.getString("live_id"), false);
+
+            Intent intent = new Intent(mContext, PlayerActivity.class);
+            intent.putExtra("live_id", jsonObject.getString("live_id"));
+            mContext.startActivity(intent);
         }
     }
 

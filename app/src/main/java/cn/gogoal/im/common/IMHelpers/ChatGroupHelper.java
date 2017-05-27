@@ -391,6 +391,8 @@ public class ChatGroupHelper {
         lcattrsMap.put("thumUrl", shareEntity.getIcon());
         lcattrsMap.put("link", shareEntity.getLink());
         lcattrsMap.put("toolType", shareEntity.getShareType());
+        lcattrsMap.put("live_id", shareEntity.getLive_id());
+        lcattrsMap.put("source", shareEntity.getSource());
 
         Map<Object, Object> messageMap = new HashMap<>();
         messageMap.put("_lctype", "13");
@@ -458,6 +460,8 @@ public class ChatGroupHelper {
         lcattrsMap.put("thumUrl", shareItemInfo.getEntity().getIcon());
         lcattrsMap.put("link", shareItemInfo.getEntity().getLink());
         lcattrsMap.put("toolType", shareItemInfo.getEntity().getShareType());
+        lcattrsMap.put("live_id", shareItemInfo.getEntity().getLive_id());
+        lcattrsMap.put("source", shareItemInfo.getEntity().getSource());
 
         Map<Object, Object> messageMap = new HashMap<>();
         messageMap.put("_lctype", "13");

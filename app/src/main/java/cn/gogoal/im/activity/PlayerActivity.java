@@ -49,10 +49,9 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.common.AnimationUtils;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.PlayerUtils.PlayerControl;
 import cn.gogoal.im.common.PlayerUtils.StatusListener;
@@ -1002,7 +1001,18 @@ public class PlayerActivity extends BaseActivity {
                 break;
             case R.id.imgPlayerShare: //分享
                 PlayDataStatistics.getStatisticalData(getContext(), "2", live_id, "2", "2");
-                DialogHelp.showShareDialog(getContext(), AppConst.GG_LIVE_SHARE + live_id + "?video", "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
+
+                GGShareEntity entity = new GGShareEntity();
+                entity.setDesc(playerData.getString("video_name"));
+                entity.setIcon(playerData.getString("video_img_url"));
+                entity.setTitle("Go-Goal直播");
+                entity.setShareType("2");
+                entity.setLive_id(live_id);
+                entity.setSource("video");
+
+                Intent intent = new Intent(getContext(), ShareMessageActivity.class);
+                intent.putExtra("share_web_data", entity);
+                startActivity(intent);
                 break;
             case R.id.imgPlayerClose: //退出
                 if (AppDevice.isLandscape(getContext())) {
