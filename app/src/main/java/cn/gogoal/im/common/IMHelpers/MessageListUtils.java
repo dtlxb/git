@@ -6,8 +6,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
-import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.socks.library.KLog;
 
 import cn.gogoal.im.bean.IMMessageBean;
@@ -49,22 +47,22 @@ public class MessageListUtils {
 
             AVIMMessage message = imMessageBean.getLastMessage();
             //判断消息类型
-            if (message instanceof AVIMImageMessage) {
-                double width = StringUtils.pareseStringDouble(String.valueOf(((AVIMImageMessage) message).getFileMetaData().get("width")));
+            if (message instanceof GGImageMessage) {
+                double width = StringUtils.pareseStringDouble(String.valueOf(((GGImageMessage) message).getFileMetaData().get("width")));
                 int mWidth = (int) width;
-                double height = StringUtils.pareseStringDouble(String.valueOf(((AVIMImageMessage) message).getFileMetaData().get("height")));
+                double height = StringUtils.pareseStringDouble(String.valueOf(((GGImageMessage) message).getFileMetaData().get("height")));
                 int mHeight = (int) height;
-                double size = StringUtils.pareseStringDouble(String.valueOf(((AVIMImageMessage) message).getFileMetaData().get("size")));
+                double size = StringUtils.pareseStringDouble(String.valueOf(((GGImageMessage) message).getFileMetaData().get("size")));
                 int mSize = (int) size;
 
-                ((AVIMImageMessage) message).getFileMetaData().put("width", mWidth);
-                ((AVIMImageMessage) message).getFileMetaData().put("height", mHeight);
-                ((AVIMImageMessage) message).getFileMetaData().put("size", mSize);
+                ((GGImageMessage) message).getFileMetaData().put("width", mWidth);
+                ((GGImageMessage) message).getFileMetaData().put("height", mHeight);
+                ((GGImageMessage) message).getFileMetaData().put("size", mSize);
 
-            } else if (message instanceof AVIMAudioMessage) {
-                long mSize = ((AVIMAudioMessage) message).getFileMetaData().get("size") == null ?
-                        0L : ((Number) ((AVIMAudioMessage) message).getFileMetaData().get("size")).longValue();
-                ((AVIMAudioMessage) message).getFileMetaData().put("size", mSize);
+            } else if (message instanceof GGAudioMessage) {
+                long mSize = ((GGAudioMessage) message).getFileMetaData().get("size") == null ?
+                        0L : ((Number) ((GGAudioMessage) message).getFileMetaData().get("size")).longValue();
+                ((GGAudioMessage) message).getFileMetaData().put("size", mSize);
             }
 
             thisJsonArray.add(jsonObject);

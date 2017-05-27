@@ -25,19 +25,15 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.AVFile;
-import com.avos.avoscloud.RefreshCallback;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.avos.avoscloud.im.v2.AVIMMessage.AVIMMessageStatus;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
-import com.avos.avoscloud.im.v2.messages.AVIMAudioMessage;
-import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
-import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
+import com.avos.avoscloud.okhttp.Cache;
+import com.avos.avoscloud.okhttp.internal.http.CacheStrategy;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -54,7 +50,6 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ChooseContactActivity;
 import cn.gogoal.im.adapter.IMChatAdapter;
-import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
@@ -68,6 +63,15 @@ import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
+import cn.gogoal.im.common.IMHelpers.GGGroupAddMessage;
+import cn.gogoal.im.common.IMHelpers.GGGroupDelMessage;
+import cn.gogoal.im.common.IMHelpers.GGImageMessage;
+import cn.gogoal.im.common.IMHelpers.GGShareMessage;
+import cn.gogoal.im.common.IMHelpers.GGStockMessage;
+import cn.gogoal.im.common.IMHelpers.GGSystemMessage;
+import cn.gogoal.im.common.IMHelpers.GGTextMessage;
+import cn.gogoal.im.common.IMHelpers.GGUnReadMessage;
+import cn.gogoal.im.common.IMHelpers.GGAudioMessage;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
@@ -219,7 +223,7 @@ public class ChatFragment extends BaseFragment {
                 }
 
                 //显示自己的文字消息
-                AVIMTextMessage mTextMessage = createTextMessage(etInput.getText().toString());
+                GGTextMessage mTextMessage = createTextMessage(etInput.getText().toString());
                 refreshRecyclerView(mTextMessage, true);
 
                 //文字消息基本信息
@@ -243,9 +247,7 @@ public class ChatFragment extends BaseFragment {
         });
 
         //语音和文字切换
-        imgVoice.setOnSwitchListener(new SwitchImageView.OnSwitchListener()
-
-        {
+        imgVoice.setOnSwitchListener(new SwitchImageView.OnSwitchListener() {
             @Override
             public void onSwitch(View view, int state) {
                 initInputStatus(state);
@@ -310,31 +312,29 @@ public class ChatFragment extends BaseFragment {
     }
 
     //生成未读消息
-    private AVIMMessage crateBaseMessage(String text) {
-        AVIMMessage baseMessage = new AVIMMessage();
-        baseMessage.setTimestamp(CalendarUtils.getCurrentTime());
-        baseMessage.setFrom(UserUtils.getMyAccountId());
-        baseMessage.setMessageId(UUID.randomUUID().toString());
+    private GGUnReadMessage createUnReadMessage(String text) {
+        Map<String, Object> lcattrsMap = AVIMClientManager.getInstance().userBaseInfo();
+        GGUnReadMessage unReadMessage = new GGUnReadMessage();
+        unReadMessage.setTimestamp(CalendarUtils.getCurrentTime());
+        unReadMessage.setFrom(UserUtils.getMyAccountId());
+        unReadMessage.setMessageId(UUID.randomUUID().toString());
 
-        Map<String, String> lcattrsMap = AVIMClientManager.getInstance().userBaseInfo();
-        Map<Object, Object> messageMap = new HashMap<>();
-        messageMap.put("_lctype", AppConst.IM_MESSAGE_TYPE_SEND_FAIL);
-        messageMap.put("_lctext", text);
-        messageMap.put("_lcattrs", lcattrsMap);
-        baseMessage.setContent(JSON.toJSONString(messageMap));
+        unReadMessage.setText(text);
+        unReadMessage.setAttrs(lcattrsMap);
 
-        return baseMessage;
+        return unReadMessage;
     }
 
     //生成草稿消息
-    private AVIMTextMessage createTextMessage(String text) {
-        AVIMTextMessage mTextMessage = new AVIMTextMessage();
+    private GGTextMessage createTextMessage(String text) {
+        GGTextMessage mTextMessage = new GGTextMessage();
         HashMap<String, Object> attrsMap = new HashMap<>();
         attrsMap.put("username", UserUtils.getNickname());
         attrsMap.put("avatar", UserUtils.getUserAvatar());
         mTextMessage.setAttrs(attrsMap);
         mTextMessage.setTimestamp(CalendarUtils.getCurrentTime());
         mTextMessage.setFrom(UserUtils.getMyAccountId());
+        mTextMessage.setMessageSendStatus(AppConst.MESSAGE_SEND_STATUS_SENDING);
         mTextMessage.setText(text);
         return mTextMessage;
     }
@@ -436,73 +436,76 @@ public class ChatFragment extends BaseFragment {
                     JSONObject data = result.getJSONObject("data");
                     if (data.getBoolean("success")) {
                         saveToMessageList(message);
+                        messageStatusChange(message, AppConst.MESSAGE_SEND_STATUS_SUCCESS);
                     } else {
-
-                        /*AVIMMessage newMessage = messageAddStatus(message);
-                        refreshRecyclerView(newMessage, true);*/
-
-                        AVIMMessage failMessage = null;
+                        GGUnReadMessage failMessage = null;
+                        messageStatusChange(message, AppConst.MESSAGE_SEND_STATUS_FAIL);
                         switch (data.getInteger("code")) {
                             case AppConst.MESSAGE_SEND_FAIL_PARAMS_LACK:
                                 //缺少参数
-                                //crateBaseMessage();
+                                //createUnReadMessage();
                                 break;
                             case AppConst.MESSAGE_SEND_FAIL_NOT_FRIEND:
-                                failMessage = crateBaseMessage(getResources().getString(R.string.im_message_send_fail));
+                                failMessage = createUnReadMessage(getResources().getString(R.string.im_message_send_fail));
                                 //不是好友
                                 break;
                             case AppConst.MESSAGE_SEND_FAIL_NET_ERROR:
                                 //网络异常
-                                //crateBaseMessage();
+                                //createUnReadMessage();
                                 break;
                             case AppConst.MESSAGE_SEND_FAIL_NOT_MEMBER:
                                 //不是群成员
-                                //crateBaseMessage();
+                                //createUnReadMessage();
                                 break;
                             case AppConst.MESSAGE_SEND_FAIL_DISCONNECT:
                                 //长连接断开
-                                //crateBaseMessage();
+                                //createUnReadMessage();
                                 break;
                             case AppConst.MESSAGE_SEND_FAIL_MEMBER_LIMIT:
                                 //群成员超限
-                                //crateBaseMessage();
+                                //createUnReadMessage();
                                 break;
                             default:
-                                //crateBaseMessage();
+                                //createUnReadMessage();
                                 break;
                         }
                         refreshRecyclerView(failMessage, true);
                     }
+                } else {
+                    messageStatusChange(message, AppConst.MESSAGE_SEND_STATUS_FAIL);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                KLog.json(msg);
+                messageStatusChange(message, AppConst.MESSAGE_SEND_STATUS_FAIL);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
 
     }
 
-    private AVIMMessage messageAddStatus(AVIMMessage avimMessage) {
-        JSONObject contentObject = JSON.parseObject(avimMessage.getContent());
-        AVIMMessage message = new AVIMMessage();
-        if (null != contentObject) {
-            contentObject.put("status", "4");
-            message.setTimestamp(avimMessage.getTimestamp());
-            message.setMessageId(avimMessage.getMessageId());
-            message.setConversationId(avimMessage.getConversationId());
-            message.setFrom(avimMessage.getFrom());
-            message.setContent(JSON.toJSONString(contentObject));
+    private void messageStatusChange(AVIMMessage message, int statusType) {
+        //消息状态更改
+        if (message instanceof GGTextMessage) {
+            ((GGTextMessage) message).setMessageSendStatus(statusType);
+        } else if (message instanceof GGAudioMessage) {
+            ((GGAudioMessage) message).setMessageSendStatus(statusType);
+        } else if (message instanceof GGImageMessage) {
+            ((GGImageMessage) message).setMessageSendStatus(statusType);
+        } else if (message instanceof GGStockMessage) {
+            ((GGStockMessage) message).setMessageSendStatus(statusType);
         }
-        return message;
+        imChatAdapter.notifyItemChanged(messageList.size() - 1);
     }
 
     //缓存消息至消息列表
     private void saveToMessageList(AVIMMessage message) {
         //头像暂时未保存
         IMMessageBean imMessageBean = null;
+        if (message instanceof GGAudioMessage) {
+            ((GGAudioMessage) message).setListItem(null);
+        }
         if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
             if (null != contactBean) {
                 imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(), "0",
@@ -514,6 +517,7 @@ public class ChatFragment extends BaseFragment {
         } else {
 
         }
+
         MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
     }
 
@@ -523,13 +527,14 @@ public class ChatFragment extends BaseFragment {
             UIHelper.toast(getActivity(), R.string.network_busy);
             return;
         }
-        //股票消息(消息type:11,加上stockCode,stockName);
-        AVIMMessage mStockMessage = new AVIMMessage();
+
+        GGStockMessage mStockMessage = new GGStockMessage();
         mStockMessage.setTimestamp(CalendarUtils.getCurrentTime());
+        mStockMessage.setMessageSendStatus(AppConst.MESSAGE_SEND_STATUS_SENDING);
         mStockMessage.setFrom(UserUtils.getMyAccountId());
 
         //添加股票信息
-        Map<String, String> lcattrsMap;
+        Map<String, Object> lcattrsMap;
         lcattrsMap = AVIMClientManager.getInstance().userBaseInfo();
         lcattrsMap.put("stockCode", stockCode);
         lcattrsMap.put("stockName", stockName);
@@ -545,9 +550,9 @@ public class ChatFragment extends BaseFragment {
         params.put("conv_id", imConversation.getConversationId());
         params.put("chat_type", String.valueOf(chatType));
         params.put("message", JSONObject.toJSONString(messageMap));
-        KLog.e(params);
 
-        mStockMessage.setContent(JSONObject.toJSONString(messageMap));
+        mStockMessage.setText("股票消息");
+        mStockMessage.setAttrs(lcattrsMap);
         refreshRecyclerView(mStockMessage, true);
 
         etInput.setText("");
@@ -581,9 +586,10 @@ public class ChatFragment extends BaseFragment {
         HashMap<String, Object> attrsMap = new HashMap<>();
         attrsMap.put("username", UserUtils.getNickname());
         attrsMap.put("avatar", UserUtils.getUserAvatar());
-        final AVIMImageMessage mImageMessage = new AVIMImageMessage(imagefile);
+        final GGImageMessage mImageMessage = new GGImageMessage(imagefile);
         mImageMessage.setFrom(UserUtils.getMyAccountId());
         mImageMessage.setAttrs(attrsMap);
+        mImageMessage.setMessageSendStatus(AppConst.MESSAGE_SEND_STATUS_SENDING);
         mImageMessage.setTimestamp(CalendarUtils.getCurrentTime());
 
         refreshRecyclerView(mImageMessage, true);
@@ -635,7 +641,7 @@ public class ChatFragment extends BaseFragment {
 
                     @Override
                     public void onFailed() {
-                        UIHelper.toast(getActivity(), "消息发送失败！");
+                        messageStatusChange(mImageMessage, AppConst.MESSAGE_SEND_STATUS_FAIL);
                     }
                 });
             }
@@ -662,22 +668,26 @@ public class ChatFragment extends BaseFragment {
                 attrsMap.put("username", UserUtils.getNickname());
                 attrsMap.put("avatar", UserUtils.getUserAvatar());
 
-                //封装一个AVfile对象
+                //封装一个AVFile对象
                 HashMap<String, Object> metaData = new HashMap<>();
                 metaData.put("duration", seconds);
-                AVFile Audiofile = new AVFile("Audiofile", voicePath, metaData);
+                AVFile AudioFile = new AVFile("", voicePath, metaData);
 
-                final AVIMAudioMessage mAudioMessage = new AVIMAudioMessage(Audiofile);
+                //页面卡死（消息绑定了holder,导致缓存时卡死）
+                final GGAudioMessage mAudioMessage = new GGAudioMessage(AudioFile);
 
-                KLog.e(mAudioMessage.getAVFile().getUrl());
                 mAudioMessage.setFrom(UserUtils.getMyAccountId());
                 mAudioMessage.setAttrs(attrsMap);
+                mAudioMessage.setMessageSendStatus(AppConst.MESSAGE_SEND_STATUS_SENDING);
                 mAudioMessage.setTimestamp(CalendarUtils.getCurrentTime());
 
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("audio_message", mAudioMessage);
-                BaseMessage baseMessage = new BaseMessage("audio_info", map);
-                AppManager.getInstance().sendMessage("refresh_recyle", baseMessage);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //此时已在主线程中，可以更新UI了
+                        refreshRecyclerView(mAudioMessage, true);
+                    }
+                });
 
 
                 UFileUpload.getInstance().upload(new File(voicePath), UFileUpload.Type.AUDIO, new UFileUpload.UploadListener() {
@@ -708,7 +718,6 @@ public class ChatFragment extends BaseFragment {
                         params.put("conv_id", imConversation.getConversationId());
                         params.put("chat_type", String.valueOf(chatType));
                         params.put("message", JSONObject.toJSON(messageMap).toString());
-                        KLog.e(params);
 
                         //发送语音消息
                         sendAVIMMessage(params, mAudioMessage);
@@ -716,7 +725,7 @@ public class ChatFragment extends BaseFragment {
 
                     @Override
                     public void onFailed() {
-                        UIHelper.toast(getActivity(), "消息发送失败！");
+                        messageStatusChange(mAudioMessage, AppConst.MESSAGE_SEND_STATUS_FAIL);
                     }
                 });
             }
@@ -762,10 +771,9 @@ public class ChatFragment extends BaseFragment {
     private void setCacheMessage() {
         IMMessageBean imMessageBean = MessageListUtils.getIMMessageBeanById(UserUtils.getMessageListInfo(), imConversation.getConversationId());
         if (imMessageBean != null && imMessageBean.getLastMessage() != null) {
-            JSONObject contentObject = JSON.parseObject(imMessageBean.getLastMessage().getContent());
-            String _lctype = contentObject.getString("_lctype");
-            if (_lctype.equals(AppConst.IM_MESSAGE_TYPE_TEXT)) {
-                String messageText = contentObject.getString("_lctext");
+            if (imMessageBean.getLastMessage() instanceof GGTextMessage) {
+                GGTextMessage textMessage = (GGTextMessage) imMessageBean.getLastMessage();
+                String messageText = textMessage.getText();
                 if (messageText.startsWith("[草稿] ")) {
                     String text = messageText.substring(5, messageText.length());
                     etInput.setText(text);
@@ -794,12 +802,12 @@ public class ChatFragment extends BaseFragment {
                 }
             } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                 //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息(群对象和群头像暂时为空)
-                if (lastMessage instanceof AVIMTextMessage) {
-                    String strMessage = ((AVIMTextMessage) lastMessage).getText();
+                if (lastMessage instanceof GGTextMessage) {
+                    String strMessage = ((GGTextMessage) lastMessage).getText();
                     if (StringUtils.StringFilter(strMessage, "@*[\\S]*[ \r\n]")) {
-                        ((AVIMTextMessage) lastMessage).setText(strMessage.replace(" ", ""));
+                        ((GGTextMessage) lastMessage).setText(strMessage.replace(" ", ""));
                     }
-                    KLog.e(((AVIMTextMessage) lastMessage).getText());
+                    KLog.e(((GGTextMessage) lastMessage).getText());
                 }
                 imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0", imConversation.getName(),
                         "", imConversation.getAttribute("avatar") != null ? (String) imConversation.getAttribute("avatar") : "", lastMessage);
@@ -816,18 +824,13 @@ public class ChatFragment extends BaseFragment {
         if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
             //加群消息特殊处理
             for (int i = 0; i < messageList.size(); i++) {
-                JSONObject contentObject = JSON.parseObject(messageList.get(i).getContent());
-                String _lctype = contentObject.getString("_lctype");
-                if (_lctype.equals("5") || _lctype.equals("6")) {
-                    if (null != contentObject.getJSONObject("_lcattrs") && null != contentObject.getJSONObject("_lcattrs").getJSONArray("accountList")) {
-                        HashMap<String, String> map = new HashMap<>();
-                        JSONArray accountArray = contentObject.getJSONObject("_lcattrs").getJSONArray("accountList");
-                        String _lctext = MessageListUtils.findSquarePeople(accountArray, _lctype);
-                        map.put("_lctext", _lctext);
-                        map.put("_lctype", _lctype);
-                        messageList.get(i).setContent(JSON.toJSONString(map));
-                    }
+                if (messageList.get(i) instanceof GGGroupAddMessage || messageList.get(i) instanceof GGGroupDelMessage) {
+                    GGSystemMessage systemMessage = (GGSystemMessage) messageList.get(i);
+                    JSONArray accountArray = (JSONArray) systemMessage.getAttrs().get("accountList");
+                    String _lctext = MessageListUtils.findSquarePeople(accountArray, String.valueOf(systemMessage.getMessageType()));
+                    systemMessage.setText(_lctext);
                 }
+
             }
         }
     }
@@ -862,7 +865,7 @@ public class ChatFragment extends BaseFragment {
     public void onPause() {
         super.onPause();
         if (!TextUtils.isEmpty(etInput.getText())) {
-            AVIMTextMessage mTextMessage = createTextMessage("[草稿] " + etInput.getText());
+            GGTextMessage mTextMessage = createTextMessage("[草稿] " + etInput.getText());
             saveToMessageList(mTextMessage);
         }
         MediaManager.pause();
@@ -880,12 +883,6 @@ public class ChatFragment extends BaseFragment {
         MediaManager.release();
     }
 
-    @Subscriber(tag = "refresh_recyle")
-    public void audioRefresh(BaseMessage<AVIMAudioMessage> message) {
-        AVIMAudioMessage audioMessage = message.getOthers().get("audio_message");
-        refreshRecyclerView(audioMessage, true);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -894,9 +891,9 @@ public class ChatFragment extends BaseFragment {
                 StringBuilder strBuilder = new StringBuilder();
                 String inputStr = etInput.getText().toString();
                 strBuilder.append(inputStr.substring(0, inputStr.length() - 1));
-                List<ContactBean> changeContactBeens = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
-                for (int i = 0; i < changeContactBeens.size(); i++) {
-                    strBuilder.append("@" + changeContactBeens.get(i).getTarget() + " ");
+                List<ContactBean> changeContactBeans = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
+                for (int i = 0; i < changeContactBeans.size(); i++) {
+                    strBuilder.append("@" + changeContactBeans.get(i).getTarget() + " ");
                 }
                 etInput.setText(strBuilder.toString());
                 etInput.setSelection(strBuilder.toString().length());
@@ -913,7 +910,7 @@ public class ChatFragment extends BaseFragment {
         Map map = baseMessage.getOthers();
         String share_convid = (String) map.get("share_convid");
         if (share_convid.equals(imConversation.getConversationId())) {
-            AVIMMessage mShareMessage = (AVIMMessage) map.get("share_message");
+            GGShareMessage mShareMessage = (GGShareMessage) map.get("share_message");
             refreshRecyclerView(mShareMessage, true);
         }
     }
@@ -985,8 +982,8 @@ public class ChatFragment extends BaseFragment {
         int totalItemCount = layoutManager.getItemCount();
         //RecyclerView的滑动状态
         int state = recyclerView.getScrollState();
-        KLog.e(lastVisibleItemPosition);
-        if (visibleItemCount > 1 && lastVisibleItemPosition == totalItemCount - 2 && state == recyclerView.SCROLL_STATE_IDLE) {
+
+        if (visibleItemCount > 1 && lastVisibleItemPosition == totalItemCount - 1 && state == recyclerView.SCROLL_STATE_IDLE) {
             return true;
         } else {
             return false;
@@ -1002,13 +999,13 @@ public class ChatFragment extends BaseFragment {
             Map map = baseMessage.getOthers();
             AVIMMessage message = (AVIMMessage) map.get("message");
             AVIMConversation conversation = (AVIMConversation) map.get("conversation");
-            JSONObject contentObject = JSON.parseObject(message.getContent());
-            String _lctype = contentObject.getString("_lctype");
 
-            KLog.e(contentObject);
             //判断房间一致然后做消息接收处理
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
                 refreshRecyclerView(message, isVisBottom(message_recycler));
+//                imChatAdapter.addItem(message);
+//                imChatAdapter.notifyItemInserted(messageList.size() - 1);
+//                message_recycler.smoothScrollToPosition(messageList.size() - 1);
                 //此处头像，昵称日后有数据再改
                 IMMessageBean imMessageBean = null;
                 if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
@@ -1017,12 +1014,11 @@ public class ChatFragment extends BaseFragment {
 
                 } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                     //加人删人逻辑
-                    if (_lctype.equals("5") || _lctype.equals("6")) {
-                        JSONArray accountArray = contentObject.getJSONObject("_lcattrs").getJSONArray("accountList");
-                        String _lctext = MessageListUtils.findSquarePeople(accountArray, _lctype);
-                        map.put("_lctext", _lctext);
-                        map.put("_lctype", _lctype);
-                        message.setContent(JSON.toJSONString(map));
+                    if (message instanceof GGGroupDelMessage || message instanceof GGGroupAddMessage) {
+                        GGSystemMessage systemMessage = (GGSystemMessage) message;
+                        JSONArray accountArray = (JSONArray) systemMessage.getAttrs().get("accountList");
+                        String _lctext = MessageListUtils.findSquarePeople(accountArray, String.valueOf(systemMessage.getMessageType()));
+                        systemMessage.setText(_lctext);
                     }
 
                     //群对象和群头像暂时为空

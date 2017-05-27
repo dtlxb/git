@@ -153,7 +153,7 @@ public class AppConst {
     public static final String IM_MESSAGE_TYPE_TEXT = "-1";             //消息类型 文字
     public static final String IM_MESSAGE_TYPE_PHOTO = "-2";            //消息类型 图片
     public static final String IM_MESSAGE_TYPE_AUDIO = "-3";            //消息类型 语音
-    public static final String IM_MESSAGE_TYPE_FRIEND_DEL = "1";        //消息类型 加好友
+    public static final String IM_MESSAGE_TYPE_FRIEND_DEL = "1";        //消息类型 删好友
     public static final String IM_MESSAGE_TYPE_FRIEND_ADD = "2";        //消息类型 加好友
     public static final String IM_MESSAGE_TYPE_CONTACT_ADD = "3";       //消息类型 好友加入通讯录
     public static final String IM_MESSAGE_TYPE_CONTACT_DEL = "4";       //消息类型 好友从通讯录移除
@@ -172,6 +172,10 @@ public class AppConst {
     public static final int MESSAGE_SEND_FAIL_NOT_MEMBER = 112;         //失败类型 不是群成员
     public static final int MESSAGE_SEND_FAIL_DISCONNECT = 119;         //失败类型 链接断开
     public static final int MESSAGE_SEND_FAIL_MEMBER_LIMIT = 120;       //失败类型 群员超限
+
+    public static final int MESSAGE_SEND_STATUS_SENDING = 1200;         //消息正在发送
+    public static final int MESSAGE_SEND_STATUS_SUCCESS = 1201;         //消息发送成功
+    public static final int MESSAGE_SEND_STATUS_FAIL = 1202;            //消息发送失败
 
 
 }

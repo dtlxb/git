@@ -4,24 +4,16 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import cn.gogoal.im.R;
-import cn.gogoal.im.bean.AudioViewInfo;
 
 public class MediaManager {
-    private static MediaPlayer mMediaPlayer;
     private static boolean isPause;
-    private static List<AudioViewInfo> infoList = new ArrayList<>();
+    private static GGMediaPlayer ggMediaPlayer;
+
 
     /**
      * 播放音乐
-     *
-     * @param audioViewInfo;
-     * @param onCompletionListener;
      */
-    public static void playSound(final AudioViewInfo audioViewInfo, MediaPlayer.OnCompletionListener onCompletionListener) {
+   /* public static void playSound(final AudioViewInfo audioViewInfo, MediaPlayer.OnCompletionListener onCompletionListener) {
         infoList.add(audioViewInfo);
         if (infoList.size() > 2) {
             infoList.remove(0);
@@ -56,14 +48,50 @@ public class MediaManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }*/
+    public static void playStop() {
+
+        if (null != ggMediaPlayer) {
+
+            ggMediaPlayer.getGGMediaInterface().audioWillStop();
+            ggMediaPlayer.stop();
+        }
+    }
+
+    public static void playAudio(GGMediaPlayInterface playInterface, String path) {
+
+        if (null != ggMediaPlayer) {
+            ggMediaPlayer.getGGMediaInterface().audioWillStop();
+            ggMediaPlayer.stop();
+        }
+
+        ggMediaPlayer = new GGMediaPlayer();
+        ggMediaPlayer.setGGMediaInterface(playInterface);
+        ggMediaPlayer.getGGMediaInterface().audioWillPlay();
+
+        try {
+            ggMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            ggMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    GGMediaPlayer mediaPlayer = (GGMediaPlayer) mp;
+                    mediaPlayer.getGGMediaInterface().audioWillEnd();
+                }
+            });
+            ggMediaPlayer.setDataSource(path);
+            ggMediaPlayer.prepare();
+            ggMediaPlayer.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * 暂停播放
      */
     public static void pause() {
-        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) { //正在播放的时候
-            mMediaPlayer.pause();
+        if (ggMediaPlayer != null && ggMediaPlayer.isPlaying()) { //正在播放的时候
+            ggMediaPlayer.pause();
             isPause = true;
         }
     }
@@ -72,8 +100,8 @@ public class MediaManager {
      * 当前是isPause状态
      */
     public static void resume() {
-        if (mMediaPlayer != null && isPause) {
-            mMediaPlayer.start();
+        if (ggMediaPlayer != null && isPause) {
+            ggMediaPlayer.start();
             isPause = false;
         }
     }
@@ -82,22 +110,30 @@ public class MediaManager {
      * 释放资源
      */
     public static void release() {
-        if (mMediaPlayer != null) {
-            mMediaPlayer.release();
-            mMediaPlayer = null;
+        if (ggMediaPlayer != null) {
+            ggMediaPlayer.release();
+            ggMediaPlayer = null;
         }
     }
 
-    /**
-     * 暂停动画
-     */
-    public static void clearAime(AudioViewInfo info) {
-        if (info.getType() == 1) {
-            info.getView().setBackgroundResource(R.mipmap.right_voice_anime3);
-        } else if (info.getType() == 0) {
-            info.getView().setBackgroundResource(R.mipmap.left_voice_anime3);
-        } else {
+    private static class GGMediaPlayer extends MediaPlayer {
 
+        GGMediaPlayInterface GGMediaInterface;
+
+        void setGGMediaInterface(GGMediaPlayInterface GGMediaInterface) {
+            this.GGMediaInterface = GGMediaInterface;
         }
+
+        GGMediaPlayInterface getGGMediaInterface() {
+            return GGMediaInterface;
+        }
+    }
+
+    public interface GGMediaPlayInterface {
+        void audioWillPlay();
+
+        void audioWillEnd();
+
+        void audioWillStop();
     }
 }

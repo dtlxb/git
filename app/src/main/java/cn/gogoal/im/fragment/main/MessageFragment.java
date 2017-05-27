@@ -165,77 +165,65 @@ public class MessageFragment extends BaseFragment {
             });
         }
         listAdapter.notifyDataSetChanged();
+
         listAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(CommonAdapter adapter, View view, final int position) {
-                final String conversation_id = IMMessageBeans.get(position).getConversationID();
-
-                KLog.e(conversation_id);
-
-                AVIMClientManager.getInstance().findConversationById(conversation_id, new AVIMClientManager.ChatJoinManager() {
-                    @Override
-                    public void joinSuccess(AVIMConversation conversation) {
-                        int chat_type = (int) conversation.getAttribute("chat_type");
-                        Intent intent;
-                        Bundle bundle = new Bundle();
-                        switch (chat_type) {
-                            case AppConst.IM_CHAT_TYPE_SINGLE:
-                                //单聊处理
-                                intent = new Intent(getContext(), SingleChatRoomActivity.class);
-                                bundle.putString("conversation_id", conversation_id);
-                                bundle.putString("nickname", IMMessageBeans.get(position).getNickname());
-                                bundle.putBoolean("need_update", true);
-                                intent.putExtras(bundle);
-                                startActivity(intent);
-                                break;
-                            case AppConst.IM_CHAT_TYPE_SQUARE:
-                                //群聊处理
-                                intent = new Intent(getContext(), SquareChatRoomActivity.class);
-                                bundle.putString("conversation_id", conversation_id);
-                                bundle.putString("squareName", IMMessageBeans.get(position).getNickname());
-                                bundle.putBoolean("need_update", true);
-                                intent.putExtras(bundle);
-                                startActivity(intent);
-                                break;
-                            case AppConst.IM_CHAT_TYPE_LIVE:
-                                //直播处理
-                                intent = new Intent(getContext(), SquareChatRoomActivity.class);
-                                intent.putExtra("conversation_id", conversation_id);
-                                startActivity(intent);
-                                break;
-                            case AppConst.IM_CHAT_TYPE_SYSTEM:
-                                //系统处理
-                                intent = new Intent(getContext(), IMNewFriendActivity.class);
-                                intent.putExtra("conversation_id", conversation_id);
-                                intent.putExtra("add_type", 0x01);
-                                startActivity(intent);
-                                break;
-                            case AppConst.IM_CHAT_TYPE_CONSULTATION:
-                                //公众号(直播)
-                                intent = new Intent(getContext(), OfficialAccountsActivity.class);
-                                intent.putExtra("conversation_id", conversation_id);
-                                startActivity(intent);
-                                break;
-                            case AppConst.IM_CHAT_TYPE_SQUARE_REQUEST:
-                                //入群申请
-                                intent = new Intent(getContext(), IMNewFriendActivity.class);
-                                intent.putExtra("conversation_id", conversation_id);
-                                intent.putExtra("add_type", 0x02);
-                                startActivity(intent);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void joinFail(String error) {
-                        UIHelper.toast(getActivity(), error);
-                    }
-                });
+                String conversation_id = IMMessageBeans.get(position).getConversationID();
+                int chat_type = IMMessageBeans.get(position).getChatType();
+                Intent intent;
+                Bundle bundle = new Bundle();
+                switch (chat_type) {
+                    case AppConst.IM_CHAT_TYPE_SINGLE:
+                        //单聊处理
+                        intent = new Intent(getContext(), SingleChatRoomActivity.class);
+                        bundle.putString("conversation_id", conversation_id);
+                        bundle.putString("nickname", IMMessageBeans.get(position).getNickname());
+                        bundle.putBoolean("need_update", true);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                        break;
+                    case AppConst.IM_CHAT_TYPE_SQUARE:
+                        //群聊处理
+                        intent = new Intent(getContext(), SquareChatRoomActivity.class);
+                        bundle.putString("conversation_id", conversation_id);
+                        bundle.putString("squareName", IMMessageBeans.get(position).getNickname());
+                        bundle.putBoolean("need_update", true);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                        break;
+                    case AppConst.IM_CHAT_TYPE_LIVE:
+                        //直播处理
+                        intent = new Intent(getContext(), SquareChatRoomActivity.class);
+                        intent.putExtra("conversation_id", conversation_id);
+                        startActivity(intent);
+                        break;
+                    case AppConst.IM_CHAT_TYPE_SYSTEM:
+                        //系统处理
+                        intent = new Intent(getContext(), IMNewFriendActivity.class);
+                        intent.putExtra("conversation_id", conversation_id);
+                        intent.putExtra("add_type", 0x01);
+                        startActivity(intent);
+                        break;
+                    case AppConst.IM_CHAT_TYPE_CONSULTATION:
+                        //公众号(直播)
+                        intent = new Intent(getContext(), OfficialAccountsActivity.class);
+                        intent.putExtra("conversation_id", conversation_id);
+                        startActivity(intent);
+                        break;
+                    case AppConst.IM_CHAT_TYPE_SQUARE_REQUEST:
+                        //入群申请
+                        intent = new Intent(getContext(), IMNewFriendActivity.class);
+                        intent.putExtra("conversation_id", conversation_id);
+                        intent.putExtra("add_type", 0x02);
+                        startActivity(intent);
+                        break;
+                    default:
+                        break;
+                }
             }
-
         });
+
         listAdapter.setOnItemLongClickListener(new CommonAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(CommonAdapter adapter, View view, final int position) {
@@ -272,7 +260,7 @@ public class MessageFragment extends BaseFragment {
 
         View includeView = popuView.findViewById(R.id.include_line);
         ViewGroup.LayoutParams params = includeView.getLayoutParams();
-        params.width = 5*AppDevice.getWidth(getActivity()) / 12;
+        params.width = 5 * AppDevice.getWidth(getActivity()) / 12;
         includeView.setLayoutParams(params);
 
         mBubblePopupWindow = new BubblePopupWindow(popuView, mBubbleView);
@@ -549,7 +537,7 @@ public class MessageFragment extends BaseFragment {
         String nickName = "";
         String avatar = "";
         String friend_id = UserUtils.getMyAccountId();
-        int unreadmessage = 0;
+        int unreadMessage = 0;
 
         JSONObject contentObject = JSON.parseObject(message.getContent());
         JSONObject lcattrsObject = contentObject.getJSONObject("_lcattrs");
@@ -636,8 +624,8 @@ public class MessageFragment extends BaseFragment {
             if (IMMessageBeans.get(i).getConversationID().equals(ConversationId)) {
                 IMMessageBeans.get(i).setLastTime(rightNow);
                 IMMessageBeans.get(i).setLastMessage(message);
-                unreadmessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts().equals("") ? "0" : IMMessageBeans.get(i).getUnReadCounts()) + 1;
-                IMMessageBeans.get(i).setUnReadCounts(unreadmessage + "");
+                unreadMessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts().equals("") ? "0" : IMMessageBeans.get(i).getUnReadCounts()) + 1;
+                IMMessageBeans.get(i).setUnReadCounts(unreadMessage + "");
                 isTheSame = true;
             }
         }
@@ -657,7 +645,8 @@ public class MessageFragment extends BaseFragment {
 
         //保存
         IMMessageBean imMessageBean = new IMMessageBean(ConversationId, chatType, message.getTimestamp(),
-                isTheSame ? String.valueOf(unreadmessage) : "1", nickName, friend_id, avatar, message);
+                isTheSame ? String.valueOf(unreadMessage) : "1", nickName, friend_id, avatar, message);
+        KLog.e(imMessageBean);
         MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
         allCount++;
 
