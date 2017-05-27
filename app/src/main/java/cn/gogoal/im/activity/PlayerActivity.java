@@ -1041,6 +1041,9 @@ public class PlayerActivity extends BaseActivity {
 
     //设置横屏
     private void setLandscape() {
+        RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        imgLoadPic.setLayoutParams(param);
 
         linearPlayerFun.setVisibility(View.GONE);
         player_line_tab.setVisibility(View.GONE);
@@ -1062,6 +1065,9 @@ public class PlayerActivity extends BaseActivity {
 
     //设置竖屏
     private void setProtrait() {
+        RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, (int) (screenWidth * 9.0f / 16));
+        imgLoadPic.setLayoutParams(param);
 
         linearPlayerFun.setVisibility(View.VISIBLE);
         player_line_tab.setVisibility(View.VISIBLE);
