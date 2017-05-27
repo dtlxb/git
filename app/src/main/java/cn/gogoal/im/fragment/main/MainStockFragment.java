@@ -1,6 +1,7 @@
 package cn.gogoal.im.fragment.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -28,8 +29,10 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MainActivity;
+import cn.gogoal.im.activity.copy.StockSearchActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
@@ -57,9 +60,9 @@ import static cn.gogoal.im.R.id.img_mystock_refresh;
 public class MainStockFragment extends BaseFragment {
 
     @BindView(R.id.tv_mystock_edit)
-    TextView tvMystockEdit;
+    ImageView tvMystockEdit;
 
-    public TextView getTvMystockEdit() {
+    public ImageView getTvMystockEdit() {
         return tvMystockEdit;
     }
 
@@ -138,23 +141,31 @@ public class MainStockFragment extends BaseFragment {
 
         refreshAll(AppConst.REFRESH_TYPE_FIRST);
 
-        imgMystockRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshAll(AppConst.REFRESH_TYPE_PARENT_BUTTON);
-            }
-        });
-
         if (StockUtils.isTradeTime()) {//交易时间段
             handler.postDelayed(runnable, INTERVAL_TIME);//启动定时刷新
         }
     }
 
     @Subscriber(tag = "updata_refresh_mode")
-    void updataRefreshMode(String msg){
+    void updataRefreshMode(String msg) {
         handler.removeCallbacks(runnable);
         if (StockUtils.isTradeTime()) {//交易时间段
             handler.postDelayed(runnable, INTERVAL_TIME);//启动定时刷新
+        }
+    }
+
+    @OnClick({R.id.img_mystock_search,R.id.img_mystock_refresh,R.id.view_dialog_mask})
+    void click(View view) {
+        switch (view.getId()) {
+            case R.id.img_mystock_search:
+                startActivity(new Intent(view.getContext(), StockSearchActivity.class));
+                break;
+            case R.id.img_mystock_refresh:
+                refreshAll(AppConst.REFRESH_TYPE_PARENT_BUTTON);
+                break;
+            case R.id.view_dialog_mask:
+                dismissMarket();
+                break;
         }
     }
 
@@ -166,12 +177,6 @@ public class MainStockFragment extends BaseFragment {
         myAdaptetDialogMarket = new GridMarketAdapter(listDialogMarketDatas);
         rvDialogMarket.setAdapter(myAdaptetDialogMarket);
 
-        viewDialogMask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismissMarket();
-            }
-        });
     }
 
     @Override
@@ -202,7 +207,7 @@ public class MainStockFragment extends BaseFragment {
                     try {
                         myStockFragment.changeIitem(
                                 marketDatas.get(SPTools.getInt("change_market_item", 0)));
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.getMessage();
                     }
                 }
@@ -233,14 +238,14 @@ public class MainStockFragment extends BaseFragment {
                 android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.alpha_in));
     }
 
-    private void refreshAll(int type){
+    private void refreshAll(int type) {
         //大盘指数模块刷新
         getMarketLittle(type);
 
         //嵌套的自选股、行情模块更新
-        if (tabMyStock.getTabAt(0).isSelected()){
+        if (tabMyStock.getTabAt(0).isSelected()) {
             myStockFragment.refreshMyStock(type);
-        }else {
+        } else {
             marketFragment.huShenFragment.getMarketInformation(type);
         }
 
@@ -322,7 +327,7 @@ public class MainStockFragment extends BaseFragment {
 
     public void changeItem(int index) {
 //        Artificial
-        if (index>=0 && index<tabMyStock.getTabCount()) {
+        if (index >= 0 && index < tabMyStock.getTabCount()) {
             tabMyStock.getTabAt(index).select();
         }
     }
@@ -406,7 +411,7 @@ public class MainStockFragment extends BaseFragment {
                         SPTools.saveInt("change_market_item", position);
                         try {
                             myStockFragment.changeIitem(data);
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.getMessage();
                         }
                     }

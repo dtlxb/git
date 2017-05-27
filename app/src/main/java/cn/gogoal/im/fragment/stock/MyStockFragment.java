@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -269,7 +270,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
      */
     void editEnable(boolean enable) {
         try {
-            final TextView tvEditMyStock = ((MainStockFragment) getParentFragment()).getTvMystockEdit();
+            final ImageView tvEditMyStock = ((MainStockFragment) getParentFragment()).getTvMystockEdit();
             tvEditMyStock.setEnabled(enable);
             tvEditMyStock.setClickable(enable);
             tvEditMyStock.setOnClickListener(new View.OnClickListener() {
@@ -282,7 +283,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     startActivity(intent);
                 }
             });
-            tvEditMyStock.setTextColor(enable ? Color.BLACK : Color.GRAY);
         } catch (Exception e) {
             e.getMessage();
         }
