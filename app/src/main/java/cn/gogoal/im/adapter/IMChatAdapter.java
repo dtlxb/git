@@ -236,6 +236,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((LeftImageViewHolder) holder).image_user_send.getLayoutParams();
             setImageSize(params, imageMessage);
             ((LeftImageViewHolder) holder).image_user_send.setLayoutParams(params);
+            ((LeftImageViewHolder) holder).image_send_fg.setLayoutParams(params);
             ImageDisplay.loadImage(mContext, UFileImageHelper.load(imageMessage.getAVFile().getUrl()).compress(10).get(), ((LeftImageViewHolder) holder).image_user_send);
 
             ((LeftImageViewHolder) holder).image_user_send.setOnClickListener(new View.OnClickListener() {
@@ -261,6 +262,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             //获取后台图片大小设置
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((RightImageViewHolder) holder).image_user_send.getLayoutParams();
             setImageSize(params, imageMessage);
+            ((RightImageViewHolder) holder).image_send_fg.setLayoutParams(params);
             ((RightImageViewHolder) holder).image_user_send.setLayoutParams(params);
             ImageDisplay.loadImage(mContext, isFromUFile(imageMessage.getAVFile().getUrl()), ((RightImageViewHolder) holder).image_user_send);
             ((RightImageViewHolder) holder).image_user_send.setOnClickListener(new View.OnClickListener() {
@@ -792,20 +794,24 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     private class RightImageViewHolder extends IMCHatViewHolder {
 
         private ImageView image_user_send;
+        private ImageView image_send_fg;
 
         RightImageViewHolder(View itemView) {
             super(itemView);
             image_user_send = (ImageView) itemView.findViewById(R.id.image_user_send);
+            image_send_fg = (ImageView) itemView.findViewById(R.id.image_send_fg);
         }
     }
 
     private class LeftImageViewHolder extends IMCHatViewHolder {
 
         private ImageView image_user_send;
+        private ImageView image_send_fg;
 
         LeftImageViewHolder(View itemView) {
             super(itemView);
             image_user_send = (ImageView) itemView.findViewById(R.id.image_user_send);
+            image_send_fg = (ImageView) itemView.findViewById(R.id.image_send_fg);
         }
     }
 

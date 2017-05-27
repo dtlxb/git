@@ -1003,9 +1003,6 @@ public class ChatFragment extends BaseFragment {
             //判断房间一致然后做消息接收处理
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
                 refreshRecyclerView(message, isVisBottom(message_recycler));
-//                imChatAdapter.addItem(message);
-//                imChatAdapter.notifyItemInserted(messageList.size() - 1);
-//                message_recycler.smoothScrollToPosition(messageList.size() - 1);
                 //此处头像，昵称日后有数据再改
                 IMMessageBean imMessageBean = null;
                 if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
