@@ -8,6 +8,7 @@
     android:orientation="vertical"
     app:divider="@drawable/shape_divider_1px"
     app:showDividers="middle|end"
+    android:fitsSystemWindows="true"
     tools:context=".activity.SettingStockActivity">
 
     <include layout="@layout/include_title"/>
