@@ -42,7 +42,6 @@ import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
-import com.hply.imagepicker.view.StatusBarUtil;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
@@ -214,8 +213,6 @@ public class LiveActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-
-        StatusBarUtil.with(this).setColor(Color.BLACK);
 
         live_id = getIntent().getStringExtra("live_id");
 

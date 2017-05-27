@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hply.imagepicker.view.StatusBarUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -117,8 +116,7 @@ public class InteractiveInvestorActivity extends BaseActivity {
                 })
                 .setBackgroundResource(StockUtils.getStockRateColor(stock.getChangeValue()));
 
-        StatusBarUtil.with(InteractiveInvestorActivity.this).
-                setColor(getResColor(StockUtils.getStockRateColor(stock.getChangeValue())));
+        setStatusColor(getResColor(StockUtils.getStockRateColor(stock.getChangeValue())));
     }
 
 

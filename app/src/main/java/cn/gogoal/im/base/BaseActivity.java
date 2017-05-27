@@ -7,7 +7,9 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -24,10 +26,12 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.bumptech.glide.Glide;
+import com.hply.imagepicker.ui.SystemBarTintManager;
 
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
@@ -72,14 +76,39 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
+
         ButterKnife.bind(this);
 
         initView(mContentView);
 
         EventBus.getDefault().register(this);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus();
+        }
+        setStatusColor(Color.BLACK);
+
         doBusiness(this);
 
+    }
+
+    private void setTranslucentStatus() {
+        Window window = getWindow();
+        window.setFlags(
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    }
+
+    protected void setStatusColor(@ColorInt int color) {
+        SystemBarTintManager tintManager = new SystemBarTintManager(getActivity());
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setStatusBarTintColor(color);
+    }
+
+    protected void setStatusColorId(@ColorRes int colorId) {
+        SystemBarTintManager tintManager = new SystemBarTintManager(getActivity());
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setStatusBarTintColor(ContextCompat.getColor(getActivity(),colorId));
     }
 
     @Override

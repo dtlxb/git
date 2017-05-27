@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.hply.imagepicker.view.StatusBarUtil;
 
 import org.simple.eventbus.Subscriber;
 
@@ -233,7 +232,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     private int dayk4;
 
     private ArrayList<StockDetailMarketIndexData> info;
-    private StatusBarUtil barUtil;
     private RotateAnimation rotateAnimation;
 
     @Override
@@ -243,7 +241,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        barUtil = StatusBarUtil.with(this);
         layoutTreat.setVisibility(View.GONE);
 
         rotateAnimation = AnimationUtils.getInstance().setLoadingAnime(btnRefresh, R.mipmap.loading_white);
@@ -390,7 +387,8 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         });
 
         // 修改状态栏颜色
-        setStatusColor(R.color.header_gray);
+        setStatusColor(getResColor(R.color.header_gray));
+
         relative_header.setBackgroundColor(getResColor(R.color.header_gray));
         linear_header.setBackgroundColor(getResColor(R.color.header_gray));
         initRefreshStyle(R.color.header_gray);
@@ -430,10 +428,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 
         ptrFrame.setHeaderView(headerView);
         ptrFrame.addPtrUIHandler(headerView);
-    }
-
-    private void setStatusColor(int header_gray) {
-        barUtil.setColor(getResColor(header_gray));
     }
 
     private void startAnimation() {
@@ -766,7 +760,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                     info = bean.getData();
                     //涨跌
                     if (info.get(0).getPrice_change() > 0) {
-                        setStatusColor(R.color.header_red);
+                        setStatusColorId(R.color.header_red);
                         relative_header.setBackgroundColor(getResColor(R.color.header_red));
                         linear_header.setBackgroundColor(getResColor(R.color.header_red));
                         initRefreshStyle(R.color.header_red);
@@ -775,7 +769,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                         stock_detail_tv1.setText("+" + StringUtils.save2Significand(info.get(0).getPrice_change()));
                         stock_detail_tv2.setText("+" + StringUtils.save2Significand(info.get(0).getPrice_change_rate()) + "%");
                     } else if (info.get(0).getPrice_change() < 0) {
-                        setStatusColor(R.color.header_green);
+                        setStatusColorId(R.color.header_green);
                         relative_header.setBackgroundColor(getResColor(R.color.header_green));
                         linear_header.setBackgroundColor(getResColor(R.color.header_green));
                         initRefreshStyle(R.color.header_green);
@@ -785,7 +779,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                         stock_detail_tv1.setText(StringUtils.save2Significand(info.get(0).getPrice_change()));
                         stock_detail_tv2.setText(StringUtils.save2Significand(info.get(0).getPrice_change_rate()) + "%");
                     } else {
-                        setStatusColor(R.color.header_gray);
+                        setStatusColorId(R.color.header_gray);
                         relative_header.setBackgroundColor(getResColor(R.color.header_gray));
                         linear_header.setBackgroundColor(getResColor(R.color.header_gray));
                         initRefreshStyle(R.color.header_gray);

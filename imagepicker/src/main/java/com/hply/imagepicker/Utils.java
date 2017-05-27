@@ -3,7 +3,12 @@ package com.hply.imagepicker;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Environment;
+import android.support.annotation.ColorInt;
 import android.util.DisplayMetrics;
+import android.view.Window;
+import android.view.WindowManager;
+
+import com.hply.imagepicker.ui.SystemBarTintManager;
 
 public class Utils {
 
@@ -51,5 +56,17 @@ public class Utils {
         return displaysMetrics;
     }
 
+    public static void setTranslucentStatus(Activity context) {
+        Window window = context.getWindow();
+        window.setFlags(
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    }
+
+    public static void setStatusColor(Activity activity,@ColorInt int color) {
+        SystemBarTintManager tintManager = new SystemBarTintManager(activity);
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setStatusBarTintColor(color);
+    }
 
 }

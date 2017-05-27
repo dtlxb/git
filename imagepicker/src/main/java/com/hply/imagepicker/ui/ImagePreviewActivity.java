@@ -14,8 +14,8 @@ import android.widget.Toast;
 
 import com.hply.imagepicker.ImagePicker;
 import com.hply.imagepicker.R;
+import com.hply.imagepicker.Utils;
 import com.hply.imagepicker.bean.ImageItem;
-import com.hply.imagepicker.view.StatusBarUtil;
 import com.hply.imagepicker.view.SuperCheckBox;
 
 public class ImagePreviewActivity extends ImagePreviewBaseActivity implements ImagePicker.OnImageSelectedListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
@@ -27,13 +27,11 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
     private SuperCheckBox mCbOrigin;               //原图
     private Button mBtnOk;                         //确认图片的选择
     private View bottomBar;
-    private StatusBarUtil barUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        barUtil = StatusBarUtil.with(this);
         isOrigin = getIntent().getBooleanExtra(ImagePreviewActivity.ISORIGIN, false);
         imagePicker.addOnImageSelectedListener(this);
 
@@ -186,7 +184,9 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
             bottomBar.setAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_out));
             topBar.setVisibility(View.GONE);
             bottomBar.setVisibility(View.GONE);
-            barUtil.setColor(ContextCompat.getColor(ImagePreviewActivity.this,R.color.transparent));//通知栏所需颜色
+
+            Utils.setStatusColor(this,ContextCompat.getColor(this,R.color.transparent));//通知栏所需颜色
+
             //给最外层布局加上这个属性表示，Activity全屏显示，且状态栏被隐藏覆盖掉。
             if (Build.VERSION.SDK_INT >= 16)
                 content.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
@@ -195,7 +195,7 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
             bottomBar.setAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
             topBar.setVisibility(View.VISIBLE);
             bottomBar.setVisibility(View.VISIBLE);
-            barUtil.setColor(ContextCompat.getColor(ImagePreviewActivity.this,R.color.status_bar));//通知栏所需颜色
+            Utils.setStatusColor(this,ContextCompat.getColor(this,R.color.status_bar));//通知栏所需颜色
             //Activity全屏显示，但状态栏不会被隐藏覆盖，状态栏依然可见，Activity顶端布局部分会被状态遮住
             if (Build.VERSION.SDK_INT >= 16)
                 content.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
