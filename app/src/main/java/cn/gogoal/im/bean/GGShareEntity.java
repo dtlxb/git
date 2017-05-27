@@ -30,6 +30,10 @@ public class GGShareEntity implements Parcelable {
 
     private String shareType;
 
+    private String live_id;
+
+    private String source;
+
     public String getDesc() {
         return desc;
     }
@@ -70,6 +74,25 @@ public class GGShareEntity implements Parcelable {
         this.shareType = shareType;
     }
 
+    public String getLive_id() {
+        return live_id;
+    }
+
+    public void setLive_id(String live_id) {
+        this.live_id = live_id;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public GGShareEntity() {
+    }
+
 
     @Override
     public int describeContents() {
@@ -83,9 +106,8 @@ public class GGShareEntity implements Parcelable {
         dest.writeString(this.title);
         dest.writeString(this.link);
         dest.writeString(this.shareType);
-    }
-
-    public GGShareEntity() {
+        dest.writeString(this.live_id);
+        dest.writeString(this.source);
     }
 
     protected GGShareEntity(Parcel in) {
@@ -94,6 +116,8 @@ public class GGShareEntity implements Parcelable {
         this.title = in.readString();
         this.link = in.readString();
         this.shareType = in.readString();
+        this.live_id = in.readString();
+        this.source = in.readString();
     }
 
     public static final Creator<GGShareEntity> CREATOR = new Creator<GGShareEntity>() {

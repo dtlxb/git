@@ -3,7 +3,8 @@
     android:id="@+id/linearRelaterVideo"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
+    android:layout_marginBottom="15dp"
+    android:background="@drawable/shape_play_introduce_anchor"
     android:orientation="horizontal"
     android:paddingBottom="8dp"
     android:paddingLeft="15dp"
@@ -22,7 +23,7 @@
             android:layout_height="86dp"
             android:scaleType="fitXY" />
 
-        <RelativeLayout
+        <!--<RelativeLayout
             android:id="@+id/relative_player"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -50,7 +51,7 @@
                 android:textColor="@android:color/white"
                 android:textSize="11dp" />
 
-        </RelativeLayout>
+        </RelativeLayout>-->
 
     </FrameLayout>
 
@@ -63,8 +64,8 @@
             android:id="@+id/relater_tittle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="2"
             android:ellipsize="end"
+            android:maxLines="2"
             android:text="@string/text_empty"
             android:textColor="@color/textColor_333333"
             android:textSize="16dp" />
@@ -87,14 +88,13 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <com.hply.roundimage.roundImage.RoundedImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.hply.roundimage.roundImage.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/relater_avatar"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center_vertical"
                 android:scaleType="centerCrop"
-                app:riv_oval="true"/>
+                app:riv_oval="true" />
 
             <TextView
                 android:id="@+id/relater_name"

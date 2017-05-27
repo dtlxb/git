@@ -14,7 +14,10 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -25,17 +28,17 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.RotateAnimation;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alivc.player.AliVcMediaPlayer;
 import com.alivc.player.MediaPlayer;
-import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import java.util.HashMap;
@@ -45,20 +48,17 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
-import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.RelaterVideoData;
+import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.common.AnimationUtils;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.PlayerUtils.PlayerControl;
 import cn.gogoal.im.common.PlayerUtils.StatusListener;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
+import cn.gogoal.im.fragment.PlayIntroduceFragment;
+import cn.gogoal.im.fragment.PlayRelatedFragment;
 
 /**
  * Created by dave.
@@ -70,11 +70,15 @@ public class PlayerActivity extends BaseActivity {
     @BindView(R.id.GLViewContainer)
     FrameLayout frameContainer;
 
+    @BindView(R.id.linearPlayerFun)
+    LinearLayout linearPlayerFun;
     //缓冲控件
     @BindView(R.id.LayoutTip)
     LinearLayout LayoutTip;
     @BindView(R.id.text_tip)
     ImageView text_tip;
+    @BindView(R.id.imgLoadPic)
+    ImageView imgLoadPic;
     //暂停
     @BindView(R.id.imgPause)
     CheckBox imgPause;
@@ -87,44 +91,21 @@ public class PlayerActivity extends BaseActivity {
     SeekBar mSeekBar;
     @BindView(R.id.totalDuration)
     TextView totalDuration;
-
     //介绍
     @BindView(R.id.player_line_tab)
     LinearLayout player_line_tab;
-    //主播
-    @BindView(R.id.player_anchor_tv)
-    TextView player_anchor_tv;
-    @BindView(R.id.tv_player_anchor)
-    TextView tv_player_anchor;
 
-    @BindView(R.id.linearPlayerFun)
-    LinearLayout linearPlayerFun;
+    @BindView(R.id.textVideoName)
+    TextView textVideoName;
+    @BindView(R.id.textProgrammeName)
+    TextView textProgrammeName;
+    @BindView(R.id.textPlayBase)
+    TextView textPlayBase;
+    @BindView(R.id.boxCategory)
+    CheckBox boxCategory;
 
-    //相关视频
-    @BindView(R.id.player_video_tv)
-    TextView player_video_tv;
-    @BindView(R.id.tv_player_video)
-    TextView tv_player_video;
-
-    @BindView(R.id.recy_relater)
-    RecyclerView recy_relater;
-    @BindView(R.id.linearShowError)
-    LinearLayout linearShowError;
-    //主播介绍
-    @BindView(R.id.scrollIntroduce)
-    ScrollView scrollIntroduce;
-    @BindView(R.id.anchor_avatar)
-    RoundedImageView anchor_avatar;
-    @BindView(R.id.anchor_name)
-    TextView anchor_name;
-    @BindView(R.id.anchor_position)
-    TextView anchor_position;
-    @BindView(R.id.anchor_achieve)
-    TextView anchor_achieve;
-    @BindView(R.id.live_avatar)
-    ImageView live_avatar;
-    @BindView(R.id.live_achieve)
-    TextView live_achieve;
+    @BindView(R.id.playPager)
+    ViewPager playPager;
 
     private RotateAnimation animation;
 
@@ -171,13 +152,13 @@ public class PlayerActivity extends BaseActivity {
     private int mPosition = 0;
     private int mVolumn = 50;
 
+    private JSONObject playerData;
     private String mURI;
-
     private String live_id;
 
-    private RelaterVideoAdapter adapter;
-
     private int screenWidth;
+
+    private PlayPagerAdapter pagerAdapter;
 
     private Handler mTimerHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -223,8 +204,6 @@ public class PlayerActivity extends BaseActivity {
 
         PlayDataStatistics.getStatisticalData(getContext(), "2", live_id, "2", "1");
 
-        initRecycleView(recy_relater, null);
-
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(connectionReceiver, intentFilter);
@@ -238,7 +217,36 @@ public class PlayerActivity extends BaseActivity {
 
         initSurface();
 
-        getRelaterVideoInfo();
+        boxCategory.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isCheck) {
+                if (isCheck) {
+                    boxCategory.setText("主播介绍");
+                } else {
+                    boxCategory.setText("相关视频");
+                }
+            }
+        });
+
+        playPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    boxCategory.setChecked(false);
+                } else if (position == 1) {
+                    boxCategory.setChecked(true);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
     }
 
     /**
@@ -255,33 +263,18 @@ public class PlayerActivity extends BaseActivity {
                 KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
-                    JSONObject data = object.getJSONArray("data").getJSONObject(0);
-                    //主播介绍
-                    JSONObject anchor = data.getJSONObject("anchor");
+                    playerData = object.getJSONArray("data").getJSONObject(0);
 
-                    //初始化
-                    player_anchor_tv.setTextColor(getResColor(R.color.player_add_friend));
-                    tv_player_anchor.setVisibility(View.VISIBLE);
-                    player_video_tv.setTextColor(getResColor(R.color.textColor_333333));
-                    tv_player_video.setVisibility(View.GONE);
+                    pagerAdapter = new PlayPagerAdapter(getSupportFragmentManager(), getContext());
+                    playPager.setAdapter(pagerAdapter);
+                    playPager.setOffscreenPageLimit(2);
 
-                    if (anchor != null) {
-                        linearShowError.setVisibility(View.GONE);
-                        scrollIntroduce.setVisibility(View.VISIBLE);
-                        recy_relater.setVisibility(View.GONE);
+                    //数据填入
+                    textVideoName.setText(playerData.getString("video_name"));
+                    textProgrammeName.setText(playerData.getString("programme_name"));
+                    textPlayBase.setText(playerData.getString("play_base") + "次播放");
 
-                        ImageDisplay.loadCircleImage(getContext(), anchor.getString("face_url"), anchor_avatar);
-                        anchor_name.setText(anchor.getString("anchor_name"));
-                        anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
-                        anchor_achieve.setText(anchor.getString("anchor_introduction"));
-                        ImageDisplay.loadImage(getContext(), data.getString("introduction_img"), live_avatar);
-                        live_achieve.setText(data.getString("introduction"));
-                    } else {
-                        linearShowError.setVisibility(View.VISIBLE);
-                        scrollIntroduce.setVisibility(View.GONE);
-                    }
-
-                    mURI = data.getString("video_file");
+                    mURI = playerData.getString("video_file");
 
                     startToPlay(mURI);
 
@@ -415,6 +408,10 @@ public class PlayerActivity extends BaseActivity {
      * @return 是否成功
      */
     private boolean initSurface() {
+        RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, (int) (screenWidth * 9.0f / 16));
+        imgLoadPic.setLayoutParams(param);
+
         frameContainer.setBackgroundColor(Color.rgb(0, 0, 0));
         mSurfaceView = new SurfaceView(this);
         mGestureDetector = new GestureDetector(this, new MyGestureListener());
@@ -422,6 +419,7 @@ public class PlayerActivity extends BaseActivity {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, (int) (screenWidth * 9.0f / 16));
         params.gravity = Gravity.CENTER;
+
         mSurfaceView.setLayoutParams(params);
         // 为避免重复添加,事先remove子view
         frameContainer.removeAllViews();
@@ -780,6 +778,7 @@ public class PlayerActivity extends BaseActivity {
             if (animation != null) {
                 animation.cancel();
             }
+            imgLoadPic.setVisibility(View.GONE);
         }
     }
 
@@ -989,8 +988,8 @@ public class PlayerActivity extends BaseActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    @OnClick({R.id.imgPlayerFullScreen, R.id.imgPlayerShare, R.id.imgPlayerClose,
-            R.id.player_anchor_layout, R.id.player_video_layout, R.id.textAgainLoad, R.id.imgPause})
+    @OnClick({R.id.imgPlayerFullScreen, R.id.imgPlayerShare, R.id.imgPlayerClose, R.id.imgPause,
+            R.id.boxCategory})
     public void setClickFunctionBar(View v) {
         switch (v.getId()) {
             case R.id.imgPlayerFullScreen: //横竖屏切换
@@ -1002,7 +1001,18 @@ public class PlayerActivity extends BaseActivity {
                 break;
             case R.id.imgPlayerShare: //分享
                 PlayDataStatistics.getStatisticalData(getContext(), "2", live_id, "2", "2");
-                DialogHelp.showShareDialog(getContext(), AppConst.GG_LIVE_SHARE + live_id + "?video", "http://g1.dfcfw.com/g2/201702/20170216133526.png", "分享", "第一次分享");
+
+                GGShareEntity entity = new GGShareEntity();
+                entity.setDesc(playerData.getString("video_name"));
+                entity.setIcon(playerData.getString("video_img_url"));
+                entity.setTitle("Go-Goal直播");
+                entity.setShareType("2");
+                entity.setLive_id(live_id);
+                entity.setSource("video");
+
+                Intent intent = new Intent(getContext(), ShareMessageActivity.class);
+                intent.putExtra("share_web_data", entity);
+                startActivity(intent);
                 break;
             case R.id.imgPlayerClose: //退出
                 if (AppDevice.isLandscape(getContext())) {
@@ -1010,31 +1020,6 @@ public class PlayerActivity extends BaseActivity {
                 } else if (AppDevice.isPortrait(getContext())) {
                     finish();
                 }
-                break;
-            case R.id.player_anchor_layout: //主播
-                if (tv_player_anchor.getVisibility() == View.GONE) {
-                    player_anchor_tv.setTextColor(getResColor(R.color.player_add_friend));
-                    tv_player_anchor.setVisibility(View.VISIBLE);
-                    player_video_tv.setTextColor(getResColor(R.color.textColor_333333));
-                    tv_player_video.setVisibility(View.GONE);
-
-                    scrollIntroduce.setVisibility(View.VISIBLE);
-                    recy_relater.setVisibility(View.GONE);
-                }
-                break;
-            case R.id.player_video_layout: //相关视频
-                if (tv_player_video.getVisibility() == View.GONE) {
-                    player_anchor_tv.setTextColor(getResColor(R.color.textColor_333333));
-                    tv_player_anchor.setVisibility(View.GONE);
-                    player_video_tv.setTextColor(getResColor(R.color.player_add_friend));
-                    tv_player_video.setVisibility(View.VISIBLE);
-
-                    scrollIntroduce.setVisibility(View.GONE);
-                    recy_relater.setVisibility(View.VISIBLE);
-                }
-                break;
-            case R.id.textAgainLoad: //重新加载
-                getRelaterVideoInfo();
                 break;
             case R.id.imgPause: //播放暂停/开始
                 if (imgPause.isChecked()) {
@@ -1044,11 +1029,21 @@ public class PlayerActivity extends BaseActivity {
                         start();
                 }
                 break;
+            case R.id.boxCategory: //主播介绍/相关视频
+                if (boxCategory.isChecked()) {
+                    playPager.setCurrentItem(1);
+                } else {
+                    playPager.setCurrentItem(0);
+                }
+                break;
         }
     }
 
     //设置横屏
     private void setLandscape() {
+        RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        imgLoadPic.setLayoutParams(param);
 
         linearPlayerFun.setVisibility(View.GONE);
         player_line_tab.setVisibility(View.GONE);
@@ -1070,6 +1065,9 @@ public class PlayerActivity extends BaseActivity {
 
     //设置竖屏
     private void setProtrait() {
+        RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT, (int) (screenWidth * 9.0f / 16));
+        imgLoadPic.setLayoutParams(param);
 
         linearPlayerFun.setVisibility(View.VISIBLE);
         player_line_tab.setVisibility(View.VISIBLE);
@@ -1087,71 +1085,33 @@ public class PlayerActivity extends BaseActivity {
         }
     }
 
-    /*
-    * 获取直播相关视频
-    * */
-    private void getRelaterVideoInfo() {
+    /**
+     * viewpager适配器
+     */
+    class PlayPagerAdapter extends FragmentPagerAdapter {
 
-        Map<String, String> param = new HashMap<>();
-        param.put("video_id", live_id);
-        param.put("video_type", "2");
+        private Context mContext;
 
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                JSONObject object = JSONObject.parseObject(responseInfo);
-                if (object.getIntValue("code") == 0) {
-                    recy_relater.setVisibility(View.VISIBLE);
-                    linearShowError.setVisibility(View.GONE);
-
-                    List<RelaterVideoData> videoDatas = JSONObject.parseArray(String.valueOf(object.getJSONArray("data")), RelaterVideoData.class);
-                    adapter = new RelaterVideoAdapter(getContext(), videoDatas);
-                    recy_relater.setAdapter(adapter);
-                } else {
-                    recy_relater.setVisibility(View.GONE);
-                    linearShowError.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                UIHelper.toast(getContext(), R.string.net_erro_hint);
-            }
-        };
-        new GGOKHTTP(param, GGOKHTTP.GET_RELATED_VIDEO, ggHttpInterface).startGet();
-    }
-
-    class RelaterVideoAdapter extends CommonAdapter<RelaterVideoData, BaseViewHolder> {
-
-        public RelaterVideoAdapter(Context context, List<RelaterVideoData> list) {
-            super(R.layout.item_relater_video, list);
+        public PlayPagerAdapter(FragmentManager fm, Context mContext) {
+            super(fm);
+            this.mContext = mContext;
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, final RelaterVideoData data, int position) {
-
-            holder.setAlpha(R.id.text_playback, (float) 0.5);
-            if (data.getType() == 1) {
-                holder.setVisible(R.id.relative_player, true);
-            } else {
-                holder.setVisible(R.id.relative_player, false);
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return PlayIntroduceFragment.newInstance(String.valueOf(playerData));
+                case 1:
+                    return PlayRelatedFragment.newInstance(live_id);
+                default:
+                    return PlayIntroduceFragment.newInstance(String.valueOf(playerData));
             }
-            ImageView relater_img = holder.getView(R.id.relater_img);
-            ImageDisplay.loadImage(getContext(), data.getVideo_img_url(), relater_img);
-            holder.setText(R.id.relater_tittle, data.getVideo_name());
-            holder.setText(R.id.relater_play_count, data.getPlay_base() + "次");
-            RoundedImageView relater_avatar = holder.getView(R.id.relater_avatar);
-            ImageDisplay.loadCircleImage(getContext(), data.getFace_url(), relater_avatar);
-            holder.setText(R.id.relater_name, data.getAnchor_name());
-            holder.setText(R.id.relater_content, data.getProgramme_name());
+        }
 
-            holder.setOnClickListener(R.id.linearRelaterVideo, new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    live_id = data.getVideo_id();
-                    getPlayerInfo();
-                }
-            });
+        @Override
+        public int getCount() {
+            return 2;
         }
     }
 
