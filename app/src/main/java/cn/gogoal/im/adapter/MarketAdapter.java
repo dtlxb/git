@@ -122,9 +122,9 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
             holder.setText(R.id.tv_stock_market_price, StringUtils.saveSignificand(data.getPrice(), 2));
             holder.setText(R.id.tv_stock_market_price_change_rate, StringUtils.saveSignificand(data.getRate(), 2) + "%");
 
-            holder.setTextResColor(R.id.tv_stock_market_price, data.getPriceColor() == 0 ? R.color.textColor_333333 : data.getPriceColor());
-            holder.setTextResColor(R.id.tv_stock_market_price_change, data.getPriceColor() == 0 ? R.color.textColor_333333 : data.getPriceColor());
-            holder.setTextResColor(R.id.tv_stock_market_price_change_rate, data.getPriceColor() == 0 ? R.color.textColor_333333 : data.getPriceColor());
+            holder.setTextResColor(R.id.tv_stock_market_price,StockUtils.getStockRateColor(data.getChangeRate()));
+            holder.setTextResColor(R.id.tv_stock_market_price_change, StockUtils.getStockRateColor(data.getChangeRate()));
+            holder.setTextResColor(R.id.tv_stock_market_price_change_rate, StockUtils.getStockRateColor(data.getChangeRate()));
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -157,8 +157,8 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
             holder.setText(R.id.tv_hot_industry_name, data.getName());
             holder.setText(R.id.tv_hot_industry_rate, StockUtils.plusMinus(data.getIndustryRate(), true));
 
-            holder.setTextResColor(R.id.tv_hot_industry_rate, data.getPriceColor() == 0 ? R.color.textColor_333333 : data.getPriceColor());
-            holder.setTextResColor(R.id.tv_hot_industry_curentPrice$rate, data.getPriceColor() == 0 ? R.color.textColor_333333 : data.getPriceColor());
+            holder.setTextResColor(R.id.tv_hot_industry_rate, StockUtils.getStockRateColor(data.getChangeRate()));
+            holder.setTextResColor(R.id.tv_hot_industry_curentPrice$rate, StockUtils.getStockRateColor(data.getChangeRate()));
 
             holder.setText(R.id.tv_hot_industry_stockname, data.getStockName());
             holder.setText(R.id.tv_hot_industry_curentPrice$rate,
@@ -186,7 +186,8 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
         private int typePostion;
 
         private RankListAdapter(List<MarkteBean.MarketItemData> datas, int typePostion) {
-            super(R.layout.item_stock_rank_list, datas);
+//            super(R.layout.item_stock_rank_list, datas);
+            super(R.layout.item_my_stock, datas);
             this.typePostion = typePostion;
         }
 
@@ -194,24 +195,27 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
         protected void convert(BaseViewHolder holder, final MarkteBean.MarketItemData data, int position) {
             holder.itemView.setTag(position);
 
-            holder.setText(R.id.tv_stock_ranklist_stockName, data.getStockName());
-            holder.setText(R.id.tv_stock_ranklist_stockCode, data.getCode());
-            holder.setText(R.id.tv_stock_ranklist_currentPrice, StringUtils.saveSignificand(data.getPrice(), 2));
+            holder.setText(R.id.tv_mystock_stockname, data.getStockName());
+            holder.setText(R.id.tv_mystock_stockcode, data.getCode());
+            holder.setText(R.id.tv_mystock_price, StringUtils.saveSignificand(data.getPrice(), 2));
+
 
 
             switch (typePostion) {
                 case 2:
                 case 3:
-                    holder.setText(R.id.tv_stock_ranklist_rate, StockUtils.plusMinus(data.getRate(), true));
-                    holder.setTextResColor(R.id.tv_stock_ranklist_rate, data.getPriceColor());
-                    holder.setTextResColor(R.id.tv_stock_ranklist_currentPrice, data.getPriceColor());
+                    holder.setText(R.id.tv_mystock_rate, StockUtils.plusMinus(data.getRate(), true));
+                    holder.setBackgroundRes(R.id.tv_mystock_rate, StockUtils.getStockRateBackgroundRes(data.getChangeRate()));
+                    holder.setTextResColor(R.id.tv_mystock_price, StockUtils.getStockRateColor(data.getChangeRate()));
                     break;
                 case 4://换手率
-                    holder.setText(R.id.tv_stock_ranklist_rate, StringUtils.saveSignificand(
+                    holder.setText(R.id.tv_mystock_rate, StringUtils.saveSignificand(
                             StringUtils.pareseStringDouble(data.getRate()) * 100, 2) + "%");
+                    holder.setBackgroundRes(R.id.tv_mystock_rate, R.drawable.shape_my_stock_price_gray);
                     break;
                 case 5://振幅榜
-                    holder.setText(R.id.tv_stock_ranklist_rate, StringUtils.saveSignificand(data.getRate(), 2) + "%");
+                    holder.setText(R.id.tv_mystock_rate, StringUtils.saveSignificand(data.getRate(), 2) + "%");
+                    holder.setBackgroundRes(R.id.tv_mystock_rate, R.drawable.shape_my_stock_price_gray);
                     break;
             }
 

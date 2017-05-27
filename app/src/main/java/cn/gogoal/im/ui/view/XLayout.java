@@ -8,6 +8,7 @@ import android.support.annotation.IntDef;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -293,7 +294,9 @@ public class XLayout extends FrameLayout {
      * @return
      */
     public XLayout setEmptyText(String text) {
-        emptyText.setText(text);
+        if (TextUtils.isEmpty(text)) {
+            emptyText.setText(text);
+        }
         return this;
     }
 

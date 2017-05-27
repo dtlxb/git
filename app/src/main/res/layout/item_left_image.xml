@@ -53,8 +53,16 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_name"
             android:layout_marginStart="5dp"
-            android:background="@drawable/im_left_image_bg"
             android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/image_send_fg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_name"
+            android:layout_marginStart="5dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/im_left_image_bg" />
 
     </RelativeLayout>
 

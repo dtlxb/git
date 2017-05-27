@@ -58,7 +58,16 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/recorder_time"
-            android:src="@mipmap/message_send_fail" />
+            android:src="@mipmap/message_send_fail"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/pb_sending"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/recorder_time" />
 
         <FrameLayout
             android:id="@+id/recorder_length"

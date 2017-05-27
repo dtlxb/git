@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusable="true"
     android:background="@color/colorTitle"
+    android:focusable="true"
+    android:fitsSystemWindows="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 
@@ -20,10 +21,8 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="vertical"
             android:background="@android:color/white"/>
 
     </cn.gogoal.im.ui.view.XLayout>
-
 
 </LinearLayout>

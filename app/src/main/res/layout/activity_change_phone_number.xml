@@ -7,6 +7,7 @@
     android:background="@color/stock_market_bg"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     tools:context=".activity.ChangePhoneNumberActivity">
 
     <include layout="@layout/include_title" />

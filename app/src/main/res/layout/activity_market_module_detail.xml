@@ -7,42 +7,7 @@
 
     <include layout="@layout/include_title" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/stock_market_bg"
-        android:paddingBottom="8dp"
-        android:paddingEnd="15dp"
-        android:paddingStart="15dp"
-        android:paddingTop="8dp">
-
-        <TextView
-            android:id="@+id/tv_header_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/text_empty"
-            android:textColor="@color/textColor_333333"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_header_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/text_empty"
-            android:textColor="@color/textColor_333333"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_header_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerInParent="true"
-            android:text="@string/text_empty"
-            android:textColor="@color/textColor_333333"
-            android:textSize="16sp" />
-    </RelativeLayout>
+    <include layout="@layout/head_stock_rank_list"/>
 
     <cn.gogoal.im.ui.view.XLayout
         android:id="@+id/xLayout"

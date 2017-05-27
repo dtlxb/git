@@ -2,6 +2,8 @@ package cn.gogoal.im.activity.stock;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -40,11 +42,11 @@ import static cn.gogoal.im.common.AppConst.REFRESH_TYPE_SWIPEREFRESH;
  */
 public class MarketDetialActivity extends BaseActivity {
 
-    public static final int MODULE_TYPE_TITLE_HOT_INDUSTRY = 0x6001;
+    public static final int MODULE_TYPE_TITLE_HOT_INDUSTRY = 0x6001;//热门行业 标题
 
-    public static final int MODULE_TYPE_HOT_INDUSTRY = 0x6002;
+    public static final int MODULE_TYPE_HOT_INDUSTRY = 0x6002;//热门行业 子模块
 
-    public static final int MODULE_TYPE_TTILE_RANK_LIST = 0x6003;
+    public static final int MODULE_TYPE_TTILE_RANK_LIST = 0x6003;//[涨跌换振] 模块
 
     private int refreshType = REFRESH_TYPE_AUTO;
 
@@ -57,13 +59,13 @@ public class MarketDetialActivity extends BaseActivity {
     @BindView(R.id.xLayout)
     XLayout xLayout;
 
-    @BindView(R.id.tv_header_group)
+    @BindView(R.id.tv_name)
     TextView tvHeaderGroup;
 
-    @BindView(R.id.tv_header_value)
+    @BindView(R.id.tv_center_element)
     TextView tvHeaderValue;
 
-    @BindView(R.id.tv_header_type)
+    @BindView(R.id.tv_third_element)
     TextView tvHeaderType;
 
     private int moduleType;
@@ -168,7 +170,7 @@ public class MarketDetialActivity extends BaseActivity {
      * 获取 热门行业、行业子模块
      */
     private void getHotIndustryList(String industryName) {
-        if (refreshType!=REFRESH_TYPE_SWIPEREFRESH) {
+        if (refreshType != REFRESH_TYPE_SWIPEREFRESH) {
             xLayout.setStatus(XLayout.Loading);
         }
 
@@ -194,8 +196,8 @@ public class MarketDetialActivity extends BaseActivity {
                     List<HotIndustryBean.DataBean> datas = JSONObject.parseObject(responseInfo, HotIndustryBean.class).getData();
                     hotIndustryDatas.addAll(datas);
                     hotIndustryAdapter.notifyDataSetChanged();
-                    if (refreshType==REFRESH_TYPE_SWIPEREFRESH){
-                        UIHelper.toast(getActivity(),"更新数据成功");
+                    if (refreshType == REFRESH_TYPE_SWIPEREFRESH) {
+                        UIHelper.toast(getActivity(), "更新数据成功");
                     }
                     xLayout.setStatus(XLayout.Success);
                 } else if (responseCode == 1001) {
@@ -216,7 +218,7 @@ public class MarketDetialActivity extends BaseActivity {
      * 获取[涨跌换振]数据
      */
     private void getRanKList() {
-        if (refreshType!=REFRESH_TYPE_SWIPEREFRESH) {
+        if (refreshType != REFRESH_TYPE_SWIPEREFRESH) {
             xLayout.setStatus(XLayout.Loading);
         }
         Map<String, String> param = new HashMap<>();
@@ -264,34 +266,43 @@ public class MarketDetialActivity extends BaseActivity {
         }).startGet();
     }
 
+    //    [涨跌换振] TITLE
     private class RankAdapter extends CommonAdapter<StockMarketBean.DataBean.StockRanklistBean.StockRankBean
-            ,BaseViewHolder> {
+            , BaseViewHolder> {
 
         RankAdapter(List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> datas) {
-            super(R.layout.item_stock_rank_list, datas);
+            super(R.layout.item_my_stock, datas);
         }
 
         @Override
         protected void convert(BaseViewHolder holder,
                                final StockMarketBean.DataBean.StockRanklistBean.StockRankBean data, int position) {
 
-            holder.setText(R.id.tv_stock_ranklist_stockName, data.getStock_name());
-            holder.setText(R.id.tv_stock_ranklist_stockCode, data.getStock_code());
-            holder.setText(R.id.tv_stock_ranklist_currentPrice, StringUtils.saveSignificand(data.getCurrent_price(), 2));
+            TextView tv_price = holder.getView(R.id.tv_mystock_price);
 
+            tv_price.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+
+            holder.setText(R.id.tv_mystock_stockname, data.getStock_name());
+            holder.setText(R.id.tv_mystock_stockcode, data.getStock_code());
+
+            tv_price.setText(StringUtils.saveSignificand(data.getCurrent_price(), 2));
+
+            TextView rateView = holder.getView(R.id.tv_mystock_rate);
 
             switch (listType) {
-                case 0:
-                case 1:
-                    holder.setText(R.id.tv_stock_ranklist_rate, StockUtils.plusMinus(data.getRate(),true));
-                    holder.setTextResColor(R.id.tv_stock_ranklist_rate, StockUtils.getStockRateColor(data.getRate()));
+                case 0://涨幅榜
+                case 1://跌幅榜
+                    rateView.setText(StockUtils.plusMinus(data.getRate(), true));
+                    rateView.setBackgroundResource(StockUtils.getStockRateBackgroundRes(data.getRate()));
                     break;
                 case 2://换手率
-                    holder.setText(R.id.tv_stock_ranklist_rate, StringUtils.saveSignificand(
+                    rateView.setText(""+StringUtils.saveSignificand(
                             StringUtils.pareseStringDouble(data.getRate()) * 100, 2) + "%");
+                    rateView.setBackgroundResource(R.drawable.shape_my_stock_price_gray);
                     break;
                 case 3://振幅榜
-                    holder.setText(R.id.tv_stock_ranklist_rate, StringUtils.saveSignificand(data.getRate(), 2) + "%");
+                    rateView.setText(""+StringUtils.saveSignificand(data.getRate(), 2) + "%");
+                    rateView.setBackgroundResource(R.drawable.shape_my_stock_price_gray);
                     break;
             }
 
@@ -299,7 +310,7 @@ public class MarketDetialActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     NormalIntentUtils.go2StockDetail(getActivity(),
-                            data.getStock_code(),data.getStock_name());
+                            data.getStock_code(), data.getStock_name());
                 }
             });
         }
@@ -308,29 +319,30 @@ public class MarketDetialActivity extends BaseActivity {
     /**
      * 热门行业大模块及子模块列表适配器
      */
-    private class IndustryAdapter extends CommonAdapter<HotIndustryBean.DataBean,BaseViewHolder> {
-
-        private List<HotIndustryBean.DataBean> datas;
+    private class IndustryAdapter extends CommonAdapter<HotIndustryBean.DataBean, BaseViewHolder> {
 
         private IndustryAdapter(List<HotIndustryBean.DataBean> datas) {
-            super(R.layout.item_stock_rank_list, datas);
-            this.datas = datas;
+            super(R.layout.item_my_stock, datas);
         }
 
         @Override
         protected void convert(BaseViewHolder holder, final HotIndustryBean.DataBean data, int position) {
 
             if (moduleType == MODULE_TYPE_TITLE_HOT_INDUSTRY) {
-                holder.setText(R.id.tv_stock_ranklist_stockName, data.getIndustry_name());
-                holder.getView(R.id.tv_stock_ranklist_stockCode).setVisibility(View.GONE);
+                holder.setText(R.id.tv_mystock_stockname, data.getIndustry_name());
+                holder.getView(R.id.tv_mystock_stockcode).setVisibility(View.GONE);
 
-                TextView rateView = holder.getView(R.id.tv_stock_ranklist_currentPrice);
+                TextView rateView = holder.getView(R.id.tv_mystock_price);
+                TextView stockView = holder.getView(R.id.tv_mystock_rate);
 
-                rateView.setText(StockUtils.plusMinus(""+StringUtils.pareseStringDouble(data.getIndustry_rate()),true));// TODO: 2017/4/7 0007
+                rateView.setText(StockUtils.plusMinus("" + StringUtils.pareseStringDouble(data.getIndustry_rate()), true));// TODO: 2017/4/7 0007
+                rateView.setTextColor(Color.WHITE);
 
-                holder.setText(R.id.tv_stock_ranklist_rate, data.getStock_name());
+                stockView.setText(data.getStock_name());
+                stockView.setTextColor(getResColor(R.color.textColor_333333));
+                stockView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
 
-                rateView.setTextColor(getResColor(StockUtils.getStockRateColor(data.getIndustry_rate())));
+                rateView.setBackgroundResource(StockUtils.getStockRateBackgroundRes(data.getIndustry_rate()));
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -345,31 +357,37 @@ public class MarketDetialActivity extends BaseActivity {
 
             } else {
 
-                TextView rateView = holder.getView(R.id.tv_stock_ranklist_rate);
+                TextView rateView = holder.getView(R.id.tv_mystock_rate);
+                rateView.setTextColor(Color.WHITE);
 
-                holder.setText(R.id.tv_stock_ranklist_stockName, data.getStock_name());
-                holder.setText(R.id.tv_stock_ranklist_stockCode, data.getStock_code());
+                TextView priceView = holder.getView(R.id.tv_mystock_price);
+                priceView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+
+                holder.setText(R.id.tv_mystock_stockname, data.getStock_name());
+                holder.setText(R.id.tv_mystock_stockcode, data.getStock_code());
 
                 if (data.getStock_type() == 1) { //股票状态正常
-                    holder.setText(R.id.tv_stock_ranklist_currentPrice, StringUtils.saveSignificand(data.getCurrent_price(), 2));
-                    rateView.setText(StockUtils.plusMinus(""+data.getRate(),true));
 
-                    rateView.setTextColor(getResColor(StockUtils.getStockRateColor(""+data.getRate())));
+                    priceView.setText(StringUtils.saveSignificand(data.getCurrent_price(), 2));
 
-                    holder.setTextResColor(R.id.tv_stock_ranklist_currentPrice, R.color.textColor_333333);
+                    rateView.setText(StockUtils.plusMinus("" + data.getRate(), true));
+
+                    rateView.setBackgroundResource(StockUtils.getStockRateBackgroundRes(data.getRate()));
+
+                    priceView.setTextColor(StockUtils.getStockRateColor(data.getRate()));
+
                 } else { //股票退市，停牌等异常
-                    holder.setText(R.id.tv_stock_ranklist_currentPrice, "--");//价格
+                    priceView.setText(StockUtils.getStockStatus(data.getStock_type()));
                     rateView.setText("--");                                     //涨跌幅
-                    rateView.setTextColor(getResColor(R.color.stock_gray));
-                    holder.setTextResColor(R.id.tv_stock_ranklist_currentPrice, R.color.stock_gray);
-
+                    rateView.setBackgroundResource(R.drawable.shape_my_stock_price_gray);
+                    priceView.setTextColor(getResColor(R.color.stock_gray));
                 }
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         NormalIntentUtils.go2StockDetail(getActivity(),
-                                data.getStock_code(),data.getStock_name());
+                                data.getStock_code(), data.getStock_name());
                     }
                 });
             }

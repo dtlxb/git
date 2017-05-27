@@ -13,7 +13,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.hply.imagepicker.R;
-import com.hply.imagepicker.view.StatusBarUtil;
+import com.hply.imagepicker.Utils;
 
 public class ImageBaseActivity extends AppCompatActivity {
 
@@ -24,7 +24,7 @@ public class ImageBaseActivity extends AppCompatActivity {
             setTranslucentStatus(true);
         }
 
-        StatusBarUtil.with(this).setColor(ContextCompat.getColor(this, R.color.status_bar));
+        Utils.setStatusColor(this,ContextCompat.getColor(this,R.color.status_bar));
 
         //设置上方状态栏的颜色
     }

@@ -194,8 +194,6 @@ public class PhoneContactsActivity extends BaseActivity {
                     mapContacts.add(map);
                 }
 
-                KLog.e(JSONObject.toJSONString(mapContacts));
-
                 HashMap<String, String> map = new HashMap<>();
                 map.put("token", UserUtils.getToken());
                 map.put("contacts", JSONObject.toJSONString(mapContacts));
@@ -203,7 +201,6 @@ public class PhoneContactsActivity extends BaseActivity {
                 new GGOKHTTP(map, GGOKHTTP.GET_CONTACTS, new GGOKHTTP.GGHttpInterface() {
                     @Override
                     public void onSuccess(String responseInfo) {
-                        KLog.e(responseInfo);
                         if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                             phoneContacts.clear();
 

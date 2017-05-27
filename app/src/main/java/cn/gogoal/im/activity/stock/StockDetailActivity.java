@@ -18,7 +18,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hply.imagepicker.view.StatusBarUtil;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -354,24 +353,24 @@ public class StockDetailActivity extends BaseActivity {
 
     private void setStockHeadColor(String change_rate) {
         if (TextUtils.isEmpty(change_rate)) {
-            StatusBarUtil.with(getActivity()).setColor(getResColor(R.color.stock_gray));
+//            StatusBarUtil.with(getActivity()).setColor(getResColor(R.color.stock_gray));
             xTitle.setBackgroundColor(getResColor(R.color.stock_gray));
             layoutHead.setBackgroundColor(getResColor(R.color.stock_gray));
         } else {
             double rate = Double.parseDouble(change_rate);
             if (rate > 0) {
-                StatusBarUtil.with(getActivity()).setColor(
-                        getResColor(R.color.stock_red));
+//                StatusBarUtil.with(getActivity()).setColor(
+//                        getResColor(R.color.stock_red));
                 xTitle.setBackgroundColor(getResColor(R.color.stock_red));
                 layoutHead.setBackgroundColor(getResColor(R.color.stock_red));
             } else if (rate < 0) {
-                StatusBarUtil.with(getActivity()).setColor(
-                        getResColor(R.color.stock_green));
+//                StatusBarUtil.with(getActivity()).setColor(
+//                        getResColor(R.color.stock_green));
                 xTitle.setBackgroundColor(getResColor(R.color.stock_green));
                 layoutHead.setBackgroundColor(getResColor(R.color.stock_green));
             } else {
-                StatusBarUtil.with(getActivity()).setColor(
-                        getResColor(R.color.stock_gray));
+//                StatusBarUtil.with(getActivity()).setColor(
+//                        getResColor(R.color.stock_gray));
                 xTitle.setBackgroundColor(getResColor(R.color.stock_gray));
                 layoutHead.setBackgroundColor(getResColor(R.color.stock_gray));
             }

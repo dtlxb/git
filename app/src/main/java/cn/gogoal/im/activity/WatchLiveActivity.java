@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
@@ -42,7 +41,6 @@ import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
-import com.hply.imagepicker.view.StatusBarUtil;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
@@ -214,8 +212,6 @@ public class WatchLiveActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-
-        StatusBarUtil.with(this).setColor(Color.BLACK);
 
         live_id = getIntent().getStringExtra("live_id");
 

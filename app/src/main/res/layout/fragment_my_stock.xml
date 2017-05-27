@@ -18,18 +18,6 @@
             android:orientation="vertical"
             app:layout_scrollFlags="scroll|enterAlways">
 
-            <cn.gogoal.im.ui.view.MySearchView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_margin="10dp"
-                android:background="@drawable/shape_search_activity_edit"
-                android:drawableLeft="@mipmap/img_search"
-                android:drawablePadding="3dp"
-                android:gravity="center_vertical"
-                android:text="股票代码/名称/拼音"
-                android:textColor="@color/colorXLayout"
-                android:textSize="14sp" />
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
@@ -82,9 +70,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/layout_tiny_market"
                         android:contentDescription="@null"
                         android:paddingEnd="10dp"
-                        android:layout_toEndOf="@+id/layout_tiny_market"
                         android:paddingStart="10dp"
                         android:paddingTop="10dp"
                         android:scaleType="fitStart"
@@ -151,7 +139,53 @@
             </RelativeLayout>
         </LinearLayout>
 
-        <include layout="@layout/item_my_stock" />
+        <android.support.percent.PercentRelativeLayout
+            android:id="@+id/item_mystock"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:paddingEnd="15dp"
+            android:paddingStart="0dp"
+            android:background="@drawable/shape_line_bottom"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_mystock_stockname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/text_empty"
+                android:layout_marginStart="15dp"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/tv_mystock_price"
+                android:textColor="@color/textColor_333333"
+                android:textSize="16sp" />
+
+            <cn.gogoal.im.ui.view.SortView
+                android:id="@+id/tv_mystock_price"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/tv_mystock_rate"
+                android:gravity="center"
+                android:text="@string/text_empty"
+                android:textColor="@color/textColor_333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_widthPercent="35%" />
+
+            <cn.gogoal.im.ui.view.SortView
+                android:id="@+id/tv_mystock_rate"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="@string/text_empty"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:textColor="@color/textColor_333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_widthPercent="25%" />
+        </android.support.percent.PercentRelativeLayout>
 
     </android.support.design.widget.AppBarLayout>
 

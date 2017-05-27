@@ -13,7 +13,7 @@ import android.widget.ImageView;
 
 import com.hply.imagepicker.ImagePicker;
 import com.hply.imagepicker.R;
-import com.hply.imagepicker.view.StatusBarUtil;
+import com.hply.imagepicker.Utils;
 
 public class ImagePreviewDelActivity extends ImagePreviewBaseActivity implements View.OnClickListener {
 
@@ -86,13 +86,16 @@ public class ImagePreviewDelActivity extends ImagePreviewBaseActivity implements
         if (topBar.getVisibility() == View.VISIBLE) {
             topBar.setAnimation(AnimationUtils.loadAnimation(this, com.hply.imagepicker.R.anim.top_out));
             topBar.setVisibility(View.GONE);
-            StatusBarUtil.with(ImagePreviewDelActivity.this).setColor(ContextCompat.getColor(ImagePreviewDelActivity.this,com.hply.imagepicker.R.color.transparent));//通知栏所需颜色
+
+            Utils.setStatusColor(this,ContextCompat.getColor(this,R.color.transparent));
             //给最外层布局加上这个属性表示，Activity全屏显示，且状态栏被隐藏覆盖掉。
             if (Build.VERSION.SDK_INT >= 16) content.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
         } else {
             topBar.setAnimation(AnimationUtils.loadAnimation(this, com.hply.imagepicker.R.anim.top_in));
             topBar.setVisibility(View.VISIBLE);
-            StatusBarUtil.with(ImagePreviewDelActivity.this).setColor(ContextCompat.getColor(ImagePreviewDelActivity.this,com.hply.imagepicker.R.color.status_bar));//通知栏所需颜色
+
+            Utils.setStatusColor(this,ContextCompat.getColor(this,R.color.status_bar));
+//            StatusBarUtil.with(ImagePreviewDelActivity.this).setColor(ContextCompat.getColor(ImagePreviewDelActivity.this,com.hply.imagepicker.R.color.status_bar));//通知栏所需颜色
             //Activity全屏显示，但状态栏不会被隐藏覆盖，状态栏依然可见，Activity顶端布局部分会被状态遮住
             if (Build.VERSION.SDK_INT >= 16) content.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }

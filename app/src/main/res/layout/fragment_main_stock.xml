@@ -10,19 +10,22 @@
         android:id="@+id/layout_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/titlebar_size"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         android:background="@drawable/shape_line_bottom">
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_mystock_edit"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:paddingEnd="15dp"
-            android:paddingStart="15dp"
-            android:text="编辑"
+            android:paddingEnd="7dp"
+            android:paddingStart="7dp"
+            android:src="@mipmap/img_edit"
             android:textColor="@color/textColor_333333"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:contentDescription="@null" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_my_stock"
@@ -40,9 +43,20 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:contentDescription="@null"
-            android:paddingEnd="15dp"
-            android:paddingStart="15dp"
+            android:paddingEnd="7dp"
+            android:paddingStart="8dp"
             android:src="@mipmap/img_refresh" />
+
+        <ImageView
+            android:id="@+id/img_mystock_search"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:paddingEnd="8dp"
+            android:paddingStart="7dp"
+            android:layout_toStartOf="@+id/img_mystock_refresh"
+            android:src="@mipmap/img_title_search" />
     </RelativeLayout>
 
     <FrameLayout

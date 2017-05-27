@@ -4,6 +4,8 @@
     android:id="@+id/item_mystock"
     android:layout_width="match_parent"
     android:layout_height="55dp"
+    android:paddingEnd="15dp"
+    android:paddingStart="15dp"
     android:background="@drawable/shape_line_bottom"
     android:orientation="horizontal">
 
@@ -11,7 +13,6 @@
         android:id="@+id/flag_layout"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="15dp"
         android:layout_toStartOf="@+id/tv_mystock_price"
         android:gravity="center_vertical"
         android:orientation="vertical">
@@ -56,25 +57,32 @@
         </LinearLayout>
     </LinearLayout>
 
-    <cn.gogoal.im.ui.view.SortView
+    <TextView
         android:id="@+id/tv_mystock_price"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toStartOf="@+id/tv_mystock_rate"
         android:gravity="center"
         android:text="@string/text_empty"
+        app:layout_marginEndPercent="5%"
         android:textColor="@color/textColor_333333"
         android:textSize="16sp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:textStyle="bold"
         app:layout_widthPercent="25%" />
 
-    <cn.gogoal.im.ui.view.SortView
+    <TextView
         android:id="@+id/tv_mystock_rate"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:gravity="center"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         android:text="@string/text_empty"
-        android:textColor="@color/textColor_333333"
+        android:textColor="@android:color/white"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_widthPercent="25%" />
 </android.support.percent.PercentRelativeLayout>
