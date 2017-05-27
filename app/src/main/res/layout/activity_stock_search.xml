@@ -2,53 +2,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
     android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".activity.copy.StockSearchActivity">
 
-    <LinearLayout
+    <include layout="@layout/include_title"/>
+
+    <android.support.v7.widget.SearchView
+        style="@style/NormalSearchView"
+        android:id="@+id/search_edit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_marginBottom="6dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:layout_marginTop="6dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/shape_search_activity_edit"
-            android:orientation="horizontal">
-
-            <android.support.v7.widget.SearchView
-                style="@style/NormalSearchView"
-                android:id="@+id/search_edit"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:drawableRight="@drawable/cancel_phone"
-                app:defaultQueryHint="@string/stock_fund_plate"
-                android:singleLine="true"
-                app:searchIcon="@drawable/search_gray"
-                android:textColorHint="@color/text_color_light"
-                android:textSize="@dimen/text_size_11"/>
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/back_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="取消"
-            android:padding="12dp"
-            android:textColor="@color/search_back"
-            android:textSize="@dimen/text_size_15" />
-
-    </LinearLayout>
+        android:drawableRight="@drawable/cancel_phone"
+        app:defaultQueryHint="@string/stock_fund_plate"
+        android:singleLine="true"
+        android:background="@drawable/shape_search_activity_edit"
+        app:searchIcon="@drawable/search_gray"
+        android:textColorHint="@color/text_color_light"
+        android:textSize="@dimen/text_size_11"/>
 
     <TextView
         android:layout_width="match_parent"

@@ -53,7 +53,7 @@ public class StockUtils {
      * 添加单个股票到自选股
      */
     public static void addStock2MyStock(String stockCode) {
-        if (stockCode==null){
+        if (stockCode == null) {
             return;
         }
         Set<String> myStockSet = getMyStockSet();
@@ -75,14 +75,14 @@ public class StockUtils {
 
         Set<String> myStockSet = getMyStockSet();
 
-        KLog.e(myStockSet.size()+";==="+myStockSet.toString());
+        KLog.e(myStockSet.size() + ";===" + myStockSet.toString());
 
         if (myStockSet.remove(stockCode)) {
             SPTools.saveSetData("my_stock_set", myStockSet);
-        }else {
+        } else {
             myStockSet.remove(stockCode.substring(2));
         }
-        KLog.e(myStockSet.size()+";==="+myStockSet.toString());
+        KLog.e(myStockSet.size() + ";===" + myStockSet.toString());
     }
 
     /**
@@ -159,6 +159,43 @@ public class StockUtils {
         return rateOrPrice == Double.NaN ? R.color.stock_gray : (rateOrPrice > 0 ? R.color.stock_red : (rateOrPrice == 0 ? R.color.stock_gray :
                 R.color.stock_green));
     }
+
+    /**
+     * 根据判断的依据字段，返回股票颜色
+     */
+    public static int getStockRateColor(double rateOrPriceString) {
+        return rateOrPriceString == Double.NaN ?
+                R.color.stock_gray :
+                (rateOrPriceString > 0 ?
+                        R.color.stock_red : (rateOrPriceString == 0 ? R.color.stock_gray :
+                        R.color.stock_green));
+    }
+
+    /**
+     * 根据判断的依据字段，返回股票颜色
+     */
+    public static int getStockRateBackgroundRes(String rateOrPriceString) {
+        if (TextUtils.isEmpty(rateOrPriceString) || rateOrPriceString.equals("null")) {
+            return R.drawable.shape_my_stock_price_gray;
+        }
+        double rateOrPrice = Double.parseDouble(rateOrPriceString);
+
+        return rateOrPrice == Double.NaN ? R.drawable.shape_my_stock_price_gray :
+                (rateOrPrice > 0 ? R.drawable.shape_my_stock_price_red :
+                        (rateOrPrice == 0 ? R.drawable.shape_my_stock_price_gray :
+                                R.drawable.shape_my_stock_price_green));
+    }
+
+    /**
+     * 根据判断的依据字段，返回股票颜色
+     */
+    public static int getStockRateBackgroundRes(double rateOrPriceString) {
+        return rateOrPriceString == Double.NaN ? R.drawable.shape_my_stock_price_gray :
+                (rateOrPriceString > 0 ? R.drawable.shape_my_stock_price_red :
+                        (rateOrPriceString == 0 ? R.drawable.shape_my_stock_price_gray :
+                                R.drawable.shape_my_stock_price_green));
+    }
+
 
     /**
      * 是否是交易时间
@@ -299,7 +336,7 @@ public class StockUtils {
 
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e("添加自选",responseInfo);
+                KLog.e("添加自选", responseInfo);
 
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if (result.getIntValue("code") == 0) {
@@ -334,12 +371,12 @@ public class StockUtils {
                 int code = (int) result.get("code");
                 if (code == 0 || code == 1001) {
                     UIHelper.toast(context, "删除自选成功");
-                    if (callBack!=null) {
+                    if (callBack != null) {
                         callBack.success();
                     }
                     removeStock(full_code.substring(2));
                 } else {
-                    if (callBack!=null) {
+                    if (callBack != null) {
                         callBack.failed(JSONObject.parseObject(responseInfo).getString("message"));
                     }
                 }
@@ -353,6 +390,7 @@ public class StockUtils {
         };
         new GGOKHTTP(param, GGOKHTTP.DELETE_MY_STOCKS, httpInterface).startGet();
     }
+
     /**
      * 删除自选股
      */
@@ -370,12 +408,12 @@ public class StockUtils {
                 int code = (int) result.get("code");
                 if (code == 0 || code == 1001) {
                     UIHelper.toast(context, "删除自选成功");
-                    if (callBack!=null) {
+                    if (callBack != null) {
                         callBack.success();
                     }
                     removeStock(stock_code);
                 } else {
-                    if (callBack!=null) {
+                    if (callBack != null) {
                         callBack.failed(JSONObject.parseObject(responseInfo).getString("message"));
                     }
                 }

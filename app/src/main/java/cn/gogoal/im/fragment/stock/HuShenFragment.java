@@ -24,7 +24,6 @@ import cn.gogoal.im.bean.stock.StockMarketBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.XLayout;
@@ -117,13 +116,17 @@ public class HuShenFragment extends BaseFragment {
             public void onFailure(String msg) {
                 UIHelper.toastError(getActivity(), msg, xLayout);
                 AppManager.getInstance().sendMessage("STOP_MARKET_ANIMATION");
-                xLayout.setEmptyText(msg);
-                xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
-                    @Override
-                    public void onReload(View v) {
-                        getMarketInformation(AppConst.REFRESH_TYPE_RELOAD);
-                    }
-                });
+
+                if (xLayout != null) {
+                    xLayout.setEmptyText(msg);
+                    xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
+                        @Override
+                        public void onReload(View v) {
+                            getMarketInformation(AppConst.REFRESH_TYPE_RELOAD);
+                        }
+                    });
+                }
+
             }
         };
         new GGOKHTTP(param, GGOKHTTP.APP_HQ_INFORMATION, ggHttpInterface).startGet();
@@ -141,7 +144,7 @@ public class HuShenFragment extends BaseFragment {
                     StringUtils.pareseStringDouble(hangqingBean.getPrice()),
                     hangqingBean.getPrice_change(),
                     hangqingBean.getPrice_change_rate(), "", null, hangqingBean.getFullcode(),
-                    StockUtils.getStockRateColor(hangqingBean.getPrice_change()));
+                    StringUtils.pareseStringDouble(hangqingBean.getPrice_change()));
             listMarket.add(itemData);
         }
 
@@ -159,7 +162,7 @@ public class HuShenFragment extends BaseFragment {
                     industrylistBean.getIndustry_rate(),
                     industrylistBean.getStock_name(),
                     industrylistBean.getStock_code(),
-                    StockUtils.getStockRateColor(industrylistBean.getIndustry_rate())
+                    StringUtils.pareseStringDouble(industrylistBean.getIndustry_rate())
             );
             listHotIndestry.add(itemData);
         }
@@ -192,7 +195,7 @@ public class HuShenFragment extends BaseFragment {
                     "",
                     list.get(i).getStock_name(),
                     list.get(i).getStock_code(),
-                    StockUtils.getStockRateColor(list.get(i).getRate())
+                    StringUtils.pareseStringDouble(list.get(i).getRate())
             );
             increase.add(itemData);
         }

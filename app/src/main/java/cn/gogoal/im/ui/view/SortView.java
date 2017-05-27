@@ -1,14 +1,17 @@
 package cn.gogoal.im.ui.view;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.MyStockSortInteface;
+import cn.gogoal.im.ui.widget.CenterImageSpan;
 
 
 /**
@@ -30,7 +33,7 @@ public class SortView extends AppCompatTextView {
     private String defaultText;
 
     public void setDefaultText(String defaultText) {
-        this.defaultText = defaultText;
+        this.defaultText = defaultText+"  ";
     }
 
     public void seOntSortListener(MyStockSortInteface sortInteface) {
@@ -51,11 +54,9 @@ public class SortView extends AppCompatTextView {
     }
 
     private void init(Context context) {
-
-        Typeface iconfont = Typeface.createFromAsset(context.getAssets(), "iconfont/sort.ttf");
-        this.setTypeface(iconfont);
-        this.setClickable(true);
+        this.setGravity(Gravity.CENTER);
         this.setOnClickListener(new SortClick());
+        this.setTextColor(ContextCompat.getColor(context, R.color.textColor_333333));
     }
 
     private class SortClick implements OnClickListener {
@@ -82,19 +83,26 @@ public class SortView extends AppCompatTextView {
 
     public void setViewStateNormal() {
         sortType = 0;
-        setText(String.format(getContext().getString(R.string.mystock_sort_normal), defaultText));
-        this.setTextColor(ContextCompat.getColor(getContext(), R.color.textColor_333333));
+        setText(setSortContent(R.mipmap.img_sort_normal));
     }
 
     public void setViewStateDown() {
         sortType = -1;
-        setText(String.format(getContext().getString(R.string.mystock_sort_down), defaultText));
-        this.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        setText(setSortContent(R.mipmap.img_sort_down));
     }
 
     public void setViewStateUp() {
         sortType = 1;
-        setText(String.format(getContext().getString(R.string.mystock_sort_up), defaultText));
-        this.setTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        setText(setSortContent(R.mipmap.img_sort_up));
+    }
+
+
+    private SpannableString setSortContent(int drawableId){
+        SpannableString spannableString = new SpannableString(defaultText);
+        CenterImageSpan imageSpan = new CenterImageSpan(getContext(),drawableId);
+        spannableString.setSpan(imageSpan, defaultText.length()-1, defaultText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+
+        setText(spannableString);
+        return spannableString;
     }
 }

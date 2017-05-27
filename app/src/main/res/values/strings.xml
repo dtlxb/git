@@ -170,9 +170,6 @@
     <string name="str_market">行情</string>
     <string name="str_search_hint">请输入股票代码/名称/拼音</string>
 
-    <string name="mystock_sort_normal">%s&#xe679;</string>
-    <string name="mystock_sort_up">%s&#xe6b4;</string>
-    <string name="mystock_sort_down">%s&#xe6b6;</string>
     <string name="str_add_my_stock">添加自选股</string>
     <string name="str_refresh_ok">数据更新成功！</string>
     <string name="str_account_exit">该手机号已注册，请直接登录</string>

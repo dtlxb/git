@@ -3,6 +3,7 @@ package cn.gogoal.im.common.GGOKHTTP;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -743,7 +744,21 @@ public class GGOKHTTP {
 
                         @Override
                         public void onResponse(String response, int id) {
-                            if (httpInterface != null) httpInterface.onSuccess(response);
+                            KLog.e(response);
+
+                            if (httpInterface != null) {
+                                try {
+                                    if (!JSONObject.parseObject(response).containsKey("code") &&
+                                            JSONObject.parseObject(response).containsKey("data")) {
+                                        httpInterface.onFailure("没有code或data字段");
+                                    } else {
+                                        httpInterface.onSuccess(response);
+                                    }
+                                } catch (Exception e) {//解析出错，返回就TM就不是json
+                                    httpInterface.onFailure(e.getMessage());
+                                }
+                            }
+                            ;
                         }
                     });
         } catch (Exception e) {

@@ -91,9 +91,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     @BindView(R.id.tv_mystock_rate)
     SortView tvMystockRate;
 
-    @BindView(R.id.tv_mystock_stockcode)
-    View flagLayout;
-
     @BindView(R.id.tv_mystock_stockname)
     TextView sortTitleName;
 
@@ -202,7 +199,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
      */
     private void initSortTitle(Context ctx) {
         itemMystock.setPadding(0, AppDevice.dp2px(ctx, 5), 0, AppDevice.dp2px(ctx, 5));
-        flagLayout.setVisibility(View.GONE);
         sortTitleName.setText("全部");
         AppDevice.setViewWidth$Height(itemMystock, -1, AppDevice.dp2px(ctx, 40));
 
@@ -360,7 +356,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
     @Override
     public void doSort(final View view, final int sortType) {
-        ArrayList<MyStockData> cloneData = (ArrayList<MyStockData>) myStockDatas.clone();
         Collections.sort(myStockDatas, new Comparator<MyStockData>() {
             @Override
             public int compare(MyStockData o1, MyStockData o2) {
@@ -446,15 +441,16 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
             if (data.getStock_type() == 1) {
                 rateView.setText(StockUtils.plusMinus(data.getChange_rate(), true));
-
-                priceView.setTextColor(ContextCompat.getColor(getActivity(),
-                        StockUtils.getStockRateColor(data.getChange_rate())));
-                rateView.setTextColor(ContextCompat.getColor(getActivity(),
-                        StockUtils.getStockRateColor(data.getChange_rate())));
             } else {
                 rateView.setText(StockUtils.getStockStatus(data.getStock_type()));
-                rateView.setTextColor(getResColor(R.color.stock_gray));
             }
+            priceView.setTextColor(ContextCompat.getColor(getActivity(),
+                    StockUtils.getStockRateColor(data.getChange_rate())));
+//            rateView.setTextColor(ContextCompat.getColor(getActivity(),
+//                    StockUtils.getStockRateColor(data.getChange_rate())));
+            rateView.setTextColor(Color.WHITE);
+
+            rateView.setBackgroundResource(StockUtils.getStockRateBackgroundRes(data.getChange_rate()));
 
             UIHelper.setRippBg(holder.itemView);
 

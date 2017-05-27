@@ -69,8 +69,6 @@ public class MineFragment extends BaseFragment {
 
     private MineAdapter mineAdapter;
 
-    private List<MineItem> mineItems;
-
     public MineFragment() {
     }
 
@@ -104,6 +102,16 @@ public class MineFragment extends BaseFragment {
         rvMine.addItemDecoration(new NormalItemDecoration(mContext));
     }
 
+//    @Override
+//    protected void immersionInit() {
+//        super.immersionInit();
+//
+//        StatusBarUtil.with(getActivity())
+//                .statusBarDarkFont(false)
+//                .barColor(R.color.colorMineHead)
+//                .init();
+//    }
+
     private void iniheadInfo(Context mContext) {
         AppDevice.setViewWidth$Height(imageAvatar,
                 4 * AppDevice.getWidth(mContext) / 25,
@@ -132,7 +140,7 @@ public class MineFragment extends BaseFragment {
     }
 
     private void initDatas() {
-        mineItems = new ArrayList<>();
+        List<MineItem> mineItems = new ArrayList<>();
         mineItems.add(new MineItem(MineItem.TYPE_HEAD));
         mineItems.add(new MineItem(MineItem.TYPE_SPACE));
         for (int i = 0; i < mineTitle.length; i++) {
@@ -199,19 +207,19 @@ public class MineFragment extends BaseFragment {
                         public void onClick(View v) {
                             KLog.e("pos=" + position + ";item=" + data.getItemText());
                             Intent intent;
-                            switch (position) {
-                                case 3://我要直播
+                            switch (data.getItemText()) {
+                                case "我要直播"://我要直播
                                     ((MainActivity)getActivity()).socialContactFragment.getUserValid();
                                     break;
-                                case 5://自选股设置
+                                case "自选股设置"://自选股设置
                                     intent=new Intent(getActivity(),SettingStockActivity.class);
                                     startActivity(intent);
                                     break;
-                                case 6:
+                                case "专属顾问":
                                     intent = new Intent(getActivity(), MyAdvisersActivity.class);
                                     startActivity(intent);
                                     break;
-                                case 7:
+                                case "设置":
                                     intent = new Intent(getActivity(), SettingActivity.class);
                                     startActivity(intent);
                                     break;

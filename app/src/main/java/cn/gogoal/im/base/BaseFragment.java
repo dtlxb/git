@@ -8,8 +8,6 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +63,30 @@ public abstract class BaseFragment extends Fragment implements IBase {
         fragmentTitle.setTitleColor(Color.BLACK);
         return fragmentTitle;
     }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && isResumed()) {
+            onResume();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        if (getUserVisibleHint()) {
+//            immersionInit();
+//        }
+    }
+
+//    //此时是否将状态栏文字变成黑色
+//    protected void immersionInit(){
+//        StatusBarUtil.with(getActivity())
+//                .statusBarDarkFont(StatusBarUtil.isSupportStatusBarDarkFont())
+//                .barColor(R.color.colorTitle)
+//                .init();
+//    }
 
     @Override
     public void onDestroyView() {

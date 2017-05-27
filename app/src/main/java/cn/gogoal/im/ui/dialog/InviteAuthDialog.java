@@ -1,6 +1,6 @@
 package cn.gogoal.im.ui.dialog;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,12 +15,11 @@ import java.util.Map;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.PlayerActivity;
-import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
-import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
 
 /**
@@ -86,7 +85,7 @@ public class InviteAuthDialog extends BaseCentDailog {
         textSure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validateInviteCode(view.getContext());
+                validateInviteCode(getActivity());
             }
         });
     }
@@ -94,7 +93,7 @@ public class InviteAuthDialog extends BaseCentDailog {
     /*
     * 验证邀请码
     * */
-    private void validateInviteCode(final Context mContext) {
+    private void validateInviteCode(final Activity mContext) {
 
         final String invite_code = editInvite.getText().toString();
 
@@ -109,7 +108,7 @@ public class InviteAuthDialog extends BaseCentDailog {
             return;
         }
 
-        final String filename= StringUtils.getRandomString(10);
+        final String filename = StringUtils.getRandomString(10);
 
         Map<String, String> param = new HashMap<>();
         param.put("user_token", filename);
@@ -130,9 +129,7 @@ public class InviteAuthDialog extends BaseCentDailog {
                         InviteAuthDialog.this.dismiss();
 
                         if (liveSource.equals("live")) {
-                            Intent intent = new Intent(mContext, WatchLiveActivity.class);
-                            intent.putExtra("live_id", invite_id);
-                            mContext.startActivity(intent);
+                            PlayDataStatistics.enterLiveAuthorize(false, mContext, invite_id, false);
                         } else if (liveSource.equals("video")) {
                             Intent intent = new Intent(mContext, PlayerActivity.class);
                             intent.putExtra("live_id", invite_id);

@@ -3,7 +3,6 @@ package cn.gogoal.im.base;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -29,7 +28,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.bumptech.glide.Glide;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
@@ -40,7 +38,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.permission.IPermissionListner;
@@ -85,10 +82,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     }
 
-    public boolean isFullScreem() {
-        return false;
-    }
-
     @Override
     public void setContentView(View view) {
         super.setContentView(mContentView);
@@ -97,6 +90,10 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
     public void setOrientation() {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+
+    public boolean isFullScreem() {
+        return false;
     }
 
     //封装运行时权限
@@ -131,7 +128,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
                     for (int i = 0; i < grantResults.length; i++) {
                         if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                             deniedPermissionList.add(permissions[i]);
-                            return;
+                            break;
                         }
                     }
                     if (deniedPermissionList.isEmpty()) {
@@ -158,6 +155,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
     @Override
     public void resume() {
         onResume();
+//        immersionInit();
     }
 
     public XTitle setMyTitle(String title, boolean canBack) {
@@ -301,6 +299,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         fixInputMethodManagerLeak(this);
         try {
             Glide.with(this).pauseRequests();
+//            StatusBarUtil.with(this).destroy();
         } catch (Exception e) {
         }
     }

@@ -59,9 +59,7 @@ public class StockSearchActivity extends BaseActivity {
     //搜索框
     @BindView(R.id.search_edit)
     SearchView searchStock;
-    //返回
-    @BindView(R.id.back_tv)
-    TextView back_tv;
+
     //列表
     @BindView(R.id.search_listView)
     ListView mlistView;
@@ -88,7 +86,6 @@ public class StockSearchActivity extends BaseActivity {
 
     private SearchStockAdapter adapter;
     private ArrayList<SearchStockData> list = new ArrayList<SearchStockData>();
-    private String content = null;
     private int num;
 
     private HistorySearchAdapter adapter_history;
@@ -104,6 +101,8 @@ public class StockSearchActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
+        setMyTitle("股票搜索",true);
+
         init();
         Intent intent = getIntent();
         num = intent.getIntExtra("num", 0);
@@ -117,15 +116,6 @@ public class StockSearchActivity extends BaseActivity {
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         ((SearchView.SearchAutoComplete) searchStock.findViewById(R.id.search_src_text)).
                 setGravity(Gravity.CENTER_VERTICAL);
-
-        back_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                finish();
-            }
-        });
 
         searchStock.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

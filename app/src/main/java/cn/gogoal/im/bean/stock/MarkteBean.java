@@ -42,9 +42,9 @@ public class MarkteBean {
         private String industryRate;  //22
         private String stockName;      //23    31
         private String code;           //32
-        private int priceColor;//颜色字段
+        private double changeRate;//颜色 依据字段
 
-        public MarketItemData(String name, double price, String priceChange, String rate, String industryRate, String stockName, String code, int priceColor) {
+        public MarketItemData(String name, double price, String priceChange, String rate, String industryRate, String stockName, String code, double changeRate) {
             this.name = name;
             this.price = price;
             this.priceChange = priceChange;
@@ -52,7 +52,7 @@ public class MarkteBean {
             this.industryRate = industryRate;
             this.stockName = stockName;
             this.code = code;
-            this.priceColor = priceColor;
+            this.changeRate = changeRate;
         }
 
         public String getName() {
@@ -111,12 +111,12 @@ public class MarkteBean {
             this.code = code;
         }
 
-        public int getPriceColor() {
-            return priceColor;
+        public double getChangeRate() {
+            return changeRate;
         }
 
-        public void setPriceColor(int priceColor) {
-            this.priceColor = priceColor;
+        public void setChangeRate(double changeRate) {
+            this.changeRate = changeRate;
         }
     }
 }

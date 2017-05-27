@@ -9,12 +9,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.gogoal.im.R;
 import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.MD5Utils;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.permission.IPermissionListner;
 
@@ -32,6 +34,15 @@ public class PlayDataStatistics {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE
     };
+
+    private static final int[] noPermissionTip = {
+            R.string.no_camera_permission,
+            R.string.no_record_audio_permission,
+            R.string.no_read_phone_state_permission,
+            R.string.no_write_external_storage_permission,
+            R.string.no_read_external_storage_permission
+    };
+
 
     /**
      * 统计直播录播
@@ -114,7 +125,7 @@ public class PlayDataStatistics {
 
             @Override
             public void onRefusedAuthorize(List<String> deniedPermissions) {
-
+                UIHelper.toast(mContext, "在设置-应用-GoGoal-权限中开启相关权限，以正常使用App功能");
             }
         });
     }

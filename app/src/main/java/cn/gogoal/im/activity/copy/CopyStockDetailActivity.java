@@ -541,7 +541,7 @@ public class CopyStockDetailActivity extends BaseActivity {
 
 
         // 修改状态栏颜色
-        setStatusColor(getResColor(R.color.header_gray));
+        setStatusColor(R.color.header_gray);
 
         relative_header.setBackgroundResource(R.color.header_gray);
         linear_header.setBackgroundResource(R.color.header_gray);

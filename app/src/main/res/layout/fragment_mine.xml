@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context="cn.gogoal.im.fragment.main.MineFragment">
 
-    <include layout="@layout/include_title"/>
+    <include layout="@layout/include_title" />
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scrollView_mine"
@@ -33,26 +33,40 @@
                 android:paddingEnd="20dp"
                 android:paddingStart="15dp">
 
-                <com.hply.roundimage.roundImage.RoundedImageView
-                    android:id="@+id/img_mine_avatar"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
+                <FrameLayout
+                    android:id="@+id/flag_layout_avatar"
+                    android:layout_width="58dp"
+                    android:layout_height="58dp"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/logo"
-                    app:riv_border_color="#e0e0e0"
-                    app:riv_border_width="1dp"
-                    android:layout_marginTop="24dp"
                     android:layout_marginBottom="24dp"
-                    app:riv_oval="true" />
+                    android:layout_marginTop="24dp">
+
+                    <com.hply.roundimage.roundImage.RoundedImageView
+                        android:id="@+id/img_mine_avatar"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:src="@mipmap/logo"
+                        android:layout_gravity="center"
+                        app:riv_border_color="#e0e0e0"
+                        app:riv_border_width="1dp"
+                        app:riv_oval="true" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|right"
+                        android:src="@mipmap/img_level"/>
+
+                </FrameLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/img_mine_avatar"
-                    android:layout_alignTop="@+id/img_mine_avatar"
+                    android:layout_alignBottom="@+id/flag_layout_avatar"
+                    android:layout_alignTop="@+id/flag_layout_avatar"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="8dp"
-                    android:layout_toEndOf="@+id/img_mine_avatar"
+                    android:layout_toEndOf="@+id/flag_layout_avatar"
                     android:layout_toStartOf="@+id/flag_img_more"
                     android:gravity="center_vertical"
                     android:orientation="vertical">

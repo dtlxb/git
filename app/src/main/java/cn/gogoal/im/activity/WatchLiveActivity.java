@@ -797,7 +797,7 @@ public class WatchLiveActivity extends BaseActivity {
                 } else {
                     //显示结束连麦失败的
                     KLog.e("Close video chat failed");
-                    UIHelper.toast(WatchLiveActivity.this, R.string.close_video_chatting_failed);
+                    UIHelper.toast(getContext(), R.string.close_video_chatting_failed);
                 }
             }
 
@@ -995,7 +995,8 @@ public class WatchLiveActivity extends BaseActivity {
                     ImageDisplay.loadCircleImage(getContext(), data.getString("face_url"), imgPalyer);
                     textCompany.setText(data.getString("anchor_name"));
                     appoint_account = data.getString("appoint_account");
-                    if (appoint_account != null) {
+
+                    /*if (appoint_account != null) {
                         if (UserUtils.isMyFriend(data.getIntValue("appoint_account"))) {
                             textAddFriend.setVisibility(View.GONE);
                         } else {
@@ -1003,7 +1004,7 @@ public class WatchLiveActivity extends BaseActivity {
                         }
                     } else {
                         textAddFriend.setVisibility(View.GONE);
-                    }
+                    }*/
 
                     //主播介绍
                     anchor = data.getJSONObject("anchor");
@@ -1012,6 +1013,8 @@ public class WatchLiveActivity extends BaseActivity {
 
                     //倒计时
                     if (data.getLongValue("launch_time") > 0) {
+                        show_buffering_ui(false);
+
                         countDownTimer.setVisibility(View.VISIBLE);
                         countDownTimer.addTime(data.getString("live_time_start"));
                         countDownTimer.start();
