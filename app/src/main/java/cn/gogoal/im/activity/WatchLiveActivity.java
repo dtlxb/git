@@ -1058,7 +1058,7 @@ public class WatchLiveActivity extends BaseActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.bottom_container, mBottomFragment).commit();
 
                 } else {
-                    UIHelper.toast(getContext(), R.string.net_erro_hint);
+                    UIHelper.toast(getContext(), R.string.nodata_hint);
                 }
             }
 
