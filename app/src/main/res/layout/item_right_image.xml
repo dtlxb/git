@@ -57,8 +57,17 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/user_name"
             android:layout_marginRight="5dp"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/timg" />
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/image_send_fg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/user_name"
+            android:layout_marginRight="5dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/im_right_image_bg" />
 
         <ImageView
             android:id="@+id/iv_send_fail"
@@ -77,7 +86,6 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/image_user_send" />
-
 
     </RelativeLayout>
 

@@ -34,9 +34,6 @@ public class GGShareEntity implements Parcelable {
 
     private String source;
 
-
-
-
     public String getDesc() {
         return desc;
     }
@@ -77,6 +74,21 @@ public class GGShareEntity implements Parcelable {
         this.shareType = shareType;
     }
 
+    public String getLive_id() {
+        return live_id;
+    }
+
+    public void setLive_id(String live_id) {
+        this.live_id = live_id;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
 
     public GGShareEntity() {
     }
