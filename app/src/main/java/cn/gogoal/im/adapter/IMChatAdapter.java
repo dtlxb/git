@@ -36,6 +36,7 @@ import java.util.Map;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.IMPersonDetailActivity;
 import cn.gogoal.im.activity.ImageDetailActivity;
+import cn.gogoal.im.activity.PlayerActivity;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.BaseMessage;
@@ -43,11 +44,11 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
+import cn.gogoal.im.common.IMHelpers.GGAudioMessage;
 import cn.gogoal.im.common.IMHelpers.GGImageMessage;
 import cn.gogoal.im.common.IMHelpers.GGShareMessage;
 import cn.gogoal.im.common.IMHelpers.GGStockMessage;
 import cn.gogoal.im.common.IMHelpers.GGSystemMessage;
-import cn.gogoal.im.common.IMHelpers.GGAudioMessage;
 import cn.gogoal.im.common.IMHelpers.GGTextMessage;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
@@ -56,7 +57,6 @@ import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 import cn.gogoal.im.common.recording.MediaManager;
 
 /**
@@ -714,12 +714,17 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         }
     }
 
-
     private void shareAction(Map<String, Object> shareMap) {
         if (String.valueOf(shareMap.get("toolType")).equals("1")) {
             NormalIntentUtils.go2WebActivity(mContext, String.valueOf(shareMap.get("link")), String.valueOf(shareMap.get("title")));
         } else if (String.valueOf(shareMap.get("toolType")).equals("2")) {
-            PlayDataStatistics.enterLiveAuthorize(false, mContext, String.valueOf(shareMap.get("live_id")), false);
+
+            //jsonObject.getString("source"); //video\live
+            //PlayDataStatistics.enterLiveAuthorize(false, mContext, jsonObject.getString("live_id"), false);
+
+            Intent intent = new Intent(mContext, PlayerActivity.class);
+            intent.putExtra("live_id", String.valueOf(shareMap.get("live_id")));
+            mContext.startActivity(intent);
         }
     }
 

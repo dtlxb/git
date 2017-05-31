@@ -205,11 +205,13 @@
     <string name="str_get_contacts_erro">取通讯录失败，原因可能有：\n
         1.Go-Goal没有权限访问你的通讯录。请先退出Go-Goal，在系统设置或手机安全软件中，授权Go-Goal访问通讯录。\n
         2. 手机通讯录中没有联系人资料。</string>
+    <string name="no_related_video">暂无相关视频</string>
     <string name="loading_error">加载失败...</string>
     <string name="again_load">重新加载</string>
     <string name="im_phone_num">手机通讯录</string>
     <string name="im_message_send_fail">对方开启了好友验证，您还不是他（她）的好友。请发起朋友验证请求，
         对方验证通过后，才可以聊天。发送朋友验证</string>
     <string name="title_change_phone">更换手机号</string>
+    <string name="play_introduction_null">主播很懒，什么都没有留下。</string>
 
 </resources>

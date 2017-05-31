@@ -116,5 +116,7 @@
     <color name="dialog_invite_sure">#2782d7</color>
 
     <color name="player_line">#d4d4d4</color>
+    <color name="player_space">#f6f6f6</color>
+    <color name="player_base">#f1f1f1</color>
 
 </resources>

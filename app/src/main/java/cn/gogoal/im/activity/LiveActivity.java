@@ -170,6 +170,9 @@ public class LiveActivity extends BaseActivity {
     private String room_id;
 
     private String live_id;
+
+    private String live_type;
+
     //弹窗
     private JSONObject anchor;
 
@@ -488,6 +491,7 @@ public class LiveActivity extends BaseActivity {
         Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
         param.put("live_id", live_id);
+        param.put("live_type", live_type);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -1049,6 +1053,8 @@ public class LiveActivity extends BaseActivity {
                     ImageDisplay.loadCircleImage(getContext(), data.getString("face_url"), imgPalyer);
                     textCompany.setText(data.getString("anchor_name"));
                     appoint_account = data.getString("appoint_account");
+
+                    live_type = data.getString("live_type");
 
                     //主播介绍
                     anchor = data.getJSONObject("anchor");

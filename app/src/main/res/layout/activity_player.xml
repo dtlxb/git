@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/relative_player"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -37,6 +35,13 @@
             android:paddingTop="0dp">
 
         </FrameLayout>
+
+        <ImageView
+            android:id="@+id/imgLoadPic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/play_bg"
+            android:scaleType="centerCrop" />
 
         <LinearLayout
             android:id="@+id/LayoutTip"
@@ -169,214 +174,77 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/textVideoName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_empty"
+                android:textColor="@color/textColor_333333"
+                android:textSize="17dp" />
+
+            <TextView
+                android:id="@+id/textProgrammeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:text="@string/text_empty"
+                android:textColor="@color/textColor_666666"
+                android:textSize="13dp" />
 
             <RelativeLayout
-                android:id="@+id/player_anchor_layout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp">
 
                 <TextView
-                    android:id="@+id/player_anchor_tv"
-                    android:layout_width="match_parent"
+                    android:id="@+id/textPlayBase"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:gravity="center_horizontal"
-                    android:text="主播"
-                    android:textColor="@color/player_add_friend"
-                    android:textSize="14dp" />
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/shape_play_base"
+                    android:drawableLeft="@mipmap/play_base"
+                    android:drawablePadding="3dp"
+                    android:text="@string/text_empty"
+                    android:textColor="@color/textColor_666666"
+                    android:textSize="11dp" />
 
-                <TextView
-                    android:id="@+id/tv_player_anchor"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:background="@color/player_add_friend" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/player_video_layout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/player_video_tv"
-                    android:layout_width="match_parent"
+                <CheckBox
+                    android:id="@+id/boxCategory"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:gravity="center_horizontal"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:button="@null"
+                    android:drawableLeft="@mipmap/play_category"
+                    android:drawablePadding="3dp"
                     android:text="相关视频"
                     android:textColor="@color/textColor_333333"
-                    android:textSize="14dp" />
-
-                <TextView
-                    android:id="@+id/tv_player_video"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:background="@color/player_add_friend"
-                    android:visibility="gone" />
+                    android:textSize="15dp" />
 
             </RelativeLayout>
 
         </LinearLayout>
+
+        <!--<View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/shape_play_space" />-->
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/player_line" />
+            android:layout_height="1px"
+            android:background="@color/colorDivider_d9d9d9" />
 
-        <ScrollView
-            android:id="@+id/scrollIntroduce"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:paddingBottom="10dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingTop="15dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <com.hply.roundimage.roundImage.RoundedImageView
-                        android:id="@+id/anchor_avatar"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:scaleType="centerCrop"
-                        app:riv_oval="true"/>
-
-                    <LinearLayout
-                        android:id="@+id/linearMessage"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/anchor_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:singleLine="true"
-                            android:text="@string/text_empty"
-                            android:textColor="@color/textColor_333333"
-                            android:textSize="16dp" />
-
-                        <TextView
-                            android:id="@+id/anchor_position"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:singleLine="true"
-                            android:text="@string/text_empty"
-                            android:textColor="@color/textColor_666666"
-                            android:textSize="13dp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/anchor_achieve"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:lineSpacingExtra="2dp"
-                    android:lineSpacingMultiplier="1.5"
-                    android:text="@string/text_empty"
-                    android:textColor="@color/textColor_333333"
-                    android:textSize="14dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="直播介绍"
-                    android:textColor="@color/textColor_333333"
-                    android:textSize="14dp" />
-
-                <ImageView
-                    android:id="@+id/live_avatar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:scaleType="centerCrop" />
-
-                <TextView
-                    android:id="@+id/live_achieve"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="2dp"
-                    android:lineSpacingMultiplier="1.5"
-                    android:text="@string/text_empty"
-                    android:textColor="@color/textColor_333333"
-                    android:textSize="14dp" />
-
-            </LinearLayout>
-
-        </ScrollView>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recy_relater"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/playPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
-        <LinearLayout
-            android:id="@+id/linearShowError"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/load_error" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="@string/loading_error"
-                android:textColor="@color/textColor_999999"
-                android:textSize="16dp" />
-
-            <TextView
-                android:id="@+id/textAgainLoad"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/again_loading"
-                android:text="@string/again_load"
-                android:textColor="@color/textColor_333333"
-                android:textSize="16dp" />
-
-        </LinearLayout>
 
     </LinearLayout>
 
