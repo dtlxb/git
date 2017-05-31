@@ -180,7 +180,7 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
     @Override
     public void onImageSingleTap() {
         if (topBar.getVisibility() == View.VISIBLE) {
-            topBar.setAnimation(AnimationUtils.loadAnimation(this, R.anim.top_out));
+            topBar.setAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_from_bottom));
             bottomBar.setAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_out));
             topBar.setVisibility(View.GONE);
             bottomBar.setVisibility(View.GONE);
@@ -191,7 +191,7 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
             if (Build.VERSION.SDK_INT >= 16)
                 content.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
         } else {
-            topBar.setAnimation(AnimationUtils.loadAnimation(this, R.anim.top_in));
+            topBar.setAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_from_bottom));
             bottomBar.setAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
             topBar.setVisibility(View.VISIBLE);
             bottomBar.setVisibility(View.VISIBLE);

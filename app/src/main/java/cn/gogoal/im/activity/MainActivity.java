@@ -5,18 +5,12 @@ import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
@@ -32,12 +26,8 @@ import butterknife.BindView;
 import cn.gogoal.im.BuildConfig;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
-import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
-import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
-import cn.gogoal.im.bean.BoxScreenData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -45,10 +35,10 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.main.InvestmentResearchFragment;
+import cn.gogoal.im.fragment.main.LiveListFragment;
 import cn.gogoal.im.fragment.main.MainStockFragment;
 import cn.gogoal.im.fragment.main.MessageFragment;
 import cn.gogoal.im.fragment.main.MineFragment;
-import cn.gogoal.im.fragment.main.SocialContactFragment;
 import cn.gogoal.im.ui.Badge.BadgeView;
 
 public class MainActivity extends BaseActivity {
@@ -62,16 +52,7 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.main_view_mask)
     View mainViewMask;
 
-    //侧滑模块
-    @BindView(R.id.drawer_main)
-    DrawerLayout mDrawerLayout;
-    @BindView(R.id.lay_right_menu)
-    RelativeLayout menuLayout;
-    @BindView(R.id.recyScreen)
-    RecyclerView recyScreen;
-
     public MainStockFragment mainStockFragment;
-    public SocialContactFragment socialContactFragment;
 
     @Override
     public int bindLayout() {
@@ -104,14 +85,17 @@ public class MainActivity extends BaseActivity {
 
         MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
 
-        mainStockFragment = new MainStockFragment();                                //自选股
+        mainStockFragment = new MainStockFragment();                                //TAB2 自选股
 
         InvestmentResearchFragment foundFragment = new InvestmentResearchFragment(); // TAB3 投研
 
         //社交
-        socialContactFragment = new SocialContactFragment();
+//        socialContactFrant = new SocialContactFragment();
 
-        final MineFragment mineFragment = new MineFragment();                       // TAB4 我的
+        //直播
+        LiveListFragment liveListFragment = new LiveListFragment();                   //TAB4 直播
+
+        final MineFragment mineFragment = new MineFragment();                       // TAB5 我的
 
         boolean needRefresh = getIntent().getBooleanExtra("isFromLogin", false);
         SPTools.saveBoolean("squareNeedRefresh", needRefresh);
@@ -128,7 +112,7 @@ public class MainActivity extends BaseActivity {
         tabFragments.add(messageFragment);
         tabFragments.add(mainStockFragment);
         tabFragments.add(foundFragment);
-        tabFragments.add(socialContactFragment);
+        tabFragments.add(liveListFragment);
         tabFragments.add(mineFragment);
 
         SimpleFragmentPagerAdapter tabAdapter = new SimpleFragmentPagerAdapter(
@@ -154,18 +138,6 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        //侧滑
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-
-        mDrawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                closeCallBack.closeDrawer();
-            }
-        });
-
-        getScreenData();
     }
 
     public void changeItem(int index) {
@@ -223,15 +195,10 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mDrawerLayout.isDrawerOpen(menuLayout)) {
-                mDrawerLayout.closeDrawer(menuLayout);
-                exitTime = 0;
+            if (mainStockFragment.isMaskViewVisiable()) {
+                mainStockFragment.dismissMarket();
             } else {
-                if (mainStockFragment.isMaskViewVisiable()) {
-                    mainStockFragment.dismissMarket();
-                } else {
-                    exitBy2Click();
-                }
+                exitBy2Click();
             }
 
             return true;
@@ -291,125 +258,4 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    //暴露给外部展开菜单的方法
-    public void openMenu() {
-        mDrawerLayout.openDrawer(menuLayout);
-    }
-
-    //暴露给外部收起菜单的方法
-    public void closeMenu() {
-        mDrawerLayout.closeDrawer(menuLayout);
-    }
-
-    /**
-     * 获取筛选列表数据
-     */
-    private void getScreenData() {
-
-        final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                JSONObject object = JSONObject.parseObject(responseInfo);
-                if (object.getIntValue("code") == 0) {
-                    JSONArray data = object.getJSONArray("data");
-                    List<BoxScreenData> screenData = new ArrayList<>();
-
-                    if (data != null) {
-                        for (int i = 0; i < data.size(); i++) {
-                            screenData.add(new BoxScreenData(data.getJSONObject(i).getString("programme_name"),
-                                    data.getJSONObject(i).getString("programme_id"), false));
-                        }
-                    }
-
-                    screenData.add(0, new BoxScreenData("全部", null, true));
-                    showBoxScreen(screenData);
-                }
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                UIHelper.toast(getActivity(), R.string.net_erro_hint);
-            }
-        };
-        new GGOKHTTP(null, GGOKHTTP.GET_PROGRAMME_GUIDE, ggHttpInterface).startGet();
-    }
-
-    /**
-     * 设置筛选弹窗
-     */
-    private void showBoxScreen(final List<BoxScreenData> screenData) {
-
-        initRecycleView(recyScreen, null);
-        recyScreen.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-
-        final BoxScreenAdapter adapter = new BoxScreenAdapter(getActivity(), screenData);
-        recyScreen.setAdapter(adapter);
-    }
-
-    private class BoxScreenAdapter extends CommonAdapter<BoxScreenData, BaseViewHolder> {
-
-        private List<BoxScreenData> mDatas;
-        private int mSelectedPos = -1;
-
-        private BoxScreenAdapter(Context context, List<BoxScreenData> list) {
-            super(R.layout.item_box_screen, list);
-            this.mDatas = list;
-
-            for (int i = 0; i < mDatas.size(); i++) {
-                if (mDatas.get(i).isSelected()) {
-                    mSelectedPos = i;
-                }
-            }
-        }
-
-        @Override
-        protected void convert(BaseViewHolder holder, final BoxScreenData data, final int position) {
-            final TextView textProName = holder.getView(R.id.textProName);
-
-            textProName.setSelected(data.isSelected());
-            textProName.setText(data.getProgramme_name());
-
-            textProName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    if (mSelectedPos != position) {
-                        //先取消上个item的勾选状态
-                        mDatas.get(mSelectedPos).setSelected(false);
-                        notifyItemChanged(mSelectedPos);
-                        //设置新Item的勾选状态
-                        mSelectedPos = position;
-                        mDatas.get(mSelectedPos).setSelected(true);
-                        notifyItemChanged(mSelectedPos);
-                    }
-
-                    closeMenu();
-
-                    vpMain.setCurrentItem(3);
-                    AppManager.getInstance().sendMessage("setScreen", new BaseMessage("programme_id", data.getProgramme_id()));
-
-                    /*if (mSelectedPos != 0) {
-                        Intent intent = new Intent(getActivity(), ScreenActivity.class);
-                        intent.putExtra("programme_name", data.getProgramme_name());
-                        intent.putExtra("programme_id", data.getProgramme_id());
-                        startActivity(intent);
-                    }*/
-                }
-            });
-        }
-    }
-
-    drawerCloseCallBack closeCallBack;
-
-    public drawerCloseCallBack getCloseCallBack() {
-        return closeCallBack;
-    }
-
-    public void setCloseCallBack(drawerCloseCallBack closeCallBack) {
-        this.closeCallBack = closeCallBack;
-    }
-
-    public interface drawerCloseCallBack {
-        void closeDrawer();
-    }
 }

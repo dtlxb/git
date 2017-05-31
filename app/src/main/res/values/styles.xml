@@ -78,6 +78,15 @@
         <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
     </style>
 
+    <!--右边弹窗-->
+    <style name="RightDialog" parent="@android:style/Theme.DeviceDefault.Dialog">
+        <item name="android:windowTitleStyle">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowAnimationStyle">@style/RightDialog.AnimationStyle</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+    </style>
+
     <!--中间弹窗-->
     <style name="CenterDialog" parent="@android:style/Theme.DeviceDefault.Dialog">
         <item name="android:windowTitleStyle">@null</item>
@@ -107,8 +116,14 @@
 
     <!--弹窗动画顶部-->
     <style name="BaseTopDialogStyle">
-        <item name="android:windowEnterAnimation">@anim/top_in</item>
-        <item name="android:windowExitAnimation">@anim/top_out</item>
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_top</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_from_top</item>
+    </style>
+
+    <!--弹窗动画右边-->
+    <style name="RightDialog.AnimationStyle">
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_right</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_to_right</item>
     </style>
 
     <!--弹窗动画中间-->

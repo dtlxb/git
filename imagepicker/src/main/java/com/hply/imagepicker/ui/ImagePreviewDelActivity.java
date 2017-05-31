@@ -84,14 +84,14 @@ public class ImagePreviewDelActivity extends ImagePreviewBaseActivity implements
     @Override
     public void onImageSingleTap() {
         if (topBar.getVisibility() == View.VISIBLE) {
-            topBar.setAnimation(AnimationUtils.loadAnimation(this, com.hply.imagepicker.R.anim.top_out));
+            topBar.setAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_out_to_bottom));
             topBar.setVisibility(View.GONE);
 
             Utils.setStatusColor(this,ContextCompat.getColor(this,R.color.transparent));
             //给最外层布局加上这个属性表示，Activity全屏显示，且状态栏被隐藏覆盖掉。
             if (Build.VERSION.SDK_INT >= 16) content.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
         } else {
-            topBar.setAnimation(AnimationUtils.loadAnimation(this, com.hply.imagepicker.R.anim.top_in));
+            topBar.setAnimation(AnimationUtils.loadAnimation(this, R.anim.abc_slide_out_top));
             topBar.setVisibility(View.VISIBLE);
 
             Utils.setStatusColor(this,ContextCompat.getColor(this,R.color.status_bar));

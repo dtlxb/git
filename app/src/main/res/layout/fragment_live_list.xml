@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/relaterTittle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/titlebar_size"
+        android:background="@drawable/shape_line_bottom"
+        android:paddingEnd="15dp"
+        android:paddingStart="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/title_live"
+            android:textColor="@color/textColor_333333"
+            android:textSize="18sp" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/boxScreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:button="@drawable/social_fragment_screen"
+            android:textColor="@color/textColor_333333" />
+
+        <TextView
+            android:id="@+id/tv_do_live"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:drawableTop="@mipmap/img_do_live"
+            android:text="我要直播"
+            android:textColor="#ee3131"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+    <android.support.percent.PercentFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_live_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!--蒙版-->
+        <View
+            android:id="@+id/view_dialog_mask"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#55000000"
+            android:clickable="true" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_menu_list"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:paddingTop="26dp"
+            android:background="@android:color/white"
+            app:layout_widthPercent="75%" />
+
+    </android.support.percent.PercentFrameLayout>
+
+</LinearLayout>

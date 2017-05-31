@@ -53,6 +53,7 @@ public class TestActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 drawerLayout.openDrawer(Gravity.END,true);
+//                new LiveMenuDialog().show(getSupportFragmentManager());
             }
         });
 

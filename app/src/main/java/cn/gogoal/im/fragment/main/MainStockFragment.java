@@ -229,7 +229,7 @@ public class MainStockFragment extends BaseFragment {
     public void showMarketDialog() {
         ((MainActivity) getActivity()).showMainMsk();//父Activity显示蒙版
         rvDialogMarket.startAnimation(
-                android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.top_in));
+                android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_from_top));
         rvDialogMarket.setVisibility(View.VISIBLE);
         viewDialogMask.setEnabled(true);
         viewDialogMask.setClickable(true);
@@ -286,7 +286,7 @@ public class MainStockFragment extends BaseFragment {
             ((MainActivity) getActivity()).hideMainMsk();
             rvDialogMarket.setVisibility(View.GONE);
             rvDialogMarket.startAnimation(
-                    android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.top_out));
+                    android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_from_top));
 
             viewDialogMask.setClickable(false);
             viewDialogMask.setEnabled(false);//防止重复点击反复出现

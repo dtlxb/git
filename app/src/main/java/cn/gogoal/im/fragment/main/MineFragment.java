@@ -24,7 +24,6 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ContactsActivity;
 import cn.gogoal.im.activity.EditMyInfoActivity;
-import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.activity.MyAdvisersActivity;
 import cn.gogoal.im.activity.MyGroupsActivity;
 import cn.gogoal.im.activity.PhoneContactsActivity;
@@ -209,7 +208,7 @@ public class MineFragment extends BaseFragment {
                             Intent intent;
                             switch (data.getItemText()) {
                                 case "我要直播"://我要直播
-                                    ((MainActivity)getActivity()).socialContactFragment.getUserValid();
+//                                    ((MainActivity)getActivity()).socialContactFragment.getUserValid();
                                     break;
                                 case "自选股设置"://自选股设置
                                     intent=new Intent(getActivity(),SettingStockActivity.class);
