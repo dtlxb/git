@@ -31,7 +31,9 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.BottomSheetListDialog;
 import cn.gogoal.im.ui.dialog.WaitDialog;
+
 import com.hply.roundimage.roundImage.RoundedImageView;
+
 import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XTitle;
 
@@ -59,7 +61,7 @@ public class EditPersonInfoActivity extends BaseActivity {
     EditText editJobName;
 
     @BindView(R.id.login_cofirm)
-    SelectorButton loginCofirm;
+    SelectorButton loginConfirm;
 
     private String imageUri;
 
@@ -76,7 +78,7 @@ public class EditPersonInfoActivity extends BaseActivity {
     }
 
     private void initTitle() {
-        xTitle = setMyTitle(R.string.str_edit_person_info, true);
+        xTitle = setMyTitle(R.string.str_edit_person_info, false);
         //添加action
         XTitle.TextAction jumpAction = new XTitle.TextAction("跳过") {
             @Override
@@ -88,8 +90,8 @@ public class EditPersonInfoActivity extends BaseActivity {
             }
         };
         xTitle.addAction(jumpAction, 0);
-        TextView rigisterView = (TextView) xTitle.getViewByAction(jumpAction);
-        rigisterView.setTextColor(getResColor(R.color.colorPrimary));
+        TextView registerView = (TextView) xTitle.getViewByAction(jumpAction);
+        registerView.setTextColor(getResColor(R.color.colorPrimary));
 
         editPersonName.setText(UserUtils.getNickname());
         editCompanyName.setText(UserUtils.getorgName());
@@ -151,19 +153,21 @@ public class EditPersonInfoActivity extends BaseActivity {
      */
     private void editDialogClick() {
         DialogHelp.getBottomSheetListDialog(getActivity(), new ArrayList<>(Arrays.asList(
-                new String[]{"拍照", "从手机相册中选择"})), new BottomSheetListDialog.DialogItemClick() {
+                new String[]{"拍照"})), new BottomSheetListDialog.DialogItemClick() {
             @Override
             public void onItemClick(BottomSheetListDialog dialog, TextView view, int position) {
                 dialog.dismiss();
                 switch (position) {
                     case 0:
                         //打开相机
-                        //openCamera();
-                        break;
-                    case 1:
-                        //从手机相册中选择
                         openPicture();
                         break;
+                    default:
+                        break;
+                    /*case 1:
+                        //从手机相册中选择
+                        openPicture();
+                        break;*/
                 }
             }
         });
@@ -199,7 +203,7 @@ public class EditPersonInfoActivity extends BaseActivity {
                     UserUtils.updataLocalUserInfo("duty", editJobName.getText().toString());
                     map.put("duty", editJobName.getText().toString());
                 }
-                loginCofirm.setClickable(false);
+                loginConfirm.setClickable(false);
 
                 final WaitDialog waitDialog = WaitDialog.getInstance("请稍后", R.mipmap.login_loading, true);
                 waitDialog.show(getSupportFragmentManager());
@@ -208,7 +212,7 @@ public class EditPersonInfoActivity extends BaseActivity {
                     @Override
                     public void success(String responce) {
                         JSONObject result = JSONObject.parseObject(responce);
-                        loginCofirm.setClickable(true);
+                        loginConfirm.setClickable(true);
                         if (result.getIntValue("code") == 0) {
                             JSONObject data = result.getJSONObject("data");
                             boolean success = data.getBoolean("success");
@@ -238,7 +242,7 @@ public class EditPersonInfoActivity extends BaseActivity {
 
                     @Override
                     public void failed(String errorMsg) {
-                        loginCofirm.setClickable(true);
+                        loginConfirm.setClickable(true);
                         waitDialog.dismiss();
                         WaitDialog errorDialog = WaitDialog.getInstance("资料修改失败", R.mipmap.login_error, false);
                         errorDialog.show(getSupportFragmentManager());

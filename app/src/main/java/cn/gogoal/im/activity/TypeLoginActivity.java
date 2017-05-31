@@ -131,7 +131,7 @@ public class TypeLoginActivity extends BaseActivity {
 
         xTitle = setMyTitle(R.string.str_login_in, false);
         //添加action
-        XTitle.TextAction rigisterAction = new XTitle.TextAction("注册") {
+        XTitle.TextAction registerAction = new XTitle.TextAction("注册") {
             @Override
             public void actionClick(View view) {
                 Intent intent = new Intent(getActivity(), RigisterActivity.class);
@@ -139,9 +139,9 @@ public class TypeLoginActivity extends BaseActivity {
                 startActivity(intent);
             }
         };
-        xTitle.addAction(rigisterAction, 0);
-        TextView rigisterView = (TextView) xTitle.getViewByAction(rigisterAction);
-        rigisterView.setTextColor(getResColor(R.color.colorPrimary));
+        xTitle.addAction(registerAction, 0);
+        TextView registerView = (TextView) xTitle.getViewByAction(registerAction);
+        registerView.setTextColor(getResColor(R.color.colorPrimary));
 
     }
 
