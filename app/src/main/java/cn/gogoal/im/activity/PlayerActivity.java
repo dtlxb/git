@@ -1,7 +1,6 @@
 package cn.gogoal.im.activity;
 
 import android.app.ActivityManager;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,6 +17,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -52,6 +52,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.PlayerUtils.MyDownTimer;
 import cn.gogoal.im.common.PlayerUtils.PlayerControl;
@@ -260,10 +261,12 @@ public class PlayerActivity extends BaseActivity {
     // 初始化计时器
     private void downTimer() {
 
-        downTimer = new MyDownTimer(4, new MyDownTimer.Runner() {
+        downTimer = new MyDownTimer(5, new MyDownTimer.Runner() {
             @Override
             public void run(long sec) {
-                if (sec == 3) {
+                if (sec == 4) {
+                    text_tip.setText("Go-Goal直播");
+                } else if (sec == 3) {
                     text_tip.setText("Go-Goal直播.");
                 } else if (sec == 2) {
                     text_tip.setText("Go-Goal直播. .");
@@ -341,14 +344,17 @@ public class PlayerActivity extends BaseActivity {
             }
             if (isLastWifiConnected && mobNetInfo.isConnected() && !wifiNetInfo.isConnected()) {
                 isLastWifiConnected = false;
-                if (mPlayer != null) {
+                /*if (mPlayer != null) {
                     mPosition = mPlayer.getCurrentPosition();
                     // 重点:新增接口,此处必须要将之前的surface释放掉
                     mPlayer.releaseVideoSurface();
                     mPlayer.stop();
                     mPlayer.destroy();
                     mPlayer = null;
-                }
+                }*/
+                //暂停
+                if (mPlayer != null && mPlayer.getDuration() > 0) pause();
+
                 setDialog();
             }
 
@@ -356,27 +362,27 @@ public class PlayerActivity extends BaseActivity {
     };
 
     protected void setDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(PlayerActivity.this);
-        builder.setMessage("确认继续播放吗？");
-        builder.setTitle("提示");
-        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
 
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                initSurface();
+            public void onClick(DialogInterface dialogInterface, int i) {
+                switch (i) {
+                    case DialogInterface.BUTTON_POSITIVE: //确认
+                        if (mPlayer != null && !mPlayer.isPlaying() && mPlayer.getDuration() > 0)
+                            start();
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE: //退出
+                        finish();
+                        break;
+                }
 
             }
-        });
-        builder.setNegativeButton("退出", new DialogInterface.OnClickListener() {
+        };
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                finish();
-            }
-        });
-        builder.create().show();
+        DialogHelp.getConfirmDialog(getContext(), getString(R.string.prompt),
+                getString(R.string.sure_is_play), getString(R.string.sure),
+                getString(R.string.quit), listener, listener)
+                .setCancelable(false).show();
     }
 
     public void setStatusListener(StatusListener listener) {
@@ -472,7 +478,6 @@ public class PlayerActivity extends BaseActivity {
                 }
 
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    KLog.e("位置1");
 
                     if (LayoutProgress.getVisibility() == View.GONE) {
                         show_progress_ui(true);
@@ -484,10 +489,8 @@ public class PlayerActivity extends BaseActivity {
 
                     //just show the progress bar
                     if ((System.currentTimeMillis() - mLastDownTimestamp) > 200) {
-                        KLog.e("位置2");
                         return true;
                     } else {
-                        KLog.e("位置3");
                     }
                     return false;
                 }
@@ -755,20 +758,23 @@ public class PlayerActivity extends BaseActivity {
 
         public void onCompleted() {
             KLog.json("onCompleted.");
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(PlayerActivity.this);
-            builder.setMessage("播放结束");
-            builder.setTitle("提示");
-            builder.setNegativeButton("退出", new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    finish();
-                }
-            });
-            builder.create().show();
+            setFinishDialog();
         }
+    }
+
+    protected void setFinishDialog() {
+        AlertDialog.Builder builder = DialogHelp.getDialog(PlayerActivity.this);
+        builder.setMessage("播放结束");
+        builder.setTitle("提示");
+        builder.setNegativeButton("退出", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+        builder.setCancelable(false).show();
     }
 
     /**
