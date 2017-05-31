@@ -1,44 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?><!-- main-->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context=".activity.MainActivity">
 
-    <cn.gogoal.im.ui.widget.UnSlidingViewPager
-        android:id="@+id/vp_main"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/flag_layout_bottom"
-        android:background="@android:color/white"
-        android:fitsSystemWindows="true"
-        app:canScroll="false" />
+        android:layout_height="@dimen/titlebar_size"
+        android:background="@drawable/shape_line_bottom"
+        app:buttonGravity="top"
+        app:collapseIcon="@null"
+        app:contentInsetEnd="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetStart="0dp">
 
-    <FrameLayout
-        android:id="@+id/flag_layout_bottom"
+        <!--title===直播-->
+        <RelativeLayout
+            android:id="@+id/title_live"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_do_live"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:drawablePadding="2dp"
+                android:drawableTop="@mipmap/img_do_live"
+                android:paddingEnd="15dp"
+                android:paddingStart="15dp"
+                android:text="我要直播"
+                android:textColor="#ee3131"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="直播"
+                android:textColor="@color/textColor_333333"
+                android:textSize="@dimen/title_text_size" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/cb_show_live_list"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:background="@android:color/transparent"
+                android:button="@drawable/social_fragment_screen"
+                android:paddingEnd="0dp"
+                android:paddingStart="15dp" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_alignParentBottom="true">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab_main"
-            style="@style/MainTabStyle"
+        <!--main-->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:tabBackground="@drawable/layer_list_main_tab"
-            app:tabGravity="fill"
-            app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/colorPrimary" />
+            android:orientation="vertical">
 
-        <View
-            android:id="@+id/main_view_mask"
+            <cn.gogoal.im.ui.widget.UnSlidingViewPager
+                android:id="@+id/vp_main"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_above="@+id/flag_layout_bottom"
+                android:layout_weight="1"
+                android:background="@android:color/white"
+                app:canScroll="false" />
+
+            <FrameLayout
+                android:id="@+id/flag_layout_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_alignParentBottom="true">
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tab_main"
+                    style="@style/MainTabStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:tabBackground="@drawable/layer_list_main_tab"
+                    app:tabGravity="fill"
+                    app:tabMode="fixed"
+                    app:tabSelectedTextColor="@color/colorPrimary" />
+
+                <View
+                    android:id="@+id/main_view_mask"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#55000000"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+        </LinearLayout>
+
+        <!--menu-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_live_classify"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#55000000"
-            android:visibility="gone" />
+            android:background="@android:color/white"
+            android:layout_gravity="end"
+            android:tag="RIGHT" />
 
-    </FrameLayout>
+    </android.support.v4.widget.DrawerLayout>
 
-</RelativeLayout>
+</LinearLayout>

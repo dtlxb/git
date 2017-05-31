@@ -117,10 +117,16 @@ public class ImageUtils {
     }
 
     public static void getUrlBitmap(Context mContext, String url, final SimpleTarget<Bitmap> simpleTarget){
-        Glide.with(mContext).load(url).into(new SimpleTarget<Drawable>() {
+//        Glide.with(mContext).load(url).into(new SimpleTarget<Drawable>() {
+//            @Override
+//            public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+//                simpleTarget.onResourceReady(drawableToBitmap(resource),null);
+//            }
+//        });
+        Glide.with(mContext).asBitmap().load(url).into(new SimpleTarget<Bitmap>() {
             @Override
-            public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
-                simpleTarget.onResourceReady(drawableToBitmap(resource),null);
+            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                simpleTarget.onResourceReady(resource,null);
             }
         });
     }

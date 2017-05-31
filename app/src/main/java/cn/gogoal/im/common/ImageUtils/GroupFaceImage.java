@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -75,15 +74,18 @@ public class GroupFaceImage<T> {
                 for (int i = 0; i < imageUrls.size(); i++) {
                     try {
                         RequestOptions options = new RequestOptions();
-                        options.dontAnimate().centerCrop().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.ALL);
+                        options.dontAnimate().centerCrop()
+                                .override(minItemH,minItemH)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL);
 
-                        Drawable drawable = Glide.with(context)
+                        Bitmap bitmap = Glide.with(context)
+                                .asBitmap()
                                 .load(imageUrls.get(i))
                                 .apply(options)
-//                                .asBitmap() //必须
-                                .into(minItemH, minItemH)
+                                .submit(minItemH, minItemH)
                                 .get();
-                        bitmaps.add(ImageUtils.drawableToBitmap(drawable));
+
+                        bitmaps.add(bitmap);
                     } catch (Exception e) {
                         e.printStackTrace();
                         matchingListener.onError(e);

@@ -46,7 +46,7 @@ public class ImageDisplay {
         if (image != null) {
 
             RequestOptions options = new RequestOptions();
-            options.dontAnimate().dontTransform().centerCrop().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.ALL);
+            options.dontAnimate().dontTransform().centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL);
 
             if (needPlaceholdeer) {
                 options.placeholder(R.mipmap.image_placeholder);
@@ -60,7 +60,6 @@ public class ImageDisplay {
         options.dontAnimate()
                 .dontTransform()
                 .centerCrop()
-                .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
         try {
             Glide.with(context)

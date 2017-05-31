@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -36,6 +37,7 @@ import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
+import cn.gogoal.im.common.permission.CheckLivePermissionListener;
 
 import static com.alibaba.fastjson.JSON.parseObject;
 
@@ -688,7 +690,7 @@ public class UserUtils {
                                 callback.onError("data null");
                             } else {
                                 callback.onSuccess(resp);
-                                SPTools.saveString(UserUtils.getMyAccountId()+"_my_group_list",resp);
+                                SPTools.saveString(UserUtils.getMyAccountId() + "_my_group_list", resp);
                             }
                         }
                     }
@@ -714,27 +716,28 @@ public class UserUtils {
 
     /**
      * 获取本地缓存的【我的群组】集
-     * */
-    public static JSONArray getLocalMyGooupList(){
-        return SPTools.getJsonArray(UserUtils.getMyAccountId()+"_my_group_list",new JSONArray());
+     */
+    public static JSONArray getLocalMyGooupList() {
+        return SPTools.getJsonArray(UserUtils.getMyAccountId() + "_my_group_list", new JSONArray());
     }
 
     /**
      * 添加群组到本地缓存的【我的群组】集
-     * */
-    public static boolean addGroup2LocalMyGooupList(JSONObject groupObject){
+     */
+    public static boolean addGroup2LocalMyGooupList(JSONObject groupObject) {
         JSONArray jsonArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_my_group_list", new JSONArray());
         boolean add = jsonArray.add(groupObject);
-        SPTools.saveJsonArray(UserUtils.getMyAccountId()+"_my_group_list",jsonArray);
+        SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_my_group_list", jsonArray);
         return add;
     }
+
     /**
      * 移除群组到本地缓存的【我的群组】集
-     * */
-    public static boolean removeGroup2LocalMyGooupList(JSONObject groupObject){
+     */
+    public static boolean removeGroup2LocalMyGooupList(JSONObject groupObject) {
         JSONArray array = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_my_group_list", new JSONArray());
         boolean remove = array.remove(groupObject);
-        SPTools.saveJsonArray(UserUtils.getMyAccountId()+"_my_group_list",array);
+        SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_my_group_list", array);
         return remove;
     }
 
@@ -826,6 +829,32 @@ public class UserUtils {
             }
         };
         new GGOKHTTP(params, GGOKHTTP.GET_MEMBER_INFO, ggHttpInterface).startGet();
+    }
+
+    //检查是否有权限发起直播
+
+    public static void checkLivePermission(@NonNull final CheckLivePermissionListener listener) {
+        new GGOKHTTP(UserUtils.getTokenParams(), GGOKHTTP.VIDEO_MOBILE, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                JSONObject jsonObject = JSONObject.parseObject(responseInfo);
+
+                if (jsonObject.getIntValue("code") == 0) {
+                    if (jsonObject.getJSONObject("data").containsKey("live_id") && jsonObject.getJSONObject("data").getString("live") != null) {
+                        listener.hasPermission(jsonObject.getJSONObject("data").getString("live_id"), true);
+                    } else {
+                        listener.hasPermission(null, false);
+                    }
+                } else {
+                    listener.hasPermission(null, false);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                listener.hasPermission(null, false);
+            }
+        }).startGet();
     }
 
     /**

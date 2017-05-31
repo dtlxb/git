@@ -714,13 +714,24 @@ public class GGOKHTTP {
                     .execute(new StringCallback() {
                         @Override
                         public void onError(Call call, Exception e, int id) {
-                            Log.e("TAG", "==出错日志==出错接口：" + url + "==" + e.getMessage() + "==");
                             if (httpInterface != null) httpInterface.onFailure(e.toString());
                         }
 
                         @Override
                         public void onResponse(String response, int id) {
-                            if (httpInterface != null) httpInterface.onSuccess(response);
+                            if (httpInterface != null) {
+                                try {
+                                    if (!JSONObject.parseObject(response).containsKey("code") &&
+                                            JSONObject.parseObject(response).containsKey("data")) {
+                                        httpInterface.onFailure("没有code或data字段");
+                                    } else {
+                                        httpInterface.onSuccess(response);
+                                    }
+                                } catch (Exception e) {//解析出错，返回就TM就不是json
+                                    httpInterface.onFailure(e.getMessage());
+                                }
+                            }
+                            ;
                         }
                     });
         } catch (Exception e) {

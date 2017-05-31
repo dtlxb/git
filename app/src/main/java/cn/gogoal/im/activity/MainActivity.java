@@ -1,14 +1,20 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
@@ -23,17 +29,19 @@ import java.util.Map;
 
 import butterknife.BindArray;
 import butterknife.BindView;
-import cn.gogoal.im.BuildConfig;
 import cn.gogoal.im.R;
+import cn.gogoal.im.adapter.BoxScreenAdapter;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
+import cn.gogoal.im.bean.BoxScreenData;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.FileUtil;
+import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.permission.CheckLivePermissionListener;
 import cn.gogoal.im.fragment.main.InvestmentResearchFragment;
 import cn.gogoal.im.fragment.main.LiveListFragment;
 import cn.gogoal.im.fragment.main.MainStockFragment;
@@ -42,6 +50,15 @@ import cn.gogoal.im.fragment.main.MineFragment;
 import cn.gogoal.im.ui.Badge.BadgeView;
 
 public class MainActivity extends BaseActivity {
+
+    @BindView(R.id.toolbar_title)
+    Toolbar mToolbar;
+
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+
+    @BindView(R.id.cb_show_live_list)
+    AppCompatCheckBox acb;
 
     @BindView(R.id.vp_main)
     ViewPager vpMain;
@@ -52,15 +69,18 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.main_view_mask)
     View mainViewMask;
 
+    @BindArray(R.array.main_tab)
+    String[] mainTabArray;
+
+    @BindView(R.id.rv_live_classify)
+    RecyclerView rvLiveClassify;
+
     public MainStockFragment mainStockFragment;
 
     @Override
     public int bindLayout() {
         return R.layout.activity_main;
     }
-
-    @BindArray(R.array.main_tab)
-    String[] mainTabArray;
 
     /*@BindArray(R.array.emoji_array)
     String[] emojis;*/
@@ -70,32 +90,12 @@ public class MainActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
-        setStatusColor(Color.BLACK);
+        setSupportActionBar(mToolbar);
 
-        KLog.e("width===" + AppDevice.getWidth(mContext) + ";height===" + AppDevice.getHeight(mContext));
-        KLog.e("DpValueWidth===" + AppDevice.px2dp(mContext, AppDevice.getWidth(mContext)) +
-                ";DpValueHeight===" + AppDevice.px2dp(mContext, AppDevice.getHeight(mContext)));
+        setTab();
 
-        if (BuildConfig.DEBUG) {
-            FileUtil.writeRequestResponse(UserUtils.getToken(), "token_" + UserUtils.getUserName());
-        }
-
-        //TODO 登录成功获取投资顾问,缓存
+        //登录成功获取投资顾问,缓存
         UserUtils.getAdvisers(null);
-
-        MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
-
-        mainStockFragment = new MainStockFragment();                                //TAB2 自选股
-
-        InvestmentResearchFragment foundFragment = new InvestmentResearchFragment(); // TAB3 投研
-
-        //社交
-//        socialContactFrant = new SocialContactFragment();
-
-        //直播
-        LiveListFragment liveListFragment = new LiveListFragment();                   //TAB4 直播
-
-        final MineFragment mineFragment = new MineFragment();                       // TAB5 我的
 
         boolean needRefresh = getIntent().getBooleanExtra("isFromLogin", false);
         SPTools.saveBoolean("squareNeedRefresh", needRefresh);
@@ -104,9 +104,24 @@ public class MainActivity extends BaseActivity {
             //拉取好友列表
             getFriendList();
         }
-        /*for (int i=0;i<emojis.length;i++){
-            int red=getResources().getIdentifier("img_emoji_"+i,"mipmap",getPackageName());
-        }*/
+
+        mainViewMask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainStockFragment.dismissMarket();
+            }
+        });
+
+        setLiveData();
+    }
+
+    //底部tab
+    private void setTab() {
+        MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
+        mainStockFragment = new MainStockFragment();                                //TAB2 自选股
+        InvestmentResearchFragment foundFragment = new InvestmentResearchFragment(); // TAB3 投研
+        LiveListFragment liveListFragment = new LiveListFragment();                  //TAB4 直播
+        final MineFragment mineFragment = new MineFragment();                       // TAB5 我的
 
         List<Fragment> tabFragments = new ArrayList<>();
         tabFragments.add(messageFragment);
@@ -120,6 +135,20 @@ public class MainActivity extends BaseActivity {
 
         vpMain.setAdapter(tabAdapter);
         vpMain.setOffscreenPageLimit(mainTabArray.length - 1);
+
+        tabMain.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mToolbar.setVisibility(tab.getPosition() == 3 ? View.VISIBLE : View.GONE);
+            }
+
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+
         tabMain.setupWithViewPager(vpMain);
 
         for (int i = 0; i < mainTabArray.length; i++) {
@@ -130,14 +159,6 @@ public class MainActivity extends BaseActivity {
         }
 
         tabMain.getTabAt(2).select();
-
-        mainViewMask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mainStockFragment.dismissMarket();
-            }
-        });
-
     }
 
     public void changeItem(int index) {
@@ -190,20 +211,120 @@ public class MainActivity extends BaseActivity {
                 R.anim.alpha_out));
     }
 
+    //获取直播数据
+    private void setLiveData() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        AppDevice.setViewWidth$Height(rvLiveClassify,3*AppDevice.getWidth(this)/4, -1);
+
+        rvLiveClassify.setLayoutManager(new GridLayoutManager(MainActivity.this, 2, GridLayoutManager.VERTICAL, false));
+
+        rvLiveClassify.setPadding(AppDevice.dp2px(this,7),AppDevice.dp2px(this,26),AppDevice.dp2px(this,7),0);
+
+        final ArrayList<BoxScreenData> menuData = new ArrayList<>();
+        BoxScreenData allData = new BoxScreenData();
+        allData.setSelected(true);
+        allData.setProgramme_name("全部");
+        allData.setProgramme_id(10086);
+        menuData.add(0, allData);
+
+        final BoxScreenAdapter boxScreenAdapter = new BoxScreenAdapter(menuData);
+
+        rvLiveClassify.setAdapter(boxScreenAdapter);
+
+        acb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    drawerLayout.openDrawer(Gravity.END, true);
+                } else {
+                    drawerLayout.closeDrawer(Gravity.END);
+                }
+            }
+        });
+
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                acb.setChecked(true);
+            }
+
+            public void onDrawerClosed(View drawerView) {
+                acb.setChecked(false);
+            }
+
+            public void onDrawerStateChanged(int newState) {
+            }
+        });
+
+        new GGOKHTTP(null, GGOKHTTP.GET_PROGRAMME_GUIDE, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+
+                KLog.e(responseInfo);
+
+                JSONObject object = JSONObject.parseObject(responseInfo);
+
+                if (object.getIntValue("code") == 0) {
+                    List<BoxScreenData> data = JSONObject.parseArray(object.getString("data"), BoxScreenData.class);
+                    menuData.addAll(data);
+
+                    boxScreenAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                KLog.e("获取直播分类失败");
+            }
+        }).startGet();
+
+        findViewById(R.id.tv_do_live).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserUtils.checkLivePermission(new CheckLivePermissionListener() {
+                    @Override
+                    public void hasPermission(String liveId, boolean hasPermission) {
+                        if (hasPermission) {
+                            Intent intent = new Intent(MainActivity.this, LiveActivity.class);
+                            intent.putExtra("live_id", liveId);
+                            startActivity(intent);
+                        } else {
+                            DialogHelp.getMessageDialog(MainActivity.this, "您暂时没有权限直播，请联系客服申请！").show();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+
     private long exitTime = 0;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mainStockFragment.isMaskViewVisiable()) {
-                mainStockFragment.dismissMarket();
-            } else {
-                exitBy2Click();
-            }
 
+            switch (tabMain.getSelectedTabPosition()) {
+                case 1:
+                    if (mainStockFragment.isMaskViewVisiable()) {
+                        mainStockFragment.dismissMarket();
+                        exitTime = 0;
+                    } else {
+                        exitBy2Click();
+                    }
+                    break;
+                case 3:
+                    if (acb.isChecked()) {
+                        acb.setChecked(false);
+                        exitTime=0;
+                    } else {
+                        exitBy2Click();
+                    }
+                    break;
+            }
             return true;
-        } else if (keyCode == KeyEvent.KEYCODE_MENU) {
-//            startActivity(new Intent(getActivity(), TestActivity.class));
         }
         return super.onKeyDown(keyCode, event);
     }

@@ -17,6 +17,16 @@ public class BoxScreenData {
     private int sort;
     private int programme_id;
 
+    private boolean selected;
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
     public String getProgramme_name() {
         return programme_name;
     }

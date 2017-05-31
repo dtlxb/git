@@ -174,6 +174,10 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
     }
 
     @Override
+    public void setNormalTitleBar() {
+    }
+
+    @Override
     public void doBusiness(Context mContext) {
         setBottomTab();
 

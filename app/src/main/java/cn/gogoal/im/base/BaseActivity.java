@@ -81,12 +81,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
 
         initView(mContentView);
 
-        EventBus.getDefault().register(this);
+        setNormalTitleBar();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            setTranslucentStatus();
-        }
-        setStatusColor(Color.BLACK);
+        EventBus.getDefault().register(this);
 
         doBusiness(this);
 
@@ -97,6 +94,13 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         window.setFlags(
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    }
+
+    public void setNormalTitleBar(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus();
+        }
+        setStatusColor(Color.BLACK);
     }
 
     protected void setStatusColor(@ColorInt int color) {

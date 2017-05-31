@@ -223,21 +223,6 @@ public class MainStockFragment extends BaseFragment {
         new GGOKHTTP(param, GGOKHTTP.APP_HQ_GET, ggHttpInterface).startGet();
     }
 
-    /**
-     * 显示指数[弹窗]
-     */
-    public void showMarketDialog() {
-        ((MainActivity) getActivity()).showMainMsk();//父Activity显示蒙版
-        rvDialogMarket.startAnimation(
-                android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_from_top));
-        rvDialogMarket.setVisibility(View.VISIBLE);
-        viewDialogMask.setEnabled(true);
-        viewDialogMask.setClickable(true);
-        viewDialogMask.setVisibility(View.VISIBLE);
-        viewDialogMask.startAnimation(
-                android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.alpha_in));
-    }
-
     private void refreshAll(int type) {
         //大盘指数模块刷新
         getMarketLittle(type);
@@ -277,6 +262,20 @@ public class MainStockFragment extends BaseFragment {
         imgMystockRefresh.setEnabled(false);
     }
 
+    /**
+     * 显示指数[弹窗]
+     */
+    public void showMarketDialog() {
+        ((MainActivity) getActivity()).showMainMsk();//父Activity显示蒙版
+        rvDialogMarket.startAnimation(
+                android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_from_top));
+        rvDialogMarket.setVisibility(View.VISIBLE);
+        viewDialogMask.setEnabled(true);
+        viewDialogMask.setClickable(true);
+        viewDialogMask.setVisibility(View.VISIBLE);
+        viewDialogMask.startAnimation(
+                android.view.animation.AnimationUtils.loadAnimation(getContext(), R.anim.alpha_in));
+    }
 
     /**
      * 销毁指数[弹窗]
