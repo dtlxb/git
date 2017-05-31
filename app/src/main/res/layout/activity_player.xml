@@ -3,8 +3,8 @@
     android:id="@+id/relative_player"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:clipToPadding="false">
+    android:clipToPadding="false"
+    android:fitsSystemWindows="true">
 
     <RelativeLayout
         android:id="@+id/relative_Container"
@@ -49,14 +49,28 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:visibility="visible">
 
             <ImageView
+                android:id="@+id/img_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/login_loading"
+                android:visibility="gone" />
+
+            <TextView
                 android:id="@+id/text_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/login_loading" />
+                android:layout_marginTop="50dp"
+                android:shadowColor="@color/live_chat"
+                android:shadowDx="0"
+                android:shadowDy="1"
+                android:shadowRadius="1"
+                android:text="Go-Goal直播. . ."
+                android:textColor="@android:color/white"
+                android:textSize="13dp" />
 
         </LinearLayout>
 
