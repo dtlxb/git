@@ -53,6 +53,7 @@ import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.PlayerUtils.MyDownTimer;
 import cn.gogoal.im.common.PlayerUtils.PlayerControl;
 import cn.gogoal.im.common.PlayerUtils.StatusListener;
 import cn.gogoal.im.common.UIHelper;
@@ -75,10 +76,12 @@ public class PlayerActivity extends BaseActivity {
     //缓冲控件
     @BindView(R.id.LayoutTip)
     LinearLayout LayoutTip;
-    @BindView(R.id.text_tip)
-    ImageView text_tip;
+    @BindView(R.id.img_tip)
+    ImageView img_tip;
     @BindView(R.id.imgLoadPic)
     ImageView imgLoadPic;
+    @BindView(R.id.text_tip)
+    TextView text_tip;
     //暂停
     @BindView(R.id.imgPause)
     CheckBox imgPause;
@@ -107,7 +110,10 @@ public class PlayerActivity extends BaseActivity {
     @BindView(R.id.playPager)
     ViewPager playPager;
 
+    //加载动画
     private RotateAnimation animation;
+    //倒数数
+    private MyDownTimer downTimer;
 
     private boolean mEnableUpdateProgress = true;
 
@@ -199,7 +205,9 @@ public class PlayerActivity extends BaseActivity {
 
         live_id = getIntent().getStringExtra("live_id");
 
-        animation = AnimationUtils.getInstance().setLoadingAnime(text_tip, R.mipmap.login_loading);
+        downTimer();
+        downTimer.start();
+        animation = AnimationUtils.getInstance().setLoadingAnime(img_tip, R.mipmap.login_loading);
         animation.startNow();
 
         PlayDataStatistics.getStatisticalData(getContext(), "2", live_id, "2", "1");
@@ -245,6 +253,28 @@ public class PlayerActivity extends BaseActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
+            }
+        });
+    }
+
+    // 初始化计时器
+    private void downTimer() {
+
+        downTimer = new MyDownTimer(4, new MyDownTimer.Runner() {
+            @Override
+            public void run(long sec) {
+                if (sec == 3) {
+                    text_tip.setText("Go-Goal直播.");
+                } else if (sec == 2) {
+                    text_tip.setText("Go-Goal直播. .");
+                } else if (sec == 1) {
+                    text_tip.setText("Go-Goal直播. . .");
+                }
+            }
+
+            @Override
+            public void finish() {
+                downTimer.start();
             }
         });
     }
