@@ -25,6 +25,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.AVFile;
@@ -771,9 +772,10 @@ public class ChatFragment extends BaseFragment {
     private void setCacheMessage() {
         IMMessageBean imMessageBean = MessageListUtils.getIMMessageBeanById(UserUtils.getMessageListInfo(), imConversation.getConversationId());
         if (imMessageBean != null && imMessageBean.getLastMessage() != null) {
-            if (imMessageBean.getLastMessage() instanceof GGTextMessage) {
-                GGTextMessage textMessage = (GGTextMessage) imMessageBean.getLastMessage();
-                String messageText = textMessage.getText();
+            JSONObject contentObject = JSON.parseObject(imMessageBean.getLastMessage().getContent());
+            String _lctype = contentObject.getString("_lctype");
+            if (_lctype.equals(AppConst.IM_MESSAGE_TYPE_TEXT)) {
+                String messageText = contentObject.getString("_lctext");
                 if (messageText.startsWith("[草稿] ")) {
                     String text = messageText.substring(5, messageText.length());
                     etInput.setText(text);

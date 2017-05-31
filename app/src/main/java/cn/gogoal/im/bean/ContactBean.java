@@ -13,7 +13,7 @@ import cn.gogoal.im.ui.index.BaseIndexPinyinBean;
  * Staff_id 1375
  * phone 18930640263
  */
-public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable{
+public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable {
 
     private int tag;//预留字段，特殊处理用
 
@@ -36,7 +36,7 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable{
     private int userId;
 
     public int getUserId() {
-        return getFriend_id()==0?getAccount_id():getFriend_id();
+        return getFriend_id() == 0 ? getAccount_id() : getFriend_id();
     }
 
     private String remark;//备注
@@ -435,7 +435,7 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable{
     public boolean equals(Object o) {
         try {
             ContactBean other = (ContactBean) o;
-            return ((ContactBean) o).getFriend_id() == other.getFriend_id();
+            return this.getFriend_id() == other.getFriend_id();
         } catch (ClassCastException e) {
             e.printStackTrace();
         }

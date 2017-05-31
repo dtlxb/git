@@ -80,6 +80,7 @@
     <string name="close_video_call_confirm_message">确定要结束连麦？</string>
     <string name="cancel">取消</string>
     <string name="sure">确定</string>
+    <string name="quit">退出</string>
     <string name="close_video_call_notify_message">对方已经终止连麦！</string>
     <string name="video_chatting_timeout">连麦超时</string>
     <string name="close_live_call_title">结束直播</string>
@@ -87,6 +88,8 @@
     <string name="close_live_failed">结束直播失败</string>
     <string name="live_finished">直播已结束</string>
     <string name="not_link_live">无法进行连麦，请稍后再试或联系客服。</string>
+    <string name="sure_is_play">当前网络4G，确认继续播放吗？</string>
+    <string name="prompt">提示</string>
 
     <!--权限-->
     <string name="no_camera_permission">没有权限使用摄像头，请开启摄像头权限</string>
@@ -127,7 +130,8 @@
     <!--聊天语音弹窗-->
     <string name="str_recorder_dialog_recording">手指上滑，取消发送</string>
     <string name="str_recorder_dialog_cancle">@string/str_recorder_want_cancel</string>
-    <string name="str_recorder_dialog_22short">录音时间太短</string>
+    <string name="str_recorder_dialog_2short">录音时间太短</string>
+    <string name="str_recorder_dialog_2long">录音时间不能超过1分钟</string>
 
     <string name="donot_found_wechat">未检测到微信客户端或者版本不被支持</string>
 

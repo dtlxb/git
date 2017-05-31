@@ -27,10 +27,10 @@ public class DialogManager {
     /**
      * 显示录音的对话框
      */
-    public void showRecordingDialog(){
+    public void showRecordingDialog() {
         mDialog = new Dialog(mContext, R.style.WindowDialogStyle);
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.dialog_recorder,new LinearLayout(mContext),false);
+        View view = inflater.inflate(R.layout.dialog_recorder, new LinearLayout(mContext), false);
         mDialog.setContentView(view);
 
         mIcon = (ImageView) mDialog.findViewById(R.id.recorder_dialog_icon);
@@ -40,8 +40,8 @@ public class DialogManager {
         mDialog.show();
     }
 
-    public void recording(){
-        if(mDialog != null && mDialog.isShowing()) { //显示状态
+    public void recording() {
+        if (mDialog != null && mDialog.isShowing()) { //显示状态
             mIcon.setVisibility(View.VISIBLE);
             mVoiceLevel.setVisibility(View.VISIBLE);
             mLable.setVisibility(View.VISIBLE);
@@ -55,8 +55,8 @@ public class DialogManager {
     /**
      * 显示想取消的对话框
      */
-    public void wantToCancel(){
-        if(mDialog != null && mDialog.isShowing()) { //显示状态
+    public void wantToCancel() {
+        if (mDialog != null && mDialog.isShowing()) { //显示状态
             mIcon.setVisibility(View.VISIBLE);
             mVoiceLevel.setVisibility(View.GONE);
             mLable.setVisibility(View.VISIBLE);
@@ -70,22 +70,26 @@ public class DialogManager {
     /**
      * 显示时间过短的对话框
      */
-    public void tooShort(){
-        if(mDialog != null && mDialog.isShowing()) { //显示状态
+    public void showError(int type) {
+        if (mDialog != null && mDialog.isShowing()) { //显示状态
             mIcon.setVisibility(View.VISIBLE);
             mVoiceLevel.setVisibility(View.GONE);
             mLable.setVisibility(View.VISIBLE);
 
             mIcon.setImageResource(R.drawable.voice_to_short);
-            mLable.setText(mContext.getString(R.string.str_recorder_dialog_22short));
+            if (type == 0) {
+                mLable.setText(mContext.getString(R.string.str_recorder_dialog_2short));
+            } else if (type == 1) {
+                mLable.setText(mContext.getString(R.string.str_recorder_dialog_2long));
+            }
         }
     }
 
     /**
      * 显示取消的对话框
      */
-    public void dimissDialog(){
-        if(mDialog != null && mDialog.isShowing()) { //显示状态
+    public void dimissDialog() {
+        if (mDialog != null && mDialog.isShowing()) { //显示状态
             mDialog.dismiss();
             mDialog = null;
         }
@@ -93,15 +97,16 @@ public class DialogManager {
 
     /**
      * 显示更新音量级别的对话框
+     *
      * @param level 1-7
      */
-    public void updateVoiceLevel(int level){
-        if(mDialog != null && mDialog.isShowing()) {
+    public void updateVoiceLevel(int level) {
+        if (mDialog != null && mDialog.isShowing()) {
          /* mIcon.setVisibility(View.VISIBLE);
             mVoiceLevel.setVisibility(View.VISIBLE);
             mLable.setVisibility(View.VISIBLE);*/
 
-            int resId = mContext.getResources().getIdentifier("v"+level,"drawable",mContext.getPackageName());
+            int resId = mContext.getResources().getIdentifier("v" + level, "drawable", mContext.getPackageName());
             mVoiceLevel.setImageResource(resId);
         }
     }

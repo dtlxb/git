@@ -7,6 +7,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,6 +34,7 @@ import cn.gogoal.im.bean.LcattrsBean;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.XTitle;
@@ -61,7 +63,7 @@ public class OfficialAccountsActivity extends BaseActivity {
         initRecycleView(officialRecycler, null);
         String conversationID = getIntent().getStringExtra("conversation_id");
         getAllMessages(conversationID);
-        messagesAdapter = new OfficialMessagesAdapter(getActivity(), R.layout.item_official_account, officialMessages);
+        messagesAdapter = new OfficialMessagesAdapter(R.layout.item_official_account, officialMessages);
         officialRecycler.setAdapter(messagesAdapter);
 
         //未读数清零
@@ -109,17 +111,26 @@ public class OfficialAccountsActivity extends BaseActivity {
 
     private class OfficialMessagesAdapter extends CommonAdapter<LcattrsBean, BaseViewHolder> {
 
-        private OfficialMessagesAdapter(Context context, int layoutId, List<LcattrsBean> datas) {
+        private OfficialMessagesAdapter(int layoutId, List<LcattrsBean> datas) {
             super(layoutId, datas);
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, LcattrsBean lcattrsBean, int position) {
+        protected void convert(BaseViewHolder holder, final LcattrsBean lcattrsBean, int position) {
             TextView official_name = holder.getView(R.id.official_name);
             TextView official_content = holder.getView(R.id.official_content);
             TextView official_brief = holder.getView(R.id.official_brief);
-            TextView official_allinfo = holder.getView(R.id.official_allinfo);
+            TextView official_allInfo = holder.getView(R.id.official_allinfo);
             ImageView official_image = holder.getView(R.id.official_image);
+            TextView textView = holder.getView(R.id.look_more);
+
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NormalIntentUtils.go2WebActivity(OfficialAccountsActivity.this, lcattrsBean.getLink(),
+                            null != lcattrsBean.getTitle() ? lcattrsBean.getTitle().getWord() : "");
+                }
+            });
 
             if (null != lcattrsBean.getTitle()) {
                 official_name.setText(lcattrsBean.getTitle().getWord());
@@ -135,7 +146,7 @@ public class OfficialAccountsActivity extends BaseActivity {
                 }
             }
             if (null != lcattrsBean.getContent() && !TextUtils.isEmpty(lcattrsBean.getContent().getWord())) {
-                official_allinfo.setText(lcattrsBean.getContent().getWord());
+                official_allInfo.setText(lcattrsBean.getContent().getWord());
             }
 
             int stringLength = 0;

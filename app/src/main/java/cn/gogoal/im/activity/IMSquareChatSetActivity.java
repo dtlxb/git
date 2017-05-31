@@ -9,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
@@ -55,7 +56,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
 
     @BindView(R.id.personlist_recycler)
-    RecyclerView personlistRecycler;
+    RecyclerView personListRecycler;
 
     @BindView(R.id.iv_square_head)
     RoundedImageView iv_square_head;
@@ -85,8 +86,8 @@ public class IMSquareChatSetActivity extends BaseActivity {
     SwitchCompat saveGroup;
 
     private IMPersonSetAdapter mPersonInfoAdapter;
-    private List<ContactBean> contactBeens = new ArrayList<>();
-    private List<ContactBean> PersonContactBeens = new ArrayList<>();
+    private List<ContactBean> contactBeans = new ArrayList<>();
+    private List<ContactBean> PersonContactBeans = new ArrayList<>();
     private String conversationId;
     private String squareCreater;
     private List<String> groupMembers;
@@ -105,9 +106,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
         //初始化
         squareCreater = getIntent().getExtras().getString("square_creater");
         headAvatar = getIntent().getExtras().getString("head_avatar");
-        personlistRecycler.setLayoutManager(new GridLayoutManager(this, 6));
-        mPersonInfoAdapter = new IMPersonSetAdapter(1002, IMSquareChatSetActivity.this, R.layout.item_square_chat_set, squareCreater, contactBeens);
-        personlistRecycler.setAdapter(mPersonInfoAdapter);
+        personListRecycler.setLayoutManager(new GridLayoutManager(this, 6));
+        mPersonInfoAdapter = new IMPersonSetAdapter(1002, IMSquareChatSetActivity.this, R.layout.item_square_chat_set, squareCreater, contactBeans);
+        personListRecycler.setAdapter(mPersonInfoAdapter);
         groupMembers = new ArrayList<>();
         urls = new ArrayList<>();
         //正式流程走完后
@@ -182,13 +183,13 @@ public class IMSquareChatSetActivity extends BaseActivity {
             public void onItemClick(CommonAdapter adapter, View view, int position) {
                 Intent intent;
                 Bundle mBundle = new Bundle();
-                if (position == contactBeens.size() - 2 && squareCreater.equals(UserUtils.getMyAccountId())) {
+                if (position == contactBeans.size() - 2 && squareCreater.equals(UserUtils.getMyAccountId())) {
                     intent = new Intent(IMSquareChatSetActivity.this, ChooseContactActivity.class);
                     mBundle.putInt("square_action", AppConst.SQUARE_ROOM_ADD_ANYONE);
                     mBundle.putString("conversation_id", conversationId);
                     intent.putExtras(mBundle);
                     startActivityForResult(intent, AppConst.SQUARE_ROOM_ADD_ANYONE);
-                } else if (squareCreater.equals(UserUtils.getMyAccountId()) && position == contactBeens.size() - 1) {
+                } else if (squareCreater.equals(UserUtils.getMyAccountId()) && position == contactBeans.size() - 1) {
                     //删除人
                     intent = new Intent(IMSquareChatSetActivity.this, ChooseContactActivity.class);
                     mBundle.putInt("square_action", AppConst.SQUARE_ROOM_DELETE_ANYONE);
@@ -197,7 +198,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     startActivityForResult(intent, AppConst.SQUARE_ROOM_DELETE_ANYONE);
                 } else {
                     intent = new Intent(IMSquareChatSetActivity.this, IMPersonDetailActivity.class);
-                    mBundle.putInt("account_id", contactBeens.get(position).getFriend_id());
+                    mBundle.putInt("account_id", contactBeans.get(position).getFriend_id());
                     intent.putExtras(mBundle);
                     startActivity(intent);
                 }
@@ -214,20 +215,20 @@ public class IMSquareChatSetActivity extends BaseActivity {
         return bean;
     }
 
-    private ContactBean<String> addNomoralFuns(String name, int friend_id, String avatar) {
-        ContactBean<String> nomoralbean = new ContactBean<>();
-        nomoralbean.setNickname(name);
-        nomoralbean.setFriend_id(friend_id);
-        nomoralbean.setContactType(ContactBean.ContactType.PERSION_ITEM);
-        nomoralbean.setAvatar(avatar);
-        return nomoralbean;
+    private ContactBean<String> addNormalFans(String name, int friend_id, String avatar) {
+        ContactBean<String> normalBean = new ContactBean<>();
+        normalBean.setNickname(name);
+        normalBean.setFriend_id(friend_id);
+        normalBean.setContactType(ContactBean.ContactType.PERSION_ITEM);
+        normalBean.setAvatar(avatar);
+        return normalBean;
     }
 
-    private void getAllContacts(JSONArray aarray) {
+    private void getAllContacts(JSONArray array) {
         List<String> memberList = new ArrayList<>();
-        for (int i = 0; i < aarray.size(); i++) {
-            JSONObject accountObject = aarray.getJSONObject(i);
-            contactBeens.add(addNomoralFuns(accountObject.getString("nickname"), accountObject.getInteger("friend_id"), accountObject.getString("avatar")));
+        for (int i = 0; i < array.size(); i++) {
+            JSONObject accountObject = array.getJSONObject(i);
+            contactBeans.add(addNormalFans(accountObject.getString("nickname"), accountObject.getInteger("friend_id"), accountObject.getString("avatar")));
             memberList.add(accountObject.getString("friend_id"));
             urls.add(accountObject.getString("avatar"));
         }
@@ -235,7 +236,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         if (!TextUtils.isEmpty(headAvatar)) {
             ImageDisplay.loadRoundedRectangleImage(IMSquareChatSetActivity.this, headAvatar, iv_square_head);
         } else {
-            if (listHasTheSame(memberList, groupMembers)) {
+            /*if (listHasTheSame(memberList, groupMembers)) {
                 String imageCache = ChatGroupHelper.getBitmapFilePaht(conversationId);
                 if (!StringUtils.isActuallyEmpty(imageCache)) {
                     ImageDisplay.loadImage(getActivity(), imageCache, iv_square_head);
@@ -246,12 +247,17 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 groupMembers.clear();
                 groupMembers.addAll(memberList);
                 getNicePicture(urls);
+            }*/
+            if (null != memberList && memberList.size() > 0) {
+                groupMembers.clear();
+                groupMembers.addAll(memberList);
+                getNicePicture(urls);
             }
         }
         tvTeamSize.setText(groupMembers.size() + "人");
-        PersonContactBeens.addAll(contactBeens);
-        contactBeens.clear();
-        contactBeens.addAll(squareCreaterFirst(PersonContactBeens));
+        PersonContactBeans.addAll(contactBeans);
+        contactBeans.clear();
+        contactBeans.addAll(squareCreaterFirst(PersonContactBeans));
         mPersonInfoAdapter.notifyDataSetChanged();
     }
 
@@ -265,10 +271,10 @@ public class IMSquareChatSetActivity extends BaseActivity {
     private void getNicePicture(List<String> picUrls) {
         GroupFaceImage.getInstance(getActivity(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
             @Override
-            public void onSuccess(Bitmap mathingBitmap) {
-                ChatGroupHelper.cacheGroupAvatar(conversationId, mathingBitmap);
+            public void onSuccess(Bitmap matchingBitmap) {
+                ChatGroupHelper.cacheGroupAvatar(conversationId, matchingBitmap);
                 HashMap<String, Object> map = new HashMap<>();
-                map.put("mathing_bitmap", mathingBitmap);
+                map.put("matching_bitmap", matchingBitmap);
                 BaseMessage baseMessage = new BaseMessage("Bitmap_Info", map);
                 AppManager.getInstance().sendMessage("set_square_avatar", baseMessage);
             }
@@ -285,7 +291,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     @Subscriber(tag = "set_square_avatar")
     public void setAvatar(BaseMessage<Bitmap> baseMessage) {
         Map<String, Bitmap> map = baseMessage.getOthers();
-        Bitmap bitmap = map.get("mathing_bitmap");
+        Bitmap bitmap = map.get("matching_bitmap");
         iv_square_head.setImageBitmap(bitmap);
     }
 
@@ -383,7 +389,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 intent = new Intent(getActivity(), IMGroupContactsActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("square_creater", squareCreater);
-                bundle.putSerializable("chat_group_contacts", (Serializable) PersonContactBeens);
+                bundle.putSerializable("chat_group_contacts", (Serializable) PersonContactBeans);
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
@@ -459,11 +465,11 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
             switch (requestCode) {
                 case AppConst.SQUARE_ROOM_ADD_ANYONE:
-                    List<ContactBean> addContactBeens = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
+                    List<ContactBean> addContactBeans = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
                     List<Integer> addIdList = new ArrayList<>();
-                    for (int i = 0; i < addContactBeens.size(); i++) {
-                        addIdList.add(addContactBeens.get(i).getFriend_id());
-                        urls.add((String) addContactBeens.get(i).getAvatar());
+                    for (int i = 0; i < addContactBeans.size(); i++) {
+                        addIdList.add(addContactBeans.get(i).getFriend_id());
+                        urls.add((String) addContactBeans.get(i).getAvatar());
                     }
                     //添加群成员
                     ChatGroupHelper.addAnyone(addIdList, conversationId, new ChatGroupHelper.ChatGroupManager() {
@@ -477,19 +483,19 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
                         }
                     });
-                    PersonContactBeens.addAll(addContactBeens);
+                    PersonContactBeans.addAll(addContactBeans);
                     getNicePicture(urls);
-                    contactBeens.clear();
-                    contactBeens.addAll(squareCreaterFirst(PersonContactBeens));
-                    tvTeamSize.setText(PersonContactBeens.size() + "人");
+                    contactBeans.clear();
+                    contactBeans.addAll(squareCreaterFirst(PersonContactBeans));
+                    tvTeamSize.setText(PersonContactBeans.size() + "人");
                     mPersonInfoAdapter.notifyDataSetChanged();
                     break;
                 case AppConst.SQUARE_ROOM_DELETE_ANYONE:
-                    List<ContactBean> changeContactBeens = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
+                    List<ContactBean> changeContactBeans = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
                     final List<Integer> idList = new ArrayList<>();
-                    for (int i = 0; i < changeContactBeens.size(); i++) {
-                        idList.add(changeContactBeens.get(i).getFriend_id());
-                        urls.remove((String) changeContactBeens.get(i).getAvatar());
+                    for (int i = 0; i < changeContactBeans.size(); i++) {
+                        idList.add(changeContactBeans.get(i).getFriend_id());
+                        urls.remove((String) changeContactBeans.get(i).getAvatar());
                     }
                     //删除群成员
                     ChatGroupHelper.deleteAnyone(idList, conversationId, new ChatGroupHelper.ChatGroupManager() {
@@ -503,11 +509,11 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
                         }
                     });
-                    PersonContactBeens.removeAll(changeContactBeens);
+                    PersonContactBeans.removeAll(changeContactBeans);
                     getNicePicture(urls);
-                    contactBeens.clear();
-                    contactBeens.addAll(squareCreaterFirst(PersonContactBeens));
-                    tvTeamSize.setText(PersonContactBeens.size() + "人");
+                    contactBeans.clear();
+                    contactBeans.addAll(squareCreaterFirst(PersonContactBeans));
+                    tvTeamSize.setText(PersonContactBeans.size() + "人");
                     mPersonInfoAdapter.notifyDataSetChanged();
                     break;
                 case AppConst.SQUARE_ROOM_EDIT_NAME:
