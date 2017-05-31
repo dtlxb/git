@@ -127,7 +127,8 @@
     <!--聊天语音弹窗-->
     <string name="str_recorder_dialog_recording">手指上滑，取消发送</string>
     <string name="str_recorder_dialog_cancle">@string/str_recorder_want_cancel</string>
-    <string name="str_recorder_dialog_22short">录音时间太短</string>
+    <string name="str_recorder_dialog_2short">录音时间太短</string>
+    <string name="str_recorder_dialog_2long">录音时间不能超过1分钟</string>
 
     <string name="donot_found_wechat">未检测到微信客户端或者版本不被支持</string>
 

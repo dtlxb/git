@@ -14,6 +14,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.socks.library.KLog;
+
 import java.io.File;
 import java.util.List;
 
@@ -41,6 +43,8 @@ public class VoiceButton extends AppCompatButton implements AudioManager.AudioSt
     private static final int MSG_VOICE_CHANGED = 0X111;
 
     private static final int MSG_DIALOG_DIMISS = 0X112;
+
+    private static final int MSG_AUDIO_STOP = 0X113; //时间过长取消录音
 
     private int mCurState = STATE_NORMAL; //当前的状态
 
@@ -129,9 +133,14 @@ public class VoiceButton extends AppCompatButton implements AudioManager.AudioSt
         public void run() {
             while (isRecording) {
                 try {
-                    Thread.sleep(100);
-                    mTime += 0.1f;
-                    handler.sendEmptyMessage(MSG_VOICE_CHANGED);
+                    if (mTime < 60.0f) {
+                        Thread.sleep(100);
+                        mTime += 0.1f;
+                        handler.sendEmptyMessage(MSG_VOICE_CHANGED);
+                    } else {
+                        handler.sendEmptyMessage(MSG_AUDIO_STOP);
+                        isRecording = false;
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -156,6 +165,17 @@ public class VoiceButton extends AppCompatButton implements AudioManager.AudioSt
                     break;
                 case MSG_DIALOG_DIMISS:
                     mDialogManger.dimissDialog();
+                    break;
+                case MSG_AUDIO_STOP:
+                    mDialogManger.showError(1);
+                    mAudioManger.release();
+                    handler.sendEmptyMessageDelayed(MSG_DIALOG_DIMISS, 1300);
+                    if (mListener != null) {
+                        mListener.onFinish(mTime, mAudioManger.getCurrentFilePath());
+                    }
+                    reset();
+                    break;
+                default:
                     break;
             }
         }
@@ -213,7 +233,7 @@ public class VoiceButton extends AppCompatButton implements AudioManager.AudioSt
                 }
 
                 if (!isRecording || mTime < 0.6f) {
-                    mDialogManger.tooShort();
+                    mDialogManger.showError(0);
                     mAudioManger.cancel();
                     handler.sendEmptyMessageDelayed(MSG_DIALOG_DIMISS, 1300);
                 } else if (mCurState == STATE_RECORDING) { //正常录制的时候结束
