@@ -85,6 +85,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     private List<AVIMMessage> messageList;
     private Activity mContext;
     private LayoutInflater mLayoutInflater;
+    private List<String> urls = new ArrayList<>();
     private int chatType;
     private Boolean isYourSelf;
 
@@ -237,7 +238,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             setImageSize(params, imageMessage);
             ((LeftImageViewHolder) holder).image_user_send.setLayoutParams(params);
             ((LeftImageViewHolder) holder).image_send_fg.setLayoutParams(params);
-            ImageDisplay.loadImage(mContext, UFileImageHelper.load(imageMessage.getAVFile().getUrl()).compress(10).get(), ((LeftImageViewHolder) holder).image_user_send);
+            ImageDisplay.loadImage(mContext, UFileImageHelper.load(imageMessage.getAVFile().getUrl()).compress(20).get(), ((LeftImageViewHolder) holder).image_user_send);
 
             ((LeftImageViewHolder) holder).image_user_send.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -638,7 +639,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     private String isFromUFile(String url) {
         if (!TextUtils.isEmpty(url)) {
             if (url.startsWith("http://hackfile")) {
-                return UFileImageHelper.load(url).compress(10).get();
+                return UFileImageHelper.load(url).compress(20).get();
             }
         }
         return url;
@@ -729,8 +730,11 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
 
     private void imageClickAction(GGImageMessage imageMessage) {
-        List<String> urls = new ArrayList<>();
-        urls.add(imageMessage.getAVFile().getUrl());
+        if (urls.contains(imageMessage.getAVFile().getUrl())) {
+            urls.remove(imageMessage.getAVFile().getUrl());
+        } else {
+        }
+        urls.add(0, imageMessage.getAVFile().getUrl());
         Intent intent = new Intent(mContext, ImageDetailActivity.class);
         intent.putStringArrayListExtra("image_urls", (ArrayList<String>) urls);
         mContext.startActivity(intent);
