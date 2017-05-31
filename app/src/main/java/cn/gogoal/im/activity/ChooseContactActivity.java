@@ -285,7 +285,6 @@ public class ChooseContactActivity extends BaseActivity {
                 bundle.putSerializable("choose_friend_array", new ArrayList<>(result.values()));
                 intent.putExtras(bundle);
                 setResult(actionType, intent);
-                //UIHelper.toast(getActivity(), actionType == AppConst.SQUARE_ROOM_ADD_ANYONE ? "添加成功" : "移除成功");
                 finish();
                 break;
             case AppConst.SQUARE_ROOM_AT_SHARE_MESSAGE://分享给很多人
