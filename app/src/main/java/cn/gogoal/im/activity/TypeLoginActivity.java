@@ -134,7 +134,7 @@ public class TypeLoginActivity extends BaseActivity {
         XTitle.TextAction registerAction = new XTitle.TextAction("注册") {
             @Override
             public void actionClick(View view) {
-                Intent intent = new Intent(getActivity(), RigisterActivity.class);
+                Intent intent = new Intent(getActivity(), RegisterActivity.class);
                 intent.putExtra("action_type", AppConst.LOGIN_RIGIST_NUMBER);
                 startActivity(intent);
             }
@@ -152,7 +152,7 @@ public class TypeLoginActivity extends BaseActivity {
                 Login();
                 break;
             case R.id.forget_code:
-                Intent intent = new Intent(getActivity(), RigisterActivity.class);
+                Intent intent = new Intent(getActivity(), RegisterActivity.class);
                 intent.putExtra("action_type", AppConst.LOGIN_FIND_CODE);
                 startActivityForResult(intent, AppConst.LOGIN_FIND_CODE);
                 break;

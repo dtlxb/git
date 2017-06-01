@@ -133,6 +133,7 @@ public class ChatFragment extends BaseFragment {
     private FunctionFragment functionFragment;
     private FragmentTransaction transaction;
     private FragmentManager childManager;
+    private int keyBordHeight;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -161,14 +162,14 @@ public class ChatFragment extends BaseFragment {
         itemPojosList.add(new FoundData.ItemPojos("照片", R.mipmap.chat_add_photo, "tag"));
         itemPojosList.add(new FoundData.ItemPojos("股票", R.mipmap.chat_add_stock, "tag"));
 
-        int keyBordHeight = SPTools.getInt("soft_keybord_height", AppDevice.dp2px(getActivity(), 220));
-        setContentHeight(keyBordHeight);
+        keyBordHeight = SPTools.getInt("soft_keybord_height", AppDevice.dp2px(getActivity(), 220));
+        setContentHeight(keyBordHeight, find_more_layout);
 
         keyboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchLinearLayout.OnKeyboardChangeListener() {
             @Override
             public void OnKeyboardPop(int height) {
                 SPTools.saveInt("soft_keybord_height", height);
-                setContentHeight(height);
+                setContentHeight(height, find_more_layout);
                 message_recycler.getLayoutManager().scrollToPosition(imChatAdapter.getItemCount() - 1);
             }
 
@@ -393,6 +394,9 @@ public class ChatFragment extends BaseFragment {
                 if (!functionFragment.isAdded()) {
                     transaction.add(R.id.find_more_layout, functionFragment, "FunctionFragment");
                 }
+
+                //message_recycler.smoothScrollBy(0, keyBordHeight);
+
                 transaction.show(functionFragment).hide(emojiFragment);
                 getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
                 EmojiCheckBox.setChecked(false);
@@ -577,17 +581,17 @@ public class ChatFragment extends BaseFragment {
         final int width = bitmap.getWidth();
         final int height = bitmap.getHeight();
 
-        //封装一个AVfile对象
+        //封装一个AVFile对象
         HashMap<String, Object> metaData = new HashMap<>();
         metaData.put("width", width);
         metaData.put("height", height);
-        AVFile imagefile = new AVFile("imagefile", file.getPath(), metaData);
+        AVFile imageFile = new AVFile("imageFile", file.getPath(), metaData);
 
         //显示自己的图片消息
         HashMap<String, Object> attrsMap = new HashMap<>();
         attrsMap.put("username", UserUtils.getNickname());
         attrsMap.put("avatar", UserUtils.getUserAvatar());
-        final GGImageMessage mImageMessage = new GGImageMessage(imagefile);
+        final GGImageMessage mImageMessage = new GGImageMessage(imageFile);
         mImageMessage.setFrom(UserUtils.getMyAccountId());
         mImageMessage.setAttrs(attrsMap);
         mImageMessage.setMessageSendStatus(AppConst.MESSAGE_SEND_STATUS_SENDING);
@@ -809,7 +813,6 @@ public class ChatFragment extends BaseFragment {
                     if (StringUtils.StringFilter(strMessage, "@*[\\S]*[ \r\n]")) {
                         ((GGTextMessage) lastMessage).setText(strMessage.replace(" ", ""));
                     }
-                    KLog.e(((GGTextMessage) lastMessage).getText());
                 }
                 imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0", imConversation.getName(),
                         "", imConversation.getAttribute("avatar") != null ? (String) imConversation.getAttribute("avatar") : "", lastMessage);
@@ -840,8 +843,8 @@ public class ChatFragment extends BaseFragment {
     /**
      * 设置多功能布局宽高
      */
-    private void setContentHeight(int keyBordHeight) {
-        ViewGroup.LayoutParams params = find_more_layout.getLayoutParams();
+    private void setContentHeight(int keyBordHeight, View view) {
+        ViewGroup.LayoutParams params = view.getLayoutParams();
         params.height = keyBordHeight;
         find_more_layout.setLayoutParams(params);
     }
@@ -973,7 +976,7 @@ public class ChatFragment extends BaseFragment {
         }
     }
 
-    //判断recycleview是否停留在底部
+    //判断recyclerView是否停留在底部
     public static boolean isVisBottom(RecyclerView recyclerView) {
         LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         //屏幕中最后一个可见子项的position

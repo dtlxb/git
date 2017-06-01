@@ -180,7 +180,7 @@ public class ChatGroupHelper {
     }
 
     //获取群头像并且缓存SD
-    public static void createGroupImage(AVIMConversation conversation, List<String> groupMemberMap, final String msgTag) {
+    public static void createGroupImage(AVIMConversation conversation, final String msgTag) {
         //群删除好友(每次删除后重新生成群头像)
         /*JSONArray accountArray = UserUtils.getGroupContactInfo(ConversationId);
         KLog.e(groupMemberMap);
@@ -189,9 +189,10 @@ public class ChatGroupHelper {
             getNinePic(accountArray, ConversationId, msgTag);
         } else {*/
         final String ConversationId = conversation.getConversationId();
+        List<String> groupMemberMap = conversation.getMembers();
         //如果不存在则先找这个会话
         if (groupMemberMap == null || groupMemberMap.size() == 0) {
-            UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, conversation.getMembers(), ConversationId, new UserUtils.getSquareInfo() {
+            UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, groupMemberMap, ConversationId, new UserUtils.getSquareInfo() {
                 @Override
                 public void squareGetSuccess(JSONObject object) {
                     JSONArray array = object.getJSONArray("accountList");
@@ -232,9 +233,9 @@ public class ChatGroupHelper {
         //九宫图拼接
         GroupFaceImage.getInstance(MyApp.getAppContext(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
             @Override
-            public void onSuccess(Bitmap mathingBitmap) {
-                cacheGroupAvatar(ConversationId, mathingBitmap);
-                if (null != mathingBitmap) {
+            public void onSuccess(Bitmap matchingBitmap) {
+                cacheGroupAvatar(ConversationId, matchingBitmap);
+                if (null != matchingBitmap) {
                     AppManager.getInstance().sendMessage(msgTag, 0 + "");
                 }
             }

@@ -289,7 +289,7 @@ public class MainActivity extends BaseActivity {
         boxScreenAdapter.setOnClassifyChangeListener(new BoxScreenAdapter.ClassifyItemClickListener() {
             @Override
             public void itemClick(BoxScreenData data, int pos) {
-                liveListFragment.request(AppConst.REFRESH_TYPE_PARENT_BUTTON,pos==0?null:data.getProgramme_name());
+                liveListFragment.request(AppConst.REFRESH_TYPE_PARENT_BUTTON, pos == 0 ? null : data.getProgramme_name());
                 drawerLayout.closeDrawer(Gravity.END);
             }
         });
@@ -307,7 +307,7 @@ public class MainActivity extends BaseActivity {
                     if (mainStockFragment.isMaskViewVisiable()) {
                         mainStockFragment.dismissMarket();
                         exitTime = 0;
-                    }else {
+                    } else {
                         exitBy2Click();
                     }
                     break;
@@ -315,7 +315,7 @@ public class MainActivity extends BaseActivity {
                     if (acb.isChecked()) {
                         acb.setChecked(false);
                         exitTime = 0;
-                    }else {
+                    } else {
                         exitBy2Click();
                     }
                     break;

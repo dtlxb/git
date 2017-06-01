@@ -113,7 +113,7 @@ public class LiveListAdapter extends CommonAdapter<LiveListItemBean, BaseViewHol
 
         }
 
-        holder.setVisible(R.id.tv_live_invite,data.isHavePermissions());
+        holder.setVisible(R.id.tv_live_invite,data.getLive_source()!=1 && data.getLive_status()==1);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
