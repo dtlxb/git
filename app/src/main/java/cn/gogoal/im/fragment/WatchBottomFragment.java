@@ -219,7 +219,9 @@ public class WatchBottomFragment extends BaseFragment {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.imgPlayerChat: //聊天
-                showCommentEditUI();
+                if (mRecordUIClickListener != null) {
+                    mRecordUIClickListener.onOpenComment();
+                }
                 break;
             case R.id.linearPlayerFullScreen: //全屏
                 if (mRecordUIClickListener != null) {
@@ -258,7 +260,7 @@ public class WatchBottomFragment extends BaseFragment {
     /**
      * 显示评论编辑器
      */
-    private void showCommentEditUI() {
+    public void showCommentEditUI() {
         player_linear.setVisibility(View.VISIBLE);
         functionBar.setVisibility(View.GONE);
         mEtComment.post(openKeyboardRunnable);
@@ -373,6 +375,11 @@ public class WatchBottomFragment extends BaseFragment {
     }
 
     public interface RecorderUIClickListener {
+
+        /**
+         * open comment
+         */
+        void onOpenComment();
 
         /**
          * switch comment

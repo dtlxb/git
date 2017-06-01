@@ -77,6 +77,7 @@ import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
 import cn.gogoal.im.common.linkUtils.VideoChatStatus;
 import cn.gogoal.im.fragment.WatchBottomFragment;
 import cn.gogoal.im.ui.dialog.LiveCloseDialog;
+import cn.gogoal.im.ui.dialog.WaitDialog;
 
 /*
 * 观看直播页面
@@ -382,6 +383,15 @@ public class WatchLiveActivity extends BaseActivity {
      * 底部按钮点击
      */
     private WatchBottomFragment.RecorderUIClickListener mUIClickListener = new WatchBottomFragment.RecorderUIClickListener() {
+
+        @Override
+        public void onOpenComment() {
+            if (imConversation != null) {
+                mBottomFragment.showCommentEditUI();
+            } else {
+                WaitDialog.getInstance("初始化聊天失败", R.mipmap.login_error, false);
+            }
+        }
 
         @Override
         public void onSendComment(final EditText player_edit) {
@@ -1041,7 +1051,6 @@ public class WatchLiveActivity extends BaseActivity {
 
                         @Override
                         public void joinFail(String error) {
-                            UIHelper.toast(getActivity(), "获取聊天房间失败");
                         }
                     });
 
@@ -1385,6 +1394,8 @@ public class WatchLiveActivity extends BaseActivity {
                 isPlaying = false;
                 onBackPressed();
             }
+
+            return true;
         }
 
         return super.onKeyDown(keyCode, event);
