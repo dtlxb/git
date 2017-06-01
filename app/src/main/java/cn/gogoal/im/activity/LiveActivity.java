@@ -76,6 +76,7 @@ import cn.gogoal.im.common.linkUtils.HeadsetMonitor;
 import cn.gogoal.im.common.linkUtils.LinkConst;
 import cn.gogoal.im.common.linkUtils.VideoChatStatus;
 import cn.gogoal.im.fragment.WatchBottomFragment;
+import cn.gogoal.im.ui.dialog.WaitDialog;
 
 /*
 * 推流直播页面
@@ -398,6 +399,15 @@ public class LiveActivity extends BaseActivity {
     }
 
     private WatchBottomFragment.RecorderUIClickListener mUIClickListener = new WatchBottomFragment.RecorderUIClickListener() {
+
+        @Override
+        public void onOpenComment() {
+            if (imConversation != null) {
+                mBottomFragment.showCommentEditUI();
+            } else {
+                WaitDialog.getInstance("初始化聊天失败", R.mipmap.login_error, false);
+            }
+        }
 
         @Override
         public void onSendComment(final EditText player_edit) {
@@ -1090,7 +1100,6 @@ public class LiveActivity extends BaseActivity {
 
                         @Override
                         public void joinFail(String error) {
-                            UIHelper.toast(getActivity(), "获取聊天房间失败");
                         }
                     });
 
