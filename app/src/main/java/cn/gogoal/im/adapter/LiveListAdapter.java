@@ -1,5 +1,6 @@
 package cn.gogoal.im.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
@@ -24,6 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.PlayerActivity;
 import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
@@ -59,17 +61,21 @@ public class LiveListAdapter extends CommonAdapter<LiveListItemBean, BaseViewHol
         options.placeholder(R.mipmap.image_placeholder);
         options.error(R.mipmap.image_placeholder);
         options.centerCrop();
+
     }
+
+    @SuppressLint("SetTextI18n")
 
     @Override
     protected void convert(BaseViewHolder holder, final LiveListItemBean data, int position) {
 
-        int liveStatus=data.getLive_status();
+        int liveStatus = data.getLive_status();
 
 
         ImageView ivLiveBg = holder.getView(R.id.iv_live_list_bg);
         TextView tvStartTime = holder.getView(R.id.tv_item_live_list_start_time);
         TextView tvStartTimeDistance = holder.getView(R.id.tv_item_live_list_count_down);
+        TextView tvLiveListOrder = holder.getView(R.id.tv_live_list_order);//最复杂的按钮
 
         ViewGroup.LayoutParams params = ivLiveBg.getLayoutParams();
         params.width = imgBgSize;
@@ -92,34 +98,53 @@ public class LiveListAdapter extends CommonAdapter<LiveListItemBean, BaseViewHol
         holder.setVisible(R.id.tv_item_live_list_count_down,
                 data.getLive_status() != -1);
 
-        Drawable leftDrawable = ContextCompat.getDrawable(context,data.getLive_status()==0?R.mipmap.social_time:R.mipmap.social_online_num);
+        Drawable leftDrawable = ContextCompat.getDrawable(context, data.getLive_status() == 0 ? R.mipmap.social_time : R.mipmap.social_online_num);
         leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
         tvStartTimeDistance.setCompoundDrawables(leftDrawable, null, null, null);
 
+        tvLiveListOrder.setBackgroundResource(liveStatus == -1 ? android.R.color.transparent : R.drawable.bg_social_live_order_red);
+
+        tvLiveListOrder.setVisibility(
+                data.getLive_status() == -1 ?View.VISIBLE:
+                        (data.getLive_status()==1?View.VISIBLE:
+                                (CalendarUtils.isPassNow(data.getStartTime())?View.GONE:
+                                        View.VISIBLE)));
+
+        Drawable orderDrawable=ContextCompat.getDrawable(context,R.mipmap.img_social_online_num_gray);
+        orderDrawable.setBounds(0,0,orderDrawable.getMinimumWidth(),orderDrawable.getMinimumHeight());
+        tvLiveListOrder.setCompoundDrawables(data.getLive_status()==-1?orderDrawable:null,null,null,null);
+        tvLiveListOrder.setCompoundDrawablePadding(AppDevice.dp2px(context, 2));
+        tvLiveListOrder.setText(data.getLive_status() == -1 ? data.getPlayerCount() : (data.isNeedOrder() ? "预约" : "已预约"));
+        tvLiveListOrder.setTextColor(data.getLive_status() == -1 ?
+                getResColor(R.color.textColor_999999) : getResColor(R.color.colorPrimary));
+
         if (liveStatus == 0) {           //预告
             tvStartTime.setBackgroundResource(R.drawable.shape_social_live_status_yellow);
-            tvStartTime.setText("预告中 " + CalendarUtils.formatDate("yyyy-MM-dd HH:mm:ss","MM-dd HH:mm", data.getStartTime()));
 
+            tvStartTime.setText((CalendarUtils.isPassNow(data.getStartTime()) ? "准备中 " : "预告中 ") +
+                    CalendarUtils.formatDate("yyyy-MM-dd HH:mm:ss", "MM-dd HH:mm", data.getStartTime()));
             tvStartTimeDistance.setText($(data.getStartTime()));
 
         } else if (liveStatus == -1) {   //录播
             tvStartTime.setBackgroundResource(R.drawable.shape_social_live_status_gray);
-            tvStartTime.setText("回放 " + CalendarUtils.formatDate("yyyy-MM-dd HH:mm:ss","MM-dd HH:mm", data.getStartTime()));
+            tvStartTime.setText("回放 " + CalendarUtils.formatDate("yyyy-MM-dd HH:mm:ss", "MM-dd HH:mm", data.getStartTime()));
+
         } else {                                    //直播中
             tvStartTime.setBackgroundResource(R.drawable.shape_social_live_status_red);
-            tvStartTime.setText("直播中 " + CalendarUtils.formatDate("yyyy-MM-dd HH:mm:ss","MM-dd HH:mm", data.getStartTime()));
+            tvStartTime.setText("直播中 " + CalendarUtils.formatDate("yyyy-MM-dd HH:mm:ss", "MM-dd HH:mm", data.getStartTime()));
 
             tvStartTimeDistance.setText(data.getPlayerCount());
 
+
         }
 
-        holder.setVisible(R.id.tv_live_invite,data.getLive_source()!=1 && data.getLive_status()==1);
+        holder.setVisible(R.id.tv_live_invite, !data.isHavePermissions());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (data.isHavePermissions()) {//不需要邀约
-                    Intent intent = new Intent(context, WatchLiveActivity.class);
+                    Intent intent = new Intent(context, PlayerActivity.class);
                     intent.putExtra("live_id", data.getLive_id());
                     context.startActivity(intent);
                 } else {//需要邀约
@@ -171,18 +196,19 @@ public class LiveListAdapter extends CommonAdapter<LiveListItemBean, BaseViewHol
         };
         new GGOKHTTP(param, GGOKHTTP.VALIDATE_IDENTIFIES, ggHttpInterface).startGet();
     }
-    
+
     private String $(String startTime) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Date parse = format.parse(startTime, new ParsePosition(0));
 
-        long distance = System.currentTimeMillis() - parse.getTime();
+        long distance = parse.getTime() - System.currentTimeMillis();
+
 
         if (distance > 86400 * 1000) {
-            return "距离开始 " + ((distance) / 86400 * 1000)+"天";
-        }else if (distance>3600){
-            return "距离开始 "+ (distance/3600)+"小时";
-        }else {
+            return "距离开始 " + ((distance) / (86400 * 1000)) + "天";
+        } else if (distance > 3600 * 1000) {
+            return "距离开始 " + (distance / (3600 * 1000)) + "小时";
+        } else {
             return "即将开始";
         }
     }

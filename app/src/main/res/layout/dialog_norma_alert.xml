@@ -21,19 +21,19 @@
     <View
         android:id="@+id/flag_view_btm"
         android:layout_width="match_parent"
-        android:layout_height="1px"
+        android:layout_height="0.5px"
         android:layout_below="@+id/tv_dialog_message"
-        android:background="@color/textColor_333333" />
+        android:background="@color/textColor_666666" />
 
     <View
         android:id="@+id/flag_view_middle"
-        android:layout_width="1px"
+        android:layout_width="0.5px"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/btn_cancle"
         android:layout_alignTop="@+id/btn_cancle"
         android:layout_below="@+id/flag_view_btm"
         android:layout_centerHorizontal="true"
-        android:background="@color/textColor_333333" />
+        android:background="@color/textColor_666666" />
 
     <TextView
         android:id="@+id/btn_cancle"

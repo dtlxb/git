@@ -24,94 +24,103 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:id="@+id/layout_user_head"
-                android:layout_width="match_parent"
+            <android.support.v7.widget.CardView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:orientation="vertical"
-                android:paddingEnd="20dp"
-                android:paddingStart="15dp">
-
-                <FrameLayout
-                    android:id="@+id/flag_layout_avatar"
-                    android:layout_width="58dp"
-                    android:layout_height="58dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginBottom="24dp"
-                    android:layout_marginTop="24dp">
-
-                    <com.hply.roundimage.roundImage.RoundedImageView
-                        android:id="@+id/img_mine_avatar"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:src="@mipmap/logo"
-                        android:layout_gravity="center"
-                        app:riv_border_color="#e0e0e0"
-                        app:riv_border_width="1dp"
-                        app:riv_oval="true" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|right"
-                        android:src="@mipmap/img_level"/>
-
-                </FrameLayout>
+                app:cardCornerRadius="4dp"
+                app:cardUseCompatPadding="true"
+                app:cardElevation="4dp"
+                android:layout_margin="10dp">
 
                 <RelativeLayout
-                    android:layout_width="wrap_content"
+                    android:id="@+id/layout_user_head"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/flag_layout_avatar"
-                    android:layout_alignTop="@+id/flag_layout_avatar"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="8dp"
-                    android:layout_toEndOf="@+id/flag_layout_avatar"
-                    android:layout_toStartOf="@+id/flag_img_more"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
+                    android:background="@android:color/white"
+                    android:orientation="vertical"
+                    android:paddingEnd="20dp"
+                    android:paddingStart="15dp">
 
-                    <TextView
-                        android:id="@+id/tv_mine_userName"
+                    <FrameLayout
+                        android:id="@+id/flag_layout_avatar"
+                        android:layout_width="58dp"
+                        android:layout_height="58dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginBottom="24dp"
+                        android:layout_marginTop="24dp">
+
+                        <com.hply.roundimage.roundImage.RoundedImageView
+                            android:id="@+id/img_mine_avatar"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/logo"
+                            app:riv_border_color="#e0e0e0"
+                            app:riv_border_width="1dp"
+                            app:riv_oval="true" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom|right"
+                            android:src="@mipmap/img_level" />
+
+                    </FrameLayout>
+
+                    <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:maxLength="8"
-                        android:singleLine="true"
-                        android:text="朝阳永续六小龄童"
-                        android:textColor="@color/textColor_333333"
-                        android:textSize="16sp" />
+                        android:layout_alignBottom="@+id/flag_layout_avatar"
+                        android:layout_alignTop="@+id/flag_layout_avatar"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@+id/flag_layout_avatar"
+                        android:layout_toStartOf="@+id/flag_img_more"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_authentication"
-                        style="@style/TextViewMineLevel"
-                        android:layout_toEndOf="@+id/tv_mine_userName"
-                        android:drawableStart="@mipmap/authentication"
-                        android:text="高级认证" />
+                        <TextView
+                            android:id="@+id/tv_mine_userName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:maxLength="8"
+                            android:singleLine="true"
+                            android:text="朝阳永续六小龄童"
+                            android:textColor="@color/textColor_333333"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tv_authentication"
+                            style="@style/TextViewMineLevel"
+                            android:layout_toEndOf="@+id/tv_mine_userName"
+                            android:drawableStart="@mipmap/authentication"
+                            android:text="高级认证" />
 
 
-                    <TextView
-                        android:id="@+id/tv_mine_introduction"
+                        <TextView
+                            android:id="@+id/tv_mine_introduction"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/tv_mine_userName"
+                            android:layout_marginTop="5dp"
+                            android:text="朝阳永续金融分析师"
+                            android:textColor="@color/textColor_666666"
+                            android:textSize="12sp" />
+
+                    </RelativeLayout>
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/flag_img_more"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/tv_mine_userName"
-                        android:layout_marginTop="5dp"
-                        android:text="朝阳永续金融分析师"
-                        android:textColor="@color/textColor_666666"
-                        android:textSize="12sp" />
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        app:srcCompat="@mipmap/img_more" />
 
                 </RelativeLayout>
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/flag_img_more"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    app:srcCompat="@mipmap/img_more" />
-
-            </RelativeLayout>
-
+            </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_mine"

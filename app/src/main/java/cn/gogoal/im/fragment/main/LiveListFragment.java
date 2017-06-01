@@ -92,6 +92,8 @@ public class LiveListFragment extends BaseFragment {
             persionalDatas.clear();
 
             liveDatas.clear();
+
+            this.keyword = keyword;
         }
 
         getLiveData(refreshType, 1, keyword);
@@ -148,8 +150,10 @@ public class LiveListFragment extends BaseFragment {
                                         liveData.getProgramme_name(),
                                         liveData.getLive_time_start(),
                                         liveData.getPlay_base(),
-                                        liveData.getAuth()!=1
+                                        liveData.getAuth() != 1
                                 );
+
+                        listItemBean.setNeedOrder(liveData.getOrder_status() != 0);
 
                         if (live_source == 1) {
                             persionalDatas.add(listItemBean);
@@ -199,24 +203,12 @@ public class LiveListFragment extends BaseFragment {
                         recorderDatas.clear();
                     }
 
-                     /*this.live_source = live_source;
-                    this.live_status = live_status;
-                    this.live_id = live_id;
-                    this.liveImgBg = liveImgBg;
-                    this.title = title;
-                    this.anchorAvatar = anchorAvatar;
-                    this.anchorName = anchorName;
-                    this.programme_name = programme_name;
-                    this.startTime = startTime;
-                    this.playerCount = playerCount;
-                    this.havePermissions = havePermissions;*/
-
                     ArrayList<SocialRecordData> recordDatas =
                             JSONObject.parseObject(responseInfo, SocialRecordBean.class).getData();
                     for (SocialRecordData data : recordDatas) {
                         LiveListItemBean listItemBean = new LiveListItemBean(
-                                2,//目前回放视频只能是后端发起
-                                -1,
+                                2, // 目前回放视频只能是后端发起
+                                -1,// 视频状态，回放视频是-1
                                 data.getVideo_id(),
                                 data.getVideo_img_url(),
                                 data.getVideo_name(),
@@ -225,7 +217,7 @@ public class LiveListFragment extends BaseFragment {
                                 data.getProgramme_name(),
                                 data.getUpdate_time(),
                                 data.getPlay_base(),
-                                true);
+                                data.getAuth() == 0);
                         recorderDatas.add(listItemBean);
                     }
 

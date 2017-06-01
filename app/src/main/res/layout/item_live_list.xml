@@ -62,6 +62,7 @@
                 android:layout_gravity="center"
                 android:background="@drawable/shape_social_live_invite"
                 android:text="邀约"
+                android:visibility="gone"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
         </FrameLayout>
@@ -133,6 +134,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_social_live_order_red"
                     android:text="已预约"
+                    android:layout_marginEnd="10dp"
                     android:textColor="@color/colorPrimary"
                     android:textSize="14sp" />
             </LinearLayout>

@@ -131,6 +131,7 @@ public class ImageDisplay {
     public static <T> void loadRoundedRectangleImage(Context context, T image, RoundedImageView imageView, int radius) {
         imageView.setCornerRadius(radius);
         Glide.with(context)
+                .asBitmap()
                 .load(image)
                 .into(imageView);
     }
@@ -143,6 +144,7 @@ public class ImageDisplay {
         imageView.setCornerRadius(AppDevice.dp2px(context, 4));
         try {
             Glide.with(context)
+                    .asBitmap()
                     .load(image)
                     .into(imageView);
         } catch (Exception e) {
@@ -159,7 +161,9 @@ public class ImageDisplay {
         op.dontAnimate();
 
         if (image != null) {
-            Glide.with(context).load(image)
+            Glide.with(context)
+                    .asBitmap()
+                    .load(image)
                     .thumbnail(0.1f)
                     .apply(op)
                     .into(imageView);
@@ -176,7 +180,8 @@ public class ImageDisplay {
         op.dontAnimate();
 
         if (image != null) {
-            Glide.with(context).load(image)
+            Glide.with(context)
+                    .asBitmap().load(image)
                     .apply(op)
                     .thumbnail(0.1f)
                     .into(imageView);
