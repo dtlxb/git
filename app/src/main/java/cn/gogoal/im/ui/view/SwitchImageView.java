@@ -11,7 +11,9 @@ import android.view.View;
  * phone 18930640263
  */
 public class SwitchImageView extends AppCompatImageView {
+
     private int state;
+
     private OnSwitchListener listener;
 
     public void setOnSwitchListener(OnSwitchListener listener) {
@@ -50,5 +52,12 @@ public class SwitchImageView extends AppCompatImageView {
 
     public interface OnSwitchListener {
         void onSwitch(View view,int state);//0,1
+    }
+
+    public void setState(boolean checked){
+        state=checked?0:1;
+        if (listener!=null){
+            listener.onSwitch(this,state);
+        }
     }
 }

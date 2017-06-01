@@ -55,22 +55,6 @@ public class NormalIntentUtils {
         context.startActivity(intent);
     }
 
-//    /**
-//     * 跳好友选择 Activiy
-//     *
-//     * @param context   上下文
-//     * @param url       跳转的url(拼好的)
-//     * @param title     web页面的原生标题头
-//     * @param needShare 是否支持分享，(显示分享按钮判断)
-//     */
-//    public static void go2ChooseContactsActivity(Context context,int ) {
-//        Intent intent = new Intent(context, ChooseContactActivity.class);
-//        intent.putExtra("function_url", url);
-//        intent.putExtra("title", title);
-//        intent.putExtra("need_share", needShare);
-//        context.startActivity(intent);
-//    }
-
     /**
      * 跳网页Web pdf预览
      *

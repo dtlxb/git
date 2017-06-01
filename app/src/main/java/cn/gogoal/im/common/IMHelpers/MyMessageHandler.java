@@ -91,7 +91,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                                 MessageListUtils.changeSquareInfo(conversation.getConversationId(), accountArray, _lctype);
                                                 //生成群头像(加人删人时候更改)
                                                 if (conversation.getAttribute("avatar") == null || TextUtils.isEmpty((String) conversation.getAttribute("avatar"))) {
-                                                    ChatGroupHelper.createGroupImage(conversation.getConversationId(), conversation.getMembers(), "set_avatar");
+                                                    ChatGroupHelper.createGroupImage(conversation, conversation.getMembers(), "set_avatar");
                                                 }
                                                 //发送
                                                 sendIMMessage(message, conversation);
@@ -126,8 +126,8 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     break;
                                 case AppConst.IM_CHAT_TYPE_SQUARE_ACTION:
                                     //好友更新
-                                    JSONObject contentObjec1 = JSON.parseObject(message.getContent());
-                                    JSONObject lcattrsObject1 = contentObjec1.getJSONObject("_lcattrs");
+                                    JSONObject contentObject1 = JSON.parseObject(message.getContent());
+                                    JSONObject lcattrsObject1 = contentObject1.getJSONObject("_lcattrs");
                                     String avatar = lcattrsObject1.getString("avatar");
                                     String nickName = lcattrsObject1.getString("nickname");
                                     String conv_id = lcattrsObject1.getString("conv_id");

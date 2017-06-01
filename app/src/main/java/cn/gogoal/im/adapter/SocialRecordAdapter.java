@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import java.util.HashMap;
@@ -22,7 +23,6 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.ui.dialog.InviteAuthDialog;
-import com.hply.roundimage.roundImage.RoundedImageView;
 
 /**
  * Created by dave.

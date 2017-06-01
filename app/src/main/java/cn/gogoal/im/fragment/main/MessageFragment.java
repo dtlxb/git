@@ -98,8 +98,6 @@ public class MessageFragment extends BaseFragment {
 
     private JSONArray jsonArray;
 
-    private Map<String, List<String>> gruopMemberMap = new HashMap<>();
-
     private int allCount;
     private BubbleLinearLayout mBubbleView;
 
@@ -144,12 +142,7 @@ public class MessageFragment extends BaseFragment {
         super.onResume();
         jsonArray = UserUtils.getMessageListInfo();
         allCount = MessageListUtils.getAllMessageUnreadCount(jsonArray);
-
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("index", 0);
-        map.put("number", allCount);
-        BaseMessage baseMessage = new BaseMessage("message_count", map);
-        AppManager.getInstance().sendMessage("correct_allmessage_count", baseMessage);
+        sendUnreadCount(allCount);
 //        KLog.e(jsonArray);
         IMMessageBeans.clear();
         IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
@@ -228,9 +221,10 @@ public class MessageFragment extends BaseFragment {
                 DialogHelp.getSelectDialog(getActivity(), "", new String[]{"删除聊天"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        allCount = allCount - Integer.parseInt(IMMessageBeans.get(position).getUnReadCounts());
+                        sendUnreadCount(allCount);
                         MessageListUtils.removeMessageInfo(IMMessageBeans.get(position).getConversationID());
                         listAdapter.removeItem(position);
-                        KLog.e(listAdapter.getData().size());
                     }
                 }, false).show();
                 return false;
@@ -527,7 +521,6 @@ public class MessageFragment extends BaseFragment {
 
         AVIMMessage message = (AVIMMessage) map.get("message");
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
-        gruopMemberMap.put(conversation.getConversationId(), conversation.getMembers());
         boolean isTheSame = false;
         final String ConversationId = conversation.getConversationId();
         int chatType = (int) conversation.getAttribute("chat_type");
@@ -563,9 +556,6 @@ public class MessageFragment extends BaseFragment {
             case AppConst.IM_MESSAGE_TYPE_SQUARE_ADD:
             case AppConst.IM_MESSAGE_TYPE_SQUARE_DEL:
                 //好友入群
-                //群删除好友(每次删除后重新生成群头像)
-                KLog.e(gruopMemberMap.toString());
-                //createGroupImage(ConversationId, 0);
                 break;
             case AppConst.IM_MESSAGE_TYPE_SQUARE_REQUEST:
                 //申请入群
@@ -647,14 +637,7 @@ public class MessageFragment extends BaseFragment {
         KLog.e(imMessageBean);
         MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
         allCount++;
-
-        //发送消息更改消息总数
-        HashMap<String, Object> countMap = new HashMap<>();
-        countMap.put("index", 0);
-        countMap.put("number", allCount);
-        BaseMessage countMessage = new BaseMessage("message_count", countMap);
-        AppManager.getInstance().sendMessage("correct_allmessage_count", countMessage);
-
+        sendUnreadCount(allCount);
         //按照时间排序
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
             Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
@@ -666,6 +649,15 @@ public class MessageFragment extends BaseFragment {
         }
 
         listAdapter.notifyDataSetChanged();
+    }
+
+    private void sendUnreadCount(int count) {
+        //发送消息更改消息总数
+        HashMap<String, Object> countMap = new HashMap<>();
+        countMap.put("index", 0);
+        countMap.put("number", count);
+        BaseMessage countMessage = new BaseMessage("message_count", countMap);
+        AppManager.getInstance().sendMessage("correct_allmessage_count", countMessage);
     }
 
     @Override

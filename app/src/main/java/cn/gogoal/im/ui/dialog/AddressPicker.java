@@ -4,7 +4,6 @@ import android.view.View;
 import android.widget.NumberPicker;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -122,8 +121,7 @@ public class AddressPicker extends BaseBottomDialog {
         try {
             pickerCity.setMaxValue(cityNameLists.size() - 1);
         } catch (Exception e) {
-            String eMessage = e.getMessage();
-            KLog.e(eMessage);
+            e.getMessage();
         }
         pickerCity.setMinValue(0);
         pickerCity.setDisplayedValues(cityNameLists.toArray(new String[cityNameLists.size()]));

@@ -208,7 +208,7 @@ public class MineFragment extends BaseFragment {
                             Intent intent;
                             switch (data.getItemText()) {
                                 case "我要直播"://我要直播
-//                                    ((MainActivity)getActivity()).socialContactFragment.getUserValid();
+                                    UserUtils.checkLivePermission(getActivity());
                                     break;
                                 case "自选股设置"://自选股设置
                                     intent=new Intent(getActivity(),SettingStockActivity.class);

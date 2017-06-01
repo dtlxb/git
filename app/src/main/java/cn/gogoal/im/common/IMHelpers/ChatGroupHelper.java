@@ -180,53 +180,46 @@ public class ChatGroupHelper {
     }
 
     //获取群头像并且缓存SD
-    public static void createGroupImage(final String ConversationId, List<String> gruopMemberMap, final String msgTag) {
+    public static void createGroupImage(AVIMConversation conversation, List<String> groupMemberMap, final String msgTag) {
         //群删除好友(每次删除后重新生成群头像)
-        JSONArray accountArray = UserUtils.getGroupContactInfo(ConversationId);
-        if (null != accountArray && accountArray.size() > 0) {
+        /*JSONArray accountArray = UserUtils.getGroupContactInfo(ConversationId);
+        KLog.e(groupMemberMap);
+        KLog.e(accountArray);*/
+        /*if (null != accountArray && accountArray.size() > 0) {
             getNinePic(accountArray, ConversationId, msgTag);
+        } else {*/
+        final String ConversationId = conversation.getConversationId();
+        //如果不存在则先找这个会话
+        if (groupMemberMap == null || groupMemberMap.size() == 0) {
+            UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, conversation.getMembers(), ConversationId, new UserUtils.getSquareInfo() {
+                @Override
+                public void squareGetSuccess(JSONObject object) {
+                    JSONArray array = object.getJSONArray("accountList");
+                    if (null != array && array.size() > 0)
+                        getNinePic(array, ConversationId, msgTag);
+                }
+
+                @Override
+                public void squareGetFail(String error) {
+
+                }
+            });
         } else {
-            //如果不存在则先找这个会话
-            if (gruopMemberMap == null || gruopMemberMap.size() == 0) {
-                AVIMClientManager.getInstance().findConversationById(ConversationId, new AVIMClientManager.ChatJoinManager() {
-                    @Override
-                    public void joinSuccess(AVIMConversation conversation) {
-                        UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, conversation.getMembers(), ConversationId, new UserUtils.getSquareInfo() {
-                            @Override
-                            public void squareGetSuccess(JSONObject object) {
-                                JSONArray array = object.getJSONArray("accountList");
-                                if (null != array && array.size() > 0)
-                                    getNinePic(array, ConversationId, msgTag);
-                            }
+            UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, groupMemberMap, ConversationId, new UserUtils.getSquareInfo() {
+                @Override
+                public void squareGetSuccess(JSONObject object) {
+                    JSONArray array = object.getJSONArray("accountList");
+                    if (null != array && array.size() > 0)
+                        getNinePic(array, ConversationId, msgTag);
+                }
 
-                            @Override
-                            public void squareGetFail(String error) {
+                @Override
+                public void squareGetFail(String error) {
 
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void joinFail(String error) {
-
-                    }
-                });
-            } else {
-                UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, gruopMemberMap, ConversationId, new UserUtils.getSquareInfo() {
-                    @Override
-                    public void squareGetSuccess(JSONObject object) {
-                        JSONArray array = object.getJSONArray("accountList");
-                        if (null != array && array.size() > 0)
-                            getNinePic(array, ConversationId, msgTag);
-                    }
-
-                    @Override
-                    public void squareGetFail(String error) {
-
-                    }
-                });
-            }
+                }
+            });
         }
+        //}
     }
 
     public static void getNinePic(JSONArray array, final String ConversationId, final String msgTag) {
