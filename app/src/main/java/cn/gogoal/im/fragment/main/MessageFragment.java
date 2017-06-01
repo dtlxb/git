@@ -98,8 +98,6 @@ public class MessageFragment extends BaseFragment {
 
     private JSONArray jsonArray;
 
-    private Map<String, List<String>> gruopMemberMap = new HashMap<>();
-
     private int allCount;
     private BubbleLinearLayout mBubbleView;
 
@@ -523,7 +521,6 @@ public class MessageFragment extends BaseFragment {
 
         AVIMMessage message = (AVIMMessage) map.get("message");
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
-        gruopMemberMap.put(conversation.getConversationId(), conversation.getMembers());
         boolean isTheSame = false;
         final String ConversationId = conversation.getConversationId();
         int chatType = (int) conversation.getAttribute("chat_type");
@@ -559,9 +556,6 @@ public class MessageFragment extends BaseFragment {
             case AppConst.IM_MESSAGE_TYPE_SQUARE_ADD:
             case AppConst.IM_MESSAGE_TYPE_SQUARE_DEL:
                 //好友入群
-                //群删除好友(每次删除后重新生成群头像)
-                KLog.e(gruopMemberMap.toString());
-                //createGroupImage(ConversationId, 0);
                 break;
             case AppConst.IM_MESSAGE_TYPE_SQUARE_REQUEST:
                 //申请入群
