@@ -83,8 +83,8 @@ public class MessageFragment extends BaseFragment {
     @BindView(R.id.recyclerView)
     RecyclerView message_recycler;
 
-    @BindView(R.id.iv_go_contancts)
-    ImageView goContancts;
+    @BindView(R.id.iv_go_contacts)
+    ImageView goContacts;
 
     @BindView(R.id.iv_add_person)
     ImageView addPerson;
@@ -123,7 +123,7 @@ public class MessageFragment extends BaseFragment {
     private BubblePopupWindow mBubblePopupWindow;
 
     private void initTitle() {
-        goContancts.setOnClickListener(new View.OnClickListener() {
+        goContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), ContactsActivity.class));
