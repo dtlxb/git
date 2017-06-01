@@ -149,7 +149,7 @@
                 <View
                     android:id="@+id/placeholder"
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"/>
+                    android:layout_height="40dp"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_mystock"
@@ -162,7 +162,7 @@
             <android.support.percent.PercentRelativeLayout
                 android:id="@+id/item_mystock"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
+                android:layout_height="40dp"
                 android:background="@drawable/shape_line_bottom"
                 android:orientation="horizontal"
                 android:paddingEnd="15dp"

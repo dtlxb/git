@@ -3,4 +3,5 @@
     android:color="@color/item_press">
 
     <item android:drawable="@drawable/shape_line_top_and_bottom_unpress"/>
+
 </ripple>

@@ -15,6 +15,7 @@ import java.util.Map;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.LiveListAdapter;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.LiveListItemBean;
@@ -25,6 +26,7 @@ import cn.gogoal.im.bean.SocialRecordData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 
 /**
@@ -52,6 +54,8 @@ public class LiveListFragment extends BaseFragment {
     private LiveListAdapter liveListAdapter;
 
     private String keyword;//分类关键词
+
+    private int page;
 
     @Override
     public int bindLayout() {
@@ -83,9 +87,26 @@ public class LiveListFragment extends BaseFragment {
                 refreshLayout.setRefreshing(false);
             }
         });
+
+        liveListAdapter.setOnLoadMoreListener(new CommonAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                if (page <= 50) {
+                    page++;
+                    request(AppConst.REFRESH_TYPE_LOAD_MORE,keyword);
+                } else {
+                    liveListAdapter.loadMoreEnd(true);
+                    liveListAdapter.setEnableLoadMore(false);
+                    UIHelper.toast(getActivity(),"没有更多数据");
+
+                }
+                liveListAdapter.loadMoreComplete();
+            }
+        },rvLiveList);
     }
 
     public void request(int refreshType, String keyword) {
+        liveListAdapter.setEnableLoadMore(false);
         if (refreshType == AppConst.REFRESH_TYPE_PARENT_BUTTON) {//做筛选，先清空
             recorderDatas.clear();
             pcDatas.clear();
@@ -190,7 +211,7 @@ public class LiveListFragment extends BaseFragment {
         if (programme_id != null) {
             param.put("programme_id", programme_id);
         }
-        param.put("page", String.valueOf(1));
+        param.put("page", String.valueOf(page));
         param.put("rows", "20");
 
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
@@ -222,6 +243,9 @@ public class LiveListFragment extends BaseFragment {
                     }
 
                     liveDatas.addAll(recorderDatas);
+
+                    liveListAdapter.setEnableLoadMore(true);
+                    liveListAdapter.loadMoreComplete();
 
                     liveListAdapter.notifyDataSetChanged();
                 }

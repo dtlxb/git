@@ -1087,7 +1087,7 @@ public class PlayerActivity extends BaseActivity {
 
         linearPlayerFun.setVisibility(View.GONE);
         player_line_tab.setVisibility(View.GONE);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 
         if (mSurfaceView != null) {
             //隐藏状态栏
