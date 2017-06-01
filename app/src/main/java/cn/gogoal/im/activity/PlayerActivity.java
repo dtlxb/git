@@ -834,7 +834,11 @@ public class PlayerActivity extends BaseActivity {
         int var = (int) (ms / 1000.0f + 0.5f);
         int min = var / 60;
         int sec = var % 60;
-        totalDuration.setText((min >= 10 ? min : "0" + min) + ":" + (sec >= 10 ? sec : "0" + sec));
+        int hour = min / 60;
+        min = min >= 60 ? min % 60 : min;
+
+        totalDuration.setText((hour >= 10 ? hour : "0" + hour) + ":" + (min >= 10 ? min : "0" + min)
+                + ":" + (sec >= 10 ? sec : "0" + sec));
 
         SeekBar sb = (SeekBar) findViewById(R.id.progress);
         sb.setMax(ms);
@@ -848,8 +852,12 @@ public class PlayerActivity extends BaseActivity {
                 int var = (int) (i / 1000.0f + 0.5f);
                 int min = var / 60;
                 int sec = var % 60;
+                int hour = min / 60;
+                min = min >= 60 ? min % 60 : min;
+
                 String strCur = String.format("%1$d:%2$d", min, sec);
-                currentDuration.setText((min >= 10 ? min : "0" + min) + ":" + (sec >= 10 ? sec : "0" + sec));
+                currentDuration.setText((hour >= 10 ? hour : "0" + hour) + ":" +
+                        (min >= 10 ? min : "0" + min) + ":" + (sec >= 10 ? sec : "0" + sec));
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
