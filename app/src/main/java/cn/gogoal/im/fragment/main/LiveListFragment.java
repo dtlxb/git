@@ -23,6 +23,7 @@ import cn.gogoal.im.bean.SocialLiveData;
 import cn.gogoal.im.bean.SocialRecordBean;
 import cn.gogoal.im.bean.SocialRecordData;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UserUtils;
 
@@ -68,24 +69,24 @@ public class LiveListFragment extends BaseFragment {
         pcDatas = new ArrayList<>();
         recorderDatas = new ArrayList<>();
 
-        liveListAdapter = new LiveListAdapter(mContext, liveDatas);
+        liveListAdapter = new LiveListAdapter(getActivity(), liveDatas);
 
         rvLiveList.setAdapter(liveListAdapter);
 
-        request(AppConst.REFRESH_TYPE_FIRST,keyword);
+        request(AppConst.REFRESH_TYPE_FIRST, keyword);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 liveDatas.clear();
-                request(AppConst.REFRESH_TYPE_SWIPEREFRESH,keyword);
+                request(AppConst.REFRESH_TYPE_SWIPEREFRESH, keyword);
                 refreshLayout.setRefreshing(false);
             }
         });
     }
 
-    public void request(int refreshType,String keyword) {
-        if (refreshType==AppConst.REFRESH_TYPE_PARENT_BUTTON){//做筛选，先清空
+    public void request(int refreshType, String keyword) {
+        if (refreshType == AppConst.REFRESH_TYPE_PARENT_BUTTON) {//做筛选，先清空
             recorderDatas.clear();
             pcDatas.clear();
             persionalDatas.clear();
@@ -120,6 +121,8 @@ public class LiveListFragment extends BaseFragment {
             public void onSuccess(String responseInfo) {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
 
+                FileUtil.writeRequestResponse(responseInfo, "直播_" + live_source);
+
                 if (code == 0) {
                     SocialLiveBean bean = JSONObject.parseObject(responseInfo, SocialLiveBean.class);
                     List<SocialLiveData> datas = bean.getData();
@@ -135,14 +138,18 @@ public class LiveListFragment extends BaseFragment {
                     for (SocialLiveData liveData : datas) {
                         LiveListItemBean listItemBean =
                                 new LiveListItemBean(
-                                        liveData.getLive_time_start(),
+                                        live_source,
+                                        liveData.getLive_status(),
+                                        liveData.getLive_id(),
                                         liveData.getLive_large_img(),
                                         liveData.getVideo_name(),
                                         liveData.getAnchor().getFace_url(),
                                         liveData.getAnchor().getAnchor_name(),
                                         liveData.getProgramme_name(),
-                                        liveData.getLive_id(),
-                                        liveData.getLive_status());
+                                        liveData.getLive_time_start(),
+                                        liveData.getPlay_base(),
+                                        liveData.getAuth()!=1
+                                );
 
                         if (live_source == 1) {
                             persionalDatas.add(listItemBean);
@@ -192,17 +199,34 @@ public class LiveListFragment extends BaseFragment {
                         recorderDatas.clear();
                     }
 
+                     /*this.live_source = live_source;
+                    this.live_status = live_status;
+                    this.live_id = live_id;
+                    this.liveImgBg = liveImgBg;
+                    this.title = title;
+                    this.anchorAvatar = anchorAvatar;
+                    this.anchorName = anchorName;
+                    this.programme_name = programme_name;
+                    this.startTime = startTime;
+                    this.playerCount = playerCount;
+                    this.havePermissions = havePermissions;*/
+
                     ArrayList<SocialRecordData> recordDatas =
                             JSONObject.parseObject(responseInfo, SocialRecordBean.class).getData();
                     for (SocialRecordData data : recordDatas) {
-                        recorderDatas.add(new LiveListItemBean(
-                                data.getUpdate_time(),
+                        LiveListItemBean listItemBean = new LiveListItemBean(
+                                2,//目前回放视频只能是后端发起
+                                -1,
+                                data.getVideo_id(),
                                 data.getVideo_img_url(),
                                 data.getVideo_name(),
                                 data.getAnchor().getFace_url(),
-                                data.getAnchor_name(),
+                                data.getAnchor().getAnchor_name(),
                                 data.getProgramme_name(),
-                                data.getVideo_id(),-1));
+                                data.getUpdate_time(),
+                                data.getPlay_base(),
+                                true);
+                        recorderDatas.add(listItemBean);
                     }
 
                     liveDatas.addAll(recorderDatas);

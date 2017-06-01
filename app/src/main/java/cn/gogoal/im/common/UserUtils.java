@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import cn.gogoal.im.activity.CreateLiveActivity;
 import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.base.MyApp;
@@ -841,7 +842,7 @@ public class UserUtils {
                 JSONObject jsonObject = JSONObject.parseObject(responseInfo);
 
                 if (jsonObject.getIntValue("code") == 0) {
-                    if (jsonObject.getJSONObject("data").containsKey("live_id") && jsonObject.getJSONObject("data").getString("live") != null) {
+                    if (jsonObject.getJSONObject("data").containsKey("live_id") && jsonObject.getJSONObject("data").getIntValue("code") == 1) {
                         listener.hasPermission(jsonObject.getJSONObject("data").getString("live_id"), true);
                     } else {
                         listener.hasPermission(null, false);
@@ -864,15 +865,19 @@ public class UserUtils {
             @Override
             public void hasPermission(String liveId, boolean hasPermission) {
                 if (hasPermission) {
-                    Intent intent = new Intent(context, LiveActivity.class);
-                    intent.putExtra("live_id", liveId);
-                    context.startActivity(intent);
+                    if (StringUtils.isActuallyEmpty(liveId)) {
+                        context.startActivity(new Intent(context, CreateLiveActivity.class));
+                    } else {
+                        Intent intent = new Intent(context, LiveActivity.class);
+                        intent.putExtra("live_id", liveId);
+                        context.startActivity(intent);
+                    }
                 } else {
                     NormalAlertDialog.newInstance("该直播目前仅限由朝阳永续定向邀约发起，如果您有直播合作意向请联系曹小姐：021-68889706-8127",
                             "免费通话", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    AppDevice.openDial(v.getContext(),"021688897068127");
+                                    AppDevice.openDial(v.getContext(), "021688897068127");
                                 }
                             }).show(context.getSupportFragmentManager());
                 }

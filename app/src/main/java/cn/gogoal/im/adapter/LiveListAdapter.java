@@ -1,22 +1,38 @@
 package cn.gogoal.im.adapter;
 
-import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.socks.library.KLog;
 
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.WatchLiveActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.LiveListItemBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.ui.dialog.InviteAuthDialog;
 
 /**
  * author wangjd on 2017/5/31 0031.
@@ -30,9 +46,9 @@ public class LiveListAdapter extends CommonAdapter<LiveListItemBean, BaseViewHol
 
     private RequestOptions options;
 
-    private Context context;
+    private FragmentActivity context;
 
-    public LiveListAdapter(Context context, List<LiveListItemBean> data) {
+    public LiveListAdapter(FragmentActivity context, List<LiveListItemBean> data) {
         super(R.layout.item_live_list, data);
         imgBgSize = AppDevice.getWidth(context) - AppDevice.dp2px(context, 14);
         this.context = context;
@@ -46,10 +62,14 @@ public class LiveListAdapter extends CommonAdapter<LiveListItemBean, BaseViewHol
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, LiveListItemBean data, int position) {
+    protected void convert(BaseViewHolder holder, final LiveListItemBean data, int position) {
+
+        int liveStatus=data.getLive_status();
+
 
         ImageView ivLiveBg = holder.getView(R.id.iv_live_list_bg);
         TextView tvStartTime = holder.getView(R.id.tv_item_live_list_start_time);
+        TextView tvStartTimeDistance = holder.getView(R.id.tv_item_live_list_count_down);
 
         ViewGroup.LayoutParams params = ivLiveBg.getLayoutParams();
         params.width = imgBgSize;
@@ -57,7 +77,7 @@ public class LiveListAdapter extends CommonAdapter<LiveListItemBean, BaseViewHol
         ivLiveBg.setLayoutParams(params);
 
         Glide.with(context)
-                .load(data.getImgBg())
+                .load(data.getLiveImgBg())
                 .apply(options)
                 .into(ivLiveBg);
 
@@ -72,17 +92,98 @@ public class LiveListAdapter extends CommonAdapter<LiveListItemBean, BaseViewHol
         holder.setVisible(R.id.tv_item_live_list_count_down,
                 data.getLive_status() != -1);
 
-        if (data.getLive_status() == 0) {           //预告
+        Drawable leftDrawable = ContextCompat.getDrawable(context,data.getLive_status()==0?R.mipmap.social_time:R.mipmap.social_online_num);
+        leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
+        tvStartTimeDistance.setCompoundDrawables(leftDrawable, null, null, null);
+
+        if (liveStatus == 0) {           //预告
             tvStartTime.setBackgroundResource(R.drawable.shape_social_live_status_yellow);
-            tvStartTime.setText("预告中 " + CalendarUtils.formatDate("MM-dd HH:mm", "yyyy-MM-dd HH:mm:ss", data.getStartTime()));
-            holder.setText(R.id.tv_item_live_list_count_down,"距离开始");
-        } else if (data.getLive_status() == -1) {   //录播
+            tvStartTime.setText("预告中 " + CalendarUtils.formatDate("yyyy-MM-dd HH:mm:ss","MM-dd HH:mm", data.getStartTime()));
+
+            tvStartTimeDistance.setText($(data.getStartTime()));
+
+        } else if (liveStatus == -1) {   //录播
             tvStartTime.setBackgroundResource(R.drawable.shape_social_live_status_gray);
-            tvStartTime.setText("回放 " + CalendarUtils.formatDate("MM-dd HH:mm", "yyyy-MM-dd HH:mm:ss", data.getStartTime()));
+            tvStartTime.setText("回放 " + CalendarUtils.formatDate("yyyy-MM-dd HH:mm:ss","MM-dd HH:mm", data.getStartTime()));
         } else {                                    //直播中
             tvStartTime.setBackgroundResource(R.drawable.shape_social_live_status_red);
-            tvStartTime.setText("直播中 " + CalendarUtils.formatDate("MM-dd HH:mm", "yyyy-MM-dd HH:mm:ss", data.getStartTime()));
+            tvStartTime.setText("直播中 " + CalendarUtils.formatDate("yyyy-MM-dd HH:mm:ss","MM-dd HH:mm", data.getStartTime()));
+
+            tvStartTimeDistance.setText(data.getPlayerCount());
+
         }
 
+        holder.setVisible(R.id.tv_live_invite,data.isHavePermissions());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (data.isHavePermissions()) {//不需要邀约
+                    Intent intent = new Intent(context, WatchLiveActivity.class);
+                    intent.putExtra("live_id", data.getLive_id());
+                    context.startActivity(intent);
+                } else {//需要邀约
+                    setInviteAuth(data.getLive_id());
+                }
+            }
+        });
+    }
+
+    /**
+     * 邀约
+     */
+    private void setInviteAuth(final String invite_id) {
+
+        String identifies = SPTools.getString(invite_id, null);
+
+        if (identifies == null) {
+            InviteAuthDialog.newInstance("live", invite_id).show(context.getSupportFragmentManager());
+            return;
+        }
+
+        Map<String, String> param = new HashMap<>();
+        param.put("video_id", invite_id);
+        param.put("identifies", identifies);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.json(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONObject data = object.getJSONObject("data");
+                    if (data.getIntValue("code") == 101) {
+                        Intent intent = new Intent(context, WatchLiveActivity.class);
+                        intent.putExtra("live_id", invite_id);
+                        context.startActivity(intent);
+                    } else {
+                        InviteAuthDialog.newInstance("video", invite_id).show(context.getSupportFragmentManager());
+                    }
+                } else {
+                    InviteAuthDialog.newInstance("video", invite_id).show(context.getSupportFragmentManager());
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                InviteAuthDialog.newInstance("video", invite_id).show(context.getSupportFragmentManager());
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.VALIDATE_IDENTIFIES, ggHttpInterface).startGet();
+    }
+    
+    private String $(String startTime) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date parse = format.parse(startTime, new ParsePosition(0));
+
+        long distance = System.currentTimeMillis() - parse.getTime();
+
+        if (distance > 86400 * 1000) {
+            return "距离开始 " + ((distance) / 86400 * 1000)+"天";
+        }else if (distance>3600){
+            return "距离开始 "+ (distance/3600)+"小时";
+        }else {
+            return "即将开始";
+        }
     }
 }
