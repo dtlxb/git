@@ -195,6 +195,10 @@ public class PlayerActivity extends BaseActivity {
     };
 
     @Override
+    public void setNormalTitleBar() {
+    }
+
+    @Override
     public int bindLayout() {
         return R.layout.activity_player;
     }

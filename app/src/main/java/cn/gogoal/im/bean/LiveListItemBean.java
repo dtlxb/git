@@ -8,7 +8,7 @@ package cn.gogoal.im.bean;
  */
 public class LiveListItemBean {
     private int live_source;//来源，个人(1)还是后台(2)
-    private int live_status;//视频状态，直播中(1)还是预约直播(2),还是回放视频(-1)
+    private int live_status;//视频状态，直播中(1)还是预约直播(0),还是回放视频(-1)
     private String live_id;//视频唯一标识码
     private String liveImgBg;//视频的背景图
     private String title;//视频标题
@@ -23,8 +23,28 @@ public class LiveListItemBean {
 
     private boolean havePermissions;//是否需要邀约，是否具有权限
 
+    private boolean needOrder;//是否要预约
 
-    public LiveListItemBean(int live_source, int live_status, String live_id, String liveImgBg, String title, String anchorAvatar, String anchorName, String programme_name, String startTime, String playerCount, boolean havePermissions) {
+    public boolean isNeedOrder() {
+        return needOrder;
+    }
+
+    public void setNeedOrder(boolean needOrder) {
+        this.needOrder = needOrder;
+    }
+
+    public LiveListItemBean(int live_source,
+                            int live_status,
+                            String live_id,
+                            String liveImgBg,
+                            String title,
+                            String anchorAvatar,
+                            String anchorName,
+                            String programme_name,
+                            String startTime,
+                            String playerCount,
+                            boolean havePermissions) {
+
         this.live_source = live_source;
         this.live_status = live_status;
         this.live_id = live_id;

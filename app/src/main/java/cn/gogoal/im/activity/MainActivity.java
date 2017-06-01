@@ -289,7 +289,7 @@ public class MainActivity extends BaseActivity {
         boxScreenAdapter.setOnClassifyChangeListener(new BoxScreenAdapter.ClassifyItemClickListener() {
             @Override
             public void itemClick(BoxScreenData data, int pos) {
-                liveListFragment.request(AppConst.REFRESH_TYPE_PARENT_BUTTON,pos==0?null:data.getProgramme_name());
+                liveListFragment.request(AppConst.REFRESH_TYPE_PARENT_BUTTON,pos==0?null:String.valueOf(data.getProgramme_id()));
                 drawerLayout.closeDrawer(Gravity.END);
             }
         });

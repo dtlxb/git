@@ -458,6 +458,12 @@ public class CalendarUtils {
         return System.currentTimeMillis();
     }
 
+    //过去的时间
+    public static boolean isPassNow(String formatDate) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return format.parse(formatDate, new ParsePosition(0)).getTime() < System.currentTimeMillis();
+    }
+
     /**
      * 获取当前时间的时间戳
      */

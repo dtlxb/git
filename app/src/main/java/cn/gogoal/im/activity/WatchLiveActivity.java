@@ -215,6 +215,8 @@ public class WatchLiveActivity extends BaseActivity {
 
         live_id = getIntent().getStringExtra("live_id");
 
+        KLog.e(live_id);
+
         animation = AnimationUtils.getInstance().setLoadingAnime(text_tip, R.mipmap.login_loading);
         animation.startNow();
 
