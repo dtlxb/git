@@ -395,7 +395,7 @@ public class ChatFragment extends BaseFragment {
                     transaction.add(R.id.find_more_layout, functionFragment, "FunctionFragment");
                 }
 
-                //message_recycler.smoothScrollBy(0, keyBordHeight);
+                message_recycler.getLayoutManager().scrollToPosition(imChatAdapter.getItemCount() - 1);
 
                 transaction.show(functionFragment).hide(emojiFragment);
                 getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
@@ -407,6 +407,9 @@ public class ChatFragment extends BaseFragment {
                 if (!emojiFragment.isAdded()) {
                     transaction.add(R.id.find_more_layout, emojiFragment, "EmojiFragment");
                 }
+
+                message_recycler.getLayoutManager().scrollToPosition(imChatAdapter.getItemCount() - 1);
+
                 transaction.show(emojiFragment).hide(functionFragment);
                 getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
                 functionCheckBox.setChecked(false);
