@@ -214,11 +214,11 @@ public class MainActivity extends BaseActivity {
     //获取直播数据
     private void setLiveData() {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        AppDevice.setViewWidth$Height(rvLiveClassify,3*AppDevice.getWidth(this)/4, -1);
+        AppDevice.setViewWidth$Height(rvLiveClassify, 3 * AppDevice.getWidth(this) / 4, -1);
 
         rvLiveClassify.setLayoutManager(new GridLayoutManager(MainActivity.this, 2, GridLayoutManager.VERTICAL, false));
 
-        rvLiveClassify.setPadding(AppDevice.dp2px(this,7),AppDevice.dp2px(this,26),AppDevice.dp2px(this,7),0);
+        rvLiveClassify.setPadding(AppDevice.dp2px(this, 7), AppDevice.dp2px(this, 26), AppDevice.dp2px(this, 7), 0);
 
         final ArrayList<BoxScreenData> menuData = new ArrayList<>();
         BoxScreenData allData = new BoxScreenData();
@@ -318,10 +318,13 @@ public class MainActivity extends BaseActivity {
                 case 3:
                     if (acb.isChecked()) {
                         acb.setChecked(false);
-                        exitTime=0;
+                        exitTime = 0;
                     } else {
                         exitBy2Click();
                     }
+                    break;
+                default:
+                    exitBy2Click();
                     break;
             }
             return true;

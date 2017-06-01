@@ -35,7 +35,7 @@ import cn.gogoal.im.ui.view.XTitle;
  * Created by huangxx on 2017/4/17.
  */
 
-public class RigisterActivity extends BaseActivity {
+public class RegisterActivity extends BaseActivity {
 
     private XTitle xTitle;
     private MyDownTimer downTimer;
@@ -107,10 +107,10 @@ public class RigisterActivity extends BaseActivity {
                 super.handleMessage(msg);
                 switch (msg.what) {
                     case 0x01:
-                        RigisterActivity.this.finish();
+                        RegisterActivity.this.finish();
                         break;
                     case 0x02:
-                        RigisterActivity.this.finish();
+                        RegisterActivity.this.finish();
                         break;
                     default:
                         break;
@@ -137,7 +137,7 @@ public class RigisterActivity extends BaseActivity {
                 break;
             case R.id.login_button:
                 if (actionType == AppConst.LOGIN_RIGIST_NUMBER) {
-                    rigisterNow();
+                    registerNow();
                 } else if (actionType == AppConst.LOGIN_FIND_CODE) {
                     //显示更改成功5s后自动跳转登录页面
                     correctPassCode();
@@ -151,7 +151,7 @@ public class RigisterActivity extends BaseActivity {
 
     //获取验证码
     private void getVerificationCode() {
-        if (!UIHelper.GGPhoneNumber(editPhoneNumber.getText().toString().trim(), RigisterActivity.this))
+        if (!UIHelper.GGPhoneNumber(editPhoneNumber.getText().toString().trim(), RegisterActivity.this))
             return;
         tvGetCode.setEnabled(false);
 
@@ -164,19 +164,20 @@ public class RigisterActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                tvGetCode.setEnabled(true);
-                tvGetCode.setTextColor(getResColor(R.color.colorPrimary));
+//                tvGetCode.setEnabled(true);
+//                tvGetCode.setTextColor(getResColor(R.color.colorPrimary));
                 if (result.getIntValue("code") == 0) {
                     JSONObject data = result.getJSONObject("data");
                     int code = data.getInteger("code");
                     if (code == 0) {
                         downTimer.start();
                     } else {
-                        UIHelper.toast(RigisterActivity.this, "短信发送失败！");
+                        resetTvGetCode();
+                        UIHelper.toast(RegisterActivity.this, "短信发送失败！");
                     }
                 } else {
-
-                    UIHelper.toast(RigisterActivity.this, "短信发送失败！");
+                    resetTvGetCode();
+                    UIHelper.toast(RegisterActivity.this, "短信发送失败！");
                 }
             }
 
@@ -184,7 +185,7 @@ public class RigisterActivity extends BaseActivity {
             public void onFailure(String msg) {
                 tvGetCode.setEnabled(true);
                 tvGetCode.setTextColor(getResColor(R.color.colorPrimary));
-                UIHelper.toast(RigisterActivity.this, R.string.net_erro_hint);
+                UIHelper.toast(RegisterActivity.this, R.string.net_erro_hint);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.MOBILE_SEND_CAPTCHA, ggHttpInterface).startGet();
@@ -192,8 +193,8 @@ public class RigisterActivity extends BaseActivity {
     }
 
     private void correctPassCode() {
-        if (!UIHelper.GGPhoneNumber(editPhoneNumber.getText().toString().trim(), RigisterActivity.this)
-                || !UIHelper.GGCode(editPaseCode.getText().toString().trim(), RigisterActivity.this)
+        if (!UIHelper.GGPhoneNumber(editPhoneNumber.getText().toString().trim(), RegisterActivity.this)
+                || !UIHelper.GGCode(editPaseCode.getText().toString().trim(), RegisterActivity.this)
                 || !codeIsTheSame(editCode.getText().toString().trim(), validEditCode.getText().toString().trim())
                 || !UIHelper.isGGPassWord(editCode.getText().toString().trim(), getActivity())
                 || !UIHelper.isGGPassWord(validEditCode.getText().toString().trim(), getActivity()))
@@ -214,29 +215,29 @@ public class RigisterActivity extends BaseActivity {
                     JSONObject data = result.getJSONObject("data");
                     boolean success = data.getBoolean("success");
                     if (success) {
-                        UIHelper.toastInCenter(RigisterActivity.this, "密码重置成功,将自动跳转登录页面", Toast.LENGTH_LONG);
+                        UIHelper.toastInCenter(RegisterActivity.this, "密码重置成功,将自动跳转登录页面", Toast.LENGTH_LONG);
                         handler.sendEmptyMessageDelayed(0x01, 5000);
                     } else {
-                        UIHelper.toast(RigisterActivity.this, "验证码失效，请重新获取验证码");
+                        UIHelper.toast(RegisterActivity.this, "验证码失效，请重新获取验证码");
                     }
                 } else {
-                    UIHelper.toast(RigisterActivity.this, "密码重置失败");
+                    UIHelper.toast(RegisterActivity.this, "密码重置失败");
                 }
             }
 
             @Override
             public void onFailure(String msg) {
                 loginLayout.setEnabled(true);
-                UIHelper.toast(RigisterActivity.this, R.string.net_erro_hint);
+                UIHelper.toast(RegisterActivity.this, R.string.net_erro_hint);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.RESET_PASSWORD_BY_MOBILE, ggHttpInterface).startGet();
 
     }
 
-    private void rigisterNow() {
-        if (!UIHelper.GGPhoneNumber(editPhoneNumber.getText().toString().trim(), RigisterActivity.this)
-                || !UIHelper.GGCode(editPaseCode.getText().toString().trim(), RigisterActivity.this)
+    private void registerNow() {
+        if (!UIHelper.GGPhoneNumber(editPhoneNumber.getText().toString().trim(), RegisterActivity.this)
+                || !UIHelper.GGCode(editPaseCode.getText().toString().trim(), RegisterActivity.this)
                 || !UIHelper.isGGPassWord(editCode.getText().toString().trim(), getActivity()))
             return;
         final Map<String, String> params = new HashMap<>();
@@ -258,11 +259,11 @@ public class RigisterActivity extends BaseActivity {
                     JSONObject data = result.getJSONObject("data");
                     int dataCode = data.getInteger("code");
                     if (dataCode == 0) {
-                        UIHelper.toastInCenter(RigisterActivity.this, "注册成功,将自动跳转登录页面", Toast.LENGTH_LONG);
+                        UIHelper.toastInCenter(RegisterActivity.this, "注册成功,将自动跳转登录页面", Toast.LENGTH_LONG);
                         handler.sendEmptyMessageDelayed(0x02, 5000);
                     } else if (dataCode == 3) {
                         //账号已存在
-                        DialogHelp.getConfirmDialog(RigisterActivity.this, "该手机号已注册，请直接登录", new DialogInterface.OnClickListener() {
+                        DialogHelp.getConfirmDialog(RegisterActivity.this, "该手机号已注册，请直接登录", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         finish();
@@ -275,17 +276,17 @@ public class RigisterActivity extends BaseActivity {
                                     }
                                 }).show();
                     } else {
-                        UIHelper.toast(RigisterActivity.this, R.string.str_rigister_error);
+                        UIHelper.toast(RegisterActivity.this, R.string.str_rigister_error);
                     }
                 } else {
-                    UIHelper.toast(RigisterActivity.this, R.string.str_rigister_error);
+                    UIHelper.toast(RegisterActivity.this, R.string.str_rigister_error);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
                 loginLayout.setEnabled(true);
-                UIHelper.toast(RigisterActivity.this, R.string.net_erro_hint);
+                UIHelper.toast(RegisterActivity.this, R.string.net_erro_hint);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.USER_REGISTER, ggHttpInterface).startGet();
@@ -295,7 +296,7 @@ public class RigisterActivity extends BaseActivity {
         if (code1.equals(code2)) {
             return true;
         } else {
-            UIHelper.toast(RigisterActivity.this, "两次密码不一致");
+            UIHelper.toast(RegisterActivity.this, "两次密码不一致");
             return false;
         }
     }
@@ -313,13 +314,16 @@ public class RigisterActivity extends BaseActivity {
 
             @Override
             public void finish() {
-                tvGetCode.setText("获取验证码");
-                tvGetCode.setBackgroundResource(R.drawable.login_edit_red_border);
-                tvGetCode.setTextColor(getResColor(R.color.colorPrimary));
-                tvGetCode.setEnabled(true);
+                resetTvGetCode();
             }
         });
     }
 
+    private void resetTvGetCode() {
+        tvGetCode.setText("获取验证码");
+        tvGetCode.setBackgroundResource(R.drawable.login_edit_red_border);
+        tvGetCode.setTextColor(getResColor(R.color.colorPrimary));
+        tvGetCode.setEnabled(true);
+    }
 
 }
