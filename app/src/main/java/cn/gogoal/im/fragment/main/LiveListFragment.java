@@ -50,6 +50,8 @@ public class LiveListFragment extends BaseFragment {
 
     private LiveListAdapter liveListAdapter;
 
+    private String keyword;//分类关键词
+
     @Override
     public int bindLayout() {
         return R.layout.fragment_live_list;
@@ -70,24 +72,32 @@ public class LiveListFragment extends BaseFragment {
 
         rvLiveList.setAdapter(liveListAdapter);
 
-        request(AppConst.REFRESH_TYPE_FIRST);
+        request(AppConst.REFRESH_TYPE_FIRST,keyword);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 liveDatas.clear();
-                request(AppConst.REFRESH_TYPE_SWIPEREFRESH);
+                request(AppConst.REFRESH_TYPE_SWIPEREFRESH,keyword);
                 refreshLayout.setRefreshing(false);
             }
         });
     }
 
-    private void request(int refreshType) {
-        getLiveData(refreshType, 1, null);
+    public void request(int refreshType,String keyword) {
+        if (refreshType==AppConst.REFRESH_TYPE_PARENT_BUTTON){//做筛选，先清空
+            recorderDatas.clear();
+            pcDatas.clear();
+            persionalDatas.clear();
 
-        getLiveData(refreshType, 2, null);
+            liveDatas.clear();
+        }
 
-        getRecordData(refreshType, null);
+        getLiveData(refreshType, 1, keyword);
+
+        getLiveData(refreshType, 2, keyword);
+
+        getRecordData(refreshType, keyword);
     }
 
     /**

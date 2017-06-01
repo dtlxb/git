@@ -16,6 +16,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.LiveListItemBean;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.CalendarUtils;
 
 /**
  * author wangjd on 2017/5/31 0031.
@@ -48,7 +49,7 @@ public class LiveListAdapter extends CommonAdapter<LiveListItemBean, BaseViewHol
     protected void convert(BaseViewHolder holder, LiveListItemBean data, int position) {
 
         ImageView ivLiveBg = holder.getView(R.id.iv_live_list_bg);
-        TextView tvStartTime = holder.getView(R.id.R.id.tv_item_live_list_start_time);
+        TextView tvStartTime = holder.getView(R.id.tv_item_live_list_start_time);
 
         ViewGroup.LayoutParams params = ivLiveBg.getLayoutParams();
         params.width = imgBgSize;
@@ -73,10 +74,14 @@ public class LiveListAdapter extends CommonAdapter<LiveListItemBean, BaseViewHol
 
         if (data.getLive_status() == 0) {           //预告
             tvStartTime.setBackgroundResource(R.drawable.shape_social_live_status_yellow);
+            tvStartTime.setText("预告中 " + CalendarUtils.formatDate("MM-dd HH:mm", "yyyy-MM-dd HH:mm:ss", data.getStartTime()));
+            holder.setText(R.id.tv_item_live_list_count_down,"距离开始");
         } else if (data.getLive_status() == -1) {   //录播
             tvStartTime.setBackgroundResource(R.drawable.shape_social_live_status_gray);
+            tvStartTime.setText("回放 " + CalendarUtils.formatDate("MM-dd HH:mm", "yyyy-MM-dd HH:mm:ss", data.getStartTime()));
         } else {                                    //直播中
             tvStartTime.setBackgroundResource(R.drawable.shape_social_live_status_red);
+            tvStartTime.setText("直播中 " + CalendarUtils.formatDate("MM-dd HH:mm", "yyyy-MM-dd HH:mm:ss", data.getStartTime()));
         }
 
     }

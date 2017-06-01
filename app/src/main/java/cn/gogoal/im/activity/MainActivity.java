@@ -34,6 +34,7 @@ import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.BoxScreenData;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
@@ -73,6 +74,7 @@ public class MainActivity extends BaseActivity {
     RecyclerView rvLiveClassify;
 
     public MainStockFragment mainStockFragment;
+    private LiveListFragment liveListFragment;
 
     @Override
     public int bindLayout() {
@@ -117,7 +119,8 @@ public class MainActivity extends BaseActivity {
         MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
         mainStockFragment = new MainStockFragment();                                //TAB2 自选股
         InvestmentResearchFragment foundFragment = new InvestmentResearchFragment(); // TAB3 投研
-        LiveListFragment liveListFragment = new LiveListFragment();                  //TAB4 直播
+        //TAB4 直播
+        liveListFragment = new LiveListFragment();
         final MineFragment mineFragment = new MineFragment();                       // TAB5 我的
 
         List<Fragment> tabFragments = new ArrayList<>();
@@ -280,6 +283,14 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 UserUtils.checkLivePermission(MainActivity.this);
+            }
+        });
+
+        boxScreenAdapter.setOnClassifyChangeListener(new BoxScreenAdapter.ClassifyItemClickListener() {
+            @Override
+            public void itemClick(BoxScreenData data, int pos) {
+                liveListFragment.request(AppConst.REFRESH_TYPE_PARENT_BUTTON,pos==0?null:data.getProgramme_name());
+                drawerLayout.closeDrawer(Gravity.END);
             }
         });
     }
