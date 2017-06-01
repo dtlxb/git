@@ -2,18 +2,27 @@ package cn.gogoal.im.fragment.main;
 
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.adapter.LiveListAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.bean.LiveListItemBean;
 import cn.gogoal.im.bean.SocialLiveBean;
+import cn.gogoal.im.bean.SocialLiveData;
+import cn.gogoal.im.bean.SocialRecordBean;
+import cn.gogoal.im.bean.SocialRecordData;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UserUtils;
@@ -32,6 +41,18 @@ public class LiveListFragment extends BaseFragment {
     @BindView(R.id.rv_live_list)
     RecyclerView rvLiveList;
 
+    private List<LiveListItemBean> liveDatas;//全部
+
+    private List<LiveListItemBean> persionalDatas;  //个人
+
+    private List<LiveListItemBean> pcDatas;         //后台发起
+
+    private List<LiveListItemBean> recorderDatas;         //录播发起
+
+    private LiveListAdapter liveListAdapter;
+
+    private String keyword;//分类关键词
+
     @Override
     public int bindLayout() {
         return R.layout.fragment_live_list;
@@ -41,15 +62,49 @@ public class LiveListFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         BaseActivity.iniRefresh(refreshLayout);
 
-        getLiveData(1, null);
-        getLiveData(2, null);
-        getRecordData(null);
+        rvLiveList.setLayoutManager(new LinearLayoutManager(mContext));
+
+        liveDatas = new ArrayList<>();
+        persionalDatas = new ArrayList<>();
+        pcDatas = new ArrayList<>();
+        recorderDatas = new ArrayList<>();
+
+        liveListAdapter = new LiveListAdapter(getActivity(), liveDatas);
+
+        rvLiveList.setAdapter(liveListAdapter);
+
+        request(AppConst.REFRESH_TYPE_FIRST, keyword);
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                liveDatas.clear();
+                request(AppConst.REFRESH_TYPE_SWIPEREFRESH, keyword);
+                refreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    public void request(int refreshType, String keyword) {
+        if (refreshType == AppConst.REFRESH_TYPE_PARENT_BUTTON) {//做筛选，先清空
+            recorderDatas.clear();
+            pcDatas.clear();
+            persionalDatas.clear();
+
+            liveDatas.clear();
+        }
+
+        getLiveData(refreshType, 1, keyword);
+
+        getLiveData(refreshType, 2, keyword);
+
+        getRecordData(refreshType, keyword);
     }
 
     /**
      * 获取直播列表数据
      */
-    private void getLiveData(final int live_source, String programme_id) {
+    private void getLiveData(final int refreshType, final int live_source, String programme_id) {
         final Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
         param.put("live_source", live_source + "");
@@ -59,37 +114,61 @@ public class LiveListFragment extends BaseFragment {
         }
 
         param.put("page", "1");
-        param.put("rows", "100");
+        param.put("rows", "200");
 
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                SocialLiveBean bean = JSONObject.parseObject(responseInfo, SocialLiveBean.class);
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
 
-//                if (object.getCode() == 0) {
-//                    if (live_source == 1) {
-//                        perLiveLinear.setVisibility(View.VISIBLE);
-//                        List<SocialLiveData> liveData = object.getData();
-//                        liveAdapter = new SocialLiveAdapter(getActivity(), liveData);
-//                        perLiveRecycler.setAdapter(liveAdapter);
-//                    } else if (live_source == 2) {
-//                        orgLiveLinear.setVisibility(View.VISIBLE);
-//                        List<SocialLiveData> listData = object.getData();
-//                        liveAdapter = new SocialLiveAdapter(getActivity(), listData);
-//                        orgLiveRecycler.setAdapter(liveAdapter);
-//                    }
-//                } else if (object.getCode() == 1001) {
-//                    if (live_source == 1) {
-//                        perLiveLinear.setVisibility(View.GONE);
-//                    } else if (live_source == 2) {
-//                        orgLiveLinear.setVisibility(View.GONE);
-//                    }
-//                } else {
-//                    UIHelper.toast(getContext(), R.string.net_erro_hint);
-//                    KLog.e(TAG);
-//                }
-//
-//                refreshSocial.setRefreshing(false);
+                FileUtil.writeRequestResponse(responseInfo, "直播_" + live_source);
+
+                if (code == 0) {
+                    SocialLiveBean bean = JSONObject.parseObject(responseInfo, SocialLiveBean.class);
+                    List<SocialLiveData> datas = bean.getData();
+
+                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+                        if (live_source == 1) {
+                            persionalDatas.clear();
+                        } else {
+                            pcDatas.clear();
+                        }
+                    }
+
+                    for (SocialLiveData liveData : datas) {
+                        LiveListItemBean listItemBean =
+                                new LiveListItemBean(
+                                        live_source,
+                                        liveData.getLive_status(),
+                                        liveData.getLive_id(),
+                                        liveData.getLive_large_img(),
+                                        liveData.getVideo_name(),
+                                        liveData.getAnchor().getFace_url(),
+                                        liveData.getAnchor().getAnchor_name(),
+                                        liveData.getProgramme_name(),
+                                        liveData.getLive_time_start(),
+                                        liveData.getPlay_base(),
+                                        liveData.getAuth()!=1
+                                );
+
+                        if (live_source == 1) {
+                            persionalDatas.add(listItemBean);
+                        } else {
+                            pcDatas.add(listItemBean);
+                        }
+                    }
+
+                    liveDatas.addAll(0, persionalDatas);
+
+                    liveDatas.addAll(pcDatas);
+
+                    liveListAdapter.notifyDataSetChanged();
+
+                } else if (code == 1001) {
+                    //没有请求到直播数据
+                } else {
+                    //请求出错
+                }
             }
 
             @Override
@@ -102,10 +181,7 @@ public class LiveListFragment extends BaseFragment {
     /**
      * 获取录播列表数据
      */
-    private void getRecordData(String programme_id) {
-//
-//        recordAdapter.setEnableLoadMore(false);
-
+    private void getRecordData(final int refreshType, String programme_id) {
         final Map<String, String> param = new HashMap<>();
         if (programme_id != null) {
             param.put("programme_id", programme_id);
@@ -116,35 +192,51 @@ public class LiveListFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                FileUtil.writeRequestResponse(responseInfo,"录播数据");
-//                SocialRecordBean object = JSONObject.parseObject(responseInfo, SocialRecordBean.class);
-//                if (object.getCode() == 0) {
-//                    recordLinear.setVisibility(View.VISIBLE);
-//                    ArrayList<SocialRecordData> data = object.getData();
-//                    recordData.addAll(data);
-//                    recordAdapter.notifyDataSetChanged();
-//                    recordAdapter.setEnableLoadMore(true);
-//                    recordAdapter.loadMoreComplete();
-//
-//                } else if (object.getCode() == 1001) {
-//                    if (recordPage == 1) {
-//                        recordLinear.setVisibility(View.GONE);
-//                    }
-//                } else {
-//                    UIHelper.toast(getContext(), R.string.net_erro_hint);
-//                    KLog.e(TAG);
-//                }
-//
-//                refreshSocial.setRefreshing(false);
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                if (code == 0) {
+
+                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+                        recorderDatas.clear();
+                    }
+
+                     /*this.live_source = live_source;
+                    this.live_status = live_status;
+                    this.live_id = live_id;
+                    this.liveImgBg = liveImgBg;
+                    this.title = title;
+                    this.anchorAvatar = anchorAvatar;
+                    this.anchorName = anchorName;
+                    this.programme_name = programme_name;
+                    this.startTime = startTime;
+                    this.playerCount = playerCount;
+                    this.havePermissions = havePermissions;*/
+
+                    ArrayList<SocialRecordData> recordDatas =
+                            JSONObject.parseObject(responseInfo, SocialRecordBean.class).getData();
+                    for (SocialRecordData data : recordDatas) {
+                        LiveListItemBean listItemBean = new LiveListItemBean(
+                                2,//目前回放视频只能是后端发起
+                                -1,
+                                data.getVideo_id(),
+                                data.getVideo_img_url(),
+                                data.getVideo_name(),
+                                data.getAnchor().getFace_url(),
+                                data.getAnchor().getAnchor_name(),
+                                data.getProgramme_name(),
+                                data.getUpdate_time(),
+                                data.getPlay_base(),
+                                true);
+                        recorderDatas.add(listItemBean);
+                    }
+
+                    liveDatas.addAll(recorderDatas);
+
+                    liveListAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
             public void onFailure(String msg) {
-//                if (refreshSocial!=null)
-//                    refreshSocial.setRefreshing(false);
-//
-//                UIHelper.toast(getContext(), R.string.net_erro_hint);
-//                KLog.e(TAG);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_RECORD_LIST, ggHttpInterface).startGet();

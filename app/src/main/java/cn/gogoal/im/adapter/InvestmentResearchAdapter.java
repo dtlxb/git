@@ -91,7 +91,7 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
                 } else {
                     //TODO 跳网页类型
                     if (data.getIsClick() == 0) {
-                        String[] params = {data.getUrl(), data.getDesc()};
+                        String[] params = {data.getUrl()+"?code="+data.getCode(), data.getDesc()};
                         BannerUtils.getInstance(context, data.getType(), params).go();
                     } else {
 //                        new ComingSoonDialog().show(((MainActivity) context).getSupportFragmentManager());

@@ -1,7 +1,6 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -35,13 +34,12 @@ import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.BoxScreenData;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.common.permission.CheckLivePermissionListener;
 import cn.gogoal.im.fragment.main.InvestmentResearchFragment;
 import cn.gogoal.im.fragment.main.LiveListFragment;
 import cn.gogoal.im.fragment.main.MainStockFragment;
@@ -76,6 +74,7 @@ public class MainActivity extends BaseActivity {
     RecyclerView rvLiveClassify;
 
     public MainStockFragment mainStockFragment;
+    private LiveListFragment liveListFragment;
 
     @Override
     public int bindLayout() {
@@ -120,7 +119,8 @@ public class MainActivity extends BaseActivity {
         MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
         mainStockFragment = new MainStockFragment();                                //TAB2 自选股
         InvestmentResearchFragment foundFragment = new InvestmentResearchFragment(); // TAB3 投研
-        LiveListFragment liveListFragment = new LiveListFragment();                  //TAB4 直播
+        //TAB4 直播
+        liveListFragment = new LiveListFragment();
         final MineFragment mineFragment = new MineFragment();                       // TAB5 我的
 
         List<Fragment> tabFragments = new ArrayList<>();
@@ -269,7 +269,6 @@ public class MainActivity extends BaseActivity {
                 if (object.getIntValue("code") == 0) {
                     List<BoxScreenData> data = JSONObject.parseArray(object.getString("data"), BoxScreenData.class);
                     menuData.addAll(data);
-
                     boxScreenAdapter.notifyDataSetChanged();
                 }
             }
@@ -283,18 +282,15 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.tv_do_live).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserUtils.checkLivePermission(new CheckLivePermissionListener() {
-                    @Override
-                    public void hasPermission(String liveId, boolean hasPermission) {
-                        if (hasPermission) {
-                            Intent intent = new Intent(MainActivity.this, LiveActivity.class);
-                            intent.putExtra("live_id", liveId);
-                            startActivity(intent);
-                        } else {
-                            DialogHelp.getMessageDialog(MainActivity.this, "您暂时没有权限直播，请联系客服申请！").show();
-                        }
-                    }
-                });
+                UserUtils.checkLivePermission(MainActivity.this);
+            }
+        });
+
+        boxScreenAdapter.setOnClassifyChangeListener(new BoxScreenAdapter.ClassifyItemClickListener() {
+            @Override
+            public void itemClick(BoxScreenData data, int pos) {
+                liveListFragment.request(AppConst.REFRESH_TYPE_PARENT_BUTTON, pos == 0 ? null : data.getProgramme_name());
+                drawerLayout.closeDrawer(Gravity.END);
             }
         });
     }
