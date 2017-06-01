@@ -38,8 +38,7 @@ public class BannerUtils {
     }
 
     public static BannerUtils getInstance(Context context, int type, String... params) {
-        BannerUtils utils=new BannerUtils(context,type,params);
-        return utils;
+        return new BannerUtils(context,type,params);
     }
 
     public void go() {

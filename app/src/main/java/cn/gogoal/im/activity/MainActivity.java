@@ -1,7 +1,6 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -36,12 +35,10 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.BoxScreenData;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.common.permission.CheckLivePermissionListener;
 import cn.gogoal.im.fragment.main.InvestmentResearchFragment;
 import cn.gogoal.im.fragment.main.LiveListFragment;
 import cn.gogoal.im.fragment.main.MainStockFragment;
@@ -214,11 +211,11 @@ public class MainActivity extends BaseActivity {
     //获取直播数据
     private void setLiveData() {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        AppDevice.setViewWidth$Height(rvLiveClassify,3*AppDevice.getWidth(this)/4, -1);
+        AppDevice.setViewWidth$Height(rvLiveClassify, 3 * AppDevice.getWidth(this) / 4, -1);
 
         rvLiveClassify.setLayoutManager(new GridLayoutManager(MainActivity.this, 2, GridLayoutManager.VERTICAL, false));
 
-        rvLiveClassify.setPadding(AppDevice.dp2px(this,7),AppDevice.dp2px(this,26),AppDevice.dp2px(this,7),0);
+        rvLiveClassify.setPadding(AppDevice.dp2px(this, 7), AppDevice.dp2px(this, 26), AppDevice.dp2px(this, 7), 0);
 
         final ArrayList<BoxScreenData> menuData = new ArrayList<>();
         BoxScreenData allData = new BoxScreenData();
@@ -269,7 +266,6 @@ public class MainActivity extends BaseActivity {
                 if (object.getIntValue("code") == 0) {
                     List<BoxScreenData> data = JSONObject.parseArray(object.getString("data"), BoxScreenData.class);
                     menuData.addAll(data);
-
                     boxScreenAdapter.notifyDataSetChanged();
                 }
             }
@@ -283,18 +279,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.tv_do_live).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserUtils.checkLivePermission(new CheckLivePermissionListener() {
-                    @Override
-                    public void hasPermission(String liveId, boolean hasPermission) {
-                        if (hasPermission) {
-                            Intent intent = new Intent(MainActivity.this, LiveActivity.class);
-                            intent.putExtra("live_id", liveId);
-                            startActivity(intent);
-                        } else {
-                            DialogHelp.getMessageDialog(MainActivity.this, "您暂时没有权限直播，请联系客服申请！").show();
-                        }
-                    }
-                });
+                UserUtils.checkLivePermission(MainActivity.this);
             }
         });
     }
@@ -311,17 +296,20 @@ public class MainActivity extends BaseActivity {
                     if (mainStockFragment.isMaskViewVisiable()) {
                         mainStockFragment.dismissMarket();
                         exitTime = 0;
-                    } else {
+                    }else {
                         exitBy2Click();
                     }
                     break;
                 case 3:
                     if (acb.isChecked()) {
                         acb.setChecked(false);
-                        exitTime=0;
-                    } else {
+                        exitTime = 0;
+                    }else {
                         exitBy2Click();
                     }
+                    break;
+                default:
+                    exitBy2Click();
                     break;
             }
             return true;

@@ -23,7 +23,7 @@
                 android:textColor="@color/textColor_333333"
                 android:textSize="18dp" />
 
-            <CheckBox
+            <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/boxScreen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

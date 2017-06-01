@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -21,6 +22,7 @@ import cn.gogoal.im.bean.stock.Stock;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.NormalIntentUtils;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.ui.dialog.base.BaseBottomDialog;
 
 /**
@@ -89,6 +91,8 @@ public class StockPopuDialog extends BaseBottomDialog {
 
         private Stock stock;
 
+        private String[] codesParams = {"G3_003_05", "G3_003_04", "G3_003_08"};
+
         private BottomSheetAdapter(List<BaseIconText<Integer, String>> data, Stock stock) {
             super(R.layout.item_dialog_bottom_sheet, data);
             this.stock = stock;
@@ -105,6 +109,11 @@ public class StockPopuDialog extends BaseBottomDialog {
             imageView.setLayoutParams(params);
             imageView.setImageResource(data.getIamge());
 
+
+            final HashMap<String, String> args = new HashMap<>();
+            args.put("stock_code", stock.getStock_code());
+            args.put("stock_name", stock.getStock_name());
+
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -112,13 +121,16 @@ public class StockPopuDialog extends BaseBottomDialog {
                         case 0:
                         case 1:
                         case 2:
+                            args.put("code", codesParams[position]);
+
                             NormalIntentUtils.go2WebActivity(
                                     v.getContext(),
-                                    data.getUrl() + "?stock_code=" + stock.getStock_code() + "&stock_name=" + stock.getStock_name(),
+                                    data.getUrl() + "?"+StringUtils.map2ggParameter(args),
                                     data.getText(), true);
+
                             break;
                         case 3:
-                            if (stock==null){
+                            if (stock == null) {
                                 return;
                             }
                             Intent intent = new Intent(v.getContext(), InteractiveInvestorActivity.class);

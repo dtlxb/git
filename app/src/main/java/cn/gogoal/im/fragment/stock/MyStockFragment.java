@@ -265,8 +265,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
                     myStockAdapter.notifyDataSetChanged();
 
-                    KLog.e(myStockDatas.size());
-
                     //缓存自选股
                     StockUtils.saveMyStock(JSONObject.parseObject(responseInfo).getJSONArray("data"));
 

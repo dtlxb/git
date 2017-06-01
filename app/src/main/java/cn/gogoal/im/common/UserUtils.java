@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -29,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.Advisers;
@@ -38,6 +41,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.permission.CheckLivePermissionListener;
+import cn.gogoal.im.ui.dialog.NormalAlertDialog;
 
 import static com.alibaba.fastjson.JSON.parseObject;
 
@@ -224,8 +228,6 @@ public class UserUtils {
 //        map.put("province", "7");
 //        map.put("city", "7");
         map.put("token", UserUtils.getToken());
-
-        KLog.e(StringUtils.map2ggParameter(map));
 
         new GGOKHTTP(map, GGOKHTTP.UPDATE_ACCOUNT_INFO, new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -832,8 +834,7 @@ public class UserUtils {
     }
 
     //检查是否有权限发起直播
-
-    public static void checkLivePermission(@NonNull final CheckLivePermissionListener listener) {
+    private static void checkLivePermission(@NonNull final CheckLivePermissionListener listener) {
         new GGOKHTTP(UserUtils.getTokenParams(), GGOKHTTP.VIDEO_MOBILE, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
@@ -855,6 +856,28 @@ public class UserUtils {
                 listener.hasPermission(null, false);
             }
         }).startGet();
+    }
+
+    //检查当前用户是否有权限发起直播
+    public static void checkLivePermission(final FragmentActivity context) {
+        checkLivePermission(new CheckLivePermissionListener() {
+            @Override
+            public void hasPermission(String liveId, boolean hasPermission) {
+                if (hasPermission) {
+                    Intent intent = new Intent(context, LiveActivity.class);
+                    intent.putExtra("live_id", liveId);
+                    context.startActivity(intent);
+                } else {
+                    NormalAlertDialog.newInstance("该直播目前仅限由朝阳永续定向邀约发起，如果您有直播合作意向请联系曹小姐：021-68889706-8127",
+                            "免费通话", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    AppDevice.openDial(v.getContext(),"021688897068127");
+                                }
+                            }).show(context.getSupportFragmentManager());
+                }
+            }
+        });
     }
 
     /**
