@@ -119,6 +119,7 @@
                 android:textSize="16sp"
                 android:visibility="invisible" />
         </FrameLayout>
+
     </LinearLayout>
 
     <View
@@ -130,8 +131,7 @@
     <RelativeLayout
         android:id="@+id/find_more_layout"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:layout_above="@+id/space"
+        android:layout_height="240dp"
         android:background="@color/colorchatGrid"
         android:visibility="gone">
 
