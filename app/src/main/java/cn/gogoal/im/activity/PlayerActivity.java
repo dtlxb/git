@@ -1019,6 +1019,8 @@ public class PlayerActivity extends BaseActivity {
             } else if (AppDevice.isPortrait(getContext())) {
                 finish();
             }
+
+            return true;
         }
 
         return super.onKeyDown(keyCode, event);
