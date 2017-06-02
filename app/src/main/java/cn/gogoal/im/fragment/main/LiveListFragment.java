@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,10 +25,11 @@ import cn.gogoal.im.bean.SocialLiveData;
 import cn.gogoal.im.bean.SocialRecordBean;
 import cn.gogoal.im.bean.SocialRecordData;
 import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.widget.WrapContentLinearLayoutManager;
 
 /**
  * author wangjd on 2017/5/27 0027.
@@ -66,7 +68,8 @@ public class LiveListFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         BaseActivity.iniRefresh(refreshLayout);
 
-        rvLiveList.setLayoutManager(new LinearLayoutManager(mContext));
+        rvLiveList.setLayoutManager(
+                new WrapContentLinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
 
         liveDatas = new ArrayList<>();
         persionalDatas = new ArrayList<>();
@@ -107,6 +110,7 @@ public class LiveListFragment extends BaseFragment {
 
     public void request(int refreshType, String keyword) {
         liveListAdapter.setEnableLoadMore(false);
+
         if (refreshType == AppConst.REFRESH_TYPE_PARENT_BUTTON) {//做筛选，先清空
             recorderDatas.clear();
             pcDatas.clear();
@@ -142,9 +146,10 @@ public class LiveListFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
 
-                FileUtil.writeRequestResponse(responseInfo, "直播_" + live_source);
+                KLog.e(StringUtils.map2ggParameter(param));
+
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
 
                 if (code == 0) {
                     SocialLiveBean bean = JSONObject.parseObject(responseInfo, SocialLiveBean.class);
@@ -217,6 +222,9 @@ public class LiveListFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+
+                KLog.e(StringUtils.map2ggParameter(param));
+
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
 

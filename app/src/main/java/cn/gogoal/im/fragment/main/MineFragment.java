@@ -37,9 +37,11 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.FlipperData;
 import cn.gogoal.im.bean.MineItem;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 
@@ -224,6 +226,9 @@ public class MineFragment extends BaseFragment {
                             switch (data.getItemText()) {
                                 case "我要直播"://我要直播
                                     UserUtils.checkLivePermission(getActivity());
+                                    break;
+                                case "我的二维码"://我的二维码
+                                    NormalIntentUtils.go2WebActivity(getContext(), AppConst.WEB_URL_LLJ,"");
                                     break;
                                 case "行情设置"://自选股设置
                                     intent = new Intent(getActivity(), SettingStockActivity.class);

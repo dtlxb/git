@@ -68,6 +68,12 @@ public class FunctionActivity extends BaseActivity {
         } else {
             xTitle = setMyTitle("", true);
         }
+        xTitle.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                webView.goBack();
+            }
+        });
 
         //分享web页
         if (needShare) {
@@ -78,6 +84,7 @@ public class FunctionActivity extends BaseActivity {
                         @Override
                         public void onReceiveValue(String value) {
                             KLog.e(value);
+
 //                            if (StringUtils.isActuallyEmpty(value)) {//TODO 目前没有分享，肯定是空咯
 //                                GGShareEntity entity = new GGShareEntity();
 //                                entity.setDesc("测试数据测试数据测试数据测试数据测试数据测试数据测试数据");
