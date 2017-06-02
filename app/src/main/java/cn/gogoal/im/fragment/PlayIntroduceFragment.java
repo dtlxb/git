@@ -77,6 +77,7 @@ public class PlayIntroduceFragment extends BaseFragment {
         ImageDisplay.loadImage(getContext(), data.getString("introduction_img") != null
                 ? data.getString("introduction_img") : data.getString("video_img_url"), live_avatar);
 
-        live_achieve.setText(anchor.getString("introduction"));
+        live_achieve.setText(anchor.getString("introduction") != null
+                ? anchor.getString("introduction") : getString(R.string.play_introduction_null));
     }
 }
