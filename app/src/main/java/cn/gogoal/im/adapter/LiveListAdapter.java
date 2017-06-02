@@ -144,7 +144,7 @@ public class LiveListAdapter extends CommonAdapter<LiveListItemBean, BaseViewHol
             @Override
             public void onClick(View v) {
                 if (data.isHavePermissions()) {//不需要邀约
-                    Intent intent = new Intent(context, PlayerActivity.class);
+                    Intent intent = new Intent(context, data.getLive_status()==-1?PlayerActivity.class:WatchLiveActivity.class);
                     intent.putExtra("live_id", data.getLive_id());
                     context.startActivity(intent);
                 } else {//需要邀约
