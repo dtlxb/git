@@ -116,13 +116,17 @@
             if (strDate >= 0 && strDate <= 9) {
                 strDate = "0" + strDate;
             }
-
             var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
                 + " " + date.getHours() + seperator2 + date.getMinutes()
                 + seperator2 + date.getSeconds();
-
+            /**
+             * 4.4以下以及IOS返回数据通过responseCallback
+             * 4.4及以上通过return返回，没有responseCallback方法
+             **/
+            if (responseCallback) {
+                responseCallback("当前时间:" + currentdate);
+            }
             return "当前时间:" + currentdate;
-
         });
     });
 
