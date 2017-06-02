@@ -132,7 +132,7 @@ public class MineFragment extends BaseFragment {
             }
         });
         tvMineUserName.setText(UserUtils.getNickname());
-        tvMineIntroduction.setText(UserUtils.getDuty());
+        tvMineIntroduction.setText(UserUtils.getorgName()+" "+UserUtils.getDuty());
 
     }
 

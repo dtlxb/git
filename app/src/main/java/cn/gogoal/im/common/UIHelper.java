@@ -113,7 +113,7 @@ public class UIHelper {
         }
         if (mToast == null) {
             if (AppDevice.isNetworkConnected(cont)) {
-                mToast = Toast.makeText(cont, msg, Toast.LENGTH_LONG);
+                mToast = Toast.makeText(cont,"服务器开小差了...", Toast.LENGTH_LONG);
                 xLayout.setStatus(XLayout.Error);
             } else {
                 mToast = Toast.makeText(cont, "当前网络不可用", Toast.LENGTH_LONG);
@@ -121,7 +121,7 @@ public class UIHelper {
             }
         } else {
             if (AppDevice.isNetworkConnected(cont)) {
-                mToast.setText(msg);
+                mToast.setText("服务器开小差了...");
                 xLayout.setStatus(XLayout.Error);
             } else {
                 mToast.setText("当前网络不可用");

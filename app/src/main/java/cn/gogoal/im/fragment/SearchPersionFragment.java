@@ -28,11 +28,13 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
+import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.view.XLayout;
 
 
@@ -52,6 +54,9 @@ public class SearchPersionFragment extends BaseFragment {
 
     private ArrayList<ContactBean> searchResultList;
     private SearchPersionResultAdapter adapter;
+
+    private int page=1;
+
 //    private EmptyWrapper wrapper;
 
     @Override
@@ -87,28 +92,66 @@ public class SearchPersionFragment extends BaseFragment {
 
         adapter.addHeaderView(headView);
 
+        adapter.setOnLoadMoreListener(new CommonAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                if (page <= 100) { //100页×20条/页，最多显示2000条搜索结果
+                    page++;
+                    searchPersion(AppConst.REFRESH_TYPE_LOAD_MORE,keyword);
+                } else {
+                    adapter.loadMoreEnd(true);
+                    adapter.setEnableLoadMore(false);
+                    UIHelper.toast(getActivity(),"没有更多数据");
+
+                }
+                adapter.loadMoreComplete();
+            }
+        },recyclerView);
+
+    }
+
+    private void searchPersion(int loadType,String keyWord){
+        searchPersion(keyWord);
     }
 
     @Subscriber(tag = "SEARCH_PERSION_TAG")
     private void searchPersion(final String keyword) {
+        adapter.setEnableLoadMore(false);
+
+        this.keyword=keyword;
         searchResultList.clear();
-        xLayout.setStatus(XLayout.Loading);
+//        xLayout.setStatus(XLayout.Loading);
+
+        final WaitDialog waitDialog = WaitDialog.getInstance("努力搜索中...", R.mipmap.login_loading, true);
+        waitDialog.show(getChildFragmentManager());
+
         final Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
+        param.put("page", String.valueOf(page));
+        param.put("rows", "20");
         param.put("keyword", keyword);
         KLog.e("token=" + UserUtils.getToken() + "&keyword=" + keyword);
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+
                 KLog.e(responseInfo);
+
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     JSONObject jsonObject = JSONObject.parseObject(responseInfo);
                     List<ContactBean> resultList = JSONObject.parseArray(jsonObject.getJSONArray("data")
                             .toJSONString(), ContactBean.class);
 
                     searchResultList.addAll(resultList);
+
+                    adapter.setEnableLoadMore(true);
+
+                    adapter.loadMoreComplete();
+
                     adapter.notifyDataSetChanged();
+
                     xLayout.setStatus(XLayout.Success);
+                    waitDialog.dismiss();
 
                     adapter.removeAllHeaderView();
 
@@ -125,7 +168,7 @@ public class SearchPersionFragment extends BaseFragment {
                 xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
                     @Override
                     public void onReload(View v) {
-                        searchPersion(keyword);
+                        searchPersion(AppConst.REFRESH_TYPE_RELOAD,keyword);
                     }
                 });
                 UIHelper.toastError(getActivity(), msg, xLayout);
@@ -134,6 +177,30 @@ public class SearchPersionFragment extends BaseFragment {
         };
         new GGOKHTTP(param, GGOKHTTP.SEARCH_FRIEND, ggHttpInterface).startGet();
     }
+
+//    private class LoadSearchResult extends AsyncTask<String, Void, String> {
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            if (getActivity() != null)
+//                mAdapter = new Adapter(mList);
+//            return "Executed";
+//            return "";
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String result) {
+////            recyclerView.setAdapter(mAdapter);
+////            if (RecentActivity.this != null)
+////                recyclerView.addItemDecoration(new DividerItemDecoration(RecentActivity.this, DividerItemDecoration.VERTICAL_LIST));
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//
+//        }
+//    }
 
     private class SearchPersionResultAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
 
