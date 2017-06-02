@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONObject;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
@@ -120,7 +119,7 @@ public class SearchPersionFragment extends BaseFragment {
 
         this.keyword=keyword;
         searchResultList.clear();
-//        xLayout.setStatus(XLayout.Loading);
+        xLayout.setStatus(XLayout.Loading);
 
         final WaitDialog waitDialog = WaitDialog.getInstance("努力搜索中...", R.mipmap.login_loading, true);
         waitDialog.show(getChildFragmentManager());
@@ -130,37 +129,36 @@ public class SearchPersionFragment extends BaseFragment {
         param.put("page", String.valueOf(page));
         param.put("rows", "20");
         param.put("keyword", keyword);
-        KLog.e("token=" + UserUtils.getToken() + "&keyword=" + keyword);
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
 
-                KLog.e(responseInfo);
+//                KLog.e(responseInfo);
 
-                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    JSONObject jsonObject = JSONObject.parseObject(responseInfo);
-                    List<ContactBean> resultList = JSONObject.parseArray(jsonObject.getJSONArray("data")
-                            .toJSONString(), ContactBean.class);
+//                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+//                    JSONObject jsonObject = JSONObject.parseObject(responseInfo);
+//                    List<ContactBean> resultList = JSONObject.parseArray(jsonObject.getJSONArray("data")
+//                            .toJSONString(), ContactBean.class);
+//
+//                    searchResultList.addAll(resultList);
+//
+//                    adapter.setEnableLoadMore(true);
+//
+//                    adapter.loadMoreComplete();
+//
+//                    adapter.notifyDataSetChanged();
 
-                    searchResultList.addAll(resultList);
-
-                    adapter.setEnableLoadMore(true);
-
-                    adapter.loadMoreComplete();
-
-                    adapter.notifyDataSetChanged();
-
-                    xLayout.setStatus(XLayout.Success);
+//                    xLayout.setStatus(XLayout.Success);
                     waitDialog.dismiss();
 
-                    adapter.removeAllHeaderView();
-
-                } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
-                    xLayout.setEmptyText(String.format(getString(R.string.str_result), keyword) + "的用户");
-                    xLayout.setStatus(XLayout.Empty);
-                } else {
-                    UIHelper.toastResponseError(getActivity(), responseInfo);
-                }
+//                    adapter.removeAllHeaderView();
+//
+//                } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
+//                    xLayout.setEmptyText(String.format(getString(R.string.str_result), keyword) + "的用户");
+//                    xLayout.setStatus(XLayout.Empty);
+//                } else {
+//                    UIHelper.toastResponseError(getActivity(), responseInfo);
+//                }
             }
 
             @Override

@@ -16,6 +16,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
 
 /**
@@ -71,18 +72,34 @@ public class ShareMessageDialog extends BaseCentDailog {
         TextView tvSend = (TextView) v.findViewById(R.id.btn_dialog_share_msg_send);
 
         if (entity != null) {
-            if (entity.getImMessageBean().getChatType() == AppConst.IM_CHAT_TYPE_SINGLE) {
-                ImageDisplay.loadRoundedRectangleImage(v.getContext(), entity.getAvatar(), icon);
-            } else if (entity.getImMessageBean().getChatType() == AppConst.IM_CHAT_TYPE_SQUARE) {
-                ChatGroupHelper.setGroupAvatar(entity.getImMessageBean().getConversationID(), new AvatarTakeListener() {
-                    @Override
-                    public void success(Bitmap bitmap) {
-                        icon.setImageBitmap(bitmap);
-                    }
+            Object avatar = entity.getAvatar();
+            if (avatar instanceof Bitmap){
+                icon.setImageBitmap((Bitmap) avatar);
+            }else {
+                ImageDisplay.loadRoundedRectangleImage(v.getContext(), avatar, icon);
+            }
 
-                    public void failed(Exception e) {
-                    }
-                });
+            if (entity.getImMessageBean().getChatType() == AppConst.IM_CHAT_TYPE_SINGLE) {
+                ImageDisplay.loadRoundedRectangleImage(v.getContext(), avatar, icon);
+            } else if (entity.getImMessageBean().getChatType() == AppConst.IM_CHAT_TYPE_SQUARE) {
+                if (StringUtils.isActuallyEmpty(entity.getImMessageBean().getAvatar())){
+                    ImageDisplay.loadRoundedRectangleImage(v.getContext(), entity.getImMessageBean().getAvatar(), icon);
+                }else {
+                    ChatGroupHelper.setGroupAvatar(entity.getImMessageBean().getConversationID(), new AvatarTakeListener() {
+                        @Override
+                        public void success(final Bitmap bitmap) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    icon.setImageBitmap(bitmap);
+                                }
+                            });
+                        }
+
+                        public void failed(Exception e) {
+                        }
+                    });
+                }
             }
             name.setText(entity.getName());
             tvShareMsgDesc.setText(entity.getEntity().getDesc());
