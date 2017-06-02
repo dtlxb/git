@@ -391,7 +391,9 @@ public class WatchLiveActivity extends BaseActivity {
             if (imConversation != null) {
                 mBottomFragment.showCommentEditUI();
             } else {
-                WaitDialog.getInstance("初始化聊天失败", R.mipmap.login_error, false);
+                WaitDialog dialog = WaitDialog.getInstance("初始化聊天失败", R.mipmap.login_error, false);
+                dialog.show(getSupportFragmentManager());
+                dialog.dismiss(false);
             }
         }
 
