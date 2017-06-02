@@ -34,6 +34,7 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
+import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.view.XLayout;
 
 
@@ -119,7 +120,11 @@ public class SearchPersionFragment extends BaseFragment {
 
         this.keyword=keyword;
         searchResultList.clear();
-        xLayout.setStatus(XLayout.Loading);
+//        xLayout.setStatus(XLayout.Loading);
+
+        final WaitDialog waitDialog = WaitDialog.getInstance("努力搜索中...", R.mipmap.login_loading, true);
+        waitDialog.show(getChildFragmentManager());
+
         final Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
         param.put("page", String.valueOf(page));
@@ -146,6 +151,7 @@ public class SearchPersionFragment extends BaseFragment {
                     adapter.notifyDataSetChanged();
 
                     xLayout.setStatus(XLayout.Success);
+                    waitDialog.dismiss();
 
                     adapter.removeAllHeaderView();
 

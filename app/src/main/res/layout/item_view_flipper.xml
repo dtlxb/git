@@ -17,6 +17,6 @@
         android:layout_height="wrap_content"
         android:maxLines="10"
         android:layout_below="@+id/tv_item_view_flipper"
-        android:text="\n\n\n" />
+        android:text="\n\n" />
 
 </RelativeLayout>

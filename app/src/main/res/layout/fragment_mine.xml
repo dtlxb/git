@@ -69,8 +69,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/img_mine_avatar"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="10dp"
                         android:text="朝阳永续金融分析师"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:textColor="@color/textColor_333333"
                         android:textSize="16sp" />
 
