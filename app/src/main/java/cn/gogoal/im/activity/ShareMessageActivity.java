@@ -31,6 +31,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.ShareMessageDialog;
 import cn.gogoal.im.ui.view.XLayout;
@@ -119,17 +120,17 @@ public class ShareMessageActivity extends BaseActivity {
 
                 } else if (bean.getChatType() == AppConst.IM_CHAT_TYPE_SQUARE) { //最近群聊会话
 
+                    if (StringUtils.isActuallyEmpty(bean.getAvatar())){
+
+                    }
+
                     final ShareListBean<Bitmap> group = new ShareListBean<>(ShareListBean.LIST_TYPE_ITEM);
-
                     group.setText(bean.getNickname());
-
                     group.setBean(bean);
-
                     ChatGroupHelper.setGroupAvatar(bean.getConversationID(), new AvatarTakeListener() {
                         @Override
                         public void success(Bitmap bitmap) {
                             KLog.e(bitmap);
-
                             group.setItemImage(bitmap);
                         }
 
@@ -138,7 +139,6 @@ public class ShareMessageActivity extends BaseActivity {
 
                         }
                     });
-
                     datas.add(group);
                 }
             }
