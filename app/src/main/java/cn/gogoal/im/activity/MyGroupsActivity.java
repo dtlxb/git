@@ -217,6 +217,7 @@ public class MyGroupsActivity extends BaseActivity {
                     } else {
                         ShareItemInfo shareItemInfo = new ShareItemInfo<>(groupAvatar[0], data.getName(), entity,
                                 MessageListUtils.getIMMessageBeanById(UserUtils.getMessageListInfo(), data.getConv_id()));
+
                         ShareMessageDialog.newInstance(shareItemInfo).show(getSupportFragmentManager());
                     }
                 }

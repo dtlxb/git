@@ -635,7 +635,6 @@ public class MessageFragment extends BaseFragment {
         //保存
         IMMessageBean imMessageBean = new IMMessageBean(ConversationId, chatType, message.getTimestamp(),
                 isTheSame ? String.valueOf(unreadMessage) : "1", nickName, friend_id, avatar, message);
-        KLog.e(imMessageBean);
         MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
         allCount++;
         sendUnreadCount(allCount);

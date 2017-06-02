@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -146,8 +145,6 @@ public class LiveListFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
 
-                KLog.e(responseInfo);
-
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
 
                 if (code == 0) {
@@ -223,8 +220,6 @@ public class LiveListFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-
-                KLog.e(responseInfo);
 
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
