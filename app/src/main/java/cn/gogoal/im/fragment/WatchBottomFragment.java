@@ -65,21 +65,21 @@ public class WatchBottomFragment extends BaseFragment {
     private JSONObject anchor;
     private String introduction_img;
     private String introduction;
-    private String video_img_url;
+    private String live_large_img;
     private int type;
 
     private PopupWindowHelper anchorHelper;
     private PopupWindowHelper anchorHelperLand;
 
     public static final WatchBottomFragment newInstance(
-            String live_id, String anchor, String introduction_img, String introduction, String video_img_url) {
+            String live_id, String anchor, String introduction_img, String introduction, String live_large_img) {
         WatchBottomFragment wbf = new WatchBottomFragment();
         Bundle bundle = new Bundle();
         bundle.putString("live_id", live_id);
         bundle.putString("anchor", anchor);
         bundle.putString("introduction_img", introduction_img);
         bundle.putString("introduction", introduction);
-        bundle.putString("video_img_url", video_img_url);
+        bundle.putString("live_large_img", live_large_img);
         wbf.setArguments(bundle);
         return wbf;
     }
@@ -96,7 +96,7 @@ public class WatchBottomFragment extends BaseFragment {
         anchor = JSONObject.parseObject(getArguments().getString("anchor"));
         introduction_img = getArguments().getString("introduction_img");
         introduction = getArguments().getString("introduction");
-        video_img_url = getArguments().getString("video_img_url");
+        live_large_img = getArguments().getString("live_large_img");
 
         if (anchor == null) {
             linearPlayerProfiles.setVisibility(View.GONE);
@@ -358,7 +358,7 @@ public class WatchBottomFragment extends BaseFragment {
         anchor_achieve.setText(anchor_introduction != null ? anchor_introduction
                 : getString(R.string.play_introduction_null));
 
-        ImageDisplay.loadImage(getContext(), introduction_img != null ? introduction_img : video_img_url, live_avatar);
+        ImageDisplay.loadImage(getContext(), introduction_img != null ? introduction_img : live_large_img, live_avatar);
 
         live_achieve.setText(introduction != null ? introduction
                 : getString(R.string.play_introduction_null));
@@ -387,7 +387,7 @@ public class WatchBottomFragment extends BaseFragment {
         anchor_achieve.setText(anchor_introduction != null ? anchor_introduction
                 : getString(R.string.play_introduction_null));
 
-        ImageDisplay.loadImage(getContext(), introduction_img != null ? introduction_img : video_img_url, live_avatar);
+        ImageDisplay.loadImage(getContext(), introduction_img != null ? introduction_img : live_large_img, live_avatar);
 
         live_achieve.setText(introduction != null ? introduction
                 : getString(R.string.play_introduction_null));

@@ -1,99 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollIntroduce"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
-    android:background="@android:color/white"
-    android:paddingBottom="10dp"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
-    android:paddingTop="10dp">
+    android:layout_height="match_parent"
+    android:background="@color/player_space">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="15dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <com.hply.roundimage.roundImage.RoundedImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/anchor_avatar"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:scaleType="centerCrop"
-                app:riv_oval="true"/>
+            android:background="@drawable/shape_play_introduce_anchor"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/linearMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_margin="15dp"
                 android:gravity="center_vertical"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/anchor_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="@string/text_empty"
-                    android:textColor="@color/textColor_333333"
-                    android:textSize="16dp" />
+                <com.hply.roundimage.roundImage.RoundedImageView
+                    android:id="@+id/anchor_avatar"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:scaleType="centerCrop"
+                    app:riv_oval="true" />
 
-                <TextView
-                    android:id="@+id/anchor_position"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/linearMessage"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:singleLine="true"
-                    android:text="@string/text_empty"
-                    android:textColor="@color/textColor_666666"
-                    android:textSize="13dp" />
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/anchor_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="@string/text_empty"
+                        android:textColor="@color/textColor_333333"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:id="@+id/anchor_position"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:singleLine="true"
+                        android:text="@string/text_empty"
+                        android:textColor="@color/textColor_666666"
+                        android:textSize="13dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorDivider_d9d9d9" />
+
+            <TextView
+                android:id="@+id/anchor_achieve"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:lineSpacingExtra="2dp"
+                android:lineSpacingMultiplier="1.5"
+                android:text="@string/text_empty"
+                android:textColor="@color/textColor_333333"
+                android:textSize="14dp" />
+
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/anchor_achieve"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:lineSpacingExtra="2dp"
-            android:lineSpacingMultiplier="1.5"
-            android:text="@string/text_empty"
-            android:textColor="@color/textColor_333333"
-            android:textSize="14dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="直播介绍"
-            android:textColor="@color/textColor_333333"
-            android:textSize="14dp" />
-
-        <ImageView
-            android:id="@+id/live_avatar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:scaleType="centerCrop" />
+            android:background="@drawable/shape_play_introduce_anchor"
+            android:orientation="vertical"
+            android:padding="15dp">
 
-        <TextView
-            android:id="@+id/live_achieve"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:lineSpacingExtra="2dp"
-            android:lineSpacingMultiplier="1.5"
-            android:text="@string/text_empty"
-            android:textColor="@color/textColor_333333"
-            android:textSize="14dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="直播介绍"
+                android:textColor="@color/textColor_333333"
+                android:textSize="14dp" />
+
+            <ImageView
+                android:id="@+id/live_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/live_achieve"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="2dp"
+                android:lineSpacingMultiplier="1.5"
+                android:text="@string/text_empty"
+                android:textColor="@color/textColor_333333"
+                android:textSize="14dp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

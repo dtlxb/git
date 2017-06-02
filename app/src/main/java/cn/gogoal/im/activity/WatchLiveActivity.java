@@ -1062,7 +1062,7 @@ public class WatchLiveActivity extends BaseActivity {
                     getOnlineCount(room_id);
 
                     mBottomFragment = WatchBottomFragment.newInstance(live_id, String.valueOf(anchor),
-                            data.getString("introduction_img"), data.getString("introduction"), data.getString("video_img_url"));
+                            data.getString("introduction_img"), data.getString("introduction"), data.getString("live_large_img"));
                     mBottomFragment.setRecordUIClickListener(mUIClickListener);
                     mBottomFragment.setActivityRootView(mRootContainer);
                     mBottomFragment.setType(1);
