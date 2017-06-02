@@ -28,6 +28,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
+import cn.gogoal.im.common.linkUtils.SoftInputAndScreenChangeManager;
 import cn.gogoal.im.ui.widget.PopupWindowHelper;
 
 public class WatchBottomFragment extends BaseFragment {
@@ -59,6 +60,8 @@ public class WatchBottomFragment extends BaseFragment {
     private int screenHeight = 0;
     //软件盘弹起后所占高度阀值
     private int keyHeight = 0;*/
+
+    private SoftInputAndScreenChangeManager siacManager;
 
     private RecorderUIClickListener mRecordUIClickListener;
 
@@ -108,7 +111,9 @@ public class WatchBottomFragment extends BaseFragment {
         //阀值设置为屏幕高度的1/3
         keyHeight = screenHeight / 3;*/
 
-        mEtComment.getViewTreeObserver().addOnGlobalLayoutListener(mOnGlobalLayoutListener);
+        siacManager = new SoftInputAndScreenChangeManager(getActivity());
+
+        //mEtComment.getViewTreeObserver().addOnGlobalLayoutListener(mOnGlobalLayoutListener);
 
         mEtComment.addTextChangedListener(new TextWatcher() {
             @Override
@@ -212,6 +217,12 @@ public class WatchBottomFragment extends BaseFragment {
                 }
             }
         });*/
+
+        if (siacManager.isSoftInputShow()) {
+            KLog.e("1");
+        } else {
+            KLog.e("2");
+        }
     }
 
     @OnClick({R.id.imgPlayerChat, R.id.linearPlayerFullScreen, R.id.imgPlayerProfiles,
@@ -303,7 +314,7 @@ public class WatchBottomFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        mOnGlobalLayoutListener.hasShowInputMethod = false;
+        //mOnGlobalLayoutListener.hasShowInputMethod = false;
     }
 
     private InputMethodUIListener mOnGlobalLayoutListener = new InputMethodUIListener();
