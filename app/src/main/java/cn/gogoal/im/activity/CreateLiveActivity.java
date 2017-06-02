@@ -110,7 +110,6 @@ public class CreateLiveActivity extends BaseActivity {
                     @Override
                     public void onSuccess(String onlineUri) {
                         KLog.e("上传成功===" + onlineUri);
-                        waitDialog.dismiss();
 
                         liveLargeImg = onlineUri;
 
@@ -118,6 +117,8 @@ public class CreateLiveActivity extends BaseActivity {
                                 getContext(),
                                 onlineUri,
                                 imgLive);
+
+                        waitDialog.dismiss();
                     }
 
                     @Override
