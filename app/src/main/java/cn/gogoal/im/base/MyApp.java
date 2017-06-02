@@ -17,6 +17,8 @@ import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 
+import org.litepal.LitePal;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -53,7 +55,7 @@ public class MyApp extends LitePalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        LitePal.initialize(this);
         app = this;
 
         registerActivityLifecycleCallbacks(new LifeCircle());
