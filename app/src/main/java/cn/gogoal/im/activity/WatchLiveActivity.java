@@ -521,7 +521,8 @@ public class WatchLiveActivity extends BaseActivity {
                 case MediaError.ALIVC_ERR_PLAYER_READ_PACKET_TIMEOUT:
                 case MediaError.ALIVC_ERR_PLAYER_NO_NETWORK:
                 case MediaError.ALIVC_ERR_PLAYER_UNKNOW:
-                    UIHelper.toast(getContext(), R.string.error_stop_playing);
+                    //UIHelper.toast(getContext(), R.string.error_stop_playing);
+                    KLog.e("播放出错，请退出观看！what=" + what);
                     //如果正在连麦则结束连麦
                     if (isChatting()) {
                         closeVideoCall();
