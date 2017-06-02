@@ -100,6 +100,7 @@ public class FunctionActivity extends BaseActivity {
                                 UIHelper.toast(getContext(), "暂无分享信息");
                                 return;
                             }
+
                             GGShareEntity shareEntity = JSONObject.parseObject(value, GGShareEntity.class);
                             shareEntity.setShareType("1");
                             if (StringUtils.isActuallyEmpty(shareEntity.getLink())) {
@@ -116,7 +117,22 @@ public class FunctionActivity extends BaseActivity {
 
         initWebView(webView);
 
-        webView.loadUrl(url);
+        if(!StringUtils.isActuallyEmpty(url)) {
+            webView.loadUrl(url);
+        }else {
+            webView.loadUrl("file:///android_asset/demo.html");
+            title_bar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    webView.callHandler("methodFromJs", "java调用js方法:这是java转给js参数", new ValueCallback<String>() {
+                        @Override
+                        public void onReceiveValue(String value) {
+                            KLog.e(value);
+                        }
+                    });
+                }
+            });
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WebView.setWebContentsDebuggingEnabled(true);
@@ -163,6 +179,7 @@ public class FunctionActivity extends BaseActivity {
         webView.registerHandler("JumpPlayerDetial", new BridgeHandler() {
             @Override
             public void handler(String data, ValueCallback<String> function) {
+
                 JSONObject object = JSONObject.parseObject(data);
                 if (object.getString("source").equals("live")) {
                     PlayDataStatistics.enterLiveAuthorize(false, getContext(), object.getString("live_id"), false);
