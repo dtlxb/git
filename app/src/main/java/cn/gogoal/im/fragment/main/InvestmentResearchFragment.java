@@ -2,6 +2,7 @@ package cn.gogoal.im.fragment.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -70,7 +71,7 @@ public class InvestmentResearchFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle(R.string.title_found).addAction(new XTitle.TextAction(getString(R.string.str_setting)) {
+        setFragmentTitle(R.string.title_found).addAction(new XTitle.ImageAction(ContextCompat.getDrawable(mContext,R.mipmap.img_setting)) {
             @Override
             public void actionClick(View view) {
 

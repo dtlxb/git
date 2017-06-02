@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
@@ -68,16 +69,23 @@ public class FunctionActivity extends BaseActivity {
         } else {
             xTitle = setMyTitle("", true);
         }
+        xTitle.setLeftClickListener(new View.OnClickListener() {
+            @Override
+          public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         //分享web页
         if (needShare) {
-            xTitle.addAction(new XTitle.TextAction(getString(R.string.str_share)) {
+            xTitle.addAction(new XTitle.ImageAction(ContextCompat.getDrawable(mContext,R.mipmap.img_share)) {
                 @Override
                 public void actionClick(View view) {
                     webView.callHandler("shareWeb", "", new ValueCallback<String>() {
                         @Override
                         public void onReceiveValue(String value) {
                             KLog.e(value);
+
 //                            if (StringUtils.isActuallyEmpty(value)) {//TODO 目前没有分享，肯定是空咯
 //                                GGShareEntity entity = new GGShareEntity();
 //                                entity.setDesc("测试数据测试数据测试数据测试数据测试数据测试数据测试数据");
@@ -279,4 +287,15 @@ public class FunctionActivity extends BaseActivity {
         settings.setAppCacheEnabled(true);
     }
 
+
+    @Override
+    public void onBackPressed() {
+        if (webView.canGoBack()){
+            // 返回上一页面
+//            webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+            webView.goBack();
+        }else {
+            super.onBackPressed();
+        }
+    }
 }

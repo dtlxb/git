@@ -148,6 +148,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     @Override
                     public void onGlobalLayout() {
                         onScrollChanged(mObservableScrollView.getScrollY());
+                        mObservableScrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     }
                 });
     }
@@ -228,9 +229,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
      * 初始化排序头
      */
     private void initSortTitle(Context ctx) {
-        itemMystock.setPadding(0, AppDevice.dp2px(ctx, 5), 0, AppDevice.dp2px(ctx, 5));
         sortTitleName.setText("全部");
-        AppDevice.setViewWidth$Height(itemMystock, -1, AppDevice.dp2px(ctx, 40));
 
         tvMystockPrice.setDefaultText("最新价");
         tvMystockRate.setDefaultText("涨跌幅");
