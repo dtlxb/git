@@ -139,10 +139,9 @@ public class SearchPersionFragment extends BaseFragment {
 
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     JSONObject jsonObject = JSONObject.parseObject(responseInfo);
-                    List<ContactBean> resultList = JSONObject.parseArray(jsonObject.getJSONArray("data")
-                            .toJSONString(), ContactBean.class);
 
-                    searchResultList.addAll(resultList);
+                    searchResultList.addAll(JSONObject.parseArray(jsonObject.getJSONArray("data")
+                            .toJSONString(), ContactBean.class));
 
                     adapter.setEnableLoadMore(true);
 

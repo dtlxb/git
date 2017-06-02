@@ -586,6 +586,7 @@ public class MessageFragment extends BaseFragment {
                 break;
             case AppConst.IM_CHAT_TYPE_SQUARE:
                 nickName = conversation.getName();
+                //avatar = (String) conversation.getAttribute("avatar");
                 avatar = (String) conversation.getAttribute("avatar");
                 break;
             case AppConst.IM_CHAT_TYPE_SYSTEM:
@@ -634,7 +635,6 @@ public class MessageFragment extends BaseFragment {
         //保存
         IMMessageBean imMessageBean = new IMMessageBean(ConversationId, chatType, message.getTimestamp(),
                 isTheSame ? String.valueOf(unreadMessage) : "1", nickName, friend_id, avatar, message);
-        KLog.e(imMessageBean);
         MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
         allCount++;
         sendUnreadCount(allCount);

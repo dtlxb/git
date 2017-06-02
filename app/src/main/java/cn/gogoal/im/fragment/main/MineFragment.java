@@ -89,7 +89,7 @@ public class MineFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle("我de");
+        setFragmentTitle("我的");
 
         iniheadInfo(mContext);
         initRecycler(mContext);

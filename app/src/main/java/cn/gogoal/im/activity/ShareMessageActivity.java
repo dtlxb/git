@@ -6,13 +6,13 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.hply.roundimage.roundImage.RoundedImageView;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.ShareMessageDialog;
 import cn.gogoal.im.ui.view.XLayout;
@@ -110,19 +110,27 @@ public class ShareMessageActivity extends BaseActivity {
         if (recentArray != null && recentArray.size() > 0) {
             datas.add(new ShareListBean(ShareListBean.LIST_TYPE_SECTION));
             List<IMMessageBean> messageBeen = JSON.parseArray(recentArray.toJSONString(), IMMessageBean.class);
+
             for (IMMessageBean bean : messageBeen) {
-                if (bean.getChatType() == AppConst.IM_CHAT_TYPE_SINGLE) {
+                if (bean.getChatType() == AppConst.IM_CHAT_TYPE_SINGLE) { //最近单聊会话
                     ShareListBean<String> shareListFriend = new ShareListBean<>(
                             ShareListBean.LIST_TYPE_ITEM, bean.getAvatar(), bean.getNickname(), bean);
+
                     datas.add(shareListFriend);
-                } else if (bean.getChatType() == AppConst.IM_CHAT_TYPE_SQUARE) {
-                    final ShareListBean group = new ShareListBean<>(ShareListBean.LIST_TYPE_ITEM);
+
+                } else if (bean.getChatType() == AppConst.IM_CHAT_TYPE_SQUARE) { //最近群聊会话
+
+                    if (StringUtils.isActuallyEmpty(bean.getAvatar())){
+
+                    }
+
+                    final ShareListBean<Bitmap> group = new ShareListBean<>(ShareListBean.LIST_TYPE_ITEM);
                     group.setText(bean.getNickname());
                     group.setBean(bean);
-
                     ChatGroupHelper.setGroupAvatar(bean.getConversationID(), new AvatarTakeListener() {
                         @Override
                         public void success(Bitmap bitmap) {
+                            KLog.e(bitmap);
                             group.setItemImage(bitmap);
                         }
 
@@ -131,38 +139,6 @@ public class ShareMessageActivity extends BaseActivity {
 
                         }
                     });
-//                    String imagecache = ChatGroupHelper.getBitmapFilePaht(bean.getConversationID());
-//                    if (!StringUtils.isActuallyEmpty(imagecache)) {
-//                        group.setItemImage(imagecache);
-//                    } else {//没有缓存就拼
-//                        final List<String> avatarString = new ArrayList<>();
-//                        ChatGroupHelper.createGroupImage(bean.getConversationID(), new ChatGroupHelper.GroupInfoResponse() {
-//                            @Override
-//                            public void getInfoSuccess(JSONObject groupInfo) {
-//                                JSONArray accountList = groupInfo.getJSONArray("accountList");
-//                                for (int i = 0; i < accountList.size(); i++) {
-//                                    avatarString.add(((JSONObject) accountList.get(i)).getString("avatar"));
-//                                }
-//                                GroupFaceImage.getInstance(getActivity(), avatarString).load(new GroupFaceImage.OnMatchingListener() {
-//                                    @Override
-//                                    public void onSuccess(Bitmap mathingBitmap) {
-//                                        group.setItemImage(mathingBitmap);
-//                                    }
-//
-//                                    @Override
-//                                    public void onError(Exception e) {
-//                                        KLog.e(e.getMessage());
-//                                    }
-//                                });
-//                            }
-//
-//                            @Override
-//                            public void getInfoFailed(Exception e) {
-//                                KLog.e(e.getMessage());
-//                            }
-//                        });
-//                    }
-
                     datas.add(group);
                 }
             }
@@ -186,7 +162,6 @@ public class ShareMessageActivity extends BaseActivity {
         protected void convert(BaseViewHolder holder, final ShareListBean data, final int position) {
             switch (holder.getItemViewType()) {
                 case ShareListBean.LIST_TYPE_SEARCH:
-                    EditText etSearch = holder.getView(R.id.layout_2search);
                     // TODO: 2017/5/8 0008 搜索匹配
                     break;
                 case ShareListBean.LIST_TYPE_SECTION:
@@ -201,7 +176,13 @@ public class ShareMessageActivity extends BaseActivity {
                 case ShareListBean.LIST_TYPE_ITEM:
                     holder.setText(R.id.item_contacts_tv_nickname, data.getText());
                     final RoundedImageView icon = holder.getView(R.id.item_contacts_iv_icon);
-                    ImageDisplay.loadRoundedRectangleImage(ShareMessageActivity.this, data.getItemImage(), icon);
+
+                    final Object image = data.getItemImage();
+                    if (image instanceof Bitmap){
+                        icon.setImageBitmap((Bitmap) image);
+                    }else {
+                        ImageDisplay.loadRoundedRectangleImage(ShareMessageActivity.this, image, icon);
+                    }
 
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -223,7 +204,7 @@ public class ShareMessageActivity extends BaseActivity {
                                     break;
                                 default:
                                     ShareMessageDialog.newInstance(
-                                            new ShareItemInfo(data.getItemImage(),
+                                            new ShareItemInfo(image,
                                                     data.getText(),
                                                     shareEntity, data.getBean())).show(getSupportFragmentManager());
                                     break;
