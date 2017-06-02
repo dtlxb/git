@@ -26,7 +26,6 @@ import cn.gogoal.im.bean.SocialRecordBean;
 import cn.gogoal.im.bean.SocialRecordData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.widget.WrapContentLinearLayoutManager;
@@ -147,7 +146,7 @@ public class LiveListFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
 
-                KLog.e(StringUtils.map2ggParameter(param));
+                KLog.e(responseInfo);
 
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
 
@@ -188,6 +187,8 @@ public class LiveListFragment extends BaseFragment {
                         }
                     }
 
+                    liveListAdapter.notifyItemRangeRemoved(0,liveListAdapter.getItemCount());
+
                     liveDatas.addAll(0, persionalDatas);
 
                     liveDatas.addAll(pcDatas);
@@ -223,7 +224,7 @@ public class LiveListFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
 
-                KLog.e(StringUtils.map2ggParameter(param));
+                KLog.e(responseInfo);
 
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
@@ -249,6 +250,8 @@ public class LiveListFragment extends BaseFragment {
                                 data.getAuth() == 0);
                         recorderDatas.add(listItemBean);
                     }
+
+                    liveListAdapter.notifyItemRangeRemoved(0,liveListAdapter.getItemCount());
 
                     liveDatas.addAll(recorderDatas);
 

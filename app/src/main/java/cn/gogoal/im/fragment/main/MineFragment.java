@@ -228,6 +228,7 @@ public class MineFragment extends BaseFragment {
                                     UserUtils.checkLivePermission(getActivity());
                                     break;
                                 case "我的二维码"://我的二维码
+//                                    NormalIntentUtils.go2WebActivity(getContext(), "","");
                                     NormalIntentUtils.go2WebActivity(getContext(), AppConst.WEB_URL_LLJ,"");
                                     break;
                                 case "行情设置"://自选股设置
