@@ -287,4 +287,15 @@ public class FunctionActivity extends BaseActivity {
         settings.setAppCacheEnabled(true);
     }
 
+
+    @Override
+    public void onBackPressed() {
+        if (webView.canGoBack()){
+            // 返回上一页面
+//            webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+            webView.goBack();
+        }else {
+            super.onBackPressed();
+        }
+    }
 }
