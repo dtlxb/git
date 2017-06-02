@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -28,7 +27,6 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
-import cn.gogoal.im.common.linkUtils.SoftInputAndScreenChangeManager;
 import cn.gogoal.im.ui.widget.PopupWindowHelper;
 
 public class WatchBottomFragment extends BaseFragment {
@@ -61,26 +59,27 @@ public class WatchBottomFragment extends BaseFragment {
     //软件盘弹起后所占高度阀值
     private int keyHeight = 0;*/
 
-    private SoftInputAndScreenChangeManager siacManager;
-
     private RecorderUIClickListener mRecordUIClickListener;
 
     private String live_id;
     private JSONObject anchor;
     private String introduction_img;
     private String introduction;
+    private String video_img_url;
     private int type;
 
     private PopupWindowHelper anchorHelper;
     private PopupWindowHelper anchorHelperLand;
 
-    public static final WatchBottomFragment newInstance(String live_id, String anchor, String introduction_img, String introduction) {
+    public static final WatchBottomFragment newInstance(
+            String live_id, String anchor, String introduction_img, String introduction, String video_img_url) {
         WatchBottomFragment wbf = new WatchBottomFragment();
         Bundle bundle = new Bundle();
         bundle.putString("live_id", live_id);
         bundle.putString("anchor", anchor);
         bundle.putString("introduction_img", introduction_img);
         bundle.putString("introduction", introduction);
+        bundle.putString("video_img_url", video_img_url);
         wbf.setArguments(bundle);
         return wbf;
     }
@@ -97,6 +96,7 @@ public class WatchBottomFragment extends BaseFragment {
         anchor = JSONObject.parseObject(getArguments().getString("anchor"));
         introduction_img = getArguments().getString("introduction_img");
         introduction = getArguments().getString("introduction");
+        video_img_url = getArguments().getString("video_img_url");
 
         if (anchor == null) {
             linearPlayerProfiles.setVisibility(View.GONE);
@@ -111,9 +111,7 @@ public class WatchBottomFragment extends BaseFragment {
         //阀值设置为屏幕高度的1/3
         keyHeight = screenHeight / 3;*/
 
-        siacManager = new SoftInputAndScreenChangeManager(getActivity());
-
-        //mEtComment.getViewTreeObserver().addOnGlobalLayoutListener(mOnGlobalLayoutListener);
+        mEtComment.getViewTreeObserver().addOnGlobalLayoutListener(mOnGlobalLayoutListener);
 
         mEtComment.addTextChangedListener(new TextWatcher() {
             @Override
@@ -217,12 +215,6 @@ public class WatchBottomFragment extends BaseFragment {
                 }
             }
         });*/
-
-        if (siacManager.isSoftInputShow()) {
-            KLog.e("1");
-        } else {
-            KLog.e("2");
-        }
     }
 
     @OnClick({R.id.imgPlayerChat, R.id.linearPlayerFullScreen, R.id.imgPlayerProfiles,
@@ -314,7 +306,7 @@ public class WatchBottomFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        //mOnGlobalLayoutListener.hasShowInputMethod = false;
+        mOnGlobalLayoutListener.hasShowInputMethod = false;
     }
 
     private InputMethodUIListener mOnGlobalLayoutListener = new InputMethodUIListener();
@@ -356,10 +348,20 @@ public class WatchBottomFragment extends BaseFragment {
 
         ImageDisplay.loadCircleImage(getContext(), anchor.getString("face_url"), anchor_avatar);
         anchor_name.setText(anchor.getString("anchor_name"));
-        anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
-        anchor_achieve.setText(anchor.getString("anchor_introduction"));
-        ImageDisplay.loadImage(getContext(), introduction_img, live_avatar);
-        live_achieve.setText(introduction);
+
+        String organization = anchor.getString("organization");
+        String position = anchor.getString("anchor_position");
+        anchor_position.setText(organization != null ? organization : "--" + " | "
+                + position != null ? position : "--");
+
+        String anchor_introduction = anchor.getString("anchor_introduction");
+        anchor_achieve.setText(anchor_introduction != null ? anchor_introduction
+                : getString(R.string.play_introduction_null));
+
+        ImageDisplay.loadImage(getContext(), introduction_img != null ? introduction_img : video_img_url, live_avatar);
+
+        live_achieve.setText(introduction != null ? introduction
+                : getString(R.string.play_introduction_null));
     }
 
     private void showAnchorProfilesLand() {
@@ -375,10 +377,20 @@ public class WatchBottomFragment extends BaseFragment {
 
         ImageDisplay.loadCircleImage(getContext(), anchor.getString("face_url"), anchor_avatar);
         anchor_name.setText(anchor.getString("anchor_name"));
-        anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
-        anchor_achieve.setText(anchor.getString("anchor_introduction"));
-        ImageDisplay.loadImage(getContext(), introduction_img, live_avatar);
-        live_achieve.setText(introduction);
+
+        String organization = anchor.getString("organization");
+        String position = anchor.getString("anchor_position");
+        anchor_position.setText(organization != null ? organization : "--" + " | "
+                + position != null ? position : "--");
+
+        String anchor_introduction = anchor.getString("anchor_introduction");
+        anchor_achieve.setText(anchor_introduction != null ? anchor_introduction
+                : getString(R.string.play_introduction_null));
+
+        ImageDisplay.loadImage(getContext(), introduction_img != null ? introduction_img : video_img_url, live_avatar);
+
+        live_achieve.setText(introduction != null ? introduction
+                : getString(R.string.play_introduction_null));
     }
 
     public void setRecordUIClickListener(RecorderUIClickListener listener) {
