@@ -23,7 +23,7 @@ import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
  * author wangjd on 2017/5/8 0008.
  * Staff_id 1375
  * phone 18930640263
- * description :${annotated}.
+ * description :分享确认弹窗
  */
 public class ShareMessageDialog extends BaseCentDailog {
     @Override

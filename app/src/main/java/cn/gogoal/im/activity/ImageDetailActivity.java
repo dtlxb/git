@@ -22,16 +22,17 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.DialogHelp;
-import cn.gogoal.im.download.DownloadCallBack;
-import cn.gogoal.im.download.DownloadUtils;
 import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
+import cn.gogoal.im.common.ImageUtils.ImageUtils;
+import cn.gogoal.im.common.Impl;
+import cn.gogoal.im.common.MD5Utils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.ImageDetailFragment;
-import cn.gogoal.im.ui.view.XTitle;
 import cn.gogoal.im.ui.dialog.BottomSheetListDialog;
+import cn.gogoal.im.ui.view.XTitle;
 import cn.gogoal.im.ui.widget.PhotoViewPager;
 
 /**
@@ -118,16 +119,13 @@ public class ImageDetailActivity extends BaseActivity {
                 dialog.dismiss();
                 switch (position) {
                     case 0:
-                        DownloadUtils.getInstance(DownloadUtils.DEFAULT_DOWNLOAD_PATH).downloadPicture(getActivity(),
-                                imageUrls.get(vpImageDetail.getCurrentItem()), null, new DownloadCallBack() {
+                        ImageUtils.saveImage2DCIM(
+                                imageUrls.get(vpImageDetail.getCurrentItem()),
+                                MD5Utils.getMD5EncryptyString16(imageUrls.get(vpImageDetail.getCurrentItem())), new Impl<String>() {
                                     @Override
-                                    public void success() {
-                                        UIHelper.toast(getActivity(), "图片已成功下载到相册");
-                                    }
-
-                                    @Override
-                                    public void error(String errorMsg) {
-                                        UIHelper.toast(getActivity(), "图片载出错::" + errorMsg);
+                                    public void response(boolean success, String data) {
+                                        KLog.e(data);
+                                        UIHelper.toast(getActivity(), success?"图片已成功下载到相册":"图片下载出错");
                                     }
                                 });
                         break;
@@ -153,16 +151,12 @@ public class ImageDetailActivity extends BaseActivity {
                         openCamera();
                         break;
                     case 1://保存图片
-                        DownloadUtils.getInstance(DownloadUtils.DEFAULT_DOWNLOAD_PATH).downloadPicture(getActivity(),
-                                imageUrls.get(vpImageDetail.getCurrentItem()), null, new DownloadCallBack() {
+                        ImageUtils.saveImage2DCIM(
+                                imageUrls.get(vpImageDetail.getCurrentItem()),
+                                MD5Utils.getMD5EncryptyString16(imageUrls.get(vpImageDetail.getCurrentItem())), new Impl<String>() {
                                     @Override
-                                    public void success() {
-                                        UIHelper.toast(getActivity(), "图片已成功下载到相册");
-                                    }
-
-                                    @Override
-                                    public void error(String errorMsg) {
-                                        UIHelper.toast(getActivity(), "图片载出错::" + errorMsg);
+                                    public void response(boolean success, String data) {
+                                        UIHelper.toast(getActivity(), success?"图片已成功下载到相册":"图片下载出错");
                                     }
                                 });
                         break;

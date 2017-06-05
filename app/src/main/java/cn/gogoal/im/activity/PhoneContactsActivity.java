@@ -322,9 +322,12 @@ public class PhoneContactsActivity extends BaseActivity {
                     tvInvite.setBackgroundResource(R.drawable.shape_btn_rounded_rectangle_hollow);
                 }
             } else {//不是gogoal用户
-                tvInvite.setText("邀请");
+//                tvInvite.setText("邀请");
+//                tvInvite.setTextColor(Color.WHITE);
+//                tvInvite.setBackgroundResource(R.drawable.shape_add_friend);
+                tvInvite.setText("");
                 tvInvite.setTextColor(Color.WHITE);
-                tvInvite.setBackgroundResource(R.drawable.shape_add_friend);
+                tvInvite.setBackgroundResource(android.R.color.transparent);
             }
 
             tvInvite.setOnClickListener(new View.OnClickListener() {

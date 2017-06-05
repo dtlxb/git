@@ -21,7 +21,7 @@
             android:drawableTop="@mipmap/icon_share_gogoal"
             android:paddingBottom="15dp"
             android:paddingTop="15dp"
-            android:text="GoGoal好友" />
+            android:text="GoGoal" />
 
         <TextView
             android:id="@+id/tv_dialog_share_wx"

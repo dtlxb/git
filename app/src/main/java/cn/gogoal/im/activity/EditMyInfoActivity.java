@@ -25,8 +25,8 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.EditInfoBean;
 import cn.gogoal.im.bean.UserDetailInfo;
-import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.dialog.AddressPicker;
@@ -117,14 +117,10 @@ public class EditMyInfoActivity extends BaseActivity {
             final RoundedImageView circleImageView = holder.getView(R.id.image_user_info_avatar);
             switch (holder.getItemViewType()) {
                 case UserDetailInfo.HEAD:
-                    UserUtils.getUserAvatar(new AvatarTakeListener() {
+                    UserUtils.getUserAvatar(new Impl<Bitmap>() {
                         @Override
-                        public void success(Bitmap bitmap) {
-                            circleImageView.setImageBitmap(bitmap);
-                        }
-                        @Override
-                        public void failed(Exception e) {
-
+                        public void response(boolean success, Bitmap data) {
+                            circleImageView.setImageBitmap(data);
                         }
                     });
 

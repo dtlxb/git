@@ -3,4 +3,4 @@
     android:id="@+id/trm_recyclerview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#444444" />
+    android:background="@drawable/img_drop_down" />

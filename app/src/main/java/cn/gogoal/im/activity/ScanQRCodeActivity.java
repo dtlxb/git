@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.hply.qrcode_lib.activity.CaptureFragment;
 import com.hply.qrcode_lib.activity.CodeUtils;
@@ -13,6 +12,8 @@ import com.hply.qrcode_lib.activity.CodeUtils;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+
+import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_IMAGE;
 
 /**
  * author wangjd on 2017/6/2 0002.
@@ -38,7 +39,7 @@ public class ScanQRCodeActivity extends BaseActivity {
 
     public boolean isOpen = false;
 
-    @OnClick({R.id.iv_scan_flashlight})
+    @OnClick({R.id.iv_scan_flashlight,R.id.iv_scan_open_gallery})
     void click(View view) {
         switch (view.getId()) {
             case R.id.iv_scan_flashlight:
@@ -49,6 +50,12 @@ public class ScanQRCodeActivity extends BaseActivity {
                     CodeUtils.isLightEnable(false);
                     isOpen = false;
                 }
+                break;
+            case R.id.iv_scan_open_gallery:
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
+                startActivityForResult(intent, REQUEST_IMAGE);
                 break;
         }
     }
@@ -64,9 +71,8 @@ public class ScanQRCodeActivity extends BaseActivity {
             bundle.putInt(CodeUtils.RESULT_TYPE, CodeUtils.RESULT_SUCCESS);
             bundle.putString(CodeUtils.RESULT_STRING, result);
             resultIntent.putExtras(bundle);
-//            setResult(RESULT_OK, resultIntent);
-//            finish();
-            Toast.makeText(ScanQRCodeActivity.this, "解析结果=" + result, Toast.LENGTH_SHORT).show();
+            setResult(RESULT_OK, resultIntent);
+            finish();
         }
 
         @Override
@@ -76,11 +82,8 @@ public class ScanQRCodeActivity extends BaseActivity {
             bundle.putInt(CodeUtils.RESULT_TYPE, CodeUtils.RESULT_FAILED);
             bundle.putString(CodeUtils.RESULT_STRING, "");
             resultIntent.putExtras(bundle);
-
             setResult(RESULT_OK, resultIntent);
-//            finish();
-
-            Toast.makeText(ScanQRCodeActivity.this, "解析出错", Toast.LENGTH_SHORT).show();
+            finish();
         }
     };
 

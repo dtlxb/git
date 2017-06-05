@@ -37,6 +37,20 @@ public class CodeUtils {
 
     public static final String LAYOUT_ID = "layout_id";
 
+    /**
+     * 请求CAMERA权限码
+     */
+    public static final int REQUEST_CAMERA_PERM = 101;
+
+    /**
+     * 扫描跳转Activity RequestCode
+     */
+    public static final int REQUEST_CODE = 111;
+    /**
+     * 选择系统图片二维码 Request Code
+     */
+    public static final int REQUEST_IMAGE = 112;
+
 
 
     /**

@@ -53,9 +53,7 @@ import cn.gogoal.im.fragment.main.MessageFragment;
 import cn.gogoal.im.fragment.main.MineFragment;
 import cn.gogoal.im.ui.Badge.BadgeView;
 
-import static cn.gogoal.im.common.AppConst.REQUEST_CAMERA_PERM;
-import static cn.gogoal.im.common.AppConst.REQUEST_CODE;
-import static cn.gogoal.im.common.AppConst.REQUEST_IMAGE;
+import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_CODE;
 
 public class MainActivity extends BaseActivity {
 
@@ -388,6 +386,13 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            KLog.e("==========" + data.getExtras().getString(CodeUtils.RESULT_STRING) + "===========");
+
+        }catch (Exception e){
+            e.getMessage();
+        }
+
         if (requestCode == REQUEST_CODE) {
             //处理扫描结果（在界面上显示）
             if (null != data) {
@@ -397,9 +402,9 @@ public class MainActivity extends BaseActivity {
                 }
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                     String result = bundle.getString(CodeUtils.RESULT_STRING);
-                    Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
+                    UIHelper.toast(MainActivity.this, "解析结果:" + result, Toast.LENGTH_LONG);
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
-                    Toast.makeText(MainActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();
+                    UIHelper.toast(MainActivity.this, "解析出错");
                 }
             }
         }
@@ -407,7 +412,7 @@ public class MainActivity extends BaseActivity {
         /**
          * 选择系统图片并解析
          */
-        else if (requestCode == REQUEST_IMAGE) {
+        else if (requestCode == CodeUtils.REQUEST_IMAGE) {
             if (data != null) {
                 Uri uri = data.getData();
                 try {
@@ -426,9 +431,7 @@ public class MainActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
-        }
-
-        else if (requestCode == REQUEST_CAMERA_PERM) {
+        } else if (requestCode == CodeUtils.REQUEST_CAMERA_PERM) {
             Toast.makeText(this, "从设置页面返回...", Toast.LENGTH_SHORT)
                     .show();
         }

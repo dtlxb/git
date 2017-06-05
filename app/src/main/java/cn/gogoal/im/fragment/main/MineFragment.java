@@ -28,6 +28,7 @@ import cn.gogoal.im.activity.ContactsActivity;
 import cn.gogoal.im.activity.EditMyInfoActivity;
 import cn.gogoal.im.activity.MyAdvisersActivity;
 import cn.gogoal.im.activity.MyGroupsActivity;
+import cn.gogoal.im.activity.MyQrCodeActivity;
 import cn.gogoal.im.activity.PhoneContactsActivity;
 import cn.gogoal.im.activity.SettingActivity;
 import cn.gogoal.im.activity.SettingStockActivity;
@@ -37,11 +38,9 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.FlipperData;
 import cn.gogoal.im.bean.MineItem;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.NormalIntentUtils;
+import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 
@@ -114,21 +113,10 @@ public class MineFragment extends BaseFragment {
                 4 * AppDevice.getWidth(mContext) / 25,
                 4 * AppDevice.getWidth(mContext) / 25);
 
-        UserUtils.getUserAvatar(new AvatarTakeListener() {
+        UserUtils.getUserAvatar(new Impl<Bitmap>() {
             @Override
-            public void success(final Bitmap bitmap) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        imageAvatar.setImageBitmap(bitmap);
-                    }
-                });
-
-            }
-
-            @Override
-            public void failed(Exception e) {
-
+            public void response(boolean success, Bitmap data) {
+                imageAvatar.setImageBitmap(data);
             }
         });
         tvMineUserName.setText(UserUtils.getNickname());
@@ -229,7 +217,8 @@ public class MineFragment extends BaseFragment {
                                     break;
                                 case "我的二维码"://我的二维码
 //                                    NormalIntentUtils.go2WebActivity(getContext(), "","");
-                                    NormalIntentUtils.go2WebActivity(getContext(), AppConst.WEB_URL_LLJ,"");
+//                                    NormalIntentUtils.go2WebActivity(getContext(), AppConst.WEB_URL_LLJ,"");
+                                    startActivity(new Intent(v.getContext(),MyQrCodeActivity.class));
                                     break;
                                 case "行情设置"://自选股设置
                                     intent = new Intent(getActivity(), SettingStockActivity.class);

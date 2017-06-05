@@ -57,20 +57,6 @@ public class DownloadUtils {
         if (mCallBack != null) {
             callBack = mCallBack;
         }
-//        Glide.with(context).load(imageUrl).toBytes().into(new SimpleTarget<byte[]>() {
-//            @Override
-//            public void onResourceReady(byte[] bytes, GlideAnimation<? super byte[]> glideAnimation) {
-//                try {
-//                    savaFileToSD(saveName, ImageUtils.getImageSuffix(imageUrl), bytes);
-//                } catch (Exception e) {
-//                    if (callBack != null) {
-//                        callBack.error(e.getMessage());
-//                    }
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-
         ImageUtils.getUrlBitmap(context, imageUrl, new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {

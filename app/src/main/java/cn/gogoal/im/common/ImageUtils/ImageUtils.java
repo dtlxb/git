@@ -1,5 +1,6 @@
 package cn.gogoal.im.common.ImageUtils;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
@@ -18,6 +19,8 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Base64;
@@ -25,6 +28,7 @@ import android.util.Base64;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.socks.library.KLog;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -34,16 +38,20 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
+import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.FileUtil;
+import cn.gogoal.im.common.Impl;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * author wangjd on 2017/2/23 0023.
  * Staff_id 1375
  * phone 18930640263
  */
-public class ImageUtils {
+public class ImageUtils implements EasyPermissions.PermissionCallbacks {
 
     public final static String SDCARD_MNT = "/mnt/sdcard";
     public final static String SDCARD = Environment.getExternalStorageState();
@@ -67,7 +75,7 @@ public class ImageUtils {
                     width,
                     height,
                     drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
-                : Bitmap.Config.RGB_565);//取 drawable 的颜色格式);
+                            : Bitmap.Config.RGB_565);//取 drawable 的颜色格式);
             Canvas canvas = new Canvas(bitmap);
             drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
             drawable.draw(canvas);
@@ -141,16 +149,70 @@ public class ImageUtils {
     }
 
     public static void getUrlBitmap(Context mContext, String url, final SimpleTarget<Bitmap> simpleTarget) {
-//        Glide.with(mContext).load(url).into(new SimpleTarget<Drawable>() {
-//            @Override
-//            public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
-//                simpleTarget.onResourceReady(drawableToBitmap(resource),null);
-//            }
-//        });
         Glide.with(mContext).asBitmap().load(url).into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                 simpleTarget.onResourceReady(resource, null);
+            }
+        });
+    }
+
+    /**
+     * 保存图片到DCIM下
+     */
+    public static void saveImage2DCIM(Bitmap bitmap, String filename, Impl<String> callBack) {
+        int selfPermission = ContextCompat.checkSelfPermission(MyApp.getAppContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+
+        if (bitmap == null) {
+            if (callBack != null)
+                callBack.response(false, "bitmap为空");
+            return;
+        }
+
+        String dirs = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+                .getAbsolutePath() + File.separator + "GoGoal";
+
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            BufferedOutputStream bos = null;
+            try {
+                bos = new BufferedOutputStream(
+                        new FileOutputStream(new File(dirs,filename)));
+
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+
+                bos.flush();
+
+                scanPhoto(MyApp.getAppContext(), dirs);
+
+                if (callBack != null)
+                    callBack.response(true,"success");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                if (callBack != null)
+                    callBack.response(false,e.getMessage());
+            } finally {
+                FileUtil.closeIO(bos);
+            }
+
+        } else {
+            if (callBack != null) {
+                callBack.response(false, "SD卡不存在或者不可读写");
+            }
+        }
+    }
+
+    /**
+     * 保存图片到DCIM下
+     */
+    public static void saveImage2DCIM(String imageUrl, final String filename, final Impl<String> callBack) {
+        KLog.e(imageUrl);
+
+        getUrlBitmap(MyApp.getAppContext(), imageUrl, new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                saveImage2DCIM(resource, filename, callBack);
             }
         });
     }
@@ -181,7 +243,7 @@ public class ImageUtils {
 //    }
 
     @TargetApi(19)
-    public static String getImageAbsolutePath(Context context,Uri imageUri){
+    public static String getImageAbsolutePath(Context context, Uri imageUri) {
         if (context == null || imageUri == null)
             return null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, imageUri)) {
@@ -605,5 +667,20 @@ public class ImageUtils {
         options.inSampleSize = 1;
         BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options); // 此时返回的bitmap为null
         return options.outHeight + "x" + options.outWidth;
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
     }
 }

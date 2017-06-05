@@ -20,6 +20,14 @@ import android.os.Parcelable;
  */
 public class GGShareEntity implements Parcelable {
 
+    private static final int SHARE_TYPE_WEB = 700;
+
+    private static final int SHARE_TYPE_TEXT = 701;
+
+    private static final int SHARE_TYPE_LIVE = 702;
+
+    private static final int SHARE_TYPE_IMAGE = 703;
+
     private String desc;
 
     private String icon;

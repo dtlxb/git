@@ -23,6 +23,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.bumptech.glide.Glide;
+import com.hply.qrcode_lib.activity.CodeUtils;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
@@ -73,13 +74,12 @@ import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static cn.gogoal.im.base.BaseActivity.initRecycleView;
-import static cn.gogoal.im.common.AppConst.REQUEST_CAMERA_PERM;
-import static cn.gogoal.im.common.AppConst.REQUEST_CODE;
+import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_CAMERA_PERM;
 
 /**
  * 消息
  */
-public class MessageFragment extends BaseFragment implements EasyPermissions.PermissionCallbacks{
+public class MessageFragment extends BaseFragment implements EasyPermissions.PermissionCallbacks {
 
     @BindView(R.id.tv_to_search)
     DrawableCenterTextView tv_to_search;
@@ -244,31 +244,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
      * TODO 点击弹窗
      */
     private void popuMore(View clickView) {
-//        final View popuView = LayoutInflater.from(clickView.getContext()).
-//        inflate(R.layout.chat_message_more,
-//                        new LinearLayout(getActivity()), false);
-//        mBubbleView = (BubbleLinearLayout) popuView.findViewById(R.id.chat_message_more);
-//
-//        mBubbleView.setArrowPosDelta(AppDevice.dp2px(getContext(), 5));
-//
-//        View includeView = popuView.findViewById(R.id.include_line);
-//        ViewGroup.LayoutParams params = includeView.getLayoutParams();
-//        params.width = 5 * AppDevice.getWidth(getActivity()) / 12;
-//        includeView.setLayoutParams(params);
-//
-//        mBubblePopupWindow = new BubblePopupWindow(popuView, mBubbleView);
-//
-//        popuView.findViewById(R.id.find_man_layout)
-//                .setOnClickListener(new PopuClick(mBubblePopupWindow));
-//        popuView.findViewById(R.id.take_square_layout)
-//                .setOnClickListener(new PopuClick(mBubblePopupWindow));
-//
-//        if (getActivity().hasWindowFocus()) {
-//            mBubblePopupWindow.showArrowTo(addPerson
-//                    , new RelativePos(RelativePos.ALIGN_RIGHT, RelativePos.BELOW)
-//                    , AppDevice.dp2px(getActivity(), 5), 0);
-//        }
-                PopuMoreMenu popuMoreMenu = new PopuMoreMenu(getActivity());
+        PopuMoreMenu popuMoreMenu = new PopuMoreMenu(getActivity());
         List<BaseIconText<Integer, String>> popuData = new ArrayList<>();
         popuData.add(new BaseIconText<>(R.mipmap.chat_find_man, "找人"));
         popuData.add(new BaseIconText<>(R.mipmap.chat_find_square, "发起群聊"));
@@ -300,12 +276,12 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
                         }
                     }
                 })
-                .showAsDropDown(clickView, -AppDevice.dp2px(getActivity(), 105), 0);
+                .showAsDropDown(clickView,-AppDevice.dp2px(getActivity(),95), 0);
 
 
     }
 
-    @AfterPermissionGranted(REQUEST_CAMERA_PERM)
+    @AfterPermissionGranted(CodeUtils.REQUEST_CAMERA_PERM)
     public void cameraTask() {
         if (EasyPermissions.hasPermissions(getContext(), Manifest.permission.CAMERA)) {
             // Have permission, do the thing!
@@ -313,13 +289,13 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
         } else {
             // Ask for one permission
             EasyPermissions.requestPermissions(this, "需要请求camera权限",
-                    REQUEST_CAMERA_PERM, Manifest.permission.CAMERA);
+                    CodeUtils.REQUEST_CAMERA_PERM, Manifest.permission.CAMERA);
         }
     }
 
     private void onClick() {
         Intent intent = new Intent(getContext(), ScanQRCodeActivity.class);
-        startActivityForResult(intent, REQUEST_CODE);
+        startActivityForResult(intent, CodeUtils.REQUEST_CODE);
     }
 
     @Override
