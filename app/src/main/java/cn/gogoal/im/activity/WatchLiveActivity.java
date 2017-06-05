@@ -172,6 +172,7 @@ public class WatchLiveActivity extends BaseActivity {
     private String appoint_account;
 
     //弹窗
+    private int screenHeight;
     private JSONObject anchor;
 
     private WatchBottomFragment mBottomFragment;
@@ -213,6 +214,8 @@ public class WatchLiveActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+
+        screenHeight = AppDevice.getHeight(getContext());
 
         live_id = getIntent().getStringExtra("live_id");
 
@@ -1061,8 +1064,15 @@ public class WatchLiveActivity extends BaseActivity {
 
                     getOnlineCount(room_id);
 
-                    mBottomFragment = WatchBottomFragment.newInstance(live_id, String.valueOf(anchor),
-                            data.getString("introduction_img"), data.getString("introduction"), data.getString("live_large_img"));
+                    JSONObject introduce = new JSONObject();
+                    introduce.put("screenHeight", screenHeight);
+                    introduce.put("live_id", live_id);
+                    introduce.put("anchor", anchor);
+                    introduce.put("introduction_img", data.getString("introduction_img"));
+                    introduce.put("introduction", data.getString("introduction"));
+                    introduce.put("live_large_img", data.getString("live_large_img"));
+
+                    mBottomFragment = WatchBottomFragment.newInstance(String.valueOf(introduce));
                     mBottomFragment.setRecordUIClickListener(mUIClickListener);
                     mBottomFragment.setActivityRootView(mRootContainer);
                     mBottomFragment.setType(1);

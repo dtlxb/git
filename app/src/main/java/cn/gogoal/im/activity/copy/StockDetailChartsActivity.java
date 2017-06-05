@@ -156,8 +156,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
 
     private String[] tabTitles = {"分 时", "五 日", "日 K", "周 K", "月 K"};
     private int stock_charge_type;
-    private Long INTERVAL_TIME;
-
+    private long INTERVAL_TIME;
     @Override
     public int bindLayout() {
         return hply.com.niugu.R.layout.activity_stock_detail_charts;

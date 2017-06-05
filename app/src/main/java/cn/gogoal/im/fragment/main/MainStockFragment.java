@@ -140,10 +140,6 @@ public class MainStockFragment extends BaseFragment {
         initView();//初始化一些View
 
         refreshAll(AppConst.REFRESH_TYPE_FIRST);
-
-        if (StockUtils.isTradeTime()) {//交易时间段
-            handler.postDelayed(runnable, INTERVAL_TIME);//启动定时刷新
-        }
     }
 
     @Subscriber(tag = "updata_refresh_mode")
@@ -154,7 +150,7 @@ public class MainStockFragment extends BaseFragment {
         }
     }
 
-    @OnClick({R.id.img_mystock_search,R.id.img_mystock_refresh,R.id.view_dialog_mask})
+    @OnClick({R.id.img_mystock_search, R.id.img_mystock_refresh, R.id.view_dialog_mask})
     void click(View view) {
         switch (view.getId()) {
             case R.id.img_mystock_search:
@@ -183,6 +179,24 @@ public class MainStockFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         INTERVAL_TIME = SPTools.getLong("interval_time", 15000);
+
+        if (StockUtils.isTradeTime()) {//交易时间段
+            handler.postDelayed(runnable, INTERVAL_TIME);//启动定时刷新
+        }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {
+            handler.removeCallbacks(runnable);
+        } else {
+            INTERVAL_TIME = SPTools.getLong("interval_time", 15000);
+
+            if (StockUtils.isTradeTime()) {//交易时间段
+                handler.postDelayed(runnable, INTERVAL_TIME);//启动定时刷新
+            }
+        }
     }
 
     /**
