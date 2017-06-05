@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -66,18 +65,21 @@ public class WatchBottomFragment extends BaseFragment {
     private JSONObject anchor;
     private String introduction_img;
     private String introduction;
+    private String live_large_img;
     private int type;
 
     private PopupWindowHelper anchorHelper;
     private PopupWindowHelper anchorHelperLand;
 
-    public static final WatchBottomFragment newInstance(String live_id, String anchor, String introduction_img, String introduction) {
+    public static final WatchBottomFragment newInstance(
+            String live_id, String anchor, String introduction_img, String introduction, String live_large_img) {
         WatchBottomFragment wbf = new WatchBottomFragment();
         Bundle bundle = new Bundle();
         bundle.putString("live_id", live_id);
         bundle.putString("anchor", anchor);
         bundle.putString("introduction_img", introduction_img);
         bundle.putString("introduction", introduction);
+        bundle.putString("live_large_img", live_large_img);
         wbf.setArguments(bundle);
         return wbf;
     }
@@ -94,6 +96,7 @@ public class WatchBottomFragment extends BaseFragment {
         anchor = JSONObject.parseObject(getArguments().getString("anchor"));
         introduction_img = getArguments().getString("introduction_img");
         introduction = getArguments().getString("introduction");
+        live_large_img = getArguments().getString("live_large_img");
 
         if (anchor == null) {
             linearPlayerProfiles.setVisibility(View.GONE);
@@ -345,10 +348,20 @@ public class WatchBottomFragment extends BaseFragment {
 
         ImageDisplay.loadCircleImage(getContext(), anchor.getString("face_url"), anchor_avatar);
         anchor_name.setText(anchor.getString("anchor_name"));
-        anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
-        anchor_achieve.setText(anchor.getString("anchor_introduction"));
-        ImageDisplay.loadImage(getContext(), introduction_img, live_avatar);
-        live_achieve.setText(introduction);
+
+        String organization = anchor.getString("organization");
+        String position = anchor.getString("anchor_position");
+        anchor_position.setText(organization != null ? organization : "--" + " | "
+                + position != null ? position : "--");
+
+        String anchor_introduction = anchor.getString("anchor_introduction");
+        anchor_achieve.setText(anchor_introduction != null ? anchor_introduction
+                : getString(R.string.play_introduction_null));
+
+        ImageDisplay.loadImage(getContext(), introduction_img != null ? introduction_img : live_large_img, live_avatar);
+
+        live_achieve.setText(introduction != null ? introduction
+                : getString(R.string.play_introduction_null));
     }
 
     private void showAnchorProfilesLand() {
@@ -364,10 +377,20 @@ public class WatchBottomFragment extends BaseFragment {
 
         ImageDisplay.loadCircleImage(getContext(), anchor.getString("face_url"), anchor_avatar);
         anchor_name.setText(anchor.getString("anchor_name"));
-        anchor_position.setText(anchor.getString("organization") + " | " + anchor.getString("anchor_position"));
-        anchor_achieve.setText(anchor.getString("anchor_introduction"));
-        ImageDisplay.loadImage(getContext(), introduction_img, live_avatar);
-        live_achieve.setText(introduction);
+
+        String organization = anchor.getString("organization");
+        String position = anchor.getString("anchor_position");
+        anchor_position.setText(organization != null ? organization : "--" + " | "
+                + position != null ? position : "--");
+
+        String anchor_introduction = anchor.getString("anchor_introduction");
+        anchor_achieve.setText(anchor_introduction != null ? anchor_introduction
+                : getString(R.string.play_introduction_null));
+
+        ImageDisplay.loadImage(getContext(), introduction_img != null ? introduction_img : live_large_img, live_avatar);
+
+        live_achieve.setText(introduction != null ? introduction
+                : getString(R.string.play_introduction_null));
     }
 
     public void setRecordUIClickListener(RecorderUIClickListener listener) {

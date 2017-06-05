@@ -662,6 +662,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
                 break;
             case AppConst.IM_CHAT_TYPE_SQUARE:
                 nickName = conversation.getName();
+                //avatar = (String) conversation.getAttribute("avatar");
                 avatar = (String) conversation.getAttribute("avatar");
                 break;
             case AppConst.IM_CHAT_TYPE_SYSTEM:
