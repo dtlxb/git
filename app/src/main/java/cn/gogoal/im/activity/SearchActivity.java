@@ -22,8 +22,8 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.BaseIconText;
 import cn.gogoal.im.bean.IMMessageBean;
-import cn.gogoal.im.bean.ImageTextBean;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.ui.NormalItemDecoration;
 
@@ -54,7 +54,7 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.rv_flag_search)
     RecyclerView rvFlagSearch;
 
-    private SearchConversationAdapter searchReultAdapter;
+//    private SearchConversationAdapter searchReultAdapter;
 
     @Override
     public int bindLayout() {
@@ -88,9 +88,9 @@ public class SearchActivity extends BaseActivity {
             }
         });
 
-        rvFlagSearch.setAdapter(new CommonAdapter<ImageTextBean<Integer>, BaseViewHolder>(R.layout.item_search_flag, getFlagData()) {
+        rvFlagSearch.setAdapter(new CommonAdapter<BaseIconText<Integer,String>, BaseViewHolder>(R.layout.item_search_flag, getFlagData()) {
             @Override
-            protected void convert(BaseViewHolder holder, ImageTextBean<Integer> data, int position) {
+            protected void convert(BaseViewHolder holder, BaseIconText<Integer,String> data, int position) {
                 holder.setImageResource(R.id.img_search_item, data.getIamge());
                 holder.setText(R.id.tv_search_item, data.getText());
             }
@@ -138,13 +138,13 @@ public class SearchActivity extends BaseActivity {
 //        });
     }
 
-    private List<ImageTextBean<Integer>> getFlagData() {
+    private List<BaseIconText<Integer,String>> getFlagData() {
         int[] flagIcons = {R.mipmap.img_search_flag_contact, R.mipmap.img_search_flag_group, R.mipmap.home_bottom_tab_icon_message_normal,
                 R.mipmap.img_search_flag_live, R.mipmap.img_search_flag_yanwang, R.mipmap.img_search_flag_pinpai};
-        List<ImageTextBean<Integer>> list = new ArrayList<>();
+        List<BaseIconText<Integer,String>> list = new ArrayList<>();
 
         for (int i = 0; i < flagIcons.length; i++) {
-            list.add(new ImageTextBean<>(flagIcons[i], searchFlagArray[i]));
+            list.add(new BaseIconText<>(flagIcons[i], searchFlagArray[i]));
         }
         return list;
     }

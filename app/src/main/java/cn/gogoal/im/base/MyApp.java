@@ -2,6 +2,7 @@ package cn.gogoal.im.base;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
@@ -16,6 +17,7 @@ import com.avos.avoscloud.PushService;
 import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
+import com.hply.qrcode_lib.activity.ZXingLibrary;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,9 +26,9 @@ import java.util.List;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MainActivity;
-import cn.gogoal.im.common.IMHelpers.GGAudioMessage;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
+import cn.gogoal.im.common.IMHelpers.GGAudioMessage;
 import cn.gogoal.im.common.IMHelpers.GGGroupAddMessage;
 import cn.gogoal.im.common.IMHelpers.GGGroupDelMessage;
 import cn.gogoal.im.common.IMHelpers.GGGroupEditMessage;
@@ -37,7 +39,6 @@ import cn.gogoal.im.common.IMHelpers.GGTextMessage;
 import cn.gogoal.im.common.IMHelpers.MyConversationHandler;
 import cn.gogoal.im.common.IMHelpers.MyMessageHandler;
 import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.database.LitePalApplication;
 import cn.gogoal.im.common.permission.IPermissionListner;
 import cn.gogoal.im.ui.view.XLayout;
 
@@ -46,7 +47,7 @@ import cn.gogoal.im.ui.view.XLayout;
  * Staff_id 1375
  * phone 18930640263
  */
-public class MyApp extends LitePalApplication {
+public class MyApp extends Application {
 
     private static MyApp app;
 
@@ -55,6 +56,8 @@ public class MyApp extends LitePalApplication {
         super.onCreate();
 
         app = this;
+
+        ZXingLibrary.initDisplayOpinion(this);
 
         registerActivityLifecycleCallbacks(new LifeCircle());
 

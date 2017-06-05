@@ -33,6 +33,11 @@
     <!-- 获取联系人列表 -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+    <!--扫码-->
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <application
         android:name=".base.MyApp"
         android:allowBackup="true"
@@ -207,6 +212,7 @@
         <activity android:name=".activity.AccountSafeActivity"/>
         <activity android:name=".activity.ChangePasswordActivity"/>
         <activity android:name=".activity.SettingStockActivity"/>
+        <activity android:name=".activity.ScanQRCodeActivity"/>
     </application>
 
 </manifest>

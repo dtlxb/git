@@ -1854,7 +1854,7 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
     public void removeItem(int position) {
         mData.remove(position);
         notifyItemRemoveWrapper(position);
-        notifyItemRangeChanged(position, mData.size() - position);
+//        notifyItemRangeChanged(position, mData.size() - position);
     }
 
     /**

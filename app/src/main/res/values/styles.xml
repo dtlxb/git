@@ -226,6 +226,11 @@
         <item name="iconifiedByDefault">false</item>
     </style>
 
+    <style name="TRM_ANIM_STYLE">
+        <item name="android:windowEnterAnimation">@anim/trm_popup_enter</item>
+        <item name="android:windowExitAnimation">@anim/trm_popup_exit</item>
+    </style>
+
     <!--popupWindow-->
     <style name="AnimationUpPopup">
         <item name="android:windowEnterAnimation">@anim/grow_fade_in_from_bottom</item>
