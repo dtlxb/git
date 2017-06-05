@@ -13,7 +13,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.DrawableRes;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Base64;
 
 import com.bumptech.glide.Glide;
@@ -25,14 +27,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.FileUtil;
 
 /**
@@ -52,71 +51,92 @@ public class ImageUtils {
      * @return
      */
     public static Bitmap drawableToBitmap(Drawable drawable) {
-        int width = drawable.getIntrinsicWidth();
-        int height = drawable.getIntrinsicHeight();
-        Bitmap bitmap = Bitmap.createBitmap(width, height, drawable
-                .getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
-                : Bitmap.Config.RGB_565);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, width, height);
-        drawable.draw(canvas);
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+
+        Bitmap bitmap;
+        int width = Math.max(drawable.getIntrinsicWidth(), 2);
+        int height = Math.max(drawable.getIntrinsicHeight(), 2);
+        try {
+            bitmap = Bitmap.createBitmap(
+                    width,
+                    height,
+                    drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                : Bitmap.Config.RGB_565);//取 drawable 的颜色格式);
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+        } catch (Exception e) {
+            e.printStackTrace();
+            bitmap = null;
+        }
         return bitmap;
     }
+
+    /**
+     * bitmap 转 drawable
+     */
+    public static Drawable bitmap2Drawable(Context context, Bitmap bitmap) {
+        return new BitmapDrawable(context.getResources(), bitmap);
+    }
+
+    public static byte[] bitmap2Bytes(Bitmap bm) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
+    }
+
 
     public static String getImageSuffix(String oName) {
         return oName.contains(".") ? oName.substring(oName.lastIndexOf(".")) : "png";
     }
 
     /**
-     * 图片资源Id转成Bitmap对象
+     * 获取圆角矩形Drawable
      */
-    public static Bitmap drawable2Bitmap(Context context, int resId) {
-        Drawable drawable = ContextCompat.getDrawable(context, resId);
-        Bitmap bitmap = Bitmap.createBitmap(
-                drawable.getIntrinsicWidth(),
-                drawable.getIntrinsicHeight(),
-                drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565);
-        Canvas canvas = new Canvas(bitmap);
-        //canvas.setBitmap(bitmap);
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-        drawable.draw(canvas);
-        return bitmap;
+    public static Drawable getRoundedRectangleDrawable(Context context, @DrawableRes int resId, int dpRadian) {
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
+        return getRoundedRectangleDrawable(context, bitmap, dpRadian);
     }
 
-    public static Bitmap returnBitmap(String url) {
-        URL fileUrl = null;
-        Bitmap bitmap = null;
-        InputStream is = null;
-        try {
-            fileUrl = new URL(url);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            HttpURLConnection conn = (HttpURLConnection) fileUrl
-                    .openConnection();
-            conn.setDoInput(true);
-            conn.connect();
-            is = conn.getInputStream();
-            bitmap = BitmapFactory.decodeStream(is);
-            is.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return bitmap;
-
+    /**
+     * 获取圆角矩形Drawable
+     */
+    public static Drawable getRoundedRectangleDrawable(Context context, Bitmap bitmap, int dpRadian) {
+        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), bitmap);
+        roundedBitmapDrawable.setAntiAlias(true);
+        roundedBitmapDrawable.setCornerRadius(AppDevice.dp2px(context, dpRadian));
+        return roundedBitmapDrawable;
     }
 
-    public static void getUrlBitmap(Context mContext, String url, final SimpleTarget<Bitmap> simpleTarget){
+    /**
+     * 获取圆形Drawable
+     */
+    public static Drawable getCircleDrawable(Context context, Bitmap bitmap) {
+        Bitmap dst;
+        //将长方形图片裁剪成正方形图片
+        if (bitmap.getWidth() >= bitmap.getHeight()) {
+            dst = Bitmap.createBitmap(bitmap, bitmap.getWidth() / 2 - bitmap.getHeight() / 2, 0, bitmap.getHeight(), bitmap.getHeight()
+            );
+        } else {
+            dst = Bitmap.createBitmap(bitmap, 0, bitmap.getHeight() / 2 - bitmap.getWidth() / 2, bitmap.getWidth(), bitmap.getWidth()
+            );
+        }
+        RoundedBitmapDrawable circleDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), dst);
+        circleDrawable.setCornerRadius(dst.getWidth() / 2); //设置圆角半径为正方形边长的一半
+        circleDrawable.setAntiAlias(true);
+        return circleDrawable;
+    }
+
+    /**
+     * 获取圆形Drawable
+     */
+    public static Drawable getCircleDrawable(Context context, @DrawableRes int redId) {
+        return getCircleDrawable(context, BitmapFactory.decodeResource(context.getResources(), redId));
+    }
+
+    public static void getUrlBitmap(Context mContext, String url, final SimpleTarget<Bitmap> simpleTarget) {
 //        Glide.with(mContext).load(url).into(new SimpleTarget<Drawable>() {
 //            @Override
 //            public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
@@ -126,7 +146,7 @@ public class ImageUtils {
         Glide.with(mContext).asBitmap().load(url).into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                simpleTarget.onResourceReady(resource,null);
+                simpleTarget.onResourceReady(resource, null);
             }
         });
     }
@@ -154,13 +174,6 @@ public class ImageUtils {
                     + File.separator + mUriString.substring(pre2.length());
         }
         return filePath;
-    }
-
-    /**
-     * bitmap 转 drawable
-     */
-    public static Drawable bitmap2Drawable(Context context, Bitmap bitmap) {
-        return new BitmapDrawable(context.getResources(), bitmap);
     }
 
     /**
@@ -345,39 +358,6 @@ public class ImageUtils {
     }
 
     /**
-     * 创建缩略图
-     *
-     * @param context
-     * @param largeImagePath 原始大图路径
-     * @param thumbfilePath  输出缩略图路径
-     * @param square_size    输出图片宽度
-     * @param quality        输出图片质量
-     * @throws IOException
-     */
-    public static void createImageThumbnail(Context context,
-                                            String largeImagePath, String thumbfilePath, int square_size,
-                                            int quality) throws IOException {
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inSampleSize = 1;
-        // 原始图片bitmap
-        Bitmap cur_bitmap = getBitmapByPath(largeImagePath, opts);
-
-        if (cur_bitmap == null)
-            return;
-
-        // 原始图片的高宽
-        int[] cur_img_size = new int[]{cur_bitmap.getWidth(),
-                cur_bitmap.getHeight()};
-        // 计算原始图片缩放后的宽高
-        int[] new_img_size = scaleImageSize(cur_img_size, square_size);
-        // 生成缩放后的bitmap
-        Bitmap thb_bitmap = zoomBitmap(cur_bitmap, new_img_size[0],
-                new_img_size[1]);
-        // 生成缩放后的图片文件
-        saveImageToSD(null, thumbfilePath, thb_bitmap, quality);
-    }
-
-    /**
      * 放大缩小图片
      *
      * @param bitmap
@@ -402,8 +382,6 @@ public class ImageUtils {
 
     /**
      * 写图片文件到SD卡
-     *
-     * @throws IOException
      */
     public static void saveImageToSD(Context ctx, String filePath,
                                      Bitmap bitmap, int quality) {
@@ -446,10 +424,6 @@ public class ImageUtils {
 
     /**
      * 计算缩放图片的宽高
-     *
-     * @param img_size
-     * @param square_size
-     * @return
      */
     public static int[] scaleImageSize(int[] img_size, int square_size) {
         if (img_size[0] <= square_size && img_size[1] <= square_size)
@@ -458,37 +432,6 @@ public class ImageUtils {
                 / (double) Math.max(img_size[0], img_size[1]);
         return new int[]{(int) (img_size[0] * ratio),
                 (int) (img_size[1] * ratio)};
-    }
-
-    /**
-     * 获取bitmap
-     *
-     * @param filePath
-     * @return
-     */
-    public static Bitmap getBitmapByPath(String filePath) {
-        return getBitmapByPath(filePath, null);
-    }
-
-    public static Bitmap getBitmapByPath(String filePath,
-                                         BitmapFactory.Options opts) {
-        FileInputStream fis = null;
-        Bitmap bitmap = null;
-        try {
-            File file = new File(filePath);
-            fis = new FileInputStream(file);
-            bitmap = BitmapFactory.decodeStream(fis, null, opts);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (OutOfMemoryError e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fis.close();
-            } catch (Exception e) {
-            }
-        }
-        return bitmap;
     }
 
     //压缩图片--质量压缩
@@ -564,42 +507,4 @@ public class ImageUtils {
         BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options); // 此时返回的bitmap为null
         return options.outHeight + "x" + options.outWidth;
     }
-
-    public static Bitmap imageZoom(Bitmap bitmap) {
-        //图片允许最大空间   单位：KB
-        double maxSize = 180.00;
-        //将bitmap放至数组中，意在bitmap的大小（与实际读取的原文件要大）
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] b = baos.toByteArray();
-        //将字节换成KB
-        double mid = b.length / 1024;
-        //判断bitmap占用空间是否大于允许最大空间  如果大于则压缩 小于则不压缩
-        if (mid > maxSize) {
-            //获取bitmap大小 是允许最大大小的多少倍
-            double i = mid / maxSize;
-            //开始压缩  此处用到平方根 将宽带和高度压缩掉对应的平方根倍 （1.保持刻度和高度和原bitmap比率一致，压缩后也达到了最大大小占用空间的大小）
-            bitmap = zoomImage(bitmap, bitmap.getWidth() / Math.sqrt(i),
-                    bitmap.getHeight() / Math.sqrt(i));
-        }
-        return bitmap;
-    }
-
-    private static Bitmap zoomImage(Bitmap bgimage, double newWidth,
-                                    double newHeight) {
-        // 获取这个图片的宽和高
-        float width = bgimage.getWidth();
-        float height = bgimage.getHeight();
-        // 创建操作图片用的matrix对象
-        Matrix matrix = new Matrix();
-        // 计算宽高缩放率
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        // 缩放图片动作
-        matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap bitmap = Bitmap.createBitmap(bgimage, 0, 0, (int) width,
-                (int) height, matrix, true);
-        return bitmap;
-    }
-
 }

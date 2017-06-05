@@ -1,21 +1,20 @@
 package cn.gogoal.im.fragment.main;
 
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -24,9 +23,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.bumptech.glide.Glide;
-import com.cpiz.android.bubbleview.BubbleLinearLayout;
-import com.cpiz.android.bubbleview.BubblePopupWindow;
-import com.cpiz.android.bubbleview.RelativePos;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
@@ -46,6 +42,7 @@ import cn.gogoal.im.activity.ContactsActivity;
 import cn.gogoal.im.activity.IMNewFriendActivity;
 import cn.gogoal.im.activity.IMSearchLocalActivity;
 import cn.gogoal.im.activity.OfficialAccountsActivity;
+import cn.gogoal.im.activity.ScanQRCodeActivity;
 import cn.gogoal.im.activity.SearchPersonSquareActivity;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
@@ -53,6 +50,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.bean.BaseIconText;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
@@ -68,14 +66,32 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
+import cn.gogoal.im.ui.view.PopuMoreMenu;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
 import static cn.gogoal.im.base.BaseActivity.initRecycleView;
 
 /**
  * 消息
  */
-public class MessageFragment extends BaseFragment {
+public class MessageFragment extends BaseFragment implements EasyPermissions.PermissionCallbacks{
+    /**
+     * 请求CAMERA权限码
+     */
+    public static final int REQUEST_CAMERA_PERM = 101;
+
+    /**
+     * 扫描跳转Activity RequestCode
+     */
+    public static final int REQUEST_CODE = 111;
+    /**
+     * 选择系统图片Request Code
+     */
+    public static final int REQUEST_IMAGE = 112;
+
 
     @BindView(R.id.tv_to_search)
     DrawableCenterTextView tv_to_search;
@@ -99,7 +115,6 @@ public class MessageFragment extends BaseFragment {
     private JSONArray jsonArray;
 
     private int allCount;
-    private BubbleLinearLayout mBubbleView;
 
     public MessageFragment() {
     }
@@ -119,8 +134,6 @@ public class MessageFragment extends BaseFragment {
         listAdapter = new ListAdapter(R.layout.item_fragment_message, IMMessageBeans);
         message_recycler.setAdapter(listAdapter);
     }
-
-    private BubblePopupWindow mBubblePopupWindow;
 
     private void initTitle() {
         goContacts.setOnClickListener(new View.OnClickListener() {
@@ -243,62 +256,137 @@ public class MessageFragment extends BaseFragment {
      * TODO 点击弹窗
      */
     private void popuMore(View clickView) {
-        final View popuView = LayoutInflater.from(clickView.getContext()).
-                inflate(R.layout.chat_message_more,
-                        new LinearLayout(getActivity()), false);
-        mBubbleView = (BubbleLinearLayout) popuView.findViewById(R.id.chat_message_more);
+//        final View popuView = LayoutInflater.from(clickView.getContext()).
+//        inflate(R.layout.chat_message_more,
+//                        new LinearLayout(getActivity()), false);
+//        mBubbleView = (BubbleLinearLayout) popuView.findViewById(R.id.chat_message_more);
+//
+//        mBubbleView.setArrowPosDelta(AppDevice.dp2px(getContext(), 5));
+//
+//        View includeView = popuView.findViewById(R.id.include_line);
+//        ViewGroup.LayoutParams params = includeView.getLayoutParams();
+//        params.width = 5 * AppDevice.getWidth(getActivity()) / 12;
+//        includeView.setLayoutParams(params);
+//
+//        mBubblePopupWindow = new BubblePopupWindow(popuView, mBubbleView);
+//
+//        popuView.findViewById(R.id.find_man_layout)
+//                .setOnClickListener(new PopuClick(mBubblePopupWindow));
+//        popuView.findViewById(R.id.take_square_layout)
+//                .setOnClickListener(new PopuClick(mBubblePopupWindow));
+//
+//        if (getActivity().hasWindowFocus()) {
+//            mBubblePopupWindow.showArrowTo(addPerson
+//                    , new RelativePos(RelativePos.ALIGN_RIGHT, RelativePos.BELOW)
+//                    , AppDevice.dp2px(getActivity(), 5), 0);
+//        }
+                PopuMoreMenu popuMoreMenu = new PopuMoreMenu(getActivity());
+        List<BaseIconText<Integer, String>> popuData = new ArrayList<>();
+        popuData.add(new BaseIconText<>(R.mipmap.chat_find_man, "找人"));
+        popuData.add(new BaseIconText<>(R.mipmap.chat_find_square, "发起群聊"));
+        popuData.add(new BaseIconText<>(R.mipmap.chat_find_square, "扫一扫"));
 
-        mBubbleView.setArrowPosDelta(AppDevice.dp2px(getContext(), 5));
+        popuMoreMenu.dimBackground(false)
+                .needAnimationStyle(true)
+                .addMenuList(popuData)
+                .setOnMenuItemClickListener(new PopuMoreMenu.OnMenuItemClickListener() {
+                    @Override
+                    public void onMenuItemClick(int position) {
+                        Intent intent;
+                        switch (position) {
+                            case 0://找人
+                                intent = new Intent(getContext(), SearchPersonSquareActivity.class);
+                                intent.putExtra("search_index", 0);
+                                startActivity(intent);
+                                break;
+                            case 1://发起群聊
+                                intent = new Intent(getContext(), ChooseContactActivity.class);
+                                Bundle mBundle = new Bundle();
+                                mBundle.putInt("square_action", AppConst.CREATE_SQUARE_ROOM_BUILD);
+                                intent.putExtras(mBundle);
+                                startActivity(intent);
+                                break;
+                            case 2://扫一扫
+                                cameraTask();
+                                break;
+                        }
+                    }
+                })
+                .showAsDropDown(clickView, -AppDevice.dp2px(getActivity(), 105), 0);
 
-        View includeView = popuView.findViewById(R.id.include_line);
-        ViewGroup.LayoutParams params = includeView.getLayoutParams();
-        params.width = 5 * AppDevice.getWidth(getActivity()) / 12;
-        includeView.setLayoutParams(params);
-
-        mBubblePopupWindow = new BubblePopupWindow(popuView, mBubbleView);
-
-        popuView.findViewById(R.id.find_man_layout)
-                .setOnClickListener(new PopuClick(mBubblePopupWindow));
-        popuView.findViewById(R.id.take_square_layout)
-                .setOnClickListener(new PopuClick(mBubblePopupWindow));
-
-        if (getActivity().hasWindowFocus()) {
-            mBubblePopupWindow.showArrowTo(addPerson
-                    , new RelativePos(RelativePos.ALIGN_RIGHT, RelativePos.BELOW)
-                    , AppDevice.dp2px(getActivity(), 5), 0);
-        }
 
     }
 
-    //弹窗监听事件
-    private class PopuClick implements View.OnClickListener {
-        BubblePopupWindow popupWindow;
-
-        public PopuClick(BubblePopupWindow style) {
-            this.popupWindow = style;
-        }
-
-        @Override
-        public void onClick(View v) {
-            Intent intent;
-            switch (v.getId()) {
-                case R.id.find_man_layout:
-                    intent = new Intent(getContext(), SearchPersonSquareActivity.class);
-                    intent.putExtra("search_index", 0);
-                    startActivity(intent);
-                    break;
-                case R.id.take_square_layout:
-                    intent = new Intent(getContext(), ChooseContactActivity.class);
-                    Bundle mBundle = new Bundle();
-                    mBundle.putInt("square_action", AppConst.CREATE_SQUARE_ROOM_BUILD);
-                    intent.putExtras(mBundle);
-                    startActivity(intent);
-                    break;
-            }
-
-            popupWindow.dismiss();
+    @AfterPermissionGranted(REQUEST_CAMERA_PERM)
+    public void cameraTask() {
+        if (EasyPermissions.hasPermissions(getContext(), Manifest.permission.CAMERA)) {
+            // Have permission, do the thing!
+            onClick();
+        } else {
+            // Ask for one permission
+            EasyPermissions.requestPermissions(this, "需要请求camera权限",
+                    REQUEST_CAMERA_PERM, Manifest.permission.CAMERA);
         }
     }
+
+    private void onClick() {
+        Intent intent = new Intent(getContext(), ScanQRCodeActivity.class);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog.Builder(this, "当前App需要申请camera权限,需要打开设置页面么?")
+                    .setTitle("权限申请")
+                    .setPositiveButton("确认")
+                    .setNegativeButton("取消", null /* click listener */)
+                    .setRequestCode(REQUEST_CAMERA_PERM)
+                    .build()
+                    .show();
+        }
+    }
+
+//    //弹窗监听事件
+//    private class PopuClick implements View.OnClickListener {
+//        BubblePopupWindow popupWindow;
+//
+//        public PopuClick(BubblePopupWindow style) {
+//            this.popupWindow = style;
+//        }
+//
+//        @Override
+//        public void onClick(View v) {
+//            Intent intent;
+//            switch (v.getId()) {
+//                case R.id.find_man_layout:
+//                    intent = new Intent(getContext(), SearchPersonSquareActivity.class);
+//                    intent.putExtra("search_index", 0);
+//                    startActivity(intent);
+//                    break;
+//                case R.id.take_square_layout:
+//                    intent = new Intent(getContext(), ChooseContactActivity.class);
+//                    Bundle mBundle = new Bundle();
+//                    mBundle.putInt("square_action", AppConst.CREATE_SQUARE_ROOM_BUILD);
+//                    intent.putExtras(mBundle);
+//                    startActivity(intent);
+//                    break;
+//            }
+//
+//            popupWindow.dismiss();
+//        }
+//    }
 
     private class ListAdapter extends CommonAdapter<IMMessageBean, BaseViewHolder> {
 
@@ -659,11 +747,4 @@ public class MessageFragment extends BaseFragment {
         AppManager.getInstance().sendMessage("correct_allmessage_count", countMessage);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (mBubblePopupWindow != null) {
-            mBubblePopupWindow.dismiss();
-        }
-    }
 }

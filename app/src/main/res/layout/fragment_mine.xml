@@ -103,7 +103,7 @@
                         android:background="@drawable/shape_level"
                         android:minHeight="0dp"
                         android:minWidth="0dp"
-                        android:text="等级"
+                        android:text="5等级"
                         android:layout_toEndOf="@+id/tv_authentication"
                         android:layout_alignTop="@+id/tv_authentication"
                         android:layout_alignBottom="@+id/tv_authentication"
@@ -112,7 +112,7 @@
                         android:layout_marginStart="15dp"
                         android:paddingStart="5dp"
                         android:drawablePadding="2dp"
-                        android:drawableStart="@mipmap/img_authentication_white"
+                        android:drawableStart="@mipmap/img_level_white"
                         android:paddingEnd="5dp"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
