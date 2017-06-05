@@ -62,6 +62,7 @@ import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.LiveOnlinePersonData;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
@@ -175,6 +176,7 @@ public class LiveActivity extends BaseActivity {
     private String live_type;
 
     //弹窗
+    private int screenHeight;
     private JSONObject anchor;
 
     private WatchBottomFragment mBottomFragment;
@@ -217,6 +219,8 @@ public class LiveActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+
+        screenHeight = AppDevice.getHeight(getContext());
 
         live_id = getIntent().getStringExtra("live_id");
 
@@ -1107,8 +1111,15 @@ public class LiveActivity extends BaseActivity {
 
                     getOnlineCount(room_id);
 
-                    mBottomFragment = WatchBottomFragment.newInstance(live_id, String.valueOf(anchor),
-                            data.getString("introduction_img"), data.getString("introduction"), data.getString("live_large_img"));
+                    JSONObject introduce = new JSONObject();
+                    introduce.put("screenHeight", screenHeight);
+                    introduce.put("live_id", live_id);
+                    introduce.put("anchor", anchor);
+                    introduce.put("introduction_img", data.getString("introduction_img"));
+                    introduce.put("introduction", data.getString("introduction"));
+                    introduce.put("live_large_img", data.getString("live_large_img"));
+
+                    mBottomFragment = WatchBottomFragment.newInstance(String.valueOf(introduce));
                     mBottomFragment.setRecordUIClickListener(mUIClickListener);
                     mBottomFragment.setActivityRootView(mRootContainer);
                     mBottomFragment.setType(0);

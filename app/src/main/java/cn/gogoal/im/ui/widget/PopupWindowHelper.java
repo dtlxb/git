@@ -64,8 +64,22 @@ public class PopupWindowHelper {
         mPopupWindow.showAtLocation(anchor, Gravity.LEFT | Gravity.TOP, 0, getStatusBarHeight());
     }
 
-    public void showFromBottom(View anchor) {
-        initPopupWindow(TYPE_MATCH_WRAR);
+    public void showFromRight(View anchor, int mWidth) {
+        //initPopupWindow(TYPE_WRAR_MATCH);
+        mPopupWindow = new PopupWindow(popupView, mWidth, ViewGroup.LayoutParams.MATCH_PARENT);
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        setCancelable(true);
+
+        mPopupWindow.setAnimationStyle(R.style.AnimationFromRight);
+        mPopupWindow.showAtLocation(anchor, Gravity.RIGHT, 0, getStatusBarHeight());
+    }
+
+    public void showFromBottom(View anchor, int mHeight) {
+        //initPopupWindow(TYPE_MATCH_WRAR);
+        mPopupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, mHeight);
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        setCancelable(true);
+
         mPopupWindow.setAnimationStyle(R.style.AnimationFromButtom);
         mPopupWindow.showAtLocation(anchor, Gravity.LEFT | Gravity.BOTTOM, 0, 0);
     }
@@ -74,12 +88,6 @@ public class PopupWindowHelper {
         initPopupWindow(TYPE_WRAR_MATCH);
         //mPopupWindow.setAnimationStyle(R.style.AnimationFromLeft);
         mPopupWindow.showAtLocation(anchor, Gravity.LEFT, 0, getStatusBarHeight());
-    }
-
-    public void showFromRight(View anchor) {
-        initPopupWindow(TYPE_WRAR_MATCH);
-        mPopupWindow.setAnimationStyle(R.style.AnimationFromRight);
-        mPopupWindow.showAtLocation(anchor, Gravity.RIGHT, 0, getStatusBarHeight());
     }
 
     /**
