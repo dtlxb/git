@@ -156,7 +156,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
 
     private String[] tabTitles = {"分 时", "五 日", "日 K", "周 K", "月 K"};
     private int stock_charge_type;
-    private int INTERVAL_TIME;
+    private long INTERVAL_TIME;
 
     @Override
     public int bindLayout() {
@@ -648,7 +648,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
     @Override
     protected void onResume() {
         super.onResume();
-        INTERVAL_TIME=SPTools.getInt("interval_time",15000);
+        INTERVAL_TIME=SPTools.getLong("interval_time",15000);
         if (StockUtils.isTradeTime()) {//交易时间段
             handler.postDelayed(runnable, INTERVAL_TIME);//启动定时刷新
         }
