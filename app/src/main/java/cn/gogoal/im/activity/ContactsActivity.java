@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.socks.library.KLog;
@@ -32,12 +33,14 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.UserBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.database.crud.DataSupport;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.index.IndexBar;
 import cn.gogoal.im.ui.index.SuspendedDecoration;
@@ -58,7 +61,7 @@ public class ContactsActivity extends BaseActivity {
     IndexBar indexBar;
 
     @BindView(R.id.tv_constacts_flag)
-    TextView tvConstactsFlag;
+    TextView tvContactsFlag;
 
     @BindView(R.id.tv_to_search)
     DrawableCenterTextView tvSearch;
@@ -89,10 +92,10 @@ public class ContactsActivity extends BaseActivity {
         TextView RightText = (TextView) xTitle.getViewByAction(textAction);
         RightText.setTextColor(getResColor(R.color.textColor_333333));
 
-        ViewGroup.LayoutParams tvParams = tvConstactsFlag.getLayoutParams();
+        ViewGroup.LayoutParams tvParams = tvContactsFlag.getLayoutParams();
         tvParams.width = AppDevice.getWidth(getActivity()) / 4;
         tvParams.height = AppDevice.getWidth(getActivity()) / 4;
-        tvConstactsFlag.setLayoutParams(tvParams);
+        tvContactsFlag.setLayoutParams(tvParams);
 
         textViewFooter = new TextView(mContext);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -2);
@@ -108,7 +111,7 @@ public class ContactsActivity extends BaseActivity {
                 getActivity(), LinearLayoutManager.VERTICAL, false));
 
         //indexbar初始化
-        indexBar.setmPressedShowTextView(tvConstactsFlag)//设置HintTextView
+        indexBar.setmPressedShowTextView(tvContactsFlag)//设置HintTextView
                 .setmLayoutManager(layoutManager);//设置RecyclerView的LayoutManager
 
         contactBeanList = new ArrayList<>();
@@ -287,12 +290,25 @@ public class ContactsActivity extends BaseActivity {
 
     private void parseContactDatas(String responseInfo, List<ContactBean> contactBeanList) {
         List<ContactBean> list = new ArrayList<>();
-        BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
+        /*BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
                 responseInfo,
                 new TypeReference<BaseBeanList<ContactBean<String>>>() {
+                });*/
+
+        BaseBeanList<UserBean<String>> users = JSONObject.parseObject(
+                responseInfo,
+                new TypeReference<BaseBeanList<UserBean<String>>>() {
                 });
+
+        //缓存到数据库
         list.clear();
-        list.addAll(beanList.getData());
+        for (int i = 0; i < users.getData().size(); i++) {
+            users.getData().get(i).save();
+            list.add(new ContactBean());
+        }
+
+        /*list.clear();
+        list.addAll(beanList.getData());*/
 
         upDataFootCount(list);
 
@@ -314,5 +330,8 @@ public class ContactsActivity extends BaseActivity {
 
             added = false;
         }
+
+        KLog.e(DataSupport.findFirst(UserBean.class));
+
     }
 }
