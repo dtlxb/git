@@ -73,25 +73,13 @@ import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static cn.gogoal.im.base.BaseActivity.initRecycleView;
+import static cn.gogoal.im.common.AppConst.REQUEST_CAMERA_PERM;
+import static cn.gogoal.im.common.AppConst.REQUEST_CODE;
 
 /**
  * 消息
  */
 public class MessageFragment extends BaseFragment implements EasyPermissions.PermissionCallbacks{
-    /**
-     * 请求CAMERA权限码
-     */
-    public static final int REQUEST_CAMERA_PERM = 101;
-
-    /**
-     * 扫描跳转Activity RequestCode
-     */
-    public static final int REQUEST_CODE = 111;
-    /**
-     * 选择系统图片Request Code
-     */
-    public static final int REQUEST_IMAGE = 112;
-
 
     @BindView(R.id.tv_to_search)
     DrawableCenterTextView tv_to_search;
