@@ -426,7 +426,7 @@ public class ChatGroupHelper {
                     IMMessageBean imMessageBean = null;
                     if (null != contactBean) {
                         imMessageBean = new IMMessageBean(contactBean.getConv_id(), 1001, System.currentTimeMillis(),
-                                "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), shareMessage);
+                                "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), shareMessage.toString());
                     }
                     MessageListUtils.saveMessageInfo(UserUtils.getMessageListInfo(), imMessageBean);
                 }
@@ -491,7 +491,7 @@ public class ChatGroupHelper {
 
                     //头像暂时未保存
                     IMMessageBean imMessageBean = shareItemInfo.getImMessageBean();
-                    imMessageBean.setLastMessage(shareMessage);
+                    imMessageBean.setLastMessage(shareMessage.toString());
                     imMessageBean.setLastTime(System.currentTimeMillis());
                     MessageListUtils.saveMessageInfo(UserUtils.getMessageListInfo(), imMessageBean);
                 }

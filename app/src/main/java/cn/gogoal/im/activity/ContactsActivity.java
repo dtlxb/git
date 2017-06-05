@@ -290,25 +290,25 @@ public class ContactsActivity extends BaseActivity {
 
     private void parseContactDatas(String responseInfo, List<ContactBean> contactBeanList) {
         List<ContactBean> list = new ArrayList<>();
-        /*BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
+        BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
                 responseInfo,
                 new TypeReference<BaseBeanList<ContactBean<String>>>() {
-                });*/
-
-        BaseBeanList<UserBean<String>> users = JSONObject.parseObject(
-                responseInfo,
-                new TypeReference<BaseBeanList<UserBean<String>>>() {
                 });
 
+        /*BaseBeanList<UserBean<String>> users = JSONObject.parseObject(
+                responseInfo,
+                new TypeReference<BaseBeanList<UserBean<String>>>() {
+                });*/
+
         //缓存到数据库
-        list.clear();
+        /*list.clear();
         for (int i = 0; i < users.getData().size(); i++) {
             users.getData().get(i).save();
             list.add(new ContactBean());
-        }
+        }*/
 
-        /*list.clear();
-        list.addAll(beanList.getData());*/
+        list.clear();
+        list.addAll(beanList.getData());
 
         upDataFootCount(list);
 
@@ -330,8 +330,6 @@ public class ContactsActivity extends BaseActivity {
 
             added = false;
         }
-
-        KLog.e(DataSupport.findFirst(UserBean.class));
 
     }
 }

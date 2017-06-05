@@ -8,6 +8,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.socks.library.KLog;
 
+import java.util.List;
+
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.SPTools;
@@ -45,7 +47,7 @@ public class MessageListUtils {
             jsonObject.put("friend_id", imMessageBean.getFriend_id());
             jsonObject.put("avatar", imMessageBean.getAvatar());
 
-            AVIMMessage message = imMessageBean.getLastMessage();
+            AVIMMessage message = JSON.parseObject(imMessageBean.getLastMessage(), AVIMMessage.class);
             //判断消息类型
             if (message instanceof GGImageMessage) {
                 double width = StringUtils.pareseStringDouble(String.valueOf(((GGImageMessage) message).getFileMetaData().get("width")));
@@ -113,6 +115,18 @@ public class MessageListUtils {
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject = (JSONObject) jsonArray.get(i);
             count += jsonObject.getInteger("unReadCounts");
+        }
+        return count;
+    }
+
+    /**
+     * 消息列表：获取未读数
+     */
+    public static int getAllMessageUnreadCount(List IMMessages) {
+        int count = 0;
+        for (int i = 0; i < IMMessages.size(); i++) {
+            IMMessageBean bean = (IMMessageBean) IMMessages.get(i);
+            count += Integer.parseInt(bean.getUnReadCounts());
         }
         return count;
     }

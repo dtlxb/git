@@ -67,6 +67,7 @@ import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.database.crud.DataSupport;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
@@ -96,7 +97,7 @@ public class MessageFragment extends BaseFragment {
 
     private ListAdapter listAdapter;
 
-    private JSONArray jsonArray;
+    //private JSONArray jsonArray;
 
     private int allCount;
     private BubbleLinearLayout mBubbleView;
@@ -140,12 +141,11 @@ public class MessageFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        jsonArray = UserUtils.getMessageListInfo();
-        allCount = MessageListUtils.getAllMessageUnreadCount(jsonArray);
-        sendUnreadCount(allCount);
-//        KLog.e(jsonArray);
         IMMessageBeans.clear();
-        IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
+        IMMessageBeans.addAll(DataSupport.findAll(IMMessageBean.class));
+        allCount = MessageListUtils.getAllMessageUnreadCount(IMMessageBeans);
+        sendUnreadCount(allCount);
+        KLog.e(IMMessageBeans);
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
             //按照时间排序
             Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
@@ -155,6 +155,7 @@ public class MessageFragment extends BaseFragment {
                 }
             });
         }
+
         listAdapter.notifyDataSetChanged();
 
         listAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
@@ -331,7 +332,8 @@ public class MessageFragment extends BaseFragment {
 
             //SDK定义的消息类型
             if (messageBean.getLastMessage() != null) {
-                String content = messageBean.getLastMessage().getContent();
+                AVIMMessage cacheMessage = JSON.parseObject(messageBean.getLastMessage(), AVIMMessage.class);
+                String content = cacheMessage.getContent();
                 JSONObject contentObject = JSON.parseObject(content);
                 JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
                 String _lctype = contentObject.getString("_lctype");
@@ -611,7 +613,7 @@ public class MessageFragment extends BaseFragment {
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(ConversationId)) {
                 IMMessageBeans.get(i).setLastTime(rightNow);
-                IMMessageBeans.get(i).setLastMessage(message);
+                IMMessageBeans.get(i).setLastMessage(JSON.toJSONString(message));
                 unreadMessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts().equals("") ? "0" : IMMessageBeans.get(i).getUnReadCounts()) + 1;
                 IMMessageBeans.get(i).setUnReadCounts(unreadMessage + "");
                 isTheSame = true;
@@ -622,7 +624,7 @@ public class MessageFragment extends BaseFragment {
         if (!isTheSame) {
             IMMessageBean imMessageBean = new IMMessageBean();
             imMessageBean.setConversationID(ConversationId);
-            imMessageBean.setLastMessage(message);
+            imMessageBean.setLastMessage(JSON.toJSONString(message));
             imMessageBean.setLastTime(rightNow);
             imMessageBean.setNickname(nickName);
             imMessageBean.setAvatar(avatar);
@@ -633,9 +635,9 @@ public class MessageFragment extends BaseFragment {
 
         //保存
         IMMessageBean imMessageBean = new IMMessageBean(ConversationId, chatType, message.getTimestamp(),
-                isTheSame ? String.valueOf(unreadMessage) : "1", nickName, friend_id, avatar, message);
+                isTheSame ? String.valueOf(unreadMessage) : "1", nickName, friend_id, avatar, JSON.toJSONString(message));
         KLog.e(imMessageBean);
-        MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
+        imMessageBean.save();
         allCount++;
         sendUnreadCount(allCount);
         //按照时间排序

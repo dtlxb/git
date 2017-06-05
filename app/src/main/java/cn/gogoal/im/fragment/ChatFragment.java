@@ -127,7 +127,7 @@ public class ChatFragment extends BaseFragment {
     private List<AVIMMessage> messageList = new ArrayList<>();
     private IMChatAdapter imChatAdapter;
     private List<FoundData.ItemPojos> itemPojosList;
-    private JSONArray jsonArray;
+    //private JSONArray jsonArray;
     private ContactBean contactBean;
     private EmojiFragment emojiFragment;
     private FunctionFragment functionFragment;
@@ -517,16 +517,17 @@ public class ChatFragment extends BaseFragment {
         if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
             if (null != contactBean) {
                 imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(), "0",
-                        null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), message);
+                        null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), JSON.toJSONString(message));
             }
         } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
             imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
-                    "0", imConversation.getName(), "", "", message);
+                    "0", imConversation.getName(), "", "", JSON.toJSONString(message));
         } else {
 
         }
 
-        MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
+        //MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
+        imMessageBean.save();
     }
 
     private void sendStockMessage(String stockCode, String stockName) {
@@ -779,7 +780,8 @@ public class ChatFragment extends BaseFragment {
     private void setCacheMessage() {
         IMMessageBean imMessageBean = MessageListUtils.getIMMessageBeanById(UserUtils.getMessageListInfo(), imConversation.getConversationId());
         if (imMessageBean != null && imMessageBean.getLastMessage() != null) {
-            JSONObject contentObject = JSON.parseObject(imMessageBean.getLastMessage().getContent());
+            AVIMMessage message = JSON.parseObject(imMessageBean.getLastMessage(), AVIMMessage.class);
+            JSONObject contentObject = JSON.parseObject(message.getContent());
             String _lctype = contentObject.getString("_lctype");
             if (_lctype.equals(AppConst.IM_MESSAGE_TYPE_TEXT)) {
                 String messageText = contentObject.getString("_lctext");
@@ -807,7 +809,7 @@ public class ChatFragment extends BaseFragment {
                     KLog.e(contactBean);
                     imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0",
                             null != contactBean.getTarget() ? contactBean.getTarget() : "",
-                            String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), lastMessage);
+                            String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), JSON.toJSONString(lastMessage));
                 }
             } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                 //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息(群对象和群头像暂时为空)
@@ -818,9 +820,10 @@ public class ChatFragment extends BaseFragment {
                     }
                 }
                 imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0", imConversation.getName(),
-                        "", imConversation.getAttribute("avatar") != null ? (String) imConversation.getAttribute("avatar") : "", lastMessage);
+                        "", imConversation.getAttribute("avatar") != null ? (String) imConversation.getAttribute("avatar") : "", JSON.toJSONString(lastMessage));
             }
-            MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
+            //MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
+            imMessageBean.save();
         }
 
         imChatAdapter.setChatType(chatType);
@@ -857,7 +860,7 @@ public class ChatFragment extends BaseFragment {
         if (null != conversation) {
             imConversation = conversation;
             chatType = (int) imConversation.getAttribute("chat_type");
-            jsonArray = UserUtils.getMessageListInfo();
+            //jsonArray = UserUtils.getMessageListInfo();
             if (chatType == AppConst.IM_CHAT_TYPE_SINGLE && contact != null) {
                 contactBean = contact;
             }
@@ -1015,7 +1018,7 @@ public class ChatFragment extends BaseFragment {
                 IMMessageBean imMessageBean = null;
                 if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                     imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
-                            "0", message.getFrom(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message);
+                            "0", message.getFrom(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message.toString());
 
                 } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                     //加人删人逻辑
@@ -1028,10 +1031,11 @@ public class ChatFragment extends BaseFragment {
 
                     //群对象和群头像暂时为空
                     imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
-                            "0", conversation.getName(), "", "", message);
+                            "0", conversation.getName(), "", "", JSON.toJSONString(message));
                 }
 
-                MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
+                //MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
+                imMessageBean.save();
             }
         }
     }
