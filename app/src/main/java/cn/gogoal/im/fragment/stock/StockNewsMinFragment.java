@@ -18,8 +18,8 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.stock.StockNewsAllListActivity;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
+import cn.gogoal.im.activity.stock.StockNewsAllListActivity;
 import cn.gogoal.im.adapter.NewsAdapter;
 import cn.gogoal.im.adapter.ResearchAdapter;
 import cn.gogoal.im.base.BaseFragment;
@@ -127,12 +127,12 @@ public class StockNewsMinFragment extends BaseFragment {
     private void getDatas() {
         if (parentPosition != 2) {
             dataListsNews = new ArrayList<>();
-            newsAdapter = new NewsAdapter(dataListsNews, stockNewsType,true);
+            newsAdapter = new NewsAdapter(dataListsNews, stockNewsType, true);
             recyclerView.setAdapter(newsAdapter);
             getNews(stockNewsType.getNewsType());
         } else {
             dataListsResearch = new ArrayList<>();
-            researchadapter = new ResearchAdapter(dataListsResearch, stockNewsType.getNewsSource(),true);
+            researchadapter = new ResearchAdapter(dataListsResearch, stockNewsType.getNewsSource(), true);
             recyclerView.setAdapter(researchadapter);
             getYanBao();
         }
@@ -184,7 +184,7 @@ public class StockNewsMinFragment extends BaseFragment {
         param.put("stock_code", stockCode);
         param.put("page", "1");
         param.put("type", String.valueOf(type));
-        param.put("rows", "3");
+        param.put("rows", "5");
 
         new GGOKHTTP(param, GGOKHTTP.GET_STOCK_NEWS, new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -194,7 +194,7 @@ public class StockNewsMinFragment extends BaseFragment {
                     dataListsNews.addAll(
                             JSONObject.parseObject(responseInfo, StockDetailNewsBean.class).getData());
 
-                    if (dataListsNews.size() < 3) {
+                    if (dataListsNews.size() < 5) {
                         hideFootView();
                     } else {
                         showFootView();
@@ -223,7 +223,7 @@ public class StockNewsMinFragment extends BaseFragment {
         param.put("token", UserUtils.getToken());
         param.put("first_class", "公司报告");
         param.put("page", "1");
-        param.put("rows", "3");
+        param.put("rows", "5");
 
         new GGOKHTTP(param, GGOKHTTP.REPORT_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -234,7 +234,7 @@ public class StockNewsMinFragment extends BaseFragment {
                                     responseInfo, StockDetailResearchBean.class).getData());
                     researchadapter.notifyDataSetChanged();
 
-                    if (dataListsResearch.size() < 3) {
+                    if (dataListsResearch.size() < 5) {
                         hideFootView();
                     } else {
                         showFootView();

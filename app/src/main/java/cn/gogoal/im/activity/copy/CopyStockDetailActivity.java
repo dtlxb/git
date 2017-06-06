@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -20,7 +19,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver;
 import android.view.animation.RotateAnimation;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -51,7 +49,6 @@ import cn.gogoal.im.adapter.TreatAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
-import cn.gogoal.im.bean.stock.ChartImageBean;
 import cn.gogoal.im.bean.stock.Stock;
 import cn.gogoal.im.bean.stock.StockDetail;
 import cn.gogoal.im.bean.stock.TreatData;
@@ -63,7 +60,6 @@ import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.fragment.stock.ImageChartFragment;
 import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
 import cn.gogoal.im.ui.copy.BitmapChartView;
 import cn.gogoal.im.ui.copy.TimesFivesBitmap;
@@ -241,7 +237,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     private int dayk4;
 
     //图片表格
-    @BindView(R.id.stock_no_data)
+    /*@BindView(R.id.stock_no_data)
     LinearLayout layoutNoData;
 
     @BindView(R.id.tablayout_chatImg)
@@ -251,7 +247,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     @BindView(R.id.smartImageView_chat)
     ViewPager vpImageChart;
     @BindArray(R.array.srock_chart_image)
-    String[] arrStockChartImage;
+    String[] arrStockChartImage;*/
 
     //修改的中间新闻模块
     @BindView(R.id.tablayout_news_)
@@ -285,13 +281,13 @@ public class CopyStockDetailActivity extends BaseActivity {
 
         initList(stockCode);
 
-        getImageChart();
+        //getImageChart();
 
         onShow(showItem);
 
     }
 
-    private void getImageChart() {
+    /*private void getImageChart() {
         AppDevice.setViewWidth$Height(layoutImageChart, -1, 350 * AppDevice.getWidth(getActivity()) / 560);
 
         Map<String, String> param = new HashMap<>();
@@ -332,7 +328,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         };
         new GGOKHTTP(param, GGOKHTTP.DM_GET_IMG, ggHttpInterface).startRealGet();
 
-    }
+    }*/
 
     /***/
     private void setNewsTab() {
@@ -1545,7 +1541,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         this.now = now;
     }
 
-    private class ImageChartAdapter extends FragmentPagerAdapter {
+    /*private class ImageChartAdapter extends FragmentPagerAdapter {
         private List<String> datas;
 
         private ImageChartAdapter(FragmentManager fm, List<String> datas) {
@@ -1568,7 +1564,7 @@ public class CopyStockDetailActivity extends BaseActivity {
             return arrStockChartImage[position];
         }
 
-    }
+    }*/
 
     /*五档、明细切换*/
     public void toggleTreatMode() {

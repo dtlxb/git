@@ -552,9 +552,9 @@
                     <android.support.v4.view.ViewPager
                         android:id="@+id/vp_news_"
                         android:layout_width="match_parent"
-                        android:layout_height="270dp" />
+                        android:layout_height="415dp" />
 
-                    <android.support.design.widget.TabLayout
+                    <!--<android.support.design.widget.TabLayout
                         android:id="@+id/tablayout_chatImg"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -577,9 +577,9 @@
 
                         <include layout="@layout/stock_no_data" />
 
-                    </FrameLayout>
+                    </FrameLayout>-->
 
-                    <android.support.design.widget.TabLayout
+                    <!--<android.support.design.widget.TabLayout
                         android:id="@+id/tablayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -599,7 +599,8 @@
 
                     </FrameLayout>
 
-                    <include layout="@layout/line_space_line" />
+                    <include layout="@layout/line_space_line" />-->
+
                 </LinearLayout>
 
             </android.support.v4.widget.NestedScrollView>
