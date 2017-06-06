@@ -15,6 +15,8 @@ public class UserBean<T> extends DataSupport {
 
     private T avatar;//头像URL
 
+    private String duty;//职务
+
     public int getFriend_id() {
         return friend_id;
     }
@@ -39,12 +41,21 @@ public class UserBean<T> extends DataSupport {
         this.avatar = avatar;
     }
 
+    public String getDuty() {
+        return duty;
+    }
+
+    public void setDuty(String duty) {
+        this.duty = duty;
+    }
+
     @Override
     public String toString() {
         return "UserBean{" +
                 "friend_id=" + friend_id +
                 ", nickname='" + nickname + '\'' +
                 ", avatar=" + avatar +
+                ", duty='" + duty + '\'' +
                 '}';
     }
 

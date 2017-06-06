@@ -37,6 +37,7 @@ import cn.gogoal.im.bean.BoxScreenData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -178,9 +179,9 @@ public class MainActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
 
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    UserUtils.saveContactInfo(responseInfo);
+                    UserInfoUtils.saveAllUserInfo(responseInfo);
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
-                    UserUtils.saveContactInfo("{\"code\":0,\"data\":[],\"message\":\"成功\"}");
+                    UserInfoUtils.saveAllUserInfo("{\"code\":0,\"data\":[],\"message\":\"成功\"}");
                 } else {
                     UIHelper.toastError(getActivity(), GGOKHTTP.getMessage(responseInfo));
                 }

@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.socks.library.KLog;
@@ -37,6 +36,7 @@ import cn.gogoal.im.bean.UserBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -61,7 +61,7 @@ public class ContactsActivity extends BaseActivity {
     IndexBar indexBar;
 
     @BindView(R.id.tv_constacts_flag)
-    TextView tvContactsFlag;
+    TextView tvConstactsFlag;
 
     @BindView(R.id.tv_to_search)
     DrawableCenterTextView tvSearch;
@@ -92,10 +92,10 @@ public class ContactsActivity extends BaseActivity {
         TextView RightText = (TextView) xTitle.getViewByAction(textAction);
         RightText.setTextColor(getResColor(R.color.textColor_333333));
 
-        ViewGroup.LayoutParams tvParams = tvContactsFlag.getLayoutParams();
+        ViewGroup.LayoutParams tvParams = tvConstactsFlag.getLayoutParams();
         tvParams.width = AppDevice.getWidth(getActivity()) / 4;
         tvParams.height = AppDevice.getWidth(getActivity()) / 4;
-        tvContactsFlag.setLayoutParams(tvParams);
+        tvConstactsFlag.setLayoutParams(tvParams);
 
         textViewFooter = new TextView(mContext);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -2);
@@ -111,7 +111,7 @@ public class ContactsActivity extends BaseActivity {
                 getActivity(), LinearLayoutManager.VERTICAL, false));
 
         //indexbar初始化
-        indexBar.setmPressedShowTextView(tvContactsFlag)//设置HintTextView
+        indexBar.setmPressedShowTextView(tvConstactsFlag)//设置HintTextView
                 .setmLayoutManager(layoutManager);//设置RecyclerView的LayoutManager
 
         contactBeanList = new ArrayList<>();
@@ -195,13 +195,12 @@ public class ContactsActivity extends BaseActivity {
 
     private void getData() {
         //缓存的联系人请求数据
-        String friendResponseInfo = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", "");
-        if (TextUtils.isEmpty(friendResponseInfo)) {
-            getFriendList(contactBeanList);
+        //String friendResponseInfo = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", "");
+        List<UserBean> userBeen = DataSupport.findAll(UserBean.class);
+        if (null != userBeen && userBeen.size() > 0) {
+            parseContactDatas(userBeen, contactBeanList);
         } else {
-            if (!JSONObject.parseObject(friendResponseInfo).getJSONArray("data").isEmpty()) {
-                parseContactDatas(friendResponseInfo, contactBeanList);
-            }
+            getFriendList(contactBeanList);
         }
     }
 
@@ -268,12 +267,11 @@ public class ContactsActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    //SPTools.saveString(UserUtils.getMyAccountId() + "_contact_beans", responseInfo);
-                    UserUtils.saveContactInfo(responseInfo);
+                    UserInfoUtils.saveAllUserInfo(responseInfo);
                     parseContactDatas(responseInfo, contactBeanList);
 
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
-                    UserUtils.saveContactInfo("{\"code\":0,\"data\":[],\"message\":\"成功\"}");
+                    UserInfoUtils.saveAllUserInfo("{\"code\":0,\"data\":[],\"message\":\"成功\"}");
                 } else {
                     UIHelper.toastError(getActivity(), GGOKHTTP.getMessage(responseInfo));
                 }
@@ -288,25 +286,13 @@ public class ContactsActivity extends BaseActivity {
         new GGOKHTTP(param, GGOKHTTP.GET_FRIEND_LIST, ggHttpInterface).startGet();
     }
 
+    //拉取的数据解析
     private void parseContactDatas(String responseInfo, List<ContactBean> contactBeanList) {
         List<ContactBean> list = new ArrayList<>();
         BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
                 responseInfo,
                 new TypeReference<BaseBeanList<ContactBean<String>>>() {
                 });
-
-        /*BaseBeanList<UserBean<String>> users = JSONObject.parseObject(
-                responseInfo,
-                new TypeReference<BaseBeanList<UserBean<String>>>() {
-                });*/
-
-        //缓存到数据库
-        /*list.clear();
-        for (int i = 0; i < users.getData().size(); i++) {
-            users.getData().get(i).save();
-            list.add(new ContactBean());
-        }*/
-
         list.clear();
         list.addAll(beanList.getData());
 
@@ -330,6 +316,40 @@ public class ContactsActivity extends BaseActivity {
 
             added = false;
         }
+    }
 
+    //缓存解析
+    private void parseContactDatas(List<UserBean> userBeanList, List<ContactBean> contactBeanList) {
+        List<ContactBean> list = new ArrayList<>();
+
+        for (int i = 0; i < userBeanList.size(); i++) {
+            ContactBean contactBean = new ContactBean();
+            contactBean.setUserId(userBeanList.get(i).getFriend_id());
+            contactBean.setAvatar(userBeanList.get(i).getAvatar());
+            contactBean.setNickname(userBeanList.get(i).getNickname());
+            contactBean.setDuty(userBeanList.get(i).getDuty());
+            list.add(contactBean);
+        }
+
+        upDataFootCount(list);
+
+        for (ContactBean bean : list) {
+            bean.setContactType(ContactBean.ContactType.PERSION_ITEM);
+        }
+
+        contactBeanList.addAll(list);
+
+        SuspendedDecoration mDecoration = new SuspendedDecoration(getActivity());
+
+        mDecoration.setmDatas(contactBeanList);
+
+        indexBar.setmSourceDatas(contactBeanList)//设置数据
+                .invalidate();
+
+        if (added) {
+            rvContacts.addItemDecoration(mDecoration);
+
+            added = false;
+        }
     }
 }
