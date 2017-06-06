@@ -3,6 +3,7 @@ package cn.gogoal.im.common.IMHelpers;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
@@ -426,9 +427,10 @@ public class ChatGroupHelper {
                     IMMessageBean imMessageBean = null;
                     if (null != contactBean) {
                         imMessageBean = new IMMessageBean(contactBean.getConv_id(), 1001, System.currentTimeMillis(),
-                                "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), shareMessage.toString());
+                                "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()),
+                                String.valueOf(contactBean.getAvatar()), JSON.toJSONString(shareMessage));
                     }
-                    MessageListUtils.saveMessageInfo(UserUtils.getMessageListInfo(), imMessageBean);
+                    MessageListUtils.saveMessageInfo(imMessageBean);
                 }
             }
 
@@ -491,9 +493,9 @@ public class ChatGroupHelper {
 
                     //头像暂时未保存
                     IMMessageBean imMessageBean = shareItemInfo.getImMessageBean();
-                    imMessageBean.setLastMessage(shareMessage.toString());
+                    imMessageBean.setLastMessage(JSON.toJSONString(shareMessage));
                     imMessageBean.setLastTime(System.currentTimeMillis());
-                    MessageListUtils.saveMessageInfo(UserUtils.getMessageListInfo(), imMessageBean);
+                    MessageListUtils.saveMessageInfo(imMessageBean);
                 }
             }
 

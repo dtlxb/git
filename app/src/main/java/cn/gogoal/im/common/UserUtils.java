@@ -89,7 +89,6 @@ public class UserUtils {
         if (user == null) return null;
         return user.getString("account_id");
     }
-
     /**
      * 获取用户名
      *

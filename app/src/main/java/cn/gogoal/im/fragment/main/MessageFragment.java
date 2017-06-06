@@ -143,7 +143,7 @@ public class MessageFragment extends BaseFragment {
         super.onResume();
         IMMessageBeans.clear();
         IMMessageBeans.addAll(DataSupport.findAll(IMMessageBean.class));
-        allCount = MessageListUtils.getAllMessageUnreadCount(IMMessageBeans);
+        allCount = MessageListUtils.getAllMessageUnreadCount();
         sendUnreadCount(allCount);
         KLog.e(IMMessageBeans);
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
@@ -636,8 +636,7 @@ public class MessageFragment extends BaseFragment {
         //保存
         IMMessageBean imMessageBean = new IMMessageBean(ConversationId, chatType, message.getTimestamp(),
                 isTheSame ? String.valueOf(unreadMessage) : "1", nickName, friend_id, avatar, JSON.toJSONString(message));
-        KLog.e(imMessageBean);
-        imMessageBean.save();
+        MessageListUtils.saveMessageInfo(imMessageBean);
         allCount++;
         sendUnreadCount(allCount);
         //按照时间排序

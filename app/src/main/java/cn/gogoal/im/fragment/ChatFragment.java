@@ -33,8 +33,6 @@ import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
-import com.avos.avoscloud.okhttp.Cache;
-import com.avos.avoscloud.okhttp.internal.http.CacheStrategy;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -79,6 +77,7 @@ import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.database.crud.DataSupport;
 import cn.gogoal.im.common.recording.MediaManager;
 import cn.gogoal.im.ui.KeyboardLaunchLinearLayout;
 import cn.gogoal.im.ui.view.SwitchImageView;
@@ -127,7 +126,6 @@ public class ChatFragment extends BaseFragment {
     private List<AVIMMessage> messageList = new ArrayList<>();
     private IMChatAdapter imChatAdapter;
     private List<FoundData.ItemPojos> itemPojosList;
-    //private JSONArray jsonArray;
     private ContactBean contactBean;
     private EmojiFragment emojiFragment;
     private FunctionFragment functionFragment;
@@ -516,18 +514,24 @@ public class ChatFragment extends BaseFragment {
         }
         if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
             if (null != contactBean) {
+                //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息
+                KLog.e(contactBean);
                 imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(), "0",
-                        null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), JSON.toJSONString(message));
+                        null != contactBean.getTarget() ? contactBean.getTarget() : "",
+                        String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), JSON.toJSONString(message));
             }
         } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
-            imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
-                    "0", imConversation.getName(), "", "", JSON.toJSONString(message));
-        } else {
-
+            //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息(群对象和群头像暂时为空)
+            if (message instanceof GGTextMessage) {
+                String strMessage = ((GGTextMessage) message).getText();
+                if (StringUtils.StringFilter(strMessage, "@*[\\S]*[ \r\n]")) {
+                    ((GGTextMessage) message).setText(strMessage.replace(" ", ""));
+                }
+            }
+            imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(), "0", imConversation.getName(),
+                    "", imConversation.getAttribute("avatar") != null ? (String) imConversation.getAttribute("avatar") : "", JSON.toJSONString(message));
         }
-
-        //MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
-        imMessageBean.save();
+        MessageListUtils.saveMessageInfo(imMessageBean);
     }
 
     private void sendStockMessage(String stockCode, String stockName) {
@@ -778,10 +782,12 @@ public class ChatFragment extends BaseFragment {
 
     //寻找信息  显示草稿
     private void setCacheMessage() {
-        IMMessageBean imMessageBean = MessageListUtils.getIMMessageBeanById(UserUtils.getMessageListInfo(), imConversation.getConversationId());
-        if (imMessageBean != null && imMessageBean.getLastMessage() != null) {
-            AVIMMessage message = JSON.parseObject(imMessageBean.getLastMessage(), AVIMMessage.class);
-            JSONObject contentObject = JSON.parseObject(message.getContent());
+        List<IMMessageBean> cacheBeans = DataSupport.where("conversationID = ?",
+                imConversation.getConversationId()).find(IMMessageBean.class);
+        if (cacheBeans != null && cacheBeans.get(0) != null && cacheBeans.get(0).getLastMessage() != null) {
+            AVIMMessage cacheMessage = JSON.parseObject(cacheBeans.get(0).getLastMessage(), AVIMMessage.class);
+            String content = cacheMessage.getContent();
+            JSONObject contentObject = JSON.parseObject(content);
             String _lctype = contentObject.getString("_lctype");
             if (_lctype.equals(AppConst.IM_MESSAGE_TYPE_TEXT)) {
                 String messageText = contentObject.getString("_lctext");
@@ -801,31 +807,8 @@ public class ChatFragment extends BaseFragment {
         setCacheMessage();
         //单聊，群聊处理(没发消息的时候不保存)
         if (messageList.size() > 0 && needUpdate) {
-            IMMessageBean imMessageBean = null;
-            AVIMMessage lastMessage = messageList.get(messageList.size() - 1);
-            if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
-                if (null != contactBean) {
-                    //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息
-                    KLog.e(contactBean);
-                    imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0",
-                            null != contactBean.getTarget() ? contactBean.getTarget() : "",
-                            String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), JSON.toJSONString(lastMessage));
-                }
-            } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
-                //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息(群对象和群头像暂时为空)
-                if (lastMessage instanceof GGTextMessage) {
-                    String strMessage = ((GGTextMessage) lastMessage).getText();
-                    if (StringUtils.StringFilter(strMessage, "@*[\\S]*[ \r\n]")) {
-                        ((GGTextMessage) lastMessage).setText(strMessage.replace(" ", ""));
-                    }
-                }
-                imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, lastMessage.getTimestamp(), "0", imConversation.getName(),
-                        "", imConversation.getAttribute("avatar") != null ? (String) imConversation.getAttribute("avatar") : "", JSON.toJSONString(lastMessage));
-            }
-            //MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
-            imMessageBean.save();
+            saveToMessageList(messageList.get(messageList.size() - 1));
         }
-
         imChatAdapter.setChatType(chatType);
         imChatAdapter.notifyDataSetChanged();
         message_recycler.getLayoutManager().scrollToPosition(messageList.size() - 1);
@@ -860,7 +843,6 @@ public class ChatFragment extends BaseFragment {
         if (null != conversation) {
             imConversation = conversation;
             chatType = (int) imConversation.getAttribute("chat_type");
-            //jsonArray = UserUtils.getMessageListInfo();
             if (chatType == AppConst.IM_CHAT_TYPE_SINGLE && contact != null) {
                 contactBean = contact;
             }
@@ -1018,7 +1000,7 @@ public class ChatFragment extends BaseFragment {
                 IMMessageBean imMessageBean = null;
                 if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                     imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
-                            "0", message.getFrom(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), message.toString());
+                            "0", message.getFrom(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), JSON.toJSONString(message));
 
                 } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                     //加人删人逻辑
@@ -1034,8 +1016,8 @@ public class ChatFragment extends BaseFragment {
                             "0", conversation.getName(), "", "", JSON.toJSONString(message));
                 }
 
-                //MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
-                imMessageBean.save();
+                MessageListUtils.saveMessageInfo(imMessageBean);
+
             }
         }
     }

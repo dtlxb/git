@@ -33,6 +33,7 @@ import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.database.crud.DataSupport;
 import cn.gogoal.im.ui.view.XTitle;
 
 
@@ -46,7 +47,6 @@ public class IMNewFriendActivity extends BaseActivity {
     private List<IMNewFriendBean> newFriendBeans = new ArrayList<>();
     private ListAdapter listAdapter;
     private JSONArray jsonArray;
-    private JSONArray messageListJsonArray;
     private List<IMMessageBean> IMMessageBeans = new ArrayList<>();
     private int addType;
     private String conversationId;
@@ -64,12 +64,11 @@ public class IMNewFriendActivity extends BaseActivity {
         conversationId = getIntent().getStringExtra("conversation_id");
         titleBar = setMyTitle(R.string.title_message, true);
         //未读数清零
-        messageListJsonArray = UserUtils.getMessageListInfo();
-        IMMessageBeans.addAll(JSON.parseArray(String.valueOf(messageListJsonArray), IMMessageBean.class));
+        IMMessageBeans.addAll(DataSupport.findAll(IMMessageBean.class));
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(conversationId)) {
                 IMMessageBeans.get(i).setUnReadCounts("0");
-                MessageListUtils.saveMessageInfo(messageListJsonArray, IMMessageBeans.get(i));
+                MessageListUtils.saveMessageInfo(IMMessageBeans.get(i));
             }
         }
 

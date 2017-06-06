@@ -95,7 +95,7 @@ public class MyGroupsActivity extends BaseActivity {
         xLayout.setEmptyText("你还没有群组\n\r赶快找到属于你的组织吧");
 
         recyclerView.setLayoutManager(
-                new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
+                new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
 
         recyclerView.addItemDecoration(new NormalItemDecoration(mContext));
 
@@ -192,6 +192,7 @@ public class MyGroupsActivity extends BaseActivity {
                             }
                         });
                     }
+
                     public void failed(Exception e) {
                     }
                 });
@@ -216,7 +217,7 @@ public class MyGroupsActivity extends BaseActivity {
                         startActivity(intent);
                     } else {
                         ShareItemInfo shareItemInfo = new ShareItemInfo<>(groupAvatar[0], data.getName(), entity,
-                                MessageListUtils.getIMMessageBeanById(UserUtils.getMessageListInfo(), data.getConv_id()));
+                                MessageListUtils.getIMMessageBeanById(data.getConv_id()));
                         ShareMessageDialog.newInstance(shareItemInfo).show(getSupportFragmentManager());
                     }
                 }
