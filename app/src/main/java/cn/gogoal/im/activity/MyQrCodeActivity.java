@@ -117,7 +117,8 @@ public class MyQrCodeActivity extends BaseActivity implements EasyPermissions.Pe
         Intent intent=new Intent(MyQrCodeActivity.this,ShareMessageActivity.class);
         Bundle bundle=new Bundle();
         GGShareEntity entity=new GGShareEntity();
-
+        entity.setShareType(GGShareEntity.SHARE_TYPE_IMAGE);
+        entity.setArg(qrCodeBitmap);
         bundle.putParcelable("share_web_data",entity);
         intent.putExtras(bundle);
         startActivity(intent);

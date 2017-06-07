@@ -437,18 +437,13 @@
                 android:textSize="@dimen/text_size_15" />
         </LinearLayout>
 
-        <RelativeLayout
+        <ImageButton
             android:id="@+id/btn_close"
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:background="@drawable/selector_background"
-            android:gravity="center">
+            android:src="@drawable/close"
+            android:contentDescription="@null" />
 
-            <ImageButton
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:background="@null"
-                android:src="@drawable/close" />
-        </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

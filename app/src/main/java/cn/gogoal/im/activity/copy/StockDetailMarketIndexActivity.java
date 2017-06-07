@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.annotation.ColorRes;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -60,10 +62,6 @@ import hply.com.niugu.bean.StockDetailMarketIndexData;
 import hply.com.niugu.bean.StockRankBean;
 import hply.com.niugu.stock.StockMinuteBean;
 import hply.com.niugu.stock.StockMinuteData;
-import in.srain.cube.views.ptr.PtrClassicFrameLayout;
-import in.srain.cube.views.ptr.PtrDefaultHandler;
-import in.srain.cube.views.ptr.PtrFrameLayout;
-import in.srain.cube.views.ptr.PtrHandler;
 
 
 /*
@@ -110,7 +108,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     ScrollView scrollView;
     //下拉刷新rootView
     @BindView(R.id.fragment_rotate_header_with_view_group_frame)
-    PtrClassicFrameLayout ptrFrame;
+    SwipeRefreshLayout ptrFrame;
     //下拉刷新头部控件
     private HeaderView headerView;
     //股票价格
@@ -241,17 +239,23 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+
+        iniRefresh(ptrFrame);
+
         layoutTreat.setVisibility(View.GONE);
 
         rotateAnimation = AnimationUtils.getInstance().setLoadingAnime(btnRefresh, R.mipmap.loading_white);
         //获取股票数据
         stockName = getIntent().getStringExtra("stockName");
         stockCode = getIntent().getStringExtra("stockCode");
+
+        KLog.e("stockCode="+stockCode+";stockName="+stockName);
+
         textHeadTitle.setText(stockName + "(" + stockCode.substring(2, stockCode.length()) + ")");
         init();
         InitList(stockCode);
         seat = 0;
-        getStockCode = stockCode.substring(0, 2) + "." + stockCode.substring(2, stockCode.length());
+        getStockCode = stockCode.substring(0, 2) + "." + stockCode.substring(2);
         getMarketInformation(seat, getStockCode);
         onShow(showItem);
     }
@@ -403,31 +407,41 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         headerView.setPullImage(R.mipmap.arrows_white);
         headerView.setLoadingImage(R.mipmap.loading_white);
 
-        //设置下拉刷新属性
-        ptrFrame.setPtrHandler(new PtrHandler() {
+        ptrFrame.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefreshBegin(PtrFrameLayout frame) {
-                //刷新
-                headerView.loading();
-
-                if (canRefreshLine) {
-                    StockState();
-                    startAnimation();
-                    InitList(stockCode);
-                    refreshChart(showItem);
-                } else {
-                    ptrFrame.refreshComplete();
-                }
-            }
-
-            @Override
-            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+            public void onRefresh() {
+                StockState();
+                startAnimation();
+                InitList(stockCode);
+                refreshChart(showItem);
+                ptrFrame.setRefreshing(false);
             }
         });
+//        //设置下拉刷新属性
+//        ptrFrame.setPtrHandler(new PtrHandler() {
+//            @Override
+//            public void onRefreshBegin(PtrFrameLayout frame) {
+//                //刷新
+//                headerView.loading();
+//
+//                if (canRefreshLine) {
+//                    StockState();
+//                    startAnimation();
+//                    InitList(stockCode);
+//                    refreshChart(showItem);
+//                } else {
+//                    ptrFrame.refreshComplete();
+//                }
+//            }
+//
+//            @Override
+//            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+//                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+//            }
+//        });
 
-        ptrFrame.setHeaderView(headerView);
-        ptrFrame.addPtrUIHandler(headerView);
+//        ptrFrame.setHeaderView(headerView);
+//        ptrFrame.addPtrUIHandler(headerView);
     }
 
     private void startAnimation() {
@@ -839,7 +853,8 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         ptrFrame.postDelayed(new Runnable() {
             @Override
             public void run() {
-                ptrFrame.refreshComplete();
+//                ptrFrame.refreshComplete();
+                ptrFrame.setRefreshing(false);
             }
         }, 1000);
     }
@@ -918,24 +933,31 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     private void getMarketInformation(final int seat, String getStockCode) {
         //type=0;1&channel=sh.000001
         final Map<String, String> param = new HashMap<String, String>();
-        switch (seat) {
-            case 0:
-                param.put("type", "0");
-                param.put("channel", getStockCode);
-                break;
-            case 1:
-                param.put("type", "1");
-                param.put("channel", getStockCode);
-                break;
-            case 2:
-                param.put("type", "2");
-                param.put("channel", getStockCode);
-                break;
-        }
+        param.put("type",String.valueOf(seat));
+        param.put("channel",getStockCode);
+        //MDZZ
+//        switch (seat) {
+//            case 0:
+//                param.put("type", "0");
+//                param.put("channel", getStockCode);
+//                break;
+//            case 1:
+//                param.put("type", "1");
+//                param.put("channel", getStockCode);
+//                break;
+//            case 2:
+//                param.put("type", "2");
+//                param.put("channel", getStockCode);
+//                break;
+//        }
+
+        KLog.e(cn.gogoal.im.common.StringUtils.map2ggParameter(param));
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+
+                KLog.e("TYPE_"+seat,responseInfo);
 
                 StockDatas.clear();
                 StockRankBean bean = JSONObject.parseObject(responseInfo, StockRankBean.class);

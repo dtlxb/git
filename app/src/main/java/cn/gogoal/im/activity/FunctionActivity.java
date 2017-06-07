@@ -103,7 +103,7 @@ public class FunctionActivity extends BaseActivity {
                             }
 
                             GGShareEntity shareEntity = JSONObject.parseObject(value, GGShareEntity.class);
-                            shareEntity.setShareType("1");
+                            shareEntity.setShareType(GGShareEntity.SHARE_TYPE_WEB);
                             if (StringUtils.isActuallyEmpty(shareEntity.getLink())) {
                                 shareEntity.setLink(webView.getUrl());
                             }

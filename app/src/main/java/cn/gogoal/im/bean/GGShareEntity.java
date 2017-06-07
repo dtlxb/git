@@ -3,6 +3,8 @@ package cn.gogoal.im.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Objects;
+
 /**
  * author wangjd on 2017/5/4 0004.
  * Staff_id 1375
@@ -20,13 +22,13 @@ import android.os.Parcelable;
  */
 public class GGShareEntity implements Parcelable {
 
-    private static final int SHARE_TYPE_WEB = 700;
+    public static final int SHARE_TYPE_TEXT = 0;
 
-    private static final int SHARE_TYPE_TEXT = 701;
+    public static final String SHARE_TYPE_WEB = "1";
 
-    private static final int SHARE_TYPE_LIVE = 702;
+    public static final String SHARE_TYPE_LIVE = "2";
 
-    private static final int SHARE_TYPE_IMAGE = 703;
+    public static final String SHARE_TYPE_IMAGE = "3";
 
     private String desc;
 
@@ -41,6 +43,16 @@ public class GGShareEntity implements Parcelable {
     private String live_id;
 
     private String source;
+
+    private Parcelable arg;//走分享时其他扩展情况
+
+    public Parcelable getArg() {
+        return arg;
+    }
+
+    public void setArg(Parcelable arg) {
+        this.arg = arg;
+    }
 
     public String getDesc() {
         return desc;
@@ -116,6 +128,7 @@ public class GGShareEntity implements Parcelable {
         dest.writeString(this.shareType);
         dest.writeString(this.live_id);
         dest.writeString(this.source);
+        dest.writeParcelable(this.arg, flags);
     }
 
     protected GGShareEntity(Parcel in) {
@@ -126,6 +139,7 @@ public class GGShareEntity implements Parcelable {
         this.shareType = in.readString();
         this.live_id = in.readString();
         this.source = in.readString();
+        this.arg = in.readParcelable(Objects.class.getClassLoader());
     }
 
     public static final Creator<GGShareEntity> CREATOR = new Creator<GGShareEntity>() {

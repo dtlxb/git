@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,10 +74,6 @@ import cn.gogoal.im.ui.widget.UnSlidingViewPager;
 import hply.com.niugu.HeaderView;
 import hply.com.niugu.autofixtext.AutofitTextView;
 import hply.com.niugu.stock.StockMinuteBean;
-import in.srain.cube.views.ptr.PtrClassicFrameLayout;
-import in.srain.cube.views.ptr.PtrDefaultHandler;
-import in.srain.cube.views.ptr.PtrFrameLayout;
-import in.srain.cube.views.ptr.PtrHandler;
 
 
 /*
@@ -177,7 +174,7 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     //下拉刷新rootView
     @BindView(R.id.fragment_rotate_header_with_view_group_frame)
-    PtrClassicFrameLayout ptrFrame;
+    SwipeRefreshLayout ptrFrame;
     //下拉刷新头部控件
     private HeaderView headerView;
     private int stock_charge_type = 1;
@@ -372,6 +369,8 @@ public class CopyStockDetailActivity extends BaseActivity {
     }
 
     private void findView() {
+        BaseActivity.iniRefresh(ptrFrame);
+
         scrollView.smoothScrollTo(0, 20);
         headerView = (HeaderView) LayoutInflater.from(this).inflate(
                 R.layout.header_layout, new LinearLayout(getActivity()), false);
@@ -558,41 +557,32 @@ public class CopyStockDetailActivity extends BaseActivity {
         headerView.setLoadingImage(R.mipmap.loading_white);
 
         //设置下拉刷新属性
-        ptrFrame.setPtrHandler(new PtrHandler() {
+        ptrFrame.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefreshBegin(PtrFrameLayout frame) {
-                //刷新
-                headerView.loading();
-
-                if (canRefreshLine) {
-                    refreshAll();
-                } else {
-                    ptrFrame.refreshComplete();
-
-                }
-            }
-
-            @Override
-            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+            public void onRefresh() {
+                refreshAll();
+                ptrFrame.setRefreshing(false);
             }
         });
-
-        ptrFrame.setHeaderView(headerView);
-        ptrFrame.addPtrUIHandler(headerView);
-
-        ptrFrame.setLastUpdateTimeRelateObject(this);
-
-        // the following are default settings
-        ptrFrame.setResistance(1.7f);
-        ptrFrame.setRatioOfHeaderHeightToRefresh(1.5f);
-        ptrFrame.setDurationToClose(200);
-        ptrFrame.setDurationToCloseHeader(1000);
-        // default is false
-        ptrFrame.setPullToRefresh(false);
-        // default is true
-        ptrFrame.setKeepHeaderWhenRefresh(true);
-
+//        ptrFrame.setPtrHandler(new PtrHandler() {
+//            @Override
+//            public void onRefreshBegin(PtrFrameLayout frame) {
+//                //刷新
+//                headerView.loading();
+//
+//                if (canRefreshLine) {
+//                    refreshAll();
+//                } else {
+//                    ptrFrame.refreshComplete();
+//
+//                }
+//            }
+//
+//            @Override
+//            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+//                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+//            }
+//        });
 
     }
 
@@ -1190,13 +1180,13 @@ public class CopyStockDetailActivity extends BaseActivity {
 
                 //显示刷新完毕提示
                 headerView.over();
-                //延时1s收回下拉头部
-                ptrFrame.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ptrFrame.refreshComplete();
-                    }
-                }, 1000);
+//                //延时1s收回下拉头部
+//                ptrFrame.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        ptrFrame.refreshComplete();
+//                    }
+//                }, 1000);
 
                 stopAnimation();
             }
@@ -1206,12 +1196,12 @@ public class CopyStockDetailActivity extends BaseActivity {
                 //显示刷新完毕提示
                 headerView.over();
                 //延时1s收回下拉头部
-                ptrFrame.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ptrFrame.refreshComplete();
-                    }
-                }, 1000);
+//                ptrFrame.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        ptrFrame.refreshComplete();
+//                    }
+//                }, 1000);
                 stopAnimation();
                 UIHelper.toast(getApplicationContext(), "请检查网络");
             }

@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,8 +111,6 @@ public class ShareMessageActivity extends BaseActivity {
             List<IMMessageBean> messageBeen = JSON.parseArray(recentArray.toJSONString(), IMMessageBean.class);
 
             for (IMMessageBean bean : messageBeen) {
-
-                KLog.e(bean.getNickname()+"=>"+bean.getAvatar());
 
                 if (bean.getChatType() == AppConst.IM_CHAT_TYPE_SINGLE) { //最近单聊会话
                     ShareListBean<String> shareListFriend = new ShareListBean<>(
