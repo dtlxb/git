@@ -9,15 +9,15 @@ import cn.gogoal.im.base.BaseFragment;
 /**
  * Created by dave.
  * Date: 2017/6/7.
- * Desc: 公司简况
+ * Desc: 分红融资
  */
-public class CompanyProfileFragment extends BaseFragment {
+public class DividendFinancingFragment extends BaseFragment {
 
     private String stockCode;
     private String stockName;
 
-    public static CompanyProfileFragment getInstance(String stockCode, String stockName) {
-        CompanyProfileFragment fragment = new CompanyProfileFragment();
+    public static DividendFinancingFragment getInstance(String stockCode, String stockName) {
+        DividendFinancingFragment fragment = new DividendFinancingFragment();
         Bundle b = new Bundle();
         b.putString("stockCode", stockCode);
         b.putString("stockName", stockName);
@@ -27,7 +27,7 @@ public class CompanyProfileFragment extends BaseFragment {
 
     @Override
     public int bindLayout() {
-        return R.layout.fragment_company_profile;
+        return R.layout.fragment_dividend_financing;
     }
 
     @Override

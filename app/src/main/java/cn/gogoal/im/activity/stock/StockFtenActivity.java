@@ -12,7 +12,13 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.fragment.stock.stockften.BusinessAnalysisFragment;
+import cn.gogoal.im.fragment.stock.stockften.CapitalStructureFragment;
+import cn.gogoal.im.fragment.stock.stockften.CompanyExecutivesFragment;
 import cn.gogoal.im.fragment.stock.stockften.CompanyProfileFragment;
+import cn.gogoal.im.fragment.stock.stockften.DividendFinancingFragment;
+import cn.gogoal.im.fragment.stock.stockften.FinancialAnalysisFragment;
+import cn.gogoal.im.fragment.stock.stockften.FinancialStatementsFragment;
+import cn.gogoal.im.fragment.stock.stockften.ShareholderResearchFragment;
 
 public class StockFtenActivity extends BaseActivity {
 
@@ -48,23 +54,28 @@ public class StockFtenActivity extends BaseActivity {
      * 设置新闻-F10的页面
      */
     private void setNewsTab() {
-
         viewPagerFten.setOffscreenPageLimit(arrStockFten.length);
         viewPagerFten.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             public Fragment getItem(int position) {
                 switch (position) {
                     case 0:
-                        return new CompanyProfileFragment();
+                        return CompanyProfileFragment.getInstance(stockCode, stockName);
                     case 1:
-                        return new BusinessAnalysisFragment();
+                        return BusinessAnalysisFragment.getInstance(stockCode, stockName);
                     case 2:
+                        return FinancialAnalysisFragment.getInstance(stockCode, stockName);
                     case 3:
+                        return FinancialStatementsFragment.getInstance(stockCode, stockName);
                     case 4:
+                        return DividendFinancingFragment.getInstance(stockCode, stockName);
                     case 5:
+                        return ShareholderResearchFragment.getInstance(stockCode, stockName);
                     case 6:
+                        return CapitalStructureFragment.getInstance(stockCode, stockName);
                     case 7:
+                        return CompanyExecutivesFragment.getInstance(stockCode, stockName);
                     default:
-                        return new CompanyProfileFragment();
+                        return CompanyProfileFragment.getInstance(stockCode, stockName);
                 }
             }
 
@@ -77,6 +88,8 @@ public class StockFtenActivity extends BaseActivity {
             }
         });
         tabLayoutFten.setupWithViewPager(viewPagerFten);
+
+        viewPagerFten.setCurrentItem(position);
 
         AppDevice.setTabLayoutWidth(tabLayoutFten, 5);
     }
