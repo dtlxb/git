@@ -20,6 +20,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.socks.library.KLog;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,10 +39,8 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
-import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.common.database.crud.DataSupport;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.index.IndexBar;
 import cn.gogoal.im.ui.index.SuspendedDecoration;
@@ -177,7 +177,7 @@ public class ContactsActivity extends BaseActivity {
                             //服务器中清除
                             deleteFriend(contactBeanList.get(position).getFriend_id());
                             //缓存中清除
-                            UserUtils.deleteContactsSomeone(contactBeanList.get(position).getFriend_id());
+                            UserInfoUtils.deleteSomeone(contactBeanList.get(position).getFriend_id());
                             //刷新列表
                             contactBeanList.remove(position);
                             contactAdapter.notifyDataSetChanged();
@@ -195,10 +195,12 @@ public class ContactsActivity extends BaseActivity {
 
     private void getData() {
         //缓存的联系人请求数据
-        //String friendResponseInfo = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", "");
-        List<UserBean> userBeen = DataSupport.findAll(UserBean.class);
-        if (null != userBeen && userBeen.size() > 0) {
-            parseContactDatas(userBeen, contactBeanList);
+        List<UserBean> userBeanList = new ArrayList<>();
+        userBeanList.addAll(UserInfoUtils.getAllUserInfo());
+
+        KLog.e(userBeanList);
+        if (null != userBeanList && userBeanList.size() > 0) {
+            parseContactDatas(userBeanList, contactBeanList);
         } else {
             getFriendList(contactBeanList);
         }
@@ -324,10 +326,12 @@ public class ContactsActivity extends BaseActivity {
 
         for (int i = 0; i < userBeanList.size(); i++) {
             ContactBean contactBean = new ContactBean();
-            contactBean.setUserId(userBeanList.get(i).getFriend_id());
+            contactBean.setFriend_id(userBeanList.get(i).getFriend_id());
             contactBean.setAvatar(userBeanList.get(i).getAvatar());
+            contactBean.setConv_id(userBeanList.get(i).getConv_id());
             contactBean.setNickname(userBeanList.get(i).getNickname());
             contactBean.setDuty(userBeanList.get(i).getDuty());
+
             list.add(contactBean);
         }
 

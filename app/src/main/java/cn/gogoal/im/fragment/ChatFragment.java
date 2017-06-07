@@ -35,6 +35,7 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.socks.library.KLog;
 
+import org.litepal.crud.DataSupport;
 import org.simple.eventbus.Subscriber;
 
 import java.io.File;
@@ -56,6 +57,7 @@ import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.EmojiBean;
 import cn.gogoal.im.bean.FoundData;
 import cn.gogoal.im.bean.IMMessageBean;
+import cn.gogoal.im.bean.UserBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AsyncTaskUtil;
@@ -77,7 +79,6 @@ import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.common.database.crud.DataSupport;
 import cn.gogoal.im.common.recording.MediaManager;
 import cn.gogoal.im.ui.KeyboardLaunchLinearLayout;
 import cn.gogoal.im.ui.view.SwitchImageView;
@@ -126,7 +127,7 @@ public class ChatFragment extends BaseFragment {
     private List<AVIMMessage> messageList = new ArrayList<>();
     private IMChatAdapter imChatAdapter;
     private List<FoundData.ItemPojos> itemPojosList;
-    private ContactBean contactBean;
+    private UserBean userBean;
     private EmojiFragment emojiFragment;
     private FunctionFragment functionFragment;
     private FragmentTransaction transaction;
@@ -513,12 +514,12 @@ public class ChatFragment extends BaseFragment {
             ((GGAudioMessage) message).setListItem(null);
         }
         if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
-            if (null != contactBean) {
+            if (null != userBean) {
                 //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息
-                KLog.e(contactBean);
+                KLog.e(userBean);
                 imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(), "0",
-                        null != contactBean.getTarget() ? contactBean.getTarget() : "",
-                        String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), JSON.toJSONString(message));
+                        null != userBean.getNickname() ? userBean.getNickname() : "",
+                        String.valueOf(userBean.getFriend_id()), String.valueOf(userBean.getAvatar()), JSON.toJSONString(message));
             }
         } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
             //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息(群对象和群头像暂时为空)
@@ -784,7 +785,7 @@ public class ChatFragment extends BaseFragment {
     private void setCacheMessage() {
         List<IMMessageBean> cacheBeans = DataSupport.where("conversationID = ?",
                 imConversation.getConversationId()).find(IMMessageBean.class);
-        if (cacheBeans != null && cacheBeans.get(0) != null && cacheBeans.get(0).getLastMessage() != null) {
+        if (null != cacheBeans && cacheBeans.size() > 0 && null != cacheBeans.get(0).getLastMessage()) {
             AVIMMessage cacheMessage = JSON.parseObject(cacheBeans.get(0).getLastMessage(), AVIMMessage.class);
             String content = cacheMessage.getContent();
             JSONObject contentObject = JSON.parseObject(content);
@@ -839,12 +840,12 @@ public class ChatFragment extends BaseFragment {
     }
 
     //群会话入口
-    public void setConversation(AVIMConversation conversation, boolean needUpdate, int actionType, ContactBean contact, List<AVIMMessage> messageList) {
+    public void setConversation(AVIMConversation conversation, boolean needUpdate, int actionType, UserBean user, List<AVIMMessage> messageList) {
         if (null != conversation) {
             imConversation = conversation;
             chatType = (int) imConversation.getAttribute("chat_type");
-            if (chatType == AppConst.IM_CHAT_TYPE_SINGLE && contact != null) {
-                contactBean = contact;
+            if (chatType == AppConst.IM_CHAT_TYPE_SINGLE && user != null) {
+                userBean = user;
             }
             //(刚创建群的时候不拉消息)
             if (actionType == AppConst.CREATE_SQUARE_ROOM_BUILD || actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
@@ -1000,7 +1001,7 @@ public class ChatFragment extends BaseFragment {
                 IMMessageBean imMessageBean = null;
                 if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                     imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
-                            "0", message.getFrom(), String.valueOf(contactBean.getFriend_id()), String.valueOf(contactBean.getAvatar()), JSON.toJSONString(message));
+                            "0", userBean.getNickname(), String.valueOf(userBean.getFriend_id()), String.valueOf(userBean.getAvatar()), JSON.toJSONString(message));
 
                 } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                     //加人删人逻辑

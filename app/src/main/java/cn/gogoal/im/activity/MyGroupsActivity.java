@@ -66,7 +66,7 @@ public class MyGroupsActivity extends BaseActivity {
     DrawableCenterTextView tv_to_search;
 
     private ListAdapter listAdapter;
-    private List<GroupData> dataBeens;
+    private List<GroupData> dataBeans;
 
     private int actionType;
     private GGShareEntity entity;
@@ -99,8 +99,8 @@ public class MyGroupsActivity extends BaseActivity {
 
         recyclerView.addItemDecoration(new NormalItemDecoration(mContext));
 
-        dataBeens = new ArrayList<>();
-        listAdapter = new ListAdapter(dataBeens);
+        dataBeans = new ArrayList<>();
+        listAdapter = new ListAdapter(dataBeans);
         recyclerView.setAdapter(listAdapter);
         getGroupList(AppConst.REFRESH_TYPE_FIRST);
 
@@ -134,11 +134,11 @@ public class MyGroupsActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
 
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    dataBeens.clear();
+                    dataBeans.clear();
 
                     List<GroupData> data =
                             JSONObject.parseObject(responseInfo, GroupCollectionData.class).getData();
-                    dataBeens.addAll(data);
+                    dataBeans.addAll(data);
                     listAdapter.notifyDataSetChanged();
                     xLayout.setStatus(XLayout.Success);
                     if (type == AppConst.REFRESH_TYPE_SWIPEREFRESH) {

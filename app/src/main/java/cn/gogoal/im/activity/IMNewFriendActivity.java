@@ -13,6 +13,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,10 +32,10 @@ import cn.gogoal.im.bean.IMNewFriendBean;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
+import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.common.database.crud.DataSupport;
 import cn.gogoal.im.ui.view.XTitle;
 
 
@@ -98,14 +100,14 @@ public class IMNewFriendActivity extends BaseActivity {
             });
         }
 
-        listAdapter = new ListAdapter(IMNewFriendActivity.this, R.layout.item_new_friend, newFriendBeans);
+        listAdapter = new ListAdapter(R.layout.item_new_friend, newFriendBeans);
         newFriendList.setAdapter(listAdapter);
     }
 
 
     class ListAdapter extends CommonAdapter<IMNewFriendBean, BaseViewHolder> {
 
-        public ListAdapter(Context context, int layoutId, List<IMNewFriendBean> datas) {
+        public ListAdapter(int layoutId, List<IMNewFriendBean> datas) {
             super(layoutId, datas);
         }
 
@@ -205,6 +207,7 @@ public class IMNewFriendActivity extends BaseActivity {
                         }
 
                         SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_newFriendList", jsonArray);
+
                     }
                 }
             }
@@ -259,7 +262,7 @@ public class IMNewFriendActivity extends BaseActivity {
                         JSONArray accountArray = new JSONArray();
                         accountArray.add(jsonObject);
 
-                        MessageListUtils.changeSquareInfo(lcattrsObject.getString("conv_id"), accountArray, "5");
+                        UserInfoUtils.saveGroupUserInfo(lcattrsObject.getString("conv_id"), accountArray);
 
                     }
                 }

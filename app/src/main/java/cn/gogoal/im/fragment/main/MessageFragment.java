@@ -30,6 +30,7 @@ import com.cpiz.android.bubbleview.RelativePos;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
+import org.litepal.crud.DataSupport;
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
@@ -67,7 +68,6 @@ import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.common.database.crud.DataSupport;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
@@ -96,8 +96,6 @@ public class MessageFragment extends BaseFragment {
     private List<IMMessageBean> IMMessageBeans;
 
     private ListAdapter listAdapter;
-
-    //private JSONArray jsonArray;
 
     private int allCount;
     private BubbleLinearLayout mBubbleView;
@@ -142,11 +140,11 @@ public class MessageFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         IMMessageBeans.clear();
-        IMMessageBeans.addAll(DataSupport.findAll(IMMessageBean.class));
+        IMMessageBeans.addAll(DataSupport.order("lastTime desc").find(IMMessageBean.class));
         allCount = MessageListUtils.getAllMessageUnreadCount();
         sendUnreadCount(allCount);
         KLog.e(IMMessageBeans);
-        if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
+        /*if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
             //按照时间排序
             Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
                 @Override
@@ -154,7 +152,7 @@ public class MessageFragment extends BaseFragment {
                     return Long.compare(object2.getLastTime(), object1.getLastTime());
                 }
             });
-        }
+        }*/
 
         listAdapter.notifyDataSetChanged();
 

@@ -3,8 +3,7 @@ package cn.gogoal.im.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import cn.gogoal.im.common.database.crud.DataSupport;
-
+import org.litepal.crud.DataSupport;
 
 /**
  * Created by huangxx on 2017/2/23.

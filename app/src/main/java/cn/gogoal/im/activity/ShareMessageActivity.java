@@ -31,7 +31,6 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.ShareMessageDialog;
 import cn.gogoal.im.ui.view.XLayout;

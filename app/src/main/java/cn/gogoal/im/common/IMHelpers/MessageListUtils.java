@@ -8,13 +8,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
 
+import org.litepal.crud.DataSupport;
+
 import java.util.List;
 
 import cn.gogoal.im.bean.IMMessageBean;
+import cn.gogoal.im.bean.UserBean;
 import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.common.database.crud.DataSupport;
 
 /**
  * Created by huangxx on 2017/2/28.00
@@ -145,64 +146,18 @@ public class MessageListUtils {
     }
 
     /**
-     * 获取所需要的字段
+     * 获取所需要的字段(头像，昵称)
      */
-    public static String getContactWantedInfo(String wanted, int friendId, int chatType, String conversationID) {
-        JSONArray jsonArray;
-        JSONObject object;
-        if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
-            object = SPTools.getJsonObject(UserUtils.getMyAccountId() + friendId + "", null);
-            if (null != object) {
-                return object.getString(wanted);
-            } else {
-                String string = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", null);
-                KLog.e(string);
-                if (!TextUtils.isEmpty(string)) {
-                    JSONObject jsonObject = JSON.parseObject(string);
-                    KLog.e(jsonObject.toString());
-                    if (jsonObject.get("data") != null) {
-                        jsonArray = jsonObject.getJSONArray("data");
-                        for (int i = 0; i < jsonArray.size(); i++) {
-                            JSONObject oldObject = (JSONObject) jsonArray.get(i);
-                            if (oldObject.getInteger("friend_id") == friendId) {
-                                return oldObject.getString(wanted);
-                            }
-                        }
-                    }
-                }
-            }
-        } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
-            object = SPTools.getJsonObject(UserUtils.getMyAccountId() + conversationID + friendId, null);
-            if (null != object) {
-                return object.getString(wanted);
-            } else {
-                jsonArray = UserUtils.getGroupContactInfo(conversationID);
-                if (jsonArray != null) {
-                    for (int i = 0; i < jsonArray.size(); i++) {
-                        JSONObject oldObject = (JSONObject) jsonArray.get(i);
-                        if (oldObject.getInteger("friend_id") == friendId) {
-                            return oldObject.getString(wanted);
-                        }
-                    }
-                }
+    public static String getContactWantedInfo(String wanted, int friendId) {
+        List<UserBean> userBeanList = DataSupport.where("friend_id = ? ", friendId + "").find(UserBean.class);
+        if (null != userBeanList && userBeanList.size() > 0) {
+            if (wanted.equals("avatar")) {
+                return userBeanList.get(0).getAvatar();
+            } else if (wanted.equals("nickname")) {
+                return userBeanList.get(0).getNickname();
             }
         }
         return "";
-    }
-
-    //群聊拉人加人(5:建群，拉人   6:踢人)
-    public static void changeSquareInfo(String conversationID, JSONArray accountArray, String messageType) {
-        JSONArray spAccountArray = UserUtils.getGroupContactInfo(conversationID);
-        if (null != accountArray) {
-            if (messageType.equals("5")) {
-                spAccountArray.addAll(accountArray);
-            } else if (messageType.equals("6")) {
-                spAccountArray.removeAll(accountArray);
-            }
-            UserUtils.saveGroupContactInfo(conversationID, spAccountArray);
-        } else {
-
-        }
     }
 
 }

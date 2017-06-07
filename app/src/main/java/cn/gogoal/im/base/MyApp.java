@@ -17,6 +17,8 @@ import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 
+import org.litepal.LitePalApplication;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -37,8 +39,6 @@ import cn.gogoal.im.common.IMHelpers.GGTextMessage;
 import cn.gogoal.im.common.IMHelpers.MyConversationHandler;
 import cn.gogoal.im.common.IMHelpers.MyMessageHandler;
 import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.database.LitePal;
-import cn.gogoal.im.common.database.LitePalApplication;
 import cn.gogoal.im.common.permission.IPermissionListner;
 import cn.gogoal.im.ui.view.XLayout;
 
@@ -54,7 +54,6 @@ public class MyApp extends LitePalApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        LitePal.initialize(this);
         app = this;
 
         registerActivityLifecycleCallbacks(new LifeCircle());

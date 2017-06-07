@@ -9,12 +9,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hply.roundimage.roundImage.RoundedImageView;
@@ -37,10 +37,12 @@ import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.UserBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
+import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
@@ -95,6 +97,8 @@ public class IMSquareChatSetActivity extends BaseActivity {
     private String headAvatar;
     private List<String> urls;
 
+    private List<UserBean> userBeans = new ArrayList<>();
+
     @Override
     public int bindLayout() {
         return R.layout.item_imsquare_set;
@@ -122,7 +126,12 @@ public class IMSquareChatSetActivity extends BaseActivity {
             tvTeamSize.setText(groupMembers.size() + "人");
         }
 
-        getChatGroup();
+        userBeans.addAll(UserInfoUtils.getAllGroupUserInfo(conversationId));
+        if (null != userBeans && userBeans.size() > 0) {
+            getAllContacts(userBeans);
+        } else {
+            getChatGroup();
+        }
 
         final JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_groups_saved", new JSONArray());
         JSONObject thisGroup = null;
@@ -224,30 +233,17 @@ public class IMSquareChatSetActivity extends BaseActivity {
         return normalBean;
     }
 
-    private void getAllContacts(JSONArray array) {
+    private void getAllContacts(List<UserBean> list) {
         List<String> memberList = new ArrayList<>();
-        for (int i = 0; i < array.size(); i++) {
-            JSONObject accountObject = array.getJSONObject(i);
-            contactBeans.add(addNormalFans(accountObject.getString("nickname"), accountObject.getInteger("friend_id"), accountObject.getString("avatar")));
-            memberList.add(accountObject.getString("friend_id"));
-            urls.add(accountObject.getString("avatar"));
+        for (int i = 0; i < list.size(); i++) {
+            contactBeans.add(addNormalFans(list.get(i).getNickname(), list.get(i).getFriend_id(), list.get(i).getAvatar()));
+            memberList.add(String.valueOf(list.get(i).getFriend_id()));
+            urls.add(list.get(i).getAvatar());
         }
         //获取群头像
         if (!TextUtils.isEmpty(headAvatar)) {
             ImageDisplay.loadRoundedRectangleImage(IMSquareChatSetActivity.this, headAvatar, iv_square_head);
         } else {
-            /*if (listHasTheSame(memberList, groupMembers)) {
-                String imageCache = ChatGroupHelper.getBitmapFilePaht(conversationId);
-                if (!StringUtils.isActuallyEmpty(imageCache)) {
-                    ImageDisplay.loadImage(getActivity(), imageCache, iv_square_head);
-                } else {
-                    getNicePicture(urls);
-                }
-            } else {
-                groupMembers.clear();
-                groupMembers.addAll(memberList);
-                getNicePicture(urls);
-            }*/
             if (null != memberList && memberList.size() > 0) {
                 groupMembers.clear();
                 groupMembers.addAll(memberList);
@@ -260,12 +256,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
         contactBeans.addAll(squareCreaterFirst(PersonContactBeans));
         mPersonInfoAdapter.notifyDataSetChanged();
     }
-
-
-    private boolean listHasTheSame(List listFirst, List listSecond) {
-        return (listFirst.size() == listSecond.size()) && listFirst.containsAll(listSecond);
-    }
-
 
     //生成九宫图
     private void getNicePicture(List<String> picUrls) {
@@ -300,7 +290,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         if (idList.size() == 1 && idList.get(0) == (Integer.parseInt(UserUtils.getMyAccountId()))) {
             UIHelper.toast(IMSquareChatSetActivity.this, "退群并删除群成功");
             //群列表删除
-            UserUtils.deleteGroupContactInfo(conversationId);
+            UserInfoUtils.deleteTheGroup(conversationId);
             MessageListUtils.removeMessageInfo(conversationId);
             finish();
             AppManager.getInstance().finishActivity(SquareChatRoomActivity.class);
@@ -311,31 +301,18 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
     //拉取群组信息
     public void getChatGroup() {
-        UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, null, conversationId, new UserUtils.getSquareInfo() {
+        UserUtils.getChatGroup(null, conversationId, new UserUtils.getSquareInfo() {
             @Override
             public void squareGetSuccess(JSONObject object) {
                 if (null != object.get("accountList")) {
-                    getAllContacts(object.getJSONArray("accountList"));
+                    List<UserBean> userBeanList = JSON.parseArray(object.getJSONArray("accountList").toJSONString(), UserBean.class);
+                    getAllContacts(userBeanList);
                 } else {
-                    JSONArray accountArray = UserUtils.getGroupContactInfo(conversationId);
-                    //缓存中没有群信息则向后台拉取(取消这个)
-                    if (null != accountArray && accountArray.size() > 0) {
-                        getAllContacts(accountArray);
-                    } else {
-                        UIHelper.toast(getActivity(), "网络不给力");
-                    }
                 }
             }
 
             @Override
             public void squareGetFail(String error) {
-                JSONArray accountArray = UserUtils.getGroupContactInfo(conversationId);
-                //缓存中没有群信息则向后台拉取(取消这个)
-                if (null != accountArray && accountArray.size() > 0) {
-                    getAllContacts(accountArray);
-                } else {
-                    UIHelper.toast(getActivity(), "网络不给力");
-                }
                 KLog.e(error);
             }
         });

@@ -279,7 +279,7 @@ public class WatchLiveActivity extends BaseActivity {
                 @Override
                 public void done(AVIMException e) {
                     //拉取群通讯录并缓存本地
-                    UserUtils.getChatGroup(AppConst.LIVE_GROUP_CONTACT_BEANS, conversation.getMembers(), conversation.getConversationId(), new UserUtils.getSquareInfo() {
+                    UserUtils.getChatGroup(conversation.getMembers(), conversation.getConversationId(), new UserUtils.getSquareInfo() {
                         @Override
                         public void squareGetSuccess(JSONObject object) {
                             KLog.e(object.toJSONString());

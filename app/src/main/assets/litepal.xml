@@ -4,6 +4,7 @@
     <version value="1" />
     <list>
         <mapping class="cn.gogoal.im.bean.UserBean" />
+        <mapping class="cn.gogoal.im.bean.SquareUserBean" />
         <mapping class="cn.gogoal.im.bean.IMMessageBean" />
     </list>
 </litepal>

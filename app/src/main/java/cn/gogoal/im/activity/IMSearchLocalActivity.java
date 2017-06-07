@@ -31,9 +31,10 @@ import cn.gogoal.im.bean.GroupData;
 import cn.gogoal.im.bean.ImageTextBean;
 import cn.gogoal.im.bean.SearchBean;
 import cn.gogoal.im.bean.SearchData;
+import cn.gogoal.im.bean.UserBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
 import cn.gogoal.im.common.UserUtils;
 
 /**
@@ -151,20 +152,16 @@ public class IMSearchLocalActivity extends BaseActivity {
         initRecycleView(rvHistory, R.drawable.shape_divider_1px);
         rvHistory.setAdapter(searchListAdapter);
         //联系人列表
-        String friendResponseInfo = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", "");
-        List<ContactBean> list = new ArrayList<>();
-        BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
-                friendResponseInfo,
-                new TypeReference<BaseBeanList<ContactBean<String>>>() {
-                });
-        list.clear();
-        list.addAll(beanList.getData());
+
+        List<UserBean> userBeanList = new ArrayList<>();
+        userBeanList.addAll(UserInfoUtils.getAllUserInfo());
+
         SearchData searchData = new SearchData(true, "朋友");
         searchData.setParentPosition(0);
         dataList.add(searchData);
-        for (int i = 0; i < list.size(); i++) {
-            SearchBean searchBean = new SearchBean(list.get(i).getAvatar(), list.get(i).getNickname(), "", list.get(i).getConv_id(), AppConst.IM_CHAT_TYPE_SINGLE);
-            SearchData searchContactsData = new SearchData(searchBean, list.size());
+        for (int i = 0; i < userBeanList.size(); i++) {
+            SearchBean searchBean = new SearchBean(userBeanList.get(i).getAvatar(), userBeanList.get(i).getNickname(), "", userBeanList.get(i).getConv_id(), AppConst.IM_CHAT_TYPE_SINGLE);
+            SearchData searchContactsData = new SearchData(searchBean, userBeanList.size());
             searchContactsData.setChildPosition(i);
             dataList.add(searchContactsData);
         }
