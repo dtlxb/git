@@ -279,6 +279,11 @@ public class CopyStockDetailActivity extends BaseActivity {
 
         screenHeight = AppDevice.getHeight(mContext);
 
+        stockCode = getIntent().getStringExtra("stock_code");
+        stockName = getIntent().getStringExtra("stock_name");
+        setStockCode(stockCode);
+        setStockName(stockName);
+
         //找控件
         findView();
 //        //初始化
@@ -349,7 +354,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         viewPagerNews.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             public Fragment getItem(int position) {
                 if (position == 3) {
-                    return new StockFtenFragment();
+                    return StockFtenFragment.getInstance(stockCode, stockName);
                 } else {
                     return StockNewsMinFragment.getInstance(position);
                 }
@@ -406,10 +411,6 @@ public class CopyStockDetailActivity extends BaseActivity {
         dayk2 = SPTools.getInt("tv_ln2", 10);
         dayk3 = SPTools.getInt("tv_ln3", 20);
         dayk4 = SPTools.getInt("tv_ln4", 0);
-        stockCode = getIntent().getStringExtra("stock_code");
-        stockName = getIntent().getStringExtra("stock_name");
-        setStockCode(stockCode);
-        setStockName(stockName);
 
         TreatAdapter treatAdapter = new TreatAdapter(getSupportFragmentManager(), getActivity(), stockCode, true);
         vpTreat.setAdapter(treatAdapter);

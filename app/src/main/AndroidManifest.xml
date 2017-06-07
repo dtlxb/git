@@ -33,8 +33,9 @@
     <!-- 获取联系人列表 -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-    <!--扫码-->
+    <!-- 扫码 -->
     <uses-permission android:name="android.permission.FLASHLIGHT" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
@@ -57,7 +58,6 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-
         <receiver android:name=".receiver.pushReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -158,9 +158,9 @@
             android:name="com.google.android.maps"
             android:required="false" />
 
-        <activity android:name=".activity.PdfDisplayActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
-
+        <activity
+            android:name=".activity.PdfDisplayActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".activity.ChooseContactActivity"
             android:windowSoftInputMode="adjustPan" />
@@ -185,7 +185,7 @@
             android:name=".activity.copy.StockDetailChartsActivity"
             android:configChanges="orientation|screenSize|keyboard"
             android:screenOrientation="landscape" />
-        <!--<activity android:name=".activity.copy.CommentActivity" />-->
+        <!-- <activity android:name=".activity.copy.CommentActivity" /> -->
         <activity
             android:name=".activity.copy.StockDetailMarketIndexActivity"
             android:screenOrientation="portrait" />
@@ -202,18 +202,18 @@
         <activity android:name=".activity.ChangePhoneNumberActivity" />
         <activity android:name=".activity.PhoneContactsActivity" />
         <activity android:name=".activity.stock.StockNewsAllListActivity" />
-
         <activity android:name=".activity.ShareMessageActivity" />
         <activity android:name=".activity.ScreenActivity" />
         <activity android:name=".activity.ToolsSettingActivity" />
         <activity android:name=".activity.ToolsListActivity" />
         <activity android:name=".activity.MyAdvisersActivity" />
         <activity android:name=".activity.stock.InteractiveInvestorActivity" />
-        <activity android:name=".activity.AccountSafeActivity"/>
-        <activity android:name=".activity.ChangePasswordActivity"/>
-        <activity android:name=".activity.SettingStockActivity"/>
-        <activity android:name=".activity.ScanQRCodeActivity"/>
-        <activity android:name=".activity.MyQrCodeActivity"/>
+        <activity android:name=".activity.AccountSafeActivity" />
+        <activity android:name=".activity.ChangePasswordActivity" />
+        <activity android:name=".activity.SettingStockActivity" />
+        <activity android:name=".activity.ScanQRCodeActivity" />
+        <activity android:name=".activity.MyQrCodeActivity" />
+        <activity android:name=".activity.stock.StockFtenActivity" />
     </application>
 
 </manifest>

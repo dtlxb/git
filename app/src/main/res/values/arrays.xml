@@ -124,4 +124,16 @@
         <item>免责申明</item>
         <item>服务协议</item>
     </string-array>
+
+    <string-array name="stock_ften_array">
+        <item>公司简况</item>
+        <item>经营分析</item>
+        <item>财务分析</item>
+        <item>财务报表</item>
+        <item>分红融资</item>
+        <item>股东研究</item>
+        <item>股本结构</item>
+        <item>公司高管</item>
+    </string-array>
+
 </resources>

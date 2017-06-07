@@ -1,6 +1,8 @@
 package cn.gogoal.im.fragment.stock;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -10,6 +12,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.stock.StockFtenActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
@@ -30,6 +33,18 @@ public class StockFtenFragment extends BaseFragment {
 
     private FTenAdapter adapter;
 
+    private String stockCode;
+    private String stockName;
+
+    public static StockFtenFragment getInstance(String stockCode, String stockName) {
+        StockFtenFragment sff = new StockFtenFragment();
+        Bundle b = new Bundle();
+        b.putString("stockCode", stockCode);
+        b.putString("stockName", stockName);
+        sff.setArguments(b);
+        return sff;
+    }
+
     @Override
     public int bindLayout() {
         return R.layout.layout_normal_list_without_refresh;
@@ -37,6 +52,9 @@ public class StockFtenFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
+
+        stockCode = getArguments().getString("stockCode");
+        stockName = getArguments().getString("stockName");
 
         initRecycleView(recyclerView, 0);
 
@@ -54,7 +72,7 @@ public class StockFtenFragment extends BaseFragment {
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, StockFtenData data, int position) {
+        protected void convert(BaseViewHolder holder, StockFtenData data, final int position) {
 
             holder.setText(R.id.textTitle, data.getTitle());
             holder.setText(R.id.textDesc, data.getDesc());
@@ -62,7 +80,11 @@ public class StockFtenFragment extends BaseFragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    UIHelper.toast(getActivity(), "我点击了");
+                    Intent intent = new Intent(getActivity(), StockFtenActivity.class);
+                    intent.putExtra("stockCode", stockCode);
+                    intent.putExtra("stockName", stockName);
+                    intent.putExtra("position", position);
+                    startActivity(intent);
                 }
             });
         }
