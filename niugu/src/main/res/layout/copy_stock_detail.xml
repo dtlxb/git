@@ -110,7 +110,6 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-
                     <LinearLayout
                         android:id="@+id/linear_header"
                         android:layout_width="match_parent"
@@ -549,10 +548,10 @@
                         app:tabTextAppearance="@style/TabLayoutTextStyle"
                         app:tabTextColor="@color/tabUnSelected" />
 
-                    <android.support.v4.view.ViewPager
+                    <cn.gogoal.im.ui.view.CustomHeightViewPager
                         android:id="@+id/vp_news_"
                         android:layout_width="match_parent"
-                        android:layout_height="415dp" />
+                        android:layout_height="wrap_content" />
 
                     <!--<android.support.design.widget.TabLayout
                         android:id="@+id/tablayout_chatImg"
@@ -604,6 +603,7 @@
                 </LinearLayout>
 
             </android.support.v4.widget.NestedScrollView>
+
         </in.srain.cube.views.ptr.PtrClassicFrameLayout>
 
         <!---底部dock栏-->
@@ -634,8 +634,8 @@
             <TextView
                 android:id="@+id/stock_detail_choose"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:drawableTop="@drawable/choose_stock"
                 android:gravity="center"
                 android:paddingTop="7dp"

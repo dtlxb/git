@@ -60,11 +60,13 @@ import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.fragment.stock.StockFtenFragment;
 import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
 import cn.gogoal.im.ui.copy.BitmapChartView;
 import cn.gogoal.im.ui.copy.TimesFivesBitmap;
 import cn.gogoal.im.ui.dialog.StockPopuDialog;
 import cn.gogoal.im.ui.stock.KChartsBitmap;
+import cn.gogoal.im.ui.view.CustomHeightViewPager;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
 import hply.com.niugu.HeaderView;
 import hply.com.niugu.autofixtext.AutofitTextView;
@@ -253,9 +255,11 @@ public class CopyStockDetailActivity extends BaseActivity {
     @BindView(R.id.tablayout_news_)
     TabLayout tabLayoutNews;
     @BindView(R.id.vp_news_)
-    ViewPager viewPagerNews;
-    private String[] newTitles = {"新闻", "公告", "研报"};
+    CustomHeightViewPager viewPagerNews;
+    private String[] newTitles = {"新闻", "公告", "研报", "F10"};
     private RotateAnimation rotateAnimation;
+
+    private int screenHeight;
 
     //交易五档、明细
     @BindView(R.id.tablayout_treat)
@@ -272,6 +276,9 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+
+        screenHeight = AppDevice.getHeight(mContext);
+
         //找控件
         findView();
 //        //初始化
@@ -330,12 +337,22 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     }*/
 
-    /***/
+    /**
+     * 设置新闻-F10的页面
+     */
     private void setNewsTab() {
-        viewPagerNews.setOffscreenPageLimit(3);
+        /*LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 1119 * screenHeight / 1800);
+        viewPagerNews.setLayoutParams(param);*/
+
+        viewPagerNews.setOffscreenPageLimit(4);
         viewPagerNews.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             public Fragment getItem(int position) {
-                return StockNewsMinFragment.getInstance(position);
+                if (position == 3) {
+                    return new StockFtenFragment();
+                } else {
+                    return StockNewsMinFragment.getInstance(position);
+                }
             }
 
             public int getCount() {
@@ -356,6 +373,16 @@ public class CopyStockDetailActivity extends BaseActivity {
             @Override
             public void onPageSelected(int position) {
                 AppManager.getInstance().sendMessage("StockDetailNewsFragment_TAB", new BaseMessage(String.valueOf(position)));
+
+                /*if (position == 3) {
+                    LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT, 1568 * screenHeight / 1800);
+                    viewPagerNews.setLayoutParams(param);
+                } else {
+                    LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT, 1119 * screenHeight / 1800);
+                    viewPagerNews.setLayoutParams(param);
+                }*/
             }
 
             @Override
@@ -1573,5 +1600,9 @@ public class CopyStockDetailActivity extends BaseActivity {
         } else {
             tabLayoutTreat.getTabAt(0).select();
         }
+    }
+
+    public ViewPager getViewPagerNews() {
+        return viewPagerNews;
     }
 }
