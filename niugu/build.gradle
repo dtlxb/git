@@ -29,7 +29,6 @@ dependencies {
     compile "com.android.support:appcompat-v7:$ANDROID_SUPPORT_VERSION"
     compile "com.android.support:design:$ANDROID_SUPPORT_VERSION"
     testCompile 'junit:junit:4.12'
-    compile 'in.srain.cube:ultra-ptr:1.0.11'
     compile 'org.simple:androideventbus:1.0.5.1'
     compile project(':roundImage')
 }
