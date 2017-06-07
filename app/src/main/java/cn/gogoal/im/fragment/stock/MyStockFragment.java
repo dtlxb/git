@@ -357,7 +357,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         }
 
         if (noData && rvMyStock != null) {
-            myStockAdapter.setEmptyView(R.layout.layout_no_mystock,new LinearLayout(getContext()));
+            myStockAdapter.setEmptyView(R.layout.layout_no_mystock, new LinearLayout(getContext()));
 
             myStockAdapter.getEmptyView().findViewById(R.id.flag_img).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -424,9 +424,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
             TextView rateView = holder.getView(R.id.tv_mystock_rate);
             TextView priceView = holder.getView(R.id.tv_mystock_price);
-            priceView.setGravity(Gravity.CENTER_VERTICAL|Gravity.RIGHT);
-            priceView.setPadding(0,AppDevice.dp2px(getContext(),5),
-                    AppDevice.dp2px(getContext(),10),AppDevice.dp2px(getContext(),0));
+            priceView.setGravity(Gravity.CENTER_VERTICAL | Gravity.RIGHT);
+            priceView.setPadding(0, AppDevice.dp2px(getContext(), 5),
+                    AppDevice.dp2px(getContext(), 10), AppDevice.dp2px(getContext(), 0));
 
             rateView.setClickable(false);
             priceView.setClickable(false);
@@ -436,7 +436,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             //自作主张
             TextView typeView = holder.getView(R.id.tv_stock_type);
 
-            if (data.getSymbol_type() == 1) {//是否是股票
+            if (data.getSymbol_type() == 1 || data.getSymbol_type() == 2) {//是否是股票、指数
 
                 if (data.getSource().equalsIgnoreCase("hk")) {//是不是港股
                     typeView.setVisibility(View.VISIBLE);
@@ -447,11 +447,16 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     typeView.setVisibility(View.GONE);
                     rateView.setBackgroundResource(StockUtils.getStockRateBackgroundRes(data.getChange_rate()));
 
-                    if (data.getStock_type() == 1) {//是否停牌退市啥的
+                    if (data.getSymbol_type()==1) {
+                        if (data.getStock_type() == 1) {//是否停牌退市啥的
+                            rateView.setText(StockUtils.plusMinus(data.getChange_rate(), true));
+                        } else {
+                            rateView.setText(StockUtils.getStockStatus(data.getStock_type()));
+                        }
+                    }else {
                         rateView.setText(StockUtils.plusMinus(data.getChange_rate(), true));
-                    } else {
-                        rateView.setText(StockUtils.getStockStatus(data.getStock_type()));
                     }
+
                     priceView.setTextColor(ContextCompat.getColor(getActivity(),
                             StockUtils.getStockRateColor(data.getChange_rate())));
                     rateView.setTextColor(Color.WHITE);
@@ -468,7 +473,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (data.getSymbol_type() == 1) {
+                    if (data.getSymbol_type() == 1) {//股票类型
                         if (!data.getSource().equalsIgnoreCase("hk")) {
                             NormalIntentUtils.go2StockDetail(v.getContext(),
                                     data.getStock_code(), data.getStock_name());
@@ -478,7 +483,13 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                             waitDialog.show(getActivity().getSupportFragmentManager());
                             waitDialog.dismiss(false);
                         }
-                    } else {
+                    } else if (data.getSymbol_type() == 2) {//指数类型
+                        Intent intent = new Intent(getContext(), StockDetailMarketIndexActivity.class);
+                        intent.putExtra("stockName", data.getStock_name());
+                        intent.putExtra("stockCode", data.getSource()+data.getStock_code());
+                        startActivity(intent);
+
+                    } else {//基金、债券、其他类型
                         WaitDialog waitDialog = WaitDialog.getInstance("暂无 " +
                                         StockUtils.getSympolType(data.getSymbol_type()) + " 详情页面",
                                 R.mipmap.login_error, false);

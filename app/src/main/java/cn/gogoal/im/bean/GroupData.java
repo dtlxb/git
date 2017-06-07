@@ -1,5 +1,6 @@
 package cn.gogoal.im.bean;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -23,6 +24,16 @@ public class GroupData {
     private String name_in_group;
     private List<String> m;
     private ArrayList<MInfoBean> m_info;
+
+    private Bitmap avatar;
+
+    public Bitmap getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Bitmap avatar) {
+        this.avatar = avatar;
+    }
 
     public AttrBean getAttr() {
         return attr;

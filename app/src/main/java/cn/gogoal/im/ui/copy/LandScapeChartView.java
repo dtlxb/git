@@ -16,8 +16,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.gogoal.im.activity.copy.MessageHandlerList;
+import cn.gogoal.im.activity.copy.StockDetailChartsActivity;
 import cn.gogoal.im.common.StockUtils;
 import hply.com.niugu.ColorUtils;
+import hply.com.niugu.ConstantUtils;
 import hply.com.niugu.StringUtils;
 import hply.com.niugu.stock.StockMinuteData;
 
@@ -151,7 +154,7 @@ public class LandScapeChartView extends View {
                         }
                     }
                 }
-//                MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISPLAY_XCHART_TIME_DATA, fenshiData, 0);
+                MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISPLAY_XCHART_TIME_DATA, fenshiData, 0);
                 float priceY = (float) (uperBottom - (StringUtils.getDouble(fenshiData.getPrice()) + uperHalfHigh - initialWeightedIndex)
                         * uperRate);
                 //绘制十字线
@@ -292,13 +295,13 @@ public class LandScapeChartView extends View {
                 postInvalidate();
                 break;
             case MotionEvent.ACTION_UP:
-//                MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISS_XCHART_DATA, 0);
+                MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISS_XCHART_DATA, 0);
                 showDetail = false;
                 postInvalidate();
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_OUTSIDE:
                 showDetail = false;
-//                MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISS_XCHART_DATA, 0);
+                MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISS_XCHART_DATA, 0);
                 break;
             default:
                 break;

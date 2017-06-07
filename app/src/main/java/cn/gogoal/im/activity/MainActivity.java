@@ -159,7 +159,7 @@ public class MainActivity extends BaseActivity {
 
         tabMain.setupWithViewPager(vpMain);
 
-        for (int i = 0; i < mainTabArray.length; i++) {
+        for (int i = 0; i < tabFragments.size(); i++) {
             TabLayout.Tab tab = tabMain.getTabAt(i);
             if (tab != null) {
                 tab.setCustomView(tabAdapter.getTabView(i));

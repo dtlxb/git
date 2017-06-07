@@ -212,7 +212,7 @@ public class ImageUtils implements EasyPermissions.PermissionCallbacks {
         getUrlBitmap(MyApp.getAppContext(), imageUrl, new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                saveImage2DCIM(resource, filename, callBack);
+                saveImage2DCIM(resource, filename+".png", callBack);
             }
         });
     }

@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,6 +111,7 @@ public class ShareMessageActivity extends BaseActivity {
             List<IMMessageBean> messageBeen = JSON.parseArray(recentArray.toJSONString(), IMMessageBean.class);
 
             for (IMMessageBean bean : messageBeen) {
+
                 if (bean.getChatType() == AppConst.IM_CHAT_TYPE_SINGLE) { //最近单聊会话
                     ShareListBean<String> shareListFriend = new ShareListBean<>(
                             ShareListBean.LIST_TYPE_ITEM, bean.getAvatar(), bean.getNickname(), bean);
@@ -119,26 +119,25 @@ public class ShareMessageActivity extends BaseActivity {
                     datas.add(shareListFriend);
 
                 } else if (bean.getChatType() == AppConst.IM_CHAT_TYPE_SQUARE) { //最近群聊会话
-
-                    if (StringUtils.isActuallyEmpty(bean.getAvatar())){
-
-                    }
-
-                    final ShareListBean<Bitmap> group = new ShareListBean<>(ShareListBean.LIST_TYPE_ITEM);
+                    final ShareListBean<Object> group = new ShareListBean<>(ShareListBean.LIST_TYPE_ITEM);
                     group.setText(bean.getNickname());
                     group.setBean(bean);
-                    ChatGroupHelper.setGroupAvatar(bean.getConversationID(), new AvatarTakeListener() {
-                        @Override
-                        public void success(Bitmap bitmap) {
-                            KLog.e(bitmap);
-                            group.setItemImage(bitmap);
-                        }
 
-                        @Override
-                        public void failed(Exception e) {
+                    if (!StringUtils.isActuallyEmpty(bean.getAvatar())){
+                        group.setItemImage(bean.getAvatar());
+                    }else {
+                        ChatGroupHelper.setGroupAvatar(bean.getConversationID(), new AvatarTakeListener() {
+                            @Override
+                            public void success(Bitmap bitmap) {
+                                group.setItemImage(bitmap);
+                            }
 
-                        }
-                    });
+                            @Override
+                            public void failed(Exception e) {
+
+                            }
+                        });
+                    }
                     datas.add(group);
                 }
             }

@@ -2,7 +2,6 @@ package cn.gogoal.im.activity.copy;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -193,7 +192,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
             progressWheel.setVisibility(View.VISIBLE);
             tvCannotGetData.setVisibility(View.GONE);
             handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 5000);
+            handler.postDelayed(runnable, SPTools.getLong("interval_time", 15000));
         }
         setEnvents();
 
@@ -676,11 +675,5 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
             }
         }
     };
-
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
 
 }

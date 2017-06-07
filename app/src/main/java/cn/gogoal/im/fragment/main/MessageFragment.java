@@ -401,12 +401,14 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
                         ChatGroupHelper.setGroupAvatar(messageBean.getConversationID(), new AvatarTakeListener() {
                             @Override
                             public void success(final Bitmap bitmap) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        avatarIv.setImageBitmap(bitmap);
-                                    }
-                                });
+                                if (getActivity()!=null) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            avatarIv.setImageBitmap(bitmap);
+                                        }
+                                    });
+                                }
 
                             }
 

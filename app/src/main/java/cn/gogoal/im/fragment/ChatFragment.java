@@ -33,8 +33,6 @@ import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
-import com.avos.avoscloud.okhttp.Cache;
-import com.avos.avoscloud.okhttp.internal.http.CacheStrategy;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -64,6 +62,7 @@ import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
+import cn.gogoal.im.common.IMHelpers.GGAudioMessage;
 import cn.gogoal.im.common.IMHelpers.GGGroupAddMessage;
 import cn.gogoal.im.common.IMHelpers.GGGroupDelMessage;
 import cn.gogoal.im.common.IMHelpers.GGImageMessage;
@@ -72,7 +71,6 @@ import cn.gogoal.im.common.IMHelpers.GGStockMessage;
 import cn.gogoal.im.common.IMHelpers.GGSystemMessage;
 import cn.gogoal.im.common.IMHelpers.GGTextMessage;
 import cn.gogoal.im.common.IMHelpers.GGUnReadMessage;
-import cn.gogoal.im.common.IMHelpers.GGAudioMessage;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
@@ -530,6 +528,7 @@ public class ChatFragment extends BaseFragment {
                     ((GGTextMessage) message).setText(strMessage.replace(" ", ""));
                 }
             }
+
             imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(), "0", imConversation.getName(),
                     "", imConversation.getAttribute("avatar") != null ? (String) imConversation.getAttribute("avatar") : "", message);
         }

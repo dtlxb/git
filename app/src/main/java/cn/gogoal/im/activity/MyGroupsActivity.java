@@ -100,7 +100,7 @@ public class MyGroupsActivity extends BaseActivity {
         recyclerView.addItemDecoration(new NormalItemDecoration(mContext));
 
         dataBeens = new ArrayList<>();
-        listAdapter = new ListAdapter(dataBeens);
+        listAdapter = new ListAdapter(mContext,dataBeens);
         recyclerView.setAdapter(listAdapter);
         getGroupList(AppConst.REFRESH_TYPE_FIRST);
 
@@ -138,9 +138,13 @@ public class MyGroupsActivity extends BaseActivity {
 
                     List<GroupData> data =
                             JSONObject.parseObject(responseInfo, GroupCollectionData.class).getData();
+
                     dataBeens.addAll(data);
+
                     listAdapter.notifyDataSetChanged();
+
                     xLayout.setStatus(XLayout.Success);
+
                     if (type == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
                         UIHelper.toast(getActivity(), "更新群组数据成功");
                     }
@@ -166,22 +170,23 @@ public class MyGroupsActivity extends BaseActivity {
 
     private class ListAdapter extends CommonAdapter<GroupData, BaseViewHolder> {
 
-        private ListAdapter(List<GroupData> datas) {
+        private Object groupAvatar;
+
+        private ListAdapter(Context context,List<GroupData> datas) {
             super(R.layout.item_my_group_list, datas);
         }
 
         @Override
         protected void convert(BaseViewHolder holder, final GroupData data, final int position) {
             final RoundedImageView imgAvatar = holder.getView(R.id.img_my_group_avatar);
-            final Bitmap[] groupAvatar = new Bitmap[1];
-            final String imagecache = ChatGroupHelper.getBitmapFilePaht(data.getConv_id());
+//            final Bitmap[] groupAvatar = new Bitmap[1];
 
             final String groupUrl = data.getAttr().getAvatar();
 
             if (!TextUtils.isEmpty(groupUrl)) {//
                 ImageDisplay.loadRoundedRectangleImage(getActivity(), groupUrl, imgAvatar);
+                groupAvatar=groupUrl;
             } else {
-
                 ChatGroupHelper.setGroupAvatar(data.getConv_id(), new AvatarTakeListener() {
                     @Override
                     public void success(final Bitmap bitmap) {
@@ -189,6 +194,7 @@ public class MyGroupsActivity extends BaseActivity {
                             @Override
                             public void run() {
                                 imgAvatar.setImageBitmap(bitmap);
+                                groupAvatar=bitmap;
                             }
                         });
                     }
@@ -215,7 +221,7 @@ public class MyGroupsActivity extends BaseActivity {
                         intent.putExtras(bundle);
                         startActivity(intent);
                     } else {
-                        ShareItemInfo shareItemInfo = new ShareItemInfo<>(groupAvatar[0], data.getName(), entity,
+                        ShareItemInfo shareItemInfo = new ShareItemInfo<>(groupAvatar, data.getName(), entity,
                                 MessageListUtils.getIMMessageBeanById(UserUtils.getMessageListInfo(), data.getConv_id()));
 
                         ShareMessageDialog.newInstance(shareItemInfo).show(getSupportFragmentManager());

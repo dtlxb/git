@@ -11,12 +11,9 @@ import com.hply.roundimage.roundImage.RoundedImageView;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.bean.ShareItemInfo;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
 
 /**
@@ -75,32 +72,10 @@ public class ShareMessageDialog extends BaseCentDailog {
             Object avatar = entity.getAvatar();
             if (avatar instanceof Bitmap){
                 icon.setImageBitmap((Bitmap) avatar);
-            }else {
+            }else if (avatar instanceof String){
                 ImageDisplay.loadRoundedRectangleImage(v.getContext(), avatar, icon);
             }
 
-            if (entity.getImMessageBean().getChatType() == AppConst.IM_CHAT_TYPE_SINGLE) {
-                ImageDisplay.loadRoundedRectangleImage(v.getContext(), avatar, icon);
-            } else if (entity.getImMessageBean().getChatType() == AppConst.IM_CHAT_TYPE_SQUARE) {
-                if (StringUtils.isActuallyEmpty(entity.getImMessageBean().getAvatar())){
-                    ImageDisplay.loadRoundedRectangleImage(v.getContext(), entity.getImMessageBean().getAvatar(), icon);
-                }else {
-                    ChatGroupHelper.setGroupAvatar(entity.getImMessageBean().getConversationID(), new AvatarTakeListener() {
-                        @Override
-                        public void success(final Bitmap bitmap) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    icon.setImageBitmap(bitmap);
-                                }
-                            });
-                        }
-
-                        public void failed(Exception e) {
-                        }
-                    });
-                }
-            }
             name.setText(entity.getName());
             tvShareMsgDesc.setText(entity.getEntity().getDesc());
         }
