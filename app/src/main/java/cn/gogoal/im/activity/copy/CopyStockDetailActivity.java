@@ -16,7 +16,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver;
@@ -71,7 +70,6 @@ import cn.gogoal.im.ui.copy.TimesFivesBitmap;
 import cn.gogoal.im.ui.dialog.StockPopuDialog;
 import cn.gogoal.im.ui.stock.KChartsBitmap;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
-import hply.com.niugu.HeaderView;
 import hply.com.niugu.autofixtext.AutofitTextView;
 import hply.com.niugu.stock.StockMinuteBean;
 
@@ -176,7 +174,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     @BindView(R.id.fragment_rotate_header_with_view_group_frame)
     SwipeRefreshLayout ptrFrame;
     //下拉刷新头部控件
-    private HeaderView headerView;
+//    private HeaderView headerView;
     private int stock_charge_type = 1;
 
     //图表表头
@@ -372,8 +370,8 @@ public class CopyStockDetailActivity extends BaseActivity {
         BaseActivity.iniRefresh(ptrFrame);
 
         scrollView.smoothScrollTo(0, 20);
-        headerView = (HeaderView) LayoutInflater.from(this).inflate(
-                R.layout.header_layout, new LinearLayout(getActivity()), false);
+//        headerView = (HeaderView) LayoutInflater.from(this).inflate(
+//                R.layout.header_layout, new LinearLayout(getActivity()), false);
     }
 
     //初始化
@@ -549,12 +547,12 @@ public class CopyStockDetailActivity extends BaseActivity {
         //股票状态和当前时间
         StockState();
 
-        //设置下拉头部属性
-        headerView.setFontColor(
-
-                getResColor(R.color.white));
-        headerView.setPullImage(R.mipmap.arrows_white);
-        headerView.setLoadingImage(R.mipmap.loading_white);
+//        //设置下拉头部属性
+//        headerView.setFontColor(
+//
+//                getResColor(R.color.white));
+//        headerView.setPullImage(R.mipmap.arrows_white);
+//        headerView.setLoadingImage(R.mipmap.loading_white);
 
         //设置下拉刷新属性
         ptrFrame.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -879,7 +877,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     //初始化下拉刷新样式
     private void initRefreshStyle(int color) {
         int c = getResColor(color);
-        headerView.setBackgroundColor(c);
+//        headerView.setBackgroundColor(c);
         ptrFrame.setBackgroundColor(c);
     }
 
@@ -1179,7 +1177,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                 stopAnimation();
 
                 //显示刷新完毕提示
-                headerView.over();
+//                headerView.over();
 //                //延时1s收回下拉头部
 //                ptrFrame.postDelayed(new Runnable() {
 //                    @Override
@@ -1194,7 +1192,7 @@ public class CopyStockDetailActivity extends BaseActivity {
             @Override
             public void onFailure(String msg) {
                 //显示刷新完毕提示
-                headerView.over();
+//                headerView.over();
                 //延时1s收回下拉头部
 //                ptrFrame.postDelayed(new Runnable() {
 //                    @Override

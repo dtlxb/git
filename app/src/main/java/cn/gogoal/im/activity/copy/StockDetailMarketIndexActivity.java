@@ -9,7 +9,6 @@ import android.support.annotation.ColorRes;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.RotateAnimation;
@@ -53,7 +52,6 @@ import cn.gogoal.im.ui.copy.InnerListView;
 import cn.gogoal.im.ui.copy.TimesFivesBitmap;
 import cn.gogoal.im.ui.stock.KChartsBitmap;
 import hply.com.niugu.DeviceUtil;
-import hply.com.niugu.HeaderView;
 import hply.com.niugu.StringUtils;
 import hply.com.niugu.autofixtext.AutofitTextView;
 import hply.com.niugu.bean.StockData;
@@ -109,8 +107,8 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     //下拉刷新rootView
     @BindView(R.id.fragment_rotate_header_with_view_group_frame)
     SwipeRefreshLayout ptrFrame;
-    //下拉刷新头部控件
-    private HeaderView headerView;
+//    //下拉刷新头部控件
+//    private HeaderView headerView;
     //股票价格
     @BindView(R.id.stock_price)
     AutofitTextView stock_price;
@@ -266,7 +264,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         dayk3 = SPTools.getInt("tv_ln3", 20);
         dayk4 = SPTools.getInt("tv_ln4", 0);
 
-        headerView = (HeaderView) LayoutInflater.from(this).inflate(R.layout.header_layout, null).findViewById(R.id.header_view);
+//        headerView = (HeaderView) LayoutInflater.from(this).inflate(R.layout.header_layout, null).findViewById(R.id.header_view);
 
         textView1.setAlpha((float) 0.7);
         textView2.setAlpha((float) 0.7);
@@ -402,10 +400,10 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         adapter = new MarketTitleAdapter((ArrayList<StockData>) StockDatas);
         changeAdapter = new ChangeListAdapter((ArrayList<StockData>) StockDatas);
 
-        //设置下拉头部属性
-        headerView.setFontColor(getResColor(R.color.white));
-        headerView.setPullImage(R.mipmap.arrows_white);
-        headerView.setLoadingImage(R.mipmap.loading_white);
+//        //设置下拉头部属性
+//        headerView.setFontColor(getResColor(R.color.white));
+//        headerView.setPullImage(R.mipmap.arrows_white);
+//        headerView.setLoadingImage(R.mipmap.loading_white);
 
         ptrFrame.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -464,7 +462,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
      * 初始化下拉刷新样式
      */
     private void initRefreshStyle(@ColorRes int color) {
-        headerView.setBackgroundColor(getResColor(color));
+//        headerView.setBackgroundColor(getResColor(color));
         ptrFrame.setBackgroundColor(getResColor(color));
     }
 
@@ -848,15 +846,15 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 
     private void refreshCompalte() {
         //显示刷新完毕提示
-        headerView.over();
+//        headerView.over();
         //延时1s收回下拉头部
-        ptrFrame.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-//                ptrFrame.refreshComplete();
-                ptrFrame.setRefreshing(false);
-            }
-        }, 1000);
+//        ptrFrame.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+////                ptrFrame.refreshComplete();
+//                ptrFrame.setRefreshing(false);
+//            }
+//        }, 1000);
     }
 
     //股票成交量
