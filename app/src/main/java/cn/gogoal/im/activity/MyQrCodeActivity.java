@@ -2,8 +2,10 @@ package cn.gogoal.im.activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
@@ -18,6 +20,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.Impl;
@@ -111,12 +114,18 @@ public class MyQrCodeActivity extends BaseActivity implements EasyPermissions.Pe
 
     /**分享*/
     private void share() {
+        Intent intent=new Intent(MyQrCodeActivity.this,ShareMessageActivity.class);
+        Bundle bundle=new Bundle();
+        GGShareEntity entity=new GGShareEntity();
 
+        bundle.putParcelable("share_web_data",entity);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @AfterPermissionGranted(PermisstionCode.WRITE_EXTERNAL_STORAGE)
     public void saveQrCode(){
-        if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.CAMERA)) {
+        if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             ImageUtils.saveImage2DCIM(qrCodeBitmap, "my_qr_code.png", new Impl<String>() {
                 @Override
                 public void response(boolean success, String data) {
@@ -127,6 +136,7 @@ public class MyQrCodeActivity extends BaseActivity implements EasyPermissions.Pe
             // Ask for one permission
             EasyPermissions.requestPermissions(this, "需要请求存储图片权限",
                     REQUEST_CAMERA_PERM, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            UIHelper.toast(getActivity(),"需要请求存储图片权限,请到设置中开启");
         }
     }
 
