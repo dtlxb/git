@@ -9,7 +9,7 @@ import cn.gogoal.im.base.BaseFragment;
 /**
  * Created by dave.
  * Date: 2017/6/7.
- * Desc: 公司简况
+ * Desc: 公司概况
  */
 public class CompanyProfileFragment extends BaseFragment {
 
