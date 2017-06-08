@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Map;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.IMPersonDetailActivity;
 import cn.gogoal.im.activity.ImageDetailActivity;
 import cn.gogoal.im.activity.PlayerActivity;
 import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
@@ -168,9 +167,10 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             ((IMCHatViewHolder) holder).user_head_photo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, IMPersonDetailActivity.class);
-                    intent.putExtra("account_id", Integer.parseInt(avimMessage.getFrom()));
-                    mContext.startActivity(intent);
+//                    Intent intent = new Intent(mContext, IMPersonDetailActivity.class);
+//                    intent.putExtra("account_id", Integer.parseInt(avimMessage.getFrom()));
+//                    mContext.startActivity(intent);
+                    NormalIntentUtils.go2PersionDetail(mContext,Integer.parseInt(avimMessage.getFrom()));
                 }
             });
             //长按头像AT某人

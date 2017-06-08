@@ -102,7 +102,6 @@ public class UserInfoUtils {
 
             }
             List<SquareUserBean> SquareUsers = DataSupport.findAll(SquareUserBean.class);
-            KLog.e(SquareUsers);
         }
     }
 

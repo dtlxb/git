@@ -22,7 +22,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.IMPersonDetailActivity;
 import cn.gogoal.im.activity.PhoneContactsActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
@@ -31,6 +30,7 @@ import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -227,10 +227,11 @@ public class SearchPersionFragment extends BaseFragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), IMPersonDetailActivity.class);
-                    intent.putExtra("account_id", data.getUserId());
-                    KLog.e(data.getUserId());
-                    startActivity(intent);
+//                    Intent intent = new Intent(v.getContext(), IMPersonDetailActivity.class);
+//                    intent.putExtra("account_id", data.getUserId());
+//                    KLog.e(data.getUserId());
+//                    startActivity(intent);
+                    NormalIntentUtils.go2PersionDetail(v.getContext(),data.getUserId());
                 }
             });
         }

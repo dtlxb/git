@@ -64,9 +64,12 @@ import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.ggqrcode.GGQrCode;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
 import cn.gogoal.im.ui.view.PopupMoreMenu;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
@@ -76,6 +79,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 import static cn.gogoal.im.base.BaseActivity.initRecycleView;
 import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_CAMERA_PERM;
+import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_CODE;
 
 /**
  * 消息
@@ -284,7 +288,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
 
     private void onClick() {
         Intent intent = new Intent(getContext(), ScanQRCodeActivity.class);
-        startActivityForResult(intent, CodeUtils.REQUEST_CODE);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
     @Override
@@ -692,4 +696,48 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
         AppManager.getInstance().sendMessage("correct_allmessage_count", countMessage);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            KLog.e("==========" + data.getExtras().getString(CodeUtils.RESULT_STRING) + "===========");
+        } catch (Exception e) {
+            e.getMessage();
+        }
+
+        KLog.e("requestCode==" + requestCode);
+
+        if (requestCode == REQUEST_CODE) {
+            //处理扫描结果（在界面上显示）
+            if (null != data) {
+                Bundle bundle = data.getExtras();
+                if (bundle == null) {
+                    return;
+                }
+                if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
+                    String result = bundle.getString(CodeUtils.RESULT_STRING);
+
+                    String codeBody = GGQrCode.getUserQrCodeBody(result);
+
+                    try {
+                        JSONObject scanBody = JSONObject.parseObject(codeBody);
+                        if (scanBody.getString("qrType").equalsIgnoreCase("0")) {
+                            //TODO 跳转个人详情
+                            NormalIntentUtils.go2PersionDetail(getContext(),
+                                    Integer.parseInt(scanBody.getString("account_id")));
+
+                        } else if (scanBody.getString("qrType").equalsIgnoreCase("1")) {
+                            //TODO 跳转群名片
+                        }
+
+                    } catch (Exception e) {
+                        e.getMessage();
+                        KLog.e("结果不是json");
+                    }
+
+                } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+                    UIHelper.toast(getActivity(), "解析出错");
+                }
+            }
+        }
+    }
 }

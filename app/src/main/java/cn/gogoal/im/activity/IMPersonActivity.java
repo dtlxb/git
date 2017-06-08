@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.Switch;
 
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
@@ -24,11 +23,10 @@ import cn.gogoal.im.adapter.IMPersonSetAdapter;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
-import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 
 /**
@@ -85,9 +83,11 @@ public class IMPersonActivity extends BaseActivity {
                     intent.putExtras(mBundle);
                     startActivity(intent);
                 } else {
-                    intent = new Intent(IMPersonActivity.this, IMPersonDetailActivity.class);
-                    intent.putExtra("account_id", contactBeans.get(position).getUserId());
-                    startActivity(intent);
+//                    intent = new Intent(IMPersonActivity.this, IMPersonDetailActivity.class);
+//                    intent.putExtra("account_id", contactBeans.get(position).getUserId());
+//                    startActivity(intent);
+                    NormalIntentUtils.go2PersionDetail(IMPersonActivity.this,
+                            contactBeans.get(position).getUserId());
                 }
             }
         });

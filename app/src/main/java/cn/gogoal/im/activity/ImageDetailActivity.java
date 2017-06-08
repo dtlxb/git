@@ -77,7 +77,6 @@ public class ImageDetailActivity extends BaseActivity {
                 if (isEditMyAvatar) { //自己头像,查看修改
                     editDialogClick();
                 } else { //其他类型
-                    KLog.e("其他类型//TODO");
                     saveImageDialog();
                 }
             }

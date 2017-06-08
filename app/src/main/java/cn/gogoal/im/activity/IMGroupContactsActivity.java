@@ -1,8 +1,6 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -16,8 +14,7 @@ import cn.gogoal.im.adapter.IMPersonSetAdapter;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
-import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.NormalIntentUtils;
 
 /**
  * Created by huangxx on 2017/4/21.
@@ -50,11 +47,13 @@ public class IMGroupContactsActivity extends BaseActivity {
         mPersonInfoAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(CommonAdapter adapter, View view, int position) {
-                Intent intent = new Intent(IMGroupContactsActivity.this, IMPersonDetailActivity.class);
-                Bundle mBundle = new Bundle();
-                mBundle.putInt("account_id", contactBeens.get(position).getFriend_id());
-                intent.putExtras(mBundle);
-                startActivity(intent);
+//                Intent intent = new Intent(IMGroupContactsActivity.this, IMPersonDetailActivity.class);
+//                Bundle mBundle = new Bundle();
+//                mBundle.putInt("account_id", contactBeens.get(position).getFriend_id());
+//                intent.putExtras(mBundle);
+//                startActivity(intent);
+                NormalIntentUtils.go2PersionDetail(
+                        IMGroupContactsActivity.this,contactBeens.get(position).getFriend_id());
 
             }
         });

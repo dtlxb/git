@@ -3,15 +3,19 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.hply.qrcode_lib.activity.CaptureFragment;
 import com.hply.qrcode_lib.activity.CodeUtils;
+import com.socks.library.KLog;
 
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.common.ImageUtils.ImageUtils;
 
 import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_IMAGE;
 
@@ -39,7 +43,7 @@ public class ScanQRCodeActivity extends BaseActivity {
 
     public boolean isOpen = false;
 
-    @OnClick({R.id.iv_scan_flashlight,R.id.iv_scan_open_gallery})
+    @OnClick({R.id.iv_scan_flashlight, R.id.iv_scan_open_gallery})
     void click(View view) {
         switch (view.getId()) {
             case R.id.iv_scan_flashlight:
@@ -87,4 +91,25 @@ public class ScanQRCodeActivity extends BaseActivity {
         }
     };
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CodeUtils.REQUEST_IMAGE && data != null) {
+            Uri uri = data.getData();
+            try {
+                CodeUtils.analyzeBitmap(ImageUtils.getImageAbsolutePath(getActivity(), uri), new CodeUtils.AnalyzeCallback() {
+                    @Override
+                    public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
+                        KLog.e("result=" + result);
+                    }
+
+                    @Override
+                    public void onAnalyzeFailed() {
+                        Toast.makeText(getActivity(), "解析二维码失败", Toast.LENGTH_LONG).show();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
