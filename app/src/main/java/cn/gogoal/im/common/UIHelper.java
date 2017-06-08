@@ -107,30 +107,30 @@ public class UIHelper {
     }
 
     public static void toastError(Context cont, String msg, XLayout xLayout) {
-        if (cont == null || msg == null || xLayout == null) {
-            KLog.e("执行空");
-            return;
-        }
-        if (mToast == null) {
-            if (AppDevice.isNetworkConnected(cont)) {
-                mToast = Toast.makeText(cont,"服务器开小差了...", Toast.LENGTH_LONG);
-                xLayout.setStatus(XLayout.Error);
-            } else {
-                mToast = Toast.makeText(cont, "当前网络不可用", Toast.LENGTH_LONG);
-                xLayout.setStatus(XLayout.No_Network);
-            }
-        } else {
-            if (AppDevice.isNetworkConnected(cont)) {
-                mToast.setText("服务器开小差了...");
-                xLayout.setStatus(XLayout.Error);
-            } else {
-                mToast.setText("当前网络不可用");
-                xLayout.setStatus(XLayout.No_Network);
-            }
-            mToast.setDuration(Toast.LENGTH_LONG);
-        }
-        KLog.e(cont.getClass().getSimpleName());
-        mToast.show();
+//        if (cont == null || msg == null || xLayout == null) {
+//            KLog.e("执行空");
+//            return;
+//        }
+//        if (mToast == null) {
+//            if (AppDevice.isNetworkConnected(cont)) {
+//                mToast = Toast.makeText(cont,"服务器开小差了...", Toast.LENGTH_LONG);
+//                xLayout.setStatus(XLayout.Error);
+//            } else {
+//                mToast = Toast.makeText(cont, "当前网络不可用", Toast.LENGTH_LONG);
+//                xLayout.setStatus(XLayout.No_Network);
+//            }
+//        } else {
+//            if (AppDevice.isNetworkConnected(cont)) {
+//                mToast.setText("服务器开小差了...");
+//                xLayout.setStatus(XLayout.Error);
+//            } else {
+//                mToast.setText("当前网络不可用");
+//                xLayout.setStatus(XLayout.No_Network);
+//            }
+//            mToast.setDuration(Toast.LENGTH_LONG);
+//        }
+//        KLog.e(cont.getClass().getSimpleName());
+//        mToast.show();
     }
 
     public static void toastError(Context cont, String msg) {

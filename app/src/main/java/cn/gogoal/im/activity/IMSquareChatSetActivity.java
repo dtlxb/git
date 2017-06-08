@@ -45,6 +45,7 @@ import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -206,10 +207,13 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     intent.putExtras(mBundle);
                     startActivityForResult(intent, AppConst.SQUARE_ROOM_DELETE_ANYONE);
                 } else {
-                    intent = new Intent(IMSquareChatSetActivity.this, IMPersonDetailActivity.class);
-                    mBundle.putInt("account_id", contactBeans.get(position).getFriend_id());
-                    intent.putExtras(mBundle);
-                    startActivity(intent);
+//                    intent = new Intent(IMSquareChatSetActivity.this, IMPersonDetailActivity.class);
+//                    mBundle.putInt("account_id", contactBeans.get(position).getFriend_id());
+//                    intent.putExtras(mBundle);
+//                    startActivity(intent);
+
+                    NormalIntentUtils.go2PersionDetail(IMSquareChatSetActivity.this,
+                            contactBeans.get(position).getFriend_id());
                 }
             }
         });

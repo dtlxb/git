@@ -2,11 +2,9 @@ package cn.gogoal.im.activity;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatImageView;
@@ -22,7 +20,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
@@ -134,20 +131,20 @@ public class MyQrCodeActivity extends BaseActivity implements EasyPermissions.Pe
      * 分享
      */
     private void share() {
-        Intent intent = new Intent(MyQrCodeActivity.this, ShareMessageActivity.class);
-        Bundle bundle = new Bundle();
-        GGShareEntity entity = new GGShareEntity();
-        entity.setShareType(GGShareEntity.SHARE_TYPE_IMAGE);
-        entity.setArg(qrCodeBitmap);
-        bundle.putParcelable("share_web_data", entity);
-        intent.putExtras(bundle);
-        startActivity(intent);
+//        Intent intent = new Intent(MyQrCodeActivity.this, ShareMessageActivity.class);
+//        Bundle bundle = new Bundle();
+//        GGShareEntity entity = new GGShareEntity();
+//        entity.setShareType(GGShareEntity.SHARE_TYPE_IMAGE);
+//        entity.setArg(qrCodeBitmap);
+//        bundle.putParcelable("share_web_data", entity);
+//        intent.putExtras(bundle);
+//        startActivity(intent);
     }
 
     @AfterPermissionGranted(PermisstionCode.WRITE_EXTERNAL_STORAGE)
     public void saveQrCode() {
         if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            ImageUtils.saveImage2DCIM(ImageUtils.screenshot(scrollView), "my_qr_code"+System.currentTimeMillis()+".png", new Impl<String>() {
+            ImageUtils.saveImage2DCIM(ImageUtils.screenshot(scrollView), "my_qr_code" + System.currentTimeMillis() + ".png", new Impl<String>() {
                 @Override
                 public void response(boolean success, String data) {
                     UIHelper.toast(getActivity(), success ? "二维码已保存到相册" : "保存二维码出错，请重试");
@@ -209,8 +206,8 @@ public class MyQrCodeActivity extends BaseActivity implements EasyPermissions.Pe
         ;
 
         Bitmap result = Bitmap.createBitmap(
-                size + border*2,
-                size + border*2, Bitmap.Config.ARGB_8888);
+                size + border * 2,
+                size + border * 2, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(result);
         canvas.drawARGB(255, 255, 255, 255);
         canvas.drawBitmap(mBitmap, border, border, null);

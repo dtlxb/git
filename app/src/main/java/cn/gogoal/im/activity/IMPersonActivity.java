@@ -21,6 +21,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.NormalIntentUtils;
 
 /**
  * Created by huangxx on 2017/3/16.
@@ -70,9 +71,11 @@ public class IMPersonActivity extends BaseActivity {
                     intent.putExtras(mBundle);
                     startActivity(intent);
                 } else {
-                    intent = new Intent(IMPersonActivity.this, IMPersonDetailActivity.class);
-                    intent.putExtra("account_id", contactBeans.get(position).getUserId());
-                    startActivity(intent);
+//                    intent = new Intent(IMPersonActivity.this, IMPersonDetailActivity.class);
+//                    intent.putExtra("account_id", contactBeans.get(position).getUserId());
+//                    startActivity(intent);
+                    NormalIntentUtils.go2PersionDetail(
+                            getActivity(),contactBeans.get(position).getUserId());
                 }
             }
         });
