@@ -49,7 +49,7 @@ import cn.gogoal.im.ui.view.XLayout;
  * Staff_id 1375
  * phone 18930640263
  */
-public class MyApp extends Application {
+public class MyApp extends LitePalApplication {
 
     private static MyApp app;
 
