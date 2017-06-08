@@ -22,7 +22,7 @@
         app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabTextColor="@color/tabUnSelected" />
 
-    <cn.gogoal.im.ui.view.CustomHeightViewPager
+    <android.support.v4.view.ViewPager
         android:id="@+id/vp_ften"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

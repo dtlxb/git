@@ -685,6 +685,12 @@ public class GGOKHTTP {
      */
     public static final String USER_AUTO_LOGIN = "v1/user/auto_login";
 
+    /**
+     * F10-公司概况
+     * params stock_code
+     */
+    public static final String COMPANY_SUMMARY = "v1/f10/company_summary";
+
 
 //--------------------------------------------------------------------------------------------------
 
