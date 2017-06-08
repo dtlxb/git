@@ -66,7 +66,7 @@ public class MyGroupsActivity extends BaseActivity {
     DrawableCenterTextView tv_to_search;
 
     private ListAdapter listAdapter;
-    private List<GroupData> dataBeens;
+    private List<GroupData> dataBeans;
 
     private int actionType;
     private GGShareEntity entity;
@@ -95,12 +95,12 @@ public class MyGroupsActivity extends BaseActivity {
         xLayout.setEmptyText("你还没有群组\n\r赶快找到属于你的组织吧");
 
         recyclerView.setLayoutManager(
-                new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
+                new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
 
         recyclerView.addItemDecoration(new NormalItemDecoration(mContext));
 
-        dataBeens = new ArrayList<>();
-        listAdapter = new ListAdapter(mContext,dataBeens);
+        dataBeans = new ArrayList<>();
+        listAdapter = new ListAdapter(dataBeans);
         recyclerView.setAdapter(listAdapter);
         getGroupList(AppConst.REFRESH_TYPE_FIRST);
 
@@ -134,13 +134,11 @@ public class MyGroupsActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
 
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    dataBeens.clear();
+                    dataBeans.clear();
 
                     List<GroupData> data =
                             JSONObject.parseObject(responseInfo, GroupCollectionData.class).getData();
-
-                    dataBeens.addAll(data);
-
+                    dataBeans.addAll(data);
                     listAdapter.notifyDataSetChanged();
 
                     xLayout.setStatus(XLayout.Success);
@@ -172,7 +170,7 @@ public class MyGroupsActivity extends BaseActivity {
 
         private Object groupAvatar;
 
-        private ListAdapter(Context context,List<GroupData> datas) {
+        private ListAdapter(List<GroupData> datas) {
             super(R.layout.item_my_group_list, datas);
         }
 
@@ -198,6 +196,7 @@ public class MyGroupsActivity extends BaseActivity {
                             }
                         });
                     }
+
                     public void failed(Exception e) {
                     }
                 });
@@ -222,8 +221,7 @@ public class MyGroupsActivity extends BaseActivity {
                         startActivity(intent);
                     } else {
                         ShareItemInfo shareItemInfo = new ShareItemInfo<>(groupAvatar, data.getName(), entity,
-                                MessageListUtils.getIMMessageBeanById(UserUtils.getMessageListInfo(), data.getConv_id()));
-
+                                MessageListUtils.getIMMessageBeanById(data.getConv_id()));
                         ShareMessageDialog.newInstance(shareItemInfo).show(getSupportFragmentManager());
                     }
                 }

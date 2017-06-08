@@ -27,6 +27,7 @@ import com.hply.qrcode_lib.activity.CodeUtils;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
+import org.litepal.crud.DataSupport;
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
@@ -100,8 +101,6 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
 
     private ListAdapter listAdapter;
 
-    private JSONArray jsonArray;
-
     private int allCount;
 
     public MessageFragment() {
@@ -141,21 +140,11 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
     @Override
     public void onResume() {
         super.onResume();
-        jsonArray = UserUtils.getMessageListInfo();
-        allCount = MessageListUtils.getAllMessageUnreadCount(jsonArray);
-        sendUnreadCount(allCount);
-//        KLog.e(jsonArray);
         IMMessageBeans.clear();
-        IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
-        if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
-            //按照时间排序
-            Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
-                @Override
-                public int compare(IMMessageBean object1, IMMessageBean object2) {
-                    return Long.compare(object2.getLastTime(), object1.getLastTime());
-                }
-            });
-        }
+        IMMessageBeans.addAll(DataSupport.order("lastTime desc").find(IMMessageBean.class));
+        allCount = MessageListUtils.getAllMessageUnreadCount();
+        sendUnreadCount(allCount);
+
         listAdapter.notifyDataSetChanged();
 
         listAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
@@ -276,7 +265,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
                         }
                     }
                 })
-                .showAsDropDown(clickView,-AppDevice.dp2px(getActivity(),95), 0);
+                .showAsDropDown(clickView, -AppDevice.dp2px(getActivity(), 95), 0);
 
 
     }
@@ -322,36 +311,6 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
         }
     }
 
-//    //弹窗监听事件
-//    private class PopuClick implements View.OnClickListener {
-//        BubblePopupWindow popupWindow;
-//
-//        public PopuClick(BubblePopupWindow style) {
-//            this.popupWindow = style;
-//        }
-//
-//        @Override
-//        public void onClick(View v) {
-//            Intent intent;
-//            switch (v.getId()) {
-//                case R.id.find_man_layout:
-//                    intent = new Intent(getContext(), SearchPersonSquareActivity.class);
-//                    intent.putExtra("search_index", 0);
-//                    startActivity(intent);
-//                    break;
-//                case R.id.take_square_layout:
-//                    intent = new Intent(getContext(), ChooseContactActivity.class);
-//                    Bundle mBundle = new Bundle();
-//                    mBundle.putInt("square_action", AppConst.CREATE_SQUARE_ROOM_BUILD);
-//                    intent.putExtras(mBundle);
-//                    startActivity(intent);
-//                    break;
-//            }
-//
-//            popupWindow.dismiss();
-//        }
-//    }
-
     private class ListAdapter extends CommonAdapter<IMMessageBean, BaseViewHolder> {
 
         private ListAdapter(int layoutId, List<IMMessageBean> datas) {
@@ -383,7 +342,8 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
 
             //SDK定义的消息类型
             if (messageBean.getLastMessage() != null) {
-                String content = messageBean.getLastMessage().getContent();
+                AVIMMessage cacheMessage = JSON.parseObject(messageBean.getLastMessage(), AVIMMessage.class);
+                String content = cacheMessage.getContent();
                 JSONObject contentObject = JSON.parseObject(content);
                 JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
                 String _lctype = contentObject.getString("_lctype");
@@ -401,7 +361,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
                         ChatGroupHelper.setGroupAvatar(messageBean.getConversationID(), new AvatarTakeListener() {
                             @Override
                             public void success(final Bitmap bitmap) {
-                                if (getActivity()!=null) {
+                                if (getActivity() != null) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -666,7 +626,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(ConversationId)) {
                 IMMessageBeans.get(i).setLastTime(rightNow);
-                IMMessageBeans.get(i).setLastMessage(message);
+                IMMessageBeans.get(i).setLastMessage(JSON.toJSONString(message));
                 unreadMessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts().equals("") ? "0" : IMMessageBeans.get(i).getUnReadCounts()) + 1;
                 IMMessageBeans.get(i).setUnReadCounts(unreadMessage + "");
                 isTheSame = true;
@@ -677,7 +637,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
         if (!isTheSame) {
             IMMessageBean imMessageBean = new IMMessageBean();
             imMessageBean.setConversationID(ConversationId);
-            imMessageBean.setLastMessage(message);
+            imMessageBean.setLastMessage(JSON.toJSONString(message));
             imMessageBean.setLastTime(rightNow);
             imMessageBean.setNickname(nickName);
             imMessageBean.setAvatar(avatar);
@@ -688,8 +648,8 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
 
         //保存
         IMMessageBean imMessageBean = new IMMessageBean(ConversationId, chatType, message.getTimestamp(),
-                isTheSame ? String.valueOf(unreadMessage) : "1", nickName, friend_id, avatar, message);
-        MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
+                isTheSame ? String.valueOf(unreadMessage) : "1", nickName, friend_id, avatar, JSON.toJSONString(message));
+        MessageListUtils.saveMessageInfo(imMessageBean);
         allCount++;
         sendUnreadCount(allCount);
         //按照时间排序

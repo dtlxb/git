@@ -3,15 +3,13 @@ package cn.gogoal.im.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.avos.avoscloud.im.v2.AVIMMessage;
-
-import java.util.List;
+import org.litepal.crud.DataSupport;
 
 /**
  * Created by huangxx on 2017/2/23.
  */
 
-public class IMMessageBean implements Parcelable{
+public class IMMessageBean extends DataSupport implements Parcelable {
     private String conversationID;
     private int chatType;
     private Long lastTime;
@@ -20,7 +18,7 @@ public class IMMessageBean implements Parcelable{
     private String friend_id;
     private String avatar;
     //消息
-    private AVIMMessage lastMessage;
+    private String lastMessage;
 
     public IMMessageBean() {
     }
@@ -57,11 +55,11 @@ public class IMMessageBean implements Parcelable{
         this.conversationID = conversationID;
     }
 
-    public AVIMMessage getLastMessage() {
+    public String getLastMessage() {
         return lastMessage;
     }
 
-    public void setLastMessage(AVIMMessage lastMessage) {
+    public void setLastMessage(String lastMessage) {
         this.lastMessage = lastMessage;
     }
 
@@ -105,7 +103,7 @@ public class IMMessageBean implements Parcelable{
                 '}';
     }
 
-    public IMMessageBean(String conversationID, int chatType, Long lastTime, String unReadCounts, String nickname, String friend_id, String avatar, AVIMMessage lastMessage) {
+    public IMMessageBean(String conversationID, int chatType, Long lastTime, String unReadCounts, String nickname, String friend_id, String avatar, String lastMessage) {
         this.conversationID = conversationID;
         this.chatType = chatType;
         this.lastTime = lastTime;
@@ -130,7 +128,7 @@ public class IMMessageBean implements Parcelable{
         dest.writeString(this.nickname);
         dest.writeString(this.friend_id);
         dest.writeString(this.avatar);
-        dest.writeParcelable(this.lastMessage, flags);
+        dest.writeString(this.lastMessage);
     }
 
     protected IMMessageBean(Parcel in) {
@@ -141,7 +139,7 @@ public class IMMessageBean implements Parcelable{
         this.nickname = in.readString();
         this.friend_id = in.readString();
         this.avatar = in.readString();
-        this.lastMessage = in.readParcelable(AVIMMessage.class.getClassLoader());
+        this.lastMessage = in.readString();
     }
 
     public static final Creator<IMMessageBean> CREATOR = new Creator<IMMessageBean>() {

@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.ImageView;
@@ -44,6 +45,9 @@ import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_CAMERA_PERM;
  * description :我的二维码
  */
 public class MyQrCodeActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
+
+    @BindView(R.id.layout_main)
+    NestedScrollView scrollView;
 
     @BindView(R.id.iv_my_qrcode_avatar)
     ImageView ivMyQrcodeAvatar;
@@ -143,7 +147,7 @@ public class MyQrCodeActivity extends BaseActivity implements EasyPermissions.Pe
     @AfterPermissionGranted(PermisstionCode.WRITE_EXTERNAL_STORAGE)
     public void saveQrCode() {
         if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            ImageUtils.saveImage2DCIM(qrCodeBitmap, "my_qr_code"+System.currentTimeMillis()+".png", new Impl<String>() {
+            ImageUtils.saveImage2DCIM(ImageUtils.screenshot(scrollView), "my_qr_code"+System.currentTimeMillis()+".png", new Impl<String>() {
                 @Override
                 public void response(boolean success, String data) {
                     UIHelper.toast(getActivity(), success ? "二维码已保存到相册" : "保存二维码出错，请重试");
