@@ -21,6 +21,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.XTitle;
@@ -83,14 +84,7 @@ public class EditSquareNameActivity extends BaseActivity {
                     UIHelper.toast(getActivity(), "群名称修改成功");
                     //刷新conversation
                     AVIMClientManager.getInstance().refreshConversation(conversationID);
-                    JSONArray jsonArray = UserUtils.getMessageListInfo();
-                    for (int i = 0; i < jsonArray.size(); i++) {
-                        JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                        if (jsonObject.get("conversationID").equals(conversationID)) {
-                            ((JSONObject) jsonArray.get(i)).put("nickname", editSquareName.getText().toString());
-                        }
-                    }
-                    UserUtils.saveMessageListInfo(jsonArray);
+                    MessageListUtils.upDateIMMessageBeanById(conversationID, editSquareName.getText().toString());
                     AppManager.getInstance().sendMessage("correct_square_name", editSquareName.getText().toString());
                 } else {
                     UIHelper.toast(getActivity(), "群名称修改失败");

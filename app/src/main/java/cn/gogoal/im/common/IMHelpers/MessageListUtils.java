@@ -1,5 +1,6 @@
 package cn.gogoal.im.common.IMHelpers;
 
+import android.content.ContentValues;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -100,6 +101,15 @@ public class MessageListUtils {
             return cacheBeans.get(0);
         }
         return new IMMessageBean(conversationID, AppConst.IM_CHAT_TYPE_SQUARE, System.currentTimeMillis(), "0", "", "", "", null);
+    }
+
+    /**
+     * 根据对话id更改群昵称
+     */
+    public static void upDateIMMessageBeanById(String conversationID, String nickName) {
+        ContentValues values = new ContentValues();
+        values.put("nickname", nickName);
+        DataSupport.updateAll(IMMessageBean.class, values, "conversationID = ?", conversationID);
     }
 
     /**
