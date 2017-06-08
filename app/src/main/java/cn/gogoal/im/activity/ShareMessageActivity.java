@@ -69,6 +69,7 @@ public class ShareMessageActivity extends BaseActivity {
         GGShareEntity shareEntity = getIntent().getParcelableExtra("share_web_data");//分享的数据
 
         datas = new ArrayList<>();
+
         adapter = new ShareListAdapter(datas, shareEntity);
 
         recyclerView.setAdapter(adapter);
@@ -149,6 +150,7 @@ public class ShareMessageActivity extends BaseActivity {
      * 分享选择列表
      */
     private class ShareListAdapter extends BaseMultiItemQuickAdapter<ShareListBean, BaseViewHolder> {
+
         private GGShareEntity shareEntity;
 
         private ShareListAdapter(List<ShareListBean> data,GGShareEntity shareEntity) {
