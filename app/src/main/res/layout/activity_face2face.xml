@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#444444"
+    android:gravity="center_horizontal"
+    tools:context=".activity.Face2FaceActivity">
+
+    <include layout="@layout/include_title" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/textColor_999999"
+        android:layout_marginTop="45dp"
+        android:text="和身边的朋友输入同样的数字\n进入同一个群聊" />
+    
+    <cn.gogoal.im.ui.view.PointPasswordEditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatImageView;
@@ -21,6 +22,7 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.GGShareEntity;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.Impl;
@@ -41,7 +43,7 @@ import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_CAMERA_PERM;
  * phone 18930640263
  * description :我的二维码
  */
-public class MyQrCodeActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks{
+public class MyQrCodeActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
 
     @BindView(R.id.iv_my_qrcode_avatar)
     ImageView ivMyQrcodeAvatar;
@@ -55,6 +57,7 @@ public class MyQrCodeActivity extends BaseActivity implements EasyPermissions.Pe
     @BindView(R.id.appCompatImageView)
     AppCompatImageView ivQrCode;
     private Bitmap qrCodeBitmap;
+    private Bitmap userAvatarBitmap;
 
     @Override
     public int bindLayout() {
@@ -62,7 +65,7 @@ public class MyQrCodeActivity extends BaseActivity implements EasyPermissions.Pe
     }
 
     @Override
-    public void doBusiness(Context mContext) {
+    public void doBusiness(final Context mContext) {
         setMyTitle("我的二维码", true);
 
         UserUtils.getUserAvatar(new Impl<Bitmap>() {
@@ -74,7 +77,7 @@ public class MyQrCodeActivity extends BaseActivity implements EasyPermissions.Pe
         tvMyQqrcodeName.setText(UserUtils.getNickname());
         tvMyQqrcodeDuty.setText(UserUtils.getDuty());
 
-        Bean bean=new Bean();
+        Bean bean = new Bean();
         bean.setAccount_id(UserUtils.getMyAccountId());
         bean.setQrType(Bean.QR_CODE_TYPE_PERSIONAL);
 
@@ -86,11 +89,22 @@ public class MyQrCodeActivity extends BaseActivity implements EasyPermissions.Pe
 
             @Override
             public void doInBackground() {
+                UserUtils.getUserAvatar(new Impl<Bitmap>() {
+                    @Override
+                    public void response(boolean success, Bitmap data) {
+                        if (success) {
+                            userAvatarBitmap = data;
+                        } else {
+                            userAvatarBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
+                        }
+                    }
+                });
+
                 qrCodeBitmap = CodeUtils.createImage(
                         GGQrCode.getMyQrcodeString(),
                         400,
                         400,
-                        BitmapFactory.decodeResource(getResources(), R.mipmap.logo));
+                        userAvatarBitmap);
             }
 
             @Override
@@ -112,32 +126,34 @@ public class MyQrCodeActivity extends BaseActivity implements EasyPermissions.Pe
         }
     }
 
-    /**分享*/
+    /**
+     * 分享
+     */
     private void share() {
-        Intent intent=new Intent(MyQrCodeActivity.this,ShareMessageActivity.class);
-        Bundle bundle=new Bundle();
-        GGShareEntity entity=new GGShareEntity();
+        Intent intent = new Intent(MyQrCodeActivity.this, ShareMessageActivity.class);
+        Bundle bundle = new Bundle();
+        GGShareEntity entity = new GGShareEntity();
         entity.setShareType(GGShareEntity.SHARE_TYPE_IMAGE);
         entity.setArg(qrCodeBitmap);
-        bundle.putParcelable("share_web_data",entity);
+        bundle.putParcelable("share_web_data", entity);
         intent.putExtras(bundle);
         startActivity(intent);
     }
 
     @AfterPermissionGranted(PermisstionCode.WRITE_EXTERNAL_STORAGE)
-    public void saveQrCode(){
+    public void saveQrCode() {
         if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            ImageUtils.saveImage2DCIM(qrCodeBitmap, "my_qr_code.png", new Impl<String>() {
+            ImageUtils.saveImage2DCIM(qrCodeBitmap, "my_qr_code"+System.currentTimeMillis()+".png", new Impl<String>() {
                 @Override
                 public void response(boolean success, String data) {
-                    UIHelper.toast(getActivity(),success?"二维码已保存到相册":"保存二维码出错，请重试");
+                    UIHelper.toast(getActivity(), success ? "二维码已保存到相册" : "保存二维码出错，请重试");
                 }
             });
         } else {
             // Ask for one permission
             EasyPermissions.requestPermissions(this, "需要请求存储图片权限",
                     REQUEST_CAMERA_PERM, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            UIHelper.toast(getActivity(),"需要请求存储图片权限,请到设置中开启");
+            UIHelper.toast(getActivity(), "需要请求存储图片权限,请到设置中开启");
         }
     }
 
@@ -164,6 +180,39 @@ public class MyQrCodeActivity extends BaseActivity implements EasyPermissions.Pe
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    /**
+     * 二维码插入logo
+     */
+    public Bitmap getQrCodeInnerBitmap(Context context, Bitmap logoBitmap) {
+
+        int radius = AppDevice.dp2px(context, 10);
+
+        int border = AppDevice.dp2px(context, 20);
+
+        if (logoBitmap == null) {
+            return null;
+        }
+
+        int size = Math.min(logoBitmap.getWidth(), logoBitmap.getHeight());
+
+        Bitmap mBitmap = ImageUtils.drawableToBitmap(
+                ImageUtils.getRoundedRectangleDrawable(
+                        context,
+                        Bitmap.createScaledBitmap(logoBitmap, size, size, true), radius));
+        ;
+
+        Bitmap result = Bitmap.createBitmap(
+                size + border*2,
+                size + border*2, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(result);
+        canvas.drawARGB(255, 255, 255, 255);
+        canvas.drawBitmap(mBitmap, border, border, null);
+
+        return ImageUtils.drawableToBitmap(
+                ImageUtils.getRoundedRectangleDrawable(context, result, radius));
 
     }
 }

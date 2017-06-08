@@ -229,7 +229,6 @@ public class ChatGroupHelper {
             JSONObject personObject = array.getJSONObject(i);
             picUrls.add(personObject.getString("avatar"));
         }
-        KLog.e(picUrls);
         //九宫图拼接
         GroupFaceImage.getInstance(MyApp.getAppContext(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
             @Override

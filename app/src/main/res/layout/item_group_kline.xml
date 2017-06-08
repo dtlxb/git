@@ -3,6 +3,7 @@
     android:id="@+id/group_kline"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_below="@+id/group_authority"
     android:orientation="vertical">
 
     <TextView
