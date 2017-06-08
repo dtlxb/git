@@ -126,7 +126,7 @@
     </string-array>
 
     <string-array name="stock_ften_array">
-        <item>公司简况</item>
+        <item>公司概况</item>
         <item>经营分析</item>
         <item>财务分析</item>
         <item>财务报表</item>
