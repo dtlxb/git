@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import com.socks.library.KLog;
 
@@ -20,7 +23,10 @@ import cn.gogoal.im.adapter.IMPersonSetAdapter;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.UserUtils;
 
 /**
  * Created by huangxx on 2017/3/16.
@@ -31,8 +37,12 @@ public class IMPersonActivity extends BaseActivity {
     @BindView(R.id.personlist_recycler)
     RecyclerView personListRecycler;
 
+    @BindView(R.id.message_switch)
+    SwitchCompat messageSwitch;
+
     private IMPersonSetAdapter mPersonInfoAdapter;
     private List<ContactBean> contactBeans = new ArrayList<>();
+    private IMMessageBean imMessageBean;
     private String conversationId;
     private String nickname;
 
@@ -58,6 +68,7 @@ public class IMPersonActivity extends BaseActivity {
         mPersonInfoAdapter = new IMPersonSetAdapter(1001, IMPersonActivity.this, R.layout.item_square_chat_set, "", contactBeans);
         personListRecycler.setAdapter(mPersonInfoAdapter);
 
+
         mPersonInfoAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(CommonAdapter adapter, View view, int position) {
@@ -73,6 +84,18 @@ public class IMPersonActivity extends BaseActivity {
                     intent = new Intent(IMPersonActivity.this, IMPersonDetailActivity.class);
                     intent.putExtra("account_id", contactBeans.get(position).getUserId());
                     startActivity(intent);
+                }
+            }
+        });
+
+        //免打扰，用字段缓存
+        messageSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    SPTools.saveBoolean(UserUtils.getMyAccountId() + conversationId + "noBother", true);
+                } else {
+                    SPTools.saveBoolean(UserUtils.getMyAccountId() + conversationId + "noBother", false);
                 }
             }
         });

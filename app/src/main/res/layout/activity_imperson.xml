@@ -28,8 +28,8 @@
         android:textColor="@color/textColor_333333"
         android:textSize="17sp" />
 
-   <!-- <RelativeLayout
-        android:id="@+id/getmessage_swith"
+    <RelativeLayout
+        android:id="@+id/switch_layout"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginTop="19dp"
@@ -45,13 +45,14 @@
             android:textColor="@color/textColor_333333"
             android:textSize="17sp" />
 
-        <Switch
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/message_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="@null" />
 
-    </RelativeLayout>-->
+    </RelativeLayout>
 
 </LinearLayout>

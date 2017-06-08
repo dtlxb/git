@@ -467,20 +467,6 @@ public class UserUtils {
     }
 
     /**
-     * 保存消息列表
-     */
-    public static void saveMessageListInfo(JSONArray jsonArray) {
-        SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", jsonArray);
-    }
-
-    /**
-     * 获取消息列表
-     */
-    public static JSONArray getMessageListInfo() {
-        return SPTools.getJsonArray(UserUtils.getMyAccountId() + "_conversation_beans", new JSONArray());
-    }
-
-    /**
      * 登录时需要拉取
      * 我收藏的群列表
      */
