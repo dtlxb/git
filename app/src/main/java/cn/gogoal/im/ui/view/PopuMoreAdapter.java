@@ -17,14 +17,14 @@ import cn.gogoal.im.bean.BaseIconText;
  */
 public class PopuMoreAdapter extends CommonAdapter<BaseIconText<Integer, String>, BaseViewHolder> {
     private List<BaseIconText<Integer, String>> menuItemList;
-    private PopuMoreMenu popuMoreMenu;
-    private PopuMoreMenu.OnMenuItemClickListener onMenuItemClickListener;
+    private PopupMoreMenu popuMoreMenu;
+    private PopupMoreMenu.OnMenuItemClickListener onMenuItemClickListener;
 
-    public void setOnMenuItemClickListener(PopuMoreMenu.OnMenuItemClickListener onMenuItemClickListener) {
+    public void setOnMenuItemClickListener(PopupMoreMenu.OnMenuItemClickListener onMenuItemClickListener) {
         this.onMenuItemClickListener = onMenuItemClickListener;
     }
 
-    public PopuMoreAdapter(PopuMoreMenu popuMoreMenu, List<BaseIconText<Integer, String>> data) {
+    public PopuMoreAdapter(PopupMoreMenu popuMoreMenu, List<BaseIconText<Integer, String>> data) {
         super(R.layout.trm_item_popup_menu_list, data);
         menuItemList = data;
         this.popuMoreMenu = popuMoreMenu;

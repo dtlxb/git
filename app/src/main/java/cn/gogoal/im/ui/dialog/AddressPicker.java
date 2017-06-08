@@ -88,7 +88,7 @@ public class AddressPicker extends BaseBottomDialog {
                     @Override
                     public void success(String responseInfo) {
                         //更新本地缓存
-                        UserUtils.updataLocalUserInfo("city", provinceChoose + " " + cityChoose);
+                        UserUtils.updateLocalUserInfo("city", provinceChoose + " " + cityChoose);
                         //发消息更新当前列表
                         AppManager.getInstance().sendMessage("updata_userinfo", "true");
                         loadingDialog.dismiss();

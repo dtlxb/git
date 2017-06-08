@@ -75,7 +75,7 @@ public class EditMyInfoActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     EditInfoBean.EditInfoData editInfoData = JSONObject.parseObject(responseInfo, EditInfoBean.class).getData();
-                    UserUtils.updataLocalUserInfo("city", editInfoData.getCity());
+                    UserUtils.updateLocalUserInfo("city", editInfoData.getCity());
                     updataUserInfo("");
                 }
             }

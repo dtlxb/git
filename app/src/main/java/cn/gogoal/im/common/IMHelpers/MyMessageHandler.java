@@ -93,10 +93,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                         //群公告，群简介
                                         sendIMMessage(message, conversation);
                                     } else {
-                                        //更新群通讯录
-                                        UserInfoUtils.upDateUserInfo(Integer.parseInt(message.getFrom()), lcattrsGroup.getString("avatar"), lcattrsGroup.getString("username"));
-                                        sendIMMessage(message, conversation);
-
                                         //补全群信息(群信息没有的时候)
                                         List<UserBean> cacheBeans = UserInfoUtils.getAllGroupUserInfo(conversation.getConversationId());
                                         if (cacheBeans == null || cacheBeans.size() == 0) {
@@ -110,6 +106,10 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                                 }
                                             });
                                         }
+
+                                        //更新群通讯录
+                                        UserInfoUtils.upDateUserInfo(Integer.parseInt(message.getFrom()), lcattrsGroup.getString("avatar"), lcattrsGroup.getString("username"));
+                                        sendIMMessage(message, conversation);
                                     }
 
                                     break;

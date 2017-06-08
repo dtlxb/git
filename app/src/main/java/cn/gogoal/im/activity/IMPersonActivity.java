@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -25,7 +26,9 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 
 /**
@@ -42,7 +45,6 @@ public class IMPersonActivity extends BaseActivity {
 
     private IMPersonSetAdapter mPersonInfoAdapter;
     private List<ContactBean> contactBeans = new ArrayList<>();
-    private IMMessageBean imMessageBean;
     private String conversationId;
     private String nickname;
 
@@ -60,8 +62,10 @@ public class IMPersonActivity extends BaseActivity {
         nickname = getIntent().getStringExtra("nickname");
         contactBeans.add(contactBean);
         contactBeans.add(addFunctionHead("", R.mipmap.person_add));
+        //初始化打扰设置
+        boolean noBother = SPTools.getBoolean(UserUtils.getMyAccountId() + conversationId + "noBother", false);
+        messageSwitch.setChecked(noBother);
 
-        KLog.e(contactBeans);
         //初始化
         personListRecycler.setLayoutManager(new GridLayoutManager(this, 5));
         //单聊的传群创建者为空字符
@@ -91,12 +95,10 @@ public class IMPersonActivity extends BaseActivity {
         //免打扰，用字段缓存
         messageSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    SPTools.saveBoolean(UserUtils.getMyAccountId() + conversationId + "noBother", true);
-                } else {
-                    SPTools.saveBoolean(UserUtils.getMyAccountId() + conversationId + "noBother", false);
-                }
+            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+
+                ChatGroupHelper.controlMute(isChecked, conversationId);
+
             }
         });
 
@@ -119,8 +121,6 @@ public class IMPersonActivity extends BaseActivity {
                 intent.putExtra("nickname", nickname);
                 startActivity(intent);
                 break;
-            /*case R.id.getmessage_swith:
-                break;*/
             default:
                 break;
         }

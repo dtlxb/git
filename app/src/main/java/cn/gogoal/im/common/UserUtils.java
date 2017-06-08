@@ -196,7 +196,7 @@ public class UserUtils {
     /**
      * 更新用户信息
      */
-    public static void updataLocalUserInfo(JSONObject userInfo) {
+    public static void updateLocalUserInfo(JSONObject userInfo) {
         if (null != userInfo) {
             SPTools.clearItem("userInfo");
             SPTools.saveString("userInfo", userInfo.toJSONString());
@@ -206,7 +206,7 @@ public class UserUtils {
     /**
      * 更新用户指定字段信息
      */
-    public static void updataLocalUserInfo(String key, String newValue) {
+    public static void updateLocalUserInfo(String key, String newValue) {
         JSONObject user = getUserInfo();
         if (user == null) {
             return;

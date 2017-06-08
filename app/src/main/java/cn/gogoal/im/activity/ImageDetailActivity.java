@@ -205,7 +205,7 @@ public class ImageDetailActivity extends BaseActivity {
                         UIHelper.toast(getActivity(), "修改成功");
                         AppManager.getInstance().sendMessage("updata_cache_avatar",
                                 onlineUri);
-                        UserUtils.updataLocalUserInfo("simple_avatar", onlineUri);
+                        UserUtils.updateLocalUserInfo("simple_avatar", onlineUri);
 
                         KLog.e(UserUtils.getUserAvatar());
 
