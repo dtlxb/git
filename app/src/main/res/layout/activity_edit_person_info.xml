@@ -70,7 +70,8 @@
                     android:layout_marginLeft="10dp"
                     android:background="@null"
                     android:hint="真实姓名"
-                    android:lines="1"
+                    android:maxLength="8"
+                    android:maxLines="1"
                     android:textSize="15sp" />
 
             </LinearLayout>

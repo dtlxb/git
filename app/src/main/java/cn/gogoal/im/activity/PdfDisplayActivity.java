@@ -92,8 +92,8 @@ public class PdfDisplayActivity extends BaseActivity {
                 xLayout.setStatus(XLayout.No_Network);
                 break;
             case 1:
-//                new MyLoadAsyncTask().execute(pdfUrl);
-//                break;
+                new MyLoadAsyncTask().execute(pdfUrl);
+                break;
             case 2:
             case 3:
                 new AlertDialog.Builder(this, R.style.HoloDialogStyle).setTitle("提示")

@@ -1,10 +1,18 @@
 package com.hply.qrcode_lib.activity;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.TextUtils;
 
 import com.google.zxing.BarcodeFormat;
@@ -51,10 +59,9 @@ public class CodeUtils {
      */
     public static final int REQUEST_IMAGE = 112;
 
-
-
     /**
      * 解析二维码图片工具类
+     *
      * @param analyzeCallback
      */
     public static void analyzeBitmap(String path, AnalyzeCallback analyzeCallback) {
@@ -115,18 +122,19 @@ public class CodeUtils {
 
     /**
      * 生成二维码图片
+     *
      * @param text
      * @param w
      * @param h
      * @param logo
      * @return
      */
-    public static Bitmap createImage(String text,int w,int h,Bitmap logo) {
+    public static Bitmap createImage(String text, int w, int h, Bitmap logo) {
         if (TextUtils.isEmpty(text)) {
             return null;
         }
         try {
-            Bitmap scaleLogo = getScaleLogo(logo,w,h);
+            Bitmap scaleLogo = getScaleLogo(logo, w, h);
 
             int offsetX = w / 2;
             int offsetY = h / 2;
@@ -149,17 +157,17 @@ public class CodeUtils {
             int[] pixels = new int[w * h];
             for (int y = 0; y < h; y++) {
                 for (int x = 0; x < w; x++) {
-                    if(x >= offsetX && x < offsetX + scaleWidth && y>= offsetY && y < offsetY + scaleHeight){
-                        int pixel = scaleLogo.getPixel(x-offsetX,y-offsetY);
-                        if(pixel == 0){
-                            if(bitMatrix.get(x, y)){
+                    if (x >= offsetX && x < offsetX + scaleWidth && y >= offsetY && y < offsetY + scaleHeight) {
+                        int pixel = scaleLogo.getPixel(x - offsetX, y - offsetY);
+                        if (pixel == 0) {
+                            if (bitMatrix.get(x, y)) {
                                 pixel = 0xff000000;
-                            }else{
+                            } else {
                                 pixel = 0xffffffff;
                             }
                         }
                         pixels[y * w + x] = pixel;
-                    }else{
+                    } else {
                         if (bitMatrix.get(x, y)) {
                             pixels[y * w + x] = 0xff000000;
                         } else {
@@ -178,29 +186,35 @@ public class CodeUtils {
         return null;
     }
 
-    private static Bitmap getScaleLogo(Bitmap logo,int w,int h){
-        if(logo == null)return null;
+    /**
+     * @param logo logo原图的bitmap对象
+     */
+    private static Bitmap getScaleLogo(Bitmap logo, int w, int h) {
+        if (logo == null) return null;
         Matrix matrix = new Matrix();
-        float scaleFactor = Math.min(w * 1.0f / 5 / logo.getWidth(), h * 1.0f / 5 /logo.getHeight());
-        matrix.postScale(scaleFactor,scaleFactor);
-        return Bitmap.createBitmap(logo, 0, 0, logo.getWidth(),   logo.getHeight(), matrix, true);
+        float scaleFactor = Math.min(w * 1.0f / 4.5f / logo.getWidth(), h * 1.0f / 4.5f / logo.getHeight());
+        matrix.postScale(scaleFactor, scaleFactor);
+
+        Bitmap bitmap = Bitmap.createBitmap(logo, 0, 0, logo.getWidth(), logo.getHeight(), matrix, true);
+        return filletSquare(bitmap, 200, 4);
     }
 
     /**
      * 解析二维码结果
      */
-    public interface AnalyzeCallback{
+    public interface AnalyzeCallback {
 
-        public void onAnalyzeSuccess(Bitmap mBitmap, String result);
+        void onAnalyzeSuccess(Bitmap mBitmap, String result);
 
-        public void onAnalyzeFailed();
+        void onAnalyzeFailed();
     }
 
 
     /**
      * 为CaptureFragment设置layout参数
-     * @param captureFragment
-     * @param layoutId
+     *
+     * @param captureFragment;
+     * @param layoutId;
      */
     public static void setFragmentArgs(CaptureFragment captureFragment, int layoutId) {
         if (captureFragment == null || layoutId == -1) {
@@ -229,5 +243,66 @@ public class CodeUtils {
                 camera.setParameters(parameter);
             }
         }
+    }
+
+    //================================bitmap处理=========================================
+
+    /**
+     * @param context    上下文
+     * @param logoBitmap 二维码logo源文件bitmap对象
+     * @param size       logo部分的大小
+     */
+    private Bitmap getLogoBitmap(Context context, Bitmap logoBitmap, int size) {
+        //1.
+        Bitmap bitmapBg = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmapBg);
+        canvas.drawARGB(255, 228, 228, 228);
+        RoundedBitmapDrawable drawableBg = RoundedBitmapDrawableFactory.create(context.getResources(), bitmapBg);
+        drawableBg.setMipMap(false);
+        drawableBg.setCornerRadius(4);
+
+        //2.
+        int width = logoBitmap.getWidth();
+        int height = logoBitmap.getHeight();
+        int newWidth = size - 12;//白边
+        int newHeight = size - 12;
+
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+        Bitmap resizedBitmap = Bitmap.createBitmap(logoBitmap, 0, 0, width,//缩放logobitmap
+                height, matrix, true);
+
+        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), resizedBitmap);
+        drawable.setMipMap(false);
+        drawable.setCornerRadius(4);
+
+        return drawableToBitmap(new LayerDrawable(new Drawable[]{drawableBg, drawable}));
+    }
+
+    private Bitmap drawableToBitmap(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+
+        Bitmap bitmap;
+        int width = Math.max(drawable.getIntrinsicWidth(), 2);
+        int height = Math.max(drawable.getIntrinsicHeight(), 2);
+        try {
+            bitmap = Bitmap.createBitmap(
+                    width,
+                    height,
+                    drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                            : Bitmap.Config.RGB_565);//取 drawable 的颜色格式);
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+        } catch (Exception e) {
+            e.printStackTrace();
+            bitmap = null;
+        }
+        return bitmap;
     }
 }
