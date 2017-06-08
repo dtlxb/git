@@ -171,9 +171,9 @@ public class ChooseContactActivity extends BaseActivity {
 
         if (actionType == AppConst.SQUARE_ROOM_AT_SOMEONE) {
             userContacts = UserUtils.getAllFriendsInTeam(teamId);
-        } else if (actionType==AppConst.SQUARE_ROOM_DELETE_ANYONE){
-            userContacts=UserUtils.getOthersInTeam(teamId, actionType);
-        }else {
+        } else if (actionType == AppConst.SQUARE_ROOM_DELETE_ANYONE) {
+            userContacts = UserUtils.getOthersInTeam(teamId, actionType);
+        } else {
             userContacts = UserUtils.getUserContacts();
         }
 

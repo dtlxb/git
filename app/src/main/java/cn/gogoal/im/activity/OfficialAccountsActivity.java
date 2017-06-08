@@ -21,6 +21,8 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.socks.library.KLog;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +37,6 @@ import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.NormalIntentUtils;
-import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**
@@ -67,14 +67,11 @@ public class OfficialAccountsActivity extends BaseActivity {
         officialRecycler.setAdapter(messagesAdapter);
 
         //未读数清零
-        JSONArray messageListJsonArray = UserUtils.getMessageListInfo();
-
-        List<IMMessageBean> iMMessageBeans = new ArrayList<>();
-        iMMessageBeans.addAll(JSON.parseArray(String.valueOf(messageListJsonArray), IMMessageBean.class));
+        List<IMMessageBean> iMMessageBeans = DataSupport.findAll(IMMessageBean.class);
         for (int i = 0; i < iMMessageBeans.size(); i++) {
             if (iMMessageBeans.get(i).getConversationID().equals(conversationID)) {
                 iMMessageBeans.get(i).setUnReadCounts("0");
-                MessageListUtils.saveMessageInfo(messageListJsonArray, iMMessageBeans.get(i));
+                MessageListUtils.saveMessageInfo(iMMessageBeans.get(i));
             }
         }
     }

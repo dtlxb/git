@@ -75,11 +75,11 @@ public class SearchPersionFragment extends BaseFragment {
 
         recyclerView.setAdapter(adapter);
 
-        View headView= LayoutInflater.from(mContext)
-                .inflate(R.layout.item_contacts,new LinearLayout(mContext),false);
-        RoundedImageView headImage= (RoundedImageView)
+        View headView = LayoutInflater.from(mContext)
+                .inflate(R.layout.item_contacts, new LinearLayout(mContext), false);
+        RoundedImageView headImage = (RoundedImageView)
                 headView.findViewById(R.id.item_contacts_iv_icon);
-        TextView headText= (TextView)
+        TextView headText = (TextView)
                 headView.findViewById(R.id.item_contacts_tv_nickname);
         headImage.setImageResource(R.mipmap.chat_phone_contacts);
         headText.setText(R.string.im_phone_num);
@@ -213,7 +213,7 @@ public class SearchPersionFragment extends BaseFragment {
 
             RoundedImageView imageView = holder.getView(R.id.item_user_avatar);
             holder.setText(R.id.item_tv_search_result_name, data.getNickname());
-            holder.setText(R.id.item_tv_search_result_intro,data.getDuty());
+            holder.setText(R.id.item_tv_search_result_intro, data.getDuty());
             try {
                 ImageDisplay.loadRoundedRectangleImage(mContext,
                         data.getAvatar(),

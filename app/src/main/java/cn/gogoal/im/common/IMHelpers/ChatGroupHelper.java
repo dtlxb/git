@@ -3,6 +3,7 @@ package cn.gogoal.im.common.IMHelpers;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
@@ -21,14 +22,12 @@ import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ShareItemInfo;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.MyFilter;
-import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 
@@ -158,41 +157,14 @@ public class ChatGroupHelper {
         new GGOKHTTP(params, GGOKHTTP.CANCEL_COLLECT_GROUP, ggHttpInterface).startGet();
     }
 
-    //群通讯录更新
-    public static void upDataGroupContactInfo(String conversationID, int friendId, String avatar, String nickname) {
-        JSONArray spAccountArray = UserUtils.getGroupContactInfo(conversationID);
-        boolean hasThisGuy = false;
-        //有这个人修改
-        for (int i = 0; i < spAccountArray.size(); i++) {
-            JSONObject oldObject = (JSONObject) spAccountArray.get(i);
-            if (oldObject.getInteger("friend_id") == friendId) {
-                ((JSONObject) spAccountArray.get(i)).put("avatar", avatar);
-                ((JSONObject) spAccountArray.get(i)).put("nickname", nickname);
-                ((JSONObject) spAccountArray.get(i)).put("friend_id", friendId);
-                SPTools.saveJsonObject(UserUtils.getMyAccountId() + conversationID + friendId, ((JSONObject) spAccountArray.get(i)));
-                hasThisGuy = true;
-                break;
-            }
-        }
-        if (hasThisGuy) {
-            UserUtils.saveGroupContactInfo(conversationID, spAccountArray);
-        }
-    }
-
     //获取群头像并且缓存SD
     public static void createGroupImage(AVIMConversation conversation, final String msgTag) {
         //群删除好友(每次删除后重新生成群头像)
-        /*JSONArray accountArray = UserUtils.getGroupContactInfo(ConversationId);
-        KLog.e(groupMemberMap);
-        KLog.e(accountArray);*/
-        /*if (null != accountArray && accountArray.size() > 0) {
-            getNinePic(accountArray, ConversationId, msgTag);
-        } else {*/
         final String ConversationId = conversation.getConversationId();
         List<String> groupMemberMap = conversation.getMembers();
         //如果不存在则先找这个会话
         if (groupMemberMap == null || groupMemberMap.size() == 0) {
-            UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, groupMemberMap, ConversationId, new UserUtils.getSquareInfo() {
+            UserUtils.getChatGroup(groupMemberMap, ConversationId, new UserUtils.getSquareInfo() {
                 @Override
                 public void squareGetSuccess(JSONObject object) {
                     JSONArray array = object.getJSONArray("accountList");
@@ -206,7 +178,7 @@ public class ChatGroupHelper {
                 }
             });
         } else {
-            UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, groupMemberMap, ConversationId, new UserUtils.getSquareInfo() {
+            UserUtils.getChatGroup(groupMemberMap, ConversationId, new UserUtils.getSquareInfo() {
                 @Override
                 public void squareGetSuccess(JSONObject object) {
                     JSONArray array = object.getJSONArray("accountList");
@@ -220,7 +192,6 @@ public class ChatGroupHelper {
                 }
             });
         }
-        //}
     }
 
     public static void getNinePic(JSONArray array, final String ConversationId, final String msgTag) {
@@ -425,9 +396,10 @@ public class ChatGroupHelper {
                     IMMessageBean imMessageBean = null;
                     if (null != contactBean) {
                         imMessageBean = new IMMessageBean(contactBean.getConv_id(), 1001, System.currentTimeMillis(),
-                                "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), shareMessage);
+                                "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()),
+                                String.valueOf(contactBean.getAvatar()), JSON.toJSONString(shareMessage));
                     }
-                    MessageListUtils.saveMessageInfo(UserUtils.getMessageListInfo(), imMessageBean);
+                    MessageListUtils.saveMessageInfo(imMessageBean);
                 }
             }
 
@@ -490,9 +462,9 @@ public class ChatGroupHelper {
 
                     //头像暂时未保存
                     IMMessageBean imMessageBean = shareItemInfo.getImMessageBean();
-                    imMessageBean.setLastMessage(shareMessage);
+                    imMessageBean.setLastMessage(JSON.toJSONString(shareMessage));
                     imMessageBean.setLastTime(System.currentTimeMillis());
-                    MessageListUtils.saveMessageInfo(UserUtils.getMessageListInfo(), imMessageBean);
+                    MessageListUtils.saveMessageInfo(imMessageBean);
                 }
             }
 

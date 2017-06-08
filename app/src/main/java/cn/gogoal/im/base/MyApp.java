@@ -19,6 +19,8 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.hply.qrcode_lib.activity.ZXingLibrary;
 
+import org.litepal.LitePalApplication;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -54,7 +56,6 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         app = this;
 
         ZXingLibrary.initDisplayOpinion(this);

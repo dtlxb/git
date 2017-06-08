@@ -29,10 +29,10 @@ import cn.gogoal.im.common.AppConst;
 public class IMPersonActivity extends BaseActivity {
 
     @BindView(R.id.personlist_recycler)
-    RecyclerView personlistRecycler;
+    RecyclerView personListRecycler;
 
     private IMPersonSetAdapter mPersonInfoAdapter;
-    private List<ContactBean> contactBeens = new ArrayList<>();
+    private List<ContactBean> contactBeans = new ArrayList<>();
     private String conversationId;
     private String nickname;
 
@@ -44,25 +44,25 @@ public class IMPersonActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         setMyTitle(R.string.title_chat_person_detial, true);
-        initRecycleView(personlistRecycler, null);
+        initRecycleView(personListRecycler, null);
         final ContactBean contactBean = (ContactBean) getIntent().getSerializableExtra("seri");
         conversationId = getIntent().getStringExtra("conversation_id");
         nickname = getIntent().getStringExtra("nickname");
-        contactBeens.add(contactBean);
-        contactBeens.add(addFunctionHead("", R.mipmap.person_add));
+        contactBeans.add(contactBean);
+        contactBeans.add(addFunctionHead("", R.mipmap.person_add));
 
-        KLog.e(contactBeens);
+        KLog.e(contactBeans);
         //初始化
-        personlistRecycler.setLayoutManager(new GridLayoutManager(this, 5));
+        personListRecycler.setLayoutManager(new GridLayoutManager(this, 5));
         //单聊的传群创建者为空字符
-        mPersonInfoAdapter = new IMPersonSetAdapter(1001, IMPersonActivity.this, R.layout.item_square_chat_set, "", contactBeens);
-        personlistRecycler.setAdapter(mPersonInfoAdapter);
+        mPersonInfoAdapter = new IMPersonSetAdapter(1001, IMPersonActivity.this, R.layout.item_square_chat_set, "", contactBeans);
+        personListRecycler.setAdapter(mPersonInfoAdapter);
 
         mPersonInfoAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(CommonAdapter adapter, View view, int position) {
                 Intent intent;
-                if (position == contactBeens.size() - 1) {
+                if (position == contactBeans.size() - 1) {
                     intent = new Intent(IMPersonActivity.this, ChooseContactActivity.class);
                     Bundle mBundle = new Bundle();
                     mBundle.putInt("square_action", AppConst.CREATE_SQUARE_ROOM_BY_ONE);
@@ -71,7 +71,7 @@ public class IMPersonActivity extends BaseActivity {
                     startActivity(intent);
                 } else {
                     intent = new Intent(IMPersonActivity.this, IMPersonDetailActivity.class);
-                    intent.putExtra("account_id", contactBeens.get(position).getUserId());
+                    intent.putExtra("account_id", contactBeans.get(position).getUserId());
                     startActivity(intent);
                 }
             }
