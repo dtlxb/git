@@ -101,10 +101,10 @@ public class MyQrCodeActivity extends BaseActivity implements EasyPermissions.Pe
                 });
 
                 qrCodeBitmap = CodeUtils.createImage(
-                        GGQrCode.getMyQrcodeString(),
-                        400,
-                        400,
-                        userAvatarBitmap);
+                        mContext,//上下文
+                        GGQrCode.getMyQrcodeString(),//内容
+                        400,//尺寸
+                        userAvatarBitmap);//内嵌logo
             }
 
             @Override

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hply.imagepicker.ITakePhoto;
+import com.hply.roundimage.roundImage.RoundedImageView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,9 +32,6 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.BottomSheetListDialog;
 import cn.gogoal.im.ui.dialog.WaitDialog;
-
-import com.hply.roundimage.roundImage.RoundedImageView;
-
 import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XTitle;
 
@@ -191,10 +189,12 @@ public class EditPersonInfoActivity extends BaseActivity {
                     UserUtils.updataLocalUserInfo("simple_avatar", imageUri);
                     map.put("avatar", imageUri);
                 }
+
                 if (!TextUtils.isEmpty(editPersonName.getText().toString())) {
                     UserUtils.updataLocalUserInfo("nickname", editPersonName.getText().toString());
                     map.put("name", editPersonName.getText().toString());
                 }
+
                 if (!TextUtils.isEmpty(editCompanyName.getText().toString())) {
                     UserUtils.updataLocalUserInfo("organization_name", imageUri);
                     map.put("company", editCompanyName.getText().toString());

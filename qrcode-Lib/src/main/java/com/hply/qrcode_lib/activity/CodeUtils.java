@@ -122,41 +122,37 @@ public class CodeUtils {
 
     /**
      * 生成二维码图片
-     *
-     * @param text
-     * @param w
-     * @param h
-     * @param logo
-     * @return
      */
-    public static Bitmap createImage(String text, int w, int h, Bitmap logo) {
+    public static Bitmap createImage(Context context,String text, int size, Bitmap logo) {
         if (TextUtils.isEmpty(text)) {
             return null;
         }
-        try {
-            Bitmap scaleLogo = getScaleLogo(logo, w, h);
 
-            int offsetX = w / 2;
-            int offsetY = h / 2;
+        try {
+            Bitmap scaleLogo = getScaleLogo(context,logo, size);
+//            Bitmap scaleLogo = getLogoBitmap(context, oriBitmap,oriBitmap.getWidth());
+
+            int offsetX = size / 2;
+            int offsetY = size / 2;
 
             int scaleWidth = 0;
             int scaleHeight = 0;
             if (scaleLogo != null) {
                 scaleWidth = scaleLogo.getWidth();
                 scaleHeight = scaleLogo.getHeight();
-                offsetX = (w - scaleWidth) / 2;
-                offsetY = (h - scaleHeight) / 2;
+                offsetX = (size - scaleWidth) / 2;
+                offsetY = (size - scaleHeight) / 2;
             }
             Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
             hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
             //容错级别
             hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
             //设置空白边距的宽度
-            hints.put(EncodeHintType.MARGIN, 0);
-            BitMatrix bitMatrix = new QRCodeWriter().encode(text, BarcodeFormat.QR_CODE, w, h, hints);
-            int[] pixels = new int[w * h];
-            for (int y = 0; y < h; y++) {
-                for (int x = 0; x < w; x++) {
+            hints.put(EncodeHintType.MARGIN, 2);
+            BitMatrix bitMatrix = new QRCodeWriter().encode(text, BarcodeFormat.QR_CODE, size, size, hints);
+            int[] pixels = new int[size * size];
+            for (int y = 0; y < size; y++) {
+                for (int x = 0; x < size; x++) {
                     if (x >= offsetX && x < offsetX + scaleWidth && y >= offsetY && y < offsetY + scaleHeight) {
                         int pixel = scaleLogo.getPixel(x - offsetX, y - offsetY);
                         if (pixel == 0) {
@@ -166,19 +162,19 @@ public class CodeUtils {
                                 pixel = 0xffffffff;
                             }
                         }
-                        pixels[y * w + x] = pixel;
+                        pixels[y * size + x] = pixel;
                     } else {
                         if (bitMatrix.get(x, y)) {
-                            pixels[y * w + x] = 0xff000000;
+                            pixels[y * size + x] = 0xff000000;
                         } else {
-                            pixels[y * w + x] = 0xffffffff;
+                            pixels[y * size + x] = 0xffffffff;
                         }
                     }
                 }
             }
-            Bitmap bitmap = Bitmap.createBitmap(w, h,
+            Bitmap bitmap = Bitmap.createBitmap(size, size,
                     Bitmap.Config.ARGB_8888);
-            bitmap.setPixels(pixels, 0, w, 0, 0, w, h);
+            bitmap.setPixels(pixels, 0, size, 0, 0, size, size);
             return bitmap;
         } catch (WriterException e) {
             e.printStackTrace();
@@ -189,14 +185,18 @@ public class CodeUtils {
     /**
      * @param logo logo原图的bitmap对象
      */
-    private static Bitmap getScaleLogo(Bitmap logo, int w, int h) {
+    private static Bitmap getScaleLogo(Context context,Bitmap logo,int size) {
         if (logo == null) return null;
+
         Matrix matrix = new Matrix();
-        float scaleFactor = Math.min(w * 1.0f / 4.5f / logo.getWidth(), h * 1.0f / 4.5f / logo.getHeight());
+        float scaleFactor = Math.min(size * 1.0f / 4.5f / logo.getWidth(), size * 1.0f / 4.5f / logo.getHeight());
         matrix.postScale(scaleFactor, scaleFactor);
 
         Bitmap bitmap = Bitmap.createBitmap(logo, 0, 0, logo.getWidth(), logo.getHeight(), matrix, true);
-        return filletSquare(bitmap, 200, 4);
+        RoundedBitmapDrawable drawable=RoundedBitmapDrawableFactory.create(context.getResources(),bitmap);
+        drawable.setAntiAlias(true);
+        drawable.setCornerRadius(10);
+        return drawableToBitmap(drawable);
     }
 
     /**
@@ -252,37 +252,38 @@ public class CodeUtils {
      * @param logoBitmap 二维码logo源文件bitmap对象
      * @param size       logo部分的大小
      */
-    private Bitmap getLogoBitmap(Context context, Bitmap logoBitmap, int size) {
+    private static Bitmap getLogoBitmap(Context context, Bitmap logoBitmap, int size) {
+        int radiu=10;
         //1.
         Bitmap bitmapBg = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmapBg);
         canvas.drawARGB(255, 228, 228, 228);
         RoundedBitmapDrawable drawableBg = RoundedBitmapDrawableFactory.create(context.getResources(), bitmapBg);
         drawableBg.setMipMap(false);
-        drawableBg.setCornerRadius(4);
+        drawableBg.setCornerRadius(radiu);
 
         //2.
         int width = logoBitmap.getWidth();
         int height = logoBitmap.getHeight();
-        int newWidth = size - 12;//白边
-        int newHeight = size - 12;
+        int newWidth = size - 52;//白边
+        int newHeight = size - 52;
 
         float scaleWidth = ((float) newWidth) / width;
         float scaleHeight = ((float) newHeight) / height;
 
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap resizedBitmap = Bitmap.createBitmap(logoBitmap, 0, 0, width,//缩放logobitmap
-                height, matrix, true);
+        Bitmap resizedBitmap = Bitmap.createBitmap(logoBitmap, 0, 0, newWidth,//缩放logobitmap
+                newHeight, matrix, true);
 
         RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(context.getResources(), resizedBitmap);
         drawable.setMipMap(false);
-        drawable.setCornerRadius(4);
+        drawable.setCornerRadius(radiu);
 
         return drawableToBitmap(new LayerDrawable(new Drawable[]{drawableBg, drawable}));
     }
 
-    private Bitmap drawableToBitmap(Drawable drawable) {
+    private static Bitmap drawableToBitmap(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
             return ((BitmapDrawable) drawable).getBitmap();
         }
