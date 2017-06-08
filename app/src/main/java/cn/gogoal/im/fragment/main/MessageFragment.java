@@ -144,16 +144,6 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
         IMMessageBeans.addAll(DataSupport.order("lastTime desc").find(IMMessageBean.class));
         allCount = MessageListUtils.getAllMessageUnreadCount();
         sendUnreadCount(allCount);
-        KLog.e(IMMessageBeans);
-        /*if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
-            //按照时间排序
-            Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
-                @Override
-                public int compare(IMMessageBean object1, IMMessageBean object2) {
-                    return Long.compare(object2.getLastTime(), object1.getLastTime());
-                }
-            });
-        }*/
 
         listAdapter.notifyDataSetChanged();
 
@@ -275,7 +265,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
                         }
                     }
                 })
-                .showAsDropDown(clickView,-AppDevice.dp2px(getActivity(),95), 0);
+                .showAsDropDown(clickView, -AppDevice.dp2px(getActivity(), 95), 0);
 
 
     }
@@ -320,36 +310,6 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
                     .show();
         }
     }
-
-//    //弹窗监听事件
-//    private class PopuClick implements View.OnClickListener {
-//        BubblePopupWindow popupWindow;
-//
-//        public PopuClick(BubblePopupWindow style) {
-//            this.popupWindow = style;
-//        }
-//
-//        @Override
-//        public void onClick(View v) {
-//            Intent intent;
-//            switch (v.getId()) {
-//                case R.id.find_man_layout:
-//                    intent = new Intent(getContext(), SearchPersonSquareActivity.class);
-//                    intent.putExtra("search_index", 0);
-//                    startActivity(intent);
-//                    break;
-//                case R.id.take_square_layout:
-//                    intent = new Intent(getContext(), ChooseContactActivity.class);
-//                    Bundle mBundle = new Bundle();
-//                    mBundle.putInt("square_action", AppConst.CREATE_SQUARE_ROOM_BUILD);
-//                    intent.putExtras(mBundle);
-//                    startActivity(intent);
-//                    break;
-//            }
-//
-//            popupWindow.dismiss();
-//        }
-//    }
 
     private class ListAdapter extends CommonAdapter<IMMessageBean, BaseViewHolder> {
 
@@ -401,7 +361,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
                         ChatGroupHelper.setGroupAvatar(messageBean.getConversationID(), new AvatarTakeListener() {
                             @Override
                             public void success(final Bitmap bitmap) {
-                                if (getActivity()!=null) {
+                                if (getActivity() != null) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {

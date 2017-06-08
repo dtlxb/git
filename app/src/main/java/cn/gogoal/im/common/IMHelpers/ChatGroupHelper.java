@@ -2,11 +2,13 @@ package cn.gogoal.im.common.IMHelpers;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
+import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.socks.library.KLog;
 
 import java.io.File;
@@ -15,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.gogoal.im.R;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.BaseMessage;
@@ -22,6 +25,8 @@ import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ShareItemInfo;
+import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -29,6 +34,7 @@ import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.MyFilter;
 import cn.gogoal.im.common.StringUtils;
+import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UserUtils;
 
 import static cn.gogoal.im.common.UserUtils.getToken;
@@ -474,6 +480,112 @@ public class ChatGroupHelper {
             }
         };
         new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
+    }
+
+    public static void sendImageMessage(final String conversationId, final String chatType, final File file, final MessageResponse messageResponse) {
+        //图片宽高处理
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+        final int width = bitmap.getWidth();
+        final int height = bitmap.getHeight();
+
+        AsyncTaskUtil.doAsync(new AsyncTaskUtil.AsyncCallBack() {
+            @Override
+            public void onPreExecute() {
+
+            }
+
+            @Override
+            public void doInBackground() {
+                //分个上传UFile;
+                UFileUpload.getInstance().upload(file, UFileUpload.Type.IMAGE, new UFileUpload.UploadListener() {
+                    @Override
+                    public void onUploading(int progress) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String onlineUri) {
+
+                        if (TextUtils.isEmpty(conversationId)) {
+                            return;
+                        }
+
+                        //图片消息基本信息
+                        Map<Object, Object> messageMap = new HashMap<>();
+                        messageMap.put("_lctype", "-2");
+                        messageMap.put("_lctext", "");
+                        messageMap.put("_lcattrs", AVIMClientManager.getInstance().userBaseInfo());
+                        messageMap.put("url", onlineUri);
+                        messageMap.put("name", file.getPath());
+                        messageMap.put("format", "jpg");
+                        messageMap.put("height", String.valueOf(height));
+                        messageMap.put("width", String.valueOf(width));
+
+                        Map<String, String> params = new HashMap<>();
+                        params.put("token", UserUtils.getToken());
+                        params.put("conv_id", conversationId);
+                        params.put("chat_type", chatType);
+                        params.put("message", JSONObject.toJSON(messageMap).toString());
+                        KLog.e(onlineUri);
+
+                        //发送图片消息
+                        sendAVIMMessage(params, messageResponse);
+                    }
+
+                    @Override
+                    public void onFailed() {
+                    }
+                });
+            }
+
+            @Override
+            public void onPostExecute() {
+
+            }
+        });
+    }
+
+
+    public static void sendAVIMMessage(final Map<String, String> params, final MessageResponse messageResponse) {
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                if ((int) result.get("code") == 0) {
+                    JSONObject data = result.getJSONObject("data");
+                    if (data.getBoolean("success")) {
+                        if (null != messageResponse) {
+                            messageResponse.sendSuccess();
+                        }
+                    } else {
+                        if (null != messageResponse) {
+                            messageResponse.sendFailed();
+                        }
+                    }
+                } else {
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                if (null != messageResponse) {
+                    messageResponse.sendFailed();
+                }
+            }
+        };
+        new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
+
+    }
+
+
+    /**
+     * 消息发送状况
+     */
+    public interface MessageResponse {
+        void sendSuccess();
+
+        void sendFailed();
     }
 
     /**
