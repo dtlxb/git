@@ -5,21 +5,21 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/bg_color_2"
         android:paddingBottom="7.5dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:paddingTop="7.5dp"
-        android:singleLine="true"
-        android:text="@string/text_empty"
-        android:textColor="@color/textColor_666666"
-        android:textSize="14dp" />
+        android:text="@string/main_introduction"
+        android:textColor="@color/textColor_333333"
+        android:textSize="16dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/bg_color_1"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingBottom="7.5dp"
@@ -32,19 +32,129 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:singleLine="true"
-            android:text="@string/text_empty"
+            android:text="@string/product_class"
             android:textColor="@color/textColor_666666"
             android:textSize="14dp" />
 
         <TextView
-            android:id="@+id/textContent"
+            android:id="@+id/textProductClass"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
+            android:singleLine="true"
             android:text="@string/text_empty"
-            android:textColor="@color/textColor_333333"
+            android:textColor="@android:color/black"
             android:textSize="14dp" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_color_2"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="7.5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="7.5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:singleLine="true"
+            android:text="@string/product_name"
+            android:textColor="@color/textColor_666666"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/textProductName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:singleLine="true"
+            android:text="@string/text_empty"
+            android:textColor="@android:color/black"
+            android:textSize="14dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_color_1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="7.5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="7.5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:singleLine="true"
+            android:text="@string/scope_business"
+            android:textColor="@color/textColor_666666"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/textScopeBusiness"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:singleLine="true"
+            android:text="@string/text_empty"
+            android:textColor="@android:color/black"
+            android:textSize="14dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_color_2"
+        android:paddingBottom="7.5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="7.5dp"
+        android:text="@string/main_business_structure"
+        android:textColor="@color/textColor_333333"
+        android:textSize="16dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <!--左边的ListView-->
+            <cn.gogoal.im.ui.copy.InnerListView
+                android:id="@+id/lsv_left"
+                android:layout_width="130dp"
+                android:layout_height="match_parent"
+                android:scrollbars="none" />
+
+            <!--右边的ScrollView-->
+            <cn.gogoal.im.ui.view.MySyncHorizontalScrollView
+                android:id="@+id/rightContentHorscrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none">
+
+                <cn.gogoal.im.ui.copy.InnerListView
+                    android:id="@+id/lsv_right"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none" />
+
+            </cn.gogoal.im.ui.view.MySyncHorizontalScrollView>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

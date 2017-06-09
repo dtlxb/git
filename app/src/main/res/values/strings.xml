@@ -217,5 +217,10 @@
         对方验证通过后，才可以聊天。发送朋友验证</string>
     <string name="title_change_phone">更换手机号</string>
     <string name="play_introduction_null">主播很懒，什么都没有留下。</string>
+    <string name="main_introduction">主营介绍</string>
+    <string name="product_class">产品分类</string>
+    <string name="product_name">产品名称</string>
+    <string name="scope_business">经营范围</string>
+    <string name="main_business_structure">主营业务构成</string>
 
 </resources>

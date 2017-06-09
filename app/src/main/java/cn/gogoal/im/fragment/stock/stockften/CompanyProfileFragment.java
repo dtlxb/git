@@ -114,7 +114,6 @@ public class CompanyProfileFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
 
                 if (object.getIntValue("code") == 0) {
