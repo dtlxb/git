@@ -15,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.LitePalDBHelper;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.servise.AppBackServise;
@@ -43,20 +44,22 @@ public class SplashActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        ImageDisplay.loadImage(this,R.mipmap.splash,imgSplash);
+        ImageDisplay.loadImage(this, R.mipmap.splash, imgSplash);
 
         new android.os.Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 go2Next();
             }
-        },1000);
+        }, 1000);
 
     }
 
     private void go2Next() {
         if (UserUtils.isLogin()) {
             NormalIntentUtils.go2MainActivity(SplashActivity.this);
+            //建立数据库
+            LitePalDBHelper.getInstance().createSQLite(UserUtils.getUserId());
         } else {
             NormalIntentUtils.go2LoginActivity(SplashActivity.this);
         }
