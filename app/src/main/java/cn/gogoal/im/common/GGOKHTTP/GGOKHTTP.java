@@ -691,6 +691,12 @@ public class GGOKHTTP {
      */
     public static final String COMPANY_SUMMARY = "v1/f10/company_summary";
 
+    /**
+     * F10-经营分析
+     * params stock_code
+     */
+    public static final String COMPANY_BUSINESS_ANALYSIS = "v1/f10/company_business_analysis";
+
 
 //--------------------------------------------------------------------------------------------------
 
