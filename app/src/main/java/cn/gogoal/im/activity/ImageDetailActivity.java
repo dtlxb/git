@@ -77,7 +77,6 @@ public class ImageDetailActivity extends BaseActivity {
                 if (isEditMyAvatar) { //自己头像,查看修改
                     editDialogClick();
                 } else { //其他类型
-                    KLog.e("其他类型//TODO");
                     saveImageDialog();
                 }
             }
@@ -205,7 +204,7 @@ public class ImageDetailActivity extends BaseActivity {
                         UIHelper.toast(getActivity(), "修改成功");
                         AppManager.getInstance().sendMessage("updata_cache_avatar",
                                 onlineUri);
-                        UserUtils.updataLocalUserInfo("simple_avatar", onlineUri);
+                        UserUtils.updateLocalUserInfo("simple_avatar", onlineUri);
 
                         KLog.e(UserUtils.getUserAvatar());
 

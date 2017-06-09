@@ -76,9 +76,6 @@ public class AppConst {
     public static final int SQUARE_ROOM_EDIT_NOTICE = 1107;
     //直播连麦
     public static final int LIVE_CONTACT_SOMEBODY = 1108;
-    //一般群缓存，直播群缓存(通讯录)
-    public static final int CHAT_GROUP_CONTACT_BEANS = 1109;
-    public static final int LIVE_GROUP_CONTACT_BEANS = 1110;
     //登录验证，注册
     public static final int LOGIN_FIND_CODE = 1111;
     public static final int LOGIN_RIGIST_NUMBER = 1112;
@@ -93,6 +90,8 @@ public class AppConst {
 //    public static final String WEB_URL = "http://192.168.72.155:9000/#";
     public static final String WEB_URL_LLJ = "http://192.168.52.156:9000/#/hello";
 //    public static final String WEB_URL = "http://ggmobile.sandbox.go-goal.cn/#";
+//    public static final String WEB_URL_LLJ = "http://192.168.52.156:9000/#/hello";
+    //    public static final String WEB_URL = "http://ggmobile.sandbox.go-goal.cn/#";
     public static final String WEB_URL = "http://app.go-goal.cn/#";
     //预正式环境
 //    public static final String WEB_URL = "http://192.168.52.156:9000/#";

@@ -2,7 +2,6 @@ package cn.gogoal.im.base;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
@@ -18,6 +17,8 @@ import com.avos.avoscloud.SaveCallback;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.hply.qrcode_lib.activity.ZXingLibrary;
+
+import org.litepal.LitePalApplication;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -47,14 +48,13 @@ import cn.gogoal.im.ui.view.XLayout;
  * Staff_id 1375
  * phone 18930640263
  */
-public class MyApp extends Application {
+public class MyApp extends LitePalApplication {
 
     private static MyApp app;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
         app = this;
 
         ZXingLibrary.initDisplayOpinion(this);

@@ -33,6 +33,7 @@ android {
 //        ndk {
 //            abiFilters "armeabi-v7a", "armeabi", "x86_64"
 //        }
+
     }
 
     productFlavors {
@@ -114,7 +115,7 @@ dependencies {
     compile project(':jsbridge')
     //LeanCloud实时聊天
     compile('cn.leancloud.android:avoscloud-push:v3.15.9@aar') { transitive = true }
-    compile 'cn.leancloud.android:avoscloud-sdk:v3.15.9'
+    compile('cn.leancloud.android:avoscloud-sdk:v3.15.9')
     //UCloud存储
     compile project(':uFileLib')
     //鲁班压缩
@@ -131,4 +132,5 @@ dependencies {
     compile project(':qrcode-Lib')
     compile('com.github.hotchemi:permissionsdispatcher:2.4.0') { exclude module: 'support-v13' }
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
+    compile 'org.litepal.android:core:1.5.1'
 }

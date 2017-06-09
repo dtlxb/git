@@ -1,10 +1,6 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -21,7 +17,6 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hply.qrcode_lib.activity.CodeUtils;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -42,7 +37,8 @@ import cn.gogoal.im.bean.BoxScreenData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.ImageUtils.ImageUtils;
+import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
+import cn.gogoal.im.common.LitePalDBHelper;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -52,8 +48,6 @@ import cn.gogoal.im.fragment.main.MainStockFragment;
 import cn.gogoal.im.fragment.main.MessageFragment;
 import cn.gogoal.im.fragment.main.MineFragment;
 import cn.gogoal.im.ui.Badge.BadgeView;
-
-import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_CODE;
 
 public class MainActivity extends BaseActivity {
 
@@ -184,11 +178,10 @@ public class MainActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    UserUtils.saveContactInfo(responseInfo);
+                    UserInfoUtils.saveAllUserInfo(responseInfo);
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
-                    UserUtils.saveContactInfo("{\"code\":0,\"data\":[],\"message\":\"成功\"}");
+                    UserInfoUtils.saveAllUserInfo("{\"code\":0,\"data\":[],\"message\":\"成功\"}");
                 } else {
                     UIHelper.toastError(getActivity(), GGOKHTTP.getMessage(responseInfo));
                 }
@@ -384,56 +377,4 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        try {
-            KLog.e("==========" + data.getExtras().getString(CodeUtils.RESULT_STRING) + "===========");
-
-        }catch (Exception e){
-            e.getMessage();
-        }
-
-        if (requestCode == REQUEST_CODE) {
-            //处理扫描结果（在界面上显示）
-            if (null != data) {
-                Bundle bundle = data.getExtras();
-                if (bundle == null) {
-                    return;
-                }
-                if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
-                    String result = bundle.getString(CodeUtils.RESULT_STRING);
-                    UIHelper.toast(MainActivity.this, "解析结果:" + result, Toast.LENGTH_LONG);
-                } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
-                    UIHelper.toast(MainActivity.this, "解析出错");
-                }
-            }
-        }
-
-        /**
-         * 选择系统图片并解析
-         */
-        else if (requestCode == CodeUtils.REQUEST_IMAGE) {
-            if (data != null) {
-                Uri uri = data.getData();
-                try {
-                    CodeUtils.analyzeBitmap(ImageUtils.getImageAbsolutePath(this, uri), new CodeUtils.AnalyzeCallback() {
-                        @Override
-                        public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
-                            Toast.makeText(MainActivity.this, "解析结果:" + result, Toast.LENGTH_LONG).show();
-                        }
-
-                        @Override
-                        public void onAnalyzeFailed() {
-                            Toast.makeText(MainActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } else if (requestCode == CodeUtils.REQUEST_CAMERA_PERM) {
-            Toast.makeText(this, "从设置页面返回...", Toast.LENGTH_SHORT)
-                    .show();
-        }
-    }
 }

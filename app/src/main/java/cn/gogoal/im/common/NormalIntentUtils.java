@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.gogoal.im.activity.FunctionActivity;
+import cn.gogoal.im.activity.IMPersonDetailActivity;
 import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.activity.PdfDisplayActivity;
 import cn.gogoal.im.activity.TypeLoginActivity;
@@ -87,6 +88,15 @@ public class NormalIntentUtils {
      */
     public static void go2LoginActivity(Context context) {
         Intent intent = new Intent(context, TypeLoginActivity.class);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 跳转个人行情
+     * */
+    public static void go2PersionDetail(Context context,int accountId){
+        Intent intent=new Intent(context, IMPersonDetailActivity.class);
+        intent.putExtra("account_id",accountId);
         context.startActivity(intent);
     }
 }

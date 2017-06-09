@@ -13,6 +13,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.hply.roundimage.roundImage.RoundedImageView;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +57,6 @@ public class ShareMessageActivity extends BaseActivity {
 
     private List<ShareListBean> datas;
     private ShareListAdapter adapter;
-    private GGShareEntity shareEntity;
 
     @Override
     public int bindLayout() {
@@ -67,10 +68,11 @@ public class ShareMessageActivity extends BaseActivity {
         initTitle();
         BaseActivity.initRecycleView(recyclerView, 0);
 
-        shareEntity = getIntent().getParcelableExtra("share_web_data");//分享的数据
+        GGShareEntity shareEntity = getIntent().getParcelableExtra("share_web_data");//分享的数据
 
         datas = new ArrayList<>();
-        adapter = new ShareListAdapter(datas);
+
+        adapter = new ShareListAdapter(datas, shareEntity);
 
         recyclerView.setAdapter(adapter);
 
@@ -105,42 +107,40 @@ public class ShareMessageActivity extends BaseActivity {
      * 获取最近会话
      */
     public void getRecentConversation() {
-        JSONArray recentArray = UserUtils.getMessageListInfo();
-        if (recentArray != null && recentArray.size() > 0) {
-            datas.add(new ShareListBean(ShareListBean.LIST_TYPE_SECTION));
-            List<IMMessageBean> messageBeen = JSON.parseArray(recentArray.toJSONString(), IMMessageBean.class);
+        List<IMMessageBean> IMMessageBeans = new ArrayList<>();
+        IMMessageBeans.addAll(DataSupport.findAll(IMMessageBean.class));
 
-            for (IMMessageBean bean : messageBeen) {
+        datas.add(new ShareListBean(ShareListBean.LIST_TYPE_SECTION));
+        for (IMMessageBean bean : IMMessageBeans) {
+            if (bean.getChatType() == AppConst.IM_CHAT_TYPE_SINGLE) { //最近单聊会话
+                ShareListBean<String> shareListFriend = new ShareListBean<>(
+                        ShareListBean.LIST_TYPE_ITEM, bean.getAvatar(), bean.getNickname(), bean);
 
-                if (bean.getChatType() == AppConst.IM_CHAT_TYPE_SINGLE) { //最近单聊会话
-                    ShareListBean<String> shareListFriend = new ShareListBean<>(
-                            ShareListBean.LIST_TYPE_ITEM, bean.getAvatar(), bean.getNickname(), bean);
+                datas.add(shareListFriend);
 
-                    datas.add(shareListFriend);
+            } else if (bean.getChatType() == AppConst.IM_CHAT_TYPE_SQUARE) { //最近群聊会话
+                final ShareListBean<Object> group = new ShareListBean<>(ShareListBean.LIST_TYPE_ITEM);
+                group.setText(bean.getNickname());
+                group.setBean(bean);
 
-                } else if (bean.getChatType() == AppConst.IM_CHAT_TYPE_SQUARE) { //最近群聊会话
-                    final ShareListBean<Object> group = new ShareListBean<>(ShareListBean.LIST_TYPE_ITEM);
-                    group.setText(bean.getNickname());
-                    group.setBean(bean);
+                if (!StringUtils.isActuallyEmpty(bean.getAvatar())) {
+                    group.setItemImage(bean.getAvatar());
+                } else {
+                    ChatGroupHelper.setGroupAvatar(bean.getConversationID(), new AvatarTakeListener() {
+                        @Override
+                        public void success(Bitmap bitmap) {
+                            group.setItemImage(bitmap);
+                        }
 
-                    if (!StringUtils.isActuallyEmpty(bean.getAvatar())){
-                        group.setItemImage(bean.getAvatar());
-                    }else {
-                        ChatGroupHelper.setGroupAvatar(bean.getConversationID(), new AvatarTakeListener() {
-                            @Override
-                            public void success(Bitmap bitmap) {
-                                group.setItemImage(bitmap);
-                            }
+                        @Override
+                        public void failed(Exception e) {
 
-                            @Override
-                            public void failed(Exception e) {
-
-                            }
-                        });
-                    }
-                    datas.add(group);
+                        }
+                    });
                 }
+                datas.add(group);
             }
+
         }
         adapter.notifyDataSetChanged();
 
@@ -150,8 +150,13 @@ public class ShareMessageActivity extends BaseActivity {
      * 分享选择列表
      */
     private class ShareListAdapter extends BaseMultiItemQuickAdapter<ShareListBean, BaseViewHolder> {
-        private ShareListAdapter(List<ShareListBean> data) {
+
+        private GGShareEntity shareEntity;
+
+        private ShareListAdapter(List<ShareListBean> data, GGShareEntity shareEntity) {
             super(data);
+            this.shareEntity = shareEntity;
+
             addItemType(ShareListBean.LIST_TYPE_SEARCH, R.layout.include_search_edit);
             addItemType(ShareListBean.LIST_TYPE_SECTION, android.R.layout.simple_list_item_1);
             addItemType(ShareListBean.LIST_TYPE_ITEM, R.layout.item_contacts);
@@ -177,9 +182,9 @@ public class ShareMessageActivity extends BaseActivity {
                     final RoundedImageView icon = holder.getView(R.id.item_contacts_iv_icon);
 
                     final Object image = data.getItemImage();
-                    if (image instanceof Bitmap){
+                    if (image instanceof Bitmap) {
                         icon.setImageBitmap((Bitmap) image);
-                    }else {
+                    } else {
                         ImageDisplay.loadRoundedRectangleImage(ShareMessageActivity.this, image, icon);
                     }
 

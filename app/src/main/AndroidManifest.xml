@@ -125,9 +125,11 @@
         <activity
             android:name=".activity.SquareChatRoomActivity"
             android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".activity.SingleChatRoomActivity"
             android:windowSoftInputMode="adjustResize" />
+
         <activity android:name=".activity.IMRegisterActivity" />
         <activity
             android:name=".activity.ChatRoomActivity"
@@ -196,7 +198,11 @@
         <activity android:name=".activity.SquareCardActivity" />
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.SetStockRefreshActivity" />
-        <activity android:name=".activity.KlineSettingActivity" />
+
+        <activity
+            android:name=".activity.KlineSettingActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
         <activity android:name=".activity.SingleEditActivity" />
         <activity android:name=".activity.RedGreenSettingActivity" />
         <activity android:name=".activity.ChangePhoneNumberActivity" />
@@ -214,6 +220,7 @@
         <activity android:name=".activity.ScanQRCodeActivity" />
         <activity android:name=".activity.MyQrCodeActivity" />
         <activity android:name=".activity.stock.StockFtenActivity" />
+        <activity android:name=".activity.Face2FaceActivity" />
     </application>
 
 </manifest>

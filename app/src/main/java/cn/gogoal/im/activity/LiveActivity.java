@@ -303,7 +303,7 @@ public class LiveActivity extends BaseActivity {
                 @Override
                 public void done(AVIMException e) {
                     //拉取群通讯录并缓存本地
-                    UserUtils.getChatGroup(AppConst.LIVE_GROUP_CONTACT_BEANS, conversation.getMembers(), conversation.getConversationId(), new UserUtils.getSquareInfo() {
+                    UserUtils.getChatGroup(conversation.getMembers(), conversation.getConversationId(), new UserUtils.getSquareInfo() {
                         @Override
                         public void squareGetSuccess(JSONObject object) {
                             KLog.e(object.toJSONString());
@@ -987,7 +987,7 @@ public class LiveActivity extends BaseActivity {
                         @Override
                         public void done(AVIMException e) {
                             //拉取群通讯录并缓存本地
-                            getChatGroupInfos(imConversation);
+                            getChatGroupInfo(imConversation);
                         }
                     });
                 } else {
@@ -1169,8 +1169,8 @@ public class LiveActivity extends BaseActivity {
 
 
     //获取群通讯录
-    private void getChatGroupInfos(final AVIMConversation conversation) {
-        UserUtils.getChatGroup(AppConst.LIVE_GROUP_CONTACT_BEANS, conversation.getMembers(), conversation.getConversationId(), new UserUtils.getSquareInfo() {
+    private void getChatGroupInfo(final AVIMConversation conversation) {
+        UserUtils.getChatGroup(conversation.getMembers(), conversation.getConversationId(), new UserUtils.getSquareInfo() {
             @Override
             public void squareGetSuccess(JSONObject object) {
                 KLog.e(object.toJSONString());

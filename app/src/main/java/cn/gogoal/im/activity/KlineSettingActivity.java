@@ -16,14 +16,11 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import butterknife.BindView;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.ui.KeyboardLaunchRelativeLayout;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**
@@ -75,8 +72,8 @@ public class KlineSettingActivity extends BaseActivity {
     @BindView(R.id.tv_day3)
     TextView tv_day3;
 
-    @BindView(R.id.login_keyboard_layout)
-    KeyboardLaunchRelativeLayout keyboardLayout;
+//    @BindView(R.id.login_keyboard_layout)
+//    KeyboardLaunchLinearLayout keyboardLayout;
 
     //蜡烛是否空心
     private boolean hollow;
@@ -190,25 +187,26 @@ public class KlineSettingActivity extends BaseActivity {
             }
         });
 
-        //保存键盘高度
-        keyboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchRelativeLayout.OnKeyboardChangeListener() {
-            @Override
-            public void OnKeyboardPop(int height) {
-            }
-
-            @Override
-            public void OnKeyboardClose() {
-                SPTools.saveInt("et_ln1", num1);
-                SPTools.saveInt("et_ln2", num2);
-                SPTools.saveInt("et_ln3", num3);
-                et_ln1.setText(String.valueOf(num1));
-                et_ln2.setText(String.valueOf(num2));
-                et_ln3.setText(String.valueOf(num3));
-                clearThisGuy("et_ln1");
-                clearThisGuy("et_ln2");
-                clearThisGuy("et_ln3");
-            }
-        });
+//        //保存键盘高度
+//        keyboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchLinearLayout.OnKeyboardChangeListener() {
+//            @Override
+//            public void OnKeyboardPop(int height) {
+//
+//            }
+//
+//            @Override
+//            public void OnKeyboardClose() {
+//                SPTools.saveInt("et_ln1", num1);
+//                SPTools.saveInt("et_ln2", num2);
+//                SPTools.saveInt("et_ln3", num3);
+//                et_ln1.setText(String.valueOf(num1));
+//                et_ln2.setText(String.valueOf(num2));
+//                et_ln3.setText(String.valueOf(num3));
+//                clearThisGuy("et_ln1");
+//                clearThisGuy("et_ln2");
+//                clearThisGuy("et_ln3");
+//            }
+//        });
     }
 
     @OnClick({R.id.layout_avg1, R.id.layout_avg2, R.id.layout_avg3})

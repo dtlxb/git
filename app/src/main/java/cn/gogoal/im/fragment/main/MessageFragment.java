@@ -27,6 +27,7 @@ import com.hply.qrcode_lib.activity.CodeUtils;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
+import org.litepal.crud.DataSupport;
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
@@ -63,11 +64,14 @@ import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.ggqrcode.GGQrCode;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
-import cn.gogoal.im.ui.view.PopuMoreMenu;
+import cn.gogoal.im.ui.view.PopupMoreMenu;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
@@ -75,6 +79,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 import static cn.gogoal.im.base.BaseActivity.initRecycleView;
 import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_CAMERA_PERM;
+import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_CODE;
 
 /**
  * 消息
@@ -99,8 +104,6 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
     private List<IMMessageBean> IMMessageBeans;
 
     private ListAdapter listAdapter;
-
-    private JSONArray jsonArray;
 
     private int allCount;
 
@@ -133,7 +136,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
         addPerson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popuMore(v);
+                popupMore(v);
             }
         });
     }
@@ -141,21 +144,12 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
     @Override
     public void onResume() {
         super.onResume();
-        jsonArray = UserUtils.getMessageListInfo();
-        allCount = MessageListUtils.getAllMessageUnreadCount(jsonArray);
-        sendUnreadCount(allCount);
-//        KLog.e(jsonArray);
         IMMessageBeans.clear();
-        IMMessageBeans.addAll(JSON.parseArray(String.valueOf(jsonArray), IMMessageBean.class));
-        if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
-            //按照时间排序
-            Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
-                @Override
-                public int compare(IMMessageBean object1, IMMessageBean object2) {
-                    return Long.compare(object2.getLastTime(), object1.getLastTime());
-                }
-            });
-        }
+        //查找到消息列表按时间排序
+        IMMessageBeans.addAll(DataSupport.order("lastTime desc").find(IMMessageBean.class));
+        allCount = MessageListUtils.getAllMessageUnreadCount();
+        sendUnreadCount(allCount);
+
         listAdapter.notifyDataSetChanged();
 
         listAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
@@ -243,17 +237,17 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
     /**
      * TODO 点击弹窗
      */
-    private void popuMore(View clickView) {
-        PopuMoreMenu popuMoreMenu = new PopuMoreMenu(getActivity());
-        List<BaseIconText<Integer, String>> popuData = new ArrayList<>();
-        popuData.add(new BaseIconText<>(R.mipmap.chat_find_man, "找人"));
-        popuData.add(new BaseIconText<>(R.mipmap.chat_find_square, "发起群聊"));
-        popuData.add(new BaseIconText<>(R.mipmap.chat_find_square, "扫一扫"));
+    private void popupMore(View clickView) {
+        PopupMoreMenu popupMoreMenu = new PopupMoreMenu(getActivity());
+        List<BaseIconText<Integer, String>> popupData = new ArrayList<>();
+        popupData.add(new BaseIconText<>(R.mipmap.chat_find_man, "找人"));
+        popupData.add(new BaseIconText<>(R.mipmap.chat_find_square, "发起群聊"));
+        popupData.add(new BaseIconText<>(R.mipmap.chat_find_square, "扫一扫"));
 
-        popuMoreMenu.dimBackground(false)
+        popupMoreMenu.dimBackground(false)
                 .needAnimationStyle(true)
-                .addMenuList(popuData)
-                .setOnMenuItemClickListener(new PopuMoreMenu.OnMenuItemClickListener() {
+                .addMenuList(popupData)
+                .setOnMenuItemClickListener(new PopupMoreMenu.OnMenuItemClickListener() {
                     @Override
                     public void onMenuItemClick(int position) {
                         Intent intent;
@@ -276,7 +270,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
                         }
                     }
                 })
-                .showAsDropDown(clickView,-AppDevice.dp2px(getActivity(),95), 0);
+                .showAsDropDown(clickView, -AppDevice.dp2px(getActivity(), 95), 0);
 
 
     }
@@ -295,7 +289,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
 
     private void onClick() {
         Intent intent = new Intent(getContext(), ScanQRCodeActivity.class);
-        startActivityForResult(intent, CodeUtils.REQUEST_CODE);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
     @Override
@@ -322,36 +316,6 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
         }
     }
 
-//    //弹窗监听事件
-//    private class PopuClick implements View.OnClickListener {
-//        BubblePopupWindow popupWindow;
-//
-//        public PopuClick(BubblePopupWindow style) {
-//            this.popupWindow = style;
-//        }
-//
-//        @Override
-//        public void onClick(View v) {
-//            Intent intent;
-//            switch (v.getId()) {
-//                case R.id.find_man_layout:
-//                    intent = new Intent(getContext(), SearchPersonSquareActivity.class);
-//                    intent.putExtra("search_index", 0);
-//                    startActivity(intent);
-//                    break;
-//                case R.id.take_square_layout:
-//                    intent = new Intent(getContext(), ChooseContactActivity.class);
-//                    Bundle mBundle = new Bundle();
-//                    mBundle.putInt("square_action", AppConst.CREATE_SQUARE_ROOM_BUILD);
-//                    intent.putExtras(mBundle);
-//                    startActivity(intent);
-//                    break;
-//            }
-//
-//            popupWindow.dismiss();
-//        }
-//    }
-
     private class ListAdapter extends CommonAdapter<IMMessageBean, BaseViewHolder> {
 
         private ListAdapter(int layoutId, List<IMMessageBean> datas) {
@@ -366,9 +330,18 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
             String nickName = "";
             String squareMessageFrom = "";
             int chatType = messageBean.getChatType();
+            boolean noBother = SPTools.getBoolean(UserUtils.getMyAccountId() + messageBean.getConversationID() + "noBother", false);
             final RoundedImageView avatarIv = holder.getView(R.id.head_image);
             TextView messageTv = holder.getView(R.id.last_message);
             TextView countTv = holder.getView(R.id.count_tv);
+            ImageView botherIv = holder.getView(R.id.iv_no_bother);
+            //消息免打扰
+            if (noBother) {
+                botherIv.setVisibility(View.VISIBLE);
+            } else {
+                botherIv.setVisibility(View.GONE);
+            }
+
             //未读数
             setCountTag(countTv, messageBean.getUnReadCounts());
             if (messageBean.getUnReadCounts().equals("0")) {
@@ -383,7 +356,8 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
 
             //SDK定义的消息类型
             if (messageBean.getLastMessage() != null) {
-                String content = messageBean.getLastMessage().getContent();
+                AVIMMessage cacheMessage = JSON.parseObject(messageBean.getLastMessage(), AVIMMessage.class);
+                String content = cacheMessage.getContent();
                 JSONObject contentObject = JSON.parseObject(content);
                 JSONObject lcattrsObject = JSON.parseObject(contentObject.getString("_lcattrs"));
                 String _lctype = contentObject.getString("_lctype");
@@ -401,7 +375,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
                         ChatGroupHelper.setGroupAvatar(messageBean.getConversationID(), new AvatarTakeListener() {
                             @Override
                             public void success(final Bitmap bitmap) {
-                                if (getActivity()!=null) {
+                                if (getActivity() != null) {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -577,6 +551,15 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
         boolean isTheSame = false;
         final String ConversationId = conversation.getConversationId();
+        //获取免打扰
+        KLog.e(conversation.get("mu"));
+        if (conversation.get("mu") != null) {
+            boolean canBother = (boolean) conversation.get("mu");
+            SPTools.saveBoolean(UserUtils.getMyAccountId() + ConversationId + "noBother", canBother);
+        } else {
+            SPTools.saveBoolean(UserUtils.getMyAccountId() + ConversationId + "noBother", false);
+        }
+
         int chatType = (int) conversation.getAttribute("chat_type");
         Long rightNow = CalendarUtils.getCurrentTime();
         String nickName = "";
@@ -666,7 +649,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(ConversationId)) {
                 IMMessageBeans.get(i).setLastTime(rightNow);
-                IMMessageBeans.get(i).setLastMessage(message);
+                IMMessageBeans.get(i).setLastMessage(JSON.toJSONString(message));
                 unreadMessage = Integer.parseInt(IMMessageBeans.get(i).getUnReadCounts().equals("") ? "0" : IMMessageBeans.get(i).getUnReadCounts()) + 1;
                 IMMessageBeans.get(i).setUnReadCounts(unreadMessage + "");
                 isTheSame = true;
@@ -677,7 +660,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
         if (!isTheSame) {
             IMMessageBean imMessageBean = new IMMessageBean();
             imMessageBean.setConversationID(ConversationId);
-            imMessageBean.setLastMessage(message);
+            imMessageBean.setLastMessage(JSON.toJSONString(message));
             imMessageBean.setLastTime(rightNow);
             imMessageBean.setNickname(nickName);
             imMessageBean.setAvatar(avatar);
@@ -688,8 +671,8 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
 
         //保存
         IMMessageBean imMessageBean = new IMMessageBean(ConversationId, chatType, message.getTimestamp(),
-                isTheSame ? String.valueOf(unreadMessage) : "1", nickName, friend_id, avatar, message);
-        MessageListUtils.saveMessageInfo(jsonArray, imMessageBean);
+                isTheSame ? String.valueOf(unreadMessage) : "1", nickName, friend_id, avatar, JSON.toJSONString(message));
+        MessageListUtils.saveMessageInfo(imMessageBean);
         allCount++;
         sendUnreadCount(allCount);
         //按照时间排序
@@ -714,4 +697,48 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
         AppManager.getInstance().sendMessage("correct_allmessage_count", countMessage);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            KLog.e("==========" + data.getExtras().getString(CodeUtils.RESULT_STRING) + "===========");
+        } catch (Exception e) {
+            e.getMessage();
+        }
+
+        KLog.e("requestCode==" + requestCode);
+
+        if (requestCode == REQUEST_CODE) {
+            //处理扫描结果（在界面上显示）
+            if (null != data) {
+                Bundle bundle = data.getExtras();
+                if (bundle == null) {
+                    return;
+                }
+                if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
+                    String result = bundle.getString(CodeUtils.RESULT_STRING);
+
+                    String codeBody = GGQrCode.getUserQrCodeBody(result);
+
+                    try {
+                        JSONObject scanBody = JSONObject.parseObject(codeBody);
+                        if (scanBody.getString("qrType").equalsIgnoreCase("0")) {
+                            //TODO 跳转个人详情
+                            NormalIntentUtils.go2PersionDetail(getContext(),
+                                    Integer.parseInt(scanBody.getString("account_id")));
+
+                        } else if (scanBody.getString("qrType").equalsIgnoreCase("1")) {
+                            //TODO 跳转群名片
+                        }
+
+                    } catch (Exception e) {
+                        e.getMessage();
+                        KLog.e("结果不是json");
+                    }
+
+                } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+                    UIHelper.toast(getActivity(), "解析出错");
+                }
+            }
+        }
+    }
 }

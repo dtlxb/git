@@ -19,11 +19,11 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Base64;
+import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -38,20 +38,18 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.Impl;
-import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * author wangjd on 2017/2/23 0023.
  * Staff_id 1375
  * phone 18930640263
  */
-public class ImageUtils implements EasyPermissions.PermissionCallbacks {
+public class ImageUtils{
 
     public final static String SDCARD_MNT = "/mnt/sdcard";
     public final static String SDCARD = Environment.getExternalStorageState();
@@ -162,7 +160,6 @@ public class ImageUtils implements EasyPermissions.PermissionCallbacks {
      */
     public static void saveImage2DCIM(Bitmap bitmap, String filename, Impl<String> callBack) {
         int selfPermission = ContextCompat.checkSelfPermission(MyApp.getAppContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
 
         if (bitmap == null) {
             if (callBack != null)
@@ -669,18 +666,12 @@ public class ImageUtils implements EasyPermissions.PermissionCallbacks {
         return options.outHeight + "x" + options.outWidth;
     }
 
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> perms) {
+    public static Bitmap screenshot(View view){
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache();  //启用DrawingCache并创建位图
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache()); //创建一个DrawingCache的拷贝，因为DrawingCache得到的位图在禁用后会被回收
+        view.setDrawingCacheEnabled(false);  //禁用DrawingCahce否则会影响性能
 
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> perms) {
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
+        return bitmap;
     }
 }

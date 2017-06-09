@@ -2,10 +2,13 @@ package cn.gogoal.im.common.IMHelpers;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
+import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.socks.library.KLog;
 
 import java.io.File;
@@ -14,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.gogoal.im.R;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.BaseMessage;
@@ -22,6 +26,7 @@ import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -30,6 +35,7 @@ import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.MyFilter;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
+import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UserUtils;
 
 import static cn.gogoal.im.common.UserUtils.getToken;
@@ -158,41 +164,48 @@ public class ChatGroupHelper {
         new GGOKHTTP(params, GGOKHTTP.CANCEL_COLLECT_GROUP, ggHttpInterface).startGet();
     }
 
-    //群通讯录更新
-    public static void upDataGroupContactInfo(String conversationID, int friendId, String avatar, String nickname) {
-        JSONArray spAccountArray = UserUtils.getGroupContactInfo(conversationID);
-        boolean hasThisGuy = false;
-        //有这个人修改
-        for (int i = 0; i < spAccountArray.size(); i++) {
-            JSONObject oldObject = (JSONObject) spAccountArray.get(i);
-            if (oldObject.getInteger("friend_id") == friendId) {
-                ((JSONObject) spAccountArray.get(i)).put("avatar", avatar);
-                ((JSONObject) spAccountArray.get(i)).put("nickname", nickname);
-                ((JSONObject) spAccountArray.get(i)).put("friend_id", friendId);
-                SPTools.saveJsonObject(UserUtils.getMyAccountId() + conversationID + friendId, ((JSONObject) spAccountArray.get(i)));
-                hasThisGuy = true;
-                break;
+    //消息免打扰，isSetMute为true设置可打扰
+    public static void controlMute(final boolean isSetMute, final String conversationId) {
+
+        SPTools.saveBoolean(UserUtils.getMyAccountId() + conversationId + "noBother", isSetMute);
+        AVIMClientManager.getInstance().refreshConversation(conversationId);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", getToken());
+        params.put("conv_id", conversationId);
+        KLog.e(params);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                JSONObject object = result.getJSONObject("data");
+                boolean success = (boolean) object.get("success");
+                if (success) {
+                }
             }
-        }
-        if (hasThisGuy) {
-            UserUtils.saveGroupContactInfo(conversationID, spAccountArray);
+
+            @Override
+            public void onFailure(String msg) {
+                SPTools.saveBoolean(UserUtils.getMyAccountId() + conversationId + "noBother", !isSetMute);
+            }
+        };
+        if (isSetMute) {
+            new GGOKHTTP(params, GGOKHTTP.SET_MUTE, ggHttpInterface).startGet();
+        } else {
+            new GGOKHTTP(params, GGOKHTTP.CANCEL_MUTE, ggHttpInterface).startGet();
         }
     }
 
     //获取群头像并且缓存SD
     public static void createGroupImage(AVIMConversation conversation, final String msgTag) {
         //群删除好友(每次删除后重新生成群头像)
-        /*JSONArray accountArray = UserUtils.getGroupContactInfo(ConversationId);
-        KLog.e(groupMemberMap);
-        KLog.e(accountArray);*/
-        /*if (null != accountArray && accountArray.size() > 0) {
-            getNinePic(accountArray, ConversationId, msgTag);
-        } else {*/
         final String ConversationId = conversation.getConversationId();
         List<String> groupMemberMap = conversation.getMembers();
         //如果不存在则先找这个会话
         if (groupMemberMap == null || groupMemberMap.size() == 0) {
-            UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, groupMemberMap, ConversationId, new UserUtils.getSquareInfo() {
+            UserUtils.getChatGroup(groupMemberMap, ConversationId, new UserUtils.getSquareInfo() {
                 @Override
                 public void squareGetSuccess(JSONObject object) {
                     JSONArray array = object.getJSONArray("accountList");
@@ -206,7 +219,7 @@ public class ChatGroupHelper {
                 }
             });
         } else {
-            UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, groupMemberMap, ConversationId, new UserUtils.getSquareInfo() {
+            UserUtils.getChatGroup(groupMemberMap, ConversationId, new UserUtils.getSquareInfo() {
                 @Override
                 public void squareGetSuccess(JSONObject object) {
                     JSONArray array = object.getJSONArray("accountList");
@@ -220,7 +233,6 @@ public class ChatGroupHelper {
                 }
             });
         }
-        //}
     }
 
     public static void getNinePic(JSONArray array, final String ConversationId, final String msgTag) {
@@ -229,7 +241,6 @@ public class ChatGroupHelper {
             JSONObject personObject = array.getJSONObject(i);
             picUrls.add(personObject.getString("avatar"));
         }
-        KLog.e(picUrls);
         //九宫图拼接
         GroupFaceImage.getInstance(MyApp.getAppContext(), picUrls).load(new GroupFaceImage.OnMatchingListener() {
             @Override
@@ -426,9 +437,10 @@ public class ChatGroupHelper {
                     IMMessageBean imMessageBean = null;
                     if (null != contactBean) {
                         imMessageBean = new IMMessageBean(contactBean.getConv_id(), 1001, System.currentTimeMillis(),
-                                "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()), String.valueOf(contactBean.getAvatar()), shareMessage);
+                                "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()),
+                                String.valueOf(contactBean.getAvatar()), JSON.toJSONString(shareMessage));
                     }
-                    MessageListUtils.saveMessageInfo(UserUtils.getMessageListInfo(), imMessageBean);
+                    MessageListUtils.saveMessageInfo(imMessageBean);
                 }
             }
 
@@ -491,9 +503,9 @@ public class ChatGroupHelper {
 
                     //头像暂时未保存
                     IMMessageBean imMessageBean = shareItemInfo.getImMessageBean();
-                    imMessageBean.setLastMessage(shareMessage);
+                    imMessageBean.setLastMessage(JSON.toJSONString(shareMessage));
                     imMessageBean.setLastTime(System.currentTimeMillis());
-                    MessageListUtils.saveMessageInfo(UserUtils.getMessageListInfo(), imMessageBean);
+                    MessageListUtils.saveMessageInfo(imMessageBean);
                 }
             }
 
@@ -503,6 +515,112 @@ public class ChatGroupHelper {
             }
         };
         new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
+    }
+
+    public static void sendImageMessage(final String conversationId, final String chatType, final File file, final MessageResponse messageResponse) {
+        //图片宽高处理
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+        final int width = bitmap.getWidth();
+        final int height = bitmap.getHeight();
+
+        AsyncTaskUtil.doAsync(new AsyncTaskUtil.AsyncCallBack() {
+            @Override
+            public void onPreExecute() {
+
+            }
+
+            @Override
+            public void doInBackground() {
+                //分个上传UFile;
+                UFileUpload.getInstance().upload(file, UFileUpload.Type.IMAGE, new UFileUpload.UploadListener() {
+                    @Override
+                    public void onUploading(int progress) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String onlineUri) {
+
+                        if (TextUtils.isEmpty(conversationId)) {
+                            return;
+                        }
+
+                        //图片消息基本信息
+                        Map<Object, Object> messageMap = new HashMap<>();
+                        messageMap.put("_lctype", "-2");
+                        messageMap.put("_lctext", "");
+                        messageMap.put("_lcattrs", AVIMClientManager.getInstance().userBaseInfo());
+                        messageMap.put("url", onlineUri);
+                        messageMap.put("name", file.getPath());
+                        messageMap.put("format", "jpg");
+                        messageMap.put("height", String.valueOf(height));
+                        messageMap.put("width", String.valueOf(width));
+
+                        Map<String, String> params = new HashMap<>();
+                        params.put("token", UserUtils.getToken());
+                        params.put("conv_id", conversationId);
+                        params.put("chat_type", chatType);
+                        params.put("message", JSONObject.toJSON(messageMap).toString());
+                        KLog.e(onlineUri);
+
+                        //发送图片消息
+                        sendAVIMMessage(params, messageResponse);
+                    }
+
+                    @Override
+                    public void onFailed() {
+                    }
+                });
+            }
+
+            @Override
+            public void onPostExecute() {
+
+            }
+        });
+    }
+
+
+    public static void sendAVIMMessage(final Map<String, String> params, final MessageResponse messageResponse) {
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                if ((int) result.get("code") == 0) {
+                    JSONObject data = result.getJSONObject("data");
+                    if (data.getBoolean("success")) {
+                        if (null != messageResponse) {
+                            messageResponse.sendSuccess();
+                        }
+                    } else {
+                        if (null != messageResponse) {
+                            messageResponse.sendFailed();
+                        }
+                    }
+                } else {
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                if (null != messageResponse) {
+                    messageResponse.sendFailed();
+                }
+            }
+        };
+        new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
+
+    }
+
+
+    /**
+     * 消息发送状况
+     */
+    public interface MessageResponse {
+        void sendSuccess();
+
+        void sendFailed();
     }
 
     /**

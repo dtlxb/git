@@ -22,7 +22,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.IMPersonDetailActivity;
 import cn.gogoal.im.activity.PhoneContactsActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
@@ -31,6 +30,7 @@ import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -75,11 +75,11 @@ public class SearchPersionFragment extends BaseFragment {
 
         recyclerView.setAdapter(adapter);
 
-        View headView= LayoutInflater.from(mContext)
-                .inflate(R.layout.item_contacts,new LinearLayout(mContext),false);
-        RoundedImageView headImage= (RoundedImageView)
+        View headView = LayoutInflater.from(mContext)
+                .inflate(R.layout.item_contacts, new LinearLayout(mContext), false);
+        RoundedImageView headImage = (RoundedImageView)
                 headView.findViewById(R.id.item_contacts_iv_icon);
-        TextView headText= (TextView)
+        TextView headText = (TextView)
                 headView.findViewById(R.id.item_contacts_tv_nickname);
         headImage.setImageResource(R.mipmap.chat_phone_contacts);
         headText.setText(R.string.im_phone_num);
@@ -213,7 +213,7 @@ public class SearchPersionFragment extends BaseFragment {
 
             RoundedImageView imageView = holder.getView(R.id.item_user_avatar);
             holder.setText(R.id.item_tv_search_result_name, data.getNickname());
-            holder.setText(R.id.item_tv_search_result_intro,data.getDuty());
+            holder.setText(R.id.item_tv_search_result_intro, data.getDuty());
             try {
                 ImageDisplay.loadRoundedRectangleImage(mContext,
                         data.getAvatar(),
@@ -227,10 +227,11 @@ public class SearchPersionFragment extends BaseFragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), IMPersonDetailActivity.class);
-                    intent.putExtra("account_id", data.getUserId());
-                    KLog.e(data.getUserId());
-                    startActivity(intent);
+//                    Intent intent = new Intent(v.getContext(), IMPersonDetailActivity.class);
+//                    intent.putExtra("account_id", data.getUserId());
+//                    KLog.e(data.getUserId());
+//                    startActivity(intent);
+                    NormalIntentUtils.go2PersionDetail(v.getContext(),data.getUserId());
                 }
             });
         }

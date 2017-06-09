@@ -144,4 +144,34 @@
         <attr name="sv_background" format="reference|color" />
         <attr name="sv_enable_effect" format="reference|boolean" />
     </declare-styleable>
+
+    <declare-styleable name="PointPasswordEditText">
+        <attr name="ppe_passwordLength" format="integer" />
+        <attr name="ppe_passwordPadding" format="dimension" />
+        <attr name="ppe_borderColor" format="color" />
+        <attr name="ppe_borderWidth" format="dimension" />
+        <attr name="ppe_cursorFlashTime" format="integer" />
+        <attr name="ppe_isCursorEnable" format="boolean" />
+        <attr name="ppe_cipherEnable" format="boolean" />
+        <attr name="ppe_cursorColor" format="color" />
+        <attr name="ppe_mode" format="enum">
+            <enum name="underline" value="0" />
+            <enum name="rect" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="PayPsdInputView">
+        <attr name="ppi_maxCount" format="integer" />
+        <attr name="ppi_circleColor" format="color" />
+        <attr name="ppi_bottomLineColor" format="color" />
+        <attr name="ppi_radius" format="dimension" />
+        <attr name="ppi_divideLineWidth" format="dimension" />
+        <attr name="ppi_divideLineColor" format="color" />
+        <attr name="ppi_rectAngle" format="dimension" />
+        <attr name="ppi_psdType" format="enum">
+            <enum name="weChat" value="0" />
+            <enum name="bottomLine" value="1" />
+        </attr>
+    </declare-styleable>
+
 </resources>

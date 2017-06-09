@@ -26,12 +26,12 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean, BaseViewHolde
 
     private Context context;
     private String squareCreater;
-    private int chatTytpe;
+    private int chatType;
 
-    public IMPersonSetAdapter(int chatTytpe, Context context, int layoutId, String squareCreater, List<ContactBean> datas) {
+    public IMPersonSetAdapter(int chatType, Context context, int layoutId, String squareCreater, List<ContactBean> datas) {
         super(layoutId, datas);
         this.context = context;
-        this.chatTytpe = chatTytpe;
+        this.chatType = chatType;
         this.squareCreater = squareCreater;
     }
 
@@ -69,7 +69,7 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean, BaseViewHolde
         } else if (avatar instanceof Integer) {
             imageIcon.setImageResource((Integer) avatar);
         }
-        if ((String.valueOf(contactBean.getFriend_id()).equals(squareCreater) && chatTytpe == 1002)) {
+        if ((String.valueOf(contactBean.getFriend_id()).equals(squareCreater) && chatType == 1002)) {
             squareManTag.setVisibility(View.VISIBLE);
         } else {
             squareManTag.setVisibility(View.GONE);

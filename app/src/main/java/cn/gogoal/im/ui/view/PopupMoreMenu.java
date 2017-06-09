@@ -21,7 +21,7 @@ import cn.gogoal.im.common.AppDevice;
 /**
  * Author：Bro0cL on 2016/12/26.
  */
-public class PopuMoreMenu {
+public class PopupMoreMenu {
 
     private Activity mContext;
 
@@ -50,7 +50,7 @@ public class PopuMoreMenu {
 
     private float alpha = 0.75f;
 
-    public PopuMoreMenu(Activity context) {
+    public PopupMoreMenu(Activity context) {
         this.mContext = context;
         init();
     }
@@ -90,7 +90,7 @@ public class PopuMoreMenu {
         return mPopupWindow;
     }
 
-    public PopuMoreMenu setHeight(int height){
+    public PopupMoreMenu setHeight(int height){
         if (height <= 0 && height != RecyclerView.LayoutParams.MATCH_PARENT
                 && height != RecyclerView.LayoutParams.WRAP_CONTENT){
             this.popHeight = DEFAULT_HEIGHT;
@@ -100,7 +100,7 @@ public class PopuMoreMenu {
         return this;
     }
 
-    public PopuMoreMenu setWidth(int width){
+    public PopupMoreMenu setWidth(int width){
         if (width <= 0 && width != RecyclerView.LayoutParams.MATCH_PARENT){
             this.popWidth = RecyclerView.LayoutParams.WRAP_CONTENT;
         }else {
@@ -114,7 +114,7 @@ public class PopuMoreMenu {
 //     * @param show
 //     * @return
 //     */
-//    public PopuMoreMenu showIcon(boolean show){
+//    public PopupMoreMenu showIcon(boolean show){
 //        this.showIcon = show;
 //        return this;
 //    }
@@ -124,7 +124,7 @@ public class PopuMoreMenu {
      * @param item
      * @return
      */
-    public PopuMoreMenu addMenuItem(BaseIconText<Integer,String> item){
+    public PopupMoreMenu addMenuItem(BaseIconText<Integer,String> item){
         menuItemList.add(item);
         return this;
     }
@@ -134,7 +134,7 @@ public class PopuMoreMenu {
      * @param list
      * @return
      */
-    public PopuMoreMenu addMenuList(List<BaseIconText<Integer,String>> list){
+    public PopupMoreMenu addMenuList(List<BaseIconText<Integer,String>> list){
         menuItemList.addAll(list);
         return this;
     }
@@ -144,7 +144,7 @@ public class PopuMoreMenu {
      * @param b
      * @return
      */
-    public PopuMoreMenu dimBackground(boolean b){
+    public PopupMoreMenu dimBackground(boolean b){
         this.dimBackground = b;
         return this;
     }
@@ -154,7 +154,7 @@ public class PopuMoreMenu {
      * @param need
      * @return
      */
-    public PopuMoreMenu needAnimationStyle(boolean need){
+    public PopupMoreMenu needAnimationStyle(boolean need){
         this.needAnimationStyle = need;
         return this;
     }
@@ -164,22 +164,22 @@ public class PopuMoreMenu {
      * @param style
      * @return
      */
-    public PopuMoreMenu setAnimationStyle(int style){
+    public PopupMoreMenu setAnimationStyle(int style){
         this.animationStyle = style;
         return this;
     }
 
-    public PopuMoreMenu setOnMenuItemClickListener(OnMenuItemClickListener listener){
+    public PopupMoreMenu setOnMenuItemClickListener(OnMenuItemClickListener listener){
         mAdapter.setOnMenuItemClickListener(listener);
         return this;
     }
 
-    public PopuMoreMenu showAsDropDown(View anchor){
+    public PopupMoreMenu showAsDropDown(View anchor){
         showAsDropDown(anchor, 0, 0);
         return this;
     }
 
-    public PopuMoreMenu showAsDropDown(View anchor, int xoff, int yoff){
+    public PopupMoreMenu showAsDropDown(View anchor, int xoff, int yoff){
         if (mPopupWindow == null){
             getPopupWindow();
         }

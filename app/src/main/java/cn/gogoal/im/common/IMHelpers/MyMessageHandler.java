@@ -19,6 +19,7 @@ import com.avos.avospush.notification.NotificationCompat;
 import com.socks.library.KLog;
 
 import java.util.HashMap;
+import java.util.List;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MainActivity;
@@ -26,7 +27,7 @@ import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.BaseMessage;
-import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.UserBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.SPTools;
@@ -59,8 +60,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     //更新通讯录
                                     JSONObject contentObject = JSON.parseObject(message.getContent());
                                     JSONObject lcattrsObject = contentObject.getJSONObject("_lcattrs");
-                                    UserUtils.upDataContactInfo(Integer.parseInt(message.getFrom()), lcattrsObject.getString("avatar"),
-                                            lcattrsObject.getString("username"), lcattrsObject.getString("conv_id"));
+                                    UserInfoUtils.upDateUserInfo(Integer.parseInt(message.getFrom()), lcattrsObject.getString("avatar"), lcattrsObject.getString("username"));
                                     break;
                                 case AppConst.IM_CHAT_TYPE_SQUARE:
                                     //群聊
@@ -68,19 +68,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     final JSONObject content_object = JSON.parseObject(message.getContent());
                                     final String _lctype = content_object.getString("_lctype");
                                     JSONObject lcattrsGroup = content_object.getJSONObject("_lcattrs");
-                                    //补全群信息(群信息没有的时候)
-                                    JSONArray spAccountArray = UserUtils.getGroupContactInfo(conversation.getConversationId());
-                                    if (spAccountArray == null || spAccountArray.size() == 0) {
-                                        UserUtils.getChatGroup(AppConst.CHAT_GROUP_CONTACT_BEANS, null, conversation.getConversationId(), new UserUtils.getSquareInfo() {
-                                            @Override
-                                            public void squareGetSuccess(JSONObject object) {
-                                            }
-
-                                            @Override
-                                            public void squareGetFail(String error) {
-                                            }
-                                        });
-                                    }
 
                                     if (AppConst.IM_MESSAGE_TYPE_SQUARE_ADD.equals(_lctype) || AppConst.IM_MESSAGE_TYPE_SQUARE_DEL.equals(_lctype)) {
                                         conversation.fetchInfoInBackground(new AVIMConversationCallback() {
@@ -88,7 +75,12 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                             public void done(AVIMException e) {
                                                 //通讯录
                                                 JSONArray accountArray = content_object.getJSONObject("_lcattrs").getJSONArray("accountList");
-                                                MessageListUtils.changeSquareInfo(conversation.getConversationId(), accountArray, _lctype);
+                                                //群数据库加人删人
+                                                if (AppConst.IM_MESSAGE_TYPE_SQUARE_ADD.equals(_lctype)) {
+                                                    UserInfoUtils.saveGroupUserInfo(conversation.getConversationId(), accountArray);
+                                                } else if (AppConst.IM_MESSAGE_TYPE_SQUARE_DEL.equals(_lctype)) {
+                                                    UserInfoUtils.deleteGroupUserInfo(conversation.getConversationId(), accountArray);
+                                                }
                                                 //生成群头像(加人删人时候更改)
                                                 if (conversation.getAttribute("avatar") == null || TextUtils.isEmpty((String) conversation.getAttribute("avatar"))) {
                                                     ChatGroupHelper.createGroupImage(conversation, "set_avatar");
@@ -101,9 +93,22 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                         //群公告，群简介
                                         sendIMMessage(message, conversation);
                                     } else {
+                                        //补全群信息(群信息没有的时候)
+                                        List<UserBean> cacheBeans = UserInfoUtils.getAllGroupUserInfo(conversation.getConversationId());
+                                        if (cacheBeans == null || cacheBeans.size() == 0) {
+                                            UserUtils.getChatGroup(null, conversation.getConversationId(), new UserUtils.getSquareInfo() {
+                                                @Override
+                                                public void squareGetSuccess(JSONObject object) {
+                                                }
+
+                                                @Override
+                                                public void squareGetFail(String error) {
+                                                }
+                                            });
+                                        }
+
                                         //更新群通讯录
-                                        ChatGroupHelper.upDataGroupContactInfo(conversation.getConversationId(), Integer.parseInt(message.getFrom()),
-                                                lcattrsGroup.getString("avatar"), lcattrsGroup.getString("username"));
+                                        UserInfoUtils.upDateUserInfo(Integer.parseInt(message.getFrom()), lcattrsGroup.getString("avatar"), lcattrsGroup.getString("username"));
                                         sendIMMessage(message, conversation);
                                     }
 
@@ -132,15 +137,14 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     String nickName = lcattrsObject1.getString("nickname");
                                     String conv_id = lcattrsObject1.getString("conv_id");
                                     int friend_id = lcattrsObject1.getInteger("friend_id");
-                                    ContactBean<String> contactBean = new ContactBean<>();
-                                    contactBean.setNickname(nickName);
-                                    contactBean.setAvatar(avatar);
-                                    contactBean.setFriend_id(friend_id);
-                                    contactBean.setContactType(ContactBean.ContactType.PERSION_ITEM);
-                                    contactBean.setConv_id(conv_id);
-                                    String friendList = UserUtils.updataFriendList(JSONObject.toJSONString(contactBean));
-                                    //SPTools.saveString(UserUtils.getMyAccountId() + "_contact_beans", friendList);
-                                    UserUtils.saveContactInfo(friendList);
+
+                                    UserBean userBean = new UserBean();
+                                    userBean.setConv_id(conv_id);
+                                    userBean.setNickname(nickName);
+                                    userBean.setFriend_id(friend_id);
+                                    userBean.setAvatar(avatar);
+                                    userBean.setInYourContact(true);
+                                    userBean.save();
                                     break;
 
                                 case AppConst.IM_CHAT_TYPE_CONSULTATION:

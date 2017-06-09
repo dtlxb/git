@@ -13,15 +13,17 @@ import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.socks.library.KLog;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.UserBean;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
-import cn.gogoal.im.common.SPTools;
+import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -36,7 +38,7 @@ public class SingleChatRoomActivity extends BaseActivity {
 
     //聊天对象
     private ChatFragment chatFragment;
-    private ContactBean contactBean;
+    private UserBean userBean;
 
     @Override
     public int bindLayout() {
@@ -65,9 +67,16 @@ public class SingleChatRoomActivity extends BaseActivity {
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(SingleChatRoomActivity.this, R.mipmap.chat_person)) {
             @Override
             public void actionClick(View view) {
-                if (null != contactBean) {
+                if (null != userBean) {
                     Intent intent = new Intent(SingleChatRoomActivity.this, IMPersonActivity.class);
                     Bundle mBundle = new Bundle();
+
+                    ContactBean contactBean = new ContactBean();
+                    contactBean.setFriend_id(userBean.getFriend_id());
+                    contactBean.setConv_id(userBean.getConv_id());
+                    contactBean.setAvatar(userBean.getAvatar());
+                    contactBean.setNickname(userBean.getNickname());
+
                     mBundle.putSerializable("seri", contactBean);
                     mBundle.putString("conversation_id", conversation_id);
                     mBundle.putString("nickname", nickname);
@@ -83,13 +92,12 @@ public class SingleChatRoomActivity extends BaseActivity {
 
     public void getSingleConversation(String conversation_id, final boolean need_update, final List<AVIMMessage> messageList) {
 
-        KLog.e(conversation_id);
         //获取聊天conversation
         AVIMClientManager.getInstance().findConversationById(conversation_id, new AVIMClientManager.ChatJoinManager() {
             @Override
             public void joinSuccess(AVIMConversation conversation) {
-                contactBean = getYourSpeaker(conversation);
-                chatFragment.setConversation(conversation, need_update, 0, contactBean, messageList);
+                userBean = getYourSpeaker(conversation);
+                chatFragment.setConversation(conversation, need_update, 0, userBean, messageList);
             }
 
             @Override
@@ -100,9 +108,10 @@ public class SingleChatRoomActivity extends BaseActivity {
         });
     }
 
-    private ContactBean getYourSpeaker(AVIMConversation conversation) {
+    private UserBean getYourSpeaker(AVIMConversation conversation) {
         //拿到对方
         String speakTo = "";
+        UserBean userBean = null;
         List<String> members = new ArrayList<>();
         members.addAll(conversation.getMembers());
         if (members.size() > 0) {
@@ -115,32 +124,8 @@ public class SingleChatRoomActivity extends BaseActivity {
             }
         } else {
         }
-        JSONObject object = SPTools.getJsonObject(speakTo + "", null);
-        if (null != object) {
-            return JSON.parseObject(String.valueOf(object), ContactBean.class);
-        } else {
-            String responseInfo = SPTools.getString(UserUtils.getMyAccountId() + "_contact_beans", "");
-            List<ContactBean<String>> contactBeanList = new ArrayList<>();
-            if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                BaseBeanList<ContactBean<String>> beanList = JSONObject.parseObject(
-                        responseInfo,
-                        new TypeReference<BaseBeanList<ContactBean<String>>>() {
-                        });
-                List<ContactBean<String>> list = beanList.getData();
-
-                for (ContactBean<String> bean : list) {
-                    bean.setContactType(ContactBean.ContactType.PERSION_ITEM);
-                }
-
-                contactBeanList.addAll(list);
-            }
-            for (int i = 0; i < contactBeanList.size(); i++) {
-                if ((contactBeanList.get(i).getFriend_id() + "").equals(speakTo)) {
-                    return contactBeanList.get(i);
-                }
-            }
-        }
-        return null;
+        userBean = UserInfoUtils.getSomeone(Integer.parseInt(speakTo));
+        return userBean;
     }
 
 }

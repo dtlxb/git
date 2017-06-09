@@ -102,7 +102,7 @@ public class SingleEditActivity extends BaseActivity {
                         public void success(String responseInfo) {
                             loadingDialog.dismiss(true);
                             //TODO 更新本地缓存，刷新上一个页面
-                            UserUtils.updataLocalUserInfo(localCacheKey, svEditInfo.getText().toString());
+                            UserUtils.updateLocalUserInfo(localCacheKey, svEditInfo.getText().toString());
                             AppManager.getInstance().sendMessage("updata_userinfo", "更新用户信息");
 
                             final WaitDialog waitDialog = WaitDialog.getInstance(title + "信息修改成功",
