@@ -58,13 +58,16 @@ public class BusinessAnalysisFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
+                KLog.json(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
-
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
+
+                    JSONObject mainInduc = data.getJSONObject("mainInduc");
+                    KLog.e(mainInduc);
+
                     Map<String, JSONObject> map = JSONObject.parseObject(String.valueOf(data), Map.class);
-                    map.remove("main");
+                    //map.remove("main");
                     KLog.e(map);
                     Set<String> entries = map.keySet();
                     List<String> mapKey = new ArrayList<>();
