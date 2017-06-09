@@ -19,7 +19,10 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.hply.qrcode_lib.activity.ZXingLibrary;
 
+import org.litepal.LitePal;
 import org.litepal.LitePalApplication;
+import org.litepal.LitePalDB;
+import org.litepal.tablemanager.Connector;
 
 import java.io.BufferedReader;
 import java.io.File;

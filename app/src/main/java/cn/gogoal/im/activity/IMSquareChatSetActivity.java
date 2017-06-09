@@ -88,6 +88,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
     @BindView(R.id.save_switch)
     SwitchCompat saveGroup;
 
+    @BindView(R.id.bother_switch)
+    SwitchCompat botherSwitch;
+
     private IMPersonSetAdapter mPersonInfoAdapter;
     private List<ContactBean> contactBeans = new ArrayList<>();
     private List<ContactBean> PersonContactBeans = new ArrayList<>();
@@ -122,6 +125,10 @@ public class IMSquareChatSetActivity extends BaseActivity {
         tvSquareName.setText(squareName);
         the_square.setText(squareName);
 
+        //初始化打扰设置
+        boolean noBother = SPTools.getBoolean(UserUtils.getMyAccountId() + conversationId + "noBother", false);
+        botherSwitch.setChecked(noBother);
+
         if (null != getIntent().getExtras().getStringArrayList("group_members")) {
             groupMembers.addAll(getIntent().getExtras().getStringArrayList("group_members"));
             tvTeamSize.setText(groupMembers.size() + "人");
@@ -142,6 +149,15 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 thisGroup = (JSONObject) groupsArray.get(i);
             }
         }
+
+        //消息打扰设置
+        botherSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ChatGroupHelper.controlMute(isChecked, conversationId);
+            }
+        });
+
         //保存群
         final JSONObject finalThisGroup = thisGroup;
         saveGroup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

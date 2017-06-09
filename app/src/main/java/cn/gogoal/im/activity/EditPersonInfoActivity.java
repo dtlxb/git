@@ -58,10 +58,11 @@ public class EditPersonInfoActivity extends BaseActivity {
     @BindView(R.id.edit_job_name)
     EditText editJobName;
 
-    @BindView(R.id.login_cofirm)
+    @BindView(R.id.login_confirm)
     SelectorButton loginConfirm;
 
     private String imageUri;
+    private File avatarFile;
 
     @Override
     public int bindLayout() {
@@ -96,14 +97,8 @@ public class EditPersonInfoActivity extends BaseActivity {
         editJobName.setText(UserUtils.getDuty());
     }
 
-    //上传头像到ufile
-    private void uploadAvatar(File chooseAvatar) {
-        //弹个窗
-        final ProgressDialog waitDialog =
-                DialogHelp.getWaitDialog(getActivity(), "上传中...");
-        waitDialog.setCancelable(false);
-        waitDialog.show();
-
+    //上传头像到uFile
+    private void uploadAvatar(File chooseAvatar, final HashMap<String, String> map, final WaitDialog dialog) {
         //上传
         UFileUpload.getInstance().upload(chooseAvatar,
                 UFileUpload.Type.IMAGE,
@@ -115,15 +110,16 @@ public class EditPersonInfoActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(String onlineUri) {
-                        waitDialog.dismiss();
                         imageUri = onlineUri;
-                        UIHelper.toast(getActivity(), "修改成功");
+
+                        UserUtils.updateLocalUserInfo("simple_avatar", imageUri);
+                        map.put("avatar", imageUri);
+
+                        doComplete(map, dialog);
                     }
 
                     @Override
                     public void onFailed() {
-                        waitDialog.dismiss();
-                        UIHelper.toast(getActivity(), "修改出错！");
                     }
                 });
     }
@@ -133,9 +129,8 @@ public class EditPersonInfoActivity extends BaseActivity {
             @Override
             public void success(List<String> uriPaths, boolean isOriginalPic) {
                 if (uriPaths != null && (!uriPaths.isEmpty())) {
-                    File chooseAvatar = new File(uriPaths.get(0));
+                    avatarFile = new File(uriPaths.get(0));
                     ImageDisplay.loadCircleImage(getActivity(), uriPaths.get(0), imagePersonHeadpic);
-                    uploadAvatar(chooseAvatar);
                 }
             }
 
@@ -171,84 +166,53 @@ public class EditPersonInfoActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.login_cofirm, R.id.layout_person_headpic})
+    @OnClick({R.id.login_confirm, R.id.layout_person_headpic})
     void function(View view) {
         switch (view.getId()) {
-            case R.id.login_cofirm:
+            case R.id.login_confirm:
                 //资料上传后台
                 Map<String, String> map = new HashMap<>();
-                if (TextUtils.isEmpty(imageUri) &&
-                        editJobName.getText().toString().equals(UserUtils.getDuty()) &&
-                        editCompanyName.getText().toString().equals(UserUtils.getorgName()) &&
-                        editPersonName.getText().toString().equals(UserUtils.getNickname())) {
+
+                boolean isYourName = editPersonName.getText().toString().equals(UserUtils.getNickname());
+                boolean isYourDuty = editJobName.getText().toString().equals(UserUtils.getDuty());
+                boolean isYourCompany = editCompanyName.getText().toString().equals(UserUtils.getorgName());
+
+                if (avatarFile == null && isYourDuty && isYourCompany && isYourName) {
                     goToNextPage();
                     return;
                 }
 
-                if (!TextUtils.isEmpty(imageUri)) {
-                    UserUtils.updataLocalUserInfo("simple_avatar", imageUri);
-                    map.put("avatar", imageUri);
-                }
-
                 if (!TextUtils.isEmpty(editPersonName.getText().toString())) {
-                    UserUtils.updataLocalUserInfo("nickname", editPersonName.getText().toString());
-                    map.put("name", editPersonName.getText().toString());
+                    if (!isYourName) {
+                        UserUtils.updateLocalUserInfo("nickname", editPersonName.getText().toString());
+                        map.put("name", editPersonName.getText().toString());
+                    }
+                } else {
+                    UIHelper.toast(EditPersonInfoActivity.this, "人名不能为空");
+                    return;
                 }
 
-                if (!TextUtils.isEmpty(editCompanyName.getText().toString())) {
-                    UserUtils.updataLocalUserInfo("organization_name", imageUri);
+
+                if (!TextUtils.isEmpty(editCompanyName.getText().toString()) && !isYourCompany) {
+                    UserUtils.updateLocalUserInfo("organization_name", editCompanyName.getText().toString());
                     map.put("company", editCompanyName.getText().toString());
                 }
-                if (!TextUtils.isEmpty(editJobName.getText().toString())) {
-                    UserUtils.updataLocalUserInfo("duty", editJobName.getText().toString());
+
+                if (!TextUtils.isEmpty(editJobName.getText().toString()) && !isYourDuty) {
+                    UserUtils.updateLocalUserInfo("duty", editJobName.getText().toString());
                     map.put("duty", editJobName.getText().toString());
                 }
+
                 loginConfirm.setClickable(false);
 
                 final WaitDialog waitDialog = WaitDialog.getInstance("请稍后", R.mipmap.login_loading, true);
                 waitDialog.show(getSupportFragmentManager());
 
-                UserUtils.updataNetUserInfo(map, new UserUtils.UpdataListener() {
-                    @Override
-                    public void success(String responce) {
-                        JSONObject result = JSONObject.parseObject(responce);
-                        loginConfirm.setClickable(true);
-                        if (result.getIntValue("code") == 0) {
-                            JSONObject data = result.getJSONObject("data");
-                            boolean success = data.getBoolean("success");
-                            if (success) {
-                                waitDialog.dismiss();
-                                WaitDialog successDialog = WaitDialog.getInstance("资料修改成功", R.mipmap.login_success, false);
-                                successDialog.show(getSupportFragmentManager());
-                                successDialog.dismiss(false, new WaitDialog.DialogDismiss() {
-                                    @Override
-                                    public void dialogDismiss() {
-                                        goToNextPage();
-                                    }
-                                });
-                            } else {
-                                waitDialog.dismiss();
-                                WaitDialog errorDialog = WaitDialog.getInstance("资料修改失败", R.mipmap.login_error, false);
-                                errorDialog.show(getSupportFragmentManager());
-                                errorDialog.dismiss(false);
-                            }
-                        } else {
-                            waitDialog.dismiss();
-                            WaitDialog errorDialog = WaitDialog.getInstance("资料修改失败", R.mipmap.login_error, false);
-                            errorDialog.show(getSupportFragmentManager());
-                            errorDialog.dismiss(false);
-                        }
-                    }
-
-                    @Override
-                    public void failed(String errorMsg) {
-                        loginConfirm.setClickable(true);
-                        waitDialog.dismiss();
-                        WaitDialog errorDialog = WaitDialog.getInstance("资料修改失败", R.mipmap.login_error, false);
-                        errorDialog.show(getSupportFragmentManager());
-                        errorDialog.dismiss(false);
-                    }
-                });
+                if (null != avatarFile) {
+                    uploadAvatar(avatarFile, (HashMap<String, String>) map, waitDialog);
+                } else {
+                    doComplete((HashMap<String, String>) map, waitDialog);
+                }
 
                 break;
             case R.id.layout_person_headpic:
@@ -260,6 +224,51 @@ public class EditPersonInfoActivity extends BaseActivity {
             default:
                 break;
         }
+    }
+
+    private void doComplete(HashMap<String, String> map, final WaitDialog waitDialog) {
+        UserUtils.updataNetUserInfo(map, new UserUtils.UpdataListener() {
+            @Override
+            public void success(String response) {
+                JSONObject result = JSONObject.parseObject(response);
+                loginConfirm.setClickable(true);
+                if (result.getIntValue("code") == 0) {
+                    JSONObject data = result.getJSONObject("data");
+                    boolean success = data.getBoolean("success");
+                    if (success) {
+                        waitDialog.dismiss();
+                        WaitDialog successDialog = WaitDialog.getInstance("资料修改成功", R.mipmap.login_success, false);
+                        successDialog.show(getSupportFragmentManager());
+                        successDialog.dismiss(false, new WaitDialog.DialogDismiss() {
+                            @Override
+                            public void dialogDismiss() {
+                                goToNextPage();
+                                return;
+                            }
+                        });
+                    } else {
+                        waitDialog.dismiss();
+                        WaitDialog errorDialog = WaitDialog.getInstance("资料修改失败", R.mipmap.login_error, false);
+                        errorDialog.show(getSupportFragmentManager());
+                        errorDialog.dismiss(false);
+                    }
+                } else {
+                    waitDialog.dismiss();
+                    WaitDialog errorDialog = WaitDialog.getInstance("资料修改失败", R.mipmap.login_error, false);
+                    errorDialog.show(getSupportFragmentManager());
+                    errorDialog.dismiss(false);
+                }
+            }
+
+            @Override
+            public void failed(String errorMsg) {
+                loginConfirm.setClickable(true);
+                waitDialog.dismiss();
+                WaitDialog errorDialog = WaitDialog.getInstance("资料修改失败", R.mipmap.login_error, false);
+                errorDialog.show(getSupportFragmentManager());
+                errorDialog.dismiss(false);
+            }
+        });
     }
 
     private void goToNextPage() {

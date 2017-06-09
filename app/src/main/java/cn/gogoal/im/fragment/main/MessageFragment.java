@@ -71,7 +71,7 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.ggqrcode.GGQrCode;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
-import cn.gogoal.im.ui.view.PopuMoreMenu;
+import cn.gogoal.im.ui.view.PopupMoreMenu;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
@@ -145,6 +145,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
     public void onResume() {
         super.onResume();
         IMMessageBeans.clear();
+        //查找到消息列表按时间排序
         IMMessageBeans.addAll(DataSupport.order("lastTime desc").find(IMMessageBean.class));
         allCount = MessageListUtils.getAllMessageUnreadCount();
         sendUnreadCount(allCount);
@@ -237,17 +238,16 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
      * TODO 点击弹窗
      */
     private void popuMore(View clickView) {
-        PopuMoreMenu popuMoreMenu = new PopuMoreMenu(getActivity());
+        PopupMoreMenu popuMoreMenu = new PopupMoreMenu(getActivity());
         List<BaseIconText<Integer, String>> popuData = new ArrayList<>();
         popuData.add(new BaseIconText<>(R.mipmap.chat_find_man, "找人"));
         popuData.add(new BaseIconText<>(R.mipmap.chat_find_square, "发起群聊"));
         popuData.add(new BaseIconText<>(R.mipmap.chat_find_square, "扫一扫"));
         popuData.add(new BaseIconText<>(R.mipmap.chat_find_square, "面对面建群"));
-
         popuMoreMenu.dimBackground(false)
                 .needAnimationStyle(true)
                 .addMenuList(popuData)
-                .setOnMenuItemClickListener(new PopuMoreMenu.OnMenuItemClickListener() {
+                .setOnMenuItemClickListener(new PopupMoreMenu.OnMenuItemClickListener() {
                     @Override
                     public void onMenuItemClick(int position) {
                         Intent intent;
@@ -334,9 +334,18 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
             String nickName = "";
             String squareMessageFrom = "";
             int chatType = messageBean.getChatType();
+            boolean noBother = SPTools.getBoolean(UserUtils.getMyAccountId() + messageBean.getConversationID() + "noBother", false);
             final RoundedImageView avatarIv = holder.getView(R.id.head_image);
             TextView messageTv = holder.getView(R.id.last_message);
             TextView countTv = holder.getView(R.id.count_tv);
+            ImageView botherIv = holder.getView(R.id.iv_no_bother);
+            //消息免打扰
+            if (noBother) {
+                botherIv.setVisibility(View.VISIBLE);
+            } else {
+                botherIv.setVisibility(View.GONE);
+            }
+
             //未读数
             setCountTag(countTv, messageBean.getUnReadCounts());
             if (messageBean.getUnReadCounts().equals("0")) {
@@ -546,6 +555,15 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
         boolean isTheSame = false;
         final String ConversationId = conversation.getConversationId();
+        //获取免打扰
+        KLog.e(conversation.get("mu"));
+        if (conversation.get("mu") != null) {
+            boolean canBother = (boolean) conversation.get("mu");
+            SPTools.saveBoolean(UserUtils.getMyAccountId() + ConversationId + "noBother", canBother);
+        } else {
+            SPTools.saveBoolean(UserUtils.getMyAccountId() + ConversationId + "noBother", false);
+        }
+
         int chatType = (int) conversation.getAttribute("chat_type");
         Long rightNow = CalendarUtils.getCurrentTime();
         String nickName = "";

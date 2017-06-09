@@ -33,6 +33,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.MyFilter;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UserUtils;
@@ -161,6 +162,40 @@ public class ChatGroupHelper {
             }
         };
         new GGOKHTTP(params, GGOKHTTP.CANCEL_COLLECT_GROUP, ggHttpInterface).startGet();
+    }
+
+    //消息免打扰，isSetMute为true设置可打扰
+    public static void controlMute(final boolean isSetMute, final String conversationId) {
+
+        SPTools.saveBoolean(UserUtils.getMyAccountId() + conversationId + "noBother", isSetMute);
+        AVIMClientManager.getInstance().refreshConversation(conversationId);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", getToken());
+        params.put("conv_id", conversationId);
+        KLog.e(params);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                JSONObject object = result.getJSONObject("data");
+                boolean success = (boolean) object.get("success");
+                if (success) {
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                SPTools.saveBoolean(UserUtils.getMyAccountId() + conversationId + "noBother", !isSetMute);
+            }
+        };
+        if (isSetMute) {
+            new GGOKHTTP(params, GGOKHTTP.SET_MUTE, ggHttpInterface).startGet();
+        } else {
+            new GGOKHTTP(params, GGOKHTTP.CANCEL_MUTE, ggHttpInterface).startGet();
+        }
     }
 
     //获取群头像并且缓存SD

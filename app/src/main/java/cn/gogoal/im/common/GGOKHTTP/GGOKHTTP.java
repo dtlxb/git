@@ -685,6 +685,18 @@ public class GGOKHTTP {
      */
     public static final String USER_AUTO_LOGIN = "v1/user/auto_login";
 
+    /**
+     * 取消打扰
+     * token, conv_id
+     */
+    public static final String CANCEL_MUTE = "v1/ggm_chat/cancel_mute";
+
+    /**
+     * 设置打扰
+     * token, conv_id
+     */
+    public static final String SET_MUTE = "v1/ggm_chat/set_mute ";
+
 
 //--------------------------------------------------------------------------------------------------
 

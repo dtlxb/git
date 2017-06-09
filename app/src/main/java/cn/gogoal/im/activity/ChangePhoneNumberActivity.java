@@ -119,7 +119,7 @@ public class ChangePhoneNumberActivity extends BaseActivity {
                                     finish();
                                     AppManager.getInstance().sendMessage("updata_userinfo","更新数据咯");
 
-                                    UserUtils.updataLocalUserInfo("mobile",mobile);
+                                    UserUtils.updateLocalUserInfo("mobile",mobile);
                                 }else {
                                     UIHelper.toast(getActivity(),"手机号绑定失败!\n\r验证码不正确");
                                 }
