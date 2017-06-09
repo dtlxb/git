@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#1b1f22"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
-    android:background="#444444"
-    android:gravity="center_horizontal"
     tools:context=".activity.Face2FaceActivity">
 
     <include layout="@layout/include_title" />
@@ -13,14 +14,24 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textColor="@color/textColor_999999"
         android:layout_marginTop="45dp"
-        android:text="和身边的朋友输入同样的数字\n进入同一个群聊" />
-    
-    <cn.gogoal.im.ui.view.PointPasswordEditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="3dp"
+        android:text="和身边的朋友输入同样的四个数字\n进入同一个群聊"
+        android:textColor="#6e7275"
+        android:textSize="20sp" />
 
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_soft_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="android.support.v7.widget.GridLayoutManager"
+        app:spanCount="3"
+        tools:listitem="@layout/item_soft_input" />
 
 </LinearLayout>

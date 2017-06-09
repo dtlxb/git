@@ -41,6 +41,7 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ChooseContactActivity;
 import cn.gogoal.im.activity.ContactsActivity;
+import cn.gogoal.im.activity.Face2FaceActivity;
 import cn.gogoal.im.activity.IMNewFriendActivity;
 import cn.gogoal.im.activity.IMSearchLocalActivity;
 import cn.gogoal.im.activity.OfficialAccountsActivity;
@@ -56,7 +57,6 @@ import cn.gogoal.im.bean.BaseIconText;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.DialogHelp;
@@ -242,6 +242,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
         popuData.add(new BaseIconText<>(R.mipmap.chat_find_man, "找人"));
         popuData.add(new BaseIconText<>(R.mipmap.chat_find_square, "发起群聊"));
         popuData.add(new BaseIconText<>(R.mipmap.chat_find_square, "扫一扫"));
+        popuData.add(new BaseIconText<>(R.mipmap.chat_find_square, "面对面建群"));
 
         popuMoreMenu.dimBackground(false)
                 .needAnimationStyle(true)
@@ -266,10 +267,14 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
                             case 2://扫一扫
                                 cameraTask();
                                 break;
+
+                            case 3://扫一扫
+                                startActivity(new Intent(getContext(), Face2FaceActivity.class));
+                                break;
                         }
                     }
                 })
-                .showAsDropDown(clickView, -AppDevice.dp2px(getActivity(), 95), 0);
+                .showAsDropDown(clickView,0, 0);
 
 
     }

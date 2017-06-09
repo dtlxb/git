@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/trm_recyclerview"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/img_drop_down" />
+    android:background="@android:color/white"
+    android:paddingStart="5dp"
+    android:paddingEnd="5dp">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/trm_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/img_drop_down" />
+
+</LinearLayout>
