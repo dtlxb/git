@@ -35,9 +35,11 @@ public class UserInfoUtils {
                 });
 
         for (int i = 0; i < beanList.getData().size(); i++) {
-            UserBean userBean = beanList.getData().get(i);
-            userBean.setInYourContact(true);
-            userBean.save();
+            if (null == getSomeone(beanList.getData().get(i).getFriend_id())) {
+                UserBean userBean = beanList.getData().get(i);
+                userBean.setInYourContact(true);
+                userBean.save();
+            }
         }
     }
 
@@ -101,7 +103,6 @@ public class UserInfoUtils {
                 }
 
             }
-            List<SquareUserBean> SquareUsers = DataSupport.findAll(SquareUserBean.class);
         }
     }
 

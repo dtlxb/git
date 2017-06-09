@@ -78,7 +78,7 @@ public class UserUtils {
     }
 
     public static String getUserId() {
-        return "";
+        return getMyAccountId();
     }
 
     /**
@@ -156,13 +156,15 @@ public class UserUtils {
         return user.getString("simple_avatar");
     }
 
-    /**有缓存拿缓存头像，没有获取缓存，并保存*/
+    /**
+     * 有缓存拿缓存头像，没有获取缓存，并保存
+     */
     public static void getUserAvatar(final Impl<Bitmap> listener) {
         if (StringUtils.isActuallyEmpty(getBitmapFilePaht())) {
             ImageUtils.getUrlBitmap(MyApp.getAppContext(), UserUtils.getUserAvatar(), new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                    listener.response(true,resource);
+                    listener.response(true, resource);
                     ImageUtils.saveImageToSD(MyApp.getAppContext(), MyApp.getAppContext().getExternalFilesDir("avatar") +
                                     File.separator + "avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()) +
                                     ImageUtils.getImageSuffix(UserUtils.getUserAvatar()),
@@ -170,7 +172,7 @@ public class UserUtils {
                 }
             });
         } else {
-            listener.response(true,BitmapFactory.decodeFile(getBitmapFilePaht()));
+            listener.response(true, BitmapFactory.decodeFile(getBitmapFilePaht()));
         }
     }
 

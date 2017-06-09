@@ -145,6 +145,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
     public void onResume() {
         super.onResume();
         IMMessageBeans.clear();
+        //查找到消息列表按时间排序
         IMMessageBeans.addAll(DataSupport.order("lastTime desc").find(IMMessageBean.class));
         allCount = MessageListUtils.getAllMessageUnreadCount();
         sendUnreadCount(allCount);

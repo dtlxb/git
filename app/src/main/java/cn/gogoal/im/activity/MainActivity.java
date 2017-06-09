@@ -38,6 +38,7 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
+import cn.gogoal.im.common.LitePalDBHelper;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -177,7 +178,6 @@ public class MainActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     UserInfoUtils.saveAllUserInfo(responseInfo);
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
