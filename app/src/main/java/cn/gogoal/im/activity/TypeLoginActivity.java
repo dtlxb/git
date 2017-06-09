@@ -206,7 +206,6 @@ public class TypeLoginActivity extends BaseActivity {
                         final Intent intent;
                         UserUtils.saveUserInfo(data);
 
-                        KLog.e(UserUtils.getUserId());
                         //建立数据库
                         LitePalDBHelper.getInstance().createSQLite(UserUtils.getUserId());
 
