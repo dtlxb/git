@@ -323,7 +323,7 @@ public class Face2FaceActivity extends BaseActivity {
         @Override
         protected void convert(BaseViewHolder holder, GroupMemberInfo data, int position) {
             AppCompatImageView avatar = holder.getView(R.id.iv_item_avatar);
-            if (StringUtils.isActuallyEmpty(data.getAvatar())) {
+            if (!StringUtils.isActuallyEmpty(data.getAvatar())) {
                 ImageDisplay.loadImage(Face2FaceActivity.this, data.getAvatar(), avatar);
             } else {
                 ImageDisplay.loadImage(Face2FaceActivity.this, R.mipmap.logo, avatar);
