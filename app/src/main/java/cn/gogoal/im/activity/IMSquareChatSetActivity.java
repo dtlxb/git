@@ -175,7 +175,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     groupObject.put("attr", attrObject);
 
                     groupsArray.add(groupObject);
-                    ChatGroupHelper.collcetGroup(conversationId, new ChatGroupHelper.ChatGroupManager() {
+                    ChatGroupHelper.collectGroup(conversationId, new ChatGroupHelper.ChatGroupManager() {
                         @Override
                         public void groupActionSuccess(JSONObject object) {
                             UIHelper.toast(IMSquareChatSetActivity.this, "群收藏成功!!!");

@@ -65,7 +65,7 @@ public class ShareMessageDialog extends BaseCentDailog {
         TextView tvShareMsgDesc = (TextView) v.findViewById(R.id.tv_dialog_share_msg_desc);
         EditText etMessageInput = (EditText) v.findViewById(R.id.et_dialog_share_msg_input);
 
-        TextView tvCancle = (TextView) v.findViewById(R.id.btn_dialog_share_msg_cancle);
+        TextView tvCancel = (TextView) v.findViewById(R.id.btn_dialog_share_msg_cancle);
         TextView tvSend = (TextView) v.findViewById(R.id.btn_dialog_share_msg_send);
 
         if (entity != null) {
@@ -80,7 +80,7 @@ public class ShareMessageDialog extends BaseCentDailog {
             tvShareMsgDesc.setText(entity.getEntity().getDesc());
         }
 
-        tvCancle.setOnClickListener(new View.OnClickListener() {
+        tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ShareMessageDialog.this.dismiss();
