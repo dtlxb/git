@@ -8,7 +8,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
-import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.socks.library.KLog;
 
 import java.io.File;
@@ -17,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.gogoal.im.R;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.BaseMessage;
@@ -25,7 +23,6 @@ import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ShareItemInfo;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.CalendarUtils;
@@ -107,7 +104,7 @@ public class ChatGroupHelper {
 
 
     //收藏群
-    public static void collcetGroup(String conversationId, final ChatGroupManager groupManager) {
+    public static void collectGroup(String conversationId, final ChatGroupManager groupManager) {
         Map<String, String> params = new HashMap<>();
         params.put("token", getToken());
         params.put("conv_id", conversationId);
@@ -276,7 +273,7 @@ public class ChatGroupHelper {
 
         final List<String> listAvatar = new ArrayList<>();
 
-        if (StringUtils.isActuallyEmpty(getBitmapFilePaht(conversationId))) {
+        if (StringUtils.isActuallyEmpty(getBitmapFilePath(conversationId))) {
             createGroupImage(conversationId, new GroupInfoResponse() {
                 @Override
                 public void getInfoSuccess(JSONObject groupInfo) {
@@ -287,12 +284,12 @@ public class ChatGroupHelper {
 
                     GroupFaceImage.getInstance(MyApp.getAppContext(), listAvatar).load(new GroupFaceImage.OnMatchingListener() {
                         @Override
-                        public void onSuccess(Bitmap mathingBitmap) {
+                        public void onSuccess(Bitmap matchingBitmap) {
                             if (listener != null) {
-                                listener.success(mathingBitmap);
+                                listener.success(matchingBitmap);
                             }
 
-                            cacheGroupAvatar(conversationId, mathingBitmap);
+                            cacheGroupAvatar(conversationId, matchingBitmap);
                         }
 
                         public void onError(Exception e) {
@@ -320,7 +317,7 @@ public class ChatGroupHelper {
     /**
      * 拿取本地缓存去群头像
      */
-    public static String getBitmapFilePaht(String conversationID) {
+    public static String getBitmapFilePath(String conversationID) {
         File filesDir = MyApp.getAppContext().getExternalFilesDir("imagecache");
         String bitmapPath = "";
         if (filesDir == null || !filesDir.exists()) {
@@ -500,12 +497,15 @@ public class ChatGroupHelper {
                     if (null != response) {
                         response.getInfoSuccess(result.getJSONObject("data"));
                     }
+                    //消息缓存消息列表
+                    if (null != shareItemInfo.getImMessageBean()) {
+                        IMMessageBean imMessageBean = new IMMessageBean(shareItemInfo.getImMessageBean().getConversationID(),
+                                shareItemInfo.getImMessageBean().getChatType(), System.currentTimeMillis(), "0",
+                                shareItemInfo.getImMessageBean().getNickname(), String.valueOf(shareItemInfo.getImMessageBean().getFriend_id()),
+                                shareItemInfo.getImMessageBean().getAvatar(), JSON.toJSONString(shareMessage));
+                        MessageListUtils.saveMessageInfo(imMessageBean);
+                    }
 
-                    //头像暂时未保存
-                    IMMessageBean imMessageBean = shareItemInfo.getImMessageBean();
-                    imMessageBean.setLastMessage(JSON.toJSONString(shareMessage));
-                    imMessageBean.setLastTime(System.currentTimeMillis());
-                    MessageListUtils.saveMessageInfo(imMessageBean);
                 }
             }
 
