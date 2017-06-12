@@ -35,7 +35,7 @@ public class PopuMoreAdapter extends CommonAdapter<BaseIconText<Integer, String>
         holder.setText(R.id.trm_menu_item_text, data.getText());
         holder.setImageResource(R.id.trm_menu_item_icon, data.getIamge());
 
-        holder.setVisible(R.id.view_popu_divider,position==menuItemList.size()-1);
+        holder.setVisible(R.id.view_popu_divider,position!=menuItemList.size()-1);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

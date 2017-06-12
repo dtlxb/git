@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import java.util.ArrayList;
@@ -56,7 +57,11 @@ public class PopupMoreMenu {
     }
 
     private void init() {
-        content = LayoutInflater.from(mContext).inflate(R.layout.trm_popup_menu, null);
+        content = LayoutInflater.from(mContext).inflate(
+                R.layout.trm_popup_menu,
+                new LinearLayout(mContext),
+                false);
+
         mRecyclerView = (RecyclerView) content.findViewById(R.id.trm_recyclerview);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -69,7 +74,7 @@ public class PopupMoreMenu {
         mPopupWindow = new PopupWindow(mContext);
         mPopupWindow.setContentView(content);
         mPopupWindow.setHeight(popHeight);
-        mPopupWindow.setWidth(3*AppDevice.getWidth(mContext)/8);
+        mPopupWindow.setWidth(AppDevice.getWidth(mContext)/2);
         if (needAnimationStyle){
             mPopupWindow.setAnimationStyle(animationStyle <= 0 ? DEFAULT_ANIM_STYLE : animationStyle);
         }

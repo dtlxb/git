@@ -1,4 +1,4 @@
-package cn.gogoal.im.bean;
+package cn.gogoal.im.bean.group;
 
 import java.util.List;
 

@@ -65,7 +65,7 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
                 imageView.setImageResource(R.drawable.selector_icon_main_tab_my_stock);
                 break;
             case 2:
-                imageView.setImageResource(R.drawable.selector_icon_main_tab_function);
+                imageView.setImageResource(R.drawable.selector_icon_main_tab_tools);
                 break;
             case 3:
                 imageView.setImageResource(R.drawable.selector_icon_main_tab_social_contact);

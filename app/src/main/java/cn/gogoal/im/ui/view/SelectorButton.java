@@ -11,9 +11,9 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.widget.TextView;
 
 import cn.gogoal.im.R;
 
@@ -26,7 +26,7 @@ import cn.gogoal.im.R;
  * 按钮shape,bg的selector，text的selector
  *
  * */
-public class SelectorButton extends AppCompatTextView {
+public class SelectorButton extends TextView {
     //text color
     private int mNormalTextColor = 0xff333333;
     private int mPressedTextColor = 0xff333333;

@@ -1,17 +1,17 @@
 package com.github.lzyzsd.jsbridge;
 
-
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONException;
-import com.alibaba.fastjson.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * data of bridge
- * @author haoqing
  *
+ * @author haoqing
  */
 class Message {
 
@@ -83,37 +83,49 @@ class Message {
     }
 
     static Message toObject(String jsonStr) {
-        Message m =  new Message();
+        Message m = new Message();
         try {
-            JSONObject jsonObject = JSONObject.parseObject(jsonStr);
-            m.setHandlerName(jsonObject.containsKey(HANDLER_NAME_STR) ? jsonObject.getString(HANDLER_NAME_STR):null);
-            m.setCallbackId(jsonObject.containsKey(CALLBACK_ID_STR) ? jsonObject.getString(CALLBACK_ID_STR):null);
-            m.setResponseData(jsonObject.containsKey(RESPONSE_DATA_STR) ? jsonObject.getString(RESPONSE_DATA_STR):null);
-            m.setResponseId(jsonObject.containsKey(RESPONSE_ID_STR) ? jsonObject.getString(RESPONSE_ID_STR):null);
-            m.setData(jsonObject.containsKey(DATA_STR) ? jsonObject.getString(DATA_STR):null);
+            JSONObject jsonObject = new JSONObject(jsonStr);
+
+            m.setHandlerName(containsKey(HANDLER_NAME_STR, jsonObject) ? jsonObject.getString(HANDLER_NAME_STR) : null);
+            m.setCallbackId(containsKey(CALLBACK_ID_STR, jsonObject) ? jsonObject.getString(CALLBACK_ID_STR) : null);
+            m.setResponseData(containsKey(RESPONSE_DATA_STR, jsonObject) ? jsonObject.getString(RESPONSE_DATA_STR) : null);
+            m.setResponseId(containsKey(RESPONSE_ID_STR, jsonObject) ? jsonObject.getString(RESPONSE_ID_STR) : null);
+            m.setData(containsKey(DATA_STR, jsonObject) ? jsonObject.getString(DATA_STR) : null);
+
             return m;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return m;
     }
 
-    static List<Message> toArrayList(String jsonStr){
+    private static boolean containsKey(String key, JSONObject jsonObject) {
+        Iterator<String> keys = jsonObject.keys();
+        while (keys.hasNext()) {
+            if (key.equalsIgnoreCase(keys.next())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static List<Message> toArrayList(String jsonStr) {
         List<Message> list = new ArrayList<>();
         if (BridgeUtil.isBlank(jsonStr)) return list;
         try {
-            JSONArray jsonArray = JSONArray.parseArray(jsonStr);
-            for(int i = 0; i < jsonArray.size(); i++){
+            JSONArray jsonArray = new JSONArray(jsonStr);
+            for (int i = 0; i < jsonArray.length(); i++) {
                 Message m = new Message();
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                m.setHandlerName(jsonObject.containsKey(HANDLER_NAME_STR) ? jsonObject.getString(HANDLER_NAME_STR):null);
-                m.setCallbackId(jsonObject.containsKey(CALLBACK_ID_STR) ? jsonObject.getString(CALLBACK_ID_STR):null);
-                m.setResponseData(jsonObject.containsKey(RESPONSE_DATA_STR) ? jsonObject.getString(RESPONSE_DATA_STR):null);
-                m.setResponseId(jsonObject.containsKey(RESPONSE_ID_STR) ? jsonObject.getString(RESPONSE_ID_STR):null);
-                m.setData(jsonObject.containsKey(DATA_STR) ? jsonObject.getString(DATA_STR):null);
+                m.setHandlerName(containsKey(HANDLER_NAME_STR, jsonObject) ? jsonObject.getString(HANDLER_NAME_STR) : null);
+                m.setCallbackId(containsKey(CALLBACK_ID_STR, jsonObject) ? jsonObject.getString(CALLBACK_ID_STR) : null);
+                m.setResponseData(containsKey(RESPONSE_DATA_STR, jsonObject) ? jsonObject.getString(RESPONSE_DATA_STR) : null);
+                m.setResponseId(containsKey(RESPONSE_ID_STR, jsonObject) ? jsonObject.getString(RESPONSE_ID_STR) : null);
+                m.setData(containsKey(DATA_STR, jsonObject) ? jsonObject.getString(DATA_STR) : null);
                 list.add(m);
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return list;

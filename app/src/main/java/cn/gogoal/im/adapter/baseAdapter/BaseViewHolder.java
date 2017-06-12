@@ -25,6 +25,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.text.util.Linkify;
 import android.util.SparseArray;
@@ -195,7 +196,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      * @return The BaseViewHolder for chaining.
      */
     public BaseViewHolder setImageDrawable(int viewId, Drawable drawable) {
-        ImageView view = getView(viewId);
+        AppCompatImageView view = getView(viewId);
         view.setImageDrawable(drawable);
         return this;
     }

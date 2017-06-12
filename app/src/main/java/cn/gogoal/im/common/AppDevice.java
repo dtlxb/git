@@ -26,6 +26,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.Settings;
 import android.support.annotation.ColorInt;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -193,6 +194,13 @@ public class AppDevice {
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
         return isConnected;
+    }
+
+    /**跳转到应用详情设置页*/
+    public static void go2AppDetail(Context context){
+        Uri packageURI = Uri.parse("package:"+ context.getPackageName());
+        Intent intent =  new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,packageURI);
+        context.startActivity(intent);
     }
 
     /**

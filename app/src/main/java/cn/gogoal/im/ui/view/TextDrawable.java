@@ -13,10 +13,6 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RectShape;
 import android.graphics.drawable.shapes.RoundRectShape;
 
-/**
- * @author amulya
- * @datetime 14 Oct 2014, 3:53 PM
- */
 public class TextDrawable extends ShapeDrawable {
 
     private final Paint textPaint;
@@ -304,7 +300,7 @@ public class TextDrawable extends ShapeDrawable {
         TextDrawable build(String text, int color);
     }
 
-    public static interface IShapeBuilder {
+    public interface IShapeBuilder {
 
         IConfigBuilder beginConfig();
 

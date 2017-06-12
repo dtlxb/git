@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -19,8 +18,6 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.socks.library.KLog;
-
-import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -99,7 +96,7 @@ public class ContactsActivity extends BaseActivity {
 
         textViewFooter = new TextView(mContext);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -2);
-        textViewFooter.setPadding(0, AppDevice.dp2px(mContext, 15), 0, AppDevice.dp2px(mContext, 45));
+        textViewFooter.setPadding(0, AppDevice.dp2px(mContext, 15), 0, AppDevice.dp2px(mContext, 15));
         textViewFooter.setLayoutParams(params);
         textViewFooter.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         textViewFooter.setGravity(Gravity.CENTER);

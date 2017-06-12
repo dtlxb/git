@@ -41,6 +41,10 @@ public class CodeUtils {
     public static final String LAYOUT_ID = "layout_id";
 
     /**
+     * 请求定位权限码
+     */
+    public static final int REQUEST_LOCATION_PERM = 10086;
+    /**
      * 请求CAMERA权限码
      */
     public static final int REQUEST_CAMERA_PERM = 101;
