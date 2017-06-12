@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -24,11 +23,9 @@ import cn.gogoal.im.adapter.SearchListAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.BaseIconText;
-import cn.gogoal.im.bean.ContactBean;
-import cn.gogoal.im.bean.GroupCollectionData;
-import cn.gogoal.im.bean.GroupData;
+import cn.gogoal.im.bean.group.GroupCollectionData;
+import cn.gogoal.im.bean.group.GroupData;
 import cn.gogoal.im.bean.SearchBean;
 import cn.gogoal.im.bean.SearchData;
 import cn.gogoal.im.bean.UserBean;

@@ -697,6 +697,22 @@ public class GGOKHTTP {
      */
     public static final String SET_MUTE = "v1/ggm_chat/set_mute ";
 
+    /**
+     * 面对面建群
+     * "token",
+     * "password",
+     * "longitude",
+     * "latitude"
+     */
+    public static final String FTF_CREATE_GROUP = "v1/ggm_chat/ftf_create_group";
+
+    /**
+     * 加入面对面群
+     * "token",
+     * "conv_id"
+     */
+    public static final String ADD_FTF_MEMBER = "v1/ggm_chat/add_ftf_member";
+
 
 //--------------------------------------------------------------------------------------------------
 

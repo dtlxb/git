@@ -18,6 +18,8 @@ public class NormalAlertDialog extends BaseCentDailog {
 
     private View.OnClickListener listener;
 
+    private View.OnClickListener cancleListener;
+
     public static NormalAlertDialog newInstance(
             String message,
             String ok,
@@ -35,6 +37,24 @@ public class NormalAlertDialog extends BaseCentDailog {
         return dialog;
     }
 
+    public static NormalAlertDialog newInstance(
+            String message,
+            String ok,
+            View.OnClickListener okClickListener,View.OnClickListener cancleListener) {
+
+        NormalAlertDialog dialog = new NormalAlertDialog();
+        Bundle bundle = new Bundle();
+        bundle.putString("message", message);
+        bundle.putString("ok", ok);
+
+        dialog.listener = okClickListener;
+        dialog.cancleListener=cancleListener;
+
+        dialog.setArguments(bundle);
+
+        return dialog;
+    }
+
     @Override
     public int getLayoutRes() {
         return R.layout.dialog_norma_alert;
@@ -43,7 +63,7 @@ public class NormalAlertDialog extends BaseCentDailog {
     @Override
     public void bindView(View v) {
         TextView tvMsg = (TextView) v.findViewById(R.id.tv_dialog_message);
-        TextView btnCancle = (TextView) v.findViewById(R.id.btn_cancle);
+        final TextView btnCancle = (TextView) v.findViewById(R.id.btn_cancle);
         final TextView btnOk = (TextView) v.findViewById(R.id.btn_ok);
 
         String ok = getArguments().getString("ok");
@@ -56,7 +76,12 @@ public class NormalAlertDialog extends BaseCentDailog {
         btnCancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NormalAlertDialog.this.dismiss();
+                if (cancleListener==null) {
+                    NormalAlertDialog.this.dismiss();
+                }else {
+                    cancleListener.onClick(btnCancle);
+                    NormalAlertDialog.this.dismiss();
+                }
             }
         });
 

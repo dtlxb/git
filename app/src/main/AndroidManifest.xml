@@ -36,6 +36,10 @@
     <!--扫码-->
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
@@ -47,6 +51,10 @@
         android:resizeableActivity="false"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="1bfb8c9ae23e95c3b4538adff02f09f9"/>
 
         <!-- 实时通信模块、推送（均需要加入以下声明） START -->
         <!-- 实时通信模块、推送都要使用 PushService -->
@@ -223,6 +231,7 @@
         <activity android:name=".activity.ScanQRCodeActivity" />
         <activity android:name=".activity.MyQrCodeActivity" />
         <activity android:name=".activity.Face2FaceActivity" />
+        <activity android:name=".activity.Face2FaceHolderActivity"/>
     </application>
 
 </manifest>

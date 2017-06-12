@@ -20,7 +20,7 @@
             android:layout_marginRight="8dp"
             android:adjustViewBounds="true"
             android:contentDescription="@null"
-            android:scaleType="center" />
+            android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/trm_menu_item_text"
@@ -36,6 +36,6 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_gravity="bottom"
-        android:background="#979797" />
+        android:background="#4c979797" />
 
 </FrameLayout>

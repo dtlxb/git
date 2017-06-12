@@ -1,16 +1,12 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
@@ -23,10 +19,10 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.PlayerUtils.MyDownTimer;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XEditText;
 import cn.gogoal.im.ui.view.XTitle;
@@ -73,7 +69,7 @@ public class RegisterActivity extends BaseActivity {
 
     private int actionType;
 
-    private Handler handler;
+    private WaitDialog waitDialog;
 
     @Override
     public int bindLayout() {
@@ -99,24 +95,6 @@ public class RegisterActivity extends BaseActivity {
             layoutValid.setVisibility(View.GONE);
             xTitle = setMyTitle(R.string.str_login_register, true);
         }
-
-
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                switch (msg.what) {
-                    case 0x01:
-                        RegisterActivity.this.finish();
-                        break;
-                    case 0x02:
-                        RegisterActivity.this.finish();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
     }
 
     @OnClick({R.id.edit_phone_number, R.id.edit_pase_code, R.id.edit_code, R.id.tv_get_code, R.id.tv_login, R.id.login_button})
@@ -136,6 +114,9 @@ public class RegisterActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.login_button:
+                waitDialog = WaitDialog.getInstance("请稍后!", R.mipmap.login_loading, true);
+                waitDialog.show(RegisterActivity.this.getSupportFragmentManager());
+
                 if (actionType == AppConst.LOGIN_RIGIST_NUMBER) {
                     registerNow();
                 } else if (actionType == AppConst.LOGIN_FIND_CODE) {
@@ -197,8 +178,10 @@ public class RegisterActivity extends BaseActivity {
                 || !UIHelper.GGCode(editPaseCode.getText().toString().trim(), RegisterActivity.this)
                 || !codeIsTheSame(editCode.getText().toString().trim(), validEditCode.getText().toString().trim())
                 || !UIHelper.isGGPassWord(editCode.getText().toString().trim(), getActivity())
-                || !UIHelper.isGGPassWord(validEditCode.getText().toString().trim(), getActivity()))
+                || !UIHelper.isGGPassWord(validEditCode.getText().toString().trim(), getActivity())){
+            waitDialog.dismiss();
             return;
+        }
         loginLayout.setEnabled(false);
 
         final Map<String, String> params = new HashMap<>();
@@ -208,6 +191,8 @@ public class RegisterActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                waitDialog.dismiss();
+
                 KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 loginLayout.setEnabled(true);
@@ -215,13 +200,13 @@ public class RegisterActivity extends BaseActivity {
                     JSONObject data = result.getJSONObject("data");
                     boolean success = data.getBoolean("success");
                     if (success) {
-                        UIHelper.toastInCenter(RegisterActivity.this, "密码重置成功,将自动跳转登录页面", Toast.LENGTH_LONG);
-                        handler.sendEmptyMessageDelayed(0x01, 5000);
+                        WaitDialog successDialog = WaitDialog.getInstance("密码重置成功,即将跳转登录页面", R.mipmap.login_success, false);
+                        successDialog.dismiss(false, true);
                     } else {
-                        UIHelper.toast(RegisterActivity.this, "验证码失效，请重新获取验证码");
+                        showErrorDialog("验证码失效，请重新获取验证码",false);
                     }
                 } else {
-                    UIHelper.toast(RegisterActivity.this, "密码重置失败");
+                    showErrorDialog("密码重置失败,请重试",false);
                 }
             }
 
@@ -238,8 +223,10 @@ public class RegisterActivity extends BaseActivity {
     private void registerNow() {
         if (!UIHelper.GGPhoneNumber(editPhoneNumber.getText().toString().trim(), RegisterActivity.this)
                 || !UIHelper.GGCode(editPaseCode.getText().toString().trim(), RegisterActivity.this)
-                || !UIHelper.isGGPassWord(editCode.getText().toString().trim(), getActivity()))
+                || !UIHelper.isGGPassWord(editCode.getText().toString().trim(), getActivity())) {
+            waitDialog.dismiss();
             return;
+        }
         final Map<String, String> params = new HashMap<>();
         params.put("phone", editPhoneNumber.getText().toString().trim());
         params.put("password", editCode.getText().toString().trim());
@@ -252,6 +239,8 @@ public class RegisterActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                waitDialog.dismiss();
+
                 KLog.json(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 loginLayout.setEnabled(true);
@@ -259,37 +248,31 @@ public class RegisterActivity extends BaseActivity {
                     JSONObject data = result.getJSONObject("data");
                     int dataCode = data.getInteger("code");
                     if (dataCode == 0) {
-                        UIHelper.toastInCenter(RegisterActivity.this, "注册成功,将自动跳转登录页面", Toast.LENGTH_LONG);
-                        handler.sendEmptyMessageDelayed(0x02, 5000);
+                        WaitDialog successDialog = WaitDialog.getInstance("注册成功,即将自动跳转登录页面", R.mipmap.login_success, false);
+                        successDialog.dismiss(false, true);
                     } else if (dataCode == 3) {
                         //账号已存在
-                        DialogHelp.getConfirmDialog(RegisterActivity.this, "该手机号已注册，请直接登录", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        finish();
-                                    }
-                                },
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                    }
-                                }).show();
+                        showErrorDialog("该手机号已注册，请直接登录",true);
                     } else {
-                        UIHelper.toast(RegisterActivity.this, R.string.str_rigister_error);
+                        showErrorDialog(getString(R.string.str_rigister_error),false);
                     }
                 } else {
-                    UIHelper.toast(RegisterActivity.this, R.string.str_rigister_error);
+                    showErrorDialog(getString(R.string.str_rigister_error),false);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
                 loginLayout.setEnabled(true);
-                UIHelper.toast(RegisterActivity.this, R.string.net_erro_hint);
+                showErrorDialog("数据请求出错("+msg+")",false);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.USER_REGISTER, ggHttpInterface).startGet();
+    }
+
+    private void showErrorDialog(String text,boolean finishSelf){
+        WaitDialog errorDialog = WaitDialog.getInstance(text, R.mipmap.login_error, false);
+        errorDialog.dismiss(false,finishSelf);
     }
 
     private boolean codeIsTheSame(String code1, String code2) {
@@ -325,5 +308,4 @@ public class RegisterActivity extends BaseActivity {
         tvGetCode.setTextColor(getResColor(R.color.colorPrimary));
         tvGetCode.setEnabled(true);
     }
-
 }

@@ -300,7 +300,7 @@ public class TextDrawable extends ShapeDrawable {
         TextDrawable build(String text, int color);
     }
 
-    public static interface IShapeBuilder {
+    public interface IShapeBuilder {
 
         IConfigBuilder beginConfig();
 

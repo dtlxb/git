@@ -80,6 +80,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 import static cn.gogoal.im.base.BaseActivity.initRecycleView;
 import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_CAMERA_PERM;
 import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_CODE;
+import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_LOCATION_PERM;
 
 /**
  * 消息
@@ -240,10 +241,10 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
     private void popuMore(View clickView) {
         PopupMoreMenu popuMoreMenu = new PopupMoreMenu(getActivity());
         List<BaseIconText<Integer, String>> popuData = new ArrayList<>();
-        popuData.add(new BaseIconText<>(R.mipmap.chat_find_man, "找人"));
-        popuData.add(new BaseIconText<>(R.mipmap.chat_find_square, "发起群聊"));
-        popuData.add(new BaseIconText<>(R.mipmap.chat_find_square, "扫一扫"));
-        popuData.add(new BaseIconText<>(R.mipmap.chat_find_square, "面对面建群"));
+        popuData.add(new BaseIconText<>(R.mipmap.img_popu_more_scan, "扫一扫"));
+        popuData.add(new BaseIconText<>(R.mipmap.img_popu_more_add_friend, "添加朋友"));
+        popuData.add(new BaseIconText<>(R.mipmap.img_popu_more_group_chat, "发起群聊"));
+        popuData.add(new BaseIconText<>(R.mipmap.img_popu_more_face2face, "面对面建群"));
         popuMoreMenu.dimBackground(false)
                 .needAnimationStyle(true)
                 .addMenuList(popuData)
@@ -252,34 +253,53 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
                     public void onMenuItemClick(int position) {
                         Intent intent;
                         switch (position) {
-                            case 0://找人
+                            case 0://扫一扫
+                                cameraTask();
+                                break;
+                            case 1://找人
                                 intent = new Intent(getContext(), SearchPersonSquareActivity.class);
                                 intent.putExtra("search_index", 0);
                                 startActivity(intent);
                                 break;
-                            case 1://发起群聊
+                            case 2://发起群聊
                                 intent = new Intent(getContext(), ChooseContactActivity.class);
                                 Bundle mBundle = new Bundle();
                                 mBundle.putInt("square_action", AppConst.CREATE_SQUARE_ROOM_BUILD);
                                 intent.putExtras(mBundle);
                                 startActivity(intent);
                                 break;
-                            case 2://扫一扫
-                                cameraTask();
-                                break;
 
-                            case 3://扫一扫
-                                startActivity(new Intent(getContext(), Face2FaceActivity.class));
+                            case 3://面对面建群
+                                face2faceCreatGroupChat();
                                 break;
                         }
                     }
                 })
-                .showAsDropDown(clickView,0, 0);
+                .showAsDropDown(clickView, 0, 0);
 
 
     }
 
-    @AfterPermissionGranted(CodeUtils.REQUEST_CAMERA_PERM)
+    @AfterPermissionGranted(REQUEST_LOCATION_PERM)
+    public void face2faceCreatGroupChat() {
+        if (EasyPermissions.hasPermissions(getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            // Have permission, do the thing!
+            creatGroupChat();
+        } else {
+            // Ask for one permission
+            EasyPermissions.requestPermissions(this, "需要请求定位权限来和附近的人面对面建群",
+                    REQUEST_LOCATION_PERM, Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION);
+        }
+    }
+
+    private void creatGroupChat() {
+        startActivity(new Intent(getContext(), Face2FaceActivity.class));
+    }
+
+    @AfterPermissionGranted(REQUEST_CAMERA_PERM)
     public void cameraTask() {
         if (EasyPermissions.hasPermissions(getContext(), Manifest.permission.CAMERA)) {
             // Have permission, do the thing!
@@ -287,7 +307,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
         } else {
             // Ask for one permission
             EasyPermissions.requestPermissions(this, "需要请求camera权限",
-                    CodeUtils.REQUEST_CAMERA_PERM, Manifest.permission.CAMERA);
+                    REQUEST_CAMERA_PERM, Manifest.permission.CAMERA);
         }
     }
 
@@ -309,15 +329,33 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-            new AppSettingsDialog.Builder(this, "当前App需要申请camera权限,需要打开设置页面么?")
-                    .setTitle("权限申请")
-                    .setPositiveButton("确认")
-                    .setNegativeButton("取消", null /* click listener */)
-                    .setRequestCode(REQUEST_CAMERA_PERM)
-                    .build()
-                    .show();
+        switch (requestCode) {
+            case CodeUtils.REQUEST_CAMERA_PERM:
+                if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+                    new AppSettingsDialog.Builder(this, "当前App需要申请相机权限,需要打开设置页面么?")
+                            .setTitle("权限申请")
+                            .setPositiveButton("确认")
+                            .setNegativeButton("取消", null /* click listener */)
+                            .setRequestCode(REQUEST_CAMERA_PERM)
+                            .build()
+                            .show();
+                }
+
+                break;
+
+            case REQUEST_LOCATION_PERM:
+                if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+                    new AppSettingsDialog.Builder(this, "当前App需要申请定位权限,需要打开设置页面么?")
+                            .setTitle("权限申请")
+                            .setPositiveButton("确认")
+                            .setNegativeButton("取消", null /* click listener */)
+                            .setRequestCode(REQUEST_LOCATION_PERM)
+                            .build()
+                            .show();
+                }
+                break;
         }
+
     }
 
     private class ListAdapter extends CommonAdapter<IMMessageBean, BaseViewHolder> {

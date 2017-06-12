@@ -314,5 +314,11 @@
         <item name="android:inputType">textPassword</item>
     </style>
 
-
+    <style name="DotSoftKeyboardStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:src">@mipmap/img_face2face_dot</item>
+    </style>
 </resources>

@@ -29,7 +29,6 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
-import cn.gogoal.im.common.LitePalDBHelper;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -207,7 +206,7 @@ public class TypeLoginActivity extends BaseActivity {
 
                         KLog.e(UserUtils.getUserId());
                         //建立数据库
-                        LitePalDBHelper.getInstance().createSQLite(UserUtils.getUserId());
+//                        LitePalDBHelper.getInstance().createSQLite(UserUtils.getUserId());
 
                         //存在这个账号则直奔MainActivity
                         if (UserUtils.hadLogin(data.getString("account_id"))) {

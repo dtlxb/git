@@ -38,8 +38,9 @@ import cn.gogoal.im.activity.SquareChatRoomActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.bean.GroupCollectionData;
-import cn.gogoal.im.bean.GroupData;
+import cn.gogoal.im.bean.group.GroupCollectionData;
+import cn.gogoal.im.bean.group.GroupData;
+import cn.gogoal.im.bean.group.GroupMemberInfo;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -277,10 +278,10 @@ public class SearchTeamFragment extends BaseFragment {
         }
     }
 
-    private List<String> getImageAvatar(List<GroupData.MInfoBean> datas) {
+    private List<String> getImageAvatar(List<GroupMemberInfo> datas) {
         List<String> li = new ArrayList<>();
         if (null != datas && !datas.isEmpty()) {
-            for (GroupData.MInfoBean b : datas) {
+            for (GroupMemberInfo b : datas) {
                 li.add(b.getAvatar());
             }
             return li;

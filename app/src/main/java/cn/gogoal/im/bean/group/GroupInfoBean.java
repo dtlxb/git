@@ -1,4 +1,6 @@
-package cn.gogoal.im.bean;
+package cn.gogoal.im.bean.group;
+
+import cn.gogoal.im.bean.group.GroupData;
 
 /**
  * author wangjd on 2017/5/22 0022.
