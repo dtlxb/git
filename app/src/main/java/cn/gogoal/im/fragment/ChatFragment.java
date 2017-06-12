@@ -272,7 +272,7 @@ public class ChatFragment extends BaseFragment {
                 if (etInput.getText().toString().trim().equals("")) {
                     functionCheckBox.setVisibility(View.VISIBLE);
                     btnSend.setVisibility(View.INVISIBLE);
-                } else if (etInput.getText().toString().trim().endsWith("@") && chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
+                } else if (etInput.getText().toString().endsWith("@") && chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
                     //@过后跳转加人
                     Intent intent = new Intent(getActivity(), ChooseContactActivity.class);
                     Bundle bundle = new Bundle();
@@ -294,6 +294,7 @@ public class ChatFragment extends BaseFragment {
                     String backString = StringUtils.StringFilter(etInput.getText().toString());
                     etInput.setText(backString);
                     etInput.setSelection(backString.length());
+                    KLog.e(backString);
                 } else if (keyCode == KeyEvent.KEYCODE_BACK) {
                     getActivity().finish();
                 }
@@ -858,7 +859,7 @@ public class ChatFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (!TextUtils.isEmpty(etInput.getText())) {
+        if (!TextUtils.isEmpty(etInput.getText()) && !etInput.getText().toString().equals("@")) {
             GGTextMessage mTextMessage = createTextMessage("[草稿] " + etInput.getText());
             saveToMessageList(mTextMessage);
         }

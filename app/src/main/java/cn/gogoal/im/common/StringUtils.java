@@ -310,7 +310,6 @@ public class StringUtils {
     }
 
 
-
     /**
      * 保留有效数字
      */
@@ -454,19 +453,19 @@ public class StringUtils {
             return "";
         }
         if (str.endsWith(" ")) {
-            int postionAt = str.lastIndexOf("@");
-            KLog.e(postionAt);
-            if (postionAt != -1) {
-                return str.substring(0, postionAt);
+            int positionAt = str.lastIndexOf("@");
+            KLog.e(positionAt);
+            if (positionAt != -1) {
+                return str.substring(0, positionAt);
             } else {
             }
         } else {
         }
         if (str.endsWith("]")) {
-            int postionAt = str.lastIndexOf("[");
-            KLog.e(postionAt);
-            if (postionAt != -1) {
-                return str.substring(0, postionAt);
+            int positionAt = str.lastIndexOf("[");
+            KLog.e(positionAt);
+            if (positionAt != -1) {
+                return str.substring(0, positionAt);
             } else {
             }
         } else {
@@ -558,21 +557,22 @@ public class StringUtils {
 
     /**
      * 生产随机数
+     *
      * @param length
      * @return
      */
-    public static String getRandomString(int length){
-        String str="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        Random random=new Random();
-        StringBuffer sb=new StringBuffer();
-        for(int i=0;i<length;i++){
-            int number=random.nextInt(62);
+    public static String getRandomString(int length) {
+        String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < length; i++) {
+            int number = random.nextInt(62);
             sb.append(str.charAt(number));
         }
         return sb.toString();
     }
 
     public static boolean isEmpty(CharSequence trim) {
-        return TextUtils.isEmpty(trim) || TextUtils.isEmpty(trim.toString().replace(" ",""));
+        return TextUtils.isEmpty(trim) || TextUtils.isEmpty(trim.toString().replace(" ", ""));
     }
 }
