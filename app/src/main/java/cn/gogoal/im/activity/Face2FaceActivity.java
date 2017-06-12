@@ -271,6 +271,7 @@ public class Face2FaceActivity extends BaseActivity {
                         intent.putExtra("square_action", AppConst.CREATE_SQUARE_ROOM_BUILD);
                         intent.putExtra("conversation_id", conversionId);
                         startActivity(intent);
+                        Face2FaceActivity.this.finish();
                     } else {
                         UIHelper.toast(Face2FaceActivity.this, "面对面创群失败！");
                     }
