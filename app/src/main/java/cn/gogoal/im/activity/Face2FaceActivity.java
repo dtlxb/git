@@ -246,4 +246,16 @@ public class Face2FaceActivity extends BaseActivity {
             count--;
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        /*
+         * 如果AMapLocationClient是在当前Activity实例化的，
+         * 在Activity的onDestroy中一定要执行AMapLocationClient的onDestroy
+         */
+        locationClient.onDestroy();
+        locationClient = null;
+        locationOption = null;
+    }
 }
