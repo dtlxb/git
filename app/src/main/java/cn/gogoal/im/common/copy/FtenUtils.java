@@ -43,6 +43,15 @@ public class FtenUtils {
     };
 
     /**
+     * 经营分析
+     */
+    public static final String[] analysisName = {
+            "主营构成", "主营收入(亿元)", "收入比例", "主营成本(亿元)", "成本比例",
+            "主营利润(亿元)", "利润比例", "毛利率"
+    };
+
+
+    /**
      * 财务报表
      */
     //资产负债表

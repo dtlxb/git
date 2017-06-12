@@ -25,7 +25,7 @@
             android:layout_weight="2"
             android:singleLine="true"
             android:text="@string/text_empty"
-            android:textColor="@color/textColor_666666"
+            android:textColor="@color/textColor_333333"
             android:textSize="14dp" />
 
         <TextView
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:text="@string/text_empty"
-            android:textColor="@color/textColor_333333"
+            android:textColor="@android:color/black"
             android:textSize="14dp" />
 
     </LinearLayout>
