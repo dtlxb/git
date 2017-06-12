@@ -725,6 +725,15 @@ public class GGOKHTTP {
      */
     public static final String COMPANY_BUSINESS_ANALYSIS = "v1/f10/company_business_analysis";
 
+    /**
+     * F10-财务分析
+     * params stock_code
+     * params season 0【全部】1【一季度 】2【二季度】3【三 季度】4【四季度】
+     * params type 0【全部】1【核心财 务指示】2【每股指标 】3【盈利能力】4【 资本结构】5【偿债能 力】6【营运能力】 7【成长能力】
+     * params page
+     */
+    public static final String FINANCIAL_ANALYSIS = "v1/f10/financial_analysis";
+
 //--------------------------------------------------------------------------------------------------
 
     /**

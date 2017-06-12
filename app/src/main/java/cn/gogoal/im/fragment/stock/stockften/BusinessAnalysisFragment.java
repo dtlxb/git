@@ -131,8 +131,27 @@ public class BusinessAnalysisFragment extends BaseFragment {
                     for (int i = 0; i < keyList.size(); i++) {
                         timeList.add(data.getJSONObject(keyList.get(i)));
                     }
-
                     KLog.e(timeList);
+
+                    List<JSONArray> content1 = new ArrayList<>();
+                    for (int i = 0; i < timeList.size(); i++) {
+                        JSONArray array1 = new JSONArray();
+                        array1.add(timeList.get(i).getJSONArray("产品"));
+                        array1.add(timeList.get(i).getJSONArray("地区"));
+                        array1.add(timeList.get(i).getJSONArray("行业"));
+                        content1.add(array1);
+                    }
+
+                    List<JSONArray> content2 = new ArrayList<>();
+                    for (int i = 0; i < content1.size(); i++) {
+                        JSONArray array2 = new JSONArray();
+                        for (int j = 0; j < content1.get(i).size(); j++) {
+                            array2.add(content1.get(i).get(j));
+                        }
+                        content2.add(array2);
+                    }
+
+                    //FileUtil.writeRequestResponse(String.valueOf(contentData),"F10DATA.TXT");
                 }
             }
 
