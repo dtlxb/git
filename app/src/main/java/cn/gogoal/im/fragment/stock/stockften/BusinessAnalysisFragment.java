@@ -107,7 +107,12 @@ public class BusinessAnalysisFragment extends BaseFragment {
                     //将毫秒值转时间戳
                     List<String> keyList = new ArrayList<>();
                     for (int i = 0; i < keyLongList.size(); i++) {
-                        keyList.add(CalendarUtils.parseDateFormatAll(keyLongList.get(i), "yyyy-MM-dd"));
+                        //keyList.add(CalendarUtils.parseDateFormatAll(keyLongList.get(i), "yyyy-MM-dd"));
+                        for (int j = 0; j < keyMSList.size(); j++) {
+                            if (keyLongList.get(i) == CalendarUtils.parseString2Long(keyMSList.get(j) + " 00:00:00")) {
+                                keyList.add(keyMSList.get(j));
+                            }
+                        }
                     }
                     KLog.e(keyList);
 
@@ -121,6 +126,13 @@ public class BusinessAnalysisFragment extends BaseFragment {
                     KLog.e(titleList);
 
                     setLeftListData(titleList);
+                    
+                    List<JSONObject> timeList = new ArrayList<>();
+                    for (int i = 0; i < keyList.size(); i++) {
+                        timeList.add(data.getJSONObject(keyList.get(i)));
+                    }
+
+                    KLog.e(timeList);
                 }
             }
 
