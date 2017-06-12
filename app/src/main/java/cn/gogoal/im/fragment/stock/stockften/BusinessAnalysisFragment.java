@@ -126,7 +126,7 @@ public class BusinessAnalysisFragment extends BaseFragment {
                     KLog.e(titleList);
 
                     setLeftListData(titleList);
-                    
+
                     List<JSONObject> timeList = new ArrayList<>();
                     for (int i = 0; i < keyList.size(); i++) {
                         timeList.add(data.getJSONObject(keyList.get(i)));
