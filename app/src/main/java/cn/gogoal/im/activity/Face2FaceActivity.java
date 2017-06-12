@@ -6,7 +6,11 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.amap.api.location.AMapLocationClient;
@@ -21,17 +25,27 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.SoftKeyboardAdapter;
+import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.SoftKeyboard;
 import cn.gogoal.im.bean.group.GroupData;
+import cn.gogoal.im.bean.group.GroupMemberInfo;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.StringUtils;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.XDividerItemDecoration;
+import cn.gogoal.im.ui.dialog.WaitDialog;
+import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.TextDrawable;
 import cn.gogoal.im.ui.view.XTitle;
+
+import static cn.gogoal.im.R.id.rv_soft_input;
 
 /**
  * author wangjd on 2017/6/7 0007.
@@ -46,8 +60,24 @@ public class Face2FaceActivity extends BaseActivity {
 
     private static final int face2faceBgColoe = 0xff1b1f22;
 
-    @BindView(R.id.rv_soft_input)
+    @BindView(R.id.tv_flag)
+    TextView tvFlag;
+
+    @BindView(rv_soft_input)
     RecyclerView rvSoftInput;
+
+    @BindView(R.id.rv_member)
+    RecyclerView rvMember;
+
+    @BindView(R.id.layout_members)
+    LinearLayout layoutMembers;
+
+    @BindView(R.id.btn_goin)
+    SelectorButton btnGoin;
+
+    private MemberAdapter memberAdapter;
+
+    private List<GroupMemberInfo> memberDatas;
 
     private List<SoftKeyboard> keyboardDatas;
 
@@ -91,7 +121,11 @@ public class Face2FaceActivity extends BaseActivity {
 //        locationClient.setLocationListener(locationListener);
         locationClient.startLocation();
 
-
+        memberDatas = new ArrayList<>();
+        memberAdapter = new MemberAdapter(memberDatas);
+        rvMember.setLayoutManager(new GridLayoutManager(mContext, 4));
+        rvMember.setNestedScrollingEnabled(false);
+        rvMember.setAdapter(memberAdapter);
     }
 
     /**
@@ -116,46 +150,6 @@ public class Face2FaceActivity extends BaseActivity {
         return mOption;
     }
 
-    /**
-     * 定位监听
-     */
-//    AMapLocationListener locationListener = new AMapLocationListener() {
-//        @Override
-//        public void onLocationChanged(AMapLocation location) {
-//            if (null != location) {
-//
-//                KLog.e(JSONObject.toJSONString(location));
-////
-////                longitude=location.getLongitude();
-////                latitude=location.getLatitude();
-//            }
-//        }
-//    };
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//
-//        KLog.e("latitude="+locationClient.getLastKnownLocation().getLatitude()+"\nlatitude="+locationClient.getLastKnownLocation().getLatitude());
-//        if (longitude == 0 && latitude == 0) {
-//            NormalAlertDialog alertDialog = NormalAlertDialog.newInstance("如果你现在不是在非洲西部大西洋的几内亚湾," +
-//                    "我们可能没有获取到你的位置信息", "设置", new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-////                    Intent intent =  new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-////                    startActivity(intent);
-//                    AppDevice.go2AppDetail(v.getContext());
-//                }
-//            }, new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    finish();
-//                }
-//            });
-//            alertDialog.setCancelable(false);
-//            alertDialog.show(getSupportFragmentManager());
-//        }
-//    }
     private void makeDatas() {
         for (int i = 1; i < 10; i++) {
             keyboardDatas.add(new SoftKeyboard(String.valueOf(i), null));
@@ -172,8 +166,7 @@ public class Face2FaceActivity extends BaseActivity {
                 .builder()
                 .beginConfig()
                 .textColor(getResColor(R.color.colorPrimary))
-                .fontSize(AppDevice.dp2px(getActivity(), 25))
-                .bold()
+                .fontSize(AppDevice.dp2px(getActivity(), 45))
                 .endConfig().rect();
         return iBuilder.build(num, face2faceBgColoe);
     }
@@ -209,6 +202,9 @@ public class Face2FaceActivity extends BaseActivity {
     }
 
     private void creatGoupChart() {
+        final WaitDialog waitDialog = WaitDialog.getInstance("创建中...", R.mipmap.login_loading, true);
+        waitDialog.show(getSupportFragmentManager());
+
         HashMap<String, String> params = UserUtils.getTokenParams();
         params.put("password", ArrayUtils.mosaicListElement(pswList).replace(";", ""));
         params.put("longitude", String.valueOf(locationClient.getLastKnownLocation().getLongitude()));
@@ -223,10 +219,33 @@ public class Face2FaceActivity extends BaseActivity {
 
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
-                    GroupData groupData = JSONObject.parseObject(object.getString("data"), GroupData.class);
-                    Intent intent = new Intent(Face2FaceActivity.this, Face2FaceHolderActivity.class);
-                    intent.putExtra("face2face_group_data", groupData);
-                    startActivity(intent);
+                    final GroupData groupData = JSONObject.parseObject(object.getString("data"), GroupData.class);
+
+                    //视图变换
+                    changeViewTree();
+                    //添加成员,自己，和拉取到的成员
+
+                    final GroupMemberInfo contactMe = new GroupMemberInfo();
+                    contactMe.setAccount_id(Integer.parseInt(UserUtils.getMyAccountId()));
+                    contactMe.setAvatar(UserUtils.getUserAvatar());
+                    contactMe.setNickname(UserUtils.getNickname());
+
+                    memberDatas.add(contactMe);
+
+                    if (groupData.getM_info()!=null){
+                        memberDatas.addAll(groupData.getM_info());
+                    }
+
+                    memberAdapter.notifyDataSetChanged();
+                    waitDialog.dismiss();
+
+                    btnGoin.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            goInNewGroup(groupData.getConv_id());
+                        }
+                    });
+
                 } else {
 
                 }
@@ -237,6 +256,41 @@ public class Face2FaceActivity extends BaseActivity {
 
             }
         }).startGet();
+    }
+
+    private void goInNewGroup(final String conversionId) {
+        HashMap<String, String> params = UserUtils.getTokenParams();
+        params.put("conv_id", conversionId);
+        new GGOKHTTP(params, GGOKHTTP.ADD_FTF_MEMBER, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                JSONObject jsonObject = JSONObject.parseObject(responseInfo);
+                if (jsonObject.getIntValue("code") == 0) {
+                    if (jsonObject.getJSONObject("data").getBoolean("success")) {
+                        Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
+                        intent.putExtra("square_action", AppConst.CREATE_SQUARE_ROOM_BUILD);
+                        intent.putExtra("conversation_id", conversionId);
+                        startActivity(intent);
+                    } else {
+                        UIHelper.toast(Face2FaceActivity.this, "面对面创群失败！");
+                    }
+                } else {
+                    UIHelper.toast(Face2FaceActivity.this, "面对面创群失败！");
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+
+            }
+        }).startGet();
+    }
+
+    private void changeViewTree() {
+        tvFlag.setVisibility(View.GONE);
+        layoutMembers.setVisibility(View.VISIBLE);
+        rvSoftInput.setVisibility(View.GONE);
+        btnGoin.setVisibility(View.VISIBLE);
     }
 
     public void delImagePsw() {
@@ -257,5 +311,25 @@ public class Face2FaceActivity extends BaseActivity {
         locationClient.onDestroy();
         locationClient = null;
         locationOption = null;
+    }
+
+
+    private class MemberAdapter extends CommonAdapter<GroupMemberInfo, BaseViewHolder> {
+
+        public MemberAdapter(List<GroupMemberInfo> data) {
+            super(R.layout.item_face2face_member, data);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder holder, GroupMemberInfo data, int position) {
+            AppCompatImageView avatar = holder.getView(R.id.iv_item_avatar);
+            if (StringUtils.isActuallyEmpty(data.getAvatar())) {
+                ImageDisplay.loadImage(Face2FaceActivity.this, data.getAvatar(), avatar);
+            } else {
+                ImageDisplay.loadImage(Face2FaceActivity.this, R.mipmap.logo, avatar);
+            }
+
+            holder.setText(R.id.tv_item_name, data.getNickname());
+        }
     }
 }
