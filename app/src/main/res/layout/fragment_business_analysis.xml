@@ -138,6 +138,7 @@
                 android:id="@+id/lsv_left"
                 android:layout_width="130dp"
                 android:layout_height="match_parent"
+                android:divider="@null"
                 android:scrollbars="none" />
 
             <!--右边的ScrollView-->

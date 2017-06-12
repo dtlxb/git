@@ -16,11 +16,13 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.adapter.AnalysisLeftAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.copy.FtenUtils;
+import cn.gogoal.im.ui.copy.InnerListView;
 
 /**
  * Created by dave.
@@ -38,10 +40,14 @@ public class BusinessAnalysisFragment extends BaseFragment {
     //经营范围
     @BindView(R.id.textScopeBusiness)
     TextView textScopeBusiness;
-
+    //左边列表
+    @BindView(R.id.lsv_left)
+    InnerListView lsvLeft;
 
     private String stockCode;
     private String stockName;
+
+    private AnalysisLeftAdapter leftAdapter;
 
     public static BusinessAnalysisFragment getInstance(String stockCode, String stockName) {
         BusinessAnalysisFragment fragment = new BusinessAnalysisFragment();
@@ -105,15 +111,16 @@ public class BusinessAnalysisFragment extends BaseFragment {
                     }
                     KLog.e(keyList);
 
-                    List<String> titleList = new ArrayList<>();
+                    ArrayList<String> titleList = new ArrayList<>();
                     for (int i = 0; i < keyList.size(); i++) {
                         titleList.add(keyList.get(i));
                         for (int j = 0; j < FtenUtils.analysisName.length; j++) {
                             titleList.add(FtenUtils.analysisName[j]);
                         }
                     }
-
                     KLog.e(titleList);
+
+                    setLeftListData(titleList);
                 }
             }
 
@@ -124,4 +131,15 @@ public class BusinessAnalysisFragment extends BaseFragment {
         };
         new GGOKHTTP(param, GGOKHTTP.COMPANY_BUSINESS_ANALYSIS, ggHttpInterface).startGet();
     }
+
+    /**
+     * 设置左边数据
+     */
+    private void setLeftListData(ArrayList<String> titleList) {
+
+        leftAdapter = new AnalysisLeftAdapter(getActivity(), titleList);
+        lsvLeft.setAdapter(leftAdapter);
+    }
+
+
 }
