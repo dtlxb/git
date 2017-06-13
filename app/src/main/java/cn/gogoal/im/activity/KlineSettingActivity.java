@@ -110,6 +110,9 @@ public class KlineSettingActivity extends BaseActivity {
                         SPTools.saveInt("authority_type", 0);
                         SPTools.saveBoolean("hollow", false);
                         SPTools.saveBoolean("follow", false);
+                        SPTools.saveInt("et_ln1", 5);
+                        SPTools.saveInt("et_ln2", 10);
+                        SPTools.saveInt("et_ln3", 20);
                         initData();
                     }
                 }).show();
@@ -247,8 +250,6 @@ public class KlineSettingActivity extends BaseActivity {
     }
 
     private void EditTextSet(EditText editText, TextView textView) {
-
-        KLog.e("跑这儿了");
 
         textView.setText("日");
         editText.setText("");
