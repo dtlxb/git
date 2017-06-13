@@ -984,9 +984,10 @@ public class CopyStockDetailActivity extends BaseActivity {
                     final TreatData info = bean.getData();
 
                     //20170613
+                    infoDialogAdapter.setClosePrice(info.getClose_price());
+                    infoDialogAdapter.setStockType(info.getStock_type());
                     setDialogInfoData(info);
 
-                    infoDialogAdapter.setClosePrice(info.getClose_price());
 
                     setNow(info.getUpdate_time());
                     //保存收盘价
@@ -1608,10 +1609,12 @@ public class CopyStockDetailActivity extends BaseActivity {
     private void setDialogInfoData(TreatData info) {
         stockDialogInfoList.clear();
         //最高价
-        stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[0], info.getHigh_price()));
+        stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[0],
+                StringUtils.pareseStringDouble(info.getHigh_price(), 2)));
 
         //最低价
-        stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[1], info.getLow_price()));
+        stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[1],
+                StringUtils.pareseStringDouble(info.getLow_price(), 2)));
 
         //涨停
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[2],
@@ -1629,13 +1632,13 @@ public class CopyStockDetailActivity extends BaseActivity {
 
         //内盘
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[4],
-                (StringUtils.isActuallyEmpty(info.getVolume_inner()) || info.getVolume_inner().length() < 3) ? "0" : (
+                (StringUtils.isActuallyEmpty(info.getVolume_inner()) || info.getVolume_inner().length() < 3) ? "0手" : (
                         info.getVolume_inner().length() > 6 ? StringUtils.save2Significand((Double.parseDouble(info.getVolume_inner()) / 1000000)) + "万手" :
                                 StringUtils.getIntegerData(String.valueOf((Double.parseDouble(info.getVolume_inner()) / 100))) + "手")));
 
         //外盘
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[5],
-                (StringUtils.isActuallyEmpty(info.getVolume_outer()) || info.getVolume_outer().length() < 3) ? "0" : (
+                (StringUtils.isActuallyEmpty(info.getVolume_outer()) || info.getVolume_outer().length() < 3) ? "0手" : (
                         info.getVolume_outer().length() > 6 ? StringUtils.save2Significand((Double.parseDouble(info.getVolume_outer()) / 1000000)) + "万手" :
                                 StringUtils.getIntegerData(String.valueOf((Double.parseDouble(info.getVolume_outer()) / 100))) + "手")));
 
@@ -1786,6 +1789,15 @@ public class CopyStockDetailActivity extends BaseActivity {
 
         private String closePrice;
 
+        /**
+         * @serialField StockUtils.getStockStatus();
+         */
+        private int stockType;
+
+        public void setStockType(int stockType) {
+            this.stockType = stockType;
+        }
+
         public void setClosePrice(String closePrice) {
             this.closePrice = closePrice;
         }
@@ -1801,16 +1813,20 @@ public class CopyStockDetailActivity extends BaseActivity {
 
             holder.setText(R.id.tv_item_stock_detail_info_key, data.getKey());
 
-            holder.setText(R.id.tv_item_stock_detail_info_value, data.getValue());
+            holder.setText(R.id.tv_item_stock_detail_info_value, (position == 0 || position == 1) ? (
+                    realDouble(data.getValue()) == 0 ? "--" : data.getValue()) : data.getValue());
 
             switch (position) {
                 case 0:
                 case 1:
-                    holder.setTextColor(R.id.tv_item_stock_detail_info_value,
-                            getResColor(
-                                    StockUtils.getStockRateColor(
-                                            StringUtils.pareseStringDouble(data.getValue()) -
-                                                    StringUtils.pareseStringDouble(closePrice))));
+                    if (stockType == 1) {
+                        holder.setTextColor(R.id.tv_item_stock_detail_info_value,
+                                getResColor(
+                                        StockUtils.getStockRateColor(realDouble(data.getValue()) -
+                                                StringUtils.pareseStringDouble(closePrice))));
+                    } else {
+                        holder.setTextColor(R.id.tv_item_stock_detail_info_value, Color.BLACK);
+                    }
                     break;
                 case 2:
                     holder.setTextColor(R.id.tv_item_stock_detail_info_value, getResColor(R.color.stock_red));
@@ -1819,14 +1835,16 @@ public class CopyStockDetailActivity extends BaseActivity {
                     holder.setTextColor(R.id.tv_item_stock_detail_info_value, getResColor(R.color.stock_green));
                     break;
                 case 4:
-                    holder.setTextColor(R.id.tv_item_stock_detail_info_value, getResColor(R.color.stock_green));
+                    holder.setTextColor(R.id.tv_item_stock_detail_info_value, getResColor(
+                            realDouble(data.getValue()) == 0 ? R.color.stock_gray : R.color.stock_green));
                     break;
                 case 5:
-                    holder.setTextColor(R.id.tv_item_stock_detail_info_value, getResColor(R.color.stock_red));
+                    holder.setTextColor(R.id.tv_item_stock_detail_info_value, getResColor(
+                            realDouble(data.getValue()) == 0 ? R.color.stock_gray : R.color.stock_red));
                     break;
                 case 8:
                     holder.setTextColor(R.id.tv_item_stock_detail_info_value,
-                            getResColor(StockUtils.getStockRateColor(StringUtils.pareseStringDouble(data.getValue().replace("%", "")))));
+                            getResColor(StockUtils.getStockRateColor(realDouble(data.getValue()))));
                     break;
                 default:
                     holder.setTextColor(R.id.tv_item_stock_detail_info_value, Color.BLACK);
@@ -1834,14 +1852,18 @@ public class CopyStockDetailActivity extends BaseActivity {
             }
 
         }
+
+        private double realDouble(String value) {
+            return StringUtils.pareseStringDouble(value.replaceAll("[%手亿万]", ""));
+        }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode==KeyEvent.KEYCODE_BACK){
-            if (isMaskViewVisiable()){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (isMaskViewVisiable()) {
                 dismissMarket();
-            }else {
+            } else {
                 finish();
             }
             return true;
