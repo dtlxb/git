@@ -16,7 +16,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -75,6 +74,7 @@ import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
 import cn.gogoal.im.ui.copy.BitmapChartView;
 import cn.gogoal.im.ui.copy.TimesFivesBitmap;
 import cn.gogoal.im.ui.dialog.StockPopuDialog;
+import cn.gogoal.im.ui.stock.DialogRecyclerView;
 import cn.gogoal.im.ui.stock.KChartsBitmap;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
 import hply.com.niugu.autofixtext.AutofitTextView;
@@ -272,7 +272,7 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     //=====================20170613===================
     @BindView(R.id.rv_stock_info)
-    RecyclerView rvStockInfo;
+    DialogRecyclerView rvStockInfo;
 
     @BindView(R.id.view_dialog_mask)
     View viewMask;

@@ -615,7 +615,7 @@
                             android:visibility="gone"
                             android:clickable="true"/>
 
-                        <android.support.v7.widget.RecyclerView
+                        <cn.gogoal.im.ui.stock.DialogRecyclerView
                             android:id="@+id/rv_stock_info"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
