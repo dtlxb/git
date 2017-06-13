@@ -20,6 +20,11 @@ import cn.gogoal.im.fragment.stock.stockften.FinancialAnalysisFragment;
 import cn.gogoal.im.fragment.stock.stockften.FinancialStatementsFragment;
 import cn.gogoal.im.fragment.stock.stockften.ShareholderResearchFragment;
 
+/**
+ * Created by dave.
+ * Date: 2017/6/7.
+ * Desc: F10
+ */
 public class StockFtenActivity extends BaseActivity {
 
     @BindView(R.id.tablayout_ften)

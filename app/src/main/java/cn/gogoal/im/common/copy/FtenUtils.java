@@ -66,6 +66,18 @@ public class FtenUtils {
         if ("2015三季报".equals(title)) return "15Q3";
         if ("2015中报".equals(title)) return "15Q2";
         if ("2015一季报".equals(title)) return "15Q1";
+        if ("2014年报".equals(title)) return "14Q4";
+        if ("2014三季报".equals(title)) return "14Q3";
+        if ("2014中报".equals(title)) return "14Q2";
+        if ("2014一季报".equals(title)) return "14Q1";
+        if ("2013年报".equals(title)) return "13Q4";
+        if ("2013三季报".equals(title)) return "13Q3";
+        if ("2013中报".equals(title)) return "13Q2";
+        if ("2013一季报".equals(title)) return "13Q1";
+        if ("2012年报".equals(title)) return "12Q4";
+        if ("2012三季报".equals(title)) return "12Q3";
+        if ("2012中报".equals(title)) return "12Q2";
+        if ("2012一季报".equals(title)) return "12Q1";
         return null;
     }
 

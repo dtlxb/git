@@ -2,11 +2,11 @@ package cn.gogoal.im.fragment.stock.stockften;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -94,7 +95,6 @@ public class FinancialAnalysisFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
@@ -151,7 +151,6 @@ public class FinancialAnalysisFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
@@ -255,5 +254,26 @@ public class FinancialAnalysisFragment extends BaseFragment {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.FINANCIAL_ANALYSIS, ggHttpInterface).startGet();
+    }
+
+    @OnClick({R.id.textProfit2, R.id.textShareEPS2, R.id.textProfitRate2, R.id.textDebtRatio2,
+            R.id.textSovency2, R.id.textTurnoverRate2, R.id.textGrows2,})
+    public void AnalysisOnClick(View v) {
+        switch (v.getId()) {
+            case R.id.textProfit2:
+                break;
+            case R.id.textShareEPS2:
+                break;
+            case R.id.textProfitRate2:
+                break;
+            case R.id.textDebtRatio2:
+                break;
+            case R.id.textSovency2:
+                break;
+            case R.id.textTurnoverRate2:
+                break;
+            case R.id.textGrows2:
+                break;
+        }
     }
 }

@@ -740,6 +740,16 @@ public class GGOKHTTP {
      */
     public static final String GET_STOCK_FINANCIAL_TYPE = "v1/f10/get_stock_financial_type";
 
+    /**
+     * F10-财务报表
+     * params stock_code
+     * params season 0【全部】1【一季度 】2【二季度】3【三 季度】4【四季度】
+     * params stype 1-绝对值，0-同比值 ，默认1
+     * params page
+     */
+    public static final String FIREPORT_BALANCE_SHEET = "v1/f10/fireport_balance_sheet";
+
+
 //--------------------------------------------------------------------------------------------------
 
     /**
