@@ -26,9 +26,10 @@ import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.group.GroupCollectionData;
 import cn.gogoal.im.bean.group.GroupData;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.XLayout;
 
 /**
@@ -72,7 +73,11 @@ public class SearchPersonSquareActivity extends BaseActivity {
         initData();
         //一些监听
         iniListener();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (searchIndex==1){
             getRecommendGroup(AppConst.REFRESH_TYPE_FIRST,null);
         }
@@ -80,6 +85,8 @@ public class SearchPersonSquareActivity extends BaseActivity {
 
     //初始化数据
     private void initData() {
+        rvSearchResult.addItemDecoration(new NormalItemDecoration(getActivity()));
+
         if (searchIndex==0){
             searchResultList=new ArrayList<>();
             persionAdapter=new SearchPersionResultAdapter(searchResultList);
@@ -101,7 +108,7 @@ public class SearchPersonSquareActivity extends BaseActivity {
                         searchPersion(layout2search.getText().toString());
                         break;
                     case 1:
-                        getRecommendGroup(AppConst.REFRESH_TYPE_PARENT_BUTTON,
+                        getRecommendGroup(AppConst.REFRESH_TYPE_RELOAD,
                                 layout2search.getText().toString());
                         break;
                 }
@@ -122,6 +129,7 @@ public class SearchPersonSquareActivity extends BaseActivity {
                                         layout2search.getText().toString());
                                 break;
                         }
+                        AppDevice.hideSoftKeyboard(layout2search);
                     }
                     return true;
                 }
@@ -131,21 +139,26 @@ public class SearchPersonSquareActivity extends BaseActivity {
     }
 
     private void searchPersion(final String keyword) {
+
+        xLayout.setEmptyText(String.format(getString(R.string.str_result), keyword) + "的用户");
+
+        xLayout.setStatus(XLayout.Loading);
+
         final Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
         param.put("page", String.valueOf(page));
         param.put("rows", "20");
         param.put("keyword", keyword);
+
         KLog.e("token=" + UserUtils.getToken() + "&keyword=" + keyword);
 
         new GGOKHTTP(param, GGOKHTTP.SEARCH_FRIEND, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
-
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    JSONObject jsonObject = JSONObject.parseObject(responseInfo);
+                    searchResultList.clear();
 
+                    JSONObject jsonObject = JSONObject.parseObject(responseInfo);
                     searchResultList.addAll(JSONObject.parseArray(jsonObject.getJSONArray("data")
                             .toJSONString(), ContactBean.class));
 
@@ -160,16 +173,15 @@ public class SearchPersonSquareActivity extends BaseActivity {
                     persionAdapter.removeAllHeaderView();
 
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
-                    xLayout.setEmptyText(String.format(getString(R.string.str_result), keyword) + "的用户");
                     xLayout.setStatus(XLayout.Empty);
                 } else {
-                    UIHelper.toastResponseError(getActivity(), responseInfo);
+                    xLayout.setStatus(XLayout.Error);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toast(getActivity(), R.string.net_erro_hint);
+                xLayout.setStatus(XLayout.Error);
             }
         }).startGet();
     }
@@ -178,9 +190,8 @@ public class SearchPersonSquareActivity extends BaseActivity {
      * 搜群
      */
     private void getRecommendGroup(final int loadType, final String keyword) {
-        if (loadType == AppConst.REFRESH_TYPE_FIRST) {
-            xLayout.setStatus(XLayout.Loading);
-        }
+        xLayout.setEmptyText(String.format(getString(R.string.str_result), keyword) + "群组");
+
         Map<String, String> map = new HashMap<>();
         map.put("token", UserUtils.getToken());
         if (!TextUtils.isEmpty(keyword)) {
@@ -201,22 +212,16 @@ public class SearchPersonSquareActivity extends BaseActivity {
                     }
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
                     xLayout.setStatus(XLayout.Empty);
-                    xLayout.setEmptyText(String.format(getString(R.string.str_result), keyword) + "群组");
-                    UIHelper.toastResponseError(getActivity(), responseInfo);
+                }else {
+                    xLayout.setStatus(XLayout.Error);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
-                    @Override
-                    public void onReload(View v) {
-                        getRecommendGroup(AppConst.REFRESH_TYPE_SWIPEREFRESH,
-                                loadType == AppConst.REFRESH_TYPE_PARENT_BUTTON ? keyword : "");
-                    }
-                });
-
-                UIHelper.toastError(getActivity(), msg, xLayout);
+                if (loadType!=AppConst.REFRESH_TYPE_FIRST){
+                    xLayout.setStatus(XLayout.Error);
+                }
             }
         }).startGet();
     }

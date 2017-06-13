@@ -7,7 +7,7 @@
     android:background="#E8E8E8"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".activity.MyQrCodeActivity">
+    tools:context=".activity.QrCodeActivity">
 
     <include layout="@layout/include_title" />
 
@@ -42,7 +42,6 @@
                         android:layout_height="45dp"
                         android:adjustViewBounds="true"
                         android:contentDescription="@null"
-                        android:src="@mipmap/logo"
                         app:riv_corner_radius="@dimen/icon_radius" />
 
                     <LinearLayout
@@ -69,8 +68,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="--"
+                            android:layout_marginTop="5dp"
                             android:textColor="@color/textColor_999999"
-                            android:textSize="18sp" />
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                 </RelativeLayout>
@@ -131,7 +131,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="25dp"
+                        android:paddingBottom="25dp"
                         android:text="扫一扫二维码,加我Go-Goal。"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
@@ -153,9 +153,10 @@
                 android:id="@+id/btn_my_qrcode_save_qrcode"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="保存到手机"
                 android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="保存到手机"
                 app:normalBackgroundColor="#5483D5"
                 app:normalTextColor="@android:color/white"
                 app:pressedBackgroundColor="#FF8DA3C9"
@@ -166,9 +167,10 @@
                 android:id="@+id/btn_my_qrcode_share_qrcode"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="分享"
                 android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="分享"
                 app:normalBackgroundColor="#5483D5"
                 app:normalTextColor="@android:color/white"
                 app:pressedBackgroundColor="#FF8DA3C9"

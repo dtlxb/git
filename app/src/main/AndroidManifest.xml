@@ -231,7 +231,7 @@
         <activity android:name=".activity.ChangePasswordActivity" />
         <activity android:name=".activity.SettingStockActivity" />
         <activity android:name=".activity.ScanQRCodeActivity" />
-        <activity android:name=".activity.MyQrCodeActivity" />
+        <activity android:name=".activity.QrCodeActivity" />
         <activity android:name=".activity.Face2FaceActivity" />
         <activity android:name=".activity.Face2FaceHolderActivity"/>
         <activity android:name=".activity.QrcodeProcessActivity"/>

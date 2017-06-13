@@ -62,7 +62,7 @@ public class ImageDetailActivity extends BaseActivity {
 //        final String accountId = getIntent().getStringExtra("account_Id");
 //        isEditMyAvatar = accountId.equalsIgnoreCase(UserUtils.getMyAccountId());
 
-        isEditMyAvatar=getIntent().getBooleanExtra("is_change_avatar",false);
+        isEditMyAvatar = getIntent().getBooleanExtra("is_change_avatar", false);
 
         XTitle title = setMyTitle(isEditMyAvatar ? "个人头像" : "", true);
 
@@ -122,9 +122,8 @@ public class ImageDetailActivity extends BaseActivity {
                                 imageUrls.get(vpImageDetail.getCurrentItem()),
                                 MD5Utils.getMD5EncryptyString16(imageUrls.get(vpImageDetail.getCurrentItem())), new Impl<String>() {
                                     @Override
-                                    public void response(boolean success, String data) {
-                                        KLog.e(data);
-                                        UIHelper.toast(getActivity(), success?"图片已成功下载到相册":"图片下载出错");
+                                    public void response(int code, String data) {
+                                        UIHelper.toast(getActivity(), code == 0 ? "图片已成功下载到相册" : "图片下载出错");
                                     }
                                 });
                         break;
@@ -154,8 +153,8 @@ public class ImageDetailActivity extends BaseActivity {
                                 imageUrls.get(vpImageDetail.getCurrentItem()),
                                 MD5Utils.getMD5EncryptyString16(imageUrls.get(vpImageDetail.getCurrentItem())), new Impl<String>() {
                                     @Override
-                                    public void response(boolean success, String data) {
-                                        UIHelper.toast(getActivity(), success?"图片已成功下载到相册":"图片下载出错");
+                                    public void response(int code, String data) {
+                                        UIHelper.toast(getActivity(), code == 0 ? "图片已成功下载到相册" : "图片下载出错");
                                     }
                                 });
                         break;

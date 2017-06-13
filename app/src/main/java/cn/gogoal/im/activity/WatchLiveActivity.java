@@ -60,7 +60,6 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.LiveOnlinePersonData;
 import cn.gogoal.im.common.AnimationUtils;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -282,7 +281,7 @@ public class WatchLiveActivity extends BaseActivity {
                 @Override
                 public void done(AVIMException e) {
                     //拉取群通讯录并缓存本地
-                    UserUtils.getChatGroup(conversation.getMembers(), conversation.getConversationId(), new UserUtils.getSquareInfo() {
+                    UserUtils.getChatGroup(conversation.getMembers(), conversation.getConversationId(), new UserUtils.SquareInfoCallback() {
                         @Override
                         public void squareGetSuccess(JSONObject object) {
                             KLog.e(object.toJSONString());

@@ -141,28 +141,28 @@
 //        new GGOKHTTP(param, GGOKHTTP.SEARCH_FRIEND, ggHttpInterface).startGet();
 //    }
 //
-////    private class LoadSearchResult extends AsyncTask<String, Void, String> {
-////
-////        @Override
-////        protected String doInBackground(String... params) {
-////            if (getActivity() != null)
-////                mAdapter = new Adapter(mList);
-////            return "Executed";
-////            return "";
-////        }
-////
-////        @Override
-////        protected void onPostExecute(String result) {
-//////            recyclerView.setAdapter(mAdapter);
-//////            if (RecentActivity.this != null)
-//////                recyclerView.addItemDecoration(new DividerItemDecoration(RecentActivity.this, DividerItemDecoration.VERTICAL_LIST));
-////
-////        }
-////
-////        @Override
-////        protected void onPreExecute() {
-////
-////        }
-////    }
+//    private class LoadSearchResult extends AsyncTask<String, Void, String> {
 //
+//        @Override
+//        protected String doInBackground(String... params) {
+//            if (getActivity() != null)
+//                mAdapter = new Adapter(mList);
+//            return "Executed";
+//            return "";
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String result) {
+//            recyclerView.setAdapter(mAdapter);
+//            if (RecentActivity.this != null)
+//                recyclerView.addItemDecoration(new DividerItemDecoration(RecentActivity.this, DividerItemDecoration.VERTICAL_LIST));
+//
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//
+//        }
+//    }
+
 //}

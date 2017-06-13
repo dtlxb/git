@@ -10,8 +10,10 @@ import java.util.ArrayList;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.NormalIntentUtils;
-import hply.com.niugu.StringUtils;
+import cn.gogoal.im.common.StockUtils;
 import hply.com.niugu.bean.StockData;
+
+import static cn.gogoal.im.common.StringUtils.pareseStringDouble;
 
 
 /**
@@ -42,32 +44,33 @@ public class MarketTitleAdapter extends MyBaseAdapter<StockData> {
             holder.price.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.gray_light));
             holder.price.setText("停牌");
 
-            double price = StringUtils.get2Double(list.get(position).getCurrent_price());
+            String price = cn.gogoal.im.common.StringUtils.save2Significand(list.get(position).getCurrent_price());
             holder.price.setText(String.valueOf(price));
 
         } else {
             holder.price.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.text_color_normal));
-            holder.price.setText(String.valueOf(StringUtils.get2Double(list.get(position).getCurrent_price())));
+//            holder.price.setText(String.valueOf(StringUtils.get2Double(list.get(position).getCurrent_price())));
+            holder.price.setText(pareseStringDouble((list.get(position).getCurrent_price()),2));
 
             try {
-                holder.price.setText(String.valueOf(StringUtils.get2Double(list.get(position).getCurrent_price())));
+                holder.price.setText(String.valueOf(pareseStringDouble(list.get(position).getCurrent_price(),2)));
             } catch (Exception e) {
                 holder.price.setText("0.00");
             }
         }
 
-        if (StringUtils.getDouble(list.get(position).getRate()) < 0) {
+        if (pareseStringDouble(list.get(position).getRate()) < 0) {
             holder.rate.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.stock_green));
-            holder.rate.setText(String.valueOf(StringUtils.get2Double(list.get(position).getRate()) + "%"));
-        } else if (StringUtils.getDouble(list.get(position).getRate()) == 0) {
+            holder.rate.setText(String.valueOf(StockUtils.plusMinus(list.get(position).getRate(),true)));
+        } else if (pareseStringDouble(list.get(position).getRate()) == 0) {
             holder.rate.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.gray_light));
-            holder.rate.setText(String.valueOf(StringUtils.get2Double(list.get(position).getRate()) + "%"));
+            holder.rate.setText(StockUtils.plusMinus(list.get(position).getRate(),true));
         } else {
             holder.rate.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.stock_red));
-            holder.rate.setText("+" + String.valueOf(StringUtils.get2Double(list.get(position).getRate()) + "%"));
+            holder.rate.setText(StockUtils.plusMinus(list.get(position).getRate(),true));
         }
-        holder.code.setText(list.get(position).getStock_code() + "");
-        holder.name.setText(list.get(position).getStock_name() + "");
+        holder.code.setText(list.get(position).getStock_code());
+        holder.name.setText(list.get(position).getStock_name());
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

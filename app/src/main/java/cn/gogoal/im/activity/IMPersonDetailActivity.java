@@ -11,12 +11,9 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -24,11 +21,10 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.BaseInfo;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.UserDetailInfo;
-import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -84,50 +80,44 @@ public class IMPersonDetailActivity extends BaseActivity {
 
     private void getUsernfo() {
         xLayout.setStatus(XLayout.Loading);
-        final Map<String, String> param = new HashMap<>();
-        param.put("token", UserUtils.getToken());
-        param.put("account_id", String.valueOf(accountId));
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+
+        UserUtils.getUserInfo(String.valueOf(accountId), new Impl<String>() {
             @Override
-            public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
-                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+            public void response(int code, String data) {
+                switch (code) {
+                    case Impl.RESPON_DATA_SUCCESS:
+                        ContactBean contactBean = JSONObject.parseObject(data, ContactBean.class);
+                        List<UserDetailInfo> infos = new ArrayList<>();
 
-                    contactBean = JSONObject.parseObject(responseInfo, BaseInfo.class).getData();
+                        infos.add(new UserDetailInfo<>(UserDetailInfo.HEAD,
+                                (String) contactBean.getAvatar(), contactBean.getFull_name(), contactBean.getNickname()));
 
-                    List<UserDetailInfo> infos = new ArrayList<>();
-
-                    infos.add(new UserDetailInfo<>(UserDetailInfo.HEAD,
-                            (String) contactBean.getAvatar(), contactBean.getFull_name(), contactBean.getNickname()));
-
-                    infos.add(new UserDetailInfo(UserDetailInfo.SPACE));
-                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, false, "地区", "--"));
-                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, false, "公司", contactBean.getOrg_name()));
-                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, false, "职位", contactBean.getDuty()));
-                    infos.add(new UserDetailInfo(UserDetailInfo.SPACE));
-                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, false, "个人描述", contactBean.getDuty()));
+                        infos.add(new UserDetailInfo(UserDetailInfo.SPACE));
+                        infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, false, "地区", "--"));
+                        infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, false, "公司", contactBean.getOrg_name()));
+                        infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, false, "职位", contactBean.getDuty()));
+                        infos.add(new UserDetailInfo(UserDetailInfo.SPACE));
+                        infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, false, "个人描述", contactBean.getDuty()));
 //                    infos.add(new UserDetailInfo(UserDetailInfo.SPACE));
 //                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, true, "研网活动(5)", ""));
 //                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, true, "参加活动活动(4)", ""));
 //                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, true, "加入群组(3)", ""));
 
-                    personDetailRecycler.setAdapter(new UserInfoAdapter(infos));
+                        personDetailRecycler.setAdapter(new UserInfoAdapter(infos));
 
-                    xLayout.setStatus(XLayout.Success);
-                } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
-                    xLayout.setStatus(XLayout.Empty);
-                } else {
-                    UIHelper.toastResponseError(getActivity(), responseInfo);
-                    xLayout.setStatus(XLayout.Error);
+                        xLayout.setStatus(XLayout.Success);
+                        break;
+                    case Impl.RESPON_DATA_EMPTY:
+                        xLayout.setStatus(XLayout.Empty);
+                        break;
+                    case Impl.RESPON_DATA_ERROR:
+                        UIHelper.toast(getActivity(), data);
+                        xLayout.setStatus(XLayout.Error);
+                        break;
                 }
             }
+        });
 
-            @Override
-            public void onFailure(String msg) {
-                UIHelper.toastError(getActivity(), msg, xLayout);
-            }
-        };
-        new GGOKHTTP(param, GGOKHTTP.GET_ACCOUNT_DETAIL, ggHttpInterface).startGet();
     }
 
     @Override
@@ -194,16 +184,16 @@ public class IMPersonDetailActivity extends BaseActivity {
                     holder.setText(R.id.person_name, data.getNickName());
 
                     /*设置备注，暂无接口*/
-                  TextView tvRemark = holder.getView(R.id.person_mark);
+                    TextView tvRemark = holder.getView(R.id.person_mark);
                     tvRemark.setText(String.valueOf(accountId).equals(UserUtils.getMyAccountId()) ?
                             "账号：" + UserUtils.getGoGoalId() : "备注：");
 
                     Drawable drawable = String.valueOf(accountId).equals(UserUtils.getMyAccountId()) ?
-                            null: ContextCompat.getDrawable(IMPersonDetailActivity.this,R.mipmap.img_edit_remark);
-                    if (drawable!=null) {
+                            null : ContextCompat.getDrawable(IMPersonDetailActivity.this, R.mipmap.img_edit_remark);
+                    if (drawable != null) {
                         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     }
-                    tvRemark.setCompoundDrawables(null,null,drawable,null);
+                    tvRemark.setCompoundDrawables(null, null, drawable, null);
 
                     break;
                 case UserDetailInfo.SPACE:

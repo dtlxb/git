@@ -20,55 +20,45 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="189dp"
-                android:background="@drawable/shape_text_border"
+                android:orientation="vertical"
                 android:gravity="center">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <com.hply.roundimage.roundImage.RoundedImageView
+                    android:id="@+id/iv_square_head"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp" />
 
-                    <com.hply.roundimage.roundImage.RoundedImageView
-                        android:id="@+id/iv_square_head"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:layout_centerHorizontal="true" />
+                <TextView
+                    android:id="@+id/tv_square_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:textColor="@color/textColor_333333"
+                    android:textSize="17sp" />
 
-                    <TextView
-                        android:id="@+id/tv_square_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/iv_square_head"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="16dp"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:textColor="@color/textColor_333333"
-                        android:textSize="17dp" />
-
-                    <TextView
-                        android:id="@+id/tv_square_detail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/tv_square_name"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="9dp"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:textColor="@color/textColor_666666"
-                        android:textSize="17dp" />
+                <TextView
+                    android:id="@+id/tv_square_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:textColor="@color/textColor_666666"
+                    android:textSize="17sp" />
 
 
-                </RelativeLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="19dp"
+                android:layout_marginTop="15dp"
                 android:background="@drawable/shape_text_border"
                 android:orientation="vertical">
 
@@ -112,52 +102,66 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/person_base_info"
+            <RelativeLayout
+                android:id="@+id/tv_what_square"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="19dp"
-                android:background="@drawable/shape_text_border"
-                android:orientation="vertical"
-                android:paddingEnd="15dp"
-                android:paddingStart="15dp">
+                android:gravity="center_vertical"
+                android:layout_marginTop="15dp"
+                android:padding="15dp"
+                android:background="@drawable/shape_line_top_and_bottom">
 
-                <RelativeLayout
-                    android:id="@+id/tv_what_square"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp">
+                    android:text="@string/im_str_square_notice"
+                    android:textColor="@color/textColor_333333"
+                    android:textSize="16sp" />
 
-                    <TextView
-                        android:id="@+id/tv_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/im_str_square_notice"
-                        android:textColor="@color/textColor_333333"
-                        android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/square_notice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_name"
+                    android:layout_marginTop="12dp"
+                    android:textColor="@color/textColor_333333"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
 
-                    <TextView
-                        android:id="@+id/square_notice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/tv_name"
-                        android:layout_marginTop="12dp"
-                        android:textColor="@color/textColor_333333"
-                        android:textSize="16sp"
-                        android:visibility="gone" />
+            </RelativeLayout>
 
-                </RelativeLayout>
-
-
-            </LinearLayout>
-
-            <View
+            <RelativeLayout
+                android:id="@+id/layout_square_qrcode"
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginTop="28dp"
-                android:background="@color/colorDivider_d9d9d9" />
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_line_top_and_bottom"
+                android:padding="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="群二维码"
+                    android:textColor="@color/textColor_333333"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@+id/iv_more"
+                    android:contentDescription="@null"
+                    android:src="@mipmap/img_qr_code_gray" />
+
+                <ImageView
+                    android:id="@+id/iv_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@null"
+                    android:src="@mipmap/img_more" />
+            </RelativeLayout>
 
             <cn.gogoal.im.ui.view.SelectorButton
                 android:id="@+id/jion_group"

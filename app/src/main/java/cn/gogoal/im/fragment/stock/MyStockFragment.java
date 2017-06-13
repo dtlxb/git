@@ -444,16 +444,17 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     rateView.setText(StockUtils.plusMinus(data.getChange_rate(), true));
                     rateView.setBackgroundResource(R.drawable.shape_my_stock_price_gray);
                 } else {
-                    typeView.setVisibility(View.GONE);
+                    typeView.setText("指数");
+                    typeView.setVisibility(data.getSymbol_type() == 2 ? View.VISIBLE : View.GONE);
                     rateView.setBackgroundResource(StockUtils.getStockRateBackgroundRes(data.getChange_rate()));
 
-                    if (data.getSymbol_type()==1) {
+                    if (data.getSymbol_type() == 1) {
                         if (data.getStock_type() == 1) {//是否停牌退市啥的
                             rateView.setText(StockUtils.plusMinus(data.getChange_rate(), true));
                         } else {
                             rateView.setText(StockUtils.getStockStatus(data.getStock_type()));
                         }
-                    }else {
+                    } else {
                         rateView.setText(StockUtils.plusMinus(data.getChange_rate(), true));
                     }
 
@@ -486,7 +487,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     } else if (data.getSymbol_type() == 2) {//指数类型
                         Intent intent = new Intent(getContext(), StockDetailMarketIndexActivity.class);
                         intent.putExtra("stockName", data.getStock_name());
-                        intent.putExtra("stockCode", data.getSource()+data.getStock_code());
+                        intent.putExtra("stockCode", data.getSource() + data.getStock_code());
                         startActivity(intent);
 
                     } else {//基金、债券、其他类型

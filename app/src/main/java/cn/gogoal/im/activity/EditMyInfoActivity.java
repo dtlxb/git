@@ -119,8 +119,9 @@ public class EditMyInfoActivity extends BaseActivity {
                 case UserDetailInfo.HEAD:
                     UserUtils.getUserAvatar(new Impl<Bitmap>() {
                         @Override
-                        public void response(boolean success, Bitmap data) {
-                            circleImageView.setImageBitmap(data);
+                        public void response(int code, Bitmap data) {
+                            if (code == 0)
+                                circleImageView.setImageBitmap(data);
                         }
                     });
 

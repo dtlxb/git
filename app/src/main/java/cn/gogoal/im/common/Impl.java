@@ -7,5 +7,12 @@ package cn.gogoal.im.common;
  * description :${annotated}.
  */
 public interface Impl<T> {
-    void response(boolean success,T data);
+
+    int RESPON_DATA_EMPTY = 1001;//无数据
+
+    int RESPON_DATA_SUCCESS = 0;//成功
+
+    int RESPON_DATA_ERROR = 500;//出错
+
+    void response(int code, T data);
 }
