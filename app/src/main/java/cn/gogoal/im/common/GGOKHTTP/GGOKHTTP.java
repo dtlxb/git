@@ -734,6 +734,12 @@ public class GGOKHTTP {
      */
     public static final String FINANCIAL_ANALYSIS = "v1/f10/financial_analysis";
 
+    /**
+     * F10-股票特殊类型
+     * params stock_code
+     */
+    public static final String GET_STOCK_FINANCIAL_TYPE = "v1/f10/get_stock_financial_type";
+
 //--------------------------------------------------------------------------------------------------
 
     /**
