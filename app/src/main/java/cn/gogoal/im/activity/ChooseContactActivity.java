@@ -146,7 +146,6 @@ public class ChooseContactActivity extends BaseActivity {
 //            rvContacts.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
 //            rvDel.setAdapter(new DeleteAdapter());
 //        }
-
         //1100
         itContactBean = (ContactBean) getIntent().getSerializableExtra("seri");
 

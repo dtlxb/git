@@ -10,53 +10,100 @@
     android:orientation="vertical"
     tools:context=".activity.Face2FaceActivity">
 
-    <include layout="@layout/include_title" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
-        android:gravity="center_horizontal"
-        android:lineSpacingExtra="3dp"
-        android:text="和身边的朋友输入同样的四个数字\n进入同一个群聊"
-        android:textColor="#6e7275"
-        android:textSize="20sp" />
+    <include
+        layout="@layout/include_title" />
 
     <LinearLayout
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="25dp">
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/iv_dot_1"
-            style="@style/DotSoftKeyboardStyle" />
+        <TextView
+            android:id="@+id/tv_flag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="3dp"
+            android:text="和身边的朋友输入同样的四个数字\n进入同一个群聊"
+            android:textColor="#6e7275"
+            android:textSize="18sp" />
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/iv_dot_2"
-            style="@style/DotSoftKeyboardStyle" />
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/iv_dot_3"
-            style="@style/DotSoftKeyboardStyle" />
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/iv_dot_1"
+                style="@style/DotSoftKeyboardStyle" />
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/iv_dot_4"
-            style="@style/DotSoftKeyboardStyle" />
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/iv_dot_2"
+                style="@style/DotSoftKeyboardStyle" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/iv_dot_3"
+                style="@style/DotSoftKeyboardStyle" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/iv_dot_4"
+                style="@style/DotSoftKeyboardStyle" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_members"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingEnd="35dp"
+            android:visibility="invisible"
+            android:paddingStart="35dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="这些朋友也将加入群聊"
+                android:textColor="#6e7275"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
+                android:background="#6e7275" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_member"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_soft_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="android.support.v7.widget.GridLayoutManager"
+            app:spanCount="3"
+            tools:listitem="@layout/item_soft_input" />
+
+        <cn.gogoal.im.ui.view.SelectorButton
+            android:id="@+id/btn_goin"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="25dp"
+            android:text="进入该群"
+            android:visibility="gone"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            app:radius="5dp" />
+
     </LinearLayout>
-
-    <android.support.v4.widget.Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_soft_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layoutManager="android.support.v7.widget.GridLayoutManager"
-        app:spanCount="3"
-        tools:listitem="@layout/item_soft_input" />
-
 
 </LinearLayout>

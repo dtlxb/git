@@ -1,26 +1,35 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.base.AppManager;
+import cn.gogoal.im.adapter.RecommendAdapter;
+import cn.gogoal.im.adapter.SearchPersionResultAdapter;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.fragment.SearchPersionFragment;
-import cn.gogoal.im.fragment.SearchTeamFragment;
+import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.group.GroupCollectionData;
+import cn.gogoal.im.bean.group.GroupData;
+import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.view.XLayout;
 
 /**
  * Created by huangxx on 2017/3/28.
@@ -31,14 +40,24 @@ public class SearchPersonSquareActivity extends BaseActivity {
     @BindArray(R.array.searchTitle)
     String[] searchTitle;
 
-    @BindView(R.id.tab_search_persion_team)
-    TabLayout tabSearchPersionTeam;
+    @BindView(R.id.xLayout)
+    XLayout xLayout;
 
     @BindView(R.id.layout_2search)
     AppCompatEditText layout2search;
 
-    @BindView(R.id.vp_search_persion_team)
-    ViewPager vpSearchPersionTeam;
+    @BindView(R.id.rv_search_result)
+    RecyclerView rvSearchResult;
+
+    private ArrayList<ContactBean> searchResultList;
+    private SearchPersionResultAdapter persionAdapter;
+
+    private ArrayList<GroupData> groupDatas;
+    private RecommendAdapter groupdAdapter;
+
+    private int page = 1;
+
+    private int searchIndex;//搜索类型
 
     @Override
     public int bindLayout() {
@@ -47,57 +66,159 @@ public class SearchPersonSquareActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        setMyTitle(R.string.square_collcet_add, true);
+        searchIndex = getIntent().getIntExtra("search_index", 0);
+        setMyTitle(searchIndex==0?"搜索好友":"搜索群", true);
 
-        final int searchIndex = getIntent().getIntExtra("search_index", 0);
+        initData();
+        //一些监听
+        iniListener();
 
-        SearchPersionFragment persionFragment = new SearchPersionFragment();
-        SearchTeamFragment teamFragment = new SearchTeamFragment();
+        if (searchIndex==1){
+            getRecommendGroup(AppConst.REFRESH_TYPE_FIRST,null);
+        }
+    }
 
-        final Fragment[] fragments = new Fragment[]{persionFragment, teamFragment};
+    //初始化数据
+    private void initData() {
+        if (searchIndex==0){
+            searchResultList=new ArrayList<>();
+            persionAdapter=new SearchPersionResultAdapter(searchResultList);
+            rvSearchResult.setAdapter(persionAdapter);
+        }else {
+            groupDatas=new ArrayList<>();
+            groupdAdapter=new RecommendAdapter(getActivity(),groupDatas);
+            rvSearchResult.setAdapter(groupdAdapter);
+        }
+    }
 
-        vpSearchPersionTeam.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+    //初始化监听
+    private void iniListener() {
+        xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
             @Override
-            public Fragment getItem(int position) {
-                return fragments[position];
-            }
-
-            @Override
-            public int getCount() {
-                return searchTitle.length;
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return searchTitle[position];
+            public void onReload(View v) {
+                switch (searchIndex) {
+                    case 0:
+                        searchPersion(layout2search.getText().toString());
+                        break;
+                    case 1:
+                        getRecommendGroup(AppConst.REFRESH_TYPE_PARENT_BUTTON,
+                                layout2search.getText().toString());
+                        break;
+                }
             }
         });
-
-        tabSearchPersionTeam.setupWithViewPager(vpSearchPersionTeam);
-
-        try {
-            tabSearchPersionTeam.getTabAt(searchIndex).select();
-        } catch (NullPointerException e) {
-            KLog.e("Tab不存在");
-        }
 
         layout2search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     if (!TextUtils.isEmpty(layout2search.getText())) {
-                        if (vpSearchPersionTeam.getCurrentItem()==0) {
-                            AppManager.getInstance().sendMessage("SEARCH_PERSION_TAG", layout2search.getText().toString());
-                        }else {
-                            AppManager.getInstance().sendMessage("SEARCH_TEAM_TAG", layout2search.getText().toString());
+                        switch (searchIndex) {
+                            case 0:
+                                searchPersion(layout2search.getText().toString());
+                                break;
+                            case 1:
+                                getRecommendGroup(AppConst.REFRESH_TYPE_PARENT_BUTTON,
+                                        layout2search.getText().toString());
+                                break;
                         }
-                        AppDevice.hideSoftKeyboard(layout2search);
                     }
                     return true;
                 }
                 return false;
             }
         });
+    }
+
+    private void searchPersion(final String keyword) {
+        final Map<String, String> param = new HashMap<>();
+        param.put("token", UserUtils.getToken());
+        param.put("page", String.valueOf(page));
+        param.put("rows", "20");
+        param.put("keyword", keyword);
+        KLog.e("token=" + UserUtils.getToken() + "&keyword=" + keyword);
+
+        new GGOKHTTP(param, GGOKHTTP.SEARCH_FRIEND, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+
+                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                    JSONObject jsonObject = JSONObject.parseObject(responseInfo);
+
+                    searchResultList.addAll(JSONObject.parseArray(jsonObject.getJSONArray("data")
+                            .toJSONString(), ContactBean.class));
+
+                    persionAdapter.setEnableLoadMore(true);
+
+                    persionAdapter.loadMoreComplete();
+
+                    persionAdapter.notifyDataSetChanged();
+
+                    xLayout.setStatus(XLayout.Success);
+
+                    persionAdapter.removeAllHeaderView();
+
+                } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
+                    xLayout.setEmptyText(String.format(getString(R.string.str_result), keyword) + "的用户");
+                    xLayout.setStatus(XLayout.Empty);
+                } else {
+                    UIHelper.toastResponseError(getActivity(), responseInfo);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(getActivity(), R.string.net_erro_hint);
+            }
+        }).startGet();
+    }
+
+    /**
+     * 搜群
+     */
+    private void getRecommendGroup(final int loadType, final String keyword) {
+        if (loadType == AppConst.REFRESH_TYPE_FIRST) {
+            xLayout.setStatus(XLayout.Loading);
+        }
+        Map<String, String> map = new HashMap<>();
+        map.put("token", UserUtils.getToken());
+        if (!TextUtils.isEmpty(keyword)) {
+            map.put("keyword", keyword);
+        }
+        map.put("is_recommend", String.valueOf(TextUtils.isEmpty(keyword)));
+
+        new GGOKHTTP(map, GGOKHTTP.SEARCH_GROUP, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                    groupDatas.clear();
+                    GroupCollectionData groupCollectionData = JSONObject.parseObject(responseInfo, GroupCollectionData.class);
+                    if (null != groupCollectionData.getData()) {
+                        groupDatas.addAll(groupCollectionData.getData());
+                        groupdAdapter.notifyDataSetChanged();
+                        xLayout.setStatus(XLayout.Success);
+                    }
+                } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
+                    xLayout.setStatus(XLayout.Empty);
+                    xLayout.setEmptyText(String.format(getString(R.string.str_result), keyword) + "群组");
+                    UIHelper.toastResponseError(getActivity(), responseInfo);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
+                    @Override
+                    public void onReload(View v) {
+                        getRecommendGroup(AppConst.REFRESH_TYPE_SWIPEREFRESH,
+                                loadType == AppConst.REFRESH_TYPE_PARENT_BUTTON ? keyword : "");
+                    }
+                });
+
+                UIHelper.toastError(getActivity(), msg, xLayout);
+            }
+        }).startGet();
     }
 
 }

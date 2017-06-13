@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorTitle"
     android:focusable="true"
+    android:id="@+id/layout_main"
     android:fitsSystemWindows="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical">

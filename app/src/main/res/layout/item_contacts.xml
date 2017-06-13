@@ -30,7 +30,7 @@
         android:contentDescription="@null"
         android:scaleType="centerCrop"
         android:src="@mipmap/image_placeholder"
-        app:riv_corner_radius="4dp" />
+        app:riv_corner_radius="@dimen/icon_radius" />
 
     <RelativeLayout
         android:layout_width="0dp"

@@ -105,6 +105,7 @@
         <service
             android:name=".servise.AppBackServise"
             android:exported="false" />
+        <service android:name="com.amap.api.location.APSService" />
 
         <activity
             android:name=".activity.MainActivity"
@@ -163,6 +164,7 @@
         <activity android:name=".wxapi.WXPayEntryActivity" />
         <activity android:name=".activity.IMAddFriendActivity" />
         <activity android:name=".wxapi.WXEntryActivity" />
+        <activity android:name=".activity.AddFraendListActivity"/>
 
         <uses-library
             android:name="com.google.android.maps"
@@ -230,6 +232,7 @@
         <activity android:name=".activity.stock.StockFtenActivity" />
         <activity android:name=".activity.Face2FaceActivity" />
         <activity android:name=".activity.Face2FaceHolderActivity"/>
+        <activity android:name=".activity.QrcodeProcessActivity"/>
     </application>
 
 </manifest>

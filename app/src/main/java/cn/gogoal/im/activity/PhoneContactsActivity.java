@@ -140,9 +140,9 @@ public class PhoneContactsActivity extends BaseActivity {
         XTitle.TextAction textAction = new XTitle.TextAction("添加") {
             @Override
             public void actionClick(View view) {
-                /*Intent intent = new Intent(PhoneContactsActivity.this, SearchPersonSquareActivity.class);
+                Intent intent = new Intent(PhoneContactsActivity.this, SearchPersonSquareActivity.class);
                 intent.putExtra("search_index", 0);
-                startActivity(intent);*/
+                startActivity(intent);
             }
         };
 
