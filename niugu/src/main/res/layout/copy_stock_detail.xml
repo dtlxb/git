@@ -309,9 +309,8 @@
                             android:id="@+id/iv_show_info_dialog"
                             android:layout_width="wrap_content"
                             android:layout_height="110dp"
-                            android:layout_marginEnd="@dimen/space_10"
                             android:contentDescription="@null"
-                            android:paddingEnd="5dp"
+                            android:paddingEnd="15dp"
                             android:paddingStart="5dp"
                             android:scaleType="centerInside"
                             android:src="@mipmap/img_drop_down" />
