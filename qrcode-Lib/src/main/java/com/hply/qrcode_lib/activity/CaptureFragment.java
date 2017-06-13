@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -96,7 +97,7 @@ public class CaptureFragment extends Fragment implements SurfaceHolder.Callback 
         characterSet = null;
 
         playBeep = true;
-        AudioManager audioService = (AudioManager) getActivity().getSystemService(getActivity().AUDIO_SERVICE);
+        AudioManager audioService = (AudioManager) getActivity().getSystemService(FragmentActivity.AUDIO_SERVICE);
         if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
             playBeep = false;
         }

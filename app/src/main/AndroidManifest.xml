@@ -165,6 +165,7 @@
         <activity android:name=".wxapi.WXPayEntryActivity" />
         <activity android:name=".activity.IMAddFriendActivity" />
         <activity android:name=".wxapi.WXEntryActivity" />
+        <activity android:name=".activity.AddFraendListActivity"/>
 
         <uses-library
             android:name="com.google.android.maps"
@@ -233,6 +234,7 @@
         <activity android:name=".activity.MyQrCodeActivity" />
         <activity android:name=".activity.Face2FaceActivity" />
         <activity android:name=".activity.Face2FaceHolderActivity"/>
+        <activity android:name=".activity.QrcodeProcessActivity"/>
     </application>
 
 </manifest>

@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -23,7 +22,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.bumptech.glide.Glide;
-import com.hply.qrcode_lib.activity.CodeUtils;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
@@ -39,14 +37,14 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.AddFraendListActivity;
 import cn.gogoal.im.activity.ChooseContactActivity;
 import cn.gogoal.im.activity.ContactsActivity;
 import cn.gogoal.im.activity.Face2FaceActivity;
 import cn.gogoal.im.activity.IMNewFriendActivity;
 import cn.gogoal.im.activity.IMSearchLocalActivity;
 import cn.gogoal.im.activity.OfficialAccountsActivity;
-import cn.gogoal.im.activity.ScanQRCodeActivity;
-import cn.gogoal.im.activity.SearchPersonSquareActivity;
+import cn.gogoal.im.activity.QrcodeProcessActivity;
 import cn.gogoal.im.activity.SingleChatRoomActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
@@ -64,28 +62,22 @@ import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.ImageUtils.UFileImageHelper;
-import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
-import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.common.ggqrcode.GGQrCode;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
 import cn.gogoal.im.ui.view.PopupMoreMenu;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static cn.gogoal.im.base.BaseActivity.initRecycleView;
-import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_CAMERA_PERM;
-import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_CODE;
 import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_LOCATION_PERM;
 
 /**
  * 消息
  */
-public class MessageFragment extends BaseFragment implements EasyPermissions.PermissionCallbacks {
+public class MessageFragment extends BaseFragment{
 
     @BindView(R.id.tv_to_search)
     DrawableCenterTextView tv_to_search;
@@ -238,7 +230,7 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
     /**
      * TODO 点击弹窗
      */
-    private void popuMore(View clickView) {
+    private void popuMore(final View clickView) {
         PopupMoreMenu popuMoreMenu = new PopupMoreMenu(getActivity());
         List<BaseIconText<Integer, String>> popuData = new ArrayList<>();
         popuData.add(new BaseIconText<>(R.mipmap.img_popu_more_scan, "扫一扫"));
@@ -254,11 +246,11 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
                         Intent intent;
                         switch (position) {
                             case 0://扫一扫
-                                cameraTask();
+                                startActivity(new Intent(clickView.getContext(), QrcodeProcessActivity.class));
                                 break;
                             case 1://找人
-                                intent = new Intent(getContext(), SearchPersonSquareActivity.class);
-                                intent.putExtra("search_index", 0);
+                                intent = new Intent(getContext(), AddFraendListActivity.class);
+//                                intent.putExtra("search_index", 0);
                                 startActivity(intent);
                                 break;
                             case 2://发起群聊
@@ -297,65 +289,6 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
 
     private void creatGroupChat() {
         startActivity(new Intent(getContext(), Face2FaceActivity.class));
-    }
-
-    @AfterPermissionGranted(REQUEST_CAMERA_PERM)
-    public void cameraTask() {
-        if (EasyPermissions.hasPermissions(getContext(), Manifest.permission.CAMERA)) {
-            // Have permission, do the thing!
-            onClick();
-        } else {
-            // Ask for one permission
-            EasyPermissions.requestPermissions(this, "需要请求camera权限",
-                    REQUEST_CAMERA_PERM, Manifest.permission.CAMERA);
-        }
-    }
-
-    private void onClick() {
-        Intent intent = new Intent(getContext(), ScanQRCodeActivity.class);
-        startActivityForResult(intent, REQUEST_CODE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // Forward results to EasyPermissions
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> perms) {
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> perms) {
-        switch (requestCode) {
-            case CodeUtils.REQUEST_CAMERA_PERM:
-                if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-                    new AppSettingsDialog.Builder(this, "当前App需要申请相机权限,需要打开设置页面么?")
-                            .setTitle("权限申请")
-                            .setPositiveButton("确认")
-                            .setNegativeButton("取消", null /* click listener */)
-                            .setRequestCode(REQUEST_CAMERA_PERM)
-                            .build()
-                            .show();
-                }
-
-                break;
-
-            case REQUEST_LOCATION_PERM:
-                if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-                    new AppSettingsDialog.Builder(this, "当前App需要申请定位权限,需要打开设置页面么?")
-                            .setTitle("权限申请")
-                            .setPositiveButton("确认")
-                            .setNegativeButton("取消", null /* click listener */)
-                            .setRequestCode(REQUEST_LOCATION_PERM)
-                            .build()
-                            .show();
-                }
-                break;
-        }
-
     }
 
     private class ListAdapter extends CommonAdapter<IMMessageBean, BaseViewHolder> {
@@ -739,48 +672,5 @@ public class MessageFragment extends BaseFragment implements EasyPermissions.Per
         AppManager.getInstance().sendMessage("correct_allmessage_count", countMessage);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        try {
-            KLog.e("==========" + data.getExtras().getString(CodeUtils.RESULT_STRING) + "===========");
-        } catch (Exception e) {
-            e.getMessage();
-        }
 
-        KLog.e("requestCode==" + requestCode);
-
-        if (requestCode == REQUEST_CODE) {
-            //处理扫描结果（在界面上显示）
-            if (null != data) {
-                Bundle bundle = data.getExtras();
-                if (bundle == null) {
-                    return;
-                }
-                if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
-                    String result = bundle.getString(CodeUtils.RESULT_STRING);
-
-                    String codeBody = GGQrCode.getUserQrCodeBody(result);
-
-                    try {
-                        JSONObject scanBody = JSONObject.parseObject(codeBody);
-                        if (scanBody.getString("qrType").equalsIgnoreCase("0")) {
-                            //TODO 跳转个人详情
-                            NormalIntentUtils.go2PersionDetail(getContext(),
-                                    Integer.parseInt(scanBody.getString("account_id")));
-
-                        } else if (scanBody.getString("qrType").equalsIgnoreCase("1")) {
-                            //TODO 跳转群名片
-                        }
-
-                    } catch (Exception e) {
-                        e.getMessage();
-                        KLog.e("结果不是json");
-                    }
-
-                } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
-                    UIHelper.toast(getActivity(), "解析出错");
-                }
-            }
-        }
-    }
 }

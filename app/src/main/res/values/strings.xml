@@ -179,7 +179,7 @@
     <string name="str_account_exit">该手机号已注册，请直接登录</string>
     <string name="str_title_back">返回</string>
     <string name="str_login_in">登录</string>
-    <string name="str_login_at_time">登录中...</string>
+    <string name="str_login_at_time">登录中&#8230;</string>
     <string name="str_login_register">注册</string>
     <string name="str_login_sure">确  定</string>
     <string name="str_login_confirm">信息验证</string>
@@ -218,4 +218,6 @@
     <string name="title_change_phone">更换手机号</string>
     <string name="play_introduction_null">主播很懒，什么都没有留下。</string>
 
+    <string name="linear_layout_manager">android.support.v7.widget.LinearLayoutManager</string>
+    <string name="grid_layout_manager">android.support.v7.widget.GridLayoutManager</string>
 </resources>

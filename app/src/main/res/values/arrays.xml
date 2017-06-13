@@ -124,4 +124,11 @@
         <item>免责申明</item>
         <item>服务协议</item>
     </string-array>
+
+    <string-array name="addFriendArray">
+        <item>输入信息找好友</item>
+        <item>输入信息搜索群</item>
+        <item>扫一扫加好友</item>
+        <item>添加手机通讯录</item>
+    </string-array>
 </resources>

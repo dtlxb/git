@@ -43,7 +43,7 @@
                         android:adjustViewBounds="true"
                         android:contentDescription="@null"
                         android:src="@mipmap/logo"
-                        app:riv_corner_radius="4dp" />
+                        app:riv_corner_radius="@dimen/icon_radius" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
