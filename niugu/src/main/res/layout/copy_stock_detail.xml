@@ -71,11 +71,12 @@
 
         <ImageView
             android:id="@+id/btnRefresh"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"
+            android:contentDescription="@null"
+            android:scaleType="centerInside"
             android:src="@drawable/refresh_white" />
 
     </RelativeLayout>

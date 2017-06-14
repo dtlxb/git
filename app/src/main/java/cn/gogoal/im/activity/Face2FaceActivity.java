@@ -196,7 +196,14 @@ public class Face2FaceActivity extends BaseActivity {
             count++;
             if (count == 4) {
                 //创建群、获取加入群
-                creatGoupChart();
+                if (locationClient != null) {
+                    creatGoupChart();
+                } else {
+                    WaitDialog dialog = WaitDialog.getInstance("获取位置信息出错，请重新进入重试", R.mipmap.login_error, false);
+                    dialog.show(getSupportFragmentManager());
+                    dialog.setCancelOutside(false);
+                    dialog.dismiss(false,true);
+                }
             }
         }
     }
@@ -232,7 +239,7 @@ public class Face2FaceActivity extends BaseActivity {
 
                     memberDatas.add(contactMe);
 
-                    if (groupData.getM_info()!=null){
+                    if (groupData.getM_info() != null) {
                         memberDatas.addAll(groupData.getM_info());
                     }
 

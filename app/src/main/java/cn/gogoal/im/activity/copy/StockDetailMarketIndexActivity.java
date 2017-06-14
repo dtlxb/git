@@ -9,6 +9,7 @@ import android.support.annotation.ColorRes;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.RotateAnimation;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -53,7 +55,6 @@ import cn.gogoal.im.ui.copy.TimesFivesBitmap;
 import cn.gogoal.im.ui.stock.KChartsBitmap;
 import hply.com.niugu.DeviceUtil;
 import hply.com.niugu.StringUtils;
-import hply.com.niugu.autofixtext.AutofitTextView;
 import hply.com.niugu.bean.StockData;
 import hply.com.niugu.bean.StockDetailMarketIndexBean;
 import hply.com.niugu.bean.StockDetailMarketIndexData;
@@ -70,17 +71,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     TimesFivesBitmap fiveDayBitmap;
     TimesFivesBitmap timesBitmap;
     StockMinuteBean timesBean;
-    //    //五个图的布局
-//    @BindView(R.id.charts_min_line_layout)
-//    RelativeLayout tiemsLayout;
-//    @BindView(R.id.charts_fiveday_k_layout)
-//    RelativeLayout fivedayLayout;
-//    @BindView(R.id.charts_day_k_layout)
-//    RelativeLayout daykLayout;
-//    @BindView(R.id.charts_week_k_layout)
-//    RelativeLayout weekkLayout;
-//    @BindView(R.id.charts_mouth_k_layout)
-//    RelativeLayout monthkLayout;
     //返回
     @BindView(R.id.btnBack)
     LinearLayout btnBack;
@@ -98,7 +88,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     ImageView btnRefresh;
     //刷新按钮加载菊花动画
     private RotateAnimation rotateAnimation;
-//    protected RotateAnimation animation;
+    //    protected RotateAnimation animation;
     //数据栏
     @BindView(R.id.linear_header)
     LinearLayout linear_header;
@@ -108,31 +98,31 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     //下拉刷新rootView
     @BindView(R.id.fragment_rotate_header_with_view_group_frame)
     SwipeRefreshLayout ptrFrame;
-//    //下拉刷新头部控件
+    //    //下拉刷新头部控件
 //    private HeaderView headerView;
     //股票价格
     @BindView(R.id.stock_price)
-    AutofitTextView stock_price;
+    TextView stock_price;
     //涨跌
     @BindView(R.id.stock_detail_tv1)
-    AutofitTextView stock_detail_tv1;
+    TextView stock_detail_tv1;
     @BindView(R.id.stock_detail_tv2)
-    AutofitTextView stock_detail_tv2;
+    TextView stock_detail_tv2;
     //今开
     @BindView(R.id.textView1)
     TextView textView1;
     @BindView(R.id.stock_start)
-    AutofitTextView stock_start;
+    TextView stock_start;
     //成交量
     @BindView(R.id.textView3)
     TextView textView3;
     @BindView(R.id.stock_volume)
-    AutofitTextView stock_volume;
+    TextView stock_volume;
     //昨收
     @BindView(R.id.textView2)
     TextView textView2;
     @BindView(R.id.stock_close)
-    AutofitTextView stock_close;
+    TextView stock_close;
     //振幅
     @BindView(R.id.textView4)
     TextView textView4;
@@ -140,13 +130,13 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     TextView stock_amplitude;
     //最高
     @BindView(R.id.stock_detail_tv3)
-    AutofitTextView stock_detail_tv3;
+    TextView stock_detail_tv3;
     //涨家数
     @BindView(R.id.stock_detail_tv4)
     TextView stock_detail_tv4;
     //最低
     @BindView(R.id.stock_detail_tv5)
-    AutofitTextView stock_detail_tv5;
+    TextView stock_detail_tv5;
     //平家数
     @BindView(R.id.stock_detail_tv6)
     TextView stock_detail_tv6;
@@ -229,6 +219,16 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 
     private ArrayList<StockDetailMarketIndexData> info;
 
+    //=====================20170614===================
+    @BindView(R.id.layout_dialog)
+    TableLayout layoutDialog;
+
+    @BindView(R.id.view_dialog_mask)
+    View viewMask;
+
+    @BindView(R.id.iv_show_info_dialog)
+    ImageView imageViewShoeDialog;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_stock_detail_market_index;
@@ -246,7 +246,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         stockName = getIntent().getStringExtra("stockName");
         stockCode = getIntent().getStringExtra("stockCode");
 
-        KLog.e("stockCode="+stockCode+";stockName="+stockName);
+        KLog.e("stockCode=" + stockCode + ";stockName=" + stockName);
 
         textHeadTitle.setText(stockName + "(" + stockCode.substring(2, stockCode.length()) + ")");
         init();
@@ -758,6 +758,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                 KLog.e(responseInfo);
 
                 StockDetailMarketIndexBean bean = JSONObject.parseObject(responseInfo, StockDetailMarketIndexBean.class);
+
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     info = bean.getData();
                     //涨跌
@@ -770,6 +771,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                         stock_start.setText(StringUtils.save2Significand(info.get(0).getOpen_price()));//开盘价
                         stock_detail_tv1.setText("+" + StringUtils.save2Significand(info.get(0).getPrice_change()));
                         stock_detail_tv2.setText("+" + StringUtils.save2Significand(info.get(0).getPrice_change_rate()) + "%");
+
                     } else if (info.get(0).getPrice_change() < 0) {
                         setStatusColorId(R.color.header_green);
                         relative_header.setBackgroundColor(getResColor(R.color.header_green));
@@ -780,6 +782,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                         stock_start.setText(StringUtils.save2Significand(info.get(0).getOpen_price()));//开盘价
                         stock_detail_tv1.setText(StringUtils.save2Significand(info.get(0).getPrice_change()));
                         stock_detail_tv2.setText(StringUtils.save2Significand(info.get(0).getPrice_change_rate()) + "%");
+
                     } else {
                         setStatusColorId(R.color.header_gray);
                         relative_header.setBackgroundColor(getResColor(R.color.header_gray));
@@ -795,7 +798,15 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                     stock_close.setText(StringUtils.save2Significand(info.get(0).getClose_price()));//收盘价
                     stock_amplitude.setText(StringUtils.save2Significand(info.get(0).getAmplitude()) + "%");//振幅
                     stock_detail_tv3.setText(StringUtils.save2Significand(info.get(0).getHigh_price()));//最高
+                    stock_detail_tv3.setTextColor(getResColor(StockUtils.getStockRateColor(
+                            cn.gogoal.im.common.StringUtils.pareseStringDouble(info.get(0).getHigh_price())-
+                                    info.get(0).getClose_price())));
+
                     stock_detail_tv5.setText(StringUtils.save2Significand(info.get(0).getLow_price()));//最低
+                    stock_detail_tv5.setTextColor(getResColor(StockUtils.getStockRateColor(
+                            cn.gogoal.im.common.StringUtils.pareseStringDouble(info.get(0).getLow_price())-
+                                    info.get(0).getClose_price())));
+
                     String turnover = String.valueOf(Math.ceil(info.get(0).getTurnover() / 10000));
                     stock_detail_tv7.setText(turnover.substring(0, turnover.indexOf(".")) + "亿");//成交额
 
@@ -867,7 +878,10 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         text_state.setAlpha((float) 0.7);
     }
 
-    @OnClick({R.id.tv_increase_layout, R.id.tv_drop_layout, R.id.tv_turnover_layout})
+    @OnClick({R.id.tv_increase_layout,
+            R.id.tv_drop_layout,
+            R.id.tv_turnover_layout,
+            R.id.iv_show_info_dialog})
     public void allClick(View v) {
         switch (v.getId()) {
             case R.id.tv_increase_layout:
@@ -915,29 +929,21 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                     getMarketInformation(seat, getStockCode);
                 }
                 break;
+            case R.id.iv_show_info_dialog:
+                if (isMaskViewVisiable()) {
+                    dismissMarket();
+                } else {
+                    showStockInfoDialog();
+                }
+                break;
         }
     }
 
     private void getMarketInformation(final int seat, String getStockCode) {
         //type=0;1&channel=sh.000001
         final Map<String, String> param = new HashMap<String, String>();
-        param.put("type",String.valueOf(seat));
-        param.put("channel",getStockCode);
-        //MDZZ
-//        switch (seat) {
-//            case 0:
-//                param.put("type", "0");
-//                param.put("channel", getStockCode);
-//                break;
-//            case 1:
-//                param.put("type", "1");
-//                param.put("channel", getStockCode);
-//                break;
-//            case 2:
-//                param.put("type", "2");
-//                param.put("channel", getStockCode);
-//                break;
-//        }
+        param.put("type", String.valueOf(seat));
+        param.put("channel", getStockCode);
 
         KLog.e(cn.gogoal.im.common.StringUtils.map2ggParameter(param));
 
@@ -1155,4 +1161,85 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         }
         return avg_price;
     }
+
+    //=======================================20170614========================================
+    private boolean isMaskViewVisiable(){
+        return layoutDialog.getVisibility() == View.VISIBLE;
+    }
+
+    private void dismissMarket(){
+        if (isMaskViewVisiable()) {
+            layoutDialog.setVisibility(View.GONE);
+
+//            layoutDialog.startAnimation(
+//                    android.view.animation.AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_from_top));
+
+            viewMask.setClickable(false);
+            viewMask.setEnabled(false);//防止重复点击反复出现
+            viewMask.setVisibility(View.GONE);
+            viewMask.startAnimation(
+                    android.view.animation.AnimationUtils.loadAnimation(getActivity(), R.anim.alpha_out
+                    ));
+
+            scrollView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return false;
+                }
+            });
+            ptrFrame.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return false;
+                }
+            });
+
+            //恢复可点击
+            imageViewShoeDialog.setImageResource(R.mipmap.img_drop_down);
+        }
+    }
+
+    //显示弹窗
+    private void showStockInfoDialog() {
+//        layoutDialog.startAnimation(
+//                android.view.animation.AnimationUtils.loadAnimation(getActivity(), R.anim.slide_in_from_top));
+        layoutDialog.setVisibility(View.VISIBLE);
+
+        viewMask.setEnabled(true);
+        viewMask.setClickable(true);
+        viewMask.setVisibility(View.VISIBLE);
+        viewMask.startAnimation(
+                android.view.animation.AnimationUtils.loadAnimation(getActivity(), R.anim.alpha_in));
+
+        //点击蒙版消失
+        viewMask.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    dismissMarket();
+                    viewMask.setEnabled(false);
+                    viewMask.setClickable(false);
+                }
+                return true;
+            }
+        });
+
+        //禁止滑动
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+        //禁止下拉刷新
+        ptrFrame.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+        //禁止点击
+        imageViewShoeDialog.setImageResource(R.mipmap.img_drop_up);
+    }
+
 }
