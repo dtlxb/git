@@ -180,7 +180,7 @@ public class UserUtils {
         getUserAvatar(new Impl<Bitmap>() {
             @Override
             public void response(int code, Bitmap data) {
-                if (code==Impl.RESPON_DATA_SUCCESS) {
+                if (code == Impl.RESPON_DATA_SUCCESS) {
                     bitmap[0] = data;
                 } else {
                     bitmap[0] = BitmapFactory.decodeResource(MyApp.getAppContext().getResources(), R.mipmap.logo);
@@ -379,15 +379,13 @@ public class UserUtils {
     /*注销*/
     public static void logout(Activity mContext) {
 
-        SPTools.clearItem("userInfo");
-
-        mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
         AVIMClientManager.getInstance().close(UserUtils.getMyAccountId(), new AVIMClientCallback() {
             @Override
             public void done(AVIMClient avimClient, AVIMException e) {
-
             }
         });
+        SPTools.clearItem("userInfo");
+        mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
     }
 
     // TODO: 临时token
