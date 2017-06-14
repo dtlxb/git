@@ -1,6 +1,7 @@
 package cn.gogoal.im.fragment.stock.stockften;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.stock.FinancialAnalysisActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
@@ -259,21 +261,36 @@ public class FinancialAnalysisFragment extends BaseFragment {
     @OnClick({R.id.textProfit2, R.id.textShareEPS2, R.id.textProfitRate2, R.id.textDebtRatio2,
             R.id.textSovency2, R.id.textTurnoverRate2, R.id.textGrows2,})
     public void AnalysisOnClick(View v) {
+
+        Intent intent = new Intent(getActivity(), FinancialAnalysisActivity.class);
+        intent.putExtra("stockCode", stockCode);
+        intent.putExtra("stockName", stockName);
+        intent.putExtra("stype", stype);
+
         switch (v.getId()) {
             case R.id.textProfit2:
+                intent.putExtra("type", "1");
                 break;
             case R.id.textShareEPS2:
+                intent.putExtra("type", "2");
                 break;
             case R.id.textProfitRate2:
+                intent.putExtra("type", "3");
                 break;
             case R.id.textDebtRatio2:
+                intent.putExtra("type", "4");
                 break;
             case R.id.textSovency2:
+                intent.putExtra("type", "5");
                 break;
             case R.id.textTurnoverRate2:
+                intent.putExtra("type", "6");
                 break;
             case R.id.textGrows2:
+                intent.putExtra("type", "7");
                 break;
         }
+
+        startActivity(intent);
     }
 }

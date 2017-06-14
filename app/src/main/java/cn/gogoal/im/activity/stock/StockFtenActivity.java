@@ -50,7 +50,7 @@ public class StockFtenActivity extends BaseActivity {
         stockCode = getIntent().getStringExtra("stockCode");
         stockName = getIntent().getStringExtra("stockName");
 
-        setMyTitle(stockName + "-F10", true);
+        setMyTitle(stockName + "-资料F10", true);
 
         setNewsTab();
     }
