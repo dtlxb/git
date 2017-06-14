@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:paddingLeft="5dp"
-            android:text="上证指数（000001）"
+            android:text="爱使股份（600652）"
             android:textColor="@color/main_head_title"
             android:textSize="@dimen/text_size_16" />
 
@@ -286,88 +286,155 @@
 
                 </LinearLayout>
 
-                <TableLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:orientation="horizontal"
                     android:padding="8dp"
-                    android:stretchColumns="1,3,5">
+                    android:orientation="horizontal">
 
-                    <TableRow
+                    <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1">
 
                         <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true"
                             android:text="最   高"
                             android:textColor="@color/text_color_word"
                             android:textSize="@dimen/text_size_12" />
 
-                        <hply.com.niugu.autofixtext.AutofitTextView
-                            android:id="@+id/stock_detail_tv3"
-                            style="@style/stock_market_text_value"
-                            autofit:minTextSize="@dimen/text_size_4" />
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="最   低"
-                            android:textColor="@color/text_color_word"
-                            android:textSize="@dimen/text_size_12" />
-
-                        <hply.com.niugu.autofixtext.AutofitTextView
-                            android:id="@+id/stock_detail_tv5"
-                            style="@style/stock_market_text_value"
-                            autofit:minTextSize="@dimen/text_size_4" />
-
-                        <TextView
-                            android:text="成交额"
-                            android:textColor="@color/text_color_word"
-                            android:textSize="@dimen/text_size_12" />
-
-                        <hply.com.niugu.autofixtext.AutofitTextView
-                            android:id="@+id/stock_detail_tv7"
-                            style="@style/stock_market_text_value"
-                            autofit:minTextSize="@dimen/text_size_4" />
-
-
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
                             android:text="涨家数"
                             android:textColor="@color/text_color_word"
                             android:textSize="@dimen/text_size_12" />
 
                         <hply.com.niugu.autofixtext.AutofitTextView
-                            android:id="@+id/stock_detail_tv4"
-                            style="@style/stock_market_text_value"
+                            android:id="@+id/stock_detail_tv3"
+                            android:layout_width="70dp"
+                            android:layout_height="18dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:gravity="right"
+                            android:text="--"
+                            android:textColor="@color/text_color_number"
+                            android:textSize="@dimen/text_size_12"
                             autofit:minTextSize="@dimen/text_size_4" />
 
                         <TextView
+                            android:id="@+id/stock_detail_tv4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentRight="true"
+                            android:text="--"
+                            android:textColor="@color/text_color_number"
+                            android:textSize="@dimen/text_size_12" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="18dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true"
+                            android:text="最   低"
+                            android:textColor="@color/text_color_word"
+                            android:textSize="@dimen/text_size_12" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
                             android:text="平家数"
                             android:textColor="@color/text_color_word"
                             android:textSize="@dimen/text_size_12" />
 
                         <hply.com.niugu.autofixtext.AutofitTextView
-                            android:id="@+id/stock_detail_tv6"
-                            style="@style/stock_market_text_value"
+                            android:id="@+id/stock_detail_tv5"
+                            android:layout_width="70dp"
+                            android:layout_height="18dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:gravity="right"
+                            android:text="--"
+                            android:textColor="@color/text_color_number"
+                            android:textSize="@dimen/text_size_12"
                             autofit:minTextSize="@dimen/text_size_4" />
 
                         <TextView
+                            android:id="@+id/stock_detail_tv6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentRight="true"
+                            android:text="--"
+                            android:textColor="@color/text_color_number"
+                            android:textSize="@dimen/text_size_12" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="18dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true"
+                            android:text="成交额"
+                            android:textColor="@color/text_color_word"
+                            android:textSize="@dimen/text_size_12" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
                             android:text="跌家数"
                             android:textColor="@color/text_color_word"
                             android:textSize="@dimen/text_size_12" />
 
-                        <hply.com.niugu.autofixtext.AutofitTextView
+                        <TextView
+                            android:id="@+id/stock_detail_tv7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:text="--"
+                            android:textColor="@color/text_color_number"
+                            android:textSize="@dimen/text_size_12" />
+
+                        <TextView
                             android:id="@+id/stock_detail_tv8"
-                            style="@style/stock_market_text_value"
-                            autofit:minTextSize="@dimen/text_size_4" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentRight="true"
+                            android:text="--"
+                            android:textColor="@color/text_color_number"
+                            android:textSize="@dimen/text_size_12" />
 
-                    </TableRow>
+                    </RelativeLayout>
 
-                </TableLayout>
+                </LinearLayout>
 
 
                 <include layout="@layout/line_space_line" />

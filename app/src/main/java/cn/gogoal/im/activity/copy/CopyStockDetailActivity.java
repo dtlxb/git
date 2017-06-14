@@ -210,11 +210,6 @@ public class CopyStockDetailActivity extends BaseActivity {
     @BindView(R.id.stock_detail_choose)
     TextView stock_detail_choose;
 
-//    @BindView(R.id.stock_detail_choose_iv)
-//    ImageView stock_detail_choose_iv;
-//    @BindView(R.id.stock_detail_choose_tv)
-//    TextView stock_detail_choose_tv;
-
     private int pixels = -85;
     private String stockName;
     private String stockCode;
@@ -1476,7 +1471,8 @@ public class CopyStockDetailActivity extends BaseActivity {
                 addMyStock ? R.drawable.not_choose_stock : R.drawable.choose_stock);
 
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-        stock_detail_choose.setCompoundDrawables(null, drawable, null, null);
+
+        stock_detail_choose.setCompoundDrawables(drawable, null, null, null);
 
         stock_detail_choose.setText(addMyStock ? "已自选" : "加自选");
 
@@ -1821,7 +1817,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                 case 1:
                     if (stockType == 1) {
                         holder.setTextColor(R.id.tv_item_stock_detail_info_value,
-                                getResColor(
+                                realDouble(data.getValue()) == 0 ? Color.BLACK : getResColor(
                                         StockUtils.getStockRateColor(realDouble(data.getValue()) -
                                                 StringUtils.pareseStringDouble(closePrice))));
                     } else {

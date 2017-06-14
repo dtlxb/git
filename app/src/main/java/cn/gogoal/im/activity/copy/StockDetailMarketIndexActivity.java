@@ -97,7 +97,8 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     @BindView(R.id.btnRefresh)
     ImageView btnRefresh;
     //刷新按钮加载菊花动画
-    protected static RotateAnimation animation;
+    private RotateAnimation rotateAnimation;
+//    protected RotateAnimation animation;
     //数据栏
     @BindView(R.id.linear_header)
     LinearLayout linear_header;
@@ -216,7 +217,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     private int showItem;
     private int width;
     private int height;
-    private boolean canRefreshLine = true;
 
     @BindView(R.id.flag_layout_treat)
     LinearLayout layoutTreat;
@@ -228,7 +228,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     private int dayk4;
 
     private ArrayList<StockDetailMarketIndexData> info;
-    private RotateAnimation rotateAnimation;
 
     @Override
     public int bindLayout() {
@@ -442,20 +441,18 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 //        ptrFrame.addPtrUIHandler(headerView);
     }
 
-    private void startAnimation() {
-        if (rotateAnimation != null) {
-            rotateAnimation.startNow();
-        } else {
-            rotateAnimation = AnimationUtils.getInstance().setLoadingAnime(btnRefresh, R.mipmap.loading_white);
-            rotateAnimation.startNow();
-        }
-
-    }
-
-    private void stopAnimation() {
+    void stopAnimation() {
         if (rotateAnimation != null) {
             AnimationUtils.getInstance().cancleLoadingAnime(rotateAnimation, btnRefresh, R.mipmap.refresh_white);
+        } else {
+            btnRefresh.clearAnimation();
+            btnRefresh.setImageResource(R.mipmap.refresh_white);
         }
+    }
+
+    void startAnimation() {
+        rotateAnimation = AnimationUtils.getInstance().setLoadingAnime(btnRefresh, R.mipmap.loading_white);
+        rotateAnimation.startNow();
     }
 
     /**
@@ -553,7 +550,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     }
 
     private void GetMinLineData() {
-        canRefreshLine = false;
         HashMap<String, String> param = new HashMap<>();
         param.put("fullcode", stockCode);
         param.put("avg_line_type", "150");
@@ -576,7 +572,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                     if (map.get("0") == null && textLayout.getVisibility() == View.GONE) {
                         textLayout.setVisibility(View.VISIBLE);
                     }
-                    canRefreshLine = true;
                 }
             }
 
@@ -588,7 +583,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                 if (map.get("0") == null && textLayout.getVisibility() == View.GONE) {
                     textLayout.setVisibility(View.VISIBLE);
                 }
-                canRefreshLine = true;
             }
         };
 
@@ -596,7 +590,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     }
 
     private void getFiveData() {
-        canRefreshLine = false;
         final HashMap<String, String> param = new HashMap<>();
         param.put("fullcode", stockCode);
         param.put("day", "5");
@@ -609,7 +602,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
             if (map.get("1") == null && textLayout.getVisibility() == View.GONE) {
                 textLayout.setVisibility(View.VISIBLE);
             }
-            canRefreshLine = true;
         }
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
@@ -651,10 +643,8 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
             } else if (displayIndex == 2 && map.get("4") == null && textLayout.getVisibility() == View.GONE) {
                 textLayout.setVisibility(View.VISIBLE);
             }
-            canRefreshLine = true;
         }
 
-        canRefreshLine = false;
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
@@ -721,7 +711,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                 if (map.get("1") == null && textLayout.getVisibility() == View.GONE) {
                     textLayout.setVisibility(View.VISIBLE);
                 }
-                canRefreshLine = true;
                 break;
             case "indexRefresh3":
                 if (load_animation.getVisibility() == View.VISIBLE) {
@@ -765,7 +754,8 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-//                KLog.e(responseInfo);
+
+                KLog.e(responseInfo);
 
                 StockDetailMarketIndexBean bean = JSONObject.parseObject(responseInfo, StockDetailMarketIndexBean.class);
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
@@ -955,8 +945,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
             @Override
             public void onSuccess(String responseInfo) {
 
-                KLog.e("TYPE_"+seat,responseInfo);
-
                 StockDatas.clear();
                 StockRankBean bean = JSONObject.parseObject(responseInfo, StockRankBean.class);
 
@@ -1006,8 +994,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 
         @Override
         protected Bitmap doInBackground(String... params) {
-            canRefreshLine = false;
-            Bitmap bitmap = null;
+            Bitmap bitmap;
             int dpi = DeviceUtil.getWidth(StockDetailMarketIndexActivity.this);
             item_index = params[0];
             switch (item_index) {
@@ -1122,7 +1109,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                     mBitmapChartView.setBitmap(map.get(String.valueOf("4")));
                     break;
             }
-            canRefreshLine = true;
         }
     }
 

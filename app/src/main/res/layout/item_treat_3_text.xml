@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:minTextSize="8sp"
         app:sizeToFit="true" />
 
@@ -24,7 +24,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:singleLine="true"
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:minTextSize="8sp"
         app:sizeToFit="true" />
 
@@ -35,7 +35,7 @@
         android:layout_weight="1"
         android:gravity="center_vertical|right"
         android:singleLine="true"
-        android:textSize="12sp"
+        android:textSize="10sp"
         app:minTextSize="8sp"
         app:sizeToFit="true" />
 
