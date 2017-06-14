@@ -16,13 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.UserDetailInfo;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.UIHelper;
@@ -51,8 +52,6 @@ public class IMPersonDetailActivity extends BaseActivity {
     @BindView(R.id.xLayout)
     XLayout xLayout;
 
-    private ContactBean contactBean;
-
     @Override
     public int bindLayout() {
         return R.layout.activity_person_detail;
@@ -74,11 +73,11 @@ public class IMPersonDetailActivity extends BaseActivity {
         addFriendBtn.setText(UserUtils.isMyFriend(accountId) ? "发送消息" : "添加好友");
 
         if (accountId != -1) {
-            getUsernfo();
+            getUserInfo();
         }
     }
 
-    private void getUsernfo() {
+    private void getUserInfo() {
         xLayout.setStatus(XLayout.Loading);
 
         UserUtils.getUserInfo(String.valueOf(accountId), new Impl<String>() {
@@ -86,7 +85,7 @@ public class IMPersonDetailActivity extends BaseActivity {
             public void response(int code, String data) {
                 switch (code) {
                     case Impl.RESPON_DATA_SUCCESS:
-                        ContactBean contactBean = JSONObject.parseObject(data, ContactBean.class);
+                        final ContactBean contactBean = JSONObject.parseObject(data, ContactBean.class);
                         List<UserDetailInfo> infos = new ArrayList<>();
 
                         infos.add(new UserDetailInfo<>(UserDetailInfo.HEAD,
@@ -106,6 +105,13 @@ public class IMPersonDetailActivity extends BaseActivity {
                         personDetailRecycler.setAdapter(new UserInfoAdapter(infos));
 
                         xLayout.setStatus(XLayout.Success);
+
+                        addFriendBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                click(contactBean);
+                            }
+                        });
                         break;
                     case Impl.RESPON_DATA_EMPTY:
                         xLayout.setStatus(XLayout.Empty);
@@ -132,8 +138,8 @@ public class IMPersonDetailActivity extends BaseActivity {
         }*/
     }
 
-    @OnClick(R.id.add_friend_button)
-    void toAddFraeng(View view) {
+
+    public void click(ContactBean contactBean) {
         Intent intent;
         if (accountId != -1) {
             if (UserUtils.isMyFriend(accountId)) {
@@ -143,14 +149,17 @@ public class IMPersonDetailActivity extends BaseActivity {
                 intent.putExtra("nickname", contactBean.getNickname());
                 intent.putExtra("need_update", false);
                 startActivity(intent);
+                //点击发消息关闭前面页面
+                AppManager.getInstance().finishActivity(IMPersonActivity.class);
+                this.finish();
             } else {
-                intent = new Intent(view.getContext(), IMAddFriendActivity.class);
+                intent = new Intent(getActivity(), IMAddFriendActivity.class);
                 intent.putExtra("user_id", accountId);
                 //startActivityForResult(intent, ClassRequestCode);
                 startActivity(intent);
             }
         } else {
-            UIHelper.toast(view.getContext(), "用户Id获取失败,请重试");
+            UIHelper.toast(getActivity(), "用户Id获取失败,请重试");
         }
     }
 

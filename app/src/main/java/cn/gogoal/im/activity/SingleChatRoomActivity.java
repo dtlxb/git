@@ -39,6 +39,7 @@ public class SingleChatRoomActivity extends BaseActivity {
     //聊天对象
     private ChatFragment chatFragment;
     private UserBean userBean;
+    private XTitle xTitle;
 
     @Override
     public int bindLayout() {
@@ -61,7 +62,14 @@ public class SingleChatRoomActivity extends BaseActivity {
     }
 
     private void initTitle(final String nickname, final String conversation_id) {
-        XTitle title = setMyTitle(nickname, true);
+        xTitle = setMyTitle(nickname, true);
+        xTitle.setLeftClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SingleChatRoomActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //添加action
         XTitle.ImageAction personAction = new XTitle.ImageAction(ContextCompat.getDrawable(SingleChatRoomActivity.this, R.mipmap.chat_person)) {
@@ -87,7 +95,7 @@ public class SingleChatRoomActivity extends BaseActivity {
                 }
             }
         };
-        title.addAction(personAction, 0);
+        xTitle.addAction(personAction, 0);
     }
 
     public void getSingleConversation(String conversation_id, final boolean need_update, final List<AVIMMessage> messageList) {
