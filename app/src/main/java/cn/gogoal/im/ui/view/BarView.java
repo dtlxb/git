@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.bean.ChartBean;
 import hply.com.niugu.StringUtils;
 
 
@@ -33,8 +34,6 @@ public class BarView extends View {
     private int marginBottom;
     //字体与柱体距离
     private int marginBar;
-    //控件宽高
-    private int viewHeight;
     private int viewWidth;
     //水平线绘制
     private Paint linePaint;
@@ -50,15 +49,13 @@ public class BarView extends View {
     //最大数
     private float barBiggest;
     private float positive_num;
-    private float negative_nam;
+    private float negative_num;
     //柱体率
     private float barRate;
     //柱体增长率
     private float upRate;
-
     //数据
-    private List<Float> values;
-    private List<String> dates;
+    private List<ChartBean> beanList;
 
     public BarView(Context context) {
         super(context);
@@ -86,7 +83,7 @@ public class BarView extends View {
         barRate = 0;
         barBiggest = 0;
         positive_num = 0;
-        negative_nam = 0;
+        negative_num = 0;
         linePaint = new Paint();
         rectPaint = new Paint();
         titlePaint = new Paint();
@@ -95,7 +92,7 @@ public class BarView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        viewHeight = getHeight();
+        int viewHeight = getHeight();
         viewWidth = getWidth() - marginLeft - marginRight;
         barRate = (float) (viewHeight - marginBottom - marginTop) / barBiggest;
         drawBars(canvas);
@@ -117,30 +114,30 @@ public class BarView extends View {
         float fontHeight = fontMetrics.descent - fontMetrics.ascent;
 
         //绘制柱体
-        rectPaint.setStrokeWidth(viewWidth / (values.size() * 2));
-        if (null != values && values.size() > 0) {
-            for (int i = 0; i < values.size(); i++) {
+        rectPaint.setStrokeWidth(viewWidth / (beanList.size() * 2));
+        if (null != beanList && beanList.size() > 0) {
+            for (int i = 0; i < beanList.size(); i++) {
                 float barHeight;
-                String dataText = numberParse(Math.round(values.get(i)));
-                float startX = marginLeft + viewWidth * i / values.size() + viewWidth / (values.size() * 2);
-                barHeight = startY - barRate * values.get(i) * upRate;
+                String dataText = numberParse(Math.round(beanList.get(i).getBarValue()));
+                float startX = marginLeft + viewWidth * i / beanList.size() + viewWidth / (beanList.size() * 2);
+                barHeight = startY - barRate * beanList.get(i).getBarValue() * upRate;
                 //画笔颜色
-                titlePaint.setColor(values.get(i) < 0 ? ContextCompat.getColor(getContext(), R.color.stock_green_market)
+                titlePaint.setColor(beanList.get(i).getBarValue() < 0 ? ContextCompat.getColor(getContext(), R.color.stock_green_market)
                         : ContextCompat.getColor(getContext(), R.color.stock_red_market));
-                rectPaint.setColor(values.get(i) < 0 ? ContextCompat.getColor(getContext(), R.color.stock_green_market)
+                rectPaint.setColor(beanList.get(i).getBarValue() < 0 ? ContextCompat.getColor(getContext(), R.color.stock_green_market)
                         : ContextCompat.getColor(getContext(), R.color.stock_red_market));
                 //画柱体
                 canvas.drawLine(startX, startY, startX, barHeight, rectPaint);
                 //画标注
                 titlePaint.getTextBounds(dataText, 0, dataText.length(), r);
-                canvas.drawText(numberParse((int) (values.get(i) * upRate)),
-                        startX - titlePaint.measureText(numberParse((int) (values.get(i) * upRate))) / 2,
-                        values.get(i) < 0 ? barHeight + fontHeight * 3 / 5 + marginBar : barHeight - marginBar, titlePaint);
+                canvas.drawText(numberParse((int) (beanList.get(i).getBarValue() * upRate)),
+                        startX - titlePaint.measureText(numberParse((int) (beanList.get(i).getBarValue() * upRate))) / 2,
+                        beanList.get(i).getBarValue() < 0 ? barHeight + fontHeight * 3 / 5 + marginBar : barHeight - marginBar, titlePaint);
                 //画日期
                 titlePaint.setColor(ContextCompat.getColor(getContext(), R.color.gray));
-                canvas.drawText(dates.get(i),
-                        startX - titlePaint.measureText(dates.get(i)) / 2,
-                        values.get(i) > 0 ? startY + fontHeight * 3 / 5 + 3 * marginBar : startY - 3 * marginBar, titlePaint);
+                canvas.drawText(beanList.get(i).getDate(),
+                        startX - titlePaint.measureText(beanList.get(i).getDate()) / 2,
+                        beanList.get(i).getBarValue() > 0 ? startY + fontHeight * 3 / 5 + 3 * marginBar : startY - 3 * marginBar, titlePaint);
             }
             if (upRate < 1) {
                 upRate += 0.02;
@@ -164,20 +161,18 @@ public class BarView extends View {
         return text;
     }
 
-    public void setChartData(Map<String, Object> data) {
-        values = new ArrayList<>();
-        dates = new ArrayList<>();
-        values.addAll((Collection<? extends Float>) data.get("values"));
-        dates.addAll((Collection<? extends String>) data.get("dates"));
-        for (int i = 0; i < values.size(); i++) {
-            float num = values.get(i);
+    public void setChartData(List<ChartBean> beans) {
+        beanList = new ArrayList<>();
+        beanList.addAll(beans);
+        for (int i = 0; i < beans.size(); i++) {
+            float num = beans.get(i).getBarValue();
             if (num > 0) {
                 positive_num = positive_num > num ? positive_num : num;
             } else {
-                negative_nam = negative_nam > Math.abs(num) ? negative_nam : Math.abs(num);
+                negative_num = negative_num > Math.abs(num) ? negative_num : Math.abs(num);
             }
         }
-        barBiggest = positive_num + negative_nam;
+        barBiggest = positive_num + negative_num;
         invalidate();
     }
 
@@ -236,5 +231,13 @@ public class BarView extends View {
 
     public void setMarginBar(int marginBar) {
         this.marginBar = marginBar;
+    }
+
+    public int getTextSize() {
+        return textSize;
+    }
+
+    public void setTextSize(int textSize) {
+        this.textSize = textSize;
     }
 }

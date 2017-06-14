@@ -66,7 +66,7 @@ public class FinancialAnalysisFragment extends BaseFragment {
         Map<String, Object> map = new HashMap<>();
         map.put("dates", dates);
         map.put("values", values);
-        barView.setChartData(map);
+        //barView.setChartData(map);
 
         getFinacialData("0", "1");
     }

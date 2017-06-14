@@ -12,4 +12,12 @@
         android:layout_height="200dp"
         android:background="@android:color/white" />
 
+
+    <cn.gogoal.im.ui.view.LineBarView
+        android:id="@+id/lineBarView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white" />
+
 </LinearLayout>
