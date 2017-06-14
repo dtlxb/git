@@ -29,9 +29,9 @@ public class StockDetailMarketIndexData {
     private double close_price;
     private String code;
     private String fullcode;
-    private double high_price;
+    private String high_price;
     private String insert_time;
-    private double low_price;
+    private String low_price;
     private String name;
     private double open_price;
     private double price;
@@ -77,11 +77,11 @@ public class StockDetailMarketIndexData {
         this.fullcode = fullcode;
     }
 
-    public double getHigh_price() {
+    public String getHigh_price() {
         return high_price;
     }
 
-    public void setHigh_price(double high_price) {
+    public void setHigh_price(String high_price) {
         this.high_price = high_price;
     }
 
@@ -93,11 +93,11 @@ public class StockDetailMarketIndexData {
         this.insert_time = insert_time;
     }
 
-    public double getLow_price() {
+    public String getLow_price() {
         return low_price;
     }
 
-    public void setLow_price(double low_price) {
+    public void setLow_price(String low_price) {
         this.low_price = low_price;
     }
 

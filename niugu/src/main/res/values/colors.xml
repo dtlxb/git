@@ -38,9 +38,12 @@
     <color name="mystock_add_color">#d9d9d9</color>
 
     <color name="stocklist_bg">#fefefe</color>
-    <color name="stock_red">#f14958</color>
+
+    <color name="stock_green">#26b844</color>
+    <color name="stock_red">#ed1b1b</color>
+    <color name="stock_gray">#A6A9AD</color>
+
     <color name="selectbutton_enable_red">#f68d8f</color>
-    <color name="stock_green">#1ebf61</color>
 
     <color name="mystock_news_green">#a1d36e</color>
     <color name="mystock_news_red">#d43c33</color>

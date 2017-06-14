@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:paddingLeft="5dp"
-            android:text="爱使股份（600652）"
+            android:text="上证指数（000001）"
             android:textColor="@color/main_head_title"
             android:textSize="@dimen/text_size_16" />
 
@@ -69,12 +69,13 @@
 
         <ImageView
             android:id="@+id/btnRefresh"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"
-            android:background="@drawable/refresh_white" />
+            android:contentDescription="@null"
+            android:scaleType="centerInside"
+            android:src="@drawable/refresh_white" />
 
     </RelativeLayout>
 
@@ -159,6 +160,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:baselineAligned="false"
                         android:paddingBottom="10dp">
 
                         <LinearLayout
@@ -255,9 +257,11 @@
 
                             </LinearLayout>
 
-                            <RelativeLayout
+                            <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="45dp">
+                                android:layout_height="45dp"
+                                android:layout_gravity="top"
+                                android:orientation="vertical">
 
                                 <TextView
                                     android:id="@+id/textView4"
@@ -268,335 +272,391 @@
                                     android:textColor="@color/main_head_title"
                                     android:textSize="@dimen/text_size_11" />
 
-                                <TextView
+                                <hply.com.niugu.autofixtext.AutofitTextView
                                     android:id="@+id/stock_amplitude"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="80dp"
                                     android:layout_height="30dp"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_alignParentLeft="true"
                                     android:text="--"
                                     android:textColor="@color/main_head_title"
-                                    android:textSize="@dimen/text_size_16" />
-                            </RelativeLayout>
+                                    android:textSize="@dimen/text_size_16"
+                                    autofit:minTextSize="@dimen/text_size_6"/>
+                            </LinearLayout>
 
                         </LinearLayout>
 
                     </LinearLayout>
 
+                    <ImageView
+                        android:id="@+id/iv_show_info_dialog"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@null"
+                        android:paddingEnd="15dp"
+                        android:paddingStart="5dp"
+                        android:scaleType="centerInside"
+                        android:src="@mipmap/img_drop_down" />
+
                 </LinearLayout>
 
-                <LinearLayout
+                <!--改成弹窗-->
+                <!--<TableLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:padding="8dp"-->
+                <!--android:stretchColumns="1,3,5">-->
+
+                <!--<TableRow-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1">-->
+
+                <!--<TextView-->
+                <!--android:text="最   高"-->
+                <!--android:textColor="@color/text_color_word"-->
+                <!--android:textSize="@dimen/text_size_12" />-->
+
+                <!--<hply.com.niugu.autofixtext.AutofitTextView-->
+                <!--android:id="@+id/stock_detail_tv3"-->
+                <!--style="@style/stock_market_text_value"-->
+                <!--autofit:minTextSize="@dimen/text_size_4" />-->
+
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="最   低"-->
+                <!--android:textColor="@color/text_color_word"-->
+                <!--android:textSize="@dimen/text_size_12" />-->
+
+                <!--<hply.com.niugu.autofixtext.AutofitTextView-->
+                <!--android:id="@+id/stock_detail_tv5"-->
+                <!--style="@style/stock_market_text_value"-->
+                <!--autofit:minTextSize="@dimen/text_size_4" />-->
+
+                <!--<TextView-->
+                <!--android:text="成交额"-->
+                <!--android:textColor="@color/text_color_word"-->
+                <!--android:textSize="@dimen/text_size_12" />-->
+
+                <!--<hply.com.niugu.autofixtext.AutofitTextView-->
+                <!--android:id="@+id/stock_detail_tv7"-->
+                <!--style="@style/stock_market_text_value"-->
+                <!--autofit:minTextSize="@dimen/text_size_4" />-->
+
+
+                <!--</TableRow>-->
+
+                <!--<TableRow>-->
+
+                <!--<TextView-->
+                <!--android:text="涨家数"-->
+                <!--android:textColor="@color/text_color_word"-->
+                <!--android:textSize="@dimen/text_size_12" />-->
+
+                <!--<hply.com.niugu.autofixtext.AutofitTextView-->
+                <!--android:id="@+id/stock_detail_tv4"-->
+                <!--style="@style/stock_market_text_value"-->
+                <!--autofit:minTextSize="@dimen/text_size_4" />-->
+
+                <!--<TextView-->
+                <!--android:text="平家数"-->
+                <!--android:textColor="@color/text_color_word"-->
+                <!--android:textSize="@dimen/text_size_12" />-->
+
+                <!--<hply.com.niugu.autofixtext.AutofitTextView-->
+                <!--android:id="@+id/stock_detail_tv6"-->
+                <!--style="@style/stock_market_text_value"-->
+                <!--autofit:minTextSize="@dimen/text_size_4" />-->
+
+                <!--<TextView-->
+                <!--android:text="跌家数"-->
+                <!--android:textColor="@color/text_color_word"-->
+                <!--android:textSize="@dimen/text_size_12" />-->
+
+                <!--<hply.com.niugu.autofixtext.AutofitTextView-->
+                <!--android:id="@+id/stock_detail_tv8"-->
+                <!--style="@style/stock_market_text_value"-->
+                <!--autofit:minTextSize="@dimen/text_size_4" />-->
+
+                <!--</TableRow>-->
+
+                <!--</TableLayout>-->
+
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@color/white"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="8dp"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <include
+                            android:id="@+id/market_stock_detail1"
+                            layout="@layout/fragment_stock_detail_charts"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp" />
+
+                        <include layout="@layout/line_space_line" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@color/Kline_item_bg"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <RelativeLayout
+                                android:id="@+id/tv_increase_layout"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_increase"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:gravity="center_horizontal"
+                                    android:text="涨幅榜"
+                                    android:textColor="@color/red"
+                                    android:textSize="@dimen/text_size_15" />
+
+                                <TextView
+                                    android:id="@+id/tv_line_increase"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginLeft="35dp"
+                                    android:layout_marginRight="35dp"
+                                    android:background="@color/red" />
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/tv_drop_layout"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_drop"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:gravity="center_horizontal"
+                                    android:text="跌幅榜"
+                                    android:textColor="@color/text_color_tab"
+                                    android:textSize="@dimen/text_size_15" />
+
+                                <TextView
+                                    android:id="@+id/tv_line_drop"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginLeft="35dp"
+                                    android:layout_marginRight="35dp"
+                                    android:background="@color/red"
+                                    android:visibility="gone" />
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/tv_turnover_layout"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_turnover"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerInParent="true"
+                                    android:gravity="center_horizontal"
+                                    android:text="换手率"
+                                    android:textColor="@color/text_color_tab"
+                                    android:textSize="@dimen/text_size_15" />
+
+                                <TextView
+                                    android:id="@+id/tv_line_turnover"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginLeft="35dp"
+                                    android:layout_marginRight="35dp"
+                                    android:background="@color/red"
+                                    android:visibility="gone" />
+
+                            </RelativeLayout>
+
+
+                        </LinearLayout>
 
                         <RelativeLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1">
+                            android:id="@+id/load_animation_change"
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentTop="true"
-                                android:text="最   高"
-                                android:textColor="@color/text_color_word"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:layout_alignParentLeft="true"
-                                android:text="涨家数"
-                                android:textColor="@color/text_color_word"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <hply.com.niugu.autofixtext.AutofitTextView
-                                android:id="@+id/stock_detail_tv3"
-                                android:layout_width="70dp"
-                                android:layout_height="18dp"
-                                android:layout_alignParentRight="true"
-                                android:layout_alignParentTop="true"
-                                android:gravity="right"
-                                android:text="--"
-                                android:textColor="@color/text_color_number"
-                                android:textSize="@dimen/text_size_12"
-                                autofit:minTextSize="@dimen/text_size_4" />
-
-                            <TextView
-                                android:id="@+id/stock_detail_tv4"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:layout_alignParentRight="true"
-                                android:text="--"
-                                android:textColor="@color/text_color_number"
-                                android:textSize="@dimen/text_size_12" />
-
+                            <hply.com.niugu.ProgressWheel
+                                android:id="@+id/progress_wheel"
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                android:layout_centerInParent="true"
+                                wheel:matProg_barColor="#5588FF"
+                                wheel:matProg_progressIndeterminate="true" />
 
                         </RelativeLayout>
 
-                        <RelativeLayout
-                            android:layout_width="0dp"
+                        <cn.gogoal.im.ui.copy.InnerListView
+                            android:id="@+id/stock_lv"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="18dp"
-                            android:layout_weight="1">
+                            android:background="@android:color/white" />
+
+                        <LinearLayout
+                            android:id="@+id/stock_no_data"
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp"
+                            android:background="@android:color/white"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/no_data_image"
+                                android:gravity="center" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentTop="true"
-                                android:text="最   低"
-                                android:textColor="@color/text_color_word"
+                                android:layout_marginTop="8dp"
+                                android:text="暂无相关数据"
+                                android:textColor="@color/header_gray"
                                 android:textSize="@dimen/text_size_12" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:layout_alignParentLeft="true"
-                                android:text="平家数"
-                                android:textColor="@color/text_color_word"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <hply.com.niugu.autofixtext.AutofitTextView
-                                android:id="@+id/stock_detail_tv5"
-                                android:layout_width="70dp"
-                                android:layout_height="18dp"
-                                android:layout_alignParentRight="true"
-                                android:layout_alignParentTop="true"
-                                android:gravity="right"
-                                android:text="--"
-                                android:textColor="@color/text_color_number"
-                                android:textSize="@dimen/text_size_12"
-                                autofit:minTextSize="@dimen/text_size_4" />
-
-                            <TextView
-                                android:id="@+id/stock_detail_tv6"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:layout_alignParentRight="true"
-                                android:text="--"
-                                android:textColor="@color/text_color_number"
-                                android:textSize="@dimen/text_size_12" />
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="18dp"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentTop="true"
-                                android:text="成交额"
-                                android:textColor="@color/text_color_word"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:layout_alignParentLeft="true"
-                                android:text="跌家数"
-                                android:textColor="@color/text_color_word"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <TextView
-                                android:id="@+id/stock_detail_tv7"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_alignParentTop="true"
-                                android:text="--"
-                                android:textColor="@color/text_color_number"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <TextView
-                                android:id="@+id/stock_detail_tv8"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:layout_alignParentRight="true"
-                                android:text="--"
-                                android:textColor="@color/text_color_number"
-                                android:textSize="@dimen/text_size_12" />
-
-                        </RelativeLayout>
+                        </LinearLayout>
 
                     </LinearLayout>
 
-                </LinearLayout>
-
-                <include layout="@layout/line_space_line" />
-
-                <include
-                    android:id="@+id/market_stock_detail1"
-                    layout="@layout/fragment_stock_detail_charts"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp" />
-
-                <include layout="@layout/line_space_line" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@color/Kline_item_bg"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:id="@+id/tv_increase_layout"
-                        android:layout_width="0dp"
+                    <View
+                        android:id="@+id/view_dialog_mask"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:background="#55000000"
+                        android:visibility="gone"
+                        android:clickable="true"/>
 
-                        <TextView
-                            android:id="@+id/tv_increase"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:gravity="center_horizontal"
-                            android:text="涨幅榜"
-                            android:textColor="@color/red"
-                            android:textSize="@dimen/text_size_15" />
-
-                        <TextView
-                            android:id="@+id/tv_line_increase"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginLeft="35dp"
-                            android:layout_marginRight="35dp"
-                            android:background="@color/red" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/tv_drop_layout"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tv_drop"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:gravity="center_horizontal"
-                            android:text="跌幅榜"
-                            android:textColor="@color/text_color_tab"
-                            android:textSize="@dimen/text_size_15" />
-
-                        <TextView
-                            android:id="@+id/tv_line_drop"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginLeft="35dp"
-                            android:layout_marginRight="35dp"
-                            android:background="@color/red"
-                            android:visibility="gone" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/tv_turnover_layout"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tv_turnover"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:gravity="center_horizontal"
-                            android:text="换手率"
-                            android:textColor="@color/text_color_tab"
-                            android:textSize="@dimen/text_size_15" />
-
-                        <TextView
-                            android:id="@+id/tv_line_turnover"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginLeft="35dp"
-                            android:layout_marginRight="35dp"
-                            android:background="@color/red"
-                            android:visibility="gone" />
-
-                    </RelativeLayout>
-
-
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:id="@+id/load_animation_change"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp">
-
-                    <hply.com.niugu.ProgressWheel
-                        android:id="@+id/progress_wheel"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_centerInParent="true"
-                        wheel:matProg_barColor="#5588FF"
-                        wheel:matProg_progressIndeterminate="true" />
-
-                </RelativeLayout>
-
-                <cn.gogoal.im.ui.copy.InnerListView
-                    android:id="@+id/stock_lv"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/white" />
-
-                <LinearLayout
-                    android:id="@+id/stock_no_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:background="@android:color/white"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
+                    <TableLayout
+                        android:id="@+id/layout_dialog"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/no_data_image"
-                        android:gravity="center" />
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        android:stretchColumns="0,1,2,3">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="暂无相关数据"
-                        android:textColor="@color/header_gray"
-                        android:textSize="@dimen/text_size_12" />
+                        <TableRow
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:padding="8dp"
+                            android:background="@android:color/white"
+                            android:layout_weight="1">
 
-                </LinearLayout>
+                            <LinearLayout android:orientation="vertical">
+
+                                <TextView
+                                    style="@style/stock_market_text_key"
+                                    android:text="最   高" />
+
+                                <TextView
+                                    android:id="@+id/stock_detail_tv3"
+                                    style="@style/stock_market_text_value"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout android:orientation="vertical">
+
+                                <TextView
+                                    style="@style/stock_market_text_key"
+                                    android:text="最   低"/>
+
+                                <TextView
+                                    android:id="@+id/stock_detail_tv5"
+                                    style="@style/stock_market_text_value" />
+
+                            </LinearLayout>
+
+                            <LinearLayout android:orientation="vertical">
+
+                                <TextView
+                                    style="@style/stock_market_text_key"
+                                    android:text="成交额" />
+
+                                <TextView
+                                    android:id="@+id/stock_detail_tv7"
+                                    style="@style/stock_market_text_value"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:text="涨家数"
+                                    style="@style/stock_market_text_key"/>
+
+                                <TextView
+                                    android:id="@+id/stock_detail_tv4"
+                                    android:textColor="@color/stock_red"
+                                    style="@style/stock_market_text_value"/>
+
+                            </LinearLayout>
+
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:background="#f0f4fa"
+                            android:padding="8dp"
+                            android:layout_weight="1">
+
+                            <LinearLayout android:orientation="vertical">
+
+                                <TextView
+                                    style="@style/stock_market_text_key"
+                                    android:text="平家数" />
+
+                                <TextView
+                                    android:id="@+id/stock_detail_tv6"
+                                    android:textColor="@color/stock_gray"
+                                    style="@style/stock_market_text_value"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout android:orientation="vertical">
+
+                                <TextView
+                                    style="@style/stock_market_text_key"
+                                    android:text="跌家数"/>
+
+                                <TextView
+                                    android:id="@+id/stock_detail_tv8"
+                                    android:textColor="@color/stock_green"
+                                    style="@style/stock_market_text_value"/>
+
+                            </LinearLayout>
+
+                        </TableRow>
+
+
+                    </TableLayout>
+
+                </FrameLayout>
 
             </LinearLayout>
 
