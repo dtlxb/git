@@ -96,15 +96,13 @@ public class BusinessAnalysisFragment extends BaseFragment {
                     for (String dataMSKey : data.keySet()) {
                         keyMSList.add(dataMSKey);
                     }
-                    KLog.e(keyMSList);
                     //将时间戳转毫秒值并排序
                     List<Long> keyLongList = new ArrayList<>();
                     for (int i = 0; i < keyMSList.size(); i++) {
                         keyLongList.add(CalendarUtils.parseString2Long(keyMSList.get(i) + " 00:00:00"));
                     }
                     Collections.sort(keyLongList, Collections.reverseOrder());
-                    KLog.e(keyLongList);
-                    //将毫秒值转时间戳
+                    //取排序后的数据
                     List<String> keyList = new ArrayList<>();
                     for (int i = 0; i < keyLongList.size(); i++) {
                         //keyList.add(CalendarUtils.parseDateFormatAll(keyLongList.get(i), "yyyy-MM-dd"));
@@ -114,8 +112,7 @@ public class BusinessAnalysisFragment extends BaseFragment {
                             }
                         }
                     }
-                    KLog.e(keyList);
-
+                    //造自己需要的数据
                     ArrayList<String> titleList = new ArrayList<>();
                     for (int i = 0; i < keyList.size(); i++) {
                         titleList.add(keyList.get(i));
@@ -123,7 +120,6 @@ public class BusinessAnalysisFragment extends BaseFragment {
                             titleList.add(FtenUtils.analysisName[j]);
                         }
                     }
-                    KLog.e(titleList);
 
                     setLeftListData(titleList);
 
@@ -144,14 +140,9 @@ public class BusinessAnalysisFragment extends BaseFragment {
 
                     List<JSONArray> content2 = new ArrayList<>();
                     for (int i = 0; i < content1.size(); i++) {
-                        JSONArray array2 = new JSONArray();
-                        for (int j = 0; j < content1.get(i).size(); j++) {
-                            array2.add(content1.get(i).get(j));
-                        }
-                        content2.add(array2);
                     }
 
-                    //FileUtil.writeRequestResponse(String.valueOf(contentData),"F10DATA.TXT");
+                    //FileUtil.writeRequestResponse(String.valueOf(content2), "F10DATA.TXT");
                 }
             }
 

@@ -35,7 +35,6 @@
 
     <!-- 扫码 -->
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -51,7 +50,6 @@
         android:resizeableActivity="false"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="1bfb8c9ae23e95c3b4538adff02f09f9" />
@@ -105,6 +103,7 @@
         <service
             android:name=".servise.AppBackServise"
             android:exported="false" />
+        <service android:name="com.amap.api.location.APSService" />
 
         <activity
             android:name=".activity.MainActivity"
@@ -133,11 +132,9 @@
         <activity
             android:name=".activity.SquareChatRoomActivity"
             android:windowSoftInputMode="adjustResize" />
-
         <activity
             android:name=".activity.SingleChatRoomActivity"
             android:windowSoftInputMode="adjustResize" />
-
         <activity android:name=".activity.IMRegisterActivity" />
         <activity
             android:name=".activity.ChatRoomActivity"
@@ -163,6 +160,7 @@
         <activity android:name=".wxapi.WXPayEntryActivity" />
         <activity android:name=".activity.IMAddFriendActivity" />
         <activity android:name=".wxapi.WXEntryActivity" />
+        <activity android:name=".activity.AddFraendListActivity" />
 
         <uses-library
             android:name="com.google.android.maps"
@@ -206,11 +204,9 @@
         <activity android:name=".activity.SquareCardActivity" />
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.SetStockRefreshActivity" />
-
         <activity
             android:name=".activity.KlineSettingActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-
         <activity android:name=".activity.SingleEditActivity" />
         <activity android:name=".activity.RedGreenSettingActivity" />
         <activity android:name=".activity.ChangePhoneNumberActivity" />
@@ -230,6 +226,8 @@
         <activity android:name=".activity.stock.StockFtenActivity" />
         <activity android:name=".activity.Face2FaceActivity" />
         <activity android:name=".activity.Face2FaceHolderActivity" />
+        <activity android:name=".activity.QrcodeProcessActivity" />
+        <activity android:name=".activity.stock.FinancialAnalysisActivity" />
     </application>
 
 </manifest>

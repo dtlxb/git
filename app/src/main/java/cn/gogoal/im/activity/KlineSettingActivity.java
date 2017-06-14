@@ -8,12 +8,15 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.socks.library.KLog;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -72,9 +75,6 @@ public class KlineSettingActivity extends BaseActivity {
     @BindView(R.id.tv_day3)
     TextView tv_day3;
 
-//    @BindView(R.id.login_keyboard_layout)
-//    KeyboardLaunchLinearLayout keyboardLayout;
-
     //蜡烛是否空心
     private boolean hollow;
     //十字是否跟随
@@ -110,6 +110,9 @@ public class KlineSettingActivity extends BaseActivity {
                         SPTools.saveInt("authority_type", 0);
                         SPTools.saveBoolean("hollow", false);
                         SPTools.saveBoolean("follow", false);
+                        SPTools.saveInt("et_ln1", 5);
+                        SPTools.saveInt("et_ln2", 10);
+                        SPTools.saveInt("et_ln3", 20);
                         initData();
                     }
                 }).show();
@@ -187,52 +190,38 @@ public class KlineSettingActivity extends BaseActivity {
             }
         });
 
-//        //保存键盘高度
-//        keyboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchLinearLayout.OnKeyboardChangeListener() {
-//            @Override
-//            public void OnKeyboardPop(int height) {
-//
-//            }
-//
-//            @Override
-//            public void OnKeyboardClose() {
-//                SPTools.saveInt("et_ln1", num1);
-//                SPTools.saveInt("et_ln2", num2);
-//                SPTools.saveInt("et_ln3", num3);
-//                et_ln1.setText(String.valueOf(num1));
-//                et_ln2.setText(String.valueOf(num2));
-//                et_ln3.setText(String.valueOf(num3));
-//                clearThisGuy("et_ln1");
-//                clearThisGuy("et_ln2");
-//                clearThisGuy("et_ln3");
-//            }
-//        });
-    }
-
-    @OnClick({R.id.layout_avg1, R.id.layout_avg2, R.id.layout_avg3})
-    void function(View view) {
-        switch (view.getId()) {
-            case R.id.layout_avg1:
+        et_ln1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
                 EditTextSet(et_ln1, tv_day1);
-                addTextWatcher(et_ln1, "et_ln1");
                 clearThisGuy("et_ln2");
                 clearThisGuy("et_ln3");
-                break;
-            case R.id.layout_avg2:
+                return false;
+            }
+        });
+        et_ln2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
                 EditTextSet(et_ln2, tv_day2);
-                addTextWatcher(et_ln2, "et_ln2");
                 clearThisGuy("et_ln1");
                 clearThisGuy("et_ln3");
-                break;
-            case R.id.layout_avg3:
+                return false;
+            }
+        });
+        et_ln3.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
                 EditTextSet(et_ln3, tv_day3);
-                addTextWatcher(et_ln3, "et_ln3");
                 clearThisGuy("et_ln1");
                 clearThisGuy("et_ln2");
-                break;
-            default:
-                break;
-        }
+                return false;
+            }
+        });
+
+        addTextWatcher(et_ln1, "et_ln1");
+        addTextWatcher(et_ln2, "et_ln2");
+        addTextWatcher(et_ln3, "et_ln3");
+
     }
 
     private void clearThisGuy(String tag) {
@@ -261,6 +250,7 @@ public class KlineSettingActivity extends BaseActivity {
     }
 
     private void EditTextSet(EditText editText, TextView textView) {
+
         textView.setText("日");
         editText.setText("");
         editText.setFocusable(true);
@@ -287,12 +277,15 @@ public class KlineSettingActivity extends BaseActivity {
                     switch (editWhat) {
                         case "et_ln1":
                             num1 = Integer.parseInt(s.toString().trim());
+                            SPTools.saveInt("et_ln1", num1);
                             break;
                         case "et_ln2":
                             num2 = Integer.parseInt(s.toString().trim());
+                            SPTools.saveInt("et_ln2", num2);
                             break;
                         case "et_ln3":
                             num3 = Integer.parseInt(s.toString().trim());
+                            SPTools.saveInt("et_ln3", num3);
                             break;
                         default:
                             break;

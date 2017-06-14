@@ -19,7 +19,7 @@
             android:layout_gravity="center"
             android:contentDescription="@null"
             android:scaleType="fitXY"
-            app:riv_corner_radius="4dp" />
+            app:riv_corner_radius="@dimen/icon_radius" />
 
         <TextView
             android:id="@+id/count_tv"

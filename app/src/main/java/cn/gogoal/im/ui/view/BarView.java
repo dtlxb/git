@@ -114,8 +114,8 @@ public class BarView extends View {
         float fontHeight = fontMetrics.descent - fontMetrics.ascent;
 
         //绘制柱体
-        rectPaint.setStrokeWidth(viewWidth / (beanList.size() * 2));
         if (null != beanList && beanList.size() > 0) {
+            rectPaint.setStrokeWidth(viewWidth / (beanList.size() * 2));
             for (int i = 0; i < beanList.size(); i++) {
                 float barHeight;
                 String dataText = numberParse(Math.round(beanList.get(i).getBarValue()));

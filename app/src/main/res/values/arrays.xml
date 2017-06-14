@@ -113,7 +113,7 @@
         <item>职位</item>
         <item>工作地区</item>
     </string-array>
-    
+
     <string-array name="settingArray">
         <item>账号与安全</item>
         <!--<item>行情刷新频率</item>
@@ -136,4 +136,10 @@
         <item>公司高管</item>
     </string-array>
 
+    <string-array name="addFriendArray">
+        <item>输入信息找好友</item>
+        <item>输入信息搜索群</item>
+        <item>扫一扫加好友</item>
+        <item>添加手机通讯录</item>
+    </string-array>
 </resources>

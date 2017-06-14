@@ -50,6 +50,43 @@ public class FtenUtils {
             "主营利润(亿元)", "利润比例", "毛利率"
     };
 
+    /**
+     * 财务分析
+     */
+    public static final String getReportType(String title) {
+        if ("2017年报".equals(title)) return "17Q4";
+        if ("2017三季报".equals(title)) return "17Q3";
+        if ("2017中报".equals(title)) return "17Q2";
+        if ("2017一季报".equals(title)) return "17Q1";
+        if ("2016年报".equals(title)) return "16Q4";
+        if ("2016三季报".equals(title)) return "16Q3";
+        if ("2016中报".equals(title)) return "16Q2";
+        if ("2016一季报".equals(title)) return "16Q1";
+        if ("2015年报".equals(title)) return "15Q4";
+        if ("2015三季报".equals(title)) return "15Q3";
+        if ("2015中报".equals(title)) return "15Q2";
+        if ("2015一季报".equals(title)) return "15Q1";
+        if ("2014年报".equals(title)) return "14Q4";
+        if ("2014三季报".equals(title)) return "14Q3";
+        if ("2014中报".equals(title)) return "14Q2";
+        if ("2014一季报".equals(title)) return "14Q1";
+        if ("2013年报".equals(title)) return "13Q4";
+        if ("2013三季报".equals(title)) return "13Q3";
+        if ("2013中报".equals(title)) return "13Q2";
+        if ("2013一季报".equals(title)) return "13Q1";
+        if ("2012年报".equals(title)) return "12Q4";
+        if ("2012三季报".equals(title)) return "12Q3";
+        if ("2012中报".equals(title)) return "12Q2";
+        if ("2012一季报".equals(title)) return "12Q1";
+        return null;
+    }
+
+    public static final String[] title1 = {"净利润(亿元)", "每股收益EPS-基本(元)", "营业利润率(%)",
+            "资产负债率(%)", "流动比率(%)", "存货周转率(次)", "营业总收入同比增长率(%)"};
+
+    public static final String[] title2 = {"净利润(亿元)", "每股收益EPS-基本(元)", "营业利润率(%)",
+            "资产负债率(%)", "负债与所有者权益比率(%)", "固定资产周转率(次)", "营业总收入同比增长率(%)"};
+
 
     /**
      * 财务报表
