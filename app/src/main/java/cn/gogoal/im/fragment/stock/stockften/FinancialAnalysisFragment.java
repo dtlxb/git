@@ -226,25 +226,25 @@ public class FinancialAnalysisFragment extends BaseFragment {
 
                     switch (type) {
                         case "1":
-                            barProfitView.setChartData(map);
+                            //barProfitView.setChartData(map);
                             break;
                         case "2":
-                            barShareEPS.setChartData(map);
+                           //barShareEPS.setChartData(map);
                             break;
                         case "3":
-                            barProfitRateView.setChartData(map);
+                            //barProfitRateView.setChartData(map);
                             break;
                         case "4":
-                            barDebtRatioView.setChartData(map);
+                            //barDebtRatioView.setChartData(map);
                             break;
                         case "5":
-                            barSovencyView.setChartData(map);
+                            //barSovencyView.setChartData(map);
                             break;
                         case "6":
-                            barTurnoverRateView.setChartData(map);
+                            //barTurnoverRateView.setChartData(map);
                             break;
                         case "7":
-                            barGrowsView.setChartData(map);
+                            //barGrowsView.setChartData(map);
                             break;
                     }
                 }
