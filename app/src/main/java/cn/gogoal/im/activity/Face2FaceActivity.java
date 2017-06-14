@@ -13,8 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -87,10 +89,9 @@ public class Face2FaceActivity extends BaseActivity {
 
     private AMapLocationClientOption locationOption = null;//高德API定位配置类
 
-//    private double longitude;
-//
-//    private double latitude;
+    private double latitude;//纬度
 
+    private double longitude;//经度
 
     @Override
     public int bindLayout() {
@@ -118,7 +119,14 @@ public class Face2FaceActivity extends BaseActivity {
         //设置定位参数
         locationClient.setLocationOption(locationOption);
 //        // 设置定位监听
-//        locationClient.setLocationListener(locationListener);
+        locationClient.setLocationListener(new AMapLocationListener() {
+            @Override
+            public void onLocationChanged(AMapLocation aMapLocation) {
+                KLog.e("Latitude=" + aMapLocation.getLatitude() + "\nLocation=" + aMapLocation.getLongitude());
+                latitude = aMapLocation.getLatitude();
+                longitude = aMapLocation.getLongitude();
+            }
+        });
         locationClient.startLocation();
 
         memberDatas = new ArrayList<>();
@@ -197,15 +205,24 @@ public class Face2FaceActivity extends BaseActivity {
             if (count == 4) {
                 //创建群、获取加入群
                 if (locationClient != null) {
-                    creatGoupChart();
+                    if (locationClient.getLastKnownLocation()!=null &&
+                            locationClient.getLastKnownLocation()!=null) {
+                        creatGoupChart();
+                    }else {
+                        dialogNoLocation();
+                    }
                 } else {
-                    WaitDialog dialog = WaitDialog.getInstance("获取位置信息出错，请重新进入重试", R.mipmap.login_error, false);
-                    dialog.show(getSupportFragmentManager());
-                    dialog.setCancelOutside(false);
-                    dialog.dismiss(false,true);
+                    dialogNoLocation();
                 }
             }
         }
+    }
+
+    private void dialogNoLocation() {
+        WaitDialog dialog = WaitDialog.getInstance("获取位置信息出错，请重新进入重试", R.mipmap.login_error, false);
+        dialog.show(getSupportFragmentManager());
+        dialog.setCancelOutside(false);
+        dialog.dismiss(false, true);
     }
 
     private void creatGoupChart() {
