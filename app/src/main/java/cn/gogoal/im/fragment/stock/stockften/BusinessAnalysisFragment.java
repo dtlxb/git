@@ -120,7 +120,6 @@ public class BusinessAnalysisFragment extends BaseFragment {
                             titleList.add(FtenUtils.analysisName[j]);
                         }
                     }
-
                     setLeftListData(titleList);
 
                     List<JSONObject> timeList = new ArrayList<>();

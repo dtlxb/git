@@ -19,6 +19,7 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.stock.FinancialAnalysisActivity;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.bean.ChartBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.copy.FtenUtils;
@@ -208,7 +209,6 @@ public class FinancialAnalysisFragment extends BaseFragment {
                         }
                     }
                     retained_profits = data.getJSONArray(profits);
-
                     List<Float> values = new ArrayList<>();
                     for (int i = 0; i < retained_profits.size(); i++) {
                         values.add(retained_profits.getFloatValue(i));
@@ -220,31 +220,32 @@ public class FinancialAnalysisFragment extends BaseFragment {
                         dates.add(FtenUtils.getReportType(title.getString(i)));
                     }
 
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("dates", dates);
-                    map.put("values", values);
+                    List<ChartBean> chartBeanList = new ArrayList<>();
+                    for (int i = 0; i < title.size(); i++) {
+                        chartBeanList.add(new ChartBean(values.get(i), dates.get(i)));
+                    }
 
                     switch (type) {
                         case "1":
-                            //barProfitView.setChartData(map);
+                            barProfitView.setChartData(chartBeanList);
                             break;
                         case "2":
-                           //barShareEPS.setChartData(map);
+                            barShareEPS.setChartData(chartBeanList);
                             break;
                         case "3":
-                            //barProfitRateView.setChartData(map);
+                            barProfitRateView.setChartData(chartBeanList);
                             break;
                         case "4":
-                            //barDebtRatioView.setChartData(map);
+                            barDebtRatioView.setChartData(chartBeanList);
                             break;
                         case "5":
-                            //barSovencyView.setChartData(map);
+                            barSovencyView.setChartData(chartBeanList);
                             break;
                         case "6":
-                            //barTurnoverRateView.setChartData(map);
+                            barTurnoverRateView.setChartData(chartBeanList);
                             break;
                         case "7":
-                            //barGrowsView.setChartData(map);
+                            barGrowsView.setChartData(chartBeanList);
                             break;
                     }
                 }
