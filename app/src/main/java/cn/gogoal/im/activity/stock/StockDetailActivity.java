@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,11 +15,9 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +35,7 @@ import cn.gogoal.im.bean.stock.ChartImageBean;
 import cn.gogoal.im.bean.stock.StockDetail;
 import cn.gogoal.im.bean.stock.StockDetailText2;
 import cn.gogoal.im.bean.stock.TreatData;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -81,7 +81,7 @@ public class StockDetailActivity extends BaseActivity {
     TabLayout tabStockDetailChart;
 
     @BindView(R.id.chart_layout)
-    FrameLayout chartLayout;
+    ViewPager chartLayout;
 
     @BindView(R.id.tab_stock_detail_news)
     TabLayout tabStockDetailNews;
@@ -109,7 +109,8 @@ public class StockDetailActivity extends BaseActivity {
     @BindArray(R.array.srock_chart_image)
     String[] arrStockChartImage;
 
-    private int refreshType;
+    @BindView(R.id.scrollView)
+    NestedScrollView scrollView;
 
     private String stockCode;
     private String stockName;
@@ -139,30 +140,31 @@ public class StockDetailActivity extends BaseActivity {
         stockCode = getIntent().getStringExtra("stock_code");
         stockName = getIntent().getStringExtra("stock_name");
 
-        initTitle();
+        initTitle();//初始化标题
 
-        initHead();
+        initHead();//初始化头部控件
 
-        getStockHeadInfo();//
+        getStockHeadInfo(AppConst.REFRESH_TYPE_FIRST);//获取交易数据，并填充头部
 
-        setChart();
+        setChart();//设置表格
 
-        initNews();
+        initNews();//个股新闻
 
-        initChartImage();
+        initChartImage();//eps、pe图表
 
         iniRefresh(swiperefreshlayout);
 
         swiperefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getStockHeadInfo();
-
+                getStockHeadInfo(AppConst.REFRESH_TYPE_SWIPEREFRESH);
                 AppManager.getInstance().sendMessage("refresh_stock_news");//发个消息刷新新闻
-
-
             }
         });
+    }
+
+    private void refreshAll(int refreshType){
+        getStockHeadInfo(refreshType);
     }
 
     /**
@@ -221,6 +223,7 @@ public class StockDetailActivity extends BaseActivity {
         new GGOKHTTP(param, GGOKHTTP.DM_GET_IMG, ggHttpInterface).startGet();
     }
 
+    /**初始化头部控件*/
     private void initHead() {
         rvStockDetailHead.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         headInfoAdapter = new HeadInfoAdapter(listHead);
@@ -231,6 +234,7 @@ public class StockDetailActivity extends BaseActivity {
         rvStockDetailTreat.setAdapter(treatInfoAdapter);
     }
 
+    /**初始化标题*/
     private void initTitle() {
         xTitle = setMyTitle(stockName + "(" + stockCode + ")" + "\n" + String.format(subTitleText,
                 StockUtils.getTreatState(), CalendarUtils.getCurrentTime("MM-dd HH:mm")), true)
@@ -250,16 +254,17 @@ public class StockDetailActivity extends BaseActivity {
 
     }
 
-    private void getStockHeadInfo() {
+    /**获取交易数据，并填充头部*/
+    private void getStockHeadInfo(final int refreshType) {
         Map<String, String> map = new HashMap<>();
         map.put("stock_code", stockCode);
         new GGOKHTTP(map, GGOKHTTP.ONE_STOCK_DETAIL, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.file("TAG", getExternalFilesDir("json"),
-                        "stockDetail_" + stockName + ".txt", responseInfo);
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
+                    listHead.clear();
+                    listTreat.clear();
                     TreatData treatData = JSONObject.parseObject(responseInfo, StockDetail.class).getData();
                     setStockHeadColor(treatData.getChange_rate());//设置颜色
                     //设置标题、副标题
@@ -295,11 +300,9 @@ public class StockDetailActivity extends BaseActivity {
                             StringUtils.pareseStringDouble(treatData.getHigh_price()), 2));
                     treatValue.add(StringUtils.saveSignificand(
                             StringUtils.pareseStringDouble(treatData.getLow_price()), 2));
-                    //TODO "turnover": 24892.5896,-> 2.49亿
                     treatValue.add(formatCapitalization(
                             StringUtils.pareseStringDouble(treatData.getTurnover()), 2));
 
-                    //TODO "volume_inner": 7215783,,-> 7.22万
                     treatValue.add(formatVolume(treatData.getVolume_inner(), false));//内盘
                     treatValue.add(formatVolume(treatData.getVolume_outer(), false));//外盘
                     treatValue.add(formatCapitalization(
@@ -315,22 +318,41 @@ public class StockDetailActivity extends BaseActivity {
                     }
                     treatInfoAdapter.notifyDataSetChanged();
 
+                    if (refreshType== AppConst.REFRESH_TYPE_SWIPEREFRESH ||
+                            refreshType==AppConst.REFRESH_TYPE_PARENT_BUTTON){
+                        UIHelper.toast(getActivity(),"刷新成功");
+                    }
+
+                    scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                        @Override
+                        public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                            KLog.e(scrollY);
+//                            KLog.d(oldScrollY);
+                            //TODO 往上滑动，滑出头部显示交易价格
+                        }
+                    });
+
+
                 } else if (code == 1001) {
                     setStockHeadColor("-1");//设置颜色
                     //值数据从缓存中取
                 } else {
                     setStockHeadColor("-1");//设置颜色
                 }
+                swiperefreshlayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(String msg) {
                 setStockHeadColor("-1");//设置颜色
                 UIHelper.toastError(getActivity(), msg);
+                swiperefreshlayout.setRefreshing(false);
             }
         }).startGet();
+
     }
 
+    /**个股新闻*/
     private void initNews() {
         vpNews.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -353,30 +375,17 @@ public class StockDetailActivity extends BaseActivity {
 
     private void setStockHeadColor(String change_rate) {
         if (TextUtils.isEmpty(change_rate)) {
-//            StatusBarUtil.with(getActivity()).setColor(getResColor(R.color.stock_gray));
+            setStatusColor(getResColor(R.color.stock_gray));
             xTitle.setBackgroundColor(getResColor(R.color.stock_gray));
             layoutHead.setBackgroundColor(getResColor(R.color.stock_gray));
         } else {
-            double rate = Double.parseDouble(change_rate);
-            if (rate > 0) {
-//                StatusBarUtil.with(getActivity()).setColor(
-//                        getResColor(R.color.stock_red));
-                xTitle.setBackgroundColor(getResColor(R.color.stock_red));
-                layoutHead.setBackgroundColor(getResColor(R.color.stock_red));
-            } else if (rate < 0) {
-//                StatusBarUtil.with(getActivity()).setColor(
-//                        getResColor(R.color.stock_green));
-                xTitle.setBackgroundColor(getResColor(R.color.stock_green));
-                layoutHead.setBackgroundColor(getResColor(R.color.stock_green));
-            } else {
-//                StatusBarUtil.with(getActivity()).setColor(
-//                        getResColor(R.color.stock_gray));
-                xTitle.setBackgroundColor(getResColor(R.color.stock_gray));
-                layoutHead.setBackgroundColor(getResColor(R.color.stock_gray));
-            }
+            setStatusColorId(StockUtils.getStockRateColor(change_rate));
+            xTitle.setBackgroundResource(StockUtils.getStockRateColor(change_rate));
+            layoutHead.setBackgroundResource(StockUtils.getStockRateColor(change_rate));
         }
     }
 
+    /**设置表格*/
     private void setChart() {
         for (String chartTitle : arrStockChart) {
             tabStockDetailChart.addTab(tabStockDetailChart.newTab().setText(chartTitle));
@@ -385,14 +394,14 @@ public class StockDetailActivity extends BaseActivity {
 
     //========================================数据处理区 START======================================
     private String formatVolume(String volume, boolean typeHead) {
-        if (TextUtils.isEmpty(volume)) {
+        if (StringUtils.isActuallyEmpty(volume)) {
             return "--";
         }
         if (Integer.parseInt(volume) == 0 || Integer.parseInt(volume) == Double.NaN) {
             return "0手";
         }
 
-        if (volume.toString().length() > 6) {
+        if (volume.length() > 6) {
             return StringUtils.saveSignificand(Double.parseDouble(String.valueOf(volume)) / 1000000d, 2)
                     + (typeHead ? "万手" : "万");
         } else {

@@ -164,9 +164,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@drawable/shape_line_bottom"
-                android:orientation="horizontal"
-                android:paddingEnd="15dp"
-                android:paddingStart="0dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tv_mystock_stockname"
@@ -190,7 +188,7 @@
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    app:layout_marginEndPercent="5%"
+                    android:layout_marginEnd="20dp"
                     app:layout_widthPercent="25%" />
 
                 <cn.gogoal.im.ui.view.SortView

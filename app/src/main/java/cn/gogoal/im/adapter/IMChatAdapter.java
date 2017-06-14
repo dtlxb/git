@@ -36,7 +36,6 @@ import java.util.Map;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ImageDetailActivity;
 import cn.gogoal.im.activity.PlayerActivity;
-import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.AppConst;
@@ -381,10 +380,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             ((LeftStockViewHolder) holder).what_user_send.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, CopyStockDetailActivity.class);
-                    intent.putExtra("stock_code", stockCode);
-                    intent.putExtra("stock_name", stockName);
-                    mContext.startActivity(intent);
+                    NormalIntentUtils.go2StockDetail(mContext,stockCode,stockName);
                 }
             });
 
@@ -411,10 +407,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             ((RightStockViewHolder) holder).what_user_send.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, CopyStockDetailActivity.class);
-                    intent.putExtra("stock_code", stockCode);
-                    intent.putExtra("stock_name", stockName);
-                    mContext.startActivity(intent);
+                    NormalIntentUtils.go2StockDetail(mContext,stockCode,stockName);
                 }
             });
 

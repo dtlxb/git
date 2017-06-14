@@ -341,7 +341,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
         return this;
     }
 
-    public int getResColor(@ColorRes int colorId) {
+    public @ColorInt int getResColor(@ColorRes int colorId) {
         return ContextCompat.getColor(BaseActivity.this, colorId);
     }
 

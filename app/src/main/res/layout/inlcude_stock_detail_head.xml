@@ -5,7 +5,7 @@
     android:id="@+id/layout_stock_detail_head"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
+    android:background="@color/stock_gray"
     android:baselineAligned="false"
     android:orientation="horizontal"
     android:weightSum="2"

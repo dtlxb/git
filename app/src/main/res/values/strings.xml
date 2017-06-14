@@ -220,4 +220,9 @@
 
     <string name="linear_layout_manager">android.support.v7.widget.LinearLayoutManager</string>
     <string name="grid_layout_manager">android.support.v7.widget.GridLayoutManager</string>
+    
+    <string name="ten_thousand">%s万</string>
+    <string name="ten_thousand_cell">%s万手</string>
+    <string name="thousand_million">%s亿</string>
+    <string name="thousand_million_cell">%s亿手</string>
 </resources>

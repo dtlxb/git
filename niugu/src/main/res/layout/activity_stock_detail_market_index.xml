@@ -498,7 +498,7 @@
                         <RelativeLayout
                             android:id="@+id/load_animation_change"
                             android:layout_width="match_parent"
-                            android:layout_height="300dp">
+                            android:layout_height="wrap_content">
 
                             <hply.com.niugu.ProgressWheel
                                 android:id="@+id/progress_wheel"

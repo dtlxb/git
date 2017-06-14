@@ -224,7 +224,6 @@ public class CopyStockDetailActivity extends BaseActivity {
     private int showItem;
     private int width;
     private int height;
-    private boolean canRefreshLine = true;
 
     private boolean isChoose = true;
     private int dpi;
@@ -353,7 +352,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         viewPagerNews.setOffscreenPageLimit(3);
         viewPagerNews.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             public Fragment getItem(int position) {
-                return StockNewsMinFragment.getInstance(position);
+                return StockNewsMinFragment.getInstance(stockCode,stockName,position);
             }
 
             public int getCount() {
@@ -401,8 +400,6 @@ public class CopyStockDetailActivity extends BaseActivity {
         dayk4 = SPTools.getInt("tv_ln4", 0);
         stockCode = getIntent().getStringExtra("stock_code");
         stockName = getIntent().getStringExtra("stock_name");
-        setStockCode(stockCode);
-        setStockName(stockName);
 
         TreatAdapter treatAdapter = new TreatAdapter(getSupportFragmentManager(), getActivity(), stockCode, true);
         vpTreat.setAdapter(treatAdapter);
@@ -416,7 +413,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         }
 
         textHeadTitle.setText(stockName + "(" + stockCode + ")");
-        dpi = AppDevice.getWidth(CopyStockDetailActivity.this);
+        dpi = AppDevice.getWidth(getThisContext());
 
         if (StockUtils.isMyStock(stockCode)) {
             toggleIsMyStock(true, false);
@@ -437,7 +434,8 @@ public class CopyStockDetailActivity extends BaseActivity {
             tabChartsTitles.addTab(tabChartsTitles.newTab().setText(stockDetailChartTitles[i]));
         }
 
-        tabChartsTitles.getTabAt(showItem).select();
+        TabLayout.Tab tabAt = tabChartsTitles.getTabAt(showItem);
+        if (tabAt!=null)tabAt.select();
 
         //图表头点击事件
         tabChartsTitles.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -659,7 +657,6 @@ public class CopyStockDetailActivity extends BaseActivity {
     }
 
     private void GetMinLineData() {
-        canRefreshLine = false;
         HashMap<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
@@ -692,25 +689,22 @@ public class CopyStockDetailActivity extends BaseActivity {
                 if (map.get("0") == null && textLayout.getVisibility() == View.GONE) {
                     textLayout.setVisibility(View.VISIBLE);
                 }
-                canRefreshLine = true;
             }
         };
         new GGOKHTTP(param, GGOKHTTP.STOCK_MINUTE, ggHttpInterface).startGet();
     }
 
     private void getFiveData() {
-        canRefreshLine = false;
         final HashMap<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
         param.put("day", "5");
-        if (!AppDevice.isNetworkConnected(CopyStockDetailActivity.this)) {
+        if (!AppDevice.isNetworkConnected(getThisContext())) {
             if (load_animation.getVisibility() == View.VISIBLE) {
                 load_animation.setVisibility(View.GONE);
             }
             if (map.get("1") == null && textLayout.getVisibility() == View.GONE) {
                 textLayout.setVisibility(View.VISIBLE);
             }
-            canRefreshLine = true;
         }
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -742,7 +736,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         param.put("page", "1");
         param.put("rows", "100");
 
-        if (!AppDevice.isNetworkConnected(CopyStockDetailActivity.this)) {
+        if (!AppDevice.isNetworkConnected(getThisContext())) {
             if (load_animation.getVisibility() == View.VISIBLE) {
                 load_animation.setVisibility(View.GONE);
             }
@@ -753,9 +747,7 @@ public class CopyStockDetailActivity extends BaseActivity {
             } else if (displayIndex == 2 && map.get("4") == null && textLayout.getVisibility() == View.GONE) {
                 textLayout.setVisibility(View.VISIBLE);
             }
-            canRefreshLine = true;
         }
-        canRefreshLine = false;
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -772,8 +764,6 @@ public class CopyStockDetailActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                canRefreshLine = true;
-
             }
         };
         new GGOKHTTP(param, GGOKHTTP.STOCK_K_LINE, ggHttpInterface).startGet();
@@ -922,7 +912,6 @@ public class CopyStockDetailActivity extends BaseActivity {
                 if (map.get("1") == null && textLayout.getVisibility() == View.GONE) {
                     textLayout.setVisibility(View.VISIBLE);
                 }
-                canRefreshLine = true;
                 break;
             case "autoRefresh3":
                 if (load_animation.getVisibility() == View.VISIBLE) {
@@ -943,8 +932,8 @@ public class CopyStockDetailActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         long refreshtime = SPTools.getLong("interval_time", 15000);
-        width = AppDevice.getWidth(CopyStockDetailActivity.this) - AppDevice.dp2px(CopyStockDetailActivity.this, 22);
-        height = AppDevice.dp2px(CopyStockDetailActivity.this, 190);
+        width = AppDevice.getWidth(getThisContext()) - AppDevice.dp2px(getThisContext(), 22);
+        height = AppDevice.dp2px(getThisContext(), 190);
         timer = new Timer();
         AutoRefresh(refreshtime);
     }
@@ -983,8 +972,6 @@ public class CopyStockDetailActivity extends BaseActivity {
                     infoDialogAdapter.setStockType(info.getStock_type());
                     setDialogInfoData(info);
 
-
-                    setNow(info.getUpdate_time());
                     //保存收盘价
                     stock_charge_type = info.getStock_type();
                     closePrice = hply.com.niugu.StringUtils.getDouble(String.valueOf(info.getClose_price()));
@@ -1164,7 +1151,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                         @Override
                         public void onClick(View view) {
                             if (stockCode != null && stockName != null && info != null) {
-                                Intent intent = new Intent(CopyStockDetailActivity.this, StockDetailChartsActivity.class);
+                                Intent intent = new Intent(getThisContext(), StockDetailChartsActivity.class);
                                 Bundle bundle = new Bundle();
                                 intent.putExtras(bundle);
                                 intent.putExtra("position", showItem);
@@ -1246,7 +1233,6 @@ public class CopyStockDetailActivity extends BaseActivity {
 
         @Override
         protected Bitmap doInBackground(String... params) {
-            canRefreshLine = false;
             Bitmap bitmap = null;
             item_index = params[0];
             switch (item_index) {
@@ -1365,7 +1351,6 @@ public class CopyStockDetailActivity extends BaseActivity {
             if (load_animation.getVisibility() == View.VISIBLE) {
                 load_animation.setVisibility(View.GONE);
             }
-            canRefreshLine = true;
         }
     }
 
@@ -1422,7 +1407,7 @@ public class CopyStockDetailActivity extends BaseActivity {
 
                 @Override
                 public void onFailure(String msg) {
-                    UIHelper.toast(CopyStockDetailActivity.this, "请检查网络");
+                    UIHelper.toast(getThisContext(), "请检查网络");
                 }
             };
             new GGOKHTTP(param, GGOKHTTP.MYSTOCK_DELETE, httpInterface).startGet();
@@ -1458,7 +1443,7 @@ public class CopyStockDetailActivity extends BaseActivity {
 
                 @Override
                 public void onFailure(String msg) {
-                    UIHelper.toast(CopyStockDetailActivity.this, "请检查网络");
+                    UIHelper.toast(getThisContext(), "请检查网络");
                 }
             };
             new GGOKHTTP(param, GGOKHTTP.MYSTOCK_ADD, httpInterface).startGet();
@@ -1477,7 +1462,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         stock_detail_choose.setText(addMyStock ? "已自选" : "加自选");
 
         if (needToast) {
-            UIHelper.toast(CopyStockDetailActivity.this, addMyStock ? "添加自选成功" : "删除自选成功");
+            UIHelper.toast(getThisContext(), addMyStock ? "添加自选成功" : "删除自选成功");
         }
 
         isChoose = addMyStock;
@@ -1526,32 +1511,6 @@ public class CopyStockDetailActivity extends BaseActivity {
             avg_price = Float.parseFloat(s);
         }
         return avg_price;
-    }
-
-    public String getStockName() {
-        return stockName;
-    }
-
-    public void setStockName(String stockName) {
-        this.stockName = stockName;
-    }
-
-    public String getStockCode() {
-        return stockCode;
-    }
-
-    public void setStockCode(String stockCode) {
-        this.stockCode = stockCode;
-    }
-
-    String now;
-
-    public String getNow() {
-        return now;
-    }
-
-    public void setNow(String now) {
-        this.now = now;
     }
 
     private class ImageChartAdapter extends FragmentPagerAdapter {
@@ -1854,6 +1813,9 @@ public class CopyStockDetailActivity extends BaseActivity {
         }
     }
 
+    private CopyStockDetailActivity getThisContext(){
+        return CopyStockDetailActivity.this;
+    }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {

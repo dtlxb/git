@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -60,7 +61,6 @@ import hply.com.niugu.bean.StockDetailMarketIndexBean;
 import hply.com.niugu.bean.StockDetailMarketIndexData;
 import hply.com.niugu.bean.StockRankBean;
 import hply.com.niugu.stock.StockMinuteBean;
-import hply.com.niugu.stock.StockMinuteData;
 
 
 /*
@@ -121,11 +121,13 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     //昨收
     @BindView(R.id.textView2)
     TextView textView2;
+
     @BindView(R.id.stock_close)
     TextView stock_close;
     //振幅
     @BindView(R.id.textView4)
     TextView textView4;
+
     @BindView(R.id.stock_amplitude)
     TextView stock_amplitude;
     //最高
@@ -165,7 +167,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     @BindView(R.id.stock_lv)
     InnerListView stock_lv;
     private String getStockCode;
-    private List<StockData> StockDatas = new ArrayList<StockData>();
+    private List<StockData> StockDatas = new ArrayList<>();
     //适配器
     private MarketTitleAdapter adapter;
     private ChangeListAdapter changeAdapter;
@@ -190,7 +192,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     @BindView(R.id.stock_no_data)
     LinearLayout stock_no_data;
 
-    private float density;
     private int pixels = -85;
     private String stockName;
     private String stockCode;
@@ -200,8 +201,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 
     private HashMap<String, Bitmap> map = new HashMap<>();
     //数据集合
-    private List<Map<String, Object>> mOHLCData = new ArrayList<Map<String, Object>>();
-    private List<StockMinuteData> stockminuteList;
+    private List<Map<String, Object>> mOHLCData = new ArrayList<>();
     //定时刷新
     private int seat;
     private int showItem;
@@ -271,13 +271,14 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         textView4.setAlpha((float) 0.7);
         //获取自动刷新时间
         showItem = SPTools.getInt("showItem", 0);
-        stockminuteList = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
             tabChartsTitles.addTab(tabChartsTitles.newTab().setText(stockDetailChartTitles[i]));
         }
 
-        tabChartsTitles.getTabAt(showItem).select();
+        TabLayout.Tab tabAt = tabChartsTitles.getTabAt(showItem);
+        if (tabAt!=null)
+            tabAt.select();
 
         tabChartsTitles.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -562,8 +563,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                 }
                 timesBean = JSONObject.parseObject(responseInfo, StockMinuteBean.class);
                 if (timesBean.getCode() == 0) {
-                    stockminuteList.clear();
-                    stockminuteList.addAll(timesBean.getData());
                     new BitmapTask().execute("0");
                 } else {
                     if (load_animation.getVisibility() == View.VISIBLE) {
@@ -732,7 +731,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         super.onResume();
         DisplayMetrics metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
-        density = metric.density;
+        float density = metric.density;
         width = metric.widthPixels - (int) (20 * density + 0.5f);
         height = (int) (190 * density + 0.5f);
         timer = new Timer();
@@ -748,7 +747,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     }
 
     private void InitList(final String stockCode) {
-        final Map<String, String> param = new HashMap<String, String>();
+        final Map<String, String> param = new HashMap<>();
         param.put("fullcode", stockCode);
 
         GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
@@ -769,8 +768,8 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                         initRefreshStyle(R.color.header_red);
                         stock_price.setText(StringUtils.save2Significand(info.get(0).getPrice()));//股票价格
                         stock_start.setText(StringUtils.save2Significand(info.get(0).getOpen_price()));//开盘价
-                        stock_detail_tv1.setText("+" + StringUtils.save2Significand(info.get(0).getPrice_change()));
-                        stock_detail_tv2.setText("+" + StringUtils.save2Significand(info.get(0).getPrice_change_rate()) + "%");
+                        stock_detail_tv1.setText(StockUtils.plusMinus(info.get(0).getPrice_change(),false));
+                        stock_detail_tv2.setText(StockUtils.plusMinus(info.get(0).getPrice_change_rate(),true));
 
                     } else if (info.get(0).getPrice_change() < 0) {
                         setStatusColorId(R.color.header_green);
@@ -781,7 +780,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                         stock_price.setText(StringUtils.save2Significand(info.get(0).getPrice()));//股票价格
                         stock_start.setText(StringUtils.save2Significand(info.get(0).getOpen_price()));//开盘价
                         stock_detail_tv1.setText(StringUtils.save2Significand(info.get(0).getPrice_change()));
-                        stock_detail_tv2.setText(StringUtils.save2Significand(info.get(0).getPrice_change_rate()) + "%");
+                        stock_detail_tv2.setText(StockUtils.plusMinus(info.get(0).getPrice_change_rate(),true));
 
                     } else {
                         setStatusColorId(R.color.header_gray);
@@ -791,12 +790,12 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                         stock_price.setText(StringUtils.save2Significand(info.get(0).getPrice()));//股票价格
                         stock_start.setText(StringUtils.save2Significand(info.get(0).getOpen_price()));//开盘价
                         stock_detail_tv1.setText(StringUtils.save2Significand(info.get(0).getPrice_change()));
-                        stock_detail_tv2.setText(StringUtils.save2Significand(info.get(0).getPrice_change_rate()) + "%");
+                        stock_detail_tv2.setText(StockUtils.plusMinus(info.get(0).getPrice_change_rate(),true));
                     }
 
                     stock_volume.setText(GetVolume(info.get(0).getVolume()));//成交量
                     stock_close.setText(StringUtils.save2Significand(info.get(0).getClose_price()));//收盘价
-                    stock_amplitude.setText(StringUtils.save2Significand(info.get(0).getAmplitude()) + "%");//振幅
+                    stock_amplitude.setText(StockUtils.plusMinus(info.get(0).getAmplitude(),true));//振幅
                     stock_detail_tv3.setText(StringUtils.save2Significand(info.get(0).getHigh_price()));//最高
                     stock_detail_tv3.setTextColor(getResColor(StockUtils.getStockRateColor(
                             cn.gogoal.im.common.StringUtils.pareseStringDouble(info.get(0).getHigh_price())-
@@ -808,7 +807,10 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                                     info.get(0).getClose_price())));
 
                     String turnover = String.valueOf(Math.ceil(info.get(0).getTurnover() / 10000));
-                    stock_detail_tv7.setText(turnover.substring(0, turnover.indexOf(".")) + "亿");//成交额
+
+                    stock_detail_tv7.setText(
+                            String.format(Locale.getDefault(),getString(R.string.thousand_million),
+                                    cn.gogoal.im.common.StringUtils.saveSignificand(turnover,0)));//成交额
 
                     //监听当前滚动位置，动态改变状态
                     scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
@@ -816,7 +818,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                         public void onScrollChanged() {
                             int[] location = new int[2];
                             linear_header.getLocationInWindow(location);
-                            int x = location[0];
+//                            int x = location[0];
                             int y = location[1];
 
                             if (y > pixels) {
@@ -862,7 +864,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     private String GetVolume(String volume) {
         if (volume.length() > 10) {
             Double num = Double.parseDouble(volume);
-            volume = String.valueOf(StringUtils.save2Significand(num / 10000000000l)) + "亿手";
+            volume = String.valueOf(StringUtils.save2Significand(num / 10000000000d)) + "亿手";
         } else {
             String num = StringUtils.save2Significand((Long.parseLong(volume) / 1000000));
             volume = StringUtils.getIntegerData(num) + "万手";
@@ -872,7 +874,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 
     //股票状态
     private void StockState() {
-        SimpleDateFormat df = new SimpleDateFormat("MM-dd HH:mm");
+        SimpleDateFormat df = new SimpleDateFormat("MM-dd HH:mm",Locale.getDefault());
         text_state.setText(StockUtils.getTreatState() + " " + df.format(new Date()));
         text_state.setTextColor(Color.WHITE);
         text_state.setAlpha((float) 0.7);
@@ -941,7 +943,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 
     private void getMarketInformation(final int seat, String getStockCode) {
         //type=0;1&channel=sh.000001
-        final Map<String, String> param = new HashMap<String, String>();
+        final Map<String, String> param = new HashMap<>();
         param.put("type", String.valueOf(seat));
         param.put("channel", getStockCode);
 
@@ -1131,7 +1133,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     private void handleData(JSONArray data) {
         for (int i = 0; i < data.size(); i++) {
             JSONObject singledata = (JSONObject) data.get(i);
-            Map<String, Object> itemData = new HashMap<String, Object>();
+            Map<String, Object> itemData = new HashMap<>();
             itemData.put("amplitude", singledata.getFloat("amplitude"));
             itemData.put("avg_price_" + dayk1, ParseNum(singledata.getString("avg_price_" + dayk1)));
             itemData.put("avg_price_" + dayk2, ParseNum(singledata.getString("avg_price_" + dayk2)));
@@ -1153,7 +1155,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     }
 
     private float ParseNum(String s) {
-        float avg_price = 0.0f;
+        float avg_price ;
         if (s == null) {
             avg_price = 0.0f;
         } else {
