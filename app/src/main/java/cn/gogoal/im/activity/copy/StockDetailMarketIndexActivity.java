@@ -46,14 +46,15 @@ import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.AnimationUtils;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.ui.copy.BitmapChartView;
 import cn.gogoal.im.ui.copy.InnerListView;
-import cn.gogoal.im.ui.copy.TimesFivesBitmap;
-import cn.gogoal.im.ui.stock.KChartsBitmap;
+import cn.gogoal.im.ui.stockviews.BitmapChartView;
+import cn.gogoal.im.ui.stockviews.KChartsBitmap;
+import cn.gogoal.im.ui.stockviews.TimesFivesBitmap;
 import hply.com.niugu.DeviceUtil;
 import hply.com.niugu.StringUtils;
 import hply.com.niugu.bean.StockData;
@@ -278,7 +279,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         }
 
         TabLayout.Tab tabAt = tabChartsTitles.getTabAt(showItem);
-        if (tabAt!=null)
+        if (tabAt != null)
             tabAt.select();
 
         tabChartsTitles.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -769,8 +770,8 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                         initRefreshStyle(R.color.header_red);
                         stock_price.setText(StringUtils.save2Significand(info.get(0).getPrice()));//股票价格
                         stock_start.setText(StringUtils.save2Significand(info.get(0).getOpen_price()));//开盘价
-                        stock_detail_tv1.setText(StockUtils.plusMinus(info.get(0).getPrice_change(),false));
-                        stock_detail_tv2.setText(StockUtils.plusMinus(info.get(0).getPrice_change_rate(),true));
+                        stock_detail_tv1.setText(StockUtils.plusMinus(info.get(0).getPrice_change(), false));
+                        stock_detail_tv2.setText(StockUtils.plusMinus(info.get(0).getPrice_change_rate(), true));
 
                     } else if (info.get(0).getPrice_change() < 0) {
                         setStatusColorId(R.color.header_green);
@@ -781,7 +782,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                         stock_price.setText(StringUtils.save2Significand(info.get(0).getPrice()));//股票价格
                         stock_start.setText(StringUtils.save2Significand(info.get(0).getOpen_price()));//开盘价
                         stock_detail_tv1.setText(StringUtils.save2Significand(info.get(0).getPrice_change()));
-                        stock_detail_tv2.setText(StockUtils.plusMinus(info.get(0).getPrice_change_rate(),true));
+                        stock_detail_tv2.setText(StockUtils.plusMinus(info.get(0).getPrice_change_rate(), true));
 
                     } else {
                         setStatusColorId(R.color.header_gray);
@@ -791,27 +792,27 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                         stock_price.setText(StringUtils.save2Significand(info.get(0).getPrice()));//股票价格
                         stock_start.setText(StringUtils.save2Significand(info.get(0).getOpen_price()));//开盘价
                         stock_detail_tv1.setText(StringUtils.save2Significand(info.get(0).getPrice_change()));
-                        stock_detail_tv2.setText(StockUtils.plusMinus(info.get(0).getPrice_change_rate(),true));
+                        stock_detail_tv2.setText(StockUtils.plusMinus(info.get(0).getPrice_change_rate(), true));
                     }
 
                     stock_volume.setText(GetVolume(info.get(0).getVolume()));//成交量
                     stock_close.setText(StringUtils.save2Significand(info.get(0).getClose_price()));//收盘价
-                    stock_amplitude.setText(StockUtils.plusMinus(info.get(0).getAmplitude(),true));//振幅
+                    stock_amplitude.setText(StockUtils.plusMinus(info.get(0).getAmplitude(), true));//振幅
                     stock_detail_tv3.setText(StringUtils.save2Significand(info.get(0).getHigh_price()));//最高
                     stock_detail_tv3.setTextColor(getResColor(StockUtils.getStockRateColor(
-                            cn.gogoal.im.common.StringUtils.pareseStringDouble(info.get(0).getHigh_price())-
+                            cn.gogoal.im.common.StringUtils.pareseStringDouble(info.get(0).getHigh_price()) -
                                     info.get(0).getClose_price())));
 
                     stock_detail_tv5.setText(StringUtils.save2Significand(info.get(0).getLow_price()));//最低
                     stock_detail_tv5.setTextColor(getResColor(StockUtils.getStockRateColor(
-                            cn.gogoal.im.common.StringUtils.pareseStringDouble(info.get(0).getLow_price())-
+                            cn.gogoal.im.common.StringUtils.pareseStringDouble(info.get(0).getLow_price()) -
                                     info.get(0).getClose_price())));
 
                     String turnover = String.valueOf(Math.ceil(info.get(0).getTurnover() / 10000));
 
                     stock_detail_tv7.setText(
-                            String.format(Locale.getDefault(),getString(R.string.thousand_million),
-                                    cn.gogoal.im.common.StringUtils.saveSignificand(turnover,0)));//成交额
+                            String.format(Locale.getDefault(), getString(R.string.thousand_million),
+                                    cn.gogoal.im.common.StringUtils.saveSignificand(turnover, 0)));//成交额
 
                     //监听当前滚动位置，动态改变状态
                     scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
@@ -875,7 +876,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 
     //股票状态
     private void StockState() {
-        SimpleDateFormat df = new SimpleDateFormat("MM-dd HH:mm",Locale.getDefault());
+        SimpleDateFormat df = new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault());
         text_state.setText(StockUtils.getTreatState() + " " + df.format(new Date()));
         text_state.setTextColor(Color.WHITE);
         text_state.setAlpha((float) 0.7);
@@ -1009,13 +1010,12 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
             switch (item_index) {
                 case "0":
                     timesBitmap = new TimesFivesBitmap(width, height);
-                    if (dpi <= DeviceUtil.DPI480P) {
-                        timesBitmap.setIsSw480P(true);
-                    } else if (dpi <= DeviceUtil.DPI720P) {
-                        timesBitmap.setIsSw720P(true);
-                    } else if (dpi <= DeviceUtil.DPI1080P) {
-                        timesBitmap.setIsSw1080P(true);
-                    }
+                    timesBitmap.setShowDetail(false);
+                    timesBitmap.setLongitudeNum(0);
+                    timesBitmap.setmSize(AppDevice.dp2px(StockDetailMarketIndexActivity.this, 1));
+                    timesBitmap.setmSpaceSize(AppDevice.dp2px(StockDetailMarketIndexActivity.this, 3));
+                    timesBitmap.setmAxisTitleSize(AppDevice.dp2px(StockDetailMarketIndexActivity.this, 10));
+
                     bitmap = timesBitmap.setTimesList(timesBean, true, 1);
                     map.put(item_index, bitmap);
                     break;
@@ -1023,14 +1023,12 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                     if (params.length > 1) {
                         StockMinuteBean bean = JSONObject.parseObject(params[1], StockMinuteBean.class);
                         fiveDayBitmap = new TimesFivesBitmap(width, height);
-                        if (dpi <= DeviceUtil.DPI480P) {
-                            fiveDayBitmap.setIsSw480P(true);
-                        } else if (dpi <= DeviceUtil.DPI720P) {
-                            fiveDayBitmap.setIsSw720P(true);
-                        } else if (dpi <= DeviceUtil.DPI1080P) {
-                            fiveDayBitmap.setIsSw1080P(true);
-                        }
                         fiveDayBitmap.setShowDetail(false);
+                        fiveDayBitmap.setLongitudeNum(4);
+                        fiveDayBitmap.setmSize(AppDevice.dp2px(StockDetailMarketIndexActivity.this, 1));
+                        fiveDayBitmap.setmSpaceSize(AppDevice.dp2px(StockDetailMarketIndexActivity.this, 3));
+                        fiveDayBitmap.setmAxisTitleSize(AppDevice.dp2px(StockDetailMarketIndexActivity.this, 10));
+
                         bitmap = fiveDayBitmap.setTimesList(bean, false, 1);
                         map.put(item_index, bitmap);
                     }
@@ -1039,14 +1037,13 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                     if (params.length > 1) {
                         mOHLCData.clear();
                         parseObjects(params[1]);
-                        KChartsBitmap kChartsBitmap = new KChartsBitmap(getActivity(), width, height);
-                        if (dpi <= DeviceUtil.DPI480P) {
-                            kChartsBitmap.setIsSw480P(true);
-                        } else if (dpi <= DeviceUtil.DPI720P) {
-                            kChartsBitmap.setIsSw720P(true);
-                        } else if (dpi <= DeviceUtil.DPI1080P) {
-                            kChartsBitmap.setIsSw1080P(true);
-                        }
+                        KChartsBitmap kChartsBitmap = new KChartsBitmap(width, height);
+                        kChartsBitmap.setShowDetail(false);
+                        kChartsBitmap.setLongitudeNum(1);
+                        kChartsBitmap.setmAxisTitleSize(AppDevice.dp2px(StockDetailMarketIndexActivity.this, 10));
+                        kChartsBitmap.setmSize(AppDevice.dp2px(StockDetailMarketIndexActivity.this, 1));
+                        kChartsBitmap.setmSpaceSize(AppDevice.dp2px(StockDetailMarketIndexActivity.this, 3));
+
                         bitmap = kChartsBitmap.setOHLCData(mOHLCData);
                         map.put(item_index, bitmap);
                     }
@@ -1055,14 +1052,14 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                     if (params.length > 1) {
                         mOHLCData.clear();
                         parseObjects(params[1]);
-                        KChartsBitmap kChartsBitmap1 = new KChartsBitmap(getActivity(), width, height);
-                        if (dpi <= DeviceUtil.DPI480P) {
-                            kChartsBitmap1.setIsSw480P(true);
-                        } else if (dpi <= DeviceUtil.DPI720P) {
-                            kChartsBitmap1.setIsSw720P(true);
-                        } else if (dpi <= DeviceUtil.DPI1080P) {
-                            kChartsBitmap1.setIsSw1080P(true);
-                        }
+                        KChartsBitmap kChartsBitmap1 = new KChartsBitmap(width, height);
+                        kChartsBitmap1.setShowDetail(false);
+                        kChartsBitmap1.setUperLatitudeNum(1);
+                        kChartsBitmap1.setLongitudeNum(1);
+                        kChartsBitmap1.setmSpaceSize(AppDevice.dp2px(StockDetailMarketIndexActivity.this, 3));
+                        kChartsBitmap1.setmAxisTitleSize(AppDevice.dp2px(StockDetailMarketIndexActivity.this, 10));
+                        kChartsBitmap1.setmSize(AppDevice.dp2px(StockDetailMarketIndexActivity.this, 1));
+
                         bitmap = kChartsBitmap1.setOHLCData(mOHLCData);
                         map.put(item_index, bitmap);
                     }
@@ -1071,15 +1068,15 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                     if (params.length > 1) {
                         mOHLCData.clear();
                         parseObjects(params[1]);
-                        KChartsBitmap kChartsBitmap2 = new KChartsBitmap(getActivity(), width, height);
-                        if (dpi <= DeviceUtil.DPI480P) {
-                            kChartsBitmap2.setIsSw480P(true);
-                        } else if (dpi <= DeviceUtil.DPI720P) {
-                            kChartsBitmap2.setIsSw720P(true);
-                        } else if (dpi <= DeviceUtil.DPI1080P) {
-                            kChartsBitmap2.setIsSw1080P(true);
-                        }
+                        KChartsBitmap kChartsBitmap2 = new KChartsBitmap(width, height);
+                        kChartsBitmap2.setShowDetail(false);
+                        kChartsBitmap2.setUperLatitudeNum(1);
+                        kChartsBitmap2.setLongitudeNum(1);
+                        kChartsBitmap2.setmSpaceSize(AppDevice.dp2px(StockDetailMarketIndexActivity.this, 3));
+                        kChartsBitmap2.setmAxisTitleSize(AppDevice.dp2px(StockDetailMarketIndexActivity.this, 10));
+                        kChartsBitmap2.setmSize(AppDevice.dp2px(StockDetailMarketIndexActivity.this, 1));
                         bitmap = kChartsBitmap2.setOHLCData(mOHLCData);
+
                         map.put(item_index, bitmap);
                     }
                     break;
@@ -1133,30 +1130,30 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 
     private void handleData(JSONArray data) {
         for (int i = 0; i < data.size(); i++) {
-            JSONObject singledata = (JSONObject) data.get(i);
+            JSONObject singleData = (JSONObject) data.get(i);
             Map<String, Object> itemData = new HashMap<>();
-            itemData.put("amplitude", singledata.getFloat("amplitude"));
-            itemData.put("avg_price_" + dayk1, ParseNum(singledata.getString("avg_price_" + dayk1)));
-            itemData.put("avg_price_" + dayk2, ParseNum(singledata.getString("avg_price_" + dayk2)));
-            itemData.put("avg_price_" + dayk3, ParseNum(singledata.getString("avg_price_" + dayk3)));
-            itemData.put("avg_price_" + dayk4, ParseNum(singledata.getString("avg_price_" + dayk4)));
-            itemData.put("close_price", ParseNum(singledata.getString("close_price")));
-            itemData.put("date", singledata.getString("date"));
-            itemData.put("high_price", ParseNum(singledata.getString("high_price")));
-            itemData.put("low_price", ParseNum(singledata.getString("low_price")));
-            itemData.put("open_price", ParseNum(singledata.getString("open_price")));
-            itemData.put("price_change", ParseNum(singledata.getString("price_change")));
-            itemData.put("price_change_rate", ParseNum(singledata.getString("price_change_rate")));
-            itemData.put("rightValue", ParseNum(singledata.getString("rightValue")));
-            itemData.put("turnover", ParseNum(singledata.getString("turnover")));
-            itemData.put("turnover_rate", ParseNum(singledata.getString("turnover_rate")));
-            itemData.put("volume", ParseNum(singledata.getString("volume")));
+            itemData.put("amplitude", singleData.getFloat("amplitude"));
+            itemData.put("avg_price_" + dayk1, ParseNum(singleData.getString("avg_price_" + dayk1)));
+            itemData.put("avg_price_" + dayk2, ParseNum(singleData.getString("avg_price_" + dayk2)));
+            itemData.put("avg_price_" + dayk3, ParseNum(singleData.getString("avg_price_" + dayk3)));
+            itemData.put("avg_price_" + dayk4, ParseNum(singleData.getString("avg_price_" + dayk4)));
+            itemData.put("close_price", ParseNum(singleData.getString("close_price")));
+            itemData.put("date", singleData.getString("date"));
+            itemData.put("high_price", ParseNum(singleData.getString("high_price")));
+            itemData.put("low_price", ParseNum(singleData.getString("low_price")));
+            itemData.put("open_price", ParseNum(singleData.getString("open_price")));
+            itemData.put("price_change", ParseNum(singleData.getString("price_change")));
+            itemData.put("price_change_rate", ParseNum(singleData.getString("price_change_rate")));
+            itemData.put("rightValue", ParseNum(singleData.getString("rightValue")));
+            itemData.put("turnover", ParseNum(singleData.getString("turnover")));
+            itemData.put("turnover_rate", ParseNum(singleData.getString("turnover_rate")));
+            itemData.put("volume", ParseNum(singleData.getString("volume")));
             mOHLCData.add(itemData);
         }
     }
 
     private float ParseNum(String s) {
-        float avg_price ;
+        float avg_price;
         if (s == null) {
             avg_price = 0.0f;
         } else {
@@ -1166,11 +1163,11 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     }
 
     //=======================================20170614========================================
-    private boolean isMaskViewVisiable(){
+    private boolean isMaskViewVisiable() {
         return layoutDialog.getVisibility() == View.VISIBLE;
     }
 
-    private void dismissMarket(){
+    private void dismissMarket() {
         if (isMaskViewVisiable()) {
             layoutDialog.setVisibility(View.GONE);
 

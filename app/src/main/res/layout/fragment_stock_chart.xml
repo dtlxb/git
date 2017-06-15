@@ -5,7 +5,7 @@
 
     android:orientation="vertical">
 
-    <cn.gogoal.im.ui.stock.BitmapChartView
+    <cn.gogoal.im.ui.stockviews.BitmapChartView
         android:id="@+id/stock_detail_fragment_time_line"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <cn.gogoal.im.ui.copy.LandScapeChartView
+    <cn.gogoal.im.ui.stockviews.LandScapeChartView
         android:id="@+id/times_view"
         android:layout_width="0dp"
         android:layout_height="match_parent"

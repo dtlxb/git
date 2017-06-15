@@ -2,6 +2,7 @@ package cn.gogoal.im.fragment.copy;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import com.alibaba.fastjson.JSONArray;
@@ -19,6 +20,7 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.copy.MessageHandlerList;
 import cn.gogoal.im.activity.copy.StockDetailChartsActivity;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.AppConst;
@@ -26,14 +28,15 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.ui.stock.KChartsView;
+import cn.gogoal.im.ui.stockviews.KChartView;
+import cn.gogoal.im.ui.stockviews.KLineGridChart;
 import hply.com.niugu.bean.OHLCBean;
 
 
 public class KChartsFragment extends BaseFragment {
     @BindView(R.id.k_charts_view)
-    KChartsView mMyChartsView;
-
+    KChartView mKChartView;
+    KLineGridChart mGridChart;
     private int type;
     private String stockCode;
     private OHLCBean bean;
@@ -42,29 +45,35 @@ public class KChartsFragment extends BaseFragment {
     private int totalHeight;
     private int stockType;
 
-    private int dayk1;
-    private int dayk2;
-    private int dayk3;
-    private int dayk4;
+    private int dayK1;
+    private int dayK2;
+    private int dayK3;
+    private int dayK4;
+
+    private int width;
+    private int height;
 
     //页数
     private int page;
     //loading dialog
     private Dialog progressDialog;
 
-//    @Override
+    //    @Override
     public int bindLayout() {
         return R.layout.fragment_kcharts;
     }
-//
+
+    //
     @Override
     public void doBusiness(Context mContext) {
         Bundle bundle = getArguments();
         totalHeight = bundle.getInt("totalHeight", 0);
-        dayk1 = SPTools.getInt("tv_ln1", 5);
-        dayk2 = SPTools.getInt("tv_ln2", 10);
-        dayk3 = SPTools.getInt("tv_ln3", 20);
-        dayk4 = SPTools.getInt("tv_ln4", 0);
+        dayK1 = SPTools.getInt("tv_ln1", 5);
+        dayK2 = SPTools.getInt("tv_ln2", 10);
+        dayK3 = SPTools.getInt("tv_ln3", 20);
+        dayK4 = SPTools.getInt("tv_ln4", 0);
+        width = bundle.getInt("width", 0) - AppDevice.dp2px(getActivity(), 52);
+        height = bundle.getInt("height", 0);
         GetKLineDataPage(false, true);
     }
 
@@ -84,8 +93,8 @@ public class KChartsFragment extends BaseFragment {
     }
 
     @Subscriber(tag = "KChartsFragment")
-    private void refresh(BaseMessage messge) {
-        switch (messge.getCode()) {
+    private void refresh(BaseMessage message) {
+        switch (message.getCode()) {
             case "auhority":
                 page = 0;
                 if (!isHidden()) GetKLineDataPage(true, true);
@@ -94,8 +103,10 @@ public class KChartsFragment extends BaseFragment {
     }
 
     public void GetKLineDataPage(final Boolean is_authroity, final boolean is_need_animation) {
+        if (page == 0) {
+            ((StockDetailChartsActivity) getActivity()).showProgressbar(true);
+        }
         page++;
-        ((StockDetailChartsActivity) getActivity()).showProgressbar(true);
 
         HashMap<String, String> param = new HashMap<>();
         if (StockDetailChartsActivity.STOCK_COMMON == stockType) {
@@ -105,7 +116,7 @@ public class KChartsFragment extends BaseFragment {
             param.put("fullcode", stockCode);
         }
         param.put("kline_type", type + "");
-        param.put("avg_line_type", dayk1 + ";" + dayk2 + ";" + dayk3);
+        param.put("avg_line_type", dayK1 + ";" + dayK2 + ";" + dayK3);
         param.put("page", String.valueOf(page));
         param.put("rows", "200");
 
@@ -120,21 +131,27 @@ public class KChartsFragment extends BaseFragment {
                         if ((int) result.get("code") == 0) {
                             handleData(data_array);
                             if (page == 1) {
-                                if (totalHeight <= AppDevice.DPI480P) {
-                                    mMyChartsView.setIsSw480P(true);
-                                } else if (totalHeight <= AppDevice.DPI720P) {
-                                    mMyChartsView.setIsSw720P(true);
-                                } else if (totalHeight <= AppDevice.DPI1080P) {
-                                    mMyChartsView.setIsSw1080P(true);
-                                }
-                                mMyChartsView.setLowerChartTabTitles(new String[]{"Volume", "MACD", "KDJ", "RSI"});
-                                mMyChartsView.setLongitudeNum(1);
-                                mMyChartsView.setChartsType(type);
+                                mGridChart = new KLineGridChart(width, height);
+                                mGridChart.setLeftMargin(AppDevice.dp2px(getActivity(), 40));
+                                mGridChart.setRightMargin(AppDevice.dp2px(getActivity(), 0));
+                                mGridChart.setShowDetail(true);
+                                mGridChart.setUperLatitudeNum(1);
+                                mGridChart.setLongitudeNum(1);
+                                mGridChart.setmAxisTitleSize(AppDevice.dp2px(getActivity(), 10));
+                                mGridChart.setmSize(AppDevice.dp2px(getActivity(), 1));
+                                mGridChart.setBorderColor(KChartsFragment.this.getResColor(R.color.weixin_text));
+                                mGridChart.setmLongtitudeColor(KChartsFragment.this.getResColor(R.color.weixin_text));
+                                mGridChart.setmLatitudeColor(KChartsFragment.this.getResColor(R.color.weixin_text));
+                                Bitmap bitmap = mGridChart.drawBitMap();
+                                mKChartView.setBitmapData(mGridChart);
+                                mKChartView.setBitmap(bitmap);
+                                mKChartView.setChartsType(type);
                             }
-                            mMyChartsView.setOHLCData(mOHLCData, is_need_animation);
-                            mMyChartsView.setIsRefresh(true);
+                            mKChartView.setOHLCData(mOHLCData, is_need_animation);
+                            mKChartView.setIsRefresh(true);
                             ((StockDetailChartsActivity) getActivity()).showProgressbar(false);
-                            MessageHandlerList.sendMessage(StockDetailChartsActivity.class, AppConst.DISS_PROGRESSBAR, 0);
+                            //MessageHandlerList.sendMessage(StockDetailChartsActivity.class, AppConst.DISS_PROGRESSBAR, 0);
+                            AppManager.getInstance().sendMessage("Diss_Progressbar");
                         }
                     }
                     progressDialog.dismiss();
@@ -144,8 +161,8 @@ public class KChartsFragment extends BaseFragment {
             @Override
             public void onFailure(String msg) {
                 UIHelper.toast(mContext, "网络连接异常，请检查后重试！");
-                if (mMyChartsView != null) {
-                    mMyChartsView.setIsRefresh(true);
+                if (mKChartView != null) {
+                    mKChartView.setIsRefresh(true);
                 }
                 progressDialog.dismiss();
                 page--;
@@ -161,30 +178,30 @@ public class KChartsFragment extends BaseFragment {
 
     private void handleData(JSONArray data) {
         for (int i = 0; i < data.size(); i++) {
-            com.alibaba.fastjson.JSONObject singledata = (com.alibaba.fastjson.JSONObject) data.get(i);
+            com.alibaba.fastjson.JSONObject singleData = (com.alibaba.fastjson.JSONObject) data.get(i);
             Map<String, Object> itemData = new HashMap<String, Object>();
-            itemData.put("amplitude", singledata.getFloat("amplitude"));
-            itemData.put("avg_price_" + dayk1, ParseNum(singledata.getString("avg_price_" + dayk1)));
-            itemData.put("avg_price_" + dayk2, ParseNum(singledata.getString("avg_price_" + dayk2)));
-            itemData.put("avg_price_" + dayk3, ParseNum(singledata.getString("avg_price_" + dayk3)));
-            itemData.put("avg_price_" + dayk4, ParseNum(singledata.getString("avg_price_" + dayk4)));
-            itemData.put("close_price", ParseNum(singledata.getString("close_price")));
-            itemData.put("date", singledata.getString("date"));
-            itemData.put("high_price", ParseNum(singledata.getString("high_price")));
-            itemData.put("low_price", ParseNum(singledata.getString("low_price")));
-            itemData.put("open_price", ParseNum(singledata.getString("open_price")));
-            itemData.put("price_change", ParseNum(singledata.getString("price_change")));
-            itemData.put("price_change_rate", ParseNum(singledata.getString("price_change_rate")));
-            itemData.put("rightValue", ParseNum(singledata.getString("rightValue")));
-            itemData.put("turnover", ParseNum(singledata.getString("turnover")));
-            itemData.put("turnover_rate", ParseNum(singledata.getString("turnover_rate")));
-            itemData.put("volume", ParseNum(singledata.getString("volume")));
+            itemData.put("amplitude", singleData.getFloat("amplitude"));
+            itemData.put("avg_price_" + dayK1, ParseNum(singleData.getString("avg_price_" + dayK1)));
+            itemData.put("avg_price_" + dayK2, ParseNum(singleData.getString("avg_price_" + dayK2)));
+            itemData.put("avg_price_" + dayK3, ParseNum(singleData.getString("avg_price_" + dayK3)));
+            itemData.put("avg_price_" + dayK4, ParseNum(singleData.getString("avg_price_" + dayK4)));
+            itemData.put("close_price", ParseNum(singleData.getString("close_price")));
+            itemData.put("date", singleData.getString("date"));
+            itemData.put("high_price", ParseNum(singleData.getString("high_price")));
+            itemData.put("low_price", ParseNum(singleData.getString("low_price")));
+            itemData.put("open_price", ParseNum(singleData.getString("open_price")));
+            itemData.put("price_change", ParseNum(singleData.getString("price_change")));
+            itemData.put("price_change_rate", ParseNum(singleData.getString("price_change_rate")));
+            itemData.put("rightValue", ParseNum(singleData.getString("rightValue")));
+            itemData.put("turnover", ParseNum(singleData.getString("turnover")));
+            itemData.put("turnover_rate", ParseNum(singleData.getString("turnover_rate")));
+            itemData.put("volume", ParseNum(singleData.getString("volume")));
             mOHLCData.add(itemData);
         }
     }
 
     private float ParseNum(String s) {
-        float avg_price = 0.0f;
+        float avg_price;
         if (s == null) {
             avg_price = 0.0f;
         } else {
@@ -193,14 +210,8 @@ public class KChartsFragment extends BaseFragment {
         return avg_price;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
-    public KChartsView getMyChartsView() {
-        return mMyChartsView;
+    public KChartView getMyChartsView() {
+        return mKChartView;
     }
 
     public void showLoadingDialog() {
