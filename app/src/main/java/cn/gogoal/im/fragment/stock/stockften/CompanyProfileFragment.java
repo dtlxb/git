@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -143,7 +142,6 @@ public class CompanyProfileFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                KLog.e(msg);
                 UIHelper.toast(getContext(), R.string.net_erro_hint);
             }
         };

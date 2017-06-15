@@ -6,7 +6,6 @@ import android.view.View;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +18,7 @@ import cn.gogoal.im.adapter.AnalysisLeftAdapter;
 import cn.gogoal.im.adapter.AnalysisRightAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.copy.FtenUtils;
 import cn.gogoal.im.ui.copy.InnerListView;
 
@@ -123,7 +123,7 @@ public class FinancialStatementsFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
+                //KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
@@ -133,6 +133,7 @@ public class FinancialStatementsFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
+                UIHelper.toast(getContext(), R.string.net_erro_hint);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.FIREPORT_PROFIT_DIST, ggHttpInterface).startGet();
