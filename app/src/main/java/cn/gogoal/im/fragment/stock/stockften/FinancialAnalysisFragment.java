@@ -159,55 +159,13 @@ public class FinancialAnalysisFragment extends BaseFragment {
                     JSONObject data = object.getJSONObject("data");
                     JSONArray retained_profits = null;
                     String profits = null;
+
                     if (stype.equals("1")) {
-                        switch (type) {
-                            case "1":
-                                profits = "retained_profits10";
-                                break;
-                            case "2":
-                                profits = "perbasic_eps20";
-                                break;
-                            case "3":
-                                profits = "epopratio_profit35";
-                                break;
-                            case "4":
-                                profits = "asset_liratio46";
-                                break;
-                            case "5":
-                                profits = "debtflow_ratio53";
-                                break;
-                            case "6":
-                                profits = "service_saveloan72";
-                                break;
-                            case "7":
-                                profits = "business_totalrevenue_growthrate90";
-                                break;
-                        }
+                        profits = FtenUtils.cotent1[Integer.parseInt(type) - 1];
                     } else {
-                        switch (type) {
-                            case "1":
-                                profits = "ffajr_09";
-                                break;
-                            case "2":
-                                profits = "ffajr_19";
-                                break;
-                            case "3":
-                                profits = "ffajr_29";
-                                break;
-                            case "4":
-                                profits = "ffajr_38";
-                                break;
-                            case "5":
-                                profits = "ffajr_45";
-                                break;
-                            case "6":
-                                profits = "ffajr_50";
-                                break;
-                            case "7":
-                                profits = "ffajr_57";
-                                break;
-                        }
+                        profits = FtenUtils.cotent2[Integer.parseInt(type) - 1];
                     }
+
                     retained_profits = data.getJSONArray(profits);
                     List<Float> values = new ArrayList<>();
                     for (int i = 0; i < retained_profits.size(); i++) {

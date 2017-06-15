@@ -11,6 +11,7 @@ import java.util.Map;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 
 /**
@@ -76,6 +77,7 @@ public class FinancialStatementsFragment extends BaseFragment {
 
         final Map<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
+        param.put("report_stype", "1");
         param.put("season", season);
         param.put("stype", stype);
         param.put("page", "1");
@@ -83,6 +85,7 @@ public class FinancialStatementsFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                FileUtil.writeRequestResponse(responseInfo, "F10DATA.TXT");
                 KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
@@ -94,6 +97,6 @@ public class FinancialStatementsFragment extends BaseFragment {
             public void onFailure(String msg) {
             }
         };
-        new GGOKHTTP(param, GGOKHTTP.FIREPORT_BALANCE_SHEET, ggHttpInterface).startGet();
+        new GGOKHTTP(param, GGOKHTTP.FIREPORT_PROFIT_DIST, ggHttpInterface).startGet();
     }
 }
