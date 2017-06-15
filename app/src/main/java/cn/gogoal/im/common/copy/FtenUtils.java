@@ -208,27 +208,6 @@ public class FtenUtils {
      */
     //利润分配表
     public static final String[] profitForm1 = {
-            "营业总收入(万元)", "营业收入(万元)", "利息收入(万元)", "已赚保费(万元)",
-            "手续费及佣金收入(万元)", "营业总成本(万元)", "营业成本(万元)", "利息支出(万元)",
-            "手续费及佣金支出(万元)", "研发费用(万元)", "退保金(万元)", "赔付支出净额(万元)",
-            "提取保险合同准备金净额(万元)", "保单红利支出(万元)", "分保费用(万元)", "营业税金及附加(万元)",
-            "销售费用(万元)", "管理费用(万元)", "财务费用(万元)", "资产减值损失(万元)",
-            "公允价值变动净收益(万元)", "投资净收益(万元)", "其中:对联营企业和合营企业的投资收益(万元)", "汇兑净收益(万元)",
-            "四、营业利润(万元)", "加:营业外收入(万元)", "减:营业外支出(万元)", "其中:非流动资产处置净损失(万元)",
-            "利润总额(万元)", "减:所得税(万元)", "加:未确认的投资损失(万元)", "净利润(万元)",
-            "减:少数股东损益(万元)", "归属于母公司所有者的净利润(万元)", "(一) 基本每股收益(元)", "(二) 稀释每股收益(元)"};
-    public static final String[] profitForm1_1 = {
-            "trading_income115", "trading_income116", "trading_income117", "trading_income118",
-            "trading_income119", "trading_cost120", "trading_cost121", "trading_cost122",
-            "trading_cost123", "trading_cost124", "trading_cost125", "trading_cost126",
-            "trading_cost127", "trading_cost128", "trading_cost129", "trading_cost130",
-            "trading_cost131", "trading_cost132", "trading_cost133", "trading_cost134",
-            "trading_cost135", "trading_cost136", "trading_cost137", "trading_cost138",
-            "trading_profit141", "trading_profit142", "trading_profit143", "trading_profit144",
-            "total_profit147", "total_profit148", "total_profit149", "net_profit152",
-            "net_profit153", "net_profit154", "net_profit155", "net_profit156"
-    };
-    public static final String[] profitForm2 = {
             "营业收入(万元)", "利息净收入(万元)", "利息收入(万元)",
             "减：利息支出(万元)", "手续费及佣金净收入(万元)", "手续费及佣金收入(万元)",
             "减：手续费及佣金支出(万元)", "投资收益(万元)", "其中：对联营企业和合营企业的投资收益(万元)",
@@ -239,7 +218,7 @@ public class FtenUtils {
             "减：所得税(万元)", "净利润(万元)", "减：少数股东损益(万元)",
             "归属于母公司所有者的净利润(万元)", "(一)基本每股收益(元)", "(二)稀释每股收益(元)"};
 
-    public static final String[] profitForm2_1 = {
+    public static final String[] profitForm1_1 = {
             "profit_distribution01", "profit_distribution02", "profit_distribution03",
             "profit_distribution04", "profit_distribution05", "profit_distribution06",
             "profit_distribution07", "profit_distribution08", "profit_distribution09",
@@ -250,7 +229,27 @@ public class FtenUtils {
             "profit_distribution22", "profit_distribution23", "profit_distribution24",
             "profit_distribution25", "profit_distribution26", "profit_distribution27"
     };
-
+    public static final String[] profitForm2 = {
+            "营业总收入(万元)", "营业收入(万元)", "利息收入(万元)", "已赚保费(万元)",
+            "手续费及佣金收入(万元)", "营业总成本(万元)", "营业成本(万元)", "利息支出(万元)",
+            "手续费及佣金支出(万元)", "研发费用(万元)", "退保金(万元)", "赔付支出净额(万元)",
+            "提取保险合同准备金净额(万元)", "保单红利支出(万元)", "分保费用(万元)", "营业税金及附加(万元)",
+            "销售费用(万元)", "管理费用(万元)", "财务费用(万元)", "资产减值损失(万元)",
+            "公允价值变动净收益(万元)", "投资净收益(万元)", "其中:对联营企业和合营企业的投资收益(万元)", "汇兑净收益(万元)",
+            "四、营业利润(万元)", "加:营业外收入(万元)", "减:营业外支出(万元)", "其中:非流动资产处置净损失(万元)",
+            "利润总额(万元)", "减:所得税(万元)", "加:未确认的投资损失(万元)", "净利润(万元)",
+            "减:少数股东损益(万元)", "归属于母公司所有者的净利润(万元)", "(一) 基本每股收益(元)", "(二) 稀释每股收益(元)"};
+    public static final String[] profitForm2_1 = {
+            "trading_income115", "trading_income116", "trading_income117", "trading_income118",
+            "trading_income119", "trading_cost120", "trading_cost121", "trading_cost122",
+            "trading_cost123", "trading_cost124", "trading_cost125", "trading_cost126",
+            "trading_cost127", "trading_cost128", "trading_cost129", "trading_cost130",
+            "trading_cost131", "trading_cost132", "trading_cost133", "trading_cost134",
+            "trading_cost135", "trading_cost136", "trading_cost137", "trading_cost138",
+            "trading_profit141", "trading_profit142", "trading_profit143", "trading_profit144",
+            "total_profit147", "total_profit148", "total_profit149", "net_profit152",
+            "net_profit153", "net_profit154", "net_profit155", "net_profit156"
+    };
 
     //资产负债表
     public static final String[] assetsForm1 = {

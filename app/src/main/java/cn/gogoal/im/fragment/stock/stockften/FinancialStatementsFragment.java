@@ -6,13 +6,17 @@ import android.os.Bundle;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.adapter.AnalysisLeftAdapter;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.copy.FtenUtils;
+import cn.gogoal.im.ui.copy.InnerListView;
 
 /**
  * Created by dave.
@@ -21,10 +25,17 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
  */
 public class FinancialStatementsFragment extends BaseFragment {
 
+    @BindView(R.id.lsv_left)
+    InnerListView lsvLeft;
+    @BindView(R.id.lsv_right)
+    InnerListView lsvRight;
+
     private String stockCode;
     private String stockName;
 
     private String stype;
+
+    private AnalysisLeftAdapter leftAdapter;
 
     public static FinancialStatementsFragment getInstance(String stockCode, String stockName) {
         FinancialStatementsFragment fragment = new FinancialStatementsFragment();
@@ -62,6 +73,7 @@ public class FinancialStatementsFragment extends BaseFragment {
                     JSONObject data = object.getJSONObject("data");
                     stype = data.getString("stype");
 
+                    setLeftListData(stype);
                     getStatementsData("0", stype);
                 }
             }
@@ -71,6 +83,27 @@ public class FinancialStatementsFragment extends BaseFragment {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_STOCK_FINANCIAL_TYPE, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 设置左边列表数据
+     */
+    private void setLeftListData(String stype) {
+        ArrayList<String> titleList = new ArrayList<>();
+        String[] stringList = null;
+        if (stype.equals("1")) {
+            stringList = FtenUtils.profitForm1;
+        } else {
+            stringList = FtenUtils.profitForm2;
+        }
+
+        titleList.add("利润分配表");
+        for (int i = 0; i < stringList.length; i++) {
+            titleList.add(stringList[i]);
+        }
+
+        leftAdapter = new AnalysisLeftAdapter(getActivity(), titleList);
+        lsvLeft.setAdapter(leftAdapter);
     }
 
     private void getStatementsData(String season, final String stype) {
@@ -85,7 +118,6 @@ public class FinancialStatementsFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                FileUtil.writeRequestResponse(responseInfo, "F10DATA.TXT");
                 KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {

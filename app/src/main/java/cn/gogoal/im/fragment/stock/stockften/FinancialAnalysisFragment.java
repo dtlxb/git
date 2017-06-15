@@ -20,6 +20,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.activity.stock.FinancialAnalysisActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ChartBean;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.copy.FtenUtils;
@@ -185,24 +186,31 @@ public class FinancialAnalysisFragment extends BaseFragment {
 
                     switch (type) {
                         case "1":
+                            barProfitView.setTextSize(AppDevice.dp2px(getActivity(), 10));
                             barProfitView.setChartData(chartBeanList);
                             break;
                         case "2":
+                            barShareEPS.setTextSize(AppDevice.dp2px(getActivity(), 10));
                             barShareEPS.setChartData(chartBeanList);
                             break;
                         case "3":
+                            barProfitRateView.setTextSize(AppDevice.dp2px(getActivity(), 10));
                             barProfitRateView.setChartData(chartBeanList);
                             break;
                         case "4":
+                            barDebtRatioView.setTextSize(AppDevice.dp2px(getActivity(), 10));
                             barDebtRatioView.setChartData(chartBeanList);
                             break;
                         case "5":
+                            barSovencyView.setTextSize(AppDevice.dp2px(getActivity(), 10));
                             barSovencyView.setChartData(chartBeanList);
                             break;
                         case "6":
+                            barTurnoverRateView.setTextSize(AppDevice.dp2px(getActivity(), 10));
                             barTurnoverRateView.setChartData(chartBeanList);
                             break;
                         case "7":
+                            barGrowsView.setTextSize(AppDevice.dp2px(getActivity(), 10));
                             barGrowsView.setChartData(chartBeanList);
                             break;
                     }
