@@ -1,5 +1,7 @@
 package cn.gogoal.im.ui.view;
 
+import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -119,38 +121,39 @@ public class LineBarView extends View {
     }
 
     private void drawLineBar(Canvas canvas) {
+        //写字
+        titlePaint.setTextSize(textSize);
+        titlePaint.setAntiAlias(true);
+        titlePaint.setColor(ContextCompat.getColor(getContext(), R.color.gray));
+        Paint.FontMetrics fontMetrics = titlePaint.getFontMetrics();
+        float fontHeight = fontMetrics.descent - fontMetrics.ascent;
         if (null != beanList && beanList.size() > 0) {
             //画网格
             linePaint.setAntiAlias(true);
             linePaint.setStrokeWidth(lineSize);
             linePaint.setColor(ContextCompat.getColor(getContext(), R.color.actionsheet_gray));
-            //写字
-            titlePaint.setTextSize(textSize);
-            titlePaint.setAntiAlias(true);
-            Paint.FontMetrics fontMetrics = titlePaint.getFontMetrics();
-            float fontHeight = fontMetrics.descent - fontMetrics.ascent;
 
-            float leftNum = (positive_num + negative_num) / (horizontalLines - 1);
-            float RightNum = (line_pos + line_pos) / (horizontalLines - 1);
+            float leftNum = biggest / (horizontalLines > 1 ? (horizontalLines - 1) : 1);
+            float RightNum = lineMax / (horizontalLines > 1 ? (horizontalLines - 1) : 1);
 
             //画横线、标注
             for (int i = 0; i < horizontalLines; i++) {
-                canvas.drawLine(marginLeft, marginTop + viewHeight * i / (horizontalLines - 1), marginLeft + viewWidth,
-                        marginTop + viewHeight * i / (horizontalLines - 1), linePaint);
+                canvas.drawLine(marginLeft, marginTop + viewHeight * i / (horizontalLines > 1 ? (horizontalLines - 1) : 1), marginLeft + viewWidth,
+                        marginTop + viewHeight * i / (horizontalLines > 1 ? (horizontalLines - 1) : 1), linePaint);
 
                 //左边
                 canvas.drawText(StringUtils.save2Significand(positive_num - leftNum * i),
                         marginLeft - titlePaint.measureText(StringUtils.save2Significand(positive_num - leftNum * i)) - 2 * lineSize,
-                        marginTop + viewHeight * i / (horizontalLines - 1) + fontHeight / 3, titlePaint);
+                        marginTop + viewHeight * i / (horizontalLines > 1 ? (horizontalLines - 1) : 1) + fontHeight / 3, titlePaint);
 
                 //右边
                 canvas.drawText(StringUtils.save2Significand(line_pos - RightNum * i), getWidth() - marginRight + 2 * lineSize,
-                        marginTop + viewHeight * i / (horizontalLines - 1) + fontHeight / 3, titlePaint);
+                        marginTop + viewHeight * i / (horizontalLines > 1 ? (horizontalLines - 1) : 1) + fontHeight / 3, titlePaint);
             }
             //画纵线
             for (int i = 0; i < verticalLines; i++) {
-                canvas.drawLine(marginLeft + viewWidth * i / (verticalLines - 1), marginTop,
-                        marginLeft + viewWidth * i / (verticalLines - 1), marginTop + viewHeight, linePaint);
+                canvas.drawLine(marginLeft + viewWidth * i / (verticalLines > 1 ? (verticalLines - 1) : 1), marginTop,
+                        marginLeft + viewWidth * i / (verticalLines > 1 ? (verticalLines - 1) : 1), marginTop + viewHeight, linePaint);
             }
             //画柱体
             rectPaint.setStrokeWidth(viewWidth / (beanList.size() * 2));
@@ -187,7 +190,6 @@ public class LineBarView extends View {
                 }
 
                 //画日期
-                titlePaint.setColor(ContextCompat.getColor(getContext(), R.color.gray));
                 canvas.drawText(date, startX - titlePaint.measureText(date) / 2,
                         startY + fontHeight, titlePaint);
             }
@@ -202,31 +204,35 @@ public class LineBarView extends View {
             invalidate();
         } else {
             //无数据处理
-
+            titlePaint.setTextSize(2 * textSize);
+            String text = "暂无数据";
+            canvas.drawText(text, getWidth() / 2 - titlePaint.measureText(text) / 2, getHeight() / 2, titlePaint);
         }
     }
 
     public void setChartData(List<ChartBean> beans) {
-        beanList = new ArrayList<>();
-        beanList.addAll(beans);
-        for (int i = 0; i < beans.size(); i++) {
-            float line = beans.get(i).getLineValue();
-            if (line > 0) {
-                line_pos = line_pos > line ? line_pos : line;
-            } else {
-                line_neg = line_neg > Math.abs(line) ? line_neg : Math.abs(line);
-            }
+        if (null != beans && beans.size() > 0) {
+            beanList = new ArrayList<>();
+            beanList.addAll(beans);
+            for (int i = 0; i < beans.size(); i++) {
+                float line = beans.get(i).getLineValue();
+                if (line > 0) {
+                    line_pos = line_pos > line ? line_pos : line;
+                } else {
+                    line_neg = line_neg > Math.abs(line) ? line_neg : Math.abs(line);
+                }
 
-            float bar = beans.get(i).getBarValue();
-            if (bar > 0) {
-                positive_num = positive_num > bar ? positive_num : bar;
-            } else {
-                negative_num = negative_num > Math.abs(bar) ? negative_num : Math.abs(bar);
+                float bar = beans.get(i).getBarValue();
+                if (bar > 0) {
+                    positive_num = positive_num > bar ? positive_num : bar;
+                } else {
+                    negative_num = negative_num > Math.abs(bar) ? negative_num : Math.abs(bar);
+                }
             }
+            biggest = positive_num + negative_num;
+            lineMax = line_pos + line_neg;
+            invalidate();
         }
-        biggest = positive_num + negative_num;
-        lineMax = line_pos + line_neg;
-        invalidate();
     }
 
 

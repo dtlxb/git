@@ -6,18 +6,46 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <cn.gogoal.im.ui.view.BarView
-        android:id="@+id/barView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@android:color/white" />
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <cn.gogoal.im.ui.view.PieView
+                android:id="@+id/pieView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@android:color/white" />
+
+            <cn.gogoal.im.ui.view.BarView
+                android:id="@+id/barView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/white" />
 
 
-    <cn.gogoal.im.ui.view.LineBarView
-        android:id="@+id/lineBarView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/white" />
+            <cn.gogoal.im.ui.view.LineBarView
+                android:id="@+id/lineBarView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/white" />
+
+            <cn.gogoal.im.ui.view.MultiBarView
+                android:id="@+id/multiBarView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/white" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

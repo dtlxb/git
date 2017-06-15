@@ -1,5 +1,6 @@
 package cn.gogoal.im.ui.view;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -11,13 +12,11 @@ import android.view.View;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.bean.ChartBean;
-import hply.com.niugu.StringUtils;
+import cn.gogoal.im.common.StringUtils;
 
 
 /**
@@ -35,6 +34,7 @@ public class BarView extends View {
     //字体与柱体距离
     private int marginBar;
     private int viewWidth;
+    private int viewHeight;
     //水平线绘制
     private Paint linePaint;
     //柱体绘制
@@ -92,33 +92,30 @@ public class BarView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        int viewHeight = getHeight();
+        viewHeight = getHeight() - marginBottom - marginTop;
         viewWidth = getWidth() - marginLeft - marginRight;
-        barRate = (float) (viewHeight - marginBottom - marginTop) / barBiggest;
+        barRate = (float) viewHeight / barBiggest;
         drawBars(canvas);
     }
 
     private void drawBars(Canvas canvas) {
-        //绘制水平线
-        linePaint.setAntiAlias(true);
-        linePaint.setStrokeWidth(lineSize);
-        linePaint.setColor(ContextCompat.getColor(getContext(), R.color.actionsheet_gray));
-        float startY = marginTop + barRate * positive_num;
-        canvas.drawLine(marginLeft, startY, getWidth() - marginRight, startY, linePaint);
 
-        //绘制标注
-        Rect r = new Rect();
         titlePaint.setAntiAlias(true);
         titlePaint.setTextSize(textSize);
         Paint.FontMetrics fontMetrics = titlePaint.getFontMetrics();
         float fontHeight = fontMetrics.descent - fontMetrics.ascent;
 
-        //绘制柱体
         if (null != beanList && beanList.size() > 0) {
+            //绘制水平线
+            linePaint.setAntiAlias(true);
+            linePaint.setStrokeWidth(lineSize);
+            linePaint.setColor(ContextCompat.getColor(getContext(), R.color.actionsheet_gray));
+            float startY = marginTop + barRate * positive_num;
+            canvas.drawLine(marginLeft, startY, getWidth() - marginRight, startY, linePaint);
+
             rectPaint.setStrokeWidth(viewWidth / (beanList.size() * 2));
             for (int i = 0; i < beanList.size(); i++) {
                 float barHeight;
-                String dataText = numberParse(Math.round(beanList.get(i).getBarValue()));
                 float startX = marginLeft + viewWidth * i / beanList.size() + viewWidth / (beanList.size() * 2);
                 barHeight = startY - barRate * beanList.get(i).getBarValue() * upRate;
                 //画笔颜色
@@ -129,9 +126,8 @@ public class BarView extends View {
                 //画柱体
                 canvas.drawLine(startX, startY, startX, barHeight, rectPaint);
                 //画标注
-                titlePaint.getTextBounds(dataText, 0, dataText.length(), r);
-                canvas.drawText(numberParse((int) (beanList.get(i).getBarValue() * upRate)),
-                        startX - titlePaint.measureText(numberParse((int) (beanList.get(i).getBarValue() * upRate))) / 2,
+                canvas.drawText(StringUtils.save2Significand(beanList.get(i).getBarValue() * upRate),
+                        startX - titlePaint.measureText(StringUtils.save2Significand(beanList.get(i).getBarValue() * upRate)) / 2,
                         beanList.get(i).getBarValue() < 0 ? barHeight + fontHeight * 3 / 5 + marginBar : barHeight - marginBar, titlePaint);
                 //画日期
                 titlePaint.setColor(ContextCompat.getColor(getContext(), R.color.gray));
@@ -145,35 +141,30 @@ public class BarView extends View {
                 upRate = 1;
             }
             invalidate();
-        }
-    }
-
-    //净利润一致预期数据处理
-    private String numberParse(int number) {
-        String text;
-        if ((number < 100000 & number > 10000) || (number < -10000 & number > -100000)) {
-            text = StringUtils.save2Significand(number / 10000.0f) + "亿";
-        } else if (number > 100000 || number < -100000) {
-            text = Math.round(number / 10000.0f) + "亿";
         } else {
-            text = number + "万";
+            //无数据处理
+            titlePaint.setTextSize(2 * textSize);
+            titlePaint.setColor(ContextCompat.getColor(getContext(), R.color.gray));
+            String text = "暂无数据";
+            canvas.drawText(text, getWidth() / 2 - titlePaint.measureText(text) / 2, getHeight() / 2, titlePaint);
         }
-        return text;
     }
 
     public void setChartData(List<ChartBean> beans) {
-        beanList = new ArrayList<>();
-        beanList.addAll(beans);
-        for (int i = 0; i < beans.size(); i++) {
-            float num = beans.get(i).getBarValue();
-            if (num > 0) {
-                positive_num = positive_num > num ? positive_num : num;
-            } else {
-                negative_num = negative_num > Math.abs(num) ? negative_num : Math.abs(num);
+        if (null != beans && beans.size() > 0) {
+            beanList = new ArrayList<>();
+            beanList.addAll(beans);
+            for (int i = 0; i < beans.size(); i++) {
+                float num = beans.get(i).getBarValue();
+                if (num > 0) {
+                    positive_num = positive_num > num ? positive_num : num;
+                } else {
+                    negative_num = negative_num > Math.abs(num) ? negative_num : Math.abs(num);
+                }
             }
+            barBiggest = positive_num + negative_num;
+            invalidate();
         }
-        barBiggest = positive_num + negative_num;
-        invalidate();
     }
 
 

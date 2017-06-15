@@ -219,4 +219,5 @@
     <color name="profit_type_7">@color/profit_type_2</color>
 
     <color name="btn_load_more">#1aaa</color>
+    <color name="half_alpha_white">#80FFFFFF</color>
 </resources>
