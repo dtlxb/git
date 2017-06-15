@@ -21,7 +21,6 @@ import java.util.Map;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.market.HostIndustryGridAdapter;
-import cn.gogoal.im.adapter.market.MarketViewPaerAdapter;
 import cn.gogoal.im.adapter.market.RankListAdapter;
 import cn.gogoal.im.adapter.market.TitleAdapter;
 import cn.gogoal.im.base.AppManager;
@@ -76,7 +75,7 @@ public class MarketFragment2 extends BaseFragment {
         //缓存池
         viewPool = new RecyclerView.RecycledViewPool();
         rvMarket.setRecycledViewPool(viewPool);
-        viewPool.setMaxRecycledViews(0, 40);
+        viewPool.setMaxRecycledViews(0, 20);
 
         delegateAdapter = new DelegateAdapter(layoutManager, true);
         adapters = new LinkedList<>();
@@ -186,7 +185,7 @@ public class MarketFragment2 extends BaseFragment {
             }
         });
 
-        adapters.add(new MarketViewPaerAdapter(newList));
+//        adapters.add(new MarketViewPaerAdapter(newList));
 
         adapters.add(new TitleAdapter("热门行业"));
 

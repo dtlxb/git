@@ -56,4 +56,8 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
         View view=findView(resId);
         view.setBackgroundResource(bgRes);
     }
+
+    public @ColorInt int getResColor(@ColorRes int colorRes){
+        return ContextCompat.getColor(context,colorRes);
+    }
 }
