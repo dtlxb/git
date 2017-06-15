@@ -2,12 +2,15 @@ package cn.gogoal.im.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import cn.gogoal.im.R;
@@ -31,9 +34,11 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
 
     private Context context;
 
+    private int padding;
     public MarketAdapter(Context context, List<MarkteBean> datas) {
         super(R.layout.item_stock_rank, datas);
         this.context = context;
+        padding=AppDevice.dp2px(context,5);
     }
 
     @Override
@@ -43,10 +48,20 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
         recyclerView.setFocusableInTouchMode(false);
 
         recyclerView.setTag(position);
+
         switch (position) {
             case 0:
-                recyclerView.setLayoutManager(new GridLayoutManager(context, 2));
-                recyclerView.setAdapter(new GridMarketAdapter(data.getDatas()));
+                recyclerView.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
+                recyclerView.setPadding(padding,padding,padding,padding);
+                recyclerView.setBackgroundColor(Color.WHITE);
+                List<MarkteBean.MarketItemData> marketItemDatas = data.getDatas();
+                Collections.sort(marketItemDatas, new Comparator<MarkteBean.MarketItemData>() {
+                    @Override
+                    public int compare(MarkteBean.MarketItemData o1, MarkteBean.MarketItemData o2) {
+                        return Integer.compare(o1.getIndex(),o2.getIndex());
+                    }
+                });
+                recyclerView.setAdapter(new GridMarketAdapter(marketItemDatas));
                 break;
             case 1:
                 recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
@@ -105,26 +120,29 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
      */
     private class GridMarketAdapter extends CommonAdapter<MarkteBean.MarketItemData, BaseViewHolder> {
 
+        private int innerSize;
         private GridMarketAdapter(List<MarkteBean.MarketItemData> datas) {
             super(R.layout.item_stock_market, datas);
+            innerSize=(AppDevice.getWidth(context)-AppDevice.dp2px(context,40))/3;
         }
 
         @Override
         protected void convert(BaseViewHolder holder, final MarkteBean.MarketItemData data, int position) {
             holder.itemView.setTag(position);
+
             ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
-            params.width = (AppDevice.getWidth(context) - 1) / 2;
+            params.width = innerSize;
             holder.itemView.setLayoutParams(params);
 
             holder.setText(R.id.tv_stock_market_name, data.getName());
-            holder.setText(R.id.tv_stock_market_price_change, StringUtils.saveSignificand(data.getPriceChange(), 2));
+            holder.setText(R.id.tv_stock_market_price_change$change_rate,
+                    StringUtils.saveSignificand(data.getPriceChange(), 2)+"\u3000"+
+                            StockUtils.plusMinus(data.getRate(),true));
 
             holder.setText(R.id.tv_stock_market_price, StringUtils.saveSignificand(data.getPrice(), 2));
-            holder.setText(R.id.tv_stock_market_price_change_rate, StringUtils.saveSignificand(data.getRate(), 2) + "%");
 
-            holder.setTextResColor(R.id.tv_stock_market_price,StockUtils.getStockRateColor(data.getChangeRate()));
-            holder.setTextResColor(R.id.tv_stock_market_price_change, StockUtils.getStockRateColor(data.getChangeRate()));
-            holder.setTextResColor(R.id.tv_stock_market_price_change_rate, StockUtils.getStockRateColor(data.getChangeRate()));
+            holder.getView(R.id.layout_stock_detail).setBackgroundResource(
+                    StockUtils.getStockRateColor(data.getChangeRate()));
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -113,9 +113,10 @@
     <color name="login_button_red">#eb5240</color>
 
     <!--股票详情页面-->
-    <color name="header_red">#f14a56</color>
-    <color name="header_green">#0eb70a</color>
-    <color name="header_gray">#a6a9ad</color>
+    <color name="header_red">@color/stock_red</color>
+    <color name="header_green">@color/stock_green</color>
+    <color name="header_gray">@color/stock_gray</color>
+
     <color name="text_color_word">#999999</color>
     <color name="text_color_number">#222222</color>
     <color name="line_color">#e4e4e4</color>

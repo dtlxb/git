@@ -3,210 +3,69 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipe_refresh_layout"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <cn.gogoal.im.ui.view.GreatScrollView
-        android:id="@+id/mObservableScrollView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:orientation="vertical">
 
-        <FrameLayout
+        <android.support.percent.PercentRelativeLayout
+            android:id="@+id/item_mystock"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="40dp"
+            android:background="@drawable/shape_line_bottom"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/app_bar_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#fff"
-                android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_mystock_stockname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:layout_toStartOf="@+id/tv_mystock_price"
+                android:text="全部"
+                android:textColor="@color/textColor_333333"
+                android:textSize="16sp" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:background="@color/stock_market_bg"
-                    android:gravity="center_vertical">
+            <cn.gogoal.im.ui.view.SortView
+                android:id="@+id/tv_mystock_price"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:layout_toStartOf="@+id/tv_mystock_rate"
+                android:gravity="center|end"
+                android:text="最新价"
+                android:textColor="@color/textColor_333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_widthPercent="25%" />
 
-                    <!--指数缩略窗-->
-                    <RelativeLayout
-                        android:id="@+id/layout_tiny_market_popu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true">
+            <cn.gogoal.im.ui.view.SortView
+                android:id="@+id/tv_mystock_rate"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:text="涨跌幅"
+                android:textColor="@color/textColor_333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_widthPercent="25%" />
+        </android.support.percent.PercentRelativeLayout>
 
-                        <LinearLayout
-                            android:id="@+id/layout_tiny_market"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical"
-                            android:paddingStart="15dp">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_mystock"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff" />
 
-                            <TextView
-                                android:id="@+id/tv_tiny_mystock_market_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/textColor_333333"
-                                android:textSize="14sp"
-                                android:textStyle="bold" />
+    </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/tv_tiny_mystock_market_price"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/textColor_333333"
-                                android:textSize="18sp" />
-
-                            <hply.com.niugu.autofixtext.AutofitTextView
-                                android:id="@+id/tv_tiny_mystock_market_price_change$rate"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:singleLine="true"
-                                android:textColor="@color/textColor_333333"
-                                android:textSize="14sp"
-                                app:minTextSize="8sp"
-                                app:sizeToFit="true" />
-
-                        </LinearLayout>
-
-                        <ImageView
-                            android:id="@+id/img_show_tinymarket_dialog"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentTop="true"
-                            android:layout_toEndOf="@+id/layout_tiny_market"
-                            android:contentDescription="@null"
-                            android:paddingEnd="10dp"
-                            android:paddingStart="10dp"
-                            android:paddingTop="10dp"
-                            android:scaleType="fitStart"
-                            android:src="@mipmap/img_mystock_down_flag" />
-
-                    </RelativeLayout>
-
-                    <View
-                        android:id="@+id/flag_middle"
-                        android:layout_width="2px"
-                        android:layout_height="50dp"
-                        android:layout_centerVertical="true"
-                        android:layout_toEndOf="@+id/layout_tiny_market_popu"
-                        android:background="#d8d8d8" />
-
-                    <!--新闻、公告、研报-->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:layout_toEndOf="@+id/flag_middle"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingEnd="5dp"
-                        android:paddingStart="5dp">
-
-                        <TextView
-                            android:id="@+id/tv_mystock_news"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:drawablePadding="3dp"
-                            android:drawableTop="@mipmap/img_mystock_news"
-                            android:gravity="center"
-                            android:text="新闻"
-                            android:textColor="@color/textColor_666666"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/tv_mystock_gonggao"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:drawablePadding="3dp"
-                            android:drawableTop="@mipmap/img_mystock_gonggao"
-                            android:gravity="center"
-                            android:text="公告"
-                            android:textColor="@color/textColor_666666"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/tv_mystock_yanbao"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:drawablePadding="3dp"
-                            android:drawableTop="@mipmap/img_mystock_yanbao"
-                            android:gravity="center"
-                            android:text="研报"
-                            android:textColor="@color/textColor_666666"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <View
-                    android:id="@+id/placeholder"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"/>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_mystock"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#fff" />
-
-            </LinearLayout>
-
-            <android.support.percent.PercentRelativeLayout
-                android:id="@+id/item_mystock"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@drawable/shape_line_bottom"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tv_mystock_stockname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="15dp"
-                    android:layout_toStartOf="@+id/tv_mystock_price"
-                    android:text="@string/text_empty"
-                    android:textColor="@color/textColor_333333"
-                    android:textSize="16sp" />
-
-                <cn.gogoal.im.ui.view.SortView
-                    android:id="@+id/tv_mystock_price"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toStartOf="@+id/tv_mystock_rate"
-                    android:gravity="center|end"
-                    android:text="@string/text_empty"
-                    android:textColor="@color/textColor_333333"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginEnd="20dp"
-                    app:layout_widthPercent="25%" />
-
-                <cn.gogoal.im.ui.view.SortView
-                    android:id="@+id/tv_mystock_rate"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp"
-                    android:text="@string/text_empty"
-                    android:textColor="@color/textColor_333333"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_widthPercent="25%" />
-            </android.support.percent.PercentRelativeLayout>
-
-        </FrameLayout>
-
-    </cn.gogoal.im.ui.view.GreatScrollView>
 </android.support.v4.widget.SwipeRefreshLayout>

@@ -44,6 +44,16 @@ public class MarkteBean {
         private String code;           //32
         private double changeRate;//颜色 依据字段
 
+        private int index;
+
+        public void setIndex(int index) {
+            this.index = index;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+
         public MarketItemData(String name, double price, String priceChange, String rate, String industryRate, String stockName, String code, double changeRate) {
             this.name = name;
             this.price = price;

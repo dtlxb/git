@@ -39,7 +39,7 @@
                 android:layout_marginTop="15dp"
                 android:background="@drawable/shape_line_top_and_bottom"
                 android:padding="15dp"
-                android:text="常用工具"
+                android:text="我的工具"
                 android:textColor="@color/textColor_333333"
                 android:textSize="18sp" />
 

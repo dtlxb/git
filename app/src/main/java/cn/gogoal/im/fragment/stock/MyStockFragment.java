@@ -14,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,12 +29,10 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.copy.StockDetailMarketIndexActivity;
 import cn.gogoal.im.activity.copy.StockSearchActivity;
 import cn.gogoal.im.activity.stock.EditMyStockActivity;
-import cn.gogoal.im.activity.stock.MyStockNewsActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.AppManager;
@@ -43,7 +40,6 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.MyStockBean;
 import cn.gogoal.im.bean.stock.MyStockData;
-import cn.gogoal.im.bean.stock.MyStockMarketBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
@@ -57,7 +53,6 @@ import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.main.MainStockFragment;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.dialog.WaitDialog;
-import cn.gogoal.im.ui.view.GreatScrollView;
 import cn.gogoal.im.ui.view.SortView;
 
 /**
@@ -66,26 +61,11 @@ import cn.gogoal.im.ui.view.SortView;
  * phone 18930640263
  * description :自选股
  */
-public class MyStockFragment extends BaseFragment implements MyStockSortInteface, GreatScrollView.Callbacks {
-
-    //缩略行情——指数名
-    @BindView(R.id.tv_tiny_mystock_market_name)
-    TextView tvTinyMarketName;
-
-    //缩略行情——指数价格
-    @BindView(R.id.tv_tiny_mystock_market_price)
-    TextView tvTinyMarketPrice;
-
-    //缩略行情——指数价格涨幅和变换率
-    @BindView(R.id.tv_tiny_mystock_market_price_change$rate)
-    TextView tvTinyMarketpriceChange$Rate;
+public class MyStockFragment extends BaseFragment implements MyStockSortInteface{
 
     //排序头，为了对齐，使用item的引用布局
     @BindView(R.id.item_mystock)
     PercentRelativeLayout itemMystock;
-
-    @BindView(R.id.placeholder)
-    View placeholderView;
 
     //按价格排序按钮
     @BindView(R.id.tv_mystock_price)
@@ -95,20 +75,11 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     @BindView(R.id.tv_mystock_rate)
     SortView tvMystockRate;
 
-    @BindView(R.id.tv_mystock_stockname)
-    TextView sortTitleName;
-
     @BindView(R.id.rv_mystock)
     RecyclerView rvMyStock;
 
-    @BindView(R.id.layout_tiny_market)
-    LinearLayout layoutTinyMarket;
-
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout refreshLayout;
-
-    @BindView(R.id.mObservableScrollView)
-    GreatScrollView mObservableScrollView;
 
     //自选股集合
     private ArrayList<MyStockData> myStockDatas = new ArrayList<>();
@@ -140,16 +111,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             }
         });
 
-        mObservableScrollView.setCallbacks(this);
-
-        mObservableScrollView.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        onScrollChanged(mObservableScrollView.getScrollY());
-                        mObservableScrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    }
-                });
     }
 
     @Override
@@ -160,22 +121,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         } catch (Exception e) {
             KLog.e(e.getMessage());
         }
-
-//            setAppBarLayout(appBarLayout,!(myStockDatas!=null && myStockDatas.size()<5));
-    }
-
-    @Override
-    public void onScrollChanged(int scrollY) {
-        itemMystock.setTranslationY(Math.max(placeholderView.getTop(), scrollY));
-    }
-
-    @Override
-    public void onDownMotionEvent() {
-
-    }
-
-    @Override
-    public void onUpOrCancelMotionEvent() {
 
     }
 
@@ -196,40 +141,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     }
 
     /**
-     * 切换指数缩略
-     */
-    public void changeIitem(final MyStockMarketBean.MyStockMarketData data) {
-        if (data == null) {
-            return;
-        }
-
-        tvTinyMarketName.setText(data.getName());
-        tvTinyMarketPrice.setText(StringUtils.saveSignificand(data.getPrice(), 2));
-        tvTinyMarketpriceChange$Rate.setText(StockUtils.plusMinus(data.getPrice_change() + "", false) + "  " +
-                StockUtils.plusMinus(String.valueOf(data.getPrice_change_rate()), true));
-
-        tvTinyMarketPrice.setTextColor(ContextCompat.getColor(getContext(),
-                StockUtils.getStockRateColor(String.valueOf(data.getPrice_change_rate()))));
-        tvTinyMarketpriceChange$Rate.setTextColor(ContextCompat.getColor(getContext(),
-                StockUtils.getStockRateColor(String.valueOf(data.getPrice_change_rate()))));
-
-        layoutTinyMarket.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), StockDetailMarketIndexActivity.class);
-                intent.putExtra("stockName", data.getName());
-                intent.putExtra("stockCode", data.getFullcode());
-                startActivity(intent);
-            }
-        });
-    }
-
-    /**
      * 初始化排序头
      */
     private void initSortTitle(Context ctx) {
-        sortTitleName.setText("全部");
-
         tvMystockPrice.setDefaultText("最新价");
         tvMystockRate.setDefaultText("涨跌幅");
         tvMystockPrice.setViewStateNormal();
@@ -266,7 +180,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     StockUtils.saveMyStock(JSONObject.parseObject(responseInfo).getJSONArray("data"));
 
                     if (loadType == AppConst.REFRESH_TYPE_SWIPEREFRESH || loadType == AppConst.REFRESH_TYPE_PARENT_BUTTON) {
-                        UIHelper.toast(getActivity(), getString(R.string.str_refresh_ok));
+                        UIHelper.toast(getActivity(), "自选"+getString(R.string.str_refresh_ok));
                     }
 
                 } else if (code == 1001) {
@@ -312,33 +226,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         } catch (Exception e) {
             e.getMessage();
         }
-    }
-
-    @OnClick({R.id.img_show_tinymarket_dialog, R.id.tv_mystock_news,
-            R.id.tv_mystock_gonggao, R.id.tv_mystock_yanbao})
-    void click(View view) {
-        switch (view.getId()) {
-            case R.id.img_show_tinymarket_dialog:
-                ((MainStockFragment) getParentFragment()).showMarketDialog();
-                break;
-
-            case R.id.tv_mystock_news:
-                intentNews(0);
-                break;
-            case R.id.tv_mystock_gonggao:
-                intentNews(1);
-                break;
-            case R.id.tv_mystock_yanbao:
-                intentNews(2);
-                break;
-        }
-    }
-
-    private void intentNews(int index) {
-        Intent intent = new Intent(getActivity(), MyStockNewsActivity.class);
-        intent.putExtra("news_title", getString(R.string.title_mtstock_news));
-        intent.putExtra("showTabIndex", index);
-        startActivity(intent);
     }
 
     void noData(boolean noData) {
@@ -485,6 +372,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     } else if (data.getSymbol_type() == 2) {//指数类型
                         Intent intent = new Intent(getContext(), StockDetailMarketIndexActivity.class);
                         intent.putExtra("stockName", data.getStock_name());
+//                        intent.putExtra("stockSource", data.getSource());
                         intent.putExtra("stockCode", data.getSource() + data.getStock_code());
                         startActivity(intent);
 

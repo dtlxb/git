@@ -27,6 +27,7 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.XLayout;
+import cn.gogoal.im.ui.widget.VpSwipeRefreshLayout;
 
 import static cn.gogoal.im.common.AppConst.REFRESH_TYPE_PARENT_BUTTON;
 import static cn.gogoal.im.common.AppConst.REFRESH_TYPE_RELOAD;
@@ -48,7 +49,7 @@ public class HuShenFragment extends BaseFragment {
     RecyclerView rvMarket;
 
     @BindView(R.id.swiperefreshlayout)
-    SwipeRefreshLayout refreshLayout;
+    VpSwipeRefreshLayout refreshLayout;
 
     private MarketAdapter adapter;
 
@@ -84,19 +85,18 @@ public class HuShenFragment extends BaseFragment {
      */
     public void getMarketInformation(final int refreshType) {
 
-        AppManager.getInstance().sendMessage("START_MARKET_ANIMATIOM");
+        AppManager.getInstance().sendMessage("market_start_animation_refresh");
 
         if (refreshType == REFRESH_TYPE_RELOAD) {
             xLayout.setStatus(XLayout.Loading);//loading
         }
 
         final Map<String, String> param = new HashMap<>();
-        param.put("fullcode", "sh000001;sz399001;sh000300;csi930715");
+        param.put("fullcode", "sh000001;sz399001;sz399006;sh000300;sz399005;sh000016");
         param.put("category_type", "1");
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                AppManager.getInstance().sendMessage("STOP_MARKET_ANIMATION");
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     SPTools.saveString("MARKET_RESPONSEINFO_DATA", responseInfo);//缓存
                     reconstructData(responseInfo, refreshType);
@@ -107,15 +107,14 @@ public class HuShenFragment extends BaseFragment {
                     xLayout.setEmptyText(errorMsg);
                     if (refreshType == REFRESH_TYPE_PARENT_BUTTON || refreshType == REFRESH_TYPE_SWIPEREFRESH) {
                         UIHelper.toast(getContext(), "行情数据更新出错\r\n" + errorMsg, Toast.LENGTH_LONG);
-                        AppManager.getInstance().sendMessage("STOP_MARKET_ANIMATION");
                     }
                 }
+                AppManager.getInstance().sendMessage("market_stop_animation_refresh");
             }
 
             @Override
             public void onFailure(String msg) {
                 UIHelper.toastError(getActivity(), msg, xLayout);
-                AppManager.getInstance().sendMessage("STOP_MARKET_ANIMATION");
 
                 if (xLayout != null) {
                     xLayout.setEmptyText(msg);
@@ -126,6 +125,7 @@ public class HuShenFragment extends BaseFragment {
                         }
                     });
                 }
+                AppManager.getInstance().sendMessage("market_stop_animation_refresh");
 
             }
         };
@@ -137,7 +137,7 @@ public class HuShenFragment extends BaseFragment {
         StockMarketBean.DataBean marketData = JSONObject.parseObject(responseInfo, StockMarketBean.class).getData();
         //大盘
         List<MarkteBean.MarketItemData> listMarket = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 6; i++) {
             StockMarketBean.DataBean.HangqingBean hangqingBean = marketData.getHangqing().get(i);
             MarkteBean.MarketItemData itemData = new MarkteBean.MarketItemData(
                     hangqingBean.getName(),
@@ -145,6 +145,27 @@ public class HuShenFragment extends BaseFragment {
                     hangqingBean.getPrice_change(),
                     hangqingBean.getPrice_change_rate(), "", null, hangqingBean.getFullcode(),
                     StringUtils.pareseStringDouble(hangqingBean.getPrice_change()));
+//            "sh000001;sz399001;sz399006;sh000300;sz399005;sh000016"
+            switch (hangqingBean.getFullcode()){
+                case "sh000001":
+                    itemData.setIndex(0);
+                    break;
+                case "sz399001":
+                    itemData.setIndex(1);
+                    break;
+                case "sz399006":
+                    itemData.setIndex(2);
+                    break;
+                case "sh000300":
+                    itemData.setIndex(3);
+                    break;
+                case "sz399005":
+                    itemData.setIndex(4);
+                    break;
+                case "sh000016":
+                    itemData.setIndex(5);
+                    break;
+            }
             listMarket.add(itemData);
         }
 
@@ -175,12 +196,11 @@ public class HuShenFragment extends BaseFragment {
         markteList.add(new MarkteBean("振幅榜", addRankList(marketData.getStockRanklist().getAmplitude_list())));
 
         xLayout.setStatus(XLayout.Success);
-        AppManager.getInstance().sendMessage("STOP_MARKET_ANIMATION");
 
         adapter.notifyDataSetChanged();
 
         if (refreshType == REFRESH_TYPE_PARENT_BUTTON || refreshType == REFRESH_TYPE_SWIPEREFRESH) {
-            UIHelper.toast(getContext(), "行情数据更新成功");
+            UIHelper.toast(getContext(), "行情" + getString(R.string.str_refresh_ok));
         }
     }
 

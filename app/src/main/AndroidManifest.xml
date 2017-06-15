@@ -237,6 +237,7 @@
         <activity android:name=".activity.Face2FaceActivity" />
         <activity android:name=".activity.Face2FaceHolderActivity" />
         <activity android:name=".activity.QrcodeProcessActivity" />
+        <activity android:name=".activity.Test2Activity"/>
     </application>
 
 </manifest>
