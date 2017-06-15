@@ -74,6 +74,7 @@ public class PieView extends View {
         linePaint = new Paint();
         piePaint = new Paint();
         titlePaint = new Paint();
+        beanList = new ArrayList<>();
     }
 
     @Override
@@ -183,8 +184,10 @@ public class PieView extends View {
 
     public void setPieData(List<PieBean> beans) {
         if (null != beans && beans.size() > 0) {
-            beanList = new ArrayList<>();
+            beanList.clear();
             beanList.addAll(beans);
+            totalValue = 0;
+            pieRate = 0;
             for (int i = 0; i < beans.size(); i++) {
                 float num = beans.get(i).getPieValue();
                 totalValue += num;

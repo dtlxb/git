@@ -20,6 +20,7 @@ import cn.gogoal.im.adapter.AnalysisLeftAdapter;
 import cn.gogoal.im.adapter.AnalysisRightAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ChartBean;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.copy.FtenUtils;
@@ -55,7 +56,7 @@ public class FinancialAnalysisActivity extends BaseActivity {
     private JSONObject data;
     private int chartTab = 0;
 
-    List<ChartBean> chartBeanList = new ArrayList<>();
+    List<ChartBean> chartBeanList;
 
     private AnalysisLeftAdapter leftAdapter;
     private AnalysisRightAdapter rightAdapter;
@@ -72,6 +73,7 @@ public class FinancialAnalysisActivity extends BaseActivity {
         stockName = getIntent().getStringExtra("stockName");
         stype = getIntent().getStringExtra("stype");
         type = getIntent().getStringExtra("type");
+        chartBeanList = new ArrayList<>();
 
         setMyTitle(stockName + "-资料F10", true);
 
@@ -207,6 +209,7 @@ public class FinancialAnalysisActivity extends BaseActivity {
         for (int i = 0; i < title.size(); i++) {
             chartBeanList.add(new ChartBean(values.get(i), dates.get(i)));
         }
+        barAnalysisView.setTextSize(AppDevice.dp2px(FinancialAnalysisActivity.this, 10));
         barAnalysisView.setChartData(chartBeanList);
     }
 

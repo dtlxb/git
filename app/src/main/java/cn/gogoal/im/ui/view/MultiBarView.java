@@ -91,6 +91,7 @@ public class MultiBarView extends View {
         linePaint = new Paint();
         rectPaint = new Paint();
         titlePaint = new Paint();
+        beanList = new ArrayList<>();
     }
 
     @Override
@@ -176,8 +177,13 @@ public class MultiBarView extends View {
 
     public void setChartData(List<ChartBean> beans) {
         if (null != beans && beans.size() > 0) {
-            beanList = new ArrayList<>();
+            beanList.clear();
             beanList.addAll(beans);
+            positive_num = 0;
+            negative_num = 0;
+            barBiggest = 0;
+            barRate = 0;
+            upRate = 0;
             for (int i = 0; i < beans.size(); i++) {
                 float bar1 = beans.get(i).getBarValue();
                 float bar2 = beans.get(i).getSecondBarValue();

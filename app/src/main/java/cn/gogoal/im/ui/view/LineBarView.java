@@ -107,6 +107,7 @@ public class LineBarView extends View {
         rectPaint = new Paint();
         titlePaint = new Paint();
         circlePaint = new Paint();
+        beanList = new ArrayList<>();
     }
 
     @Override
@@ -212,8 +213,17 @@ public class LineBarView extends View {
 
     public void setChartData(List<ChartBean> beans) {
         if (null != beans && beans.size() > 0) {
-            beanList = new ArrayList<>();
+            beanList.clear();
             beanList.addAll(beans);
+            line_pos = 0;
+            line_neg = 0;
+            positive_num = 0;
+            negative_num = 0;
+            biggest = 0;
+            lineMax = 0;
+            barRate = 0;
+            upRate = 0;
+            lineRate = 0;
             for (int i = 0; i < beans.size(); i++) {
                 float line = beans.get(i).getLineValue();
                 if (line > 0) {

@@ -87,6 +87,7 @@ public class BarView extends View {
         linePaint = new Paint();
         rectPaint = new Paint();
         titlePaint = new Paint();
+        beanList = new ArrayList<>();
     }
 
     @Override
@@ -152,8 +153,13 @@ public class BarView extends View {
 
     public void setChartData(List<ChartBean> beans) {
         if (null != beans && beans.size() > 0) {
-            beanList = new ArrayList<>();
+            beanList.clear();
             beanList.addAll(beans);
+            barBiggest = 0;
+            positive_num = 0;
+            negative_num = 0;
+            upRate = 0;
+            barRate = 0;
             for (int i = 0; i < beans.size(); i++) {
                 float num = beans.get(i).getBarValue();
                 if (num > 0) {
