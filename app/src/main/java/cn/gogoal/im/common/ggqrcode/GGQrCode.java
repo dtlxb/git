@@ -20,11 +20,12 @@ public class GGQrCode {
 
     private static final String urlHead = "http://www.baidu.com/page/profile?";
 
+    public static final int QR_CODE_TYPE_PERSIONAL = 0x0;
+
+    public static final int QR_CODE_TYPE_GROUP = 0x1;
+
     /**
      * 获取生成后的二维码链接
-     *
-     * @see Bean 本来可以直接传Bean对象，考虑到后面要生成json,会使用fastjson，
-     * 而日后可能不用fastjson或jackjson或者gson，所以外部先将Bean生成json传入
      */
     public static String getUserQrCodeBase64String(String jsonBean) {
         return urlHead + Base64Encoder.encode(jsonBean);
@@ -35,7 +36,7 @@ public class GGQrCode {
      */
     public static String getUserQrCodeBody(String codeString) {
         if (codeString.startsWith(urlHead)) {
-            return Base64Decoder.decode(codeString.substring(codeString.indexOf("?")+1));
+            return Base64Decoder.decode(codeString.replace(urlHead,""));
         }
         return null;
     }
@@ -43,9 +44,6 @@ public class GGQrCode {
 
     /**
      * 是否是我司的二维码
-     *
-     * @see Bean 本来可以直接传Bean对象，考虑到后面要生成json,会使用fastjson，
-     * 而日后可能不用fastjson或jackjson或者gson，所以外部先将Bean生成json传入
      */
     public static boolean isGGQrcodeString(String qrCodeString) {
         return qrCodeString.startsWith(urlHead);
@@ -54,13 +52,11 @@ public class GGQrCode {
     /*
     * 获取我自己的二维码串
     * */
-    public static String getMyQrcodeString() {
-        String accountId = UserUtils.getMyAccountId();
-        if (!StringUtils.isActuallyEmpty(accountId)) {
+    public static String getQrcodeString(int type, String id) {
+        if (!StringUtils.isActuallyEmpty(id)) {
             Map<String, String> map = new HashMap<>();
-            map.put("qrType", Bean.QR_CODE_TYPE_PERSIONAL + "");
-            map.put("account_id", UserUtils.getMyAccountId());
-
+            map.put("qrType", String.valueOf(type));
+            map.put(type == QR_CODE_TYPE_PERSIONAL ? "account_id" : "conv_id", UserUtils.getMyAccountId());
             return getUserQrCodeBase64String(JSONObject.toJSONString(map));
         }
         return null;

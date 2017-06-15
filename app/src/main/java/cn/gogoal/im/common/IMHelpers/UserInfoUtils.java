@@ -49,7 +49,6 @@ public class UserInfoUtils {
     public static List<UserBean> getAllUserInfo() {
         List<UserBean> AllBean = new ArrayList<>();
         AllBean.addAll(DataSupport.where("inYourContact = ? ", "1").find(UserBean.class));
-        KLog.e(AllBean);
         return AllBean;
     }
 
@@ -114,7 +113,6 @@ public class UserInfoUtils {
     public static List<UserBean> getAllGroupUserInfo(String conversationId) {
         List<SquareUserBean> beanList = DataSupport.where("conversationId = ?", conversationId).find(SquareUserBean.class);
         List<UserBean> userBeanList = new ArrayList<>();
-        KLog.e(beanList);
         if (null != beanList && beanList.size() > 0) {
             for (int i = 0; i < beanList.size(); i++) {
                 List<UserBean> listBean = DataSupport.where("friend_id = ? ",

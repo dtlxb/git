@@ -1,6 +1,5 @@
 package cn.gogoal.im.common;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMClient;
@@ -31,6 +29,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import cn.gogoal.im.R;
 import cn.gogoal.im.activity.CreateLiveActivity;
 import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.activity.TypeLoginActivity;
@@ -164,7 +163,7 @@ public class UserUtils {
             ImageUtils.getUrlBitmap(MyApp.getAppContext(), UserUtils.getUserAvatar(), new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                    listener.response(true, resource);
+                    listener.response(Impl.RESPON_DATA_SUCCESS, resource);
                     ImageUtils.saveImageToSD(MyApp.getAppContext(), MyApp.getAppContext().getExternalFilesDir("avatar") +
                                     File.separator + "avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()) +
                                     ImageUtils.getImageSuffix(UserUtils.getUserAvatar()),
@@ -172,8 +171,48 @@ public class UserUtils {
                 }
             });
         } else {
-            listener.response(true, BitmapFactory.decodeFile(getBitmapFilePaht()));
+            listener.response(Impl.RESPON_DATA_SUCCESS, BitmapFactory.decodeFile(getBitmapFilePaht()));
         }
+    }
+
+    public static Bitmap getUserAvatarBitmap() {
+        final Bitmap[] bitmap = new Bitmap[1];
+        getUserAvatar(new Impl<Bitmap>() {
+            @Override
+            public void response(int code, Bitmap data) {
+                if (code == Impl.RESPON_DATA_SUCCESS) {
+                    bitmap[0] = data;
+                } else {
+                    bitmap[0] = BitmapFactory.decodeResource(MyApp.getAppContext().getResources(), R.mipmap.logo);
+                }
+            }
+        });
+        return bitmap[0];
+    }
+
+    /**
+     * 通过用户account_id直接获取用户信息
+     */
+    public static void getUserInfo(String accountId, final Impl<String> listener) {
+        HashMap<String, String> params = getTokenParams();
+        params.put("account_id", accountId);
+        new GGOKHTTP(params, GGOKHTTP.GET_ACCOUNT_DETAIL, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                if (listener != null) {
+                    if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                        listener.response(Impl.RESPON_DATA_SUCCESS, JSONObject.parseObject(responseInfo).getString("data"));
+                    } else {
+                        listener.response(Impl.RESPON_DATA_EMPTY, "没有查询到相关信息");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                if (listener != null) listener.response(Impl.RESPON_DATA_ERROR, "请求出错");
+            }
+        }).startGet();
     }
 
     /**
@@ -340,15 +379,13 @@ public class UserUtils {
     /*注销*/
     public static void logout(Activity mContext) {
 
-        SPTools.clearItem("userInfo");
-
-        mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
         AVIMClientManager.getInstance().close(UserUtils.getMyAccountId(), new AVIMClientCallback() {
             @Override
             public void done(AVIMClient avimClient, AVIMException e) {
-
             }
         });
+        SPTools.clearItem("userInfo");
+        mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
     }
 
     // TODO: 临时token
@@ -595,7 +632,7 @@ public class UserUtils {
     /**
      * 当群信息没有的时候 网上拉取
      */
-    public static void getChatGroup(List<String> groupMembers, final String conversationId, final getSquareInfo mGetSquareInfo) {
+    public static void getChatGroup(List<String> groupMembers, final String conversationId, final SquareInfoCallback mSquareInfoCallback) {
         Map<String, String> params = new HashMap<>();
         params.put("token", getToken());
         params.put("conv_id", conversationId);
@@ -610,8 +647,8 @@ public class UserUtils {
                 if ((int) result.get("code") == 0) {
                     if (null != result.getJSONObject("data")) {
                         JSONObject jsonObject = result.getJSONObject("data");
-                        if (null != mGetSquareInfo) {
-                            mGetSquareInfo.squareGetSuccess(jsonObject);
+                        if (null != mSquareInfoCallback) {
+                            mSquareInfoCallback.squareGetSuccess(jsonObject);
                         }
                         if (null != jsonObject.get("accountList")) {
                             UserInfoUtils.saveGroupUserInfo(conversationId, result.getJSONObject("data").getJSONArray("accountList"));
@@ -622,8 +659,8 @@ public class UserUtils {
 
             @Override
             public void onFailure(String msg) {
-                if (null != mGetSquareInfo) {
-                    mGetSquareInfo.squareGetFail(msg);
+                if (null != mSquareInfoCallback) {
+                    mSquareInfoCallback.squareGetFail(msg);
                 }
             }
         };
@@ -684,7 +721,7 @@ public class UserUtils {
     /**
      * 返回Conversation管理类
      */
-    public interface getSquareInfo {
+    public interface SquareInfoCallback {
 
         void squareGetSuccess(JSONObject object);   ///< 加入房间成功
 

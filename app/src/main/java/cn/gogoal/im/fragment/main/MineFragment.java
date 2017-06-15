@@ -28,8 +28,8 @@ import cn.gogoal.im.activity.ContactsActivity;
 import cn.gogoal.im.activity.EditMyInfoActivity;
 import cn.gogoal.im.activity.MyAdvisersActivity;
 import cn.gogoal.im.activity.MyGroupsActivity;
-import cn.gogoal.im.activity.MyQrCodeActivity;
 import cn.gogoal.im.activity.PhoneContactsActivity;
+import cn.gogoal.im.activity.QrCodeActivity;
 import cn.gogoal.im.activity.SettingActivity;
 import cn.gogoal.im.activity.SettingStockActivity;
 import cn.gogoal.im.adapter.ViewFlipperAdapter;
@@ -43,6 +43,7 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.ggqrcode.GGQrCode;
 
 /**
  * 我的
@@ -115,12 +116,12 @@ public class MineFragment extends BaseFragment {
 
         UserUtils.getUserAvatar(new Impl<Bitmap>() {
             @Override
-            public void response(boolean success, Bitmap data) {
+            public void response(int code, Bitmap data) {
                 imageAvatar.setImageBitmap(data);
             }
         });
         tvMineUserName.setText(UserUtils.getNickname());
-        tvMineIntroduction.setText(UserUtils.getorgName()+" "+UserUtils.getDuty());
+        tvMineIntroduction.setText(UserUtils.getorgName() + " " + UserUtils.getDuty());
 
     }
 
@@ -210,15 +211,18 @@ public class MineFragment extends BaseFragment {
                         @Override
                         public void onClick(View v) {
                             KLog.e("pos=" + position + ";item=" + data.getItemText());
-                            Intent intent;
+                            final Intent intent;
                             switch (data.getItemText()) {
                                 case "我要直播"://我要直播
                                     UserUtils.checkLivePermission(getActivity());
                                     break;
                                 case "我的二维码"://我的二维码
-//                                    NormalIntentUtils.go2WebActivity(getContext(), "","");
-//                                    NormalIntentUtils.go2WebActivity(getContext(), AppConst.WEB_URL_LLJ,"");
-                                    startActivity(new Intent(v.getContext(),MyQrCodeActivity.class));
+                                    intent = new Intent(v.getContext(), QrCodeActivity.class);
+                                    intent.putExtra("qr_code_type", GGQrCode.QR_CODE_TYPE_PERSIONAL);
+                                    intent.putExtra("qrcode_name",UserUtils.getNickname());
+                                    intent.putExtra("qrcode_info",UserUtils.getorgName()+" "+UserUtils.getDuty());
+                                    intent.putExtra("qrcode_content_id",UserUtils.getMyAccountId());
+                                    startActivity(intent);
                                     break;
                                 case "行情设置"://自选股设置
                                     intent = new Intent(getActivity(), SettingStockActivity.class);

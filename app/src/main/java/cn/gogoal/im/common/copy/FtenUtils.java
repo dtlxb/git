@@ -83,67 +83,118 @@ public class FtenUtils {
 
     public static final String[] title1 = {"净利润(亿元)", "每股收益EPS-基本(元)", "营业利润率(%)",
             "资产负债率(%)", "流动比率(%)", "存货周转率(次)", "营业总收入同比增长率(%)"};
+    public static final String[] cotent1 = {"retained_profits10", "perbasic_eps20",
+            "epopratio_profit35", "asset_liratio46", "debtflow_ratio53", "service_saveloan72",
+            "business_totalrevenue_growthrate90"};
 
     public static final String[] title2 = {"净利润(亿元)", "每股收益EPS-基本(元)", "营业利润率(%)",
             "资产负债率(%)", "负债与所有者权益比率(%)", "固定资产周转率(次)", "营业总收入同比增长率(%)"};
+    public static final String[] cotent2 = {"ffajr_09", "ffajr_19", "ffajr_29", "ffajr_38",
+            "ffajr_45", "ffajr_50", "ffajr_57"};
 
     public static final String[] title1_1 = {"营业收入(亿元)", "每股现金流量净额(元)", "净资产收益率(%)",
             "长期资产负债率(%)", "资产负债率(%)", "总资产周转率(次)", "归属母公司股东的净利润同比增长率(%)"};
+    public static final String[] cotent1_1 = {"business_income04", "pershare_netcash29",
+            "epnetassets_inrate38", "asset_loliratio47", "debtliability_ratio57",
+            "service_tassets74", "parentcompany_netprofit94"};
 
     public static final String[] title2_1 = {"营业收入(亿元)", "每股现金流量净额(元)", "净资产收益率(%)",
             "权益乘数(倍)", "资产负债率(%)", "总资产周转率(次)", "归属母公司股东的净利润同比增长率(%)"};
+    public static final String[] cotent2_1 = {"ffajr_04", "ffajr_25", "ffajr_31", "ffajr_39",
+            "ffajr_42", "ffajr_51", "ffajr_60"};
 
     public static final String[] profit1 = {"基本每股收益(元)", "每股净资产(元)", "每股经营活动产生的现金流量净额(元)",
             "营业收入(万元)", "营业利润(万元)", "投资收益(万元)", "营业外收支净额(万元)", "利润总额(万元)", "净利润(万元)",
             "净利润(扣除非经常性损益后)(万元)", "经营活动产生的现金流量净额(万元)", "现金及现金等价物净增加额(万元)",
             "总资产(万元)", "流动资产(万元)", "总负债(万元)", "流动负债(万元)", "股东权益不含少数股东权益(万元)",
             "净资产收益率加权(%)"};
+    public static final String[] profit1_1 = {"basic_eps01", "pershare_netasset02", "pershare_cash_activity03",
+            "business_income04", "business_profit06", "invest_income07", "net_nonoperating_income08",
+            "total_profit09", "retained_profits10", "profits11", "business_cash_flow12", "cash_and_casheq13",
+            "total_assets14", "flow_assets15", "total_indebt16", "flow_indebt17", "shareholders_less18",
+            "assets_weighting19"};
     public static final String[] profit2 = {"基本每股收益(元)", "每股净资产(元)", "每股经营活动产生的现金流量净额(元)",
             "营业收入(万元)", "营业利润(万元)", "投资收益(万元)", "营业外收支净额(万元)", "利润总额(万元)", "净利润(万元)",
             "净利润(扣除非经常性损益后)(万元)", "经营活动产生的现金流量净额(万元)", "现金及现金等价物净增加额(万元)",
             "总资产(万元)", "总负债(万元)", "股东权益不含少数股东权益(万元)", "净资产收益率加权(%)"};
+    public static final String[] profit2_1 = {"ffajr_01", "ffajr_02", "ffajr_03", "ffajr_04",
+            "ffajr_05", "ffajr_06", "ffajr_07", "ffajr_08", "ffajr_09", "ffajr_10", "ffajr_11",
+            "ffajr_12", "ffajr_13", "ffajr_14", "ffajr_15", "ffajr_16"};
 
     public static final String[] share_eps1 = {"每股收益EPS-基本(元)", "每股收益EPS-稀释(元)",
             "每股收益EPS-扣除/基本(元)", "每股收益EPS-扣除/稀释(元)", "每股净资产BPS(元)", "每股营收总收入(元)",
             "每股营收收入(元)", "每股资本公积(元)", "每股未分配利润(元)", "每股现金流量净额(元)"};
+    public static final String[] share_eps1_1 = {"perbasic_eps20", "pereps_dilute21",
+            "pereps_ductbasic22", "pereps_reduce23", "perstock_bps24", "perre_total25",
+            "perre_income26", "pershare_reserves27", "udpps28", "pershare_netcash29"};
     public static final String[] share_eps2 = {"每股收益EPS-基本(元)", "每股收益EPS-稀释(元)",
             "每股收益EPS-扣除/基本(元)", "每股收益EPS-扣除/稀释(元)", "每股净资产BPS(元)", "每股营收总收入(元)",
             "每股资本公积(元)", "每股未分配利润(元)", "每股现金流量净额(元)"};
+    public static final String[] share_eps2_1 = {"ffajr_17", "ffajr_18", "ffajr_19", "ffajr_20",
+            "ffajr_21", "ffajr_22", "ffajr_23", "ffajr_24", "ffajr_25"};
 
     public static final String[] ProfitRate1 = {"总资产利润率(%)", "主营业务利润率(%)", "总资产净利润率(%)",
             "成本费用利润率(%)", "营业利润率(%)", "主营业务成本率(%)", "销售净利率(%)", "净资产收益率(%)",
             "股本报酬率(%)", "净资产报酬率(%)", "资产报酬率(%)", "销售毛利率(%)", "三项费用比重(%)",
             "非主营比重(%)", "主营利润比重(%)"};
+    public static final String[] ProfitRate1_1 = {"eptotal_profit31", "epmbu_profit32", "eptasset_profit33",
+            "epcost_profit34", "epopratio_profit35", "epmb_profitrate36", "epsales_netprofit37",
+            "epnetassets_inrate38", "epreturn_rate39", "epnet_asset40", "epasset_rate41", "epgross_sale42",
+            "epcost_three43", "epmain_proportion44", "epmajor_rate45"};
     public static final String[] ProfitRate2 = {"总资产利润率(%)", "总资产净利润率(%)", "成本费用利润率(%)",
             "营业利润率(%)", "销售净利率(%)", "净资产收益率(%)", "股本报酬率(%)", "净资产报酬率(%)",
             "资产报酬率(%)", "销售毛利率(%)", "非主营比重(%)", "主营利润比重(%)"};
+    public static final String[] ProfitRate2_1 = {"ffajr_26", "ffajr_27", "ffajr_28", "ffajr_29", "ffajr_30",
+            "ffajr_31", "ffajr_32", "ffajr_33", "ffajr_34", "ffajr_35", "ffajr_36", "ffajr_37"};
 
     public static final String[] debtratio1 = {"资产负债率(%)", "长期资本负债率(%)", "权益乘数(倍)",
             "流动资产/总资产(%)", "非流动资产/总资产(%)", "非流动负债权益比率", "流动负债权益比率"};
+    public static final String[] debtratio1_1 = {"asset_liratio46", "asset_loliratio47", "asset_eqmulti48",
+            "asset_total49", "asset_ntotal50", "asset_nclratio51", "asset_clratio52"};
     public static final String[] debtratio2 = {"资产负债率(%)", "权益乘数(倍)"};
+    public static final String[] debtratio2_1 = {"ffajr_38", "ffajr_39"};
 
     public static final String[] sovency1 = {"流动比率", "速动比率", "现金比率", "利息支付倍数(倍)",
             "资产负债率(%)", "长期债务与营运资金比率", "股东权益比率", "长期负债比率", "股东权益与固定资产比率",
             "负债与所有者权益比率", "长期资产与长期资金比率", "资本化比率", "固定资产净值率(%)", "资本固定化比率",
             "产权比率", "清算价值比率", "固定资产比重(%)"};
+    public static final String[] sovency1_1 = {"debtflow_ratio53", "debt_velratio54", "debtcash_ratio55",
+            "debtcover_ratio56", "debtliability_ratio57", "debt_longterm58", "debtshareholder_liabilty59",
+            "debtlong_bcashratio60", "debtshareholder_fixedasset61", "debteower_ratio62", "debtlong_ratio63",
+            "debt_capitrate64", "debtfixed_netassets65", "debtrate_assets66", "debtnet_equityratio67",
+            "debtliquidate_ratio68", "debt_fixed_ratio69"};
     public static final String[] sovency2 = {"资产负债率(%)", "股东权益比率", "负债与所有者权益比率",
             "资本固定化比率"};
+    public static final String[] sovency2_1 = {"ffajr_42", "ffajr_43", "ffajr_45", "ffajr_48"};
 
     public static final String[] turnoverrate1 = {"应收账款周转率(次)", "应收账款周转天数(天)",
             "存货周转率(次)", "固定资产周转率(次)", "总资产周转率(次)", "存货周转天数(天)", "总资产周转天数(天)",
             "流动资产周转率(次)", "流动资产周转天数(天)", "经营现金净流量对销售收入比率", "资产的经营现金流量回报率(%)",
             "经营现金净流量与净利润的比率", "经营现金净流量对负债比率", "现金流量比率"};
+    public static final String[] turnoverrate1_1 = {"service_receivable70", "service_receiday71",
+            "service_saveloan72", "service_fixedassets73", "service_tassets74", "service_loandays75",
+            "service_tassetsdays76", "service_currentasset77", "service_currentassday78",
+            "service_opercashsales79", "service_assetflowcash80", "service_bcashbprofit81",
+            "service_bcashflowdebtratio82", "service_flowcash83"};
     public static final String[] turnoverrate2 = {"固定资产周转率(次)", "总资产周转率(次)",
             "资产的经营现金流量回报率(%)", "经营现金净流量与净利润的比率", "经营现金净流量对负债比率"};
+    public static final String[] turnoverrate2_1 = {"ffajr_50", "ffajr_51", "ffajr_52", "ffajr_53", "ffajr_54"};
 
     public static final String[] grows1 = {"基本每股收益同比增长率(%)", "稀释每股收益同比增长率(%)",
             "营业总收入同比增长率(%)", "营业收入同比增长率(%)", "营业利润同比增长率(%)", "利润总额同比增长率(%)",
             "归属母公司股东的净利润同比增长率(%)", "经营活动产生的现金流量净额同比增长率(%)", "净资产同比增长率(%)",
             "总负债同比增长率(%)", "总资产同比增长率(%)"};
+    public static final String[] grows1_1 = {"basic_eps_growthrate88", "dilution_eps_growthrate89",
+            "business_totalrevenue_growthrate90", "business_income_growthrate91",
+            "business_profit_growthrate92", "profit_lumpsum_growthrate93", "parentcompany_netprofit94",
+            "operating_netflow95", "netassets_growthrate96", "total_liability_growthrate97",
+            "totalassets_growthrate98"};
     public static final String[] grows2 = {"基本每股收益同比增长率(%)", "稀释每股收益同比增长率(%)",
             "营业总收入同比增长率(%)", "营业利润同比增长率(%)", "利润总额同比增长率(%)",
             "归属母公司股东的净利润同比增长率(%)", "经营活动产生的现金流量净额同比增长率(%)", "净资产同比增长率(%)",
             "总负债同比增长率(%)", "总资产同比增长率(%)"};
+    public static final String[] grows2_1 = {"ffajr_55", "ffajr_56", "ffajr_57", "ffajr_58",
+            "ffajr_59", "ffajr_60", "ffajr_61", "ffajr_62", "ffajr_63", "ffajr_64"};
 
     /**
      * 财务报表

@@ -88,9 +88,9 @@ public class TreatFragment extends BaseFragment {
         bundle.putInt("type", type);
         bundle.putBoolean("from_stock_detail", fromStockDetail);
         if (type == AppConst.TREAT_TYPE_WU_DANG) {
-            fragment.itemHeight = fromStockDetail ? 16.3f : 24f;
+            fragment.itemHeight = fromStockDetail ? 17f : 24.5f;
         } else {
-            fragment.itemHeight = 21;
+            fragment.itemHeight = 22;
         }
         fragment.setArguments(bundle);
         return fragment;

@@ -14,6 +14,8 @@ import java.util.List;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
+import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.ggqrcode.GGQrCode;
@@ -103,7 +105,7 @@ public class QrcodeProcessActivity extends BaseActivity implements EasyPermissio
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         try {
             KLog.e("==========" + data.getExtras().getString(CodeUtils.RESULT_STRING) + "===========");
         } catch (Exception e) {
@@ -125,7 +127,7 @@ public class QrcodeProcessActivity extends BaseActivity implements EasyPermissio
                     String codeBody = GGQrCode.getUserQrCodeBody(result);
 
                     try {
-                        JSONObject scanBody = JSONObject.parseObject(codeBody);
+                        final JSONObject scanBody = JSONObject.parseObject(codeBody);
                         if (scanBody.getString("qrType").equalsIgnoreCase("0")) {
                             //TODO 跳转个人详情
                             NormalIntentUtils.go2PersionDetail(getContext(),
@@ -133,11 +135,29 @@ public class QrcodeProcessActivity extends BaseActivity implements EasyPermissio
 
                         } else if (scanBody.getString("qrType").equalsIgnoreCase("1")) {
                             //TODO 跳转群名片
+                            ChatGroupHelper.getGroupInfo(scanBody.getString("conv_id"), new Impl<JSONObject>() {
+                                @Override
+                                public void response(int code, JSONObject data) {
+                                    switch (code) {
+                                        case Impl.RESPON_DATA_SUCCESS:
+                                            Intent in = new Intent(getActivity(), SquareCardActivity.class);
+                                            in.putExtra("conversation_id", scanBody.getString("conv_id"));
+                                            in.putExtra("square_name", data.getString("name"));
+//                                            in.putExtra("bitmap_avatar", groupAvatarBitmap);
+//                                            in.putExtra("square_creater", data.getC());
+//                                            in.putParcelableArrayListExtra("square_members", data.getM_info());
+//                                            context.startActivity(in);
+                                            break;
+                                    }
+                                }
+                            });
+
                         }
 
                     } catch (Exception e) {
                         e.getMessage();
-                        KLog.e("结果不是json");
+                        KLog.e("结果不是json，或者非GoGoal APP系二维码");
+                        UIHelper.toast(getActivity(), "非GoGoal二维码");
                     }
 
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {

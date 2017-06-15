@@ -303,7 +303,7 @@ public class LiveActivity extends BaseActivity {
                 @Override
                 public void done(AVIMException e) {
                     //拉取群通讯录并缓存本地
-                    UserUtils.getChatGroup(conversation.getMembers(), conversation.getConversationId(), new UserUtils.getSquareInfo() {
+                    UserUtils.getChatGroup(conversation.getMembers(), conversation.getConversationId(), new UserUtils.SquareInfoCallback() {
                         @Override
                         public void squareGetSuccess(JSONObject object) {
                             KLog.e(object.toJSONString());
@@ -1170,7 +1170,7 @@ public class LiveActivity extends BaseActivity {
 
     //获取群通讯录
     private void getChatGroupInfo(final AVIMConversation conversation) {
-        UserUtils.getChatGroup(conversation.getMembers(), conversation.getConversationId(), new UserUtils.getSquareInfo() {
+        UserUtils.getChatGroup(conversation.getMembers(), conversation.getConversationId(), new UserUtils.SquareInfoCallback() {
             @Override
             public void squareGetSuccess(JSONObject object) {
                 KLog.e(object.toJSONString());

@@ -1,5 +1,6 @@
 package cn.gogoal.im.common.IMHelpers;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
@@ -29,10 +30,12 @@ import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
+import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.MyFilter;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UFileUpload;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 
 import static cn.gogoal.im.common.UserUtils.getToken;
@@ -202,7 +205,7 @@ public class ChatGroupHelper {
         List<String> groupMemberMap = conversation.getMembers();
         //如果不存在则先找这个会话
         if (groupMemberMap == null || groupMemberMap.size() == 0) {
-            UserUtils.getChatGroup(groupMemberMap, ConversationId, new UserUtils.getSquareInfo() {
+            UserUtils.getChatGroup(groupMemberMap, ConversationId, new UserUtils.SquareInfoCallback() {
                 @Override
                 public void squareGetSuccess(JSONObject object) {
                     JSONArray array = object.getJSONArray("accountList");
@@ -216,7 +219,7 @@ public class ChatGroupHelper {
                 }
             });
         } else {
-            UserUtils.getChatGroup(groupMemberMap, ConversationId, new UserUtils.getSquareInfo() {
+            UserUtils.getChatGroup(groupMemberMap, ConversationId, new UserUtils.SquareInfoCallback() {
                 @Override
                 public void squareGetSuccess(JSONObject object) {
                     JSONArray array = object.getJSONArray("accountList");
@@ -642,4 +645,70 @@ public class ChatGroupHelper {
         void groupActionFail(String error);      ///< 加入房间失败
     }
 
+    /**
+     * 申请加群
+     */
+    public static void applyIntoGroup(final Context context, String conversationId) {
+        Map<String, String> params = new HashMap<>();
+        params.put("token", UserUtils.getToken());
+        params.put("conv_id", conversationId);
+        KLog.e(params);
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                KLog.e(responseInfo);
+                if ((int) result.get("code") == 0) {
+                    JSONObject dataJson = result.getJSONObject("data");
+                    if (dataJson.getBoolean("success")) {
+                        UIHelper.toast(context, "入群申请发送成功");
+                    } else {
+                        UIHelper.toast(context, "入群申请发送失败");
+                    }
+                } else {
+                    UIHelper.toast(context, "入群申请发送失败");
+                }
+            }
+
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toastError(context, msg);
+            }
+        };
+        new GGOKHTTP(params, GGOKHTTP.APPLY_INTO_GROUP, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 查询群信息
+     */
+    public static void getGroupInfo(String convId, final Impl<JSONObject> callback) {
+        if (StringUtils.isActuallyEmpty(convId)) {
+            return;
+        }
+        HashMap<String, String> params = UserUtils.getTokenParams();
+        params.put("conv_id", convId);
+        new GGOKHTTP(params, GGOKHTTP.GET_GROUP_INFO, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                if (callback != null) {
+                    int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                    if (code == 0) {
+                        callback.response(Impl.RESPON_DATA_SUCCESS,
+                                JSONObject.parseObject(responseInfo).getJSONObject("data"));
+                    } else if (code == 1001) {
+                        callback.response(Impl.RESPON_DATA_EMPTY, JSONObject.parseObject("没有找到相关信息"));
+                    } else {
+                        callback.response(Impl.RESPON_DATA_ERROR, JSON.parseObject("请求出错"));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                if (callback != null)
+                    callback.response(Impl.RESPON_DATA_ERROR, JSON.parseObject("请求出错"));
+            }
+        }).startGet();
+    }
 }

@@ -26,11 +26,11 @@ public class TreatAdapter extends FragmentPagerAdapter {
     private String stockCode;
     private boolean fromStockDetail;
 
-    public TreatAdapter(FragmentManager fm, Context context, String stockCode,boolean fromStockDetail) {
+    public TreatAdapter(FragmentManager fm, Context context, String stockCode, boolean fromStockDetail) {
         super(fm);
         this.context = context;
         this.stockCode = stockCode;
-        this.fromStockDetail=fromStockDetail;
+        this.fromStockDetail = fromStockDetail;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class TreatAdapter extends FragmentPagerAdapter {
         view.setLayoutParams(params);
 
         view.setGravity(Gravity.CENTER);
-        view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         view.setBackgroundResource(R.drawable.selected_tab_wudang_mingxi);
         view.setText(getPageTitle(position));
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_stock_detail_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center|start"
+    android:orientation="vertical"
+    android:paddingBottom="7dp"
+    android:paddingEnd="0dp"
+    android:paddingStart="10dp"
+    android:paddingTop="7dp">
+
+    <TextView
+        android:id="@+id/tv_item_stock_detail_info_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_char"
+        android:textColor="@color/textColor_333333"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_item_stock_detail_info_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_char"
+        android:textSize="12sp" />
+
+</LinearLayout>

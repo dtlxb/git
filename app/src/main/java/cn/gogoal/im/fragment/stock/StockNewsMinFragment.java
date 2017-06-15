@@ -18,7 +18,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.activity.stock.StockNewsAllListActivity;
 import cn.gogoal.im.adapter.NewsAdapter;
 import cn.gogoal.im.adapter.ResearchAdapter;
@@ -62,19 +61,12 @@ public class StockNewsMinFragment extends BaseFragment {
     private View footView = null;
 
     private String stockCode;
-    private int parentPosition;
     private String stockName;
+    private int parentPosition;
 
     private StockNewsType stockNewsType;//实现反序列化接口，类型
 
-    @Override
-    public void onAttach(Context activity) {
-        super.onAttach(activity);
-        stockCode = ((CopyStockDetailActivity) getActivity()).getStockCode();
-        stockName = ((CopyStockDetailActivity) getActivity()).getStockName();
-    }
-
-    public static StockNewsMinFragment getInstance(int position) {
+    public static StockNewsMinFragment getInstance(String stockCode, String stockName, int position) {
         StockNewsMinFragment snf = new StockNewsMinFragment();
         Bundle b = new Bundle();
         b.putInt("position", position);
@@ -92,6 +84,8 @@ public class StockNewsMinFragment extends BaseFragment {
                 break;
         }
         b.putParcelable("stock_news_type", stockNewsType);
+        b.putString("stock_code", stockCode);
+        b.putString("stock_name", stockName);
         snf.setArguments(b);
         return snf;
     }
@@ -104,6 +98,9 @@ public class StockNewsMinFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
         stockNewsType = getArguments().getParcelable("stock_news_type");
+
+        stockName = getArguments().getString("stock_name");
+        stockCode = getArguments().getString("stock_code");
 
         parentPosition = getArguments().getInt("position");
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));

@@ -9,6 +9,7 @@ import android.support.annotation.ColorRes;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.RotateAnimation;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -53,13 +56,11 @@ import cn.gogoal.im.ui.copy.TimesFivesBitmap;
 import cn.gogoal.im.ui.stock.KChartsBitmap;
 import hply.com.niugu.DeviceUtil;
 import hply.com.niugu.StringUtils;
-import hply.com.niugu.autofixtext.AutofitTextView;
 import hply.com.niugu.bean.StockData;
 import hply.com.niugu.bean.StockDetailMarketIndexBean;
 import hply.com.niugu.bean.StockDetailMarketIndexData;
 import hply.com.niugu.bean.StockRankBean;
 import hply.com.niugu.stock.StockMinuteBean;
-import hply.com.niugu.stock.StockMinuteData;
 
 
 /*
@@ -70,17 +71,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     TimesFivesBitmap fiveDayBitmap;
     TimesFivesBitmap timesBitmap;
     StockMinuteBean timesBean;
-    //    //五个图的布局
-//    @BindView(R.id.charts_min_line_layout)
-//    RelativeLayout tiemsLayout;
-//    @BindView(R.id.charts_fiveday_k_layout)
-//    RelativeLayout fivedayLayout;
-//    @BindView(R.id.charts_day_k_layout)
-//    RelativeLayout daykLayout;
-//    @BindView(R.id.charts_week_k_layout)
-//    RelativeLayout weekkLayout;
-//    @BindView(R.id.charts_mouth_k_layout)
-//    RelativeLayout monthkLayout;
     //返回
     @BindView(R.id.btnBack)
     LinearLayout btnBack;
@@ -97,7 +87,8 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     @BindView(R.id.btnRefresh)
     ImageView btnRefresh;
     //刷新按钮加载菊花动画
-    protected static RotateAnimation animation;
+    private RotateAnimation rotateAnimation;
+    //    protected RotateAnimation animation;
     //数据栏
     @BindView(R.id.linear_header)
     LinearLayout linear_header;
@@ -107,45 +98,47 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     //下拉刷新rootView
     @BindView(R.id.fragment_rotate_header_with_view_group_frame)
     SwipeRefreshLayout ptrFrame;
-//    //下拉刷新头部控件
+    //    //下拉刷新头部控件
 //    private HeaderView headerView;
     //股票价格
     @BindView(R.id.stock_price)
-    AutofitTextView stock_price;
+    TextView stock_price;
     //涨跌
     @BindView(R.id.stock_detail_tv1)
-    AutofitTextView stock_detail_tv1;
+    TextView stock_detail_tv1;
     @BindView(R.id.stock_detail_tv2)
-    AutofitTextView stock_detail_tv2;
+    TextView stock_detail_tv2;
     //今开
     @BindView(R.id.textView1)
     TextView textView1;
     @BindView(R.id.stock_start)
-    AutofitTextView stock_start;
+    TextView stock_start;
     //成交量
     @BindView(R.id.textView3)
     TextView textView3;
     @BindView(R.id.stock_volume)
-    AutofitTextView stock_volume;
+    TextView stock_volume;
     //昨收
     @BindView(R.id.textView2)
     TextView textView2;
+
     @BindView(R.id.stock_close)
-    AutofitTextView stock_close;
+    TextView stock_close;
     //振幅
     @BindView(R.id.textView4)
     TextView textView4;
+
     @BindView(R.id.stock_amplitude)
     TextView stock_amplitude;
     //最高
     @BindView(R.id.stock_detail_tv3)
-    AutofitTextView stock_detail_tv3;
+    TextView stock_detail_tv3;
     //涨家数
     @BindView(R.id.stock_detail_tv4)
     TextView stock_detail_tv4;
     //最低
     @BindView(R.id.stock_detail_tv5)
-    AutofitTextView stock_detail_tv5;
+    TextView stock_detail_tv5;
     //平家数
     @BindView(R.id.stock_detail_tv6)
     TextView stock_detail_tv6;
@@ -174,7 +167,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     @BindView(R.id.stock_lv)
     InnerListView stock_lv;
     private String getStockCode;
-    private List<StockData> StockDatas = new ArrayList<StockData>();
+    private List<StockData> StockDatas = new ArrayList<>();
     //适配器
     private MarketTitleAdapter adapter;
     private ChangeListAdapter changeAdapter;
@@ -199,7 +192,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     @BindView(R.id.stock_no_data)
     LinearLayout stock_no_data;
 
-    private float density;
     private int pixels = -85;
     private String stockName;
     private String stockCode;
@@ -209,14 +201,12 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 
     private HashMap<String, Bitmap> map = new HashMap<>();
     //数据集合
-    private List<Map<String, Object>> mOHLCData = new ArrayList<Map<String, Object>>();
-    private List<StockMinuteData> stockminuteList;
+    private List<Map<String, Object>> mOHLCData = new ArrayList<>();
     //定时刷新
     private int seat;
     private int showItem;
     private int width;
     private int height;
-    private boolean canRefreshLine = true;
 
     @BindView(R.id.flag_layout_treat)
     LinearLayout layoutTreat;
@@ -228,7 +218,16 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     private int dayk4;
 
     private ArrayList<StockDetailMarketIndexData> info;
-    private RotateAnimation rotateAnimation;
+
+    //=====================20170614===================
+    @BindView(R.id.layout_dialog)
+    TableLayout layoutDialog;
+
+    @BindView(R.id.view_dialog_mask)
+    View viewMask;
+
+    @BindView(R.id.iv_show_info_dialog)
+    ImageView imageViewShoeDialog;
 
     @Override
     public int bindLayout() {
@@ -247,7 +246,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         stockName = getIntent().getStringExtra("stockName");
         stockCode = getIntent().getStringExtra("stockCode");
 
-        KLog.e("stockCode="+stockCode+";stockName="+stockName);
+        KLog.e("stockCode=" + stockCode + ";stockName=" + stockName);
 
         textHeadTitle.setText(stockName + "(" + stockCode.substring(2, stockCode.length()) + ")");
         init();
@@ -272,13 +271,14 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         textView4.setAlpha((float) 0.7);
         //获取自动刷新时间
         showItem = SPTools.getInt("showItem", 0);
-        stockminuteList = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
             tabChartsTitles.addTab(tabChartsTitles.newTab().setText(stockDetailChartTitles[i]));
         }
 
-        tabChartsTitles.getTabAt(showItem).select();
+        TabLayout.Tab tabAt = tabChartsTitles.getTabAt(showItem);
+        if (tabAt!=null)
+            tabAt.select();
 
         tabChartsTitles.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -442,20 +442,18 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 //        ptrFrame.addPtrUIHandler(headerView);
     }
 
-    private void startAnimation() {
-        if (rotateAnimation != null) {
-            rotateAnimation.startNow();
-        } else {
-            rotateAnimation = AnimationUtils.getInstance().setLoadingAnime(btnRefresh, R.mipmap.loading_white);
-            rotateAnimation.startNow();
-        }
-
-    }
-
-    private void stopAnimation() {
+    void stopAnimation() {
         if (rotateAnimation != null) {
             AnimationUtils.getInstance().cancleLoadingAnime(rotateAnimation, btnRefresh, R.mipmap.refresh_white);
+        } else {
+            btnRefresh.clearAnimation();
+            btnRefresh.setImageResource(R.mipmap.refresh_white);
         }
+    }
+
+    void startAnimation() {
+        rotateAnimation = AnimationUtils.getInstance().setLoadingAnime(btnRefresh, R.mipmap.loading_white);
+        rotateAnimation.startNow();
     }
 
     /**
@@ -553,7 +551,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     }
 
     private void GetMinLineData() {
-        canRefreshLine = false;
         HashMap<String, String> param = new HashMap<>();
         param.put("fullcode", stockCode);
         param.put("avg_line_type", "150");
@@ -566,8 +563,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                 }
                 timesBean = JSONObject.parseObject(responseInfo, StockMinuteBean.class);
                 if (timesBean.getCode() == 0) {
-                    stockminuteList.clear();
-                    stockminuteList.addAll(timesBean.getData());
                     new BitmapTask().execute("0");
                 } else {
                     if (load_animation.getVisibility() == View.VISIBLE) {
@@ -576,7 +571,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                     if (map.get("0") == null && textLayout.getVisibility() == View.GONE) {
                         textLayout.setVisibility(View.VISIBLE);
                     }
-                    canRefreshLine = true;
                 }
             }
 
@@ -588,7 +582,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                 if (map.get("0") == null && textLayout.getVisibility() == View.GONE) {
                     textLayout.setVisibility(View.VISIBLE);
                 }
-                canRefreshLine = true;
             }
         };
 
@@ -596,7 +589,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     }
 
     private void getFiveData() {
-        canRefreshLine = false;
         final HashMap<String, String> param = new HashMap<>();
         param.put("fullcode", stockCode);
         param.put("day", "5");
@@ -609,7 +601,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
             if (map.get("1") == null && textLayout.getVisibility() == View.GONE) {
                 textLayout.setVisibility(View.VISIBLE);
             }
-            canRefreshLine = true;
         }
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
@@ -651,10 +642,8 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
             } else if (displayIndex == 2 && map.get("4") == null && textLayout.getVisibility() == View.GONE) {
                 textLayout.setVisibility(View.VISIBLE);
             }
-            canRefreshLine = true;
         }
 
-        canRefreshLine = false;
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
@@ -721,7 +710,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                 if (map.get("1") == null && textLayout.getVisibility() == View.GONE) {
                     textLayout.setVisibility(View.VISIBLE);
                 }
-                canRefreshLine = true;
                 break;
             case "indexRefresh3":
                 if (load_animation.getVisibility() == View.VISIBLE) {
@@ -743,7 +731,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         super.onResume();
         DisplayMetrics metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
-        density = metric.density;
+        float density = metric.density;
         width = metric.widthPixels - (int) (20 * density + 0.5f);
         height = (int) (190 * density + 0.5f);
         timer = new Timer();
@@ -759,15 +747,17 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     }
 
     private void InitList(final String stockCode) {
-        final Map<String, String> param = new HashMap<String, String>();
+        final Map<String, String> param = new HashMap<>();
         param.put("fullcode", stockCode);
 
         GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-//                KLog.e(responseInfo);
+
+                KLog.e(responseInfo);
 
                 StockDetailMarketIndexBean bean = JSONObject.parseObject(responseInfo, StockDetailMarketIndexBean.class);
+
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     info = bean.getData();
                     //涨跌
@@ -778,8 +768,9 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                         initRefreshStyle(R.color.header_red);
                         stock_price.setText(StringUtils.save2Significand(info.get(0).getPrice()));//股票价格
                         stock_start.setText(StringUtils.save2Significand(info.get(0).getOpen_price()));//开盘价
-                        stock_detail_tv1.setText("+" + StringUtils.save2Significand(info.get(0).getPrice_change()));
-                        stock_detail_tv2.setText("+" + StringUtils.save2Significand(info.get(0).getPrice_change_rate()) + "%");
+                        stock_detail_tv1.setText(StockUtils.plusMinus(info.get(0).getPrice_change(),false));
+                        stock_detail_tv2.setText(StockUtils.plusMinus(info.get(0).getPrice_change_rate(),true));
+
                     } else if (info.get(0).getPrice_change() < 0) {
                         setStatusColorId(R.color.header_green);
                         relative_header.setBackgroundColor(getResColor(R.color.header_green));
@@ -789,7 +780,8 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                         stock_price.setText(StringUtils.save2Significand(info.get(0).getPrice()));//股票价格
                         stock_start.setText(StringUtils.save2Significand(info.get(0).getOpen_price()));//开盘价
                         stock_detail_tv1.setText(StringUtils.save2Significand(info.get(0).getPrice_change()));
-                        stock_detail_tv2.setText(StringUtils.save2Significand(info.get(0).getPrice_change_rate()) + "%");
+                        stock_detail_tv2.setText(StockUtils.plusMinus(info.get(0).getPrice_change_rate(),true));
+
                     } else {
                         setStatusColorId(R.color.header_gray);
                         relative_header.setBackgroundColor(getResColor(R.color.header_gray));
@@ -798,16 +790,27 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                         stock_price.setText(StringUtils.save2Significand(info.get(0).getPrice()));//股票价格
                         stock_start.setText(StringUtils.save2Significand(info.get(0).getOpen_price()));//开盘价
                         stock_detail_tv1.setText(StringUtils.save2Significand(info.get(0).getPrice_change()));
-                        stock_detail_tv2.setText(StringUtils.save2Significand(info.get(0).getPrice_change_rate()) + "%");
+                        stock_detail_tv2.setText(StockUtils.plusMinus(info.get(0).getPrice_change_rate(),true));
                     }
 
                     stock_volume.setText(GetVolume(info.get(0).getVolume()));//成交量
                     stock_close.setText(StringUtils.save2Significand(info.get(0).getClose_price()));//收盘价
-                    stock_amplitude.setText(StringUtils.save2Significand(info.get(0).getAmplitude()) + "%");//振幅
+                    stock_amplitude.setText(StockUtils.plusMinus(info.get(0).getAmplitude(),true));//振幅
                     stock_detail_tv3.setText(StringUtils.save2Significand(info.get(0).getHigh_price()));//最高
+                    stock_detail_tv3.setTextColor(getResColor(StockUtils.getStockRateColor(
+                            cn.gogoal.im.common.StringUtils.pareseStringDouble(info.get(0).getHigh_price())-
+                                    info.get(0).getClose_price())));
+
                     stock_detail_tv5.setText(StringUtils.save2Significand(info.get(0).getLow_price()));//最低
+                    stock_detail_tv5.setTextColor(getResColor(StockUtils.getStockRateColor(
+                            cn.gogoal.im.common.StringUtils.pareseStringDouble(info.get(0).getLow_price())-
+                                    info.get(0).getClose_price())));
+
                     String turnover = String.valueOf(Math.ceil(info.get(0).getTurnover() / 10000));
-                    stock_detail_tv7.setText(turnover.substring(0, turnover.indexOf(".")) + "亿");//成交额
+
+                    stock_detail_tv7.setText(
+                            String.format(Locale.getDefault(),getString(R.string.thousand_million),
+                                    cn.gogoal.im.common.StringUtils.saveSignificand(turnover,0)));//成交额
 
                     //监听当前滚动位置，动态改变状态
                     scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
@@ -815,7 +818,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                         public void onScrollChanged() {
                             int[] location = new int[2];
                             linear_header.getLocationInWindow(location);
-                            int x = location[0];
+//                            int x = location[0];
                             int y = location[1];
 
                             if (y > pixels) {
@@ -861,7 +864,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     private String GetVolume(String volume) {
         if (volume.length() > 10) {
             Double num = Double.parseDouble(volume);
-            volume = String.valueOf(StringUtils.save2Significand(num / 10000000000l)) + "亿手";
+            volume = String.valueOf(StringUtils.save2Significand(num / 10000000000d)) + "亿手";
         } else {
             String num = StringUtils.save2Significand((Long.parseLong(volume) / 1000000));
             volume = StringUtils.getIntegerData(num) + "万手";
@@ -871,13 +874,16 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 
     //股票状态
     private void StockState() {
-        SimpleDateFormat df = new SimpleDateFormat("MM-dd HH:mm");
+        SimpleDateFormat df = new SimpleDateFormat("MM-dd HH:mm",Locale.getDefault());
         text_state.setText(StockUtils.getTreatState() + " " + df.format(new Date()));
         text_state.setTextColor(Color.WHITE);
         text_state.setAlpha((float) 0.7);
     }
 
-    @OnClick({R.id.tv_increase_layout, R.id.tv_drop_layout, R.id.tv_turnover_layout})
+    @OnClick({R.id.tv_increase_layout,
+            R.id.tv_drop_layout,
+            R.id.tv_turnover_layout,
+            R.id.iv_show_info_dialog})
     public void allClick(View v) {
         switch (v.getId()) {
             case R.id.tv_increase_layout:
@@ -925,37 +931,27 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                     getMarketInformation(seat, getStockCode);
                 }
                 break;
+            case R.id.iv_show_info_dialog:
+                if (isMaskViewVisiable()) {
+                    dismissMarket();
+                } else {
+                    showStockInfoDialog();
+                }
+                break;
         }
     }
 
     private void getMarketInformation(final int seat, String getStockCode) {
         //type=0;1&channel=sh.000001
-        final Map<String, String> param = new HashMap<String, String>();
-        param.put("type",String.valueOf(seat));
-        param.put("channel",getStockCode);
-        //MDZZ
-//        switch (seat) {
-//            case 0:
-//                param.put("type", "0");
-//                param.put("channel", getStockCode);
-//                break;
-//            case 1:
-//                param.put("type", "1");
-//                param.put("channel", getStockCode);
-//                break;
-//            case 2:
-//                param.put("type", "2");
-//                param.put("channel", getStockCode);
-//                break;
-//        }
+        final Map<String, String> param = new HashMap<>();
+        param.put("type", String.valueOf(seat));
+        param.put("channel", getStockCode);
 
         KLog.e(cn.gogoal.im.common.StringUtils.map2ggParameter(param));
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-
-                KLog.e("TYPE_"+seat,responseInfo);
 
                 StockDatas.clear();
                 StockRankBean bean = JSONObject.parseObject(responseInfo, StockRankBean.class);
@@ -1006,8 +1002,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 
         @Override
         protected Bitmap doInBackground(String... params) {
-            canRefreshLine = false;
-            Bitmap bitmap = null;
+            Bitmap bitmap;
             int dpi = DeviceUtil.getWidth(StockDetailMarketIndexActivity.this);
             item_index = params[0];
             switch (item_index) {
@@ -1122,7 +1117,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                     mBitmapChartView.setBitmap(map.get(String.valueOf("4")));
                     break;
             }
-            canRefreshLine = true;
         }
     }
 
@@ -1139,7 +1133,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     private void handleData(JSONArray data) {
         for (int i = 0; i < data.size(); i++) {
             JSONObject singledata = (JSONObject) data.get(i);
-            Map<String, Object> itemData = new HashMap<String, Object>();
+            Map<String, Object> itemData = new HashMap<>();
             itemData.put("amplitude", singledata.getFloat("amplitude"));
             itemData.put("avg_price_" + dayk1, ParseNum(singledata.getString("avg_price_" + dayk1)));
             itemData.put("avg_price_" + dayk2, ParseNum(singledata.getString("avg_price_" + dayk2)));
@@ -1161,7 +1155,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     }
 
     private float ParseNum(String s) {
-        float avg_price = 0.0f;
+        float avg_price ;
         if (s == null) {
             avg_price = 0.0f;
         } else {
@@ -1169,4 +1163,85 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         }
         return avg_price;
     }
+
+    //=======================================20170614========================================
+    private boolean isMaskViewVisiable(){
+        return layoutDialog.getVisibility() == View.VISIBLE;
+    }
+
+    private void dismissMarket(){
+        if (isMaskViewVisiable()) {
+            layoutDialog.setVisibility(View.GONE);
+
+//            layoutDialog.startAnimation(
+//                    android.view.animation.AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_from_top));
+
+            viewMask.setClickable(false);
+            viewMask.setEnabled(false);//防止重复点击反复出现
+            viewMask.setVisibility(View.GONE);
+            viewMask.startAnimation(
+                    android.view.animation.AnimationUtils.loadAnimation(getActivity(), R.anim.alpha_out
+                    ));
+
+            scrollView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return false;
+                }
+            });
+            ptrFrame.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return false;
+                }
+            });
+
+            //恢复可点击
+            imageViewShoeDialog.setImageResource(R.mipmap.img_drop_down);
+        }
+    }
+
+    //显示弹窗
+    private void showStockInfoDialog() {
+//        layoutDialog.startAnimation(
+//                android.view.animation.AnimationUtils.loadAnimation(getActivity(), R.anim.slide_in_from_top));
+        layoutDialog.setVisibility(View.VISIBLE);
+
+        viewMask.setEnabled(true);
+        viewMask.setClickable(true);
+        viewMask.setVisibility(View.VISIBLE);
+        viewMask.startAnimation(
+                android.view.animation.AnimationUtils.loadAnimation(getActivity(), R.anim.alpha_in));
+
+        //点击蒙版消失
+        viewMask.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    dismissMarket();
+                    viewMask.setEnabled(false);
+                    viewMask.setClickable(false);
+                }
+                return true;
+            }
+        });
+
+        //禁止滑动
+        scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+        //禁止下拉刷新
+        ptrFrame.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+        //禁止点击
+        imageViewShoeDialog.setImageResource(R.mipmap.img_drop_up);
+    }
+
 }
