@@ -63,21 +63,12 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
             imgHot.setVisibility(View.VISIBLE);
 
             setViewWidth$Height(imgHot, 107 * innerItem / 500, 107 * innerItem / 500);
-            setViewWidth$Height(imgIcon, innerItem / 3, innerItem / 3);
+            setViewWidth$Height(imgIcon, innerItem / 2, innerItem / 2);
             tvDesc.setText(data.getDesc());
             imgHot.setPadding(0, 0, 0, 0);
             imgHot.setImageResource(R.mipmap.img_hot);
             imgHot.setVisibility(data.getShowHotFlag() == 0 ? View.VISIBLE : View.INVISIBLE);
 
-//            Glide.with(context)
-//                    .load(data.getIconUrl())
-//                    .centerCrop()
-//                    .skipMemoryCache(true)
-//                    .dontAnimate()
-//                    .dontTransform()
-//                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-//                    .thumbnail(0.1f)
-//                    .into(imgIcon);
             ImageDisplay.loadImage(context,data.getIconUrl(),imgIcon);
         }
 

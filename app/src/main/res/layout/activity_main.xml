@@ -79,35 +79,20 @@
                 android:id="@+id/vp_main"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_above="@+id/flag_layout_bottom"
                 android:layout_weight="1"
                 android:background="@android:color/white"
                 app:canScroll="false" />
 
-            <FrameLayout
-                android:id="@+id/flag_layout_bottom"
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_main"
+                style="@style/MainTabStyle"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:layout_alignParentBottom="true">
+                app:tabBackground="@drawable/layer_list_main_tab"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/colorPrimary" />
 
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/tab_main"
-                    style="@style/MainTabStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:tabBackground="@drawable/layer_list_main_tab"
-                    app:tabGravity="fill"
-                    app:tabMode="fixed"
-                    app:tabSelectedTextColor="@color/colorPrimary" />
-
-                <View
-                    android:id="@+id/main_view_mask"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#55000000"
-                    android:visibility="gone" />
-
-            </FrameLayout>
         </LinearLayout>
 
         <!--menu-->
@@ -115,8 +100,8 @@
             android:id="@+id/rv_live_classify"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
             android:layout_gravity="end"
+            android:background="@android:color/white"
             android:tag="RIGHT" />
 
     </android.support.v4.widget.DrawerLayout>

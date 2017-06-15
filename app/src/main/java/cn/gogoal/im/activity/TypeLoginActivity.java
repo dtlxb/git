@@ -2,6 +2,7 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.ColorInt;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -32,18 +33,15 @@ import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.KeyboardLaunchRelativeLayout;
+import cn.gogoal.im.ui.KeyboardLaunchLinearLayout;
 import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XEditText;
-import cn.gogoal.im.ui.view.XTitle;
 
 /**
  * Created by huangxx on 2017/4/17.
  */
 public class TypeLoginActivity extends BaseActivity {
-
-    private XTitle xTitle;
 
     @BindView(R.id.login_edite_name)
     EditText loginUserName;
@@ -61,7 +59,11 @@ public class TypeLoginActivity extends BaseActivity {
     SelectorButton loginButton;
 
     @BindView(R.id.login_keyboard_layout)
-    KeyboardLaunchRelativeLayout keyboardLayout;
+    KeyboardLaunchLinearLayout keyboardLayout;
+
+    @Override
+    protected void setStatusColor(@ColorInt int color) {
+    }
 
     @Override
     public int bindLayout() {
@@ -80,7 +82,6 @@ public class TypeLoginActivity extends BaseActivity {
         //存储设备是否低分屏，一定要竖屏
         SPTools.saveBoolean("low_dpi", AppDevice.getWidth(mContext) < AppDevice.DPI720P);
 
-        initTitle();
         loginPassWord.setInputType(InputType.TYPE_CLASS_TEXT);
         UIHelper.passwordToggle(loginPassWord, chToggle);
         initLoginInfo();
@@ -96,11 +97,11 @@ public class TypeLoginActivity extends BaseActivity {
 //        loginUserName.setText("E00003645");
 //        loginPassWord.setText("258369");
 
-//        loginUserName.setText("E00018279");//冷
-//        loginPassWord.setText("600255");
+        loginUserName.setText("E00018279");//冷
+        loginPassWord.setText("600255");
 
-        loginUserName.setText("E00002639");
-        loginPassWord.setText("412174");
+//        loginUserName.setText("E00002639");
+//        loginPassWord.setText("412174");
 
 //        loginUserName.setText("E00020181");
 //        loginPassWord.setText("394495");
@@ -114,7 +115,7 @@ public class TypeLoginActivity extends BaseActivity {
         loginUserName.setSelection(loginUserName.getText().length());
 
         //保存键盘高度
-        keyboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchRelativeLayout.OnKeyboardChangeListener() {
+        keyboardLayout.setOnKeyboardChangeListener(new KeyboardLaunchLinearLayout.OnKeyboardChangeListener() {
             @Override
             public void OnKeyboardPop(int height) {
                 SPTools.saveInt("soft_keybord_height", height);
@@ -127,25 +128,9 @@ public class TypeLoginActivity extends BaseActivity {
         });
     }
 
-    private void initTitle() {
-
-        xTitle = setMyTitle(R.string.str_login_in, false);
-        //添加action
-        XTitle.TextAction registerAction = new XTitle.TextAction("注册") {
-            @Override
-            public void actionClick(View view) {
-                Intent intent = new Intent(getActivity(), RegisterActivity.class);
-                intent.putExtra("action_type", AppConst.LOGIN_RIGIST_NUMBER);
-                startActivity(intent);
-            }
-        };
-        xTitle.addAction(registerAction, 0);
-        TextView registerView = (TextView) xTitle.getViewByAction(registerAction);
-        registerView.setTextColor(getResColor(R.color.colorPrimary));
-
-    }
-
-    @OnClick({R.id.login_button, R.id.forget_code})
+    @OnClick({R.id.login_button,
+            R.id.forget_code,
+            R.id.tv_login_register})
     public void setLogin(View view) {
         switch (view.getId()) {
             case R.id.login_button:
@@ -154,7 +139,12 @@ public class TypeLoginActivity extends BaseActivity {
             case R.id.forget_code:
                 Intent intent = new Intent(getActivity(), RegisterActivity.class);
                 intent.putExtra("action_type", AppConst.LOGIN_FIND_CODE);
-                startActivityForResult(intent, AppConst.LOGIN_FIND_CODE);
+                startActivity(intent);
+                break;
+            case R.id.tv_login_register:
+                Intent intent1 = new Intent(getActivity(), RegisterActivity.class);
+                intent1.putExtra("action_type", AppConst.LOGIN_RIGIST_NUMBER);
+                startActivity(intent1);
                 break;
             default:
                 break;
@@ -285,14 +275,4 @@ public class TypeLoginActivity extends BaseActivity {
         new GGOKHTTP(param, GGOKHTTP.GET_USER_LOGIN, ggHttpInterface).startGet();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 0) {
-            if (requestCode == AppConst.LOGIN_FIND_CODE) {
-                loginPassWord.setText("");
-                loginUserName.requestFocus();
-            }
-        }
-    }
 }

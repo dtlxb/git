@@ -40,9 +40,6 @@ public class SelectedAdapter extends BaseItemDraggableAdapter<ToolData.Tool, Bas
 
         fullInnerItem = AppDevice.getWidth(contextView.getContext()) / (AppDevice.isLowDpi() ? 3 : 4);
 
-//        innerItem = AppDevice.isLowDpi() ?
-//                (AppDevice.getWidth(context)-AppDevice.dp2px(context,30)) / 3 :
-//                (AppDevice.getWidth(context)-AppDevice.dp2px(context,40)) / 4;
     }
 
     @Override
@@ -56,16 +53,16 @@ public class SelectedAdapter extends BaseItemDraggableAdapter<ToolData.Tool, Bas
         ImageView itemIcon = holder.getView(R.id.img_touyan_item_icon);
         AppCompatImageView itemHot = holder.getView(R.id.img_touyan_operation);
 
-        setViewHeight$Width(itemIcon, fullInnerItem / 3);
+        setViewHeight$Width(itemIcon, fullInnerItem / 2);
         setViewHeight$Width(itemHot, fullInnerItem / 4);
 
-//        setViewHeight$Width(itemView,innerItem);
+        AppDevice.setViewWidth$Height(itemView,ViewGroup.LayoutParams.MATCH_PARENT
+        ,fullInnerItem);
 
         itemHot.setImageResource(R.mipmap.img_tools_del);
 
         holder.setBackgroundColor(R.id.item_touyan_item, Color.parseColor("#f6f6f6"));
 
-//        Glide.with(contextView.getContext()).load(data.getIconUrl()).dontAnimate().dontTransform().into(itemIcon);
         ImageDisplay.loadImage(contextView.getContext(),data.getIconUrl(),itemIcon);
 
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -89,8 +86,6 @@ public class SelectedAdapter extends BaseItemDraggableAdapter<ToolData.Tool, Bas
                 params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
             }
         }
-//        params.height = (datas.size() > (AppDevice.isLowDpi() ? 3 : 8)) ?
-//                fullInnerItem * (AppDevice.isLowDpi() ? 2 : 3) : ViewGroup.LayoutParams.WRAP_CONTENT;
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         contextView.setLayoutParams(params);
 

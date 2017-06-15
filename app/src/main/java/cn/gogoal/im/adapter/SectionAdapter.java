@@ -60,9 +60,9 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionToolsData, Ba
         TextView itemTvDesc = holder.getView(R.id.tv_touyan_item_text);
 
         //init width and height
-        setViewHeight$Width(itemIcon, innerItem / 3);
+        setViewHeight$Width(itemIcon, innerItem / 2);
         setViewHeight$Width(itemHot, innerItem / 4);
-        setViewHeight$Width(itemView, innerItem);
+        AppDevice.setViewWidth$Height(itemView, innerItem, innerItem);
 
         //模拟的空item处理
         if (item.isSimulatedArg()) {

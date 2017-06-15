@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
@@ -38,7 +37,6 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
-import cn.gogoal.im.common.LitePalDBHelper;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -65,9 +63,6 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.tab_main)
     TabLayout tabMain;
-
-    @BindView(R.id.main_view_mask)
-    View mainViewMask;
 
     @BindArray(R.array.main_tab)
     String[] mainTabArray;
@@ -105,13 +100,6 @@ public class MainActivity extends BaseActivity {
             //拉取好友列表
             getFriendList();
         }
-
-        mainViewMask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mainStockFragment.dismissMarket();
-            }
-        });
 
         setLiveData();
     }
@@ -159,7 +147,6 @@ public class MainActivity extends BaseActivity {
                 tab.setCustomView(tabAdapter.getTabView(i));
             }
         }
-
         tabMain.getTabAt(2).select();
     }
 
@@ -194,22 +181,6 @@ public class MainActivity extends BaseActivity {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_FRIEND_LIST, ggHttpInterface).startGet();
-    }
-
-    public void showMainMsk() {
-        mainViewMask.setClickable(true);
-        mainViewMask.setEnabled(true);
-        mainViewMask.setVisibility(View.VISIBLE);
-        mainViewMask.startAnimation(AnimationUtils.loadAnimation(this,
-                R.anim.alpha_in));
-    }
-
-    public void hideMainMsk() {
-        mainViewMask.setClickable(false);
-        mainViewMask.setEnabled(false);
-        mainViewMask.setVisibility(View.GONE);
-        mainViewMask.startAnimation(AnimationUtils.loadAnimation(this,
-                R.anim.alpha_out));
     }
 
     //获取直播数据
@@ -302,14 +273,6 @@ public class MainActivity extends BaseActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
             switch (tabMain.getSelectedTabPosition()) {
-                case 1:
-                    if (mainStockFragment.isMaskViewVisiable()) {
-                        mainStockFragment.dismissMarket();
-                        exitTime = 0;
-                    } else {
-                        exitBy2Click();
-                    }
-                    break;
                 case 3:
                     if (acb.isChecked()) {
                         acb.setChecked(false);

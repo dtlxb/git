@@ -230,6 +230,7 @@
         <activity android:name=".activity.QrcodeProcessActivity" />
         <activity android:name=".activity.stock.FinancialAnalysisActivity" />
         <activity android:name=".activity.QrCodeActivity" />
+        <activity android:name=".activity.Test2Activity" />
     </application>
 
 </manifest>

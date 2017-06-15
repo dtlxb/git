@@ -2,7 +2,6 @@ package cn.gogoal.im.activity;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -37,6 +36,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.XDividerItemDecoration;
 import cn.gogoal.im.ui.view.XTitle;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
@@ -74,7 +74,7 @@ public class ToolsSettingActivity extends BaseActivity {
 
     @Override
     public void doBusiness(final Context mContext) {
-        SpannableString spannableString = new SpannableString("投研首页常用工具(按住拖动调整排序)");
+        SpannableString spannableString = new SpannableString("我的工具(按住拖动调整排序)");
         spannableString.setSpan(new ForegroundColorSpan(getResColor(R.color.textColor_333333)), 0, 8,
                 Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 
@@ -98,7 +98,6 @@ public class ToolsSettingActivity extends BaseActivity {
                 }).addAction(new XTitle.TextAction("确定") {
             @Override
             public void actionClick(View view) {
-                //TODO 完成
                 setChoose();
             }
         });
@@ -122,14 +121,12 @@ public class ToolsSettingActivity extends BaseActivity {
         selectedAdapter.enableDragItem(mItemTouchHelper);
         rvSelected.setLayoutManager(new GridLayoutManager(mContext, AppDevice.isLowDpi() ? 3 : 4));
         rvSelected.setAdapter(selectedAdapter);
-        rvSelected.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                outRect.set(setDivider(), setDivider(), setDivider(), setDivider());
-            }
-        });
+
+        rvSelected.addItemDecoration(new SelectedDivider());
 
         rvSelected.setItemAnimator(new NoAlphaItemAnimator());
+
+        rvSelected.setPadding(AppDevice.dp2px(mContext,4),0,AppDevice.dp2px(mContext,4),0);
 
         selectedAdapter.setOnItemDragListener(new OnItemDragListener() {
             @Override
@@ -153,7 +150,6 @@ public class ToolsSettingActivity extends BaseActivity {
                 holder.setTextResColor(R.id.tv_touyan_item_text, R.color.textColor_666666);
 
                 selectedAdapter.notifyDataSetChanged();
-//                holder.setTextColor(R.id.tv, Color.BLACK);
             }
         });
 
@@ -225,10 +221,6 @@ public class ToolsSettingActivity extends BaseActivity {
         }
 
         return builderHide;
-    }
-
-    private int setDivider() {
-        return AppDevice.dp2px(ToolsSettingActivity.this, 6);
     }
 
     public void getTouYan() {
@@ -327,7 +319,7 @@ public class ToolsSettingActivity extends BaseActivity {
                 d.t.setIsShow(1);
                 if (!rvAll.isComputingLayout()) {
                     adapterAllData.notifyItemChanged(dataAll.indexOf(d));
-                }else {
+                } else {
                     KLog.e("操作出错");
                 }
 //                adapterAllData.notifyDataSetChanged();
@@ -357,9 +349,29 @@ public class ToolsSettingActivity extends BaseActivity {
 
         selectedAdapter.notifyDataSetChanged();
 
-        tvTips.setVisibility(dataSelected.size() > 0?View.VISIBLE:View.GONE);
+        tvTips.setVisibility(dataSelected.size() > 0 ? View.VISIBLE : View.GONE);
 
-        rvSelected.setVisibility(dataSelected.size() > 0?View.VISIBLE:View.GONE);
+        rvSelected.setVisibility(dataSelected.size() > 0 ? View.VISIBLE : View.GONE);
 
+    }
+
+    private class SelectedDivider extends XDividerItemDecoration {
+
+        private boolean isLowDpi;
+
+        private SelectedDivider() {
+            super(ToolsSettingActivity.this,
+                    4,
+                    Color.WHITE);
+            isLowDpi=AppDevice.isLowDpi();
+        }
+
+        @Override
+        public boolean[] getItemSidesIsHaveOffsets(int itemPosition) {
+            boolean[] show = new boolean[4];
+            show[2] = (itemPosition + 1) % (isLowDpi ? 3 : 4) != 0;
+            show[3] = true;
+            return show;
+        }
     }
 }

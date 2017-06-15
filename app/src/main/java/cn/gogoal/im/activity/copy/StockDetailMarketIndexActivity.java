@@ -228,6 +228,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 
     @BindView(R.id.iv_show_info_dialog)
     ImageView imageViewShoeDialog;
+    private String stockSource;
 
     @Override
     public int bindLayout() {
@@ -246,9 +247,11 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         stockName = getIntent().getStringExtra("stockName");
         stockCode = getIntent().getStringExtra("stockCode");
 
-        KLog.e("stockCode=" + stockCode + ";stockName=" + stockName);
+        KLog.e("stockName="+stockName+";stockCode="+stockCode);
 
-        textHeadTitle.setText(stockName + "(" + stockCode.substring(2, stockCode.length()) + ")");
+//        stockSource=getIntent().getStringExtra("stockSource");
+
+        textHeadTitle.setText(stockName + "(" + stockCode + ")");
         init();
         InitList(stockCode);
         seat = 0;

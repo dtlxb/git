@@ -13,19 +13,6 @@
         android:background="#fff"
         app:elevation="0dp">
 
-        <!--<cn.gogoal.im.ui.view.MySearchView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/shape_search_activity_edit"
-            android:drawableLeft="@mipmap/img_search"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:text="股票代码/名称/拼音"
-            android:textColor="@color/colorXLayout"
-            android:textSize="14sp"
-            app:layout_scrollFlags="scroll|enterAlways"/>-->
-
         <android.support.design.widget.TabLayout
             android:id="@+id/tablayout_market"
             android:layout_width="match_parent"

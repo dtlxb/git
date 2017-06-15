@@ -59,25 +59,9 @@
             android:src="@mipmap/img_title_search" />
     </RelativeLayout>
 
-    <FrameLayout
+    <cn.gogoal.im.ui.widget.UnSlidingViewPager
+        android:id="@+id/vp_my_stock_tab"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <cn.gogoal.im.ui.widget.UnSlidingViewPager
-            android:id="@+id/vp_my_stock_tab"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <include layout="@layout/view_mask"/>
-
-        <!--网格大盘指数-->
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_dialog_market"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/white"
-            android:visibility="gone" />
-
-    </FrameLayout>
+        android:layout_height="match_parent" />
 
 </LinearLayout>
