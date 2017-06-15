@@ -163,7 +163,7 @@ public class ImageUtils{
 
         if (bitmap == null) {
             if (callBack != null)
-                callBack.response(false, "bitmap为空");
+                callBack.response(Impl.RESPON_DATA_EMPTY, "bitmap为空");
             return;
         }
 
@@ -183,19 +183,19 @@ public class ImageUtils{
                 scanPhoto(MyApp.getAppContext(), dirs);
 
                 if (callBack != null)
-                    callBack.response(true,"success");
+                    callBack.response(Impl.RESPON_DATA_SUCCESS,"success");
 
             } catch (Exception e) {
                 e.printStackTrace();
                 if (callBack != null)
-                    callBack.response(false,e.getMessage());
+                    callBack.response(Impl.RESPON_DATA_ERROR,e.getMessage());
             } finally {
                 FileUtil.closeIO(bos);
             }
 
         } else {
             if (callBack != null) {
-                callBack.response(false, "SD卡不存在或者不可读写");
+                callBack.response(Impl.RESPON_DATA_ERROR, "SD卡不存在或者不可读写");
             }
         }
     }

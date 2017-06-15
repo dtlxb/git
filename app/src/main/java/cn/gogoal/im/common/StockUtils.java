@@ -1,6 +1,7 @@
 package cn.gogoal.im.common;
 
 import android.content.Context;
+import android.support.annotation.ColorRes;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONArray;
@@ -110,6 +111,19 @@ public class StockUtils {
                 StringUtils.saveSignificand(rate, 2) + (percent ? "%" : "");
     }
 
+    public static String plusMinus(double rate, boolean percent) {
+
+        if (rate == Double.NaN) {
+            return "--";
+        }
+
+        if (rate == 0) {
+            return "0.00%";
+        }
+        return (rate > 0 ? "+" : "") +
+                StringUtils.saveSignificand(rate, 2) + (percent ? "%" : "");
+    }
+
     /**
      * 获取搜索历史
      *
@@ -150,7 +164,7 @@ public class StockUtils {
     /**
      * 根据判断的依据字段，返回股票颜色
      */
-    public static int getStockRateColor(String rateOrPriceString) {
+    public static @ColorRes int getStockRateColor(String rateOrPriceString) {
         if (TextUtils.isEmpty(rateOrPriceString) || rateOrPriceString.equals("null")) {
             return R.color.stock_gray;
         }
@@ -163,7 +177,7 @@ public class StockUtils {
     /**
      * 根据判断的依据字段，返回股票颜色
      */
-    public static int getStockRateColor(double rateOrPriceString) {
+    public static @ColorRes int getStockRateColor(double rateOrPriceString) {
         return rateOrPriceString == Double.NaN ?
                 R.color.stock_gray :
                 (rateOrPriceString > 0 ?

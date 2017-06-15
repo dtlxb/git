@@ -85,9 +85,9 @@
     <color name="stock_market_bg">#f8f8f8</color>
     <color name="stock_market_divider">#e4e4e4</color>
     <color name="stockItemPress">#E2E7EC</color>
-    <color name="stock_green">#26b844</color>
-    <color name="stock_red">#ed1b1b</color>
-    <color name="stock_gray">#A6A9AD</color>
+    <!--<color name="stock_green">#26b844</color>-->
+    <!--<color name="stock_red">#ed1b1b</color>-->
+    <!--<color name="stock_gray">#A6A9AD</color>-->
     <color name="stock_list_more">#0095FF</color>
     <color name="stock_text_black">#333333</color>
     <color name="stock_text_gray">#666666</color>

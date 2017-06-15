@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,19 +27,18 @@ import cn.gogoal.im.adapter.IMPersonSetAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.group.GroupMemberInfo;
+import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.ggqrcode.GGQrCode;
 import cn.gogoal.im.ui.view.SelectorButton;
-import cn.gogoal.im.ui.view.XTitle;
 
 /**
  * Created by huangxx on 2017/4/26.
  */
 
 public class SquareCardActivity extends BaseActivity {
-
-    private XTitle xTitle;
 
     @BindView(R.id.iv_square_head)
     ImageView iv_square_head;
@@ -60,7 +58,7 @@ public class SquareCardActivity extends BaseActivity {
 
     private IMPersonSetAdapter mPersonInfoAdapter;
     private List<ContactBean> contactBeens = new ArrayList<>();
-    private List<ContactBean> PersonContactBeens = new ArrayList<>();
+    private ArrayList<ContactBean> PersonContactBeens = new ArrayList<>();
     private String conversationId;
     private String squareName;
     private String squareCreater;
@@ -81,6 +79,7 @@ public class SquareCardActivity extends BaseActivity {
         squareName = getIntent().getExtras().getString("square_name");
         squareCreater = getIntent().getExtras().getString("square_creater");
         mBeanList = getIntent().getParcelableArrayListExtra("square_members");
+
         mPersonInfoAdapter = new IMPersonSetAdapter(1002, SquareCardActivity.this, R.layout.item_square_chat_set, squareCreater, contactBeens);
         personlistRecycler.setAdapter(mPersonInfoAdapter);
         //初始化界面
@@ -91,14 +90,14 @@ public class SquareCardActivity extends BaseActivity {
         getGroupInfo();
     }
 
-    @OnClick({R.id.look_more_person, R.id.jion_group})
+    @OnClick({R.id.look_more_person, R.id.jion_group, R.id.layout_square_qrcode})
     void fuction(View view) {
         switch (view.getId()) {
             case R.id.look_more_person:
                 Intent intent = new Intent(getActivity(), IMGroupContactsActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("square_creater", squareCreater);
-                bundle.putSerializable("chat_group_contacts", (Serializable) PersonContactBeens);
+                bundle.putSerializable("chat_group_contacts", PersonContactBeens);
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
@@ -110,24 +109,49 @@ public class SquareCardActivity extends BaseActivity {
                     intent1.putExtra("need_update", true);
                     startActivity(intent1);
                 } else {
-                    applyIntoGroup();
+                    ChatGroupHelper.applyIntoGroup(getActivity(), conversationId);
                 }
+                break;
+            case R.id.layout_square_qrcode:
+                intent = new Intent(view.getContext(), QrCodeActivity.class);
+                intent.putExtra("qr_code_type", GGQrCode.QR_CODE_TYPE_GROUP);
+                intent.putExtra("qrcode_name",squareName);
+                intent.putExtra("qrcode_info","("+mBeanList.size()+")人");
+                intent.putExtra("qrcode_content_id",conversationId);
+                startActivity(intent);
                 break;
         }
     }
 
     private void initTitle() {
-        xTitle = setMyTitle("群名片", true);
+        setMyTitle("群名片", true);
         tvSquareName.setText(squareName);
         tvTeamSize.setText(String.valueOf(mBeanList.size()));
-        iv_square_head.setImageBitmap((Bitmap) getIntent().getParcelableExtra("bitmap_avatar"));
-        /*XTitle.ImageAction imageAction = new XTitle.ImageAction(getResDrawable(R.mipmap.arrows_white)) {
+//        iv_square_head.setImageBitmap((Bitmap) getIntent().getParcelableExtra("bitmap_avatar"));
+//        /*XTitle.ImageAction imageAction = new XTitle.ImageAction(getResDrawable(R.mipmap.arrows_white)) {
+//            @Override
+//            public void actionClick(View view) {
+//
+//            }
+//        };
+//        xTitle.addAction(imageAction, 0);*/
+
+        ChatGroupHelper.setGroupAvatar(conversationId, new AvatarTakeListener() {
             @Override
-            public void actionClick(View view) {
+            public void success(final Bitmap bitmap) {
+                SquareCardActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        iv_square_head.setImageBitmap(bitmap);
+                    }
+                });
+            }
+
+            @Override
+            public void failed(Exception e) {
 
             }
-        };
-        xTitle.addAction(imageAction, 0);*/
+        });
     }
 
     private void getAllContacts(List<GroupMemberInfo> MBeanList) {
@@ -197,37 +221,6 @@ public class SquareCardActivity extends BaseActivity {
             }
         };
         new GGOKHTTP(params, GGOKHTTP.GET_GROUP_INFO, ggHttpInterface).startGet();
-    }
-
-    public void applyIntoGroup() {
-        Map<String, String> params = new HashMap<>();
-        params.put("token", UserUtils.getToken());
-        params.put("conv_id", conversationId);
-        KLog.e(params);
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                KLog.e(responseInfo);
-                if ((int) result.get("code") == 0) {
-                    JSONObject dataJson = result.getJSONObject("data");
-                    if (dataJson.getBoolean("success")) {
-                        UIHelper.toast(SquareCardActivity.this, "入群申请发送成功");
-                    } else {
-                        UIHelper.toast(SquareCardActivity.this, "入群申请发送失败");
-                    }
-                } else {
-                    UIHelper.toast(SquareCardActivity.this, "入群申请发送失败");
-                }
-            }
-
-
-            @Override
-            public void onFailure(String msg) {
-                UIHelper.toast(SquareCardActivity.this, R.string.network_busy);
-            }
-        };
-        new GGOKHTTP(params, GGOKHTTP.APPLY_INTO_GROUP, ggHttpInterface).startGet();
     }
 
     //取六个人

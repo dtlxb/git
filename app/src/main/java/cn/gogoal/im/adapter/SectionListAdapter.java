@@ -87,7 +87,7 @@ public class SectionListAdapter extends BaseSectionQuickAdapter<SectionToolsData
             @Override
             public void onClick(View v) {
                 NormalIntentUtils.go2WebActivity(context,
-                        AppConst.WEB_URL + "/column/info/" + tool.getId(), tool.getDesc());
+                        AppConst.WEB_URL + "/column/info/" + tool.getId()+"?code="+tool.getCode(), tool.getDesc());
             }
         });
 

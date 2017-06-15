@@ -37,9 +37,11 @@ public class ChangeListAdapter extends MyBaseAdapter<StockData>{
         }else{
             holder= (ViewHolder) convertView.getTag();
         }
-        holder.privce.setText(String.valueOf(StringUtils.get2Double(list.get(position).getCurrent_price()) + ""));
+//        holder.privce.setText(String.valueOf(StringUtils.get2Double(list.get(position).getCurrent_price()) + ""));
+        holder.privce.setText(StringUtils.saveSignificand(list.get(position).getCurrent_price(), 2));
 
-        holder.rate.setText(StringUtils.get2Double(list.get(position).getRate()) * 100 + "%");
+//        holder.rate.setText(StringUtils.get2Double(list.get(position).getRate()) * 100 + "%");
+        holder.rate.setText(""+StringUtils.saveSignificand(list.get(position).getRate(), 2) + "%");
 
         holder.code.setText(list.get(position).getStock_code());
         holder.name.setText(list.get(position).getStock_name());

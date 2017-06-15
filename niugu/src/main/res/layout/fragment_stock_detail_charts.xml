@@ -245,7 +245,7 @@
                         android:id="@+id/tablayout_treat"
                         style="@style/RadioTabLayout"
                         android:layout_width="match_parent"
-                        android:layout_height="25dp"
+                        android:layout_height="20dp"
                         android:background="@android:color/transparent"
                         android:minHeight="0dp"
                         app:tabBackground="@android:color/transparent"

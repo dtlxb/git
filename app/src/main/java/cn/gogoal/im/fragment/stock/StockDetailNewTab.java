@@ -46,7 +46,7 @@ import static cn.gogoal.im.R.id.tv_mystock_news_title;
  */
 public class StockDetailNewTab extends BaseFragment {
 
-    @BindView(R.id.rv_news)
+    @BindView(R.id.recyclerView)
     RecyclerView rvNews;
 
     @BindView(R.id.xLayout)
@@ -66,7 +66,7 @@ public class StockDetailNewTab extends BaseFragment {
 
     @Override
     public int bindLayout() {
-        return R.layout.fragment_stock_detail_newtab;
+        return R.layout.layout_normal_list_without_refresh;
     }
 
     @Override
@@ -102,7 +102,7 @@ public class StockDetailNewTab extends BaseFragment {
 
         TextView tvFoot = new TextView(mContext);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                AppDevice.dp2px(getContext(), 55));
+                AppDevice.dp2px(getContext(), 50));
         tvFoot.setGravity(Gravity.CENTER);
         tvFoot.setText("点击查看更多");
         tvFoot.setLayoutParams(params);
@@ -110,8 +110,8 @@ public class StockDetailNewTab extends BaseFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), MyStockNewsActivity.class);
-                intent.putExtra("showTabIndex",parentIndex);
-                intent.putExtra("news_title",getString(R.string.title_stock_news));
+                intent.putExtra("showTabIndex", parentIndex);
+                intent.putExtra("news_title", getString(R.string.title_stock_news));
                 startActivity(intent);
             }
         });
@@ -176,6 +176,7 @@ public class StockDetailNewTab extends BaseFragment {
             public void onSuccess(String responseInfo) {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
+                    stockNewsDatas.clear();
                     JSONArray array = JSONObject.parseObject(responseInfo).getJSONArray("data");
                     for (int i = 0; i < array.size(); i++) {
                         JSONObject object = (JSONObject) array.get(i);
@@ -210,8 +211,8 @@ public class StockDetailNewTab extends BaseFragment {
 
         @Override
         protected void convert(BaseViewHolder holder, MyStockTabNewsBean data, int position) {
-            holder.getView(R.id.tv_mystock_news_stockInfo).setVisibility(View.GONE);
-            holder.setText(tv_mystock_news_date, CalendarUtils.getStringDate("yyyy-MM-dd HH:mm",data.getDate()));
+            holder.getView(R.id.tv_mystock_news_stockInfo).setVisibility(View.INVISIBLE);
+            holder.setText(tv_mystock_news_date, CalendarUtils.getStringDate("yyyy-MM-dd HH:mm", data.getDate()));
             holder.setText(tv_mystock_news_title, data.getNewsTitle());
         }
     }

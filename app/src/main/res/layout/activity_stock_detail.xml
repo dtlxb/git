@@ -9,6 +9,7 @@
     android:orientation="vertical"
     tools:context=".activity.stock.StockDetailActivity">
 
+    <!--title-->
     <include layout="@layout/include_title" />
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -16,11 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.CoordinatorLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
             <android.support.v4.widget.NestedScrollView
+                android:id="@+id/scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -29,8 +27,10 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <!--head-->
                     <include layout="@layout/inlcude_stock_detail_head" />
 
+                    <!--treat info-->
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_stock_detail_treat"
                         android:layout_width="match_parent"
@@ -43,6 +43,7 @@
                         app:spanCount="3"
                         tools:listitem="@layout/item_rv_stock_detail_treat" />
 
+                    <!--chart control-->
                     <android.support.design.widget.TabLayout
                         android:id="@+id/tab_stock_detail_chart"
                         style="@style/NormalTabLayout"
@@ -50,13 +51,13 @@
                         android:layout_height="wrap_content"
                         android:background="@color/stock_market_bg" />
 
+                    <!--chart viewpager-->
                     <android.support.v4.view.ViewPager
                         android:id="@+id/chart_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="250dp">
+                        android:layout_height="250dp"/>
 
-                    </android.support.v4.view.ViewPager>
-
+                    <!--stock news control-->
                     <android.support.design.widget.TabLayout
                         android:id="@+id/tab_stock_detail_news"
                         style="@style/NormalTabLayout"
@@ -64,12 +65,13 @@
                         android:layout_height="wrap_content"
                         android:background="@color/stock_market_bg" />
 
+                    <!--stock news viewpager-->
                     <android.support.v4.view.ViewPager
                         android:id="@+id/vp_news"
                         android:layout_width="match_parent"
-                        android:layout_height="415dp"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                        android:layout_height="310dp"/>
 
+                    <!--chart image-->
                     <android.support.design.widget.TabLayout
                         android:id="@+id/tab_stock_detail_chart_img"
                         style="@style/NormalTabLayout"
@@ -85,6 +87,5 @@
                 </LinearLayout>
 
             </android.support.v4.widget.NestedScrollView>
-        </android.support.design.widget.CoordinatorLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

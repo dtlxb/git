@@ -321,7 +321,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
 
     //拉取群组信息
     public void getChatGroup() {
-        UserUtils.getChatGroup(null, conversationId, new UserUtils.getSquareInfo() {
+        UserUtils.getChatGroup(null, conversationId, new UserUtils.SquareInfoCallback() {
             @Override
             public void squareGetSuccess(JSONObject object) {
                 if (null != object.get("accountList")) {

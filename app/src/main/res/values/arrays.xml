@@ -142,4 +142,33 @@
         <item>扫一扫加好友</item>
         <item>添加手机通讯录</item>
     </string-array>
+
+    <string-array name="stock_detail_info">
+        <item>最高</item>
+        <item>最低</item>
+        <item>涨停</item>
+        <item>跌停</item>
+        <item>内盘</item>
+        <item>外盘</item>
+        <item>成交额</item>
+        <item>振幅</item>
+        <item>委比</item>
+        <item>量比</item>
+        <item>流通市值</item>
+        <item>总市值</item>
+        <item>市盈率</item>
+        <item>市净率</item>
+        <item>每股收益</item>
+        <item>总股本</item>
+        <item>流通股</item>
+    </string-array>
+
+    <string-array name="stock_market_info">
+        <item>最高</item>
+        <item>最低</item>
+        <item>涨家数</item>
+        <item>跌家数</item>
+        <item>平家数</item>
+
+    </string-array>
 </resources>

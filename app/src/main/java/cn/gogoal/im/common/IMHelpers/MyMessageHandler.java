@@ -96,7 +96,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                         //补全群信息(群信息没有的时候)
                                         List<UserBean> cacheBeans = UserInfoUtils.getAllGroupUserInfo(conversation.getConversationId());
                                         if (cacheBeans == null || cacheBeans.size() == 0) {
-                                            UserUtils.getChatGroup(null, conversation.getConversationId(), new UserUtils.getSquareInfo() {
+                                            UserUtils.getChatGroup(null, conversation.getConversationId(), new UserUtils.SquareInfoCallback() {
                                                 @Override
                                                 public void squareGetSuccess(JSONObject object) {
                                                 }

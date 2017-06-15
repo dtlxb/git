@@ -1,4 +1,5 @@
 <resources>
+
     <style name="TabLayoutTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textSize">16sp</item>
     </style>
@@ -63,6 +64,28 @@
         <item name="tabPaddingStart">0dp</item>
         <item name="tabPaddingEnd">0dp</item>
         <item name="android:maxHeight">0dp</item>
+    </style>
 
+    <!--大盘指数交易信息textView样式提取-->
+    <style name="stock_market_text_key">
+        <item name="android:gravity">right</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/text_color_word</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
+    <style name="stock_market_text_value">
+        <item name="android:text">@string/default__</item>
+        <item name="android:gravity">right</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:textColor">@color/text_color_number</item>
+        <item name="android:textSize">12sp</item>
     </style>
 </resources>
