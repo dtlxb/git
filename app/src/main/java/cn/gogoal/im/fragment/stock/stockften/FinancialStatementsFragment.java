@@ -2,7 +2,9 @@ package cn.gogoal.im.fragment.stock.stockften;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
@@ -11,8 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.AnalysisLeftAdapter;
+import cn.gogoal.im.adapter.AnalysisRightAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.copy.FtenUtils;
@@ -36,6 +40,7 @@ public class FinancialStatementsFragment extends BaseFragment {
     private String stype;
 
     private AnalysisLeftAdapter leftAdapter;
+    private AnalysisRightAdapter rightAdapter;
 
     public static FinancialStatementsFragment getInstance(String stockCode, String stockName) {
         FinancialStatementsFragment fragment = new FinancialStatementsFragment();
@@ -122,6 +127,7 @@ public class FinancialStatementsFragment extends BaseFragment {
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
+                    setRightListData(data);
                 }
             }
 
@@ -130,5 +136,48 @@ public class FinancialStatementsFragment extends BaseFragment {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.FIREPORT_PROFIT_DIST, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 设置右边列表数据
+     */
+    private void setRightListData(JSONObject data) {
+        ArrayList<JSONArray> contList = new ArrayList<>();
+        contList.add(data.getJSONObject("title").getJSONArray("title"));
+
+        String[] stringList = null;
+        if (stype.equals("1")) {
+            stringList = FtenUtils.profitForm1_1;
+        } else {
+            stringList = FtenUtils.profitForm2_1;
+        }
+
+        for (int i = 0; i < stringList.length; i++) {
+            contList.add(data.getJSONObject(stringList[i]).getJSONArray("original_data"));
+        }
+
+        rightAdapter = new AnalysisRightAdapter(getContext(), contList);
+        lsvRight.setAdapter(rightAdapter);
+    }
+
+    @OnClick({R.id.radioBtn0, R.id.radioBtn1, R.id.radioBtn2, R.id.radioBtn3, R.id.radioBtn4})
+    public void ChartTabClick(View v) {
+        switch (v.getId()) {
+            case R.id.radioBtn0:
+                getStatementsData("0", stype);
+                break;
+            case R.id.radioBtn1:
+                getStatementsData("4", stype);
+                break;
+            case R.id.radioBtn2:
+                getStatementsData("2", stype);
+                break;
+            case R.id.radioBtn3:
+                getStatementsData("1", stype);
+                break;
+            case R.id.radioBtn4:
+                getStatementsData("3", stype);
+                break;
+        }
     }
 }
