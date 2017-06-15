@@ -9,7 +9,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:scrollbars="none">
 
         <LinearLayout
@@ -38,10 +39,43 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true"
+                        android:layout_centerVertical="true"
                         android:text="@string/text_empty"
                         android:textColor="@color/textColor_333333"
                         android:textSize="16dp" />
+
+                    <LinearLayout
+                        android:id="@+id/mystock_tabs"
+                        android:layout_width="100dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/chart_tab_shape"
+                        android:gravity="center"
+                        android:visibility="visible">
+
+                        <TextView
+                            android:id="@+id/chart_tab_one"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/chart_tab_shape_select_left"
+                            android:gravity="center"
+                            android:text="表1"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_14" />
+
+                        <TextView
+                            android:id="@+id/chart_tab_two"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="表2"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/text_size_14" />
+
+                    </LinearLayout>
 
                 </RelativeLayout>
 
@@ -60,7 +94,7 @@
                 <!--左边的ListView-->
                 <cn.gogoal.im.ui.copy.InnerListView
                     android:id="@+id/lsv_left"
-                    android:layout_width="130dp"
+                    android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:divider="@null"
                     android:scrollbars="none" />
@@ -85,5 +119,80 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioBtn0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
+            android:text="全部"
+            android:textColor="@drawable/analysis_radio_button"
+            android:textSize="14dp" />
+
+        <RadioButton
+            android:id="@+id/radioBtn1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
+            android:text="年报"
+            android:textColor="@drawable/analysis_radio_button"
+            android:textSize="14dp" />
+
+        <RadioButton
+            android:id="@+id/radioBtn2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
+            android:text="中报"
+            android:textColor="@drawable/analysis_radio_button"
+            android:textSize="14dp" />
+
+        <RadioButton
+            android:id="@+id/radioBtn3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
+            android:text="一季报"
+            android:textColor="@drawable/analysis_radio_button"
+            android:textSize="14dp" />
+
+        <RadioButton
+            android:id="@+id/radioBtn4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
+            android:text="三季报"
+            android:textColor="@drawable/analysis_radio_button"
+            android:textSize="14dp" />
+
+    </RadioGroup>
 
 </LinearLayout>
