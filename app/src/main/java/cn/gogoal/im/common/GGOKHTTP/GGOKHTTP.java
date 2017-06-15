@@ -741,7 +741,27 @@ public class GGOKHTTP {
     public static final String GET_STOCK_FINANCIAL_TYPE = "v1/f10/get_stock_financial_type";
 
     /**
-     * F10-财务报表
+     * F10-财务报表-利润分配表
+     * params stock_code
+     * params report_stype 1【非单季】或2【单 季】
+     * params season 0【全部】1【一季度 】2【二季度】3【三 季度】4【四季度】
+     * params stype 1-绝对值，0-同比值 ，默认1
+     * params page
+     */
+    public static final String FIREPORT_PROFIT_DIST = "v1/f10/fireport_profit_dist";
+
+    /**
+     * F10-财务报表-现金流量表
+     * params stock_code
+     * params report_stype 1【非单季】或2【单 季】
+     * params season 0【全部】1【一季度 】2【二季度】3【三 季度】4【四季度】
+     * params stype 1-绝对值，0-同比值 ，默认1
+     * params page
+     */
+    public static final String FIREPORT_FLOW_CASH = "v1/f10/fireport_flow_cash";
+
+    /**
+     * F10-财务报表-资产负债表
      * params stock_code
      * params season 0【全部】1【一季度 】2【二季度】3【三 季度】4【四季度】
      * params stype 1-绝对值，0-同比值 ，默认1
