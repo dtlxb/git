@@ -19,8 +19,12 @@ import cn.gogoal.im.adapter.MarketAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.bean.stock.HangqingBean;
+import cn.gogoal.im.bean.stock.HostIndustrylistBean;
+import cn.gogoal.im.bean.stock.Market;
 import cn.gogoal.im.bean.stock.MarkteBean;
 import cn.gogoal.im.bean.stock.StockMarketBean;
+import cn.gogoal.im.bean.stock.stockRanklist.StockRankBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
@@ -134,11 +138,11 @@ public class HuShenFragment extends BaseFragment {
 
     private void reconstructData(String responseInfo, final int refreshType) {
         markteList.clear();
-        StockMarketBean.DataBean marketData = JSONObject.parseObject(responseInfo, StockMarketBean.class).getData();
+        Market marketData = JSONObject.parseObject(responseInfo, StockMarketBean.class).getData();
         //大盘
         List<MarkteBean.MarketItemData> listMarket = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
-            StockMarketBean.DataBean.HangqingBean hangqingBean = marketData.getHangqing().get(i);
+            HangqingBean hangqingBean = marketData.getHangqing().get(i);
             MarkteBean.MarketItemData itemData = new MarkteBean.MarketItemData(
                     hangqingBean.getName(),
                     StringUtils.pareseStringDouble(hangqingBean.getPrice()),
@@ -174,7 +178,7 @@ public class HuShenFragment extends BaseFragment {
         //热门行业
         List<MarkteBean.MarketItemData> listHotIndestry = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
-            StockMarketBean.DataBean.HostIndustrylistBean industrylistBean = marketData.getHostIndustrylist().get(i);
+            HostIndustrylistBean industrylistBean = marketData.getHostIndustrylist().get(i);
             MarkteBean.MarketItemData itemData = new MarkteBean.MarketItemData(
                     industrylistBean.getIndustry_name(),
                     StringUtils.pareseStringDouble(industrylistBean.getCurrent_price()),
@@ -204,7 +208,7 @@ public class HuShenFragment extends BaseFragment {
         }
     }
 
-    private List<MarkteBean.MarketItemData> addRankList(List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> list) {
+    private List<MarkteBean.MarketItemData> addRankList(List<StockRankBean> list) {
         List<MarkteBean.MarketItemData> increase = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             MarkteBean.MarketItemData itemData = new MarkteBean.MarketItemData(
