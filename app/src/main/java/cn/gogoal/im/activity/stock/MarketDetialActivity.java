@@ -23,7 +23,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.stock.HotIndustryBean;
 import cn.gogoal.im.bean.stock.RankListStockBean;
-import cn.gogoal.im.bean.stock.StockMarketBean;
+import cn.gogoal.im.bean.stock.stockRanklist.StockRankBean;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
@@ -72,7 +72,7 @@ public class MarketDetialActivity extends BaseActivity {
 
     private RankAdapter rankAdapter;
 
-    private List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> rankDatas = new ArrayList<>();
+    private List<StockRankBean> rankDatas = new ArrayList<>();
 
     private IndustryAdapter hotIndustryAdapter;
 
@@ -267,16 +267,16 @@ public class MarketDetialActivity extends BaseActivity {
     }
 
     //    [涨跌换振] TITLE
-    private class RankAdapter extends CommonAdapter<StockMarketBean.DataBean.StockRanklistBean.StockRankBean
+    private class RankAdapter extends CommonAdapter<StockRankBean
             , BaseViewHolder> {
 
-        RankAdapter(List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> datas) {
+        RankAdapter(List<StockRankBean> datas) {
             super(R.layout.item_stock_rank_list, datas);
         }
 
         @Override
         protected void convert(BaseViewHolder holder,
-                               final StockMarketBean.DataBean.StockRanklistBean.StockRankBean data, int position) {
+                               final StockRankBean data, int position) {
 
             TextView tv_price = holder.getView(R.id.tv_mystock_price);
 
@@ -374,7 +374,7 @@ public class MarketDetialActivity extends BaseActivity {
 
                     rateView.setBackgroundResource(StockUtils.getStockRateBackgroundRes(data.getRate()));
 
-                    priceView.setTextColor(StockUtils.getStockRateColor(data.getRate()));
+                    priceView.setTextColor(getResColor(StockUtils.getStockRateColor(data.getRate())));
 
                 } else { //股票退市，停牌等异常
                     priceView.setText(StockUtils.getStockStatus(data.getStock_type()));

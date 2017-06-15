@@ -248,6 +248,8 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         stockName = getIntent().getStringExtra("stockName");
         stockCode = getIntent().getStringExtra("stockCode");
 
+        KLog.e("stockName="+stockName+";stockCode="+stockCode);
+
 //        stockSource=getIntent().getStringExtra("stockSource");
 
         textHeadTitle.setText(stockName + "(" + stockCode + ")");

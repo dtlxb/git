@@ -85,6 +85,10 @@ public class UIHelper {
         mToast.show();
     }
 
+    public static <T extends View> T getView(View parentView, @IdRes int viewId) {
+        return (T)parentView.findViewById(viewId);
+    }
+
     public static void toast(Context cont, String msg, int time) {
         if (cont == null || msg == null) {
             return;
@@ -113,7 +117,7 @@ public class UIHelper {
         }
         if (mToast == null) {
             if (AppDevice.isNetworkConnected(cont)) {
-                mToast = Toast.makeText(cont,"服务器开小差了...", Toast.LENGTH_LONG);
+                mToast = Toast.makeText(cont, "服务器开小差了...", Toast.LENGTH_LONG);
                 xLayout.setStatus(XLayout.Error);
             } else {
                 mToast = Toast.makeText(cont, "网络断开了一下", Toast.LENGTH_LONG);

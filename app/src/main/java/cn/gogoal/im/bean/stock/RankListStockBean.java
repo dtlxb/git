@@ -2,6 +2,8 @@ package cn.gogoal.im.bean.stock;
 
 import java.util.List;
 
+import cn.gogoal.im.bean.stock.stockRanklist.StockRankBean;
+
 /**
  * author wangjd on 2017/4/6 0006.
  * Staff_id 1375
@@ -76,10 +78,10 @@ public class RankListStockBean {
         private int green_counts;
         private int red_counts;
 
-        private List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> amplitude_list;
-        private List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> down_list;
-        private List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> change_list;
-        private List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> increase_list;
+        private List<StockRankBean> amplitude_list;
+        private List<StockRankBean> down_list;
+        private List<StockRankBean> change_list;
+        private List<StockRankBean> increase_list;
 
         public int getGray_counts() {
             return gray_counts;
@@ -105,35 +107,35 @@ public class RankListStockBean {
             this.red_counts = red_counts;
         }
 
-        public List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> getIncrease_list() {
+        public List<StockRankBean> getIncrease_list() {
             return increase_list;
         }
 
-        public void setIncrease_list(List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> increase_list) {
+        public void setIncrease_list(List<StockRankBean> increase_list) {
             this.increase_list = increase_list;
         }
 
-        public List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> getAmplitude_list() {
+        public List<StockRankBean> getAmplitude_list() {
             return amplitude_list;
         }
 
-        public void setAmplitude_list(List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> amplitude_list) {
+        public void setAmplitude_list(List<StockRankBean> amplitude_list) {
             this.amplitude_list = amplitude_list;
         }
 
-        public List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> getDown_list() {
+        public List<StockRankBean> getDown_list() {
             return down_list;
         }
 
-        public void setDown_list(List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> down_list) {
+        public void setDown_list(List<StockRankBean> down_list) {
             this.down_list = down_list;
         }
 
-        public List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> getChange_list() {
+        public List<StockRankBean> getChange_list() {
             return change_list;
         }
 
-        public void setChange_list(List<StockMarketBean.DataBean.StockRanklistBean.StockRankBean> change_list) {
+        public void setChange_list(List<StockRankBean> change_list) {
             this.change_list = change_list;
         }
     }

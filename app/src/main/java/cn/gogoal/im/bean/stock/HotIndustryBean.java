@@ -56,7 +56,7 @@ public class HotIndustryBean {
          */
 
         private String industry_rate;
-        private double rate;
+        private String rate;
         private String current_price;
         private String stock_code;
         private String stock_name;
@@ -80,11 +80,11 @@ public class HotIndustryBean {
             this.industry_rate = industry_rate;
         }
 
-        public double getRate() {
+        public String getRate() {
             return rate;
         }
 
-        public void setRate(double rate) {
+        public void setRate(String rate) {
             this.rate = rate;
         }
 
