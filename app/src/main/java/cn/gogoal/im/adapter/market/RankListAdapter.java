@@ -24,13 +24,13 @@ import cn.gogoal.im.common.StringUtils;
  */
 public class RankListAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
 
-    public static final int RANK_TYPE_INCREASE_LIST = 0x0;
+    public static final int RANK_TYPE_INCREASE_LIST = 0x1;
 
-    public static final int RANK_TYPE_DOWN_LIST = 0x1;
+    public static final int RANK_TYPE_DOWN_LIST = 0x2;
 
-    public static final int RANK_TYPE_CHANGE_LIST = 0x2;
+    public static final int RANK_TYPE_CHANGE_LIST = 0x3;
 
-    public static final int RANK_TYPE_AMPLITUDE_LIST = 0x3;
+    public static final int RANK_TYPE_AMPLITUDE_LIST = 0x4;
 
     private List<StockRankBean> rankBeanList;
 
