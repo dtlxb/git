@@ -162,6 +162,8 @@ public class FiveDayFragment extends Fragment {
             fiveDayBitmap.setLongitudeNum(4);
             fiveDayBitmap.setmSize(AppDevice.dp2px(getActivity(), 1));
             fiveDayBitmap.setmAxisTitleSize(AppDevice.dp2px(getActivity(), 10));
+            //画交互点
+            fiveDayBitmap.setmSpaceSize(AppDevice.dp2px(getActivity(), 3));
             if (StockDetailChartsActivity.STOCK_COMMON == stockType) {
                 fiveDayBitmap.setLeftMargin(AppDevice.dp2px(getActivity(), 40));
                 fiveDayBitmap.setRightMargin(AppDevice.dp2px(getActivity(), 40));

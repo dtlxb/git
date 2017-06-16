@@ -135,6 +135,8 @@ public class TimesFragment extends BaseFragment {
                         timesBitmap.setShowDetail(true);
                         timesBitmap.setLongitudeNum(0);
                         timesBitmap.setmSize(AppDevice.dp2px(getActivity(), 1));
+                        //画交互点
+                        timesBitmap.setmSpaceSize(AppDevice.dp2px(getActivity(), 3));
                         timesBitmap.setmAxisTitleSize(AppDevice.dp2px(getActivity(), 10));
                         if (StockDetailChartsActivity.STOCK_COMMON == stockType) {
                             timesBitmap.setLeftMargin(AppDevice.dp2px(getActivity(), 40));

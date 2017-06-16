@@ -686,7 +686,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
     /**
      * K线滑动加载
      */
-    @Subscriber(tag = "Dismiss_chart")
+    @Subscriber(tag = "Diss_Progressbar")
     public void chartProgressDismiss(BaseMessage message) {
         showProgressbar(false);
     }
