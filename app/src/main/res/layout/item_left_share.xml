@@ -55,9 +55,6 @@
             android:layout_marginStart="5dp"
             android:background="@drawable/message_background"
             android:orientation="vertical"
-            android:paddingBottom="14dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="12dp"
             android:paddingTop="10dp">
 
             <TextView
@@ -66,7 +63,8 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="分享消息"
+                android:paddingLeft="12dp"
+                android:paddingRight="14dp"
                 android:textColor="@color/textColor_333333"
                 android:textSize="16sp" />
 
@@ -75,6 +73,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="14dp"
                 android:visibility="gone">
 
                 <TextView
@@ -102,12 +102,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="12dp"
+                android:paddingRight="14dp">
 
                 <ImageView
                     android:id="@+id/iv_live_share"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="100dp"
                     android:scaleType="fitXY" />
 
                 <TextView
@@ -120,6 +122,39 @@
                     android:textColor="@color/textColor_999999"
                     android:textSize="12sp" />
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="10dp"
+                android:background="@color/marketcompare_stockcode" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="14dp">
+
+                <com.hply.roundimage.roundImage.RoundedImageView
+                    android:id="@+id/iv_from"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true" />
+
+                <TextView
+                    android:id="@+id/tv_from"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="6dp"
+                    android:layout_toRightOf="@id/iv_from"
+                    android:maxLines="1"
+                    android:textColor="@color/textColor_333333"
+                    android:textSize="12dp" />
+
+            </RelativeLayout>
 
         </LinearLayout>
 

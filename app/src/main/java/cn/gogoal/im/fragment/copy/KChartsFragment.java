@@ -74,7 +74,7 @@ public class KChartsFragment extends BaseFragment {
         dayK4 = SPTools.getInt("tv_ln4", 0);
         width = bundle.getInt("width", 0) - AppDevice.dp2px(getActivity(), 52);
         height = bundle.getInt("height", 0);
-        GetKLineDataPage(false, true);
+        GetKLineDataPage(true, false, true);
     }
 
     @Override
@@ -97,13 +97,13 @@ public class KChartsFragment extends BaseFragment {
         switch (message.getCode()) {
             case "auhority":
                 page = 0;
-                if (!isHidden()) GetKLineDataPage(true, true);
+                if (!isHidden()) GetKLineDataPage(false, true, true);
                 break;
         }
     }
 
-    public void GetKLineDataPage(final Boolean is_authroity, final boolean is_need_animation) {
-        if (page == 0) {
+    public void GetKLineDataPage(boolean needShowProgress, final Boolean is_authroity, final boolean is_need_animation) {
+        if (needShowProgress) {
             ((StockDetailChartsActivity) getActivity()).showProgressbar(true);
         }
         page++;
@@ -223,7 +223,7 @@ public class KChartsFragment extends BaseFragment {
         if (!hidden) {
             if (mOHLCData.size() == 0) {
                 page = 0;
-                GetKLineDataPage(false, false);
+                GetKLineDataPage(true, false, false);
             }
         }
         super.onHiddenChanged(hidden);

@@ -99,7 +99,7 @@ public class TimesFragment extends BaseFragment {
         } else if (stockType == StockDetailChartsActivity.STOCK_COMMON) {
             initValue();
         }
-        GetMinLineData();
+        GetMinLineData(true);
     }
 
     /*五档、明细切换*/
@@ -111,8 +111,10 @@ public class TimesFragment extends BaseFragment {
         }
     }
 
-    private void GetMinLineData() {
-        ((StockDetailChartsActivity) getActivity()).showProgressbar(true);
+    private void GetMinLineData(boolean needShowProgress) {
+        if (needShowProgress) {
+            ((StockDetailChartsActivity) getActivity()).showProgressbar(true);
+        }
         HashMap<String, String> param = new HashMap<>();
         if (StockDetailChartsActivity.STOCK_COMMON == stockType) {
             param.put("stock_code", stockCode);
@@ -212,7 +214,7 @@ public class TimesFragment extends BaseFragment {
     @Subscriber(tag = "TimesFragment")
     private void refresh(String s) {
         if (StockUtils.isTradeTime()) {
-            GetMinLineData();
+            GetMinLineData(false);
             if (stockType == StockDetailChartsActivity.STOCK_COMMON) ;
 //                InitList(stockCode);
 

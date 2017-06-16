@@ -64,12 +64,14 @@ public class FiveDayFragment extends Fragment {
         View view = inflater.from(getActivity()).inflate(R.layout.fragment_fivedaybitmap, container, false);
         ButterKnife.bind(this, view);
         refreshtime = SPTools.getInt("refreshtime", 15000);
-        getFiveData();
+        getFiveData(true);
         return view;
     }
 
-    private void getFiveData() {
-        ((StockDetailChartsActivity) getActivity()).showProgressbar(true);
+    private void getFiveData(boolean needShowProgress) {
+        if (needShowProgress) {
+            ((StockDetailChartsActivity) getActivity()).showProgressbar(true);
+        }
         HashMap<String, String> param = new HashMap<>();
         param.put("day", "5");
         if (StockDetailChartsActivity.STOCK_COMMON == stockType) {
@@ -130,7 +132,7 @@ public class FiveDayFragment extends Fragment {
     @Subscriber(tag = "FiveDayFragment")
     private void refresh(String s) {
         if (StockUtils.isTradeTime()) {
-            getFiveData();
+            getFiveData(false);
         } else {
             if (timer != null) {
                 timer.cancel();
