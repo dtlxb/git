@@ -21,9 +21,11 @@ import java.util.Map;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.market.HostIndustryGridAdapter;
+import cn.gogoal.im.adapter.market.MarketViewPaerAdapter;
 import cn.gogoal.im.adapter.market.RankListAdapter;
 import cn.gogoal.im.adapter.market.TitleAdapter;
 import cn.gogoal.im.base.AppManager;
+import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.HangqingBean;
 import cn.gogoal.im.bean.stock.Market;
@@ -68,6 +70,8 @@ public class MarketFragment2 extends BaseFragment {
 
     @Override
     public void doBusiness(final Context mContext) {
+        BaseActivity.iniRefresh(refreshLayout);
+
         final VirtualLayoutManager layoutManager = new VirtualLayoutManager(mContext);
         rvMarket.setLayoutManager(layoutManager);
         layoutManager.setAutoMeasureEnabled(true);
@@ -77,7 +81,7 @@ public class MarketFragment2 extends BaseFragment {
         rvMarket.setRecycledViewPool(viewPool);
         viewPool.setMaxRecycledViews(0, 20);
 
-        delegateAdapter = new DelegateAdapter(layoutManager, true);
+        delegateAdapter = new DelegateAdapter(layoutManager, false);
         adapters = new LinkedList<>();
 
         rvMarket.setAdapter(delegateAdapter);
@@ -185,7 +189,7 @@ public class MarketFragment2 extends BaseFragment {
             }
         });
 
-//        adapters.add(new MarketViewPaerAdapter(newList));
+        adapters.add(new MarketViewPaerAdapter(newList));
 
         adapters.add(new TitleAdapter("热门行业"));
 

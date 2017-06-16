@@ -27,7 +27,7 @@ import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
-import cn.gogoal.im.fragment.stock.HuShenFragment;
+import cn.gogoal.im.fragment.stock.MarketFragment2;
 import cn.gogoal.im.fragment.stock.MyStockFragment;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
 
@@ -65,7 +65,7 @@ public class MainStockFragment extends BaseFragment {
     private long INTERVAL_TIME;
 
     private MyStockFragment myStockFragment;
-    private HuShenFragment huShenFragment;
+    private MarketFragment2 huShenFragment;
 
     private RotateAnimation animation;
 
@@ -81,7 +81,7 @@ public class MainStockFragment extends BaseFragment {
 
         myStockFragment = new MyStockFragment();
 //        marketFragment = new MarketFragment();
-        huShenFragment = new HuShenFragment();
+        huShenFragment = new MarketFragment2();
 
         MainStockTabAdapter tabAdapter = new MainStockTabAdapter(getChildFragmentManager());
 

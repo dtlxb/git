@@ -1,6 +1,7 @@
 package cn.gogoal.im.adapter.market;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -52,6 +53,7 @@ public class MarketViewPaerAdapter extends DelegateAdapter.Adapter<MainViewHolde
     public void onBindViewHolder(MainViewHolder viewHolder, int parentPosition) {
         AutoScrollViewPager viewPager = (AutoScrollViewPager) viewHolder.itemView;
         viewPager.stopAutoScroll();
+        viewPager.setDotSelectedColor(Color.BLACK);
         viewPager.setAdapter(new PagerAdapter() {
             @Override
             public int getCount() {
