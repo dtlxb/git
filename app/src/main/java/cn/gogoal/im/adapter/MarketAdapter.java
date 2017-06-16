@@ -15,7 +15,7 @@ import java.util.List;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.copy.StockDetailMarketIndexActivity;
-import cn.gogoal.im.activity.stock.MarketDetialActivity;
+import cn.gogoal.im.activity.stock.RankListDetialActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.stock.MarkteBean;
@@ -102,13 +102,13 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
         holder.setOnClickListener(R.id.head_view_market, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, MarketDetialActivity.class);
+                Intent intent = new Intent(context, RankListDetialActivity.class);
                 intent.putExtra("MODULE_TITLE", data.getTitle());
                 if (position == 1) {
-                    intent.putExtra("MODULE_TYPE", MarketDetialActivity.MODULE_TYPE_TITLE_HOT_INDUSTRY);
+                    intent.putExtra("MODULE_TYPE", RankListDetialActivity.MODULE_TYPE_TITLE_HOT_INDUSTRY);
                 } else {
                     intent.putExtra("RANK_LIST_TYPE", position - 2);
-                    intent.putExtra("MODULE_TYPE", MarketDetialActivity.MODULE_TYPE_TTILE_RANK_LIST);
+                    intent.putExtra("MODULE_TYPE", RankListDetialActivity.MODULE_TYPE_TTILE_RANK_LIST);
                 }
                 context.startActivity(intent);
             }
@@ -185,9 +185,9 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, MarketDetialActivity.class);
+                    Intent intent = new Intent(context, RankListDetialActivity.class);
                     intent.putExtra("MODULE_TITLE", data.getName());
-                    intent.putExtra("MODULE_TYPE", MarketDetialActivity.MODULE_TYPE_HOT_INDUSTRY);
+                    intent.putExtra("MODULE_TYPE", RankListDetialActivity.MODULE_TYPE_HOT_INDUSTRY);
                     intent.putExtra("INDUSTRY_NAME", data.getName());
                     context.startActivity(intent);
                 }
