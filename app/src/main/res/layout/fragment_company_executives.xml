@@ -2,11 +2,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="公司高管" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <!--左边的ListView-->
+            <cn.gogoal.im.ui.copy.InnerListView
+                android:id="@+id/lsv_left"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:scrollbars="none" />
+
+            <!--右边的ScrollView-->
+            <cn.gogoal.im.ui.view.MySyncHorizontalScrollView
+                android:id="@+id/rightHorscrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none">
+
+                <cn.gogoal.im.ui.copy.InnerListView
+                    android:id="@+id/lsv_right"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@null"
+                    android:scrollbars="none" />
+
+            </cn.gogoal.im.ui.view.MySyncHorizontalScrollView>
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

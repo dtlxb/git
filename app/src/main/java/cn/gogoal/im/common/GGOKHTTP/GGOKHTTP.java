@@ -776,6 +776,12 @@ public class GGOKHTTP {
      */
     public static final String TEN_STOCK_HOLDERS = "v1/f10/ten_stock_holders";
 
+    /**
+     * F10-公司高管
+     * params stock_code
+     */
+    public static final String COMPANY_SENIOR = "v1/f10/company_senior";
+
 //--------------------------------------------------------------------------------------------------
 
     /**
