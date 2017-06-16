@@ -19,6 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -156,6 +157,12 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
     private String[] tabTitles = {"分 时", "五 日", "日 K", "周 K", "月 K"};
     private int stock_charge_type;
     private long INTERVAL_TIME;
+
+    //显示颜色
+    private int red = Color.rgb(0xf2, 0x49, 0x57);
+    private int green = Color.rgb(0x1d, 0xbf, 0x60);
+    private int gray = Color.rgb(0x54, 0x69, 0x80);
+
     @Override
     public int bindLayout() {
         return hply.com.niugu.R.layout.activity_stock_detail_charts;
@@ -216,7 +223,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
 
     private void setBottomTab() {
         for (int i = 0; i < tabTitles.length; i++) {
-            tabLayout.addTab(tabLayout.newTab().setText(tabTitles[i]),i==getIntent().getIntExtra("position",0));
+            tabLayout.addTab(tabLayout.newTab().setText(tabTitles[i]), i == getIntent().getIntExtra("position", 0));
         }
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -231,7 +238,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-        AppDevice.setTabLayoutWidth(tabLayout,30);//
+        AppDevice.setTabLayoutWidth(tabLayout, 30);//
 
     }
 
@@ -379,9 +386,9 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
                 if (SPTools.getInt("authority_type", 0) != 0) {
                     authority_type = 0;
                     SPTools.saveInt("authority_type", authority_type);
-                    no_authority.setTextColor(ContextCompat.getColor(getContext(),hply.com.niugu.R.color.piechart_bule));
-                    before_authority.setTextColor(ContextCompat.getColor(getContext(),hply.com.niugu.R.color.gray));
-                    after_authority.setTextColor(ContextCompat.getColor(getContext(),hply.com.niugu.R.color.gray));
+                    no_authority.setTextColor(ContextCompat.getColor(getContext(), hply.com.niugu.R.color.piechart_bule));
+                    before_authority.setTextColor(ContextCompat.getColor(getContext(), hply.com.niugu.R.color.gray));
+                    after_authority.setTextColor(ContextCompat.getColor(getContext(), hply.com.niugu.R.color.gray));
                     showProgressbar(true);
                     AppManager.getInstance().sendMessage("KChartsFragment", new BaseMessage("auhority", authority_type.toString()));
                 }
@@ -390,9 +397,9 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
                 if (SPTools.getInt("authority_type", 0) != 1) {
                     authority_type = 1;
                     SPTools.saveInt("authority_type", authority_type);
-                    no_authority.setTextColor(ContextCompat.getColor(getContext(),hply.com.niugu.R.color.gray));
-                    before_authority.setTextColor(ContextCompat.getColor(getContext(),hply.com.niugu.R.color.piechart_bule));
-                    after_authority.setTextColor(ContextCompat.getColor(getContext(),hply.com.niugu.R.color.gray));
+                    no_authority.setTextColor(ContextCompat.getColor(getContext(), hply.com.niugu.R.color.gray));
+                    before_authority.setTextColor(ContextCompat.getColor(getContext(), hply.com.niugu.R.color.piechart_bule));
+                    after_authority.setTextColor(ContextCompat.getColor(getContext(), hply.com.niugu.R.color.gray));
                     showProgressbar(true);
                     AppManager.getInstance().sendMessage("KChartsFragment", new BaseMessage("auhority", authority_type.toString()));
                 }
@@ -401,9 +408,9 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
                 if (SPTools.getInt("authority_type", 0) != 2) {
                     authority_type = 2;
                     SPTools.saveInt("authority_type", authority_type);
-                    no_authority.setTextColor(ContextCompat.getColor(getContext(),hply.com.niugu.R.color.gray));
-                    before_authority.setTextColor(ContextCompat.getColor(getContext(),hply.com.niugu.R.color.gray));
-                    after_authority.setTextColor(ContextCompat.getColor(getContext(),hply.com.niugu.R.color.piechart_bule));
+                    no_authority.setTextColor(ContextCompat.getColor(getContext(), hply.com.niugu.R.color.gray));
+                    before_authority.setTextColor(ContextCompat.getColor(getContext(), hply.com.niugu.R.color.gray));
+                    after_authority.setTextColor(ContextCompat.getColor(getContext(), hply.com.niugu.R.color.piechart_bule));
                     showProgressbar(true);
                     AppManager.getInstance().sendMessage("KChartsFragment", new BaseMessage("auhority", authority_type.toString()));
                 }
@@ -441,12 +448,12 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                if (responseInfo!=null && JSONObject.parseObject(responseInfo).getIntValue("code")==0) {
+                if (responseInfo != null && JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
 //                    setListview(JSONObject.parseObject(responseInfo, TimeDetialBean.class).getData());
                     List<TimeDetialData> data = JSONObject.parseObject(responseInfo, TimeDetialBean.class).getData();
-                    String time=data.get(0).getUpdate_time();
+                    String time = data.get(0).getUpdate_time();
                     tv_time.setText(time.substring(10, time.lastIndexOf(":")));
-                    AppManager.getInstance().sendMessage("updata_list",responseInfo);
+                    AppManager.getInstance().sendMessage("updata_list", responseInfo);
                 }
             }
 
@@ -473,7 +480,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
     private void selectItem(int position) {
         if (position > 1 && stockType != STOCK_MARKE_INDEX) {
             authority_blog.setVisibility(View.VISIBLE);
-            authority_tv.get(authority_type).setTextColor(ContextCompat.getColor(getContext(),hply.com.niugu.R.color.piechart_bule));
+            authority_tv.get(authority_type).setTextColor(ContextCompat.getColor(getContext(), hply.com.niugu.R.color.piechart_bule));
         } else {
             authority_blog.setVisibility(View.GONE);
         }
@@ -487,166 +494,207 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            int red = Color.rgb(0xf2, 0x49, 0x57);
-            int green = Color.rgb(0x1d, 0xbf, 0x60);
-            int gray = Color.rgb(0x54, 0x69, 0x80);
             switch (msg.what) {
-                case ConstantUtils.DISPLAY_XCHART_TIME_DATA:
-                    times_detail.setVisibility(View.VISIBLE);
-                    fragment_stock_detail.setVisibility(View.INVISIBLE);
-
-                    StockMinuteData stockMinuteData = (StockMinuteData) msg.obj;
-
-                    String mData = stockMinuteData.getDate();
-                    tv_times_date.setText(mData.substring(10, mData.lastIndexOf(":")));
-
-                    double price = StringUtils.pareseStringDouble(stockMinuteData.getPrice());
-                    double tRate = StringUtils.pareseStringDouble(stockMinuteData.getPrice_change_rate());
-                    tv_times_price.setText(StringUtils.save2Significand(price));
-                    tv_times_price_rate.setText(StringUtils.save2Significand(tRate) + "%");
-                    tv_times_price.setTextColor(gray);
-                    tv_times_price_rate.setTextColor(gray);
-                    if (tRate > 0) {
-                        tv_times_price.setTextColor(red);
-                        tv_times_price_rate.setTextColor(red);
-                    } else if (tRate < 0) {
-                        tv_times_price.setTextColor(green);
-                        tv_times_price_rate.setTextColor(green);
-                    } else {
-                        tv_times_price.setTextColor(gray);
-                        tv_times_price_rate.setTextColor(gray);
-                    }
-
-                    float volume = stockMinuteData.getVolume();
-                    volume = volume / 100;
-                    String s;
-                    if (volume >= 10000) {
-                        s = StringUtils.save2Significand(volume / 10000);
-                        tv_times_volume.setText(s + "万手");
-                    } else {
-                        s = String.format("%.0f", volume);
-                        tv_times_volume.setText(s + "手");
-                    }
-
-                    double avg_price = StringUtils.pareseStringDouble(stockMinuteData.getAvg_price());
-                    tv_times_avg_price.setText(StringUtils.save2Significand(avg_price));
-                    tv_times_avg_price.setTextColor(gray);
-                    if (closePrice < price) {
-                        tv_times_avg_price.setTextColor(red);
-                    } else {
-                        tv_times_avg_price.setTextColor(green);
-                    }
-                    break;
-
-                case ConstantUtils.DISPLAY_XCHART_K_DATA:
-                    kline_detail.setVisibility(View.VISIBLE);
-                    fragment_stock_detail.setVisibility(View.INVISIBLE);
-                    List<Map<String, Object>> datas = (List<Map<String, Object>>) msg.obj;
-                    int index = msg.arg1;
-                    if (datas.size() > index) {
-
-                        String kData = (String) datas.get(index).get("date");
-                        tv_kline_date.setText(kData.substring(5, kData.lastIndexOf(" ")));
-
-                        float open = (float) datas.get(index).get("open_price");
-                        float high = (float) datas.get(index).get("high_price");
-                        float low = (float) datas.get(index).get("low_price");
-                        float close = (float) datas.get(index).get("close_price");
-                        float kRate = (float) datas.get(index).get("price_change_rate");
-
-                        tv_kline_open.setText(StringUtils.save2Significand(open));
-                        tv_kline_high.setText(StringUtils.save2Significand(high));
-                        tv_kline_low.setText(StringUtils.save2Significand(low));
-                        tv_kline_close.setText(StringUtils.save2Significand(close));
-                        tv_kline_amplitude.setText(StringUtils.save2Significand(kRate) + "%");
-
-                        tv_kline_open.setTextColor(gray);
-                        tv_kline_high.setTextColor(gray);
-                        tv_kline_low.setTextColor(gray);
-                        tv_kline_close.setTextColor(gray);
-                        tv_kline_amplitude.setTextColor(gray);
-
-                        if (index + 1 < datas.size()) {
-                            float yestoday_close = (float) datas.get(index + 1).get("close_price");
-
-                            if (close > open) tv_kline_close.setTextColor(red);
-                            else if (close < open) tv_kline_close.setTextColor(green);
-
-                            if (yestoday_close < open) tv_kline_open.setTextColor(red);
-                            else if (yestoday_close > open) tv_kline_open.setTextColor(green);
-
-                            if (open < high) tv_kline_high.setTextColor(red);
-                            else if (open > high) tv_kline_high.setTextColor(green);
-
-                            if (open < low) tv_kline_low.setTextColor(red);
-                            else if (open > low) tv_kline_low.setTextColor(green);
-
-                        } else {
-                            if (close > open) {
-                                tv_kline_close.setTextColor(red);
-                                tv_kline_open.setTextColor(red);
-                                tv_kline_high.setTextColor(red);
-                                tv_kline_low.setTextColor(red);
-                            } else if (close < open) {
-                                tv_kline_close.setTextColor(green);
-                                tv_kline_open.setTextColor(green);
-                                tv_kline_high.setTextColor(green);
-                                tv_kline_low.setTextColor(green);
-                            }
-                        }
-
-                        if (kRate > 0) tv_kline_amplitude.setTextColor(red);
-                        else if (kRate < 0) tv_kline_amplitude.setTextColor(green);
-                    }
-
-                    break;
-
                 case ConstantUtils.DISS_XCHART_DATA:
-                    kline_detail.setVisibility(View.INVISIBLE);
-                    times_detail.setVisibility(View.INVISIBLE);
-                    fragment_stock_detail.setVisibility(View.VISIBLE);
                     break;
                 case ConstantUtils.DISS_PROGRESSBAR:
-                    showProgressbar(false);
                     break;
                 case ConstantUtils.XCHART_FLING:
-                    switch (msg.arg1) {
-                        case KChartsView.KLINE_TYPE_DAY:
-                            dayK.getMyChartsView().displayChartTouchUp((Float) msg.obj);
-                            break;
-                        case KChartsView.KLINE_TYPE_WEEK:
-                            weekK.getMyChartsView().displayChartTouchUp((Float) msg.obj);
-                            break;
-                        case KChartsView.KLINE_TYPE_MONTH:
-                            monthK.getMyChartsView().displayChartTouchUp((Float) msg.obj);
-                            break;
-                    }
                     break;
                 case ConstantUtils.REFRESH_KLINE_DATA:
-                    switch (msg.arg1) {
-                        case KChartsView.KLINE_TYPE_DAY:
-                            dayK.showLoadingDialog();
-                            dayK.GetKLineDataPage(false, false);
-                            break;
-                        case KChartsView.KLINE_TYPE_WEEK:
-                            weekK.showLoadingDialog();
-                            weekK.GetKLineDataPage(false, false);
-                            break;
-                        case KChartsView.KLINE_TYPE_MONTH:
-                            monthK.showLoadingDialog();
-                            monthK.GetKLineDataPage(false, false);
-                            break;
-                    }
                     break;
             }
             super.handleMessage(msg);
         }
     }
 
+    /**
+     * 分时线实时交互
+     */
+    @Subscriber(tag = "Stock_FenshiData")
+    public void showStockIntime(BaseMessage message) {
+        times_detail.setVisibility(View.VISIBLE);
+        kline_detail.setVisibility(View.INVISIBLE);
+        fragment_stock_detail.setVisibility(View.INVISIBLE);
+        Map<String, Object> messageMap = message.getOthers();
+        StockMinuteData stockMinuteData = (StockMinuteData) messageMap.get("fenshi_data");
+        String mData = stockMinuteData.getDate();
+        tv_times_date.setText(mData.substring(10, mData.lastIndexOf(":")));
+
+        double price = StringUtils.pareseStringDouble(stockMinuteData.getPrice());
+        double tRate = StringUtils.pareseStringDouble(stockMinuteData.getPrice_change_rate());
+        tv_times_price.setText(StringUtils.save2Significand(price));
+        tv_times_price_rate.setText(StringUtils.save2Significand(tRate) + "%");
+        tv_times_price.setTextColor(gray);
+        tv_times_price_rate.setTextColor(gray);
+        if (tRate > 0) {
+            tv_times_price.setTextColor(red);
+            tv_times_price_rate.setTextColor(red);
+        } else if (tRate < 0) {
+            tv_times_price.setTextColor(green);
+            tv_times_price_rate.setTextColor(green);
+        } else {
+            tv_times_price.setTextColor(gray);
+            tv_times_price_rate.setTextColor(gray);
+        }
+
+        float volume = stockMinuteData.getVolume();
+        volume = volume / 100;
+        String s;
+        if (volume >= 10000) {
+            s = StringUtils.save2Significand(volume / 10000);
+            tv_times_volume.setText(s + "万手");
+        } else {
+            s = String.format("%.0f", volume);
+            tv_times_volume.setText(s + "手");
+        }
+
+        double avg_price = StringUtils.pareseStringDouble(stockMinuteData.getAvg_price());
+        tv_times_avg_price.setText(StringUtils.save2Significand(avg_price));
+        tv_times_avg_price.setTextColor(gray);
+        if (closePrice < price) {
+            tv_times_avg_price.setTextColor(red);
+        } else {
+            tv_times_avg_price.setTextColor(green);
+        }
+    }
+
+    /**
+     * K线实时交互
+     */
+    @Subscriber(tag = "Stock_KLineData")
+    public void showKDataIntime(BaseMessage message) {
+        kline_detail.setVisibility(View.VISIBLE);
+        times_detail.setVisibility(View.INVISIBLE);
+        fragment_stock_detail.setVisibility(View.INVISIBLE);
+
+        Map<String, Object> messageMap = message.getOthers();
+        int index = (int) messageMap.get("select_index");
+        List<Map<String, Object>> datas = (List<Map<String, Object>>) messageMap.get("mohlcd_data");
+
+        if (datas.size() > index) {
+
+            String kData = (String) datas.get(index).get("date");
+            tv_kline_date.setText(kData.substring(5, kData.lastIndexOf(" ")));
+
+            float open = (float) datas.get(index).get("open_price");
+            float high = (float) datas.get(index).get("high_price");
+            float low = (float) datas.get(index).get("low_price");
+            float close = (float) datas.get(index).get("close_price");
+            float kRate = (float) datas.get(index).get("price_change_rate");
+
+            tv_kline_open.setText(StringUtils.save2Significand(open));
+            tv_kline_high.setText(StringUtils.save2Significand(high));
+            tv_kline_low.setText(StringUtils.save2Significand(low));
+            tv_kline_close.setText(StringUtils.save2Significand(close));
+            tv_kline_amplitude.setText(StringUtils.save2Significand(kRate) + "%");
+
+            tv_kline_open.setTextColor(gray);
+            tv_kline_high.setTextColor(gray);
+            tv_kline_low.setTextColor(gray);
+            tv_kline_close.setTextColor(gray);
+            tv_kline_amplitude.setTextColor(gray);
+
+            if (index + 1 < datas.size()) {
+                float yesterday_close = (float) datas.get(index + 1).get("close_price");
+
+                if (close > open) tv_kline_close.setTextColor(red);
+                else if (close < open) tv_kline_close.setTextColor(green);
+
+                if (yesterday_close < open) tv_kline_open.setTextColor(red);
+                else if (yesterday_close > open) tv_kline_open.setTextColor(green);
+
+                if (open < high) tv_kline_high.setTextColor(red);
+                else if (open > high) tv_kline_high.setTextColor(green);
+
+                if (open < low) tv_kline_low.setTextColor(red);
+                else if (open > low) tv_kline_low.setTextColor(green);
+
+            } else {
+                if (close > open) {
+                    tv_kline_close.setTextColor(red);
+                    tv_kline_open.setTextColor(red);
+                    tv_kline_high.setTextColor(red);
+                    tv_kline_low.setTextColor(red);
+                } else if (close < open) {
+                    tv_kline_close.setTextColor(green);
+                    tv_kline_open.setTextColor(green);
+                    tv_kline_high.setTextColor(green);
+                    tv_kline_low.setTextColor(green);
+                }
+            }
+
+            if (kRate > 0) tv_kline_amplitude.setTextColor(red);
+            else if (kRate < 0) tv_kline_amplitude.setTextColor(green);
+        }
+    }
+
+    /**
+     * K线滑动手势交互
+     */
+    @Subscriber(tag = "Fling_Speed")
+    public void chartFlingSpeed(BaseMessage message) {
+        Map<String, Object> messageMap = message.getOthers();
+        float speed = (float) messageMap.get("fling_speed");
+        int chartsType = (int) messageMap.get("charts_type");
+
+        switch (chartsType) {
+            case KChartsView.KLINE_TYPE_DAY:
+                dayK.getMyChartsView().displayChartTouchUp(speed);
+                break;
+            case KChartsView.KLINE_TYPE_WEEK:
+                weekK.getMyChartsView().displayChartTouchUp(speed);
+                break;
+            case KChartsView.KLINE_TYPE_MONTH:
+                monthK.getMyChartsView().displayChartTouchUp(speed);
+                break;
+        }
+    }
+
+    /**
+     * K线柱是否满
+     */
+    @Subscriber(tag = "Refresh_Info")
+    public void kchartRefresh(BaseMessage message) {
+        int chartsType = message.getType();
+        switch (chartsType) {
+            case KChartsView.KLINE_TYPE_DAY:
+                dayK.showLoadingDialog();
+                dayK.GetKLineDataPage(false, false);
+                break;
+            case KChartsView.KLINE_TYPE_WEEK:
+                weekK.showLoadingDialog();
+                weekK.GetKLineDataPage(false, false);
+                break;
+            case KChartsView.KLINE_TYPE_MONTH:
+                monthK.showLoadingDialog();
+                monthK.GetKLineDataPage(false, false);
+                break;
+        }
+    }
+
+    /**
+     * K线滑动加载
+     */
+    @Subscriber(tag = "Dismiss_chart")
+    public void kchartMoveDismiss(BaseMessage message) {
+        kline_detail.setVisibility(View.INVISIBLE);
+        times_detail.setVisibility(View.INVISIBLE);
+        fragment_stock_detail.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * K线滑动加载
+     */
+    @Subscriber(tag = "Dismiss_chart")
+    public void chartProgressDismiss(BaseMessage message) {
+        showProgressbar(false);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        INTERVAL_TIME=SPTools.getLong("interval_time",15000);
+        INTERVAL_TIME = SPTools.getLong("interval_time", 15000);
         if (StockUtils.isTradeTime()) {//交易时间段
             handler.postDelayed(runnable, INTERVAL_TIME);//启动定时刷新
         }

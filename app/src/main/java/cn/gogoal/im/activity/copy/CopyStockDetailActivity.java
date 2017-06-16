@@ -68,11 +68,11 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.stock.StockFtenFragment;
 import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
-import cn.gogoal.im.ui.copy.BitmapChartView;
-import cn.gogoal.im.ui.copy.TimesFivesBitmap;
 import cn.gogoal.im.ui.dialog.StockPopuDialog;
 import cn.gogoal.im.ui.stock.DialogRecyclerView;
-import cn.gogoal.im.ui.stock.KChartsBitmap;
+import cn.gogoal.im.ui.stockviews.BitmapChartView;
+import cn.gogoal.im.ui.stockviews.KChartsBitmap;
+import cn.gogoal.im.ui.stockviews.TimesFivesBitmap;
 import cn.gogoal.im.ui.view.CustomHeightViewPager;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
 import hply.com.niugu.autofixtext.AutofitTextView;
@@ -228,10 +228,10 @@ public class CopyStockDetailActivity extends BaseActivity {
 
 
     //k线数据设置
-    private int dayk1;
-    private int dayk2;
-    private int dayk3;
-    private int dayk4;
+    private int dayK1;
+    private int dayK2;
+    private int dayK3;
+    private int dayK4;
 
     //图片表格
     /*@BindView(R.id.stock_no_data)
@@ -422,10 +422,11 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     //初始化
     private void init() {
-        dayk1 = SPTools.getInt("tv_ln1", 5);
-        dayk2 = SPTools.getInt("tv_ln2", 10);
-        dayk3 = SPTools.getInt("tv_ln3", 20);
-        dayk4 = SPTools.getInt("tv_ln4", 0);
+
+        dayK1 = SPTools.getInt("tv_ln1", 5);
+        dayK2 = SPTools.getInt("tv_ln2", 10);
+        dayK3 = SPTools.getInt("tv_ln3", 20);
+        dayK4 = SPTools.getInt("tv_ln4", 0);
 
         stockCode = getIntent().getStringExtra("stock_code");
         stockName = getIntent().getStringExtra("stock_name");
@@ -761,7 +762,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         HashMap<String, String> param = new HashMap<>();
         param.put("kline_type", displayIndex + "");
         param.put("stock_code", stockCode);
-        param.put("avg_line_type", dayk1 + ";" + dayk2 + ";" + dayk3);
+        param.put("avg_line_type", dayK1 + ";" + dayK2 + ";" + dayK3);
         param.put("page", "1");
         param.put("rows", "100");
 
@@ -1267,14 +1268,11 @@ public class CopyStockDetailActivity extends BaseActivity {
             switch (item_index) {
                 case "0":
                     timesBitmap = new TimesFivesBitmap(13 * width / 20, height);
-                    if (dpi <= AppDevice.DPI480P) {
-                        timesBitmap.setIsSw480P(true);
-                    } else if (dpi <= AppDevice.DPI720P) {
-                        timesBitmap.setIsSw720P(true);
-                    } else if (dpi <= AppDevice.DPI1080P) {
-                        timesBitmap.setIsSw1080P(true);
-                    }
                     timesBitmap.setShowDetail(false);
+                    timesBitmap.setLongitudeNum(0);
+                    timesBitmap.setmSize(AppDevice.dp2px(CopyStockDetailActivity.this, 1));
+                    timesBitmap.setmSpaceSize(AppDevice.dp2px(CopyStockDetailActivity.this, 3));
+                    timesBitmap.setmAxisTitleSize(AppDevice.dp2px(CopyStockDetailActivity.this, 10));
                     try {
                         bitmap = timesBitmap.setTimesList(timesBean, true, stock_charge_type);
                     } catch (Exception e) {
@@ -1285,14 +1283,12 @@ public class CopyStockDetailActivity extends BaseActivity {
                     if (params.length > 1) {
                         StockMinuteBean bean = JSONObject.parseObject(params[1], StockMinuteBean.class);
                         fiveDayBitmap = new TimesFivesBitmap(width, height);
-                        if (dpi <= AppDevice.DPI480P) {
-                            fiveDayBitmap.setIsSw480P(true);
-                        } else if (dpi <= AppDevice.DPI720P) {
-                            fiveDayBitmap.setIsSw720P(true);
-                        } else if (dpi <= AppDevice.DPI1080P) {
-                            fiveDayBitmap.setIsSw1080P(true);
-                        }
                         fiveDayBitmap.setShowDetail(false);
+                        fiveDayBitmap.setLongitudeNum(4);
+                        fiveDayBitmap.setmSpaceSize(AppDevice.dp2px(CopyStockDetailActivity.this, 3));
+                        fiveDayBitmap.setmSize(AppDevice.dp2px(CopyStockDetailActivity.this, 1));
+                        fiveDayBitmap.setmAxisTitleSize(AppDevice.dp2px(CopyStockDetailActivity.this, 10));
+
                         bitmap = fiveDayBitmap.setTimesList(bean, false, stock_charge_type);
                         map.put(item_index, bitmap);
                     }
@@ -1301,14 +1297,13 @@ public class CopyStockDetailActivity extends BaseActivity {
                     if (params.length > 1) {
                         mOHLCData.clear();
                         parseObjects(params[1]);
-                        KChartsBitmap kChartsBitmap = new KChartsBitmap(getActivity(), width, height);
-                        if (dpi <= AppDevice.DPI480P) {
-                            kChartsBitmap.setIsSw480P(true);
-                        } else if (dpi <= AppDevice.DPI720P) {
-                            kChartsBitmap.setIsSw720P(true);
-                        } else if (dpi <= AppDevice.DPI1080P) {
-                            kChartsBitmap.setIsSw1080P(true);
-                        }
+                        KChartsBitmap kChartsBitmap = new KChartsBitmap(width, height);
+                        kChartsBitmap.setShowDetail(false);
+                        kChartsBitmap.setLongitudeNum(1);
+                        kChartsBitmap.setmSpaceSize(AppDevice.dp2px(CopyStockDetailActivity.this, 3));
+                        kChartsBitmap.setmAxisTitleSize(AppDevice.dp2px(CopyStockDetailActivity.this, 10));
+                        kChartsBitmap.setmSize(AppDevice.dp2px(CopyStockDetailActivity.this, 1));
+
                         bitmap = kChartsBitmap.setOHLCData(mOHLCData);
                         map.put(item_index, bitmap);
                     }
@@ -1317,14 +1312,13 @@ public class CopyStockDetailActivity extends BaseActivity {
                     if (params.length > 1) {
                         mOHLCData.clear();
                         parseObjects(params[1]);
-                        KChartsBitmap kChartsBitmap1 = new KChartsBitmap(getActivity(), width, height);
-                        if (dpi <= AppDevice.DPI480P) {
-                            kChartsBitmap1.setIsSw480P(true);
-                        } else if (dpi <= AppDevice.DPI720P) {
-                            kChartsBitmap1.setIsSw720P(true);
-                        } else if (dpi <= AppDevice.DPI1080P) {
-                            kChartsBitmap1.setIsSw1080P(true);
-                        }
+                        KChartsBitmap kChartsBitmap1 = new KChartsBitmap(width, height);
+                        kChartsBitmap1.setShowDetail(false);
+                        kChartsBitmap1.setLongitudeNum(1);
+                        kChartsBitmap1.setmSpaceSize(AppDevice.dp2px(CopyStockDetailActivity.this, 3));
+                        kChartsBitmap1.setmAxisTitleSize(AppDevice.dp2px(CopyStockDetailActivity.this, 10));
+                        kChartsBitmap1.setmSize(AppDevice.dp2px(CopyStockDetailActivity.this, 1));
+
                         bitmap = kChartsBitmap1.setOHLCData(mOHLCData);
                         map.put(item_index, bitmap);
                     }
@@ -1333,14 +1327,13 @@ public class CopyStockDetailActivity extends BaseActivity {
                     if (params.length > 1) {
                         mOHLCData.clear();
                         parseObjects(params[1]);
-                        KChartsBitmap kChartsBitmap2 = new KChartsBitmap(getActivity(), width, height);
-                        if (dpi <= AppDevice.DPI480P) {
-                            kChartsBitmap2.setIsSw480P(true);
-                        } else if (dpi <= AppDevice.DPI720P) {
-                            kChartsBitmap2.setIsSw720P(true);
-                        } else if (dpi <= AppDevice.DPI1080P) {
-                            kChartsBitmap2.setIsSw1080P(true);
-                        }
+                        KChartsBitmap kChartsBitmap2 = new KChartsBitmap(width, height);
+                        kChartsBitmap2.setShowDetail(false);
+                        kChartsBitmap2.setLongitudeNum(1);
+                        kChartsBitmap2.setmSpaceSize(AppDevice.dp2px(CopyStockDetailActivity.this, 3));
+                        kChartsBitmap2.setmAxisTitleSize(AppDevice.dp2px(CopyStockDetailActivity.this, 10));
+                        kChartsBitmap2.setmSize(AppDevice.dp2px(CopyStockDetailActivity.this, 1));
+
                         bitmap = kChartsBitmap2.setOHLCData(mOHLCData);
                         map.put(item_index, bitmap);
                     }
@@ -1457,12 +1450,12 @@ public class CopyStockDetailActivity extends BaseActivity {
 
                     int data = (int) result.get("code");
                     if (data == 0) {
-                        JSONObject singlestock = new JSONObject();
-                        singlestock.put("stock_name", stockName);
-                        singlestock.put("stock_code", stockCode);
-                        singlestock.put("stock_type", 1);
-                        singlestock.put("price", 0);
-                        singlestock.put("change_rate", 0);
+                        JSONObject singleStock = new JSONObject();
+                        singleStock.put("stock_name", stockName);
+                        singleStock.put("stock_code", stockCode);
+                        singleStock.put("stock_type", 1);
+                        singleStock.put("price", 0);
+                        singleStock.put("change_rate", 0);
 
                         toggleIsMyStock(true, true);
                         StockUtils.addStock2MyStock(stockCode);
@@ -1510,24 +1503,24 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     private void handleData(JSONArray data) {
         for (int i = 0; i < data.size(); i++) {
-            com.alibaba.fastjson.JSONObject singledata = (com.alibaba.fastjson.JSONObject) data.get(i);
+            com.alibaba.fastjson.JSONObject singleData = (com.alibaba.fastjson.JSONObject) data.get(i);
             Map<String, Object> itemData = new HashMap<String, Object>();
-            itemData.put("amplitude", singledata.getFloat("amplitude"));
-            itemData.put("avg_price_" + dayk1, ParseNum(singledata.getString("avg_price_" + dayk1)));
-            itemData.put("avg_price_" + dayk2, ParseNum(singledata.getString("avg_price_" + dayk2)));
-            itemData.put("avg_price_" + dayk3, ParseNum(singledata.getString("avg_price_" + dayk3)));
-            itemData.put("avg_price_" + dayk4, ParseNum(singledata.getString("avg_price_" + dayk4)));
-            itemData.put("close_price", ParseNum(singledata.getString("close_price")));
-            itemData.put("date", singledata.getString("date"));
-            itemData.put("high_price", ParseNum(singledata.getString("high_price")));
-            itemData.put("low_price", ParseNum(singledata.getString("low_price")));
-            itemData.put("open_price", ParseNum(singledata.getString("open_price")));
-            itemData.put("price_change", ParseNum(singledata.getString("price_change")));
-            itemData.put("price_change_rate", ParseNum(singledata.getString("price_change_rate")));
-            itemData.put("rightValue", ParseNum(singledata.getString("rightValue")));
-            itemData.put("turnover", ParseNum(singledata.getString("turnover")));
-            itemData.put("turnover_rate", ParseNum(singledata.getString("turnover_rate")));
-            itemData.put("volume", ParseNum(singledata.getString("volume")));
+            itemData.put("amplitude", singleData.getFloat("amplitude"));
+            itemData.put("avg_price_" + dayK1, ParseNum(singleData.getString("avg_price_" + dayK1)));
+            itemData.put("avg_price_" + dayK2, ParseNum(singleData.getString("avg_price_" + dayK2)));
+            itemData.put("avg_price_" + dayK3, ParseNum(singleData.getString("avg_price_" + dayK3)));
+            itemData.put("avg_price_" + dayK4, ParseNum(singleData.getString("avg_price_" + dayK4)));
+            itemData.put("close_price", ParseNum(singleData.getString("close_price")));
+            itemData.put("date", singleData.getString("date"));
+            itemData.put("high_price", ParseNum(singleData.getString("high_price")));
+            itemData.put("low_price", ParseNum(singleData.getString("low_price")));
+            itemData.put("open_price", ParseNum(singleData.getString("open_price")));
+            itemData.put("price_change", ParseNum(singleData.getString("price_change")));
+            itemData.put("price_change_rate", ParseNum(singleData.getString("price_change_rate")));
+            itemData.put("rightValue", ParseNum(singleData.getString("rightValue")));
+            itemData.put("turnover", ParseNum(singleData.getString("turnover")));
+            itemData.put("turnover_rate", ParseNum(singleData.getString("turnover_rate")));
+            itemData.put("volume", ParseNum(singleData.getString("volume")));
             mOHLCData.add(itemData);
         }
     }

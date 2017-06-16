@@ -5,7 +5,7 @@
     android:orientation="horizontal"
     android:background="@color/white">
 
-    <cn.gogoal.im.ui.stock.KChartsView
+    <cn.gogoal.im.ui.stockviews.KChartView
         android:id="@+id/k_charts_view"
         android:layout_width="0dp"
         android:layout_height="match_parent"

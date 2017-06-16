@@ -40,7 +40,7 @@ import static cn.gogoal.im.common.AppConst.REFRESH_TYPE_SWIPEREFRESH;
  * phone 18930640263
  * description :行情各模块详情.
  */
-public class MarketDetialActivity extends BaseActivity {
+public class RankListDetialActivity extends BaseActivity {
 
     public static final int MODULE_TYPE_TITLE_HOT_INDUSTRY = 0x6001;//热门行业 标题
 
@@ -347,9 +347,9 @@ public class MarketDetialActivity extends BaseActivity {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(v.getContext(), MarketDetialActivity.class);
+                        Intent intent = new Intent(v.getContext(), RankListDetialActivity.class);
                         intent.putExtra("MODULE_TITLE", data.getIndustry_name());
-                        intent.putExtra("MODULE_TYPE", MarketDetialActivity.MODULE_TYPE_HOT_INDUSTRY);
+                        intent.putExtra("MODULE_TYPE", RankListDetialActivity.MODULE_TYPE_HOT_INDUSTRY);
                         intent.putExtra("INDUSTRY_NAME", data.getIndustry_name());
                         v.getContext().startActivity(intent);
                     }

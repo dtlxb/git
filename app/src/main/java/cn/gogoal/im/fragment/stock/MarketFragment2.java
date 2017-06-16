@@ -25,6 +25,7 @@ import cn.gogoal.im.adapter.market.MarketViewPaerAdapter;
 import cn.gogoal.im.adapter.market.RankListAdapter;
 import cn.gogoal.im.adapter.market.TitleAdapter;
 import cn.gogoal.im.base.AppManager;
+import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.HangqingBean;
 import cn.gogoal.im.bean.stock.Market;
@@ -69,6 +70,7 @@ public class MarketFragment2 extends BaseFragment {
 
     @Override
     public void doBusiness(final Context mContext) {
+        BaseActivity.iniRefresh(refreshLayout);
         final VirtualLayoutManager layoutManager = new VirtualLayoutManager(mContext);
         rvMarket.setLayoutManager(layoutManager);
         layoutManager.setAutoMeasureEnabled(true);
@@ -76,9 +78,9 @@ public class MarketFragment2 extends BaseFragment {
         //缓存池
         viewPool = new RecyclerView.RecycledViewPool();
         rvMarket.setRecycledViewPool(viewPool);
-        viewPool.setMaxRecycledViews(0, 40);
+        viewPool.setMaxRecycledViews(0, 20);
 
-        delegateAdapter = new DelegateAdapter(layoutManager, true);
+        delegateAdapter = new DelegateAdapter(layoutManager, false);
         adapters = new LinkedList<>();
 
         rvMarket.setAdapter(delegateAdapter);
@@ -92,7 +94,6 @@ public class MarketFragment2 extends BaseFragment {
             @Override
             public void onRefresh() {
                 getMarketInformation(REFRESH_TYPE_SWIPEREFRESH);
-                refreshLayout.setRefreshing(false);
             }
         });
 
@@ -128,6 +129,7 @@ public class MarketFragment2 extends BaseFragment {
                     }
                 }
                 AppManager.getInstance().sendMessage("market_stop_animation_refresh");
+                refreshLayout.setRefreshing(false);
             }
 
             @Override
@@ -144,6 +146,7 @@ public class MarketFragment2 extends BaseFragment {
                     });
                 }
                 AppManager.getInstance().sendMessage("market_stop_animation_refresh");
+                refreshLayout.setRefreshing(false);
 
             }
         };
@@ -188,23 +191,23 @@ public class MarketFragment2 extends BaseFragment {
 
         adapters.add(new MarketViewPaerAdapter(newList));
 
-        adapters.add(new TitleAdapter("热门行业"));
+        adapters.add(new TitleAdapter(getContext(),TitleAdapter.RANK_LIST_TITLE_HOT_INDUSTRY));
 
         adapters.add(new HostIndustryGridAdapter(marketData.getHostIndustrylist()));
 
-        adapters.add(new TitleAdapter("涨幅榜"));
+        adapters.add(new TitleAdapter(getContext(),RankListAdapter.RANK_TYPE_INCREASE_LIST));
         adapters.add(new RankListAdapter(marketData.getStockRanklist().getIncrease_list(),
                 RankListAdapter.RANK_TYPE_INCREASE_LIST));
 
-        adapters.add(new TitleAdapter("跌幅榜"));
+        adapters.add(new TitleAdapter(getContext(),RankListAdapter.RANK_TYPE_DOWN_LIST));
         adapters.add(new RankListAdapter(marketData.getStockRanklist().getDown_list(),
                 RankListAdapter.RANK_TYPE_DOWN_LIST));
 
-        adapters.add(new TitleAdapter("换手率"));
+        adapters.add(new TitleAdapter(getContext(),RankListAdapter.RANK_TYPE_CHANGE_LIST));
         adapters.add(new RankListAdapter(marketData.getStockRanklist().getChange_list(),
                 RankListAdapter.RANK_TYPE_CHANGE_LIST));
 
-        adapters.add(new TitleAdapter("振幅榜"));
+        adapters.add(new TitleAdapter(getContext(),RankListAdapter.RANK_TYPE_AMPLITUDE_LIST));
         adapters.add(new RankListAdapter(marketData.getStockRanklist().getAmplitude_list(),
                 RankListAdapter.RANK_TYPE_AMPLITUDE_LIST));
 

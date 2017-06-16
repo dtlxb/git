@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.ColorInt;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -52,8 +53,8 @@ public class AutoScrollViewPager extends ViewPager {
     private OnPageClickListener onPageClickListener;
 
     private Paint paint;
-    private int dotSelectedColor = 0xffFF8200;
-    private int dotUnSelectedColor = 0xFFD9D9D9;
+    private @ColorInt int dotSelectedColor = 0xffFF8200;
+    private @ColorInt int dotUnSelectedColor = 0xFFD9D9D9;
     private float dotPadding = 1.2f;
 
 
@@ -102,7 +103,7 @@ public class AutoScrollViewPager extends ViewPager {
         needIndicator = need;
     }
 
-    public void setDotSelectedColor(int dotSelectedColor) {
+    public void setDotSelectedColor(@ColorInt int dotSelectedColor) {
         this.dotSelectedColor = dotSelectedColor;
     }
 

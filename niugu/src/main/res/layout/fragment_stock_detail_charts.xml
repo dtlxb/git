@@ -226,7 +226,7 @@
                 android:orientation="horizontal"
                 android:padding="10dp">
 
-                <cn.gogoal.im.ui.copy.BitmapChartView
+                <cn.gogoal.im.ui.stockviews.BitmapChartView
                     android:id="@+id/stock_detail_fragment_time_line"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"

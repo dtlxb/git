@@ -1,6 +1,8 @@
 package cn.gogoal.im.adapter.market;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.hply.alilayout.DelegateAdapter;
@@ -10,6 +12,7 @@ import com.hply.alilayout.layout.GridLayoutHelper;
 import java.util.List;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.stock.RankListDetialActivity;
 import cn.gogoal.im.bean.stock.HostIndustrylistBean;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
@@ -45,7 +48,7 @@ public class HostIndustryGridAdapter extends DelegateAdapter.Adapter<MainViewHol
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, int position) {
-        HostIndustrylistBean hotData = hostIndustrylist.get(position);
+        final HostIndustrylistBean hotData = hostIndustrylist.get(position);
 
         holder.setText(R.id.tv_hot_industry_name, hotData.getIndustry_name());
         holder.setText(R.id.tv_hot_industry_rate, StockUtils.plusMinus(hotData.getIndustry_rate(), true));
@@ -61,6 +64,17 @@ public class HostIndustryGridAdapter extends DelegateAdapter.Adapter<MainViewHol
         holder.setText(R.id.tv_hot_industry_curentPrice$rate,
                 StringUtils.saveSignificand(hotData.getCurrent_price(), 2) + " " +
                         StockUtils.plusMinus(hotData.getRate(), true));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), RankListDetialActivity.class);
+                intent.putExtra("MODULE_TITLE", hotData.getIndustry_name());
+                intent.putExtra("MODULE_TYPE", RankListDetialActivity.MODULE_TYPE_HOT_INDUSTRY);
+                intent.putExtra("INDUSTRY_NAME", hotData.getIndustry_name());
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
