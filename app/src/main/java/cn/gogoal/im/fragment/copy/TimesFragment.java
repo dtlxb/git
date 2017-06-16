@@ -22,14 +22,14 @@ import cn.gogoal.im.activity.copy.StockDetailChartsActivity;
 import cn.gogoal.im.adapter.TreatAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.ui.copy.LandScapeChartView;
-import cn.gogoal.im.ui.copy.TimesFivesBitmap;
+import cn.gogoal.im.ui.stockviews.LandScapeChartView;
+import cn.gogoal.im.ui.stockviews.TimesFivesBitmap;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
-import hply.com.niugu.DeviceUtil;
 import hply.com.niugu.stock.StockMinuteBean;
 import hply.com.niugu.stock.StockMinuteData;
 
@@ -43,7 +43,7 @@ public class TimesFragment extends BaseFragment {
     private String stockCode;
     private List<StockMinuteData> stockMinuteDatas;
     private int stockType;
-    private ArrayList<String> priceVolumDatas;
+    private ArrayList<String> priceVolumeDatas;
     //定时刷新
     private Timer timer;
     private int stock_charge_type;
@@ -69,7 +69,7 @@ public class TimesFragment extends BaseFragment {
         Bundle bundle = getArguments();
         stockType = bundle.getInt("type");
         totalHeight = bundle.getInt("totalHeight", 0);
-        priceVolumDatas = bundle.getStringArrayList("priceVolumDatas");
+        priceVolumeDatas = bundle.getStringArrayList("priceVolumeDatas");
 
         stock_charge_type = bundle.getInt("stock_charge_type");
         width = bundle.getInt("width", 0);
@@ -132,14 +132,17 @@ public class TimesFragment extends BaseFragment {
                 if (bean.getCode() == 0) {
                     stockMinuteDatas = bean.getData();
                     if (stockMinuteDatas.size() > 0) {
-                        if (totalHeight <= DeviceUtil.DPI480P) {
-                            timesBitmap.setIsSw480P(true);
-                        } else if (totalHeight <= DeviceUtil.DPI720P) {
-                            timesBitmap.setIsSw720P(true);
-                        } else if (totalHeight <= DeviceUtil.DPI1080P) {
-                            timesBitmap.setIsSw1080P(true);
-                        }
                         timesBitmap.setShowDetail(true);
+                        timesBitmap.setLongitudeNum(0);
+                        timesBitmap.setmSize(AppDevice.dp2px(getActivity(), 1));
+                        timesBitmap.setmAxisTitleSize(AppDevice.dp2px(getActivity(), 10));
+                        if (StockDetailChartsActivity.STOCK_COMMON == stockType) {
+                            timesBitmap.setLeftMargin(AppDevice.dp2px(getActivity(), 40));
+                            timesBitmap.setRightMargin(AppDevice.dp2px(getActivity(), 40));
+                        } else if (StockDetailChartsActivity.STOCK_MARKE_INDEX == stockType) {
+                            timesBitmap.setLeftMargin(AppDevice.dp2px(getActivity(), 45));
+                            timesBitmap.setRightMargin(AppDevice.dp2px(getActivity(), 45));
+                        }
                         Bitmap bitmap = timesBitmap.setTimesList(bean, true, stock_charge_type);
                         mTimesView.setBitmap(bitmap);
                         mTimesView.setData(timesBitmap, stock_charge_type);
@@ -220,20 +223,20 @@ public class TimesFragment extends BaseFragment {
     }
 
     private void initValue() {
-        if (priceVolumDatas != null && priceVolumDatas.size() > 0) {
+        if (priceVolumeDatas != null && priceVolumeDatas.size() > 0) {
 //            for (int i = 0; i < priceVolumeIds.length; i++) {
-//                if (!priceVolumDatas.get(i).equals("null") && !priceVolumDatas.get(i).equals("")) {
+//                if (!priceVolumeDatas.get(i).equals("null") && !priceVolumeDatas.get(i).equals("")) {
 //                    if (i % 2 == 0) {
-//                        priceVolumes[i].setText(priceVolumDatas.get(i));
-//                        if (StringUtils.getDouble(priceVolumDatas.get(i)) > closePrice) {
+//                        priceVolumes[i].setText(priceVolumeDatas.get(i));
+//                        if (StringUtils.getDouble(priceVolumeDatas.get(i)) > closePrice) {
 //                            priceVolumes[i].setTextColor(getResColor(R.color.stock_red));
-//                        } else if (StringUtils.getDouble(priceVolumDatas.get(i)) == closePrice || StringUtils.getDouble(priceVolumDatas.get(i)) == 0) {
+//                        } else if (StringUtils.getDouble(priceVolumeDatas.get(i)) == closePrice || StringUtils.getDouble(priceVolumeDatas.get(i)) == 0) {
 //                            priceVolumes[i].setTextColor(getResColor(R.color.gray_light));
 //                        } else {
 //                            priceVolumes[i].setTextColor(getResColor(R.color.stock_green));
 //                        }
 //                    } else {
-//                        priceVolumes[i].setText(Integer.parseInt(priceVolumDatas.get(i)) / 100 + "");
+//                        priceVolumes[i].setText(Integer.parseInt(priceVolumeDatas.get(i)) / 100 + "");
 //                    }
 //                }
 //            }

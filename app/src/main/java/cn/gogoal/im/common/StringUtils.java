@@ -574,4 +574,11 @@ public class StringUtils {
     public static boolean isEmpty(CharSequence trim) {
         return TextUtils.isEmpty(trim) || TextUtils.isEmpty(trim.toString().replace(" ", ""));
     }
+
+    //获取涨跌显示状态
+    public static boolean getHighsAndLows() {
+        boolean change = SPTools.getBoolean("stock_unNormal_show", true);
+        return change;
+    }
+
 }

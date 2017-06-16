@@ -22,13 +22,14 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.activity.copy.MessageHandlerList;
 import cn.gogoal.im.activity.copy.StockDetailChartsActivity;
 import cn.gogoal.im.base.AppManager;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
-import cn.gogoal.im.ui.copy.LandScapeChartView;
-import cn.gogoal.im.ui.copy.TimesFivesBitmap;
+import cn.gogoal.im.ui.stockviews.LandScapeChartView;
+import cn.gogoal.im.ui.stockviews.TimesFivesBitmap;
 import hply.com.niugu.stock.StockMinuteBean;
 
 public class FiveDayFragment extends Fragment {
@@ -68,7 +69,7 @@ public class FiveDayFragment extends Fragment {
     }
 
     private void getFiveData() {
-        ((StockDetailChartsActivity)getActivity()).showProgressbar(true);
+        ((StockDetailChartsActivity) getActivity()).showProgressbar(true);
         HashMap<String, String> param = new HashMap<>();
         param.put("day", "5");
         if (StockDetailChartsActivity.STOCK_COMMON == stockType) {
@@ -85,8 +86,9 @@ public class FiveDayFragment extends Fragment {
 
                 if (bean.getCode() == 0) {
                     new BitmapTask().execute();
-                    MessageHandlerList.sendMessage(StockDetailChartsActivity.class, AppConst.DISS_PROGRESSBAR, 0);
-                    ((StockDetailChartsActivity)getActivity()).showProgressbar(false);
+                    //MessageHandlerList.sendMessage(StockDetailChartsActivity.class, AppConst.DISS_PROGRESSBAR, 0);
+                    AppManager.getInstance().sendMessage("Diss_Progressbar");
+                    ((StockDetailChartsActivity) getActivity()).showProgressbar(false);
                 }
             }
 
@@ -156,16 +158,18 @@ public class FiveDayFragment extends Fragment {
         @Override
         protected Bitmap doInBackground(Void... voids) {
             fiveDayBitmap = new TimesFivesBitmap(width, height);
-            if (totalHeight <= AppDevice.DPI480P) {
-                fiveDayBitmap.setIsSw480P(true);
-            } else if (totalHeight <= AppDevice.DPI720P) {
-                fiveDayBitmap.setIsSw720P(true);
-            } else if (totalHeight <= AppDevice.DPI1080P) {
-                fiveDayBitmap.setIsSw1080P(true);
-            }
             fiveDayBitmap.setShowDetail(true);
-            Bitmap bitmap = fiveDayBitmap.setTimesList(bean, false, stock_charge_type);
-            return bitmap;
+            fiveDayBitmap.setLongitudeNum(4);
+            fiveDayBitmap.setmSize(AppDevice.dp2px(getActivity(), 1));
+            fiveDayBitmap.setmAxisTitleSize(AppDevice.dp2px(getActivity(), 10));
+            if (StockDetailChartsActivity.STOCK_COMMON == stockType) {
+                fiveDayBitmap.setLeftMargin(AppDevice.dp2px(getActivity(), 40));
+                fiveDayBitmap.setRightMargin(AppDevice.dp2px(getActivity(), 40));
+            } else if (StockDetailChartsActivity.STOCK_MARKE_INDEX == stockType) {
+                fiveDayBitmap.setLeftMargin(AppDevice.dp2px(getActivity(), 45));
+                fiveDayBitmap.setRightMargin(AppDevice.dp2px(getActivity(), 45));
+            }
+            return fiveDayBitmap.setTimesList(bean, false, stock_charge_type);
         }
 
         @Override
