@@ -46,7 +46,6 @@ public class MyMessageHandler extends AVIMMessageHandler {
             AVIMClientManager.getInstance().findConversationById(conversation.getConversationId(), new AVIMClientManager.ChatJoinManager() {
                 @Override
                 public void joinSuccess(final AVIMConversation conversation) {
-
                     //接收到消息，发送出去
                     if (clientID.equals(client.getClientId())) {
                         //剔除自己消息
@@ -197,6 +196,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
         map.put("conversation", conversation);
         int chatType = (int) conversation.getAttribute("chat_type");
 
+        //用于标记已读未读
         if (message instanceof GGAudioMessage) {
             SPTools.saveBoolean(UserUtils.getMyAccountId() + message.getMessageId(), true);
         }

@@ -7,9 +7,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterViewFlipper;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -38,14 +40,17 @@ import cn.gogoal.im.adapter.ViewFlipperAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.FlipperData;
 import cn.gogoal.im.bean.MineItem;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.ggqrcode.GGQrCode;
+import cn.gogoal.im.ui.Badge.BadgeView;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**
@@ -77,6 +82,8 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.layout_user_head)
     ViewGroup layoutHead;
 
+    private ImageView ivMessageTag;
+
     private MineAdapter mineAdapter;
 
     public MineFragment() {
@@ -85,6 +92,10 @@ public class MineFragment extends BaseFragment {
     @BindArray(R.array.mine_arr)
     String[] mineTitle;
 
+    //消息
+    private BadgeView badge;
+    private int unReadCount;
+
     @Override
     public int bindLayout() {
         return R.layout.fragment_mine;
@@ -92,12 +103,18 @@ public class MineFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle("我的").addAction(new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.home_bottom_tab_icon_message_normal)) {
+
+        XTitle xTitle = setFragmentTitle("我的");
+
+        XTitle.ImageAction messageAction = new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.home_bottom_tab_icon_message_normal)) {
             @Override
             public void actionClick(View view) {
                 startActivity(new Intent(getActivity(), MessageHolderActivity.class));
             }
-        });
+        };
+
+        xTitle.addAction(messageAction);
+        ivMessageTag = (ImageView) xTitle.getViewByAction(messageAction);
 
         iniheadInfo(mContext);
         initRecycler(mContext);
@@ -105,6 +122,10 @@ public class MineFragment extends BaseFragment {
         rvMine.setAdapter(mineAdapter);
 
         setViewFlipper();
+
+        unReadCount = MessageListUtils.getAllMessageUnreadCount();
+        badge = new BadgeView(getActivity());
+        initBadge(unReadCount, badge);
     }
 
     private void initRecycler(Context mContext) {
@@ -262,6 +283,24 @@ public class MineFragment extends BaseFragment {
                 }
             });
         }
+    }
+
+    private void initBadge(int num, BadgeView badge) {
+        badge.setGravityOffset(10, 5, true);
+        badge.setShowShadow(false);
+        badge.setBadgeGravity(Gravity.TOP | Gravity.END);
+        badge.setBadgeTextSize(8, true);
+        badge.bindTarget(ivMessageTag);
+        badge.setBadgeNumber(num);
+    }
+
+    /**
+     * 消息接收
+     */
+    @Subscriber(tag = "IM_Message")
+    public void handleMessage(BaseMessage baseMessage) {
+        unReadCount++;
+        badge.setBadgeNumber(unReadCount);
     }
 
 }

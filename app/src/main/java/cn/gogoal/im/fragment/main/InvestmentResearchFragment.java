@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+
+import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,11 +31,14 @@ import cn.gogoal.im.activity.ToolsSettingActivity;
 import cn.gogoal.im.adapter.InvestmentResearchAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BannerBean;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.BannerUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.Badge.BadgeView;
 import cn.gogoal.im.ui.view.AutoScrollViewPager;
 import cn.gogoal.im.ui.view.XTitle;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
@@ -56,6 +62,8 @@ public class InvestmentResearchFragment extends BaseFragment {
     @BindView(R.id.tv_flag_tools)
     TextView tvFlagTools;
 
+    private ImageView ivMessageTag;
+
     private List<ToolData.Tool> mGridData;
     private InvestmentResearchAdapter toolsAdapter;
 
@@ -64,6 +72,10 @@ public class InvestmentResearchFragment extends BaseFragment {
      */
     private List<BannerBean.Banner> bannerPagerDatas;
     private BannerAdapter bannerAdapter;
+
+    //消息
+    private BadgeView badge;
+    private int unReadCount;
 
     @Override
     public int bindLayout() {
@@ -99,6 +111,7 @@ public class InvestmentResearchFragment extends BaseFragment {
 
         xTitle.addAction(settingAction, 0);
         xTitle.addAction(messageAction, 1);
+        ivMessageTag = (ImageView) xTitle.getViewByAction(messageAction);
 
 //        setFragmentTitle(R.string.title_found).addAction(new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.img_setting)) {
 //            @Override
@@ -136,6 +149,10 @@ public class InvestmentResearchFragment extends BaseFragment {
 
         getBannerImage();
         getTouYan();
+
+        unReadCount = MessageListUtils.getAllMessageUnreadCount();
+        badge = new BadgeView(getActivity());
+        initBadge(unReadCount, badge);
     }
 
     private void getBannerImage() {
@@ -323,5 +340,23 @@ public class InvestmentResearchFragment extends BaseFragment {
             });
             return view;
         }
+    }
+
+    private void initBadge(int num, BadgeView badge) {
+        badge.setGravityOffset(10, 5, true);
+        badge.setShowShadow(false);
+        badge.setBadgeGravity(Gravity.TOP | Gravity.END);
+        badge.setBadgeTextSize(8, true);
+        badge.bindTarget(ivMessageTag);
+        badge.setBadgeNumber(num);
+    }
+
+    /**
+     * 消息接收
+     */
+    @Subscriber(tag = "IM_Message")
+    public void handleMessage(BaseMessage baseMessage) {
+        unReadCount++;
+        badge.setBadgeNumber(unReadCount);
     }
 }

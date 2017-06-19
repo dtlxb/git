@@ -98,7 +98,7 @@ public class MessageFragment extends BaseFragment {
 
     private ListAdapter listAdapter;
 
-    private int allCount;
+    //private int allCount;
 
     public MessageFragment() {
     }
@@ -141,8 +141,8 @@ public class MessageFragment extends BaseFragment {
         IMMessageBeans.clear();
         //查找到消息列表按时间排序
         IMMessageBeans.addAll(DataSupport.order("lastTime desc").find(IMMessageBean.class));
-        allCount = MessageListUtils.getAllMessageUnreadCount();
-        sendUnreadCount(allCount);
+        //allCount = MessageListUtils.getAllMessageUnreadCount();
+        //sendUnreadCount(allCount);
 
         listAdapter.notifyDataSetChanged();
 
@@ -210,8 +210,8 @@ public class MessageFragment extends BaseFragment {
                 DialogHelp.getSelectDialog(getActivity(), "", new String[]{"删除聊天"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        allCount = allCount - Integer.parseInt(IMMessageBeans.get(position).getUnReadCounts());
-                        sendUnreadCount(allCount);
+                        //allCount = allCount - Integer.parseInt(IMMessageBeans.get(position).getUnReadCounts());
+                        //sendUnreadCount(allCount);
                         MessageListUtils.removeMessageInfo(IMMessageBeans.get(position).getConversationID());
                         listAdapter.removeItem(position);
                     }
@@ -649,8 +649,8 @@ public class MessageFragment extends BaseFragment {
         IMMessageBean imMessageBean = new IMMessageBean(ConversationId, chatType, message.getTimestamp(),
                 isTheSame ? String.valueOf(unreadMessage) : "1", nickName, friend_id, avatar, JSON.toJSONString(message));
         MessageListUtils.saveMessageInfo(imMessageBean);
-        allCount++;
-        sendUnreadCount(allCount);
+        //allCount++;
+        //sendUnreadCount(allCount);
         //按照时间排序
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
             Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
@@ -667,7 +667,6 @@ public class MessageFragment extends BaseFragment {
     private void sendUnreadCount(int count) {
         //发送消息更改消息总数
         HashMap<String, Object> countMap = new HashMap<>();
-        countMap.put("index", 0);
         countMap.put("number", count);
         BaseMessage countMessage = new BaseMessage("message_count", countMap);
         AppManager.getInstance().sendMessage("correct_allmessage_count", countMessage);

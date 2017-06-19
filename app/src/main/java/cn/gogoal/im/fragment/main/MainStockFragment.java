@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.RotateAnimation;
@@ -24,12 +25,15 @@ import cn.gogoal.im.activity.MessageHolderActivity;
 import cn.gogoal.im.activity.Test2Activity;
 import cn.gogoal.im.activity.copy.StockSearchActivity;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.fragment.stock.MarketFragment2;
 import cn.gogoal.im.fragment.stock.MyStockFragment;
+import cn.gogoal.im.ui.Badge.BadgeView;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
 
 import static cn.gogoal.im.R.id.img_mystock_refresh;
@@ -72,6 +76,10 @@ public class MainStockFragment extends BaseFragment {
     private MarketFragment2 huShenFragment;
 
     private RotateAnimation animation;
+
+    //消息
+    private BadgeView badge;
+    private int unReadCount;
 
     @Override
     public int bindLayout() {
@@ -127,6 +135,10 @@ public class MainStockFragment extends BaseFragment {
                 return true;
             }
         });
+
+        unReadCount = MessageListUtils.getAllMessageUnreadCount();
+        badge = new BadgeView(getActivity());
+        initBadge(unReadCount, badge);
     }
 
     @Subscriber(tag = "updata_refresh_mode")
@@ -285,6 +297,24 @@ public class MainStockFragment extends BaseFragment {
             tv.setText(marketTabs[position]);
             return tv;
         }
+    }
+
+    private void initBadge(int num, BadgeView badge) {
+        badge.setGravityOffset(2, 5, true);
+        badge.setShowShadow(false);
+        badge.setBadgeGravity(Gravity.TOP | Gravity.END);
+        badge.setBadgeTextSize(8, true);
+        badge.bindTarget(ivMessageTag);
+        badge.setBadgeNumber(num);
+    }
+
+    /**
+     * 消息接收
+     */
+    @Subscriber(tag = "IM_Message")
+    public void handleMessage(BaseMessage baseMessage) {
+        unReadCount++;
+        badge.setBadgeNumber(unReadCount);
     }
 
 //    /**
