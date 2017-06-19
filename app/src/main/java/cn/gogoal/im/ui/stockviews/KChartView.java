@@ -12,6 +12,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.socks.library.KLog;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1163,7 +1165,7 @@ public class KChartView extends View {
     }
 
     private void sendDissChartMsg() {
-        AppManager.getInstance().sendMessage("Dismiss_chart");
+        AppManager.getInstance().sendMessage("Dismiss_Chart");
     }
 
     public void setChartsType(int chartsType) {

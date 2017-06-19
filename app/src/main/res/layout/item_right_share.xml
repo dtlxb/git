@@ -67,18 +67,17 @@
             android:layout_marginRight="5dp"
             android:background="@drawable/item_right_share_bg"
             android:orientation="vertical"
-            android:paddingBottom="14dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="16dp"
             android:paddingTop="10dp">
 
             <TextView
                 android:id="@+id/tv_share_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="8dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="分享消息"
+                android:text="分享消息分享消息分享消息分享消息分享消息"
                 android:textColor="@color/textColor_333333"
                 android:textSize="14sp" />
 
@@ -86,6 +85,8 @@
                 android:id="@+id/layout_normal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginTop="5dp"
                 android:visibility="gone">
 
@@ -113,6 +114,8 @@
                 android:id="@+id/live_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="8dp"
                 android:orientation="vertical">
 
                 <ImageView
@@ -132,6 +135,38 @@
                     android:textColor="@color/textColor_999999"
                     android:textSize="12sp" />
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="10dp"
+                android:background="@color/marketcompare_stockcode" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="3dp">
+
+                <com.hply.roundimage.roundImage.RoundedImageView
+                    android:id="@+id/iv_from"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_centerVertical="true" />
+
+                <TextView
+                    android:id="@+id/tv_from"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="6dp"
+                    android:layout_toRightOf="@id/iv_from"
+                    android:textColor="@color/textColor_333333"
+                    android:textSize="12dp" />
+
+            </RelativeLayout>
 
         </LinearLayout>
 

@@ -27,6 +27,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.hply.roundimage.roundImage.RoundedImageView;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -169,7 +170,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 //                    Intent intent = new Intent(mContext, IMPersonDetailActivity.class);
 //                    intent.putExtra("account_id", Integer.parseInt(avimMessage.getFrom()));
 //                    mContext.startActivity(intent);
-                    NormalIntentUtils.go2PersionDetail(mContext,Integer.parseInt(avimMessage.getFrom()));
+                    NormalIntentUtils.go2PersionDetail(mContext, Integer.parseInt(avimMessage.getFrom()));
                 }
             });
             //长按头像AT某人
@@ -380,7 +381,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             ((LeftStockViewHolder) holder).what_user_send.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    NormalIntentUtils.go2StockDetail(mContext,stockCode,stockName);
+                    NormalIntentUtils.go2StockDetail(mContext, stockCode, stockName);
                 }
             });
 
@@ -407,7 +408,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             ((RightStockViewHolder) holder).what_user_send.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    NormalIntentUtils.go2StockDetail(mContext,stockCode,stockName);
+                    NormalIntentUtils.go2StockDetail(mContext, stockCode, stockName);
                 }
             });
 
@@ -415,17 +416,20 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             GGShareMessage shareMessage = (GGShareMessage) avimMessage;
             final Map<String, Object> shareMap = shareMessage.getAttrs();
             getLayoutSize(((LeftShareViewHolder) holder).user_layout);
+            ImageDisplay.loadRoundedRectangleImage(mContext, R.mipmap.logo, ((LeftShareViewHolder) holder).iv_from);
             if (shareMap.get("toolType").equals("1")) {
                 ((LeftShareViewHolder) holder).layout_normal.setVisibility(View.VISIBLE);
                 ((LeftShareViewHolder) holder).live_layout.setVisibility(View.GONE);
                 ((LeftShareViewHolder) holder).tv_share_title.setText(String.valueOf(shareMap.get("title")));
                 ((LeftShareViewHolder) holder).tv_share.setText(String.valueOf(shareMap.get("content")));
+                ((LeftShareViewHolder) holder).tv_from.setText("朝阳永续");
                 ImageDisplay.loadImage(mContext, String.valueOf(shareMap.get("thumUrl")), ((LeftShareViewHolder) holder).iv_share);
             } else if (shareMap.get("toolType").equals("2")) {
                 ((LeftShareViewHolder) holder).layout_normal.setVisibility(View.GONE);
+                ((LeftShareViewHolder) holder).tv_share_title.setVisibility(View.GONE);
                 ((LeftShareViewHolder) holder).live_layout.setVisibility(View.VISIBLE);
-                ((LeftShareViewHolder) holder).tv_share_title.setText(String.valueOf(shareMap.get("title")));
                 ((LeftShareViewHolder) holder).tv_live_share.setText(String.valueOf(shareMap.get("content")));
+                ((LeftShareViewHolder) holder).tv_from.setText(String.valueOf(shareMap.get("title")));
                 getImageSize(((LeftShareViewHolder) holder).iv_live_share);
                 ImageDisplay.loadImage(mContext, String.valueOf(shareMap.get("thumUrl")), ((LeftShareViewHolder) holder).iv_live_share);
             }
@@ -442,17 +446,20 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
             getLayoutSize(((RightShareViewHolder) holder).user_layout);
             ((RightShareViewHolder) holder).user_name.setVisibility(View.GONE);
+            ImageDisplay.loadRoundedRectangleImage(mContext, R.mipmap.logo, ((RightShareViewHolder) holder).iv_from);
             if (String.valueOf(shareMap.get("toolType")).equals("1")) {
                 ((RightShareViewHolder) holder).layout_normal.setVisibility(View.VISIBLE);
                 ((RightShareViewHolder) holder).live_layout.setVisibility(View.GONE);
                 ((RightShareViewHolder) holder).tv_share_title.setText(String.valueOf(shareMap.get("title")));
                 ((RightShareViewHolder) holder).tv_share.setText(String.valueOf(shareMap.get("content")));
+                ((RightShareViewHolder) holder).tv_from.setText("朝阳永续");
                 ImageDisplay.loadImage(mContext, String.valueOf(shareMap.get("thumUrl")), ((RightShareViewHolder) holder).iv_share);
             } else if (String.valueOf(shareMap.get("toolType")).equals("2")) {
                 ((RightShareViewHolder) holder).layout_normal.setVisibility(View.GONE);
                 ((RightShareViewHolder) holder).live_layout.setVisibility(View.VISIBLE);
-                ((RightShareViewHolder) holder).tv_share_title.setText(String.valueOf(shareMap.get("title")));
+                ((RightShareViewHolder) holder).tv_share_title.setVisibility(View.GONE);
                 ((RightShareViewHolder) holder).tv_live_share.setText(String.valueOf(shareMap.get("content")));
+                ((RightShareViewHolder) holder).tv_from.setText(String.valueOf(shareMap.get("title")));
                 getImageSize(((RightShareViewHolder) holder).iv_live_share);
                 ImageDisplay.loadImage(mContext, String.valueOf(shareMap.get("thumUrl")), ((RightShareViewHolder) holder).iv_live_share);
             }
@@ -931,6 +938,8 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         private LinearLayout live_layout;
 
         private LinearLayout card_layout;
+        private RoundedImageView iv_from;
+        private TextView tv_from;
 
         LeftShareViewHolder(View itemView) {
             super(itemView);
@@ -943,6 +952,8 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             tv_live_share = (TextView) itemView.findViewById(R.id.tv_live_share);
             live_layout = (LinearLayout) itemView.findViewById(R.id.live_layout);
             card_layout = (LinearLayout) itemView.findViewById(R.id.card_layout);
+            iv_from = (RoundedImageView) itemView.findViewById(R.id.iv_from);
+            tv_from = (TextView) itemView.findViewById(R.id.tv_from);
         }
 
     }
@@ -958,6 +969,8 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         private LinearLayout live_layout;
 
         private LinearLayout card_layout;
+        private RoundedImageView iv_from;
+        private TextView tv_from;
 
         RightShareViewHolder(View itemView) {
             super(itemView);
@@ -970,6 +983,8 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             tv_live_share = (TextView) itemView.findViewById(R.id.tv_live_share);
             live_layout = (LinearLayout) itemView.findViewById(R.id.live_layout);
             card_layout = (LinearLayout) itemView.findViewById(R.id.card_layout);
+            iv_from = (RoundedImageView) itemView.findViewById(R.id.iv_from);
+            tv_from = (TextView) itemView.findViewById(R.id.tv_from);
         }
 
     }
