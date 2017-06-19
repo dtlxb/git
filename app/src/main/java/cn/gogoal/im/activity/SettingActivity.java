@@ -186,7 +186,7 @@ public class SettingActivity extends BaseActivity {
 //                                            "http://192.168.52.156:9000/#/hello",
                                             data.getItemValue());
                                     break;
-                                
+
                                 case "免责申明":
                                     NormalIntentUtils.go2WebActivity(
                                             getActivity(),
