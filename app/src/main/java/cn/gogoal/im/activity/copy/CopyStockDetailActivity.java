@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.text.TextUtils;
@@ -69,6 +68,8 @@ import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.fragment.stock.CompanyFinanceFragment;
+import cn.gogoal.im.fragment.stock.CompanyInfoFragment;
 import cn.gogoal.im.fragment.stock.ImageChartFragment;
 import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
 import cn.gogoal.im.ui.dialog.StockPopuDialog;
@@ -76,6 +77,7 @@ import cn.gogoal.im.ui.stock.DialogRecyclerView;
 import cn.gogoal.im.ui.stockviews.BitmapChartView;
 import cn.gogoal.im.ui.stockviews.KChartsBitmap;
 import cn.gogoal.im.ui.stockviews.TimesFivesBitmap;
+import cn.gogoal.im.ui.view.GreatScrollView;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
 import hply.com.niugu.autofixtext.AutofitTextView;
 import hply.com.niugu.stock.StockMinuteBean;
@@ -115,7 +117,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     LinearLayout linear_header;
     //下拉刷新
     @BindView(R.id.scrollView)
-    NestedScrollView scrollView;
+    GreatScrollView scrollView;
     //股票价格
     @BindView(R.id.stock_price)
     AutofitTextView stock_price;
@@ -253,7 +255,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     TabLayout tabLayoutNews;
     @BindView(R.id.vp_news_)
     ViewPager viewPagerNews;
-    private String[] newTitles = {"新闻", "公告", "研报"};
+    private String[] newTitles = {"新闻", "公告", "研报","资料","财务"};
     private RotateAnimation rotateAnimation;
 
     //交易五档、明细
@@ -349,10 +351,17 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     /***/
     private void setNewsTab() {
-        viewPagerNews.setOffscreenPageLimit(3);
+        final List<Fragment> fragments=new ArrayList<>();
+        fragments.add(StockNewsMinFragment.getInstance(stockCode,stockName,0));
+        fragments.add(StockNewsMinFragment.getInstance(stockCode,stockName,1));
+        fragments.add(StockNewsMinFragment.getInstance(stockCode,stockName,2));
+        fragments.add(CompanyInfoFragment.newInstance(stockCode));
+        fragments.add(new CompanyFinanceFragment());
+
+        viewPagerNews.setOffscreenPageLimit(4);
         viewPagerNews.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             public Fragment getItem(int position) {
-                return StockNewsMinFragment.getInstance(stockCode,stockName,position);
+                return fragments.get(position);
             }
 
             public int getCount() {

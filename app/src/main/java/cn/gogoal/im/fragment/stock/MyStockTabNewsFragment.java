@@ -93,7 +93,7 @@ public class MyStockTabNewsFragment extends BaseFragment {
 
         stockNewsType = getArguments().getParcelable("stock_news_type");
 
-        rvNews.setVerticalScrollBarEnabled(true);
+        rvNews.setVerticalScrollBarEnabled(false);
 
         newsAdapter = new MyStockNewsAdapter(stockNewsDatas, stockNewsType.getNewsSource());
         rvNews.addItemDecoration(new NormalItemDecoration(mContext));

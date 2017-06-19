@@ -39,6 +39,7 @@
         <item>行情设置</item>
         <item>专属顾问</item>
         <item>我的二维码</item>
+        <item>我的工具</item>
         <!--<item>邀请好友</item>
         <item>会务</item>
         <item>路演</item>-->
@@ -97,6 +98,8 @@
         <item>新闻</item>
         <item>公告</item>
         <item>研报</item>
+        <item>资料</item>
+        <item>财务</item>
     </string-array>
 
     <string-array name="srock_chart_image">
@@ -116,9 +119,9 @@
 
     <string-array name="settingArray">
         <item>账号与安全</item>
-        <!--<item>行情刷新频率</item>
+        <item>行情刷新频率</item>
         <item>K线设置</item>
-        <item>涨跌显示设置</item>-->
+        <item>涨跌显示设置</item>
         <item>清除缓存</item>
         <item>关于</item>
         <item>免责申明</item>

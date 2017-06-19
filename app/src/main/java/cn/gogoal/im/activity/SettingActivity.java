@@ -115,11 +115,12 @@ public class SettingActivity extends BaseActivity {
     private void iniSettingData() {
         settingDatas.add(new UserDetailInfo<String>(UserDetailInfo.SPACE));
         for (String s : strings) {
-            settingDatas.add(new UserDetailInfo<>(UserDetailInfo.TEXT_ITEM_2, s));
+            settingDatas.add(new UserDetailInfo<String>(UserDetailInfo.TEXT_ITEM_2, s));
         }
 
         settingDatas.add(2, new UserDetailInfo<String>(UserDetailInfo.SPACE));
-        settingDatas.add(4, new UserDetailInfo<String>(UserDetailInfo.SPACE));
+        settingDatas.add(6, new UserDetailInfo<String>(UserDetailInfo.SPACE));
+        settingDatas.add(8, new UserDetailInfo<String>(UserDetailInfo.SPACE));
         settingAdapter.notifyDataSetChanged();
     }
 
@@ -138,43 +139,65 @@ public class SettingActivity extends BaseActivity {
                 case UserDetailInfo.SPACE:
                     break;
                 case UserDetailInfo.TEXT_ITEM_2:
-                    holder.setText(R.id.tv_info_key, data.getAvatar());
+                    holder.setText(R.id.tv_info_key, data.getItemValue());
 
                     holder.getView(R.id.tv_info_value).setVisibility(View.INVISIBLE);
 
-                    holder.setBackgroundRes(R.id.item_rv_edit_my_info,
-                            position == 6 ? R.drawable.shape_line_top_and_bottom:R.drawable.selector_normal_write2gray);
+                    holder.setVisible(R.id.view_divider, !(data.getItemValue().equalsIgnoreCase("账号与安全")
+                            || data.getItemValue().equalsIgnoreCase("涨跌显示设置")
+                            || data.getItemValue().equalsIgnoreCase("服务协议")
+                    ));
 
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
+                        public void onClick(View view) {
                             KLog.e("pos=" + position + ";itemText=" + data.getItemKey());
-                            switch (position) {
-                                case 1:
-                                    startActivity(new Intent(v.getContext(), AccountSafeActivity.class));
+                            Intent intent;
+
+                            switch (data.getItemValue()) {
+                                case "账号与安全":
+                                    startActivity(new Intent(view.getContext(), AccountSafeActivity.class));
                                     break;
-                                case 3:
+
+                                case "行情刷新频率":
+                                    //行情刷新频率
+                                    intent = new Intent(view.getContext(), SetStockRefreshActivity.class);
+                                    startActivity(intent);
+                                    break;
+                                case "K线设置":
+                                    //K线设置
+                                    intent = new Intent(view.getContext(), KlineSettingActivity.class);
+                                    startActivity(intent);
+                                    break;
+                                case "涨跌显示设置":
+                                    //涨跌幅显示
+                                    intent = new Intent(view.getContext(), RedGreenSettingActivity.class);
+                                    startActivity(intent);
+                                    break;
+
+                                case "清除缓存":
                                     //清除缓存
                                     clearMyAppCache();
                                     break;
-                                case 5:
+
+                                case "关于":
                                     NormalIntentUtils.go2WebActivity(getActivity(),
                                             AppConst.GG_SETTING_ABOUT,
 //                                            "http://192.168.52.156:9000/#/hello",
-                                            "关于我们");
+                                            data.getItemValue());
                                     break;
-                                case 6:
+                                
+                                case "免责申明":
                                     NormalIntentUtils.go2WebActivity(
                                             getActivity(),
                                             AppConst.GG_DISCLAIMER,
-                                            "免责申明");
+                                            data.getItemValue());
                                     break;
 
-                                case 7:
+                                case "服务协议":
                                     NormalIntentUtils.go2WebActivity(
                                             getActivity(),
-                                            AppConst.GG_SERVICE_AGREEMENT,
-                                            "服务协议");
+                                            AppConst.GG_SERVICE_AGREEMENT, data.getItemValue());
                                     break;
                                 default:
                                     break;

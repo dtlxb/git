@@ -28,10 +28,10 @@ public class UserDetailInfo<T> implements MultiItemEntity{
         this.itemType = itemType;
     }
 
-    public UserDetailInfo(int itemType, T avatar) {
-        this.itemType = itemType;
-        this.avatar=avatar;
-    }
+//    public UserDetailInfo(int itemType, T avatar) {
+//        this.itemType = itemType;
+//        this.avatar=avatar;
+//    }
 
     public UserDetailInfo(int itemType, T avatar, String fullName, String nickName) {
         this.itemType=itemType;
@@ -45,6 +45,11 @@ public class UserDetailInfo<T> implements MultiItemEntity{
         this.itemKey = itemKey;
         this.itemValue = itemValue;
         this.haveMore = haveMore;
+    }
+
+    public UserDetailInfo(int itemType,String itemValue) {
+        this.itemType = itemType;
+        this.itemValue = itemValue;
     }
 
     public T getAvatar() {

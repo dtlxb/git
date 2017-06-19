@@ -43,6 +43,7 @@ import cn.gogoal.im.bean.stock.MyStockData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.MyStockSortInteface;
 import cn.gogoal.im.common.NormalIntentUtils;
@@ -157,12 +158,13 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     private void getMyStockData(final int loadType) {
         Map<String, String> params = new HashMap<>();
         params.put("page", "1");
-        params.put("rows", "200");
+        params.put("rows", "500");
         params.put("token", UserUtils.getToken());
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                FileUtil.writeRequestResponse(responseInfo,"我的自选股数据");
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     noData(false);
@@ -261,9 +263,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 if (view.getId() == R.id.tv_mystock_price) {
                     tvMystockRate.setViewStateNormal();
                     if (sortType == -1) {
-                        return StringUtils.pareseStringDouble(o2.getPrice()).compareTo(StringUtils.pareseStringDouble(o1.getPrice()));
+                        return Double.compare(o2.getPrice(),o1.getPrice());
                     } else if (sortType == 1) {
-                        return StringUtils.pareseStringDouble(o1.getPrice()).compareTo(StringUtils.pareseStringDouble(o2.getPrice()));
+                        return Double.compare(o1.getPrice(),o2.getPrice());
                     } else {
                         try {
                             return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()), CalendarUtils.parseString2Long(o1.getInsertdate()));

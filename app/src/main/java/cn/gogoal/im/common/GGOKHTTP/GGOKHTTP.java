@@ -64,13 +64,13 @@ public class GGOKHTTP {
     public static final String STOCK_K_LINE = "v1/stock/kline";
 
     /*
-  * 自选股的添加
-  * params token=4967b285a82244d296b807a8fea9bc77&
-  * params group_id=22&
-  * params stock_code=600001&
-  * params stock_class=333&
-  * params source=54&
-  * params group_class=1
+      * 自选股的添加
+      * params token=4967b285a82244d296b807a8fea9bc77&
+      * params group_id=22&
+      * params stock_code=600001&
+      * params stock_class=333&
+      * params source=54&
+      * params group_class=1
   * */
     public static final String MYSTOCK_ADD = "v1/mystock/add";
 
@@ -195,6 +195,14 @@ public class GGOKHTTP {
       * params full_codes:sh600340
       * */
     public static final String DELETE_MY_STOCKS = "v1/mystock/delete_stocks";
+
+    /**
+     * 自选股排序
+     * token
+     * fromIndex   拖动的股票的stock_sort
+     * toIndex     目标位置的stock_sort
+     */
+    public static final String STOCK_INDEX_SORT = "v1/mystock/stock_index_sort";
 
     /*
       * 自选股的删除--老接口，不支持删除基金，债券，指数
@@ -713,6 +721,11 @@ public class GGOKHTTP {
      */
     public static final String ADD_FTF_MEMBER = "v1/ggm_chat/add_ftf_member";
 
+    /**
+     * F10====公司概况
+     * stock_code
+     */
+    public static final String COMPANY_SUMMARY = "v1/f10/company_summary";
 
 //--------------------------------------------------------------------------------------------------
 

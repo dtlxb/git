@@ -134,7 +134,7 @@ public class MineFragment extends BaseFragment {
             mineItems.add(new MineItem(MineItem.TYPE_ICON_TEXT_ITEM, iconId, mineTitle[i]));
         }
         mineItems.add(1, new MineItem(MineItem.TYPE_SPACE));
-        mineItems.add(5, new MineItem(MineItem.TYPE_SPACE));
+        mineItems.add(6, new MineItem(MineItem.TYPE_SPACE));
         mineAdapter = new MineAdapter(mineItems);
     }
 
@@ -205,7 +205,11 @@ public class MineFragment extends BaseFragment {
                     holder.setText(R.id.item_text_normal, data.getItemText());
                     holder.setImageResource(R.id.item_img_normal, data.getIconRes());
 
-                    holder.setVisible(R.id.view_divider, data.getItemText().equals("行情设置") || data.getItemText().equals("专属顾问"));
+                    holder.setVisible(R.id.view_divider,
+                            data.getItemText().equals("行情设置") ||
+                                    data.getItemText().equals("专属顾问")||
+                                    data.getItemText().equals("我的二维码")
+                    );
 
                     holder.getView(R.id.item_layout_simple_image_text).setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -229,6 +233,10 @@ public class MineFragment extends BaseFragment {
                                     startActivity(intent);
                                     break;
                                 case "专属顾问":
+                                    intent = new Intent(getActivity(), MyAdvisersActivity.class);
+                                    startActivity(intent);
+                                    break;
+                                case "我的工具":
                                     intent = new Intent(getActivity(), MyAdvisersActivity.class);
                                     startActivity(intent);
                                     break;
