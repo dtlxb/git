@@ -172,6 +172,9 @@ public class MainStockFragment extends BaseFragment {
         if (StockUtils.isTradeTime()) {//交易时间段
             handler.postDelayed(runnable, INTERVAL_TIME);//启动定时刷新
         }
+
+        unReadCount = MessageListUtils.getAllMessageUnreadCount();
+        badge.setBadgeNumber(unReadCount);
     }
 
     @Override
@@ -300,7 +303,7 @@ public class MainStockFragment extends BaseFragment {
     }
 
     private void initBadge(int num, BadgeView badge) {
-        badge.setGravityOffset(2, 5, true);
+        badge.setGravityOffset(2, 7, true);
         badge.setShowShadow(false);
         badge.setBadgeGravity(Gravity.TOP | Gravity.END);
         badge.setBadgeTextSize(8, true);

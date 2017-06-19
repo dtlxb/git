@@ -441,6 +441,8 @@ public class ChatGroupHelper {
                                 String.valueOf(contactBean.getAvatar()), JSON.toJSONString(shareMessage));
                     }
                     MessageListUtils.saveMessageInfo(imMessageBean);
+                    //通知服务器重新获取
+                    AppManager.getInstance().sendMessage("Cache_change");
                 }
             }
 
@@ -507,6 +509,8 @@ public class ChatGroupHelper {
                                 shareItemInfo.getImMessageBean().getNickname(), String.valueOf(shareItemInfo.getImMessageBean().getFriend_id()),
                                 shareItemInfo.getImMessageBean().getAvatar(), JSON.toJSONString(shareMessage));
                         MessageListUtils.saveMessageInfo(imMessageBean);
+                        //通知服务器重新获取
+                        AppManager.getInstance().sendMessage("Cache_change");
                     }
 
                 }

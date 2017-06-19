@@ -102,7 +102,7 @@ public class InvestmentResearchFragment extends BaseFragment {
             }
         };
 
-        XTitle.ImageAction messageAction = new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.home_bottom_tab_icon_message_normal)) {
+        XTitle.ImageAction messageAction = new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.message_dark)) {
             @Override
             public void actionClick(View view) {
                 startActivity(new Intent(getActivity(), MessageHolderActivity.class));
@@ -150,7 +150,6 @@ public class InvestmentResearchFragment extends BaseFragment {
         getBannerImage();
         getTouYan();
 
-        unReadCount = MessageListUtils.getAllMessageUnreadCount();
         badge = new BadgeView(getActivity());
         initBadge(unReadCount, badge);
     }
@@ -293,6 +292,8 @@ public class InvestmentResearchFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         getTouYan();
+        unReadCount = MessageListUtils.getAllMessageUnreadCount();
+        badge.setBadgeNumber(unReadCount);
     }
 
     private class BannerAdapter extends PagerAdapter {
@@ -343,7 +344,7 @@ public class InvestmentResearchFragment extends BaseFragment {
     }
 
     private void initBadge(int num, BadgeView badge) {
-        badge.setGravityOffset(10, 5, true);
+        badge.setGravityOffset(10, 7, true);
         badge.setShowShadow(false);
         badge.setBadgeGravity(Gravity.TOP | Gravity.END);
         badge.setBadgeTextSize(8, true);

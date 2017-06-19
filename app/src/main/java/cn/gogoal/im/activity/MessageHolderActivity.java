@@ -53,6 +53,13 @@ public class MessageHolderActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        unReadCount = MessageListUtils.getAllMessageUnreadCount();
+        badge.setBadgeNumber(unReadCount);
+    }
+
+    @Override
     public void doBusiness(Context mContext) {
         messageFragment = new MessageFragment();
         contactsFragment = new ContactsFragment();
@@ -79,8 +86,6 @@ public class MessageHolderActivity extends BaseActivity {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-
-        unReadCount = MessageListUtils.getAllMessageUnreadCount();
         badge = new BadgeView(MessageHolderActivity.this);
         initBadge(unReadCount, badge);
     }

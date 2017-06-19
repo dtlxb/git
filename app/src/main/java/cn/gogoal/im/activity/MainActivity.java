@@ -89,6 +89,13 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        unReadCount = MessageListUtils.getAllMessageUnreadCount();
+        badge.setBadgeNumber(unReadCount);
+    }
+
+    @Override
     public void doBusiness(Context mContext) {
 
         setSupportActionBar(mToolbar);
@@ -108,7 +115,6 @@ public class MainActivity extends BaseActivity {
 
         setLiveData();
 
-        unReadCount = MessageListUtils.getAllMessageUnreadCount();
         badge = new BadgeView(MainActivity.this);
         initBadge(unReadCount, badge);
     }
@@ -317,7 +323,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initBadge(int num, BadgeView badge) {
-        badge.setGravityOffset(2, 5, true);
+        badge.setGravityOffset(2, 7, true);
         badge.setShowShadow(false);
         badge.setBadgeGravity(Gravity.TOP | Gravity.END);
         badge.setBadgeTextSize(8, true);

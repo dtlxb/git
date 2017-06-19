@@ -43,6 +43,7 @@ import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.permission.CheckLivePermissionListener;
+import cn.gogoal.im.servise.MessageSaveService;
 import cn.gogoal.im.ui.dialog.NormalAlertDialog;
 
 import static com.alibaba.fastjson.JSON.parseObject;
@@ -385,6 +386,7 @@ public class UserUtils {
             }
         });
         SPTools.clearItem("userInfo");
+        mContext.stopService(new Intent(mContext, MessageSaveService.class));
         mContext.startActivity(new Intent(mContext, TypeLoginActivity.class));
     }
 

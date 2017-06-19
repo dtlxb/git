@@ -102,11 +102,18 @@ public class MineFragment extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        unReadCount = MessageListUtils.getAllMessageUnreadCount();
+        badge.setBadgeNumber(unReadCount);
+    }
+
+    @Override
     public void doBusiness(Context mContext) {
 
         XTitle xTitle = setFragmentTitle("我的");
 
-        XTitle.ImageAction messageAction = new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.home_bottom_tab_icon_message_normal)) {
+        XTitle.ImageAction messageAction = new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.message_dark)) {
             @Override
             public void actionClick(View view) {
                 startActivity(new Intent(getActivity(), MessageHolderActivity.class));
@@ -123,7 +130,6 @@ public class MineFragment extends BaseFragment {
 
         setViewFlipper();
 
-        unReadCount = MessageListUtils.getAllMessageUnreadCount();
         badge = new BadgeView(getActivity());
         initBadge(unReadCount, badge);
     }
@@ -286,7 +292,7 @@ public class MineFragment extends BaseFragment {
     }
 
     private void initBadge(int num, BadgeView badge) {
-        badge.setGravityOffset(10, 5, true);
+        badge.setGravityOffset(10, 7, true);
         badge.setShowShadow(false);
         badge.setBadgeGravity(Gravity.TOP | Gravity.END);
         badge.setBadgeTextSize(8, true);

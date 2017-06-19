@@ -17,6 +17,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -50,6 +51,7 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.MessageHolderActivity;
 import cn.gogoal.im.adapter.TreatAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
@@ -64,6 +66,7 @@ import cn.gogoal.im.bean.stock.TreatData;
 import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
@@ -71,6 +74,7 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.stock.ImageChartFragment;
 import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
+import cn.gogoal.im.ui.Badge.BadgeView;
 import cn.gogoal.im.ui.dialog.StockPopuDialog;
 import cn.gogoal.im.ui.stock.DialogRecyclerView;
 import cn.gogoal.im.ui.stockviews.BitmapChartView;
@@ -274,8 +278,15 @@ public class CopyStockDetailActivity extends BaseActivity {
     @BindView(R.id.iv_show_info_dialog)
     ImageView imageViewShoeDialog;
 
+    @BindView(R.id.iv_message_tag)
+    ImageView ivMessageTag;
+
     @BindArray(R.array.stock_detail_info)
     String[] stockDetailInfos;
+
+    //消息
+    private BadgeView badge;
+    private int unReadCount;
 
     private StockInfoDialogAdapter infoDialogAdapter;
     private List<StockDialogInfo> stockDialogInfoList;
@@ -302,6 +313,18 @@ public class CopyStockDetailActivity extends BaseActivity {
 
         onShow(showItem);
 
+        initChatMessage();
+    }
+
+    private void initChatMessage() {
+        badge = new BadgeView(getActivity());
+        initBadge(unReadCount, badge);
+        ivMessageTag.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CopyStockDetailActivity.this, MessageHolderActivity.class));
+            }
+        });
     }
 
     private void getImageChart() {
@@ -352,7 +375,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         viewPagerNews.setOffscreenPageLimit(3);
         viewPagerNews.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             public Fragment getItem(int position) {
-                return StockNewsMinFragment.getInstance(stockCode,stockName,position);
+                return StockNewsMinFragment.getInstance(stockCode, stockName, position);
             }
 
             public int getCount() {
@@ -435,7 +458,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         }
 
         TabLayout.Tab tabAt = tabChartsTitles.getTabAt(showItem);
-        if (tabAt!=null)tabAt.select();
+        if (tabAt != null) tabAt.select();
 
         //图表头点击事件
         tabChartsTitles.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -936,6 +959,9 @@ public class CopyStockDetailActivity extends BaseActivity {
         height = AppDevice.dp2px(getThisContext(), 190);
         timer = new Timer();
         AutoRefresh(refreshtime);
+
+        unReadCount = MessageListUtils.getAllMessageUnreadCount();
+        badge.setBadgeNumber(unReadCount);
     }
 
     @Override
@@ -1266,7 +1292,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                     if (params.length > 1) {
                         mOHLCData.clear();
                         parseObjects(params[1]);
-                        KChartsBitmap kChartsBitmap = new KChartsBitmap( width, height);
+                        KChartsBitmap kChartsBitmap = new KChartsBitmap(width, height);
                         kChartsBitmap.setShowDetail(false);
                         kChartsBitmap.setLongitudeNum(1);
                         kChartsBitmap.setmSpaceSize(AppDevice.dp2px(CopyStockDetailActivity.this, 3));
@@ -1281,7 +1307,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                     if (params.length > 1) {
                         mOHLCData.clear();
                         parseObjects(params[1]);
-                        KChartsBitmap kChartsBitmap1 = new KChartsBitmap( width, height);
+                        KChartsBitmap kChartsBitmap1 = new KChartsBitmap(width, height);
                         kChartsBitmap1.setShowDetail(false);
                         kChartsBitmap1.setLongitudeNum(1);
                         kChartsBitmap1.setmSpaceSize(AppDevice.dp2px(CopyStockDetailActivity.this, 3));
@@ -1296,7 +1322,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                     if (params.length > 1) {
                         mOHLCData.clear();
                         parseObjects(params[1]);
-                        KChartsBitmap kChartsBitmap2 = new KChartsBitmap( width, height);
+                        KChartsBitmap kChartsBitmap2 = new KChartsBitmap(width, height);
                         kChartsBitmap2.setShowDetail(false);
                         kChartsBitmap2.setLongitudeNum(1);
                         kChartsBitmap2.setmSpaceSize(AppDevice.dp2px(CopyStockDetailActivity.this, 3));
@@ -1804,9 +1830,28 @@ public class CopyStockDetailActivity extends BaseActivity {
         }
     }
 
-    private CopyStockDetailActivity getThisContext(){
+    private void initBadge(int num, BadgeView badge) {
+        badge.setGravityOffset(2, 5, true);
+        badge.setShowShadow(false);
+        badge.setBadgeGravity(Gravity.TOP | Gravity.END);
+        badge.setBadgeTextSize(8, true);
+        badge.bindTarget(ivMessageTag);
+        badge.setBadgeNumber(num);
+    }
+
+    /**
+     * 消息接收
+     */
+    @Subscriber(tag = "IM_Message")
+    public void handleMessage(BaseMessage baseMessage) {
+        unReadCount++;
+        badge.setBadgeNumber(unReadCount);
+    }
+
+    private CopyStockDetailActivity getThisContext() {
         return CopyStockDetailActivity.this;
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
