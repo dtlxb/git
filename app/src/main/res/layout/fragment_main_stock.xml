@@ -10,22 +10,22 @@
         android:id="@+id/layout_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/titlebar_size"
-        android:paddingStart="8dp"
+        android:background="@drawable/shape_line_bottom"
         android:paddingEnd="8dp"
-        android:background="@drawable/shape_line_bottom">
+        android:paddingStart="8dp">
 
         <ImageView
             android:id="@+id/tv_mystock_edit"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
+            android:contentDescription="@null"
             android:gravity="center"
             android:paddingEnd="7dp"
             android:paddingStart="7dp"
             android:src="@mipmap/img_edit"
             android:textColor="@color/textColor_333333"
-            android:textSize="16sp"
-            android:contentDescription="@null" />
+            android:textSize="16sp" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_my_stock"
@@ -45,17 +45,28 @@
             android:contentDescription="@null"
             android:paddingEnd="7dp"
             android:paddingStart="8dp"
-            android:src="@mipmap/img_refresh" />
+            android:src="@mipmap/img_refresh"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_message_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:src="@mipmap/home_bottom_tab_icon_message_normal" />
 
         <ImageView
             android:id="@+id/img_mystock_search"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/iv_message_tag"
             android:contentDescription="@null"
-            android:paddingEnd="8dp"
-            android:paddingStart="7dp"
-            android:layout_toStartOf="@+id/img_mystock_refresh"
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp"
             android:src="@mipmap/img_title_search" />
     </RelativeLayout>
 

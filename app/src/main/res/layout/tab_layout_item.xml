@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
     <LinearLayout
+        android:id="@+id/layout_badge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp">
 
         <ImageView
             android:id="@+id/img_main_tab"
@@ -23,24 +25,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="@dimen/bar_text_size"
-            android:textColor="@color/tab_text_color_selector" />
+            android:textColor="@color/tab_text_color_selector"
+            android:textSize="@dimen/bar_text_size" />
 
     </LinearLayout>
 
-   <!-- <hply.com.niugu.autofixtext.AutofitTextView
-        android:id="@+id/count_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="2dp"
-        android:layout_gravity="top|end"
-        android:background="@drawable/shape_message_tag"
-        android:gravity="center"
-        android:visibility="gone"
-        android:textColor="@android:color/white"
-        android:textSize="12sp"
-        app:minTextSize="8dp"
-        app:sizeToFit="true"/>-->
+    <!-- <hply.com.niugu.autofixtext.AutofitTextView
+         android:id="@+id/count_tv"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="2dp"
+         android:layout_marginEnd="2dp"
+         android:layout_gravity="top|end"
+         android:background="@drawable/shape_message_tag"
+         android:gravity="center"
+         android:visibility="gone"
+         android:textColor="@android:color/white"
+         android:textSize="12sp"
+         app:minTextSize="8dp"
+         app:sizeToFit="true"/>-->
 
 </FrameLayout>
