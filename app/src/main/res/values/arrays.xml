@@ -39,7 +39,6 @@
         <item>行情设置</item>
         <item>专属顾问</item>
         <item>我的二维码</item>
-        <item>我的工具</item>
         <!--<item>邀请好友</item>
         <item>会务</item>
         <item>路演</item>-->
@@ -162,5 +161,15 @@
         <item>跌家数</item>
         <item>平家数</item>
 
+    </string-array>
+
+    <string-array name="info_arrar">
+        <item>自选股</item>
+        <item>7×24</item>
+        <item>要闻</item>
+        <item>朝阳会务</item>
+        <item>私募观点</item>
+        <item>天高视点</item>
+        <item>政策动态</item>
     </string-array>
 </resources>

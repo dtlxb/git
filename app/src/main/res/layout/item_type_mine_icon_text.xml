@@ -4,7 +4,7 @@
     android:id="@+id/item_layout_simple_image_text"
     android:layout_width="match_parent"
     android:layout_height="55dp"
-    android:background="@drawable/selector_normal_write2gray"
+    android:background="@drawable/selector_normal_white2gray"
     android:orientation="horizontal">
 
     <com.hply.roundimage.roundImage.RoundedImageView

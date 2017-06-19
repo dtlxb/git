@@ -45,7 +45,7 @@ public class ContactAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
             }
         }
 
-        holder.itemView.setBackgroundResource(R.drawable.selector_normal_write2gray);
+        holder.itemView.setBackgroundResource(R.drawable.selector_normal_white2gray);
 
         Object avatar = contactBean.getAvatar();
         if (avatar instanceof String) {

@@ -73,7 +73,7 @@ public class MyGroupsActivity extends BaseActivity {
 
     @Override
     public int bindLayout() {
-        return R.layout.layout_normal_list_with_refresh;
+        return R.layout.activity_my_group;
     }
 
     @Override

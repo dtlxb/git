@@ -179,7 +179,7 @@ public class ExpandableLayout extends LinearLayout implements View.OnClickListen
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.view_expand_collapse, this);
         mTvContent = (TextView) findViewById(R.id.expandable_text);
-//        mTvContent.setOnClickListener(this);
+        mTvContent.setOnClickListener(this);
         mTvExpandCollapse = (TextView) findViewById(R.id.expand_collapse);
         setDrawbleAndText();
         mTvExpandCollapse.setOnClickListener(this);

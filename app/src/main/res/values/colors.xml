@@ -121,4 +121,6 @@
     <color name="player_space">#f6f6f6</color>
     <color name="player_base">#f1f1f1</color>
 
+    <!--7*24-->
+    <color name="color7by24">#C8CFDA</color>
 </resources>

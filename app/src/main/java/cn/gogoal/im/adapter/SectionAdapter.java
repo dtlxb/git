@@ -55,6 +55,7 @@ public class SectionAdapter extends BaseSectionQuickAdapter<SectionToolsData, Ba
 
         //initView
         final View itemView = holder.getView(R.id.item_touyan_item);
+        itemView.setBackgroundResource(R.drawable.shape_line_bottom_right);
         ImageView itemIcon = holder.getView(R.id.img_touyan_item_icon);
         final AppCompatImageView itemHot = holder.getView(R.id.img_touyan_operation);
         TextView itemTvDesc = holder.getView(R.id.tv_touyan_item_text);

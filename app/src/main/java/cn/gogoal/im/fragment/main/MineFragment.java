@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterViewFlipper;
@@ -19,7 +20,9 @@ import com.socks.library.KLog;
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindArray;
 import butterknife.BindView;
@@ -34,19 +37,24 @@ import cn.gogoal.im.activity.PhoneContactsActivity;
 import cn.gogoal.im.activity.QrCodeActivity;
 import cn.gogoal.im.activity.SettingActivity;
 import cn.gogoal.im.activity.SettingStockActivity;
+import cn.gogoal.im.activity.ToolsSettingActivity;
+import cn.gogoal.im.adapter.InvestmentResearchAdapter;
 import cn.gogoal.im.adapter.ViewFlipperAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.FlipperData;
 import cn.gogoal.im.bean.MineItem;
+import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.ggqrcode.GGQrCode;
 import cn.gogoal.im.ui.view.XTitle;
+import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
 /**
  * 我的
@@ -85,6 +93,16 @@ public class MineFragment extends BaseFragment {
     @BindArray(R.array.mine_arr)
     String[] mineTitle;
 
+    //===
+    @BindView(R.id.rv_mine_tools)
+    RecyclerView rvMineTools;
+
+    @BindView(R.id.tv_tools_setting)
+    TextView tvToolsFlag;
+
+    private ArrayList<ToolData.Tool> mGridData;
+    private InvestmentResearchAdapter toolsAdapter;
+
     @Override
     public int bindLayout() {
         return R.layout.fragment_mine;
@@ -99,12 +117,73 @@ public class MineFragment extends BaseFragment {
             }
         });
 
+        initools();
         iniheadInfo(mContext);
         initRecycler(mContext);
         initDatas();
         rvMine.setAdapter(mineAdapter);
 
         setViewFlipper();
+    }
+
+    private void initools() {
+        rvMineTools.setNestedScrollingEnabled(false);
+        rvMineTools.setItemAnimator(new NoAlphaItemAnimator());
+        rvMineTools.setLayoutManager(new StaggeredGridLayoutManager(
+                AppDevice.isLowDpi() ? 3 : 4,
+                StaggeredGridLayoutManager.VERTICAL));
+        mGridData = new ArrayList<>();
+        toolsAdapter = new InvestmentResearchAdapter(getActivity(), mGridData);
+        rvMineTools.setAdapter(toolsAdapter);
+        getTouYan();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getTouYan();
+    }
+
+    public void getTouYan() {
+        Map<String, String> map = new HashMap<>();
+        map.put("token", UserUtils.getToken());
+        map.put("isShow", "1");
+
+        new GGOKHTTP(map, GGOKHTTP.GET_USERCOLUMN, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                int code = object.getIntValue("code");
+                if (code == 0) {
+                    showView(true);
+                    mGridData.clear();
+                    List<ToolData.Tool> tools = JSONObject.parseArray(
+                            object.getJSONArray("data").toJSONString(), ToolData.Tool.class);
+                    mGridData.addAll(tools);
+
+                    toolsAdapter.notifyDataSetChanged();
+
+                } else if (code == 1001) {
+                    showView(false);
+                    mGridData.clear();
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+            }
+        }).startGet();
+    }
+
+    private void showView(boolean show) {
+        try {
+            rvMineTools.setVisibility(show ? View.VISIBLE : View.GONE);
+            tvToolsFlag.setVisibility(show ? View.VISIBLE : View.GONE);
+        } catch (Exception e) {
+            e.getMessage();
+        }
     }
 
     private void initRecycler(Context mContext) {
@@ -142,7 +221,7 @@ public class MineFragment extends BaseFragment {
             mineItems.add(new MineItem(MineItem.TYPE_ICON_TEXT_ITEM, iconId, mineTitle[i]));
         }
         mineItems.add(1, new MineItem(MineItem.TYPE_SPACE));
-        mineItems.add(6, new MineItem(MineItem.TYPE_SPACE));
+        mineItems.add(5, new MineItem(MineItem.TYPE_SPACE));
         mineAdapter = new MineAdapter(mineItems);
     }
 
@@ -162,11 +241,21 @@ public class MineFragment extends BaseFragment {
         flipper.setAdapter(flipperAdapter);
     }
 
-    @OnClick({R.id.layout_user_head})
+    @OnClick({R.id.layout_user_head,R.id.tv_tools_setting})
     void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_user_head:
                 startActivity(new Intent(view.getContext(), EditMyInfoActivity.class));
+                break;
+            case R.id.tv_tools_setting:
+                if (mGridData==null || mGridData.isEmpty()) {
+                    UIHelper.toast(view.getContext(),"请先添加工具再编辑");
+                    return;
+                }else {
+                    Intent intent = new Intent(view.getContext(), ToolsSettingActivity.class);
+                    intent.putParcelableArrayListExtra("selected_tools", mGridData);
+                    startActivity(intent);
+                }
                 break;
         }
     }
@@ -182,7 +271,6 @@ public class MineFragment extends BaseFragment {
     void updataUserInfo(String msg) {
         iniheadInfo(getActivity());
     }
-
 
     private class MineAdapter extends BaseMultiItemQuickAdapter<MineItem, BaseViewHolder> {
 
@@ -241,10 +329,6 @@ public class MineFragment extends BaseFragment {
                                     startActivity(intent);
                                     break;
                                 case "专属顾问":
-                                    intent = new Intent(getActivity(), MyAdvisersActivity.class);
-                                    startActivity(intent);
-                                    break;
-                                case "我的工具":
                                     intent = new Intent(getActivity(), MyAdvisersActivity.class);
                                     startActivity(intent);
                                     break;

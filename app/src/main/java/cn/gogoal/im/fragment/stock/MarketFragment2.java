@@ -9,7 +9,6 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONObject;
 import com.hply.alilayout.DelegateAdapter;
 import com.hply.alilayout.VirtualLayoutManager;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -153,8 +152,6 @@ public class MarketFragment2 extends BaseFragment {
         adapters.clear();
         Market marketData = JSONObject.parseObject(responseInfo, StockMarketBean.class).getData();
         List<HangqingBean> hangqingData = marketData.getHangqing();
-
-        KLog.e(JSONObject.toJSONString(hangqingData));
 
         List<HangqingBean> newList=new ArrayList<>();
         for (HangqingBean bean : hangqingData) {

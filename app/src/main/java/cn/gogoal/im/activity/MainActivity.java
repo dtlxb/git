@@ -20,8 +20,6 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
-import org.simple.eventbus.Subscriber;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +31,6 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.BoxScreenAdapter;
 import cn.gogoal.im.adapter.SimpleFragmentPagerAdapter;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.BoxScreenData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
@@ -42,10 +39,9 @@ import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.fragment.main.InvestmentResearchFragment;
+import cn.gogoal.im.fragment.main.InfomationFragment;
 import cn.gogoal.im.fragment.main.LiveListFragment;
 import cn.gogoal.im.fragment.main.MainStockFragment;
-import cn.gogoal.im.fragment.main.MessageFragment;
 import cn.gogoal.im.fragment.main.MineFragment;
 import cn.gogoal.im.ui.Badge.BadgeView;
 
@@ -113,7 +109,8 @@ public class MainActivity extends BaseActivity {
     private void setTab() {
         //MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
         mainStockFragment = new MainStockFragment();                                //TAB2 自选股
-        InvestmentResearchFragment foundFragment = new InvestmentResearchFragment(); // TAB3 投研
+//        InvestmentResearchFragment foundFragment = new InvestmentResearchFragment(); // TAB3 投研
+        InfomationFragment infomationFragment = new InfomationFragment();              //TAb3 资讯
         //TAB4 直播
         liveListFragment = new LiveListFragment();
         final MineFragment mineFragment = new MineFragment();                       // TAB5 我的
@@ -121,7 +118,7 @@ public class MainActivity extends BaseActivity {
         List<Fragment> tabFragments = new ArrayList<>();
         //tabFragments.add(messageFragment);
         tabFragments.add(mainStockFragment);
-        tabFragments.add(foundFragment);
+        tabFragments.add(infomationFragment);
         tabFragments.add(liveListFragment);
         tabFragments.add(mineFragment);
 
@@ -160,7 +157,7 @@ public class MainActivity extends BaseActivity {
                 tab.setCustomView(tabAdapter.getTabView(i));
             }
         }
-        tabMain.getTabAt(0).select();
+        tabMain.getTabAt(1).select();
     }
 
     public void changeItem(int index) {

@@ -10,7 +10,7 @@ import cn.gogoal.im.activity.IMPersonDetailActivity;
 import cn.gogoal.im.activity.MainActivity;
 import cn.gogoal.im.activity.PdfDisplayActivity;
 import cn.gogoal.im.activity.TypeLoginActivity;
-import cn.gogoal.im.activity.stock.StockDetailActivity;
+import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.bean.PdfData;
 
 /**
@@ -23,7 +23,7 @@ public class NormalIntentUtils {
 
     //跳个股详情
     public static void go2StockDetail(Context context, String stockCode, String stockName) {
-        Intent intent = new Intent(context, StockDetailActivity.class);
+        Intent intent = new Intent(context, CopyStockDetailActivity.class);
         intent.putExtra("stock_code", stockCode);
         intent.putExtra("stock_name", stockName);
         context.startActivity(intent);
