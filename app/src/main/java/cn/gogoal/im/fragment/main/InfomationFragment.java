@@ -46,11 +46,13 @@ public class InfomationFragment extends BaseFragment {
                 InfomationTabFragment.INFOMATION_TYPE_SKY_VIEW_POINT,
                 InfomationTabFragment.INFOMATION_TYPE_POLICY_DYNAMICS};
 
+        vpInfomation.setOffscreenPageLimit(7);
+
         vpInfomation.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
                 return position == 0 ? new InfoMyStockTabFragment() : (position == 1 ? new SevenBy24Fragment() :
-                        InfomationTabFragment.newInstance(tabTypes[position-2]));
+                        InfomationTabFragment.newInstance(tabTypes[position - 2]));
             }
 
             @Override

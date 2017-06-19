@@ -73,11 +73,21 @@
             android:id="@+id/btnRefresh"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/iv_message_tag"
             android:contentDescription="@null"
             android:scaleType="centerInside"
             android:src="@drawable/refresh_white" />
+
+        <ImageView
+            android:id="@+id/iv_message_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:src="@mipmap/message_white" />
 
     </RelativeLayout>
 
@@ -323,9 +333,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="68dp"
                         android:layout_margin="9dp"
-                        android:visibility="gone"
                         android:baselineAligned="false"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <RelativeLayout
                             android:layout_width="0dp"
@@ -558,7 +568,7 @@
                             <android.support.v4.view.ViewPager
                                 android:id="@+id/vp_news_"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="260dp" />
 
                             <android.support.design.widget.TabLayout
                                 android:id="@+id/tablayout_chatImg"
@@ -613,15 +623,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="#55000000"
-                            android:visibility="gone"
-                            android:clickable="true"/>
+                            android:clickable="true"
+                            android:visibility="gone" />
 
                         <cn.gogoal.im.ui.stock.DialogRecyclerView
                             android:id="@+id/rv_stock_info"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            android:background="@android:color/white"/>
+                            android:background="@android:color/white"
+                            android:visibility="gone" />
 
                     </FrameLayout>
 
@@ -649,17 +659,17 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/diagnose_stock"
+                android:drawablePadding="3dp"
                 android:gravity="center_vertical"
                 android:paddingTop="7dp"
                 android:text="诊断"
-                android:drawablePadding="3dp"
                 android:textColor="@color/stock_detail_bottom"
                 android:textSize="14sp" />
 
             <View
                 android:layout_width="1px"
                 android:layout_height="match_parent"
-                android:background="@color/stock_detail_bottom"/>
+                android:background="@color/stock_detail_bottom" />
 
             <cn.gogoal.im.ui.view.DrawableCenterTextView
                 android:id="@+id/stock_detail_choose"
@@ -667,10 +677,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/diagnose_stock"
+                android:drawablePadding="3dp"
                 android:gravity="center_vertical"
                 android:paddingTop="7dp"
                 android:text="加自选"
-                android:drawablePadding="3dp"
                 android:textColor="@color/stock_detail_bottom"
                 android:textSize="14sp" />
 

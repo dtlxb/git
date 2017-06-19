@@ -26,6 +26,7 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.IMNewFriendBean;
@@ -65,13 +66,19 @@ public class IMNewFriendActivity extends BaseActivity {
         addType = getIntent().getIntExtra("add_type", 0x01);
         conversationId = getIntent().getStringExtra("conversation_id");
         titleBar = setMyTitle(R.string.title_message, true);
+        boolean icClear = false;
         //未读数清零
         IMMessageBeans.addAll(DataSupport.findAll(IMMessageBean.class));
         for (int i = 0; i < IMMessageBeans.size(); i++) {
             if (IMMessageBeans.get(i).getConversationID().equals(conversationId)) {
                 IMMessageBeans.get(i).setUnReadCounts("0");
                 MessageListUtils.saveMessageInfo(IMMessageBeans.get(i));
+                icClear = true;
             }
+        }
+        if (icClear) {
+            //通知服务器重新获取
+            AppManager.getInstance().sendMessage("Cache_change");
         }
 
         if (addType == 0x01) {
@@ -133,7 +140,7 @@ public class IMNewFriendActivity extends BaseActivity {
                 message = "请求加入" + lcattrsObject.getString("group_name");
             }
             avatar = lcattrsObject.getString("avatar");
-            final String firend_id = lcattrsObject.getString("account_id");
+            final String friend_id = lcattrsObject.getString("account_id");
             nickName = lcattrsObject.getString("nickname");
 
             ImageDisplay.loadImage(IMNewFriendActivity.this, avatar, avatarIv);
@@ -163,10 +170,10 @@ public class IMNewFriendActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     if (addType == 0x01) {
-                        addFriend(mIMNewFriendBean, firend_id, addView);
+                        addFriend(mIMNewFriendBean, friend_id, addView);
                     } else if (addType == 0x02) {
                         List<String> idList = new ArrayList<>();
-                        idList.add(firend_id);
+                        idList.add(friend_id);
                         agreeToGroup(mIMNewFriendBean, idList, addView);
                     }
                     addView.setClickable(false);

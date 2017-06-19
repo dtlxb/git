@@ -54,7 +54,7 @@ public class InfomationData {
          * date : 2017-06-19 08:51:40
          */
 
-        private int id;
+        private String id;
         private String title;
         private String source;
         private String image;
@@ -70,11 +70,11 @@ public class InfomationData {
             this.summary = summary;
         }
 
-        public int getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(String id) {
             this.id = id;
         }
 

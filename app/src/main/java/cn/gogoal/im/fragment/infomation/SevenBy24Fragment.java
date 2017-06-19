@@ -102,6 +102,10 @@ public class SevenBy24Fragment extends BaseFragment {
             xLayout.setStatus(XLayout.Loading);
         }
 
+        if (refreshType==AppConst.REFRESH_TYPE_SWIPEREFRESH){
+            defaultPage=1;//重置回1
+        }
+
         HashMap<String, String> params = new HashMap<>();
         params.put("page", String.valueOf(defaultPage));
         params.put("rows", String.valueOf(15));
@@ -112,11 +116,12 @@ public class SevenBy24Fragment extends BaseFragment {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     xLayout.setStatus(XLayout.Success);
-                    List<Sevenby24.Data> datas =
-                            JSONObject.parseObject(responseInfo, Sevenby24.class).getData();
                     if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
                         dataList.clear();
                     }
+
+                    List<Sevenby24.Data> datas =
+                            JSONObject.parseObject(responseInfo, Sevenby24.class).getData();
                     if (refreshType==AppConst.REFRESH_TYPE_SWIPEREFRESH){
                         UIHelper.toast(getContext(),"7×24数据更新成功");
                     }

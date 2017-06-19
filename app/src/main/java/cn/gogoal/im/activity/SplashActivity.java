@@ -19,6 +19,7 @@ import cn.gogoal.im.common.LitePalDBHelper;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.servise.AppBackServise;
+import cn.gogoal.im.servise.MessageSaveService;
 
 /**
  * author wangjd on 2017/5/16 0016.
@@ -38,6 +39,8 @@ public class SplashActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
+
+        startService(new Intent(SplashActivity.this, MessageSaveService.class));
 
         bineServise();
 

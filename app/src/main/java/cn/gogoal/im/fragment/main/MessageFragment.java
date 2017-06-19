@@ -39,7 +39,6 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.AddFraendListActivity;
 import cn.gogoal.im.activity.ChooseContactActivity;
-import cn.gogoal.im.activity.ContactsActivity;
 import cn.gogoal.im.activity.Face2FaceActivity;
 import cn.gogoal.im.activity.IMNewFriendActivity;
 import cn.gogoal.im.activity.IMSearchLocalActivity;
@@ -142,7 +141,7 @@ public class MessageFragment extends BaseFragment {
         //查找到消息列表按时间排序
         IMMessageBeans.addAll(DataSupport.order("lastTime desc").find(IMMessageBean.class));
         allCount = MessageListUtils.getAllMessageUnreadCount();
-        sendUnreadCount(allCount);
+        //sendUnreadCount(allCount);
 
         listAdapter.notifyDataSetChanged();
 
@@ -210,8 +209,8 @@ public class MessageFragment extends BaseFragment {
                 DialogHelp.getSelectDialog(getActivity(), "", new String[]{"删除聊天"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        allCount = allCount - Integer.parseInt(IMMessageBeans.get(position).getUnReadCounts());
-                        sendUnreadCount(allCount);
+                        //allCount = allCount - Integer.parseInt(IMMessageBeans.get(position).getUnReadCounts());
+                        //sendUnreadCount(allCount);
                         MessageListUtils.removeMessageInfo(IMMessageBeans.get(position).getConversationID());
                         listAdapter.removeItem(position);
                     }
@@ -540,8 +539,7 @@ public class MessageFragment extends BaseFragment {
         Long rightNow = CalendarUtils.getCurrentTime();
         String nickName = "";
         String avatar = "";
-        String friend_id = UserUtils.getMyAccountId();
-        int unreadMessage = 0;
+        int unreadMessage;
 
         JSONObject contentObject = JSON.parseObject(message.getContent());
         JSONObject lcattrsObject = contentObject.getJSONObject("_lcattrs");
@@ -573,12 +571,10 @@ public class MessageFragment extends BaseFragment {
             case AppConst.IM_MESSAGE_TYPE_SQUARE_REQUEST:
                 //申请入群
                 nickName = lcattrsObject.getString("nickname");
-                friend_id = lcattrsObject.getString("group_name");
                 break;
             case AppConst.IM_MESSAGE_TYPE_SQUARE_DETAIL:
                 //群公告,群简介
                 nickName = lcattrsObject.getString("nickname");
-                friend_id = lcattrsObject.getString("group_name");
                 break;
             case AppConst.IM_MESSAGE_TYPE_PUBLIC:
                 //公众号
@@ -599,7 +595,6 @@ public class MessageFragment extends BaseFragment {
                 break;
             case AppConst.IM_CHAT_TYPE_SQUARE:
                 nickName = conversation.getName();
-                //avatar = (String) conversation.getAttribute("avatar");
                 avatar = (String) conversation.getAttribute("avatar");
                 break;
             case AppConst.IM_CHAT_TYPE_SYSTEM:
@@ -645,12 +640,8 @@ public class MessageFragment extends BaseFragment {
             IMMessageBeans.add(imMessageBean);
         }
 
-        //保存
-        IMMessageBean imMessageBean = new IMMessageBean(ConversationId, chatType, message.getTimestamp(),
-                isTheSame ? String.valueOf(unreadMessage) : "1", nickName, friend_id, avatar, JSON.toJSONString(message));
-        MessageListUtils.saveMessageInfo(imMessageBean);
-        allCount++;
-        sendUnreadCount(allCount);
+        //allCount++;
+        //sendUnreadCount(allCount);
         //按照时间排序
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
             Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
@@ -667,7 +658,6 @@ public class MessageFragment extends BaseFragment {
     private void sendUnreadCount(int count) {
         //发送消息更改消息总数
         HashMap<String, Object> countMap = new HashMap<>();
-        countMap.put("index", 0);
         countMap.put("number", count);
         BaseMessage countMessage = new BaseMessage("message_count", countMap);
         AppManager.getInstance().sendMessage("correct_allmessage_count", countMessage);

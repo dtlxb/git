@@ -13,12 +13,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.socks.library.KLog;
+
 import org.simple.eventbus.Subscriber;
+
+import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.fragment.ContactsFragment;
 import cn.gogoal.im.fragment.main.MessageFragment;
 import cn.gogoal.im.ui.Badge.BadgeView;
@@ -36,14 +41,22 @@ public class MessageHolderActivity extends BaseActivity {
     @BindView(R.id.vp_chat_tab)
     UnSlidingViewPager vpChatTab;
 
-    private BadgeView badge;
     private MessageFragment messageFragment;
     private ContactsFragment contactsFragment;
     private String[] chatTabs = {"消息", "通讯录"};
+    private BadgeView badge;
+    private int unReadCount;
 
     @Override
     public int bindLayout() {
         return R.layout.activity_message_holder;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        unReadCount = MessageListUtils.getAllMessageUnreadCount();
+        badge.setBadgeNumber(unReadCount);
     }
 
     @Override
@@ -73,7 +86,8 @@ public class MessageHolderActivity extends BaseActivity {
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-
+        badge = new BadgeView(MessageHolderActivity.this);
+        initBadge(unReadCount, badge);
     }
 
 
@@ -121,41 +135,21 @@ public class MessageHolderActivity extends BaseActivity {
         }
     }
 
-    @Subscriber(tag = "correct_allmessage_count")
-    public void setBadgeViewNum(BaseMessage<Integer> message) {
-        int index = message.getOthers().get("index");
-        int num = message.getOthers().get("number");
-
-        initBadge(index, num);
-
-        if (index >= 0 && index < chatTabs.length) {
-            if (num > 0) {
-                badge.setBadgeNumber(num);
-            } else {
-                badge.hide(false);
-            }
-        }
+    private void initBadge(int num, BadgeView badge) {
+        badge.setGravityOffset(0, 0, true);
+        badge.setShowShadow(false);
+        badge.setBadgeGravity(Gravity.TOP | Gravity.END);
+        badge.setBadgeTextSize(12, true);
+        badge.bindTarget(tabChat.getTabAt(0).getCustomView().findViewById(R.id.layout_badge));
+        badge.setBadgeNumber(num);
     }
 
-    private void initBadge(int index, int num) {
-        if (badge != null) {
-            if (num == 0) {
-                badge.hide(false);
-                //TODO
-            } else {
-                badge.bindTarget(tabChat.getTabAt(index).getCustomView().findViewById(R.id.layout_badge));
-                String uriStr = "android.resource://" + this.getPackageName() + "/" + R.raw.ding;
-//                VoiceManager.getInstance(MainActivity.this)
-//                        .startPlay(Uri.parse(uriStr));
-            }
-        } else {
-            badge = new BadgeView(getActivity());
-            badge.setGravityOffset(0, 0, true);
-            badge.setShowShadow(false);
-            badge.setBadgeGravity(Gravity.TOP | Gravity.END);
-            badge.setBadgeTextSize(12, true);
-            badge.setBadgePadding(5, true);
-            badge.bindTarget(tabChat.getTabAt(index).getCustomView().findViewById(R.id.layout_badge));
-        }
+    /**
+     * 消息接收
+     */
+    @Subscriber(tag = "IM_Message")
+    public void handleMessage(BaseMessage baseMessage) {
+        unReadCount++;
+        badge.setBadgeNumber(unReadCount);
     }
 }

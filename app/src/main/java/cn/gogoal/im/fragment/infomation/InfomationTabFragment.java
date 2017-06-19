@@ -115,7 +115,6 @@ public class InfomationTabFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 getInfomation(AppConst.REFRESH_TYPE_SWIPEREFRESH, tabType);
-                KLog.e(defaultPage);
             }
         });
 
@@ -156,6 +155,9 @@ public class InfomationTabFragment extends BaseFragment {
                 refreshType == AppConst.REFRESH_TYPE_RELOAD) {
             xLayout.setStatus(XLayout.Loading);
         }
+        if (refreshType==AppConst.REFRESH_TYPE_SWIPEREFRESH){
+            defaultPage=1;
+        }
 
         HashMap<String, String> params = new HashMap<>();
 //        params.put("end_time", CalendarUtils.getCurrentTime("yyyy-MM-dd HH:mm:ss"));
@@ -170,11 +172,12 @@ public class InfomationTabFragment extends BaseFragment {
 
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
-                    List<InfomationData.Data> datas =
-                            JSONObject.parseObject(responseInfo, InfomationData.class).getData();
-                    if (refreshType == AppConst.REFRESH_TYPE_FIRST) {
+                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
                         dataList.clear();
                     }
+
+                    List<InfomationData.Data> datas =
+                            JSONObject.parseObject(responseInfo, InfomationData.class).getData();
 
                     dataList.addAll(datas);
                     adapter.setEnableLoadMore(true);

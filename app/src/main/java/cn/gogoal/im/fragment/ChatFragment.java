@@ -50,6 +50,7 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ChooseContactActivity;
 import cn.gogoal.im.adapter.IMChatAdapter;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
@@ -534,6 +535,8 @@ public class ChatFragment extends BaseFragment {
                     "", imConversation.getAttribute("avatar") != null ? (String) imConversation.getAttribute("avatar") : "", JSON.toJSONString(message));
         }
         MessageListUtils.saveMessageInfo(imMessageBean);
+        //通知服务器重新获取
+        AppManager.getInstance().sendMessage("Cache_change");
     }
 
     private void sendStockMessage(String stockCode, String stockName) {
@@ -999,7 +1002,7 @@ public class ChatFragment extends BaseFragment {
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
                 refreshRecyclerView(message, isVisBottom(message_recycler));
                 //此处头像，昵称日后有数据再改
-                IMMessageBean imMessageBean = null;
+                /*IMMessageBean imMessageBean = null;
                 if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                     imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(),
                             "0", userBean.getNickname(), String.valueOf(userBean.getFriend_id()), String.valueOf(userBean.getAvatar()), JSON.toJSONString(message));
@@ -1018,8 +1021,7 @@ public class ChatFragment extends BaseFragment {
                             "0", conversation.getName(), "", "", JSON.toJSONString(message));
                 }
 
-                MessageListUtils.saveMessageInfo(imMessageBean);
-
+                MessageListUtils.saveMessageInfo(imMessageBean);*/
             }
         }
     }

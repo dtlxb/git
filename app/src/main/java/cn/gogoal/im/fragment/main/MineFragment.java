@@ -8,9 +8,11 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterViewFlipper;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -43,16 +45,19 @@ import cn.gogoal.im.adapter.ViewFlipperAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.FlipperData;
 import cn.gogoal.im.bean.MineItem;
 import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.ggqrcode.GGQrCode;
+import cn.gogoal.im.ui.Badge.BadgeView;
 import cn.gogoal.im.ui.view.XTitle;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
@@ -85,6 +90,8 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.layout_user_head)
     ViewGroup layoutHead;
 
+    private ImageView ivMessageTag;
+
     private MineAdapter mineAdapter;
 
     public MineFragment() {
@@ -102,6 +109,9 @@ public class MineFragment extends BaseFragment {
 
     private ArrayList<ToolData.Tool> mGridData;
     private InvestmentResearchAdapter toolsAdapter;
+    //消息
+    private BadgeView badge;
+    private int unReadCount;
 
     @Override
     public int bindLayout() {
@@ -109,13 +119,27 @@ public class MineFragment extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        unReadCount = MessageListUtils.getAllMessageUnreadCount();
+        badge.setBadgeNumber(unReadCount);
+        getTouYan();
+    }
+
+    @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle("我的").addAction(new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.home_bottom_tab_icon_message_normal)) {
+
+        XTitle xTitle = setFragmentTitle("我的");
+
+        XTitle.ImageAction messageAction = new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.message_dark)) {
             @Override
             public void actionClick(View view) {
                 startActivity(new Intent(getActivity(), MessageHolderActivity.class));
             }
-        });
+        };
+
+        xTitle.addAction(messageAction);
+        ivMessageTag = (ImageView) xTitle.getViewByAction(messageAction);
 
         initools();
         iniheadInfo(mContext);
@@ -124,6 +148,9 @@ public class MineFragment extends BaseFragment {
         rvMine.setAdapter(mineAdapter);
 
         setViewFlipper();
+
+        badge = new BadgeView(getActivity());
+        initBadge(unReadCount, badge);
     }
 
     private void initools() {
@@ -138,12 +165,6 @@ public class MineFragment extends BaseFragment {
         getTouYan();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getTouYan();
-    }
-
     public void getTouYan() {
         Map<String, String> map = new HashMap<>();
         map.put("token", UserUtils.getToken());
@@ -155,7 +176,6 @@ public class MineFragment extends BaseFragment {
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 int code = object.getIntValue("code");
                 if (code == 0) {
-                    showView(true);
                     mGridData.clear();
                     List<ToolData.Tool> tools = JSONObject.parseArray(
                             object.getJSONArray("data").toJSONString(), ToolData.Tool.class);
@@ -164,8 +184,10 @@ public class MineFragment extends BaseFragment {
                     toolsAdapter.notifyDataSetChanged();
 
                 } else if (code == 1001) {
-                    showView(false);
                     mGridData.clear();
+                    ToolData.Tool moreTools=new ToolData.Tool();
+                    moreTools.setSimulatedArg(false);
+                    mGridData.add(new ToolData.Tool());
                 } else {
 
                 }
@@ -177,14 +199,14 @@ public class MineFragment extends BaseFragment {
         }).startGet();
     }
 
-    private void showView(boolean show) {
-        try {
-            rvMineTools.setVisibility(show ? View.VISIBLE : View.GONE);
-            tvToolsFlag.setVisibility(show ? View.VISIBLE : View.GONE);
-        } catch (Exception e) {
-            e.getMessage();
-        }
-    }
+//    private void showView(boolean show) {
+//        try {
+//            rvMineTools.setVisibility(show ? View.VISIBLE : View.GONE);
+//            tvToolsFlag.setVisibility(show ? View.VISIBLE : View.GONE);
+//        } catch (Exception e) {
+//            e.getMessage();
+//        }
+//    }
 
     private void initRecycler(Context mContext) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
@@ -214,14 +236,12 @@ public class MineFragment extends BaseFragment {
 
     private void initDatas() {
         List<MineItem> mineItems = new ArrayList<>();
-//        mineItems.add(new MineItem(MineItem.TYPE_HEAD));
-//        mineItems.add(new MineItem(MineItem.TYPE_SPACE));
         for (int i = 0; i < mineTitle.length; i++) {
             int iconId = getResources().getIdentifier("img_mine_item_" + i, "mipmap", getActivity().getPackageName());
             mineItems.add(new MineItem(MineItem.TYPE_ICON_TEXT_ITEM, iconId, mineTitle[i]));
         }
         mineItems.add(1, new MineItem(MineItem.TYPE_SPACE));
-        mineItems.add(5, new MineItem(MineItem.TYPE_SPACE));
+        mineItems.add(4, new MineItem(MineItem.TYPE_SPACE));
         mineAdapter = new MineAdapter(mineItems);
     }
 
@@ -354,6 +374,24 @@ public class MineFragment extends BaseFragment {
                 }
             });
         }
+    }
+
+    private void initBadge(int num, BadgeView badge) {
+        badge.setGravityOffset(10, 7, true);
+        badge.setShowShadow(false);
+        badge.setBadgeGravity(Gravity.TOP | Gravity.END);
+        badge.setBadgeTextSize(8, true);
+        badge.bindTarget(ivMessageTag);
+        badge.setBadgeNumber(num);
+    }
+
+    /**
+     * 消息接收
+     */
+    @Subscriber(tag = "IM_Message")
+    public void handleMessage(BaseMessage baseMessage) {
+        unReadCount++;
+        badge.setBadgeNumber(unReadCount);
     }
 
 }

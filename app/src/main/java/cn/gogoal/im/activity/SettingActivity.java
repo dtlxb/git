@@ -146,6 +146,7 @@ public class SettingActivity extends BaseActivity {
                     holder.setVisible(R.id.view_divider, !(data.getItemValue().equalsIgnoreCase("账号与安全")
                             || data.getItemValue().equalsIgnoreCase("涨跌显示设置")
                             || data.getItemValue().equalsIgnoreCase("服务协议")
+                            || data.getItemValue().equalsIgnoreCase("清除缓存")
                     ));
 
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
