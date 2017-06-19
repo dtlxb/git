@@ -59,19 +59,19 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
         ImageView imageView = (ImageView) view.findViewById(R.id.img_main_tab);
         switch (position) {
             case 0:
-                imageView.setImageResource(R.drawable.selector_icon_main_tab_message);
-                break;
-            case 1:
+                //imageView.setImageResource(R.drawable.selector_icon_main_tab_message);
                 imageView.setImageResource(R.drawable.selector_icon_main_tab_my_stock);
                 break;
-            case 2:
+            case 1:
                 imageView.setImageResource(R.drawable.selector_icon_main_tab_tools);
                 break;
-            case 3:
+            case 2:
                 imageView.setImageResource(R.drawable.selector_icon_main_tab_social_contact);
                 break;
-            case 4:
+            case 3:
                 imageView.setImageResource(R.drawable.selector_icon_main_tab_mine);
+                break;
+            default:
                 break;
         }
 

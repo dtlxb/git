@@ -77,7 +77,7 @@ import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_LOCATION_PERM;
 /**
  * 消息
  */
-public class MessageFragment extends BaseFragment{
+public class MessageFragment extends BaseFragment {
 
     @BindView(R.id.tv_to_search)
     DrawableCenterTextView tv_to_search;
@@ -85,14 +85,14 @@ public class MessageFragment extends BaseFragment{
     @BindView(R.id.recyclerView)
     RecyclerView message_recycler;
 
-    @BindView(R.id.iv_go_contacts)
-    ImageView goContacts;
-
     @BindView(R.id.iv_add_person)
     ImageView addPerson;
 
     @BindView(R.id.tv_xtitle)
     TextView xTitle;
+
+    @BindView(R.id.iv_go_back)
+    ImageView ivGoBack;
 
     private List<IMMessageBean> IMMessageBeans;
 
@@ -120,10 +120,11 @@ public class MessageFragment extends BaseFragment{
     }
 
     private void initTitle() {
-        goContacts.setOnClickListener(new View.OnClickListener() {
+        //返回
+        ivGoBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), ContactsActivity.class));
+                getActivity().finish();
             }
         });
         addPerson.setOnClickListener(new View.OnClickListener() {

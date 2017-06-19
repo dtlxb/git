@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="main_tab">
-        <item>消息</item>
+        <!--<item>消息</item>-->
         <item>自选</item>
         <item>工具箱</item>
         <item>直播</item>

@@ -18,6 +18,7 @@ import java.util.Map;
 
 import cn.gogoal.im.activity.copy.MessageHandlerList;
 import cn.gogoal.im.activity.copy.StockDetailChartsActivity;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.common.StockUtils;
 import hply.com.niugu.ColorUtils;
 import hply.com.niugu.ConstantUtils;
@@ -106,10 +107,10 @@ public class LandScapeChartView extends View {
         float priceY = (float) (uperBottom - (StringUtils.getDouble(fenshiData.getPrice()) + uperHalfHigh - initialWeightedIndex)
                 * uperRate);
         float priceX;
-        if (isTimes){
+        if (isTimes) {
             priceX = dataSpacing * lastPoint;
-        }else {
-            priceX=dataSpacing*(timesList.size() - 1);
+        } else {
+            priceX = dataSpacing * (timesList.size() - 1);
         }
         canvas.drawCircle(priceX + margin, priceY, in_r, circlepaint);
         circlepaint.setColor(outCircleColor);
@@ -142,15 +143,15 @@ public class LandScapeChartView extends View {
                         fenshiData = timesList.get(0);
                         x = margin;
                     }
-                    if (isTimes){
+                    if (isTimes) {
                         if (touchX >= lastPoint * dataSpacing) {
                             fenshiData = timesList.get(timesList.size() - 1);
                             x = lastPoint * dataSpacing + margin;
                         }
-                    }else {
-                        if (touchX >= dataSpacing*(timesList.size() - 1)) {
+                    } else {
+                        if (touchX >= dataSpacing * (timesList.size() - 1)) {
                             fenshiData = timesList.get(timesList.size() - 1);
-                            x = dataSpacing*(timesList.size() - 1) + margin;
+                            x = dataSpacing * (timesList.size() - 1) + margin;
                         }
                     }
                 }
@@ -295,18 +296,24 @@ public class LandScapeChartView extends View {
                 postInvalidate();
                 break;
             case MotionEvent.ACTION_UP:
-                MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISS_XCHART_DATA, 0);
+                //MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISS_XCHART_DATA, 0);
+                sendDissChartMsg();
                 showDetail = false;
                 postInvalidate();
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_OUTSIDE:
                 showDetail = false;
-                MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISS_XCHART_DATA, 0);
+                //MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISS_XCHART_DATA, 0);
+                sendDissChartMsg();
                 break;
             default:
                 break;
         }
         return true;
+    }
+
+    private void sendDissChartMsg() {
+        AppManager.getInstance().sendMessage("Dismiss_Chart");
     }
 
     public void setData(TimesFivesBitmap timesFivesBitmap, int stock_charge_type) {

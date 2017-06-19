@@ -1246,7 +1246,6 @@ public class CopyStockDetailActivity extends BaseActivity {
         } catch (Exception e) {
             tv.setText("--");
         }
-        ;
     }
 
     //股票状态

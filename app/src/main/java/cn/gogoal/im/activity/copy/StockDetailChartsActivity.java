@@ -149,8 +149,6 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
     private FiveDayFragment fiveDayFragment;
     private KChartsFragment dayK, weekK, monthK;
 
-    private Handler myHandler;
-
     //复权类型 0 不复权  1 前复权 2 后复权
     private Integer authority_type;
 
@@ -262,8 +260,6 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
 
         stockType = getIntent().getIntExtra("stockType", 0);
         stock_charge_type = getIntent().getIntExtra("stock_charge_type", 1);
-
-        KLog.e(price);
     }
 
     private void addFragments() {
@@ -329,8 +325,6 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
     @Override
     protected void onStart() {
         super.onStart();
-        myHandler = new MyHandler();
-        MessageHandlerList.addHandler(StockDetailChartsActivity.class.getName(), myHandler);
         showProgressbar(true);
         initData();
         selectItem(showItem);
@@ -346,7 +340,6 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
     protected void onDestroy() {
         fragmentList.clear();
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
     private void putInBundle(Bundle bundle) {
@@ -489,23 +482,6 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
         this.showItem = position;
 
         addFragmentToStack(position);
-    }
-
-    private class MyHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case ConstantUtils.DISS_XCHART_DATA:
-                    break;
-                case ConstantUtils.DISS_PROGRESSBAR:
-                    break;
-                case ConstantUtils.XCHART_FLING:
-                    break;
-                case ConstantUtils.REFRESH_KLINE_DATA:
-                    break;
-            }
-            super.handleMessage(msg);
-        }
     }
 
     /**
@@ -660,24 +636,24 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
         switch (chartsType) {
             case KChartsView.KLINE_TYPE_DAY:
                 dayK.showLoadingDialog();
-                dayK.GetKLineDataPage(false, false);
+                dayK.GetKLineDataPage(false, false, false);
                 break;
             case KChartsView.KLINE_TYPE_WEEK:
                 weekK.showLoadingDialog();
-                weekK.GetKLineDataPage(false, false);
+                weekK.GetKLineDataPage(false, false, false);
                 break;
             case KChartsView.KLINE_TYPE_MONTH:
                 monthK.showLoadingDialog();
-                monthK.GetKLineDataPage(false, false);
+                monthK.GetKLineDataPage(false, false, false);
                 break;
         }
     }
 
     /**
-     * K线滑动加载
+     * 松手交易点信息消失
      */
-    @Subscriber(tag = "Dismiss_chart")
-    public void kchartMoveDismiss(BaseMessage message) {
+    @Subscriber(tag = "Dismiss_Chart")
+    public void kchartDataDismiss(String code) {
         kline_detail.setVisibility(View.INVISIBLE);
         times_detail.setVisibility(View.INVISIBLE);
         fragment_stock_detail.setVisibility(View.VISIBLE);
@@ -686,8 +662,8 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
     /**
      * K线滑动加载
      */
-    @Subscriber(tag = "Dismiss_chart")
-    public void chartProgressDismiss(BaseMessage message) {
+    @Subscriber(tag = "Diss_Progressbar")
+    public void chartProgressDismiss(String code) {
         showProgressbar(false);
     }
 
