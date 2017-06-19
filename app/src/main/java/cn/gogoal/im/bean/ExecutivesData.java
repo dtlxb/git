@@ -23,7 +23,8 @@ public class ExecutivesData {
     private String name;
     private String brief;
 
-    public ExecutivesData(String degree, String duty) {
+    public ExecutivesData(String name, String degree, String duty) {
+        this.name = name;
         this.degree = degree;
         this.duty = duty;
     }

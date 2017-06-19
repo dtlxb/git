@@ -2,24 +2,29 @@ package cn.gogoal.im.fragment.stock.stockften;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.hply.alilayout.DelegateAdapter;
+import com.hply.alilayout.VirtualLayoutManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.AnalysisLeftAdapter;
-import cn.gogoal.im.adapter.ExecutivesAdapter;
+import cn.gogoal.im.adapter.CurrencyTitleAdapter;
+import cn.gogoal.im.adapter.ExecutivesListAdapter;
+import cn.gogoal.im.adapter.HoldingChangeAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ExecutivesData;
-import cn.gogoal.im.common.FileUtil;
+import cn.gogoal.im.bean.HoldingData;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.ui.copy.InnerListView;
 
 /**
  * Created by dave.
@@ -28,16 +33,15 @@ import cn.gogoal.im.ui.copy.InnerListView;
  */
 public class CompanyExecutivesFragment extends BaseFragment {
 
-    @BindView(R.id.lsv_left)
-    InnerListView lsvLeft;
-    @BindView(R.id.lsv_right)
-    InnerListView lsvRight;
+    @BindView(R.id.rv_executives)
+    RecyclerView rv_executives;
 
     private String stockCode;
     private String stockName;
-
-    private AnalysisLeftAdapter leftAdapter;
-    private ExecutivesAdapter rightAdapter;
+    //缓存池
+    private RecyclerView.RecycledViewPool viewPool;
+    private DelegateAdapter delegateAdapter;
+    private LinkedList<DelegateAdapter.Adapter> adapters;
 
     public static CompanyExecutivesFragment getInstance(String stockCode, String stockName) {
         CompanyExecutivesFragment fragment = new CompanyExecutivesFragment();
@@ -59,6 +63,21 @@ public class CompanyExecutivesFragment extends BaseFragment {
         stockCode = getArguments().getString("stockCode");
         stockName = getArguments().getString("stockName");
 
+        final VirtualLayoutManager layoutManager = new VirtualLayoutManager(getActivity());
+        rv_executives.setLayoutManager(layoutManager);
+        layoutManager.setAutoMeasureEnabled(true);
+
+        viewPool = new RecyclerView.RecycledViewPool();
+        rv_executives.setRecycledViewPool(viewPool);
+        viewPool.setMaxRecycledViews(0, 20);
+
+        delegateAdapter = new DelegateAdapter(layoutManager, false);
+        adapters = new LinkedList<>();
+
+        rv_executives.setAdapter(delegateAdapter);
+        rv_executives.setHasFixedSize(true);
+        rv_executives.setNestedScrollingEnabled(false);
+
         getExecutivesData();
     }
 
@@ -71,12 +90,11 @@ public class CompanyExecutivesFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                FileUtil.writeRequestResponse(responseInfo, "F10DATA.TXT");
+                //FileUtil.writeRequestResponse(responseInfo, "F10DATA.TXT");
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
-                    setLeftListData(data.getJSONArray("senior_info_list"));
-                    setRightListData(data.getJSONArray("senior_info_list"));
+                    setListData(data);
                 }
             }
 
@@ -88,34 +106,33 @@ public class CompanyExecutivesFragment extends BaseFragment {
         new GGOKHTTP(param, GGOKHTTP.COMPANY_SENIOR, ggHttpInterface).startGet();
     }
 
-    /**
-     * 设置左边列表数据
-     */
-    private void setLeftListData(JSONArray senior_info_list) {
-        ArrayList<String> titleList = new ArrayList<>();
+    private void setListData(JSONObject data) {
+        //悬浮头1
+        adapters.add(new CurrencyTitleAdapter(getActivity(), "高管列表"));
 
-        titleList.add("高管列表");
+        JSONArray senior_info_list = data.getJSONArray("senior_info_list");
+        List<ExecutivesData> executivesList = new ArrayList<>();
+        executivesList.add(new ExecutivesData("姓名", "学历", "职务"));
         for (int i = 0; i < senior_info_list.size(); i++) {
-            titleList.add(senior_info_list.getJSONObject(i).getString("name"));
-        }
-
-        leftAdapter = new AnalysisLeftAdapter(getActivity(), titleList);
-        lsvLeft.setAdapter(leftAdapter);
-    }
-
-    /**
-     * 设置右边列表数据
-     */
-    private void setRightListData(JSONArray senior_info_list) {
-        ArrayList<ExecutivesData> contList = new ArrayList<>();
-        contList.add(new ExecutivesData("学历", "职务"));
-
-        for (int i = 0; i < senior_info_list.size(); i++) {
-            contList.add(new ExecutivesData(senior_info_list.getJSONObject(i).getString("degree"),
+            executivesList.add(new ExecutivesData(senior_info_list.getJSONObject(i).getString("name"),
+                    senior_info_list.getJSONObject(i).getString("degree"),
                     senior_info_list.getJSONObject(i).getString("duty")));
         }
+        adapters.add(new ExecutivesListAdapter(getActivity(), executivesList));
 
-        rightAdapter = new ExecutivesAdapter(getContext(), contList);
-        lsvRight.setAdapter(rightAdapter);
+        //悬浮头2
+        adapters.add(new CurrencyTitleAdapter(getActivity(), "高管持股变动"));
+
+        JSONArray senior_stock_list = data.getJSONArray("senior_stock_list");
+        List<HoldingData> HoldingList = new ArrayList<>();
+        HoldingList.add(new HoldingData("日期", "变动人", "变动数量(股)"));
+        for (int i = 0; i < senior_stock_list.size(); i++) {
+            HoldingList.add(new HoldingData(senior_stock_list.getJSONObject(i).getString("date"),
+                    senior_stock_list.getJSONObject(i).getString("name"),
+                    senior_stock_list.getJSONObject(i).getString("change_stock")));
+        }
+        adapters.add(new HoldingChangeAdapter(getActivity(), HoldingList));
+
+        delegateAdapter.setAdapters(adapters);
     }
 }
