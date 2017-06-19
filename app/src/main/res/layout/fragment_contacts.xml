@@ -1,0 +1,90 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context="cn.gogoal.im.activity.ContactsActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/titlebar_size"
+        android:background="#fafafa"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_go_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:src="@mipmap/image_title_back_0" />
+
+        <TextView
+            android:id="@+id/tv_xtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="通讯录"
+            android:textColor="@color/textColor_333333"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+    <cn.gogoal.im.ui.view.DrawableCenterTextView
+        android:id="@+id/tv_to_search"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_search_activity_edit"
+        android:drawableLeft="@mipmap/img_search"
+        android:drawablePadding="5dp"
+        android:gravity="center_vertical"
+        android:text="搜索"
+        android:textColor="@color/colorXLayout"
+        android:textSize="14sp"
+        app:layout_scrollFlags="scroll|enterAlways" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/normal_line_color" />
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_contacts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <cn.gogoal.im.ui.index.IndexBar
+            android:id="@+id/index_bar"
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end" />
+
+        <TextView
+            android:id="@+id/tv_constacts_flag"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center"
+            android:background="@drawable/shape_index_bar_bg"
+            android:gravity="center"
+            android:text="W"
+            android:textColor="@android:color/white"
+            android:textSize="40sp"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+</LinearLayout>

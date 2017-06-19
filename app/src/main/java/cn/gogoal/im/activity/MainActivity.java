@@ -1,6 +1,7 @@
 package cn.gogoal.im.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -13,6 +14,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
@@ -57,6 +59,9 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.cb_show_live_list)
     AppCompatCheckBox acb;
+
+    @BindView(R.id.iv_message_tag)
+    ImageView ivMessageTag;
 
     @BindView(R.id.vp_main)
     ViewPager vpMain;
@@ -106,7 +111,7 @@ public class MainActivity extends BaseActivity {
 
     //底部tab
     private void setTab() {
-        MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
+        //MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
         mainStockFragment = new MainStockFragment();                                //TAB2 自选股
         InvestmentResearchFragment foundFragment = new InvestmentResearchFragment(); // TAB3 投研
         //TAB4 直播
@@ -114,7 +119,7 @@ public class MainActivity extends BaseActivity {
         final MineFragment mineFragment = new MineFragment();                       // TAB5 我的
 
         List<Fragment> tabFragments = new ArrayList<>();
-        tabFragments.add(messageFragment);
+        //tabFragments.add(messageFragment);
         tabFragments.add(mainStockFragment);
         tabFragments.add(foundFragment);
         tabFragments.add(liveListFragment);
@@ -126,10 +131,18 @@ public class MainActivity extends BaseActivity {
         vpMain.setAdapter(tabAdapter);
         vpMain.setOffscreenPageLimit(mainTabArray.length - 1);
 
+        //进入聊天
+        ivMessageTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, MessageHolderActivity.class));
+            }
+        });
+
         tabMain.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                mToolbar.setVisibility(tab.getPosition() == 3 ? View.VISIBLE : View.GONE);
+                mToolbar.setVisibility(tab.getPosition() == 2 ? View.VISIBLE : View.GONE);
             }
 
             public void onTabUnselected(TabLayout.Tab tab) {
@@ -147,7 +160,7 @@ public class MainActivity extends BaseActivity {
                 tab.setCustomView(tabAdapter.getTabView(i));
             }
         }
-        tabMain.getTabAt(2).select();
+        tabMain.getTabAt(0).select();
     }
 
     public void changeItem(int index) {
@@ -299,7 +312,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    @Subscriber(tag = "correct_allmessage_count")
+    /*@Subscriber(tag = "correct_allmessage_count")
     public void setBadgeViewNum(BaseMessage<Integer> message) {
         int index = message.getOthers().get("index");
         int num = message.getOthers().get("number");
@@ -338,6 +351,6 @@ public class MainActivity extends BaseActivity {
             badge = new BadgeView(MainActivity.this);
             badge.bindTarget(tabMain.getTabAt(index).getCustomView());
         }
-    }
+    }*/
 
 }

@@ -68,7 +68,7 @@ public class SquareChatRoomActivity extends BaseActivity {
         xTitle.setLeftClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SquareChatRoomActivity.this, MainActivity.class);
+                Intent intent = new Intent(SquareChatRoomActivity.this, MessageHolderActivity.class);
                 startActivity(intent);
             }
         });

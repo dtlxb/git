@@ -20,6 +20,7 @@ import org.simple.eventbus.Subscriber;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.MessageHolderActivity;
 import cn.gogoal.im.activity.Test2Activity;
 import cn.gogoal.im.activity.copy.StockSearchActivity;
 import cn.gogoal.im.base.BaseFragment;
@@ -52,7 +53,10 @@ public class MainStockFragment extends BaseFragment {
     TabLayout tabMyStock;
 
     @BindView(img_mystock_refresh)
-    ImageView imgMystockRefresh;
+    ImageView imgMyStockRefresh;
+
+    @BindView(R.id.iv_message_tag)
+    ImageView ivMessageTag;
 
     @BindView(R.id.layout_title)
     RelativeLayout layoutTitle;
@@ -116,7 +120,7 @@ public class MainStockFragment extends BaseFragment {
         refreshAll(AppConst.REFRESH_TYPE_FIRST);
 
         //test
-        imgMystockRefresh.setOnLongClickListener(new View.OnLongClickListener() {
+        imgMyStockRefresh.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 startActivity(new Intent(mContext, Test2Activity.class));
@@ -133,14 +137,17 @@ public class MainStockFragment extends BaseFragment {
         }
     }
 
-    @OnClick({R.id.img_mystock_search, R.id.img_mystock_refresh})
+    @OnClick({R.id.img_mystock_search, R.id.img_mystock_refresh, R.id.iv_message_tag})
     void click(View view) {
         switch (view.getId()) {
             case R.id.img_mystock_search:
-                startActivity(new Intent(view.getContext(), StockSearchActivity.class));
+                startActivity(new Intent(getActivity(), StockSearchActivity.class));
                 break;
             case R.id.img_mystock_refresh:
                 refreshAll(AppConst.REFRESH_TYPE_PARENT_BUTTON);
+                break;
+            case R.id.iv_message_tag:
+                startActivity(new Intent(getActivity(), MessageHolderActivity.class));
                 break;
         }
     }
@@ -185,23 +192,23 @@ public class MainStockFragment extends BaseFragment {
         if (animation != null) {
             AnimationUtils.getInstance().cancleLoadingAnime(
                     animation,
-                    imgMystockRefresh,
+                    imgMyStockRefresh,
                     R.mipmap.img_refresh);
         } else {
-            imgMystockRefresh.clearAnimation();
-            imgMystockRefresh.setImageResource(R.mipmap.img_refresh);
+            imgMyStockRefresh.clearAnimation();
+            imgMyStockRefresh.setImageResource(R.mipmap.img_refresh);
         }
-        imgMystockRefresh.setEnabled(true);
-        imgMystockRefresh.setClickable(true);
+        imgMyStockRefresh.setEnabled(true);
+        imgMyStockRefresh.setClickable(true);
     }
 
     @Subscriber(tag = "market_start_animation_refresh")
     public void startAnimation(String msg) {
         animation = AnimationUtils.getInstance().setLoadingAnime(
-                imgMystockRefresh, R.mipmap.img_loading_refresh);
+                imgMyStockRefresh, R.mipmap.img_loading_refresh);
         animation.startNow();
-        imgMystockRefresh.setClickable(false);
-        imgMystockRefresh.setEnabled(false);
+        imgMyStockRefresh.setClickable(false);
+        imgMyStockRefresh.setEnabled(false);
     }
 
     //定时刷新

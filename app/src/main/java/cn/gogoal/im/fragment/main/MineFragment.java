@@ -3,6 +3,7 @@ package cn.gogoal.im.fragment.main;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +27,7 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.ContactsActivity;
 import cn.gogoal.im.activity.EditMyInfoActivity;
+import cn.gogoal.im.activity.MessageHolderActivity;
 import cn.gogoal.im.activity.MyAdvisersActivity;
 import cn.gogoal.im.activity.MyGroupsActivity;
 import cn.gogoal.im.activity.PhoneContactsActivity;
@@ -44,6 +46,7 @@ import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.ggqrcode.GGQrCode;
+import cn.gogoal.im.ui.view.XTitle;
 
 /**
  * 我的
@@ -89,7 +92,12 @@ public class MineFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle("我的");
+        setFragmentTitle("我的").addAction(new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.home_bottom_tab_icon_message_normal)) {
+            @Override
+            public void actionClick(View view) {
+                startActivity(new Intent(getActivity(), MessageHolderActivity.class));
+            }
+        });
 
         iniheadInfo(mContext);
         initRecycler(mContext);
@@ -219,9 +227,9 @@ public class MineFragment extends BaseFragment {
                                 case "我的二维码"://我的二维码
                                     intent = new Intent(v.getContext(), QrCodeActivity.class);
                                     intent.putExtra("qr_code_type", GGQrCode.QR_CODE_TYPE_PERSIONAL);
-                                    intent.putExtra("qrcode_name",UserUtils.getNickname());
-                                    intent.putExtra("qrcode_info",UserUtils.getorgName()+" "+UserUtils.getDuty());
-                                    intent.putExtra("qrcode_content_id",UserUtils.getMyAccountId());
+                                    intent.putExtra("qrcode_name", UserUtils.getNickname());
+                                    intent.putExtra("qrcode_info", UserUtils.getorgName() + " " + UserUtils.getDuty());
+                                    intent.putExtra("qrcode_content_id", UserUtils.getMyAccountId());
                                     startActivity(intent);
                                     break;
                                 case "行情设置"://自选股设置

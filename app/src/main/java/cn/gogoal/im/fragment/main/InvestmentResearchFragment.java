@@ -22,6 +22,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.MessageHolderActivity;
 import cn.gogoal.im.activity.ToolsListActivity;
 import cn.gogoal.im.activity.ToolsSettingActivity;
 import cn.gogoal.im.adapter.InvestmentResearchAdapter;
@@ -71,15 +72,11 @@ public class InvestmentResearchFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        setFragmentTitle(R.string.title_found).addAction(new XTitle.ImageAction(ContextCompat.getDrawable(mContext,R.mipmap.img_setting)) {
+        XTitle xTitle = setFragmentTitle(R.string.title_found);
+
+        XTitle.ImageAction settingAction = new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.img_setting)) {
             @Override
             public void actionClick(View view) {
-
-                /*//跳帮助
-                NormalIntentUtils.go2WebActivity(
-                        view.getContext(),
-                        AppConst.GG_HELP,
-                        getString(R.string.str_helper));*/
                 //跳设置小工具
                 Intent intent = new Intent(view.getContext(), ToolsSettingActivity.class);
                 ArrayList<ToolData.Tool> data = new ArrayList<>();
@@ -91,7 +88,39 @@ public class InvestmentResearchFragment extends BaseFragment {
                 intent.putParcelableArrayListExtra("selected_tools", data);
                 startActivity(intent);
             }
-        });
+        };
+
+        XTitle.ImageAction messageAction = new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.home_bottom_tab_icon_message_normal)) {
+            @Override
+            public void actionClick(View view) {
+                startActivity(new Intent(getActivity(), MessageHolderActivity.class));
+            }
+        };
+
+        xTitle.addAction(settingAction, 0);
+        xTitle.addAction(messageAction, 1);
+
+//        setFragmentTitle(R.string.title_found).addAction(new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.img_setting)) {
+//            @Override
+//            public void actionClick(View view) {
+//
+//                /*//跳帮助
+//                NormalIntentUtils.go2WebActivity(
+//                        view.getContext(),
+//                        AppConst.GG_HELP,
+//                        getString(R.string.str_helper));*/
+//                //跳设置小工具
+//                Intent intent = new Intent(view.getContext(), ToolsSettingActivity.class);
+//                ArrayList<ToolData.Tool> data = new ArrayList<>();
+//                for (ToolData.Tool tool : mGridData) {
+//                    if (!tool.isSimulatedArg()) {
+//                        data.add(tool);
+//                    }
+//                }
+//                intent.putParcelableArrayListExtra("selected_tools", data);
+//                startActivity(intent);
+//            }
+//        });
 
 
         mRecyclerView.setNestedScrollingEnabled(false);
@@ -195,7 +224,7 @@ public class InvestmentResearchFragment extends BaseFragment {
         try {
             mRecyclerView.setVisibility(show ? View.VISIBLE : View.GONE);
             tvFlagTools.setVisibility(show ? View.VISIBLE : View.GONE);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
     }
@@ -281,7 +310,7 @@ public class InvestmentResearchFragment extends BaseFragment {
             Glide.with(getActivity()).load(banners.get(position).getImage()).into(view);
             container.addView(view);
 
-            final String[] params={banners.get(position).getTarget_url()};
+            final String[] params = {banners.get(position).getTarget_url()};
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
