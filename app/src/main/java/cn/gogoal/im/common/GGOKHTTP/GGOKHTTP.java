@@ -777,6 +777,20 @@ public class GGOKHTTP {
     public static final String TEN_STOCK_HOLDERS = "v1/f10/ten_stock_holders";
 
     /**
+     * F10-股东研究-十大流通股东
+     * params stock_code
+     * params report_date 报表日期
+     */
+    public static final String TEN_TRADABLE_STOCK_HOLDERS = "v1/f10/ten_tradable_stock_holders";
+
+    /**
+     * F10-股东研究-基金持股
+     * params stock_code
+     * params report_date 报表日期
+     */
+    public static final String FUND_HOLDINGS = "v1/f10/fund_holdings";
+
+    /**
      * F10-公司高管
      * params stock_code
      */

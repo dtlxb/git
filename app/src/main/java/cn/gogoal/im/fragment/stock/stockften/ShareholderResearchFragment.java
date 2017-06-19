@@ -2,23 +2,31 @@ package cn.gogoal.im.fragment.stock.stockften;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.hply.alilayout.DelegateAdapter;
+import com.hply.alilayout.VirtualLayoutManager;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.AnalysisLeftAdapter;
-import cn.gogoal.im.adapter.HolderResearchAdapter;
+import cn.gogoal.im.adapter.CurrencyTitleAdapter;
+import cn.gogoal.im.adapter.FundHolderAdapter;
+import cn.gogoal.im.adapter.TenHolderAdapter;
+import cn.gogoal.im.adapter.TenTradableHolderAdapter;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.bean.stock.HolderResearchData;
+import cn.gogoal.im.bean.FundHolderData;
+import cn.gogoal.im.bean.TenHolderData;
+import cn.gogoal.im.bean.TenTradableHolderData;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.ui.copy.InnerListView;
 
 /**
  * Created by dave.
@@ -27,16 +35,16 @@ import cn.gogoal.im.ui.copy.InnerListView;
  */
 public class ShareholderResearchFragment extends BaseFragment {
 
-    @BindView(R.id.lsv_left)
-    InnerListView lsvLeft;
-    @BindView(R.id.lsv_right)
-    InnerListView lsvRight;
+    @BindView(R.id.rv_research)
+    RecyclerView rv_research;
 
     private String stockCode;
     private String stockName;
 
-    private AnalysisLeftAdapter leftAdapter;
-    private HolderResearchAdapter rightAdapter;
+    //缓存池
+    private RecyclerView.RecycledViewPool viewPool;
+    private DelegateAdapter delegateAdapter;
+    private LinkedList<DelegateAdapter.Adapter> adapters;
 
     public static ShareholderResearchFragment getInstance(String stockCode, String stockName) {
         ShareholderResearchFragment fragment = new ShareholderResearchFragment();
@@ -58,11 +66,28 @@ public class ShareholderResearchFragment extends BaseFragment {
         stockCode = getArguments().getString("stockCode");
         stockName = getArguments().getString("stockName");
 
-        getHolderData();
+        final VirtualLayoutManager layoutManager = new VirtualLayoutManager(getActivity());
+        rv_research.setLayoutManager(layoutManager);
+        layoutManager.setAutoMeasureEnabled(true);
+
+        viewPool = new RecyclerView.RecycledViewPool();
+        rv_research.setRecycledViewPool(viewPool);
+        viewPool.setMaxRecycledViews(0, 20);
+
+        delegateAdapter = new DelegateAdapter(layoutManager, false);
+        adapters = new LinkedList<>();
+
+        rv_research.setAdapter(delegateAdapter);
+        rv_research.setHasFixedSize(true);
+        rv_research.setNestedScrollingEnabled(false);
+
+        getTenHolderData();
     }
 
-    private void getHolderData() {
-
+    /**
+     * 十大股东
+     */
+    private void getTenHolderData() {
         final Map<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
         //param.put("report_date", "2017-03-31");
@@ -70,12 +95,23 @@ public class ShareholderResearchFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                //KLog.e(responseInfo);
+                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
-                    JSONObject data = object.getJSONObject("data");
-                    setLeftListData(data.getJSONArray("data"));
-                    setRightListData(data.getJSONArray("data"));
+                    JSONArray data = object.getJSONObject("data").getJSONArray("data");
+                    //悬浮头1
+                    adapters.add(new CurrencyTitleAdapter(getActivity(), "十大股东"));
+
+                    ArrayList<TenHolderData> HoldingList = new ArrayList<>();
+                    for (int i = 0; i < data.size(); i++) {
+                        HoldingList.add(new TenHolderData(
+                                data.getJSONObject(i).getString("stock_holder_ratio"),
+                                data.getJSONObject(i).getString("stock_holding_quantity"),
+                                data.getJSONObject(i).getString("stock_holder_name")));
+                    }
+                    adapters.add(new TenHolderAdapter(getActivity(), HoldingList));
+
+                    getTenTradableHolderData();
                 }
             }
 
@@ -88,33 +124,79 @@ public class ShareholderResearchFragment extends BaseFragment {
     }
 
     /**
-     * 设置左边列表数据
+     * 十大流通股东
      */
-    private void setLeftListData(JSONArray data) {
-        ArrayList<String> titleList = new ArrayList<>();
+    private void getTenTradableHolderData() {
+        final Map<String, String> param = new HashMap<>();
+        param.put("stock_code", stockCode);
+        //param.put("report_date", "2017-03-31");
 
-        titleList.add("十大股东");
-        for (int i = 0; i < data.size(); i++) {
-            titleList.add(data.getJSONObject(i).getString("stock_holder_name"));
-        }
+        final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONArray data = object.getJSONObject("data").getJSONArray("data");
+                    //悬浮头2
+                    adapters.add(new CurrencyTitleAdapter(getActivity(), "十大流通股东"));
 
-        leftAdapter = new AnalysisLeftAdapter(getActivity(), titleList);
-        lsvLeft.setAdapter(leftAdapter);
+                    ArrayList<TenTradableHolderData> HolderList = new ArrayList<>();
+                    HolderList.add(new TenTradableHolderData("股东名称", "持股数(万股)", "占比"));
+                    for (int i = 0; i < data.size(); i++) {
+                        HolderList.add(new TenTradableHolderData(
+                                data.getJSONObject(i).getString("stock_holder_name"),
+                                data.getJSONObject(i).getString("stock_holding_quantity"),
+                                data.getJSONObject(i).getString("stock_holder_ratio")));
+                    }
+                    adapters.add(new TenTradableHolderAdapter(getActivity(), HolderList));
+
+                    getFundHolderData();
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.TEN_TRADABLE_STOCK_HOLDERS, ggHttpInterface).startGet();
     }
 
+
     /**
-     * 设置右边列表数据
+     * 基金持股
      */
-    private void setRightListData(JSONArray data) {
-        ArrayList<HolderResearchData> contList = new ArrayList<>();
-        contList.add(new HolderResearchData("持股数(万股)", "占总股本持股比例"));
+    private void getFundHolderData() {
+        final Map<String, String> param = new HashMap<>();
+        param.put("stock_code", stockCode);
+        //param.put("report_date", "2017-03-31");
 
-        for (int i = 0; i < data.size(); i++) {
-            contList.add(new HolderResearchData(data.getJSONObject(i).getString("stock_holding_quantity"),
-                    data.getJSONObject(i).getString("stock_holder_ratio")));
-        }
+        final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONArray data = object.getJSONObject("data").getJSONArray("data");
+                    //悬浮头3
+                    adapters.add(new CurrencyTitleAdapter(getActivity(), "基金持股"));
 
-        rightAdapter = new HolderResearchAdapter(getContext(), contList);
-        lsvRight.setAdapter(rightAdapter);
+                    ArrayList<FundHolderData> fundList = new ArrayList<>();
+                    fundList.add(new FundHolderData("基金名称", "基金代码", "持股数(万股)"));
+                    for (int i = data.size() - 1; i >= (data.size() > 20 ? data.size() - 20 : 0); i--) {
+                        fundList.add(new FundHolderData(
+                                data.getJSONObject(i).getString("fund_name"),
+                                data.getJSONObject(i).getString("fund_code"),
+                                data.getJSONObject(i).getString("stock_holding_quantity")));
+                    }
+                    adapters.add(new FundHolderAdapter(getActivity(), fundList));
+
+                    delegateAdapter.setAdapters(adapters);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.FUND_HOLDINGS, ggHttpInterface).startGet();
     }
 }
