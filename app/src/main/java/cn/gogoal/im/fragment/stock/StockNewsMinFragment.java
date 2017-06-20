@@ -190,14 +190,11 @@ public class StockNewsMinFragment extends BaseFragment {
         new GGOKHTTP(param, GGOKHTTP.GET_STOCK_NEWS, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                if (code == 0) {
                     dataListsNews.clear();
-
                     ArrayList<StockDetailNewsData> detailNewsDatas =
                             JSONObject.parseObject(responseInfo, StockDetailNewsBean.class).getData();
-
-                    KLog.e(detailNewsDatas.size());
 
                     if (detailNewsDatas.size() < 6) {
                         dataListsNews.addAll(detailNewsDatas);
@@ -208,17 +205,18 @@ public class StockNewsMinFragment extends BaseFragment {
                         showFootView();
                     }
 
-                    KLog.e(dataListsNews.size());
-
                     newsAdapter.notifyDataSetChanged();
                     xLayout.setStatus(XLayout.Success);
-                } else {
+                } else if (code==1001){
                     xLayout.setStatus(XLayout.Empty);
+                }else {
+                    xLayout.setStatus(XLayout.Error);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
+                xLayout.setStatus(XLayout.Error);
                 UIHelper.toastError(getContext(), msg, xLayout);
                 KLog.e(msg);
             }
@@ -239,8 +237,8 @@ public class StockNewsMinFragment extends BaseFragment {
         new GGOKHTTP(param, GGOKHTTP.REPORT_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                if (code == 0) {
                     ArrayList<StockDetailResearchData> detailResearchDatas = JSONObject.parseObject(
                             responseInfo, StockDetailResearchBean.class).getData();
 
@@ -253,8 +251,10 @@ public class StockNewsMinFragment extends BaseFragment {
                     }
                     researchadapter.notifyDataSetChanged();
                     xLayout.setStatus(XLayout.Success);
-                } else {
+                } else if (code==1001){
                     xLayout.setStatus(XLayout.Empty);
+                }else {
+                    xLayout.setStatus(XLayout.Error);
                 }
             }
 
