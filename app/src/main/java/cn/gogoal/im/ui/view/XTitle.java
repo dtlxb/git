@@ -75,10 +75,6 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
 
     private void initView(Context context) {
         mLeftText = new TextView(context);
-        TypedValue typedValue = new TypedValue();
-        context.getTheme().resolveAttribute(android.R.attr.selectableItemBackground, typedValue, true);
-        mLeftText.setBackgroundResource(typedValue.resourceId);
-
         mCenterLayout = new LinearLayout(context);
         mRightLayout = new LinearLayout(context);
         mDividerView = new View(context);

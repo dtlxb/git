@@ -12,6 +12,8 @@ import android.view.View;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,9 +30,12 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.NormalIntentUtils;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.ui.NormalItemDecoration;
+import cn.gogoal.im.ui.DashlineItemDivider;
 import cn.gogoal.im.ui.view.XLayout;
+
+import static cn.gogoal.im.R.id.recyclerView;
 
 /**
  * author wangjd on 2017/6/19 0019.
@@ -50,7 +55,7 @@ public class InfomationTabFragment extends BaseFragment {
 
     public static final int INFOMATION_TYPE_POLICY_DYNAMICS = 115;//资讯——政策动态
 
-    @BindView(R.id.recyclerView)
+    @BindView(recyclerView)
     RecyclerView mRvInfomation;
 
     @BindView(R.id.swiperefreshlayout)
@@ -91,7 +96,7 @@ public class InfomationTabFragment extends BaseFragment {
 
         mRvInfomation.setBackgroundColor(Color.WHITE);
         mRvInfomation.setLayoutManager(new LinearLayoutManager(mContext));
-        mRvInfomation.addItemDecoration(new NormalItemDecoration(mContext));
+        mRvInfomation.addItemDecoration(new DashlineItemDivider());
 
         dataList = new ArrayList<>();
         adapter = new NormalInfoTabAdapter(dataList);
@@ -187,7 +192,7 @@ public class InfomationTabFragment extends BaseFragment {
                     if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
                         UIHelper.toast(getActivity(), tabArrays[tabType - (
                                 tabType == INFOMATION_TYPE_GET_ASK_NEWS ? 116 : 111
-                        )] + "数据刷新成功");
+                        )] + "数据更新成功");
                     }
 
                     xLayout.setStatus(XLayout.Success);
@@ -207,6 +212,13 @@ public class InfomationTabFragment extends BaseFragment {
                 refreshlayout.setRefreshing(false);
             }
         }).startGet();
+    }
+
+    @Subscriber(tag = "double_click_2_top")
+    void doubleClick2Top(String index){
+        if (StringUtils.pareseStringDouble(index)==tabType){//是本Tab
+            mRvInfomation.smoothScrollToPosition(0);
+        }
     }
 
     private class NormalInfoTabAdapter extends CommonAdapter<InfomationData.Data, BaseViewHolder> {

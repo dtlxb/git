@@ -39,7 +39,7 @@ public class DashlineItemDivider extends RecyclerView.ItemDecoration {
             //绘制虚线
             Paint paint = new Paint();
             paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(dp2px(parent.getContext(), 1));
+            paint.setStrokeWidth(/*dp2px(parent.getContext(), */1);
             paint.setColor(dashColoe);
             Path path = new Path();
             path.moveTo(left, top);

@@ -8,6 +8,8 @@ import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +24,7 @@ import cn.gogoal.im.bean.infomation.Sevenby24;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.ExpandableLayout;
 import cn.gogoal.im.ui.view.XLayout;
@@ -59,6 +62,8 @@ public class SevenBy24Fragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         dataList = new ArrayList<>();
         adapter = new Sevenby24Adapter(dataList);
+        adapter.openLoadAnimation(CommonAdapter.SCALEIN);
+        adapter.isFirstOnly(false);
         recyclerView.setAdapter(adapter);
 
         get7by24Datas(AppConst.REFRESH_TYPE_FIRST);
@@ -142,6 +147,13 @@ public class SevenBy24Fragment extends BaseFragment {
                 refreshlayout.setRefreshing(false);
             }
         }).startGet();
+    }
+
+    @Subscriber(tag = "double_click_2_top")
+    void doubleClick2Top(String index){
+        if (StringUtils.pareseStringDouble(index)==1){//是本Tab
+            recyclerView.smoothScrollToPosition(0);
+        }
     }
 
     private class Sevenby24Adapter extends CommonAdapter<Sevenby24.Data, BaseViewHolder> {

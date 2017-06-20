@@ -8,6 +8,8 @@ import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +24,7 @@ import cn.gogoal.im.bean.infomation.InfoMyStock;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.NormalIntentUtils;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.DashlineItemDivider;
@@ -99,6 +102,13 @@ public class InfoMyStockTabFragment extends BaseFragment {
                 adapter.loadMoreComplete();
             }
         }, recyclerView);
+    }
+
+    @Subscriber(tag = "double_click_2_top")
+    void doubleClick2Top(String index){
+        if (StringUtils.pareseStringDouble(index)==0){//是本Tab
+            recyclerView.smoothScrollToPosition(0);
+        }
     }
 
     private void getMyStockInfo(final int refreshType) {

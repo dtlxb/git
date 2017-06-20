@@ -17,6 +17,7 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MessageHolderActivity;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
@@ -102,6 +103,15 @@ public class InfomationFragment extends BaseFragment {
         });
         tabInfomation.setupWithViewPager(vpInfomation);
 
+        xTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppManager.getInstance().sendMessage("double_click_2_top",
+                        tabInfomation.getSelectedTabPosition()==0?"0":
+                                (tabInfomation.getSelectedTabPosition()==1?"1":
+                                        ""+tabTypes[tabInfomation.getSelectedTabPosition()-2]));
+            }
+        });
         badge = new BadgeView(getActivity());
         initBadge(unReadCount, badge);
     }
