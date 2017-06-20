@@ -35,9 +35,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="3dp"
             android:paddingLeft="18dp"
             android:paddingRight="18dp"
-            android:layout_marginRight="3dp"
             android:src="@mipmap/contact_add_message" />
     </RelativeLayout>
 
@@ -78,10 +78,19 @@
                 android:layout_height="1px"
                 android:background="@color/colorDivider_d9d9d9" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
+            <cn.gogoal.im.ui.view.XLayout
+                android:id="@+id/xLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </cn.gogoal.im.ui.view.XLayout>
+
         </LinearLayout>
     </ScrollView>
 

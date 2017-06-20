@@ -17,8 +17,8 @@ import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
-import java.util.Map;
 
+import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
@@ -41,9 +41,11 @@ public class MessageHolderActivity extends BaseActivity {
     @BindView(R.id.vp_chat_tab)
     UnSlidingViewPager vpChatTab;
 
+    @BindArray(R.array.chat_tab)
+    String[] chatTabsArray;
+
     private MessageFragment messageFragment;
     private ContactsFragment contactsFragment;
-    private String[] chatTabs = {"消息", "通讯录"};
     private BadgeView badge;
     private int unReadCount;
 
@@ -67,25 +69,13 @@ public class MessageHolderActivity extends BaseActivity {
         vpChatTab.setAdapter(messageHolderTabAdapter);
         tabChat.setupWithViewPager(vpChatTab);
 
-        for (int i = 0; i < chatTabs.length; i++) {
+        for (int i = 0; i < chatTabsArray.length; i++) {
             TabLayout.Tab tab = tabChat.getTabAt(i);
             if (tab != null) {
                 tab.setCustomView(messageHolderTabAdapter.getTabView(i));
             }
         }
-
-        tabChat.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-
-            }
-
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            public void onTabReselected(TabLayout.Tab tab) {
-            }
-        });
+        tabChat.getTabAt(0).select();
         badge = new BadgeView(MessageHolderActivity.this);
         initBadge(unReadCount, badge);
     }
@@ -107,12 +97,12 @@ public class MessageHolderActivity extends BaseActivity {
 
         @Override
         public int getCount() {
-            return chatTabs.length;
+            return chatTabsArray.length;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return chatTabs[position];
+            return chatTabsArray[position];
         }
 
         private View getTabView(int position) {
@@ -121,7 +111,6 @@ public class MessageHolderActivity extends BaseActivity {
 
             TextView tv = (TextView) view.findViewById(R.id.tv_main_tab);
             ImageView imageView = (ImageView) view.findViewById(R.id.img_main_tab);
-
             switch (position) {
                 case 0:
                     imageView.setImageResource(R.drawable.selector_icon_main_tab_message);
@@ -129,8 +118,10 @@ public class MessageHolderActivity extends BaseActivity {
                 case 1:
                     imageView.setImageResource(R.drawable.selector_icon_main_tab_mine);
                     break;
+                default:
+                    break;
             }
-            tv.setText(chatTabs[position]);
+            tv.setText(chatTabsArray[position]);
             return view;
         }
     }
@@ -150,6 +141,15 @@ public class MessageHolderActivity extends BaseActivity {
     @Subscriber(tag = "IM_Message")
     public void handleMessage(BaseMessage baseMessage) {
         unReadCount++;
+        badge.setBadgeNumber(unReadCount);
+    }
+
+    /**
+     * 消息删除
+     */
+    @Subscriber(tag = "Decrease_Message_Count")
+    public void decreaseMessage(String count) {
+        unReadCount -= Integer.parseInt(count);
         badge.setBadgeNumber(unReadCount);
     }
 }

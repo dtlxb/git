@@ -17,7 +17,10 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
+
+import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +29,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.ContactsActivity;
 import cn.gogoal.im.activity.IMNewFriendActivity;
 import cn.gogoal.im.activity.IMSearchLocalActivity;
 import cn.gogoal.im.activity.MyGroupsActivity;
@@ -36,8 +38,10 @@ import cn.gogoal.im.adapter.ContactAdapter;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.UserBean;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -194,12 +198,11 @@ public class ContactsFragment extends BaseFragment {
         indexBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
-    private void getData() {
+    public void getData() {
         //缓存的联系人请求数据
         List<UserBean> userBeanList = new ArrayList<>();
         userBeanList.addAll(UserInfoUtils.getAllUserInfo());
 
-        KLog.e(userBeanList);
         if (null != userBeanList && userBeanList.size() > 0) {
             parseContactDatas(userBeanList, contactBeanList);
         } else {
@@ -356,5 +359,16 @@ public class ContactsFragment extends BaseFragment {
 
             added = false;
         }
+    }
+
+    /**
+     * 更新通讯录列表
+     */
+    @Subscriber(tag = "Change_Contacts")
+    public void handleMessage(String code) {
+        contactBeanList.clear();
+        addContactHead();
+        getData();
+        contactAdapter.notifyDataSetChanged();
     }
 }
