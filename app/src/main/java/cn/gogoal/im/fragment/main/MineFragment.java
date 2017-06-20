@@ -55,7 +55,6 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.ggqrcode.GGQrCode;
 import cn.gogoal.im.ui.Badge.BadgeView;
-import cn.gogoal.im.ui.colorChoose.ChooseColorDialog;
 import cn.gogoal.im.ui.view.XTitle;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
@@ -241,26 +240,12 @@ public class MineFragment extends BaseFragment {
         mineAdapter = new MineAdapter(mineItems);
     }
 
-    private ChooseColorDialog chooseColorDialog;
-    private int lastColor;
-
     @OnClick({R.id.layout_user_head,
             R.id.tv_tools_setting, R.id.img_mine_avatar})
     void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_user_head:
-                if (chooseColorDialog == null) {
-                    chooseColorDialog = new ChooseColorDialog(getContext());
-                    chooseColorDialog.setOnColorSelectListener(new ChooseColorDialog.OnColorSelectListener() {
-                        @Override
-                        public void onSelectFinish(int color) {
-                            lastColor=color;
-                            layoutHead.setBackgroundColor(lastColor);
-                        }
-                    });
-                }
-                chooseColorDialog.setLastColor(lastColor);
-                chooseColorDialog.show();
+                startActivity(new Intent(view.getContext(), EditMyInfoActivity.class));
                 break;
             case R.id.tv_tools_setting:
                 Intent intent = new Intent(view.getContext(), ToolsSettingActivity.class);

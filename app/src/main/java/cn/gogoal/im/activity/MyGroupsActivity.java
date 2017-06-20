@@ -26,9 +26,8 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.GGShareEntity;
-import cn.gogoal.im.bean.group.GroupCollectionData;
-import cn.gogoal.im.bean.group.GroupData;
 import cn.gogoal.im.bean.ShareItemInfo;
+import cn.gogoal.im.bean.group.GroupData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.DialogHelp;
@@ -36,6 +35,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.ResponCallback;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -124,37 +124,34 @@ public class MyGroupsActivity extends BaseActivity {
 
     //收藏群列表
     public void getGroupList(final int type) {
-        Map<String, String> params = new HashMap<>();
-        params.put("token", UserUtils.getToken());
-        if (type == AppConst.REFRESH_TYPE_FIRST) {
-            xLayout.setStatus(XLayout.Loading);
-        }
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+        UserUtils.getMyGroupList(new ResponCallback() {
             @Override
-            public void onSuccess(String responseInfo) {
+            public void onSuccess(String jsonString) {
+                dataBeans.clear();
 
-                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    dataBeans.clear();
+                List<GroupData> data =
+                        JSONObject.parseArray(jsonString, GroupData.class);
 
-                    List<GroupData> data =
-                            JSONObject.parseObject(responseInfo, GroupCollectionData.class).getData();
-                    dataBeans.addAll(data);
-                    listAdapter.notifyDataSetChanged();
+                dataBeans.addAll(data);
 
-                    xLayout.setStatus(XLayout.Success);
+                listAdapter.notifyDataSetChanged();
 
-                    if (type == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
-                        UIHelper.toast(getActivity(), "更新群组数据成功");
-                    }
-                } else {
-                    xLayout.setStatus(XLayout.Empty);
+                xLayout.setStatus(XLayout.Success);
+
+                if (type == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+                    UIHelper.toast(getActivity(), "更新群组数据成功");
                 }
             }
 
             @Override
-            public void onFailure(String msg) {
-                KLog.json(msg);
-                UIHelper.toastError(getActivity(), msg, xLayout);
+            public void onEmpty() {
+                xLayout.setStatus(XLayout.Empty);
+            }
+
+            @Override
+            public void onError(String errorMsg) {
+                xLayout.setStatus(XLayout.Error);
+                UIHelper.toastError(getActivity(), errorMsg, xLayout);
                 xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
                     @Override
                     public void onReload(View v) {
@@ -162,8 +159,8 @@ public class MyGroupsActivity extends BaseActivity {
                     }
                 });
             }
-        };
-        new GGOKHTTP(params, GGOKHTTP.GET_GROUP_LIST, ggHttpInterface).startGet();
+        });
+
     }
 
     private class ListAdapter extends CommonAdapter<GroupData, BaseViewHolder> {

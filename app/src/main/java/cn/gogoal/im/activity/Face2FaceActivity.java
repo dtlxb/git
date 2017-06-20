@@ -3,7 +3,6 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayoutManager;
@@ -34,7 +33,6 @@ import cn.gogoal.im.bean.SoftKeyboard;
 import cn.gogoal.im.bean.group.GroupData;
 import cn.gogoal.im.bean.group.GroupMemberInfo;
 import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
@@ -44,7 +42,6 @@ import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.XDividerItemDecoration;
 import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.view.SelectorButton;
-import cn.gogoal.im.ui.view.TextDrawable;
 import cn.gogoal.im.ui.view.XTitle;
 
 import static cn.gogoal.im.R.id.rv_soft_input;
@@ -60,8 +57,6 @@ public class Face2FaceActivity extends BaseActivity {
     @BindViews({R.id.iv_dot_1, R.id.iv_dot_2, R.id.iv_dot_3, R.id.iv_dot_4})
     AppCompatImageView[] ivDots;
 
-    private static final int face2faceBgColoe = 0xff1b1f22;
-
     @BindView(R.id.tv_flag)
     TextView tvFlag;
 
@@ -76,6 +71,8 @@ public class Face2FaceActivity extends BaseActivity {
 
     @BindView(R.id.btn_goin)
     SelectorButton btnGoin;
+
+    private int[] numbersImage;
 
     private MemberAdapter memberAdapter;
 
@@ -100,12 +97,19 @@ public class Face2FaceActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        setStatusColor(face2faceBgColoe);
+        setStatusColor(getResColor(R.color.face2faceBg));
+
         XTitle xTitle = setMyTitle("面对面建群", true);
         xTitle.setLeftImageResource(R.mipmap.image_title_back_255);
-        xTitle.setBackgroundColor(face2faceBgColoe);
+        xTitle.setBackgroundColor(getResColor(R.color.face2faceBg));
         xTitle.setLeftTextColor(Color.WHITE);
         xTitle.setTitleColor(Color.WHITE);
+
+        numbersImage=new int[10];
+
+        for (int i=0;i<10;i++){
+            numbersImage[i]=getResources().getIdentifier("img_face2face_password_"+i,"mipmap",getPackageName());
+        }
 
         keyboardDatas = new ArrayList<>();
         adapter = new SoftKeyboardAdapter(mContext, keyboardDatas);
@@ -122,7 +126,6 @@ public class Face2FaceActivity extends BaseActivity {
         locationClient.setLocationListener(new AMapLocationListener() {
             @Override
             public void onLocationChanged(AMapLocation aMapLocation) {
-                KLog.e("Latitude=" + aMapLocation.getLatitude() + "\nLocation=" + aMapLocation.getLongitude());
                 latitude = aMapLocation.getLatitude();
                 longitude = aMapLocation.getLongitude();
             }
@@ -163,20 +166,10 @@ public class Face2FaceActivity extends BaseActivity {
             keyboardDatas.add(new SoftKeyboard(String.valueOf(i), null));
         }
 
-        keyboardDatas.add(new SoftKeyboard(null, null));
-        keyboardDatas.add(new SoftKeyboard(String.valueOf(0), null));
+        keyboardDatas.add(new SoftKeyboard(null, null));//左下角空按键
+        keyboardDatas.add(new SoftKeyboard(String.valueOf(0), null));//0
         keyboardDatas.add(new SoftKeyboard(null, ContextCompat.getDrawable(getActivity(), R.mipmap.img_keyboard_del)));
         adapter.notifyDataSetChanged();
-    }
-
-    private Drawable getTextDrawable(String num) {
-        TextDrawable.IBuilder iBuilder = TextDrawable
-                .builder()
-                .beginConfig()
-                .textColor(getResColor(R.color.colorPrimary))
-                .fontSize(AppDevice.dp2px(getActivity(), 45))
-                .endConfig().rect();
-        return iBuilder.build(num, face2faceBgColoe);
     }
 
     private class SoftDivider extends XDividerItemDecoration {
@@ -199,7 +192,8 @@ public class Face2FaceActivity extends BaseActivity {
 
     public void inputImagePsw(String psw) {
         if (count < 4) {
-            ivDots[count].setImageDrawable(getTextDrawable(psw));
+//            ivDots[count].setImageDrawable(getTextDrawable(psw));
+            ivDots[count].setImageResource(numbersImage[Integer.parseInt(psw)]);
             pswList.add(psw);
             count++;
             if (count == 4) {
@@ -341,7 +335,7 @@ public class Face2FaceActivity extends BaseActivity {
 
     private class MemberAdapter extends CommonAdapter<GroupMemberInfo, BaseViewHolder> {
 
-        public MemberAdapter(List<GroupMemberInfo> data) {
+        private MemberAdapter(List<GroupMemberInfo> data) {
             super(R.layout.item_face2face_member, data);
         }
 
