@@ -102,7 +102,7 @@
         <activity
             android:name=".activity.TypeLoginActivity"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <service
             android:name=".servise.AppBackServise"

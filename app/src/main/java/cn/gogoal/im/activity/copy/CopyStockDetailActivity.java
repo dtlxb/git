@@ -187,7 +187,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     @BindView(R.id.fragment_rotate_header_with_view_group_frame)
     SwipeRefreshLayout ptrFrame;
     //下拉刷新头部控件
-//    private HeaderView headerView;
+    //private HeaderView headerView;
     private int stock_charge_type = 1;
 
     //图表表头
@@ -302,7 +302,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         //找控件
         findView();
-//        //初始化
+        //初始化
         init();
 
         setNewsTab();
@@ -1009,6 +1009,8 @@ public class CopyStockDetailActivity extends BaseActivity {
 
                     //保存收盘价
                     stock_charge_type = info.getStock_type();
+
+
                     closePrice = hply.com.niugu.StringUtils.getDouble(String.valueOf(info.getClose_price()));
                     change_value = info.getChange_value();
                     StockUtils.savaColseprice((float) closePrice);
