@@ -5,10 +5,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.view.Gravity;
 import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.lzyzsd.jsbridge.BridgeHandler;
@@ -16,20 +18,25 @@ import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.github.lzyzsd.jsbridge.DefaultHandler;
 import com.socks.library.KLog;
 
+import org.simple.eventbus.Subscriber;
+
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.PdfData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.FileUtil;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.WebViewUtil;
 import cn.gogoal.im.common.linkUtils.PlayDataStatistics;
+import cn.gogoal.im.ui.Badge.BadgeView;
 import cn.gogoal.im.ui.dialog.AdvisersDialog;
 import cn.gogoal.im.ui.view.XTitle;
 
@@ -48,9 +55,21 @@ public class FunctionActivity extends BaseActivity {
     private boolean needShare;
     private XTitle xTitle;
 
+    private ImageView ivMessageTag;
+    //消息
+    private BadgeView badge;
+    private int unReadCount;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_function;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        unReadCount = MessageListUtils.getAllMessageUnreadCount();
+        badge.setBadgeNumber(unReadCount);
     }
 
     //    d4d0f74e3c87483cb3bf91dd10dc53f8
@@ -71,14 +90,20 @@ public class FunctionActivity extends BaseActivity {
         }
         xTitle.setLeftClickListener(new View.OnClickListener() {
             @Override
-          public void onClick(View v) {
+            public void onClick(View v) {
                 onBackPressed();
             }
         });
 
-        //分享web页
+        XTitle.ImageAction messageAction = new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.message_dark)) {
+            @Override
+            public void actionClick(View view) {
+                startActivity(new Intent(getActivity(), MessageHolderActivity.class));
+            }
+        };
+
         if (needShare) {
-            xTitle.addAction(new XTitle.ImageAction(ContextCompat.getDrawable(mContext,R.mipmap.img_share)) {
+            XTitle.ImageAction shareAction = new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.img_share)) {
                 @Override
                 public void actionClick(View view) {
                     webView.callHandler("shareWeb", "", new ValueCallback<String>() {
@@ -113,14 +138,22 @@ public class FunctionActivity extends BaseActivity {
                         }
                     });
                 }
-            });
+            };
+            xTitle.addAction(shareAction, 0);
+            xTitle.addAction(messageAction, 1);
+        } else {
+            xTitle.addAction(messageAction);
         }
+
+        ivMessageTag = (ImageView) xTitle.getViewByAction(messageAction);
+        badge = new BadgeView(getActivity());
+        initBadge(unReadCount, badge);
 
         initWebView(webView);
 
-        if(!StringUtils.isActuallyEmpty(url)) {
+        if (!StringUtils.isActuallyEmpty(url)) {
             webView.loadUrl(url);
-        }else {
+        } else {
             webView.loadUrl("file:///android_asset/demo.html");
             title_bar.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -305,14 +338,31 @@ public class FunctionActivity extends BaseActivity {
         settings.setAppCacheEnabled(true);
     }
 
+    private void initBadge(int num, BadgeView badge) {
+        badge.setGravityOffset(10, 7, true);
+        badge.setShowShadow(false);
+        badge.setBadgeGravity(Gravity.TOP | Gravity.END);
+        badge.setBadgeTextSize(8, true);
+        badge.bindTarget(ivMessageTag);
+        badge.setBadgeNumber(num);
+    }
+
+    /**
+     * 消息接收
+     */
+    @Subscriber(tag = "IM_Message")
+    public void handleMessage(BaseMessage baseMessage) {
+        unReadCount++;
+        badge.setBadgeNumber(unReadCount);
+    }
 
     @Override
     public void onBackPressed() {
-        if (webView.canGoBack()){
+        if (webView.canGoBack()) {
             // 返回上一页面
 //            webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
             webView.goBack();
-        }else {
+        } else {
             super.onBackPressed();
         }
     }
