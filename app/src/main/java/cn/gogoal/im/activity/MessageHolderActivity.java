@@ -13,16 +13,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.socks.library.KLog;
-
 import org.simple.eventbus.Subscriber;
-
 
 import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.fragment.ContactsFragment;
 import cn.gogoal.im.fragment.main.MessageFragment;
@@ -127,11 +125,12 @@ public class MessageHolderActivity extends BaseActivity {
     }
 
     private void initBadge(int num, BadgeView badge) {
-        badge.setGravityOffset(0, 0, true);
+        int moveX = AppDevice.getWidth(MessageHolderActivity.this) / 4 - AppDevice.dp2px(MessageHolderActivity.this, 32);
+        badge.setGravityOffset(moveX, 0, false);
         badge.setShowShadow(false);
         badge.setBadgeGravity(Gravity.TOP | Gravity.END);
         badge.setBadgeTextSize(12, true);
-        badge.bindTarget(tabChat.getTabAt(0).getCustomView().findViewById(R.id.layout_badge));
+        badge.bindTarget(tabChat.getTabAt(0).getCustomView());
         badge.setBadgeNumber(num);
     }
 
