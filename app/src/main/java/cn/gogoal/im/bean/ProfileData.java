@@ -7,13 +7,27 @@ package cn.gogoal.im.bean;
  */
 public class ProfileData {
 
-    public String sticky;
     public String name;
     public String content;
 
-    public ProfileData(String sticky, String name, String content) {
-        this.sticky = sticky;
+    public ProfileData(String name, String content) {
         this.name = name;
+        this.content = content;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
         this.content = content;
     }
 }

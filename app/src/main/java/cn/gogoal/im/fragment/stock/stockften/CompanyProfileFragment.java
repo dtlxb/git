@@ -3,26 +3,26 @@ package cn.gogoal.im.fragment.stock.stockften;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hply.alilayout.DelegateAdapter;
+import com.hply.alilayout.VirtualLayoutManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.CompanyProfileAdapter;
+import cn.gogoal.im.adapter.CurrencyTitleAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ProfileData;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.copy.FtenUtils;
-
-import static cn.gogoal.im.base.BaseActivity.initRecycleView;
 
 /**
  * Created by dave.
@@ -33,13 +33,14 @@ public class CompanyProfileFragment extends BaseFragment {
 
     @BindView(R.id.sticky_recyView)
     RecyclerView recySticky;
-    @BindView(R.id.tv_sticky_header_view)
-    TextView textSticky;
 
     private String stockCode;
     private String stockName;
 
-    private CompanyProfileAdapter adapter;
+    //缓存池
+    private RecyclerView.RecycledViewPool viewPool;
+    private DelegateAdapter delegateAdapter;
+    private LinkedList<DelegateAdapter.Adapter> adapters;
 
     public static CompanyProfileFragment getInstance(String stockCode, String stockName) {
         CompanyProfileFragment fragment = new CompanyProfileFragment();
@@ -66,43 +67,20 @@ public class CompanyProfileFragment extends BaseFragment {
     }
 
     private void initRecyView() {
+        final VirtualLayoutManager layoutManager = new VirtualLayoutManager(getActivity());
+        recySticky.setLayoutManager(layoutManager);
+        layoutManager.setAutoMeasureEnabled(true);
 
-        textSticky.setVisibility(View.VISIBLE);
+        viewPool = new RecyclerView.RecycledViewPool();
+        recySticky.setRecycledViewPool(viewPool);
+        viewPool.setMaxRecycledViews(0, 20);
 
-        initRecycleView(recySticky, null);
+        delegateAdapter = new DelegateAdapter(layoutManager, false);
+        adapters = new LinkedList<>();
 
-        recySticky.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                View stickyInfoView = recyclerView.findChildViewUnder(
-                        textSticky.getMeasuredWidth() / 2, 5);
-
-                if (stickyInfoView != null && stickyInfoView.getContentDescription() != null) {
-                    textSticky.setText(String.valueOf(stickyInfoView.getContentDescription()));
-                }
-
-                View transInfoView = recyclerView.findChildViewUnder(
-                        textSticky.getMeasuredWidth() / 2, textSticky.getMeasuredHeight() + 1);
-
-                if (transInfoView != null && transInfoView.getTag() != null) {
-
-                    int transViewStatus = (int) transInfoView.getTag();
-                    int dealtY = transInfoView.getTop() - textSticky.getMeasuredHeight();
-
-                    if (transViewStatus == FtenUtils.HAS_STICKY_VIEW) {
-                        if (transInfoView.getTop() > 0) {
-                            textSticky.setTranslationY(dealtY);
-                        } else {
-                            textSticky.setTranslationY(0);
-                        }
-                    } else if (transViewStatus == FtenUtils.NONE_STICKY_VIEW) {
-                        textSticky.setTranslationY(0);
-                    }
-                }
-            }
-        });
+        recySticky.setAdapter(delegateAdapter);
+        recySticky.setHasFixedSize(true);
+        recySticky.setNestedScrollingEnabled(false);
     }
 
     private void getProfileData() {
@@ -114,29 +92,9 @@ public class CompanyProfileFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
                 JSONObject object = JSONObject.parseObject(responseInfo);
-
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
-                    JSONObject basic_data = data.getJSONObject("basic_data");
-                    JSONObject issue_data = data.getJSONObject("issue_data");
-                    JSONObject profileData = new JSONObject();
-                    profileData.putAll(basic_data);
-                    profileData.putAll(issue_data);
-
-                    List<ProfileData> listData = new ArrayList<>();
-
-                    for (int i = 0; i < FtenUtils.profileName.length; i++) {
-                        if (i < 31) {
-                            listData.add(new ProfileData("基本资料", FtenUtils.profileName[i],
-                                    profileData.getString(FtenUtils.profileContent[i])));
-                        } else {
-                            listData.add(new ProfileData("发行相关", FtenUtils.profileName[i],
-                                    profileData.getString(FtenUtils.profileContent[i])));
-                        }
-                    }
-
-                    adapter = new CompanyProfileAdapter(getActivity(), listData);
-                    recySticky.setAdapter(adapter);
+                    setListData(data);
                 }
             }
 
@@ -146,5 +104,31 @@ public class CompanyProfileFragment extends BaseFragment {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.COMPANY_SUMMARY, ggHttpInterface).startGet();
+    }
+
+    private void setListData(JSONObject data) {
+        //悬浮头1
+        adapters.add(new CurrencyTitleAdapter(getActivity(), "基本资料"));
+
+        JSONObject basic_data = data.getJSONObject("basic_data");
+        List<ProfileData> basicList = new ArrayList<>();
+        for (int i = 0; i < FtenUtils.basicName.length; i++) {
+            basicList.add(new ProfileData(FtenUtils.basicName[i],
+                    basic_data.getString(FtenUtils.basicContent[i])));
+        }
+        adapters.add(new CompanyProfileAdapter(getActivity(), basicList));
+
+        //悬浮头2
+        adapters.add(new CurrencyTitleAdapter(getActivity(), "发行相关"));
+
+        JSONObject issue_data = data.getJSONObject("issue_data");
+        List<ProfileData> issueList = new ArrayList<>();
+        for (int i = 0; i < FtenUtils.issueName.length; i++) {
+            issueList.add(new ProfileData(FtenUtils.issueName[i],
+                    issue_data.getString(FtenUtils.issueContent[i])));
+        }
+        adapters.add(new CompanyProfileAdapter(getActivity(), issueList));
+
+        delegateAdapter.setAdapters(adapters);
     }
 }
