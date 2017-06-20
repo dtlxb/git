@@ -79,7 +79,7 @@
         <!-- 实时通信模块 END -->
 
         <activity
-            android:name=".activity.copy.TestStockDetailActivity"
+            android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -102,7 +102,7 @@
         <activity
             android:name=".activity.TypeLoginActivity"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <service
             android:name=".servise.AppBackServise"
