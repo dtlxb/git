@@ -141,7 +141,6 @@ public class ShareholderResearchFragment extends BaseFragment {
                     adapters.add(new CurrencyTitleAdapter(getActivity(), "十大流通股东"));
 
                     ArrayList<TenTradableHolderData> HolderList = new ArrayList<>();
-                    HolderList.add(new TenTradableHolderData("股东名称", "持股数(万股)", "占比"));
                     for (int i = 0; i < data.size(); i++) {
                         HolderList.add(new TenTradableHolderData(
                                 data.getJSONObject(i).getString("stock_holder_name"),
@@ -180,7 +179,7 @@ public class ShareholderResearchFragment extends BaseFragment {
                     adapters.add(new CurrencyTitleAdapter(getActivity(), "基金持股"));
 
                     ArrayList<FundHolderData> fundList = new ArrayList<>();
-                    fundList.add(new FundHolderData("基金名称", "基金代码", "持股数(万股)"));
+                    fundList.add(new FundHolderData("基金名称", "基金代码", "持股(万股)"));
                     for (int i = data.size() - 1; i >= (data.size() > 20 ? data.size() - 20 : 0); i--) {
                         fundList.add(new FundHolderData(
                                 data.getJSONObject(i).getString("fund_name"),

@@ -3,7 +3,10 @@ package cn.gogoal.im.adapter;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.hply.alilayout.DelegateAdapter;
 import com.hply.alilayout.LayoutHelper;
@@ -25,6 +28,8 @@ public class TenTradableHolderAdapter extends DelegateAdapter.Adapter<MainViewHo
     private Context context;
     private List<TenTradableHolderData> listData;
 
+    private double ratio = 0;
+
     public TenTradableHolderAdapter(Context context, List<TenTradableHolderData> listData) {
         this.context = context;
         this.listData = listData;
@@ -38,23 +43,53 @@ public class TenTradableHolderAdapter extends DelegateAdapter.Adapter<MainViewHo
     @Override
     public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new MainViewHolder(LayoutInflater.from(context)
-                .inflate(R.layout.item_currency_ften, parent, false));
+                .inflate(R.layout.item_ten_holder, parent, false));
     }
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, int position) {
-        if (position % 2 == 0) {
-            holder.findView(R.id.linearHolding).setBackgroundColor(ContextCompat.getColor(context, R.color.bg_color_1));
+
+        final TextView textPropor = holder.findView(R.id.textPropor);
+
+        if (position == 0) {
+            ratio = Double.parseDouble(listData.get(position).getStock_holder_ratio());
+            holder.findView(R.id.linearCont).setVisibility(View.VISIBLE);
         } else {
-            holder.findView(R.id.linearHolding).setBackgroundColor(ContextCompat.getColor(context, R.color.bg_color_2));
+            holder.findView(R.id.linearCont).setVisibility(View.GONE);
         }
 
-        holder.setText(R.id.textContent1, listData.get(position).getStock_holder_name() != null
+        if (position == 0) {
+            holder.setTextResColor(R.id.textSerialNum, R.color.hotsearch_list_number1);
+            textPropor.setBackgroundColor(ContextCompat.getColor(context, R.color.hotsearch_list_number1));
+        } else if (position == 1) {
+            textPropor.setBackgroundColor(ContextCompat.getColor(context, R.color.hotsearch_list_number2));
+            holder.setTextResColor(R.id.textSerialNum, R.color.hotsearch_list_number2);
+        } else if (position == 2) {
+            textPropor.setBackgroundColor(ContextCompat.getColor(context, R.color.hotsearch_list_number3));
+            holder.setTextResColor(R.id.textSerialNum, R.color.hotsearch_list_number3);
+        } else {
+            textPropor.setBackgroundColor(ContextCompat.getColor(context, R.color.textColor_666666));
+            holder.setTextResColor(R.id.textSerialNum, R.color.textColor_666666);
+        }
+        holder.setText(R.id.textSerialNum, position + 1 + "");
+
+        holder.setText(R.id.textName, listData.get(position).getStock_holder_name() != null
                 ? listData.get(position).getStock_holder_name() : "--");
-        holder.setText(R.id.textContent2, listData.get(position).getStock_holding_quantity() != null
+        holder.setText(R.id.textQuantity, listData.get(position).getStock_holding_quantity() != null
                 ? listData.get(position).getStock_holding_quantity() : "--");
-        holder.setText(R.id.textContent3, listData.get(position).getStock_holder_ratio() != null
+        holder.setText(R.id.textRatio, listData.get(position).getStock_holder_ratio() != null
                 ? listData.get(position).getStock_holder_ratio() : "--");
+
+        if (position == 0) {
+            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            textPropor.setLayoutParams(param);
+        } else {
+            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                    (int) (400 * Double.parseDouble(listData.get(position).getStock_holder_ratio())
+                            / ratio), LinearLayout.LayoutParams.MATCH_PARENT);
+            textPropor.setLayoutParams(param);
+        }
     }
 
     @Override

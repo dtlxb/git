@@ -124,4 +124,8 @@
     <color name="bg_color_1">#ffeeeeee</color>
     <color name="bg_color_2">#ffffffff</color>
 
+    <color name="hotsearch_list_number1">#e42b18</color>
+    <color name="hotsearch_list_number2">#ff7100</color>
+    <color name="hotsearch_list_number3">#ffb900</color>
+
 </resources>
