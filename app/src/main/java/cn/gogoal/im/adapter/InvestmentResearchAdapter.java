@@ -1,17 +1,22 @@
 package cn.gogoal.im.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MainActivity;
+import cn.gogoal.im.activity.ToolsListActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.ToolData;
@@ -46,7 +51,6 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
         itemView.setBackgroundColor(Color.WHITE);
 
         TextView tvDesc = holder.getView(R.id.tv_touyan_item_text);
-//        ImageView imgHot = holder.getView(R.id.img_touyan_operation);
         holder.setVisible(R.id.img_touyan_operation,false);
         ImageView imgIcon = holder.getView(R.id.img_touyan_item_icon);
 
@@ -57,14 +61,14 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
         imgIcon.setVisibility(data.isSimulatedArg() ? View.INVISIBLE : View.VISIBLE);
         tvDesc.setVisibility(data.isSimulatedArg() ? View.INVISIBLE : View.VISIBLE);
 
-//        tvDesc.setTextColor(data.getType()==10000?(data.getIsClick() == 0 ?
-//                getResColor(R.color.textColor_333333) :
-//                getResColor(R.color.textColor_999999)):getResColor(R.color.textColor_333333));
-
         setViewWidth$Height(imgIcon, innerItem / 2, innerItem / 2);
         tvDesc.setText(data.getDesc());
 
-        ImageDisplay.loadImage(context, data.getIconUrl(), imgIcon);
+        if (data.getIsClick()==10086){
+            Glide.with(context).load(Uri.parse(data.getIconUrl())).into(imgIcon);
+        }else {
+            ImageDisplay.loadImage(context, data.getIconUrl(), imgIcon);
+        }
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +82,9 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
                     if (data.getIsClick() == 0) {
                         String[] params = {data.getUrl() + "?code=" + data.getCode(), data.getDesc()};
                         BannerUtils.getInstance(context, data.getType(), params).go();
-                    } else {
+                    } else if (data.getIsClick()==10086){
+                        context.startActivity(new Intent(context, ToolsListActivity.class));
+                    }else {
 //                        new ComingSoonDialog().show(((MainActivity) context).getSupportFragmentManager());
                         UIHelper.toastInCenter(context, "该功能暂未开放使用");
 //                        MessageFullScreen.newInstance("该功能暂未开放使用")

@@ -66,7 +66,8 @@
             app:expandDrawable="@mipmap/img_drop_up"
             app:maxCollapsedLines="3"
             app:collapseExpandTextColor="@android:color/white"
-            />
+            app:contentTextColor="@color/textColor_333333"
+            app:collapseExpandTextSize="16sp"/>
 
     </LinearLayout>
 

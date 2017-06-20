@@ -8,10 +8,8 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterViewFlipper;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,23 +39,23 @@ import cn.gogoal.im.activity.SettingActivity;
 import cn.gogoal.im.activity.SettingStockActivity;
 import cn.gogoal.im.activity.ToolsSettingActivity;
 import cn.gogoal.im.adapter.InvestmentResearchAdapter;
-import cn.gogoal.im.adapter.ViewFlipperAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseMultiItemQuickAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
-import cn.gogoal.im.bean.FlipperData;
 import cn.gogoal.im.bean.MineItem;
 import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
+import cn.gogoal.im.common.ImageUtils.GlideUrilUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.ggqrcode.GGQrCode;
 import cn.gogoal.im.ui.Badge.BadgeView;
+import cn.gogoal.im.ui.colorChoose.ChooseColorDialog;
 import cn.gogoal.im.ui.view.XTitle;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
@@ -66,8 +64,8 @@ import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
  */
 public class MineFragment extends BaseFragment {
 
-    @BindView(R.id.text_flipper)
-    AdapterViewFlipper flipper;
+//    @BindView(R.id.text_flipper)
+//    AdapterViewFlipper flipper;
 
     @BindView(R.id.rv_mine)
     RecyclerView rvMine;
@@ -93,6 +91,7 @@ public class MineFragment extends BaseFragment {
     private ImageView ivMessageTag;
 
     private MineAdapter mineAdapter;
+    private ToolData.Tool moreTools;
 
     public MineFragment() {
     }
@@ -129,7 +128,7 @@ public class MineFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
 
-        XTitle xTitle = setFragmentTitle("我的");
+        moreTools = getMoreTools();
 
         XTitle.ImageAction messageAction = new XTitle.ImageAction(ContextCompat.getDrawable(mContext, R.mipmap.message_dark)) {
             @Override
@@ -138,16 +137,13 @@ public class MineFragment extends BaseFragment {
             }
         };
 
-        xTitle.addAction(messageAction);
-        ivMessageTag = (ImageView) xTitle.getViewByAction(messageAction);
-
         initools();
         iniheadInfo(mContext);
         initRecycler(mContext);
         initDatas();
         rvMine.setAdapter(mineAdapter);
 
-        setViewFlipper();
+//        setViewFlipper();
 
         badge = new BadgeView(getActivity());
         initBadge(unReadCount, badge);
@@ -181,13 +177,13 @@ public class MineFragment extends BaseFragment {
                             object.getJSONArray("data").toJSONString(), ToolData.Tool.class);
                     mGridData.addAll(tools);
 
+                    mGridData.add(moreTools);
                     toolsAdapter.notifyDataSetChanged();
 
                 } else if (code == 1001) {
                     mGridData.clear();
-                    ToolData.Tool moreTools=new ToolData.Tool();
-                    moreTools.setSimulatedArg(false);
-                    mGridData.add(new ToolData.Tool());
+                    mGridData.add(moreTools);
+                    toolsAdapter.notifyDataSetChanged();
                 } else {
 
                 }
@@ -199,14 +195,14 @@ public class MineFragment extends BaseFragment {
         }).startGet();
     }
 
-//    private void showView(boolean show) {
-//        try {
-//            rvMineTools.setVisibility(show ? View.VISIBLE : View.GONE);
-//            tvToolsFlag.setVisibility(show ? View.VISIBLE : View.GONE);
-//        } catch (Exception e) {
-//            e.getMessage();
-//        }
-//    }
+    private ToolData.Tool getMoreTools() {
+        ToolData.Tool moreTools = new ToolData.Tool();
+        moreTools.setSimulatedArg(false);
+        moreTools.setIconUrl(GlideUrilUtils.res2Uri(getContext(), R.mipmap.img_tools_center).toString());
+        moreTools.setIsClick(10086);
+        moreTools.setDesc("更多");
+        return moreTools;
+    }
 
     private void initRecycler(Context mContext) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
@@ -245,37 +241,35 @@ public class MineFragment extends BaseFragment {
         mineAdapter = new MineAdapter(mineItems);
     }
 
+    private ChooseColorDialog chooseColorDialog;
+    private int lastColor;
 
-    private void setViewFlipper() {
-        String rawString = UIHelper.getRawString(getContext(), R.raw.investsaying);
-        final List<FlipperData> datas = JSONObject.parseArray(rawString, FlipperData.class);
-
-        ViewFlipperAdapter flipperAdapter = new ViewFlipperAdapter(getContext(), datas);
-        flipperAdapter.setOnFlipperClickListener(new ViewFlipperAdapter.FlipperClickListener() {
-            @Override
-            public void click(View view, int position) {
-                flipper.showNext();
-            }
-        });
-
-        flipper.setAdapter(flipperAdapter);
-    }
-
-    @OnClick({R.id.layout_user_head,R.id.tv_tools_setting})
+    @OnClick({R.id.layout_user_head,
+            R.id.tv_tools_setting, R.id.img_mine_avatar})
     void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_user_head:
-                startActivity(new Intent(view.getContext(), EditMyInfoActivity.class));
+                if (chooseColorDialog == null) {
+                    chooseColorDialog = new ChooseColorDialog(getContext());
+                    chooseColorDialog.setOnColorSelectListener(new ChooseColorDialog.OnColorSelectListener() {
+                        @Override
+                        public void onSelectFinish(int color) {
+                            lastColor=color;
+                            layoutHead.setBackgroundColor(lastColor);
+                        }
+                    });
+                }
+                chooseColorDialog.setLastColor(lastColor);
+                chooseColorDialog.show();
                 break;
             case R.id.tv_tools_setting:
-                if (mGridData==null || mGridData.isEmpty()) {
-                    UIHelper.toast(view.getContext(),"请先添加工具再编辑");
-                    return;
-                }else {
-                    Intent intent = new Intent(view.getContext(), ToolsSettingActivity.class);
-                    intent.putParcelableArrayListExtra("selected_tools", mGridData);
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(view.getContext(), ToolsSettingActivity.class);
+                mGridData.remove(moreTools);
+                intent.putParcelableArrayListExtra("selected_tools", mGridData);
+                startActivity(intent);
+                break;
+            case R.id.img_mine_avatar:
+                startActivity(new Intent(view.getContext(), EditMyInfoActivity.class));
                 break;
         }
     }
@@ -323,7 +317,7 @@ public class MineFragment extends BaseFragment {
 
                     holder.setVisible(R.id.view_divider,
                             data.getItemText().equals("行情设置") ||
-                                    data.getItemText().equals("专属顾问")||
+                                    data.getItemText().equals("专属顾问") ||
                                     data.getItemText().equals("我的二维码")
                     );
 
@@ -377,12 +371,12 @@ public class MineFragment extends BaseFragment {
     }
 
     private void initBadge(int num, BadgeView badge) {
-        badge.setGravityOffset(10, 7, true);
-        badge.setShowShadow(false);
-        badge.setBadgeGravity(Gravity.TOP | Gravity.END);
-        badge.setBadgeTextSize(8, true);
-        badge.bindTarget(ivMessageTag);
-        badge.setBadgeNumber(num);
+//        badge.setGravityOffset(10, 7, true);
+//        badge.setShowShadow(false);
+//        badge.setBadgeGravity(Gravity.TOP | Gravity.END);
+//        badge.setBadgeTextSize(8, true);
+//        badge.bindTarget(ivMessageTag);
+//        badge.setBadgeNumber(num);
     }
 
     /**

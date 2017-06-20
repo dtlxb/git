@@ -28,7 +28,6 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.NormalIntentUtils;
-import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.XLayout;
@@ -160,11 +159,11 @@ public class InfomationTabFragment extends BaseFragment {
         }
 
         HashMap<String, String> params = new HashMap<>();
-//        params.put("end_time", CalendarUtils.getCurrentTime("yyyy-MM-dd HH:mm:ss"));
+        if (tabType==INFOMATION_TYPE_GET_ASK_NEWS){
+            params.put("contains_top",String.valueOf(false));
+        }
         params.put("page", String.valueOf(defaultPage));
         params.put("rows", String.valueOf(15));
-
-        KLog.e(StringUtils.map2ggParameter(params));
 
         new GGOKHTTP(params, apis.get(tabType), new GGOKHTTP.GGHttpInterface() {
             @Override
