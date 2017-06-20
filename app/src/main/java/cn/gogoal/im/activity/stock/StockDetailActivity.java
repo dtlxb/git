@@ -42,8 +42,10 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.fragment.stock.CompanyFinanceFragment;
+import cn.gogoal.im.fragment.stock.CompanyInfoFragment;
 import cn.gogoal.im.fragment.stock.ImageChartFragment;
-import cn.gogoal.im.fragment.stock.StockDetailNewTab;
+import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
 import cn.gogoal.im.ui.copy.TimesFivesBitmap;
 import cn.gogoal.im.ui.view.XTitle;
 
@@ -354,10 +356,18 @@ public class StockDetailActivity extends BaseActivity {
 
     /**个股新闻*/
     private void initNews() {
+
+        final List<Fragment> fragments=new ArrayList<>();
+        fragments.add(StockNewsMinFragment.getInstance(stockCode,stockName,0));
+        fragments.add(StockNewsMinFragment.getInstance(stockCode,stockName,1));
+        fragments.add(StockNewsMinFragment.getInstance(stockCode,stockName,2));
+        fragments.add(CompanyInfoFragment.newInstance(stockCode));
+        fragments.add(new CompanyFinanceFragment());
+
         vpNews.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return StockDetailNewTab.getInstance(position);
+                return fragments.get(position);
             }
 
             @Override

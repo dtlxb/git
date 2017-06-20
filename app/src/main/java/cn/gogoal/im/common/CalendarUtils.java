@@ -279,25 +279,22 @@ public class CalendarUtils {
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         try {
-            Calendar c = Calendar.getInstance();
-            c.setTime(simpleDateFormat.parse(yMDHms));
-            return formatInteger(c.get(Calendar.HOUR_OF_DAY)) + ":" +
-                    formatInteger(c.get(Calendar.MINUTE));
+            return getHour$Min(simpleDateFormat.parse(yMDHms).getTime());
         } catch (ParseException e) {
             e.printStackTrace();
             return yMDHms.substring(11, 16);
         }
     }
 
-    public static String getHourMin(long timeMillis) {
+    public static String getHour$Min(long timeMillis) {
         try {
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(timeMillis);
             return formatInteger(c.get(Calendar.HOUR_OF_DAY)) + ":" + formatInteger(c.get(Calendar.MINUTE));
         } catch (Exception e) {
             e.printStackTrace();
+            return "日期格式异常";
         }
-        return "日期格式异常";
     }
 
     //传入一个标准的完整时间戳，返回月、日

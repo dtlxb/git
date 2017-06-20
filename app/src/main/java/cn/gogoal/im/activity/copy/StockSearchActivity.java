@@ -157,6 +157,7 @@ public class StockSearchActivity extends BaseActivity {
                         stockJson.put("stockName", stockname);
                         stockJson.put("stockCode", stockcode);
                         SPTools.saveJsonObject("searchedStock", stockJson);
+
                         NormalIntentUtils.go2StockDetail(getActivity(), stockcode, stockname);
 //                        setResult(ConstantUtils.RESULT_OK, intent);
 //                        finish();

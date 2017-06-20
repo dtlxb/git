@@ -1,6 +1,7 @@
 package cn.gogoal.im.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -42,8 +43,11 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
     @Override
     protected void convert(BaseViewHolder holder, final ToolData.Tool data, int position) {
         View itemView = holder.getView(R.id.item_touyan_item);
+        itemView.setBackgroundColor(Color.WHITE);
+
         TextView tvDesc = holder.getView(R.id.tv_touyan_item_text);
-        ImageView imgHot = holder.getView(R.id.img_touyan_operation);
+//        ImageView imgHot = holder.getView(R.id.img_touyan_operation);
+        holder.setVisible(R.id.img_touyan_operation,false);
         ImageView imgIcon = holder.getView(R.id.img_touyan_item_icon);
 
         setViewWidth$Height(itemView, innerItem, innerItem);
@@ -57,20 +61,10 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
 //                getResColor(R.color.textColor_333333) :
 //                getResColor(R.color.textColor_999999)):getResColor(R.color.textColor_333333));
 
-        if (data.isSimulatedArg()) {//模拟数据
-            imgHot.setVisibility(View.INVISIBLE);
-        } else {
-            imgHot.setVisibility(View.VISIBLE);
+        setViewWidth$Height(imgIcon, innerItem / 2, innerItem / 2);
+        tvDesc.setText(data.getDesc());
 
-            setViewWidth$Height(imgHot, 107 * innerItem / 500, 107 * innerItem / 500);
-            setViewWidth$Height(imgIcon, innerItem / 2, innerItem / 2);
-            tvDesc.setText(data.getDesc());
-            imgHot.setPadding(0, 0, 0, 0);
-            imgHot.setImageResource(R.mipmap.img_hot);
-            imgHot.setVisibility(data.getShowHotFlag() == 0 ? View.VISIBLE : View.INVISIBLE);
-
-            ImageDisplay.loadImage(context,data.getIconUrl(),imgIcon);
-        }
+        ImageDisplay.loadImage(context, data.getIconUrl(), imgIcon);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +76,7 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
                 } else {
                     //TODO 跳网页类型
                     if (data.getIsClick() == 0) {
-                        String[] params = {data.getUrl()+"?code="+data.getCode(), data.getDesc()};
+                        String[] params = {data.getUrl() + "?code=" + data.getCode(), data.getDesc()};
                         BannerUtils.getInstance(context, data.getType(), params).go();
                     } else {
 //                        new ComingSoonDialog().show(((MainActivity) context).getSupportFragmentManager());

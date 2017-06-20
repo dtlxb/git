@@ -63,8 +63,9 @@ public class TitleAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
                         context.startActivity(intent);
                         break;
                     default:
-                        intent.putExtra("MODULE_TYPE",RankListDetialActivity.MODULE_TYPE_TTILE_RANK_LIST);
-                        intent.putExtra("RANK_LIST_TYPE",titleType-1);
+                        intent.putExtra("MODULE_TYPE", RankListDetialActivity.MODULE_TYPE_TTILE_RANK_LIST);
+                        intent.putExtra("RANK_LIST_TYPE", titleType - 1);
+                        context.startActivity(intent);
                         break;
                 }
             }

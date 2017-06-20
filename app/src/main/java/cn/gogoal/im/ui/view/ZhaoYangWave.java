@@ -51,7 +51,7 @@ public class ZhaoYangWave extends View {
     }
 
     private void init(Context context) {
-        A=getScreenHeight(context)/32;
+        A=getScreenHeight(context)/60;
 
         pathA = new Path();
         pathB = new Path();
@@ -93,9 +93,9 @@ public class ZhaoYangWave extends View {
         φ3 += 0.04F;
         φ4 += 0.05F;
 
-        float y1, y2, y3/**, y4*/;
+        float y1, y2, y3/*, y4*/;
 
-        double ω = 2*Math.PI /getWidth();
+        double ω = 2.3*Math.PI /getWidth();
 
 
         pathA.moveTo(getLeft(), getBottom());

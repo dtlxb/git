@@ -3,7 +3,7 @@
     android:id="@+id/item_tools_center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/selector_normal_write2gray">
+    android:background="@drawable/selector_normal_white2gray">
 
     <RelativeLayout
         android:layout_width="match_parent"

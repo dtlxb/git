@@ -33,7 +33,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
                 android:divider="@color/transparent"
-                android:scrollbars="none"
+                android:scrollbars="vertical"
                 android:dividerHeight="0dp"
                 tools:listitem="@layout/adapter_folder_list_item"/>
         </FrameLayout>

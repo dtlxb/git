@@ -72,6 +72,8 @@ import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.fragment.stock.CompanyFinanceFragment;
+import cn.gogoal.im.fragment.stock.CompanyInfoFragment;
 import cn.gogoal.im.fragment.stock.ImageChartFragment;
 import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
 import cn.gogoal.im.ui.Badge.BadgeView;
@@ -257,7 +259,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     TabLayout tabLayoutNews;
     @BindView(R.id.vp_news_)
     ViewPager viewPagerNews;
-    private String[] newTitles = {"新闻", "公告", "研报"};
+    private String[] newTitles = {"新闻", "公告", "研报","资料","财务"};
     private RotateAnimation rotateAnimation;
 
     //交易五档、明细
@@ -372,10 +374,17 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     /***/
     private void setNewsTab() {
-        viewPagerNews.setOffscreenPageLimit(3);
+        final List<Fragment> fragments=new ArrayList<>();
+        fragments.add(StockNewsMinFragment.getInstance(stockCode,stockName,0));
+        fragments.add(StockNewsMinFragment.getInstance(stockCode,stockName,1));
+        fragments.add(StockNewsMinFragment.getInstance(stockCode,stockName,2));
+        fragments.add(CompanyInfoFragment.newInstance(stockCode));
+        fragments.add(new CompanyFinanceFragment());
+
+        viewPagerNews.setOffscreenPageLimit(4);
         viewPagerNews.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             public Fragment getItem(int position) {
-                return StockNewsMinFragment.getInstance(stockCode, stockName, position);
+                return fragments.get(position);
             }
 
             public int getCount() {

@@ -62,7 +62,7 @@ public class SearchListAdapter extends BaseSectionQuickAdapter<SearchData, BaseV
             textView.setVisibility(View.GONE);
         }
 
-        holder.itemView.setBackgroundResource(R.drawable.selector_normal_write2gray);
+        holder.itemView.setBackgroundResource(R.drawable.selector_normal_white2gray);
 
         if (searchBean.getChatType() == AppConst.IM_CHAT_TYPE_SQUARE) {
             ChatGroupHelper.setGroupAvatar(searchBean.getConversationId(), new AvatarTakeListener() {

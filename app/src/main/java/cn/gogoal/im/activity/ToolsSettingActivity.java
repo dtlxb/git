@@ -374,4 +374,5 @@ public class ToolsSettingActivity extends BaseActivity {
             return show;
         }
     }
+
 }

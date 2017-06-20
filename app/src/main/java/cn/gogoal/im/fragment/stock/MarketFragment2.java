@@ -60,8 +60,8 @@ public class MarketFragment2 extends BaseFragment {
 
     @BindView(R.id.xLayout)
     XLayout xLayout;
+
     private LinkedList<DelegateAdapter.Adapter> adapters;
-    private RecyclerView.RecycledViewPool viewPool;
 
     @Override
     public int bindLayout() {
@@ -74,11 +74,6 @@ public class MarketFragment2 extends BaseFragment {
         final VirtualLayoutManager layoutManager = new VirtualLayoutManager(mContext);
         rvMarket.setLayoutManager(layoutManager);
         layoutManager.setAutoMeasureEnabled(true);
-
-        //缓存池
-        viewPool = new RecyclerView.RecycledViewPool();
-        rvMarket.setRecycledViewPool(viewPool);
-        viewPool.setMaxRecycledViews(0, 20);
 
         delegateAdapter = new DelegateAdapter(layoutManager, false);
         adapters = new LinkedList<>();
@@ -157,6 +152,7 @@ public class MarketFragment2 extends BaseFragment {
         adapters.clear();
         Market marketData = JSONObject.parseObject(responseInfo, StockMarketBean.class).getData();
         List<HangqingBean> hangqingData = marketData.getHangqing();
+
         List<HangqingBean> newList=new ArrayList<>();
         for (HangqingBean bean : hangqingData) {
             switch (bean.getFullcode()) {
@@ -191,7 +187,9 @@ public class MarketFragment2 extends BaseFragment {
 
         adapters.add(new MarketViewPaerAdapter(newList));
 
-        adapters.add(new TitleAdapter(getContext(),TitleAdapter.RANK_LIST_TITLE_HOT_INDUSTRY));
+        TitleAdapter titleAdapter = new TitleAdapter(getContext(), TitleAdapter.RANK_LIST_TITLE_HOT_INDUSTRY);
+//        titleAdapter.notifyDataSetChanged();
+        adapters.add(titleAdapter);
 
         adapters.add(new HostIndustryGridAdapter(marketData.getHostIndustrylist()));
 
@@ -211,7 +209,8 @@ public class MarketFragment2 extends BaseFragment {
         adapters.add(new RankListAdapter(marketData.getStockRanklist().getAmplitude_list(),
                 RankListAdapter.RANK_TYPE_AMPLITUDE_LIST));
 
-
         delegateAdapter.setAdapters(adapters);
+
+        rvMarket.scrollBy(0,5);
     }
 }
