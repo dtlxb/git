@@ -237,6 +237,7 @@ public class StockNewsMinFragment extends BaseFragment {
         new GGOKHTTP(param, GGOKHTTP.REPORT_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     ArrayList<StockDetailResearchData> detailResearchDatas = JSONObject.parseObject(
@@ -247,7 +248,7 @@ public class StockNewsMinFragment extends BaseFragment {
                         dataListsResearch.addAll(detailResearchDatas);
                     } else {
                         showFootView();
-                        dataListsResearch.subList(0,detailResearchDatas.size()-1);
+                        dataListsResearch.addAll(detailResearchDatas.subList(0,detailResearchDatas.size()-1));
                     }
                     researchadapter.notifyDataSetChanged();
                     xLayout.setStatus(XLayout.Success);
