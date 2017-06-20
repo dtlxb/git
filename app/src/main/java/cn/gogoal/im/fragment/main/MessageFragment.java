@@ -66,6 +66,7 @@ import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
 import cn.gogoal.im.ui.view.PopupMoreMenu;
+import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -93,11 +94,12 @@ public class MessageFragment extends BaseFragment {
     @BindView(R.id.iv_go_back)
     ImageView ivGoBack;
 
+    @BindView(R.id.xLayout)
+    XLayout xLayout;
+
     private List<IMMessageBean> IMMessageBeans;
 
     private ListAdapter listAdapter;
-
-    private int allCount;
 
     public MessageFragment() {
     }
@@ -116,6 +118,8 @@ public class MessageFragment extends BaseFragment {
         IMMessageBeans = new ArrayList<>();
         listAdapter = new ListAdapter(R.layout.item_fragment_message, IMMessageBeans);
         message_recycler.setAdapter(listAdapter);
+
+        xLayout.setEmptyText("暂时还没有聊天信息");
     }
 
     private void initTitle() {
@@ -140,8 +144,12 @@ public class MessageFragment extends BaseFragment {
         IMMessageBeans.clear();
         //查找到消息列表按时间排序
         IMMessageBeans.addAll(DataSupport.order("lastTime desc").find(IMMessageBean.class));
-        allCount = MessageListUtils.getAllMessageUnreadCount();
-        //sendUnreadCount(allCount);
+
+        if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
+            xLayout.setStatus(XLayout.Success);
+        } else {
+            xLayout.setStatus(XLayout.Empty);
+        }
 
         listAdapter.notifyDataSetChanged();
 
@@ -209,8 +217,8 @@ public class MessageFragment extends BaseFragment {
                 DialogHelp.getSelectDialog(getActivity(), "", new String[]{"删除聊天"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //allCount = allCount - Integer.parseInt(IMMessageBeans.get(position).getUnReadCounts());
-                        //sendUnreadCount(allCount);
+                        //发送消息减少消息数
+                        AppManager.getInstance().sendMessage("Decrease_Message_Count", IMMessageBeans.get(position).getUnReadCounts());
                         MessageListUtils.removeMessageInfo(IMMessageBeans.get(position).getConversationID());
                         listAdapter.removeItem(position);
                     }
@@ -526,6 +534,8 @@ public class MessageFragment extends BaseFragment {
         AVIMConversation conversation = (AVIMConversation) map.get("conversation");
         boolean isTheSame = false;
         final String ConversationId = conversation.getConversationId();
+        //移除站位
+        xLayout.setStatus(XLayout.Success);
         //获取免打扰
         KLog.e(conversation.get("mu"));
         if (conversation.get("mu") != null) {
@@ -603,7 +613,7 @@ public class MessageFragment extends BaseFragment {
             case AppConst.IM_CHAT_TYPE_LIVE:
                 break;
             //操纵通讯录
-            case AppConst.IM_CHAT_TYPE_SQUARE_ACTION:
+            case AppConst.IM_CHAT_TYPE_CONTACTS_ACTION:
                 break;
             //公众号模块
             case AppConst.IM_CHAT_TYPE_CONSULTATION:
@@ -639,9 +649,6 @@ public class MessageFragment extends BaseFragment {
             imMessageBean.setUnReadCounts(1 + "");
             IMMessageBeans.add(imMessageBean);
         }
-
-        //allCount++;
-        //sendUnreadCount(allCount);
         //按照时间排序
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
             Collections.sort(IMMessageBeans, new Comparator<IMMessageBean>() {
@@ -653,14 +660,6 @@ public class MessageFragment extends BaseFragment {
         }
 
         listAdapter.notifyDataSetChanged();
-    }
-
-    private void sendUnreadCount(int count) {
-        //发送消息更改消息总数
-        HashMap<String, Object> countMap = new HashMap<>();
-        countMap.put("number", count);
-        BaseMessage countMessage = new BaseMessage("message_count", countMap);
-        AppManager.getInstance().sendMessage("correct_allmessage_count", countMessage);
     }
 
 

@@ -13,16 +13,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.socks.library.KLog;
-
 import org.simple.eventbus.Subscriber;
 
-import java.util.Map;
-
+import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.fragment.ContactsFragment;
 import cn.gogoal.im.fragment.main.MessageFragment;
@@ -41,9 +39,11 @@ public class MessageHolderActivity extends BaseActivity {
     @BindView(R.id.vp_chat_tab)
     UnSlidingViewPager vpChatTab;
 
+    @BindArray(R.array.chat_tab)
+    String[] chatTabsArray;
+
     private MessageFragment messageFragment;
     private ContactsFragment contactsFragment;
-    private String[] chatTabs = {"消息", "通讯录"};
     private BadgeView badge;
     private int unReadCount;
 
@@ -67,25 +67,13 @@ public class MessageHolderActivity extends BaseActivity {
         vpChatTab.setAdapter(messageHolderTabAdapter);
         tabChat.setupWithViewPager(vpChatTab);
 
-        for (int i = 0; i < chatTabs.length; i++) {
+        for (int i = 0; i < chatTabsArray.length; i++) {
             TabLayout.Tab tab = tabChat.getTabAt(i);
             if (tab != null) {
                 tab.setCustomView(messageHolderTabAdapter.getTabView(i));
             }
         }
-
-        tabChat.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-
-            }
-
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            public void onTabReselected(TabLayout.Tab tab) {
-            }
-        });
+        tabChat.getTabAt(0).select();
         badge = new BadgeView(MessageHolderActivity.this);
         initBadge(unReadCount, badge);
     }
@@ -107,12 +95,12 @@ public class MessageHolderActivity extends BaseActivity {
 
         @Override
         public int getCount() {
-            return chatTabs.length;
+            return chatTabsArray.length;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return chatTabs[position];
+            return chatTabsArray[position];
         }
 
         private View getTabView(int position) {
@@ -121,7 +109,6 @@ public class MessageHolderActivity extends BaseActivity {
 
             TextView tv = (TextView) view.findViewById(R.id.tv_main_tab);
             ImageView imageView = (ImageView) view.findViewById(R.id.img_main_tab);
-
             switch (position) {
                 case 0:
                     imageView.setImageResource(R.drawable.selector_icon_main_tab_message);
@@ -129,18 +116,21 @@ public class MessageHolderActivity extends BaseActivity {
                 case 1:
                     imageView.setImageResource(R.drawable.selector_icon_main_tab_mine);
                     break;
+                default:
+                    break;
             }
-            tv.setText(chatTabs[position]);
+            tv.setText(chatTabsArray[position]);
             return view;
         }
     }
 
     private void initBadge(int num, BadgeView badge) {
-        badge.setGravityOffset(0, 0, true);
+        int moveX = AppDevice.getWidth(MessageHolderActivity.this) / 4 - AppDevice.dp2px(MessageHolderActivity.this, 32);
+        badge.setGravityOffset(moveX, 0, false);
         badge.setShowShadow(false);
         badge.setBadgeGravity(Gravity.TOP | Gravity.END);
         badge.setBadgeTextSize(12, true);
-        badge.bindTarget(tabChat.getTabAt(0).getCustomView().findViewById(R.id.layout_badge));
+        badge.bindTarget(tabChat.getTabAt(0).getCustomView());
         badge.setBadgeNumber(num);
     }
 
@@ -150,6 +140,15 @@ public class MessageHolderActivity extends BaseActivity {
     @Subscriber(tag = "IM_Message")
     public void handleMessage(BaseMessage baseMessage) {
         unReadCount++;
+        badge.setBadgeNumber(unReadCount);
+    }
+
+    /**
+     * 消息删除
+     */
+    @Subscriber(tag = "Decrease_Message_Count")
+    public void decreaseMessage(String count) {
+        unReadCount -= Integer.parseInt(count);
         badge.setBadgeNumber(unReadCount);
     }
 }

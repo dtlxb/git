@@ -37,6 +37,7 @@ import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.view.XTitle;
 
 
@@ -47,14 +48,19 @@ import cn.gogoal.im.ui.view.XTitle;
 public class IMNewFriendActivity extends BaseActivity {
 
     XTitle titleBar;
+
+    @BindView(R.id.xLayout)
+    XLayout xLayout;
+
+    @BindView(R.id.recyclerView)
+    RecyclerView newFriendList;
+
     private List<IMNewFriendBean> newFriendBeans = new ArrayList<>();
     private ListAdapter listAdapter;
     private JSONArray jsonArray;
     private List<IMMessageBean> IMMessageBeans = new ArrayList<>();
     private int addType;
     private String conversationId;
-    @BindView(R.id.recyclerView)
-    RecyclerView newFriendList;
 
     @Override
     public int bindLayout() {
@@ -76,6 +82,8 @@ public class IMNewFriendActivity extends BaseActivity {
                 icClear = true;
             }
         }
+
+        xLayout.setEmptyText("暂时还没有好友申请");
         if (icClear) {
             //通知服务器重新获取
             AppManager.getInstance().sendMessage("Cache_change");
@@ -91,10 +99,12 @@ public class IMNewFriendActivity extends BaseActivity {
 
         initRecycleView(newFriendList, R.drawable.shape_divider_1px);
 
-        KLog.e(jsonArray.toString());
         newFriendBeans.clear();
-        if (null != jsonArray) {
+        if (null != jsonArray && jsonArray.size() > 0) {
+            xLayout.setStatus(XLayout.Success);
             newFriendBeans = JSON.parseArray(String.valueOf(jsonArray), IMNewFriendBean.class);
+        } else {
+            xLayout.setStatus(XLayout.Empty);
         }
 
         if (null != newFriendBeans && newFriendBeans.size() > 0) {
