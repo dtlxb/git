@@ -102,6 +102,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     private List<String> urls;
 
     private List<UserBean> userBeans = new ArrayList<>();
+    private JSONObject finalThisGroup;
 
     @Override
     public int bindLayout() {
@@ -141,12 +142,14 @@ public class IMSquareChatSetActivity extends BaseActivity {
             getChatGroup();
         }
 
-        final JSONArray groupsArray = SPTools.getJsonArray(UserUtils.getMyAccountId() + "_groups_saved", new JSONArray());
-        JSONObject thisGroup = null;
+        final JSONArray groupsArray = UserUtils.getLocalMyGooupList();
+
+        //保存群
         for (int i = 0; i < groupsArray.size(); i++) {
             if (((JSONObject) groupsArray.get(i)).getString("conv_id").equals(conversationId)) {
                 saveGroup.setChecked(true);
-                thisGroup = (JSONObject) groupsArray.get(i);
+                finalThisGroup = (JSONObject) groupsArray.get(i);
+                break;
             }
         }
 
@@ -158,8 +161,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
             }
         });
 
-        //保存群
-        final JSONObject finalThisGroup = thisGroup;
         saveGroup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

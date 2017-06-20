@@ -2,9 +2,11 @@ package cn.gogoal.im.common.GGOKHTTP;
 
 import android.util.Log;
 
-import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -798,12 +800,13 @@ public class GGOKHTTP {
                         public void onResponse(String response, int id) {
                             if (httpInterface != null) {
                                 try {
-                                    if (!JSONObject.parseObject(response).containsKey("code") &&
-                                            JSONObject.parseObject(response).containsKey("data")) {
-                                        httpInterface.onFailure("没有code或data字段");
-                                    } else {
+                                    JSONObject jsonObject=new JSONObject(response);
+                                    if (!jsonObject.isNull("code") && !jsonObject.isNull("data")){
                                         httpInterface.onSuccess(response);
+                                    }else {
+                                        httpInterface.onFailure("最外层没有code或data字段");
                                     }
+
                                 } catch (Exception e) {//解析出错，返回就TM就不是json
                                     httpInterface.onFailure(e.getMessage());
                                 }
@@ -814,40 +817,6 @@ public class GGOKHTTP {
         } catch (Exception e) {
             e.printStackTrace();
             Log.e("TAG", "==出错日志==e.getMessage()==出错接口：" + url + "==");
-            if (httpInterface != null) httpInterface.onFailure(e.toString());
-        }
-    }
-
-    public void startRealGet() {
-        try {
-            OkHttpUtils.get()
-                    .url(GGAPI.getReal(url, param))
-                    .build()
-                    .execute(new StringCallback() {
-                        @Override
-                        public void onError(Call call, Exception e, int id) {
-                            if (httpInterface != null) httpInterface.onFailure(e.toString());
-                        }
-
-                        @Override
-                        public void onResponse(String response, int id) {
-                            if (httpInterface != null) {
-                                try {
-                                    if (!JSONObject.parseObject(response).containsKey("code") &&
-                                            JSONObject.parseObject(response).containsKey("data")) {
-                                        httpInterface.onFailure("没有code或data字段");
-                                    } else {
-                                        httpInterface.onSuccess(response);
-                                    }
-                                } catch (Exception e) {//解析出错，返回就TM就不是json
-                                    httpInterface.onFailure(e.getMessage());
-                                }
-                            }
-                            ;
-                        }
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
             if (httpInterface != null) httpInterface.onFailure(e.toString());
         }
     }
@@ -871,34 +840,27 @@ public class GGOKHTTP {
 
                         @Override
                         public void onResponse(String response, int id) {
-                            if (httpInterface != null) httpInterface.onSuccess(response);
+                            KLog.e(response);
+
+                            if (httpInterface != null) {
+                                try {
+                                    JSONObject jsonObject=new JSONObject(response);
+                                    if (!jsonObject.isNull("code") && !jsonObject.isNull("data")){
+                                        httpInterface.onSuccess(response);
+                                    }else {
+                                        httpInterface.onFailure("最外层没有code或data字段");
+                                    }
+
+                                } catch (Exception e) {//解析出错，返回就TM就不是json
+                                    httpInterface.onFailure(e.getMessage());
+                                }
+                            }
                         }
                     });
-
-//            OkHttpUtils
-//                    .post()
-//                    .url(posturl.get("url").toString())
-//                    .params(params)
-//                    .build()
-//                    .execute(new StringCallback() {
-//                        @Override
-//                        public void onError(Call call, Exception e) {
-//                            if (httpInterface != null) httpInterface.onFailure(e.toString());
-//                        }
-//
-//                        @Override
-//                        public void onResponse(String response) {
-//                            if (httpInterface != null) httpInterface.onSuccess(response);
-//                        }
-//                    });
 
         } catch (Exception e) {
             if (httpInterface != null) httpInterface.onFailure(e.toString());
         }
-    }
-
-    public static String getMessage(String responseInfo) {
-        return JSONObject.parseObject(responseInfo).getString("messaage");
     }
 
     public interface GGHttpInterface {

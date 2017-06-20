@@ -368,7 +368,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                 UIHelper.toastError(getActivity(), msg);
             }
         };
-        new GGOKHTTP(param, GGOKHTTP.DM_GET_IMG, ggHttpInterface).startRealGet();
+        new GGOKHTTP(param, GGOKHTTP.DM_GET_IMG, ggHttpInterface).startGet();
 
     }
 

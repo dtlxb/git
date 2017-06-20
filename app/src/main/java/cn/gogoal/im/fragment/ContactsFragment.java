@@ -279,7 +279,7 @@ public class ContactsFragment extends BaseFragment {
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
                     UserInfoUtils.saveAllUserInfo("{\"code\":0,\"data\":[],\"message\":\"成功\"}");
                 } else {
-                    UIHelper.toastError(getActivity(), GGOKHTTP.getMessage(responseInfo));
+                    UIHelper.toastError(getActivity(), "获取好友列表失败");
                 }
             }
 

@@ -182,7 +182,7 @@ public class PhoneContactsActivity extends BaseActivity {
             rvContacts.setAdapter(phoneAdapter);
             rvContacts.addItemDecoration(new NormalItemDecoration(PhoneContactsActivity.this));
 
-            if (phoneContactDatas.isEmpty()) {
+            if (phoneContacts==null || phoneContactDatas.isEmpty()) {
                 emptyLayout.setVisibility(View.VISIBLE);
             } else {
                 emptyLayout.setVisibility(View.GONE);
@@ -198,12 +198,15 @@ public class PhoneContactsActivity extends BaseActivity {
                 map.put("token", UserUtils.getToken());
                 map.put("contacts", JSONObject.toJSONString(mapContacts));
 
+                KLog.e(StringUtils.map2ggParameter(map));
+
                 new GGOKHTTP(map, GGOKHTTP.GET_CONTACTS, new GGOKHTTP.GGHttpInterface() {
                     @Override
                     public void onSuccess(String responseInfo) {
+                        KLog.e(responseInfo);
+
                         if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                             phoneContacts.clear();
-
                             List<PhoneContactData> datas =
                                     JSONObject.parseObject(responseInfo, PhoneContactsInfo.class)
                                             .getData();
@@ -223,7 +226,7 @@ public class PhoneContactsActivity extends BaseActivity {
 
                     @Override
                     public void onFailure(String msg) {
-                        UIHelper.toast(getActivity(), "接口异常(ggm_im/get_contacts)");
+                        UIHelper.toast(getActivity(), "请求异常，请稍后重试!");
                     }
                 }).startPost();
             }
@@ -267,7 +270,7 @@ public class PhoneContactsActivity extends BaseActivity {
                     contactAvatar = iBuilder.build(String.valueOf(contactName.charAt(0)), getContactBgColor());
                 }
 
-                if (!StringUtils.isActuallyEmpty(phoneNumber)) {
+                if (StringUtils.checkPhoneString(phoneNumber)) {
                     PhoneContactData data = new PhoneContactData();
                     data.setName(contactName);
                     data.setMobile(phoneNumber.replaceAll("\\s", "").replace("-", ""));
