@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.StockNewsType;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -181,21 +183,32 @@ public class StockNewsMinFragment extends BaseFragment {
         param.put("stock_code", stockCode);
         param.put("page", "1");
         param.put("type", String.valueOf(type));
-        param.put("rows", "3");
+        param.put("rows", "6");
+
+        KLog.e(StringUtils.map2ggParameter(param));
 
         new GGOKHTTP(param, GGOKHTTP.GET_STOCK_NEWS, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    dataListsNews.clear();
-                    dataListsNews.addAll(
-                            JSONObject.parseObject(responseInfo, StockDetailNewsBean.class).getData());
 
-                    if (dataListsNews.size() < 3) {
+                    dataListsNews.clear();
+
+                    ArrayList<StockDetailNewsData> detailNewsDatas =
+                            JSONObject.parseObject(responseInfo, StockDetailNewsBean.class).getData();
+
+                    KLog.e(detailNewsDatas.size());
+
+                    if (detailNewsDatas.size() < 6) {
+                        dataListsNews.addAll(detailNewsDatas);
                         hideFootView();
+
                     } else {
+                        dataListsNews.addAll(detailNewsDatas.subList(0,detailNewsDatas.size()-1));
                         showFootView();
                     }
+
+                    KLog.e(dataListsNews.size());
 
                     newsAdapter.notifyDataSetChanged();
                     xLayout.setStatus(XLayout.Success);
@@ -207,6 +220,7 @@ public class StockNewsMinFragment extends BaseFragment {
             @Override
             public void onFailure(String msg) {
                 UIHelper.toastError(getContext(), msg, xLayout);
+                KLog.e(msg);
             }
         }).startGet();
     }
@@ -220,23 +234,24 @@ public class StockNewsMinFragment extends BaseFragment {
         param.put("token", UserUtils.getToken());
         param.put("first_class", "公司报告");
         param.put("page", "1");
-        param.put("rows", "3");
+        param.put("rows", "6");
 
         new GGOKHTTP(param, GGOKHTTP.REPORT_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    dataListsResearch.addAll(
-                            JSONObject.parseObject(
-                                    responseInfo, StockDetailResearchBean.class).getData());
-                    researchadapter.notifyDataSetChanged();
 
-                    if (dataListsResearch.size() < 3) {
+                    ArrayList<StockDetailResearchData> detailResearchDatas = JSONObject.parseObject(
+                            responseInfo, StockDetailResearchBean.class).getData();
+
+                    if (detailResearchDatas.size() < 6) {
                         hideFootView();
+                        dataListsResearch.addAll(detailResearchDatas);
                     } else {
                         showFootView();
+                        dataListsResearch.subList(0,detailResearchDatas.size()-1);
                     }
-
+                    researchadapter.notifyDataSetChanged();
                     xLayout.setStatus(XLayout.Success);
                 } else {
                     xLayout.setStatus(XLayout.Empty);
@@ -246,6 +261,7 @@ public class StockNewsMinFragment extends BaseFragment {
             @Override
             public void onFailure(String msg) {
                 UIHelper.toastError(getActivity(), msg, xLayout);
+                KLog.e(msg);
             }
         }).startGet();
     }

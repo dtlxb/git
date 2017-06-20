@@ -2,7 +2,6 @@ package cn.gogoal.im.common.GGOKHTTP;
 
 import android.util.Log;
 
-import com.socks.library.KLog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -801,10 +800,10 @@ public class GGOKHTTP {
                             if (httpInterface != null) {
                                 try {
                                     JSONObject jsonObject=new JSONObject(response);
-                                    if (!jsonObject.isNull("code") && !jsonObject.isNull("data")){
+                                    if (!jsonObject.isNull("code")){
                                         httpInterface.onSuccess(response);
                                     }else {
-                                        httpInterface.onFailure("最外层没有code或data字段");
+                                        httpInterface.onFailure("最外层没有code字段");
                                     }
 
                                 } catch (Exception e) {//解析出错，返回就TM就不是json
@@ -816,7 +815,7 @@ public class GGOKHTTP {
                     });
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("TAG", "==出错日志==e.getMessage()==出错接口：" + url + "==");
+            Log.e("TAG", "==出错日志=="+e.getMessage()+"==出错接口：" + url + "==");
             if (httpInterface != null) httpInterface.onFailure(e.toString());
         }
     }
@@ -840,8 +839,6 @@ public class GGOKHTTP {
 
                         @Override
                         public void onResponse(String response, int id) {
-                            KLog.e(response);
-
                             if (httpInterface != null) {
                                 try {
                                     JSONObject jsonObject=new JSONObject(response);
@@ -859,6 +856,7 @@ public class GGOKHTTP {
                     });
 
         } catch (Exception e) {
+            Log.e("TAG", "==出错日志=="+e.getMessage()+"==出错接口：" + url + "==");
             if (httpInterface != null) httpInterface.onFailure(e.toString());
         }
     }

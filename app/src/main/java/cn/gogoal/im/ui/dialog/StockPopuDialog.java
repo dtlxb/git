@@ -1,6 +1,5 @@
 package cn.gogoal.im.ui.dialog;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.stock.InteractiveInvestorActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.BaseIconText;
@@ -60,7 +58,7 @@ public class StockPopuDialog extends BaseBottomDialog {
 
         rvShareList.setLayoutManager
                 (new GridLayoutManager(
-                        v.getContext(), 4));
+                        v.getContext(), 3));
 
         rvShareList.setAdapter(new BottomSheetAdapter(getDatas(), stock));
 
@@ -74,9 +72,9 @@ public class StockPopuDialog extends BaseBottomDialog {
     }
 
     private List<BaseIconText<Integer, String>> getDatas() {
-        String[] desc = {"文字一分钟", "数据一分钟", "同业比较", "投资者互动"};
+        String[] desc = {"文字一分钟", "数据一分钟", "同业比较"};
         int[] images = {R.mipmap.img_stock_words_minute, R.mipmap.img_stock_data_minute,
-                R.mipmap.img_stock_profession_compare, R.mipmap.img_stock_interactiveinvestor};
+                R.mipmap.img_stock_profession_compare};
 
         String[] urls = {AppConst.GG_TEXT1MINUTE, AppConst.GG_DATA1MINUTE, AppConst.GG_TONG_YE, null};
 
@@ -113,31 +111,15 @@ public class StockPopuDialog extends BaseBottomDialog {
             final HashMap<String, String> args = new HashMap<>();
             args.put("stock_code", stock.getStock_code());
             args.put("stock_name", stock.getStock_name());
+            args.put("code", codesParams[position]);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    switch (position) {
-                        case 0:
-                        case 1:
-                        case 2:
-                            args.put("code", codesParams[position]);
-
-                            NormalIntentUtils.go2WebActivity(
-                                    v.getContext(),
-                                    data.getUrl() + "?"+StringUtils.map2ggParameter(args),
-                                    data.getText(), true);
-
-                            break;
-                        case 3:
-                            if (stock == null) {
-                                return;
-                            }
-                            Intent intent = new Intent(v.getContext(), InteractiveInvestorActivity.class);
-                            intent.putExtra("stock_info", stock);
-                            startActivity(intent);
-                            break;
-                    }
+                    NormalIntentUtils.go2WebActivity(
+                            v.getContext(),
+                            data.getUrl() + "?" + StringUtils.map2ggParameter(args),
+                            data.getText(), true);
 
                     StockPopuDialog.this.dismiss();
                 }
