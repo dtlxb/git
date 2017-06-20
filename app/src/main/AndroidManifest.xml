@@ -98,10 +98,14 @@
 
         <activity
             android:name=".activity.TypeLoginActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <service
             android:name=".servise.AppBackServise"
+            android:exported="false" />
+        <service
+            android:name=".servise.MessageSaveService"
             android:exported="false" />
         <service android:name="com.amap.api.location.APSService" />
 

@@ -295,7 +295,7 @@ public class TextDrawable extends ShapeDrawable {
         IShapeBuilder endConfig();
     }
 
-    public static interface IBuilder {
+    public interface IBuilder {
 
         TextDrawable build(String text, int color);
     }

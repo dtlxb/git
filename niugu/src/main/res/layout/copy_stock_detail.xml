@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textHeadTitle"
             android:layout_centerHorizontal="true"
-            android:text="--  --  --"
+            android:text="-- -- --"
             android:textColor="@color/main_head_title"
             android:textSize="10dp" />
 
@@ -73,11 +73,21 @@
             android:id="@+id/btnRefresh"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/iv_message_tag"
             android:contentDescription="@null"
             android:scaleType="centerInside"
             android:src="@drawable/refresh_white" />
+
+        <ImageView
+            android:id="@+id/iv_message_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:src="@mipmap/message_white" />
 
     </RelativeLayout>
 
@@ -104,6 +114,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
 
                     <LinearLayout
                         android:id="@+id/linear_header"
@@ -554,12 +565,12 @@
                                 app:tabTextAppearance="@style/TabLayoutTextStyle"
                                 app:tabTextColor="@color/tabUnSelected" />
 
-                            <cn.gogoal.im.ui.view.CustomHeightViewPager
+                            <android.support.v4.view.ViewPager
                                 android:id="@+id/vp_news_"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="260dp" />
 
-                            <!--<android.support.design.widget.TabLayout
+                            <android.support.design.widget.TabLayout
                                 android:id="@+id/tablayout_chatImg"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -582,7 +593,7 @@
 
                                 <include layout="@layout/stock_no_data" />
 
-                            </FrameLayout>-->
+                            </FrameLayout>
 
                             <android.support.design.widget.TabLayout
                                 android:id="@+id/tablayout"

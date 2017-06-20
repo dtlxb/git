@@ -4,7 +4,7 @@
     android:id="@+id/item_contacts_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/selector_normal_write2gray"
+    android:background="@drawable/selector_normal_white2gray"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingBottom="10dp"

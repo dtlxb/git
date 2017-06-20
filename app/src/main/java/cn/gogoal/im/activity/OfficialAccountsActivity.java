@@ -30,6 +30,7 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.LcattrsBean;
@@ -66,13 +67,19 @@ public class OfficialAccountsActivity extends BaseActivity {
         messagesAdapter = new OfficialMessagesAdapter(R.layout.item_official_account, officialMessages);
         officialRecycler.setAdapter(messagesAdapter);
 
+        boolean isClear = false;
         //未读数清零
         List<IMMessageBean> iMMessageBeans = DataSupport.findAll(IMMessageBean.class);
         for (int i = 0; i < iMMessageBeans.size(); i++) {
             if (iMMessageBeans.get(i).getConversationID().equals(conversationID)) {
                 iMMessageBeans.get(i).setUnReadCounts("0");
                 MessageListUtils.saveMessageInfo(iMMessageBeans.get(i));
+                isClear = true;
             }
+        }
+        if (isClear) {
+            //通知服务器重新获取
+            AppManager.getInstance().sendMessage("Cache_change");
         }
     }
 

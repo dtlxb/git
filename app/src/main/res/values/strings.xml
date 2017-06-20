@@ -9,6 +9,7 @@
     <string name="title_status">连接中&#8230;</string>
     <string name="title_contacts">金融人脉</string>
     <string name="title_found">投研</string>
+    <string name="title_information">资讯</string>
     <string name="title_live">直播</string>
     <string name="title_mine">我的</string>
     <string name="title_group_chat">发起群聊</string>
@@ -225,9 +226,10 @@
 
     <string name="linear_layout_manager">android.support.v7.widget.LinearLayoutManager</string>
     <string name="grid_layout_manager">android.support.v7.widget.GridLayoutManager</string>
-    
+
     <string name="ten_thousand">%s万</string>
     <string name="ten_thousand_cell">%s万手</string>
     <string name="thousand_million">%s亿</string>
     <string name="thousand_million_cell">%s亿手</string>
+    <string name="infomation_bottom">%1$s | %2$s</string>
 </resources>

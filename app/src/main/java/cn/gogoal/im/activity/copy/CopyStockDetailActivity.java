@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -16,12 +17,14 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver;
 import android.view.animation.RotateAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -48,12 +51,14 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.MessageHolderActivity;
 import cn.gogoal.im.adapter.TreatAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
+import cn.gogoal.im.bean.stock.ChartImageBean;
 import cn.gogoal.im.bean.stock.Stock;
 import cn.gogoal.im.bean.stock.StockDetail;
 import cn.gogoal.im.bean.stock.StockDialogInfo;
@@ -61,19 +66,22 @@ import cn.gogoal.im.bean.stock.TreatData;
 import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.fragment.stock.StockFtenFragment;
+import cn.gogoal.im.fragment.stock.CompanyFinanceFragment;
+import cn.gogoal.im.fragment.stock.CompanyInfoFragment;
+import cn.gogoal.im.fragment.stock.ImageChartFragment;
 import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
+import cn.gogoal.im.ui.Badge.BadgeView;
 import cn.gogoal.im.ui.dialog.StockPopuDialog;
 import cn.gogoal.im.ui.stock.DialogRecyclerView;
 import cn.gogoal.im.ui.stockviews.BitmapChartView;
 import cn.gogoal.im.ui.stockviews.KChartsBitmap;
 import cn.gogoal.im.ui.stockviews.TimesFivesBitmap;
-import cn.gogoal.im.ui.view.CustomHeightViewPager;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
 import hply.com.niugu.autofixtext.AutofitTextView;
 import hply.com.niugu.stock.StockMinuteBean;
@@ -179,7 +187,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     @BindView(R.id.fragment_rotate_header_with_view_group_frame)
     SwipeRefreshLayout ptrFrame;
     //下拉刷新头部控件
-//    private HeaderView headerView;
+    //private HeaderView headerView;
     private int stock_charge_type = 1;
 
     //图表表头
@@ -234,7 +242,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     private int dayK4;
 
     //图片表格
-    /*@BindView(R.id.stock_no_data)
+    @BindView(R.id.stock_no_data)
     LinearLayout layoutNoData;
 
     @BindView(R.id.tablayout_chatImg)
@@ -244,17 +252,15 @@ public class CopyStockDetailActivity extends BaseActivity {
     @BindView(R.id.smartImageView_chat)
     ViewPager vpImageChart;
     @BindArray(R.array.srock_chart_image)
-    String[] arrStockChartImage;*/
+    String[] arrStockChartImage;
 
     //修改的中间新闻模块
     @BindView(R.id.tablayout_news_)
     TabLayout tabLayoutNews;
     @BindView(R.id.vp_news_)
-    CustomHeightViewPager viewPagerNews;
-    private String[] newTitles = {"新闻", "公告", "研报", "F10"};
+    ViewPager viewPagerNews;
+    private String[] newTitles = {"新闻", "公告", "研报","资料","财务"};
     private RotateAnimation rotateAnimation;
-
-    private int screenHeight;
 
     //交易五档、明细
     @BindView(R.id.tablayout_treat)
@@ -274,8 +280,15 @@ public class CopyStockDetailActivity extends BaseActivity {
     @BindView(R.id.iv_show_info_dialog)
     ImageView imageViewShoeDialog;
 
+    @BindView(R.id.iv_message_tag)
+    ImageView ivMessageTag;
+
     @BindArray(R.array.stock_detail_info)
     String[] stockDetailInfos;
+
+    //消息
+    private BadgeView badge;
+    private int unReadCount;
 
     private StockInfoDialogAdapter infoDialogAdapter;
     private List<StockDialogInfo> stockDialogInfoList;
@@ -287,17 +300,9 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-
-        screenHeight = AppDevice.getHeight(mContext);
-
-        stockCode = getIntent().getStringExtra("stock_code");
-        stockName = getIntent().getStringExtra("stock_name");
-        setStockCode(stockCode);
-        setStockName(stockName);
-
         //找控件
         findView();
-//        //初始化
+        //初始化
         init();
 
         setNewsTab();
@@ -306,13 +311,25 @@ public class CopyStockDetailActivity extends BaseActivity {
 
         initList(stockCode);
 
-        //getImageChart();
+        getImageChart();
 
         onShow(showItem);
 
+        initChatMessage();
     }
 
-    /*private void getImageChart() {
+    private void initChatMessage() {
+        badge = new BadgeView(getActivity());
+        initBadge(unReadCount, badge);
+        ivMessageTag.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CopyStockDetailActivity.this, MessageHolderActivity.class));
+            }
+        });
+    }
+
+    private void getImageChart() {
         AppDevice.setViewWidth$Height(layoutImageChart, -1, 350 * AppDevice.getWidth(getActivity()) / 560);
 
         Map<String, String> param = new HashMap<>();
@@ -351,26 +368,23 @@ public class CopyStockDetailActivity extends BaseActivity {
                 UIHelper.toastError(getActivity(), msg);
             }
         };
-        new GGOKHTTP(param, GGOKHTTP.DM_GET_IMG, ggHttpInterface).startRealGet();
+        new GGOKHTTP(param, GGOKHTTP.DM_GET_IMG, ggHttpInterface).startGet();
 
-    }*/
+    }
 
-    /**
-     * 设置新闻-F10的页面
-     */
+    /***/
     private void setNewsTab() {
-        /*LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, 1119 * screenHeight / 1800);
-        viewPagerNews.setLayoutParams(param);*/
+        final List<Fragment> fragments=new ArrayList<>();
+        fragments.add(StockNewsMinFragment.getInstance(stockCode,stockName,0));
+        fragments.add(StockNewsMinFragment.getInstance(stockCode,stockName,1));
+        fragments.add(StockNewsMinFragment.getInstance(stockCode,stockName,2));
+        fragments.add(CompanyInfoFragment.newInstance(stockCode));
+        fragments.add(new CompanyFinanceFragment());
 
         viewPagerNews.setOffscreenPageLimit(4);
         viewPagerNews.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             public Fragment getItem(int position) {
-                if (position == 3) {
-                    return StockFtenFragment.getInstance(stockCode, stockName);
-                } else {
-                    return StockNewsMinFragment.getInstance(stockCode, stockName, position);
-                }
+                return fragments.get(position);
             }
 
             public int getCount() {
@@ -391,16 +405,6 @@ public class CopyStockDetailActivity extends BaseActivity {
             @Override
             public void onPageSelected(int position) {
                 AppManager.getInstance().sendMessage("StockDetailNewsFragment_TAB", new BaseMessage(String.valueOf(position)));
-
-                /*if (position == 3) {
-                    LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT, 1568 * screenHeight / 1800);
-                    viewPagerNews.setLayoutParams(param);
-                } else {
-                    LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT, 1119 * screenHeight / 1800);
-                    viewPagerNews.setLayoutParams(param);
-                }*/
             }
 
             @Override
@@ -422,12 +426,10 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     //初始化
     private void init() {
-
         dayK1 = SPTools.getInt("tv_ln1", 5);
         dayK2 = SPTools.getInt("tv_ln2", 10);
         dayK3 = SPTools.getInt("tv_ln3", 20);
         dayK4 = SPTools.getInt("tv_ln4", 0);
-
         stockCode = getIntent().getStringExtra("stock_code");
         stockName = getIntent().getStringExtra("stock_name");
 
@@ -966,6 +968,9 @@ public class CopyStockDetailActivity extends BaseActivity {
         height = AppDevice.dp2px(getThisContext(), 190);
         timer = new Timer();
         AutoRefresh(refreshtime);
+
+        unReadCount = MessageListUtils.getAllMessageUnreadCount();
+        badge.setBadgeNumber(unReadCount);
     }
 
     @Override
@@ -1004,6 +1009,8 @@ public class CopyStockDetailActivity extends BaseActivity {
 
                     //保存收盘价
                     stock_charge_type = info.getStock_type();
+
+
                     closePrice = hply.com.niugu.StringUtils.getDouble(String.valueOf(info.getClose_price()));
                     change_value = info.getChange_value();
                     StockUtils.savaColseprice((float) closePrice);
@@ -1534,33 +1541,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         return avg_price;
     }
 
-    public String getStockName() {
-        return stockName;
-    }
-
-    public void setStockName(String stockName) {
-        this.stockName = stockName;
-    }
-
-    public String getStockCode() {
-        return stockCode;
-    }
-
-    public void setStockCode(String stockCode) {
-        this.stockCode = stockCode;
-    }
-
-    String now;
-
-    public String getNow() {
-        return now;
-    }
-
-    public void setNow(String now) {
-        this.now = now;
-    }
-
-    /*private class ImageChartAdapter extends FragmentPagerAdapter {
+    private class ImageChartAdapter extends FragmentPagerAdapter {
         private List<String> datas;
 
         private ImageChartAdapter(FragmentManager fm, List<String> datas) {
@@ -1583,7 +1564,7 @@ public class CopyStockDetailActivity extends BaseActivity {
             return arrStockChartImage[position];
         }
 
-    }*/
+    }
 
     /*五档、明细切换*/
     public void toggleTreatMode() {
@@ -1608,7 +1589,6 @@ public class CopyStockDetailActivity extends BaseActivity {
     /**
      * 设置-修改个股详情为弹窗
      */
-
     private void setDialogInfoData(TreatData info) {
         stockDialogInfoList.clear();
         //最高价
@@ -1859,6 +1839,24 @@ public class CopyStockDetailActivity extends BaseActivity {
         private double realDouble(String value) {
             return StringUtils.pareseStringDouble(value.replaceAll("[%手亿万]", ""));
         }
+    }
+
+    private void initBadge(int num, BadgeView badge) {
+        badge.setGravityOffset(2, 5, true);
+        badge.setShowShadow(false);
+        badge.setBadgeGravity(Gravity.TOP | Gravity.END);
+        badge.setBadgeTextSize(8, true);
+        badge.bindTarget(ivMessageTag);
+        badge.setBadgeNumber(num);
+    }
+
+    /**
+     * 消息接收
+     */
+    @Subscriber(tag = "IM_Message")
+    public void handleMessage(BaseMessage baseMessage) {
+        unReadCount++;
+        badge.setBadgeNumber(unReadCount);
     }
 
     private CopyStockDetailActivity getThisContext() {

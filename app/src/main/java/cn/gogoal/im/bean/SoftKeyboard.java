@@ -9,7 +9,9 @@ import android.graphics.drawable.Drawable;
  * description :${annotated}.
  */
 public class SoftKeyboard {
+
     private String num;
+
     private Drawable drawable;
 
     public SoftKeyboard(String num, Drawable drawable) {

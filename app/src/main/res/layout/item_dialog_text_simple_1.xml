@@ -2,7 +2,7 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_dialog_list"
-    android:background="@drawable/selector_normal_write2gray"
+    android:background="@drawable/selector_normal_white2gray"
     android:gravity="center"
     android:textColor="@color/textColor_333333"
     android:textSize="18sp" />

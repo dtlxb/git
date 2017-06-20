@@ -3,7 +3,7 @@
     android:id="@+id/item_stock_hotindustry"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/selector_normal_write2gray"
+    android:background="@drawable/selector_normal_white2gray"
     android:gravity="center"
     android:orientation="vertical"
     android:paddingBottom="10dp"

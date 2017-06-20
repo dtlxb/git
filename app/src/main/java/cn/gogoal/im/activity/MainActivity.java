@@ -38,14 +38,14 @@ import cn.gogoal.im.bean.BoxScreenData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.fragment.main.InvestmentResearchFragment;
+import cn.gogoal.im.fragment.main.InfomationFragment;
 import cn.gogoal.im.fragment.main.LiveListFragment;
 import cn.gogoal.im.fragment.main.MainStockFragment;
-import cn.gogoal.im.fragment.main.MessageFragment;
 import cn.gogoal.im.fragment.main.MineFragment;
 import cn.gogoal.im.ui.Badge.BadgeView;
 
@@ -78,15 +78,21 @@ public class MainActivity extends BaseActivity {
     public MainStockFragment mainStockFragment;
     private LiveListFragment liveListFragment;
 
+    //消息
+    private BadgeView badge;
+    private int unReadCount;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_main;
     }
 
-    /*@BindArray(R.array.emoji_array)
-    String[] emojis;*/
-
-    private BadgeView badge;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        unReadCount = MessageListUtils.getAllMessageUnreadCount();
+        badge.setBadgeNumber(unReadCount);
+    }
 
     @Override
     public void doBusiness(Context mContext) {
@@ -107,13 +113,17 @@ public class MainActivity extends BaseActivity {
         }
 
         setLiveData();
+
+        badge = new BadgeView(MainActivity.this);
+        initBadge(unReadCount, badge);
     }
 
     //底部tab
     private void setTab() {
         //MessageFragment messageFragment = new MessageFragment();                     // TAB1 消息
         mainStockFragment = new MainStockFragment();                                //TAB2 自选股
-        InvestmentResearchFragment foundFragment = new InvestmentResearchFragment(); // TAB3 投研
+//        InvestmentResearchFragment foundFragment = new InvestmentResearchFragment(); // TAB3 投研
+        InfomationFragment infomationFragment = new InfomationFragment();              //TAb3 资讯
         //TAB4 直播
         liveListFragment = new LiveListFragment();
         final MineFragment mineFragment = new MineFragment();                       // TAB5 我的
@@ -121,7 +131,7 @@ public class MainActivity extends BaseActivity {
         List<Fragment> tabFragments = new ArrayList<>();
         //tabFragments.add(messageFragment);
         tabFragments.add(mainStockFragment);
-        tabFragments.add(foundFragment);
+        tabFragments.add(infomationFragment);
         tabFragments.add(liveListFragment);
         tabFragments.add(mineFragment);
 
@@ -160,7 +170,7 @@ public class MainActivity extends BaseActivity {
                 tab.setCustomView(tabAdapter.getTabView(i));
             }
         }
-        tabMain.getTabAt(0).select();
+        tabMain.getTabAt(1).select();
     }
 
     public void changeItem(int index) {
@@ -183,7 +193,7 @@ public class MainActivity extends BaseActivity {
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
                     UserInfoUtils.saveAllUserInfo("{\"code\":0,\"data\":[],\"message\":\"成功\"}");
                 } else {
-                    UIHelper.toastError(getActivity(), GGOKHTTP.getMessage(responseInfo));
+                    UIHelper.toastError(getActivity(), "获取好友列表失败");
                 }
             }
 
@@ -312,45 +322,23 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    /*@Subscriber(tag = "correct_allmessage_count")
-    public void setBadgeViewNum(BaseMessage<Integer> message) {
-        int index = message.getOthers().get("index");
-        int num = message.getOthers().get("number");
-
-        initBadge(index, num);
-
-        if (index >= 0 && index < mainTabArray.length) {
-            if (num > 0) {
-                badge.setBadgeNumber(num);
-            } else {
-                badge.hide(false);
-            }
-        }
+    private void initBadge(int num, BadgeView badge) {
+        badge.setGravityOffset(2, 7, true);
+        badge.setShowShadow(false);
+        badge.setBadgeGravity(Gravity.TOP | Gravity.END);
+        badge.setBadgeTextSize(8, true);
+        badge.bindTarget(ivMessageTag);
+        badge.setBadgeNumber(num);
     }
 
-    private void initBadge(int index, int num) {
-        if (badge != null) {
-            if (num == 0) {
-                badge.hide(false);
-                //TODO
-            } else {
-                badge.setGravityOffset(0, 0, true);
-                badge.setShowShadow(false);
 
-                badge.bindTarget(tabMain.getTabAt(index).getCustomView());
-
-                badge.setBadgeGravity(Gravity.TOP | Gravity.END);
-                badge.setBadgeTextSize(12, true);
-                badge.setBadgePadding(5, true);
-                String uriStr = "android.resource://" + this.getPackageName() + "/" + R.raw.ding;
-
-//                VoiceManager.getInstance(MainActivity.this)
-//                        .startPlay(Uri.parse(uriStr));
-            }
-        } else {
-            badge = new BadgeView(MainActivity.this);
-            badge.bindTarget(tabMain.getTabAt(index).getCustomView());
-        }
-    }*/
+    /**
+     * 消息接收
+     */
+    @Subscriber(tag = "IM_Message")
+    public void handleMessage(BaseMessage baseMessage) {
+        unReadCount++;
+        badge.setBadgeNumber(unReadCount);
+    }
 
 }

@@ -60,7 +60,7 @@ public class MyStockData implements Parcelable {
     private int stock_sort;
     private String stock_name;
     private String change_value;
-    private String price;
+    private double price;
     private String change_rate;
     private int stock_type;
 
@@ -320,11 +320,11 @@ public class MyStockData implements Parcelable {
         this.change_value = change_value;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -389,7 +389,7 @@ public class MyStockData implements Parcelable {
         dest.writeInt(this.stock_sort);
         dest.writeString(this.stock_name);
         dest.writeString(this.change_value);
-        dest.writeString(this.price);
+        dest.writeDouble(this.price);
         dest.writeString(this.change_rate);
         dest.writeInt(this.stock_type);
     }
@@ -430,7 +430,7 @@ public class MyStockData implements Parcelable {
         this.stock_sort = in.readInt();
         this.stock_name = in.readString();
         this.change_value = in.readString();
-        this.price = in.readString();
+        this.price = in.readDouble();
         this.change_rate = in.readString();
         this.stock_type = in.readInt();
     }

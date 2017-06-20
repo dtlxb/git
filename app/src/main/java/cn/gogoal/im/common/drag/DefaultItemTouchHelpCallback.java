@@ -5,6 +5,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DefaultItemTouchHelpCallback extends ItemTouchHelper.Callback {
 
     /**
@@ -118,9 +121,36 @@ public class DefaultItemTouchHelpCallback extends ItemTouchHelper.Callback {
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder srcViewHolder, RecyclerView.ViewHolder targetViewHolder) {
         if (onItemTouchCallbackListener != null) {
+            fromPositions.add(srcViewHolder.getAdapterPosition());
             return onItemTouchCallbackListener.onMove(srcViewHolder.getAdapterPosition(), targetViewHolder.getAdapterPosition());
         }
+
         return false;
+    }
+
+    private List<Integer> fromPositions = new ArrayList<>();
+
+    @Override
+    public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+        super.onSelectedChanged(viewHolder, actionState);
+        if (onItemTouchCallbackListener != null) {
+//            ItemTouchHelper.ACTION_STATE_IDLE
+        }
+    }
+
+    @Override
+    public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        super.clearView(recyclerView, viewHolder);
+//        KLog.e(fromPositions.get(0)+":;;"+viewHolder.getAdapterPosition());
+        if (onItemTouchCallbackListener != null) {
+            onItemTouchCallbackListener.onSelectedChanged(
+                    (fromPositions != null&&fromPositions.isEmpty() ? fromPositions.get(0) : viewHolder.getAdapterPosition()),
+                    viewHolder.getAdapterPosition());
+        }
+
+
+        //
+        fromPositions.clear();
     }
 
     @Override
@@ -129,6 +159,7 @@ public class DefaultItemTouchHelpCallback extends ItemTouchHelper.Callback {
             onItemTouchCallbackListener.onSwiped(viewHolder.getAdapterPosition());
         }
     }
+
 
     public interface OnItemTouchCallbackListener {
         /**
@@ -145,6 +176,9 @@ public class DefaultItemTouchHelpCallback extends ItemTouchHelper.Callback {
          * @param targetPosition 目的地的Item的position
          * @return 开发者处理了操作应该返回true，开发者没有处理就返回false
          */
+
         boolean onMove(int srcPosition, int targetPosition);
+
+        void onSelectedChanged(int fromPosition, int toPosition);
     }
 }

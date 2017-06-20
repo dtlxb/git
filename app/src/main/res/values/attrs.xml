@@ -215,4 +215,29 @@
         </attr>
     </declare-styleable>
 
+
+    <declare-styleable name="ExpandableLayout">
+        <attr name="maxCollapsedLines" format="integer" />
+        <attr name="animDuration" format="integer" />
+        <attr name="expandDrawable" format="reference" />
+        <attr name="collapseDrawable" format="reference" />
+        <attr name="contentTextColor" format="color" />
+        <attr name="collapseExpandTextColor" format="color" />
+        <attr name="contentTextSize" format="dimension" />
+        <attr name="collapseExpandTextSize" format="dimension" />
+        <attr name="textCollapse" format="string" />
+        <attr name="textExpand" format="string" />
+        <attr name="collapseExpandGrarity">
+            <flag name="left" value="3" />
+            <flag name="center" value="17" />
+            <flag name="right" value="5" />
+        </attr>
+        <attr name="drawableGrarity">
+            <flag name="left" value="3" />
+            <flag name="top" value="48" />
+            <flag name="bottom" value="80" />
+            <flag name="right" value="5" />
+        </attr>
+    </declare-styleable>
+
 </resources>

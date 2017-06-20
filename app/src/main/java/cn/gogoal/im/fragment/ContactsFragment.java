@@ -26,7 +26,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.ContactsActivity;
 import cn.gogoal.im.activity.IMNewFriendActivity;
 import cn.gogoal.im.activity.IMSearchLocalActivity;
 import cn.gogoal.im.activity.MyGroupsActivity;
@@ -199,8 +198,7 @@ public class ContactsFragment extends BaseFragment {
         List<UserBean> userBeanList = new ArrayList<>();
         userBeanList.addAll(UserInfoUtils.getAllUserInfo());
 
-        KLog.e(userBeanList);
-        if (null != userBeanList && userBeanList.size() > 0) {
+        if (userBeanList.size() > 0) {
             parseContactDatas(userBeanList, contactBeanList);
         } else {
             getFriendList(contactBeanList);
@@ -276,7 +274,7 @@ public class ContactsFragment extends BaseFragment {
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
                     UserInfoUtils.saveAllUserInfo("{\"code\":0,\"data\":[],\"message\":\"成功\"}");
                 } else {
-                    UIHelper.toastError(getActivity(), GGOKHTTP.getMessage(responseInfo));
+                    UIHelper.toastError(getActivity(), "获取好友列表失败");
                 }
             }
 

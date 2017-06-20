@@ -7,7 +7,7 @@
     android:paddingTop="14dp"
     android:paddingBottom="14dp"
     android:id="@+id/item_mystock_market_4rv"
-    android:background="@drawable/selector_normal_write2gray"
+    android:background="@drawable/selector_normal_white2gray"
     android:orientation="vertical">
 
     <TextView

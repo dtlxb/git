@@ -6,8 +6,11 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.socks.library.KLog;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -16,7 +19,10 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.stock.MyStockData;
 import cn.gogoal.im.common.ArrayUtils;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.StockUtils;
+import cn.gogoal.im.common.StringUtils;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.drag.DefaultItemTouchHelpCallback;
 import cn.gogoal.im.common.drag.DefaultItemTouchHelper;
 import cn.gogoal.im.common.drag.DragAdapter;
@@ -26,7 +32,7 @@ import cn.gogoal.im.ui.view.XTitle;
  * author wangjd on 2017/4/10 0010.
  * Staff_id 1375
  * phone 18930640263
- * description :${annotated}.
+ * description :自选股排序
  */
 public class EditMyStockActivity extends BaseActivity {
 
@@ -186,15 +192,38 @@ public class EditMyStockActivity extends BaseActivity {
 
                 @Override
                 public boolean onMove(int srcPosition, int targetPosition) {
+//                    KLog.e("srcPosition="+srcPosition+";targetPosition="+targetPosition);
+
                     if (myStockList != null) {
                         // 更换数据源中的数据Item的位置
                         Collections.swap(myStockList, srcPosition, targetPosition);
-
                         // 更新UI中的Item的位置，主要是给用户看到交互效果
                         dragAdapter.notifyItemMoved(srcPosition, targetPosition);
+
                         return true;
                     }
                     return false;
+                }
+
+                @Override
+                public void onSelectedChanged(int fromPosition, int toPosition) {
+                    HashMap<String, String> tokenParams = UserUtils.getTokenParams();
+                    tokenParams.put("fromIndex",String.valueOf(fromPosition));
+                    tokenParams.put("toIndex",String.valueOf(toPosition));
+
+                    KLog.e(StringUtils.map2ggParameter(tokenParams));
+
+                    new GGOKHTTP(tokenParams, GGOKHTTP.STOCK_INDEX_SORT, new GGOKHTTP.GGHttpInterface() {
+                        @Override
+                        public void onSuccess(String responseInfo) {
+                            KLog.e(responseInfo);
+                        }
+
+                        @Override
+                        public void onFailure(String msg) {
+
+                        }
+                    }).startGet();
                 }
             };
 

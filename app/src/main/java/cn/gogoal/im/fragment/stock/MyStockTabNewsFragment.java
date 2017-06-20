@@ -51,9 +51,6 @@ public class MyStockTabNewsFragment extends BaseFragment {
     @BindView(R.id.xLayout)
     XLayout xLayout;
 
-    @BindView(R.id.tv_to_search)
-    View searchView;
-
     private int defaultPage = 1;
 
     private MyStockNewsAdapter newsAdapter;
@@ -89,11 +86,9 @@ public class MyStockTabNewsFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        searchView.setVisibility(View.GONE);
-
         stockNewsType = getArguments().getParcelable("stock_news_type");
 
-        rvNews.setVerticalScrollBarEnabled(true);
+        rvNews.setVerticalScrollBarEnabled(false);
 
         newsAdapter = new MyStockNewsAdapter(stockNewsDatas, stockNewsType.getNewsSource());
         rvNews.addItemDecoration(new NormalItemDecoration(mContext));

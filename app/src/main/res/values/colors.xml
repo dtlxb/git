@@ -128,4 +128,10 @@
     <color name="hotsearch_list_number2">#ff7100</color>
     <color name="hotsearch_list_number3">#ffb900</color>
 
+    <color name="face2faceBg">#1b1f22</color>
+    <color name="face2faceKeyTextColor">#626669</color>
+    <!--7*24-->
+    <color name="color7by24">#C8CFDA</color>
+    <color name="colorLevel">#FFEC86</color>
+
 </resources>
