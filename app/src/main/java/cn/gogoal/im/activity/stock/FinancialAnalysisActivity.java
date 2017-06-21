@@ -330,7 +330,7 @@ public class FinancialAnalysisActivity extends BaseActivity {
                     stringList = FtenUtils.turnoverrate2_1;
                     break;
                 case "7":
-                    stringList = FtenUtils.grows2;
+                    stringList = FtenUtils.grows2_1;
                     break;
             }
         }

@@ -10,10 +10,6 @@ public class FtenUtils {
     /**
      * 公司简况
      */
-    public static final int FIRST_STICKY_VIEW = 1;
-    public static final int HAS_STICKY_VIEW = 2;
-    public static final int NONE_STICKY_VIEW = 3;
-
     public static final String[] basicName = {
             "公司名称", "英文名称", "曾用名", "A股代码", "A股简称", "B股代码",
             "B股简称", "H股代码", "H股简称", "证券类别", "所属行业", "总经理",
@@ -218,7 +214,8 @@ public class FtenUtils {
             "资产减值损失(万元)", "其他业务成本(万元)", "营业利润(万元)",
             "加:营业外收入(万元)", "减：营业外支出(万元)", "利润总额(万元)",
             "减：所得税(万元)", "净利润(万元)", "减：少数股东损益(万元)",
-            "归属于母公司所有者的净利润(万元)", "(一)基本每股收益(元)", "(二)稀释每股收益(元)"};
+            "归属于母公司所有者的净利润(万元)", "(一)基本每股收益(元)", "(二)稀释每股收益(元)"
+    };
     public static final String[] profitForm1_1 = {
             "profit_distribution01", "profit_distribution02", "profit_distribution03",
             "profit_distribution04", "profit_distribution05", "profit_distribution06",
@@ -228,7 +225,8 @@ public class FtenUtils {
             "profit_distribution16", "profit_distribution17", "profit_distribution18",
             "profit_distribution19", "profit_distribution20", "profit_distribution21",
             "profit_distribution22", "profit_distribution23", "profit_distribution24",
-            "profit_distribution25", "profit_distribution26", "profit_distribution27"};
+            "profit_distribution25", "profit_distribution26", "profit_distribution27"
+    };
     public static final String[] profitForm2 = {
             "营业总收入(万元)", "营业收入(万元)", "利息收入(万元)", "已赚保费(万元)",
             "手续费及佣金收入(万元)", "营业总成本(万元)", "营业成本(万元)", "利息支出(万元)",
@@ -238,7 +236,8 @@ public class FtenUtils {
             "公允价值变动净收益(万元)", "投资净收益(万元)", "其中:对联营企业和合营企业的投资收益(万元)", "汇兑净收益(万元)",
             "四、营业利润(万元)", "加:营业外收入(万元)", "减:营业外支出(万元)", "其中:非流动资产处置净损失(万元)",
             "利润总额(万元)", "减:所得税(万元)", "加:未确认的投资损失(万元)", "净利润(万元)",
-            "减:少数股东损益(万元)", "归属于母公司所有者的净利润(万元)", "(一) 基本每股收益(元)", "(二) 稀释每股收益(元)"};
+            "减:少数股东损益(万元)", "归属于母公司所有者的净利润(万元)", "(一) 基本每股收益(元)", "(二) 稀释每股收益(元)"
+    };
     public static final String[] profitForm2_1 = {
             "trading_income115", "trading_income116", "trading_income117", "trading_income118",
             "trading_income119", "trading_cost120", "trading_cost121", "trading_cost122",
@@ -248,7 +247,8 @@ public class FtenUtils {
             "trading_cost135", "trading_cost136", "trading_cost137", "trading_cost138",
             "trading_profit141", "trading_profit142", "trading_profit143", "trading_profit144",
             "total_profit147", "total_profit148", "total_profit149", "net_profit152",
-            "net_profit153", "net_profit154", "net_profit155", "net_profit156"};
+            "net_profit153", "net_profit154", "net_profit155", "net_profit156"
+    };
 
     //资产负债表
     public static final String[] assetsForm1 = {
@@ -269,7 +269,8 @@ public class FtenUtils {
             "递延所得税负债(万元)", "其他非流动负债(万元)", "非流动负债合计(万元)", "负债合计(万元)", "实收资本(万元)",
             "资本公积金(万元)", "减:库存股(万元)", "专项储备(万元)", "盈余公积金(万元)", "一般风险准备(万元)",
             "未分配利润(万元)", "外币报表折算差额(万元)", "未确认的投资损失(万元)", "少数股东权益(万元)", "归属于母公司所有者权益合计(万元)",
-            "所有者权益合计(万元)", "负债和所有者权益总计(万元)"};
+            "所有者权益合计(万元)", "负债和所有者权益总计(万元)"
+    };
     public static final String[] assetsForm1_1 = {
             "money_fund1", "deposit_balance2", "lending_funds3", "trade_financial5", "notes_receivable7",
             "receivables8", "prepay9", "trade_debt10", "accounts_bill11", "accounts_billcash12",
@@ -288,7 +289,8 @@ public class FtenUtils {
             "nonflow_debt85", "nonflow_debt86", "nonflow_debt89", "nonflow_debt92", "owner_interest93",
             "owner_interest98", "owner_interest100", "owner_interest101", "owner_interest102", "owner_interest103",
             "owner_interest104", "owner_interest105", "owner_interest106", "owner_interest107", "owner_interest110",
-            "owner_interest111", "owner_interest114"};
+            "owner_interest111", "owner_interest114"
+    };
     public static final String[] assetsForm2 = {
             "现金及存放中央银行款项(万元)", "存放同业和其它金融机构款项(万元)", "贵金属(万元)", "拆出资金(万元)",
             "交易性金融资产(万元)", "衍生金融资产(万元)", "买入返售金融资产(万元)", "应收利息(万元)",
@@ -301,7 +303,8 @@ public class FtenUtils {
             "预计负债(万元)", "其他负债(万元)", "负债合计(万元)", "股本(万元)",
             "资本公积金(万元)", "减：库存股(万元)", "盈余公积金(万元)", "未分配利润(万元)",
             "一般风险准备(万元)", "外币报表折算差额(万元)", "少数股东权益(万元)", "归属于母公司所有者权益合计(万元)",
-            "所有者权益合计(万元)", "负债及股东权益总计(万元)"};
+            "所有者权益合计(万元)", "负债及股东权益总计(万元)"
+    };
     public static final String[] assetsForm2_1 = {
             "money_fund1", "deposit_balance2", "lending_funds3", "liability_value4",
             "trade_financial5", "design_price6", "notes_receivable7", "receivables8",
@@ -314,7 +317,8 @@ public class FtenUtils {
             "noncurrent_assets33", "noncurrent_assets34", "noncurrent_assets35", "noncurrent_assets36",
             "noncurrent_assets37", "noncurrent_assets38", "noncurrent_assets39", "noncurrent_assets40",
             "noncurrent_assets41", "noncurrent_assets42", "noncurrent_assets43", "noncurrent_assets44",
-            "noncurrent_assets45", "noncurrent_assets46"};
+            "noncurrent_assets45", "noncurrent_assets46"
+    };
 
     //现金流量表
     public static final String[] cashForm1 = {
@@ -338,7 +342,8 @@ public class FtenUtils {
             "经营性应收项目的减少(万元)", "经营性应付项目的增加(万元)", "其他(万元)",
             "经营活动产生的现金流量净额(万元)", "债务转为资本(万元)", "一年内到期的可转换公司债券(万元)",
             "融资租入固定资产(万元)", "现金的期末余额(万元)", "减:现金的期初余额(万元)",
-            "加:现金等价物的期末余额(万元)", "减:现金等价物的期初余额(万元)", "间接法-现金及现金等价物净增加额(万元)"};
+            "加:现金等价物的期末余额(万元)", "减:现金等价物的期初余额(万元)", "间接法-现金及现金等价物净增加额(万元)"
+    };
     public static final String[] cashForm1_1 = {
             "manage_lowcash199", "manage_lowcash200", "manage_lowcash201",
             "manage_lowcash204", "manage_lowcash205", "manage_lowcash206",
@@ -360,7 +365,8 @@ public class FtenUtils {
             "further_information268", "further_information269", "further_information270",
             "further_information273", "further_information274", "further_information275",
             "further_information276", "further_information277", "further_information278",
-            "further_information279", "further_information280", "further_information283"};
+            "further_information279", "further_information280", "further_information283"
+    };
     public static final String[] cashForm2 = {
             "客户存款和同业存放款项净增加额(万元)", "向中央银行借款净增加额(万元)", "向其他金融机构拆入资金净增加额(万元)",
             "收取利息和手续费净增加额(万元)", "收到其他与经营活动有关的现金(万元)", "经营活动现金流入小计(万元)",
@@ -382,7 +388,8 @@ public class FtenUtils {
             "其他(万元)", "经营活动产生的现金流量净额(万元)", "债务转为资本(万元)",
             "一年内到期的可转换公司债券(万元)", "融资租入固定资产(万元)", "现金的期末余额(万元)",
             "减:现金的期初余额(万元)", "加:现金等价物的期末余额(万元)", "减:现金等价物的期初余额(万元)",
-            "间接法-现金及现金等价物净增加额(万元)"};
+            "间接法-现金及现金等价物净增加额(万元)"
+    };
     public static final String[] cashForm2_1 = {
             "cash_flow01", "cash_flow02", "cash_flow03",
             "cash_flow04", "cash_flow05", "cash_flow06",
@@ -403,5 +410,6 @@ public class FtenUtils {
             "cash_flow52", "cash_flow53", "cash_flow54",
             "cash_flow55", "cash_flow56", "cash_flow57",
             "cash_flow58", "cash_flow59", "cash_flow60",
-            "cash_flow61"};
+            "cash_flow61"
+    };
 }
