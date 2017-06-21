@@ -781,6 +781,7 @@ public class GGOKHTTP {
     /**
      * F10-股票特殊类型
      * params stock_code
+     * 返回参数：stype { 1 : 一般企业, 2 : 银行, 3 : 保险, 4 : 证券, 5 : 信托 }
      */
     public static final String GET_STOCK_FINANCIAL_TYPE = "v1/f10/get_stock_financial_type";
 

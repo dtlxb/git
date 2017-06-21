@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.copy.MyBaseAdapter;
+import cn.gogoal.im.common.AppDevice;
 
 /**
  * Created by dave.
@@ -25,10 +26,14 @@ public class AnalysisRightAdapter extends MyBaseAdapter {
     private ArrayList<JSONArray> contList;
     private Context context;
 
+    private int screenWidth;
+
     public AnalysisRightAdapter(Context context, ArrayList list) {
         super(list);
         this.context = context;
         this.contList = list;
+
+        screenWidth = AppDevice.getWidth(context);
     }
 
     @Override
@@ -47,6 +52,14 @@ public class AnalysisRightAdapter extends MyBaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                screenWidth - AppDevice.dp2px(context, 150), LinearLayout.LayoutParams.MATCH_PARENT);
+        holder.textReport1.setLayoutParams(param);
+        holder.textReport2.setLayoutParams(param);
+        holder.textReport3.setLayoutParams(param);
+        holder.textReport4.setLayoutParams(param);
+        holder.textReport5.setLayoutParams(param);
 
         if (position % 2 == 0) {
             holder.linearAnalysis.setBackgroundColor(ContextCompat.getColor(context, R.color.bg_color_1));

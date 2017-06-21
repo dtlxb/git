@@ -21,6 +21,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.copy.FtenUtils;
 import cn.gogoal.im.ui.copy.InnerListView;
+import cn.gogoal.im.ui.view.MySyncHorizontalScrollView;
 
 /**
  * Created by dave.
@@ -28,6 +29,9 @@ import cn.gogoal.im.ui.copy.InnerListView;
  * Desc: 财务报表
  */
 public class FinancialStatementsFragment extends BaseFragment {
+
+    @BindView(R.id.rightHorscrollView)
+    MySyncHorizontalScrollView rightHorscrollView;
 
     @BindView(R.id.lsv_left)
     InnerListView lsvLeft;
@@ -98,8 +102,14 @@ public class FinancialStatementsFragment extends BaseFragment {
         String[] stringList = null;
         if (stype.equals("1")) {
             stringList = FtenUtils.profitForm1;
-        } else {
+        } else if (stype.equals("2")) {
             stringList = FtenUtils.profitForm2;
+        } else if (stype.equals("3")) {
+            stringList = FtenUtils.profitForm3;
+        } else if (stype.equals("4")) {
+            stringList = FtenUtils.profitForm4;
+        } else if (stype.equals("5")) {
+            stringList = FtenUtils.profitForm5;
         }
 
         titleList.add("利润分配表");
@@ -149,8 +159,14 @@ public class FinancialStatementsFragment extends BaseFragment {
         String[] stringList = null;
         if (stype.equals("1")) {
             stringList = FtenUtils.profitForm1_1;
-        } else {
+        } else if (stype.equals("2")) {
             stringList = FtenUtils.profitForm2_1;
+        } else if (stype.equals("3")) {
+            stringList = FtenUtils.profitForm3_1;
+        } else if (stype.equals("4")) {
+            stringList = FtenUtils.profitForm4_1;
+        } else if (stype.equals("5")) {
+            stringList = FtenUtils.profitForm5_1;
         }
 
         for (int i = 0; i < stringList.length; i++) {

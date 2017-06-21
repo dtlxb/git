@@ -204,7 +204,7 @@ public class FtenUtils {
     /**
      * 财务报表
      */
-    //利润分配表
+    //利润分配表 1一般，2银行，3保险，4证券，5信托
     public static final String[] profitForm1 = {
             "营业收入(万元)", "利息净收入(万元)", "利息收入(万元)",
             "减：利息支出(万元)", "手续费及佣金净收入(万元)", "手续费及佣金收入(万元)",
@@ -249,8 +249,78 @@ public class FtenUtils {
             "total_profit147", "total_profit148", "total_profit149", "net_profit152",
             "net_profit153", "net_profit154", "net_profit155", "net_profit156"
     };
+    public static final String[] profitForm3 = {
+            "一、营业收入(万元)", "已赚保费(万元)", "保费业务收入(万元)",
+            "其中：分保费收入(万元)", "减：分出保费(万元)", "提取未到期责任准备金(万元)",
+            "投资收益(万元)", "其中：对联营企业和合营企业的投资收益(万元)", "公允价值变动收益(万元)",
+            "汇兑收益(万元)", "其他业务收入(万元)", "二、营业支出(万元)",
+            "退保金(万元)", "赔付支出(万元)", "减：摊回赔付支出(万元)",
+            "提取保险责任准备金(万元)", "减：摊回保险责任准备金(万元)", "保户红利支出(万元)",
+            "分保费用(万元)", "营业税金及附加(万元)", "手续费及佣金支出(万元)",
+            "管理费用(万元)", "减：摊回分保费用(万元)", "其他业务成本(万元)",
+            "资产减值损失(万元)", "三、营业利润(万元)", "加：营业外收入(万元)",
+            "减：营业外支出(万元)", "四、利润总额(万元)", "减：所得税(万元)",
+            "五、净利润(万元)", "减：少数股东损益(万元)", "归属于母公司所有者的净利润(万元)",
+            "(一)基本每股收益(元)", "(二)稀释每股收益(元)"
+    };
+    public static final String[] profitForm3_1 = {
+            "profit_distribution01", "profit_distribution02", "profit_distribution03",
+            "profit_distribution04", "profit_distribution05", "profit_distribution06",
+            "profit_distribution07", "profit_distribution08", "profit_distribution09",
+            "profit_distribution10", "profit_distribution11", "profit_distribution12",
+            "profit_distribution13", "profit_distribution14", "profit_distribution15",
+            "profit_distribution16", "profit_distribution17", "profit_distribution18",
+            "profit_distribution19", "profit_distribution20", "profit_distribution21",
+            "profit_distribution22", "profit_distribution23", "profit_distribution24",
+            "profit_distribution25", "profit_distribution26", "profit_distribution27",
+            "profit_distribution28", "profit_distribution29", "profit_distribution30",
+            "profit_distribution31", "profit_distribution32", "profit_distribution33",
+            "profit_distribution34", "profit_distribution35"
+    };
+    public static final String[] profitForm4 = {
+            "一、营业收入(万元)", "手续费及佣金净收入(万元)", "代理买卖证券业务净收入(万元)",
+            "证券承销业务净收入(万元)", "受托客户资产管理业务净收入(万元)", "利息净收入(万元)",
+            "投资收益(万元)", "其中：对联营企业和合营企业的投资收益(万元)", "公允价值变动收益(万元)",
+            "汇兑收益(万元)", "其他业务收入(万元)", "二、营业支出(万元)",
+            "营业税金及附加(万元)", "管理费用(万元)", "资产减值损失(万元)",
+            "其他业务成本(万元)", "三、营业利润(万元)", "加：营业外收入(万元)",
+            "减：营业外支出(万元)", "四、利润总额(万元)", "减：所得税(万元)",
+            "五、净利润(万元)", "减：少数股东损益(万元)", "归属于母公司所有者的净利润(万元)",
+            "(一)基本每股收益(元)", "(二)稀释每股收益(元)"
+    };
+    public static final String[] profitForm4_1 = {
+            "profit_distribution01", "profit_distribution02", "profit_distribution03",
+            "profit_distribution04", "profit_distribution05", "profit_distribution06",
+            "profit_distribution07", "profit_distribution08", "profit_distribution09",
+            "profit_distribution10", "profit_distribution11", "profit_distribution12",
+            "profit_distribution13", "profit_distribution14", "profit_distribution15",
+            "profit_distribution16", "profit_distribution17", "profit_distribution18",
+            "profit_distribution19", "profit_distribution20", "profit_distribution21",
+            "profit_distribution22", "profit_distribution23", "profit_distribution24",
+            "profit_distribution25", "profit_distribution26"
+    };
+    public static final String[] profitForm5 = {
+            "一、营业收入(万元)", "手续费及佣金净收入(万元)", "利息净收入(万元)",
+            "投资收益(万元)", "其中：对联营企业和合营企业的投资收益(万元)", "公允价值变动收益(万元)",
+            "汇兑收益(万元)", "其他业务收入(万元)", "二、营业支出(万元)",
+            "营业税金及附加(万元)", "管理费用(万元)", "资产减值损失(万元)",
+            "其他业务成本(万元)", "三、营业利润(万元)", "加：营业外收入(万元)",
+            "减：营业外支出(万元)", "四、利润总额(万元)", "减：所得税(万元)",
+            "五、净利润(万元)", "减：少数股东损益(万元)", "归属于母公司所有者的净利润(万元)",
+            "(一)基本每股收益(元)", "(二)稀释每股收益(元)"
+    };
+    public static final String[] profitForm5_1 = {
+            "profit_distribution01", "profit_distribution02", "profit_distribution03",
+            "profit_distribution04", "profit_distribution05", "profit_distribution06",
+            "profit_distribution07", "profit_distribution08", "profit_distribution09",
+            "profit_distribution10", "profit_distribution11", "profit_distribution12",
+            "profit_distribution13", "profit_distribution14", "profit_distribution15",
+            "profit_distribution16", "profit_distribution17", "profit_distribution18",
+            "profit_distribution19", "profit_distribution20", "profit_distribution21",
+            "profit_distribution22", "profit_distribution23"
+    };
 
-    //资产负债表
+    //资产负债表 1一般，2银行，3保险，4证券，5信托
     public static final String[] assetsForm1 = {
             "货币资金(万元)", "结算备付金(万元)", "拆出资金(万元)", "其中:交易性金融资产(万元)", "应收票据(万元)",
             "应收账款(万元)", "预付款项(万元)", "应收保费(万元)", "应收分保账款(万元)", "应收分保合同准备金(万元)",
@@ -320,7 +390,7 @@ public class FtenUtils {
             "noncurrent_assets45", "noncurrent_assets46"
     };
 
-    //现金流量表
+    //现金流量表 1一般，2银行，3保险，4证券，5信托
     public static final String[] cashForm1 = {
             "销售商品、提供劳务收到的现金(万元)", "收到的税费返还(万元)", "收到其他与经营活动有关的现金(万元)",
             "经营活动现金流入小计(万元)", "购买商品、接受劳务支付的现金(万元)", "支付给职工以及为职工支付的现金(万元)",
