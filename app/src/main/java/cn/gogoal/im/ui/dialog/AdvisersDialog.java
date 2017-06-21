@@ -3,7 +3,8 @@ package cn.gogoal.im.ui.dialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
+
+import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.AdvisersAdapter;
 import cn.gogoal.im.bean.Advisers;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
@@ -56,54 +58,26 @@ public class AdvisersDialog extends BaseCentDailog {
         });
 
         datas = new ArrayList<>();
-        advisersAdapter = new AdvisersAdapter(getActivity(),this, datas, 4*getWidth()/25);
+        advisersAdapter = new AdvisersAdapter(getActivity(), this, datas, 4 * getWidth() / 25);
         rvAdvisers.setAdapter(advisersAdapter);
 
         //先取缓存，再请求覆盖
-        UserUtils.getAdvisers(new UserUtils.GetAdvisersCallback() {
+        UserUtils.getAdvisers(new Impl<String>() {
             @Override
-            public void onSuccess(List<Advisers> advisersList) {
-                datas.clear();
-                datas.addAll(advisersList);
-                advisersAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailed(String errorMsg) {
-                UIHelper.toast(getActivity(), errorMsg, Toast.LENGTH_LONG);
+            public void response(int code, String data) {
+                switch (code) {
+                    case Impl.RESPON_DATA_SUCCESS:
+                        datas.clear();
+                        datas.addAll(JSONObject.parseArray(data, Advisers.class));
+                        advisersAdapter.notifyDataSetChanged();
+                        break;
+                    default:
+                        UIHelper.toast(getContext(), data);
+                        break;
+                }
             }
         });
 
     }
-
-//    /**
-//     * 请求获取投资顾问
-//     */
-//    private void getAdvisers() {
-//        new GGOKHTTP(UserUtils.getTokenParams(), GGOKHTTP.GET_MY_ADVISERS, new GGOKHTTP.GGHttpInterface() {
-//            @Override
-//            public void onSuccess(String responseInfo) {
-//                KLog.e(responseInfo);
-//                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
-//                if (code == 0) {
-//                    datas.clear();
-//                    List<Advisers> data = JSONObject.parseObject(responseInfo, AdvisersBean.class).getData();
-//                    SPTools.saveString("ADVISERS_LIST", JSONObject.toJSONString(data));
-//                    datas.addAll(data);
-//                    advisersAdapter.notifyDataSetChanged();
-//
-//                } else if (code == 1001) {
-//
-//                } else {
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(String msg) {
-//                UIHelper.toastError(getContext(), msg);
-//            }
-//        }).startGet();
-//    }
 
 }

@@ -121,15 +121,17 @@
     <color name="player_space">#f6f6f6</color>
     <color name="player_base">#f1f1f1</color>
 
+    <color name="bg_color_1">#ffeeeeee</color>
+    <color name="bg_color_2">#ffffffff</color>
+
+    <color name="hotsearch_list_number1">#e42b18</color>
+    <color name="hotsearch_list_number2">#ff7100</color>
+    <color name="hotsearch_list_number3">#ffb900</color>
+
     <color name="face2faceBg">#1b1f22</color>
     <color name="face2faceKeyTextColor">#626669</color>
     <!--7*24-->
     <color name="color7by24">#C8CFDA</color>
     <color name="colorLevel">#FFEC86</color>
-    <color name="money_into_large">#ca2c36</color>
-    <color name="money_into_middle">#e1515b</color>
-    <color name="money_into_small">#ff9a99</color>
-    <color name="money_out_large">#247c54</color>
-    <color name="money_out_middle">#34b578</color>
-    <color name="money_out_small">#63dca4</color>
+
 </resources>

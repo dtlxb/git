@@ -108,7 +108,7 @@ public class EditMyInfoActivity extends BaseActivity {
         private MyInfoAdapter(List<UserDetailInfo> data) {
             super(data);
             addItemType(UserDetailInfo.HEAD, R.layout.header_rv_edit_my_info);
-            addItemType(UserDetailInfo.SPACE, R.layout.layout_sapce_15dp);
+            addItemType(UserDetailInfo.SPACE, R.layout.layout_space_15dp);
             addItemType(UserDetailInfo.TEXT_ITEM_2, R.layout.item_rv_edit_my_info);
         }
 

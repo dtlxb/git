@@ -276,7 +276,7 @@ public class MineFragment extends BaseFragment {
         private MineAdapter(List<MineItem> data) {
             super(data);
 //            addItemType(MineItem.TYPE_HEAD, R.layout.item_type_mine_middle);
-            addItemType(MineItem.TYPE_SPACE, R.layout.layout_sapce_15dp);
+            addItemType(MineItem.TYPE_SPACE, R.layout.layout_space_15dp);
             addItemType(MineItem.TYPE_ICON_TEXT_ITEM, R.layout.item_type_mine_icon_text);
         }
 
