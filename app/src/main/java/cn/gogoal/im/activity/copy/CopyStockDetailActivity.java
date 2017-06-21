@@ -9,11 +9,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.text.TextUtils;
@@ -24,7 +22,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver;
 import android.view.animation.RotateAnimation;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -36,7 +33,6 @@ import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,13 +48,13 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MessageHolderActivity;
+import cn.gogoal.im.activity.stock.InteractiveInvestorActivity;
 import cn.gogoal.im.adapter.TreatAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
-import cn.gogoal.im.bean.stock.ChartImageBean;
 import cn.gogoal.im.bean.stock.Stock;
 import cn.gogoal.im.bean.stock.StockDetail;
 import cn.gogoal.im.bean.stock.StockDialogInfo;
@@ -74,7 +70,6 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.stock.CompanyFinanceFragment;
 import cn.gogoal.im.fragment.stock.CompanyInfoFragment;
-import cn.gogoal.im.fragment.stock.ImageChartFragment;
 import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
 import cn.gogoal.im.ui.Badge.BadgeView;
 import cn.gogoal.im.ui.dialog.StockPopuDialog;
@@ -82,6 +77,7 @@ import cn.gogoal.im.ui.stock.DialogRecyclerView;
 import cn.gogoal.im.ui.stockviews.BitmapChartView;
 import cn.gogoal.im.ui.stockviews.KChartsBitmap;
 import cn.gogoal.im.ui.stockviews.TimesFivesBitmap;
+import cn.gogoal.im.ui.view.GreatScrollView;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
 import hply.com.niugu.autofixtext.AutofitTextView;
 import hply.com.niugu.stock.StockMinuteBean;
@@ -98,94 +94,76 @@ public class CopyStockDetailActivity extends BaseActivity {
     TimesFivesBitmap timesBitmap;
 
     StockMinuteBean timesBean;
+
     //返回
     @BindView(R.id.btnBack)
     LinearLayout btnBack;
+
     //标题栏
     @BindView(R.id.relative_header)
     RelativeLayout relative_header;
-    //标题
+
     //标题
     @BindView(R.id.textHeadTitle)
     TextView textHeadTitle;
+
     //交易状态及时间
     @BindView(R.id.text_state)
     TextView text_state;
+
     //刷新
     @BindView(R.id.btnRefresh)
     ImageView btnRefresh;
+
     //刷新按钮加载菊花动画
     protected static RotateAnimation animation;
+
     //数据栏
     @BindView(R.id.linear_header)
     LinearLayout linear_header;
+
     //下拉刷新
     @BindView(R.id.scrollView)
-    NestedScrollView scrollView;
+    GreatScrollView scrollView;
+
     //股票价格
     @BindView(R.id.stock_price)
     AutofitTextView stock_price;
+
     //涨跌
     @BindView(R.id.stock_detail_tv1)
     AutofitTextView stock_detail_tv1;
+
     @BindView(R.id.stock_detail_tv2)
     AutofitTextView stock_detail_tv2;
+
     //今开
-    @BindView(R.id.textView1)
-    TextView textView1;
     @BindView(R.id.stock_start)
     AutofitTextView stock_start;
+
     //成交量
-    @BindView(R.id.textView3)
-    TextView textView3;
     @BindView(R.id.stock_volume)
     AutofitTextView stock_volume;
+
     //昨收
-    @BindView(R.id.textView2)
-    TextView textView2;
     @BindView(R.id.stock_close)
     AutofitTextView stock_close;
+
     //换手率
-    @BindView(R.id.textView4)
-    TextView textView4;
     @BindView(R.id.stock_turnover_rate)
     TextView stock_turnover_rate;
-    //最高
-    @BindView(R.id.stock_detail_tv3)
-    TextView stock_detail_tv3;
-    //内盘
-    @BindView(R.id.stock_detail_tv4)
-    TextView stock_detail_tv4;
-    //市盈率
-    @BindView(R.id.stock_detail_tv5)
-    TextView stock_detail_tv5;
-    //最低
-    @BindView(R.id.stock_detail_tv6)
-    AutofitTextView stock_detail_tv6;
-    //外盘
-    @BindView(R.id.stock_detail_tv7)
-    TextView stock_detail_tv7;
-    //振幅
-    @BindView(R.id.stock_detail_tv8)
-    AutofitTextView stock_detail_tv8;
-    //成交额
-    @BindView(R.id.stock_detail_tv9)
-    AutofitTextView stock_detail_tv9;
-    //总市值
-    @BindView(R.id.stock_detail_tv10)
-    TextView stock_detail_tv10;
-    //流通市值
-    @BindView(R.id.stock_detail_tv11)
-    AutofitTextView stock_detail_tv11;
+
     //停牌
     @BindView(R.id.text_delist)
     TextView text_delist;
+
     @BindView(R.id.stock_detail_delist)
     TextView stock_detail_delist;
 
     //下拉刷新rootView
     @BindView(R.id.fragment_rotate_header_with_view_group_frame)
     SwipeRefreshLayout ptrFrame;
+
     //下拉刷新头部控件
     //private HeaderView headerView;
     private int stock_charge_type = 1;
@@ -209,11 +187,8 @@ public class CopyStockDetailActivity extends BaseActivity {
     @BindView(R.id.stock_detail_fragment_time_line)
     BitmapChartView mBitmapChartView;//图表控件
 
-    //诊断
-    @BindView(R.id.stock_detail_diagnose)
-    TextView stock_detail_diagnose;
-    //加自选
-    @BindView(R.id.stock_detail_choose)
+//    //加自选
+    @BindView(R.id.tv_stockDetail_toggle_mystock)
     TextView stock_detail_choose;
 
     private int pixels = -85;
@@ -232,8 +207,6 @@ public class CopyStockDetailActivity extends BaseActivity {
     private int height;
 
     private boolean isChoose = true;
-    private int dpi;
-
 
     //k线数据设置
     private int dayK1;
@@ -241,25 +214,12 @@ public class CopyStockDetailActivity extends BaseActivity {
     private int dayK3;
     private int dayK4;
 
-    //图片表格
-    @BindView(R.id.stock_no_data)
-    LinearLayout layoutNoData;
-
-    @BindView(R.id.tablayout_chatImg)
-    TabLayout tabImageChart;
-    @BindView(R.id.layout_imgchart_and_nodata)
-    FrameLayout layoutImageChart;
-    @BindView(R.id.smartImageView_chat)
-    ViewPager vpImageChart;
-    @BindArray(R.array.srock_chart_image)
-    String[] arrStockChartImage;
-
     //修改的中间新闻模块
     @BindView(R.id.tablayout_news_)
     TabLayout tabLayoutNews;
     @BindView(R.id.vp_news_)
     ViewPager viewPagerNews;
-    private String[] newTitles = {"新闻", "公告", "研报","资料","财务"};
+    private String[] newTitles = {"新闻", "公告", "研报", "资料", "财务"};
     private RotateAnimation rotateAnimation;
 
     //交易五档、明细
@@ -291,6 +251,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     private int unReadCount;
 
     private StockInfoDialogAdapter infoDialogAdapter;
+
     private List<StockDialogInfo> stockDialogInfoList;
 
     @Override
@@ -300,6 +261,7 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+
         //找控件
         findView();
         //初始化
@@ -310,8 +272,6 @@ public class CopyStockDetailActivity extends BaseActivity {
         getStockInfoDialog();
 
         initList(stockCode);
-
-        getImageChart();
 
         onShow(showItem);
 
@@ -329,55 +289,12 @@ public class CopyStockDetailActivity extends BaseActivity {
         });
     }
 
-    private void getImageChart() {
-        AppDevice.setViewWidth$Height(layoutImageChart, -1, 350 * AppDevice.getWidth(getActivity()) / 560);
-
-        Map<String, String> param = new HashMap<>();
-        param.put("stock_code", stockCode);
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-
-                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
-
-                if (code == 0) {
-                    layoutNoData.setVisibility(View.GONE);
-                    final ChartImageBean.ChartImage chartImage = JSONObject.parseObject(responseInfo, ChartImageBean.class).getData();
-
-                    final List<String> chartImageLists = new ArrayList<>();
-
-                    chartImageLists.add(chartImage.getEps_img());
-                    chartImageLists.add(chartImage.getProfit_img());
-                    chartImageLists.add(chartImage.getPe_img());
-
-                    final ImageChartAdapter chartAdapter = new ImageChartAdapter(getSupportFragmentManager(), chartImageLists);
-
-                    vpImageChart.setAdapter(chartAdapter);
-
-                    tabImageChart.setupWithViewPager(vpImageChart);
-
-                } else {
-                    layoutNoData.setVisibility(View.VISIBLE);
-                }
-
-            }
-
-            public void onFailure(String msg) {
-
-                layoutNoData.setVisibility(View.VISIBLE);
-                UIHelper.toastError(getActivity(), msg);
-            }
-        };
-        new GGOKHTTP(param, GGOKHTTP.DM_GET_IMG, ggHttpInterface).startGet();
-
-    }
-
     /***/
     private void setNewsTab() {
-        final List<Fragment> fragments=new ArrayList<>();
-        fragments.add(StockNewsMinFragment.getInstance(stockCode,stockName,0));
-        fragments.add(StockNewsMinFragment.getInstance(stockCode,stockName,1));
-        fragments.add(StockNewsMinFragment.getInstance(stockCode,stockName,2));
+        final List<Fragment> fragments = new ArrayList<>();
+        fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 0));
+        fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 1));
+        fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 2));
         fragments.add(CompanyInfoFragment.newInstance(stockCode));
         fragments.add(new CompanyFinanceFragment());
 
@@ -445,18 +362,12 @@ public class CopyStockDetailActivity extends BaseActivity {
         }
 
         textHeadTitle.setText(stockName + "(" + stockCode + ")");
-        dpi = AppDevice.getWidth(getThisContext());
 
         if (StockUtils.isMyStock(stockCode)) {
             toggleIsMyStock(true, false);
         } else {
             toggleIsMyStock(false, false);
         }
-
-        textView1.setAlpha((float) 0.7);
-        textView2.setAlpha((float) 0.7);
-        textView3.setAlpha((float) 0.7);
-        textView4.setAlpha((float) 0.7);
 
         showItem = SPTools.getInt("showItem", 0);
 
@@ -984,7 +895,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     /**
      * 初始化数据
      *
-     * @param stockCode
+     * @param stockCode;
      */
     private void initList(final String stockCode) {
         final Map<String, String> param = new HashMap<String, String>();
@@ -993,8 +904,6 @@ public class CopyStockDetailActivity extends BaseActivity {
 
             @Override
             public void onSuccess(String responseInfo) {
-
-                KLog.e(responseInfo);
 
                 StockDetail bean = JSONObject.parseObject(responseInfo, StockDetail.class);
 
@@ -1077,54 +986,12 @@ public class CopyStockDetailActivity extends BaseActivity {
                     }
                     stock_turnover_rate.setText(StringUtils.save2Significand(
                             StringUtils.pareseStringDouble(info.getTurnover_rate()) * 100) + "%");//换手率
-                    if (info.getHigh_price() == null) {
-                        stock_detail_tv3.setText("0.00");//最高
-                    } else {
-                        stock_detail_tv3.setText(StringUtils.save2Significand(Double.parseDouble(info.getHigh_price())));
-                    }
-                    if (info.getVolume_inner() == null || Integer.parseInt(info.getVolume_inner()) == 0 || info.getVolume_inner().length() < 3) {
-                        stock_detail_tv4.setText("0");//内盘
-                    } else {
-                        if (info.getVolume_inner().length() > 6) {
-                            stock_detail_tv4.setText(StringUtils.save2Significand((Double.parseDouble(info.getVolume_inner()) / 1000000)) + "万");
-                        } else {
-                            String inner = String.valueOf((Double.parseDouble(info.getVolume_inner()) / 100));
-                            stock_detail_tv4.setText(StringUtils.getIntegerData(inner) + "手");
-                        }
-                    }
-                    if (info.getLow_price() == null) {
-                        stock_detail_tv6.setText("0.00");//最低
-                    } else {
-                        stock_detail_tv6.setText(StringUtils.save2Significand(Double.parseDouble(info.getLow_price())));
-                    }
-                    if ($(info.getVolume_outer()) == 0 || info.getVolume_outer().length() < 3) {
-                        stock_detail_tv7.setText("0");//外盘
-                    } else {
-                        if (info.getVolume_outer().length() > 6) {
-                            stock_detail_tv7.setText(
-                                    StringUtils.save2Significand(
-                                            ($(info.getVolume_outer()) / 1000000)) + "万");
-                        } else {
-                            double outer = $(info.getVolume_outer()) / 100;
-                            stock_detail_tv7.setText(StringUtils.getIntegerData(Double.toString(outer)) + "手");
-                        }
-                    }
-                    if ($(info.getTurnover()) == 0) {
-                        stock_detail_tv9.setText("0");
-                    } else {
-                        if (StringUtils.save2Significand(Double.valueOf(info.getTurnover())).length() < 7) {
-                            stock_detail_tv9.setText(StringUtils.save2Significand(Double.valueOf(info.getTurnover())) + "万");//成交额
-                        } else {
-                            stock_detail_tv9.setText(StringUtils.save2Significand((Double.valueOf(info.getTurnover()) / 10000)) + "亿");
-                        }
-                    }
                     if (stock_charge_type == 1) {
                         text_state.setVisibility(View.VISIBLE);
                         text_delist.setVisibility(View.GONE);
                         stock_detail_tv1.setVisibility(View.VISIBLE);
                         stock_detail_tv2.setVisibility(View.VISIBLE);
                         stock_detail_delist.setVisibility(View.GONE);
-                        stock_detail_tv8.setText(StringUtils.save2Significand(info.getAmplitude()) + "%");//振幅
                     } else {
                         //停牌处理
                         text_state.setVisibility(View.GONE);
@@ -1134,35 +1001,8 @@ public class CopyStockDetailActivity extends BaseActivity {
                         stock_detail_tv2.setVisibility(View.GONE);
                         stock_detail_delist.setVisibility(View.VISIBLE);
                         stock_detail_delist.setText(StockUtils.getStockStatus(stock_charge_type));
-                        stock_detail_tv6.setText("--");//最低
-                        stock_detail_tv8.setText("--");//振幅
                     }
                     stock_close.setText(StringUtils.save2Significand(info.getClose_price()));//收盘价
-                    if (info.getPe_y1() == null) {
-                        stock_detail_tv5.setText("0.00");
-                    } else {
-                        stock_detail_tv5.setText(StringUtils.save2Significand(Double.parseDouble(info.getPe_y1())));//市盈率
-                    }
-                    DecimalFormat df = new DecimalFormat("0.0");
-                    if (StringUtils.save2Significand(info.getTcap()).length() > 10) {
-                        stock_detail_tv10.setText(df.format(StringUtils.pareseStringDouble(info.getTcap()) / 100000000) + "万亿");//市值
-                    } else {
-                        try {
-                            stock_detail_tv10.setText(df.format(StringUtils.pareseStringDouble(info.getTcap()) / 10000) + "亿");//市值
-                        } catch (Exception e) {
-                        }
-                    }
-                    if (StringUtils.save2Significand(info.getMcap()).length() > 10) {
-                        try {
-                            stock_detail_tv11.setText(df.format(StringUtils.pareseStringDouble(info.getMcap()) / 100000000) + "万亿");//流通市值
-                        } catch (Exception e) {
-                        }
-                    } else {
-                        try {
-                            stock_detail_tv11.setText(df.format(StringUtils.pareseStringDouble(info.getMcap()) / 10000) + "亿");//流通市值
-                        } catch (Exception e) {
-                        }
-                    }
                     //监听当前滚动位置，动态改变状态
                     scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
                         @Override
@@ -1213,16 +1053,6 @@ public class CopyStockDetailActivity extends BaseActivity {
                         setZero2Line(stock_close);
                         setZero2Line(stock_volume);
                         setZero2Line(stock_turnover_rate);
-
-                        setZero2Line(stock_detail_tv3);
-                        setZero2Line(stock_detail_tv4);
-                        setZero2Line(stock_detail_tv5);
-                        setZero2Line(stock_detail_tv6);
-                        setZero2Line(stock_detail_tv7);
-                        setZero2Line(stock_detail_tv9);
-                        setZero2Line(stock_detail_tv8);
-                        setZero2Line(stock_detail_tv10);
-                        setZero2Line(stock_detail_tv11);
                     }
                 }
                 stopAnimation();
@@ -1382,23 +1212,13 @@ public class CopyStockDetailActivity extends BaseActivity {
         }
     }
 
-    //评论, 诊断, 分享, 加自选
-    @OnClick({R.id.stock_detail_diagnose,
-            R.id.stock_detail_choose,
-            R.id.iv_show_info_dialog})
+    //popu，工具箱，股票
+    @OnClick({R.id.iv_show_info_dialog,
+            R.id.tv_stockDetail_tools, R.id.tv_stockDetail_stockCircle,
+            R.id.tv_stockDetail_interactiveinvestor, R.id.tv_stockDetail_toggle_mystock})
     public void allBtnClick(View v) {
         switch (v.getId()) {
-            case R.id.stock_detail_diagnose:
-                Stock stock = new Stock(stockCode, stockName);
-                stock.setChangeValue(StringUtils.save2Significand(change_value));
-                stock.setStock_charge_type(stock_charge_type);
-                stock.setClosePrice(closePrice);
-                StockPopuDialog.newInstance(stock).show(getSupportFragmentManager());
-                break;
-            case R.id.stock_detail_choose:
-                addOptionalShare();//TODO 更换新的删除自选股接口
-                break;
-            case R.id.iv_show_info_dialog:
+            case R.id.iv_show_info_dialog://交易popu
                 if (isMaskViewVisiable()) {
                     dismissMarket();
                 } else {
@@ -1406,17 +1226,37 @@ public class CopyStockDetailActivity extends BaseActivity {
                 }
                 break;
 
-//            case R.id.view_dialog_mask:
-//                dismissMarket();
-//                break;
+            case R.id.tv_stockDetail_tools://工具箱
+                StockPopuDialog.newInstance(getStockBean()).show(getSupportFragmentManager());
+                break;
+
+            case R.id.tv_stockDetail_toggle_mystock://tog 加减自选股
+                addOptionalShare();//TODO 更换新的删除自选股接口
+                break;
+
+            case R.id.tv_stockDetail_stockCircle://股票圈，进入后台群
+                //TODO 股票圈，进入后台群
+                break;
+            case R.id.tv_stockDetail_interactiveinvestor://投资者互动
+                //TODO 股票圈，进入后台群
+                Intent intent = new Intent(v.getContext(), InteractiveInvestorActivity.class);
+                intent.putExtra("stock_info", getStockBean());
+                startActivity(intent);
+                break;
         }
     }
 
+    private Stock getStockBean(){
+        Stock stock = new Stock(stockCode, stockName);
+        stock.setChangeValue(StringUtils.save2Significand(change_value));
+        stock.setStock_charge_type(stock_charge_type);
+        stock.setClosePrice(closePrice);
+        return stock;
+    }
 
     //添加自选股
     private void addOptionalShare() {
         if (isChoose) {
-            //登录时
             final Map<String, String> param = new HashMap<String, String>();
             param.put("token", UserUtils.getToken());
             param.put("stock_code", stockCode);
@@ -1440,7 +1280,6 @@ public class CopyStockDetailActivity extends BaseActivity {
             };
             new GGOKHTTP(param, GGOKHTTP.MYSTOCK_DELETE, httpInterface).startGet();
         } else {
-            //登录时
             final Map<String, String> param = new HashMap<String, String>();
             param.put("token", UserUtils.getToken());
             param.put("group_id", "0");
@@ -1485,8 +1324,8 @@ public class CopyStockDetailActivity extends BaseActivity {
 
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
 
-        stock_detail_choose.setCompoundDrawables(drawable, null, null, null);
-
+        stock_detail_choose.setCompoundDrawables(null, drawable, null, null);
+//
         stock_detail_choose.setText(addMyStock ? "已自选" : "加自选");
 
         if (needToast) {
@@ -1539,31 +1378,6 @@ public class CopyStockDetailActivity extends BaseActivity {
             avg_price = Float.parseFloat(s);
         }
         return avg_price;
-    }
-
-    private class ImageChartAdapter extends FragmentPagerAdapter {
-        private List<String> datas;
-
-        private ImageChartAdapter(FragmentManager fm, List<String> datas) {
-            super(fm);
-            this.datas = datas;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return ImageChartFragment.getInstance(datas.get(position));
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return arrStockChartImage[position];
-        }
-
     }
 
     /*五档、明细切换*/

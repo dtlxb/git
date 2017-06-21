@@ -1,7 +1,6 @@
 package cn.gogoal.im.common;
 
 import com.alibaba.fastjson.JSONArray;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,15 +64,6 @@ public class ArrayUtils {
     }
 
     /**
-     * 保存单个搜索关键字到本地
-     */
-    public static void addSearchKeyword(String keyword) {
-        JSONArray searchList = getSearchList();
-        searchList.add(keyword);
-        KLog.e(SPTools.getJsonArray("search_history", null).toString());
-    }
-
-    /**
      * 集合拼Srtring
      */
     public static String mosaicListElement(Collection<String> myStockArr) {
@@ -89,35 +79,8 @@ public class ArrayUtils {
         }
     }
 
-//    /**
-//     * 集合拼Srtring
-//     */
-//    public static String mosaicListElement(List<String> myStockArr) {
-//        StringBuilder builder = new StringBuilder();
-//        for (String stockCode : myStockArr) {
-//            builder.append(stockCode);
-//            builder.append(";");
-//        }
-//        if (builder.length() > 0) {
-//            return builder.toString().substring(0, builder.length() - 1);
-//        }
-//        return "";
-//    }
-
     public static boolean isEmpty(Collection c) {
         return null == c || c.isEmpty();
-    }
-
-    /**
-     * 通过map的value获取key
-     */
-    public static <T, E> T valueGetKey(Map<E, T> map, T value) {
-        for (Map.Entry<E, T> entry : map.entrySet()) {
-            if (entry.getValue() == value) {
-                entry.getKey();
-            }
-        }
-        return null;
     }
 
     private int valueGetKey(Map<Integer, ContactBean> map, ContactBean contactBean) {
@@ -135,5 +98,20 @@ public class ArrayUtils {
             set.add(entry.getValue());
         }
         return set;
+    }
+
+    public static <T> List<T> subList(List<T> list, int from, int to) {
+        List<T> newList = new ArrayList<>();
+        if (isEmpty(list)) {
+            return null;
+        }
+        if (from > list.size() - 1 || to > list.size() - 1) {
+            throw new IndexOutOfBoundsException("下标越界哦!");
+        }
+
+        for (int i = from; i <= to - from + 1; i++) {
+            newList.add(list.get(i));
+        }
+        return newList;
     }
 }

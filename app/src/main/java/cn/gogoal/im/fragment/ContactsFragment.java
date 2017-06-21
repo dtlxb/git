@@ -271,7 +271,6 @@ public class ContactsFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     UserInfoUtils.saveAllUserInfo(responseInfo);
                     parseContactDatas(responseInfo, contactBeanList);
