@@ -23,7 +23,6 @@ import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.UserDetailInfo;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.UIHelper;
@@ -168,7 +167,7 @@ public class IMPersonDetailActivity extends BaseActivity {
         public UserInfoAdapter(List<UserDetailInfo> data) {
             super(data);
             addItemType(UserDetailInfo.HEAD, R.layout.header_rv_item_user_info);
-            addItemType(UserDetailInfo.SPACE, R.layout.layout_sapce_15dp);
+            addItemType(UserDetailInfo.SPACE, R.layout.layout_space_15dp);
             addItemType(UserDetailInfo.TEXT_ITEM_2, R.layout.item_type_user_info);
         }
 

@@ -31,7 +31,6 @@ import org.simple.eventbus.Subscriber;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -118,8 +117,8 @@ public class MessageFragment extends BaseFragment {
         IMMessageBeans = new ArrayList<>();
         listAdapter = new ListAdapter(R.layout.item_fragment_message, IMMessageBeans);
         message_recycler.setAdapter(listAdapter);
-
         xLayout.setEmptyText("暂时还没有聊天信息");
+        xLayout.setEmptyImage(R.mipmap.chat_message_blank);
     }
 
     private void initTitle() {
@@ -133,7 +132,7 @@ public class MessageFragment extends BaseFragment {
         addPerson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popuMore(v);
+                popupMore(v);
             }
         });
     }
@@ -144,9 +143,9 @@ public class MessageFragment extends BaseFragment {
         IMMessageBeans.clear();
         //查找到消息列表按时间排序
         IMMessageBeans.addAll(DataSupport.order("lastTime desc").find(IMMessageBean.class));
-
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
-            xLayout.setStatus(XLayout.Success);
+            xLayout.
+                    setStatus(XLayout.Success);
         } else {
             xLayout.setStatus(XLayout.Empty);
         }
@@ -171,6 +170,7 @@ public class MessageFragment extends BaseFragment {
                         startActivity(intent);
                         break;
                     case AppConst.IM_CHAT_TYPE_SQUARE:
+                    case AppConst.IM_CHAT_TYPE_STOCK_SQUARE:
                         //群聊处理
                         intent = new Intent(getContext(), SquareChatRoomActivity.class);
                         bundle.putString("conversation_id", conversation_id);
@@ -238,16 +238,16 @@ public class MessageFragment extends BaseFragment {
     /**
      * TODO 点击弹窗
      */
-    private void popuMore(final View clickView) {
-        PopupMoreMenu popuMoreMenu = new PopupMoreMenu(getActivity());
-        List<BaseIconText<Integer, String>> popuData = new ArrayList<>();
-        popuData.add(new BaseIconText<>(R.mipmap.img_popu_more_scan, "扫一扫"));
-        popuData.add(new BaseIconText<>(R.mipmap.img_popu_more_add_friend, "添加朋友"));
-        popuData.add(new BaseIconText<>(R.mipmap.img_popu_more_group_chat, "发起群聊"));
-        popuData.add(new BaseIconText<>(R.mipmap.img_popu_more_face2face, "面对面建群"));
-        popuMoreMenu.dimBackground(false)
+    private void popupMore(final View clickView) {
+        PopupMoreMenu popupMoreMenu = new PopupMoreMenu(getActivity());
+        List<BaseIconText<Integer, String>> popupData = new ArrayList<>();
+        popupData.add(new BaseIconText<>(R.mipmap.img_popu_more_scan, "扫一扫"));
+        popupData.add(new BaseIconText<>(R.mipmap.img_popu_more_add_friend, "添加朋友"));
+        popupData.add(new BaseIconText<>(R.mipmap.img_popu_more_group_chat, "发起群聊"));
+        popupData.add(new BaseIconText<>(R.mipmap.img_popu_more_face2face, "面对面建群"));
+        popupMoreMenu.dimBackground(false)
                 .needAnimationStyle(true)
-                .addMenuList(popuData)
+                .addMenuList(popupData)
                 .setOnMenuItemClickListener(new PopupMoreMenu.OnMenuItemClickListener() {
                     @Override
                     public void onMenuItemClick(int position) {
@@ -346,7 +346,7 @@ public class MessageFragment extends BaseFragment {
                 String _lctype = contentObject.getString("_lctype");
                 nickName = messageBean.getNickname();
                 //头像设置
-                if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
+                if (chatType == AppConst.IM_CHAT_TYPE_SQUARE || chatType == AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
                     if (lcattrsObject != null && lcattrsObject.get("username") != null) {
                         squareMessageFrom = UserUtils.getUserName().equals(lcattrsObject.get("username")) ? "" : lcattrsObject.getString("username");
                     }
@@ -604,6 +604,7 @@ public class MessageFragment extends BaseFragment {
                 avatar = lcattrsObject.getString("avatar");
                 break;
             case AppConst.IM_CHAT_TYPE_SQUARE:
+            case AppConst.IM_CHAT_TYPE_STOCK_SQUARE:
                 nickName = conversation.getName();
                 avatar = (String) conversation.getAttribute("avatar");
                 break;

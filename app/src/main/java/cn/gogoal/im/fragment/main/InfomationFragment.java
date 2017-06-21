@@ -82,7 +82,6 @@ public class InfomationFragment extends BaseFragment {
                 InfomationTabFragment.INFOMATION_TYPE_SKY_VIEW_POINT,
                 InfomationTabFragment.INFOMATION_TYPE_POLICY_DYNAMICS};
 
-        vpInfomation.setOffscreenPageLimit(7);
 
         vpInfomation.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override

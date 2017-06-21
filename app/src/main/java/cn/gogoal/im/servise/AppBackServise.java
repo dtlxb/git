@@ -17,16 +17,13 @@ import java.util.Map;
 
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
+import cn.gogoal.im.common.LaunchRequest;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 
 public class AppBackServise extends Service {
 
     public class AppBackBinder extends Binder {
-
-        public AppBackServise getService() {
-            return AppBackServise.this;
-        }
 
         public void ggAutoLogin(final Activity activity) {
             if (!UserUtils.isLogin()) return;
@@ -74,6 +71,13 @@ public class AppBackServise extends Service {
             new GGOKHTTP(map, GGOKHTTP.USER_AUTO_LOGIN, ggHttpInterface).startGet();
         }
 
+        public void initData(){
+            try {
+                LaunchRequest.init();//初始化缓存数据
+            }catch (Exception e){
+                KLog.e(e.getMessage());
+            }
+        }
     }
 
 

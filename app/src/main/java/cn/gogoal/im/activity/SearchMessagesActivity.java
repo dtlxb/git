@@ -160,7 +160,7 @@ public class SearchMessagesActivity extends BaseActivity {
                     intent = new Intent(SearchMessagesActivity.this, SingleChatRoomActivity.class);
                     AppManager.getInstance().finishActivity(SingleChatRoomActivity.class);
                     AppManager.getInstance().finishActivity(IMPersonActivity.class);
-                } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
+                } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE || chatType == AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
                     AppManager.getInstance().finishActivity(SquareChatRoomActivity.class);
                     AppManager.getInstance().finishActivity(IMSquareChatSetActivity.class);
                     intent = new Intent(SearchMessagesActivity.this, SquareChatRoomActivity.class);

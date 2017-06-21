@@ -16,6 +16,17 @@
         android:textSize="17sp" />
 
     <TextView
+        android:id="@+id/tv_item_normal_sub_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:textColor="@color/textColor_333333"
+        android:textSize="14sp" />
+
+    <TextView
         android:id="@+id/tv_item_normal_info_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

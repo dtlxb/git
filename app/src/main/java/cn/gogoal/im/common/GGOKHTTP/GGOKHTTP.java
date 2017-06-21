@@ -757,6 +757,11 @@ public class GGOKHTTP {
      */
     public static final String POLICY_DYNAMICS = "v1/news/policy_dynamics";
 
+    /*
+     * 股票群聊
+     * */
+    public static final String GET_STOCK_GROUP_ID = "v1/ggm_chat/get_stock_group_id";
+
     /**
      * F10-公司概况
      * params stock_code
@@ -841,6 +846,11 @@ public class GGOKHTTP {
      */
     public static final String COMPANY_SENIOR = "v1/f10/company_senior";
 
+    /**
+     * 获取资金信息
+     * stock_code
+     */
+    public static final String GET_FUAN_INFO = "v1/ggm_fund/get_fuan_info";
 
 //--------------------------------------------------------------------------------------------------
 

@@ -73,7 +73,7 @@ public class AccountSafeActivity extends BaseActivity {
 
         private AccountSafeAdapter(List<UserDetailInfo> data) {
             super(data);
-            addItemType(UserDetailInfo.SPACE, R.layout.layout_sapce_15dp);
+            addItemType(UserDetailInfo.SPACE, R.layout.layout_space_15dp);
             addItemType(UserDetailInfo.TEXT_ITEM_2, R.layout.item_rv_edit_my_info);
         }
 

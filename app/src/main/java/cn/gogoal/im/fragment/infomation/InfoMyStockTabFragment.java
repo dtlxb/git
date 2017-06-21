@@ -75,7 +75,7 @@ public class InfoMyStockTabFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 getMyStockInfo(AppConst.REFRESH_TYPE_SWIPEREFRESH);
-                defaultPage=1;
+                defaultPage = 1;
             }
         });
         xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
@@ -105,19 +105,19 @@ public class InfoMyStockTabFragment extends BaseFragment {
     }
 
     @Subscriber(tag = "double_click_2_top")
-    void doubleClick2Top(String index){
-        if (StringUtils.pareseStringDouble(index)==0){//是本Tab
+    void doubleClick2Top(String index) {
+        if (StringUtils.pareseStringDouble(index) == 0) {//是本Tab
             recyclerView.smoothScrollToPosition(0);
         }
     }
 
     private void getMyStockInfo(final int refreshType) {
         adapter.setEnableLoadMore(false);
-        if (refreshType == AppConst.REFRESH_TYPE_FIRST || refreshType==AppConst.REFRESH_TYPE_RELOAD) {
+        if (refreshType == AppConst.REFRESH_TYPE_FIRST || refreshType == AppConst.REFRESH_TYPE_RELOAD) {
             xLayout.setStatus(XLayout.Loading);
         }
-        if (refreshType==AppConst.REFRESH_TYPE_SWIPEREFRESH){
-            defaultPage=1;
+        if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+            defaultPage = 1;
         }
         HashMap<String, String> params = UserUtils.getTokenParams();
         params.put("page", String.valueOf(defaultPage));
@@ -127,7 +127,6 @@ public class InfoMyStockTabFragment extends BaseFragment {
             public void onSuccess(String responseInfo) {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
-                    xLayout.setStatus(XLayout.Success);
                     if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
                         dataList.clear();
                     }
@@ -143,7 +142,7 @@ public class InfoMyStockTabFragment extends BaseFragment {
                     adapter.setEnableLoadMore(true);
                     adapter.loadMoreComplete();
                     adapter.notifyDataSetChanged();
-
+                    xLayout.setStatus(XLayout.Success);
                 } else if (code == 1001) {
                     if (refreshType == AppConst.REFRESH_TYPE_FIRST) {
                         xLayout.setStatus(XLayout.Empty);

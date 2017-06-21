@@ -68,6 +68,12 @@ public class TreatFragment extends BaseFragment {
     private boolean fromStockDetail;
     private int type;
 
+    //===================资金=====================
+    private MoneyAdapter moneyAdapter;
+    /*private List<TimeDetialData> timeDetialDatas;
+    private boolean fromStockDetail;
+    private int type;*/
+
     private float itemHeight;
     private String stockCode;
 
@@ -117,7 +123,7 @@ public class TreatFragment extends BaseFragment {
                 timeDetialDatas = new ArrayList<>();
                 mingxiAdapter = new MingxiAdapter(timeDetialDatas);
                 recyclerView.setAdapter(mingxiAdapter);
-                getStockTimeDetial();
+                getStockTimeDetail();
             }
         }
 
@@ -134,7 +140,7 @@ public class TreatFragment extends BaseFragment {
         if (type == AppConst.TREAT_TYPE_WU_DANG) {
             getTreatWudang();
         } else if (type == AppConst.TREAT_TYPE_MING_XI) {
-            getStockTimeDetial();
+            getStockTimeDetail();
         }
     }
 
@@ -182,7 +188,7 @@ public class TreatFragment extends BaseFragment {
     }
 
     //分时数据交易明细
-    private void getStockTimeDetial() {
+    private void getStockTimeDetail() {
         HashMap<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
         param.put("limit", "10");
@@ -194,7 +200,7 @@ public class TreatFragment extends BaseFragment {
                     timeDetialDatas.clear();
                     List<TimeDetialData> cacheData =
                             JSONObject.parseObject(responseInfo, TimeDetialBean.class).getData();
-                    if (fromStockDetail && cacheData.size()>=8) {
+                    if (fromStockDetail && cacheData.size() >= 8) {
                         timeDetialDatas.addAll(cacheData.subList(0, 8));
                     } else {
                         timeDetialDatas.addAll(cacheData);
@@ -337,4 +343,6 @@ public class TreatFragment extends BaseFragment {
     }
 
 
+    private class MoneyAdapter {
+    }
 }

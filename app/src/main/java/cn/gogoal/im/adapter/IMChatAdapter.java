@@ -133,7 +133,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         if (!(avimMessage instanceof GGSystemMessage)) {
             if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.GONE);
-            } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
+            } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE || chatType == AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
             } else {
                 ((IMCHatViewHolder) holder).user_name.setVisibility(View.VISIBLE);
@@ -343,7 +343,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             }
             if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                 params.setMargins(0, 0, 0, 0);
-            } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
+            } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE || chatType == AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
                 params.setMargins(0, AppDevice.dp2px(mContext, 13), 0, 0);
             }
             ((LeftAudioViewHolder) holder).recorder_length.setLayoutParams(params);

@@ -88,11 +88,11 @@ public class XLayout extends FrameLayout {
         build();
     }
 
-    public View getEmptyView(){
+    public View getEmptyView() {
         return emptyPage;
     }
 
-    public View getErrorView(){
+    public View getErrorView() {
         return errorPage;
     }
 
@@ -294,7 +294,7 @@ public class XLayout extends FrameLayout {
      * @return
      */
     public XLayout setEmptyText(String text) {
-        if (TextUtils.isEmpty(text)) {
+        if (!TextUtils.isEmpty(text)) {
             emptyText.setText(text);
         }
         return this;

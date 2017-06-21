@@ -18,7 +18,7 @@ import cn.gogoal.im.bean.stock.StockDetail;
 import cn.gogoal.im.bean.stock.TreatData;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.fragment.StockMapsFragment;
+import cn.gogoal.im.fragment.stock.StockMapsFragment;
 
 /**
  * Created by huangxx on 2017/6/20.

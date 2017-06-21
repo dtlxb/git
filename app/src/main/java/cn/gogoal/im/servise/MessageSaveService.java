@@ -152,11 +152,12 @@ public class MessageSaveService extends Service {
         }
 
         switch (chatType) {
-            //单聊,群聊,加好友请求
+            //单聊,群聊,股票群聊,加好友请求
             case AppConst.IM_CHAT_TYPE_SINGLE:
                 avatar = lcattrsObject.getString("avatar");
                 break;
             case AppConst.IM_CHAT_TYPE_SQUARE:
+            case AppConst.IM_CHAT_TYPE_STOCK_SQUARE:
                 nickName = conversation.getName();
                 avatar = (String) conversation.getAttribute("avatar");
                 break;

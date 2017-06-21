@@ -80,6 +80,8 @@ public class SplashActivity extends Activity {
             public void onServiceConnected(ComponentName name, IBinder service) {
                 final AppBackServise.AppBackBinder sBinder = (AppBackServise.AppBackBinder) service;
                 sBinder.ggAutoLogin(SplashActivity.this);
+
+                sBinder.initData();
             }
 
             @Override

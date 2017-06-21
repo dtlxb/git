@@ -135,14 +135,14 @@ public class QrcodeProcessActivity extends BaseActivity implements EasyPermissio
 
                         } else if (scanBody.getString("qrType").equalsIgnoreCase("1")) {
                             //TODO 跳转群名片
-                            ChatGroupHelper.getGroupInfo(scanBody.getString("conv_id"), new Impl<JSONObject>() {
+                            ChatGroupHelper.getGroupInfo(scanBody.getString("conv_id"), new Impl<String>() {
                                 @Override
-                                public void response(int code, JSONObject data) {
+                                public void response(int code, String data) {
                                     switch (code) {
                                         case Impl.RESPON_DATA_SUCCESS:
                                             Intent in = new Intent(getActivity(), SquareCardActivity.class);
                                             in.putExtra("conversation_id", scanBody.getString("conv_id"));
-                                            in.putExtra("square_name", data.getString("name"));
+                                            in.putExtra("square_name", JSONObject.parseObject(data).getString("name"));
 //                                            in.putExtra("bitmap_avatar", groupAvatarBitmap);
 //                                            in.putExtra("square_creater", data.getC());
 //                                            in.putParcelableArrayListExtra("square_members", data.getM_info());
