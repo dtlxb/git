@@ -768,6 +768,12 @@ public class GGOKHTTP {
      */
     public static final String COMPANY_SUMMARY = "v1/f10/company_summary";
 
+    /**
+     * 获取资金信息
+     * stock_code
+     */
+    public static final String GET_FUAN_INFO = "v1/ggm_fund/get_fuan_info";
+
 //--------------------------------------------------------------------------------------------------
 
     /**
@@ -803,10 +809,10 @@ public class GGOKHTTP {
                         public void onResponse(String response, int id) {
                             if (httpInterface != null) {
                                 try {
-                                    JSONObject jsonObject=new JSONObject(response);
-                                    if (!jsonObject.isNull("code")){
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    if (!jsonObject.isNull("code")) {
                                         httpInterface.onSuccess(response);
-                                    }else {
+                                    } else {
                                         httpInterface.onFailure("最外层没有code字段");
                                     }
 
@@ -819,7 +825,7 @@ public class GGOKHTTP {
                     });
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("TAG", "==出错日志=="+e.getMessage()+"==出错接口：" + url + "==");
+            Log.e("TAG", "==出错日志==" + e.getMessage() + "==出错接口：" + url + "==");
             if (httpInterface != null) httpInterface.onFailure(e.toString());
         }
     }
@@ -845,10 +851,10 @@ public class GGOKHTTP {
                         public void onResponse(String response, int id) {
                             if (httpInterface != null) {
                                 try {
-                                    JSONObject jsonObject=new JSONObject(response);
-                                    if (!jsonObject.isNull("code") && !jsonObject.isNull("data")){
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    if (!jsonObject.isNull("code") && !jsonObject.isNull("data")) {
                                         httpInterface.onSuccess(response);
-                                    }else {
+                                    } else {
                                         httpInterface.onFailure("最外层没有code或data字段");
                                     }
 
@@ -860,7 +866,7 @@ public class GGOKHTTP {
                     });
 
         } catch (Exception e) {
-            Log.e("TAG", "==出错日志=="+e.getMessage()+"==出错接口：" + url + "==");
+            Log.e("TAG", "==出错日志==" + e.getMessage() + "==出错接口：" + url + "==");
             if (httpInterface != null) httpInterface.onFailure(e.toString());
         }
     }

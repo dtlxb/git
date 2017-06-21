@@ -88,11 +88,11 @@ public class XLayout extends FrameLayout {
         build();
     }
 
-    public View getEmptyView(){
+    public View getEmptyView() {
         return emptyPage;
     }
 
-    public View getErrorView(){
+    public View getErrorView() {
         return errorPage;
     }
 

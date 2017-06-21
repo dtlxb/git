@@ -118,7 +118,7 @@ public class ShareMessageActivity extends BaseActivity {
 
                 datas.add(shareListFriend);
 
-            } else if (bean.getChatType() == AppConst.IM_CHAT_TYPE_SQUARE) { //最近群聊会话
+            } else if (bean.getChatType() == AppConst.IM_CHAT_TYPE_SQUARE || bean.getChatType() == AppConst.IM_CHAT_TYPE_STOCK_SQUARE) { //最近群聊会话
                 final ShareListBean<Object> group = new ShareListBean<>(ShareListBean.LIST_TYPE_ITEM);
                 group.setText(bean.getNickname());
                 group.setBean(bean);

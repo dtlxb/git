@@ -76,9 +76,9 @@ public class IMSearchLocalActivity extends BaseActivity {
     public void doBusiness(Context mContext) {
         iniTitle();
 
-        rvFlagSearch.setAdapter(new CommonAdapter<BaseIconText<Integer,String>, BaseViewHolder>(R.layout.item_search_flag, getFlagData()) {
+        rvFlagSearch.setAdapter(new CommonAdapter<BaseIconText<Integer, String>, BaseViewHolder>(R.layout.item_search_flag, getFlagData()) {
             @Override
-            protected void convert(BaseViewHolder holder, BaseIconText<Integer,String> data, int position) {
+            protected void convert(BaseViewHolder holder, BaseIconText<Integer, String> data, int position) {
                 holder.setImageResource(R.id.img_search_item, data.getIamge());
                 holder.setText(R.id.tv_search_item, data.getText());
             }
@@ -106,7 +106,7 @@ public class IMSearchLocalActivity extends BaseActivity {
                             if (conversationName.contains(newText)) {
                                 if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
                                     personData.add(dataList.get(i));
-                                } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
+                                } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE || chatType == AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
                                     groupsData.add(dataList.get(i));
                                 }
                             }
@@ -176,11 +176,11 @@ public class IMSearchLocalActivity extends BaseActivity {
     }
 
     //默认查询的东西
-    private List<BaseIconText<Integer,String>> getFlagData() {
+    private List<BaseIconText<Integer, String>> getFlagData() {
         /*int[] flagIcons = {R.mipmap.img_search_flag_contact, R.mipmap.img_search_flag_group, R.mipmap.home_bottom_tab_icon_message_normal,
                 R.mipmap.img_search_flag_live, R.mipmap.img_search_flag_yanwang, R.mipmap.img_search_flag_pinpai};*/
         int[] flagIcons = {R.mipmap.img_search_flag_contact, R.mipmap.img_search_flag_group};
-        List<BaseIconText<Integer,String>> list = new ArrayList<>();
+        List<BaseIconText<Integer, String>> list = new ArrayList<>();
 
         for (int i = 0; i < flagIcons.length; i++) {
             list.add(new BaseIconText<>(flagIcons[i], searchFlagArray[i]));
