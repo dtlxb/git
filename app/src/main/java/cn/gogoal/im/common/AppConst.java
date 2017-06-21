@@ -143,7 +143,7 @@ public class AppConst {
     public static final int IM_CHAT_TYPE_SQUARE = 1002;                 //聊天室类型 群聊
     public static final int IM_CHAT_TYPE_LIVE = 1003;                   //聊天室类型 直播
     public static final int IM_CHAT_TYPE_SYSTEM = 1004;                 //聊天室类型 系统
-    public static final int IM_CHAT_TYPE_SQUARE_ACTION = 1005;          //聊天室类型 群操作
+    public static final int IM_CHAT_TYPE_CONTACTS_ACTION = 1005;          //聊天室类型 通讯录操作
     public static final int IM_CHAT_TYPE_CONSULTATION = 1006;           //聊天室类型 公众号
     public static final int IM_CHAT_TYPE_SQUARE_REQUEST = 1007;         //聊天室类型 入群申请
     public static final int IM_CHAT_TYPE_LIVE_MESSAGE = 1008;           //聊天室类型 直播消息

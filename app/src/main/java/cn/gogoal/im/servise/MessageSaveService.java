@@ -166,7 +166,7 @@ public class MessageSaveService extends Service {
             case AppConst.IM_CHAT_TYPE_LIVE:
                 break;
             //操纵通讯录
-            case AppConst.IM_CHAT_TYPE_SQUARE_ACTION:
+            case AppConst.IM_CHAT_TYPE_CONTACTS_ACTION:
                 break;
             //公众号模块
             case AppConst.IM_CHAT_TYPE_CONSULTATION:

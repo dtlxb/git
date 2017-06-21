@@ -128,13 +128,14 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     jsonArray.add(jsonObject);
                                     SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_newFriendList", jsonArray);
                                     break;
-                                case AppConst.IM_CHAT_TYPE_SQUARE_ACTION:
+                                case AppConst.IM_CHAT_TYPE_CONTACTS_ACTION:
                                     //好友更新
                                     JSONObject contentObject1 = JSON.parseObject(message.getContent());
                                     JSONObject lcattrsObject1 = contentObject1.getJSONObject("_lcattrs");
                                     String avatar = lcattrsObject1.getString("avatar");
                                     String nickName = lcattrsObject1.getString("nickname");
                                     String conv_id = lcattrsObject1.getString("conv_id");
+                                    String duty = lcattrsObject1.getString("duty");
                                     int friend_id = lcattrsObject1.getInteger("friend_id");
 
                                     UserBean userBean = new UserBean();
@@ -142,8 +143,10 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     userBean.setNickname(nickName);
                                     userBean.setFriend_id(friend_id);
                                     userBean.setAvatar(avatar);
+                                    userBean.setDuty(duty);
                                     userBean.setInYourContact(true);
                                     userBean.save();
+                                    notifyContacts();
                                     break;
 
                                 case AppConst.IM_CHAT_TYPE_CONSULTATION:
@@ -188,6 +191,10 @@ public class MyMessageHandler extends AVIMMessageHandler {
             client.close(null);
         }
 
+    }
+
+    private void notifyContacts() {
+        AppManager.getInstance().sendMessage("Change_Contacts");
     }
 
     private void sendIMMessage(AVIMMessage message, AVIMConversation conversation) {

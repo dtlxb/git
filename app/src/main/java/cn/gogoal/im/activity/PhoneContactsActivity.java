@@ -18,9 +18,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -40,6 +40,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.PhoneContactData;
 import cn.gogoal.im.bean.PhoneContactsInfo;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.StringUtils;
@@ -93,7 +94,7 @@ public class PhoneContactsActivity extends BaseActivity {
     private List<PhoneContactData> phoneContacts;
 
     @BindView(R.id.empty_layout)
-    View emptyLayout;
+    RelativeLayout emptyLayout;
     private List<PhoneContactData> phoneContactDatas;
 
     @Override
@@ -173,6 +174,8 @@ public class PhoneContactsActivity extends BaseActivity {
         protected String doInBackground(String... params) {
             phoneContactDatas = getContacts();//读联系人
 
+            KLog.e(JSONObject.toJSONString(phoneContactDatas));
+
             phoneAdapter = new PhoneAdapter(phoneContacts);
             return "Executed";
         }
@@ -182,7 +185,7 @@ public class PhoneContactsActivity extends BaseActivity {
             rvContacts.setAdapter(phoneAdapter);
             rvContacts.addItemDecoration(new NormalItemDecoration(PhoneContactsActivity.this));
 
-            if (phoneContacts==null || phoneContactDatas.isEmpty()) {
+            if (phoneContacts == null || phoneContactDatas.isEmpty()) {
                 emptyLayout.setVisibility(View.VISIBLE);
             } else {
                 emptyLayout.setVisibility(View.GONE);
@@ -198,12 +201,9 @@ public class PhoneContactsActivity extends BaseActivity {
                 map.put("token", UserUtils.getToken());
                 map.put("contacts", JSONObject.toJSONString(mapContacts));
 
-                KLog.e(StringUtils.map2ggParameter(map));
-
                 new GGOKHTTP(map, GGOKHTTP.GET_CONTACTS, new GGOKHTTP.GGHttpInterface() {
                     @Override
                     public void onSuccess(String responseInfo) {
-                        KLog.e(responseInfo);
 
                         if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                             phoneContacts.clear();
@@ -211,12 +211,14 @@ public class PhoneContactsActivity extends BaseActivity {
                                     JSONObject.parseObject(responseInfo, PhoneContactsInfo.class)
                                             .getData();
 
-                            for (PhoneContactData data : datas) {
-                                data.setPhoneAvatar(getContactAvatar(data.getMobile()));
-                            }
+                            if (!ArrayUtils.isEmpty(datas)) {
+                                for (PhoneContactData data : datas) {
+                                    data.setPhoneAvatar(getContactAvatar(data.getMobile()));
+                                }
 
-                            phoneContacts.addAll(datas);
-                            phoneAdapter.notifyDataSetChanged();
+                                phoneContacts.addAll(datas);
+                                phoneAdapter.notifyDataSetChanged();
+                            }
 
                         } else {
                             UIHelper.toast(getActivity(), "something wrong");
@@ -226,7 +228,7 @@ public class PhoneContactsActivity extends BaseActivity {
 
                     @Override
                     public void onFailure(String msg) {
-                        UIHelper.toast(getActivity(), "请求异常，请稍后重试!");
+                        emptyLayout.setVisibility(View.VISIBLE);
                     }
                 }).startPost();
             }
@@ -254,12 +256,12 @@ public class PhoneContactsActivity extends BaseActivity {
             while (phoneCursor.moveToNext()) {
                 //联系人电话
                 String phoneNumber = phoneCursor.getString(PHONES_NUMBER_INDEX);
-                if (TextUtils.isEmpty(phoneNumber))
+                if (StringUtils.isActuallyEmpty(phoneNumber))
                     continue;
                 //联系人名字
                 String contactName = phoneCursor.getString(PHONES_DISPLAY_NAME_INDEX);
                 //联系人ID
-                Long contactid = phoneCursor.getLong(PHONES_CONTACT_ID_INDEX);
+                long contactid = phoneCursor.getLong(PHONES_CONTACT_ID_INDEX);
                 //联系人头像
                 Drawable contactAvatar;
                 if (phoneCursor.getLong(PHONES_PHOTO_ID_INDEX) > 0) {
@@ -270,7 +272,7 @@ public class PhoneContactsActivity extends BaseActivity {
                     contactAvatar = iBuilder.build(String.valueOf(contactName.charAt(0)), getContactBgColor());
                 }
 
-                if (StringUtils.checkPhoneString(phoneNumber)) {
+                if (!StringUtils.isActuallyEmpty(phoneNumber)) {
                     PhoneContactData data = new PhoneContactData();
                     data.setName(contactName);
                     data.setMobile(phoneNumber.replaceAll("\\s", "").replace("-", ""));
@@ -280,12 +282,8 @@ public class PhoneContactsActivity extends BaseActivity {
                     contacts.add(data);
                 }
             }
-        }
-
-        if (phoneCursor != null) {
             phoneCursor.close();
         }
-
         return contacts;
     }
 

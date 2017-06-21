@@ -1,7 +1,6 @@
 package cn.gogoal.im.activity.stock;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -31,7 +30,6 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.stock.ChartImageBean;
 import cn.gogoal.im.bean.stock.StockDetail;
 import cn.gogoal.im.bean.stock.StockDetailText2;
 import cn.gogoal.im.bean.stock.TreatData;
@@ -44,9 +42,7 @@ import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.fragment.stock.CompanyFinanceFragment;
 import cn.gogoal.im.fragment.stock.CompanyInfoFragment;
-import cn.gogoal.im.fragment.stock.ImageChartFragment;
 import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
-import cn.gogoal.im.ui.copy.TimesFivesBitmap;
 import cn.gogoal.im.ui.view.XTitle;
 
 
@@ -125,12 +121,6 @@ public class StockDetailActivity extends BaseActivity {
     private XTitle xTitle;
 
     //====================================copy=========================
-    private TimesFivesBitmap fiveDayBitmap;
-    private TimesFivesBitmap timesBitmap;
-    private HashMap<String, Bitmap> map = new HashMap<>();
-    private boolean canRefreshLine=true;
-    private int stock_charge_type = 1;
-
 
     @Override
     public int bindLayout() {
@@ -152,8 +142,6 @@ public class StockDetailActivity extends BaseActivity {
 
         initNews();//个股新闻
 
-        initChartImage();//eps、pe图表
-
         iniRefresh(swiperefreshlayout);
 
         swiperefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -169,61 +157,61 @@ public class StockDetailActivity extends BaseActivity {
         getStockHeadInfo(refreshType);
     }
 
-    /**
-     * 中间Eps模块数据,图表ChatImage数据
-     */
-    private void initChartImage() {
-        ViewGroup.LayoutParams params = vpImageChart.getLayoutParams();
-        params.width = AppDevice.getWidth(getActivity());
-        params.height = 350 * AppDevice.getWidth(getActivity()) / 560;
-        vpImageChart.setLayoutParams(params);
-
-        vpImageChart.setOffscreenPageLimit(3);
-
-        Map<String, String> param = new HashMap<>();
-        param.put("stock_code", stockCode);
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
-            @Override
-            public void onSuccess(String responseInfo) {
-                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
-
-                if (code == 0) {
-                    final ChartImageBean.ChartImage chartImage = JSONObject.parseObject(responseInfo, ChartImageBean.class).getData();
-
-                    vpImageChart.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
-                        @Override
-                        public Fragment getItem(int position) {
-                            return ImageChartFragment.getInstance(position == 0 ? chartImage.getEps_img() : (
-                                    position == 1 ? chartImage.getProfit_img() : chartImage.getPe_img()
-                            ));
-                        }
-
-                        @Override
-                        public int getCount() {
-                            return 3;
-                        }
-
-                        @Override
-                        public CharSequence getPageTitle(int position) {
-                            return arrStockChartImage[position];
-                        }
-                    });
-                    tabStockDetailChartImg.setupWithViewPager(vpImageChart);
-
-                } else if (code == 1001) {
-
-                } else {
-
-                }
-
-            }
-
-            public void onFailure(String msg) {
-                UIHelper.toastError(getActivity(), msg);
-            }
-        };
-        new GGOKHTTP(param, GGOKHTTP.DM_GET_IMG, ggHttpInterface).startGet();
-    }
+//    /**
+//     * 中间Eps模块数据,图表ChatImage数据
+//     */
+//    private void initChartImage() {
+//        ViewGroup.LayoutParams params = vpImageChart.getLayoutParams();
+//        params.width = AppDevice.getWidth(getActivity());
+//        params.height = 350 * AppDevice.getWidth(getActivity()) / 560;
+//        vpImageChart.setLayoutParams(params);
+//
+//        vpImageChart.setOffscreenPageLimit(3);
+//
+//        Map<String, String> param = new HashMap<>();
+//        param.put("stock_code", stockCode);
+//        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+//            @Override
+//            public void onSuccess(String responseInfo) {
+//                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+//
+//                if (code == 0) {
+//                    final ChartImageBean.ChartImage chartImage = JSONObject.parseObject(responseInfo, ChartImageBean.class).getData();
+//
+//                    vpImageChart.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+//                        @Override
+//                        public Fragment getItem(int position) {
+//                            return ImageChartFragment.getInstance(position == 0 ? chartImage.getEps_img() : (
+//                                    position == 1 ? chartImage.getProfit_img() : chartImage.getPe_img()
+//                            ));
+//                        }
+//
+//                        @Override
+//                        public int getCount() {
+//                            return 3;
+//                        }
+//
+//                        @Override
+//                        public CharSequence getPageTitle(int position) {
+//                            return arrStockChartImage[position];
+//                        }
+//                    });
+//                    tabStockDetailChartImg.setupWithViewPager(vpImageChart);
+//
+//                } else if (code == 1001) {
+//
+//                } else {
+//
+//                }
+//
+//            }
+//
+//            public void onFailure(String msg) {
+//                UIHelper.toastError(getActivity(), msg);
+//            }
+//        };
+//        new GGOKHTTP(param, GGOKHTTP.DM_GET_IMG, ggHttpInterface).startGet();
+//    }
 
     /**初始化头部控件*/
     private void initHead() {

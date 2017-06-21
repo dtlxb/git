@@ -174,7 +174,7 @@ public class UserInfoUtils {
     }
 
     /**
-     * 群联系人更新
+     * 通讯录、群联系人更新
      *
      * @param friendId
      */

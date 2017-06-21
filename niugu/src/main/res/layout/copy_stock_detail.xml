@@ -102,7 +102,7 @@
             android:layout_above="@+id/linear"
             android:background="@color/white">
 
-            <android.support.v4.widget.NestedScrollView
+            <cn.gogoal.im.ui.view.GreatScrollView
                 android:id="@+id/scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -210,6 +210,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="今开"
+                                        android:alpha="0.7"
                                         android:textColor="@color/main_head_title"
                                         android:textSize="@dimen/text_size_11" />
 
@@ -236,7 +237,8 @@
                                         android:layout_above="@+id/stock_volume"
                                         android:text="成交量"
                                         android:textColor="@color/main_head_title"
-                                        android:textSize="@dimen/text_size_11" />
+                                        android:textSize="@dimen/text_size_11"
+                                        android:alpha="0.7"/>
 
                                     <hply.com.niugu.autofixtext.AutofitTextView
                                         android:id="@+id/stock_volume"
@@ -273,6 +275,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="昨收"
+                                        android:alpha="0.7"
                                         android:textColor="@color/main_head_title"
                                         android:textSize="@dimen/text_size_11" />
 
@@ -297,6 +300,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_above="@+id/stock_turnover_rate"
                                         android:text="换手率"
+                                        android:alpha="0.7"
                                         android:textColor="@color/main_head_title"
                                         android:textSize="@dimen/text_size_11" />
 
@@ -328,218 +332,6 @@
 
                     </LinearLayout>
 
-                    <!--股票信息，20170613隐藏，by Wangjd,内盘外盘数据等-->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="68dp"
-                        android:layout_margin="9dp"
-                        android:baselineAligned="false"
-                        android:orientation="horizontal"
-                        android:visibility="gone">
-
-                        <RelativeLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentTop="true"
-                                android:text="最  高"
-                                android:textColor="@color/text_color_word"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"
-                                android:text="内  盘"
-                                android:textColor="@color/text_color_word"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:layout_alignParentLeft="true"
-                                android:text="市盈率"
-                                android:textColor="@color/text_color_word"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <TextView
-                                android:id="@+id/stock_detail_tv3"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_alignParentTop="true"
-                                android:text="--"
-                                android:textColor="@color/text_color_number"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <TextView
-                                android:id="@+id/stock_detail_tv4"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:text="--"
-                                android:textColor="@color/text_color_number"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <TextView
-                                android:id="@+id/stock_detail_tv5"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:layout_alignParentRight="true"
-                                android:text="--"
-                                android:textColor="@color/text_color_number"
-                                android:textSize="@dimen/text_size_12" />
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="18dp"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentTop="true"
-                                android:text="最  低"
-                                android:textColor="@color/text_color_word"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"
-                                android:text="外  盘"
-                                android:textColor="@color/text_color_word"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:layout_alignParentLeft="true"
-                                android:text="振  幅"
-                                android:textColor="@color/text_color_word"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <hply.com.niugu.autofixtext.AutofitTextView
-                                android:id="@+id/stock_detail_tv6"
-                                android:layout_width="70dp"
-                                android:layout_height="18dp"
-                                android:layout_alignParentRight="true"
-                                android:layout_alignParentTop="true"
-                                android:gravity="right|center_vertical"
-                                android:text="--"
-                                android:textColor="@color/text_color_number"
-                                android:textSize="@dimen/text_size_12"
-                                app:minTextSize="@dimen/text_size_8" />
-
-                            <TextView
-                                android:id="@+id/stock_detail_tv7"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:text="--"
-                                android:textColor="@color/text_color_number"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <hply.com.niugu.autofixtext.AutofitTextView
-                                android:id="@+id/stock_detail_tv8"
-                                android:layout_width="70dp"
-                                android:layout_height="20dp"
-                                android:layout_alignParentBottom="true"
-                                android:layout_alignParentRight="true"
-                                android:gravity="right|bottom"
-                                android:text="--"
-                                android:textColor="@color/text_color_number"
-                                android:textSize="@dimen/text_size_12"
-                                app:minTextSize="@dimen/text_size_8" />
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="18dp"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentTop="true"
-                                android:text="成交额"
-                                android:textColor="@color/text_color_word"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"
-                                android:text="总市值"
-                                android:textColor="@color/text_color_word"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:layout_alignParentLeft="true"
-                                android:text="流通市值"
-                                android:textColor="@color/text_color_word"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <hply.com.niugu.autofixtext.AutofitTextView
-                                android:id="@+id/stock_detail_tv9"
-                                android:layout_width="68dp"
-                                android:layout_height="18dp"
-                                android:layout_alignParentRight="true"
-                                android:layout_alignParentTop="true"
-                                android:gravity="right"
-                                android:text="--"
-                                android:textColor="@color/text_color_number"
-                                android:textSize="@dimen/text_size_12"
-                                app:minTextSize="@dimen/text_size_8" />
-
-                            <TextView
-                                android:id="@+id/stock_detail_tv10"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:text="--"
-                                android:textColor="@color/text_color_number"
-                                android:textSize="@dimen/text_size_12" />
-
-                            <hply.com.niugu.autofixtext.AutofitTextView
-                                android:id="@+id/stock_detail_tv11"
-                                android:layout_width="50dp"
-                                android:layout_height="20dp"
-                                android:layout_alignParentBottom="true"
-                                android:layout_alignParentRight="true"
-                                android:gravity="right|bottom"
-                                android:text="--"
-                                android:textColor="@color/text_color_number"
-                                android:textSize="@dimen/text_size_12"
-                                app:minTextSize="@dimen/text_size_6" />
-
-                        </RelativeLayout>
-
-                    </LinearLayout>
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -568,54 +360,10 @@
                             <android.support.v4.view.ViewPager
                                 android:id="@+id/vp_news_"
                                 android:layout_width="match_parent"
-                                android:layout_height="260dp" />
-
-                            <android.support.design.widget.TabLayout
-                                android:id="@+id/tablayout_chatImg"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:tabBackground="@color/main_bg"
-                                app:tabIndicatorColor="@color/tabSelected"
-                                app:tabMode="fixed"
-                                app:tabSelectedTextColor="@color/tabSelected"
-                                app:tabTextAppearance="@style/TabLayoutTextStyle"
-                                app:tabTextColor="@color/tabUnSelected" />
-
-                            <FrameLayout
-                                android:id="@+id/layout_imgchart_and_nodata"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <android.support.v4.view.ViewPager
-                                    android:id="@+id/smartImageView_chat"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent" />
-
-                                <include layout="@layout/stock_no_data" />
-
-                            </FrameLayout>
-
-                            <android.support.design.widget.TabLayout
-                                android:id="@+id/tablayout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/layerlist_tablayout_bottom"
-                                android:visibility="gone"
-                                app:tabIndicatorColor="@color/tabSelected"
-                                app:tabMode="fixed"
-                                app:tabSelectedTextColor="@color/tabSelected"
-                                app:tabTextAppearance="@style/TabLayoutTextStyle"
-                                app:tabTextColor="@color/tabUnSelected" />
-
-                            <FrameLayout
-                                android:id="@+id/detail_fragment_container"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:visibility="gone">
-
-                            </FrameLayout>
+                                android:layout_height="435dp"/>
 
                             <include layout="@layout/line_space_line" />
+
                         </LinearLayout>
 
                         <View
@@ -637,7 +385,7 @@
 
                 </LinearLayout>
 
-            </android.support.v4.widget.NestedScrollView>
+            </cn.gogoal.im.ui.view.GreatScrollView>
         </android.support.v4.widget.SwipeRefreshLayout>
 
         <!---底部dock栏-->
@@ -646,43 +394,32 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom"
-            android:background="#E4000000"
+            android:background="@drawable/shape_line_top"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="5dp"
             android:paddingRight="5dp">
 
-            <cn.gogoal.im.ui.view.DrawableCenterTextView
-                android:id="@+id/stock_detail_diagnose"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:drawableLeft="@drawable/diagnose_stock"
-                android:drawablePadding="3dp"
-                android:gravity="center_vertical"
-                android:paddingTop="7dp"
-                android:text="诊断"
-                android:textColor="@color/stock_detail_bottom"
-                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/tv_stockDetail_tools"
+                style="@style/stockDetailDockStyle"
+                android:text="工具箱" />
 
-            <View
-                android:layout_width="1px"
-                android:layout_height="match_parent"
-                android:background="@color/stock_detail_bottom" />
+            <TextView
+                android:id="@+id/tv_stockDetail_stockCircle"
+                style="@style/stockDetailDockStyle"
+                android:text="股票圈" />
 
-            <cn.gogoal.im.ui.view.DrawableCenterTextView
-                android:id="@+id/stock_detail_choose"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:drawableLeft="@drawable/diagnose_stock"
-                android:drawablePadding="3dp"
-                android:gravity="center_vertical"
-                android:paddingTop="7dp"
-                android:text="加自选"
-                android:textColor="@color/stock_detail_bottom"
-                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/tv_stockDetail_interactiveinvestor"
+                style="@style/stockDetailDockStyle"
+                android:drawableTop="@mipmap/img_stock_interactiveinvestor"
+                android:text="互动" />
+
+            <TextView
+                android:id="@+id/tv_stockDetail_toggle_mystock"
+                style="@style/stockDetailDockStyle"
+                android:text="自选" />
 
         </LinearLayout>
 

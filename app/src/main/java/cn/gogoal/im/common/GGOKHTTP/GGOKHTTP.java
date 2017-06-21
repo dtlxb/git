@@ -2,7 +2,6 @@ package cn.gogoal.im.common.GGOKHTTP;
 
 import android.util.Log;
 
-import com.socks.library.KLog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -758,89 +757,12 @@ public class GGOKHTTP {
      */
     public static final String POLICY_DYNAMICS = "v1/news/policy_dynamics";
 
+
     /**
-     * F10-公司概况
-     * params stock_code
+     * F10====公司概况
+     * stock_code
      */
     public static final String COMPANY_SUMMARY = "v1/f10/company_summary";
-
-    /**
-     * F10-经营分析
-     * params stock_code
-     */
-    public static final String COMPANY_BUSINESS_ANALYSIS = "v1/f10/company_business_analysis";
-
-    /**
-     * F10-财务分析
-     * params stock_code
-     * params season 0【全部】1【一季度 】2【二季度】3【三 季度】4【四季度】
-     * params type 0【全部】1【核心财 务指示】2【每股指标 】3【盈利能力】4【 资本结构】5【偿债能 力】6【营运能力】 7【成长能力】
-     * params page
-     */
-    public static final String FINANCIAL_ANALYSIS = "v1/f10/financial_analysis";
-
-    /**
-     * F10-股票特殊类型
-     * params stock_code
-     */
-    public static final String GET_STOCK_FINANCIAL_TYPE = "v1/f10/get_stock_financial_type";
-
-    /**
-     * F10-财务报表-利润分配表
-     * params stock_code
-     * params report_stype 1【非单季】或2【单 季】
-     * params season 0【全部】1【一季度 】2【二季度】3【三 季度】4【四季度】
-     * params stype 1-绝对值，0-同比值 ，默认1
-     * params page
-     */
-    public static final String FIREPORT_PROFIT_DIST = "v1/f10/fireport_profit_dist";
-
-    /**
-     * F10-财务报表-现金流量表
-     * params stock_code
-     * params report_stype 1【非单季】或2【单 季】
-     * params season 0【全部】1【一季度 】2【二季度】3【三 季度】4【四季度】
-     * params stype 1-绝对值，0-同比值 ，默认1
-     * params page
-     */
-    public static final String FIREPORT_FLOW_CASH = "v1/f10/fireport_flow_cash";
-
-    /**
-     * F10-财务报表-资产负债表
-     * params stock_code
-     * params season 0【全部】1【一季度 】2【二季度】3【三 季度】4【四季度】
-     * params stype 1-绝对值，0-同比值 ，默认1
-     * params page
-     */
-    public static final String FIREPORT_BALANCE_SHEET = "v1/f10/fireport_balance_sheet";
-
-    /**
-     * F10-股东研究-十大股东
-     * params stock_code
-     * params report_date 报表日期
-     */
-    public static final String TEN_STOCK_HOLDERS = "v1/f10/ten_stock_holders";
-
-    /**
-     * F10-股东研究-十大流通股东
-     * params stock_code
-     * params report_date 报表日期
-     */
-    public static final String TEN_TRADABLE_STOCK_HOLDERS = "v1/f10/ten_tradable_stock_holders";
-
-    /**
-     * F10-股东研究-基金持股
-     * params stock_code
-     * params report_date 报表日期
-     */
-    public static final String FUND_HOLDINGS = "v1/f10/fund_holdings";
-
-    /**
-     * F10-公司高管
-     * params stock_code
-     */
-    public static final String COMPANY_SENIOR = "v1/f10/company_senior";
-
 
 //--------------------------------------------------------------------------------------------------
 
@@ -877,11 +799,11 @@ public class GGOKHTTP {
                         public void onResponse(String response, int id) {
                             if (httpInterface != null) {
                                 try {
-                                    JSONObject jsonObject = new JSONObject(response);
-                                    if (!jsonObject.isNull("code") && !jsonObject.isNull("data")) {
+                                    JSONObject jsonObject=new JSONObject(response);
+                                    if (!jsonObject.isNull("code")){
                                         httpInterface.onSuccess(response);
-                                    } else {
-                                        httpInterface.onFailure("最外层没有code或data字段");
+                                    }else {
+                                        httpInterface.onFailure("最外层没有code字段");
                                     }
 
                                 } catch (Exception e) {//解析出错，返回就TM就不是json
@@ -893,7 +815,7 @@ public class GGOKHTTP {
                     });
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("TAG", "==出错日志==e.getMessage()==出错接口：" + url + "==");
+            Log.e("TAG", "==出错日志=="+e.getMessage()+"==出错接口：" + url + "==");
             if (httpInterface != null) httpInterface.onFailure(e.toString());
         }
     }
@@ -917,14 +839,12 @@ public class GGOKHTTP {
 
                         @Override
                         public void onResponse(String response, int id) {
-                            KLog.e(response);
-
                             if (httpInterface != null) {
                                 try {
-                                    JSONObject jsonObject = new JSONObject(response);
-                                    if (!jsonObject.isNull("code") && !jsonObject.isNull("data")) {
+                                    JSONObject jsonObject=new JSONObject(response);
+                                    if (!jsonObject.isNull("code") && !jsonObject.isNull("data")){
                                         httpInterface.onSuccess(response);
-                                    } else {
+                                    }else {
                                         httpInterface.onFailure("最外层没有code或data字段");
                                     }
 
@@ -936,6 +856,7 @@ public class GGOKHTTP {
                     });
 
         } catch (Exception e) {
+            Log.e("TAG", "==出错日志=="+e.getMessage()+"==出错接口：" + url + "==");
             if (httpInterface != null) httpInterface.onFailure(e.toString());
         }
     }

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.StockNewsType;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -66,7 +68,7 @@ public class StockNewsMinFragment extends BaseFragment {
 
     private StockNewsType stockNewsType;//实现反序列化接口，类型
 
-    public static StockNewsMinFragment getInstance(String stockCode, String stockName, int position) {
+    public static StockNewsMinFragment getInstance(String stockCode,String stockName,int position) {
         StockNewsMinFragment snf = new StockNewsMinFragment();
         Bundle b = new Bundle();
         b.putInt("position", position);
@@ -84,8 +86,8 @@ public class StockNewsMinFragment extends BaseFragment {
                 break;
         }
         b.putParcelable("stock_news_type", stockNewsType);
-        b.putString("stock_code", stockCode);
-        b.putString("stock_name", stockName);
+        b.putString("stock_code",stockCode);
+        b.putString("stock_name",stockName);
         snf.setArguments(b);
         return snf;
     }
@@ -99,8 +101,8 @@ public class StockNewsMinFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         stockNewsType = getArguments().getParcelable("stock_news_type");
 
-        stockName = getArguments().getString("stock_name");
-        stockCode = getArguments().getString("stock_code");
+        stockName=getArguments().getString("stock_name");
+        stockCode=getArguments().getString("stock_code");
 
         parentPosition = getArguments().getInt("position");
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
@@ -124,12 +126,12 @@ public class StockNewsMinFragment extends BaseFragment {
     private void getDatas() {
         if (parentPosition != 2) {
             dataListsNews = new ArrayList<>();
-            newsAdapter = new NewsAdapter(dataListsNews, stockNewsType, true);
+            newsAdapter = new NewsAdapter(dataListsNews, stockNewsType,true);
             recyclerView.setAdapter(newsAdapter);
             getNews(stockNewsType.getNewsType());
         } else {
             dataListsResearch = new ArrayList<>();
-            researchadapter = new ResearchAdapter(dataListsResearch, stockNewsType.getNewsSource(), true);
+            researchadapter = new ResearchAdapter(dataListsResearch, stockNewsType.getNewsSource(),true);
             recyclerView.setAdapter(researchadapter);
             getYanBao();
         }
@@ -181,32 +183,42 @@ public class StockNewsMinFragment extends BaseFragment {
         param.put("stock_code", stockCode);
         param.put("page", "1");
         param.put("type", String.valueOf(type));
-        param.put("rows", "5");
+        param.put("rows", "6");
+
+        KLog.e(StringUtils.map2ggParameter(param));
 
         new GGOKHTTP(param, GGOKHTTP.GET_STOCK_NEWS, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                if (code == 0) {
                     dataListsNews.clear();
-                    dataListsNews.addAll(
-                            JSONObject.parseObject(responseInfo, StockDetailNewsBean.class).getData());
+                    ArrayList<StockDetailNewsData> detailNewsDatas =
+                            JSONObject.parseObject(responseInfo, StockDetailNewsBean.class).getData();
 
-                    if (dataListsNews.size() < 5) {
+                    if (detailNewsDatas.size() < 6) {
+                        dataListsNews.addAll(detailNewsDatas);
                         hideFootView();
+
                     } else {
+                        dataListsNews.addAll(detailNewsDatas.subList(0,detailNewsDatas.size()-1));
                         showFootView();
                     }
 
                     newsAdapter.notifyDataSetChanged();
                     xLayout.setStatus(XLayout.Success);
-                } else {
+                } else if (code==1001){
                     xLayout.setStatus(XLayout.Empty);
+                }else {
+                    xLayout.setStatus(XLayout.Error);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
+                xLayout.setStatus(XLayout.Error);
                 UIHelper.toastError(getContext(), msg, xLayout);
+                KLog.e(msg);
             }
         }).startGet();
     }
@@ -220,32 +232,37 @@ public class StockNewsMinFragment extends BaseFragment {
         param.put("token", UserUtils.getToken());
         param.put("first_class", "公司报告");
         param.put("page", "1");
-        param.put("rows", "5");
+        param.put("rows", "6");
 
         new GGOKHTTP(param, GGOKHTTP.REPORT_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    dataListsResearch.addAll(
-                            JSONObject.parseObject(
-                                    responseInfo, StockDetailResearchBean.class).getData());
-                    researchadapter.notifyDataSetChanged();
+                
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                if (code == 0) {
+                    ArrayList<StockDetailResearchData> detailResearchDatas = JSONObject.parseObject(
+                            responseInfo, StockDetailResearchBean.class).getData();
 
-                    if (dataListsResearch.size() < 5) {
+                    if (detailResearchDatas.size() < 6) {
                         hideFootView();
+                        dataListsResearch.addAll(detailResearchDatas);
                     } else {
                         showFootView();
+                        dataListsResearch.addAll(detailResearchDatas.subList(0,detailResearchDatas.size()-1));
                     }
-
+                    researchadapter.notifyDataSetChanged();
                     xLayout.setStatus(XLayout.Success);
-                } else {
+                } else if (code==1001){
                     xLayout.setStatus(XLayout.Empty);
+                }else {
+                    xLayout.setStatus(XLayout.Error);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
                 UIHelper.toastError(getActivity(), msg, xLayout);
+                KLog.e(msg);
             }
         }).startGet();
     }

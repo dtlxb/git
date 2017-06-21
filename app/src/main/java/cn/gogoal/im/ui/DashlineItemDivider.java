@@ -21,7 +21,7 @@ public class DashlineItemDivider extends RecyclerView.ItemDecoration {
 
     private static final int dashDivider = 4;//dp value
 
-    private static final int dashColoe = 0xffe4e4e4;
+    private static final int dashColoe = 0xffd9d9d9;
 
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
