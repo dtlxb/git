@@ -2,7 +2,6 @@ package cn.gogoal.im.base;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
@@ -19,10 +18,7 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.hply.qrcode_lib.activity.ZXingLibrary;
 
-import org.litepal.LitePal;
 import org.litepal.LitePalApplication;
-import org.litepal.LitePalDB;
-import org.litepal.tablemanager.Connector;
 
 import java.io.BufferedReader;
 import java.io.File;

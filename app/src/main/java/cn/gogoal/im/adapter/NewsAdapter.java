@@ -43,11 +43,11 @@ public class NewsAdapter extends CommonAdapter<StockDetailNewsData, BaseViewHold
         if (singleLineTitle) {
             textView.setSingleLine();
             textView.setEllipsize(TextUtils.TruncateAt.END);
-        }else {
+        } else {
             textView.setSingleLine(false);
         }
 
-        holder.setText(R.id.big_event_date, CalendarUtils.getStringDate("yyyy-MM-dd HH:mm", data.getDate()));
+        holder.setText(R.id.big_event_date, CalendarUtils.getStringDate("yyyy-MM-dd", data.getDate()));
 
         UIHelper.setRippBg(holder.itemView);
 

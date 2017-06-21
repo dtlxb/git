@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnFten"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="F10"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_research"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

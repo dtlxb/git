@@ -1,8 +1,11 @@
 package cn.gogoal.im.fragment.stock;
 
 import android.content.Context;
+import android.content.Intent;
 
+import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.stock.StockFtenActivity;
 import cn.gogoal.im.base.BaseFragment;
 
 /**
@@ -20,5 +23,14 @@ public class CompanyFinanceFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
 
+    }
+
+    @OnClick({R.id.btnFten})
+    public void ftenOnClick() {
+        Intent intent = new Intent(getActivity(), StockFtenActivity.class);
+        intent.putExtra("stockCode", "000001");
+        intent.putExtra("stockName", "平安银行");
+        intent.putExtra("position", "0");
+        startActivity(intent);
     }
 }

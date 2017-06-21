@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/line_color"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <cn.gogoal.im.ui.view.PieView
+                android:id="@+id/pieView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@android:color/white" />
+
+            <cn.gogoal.im.ui.view.BarView
+                android:id="@+id/barView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/white" />
+
+
+            <cn.gogoal.im.ui.view.LineBarView
+                android:id="@+id/lineBarView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/white" />
+
+            <cn.gogoal.im.ui.view.MultiBarView
+                android:id="@+id/multiBarView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/white" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
