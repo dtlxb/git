@@ -35,7 +35,6 @@ import cn.gogoal.im.activity.LiveActivity;
 import cn.gogoal.im.activity.TypeLoginActivity;
 import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.Advisers;
-import cn.gogoal.im.bean.AdvisersBean;
 import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.UserBean;
 import cn.gogoal.im.bean.group.GroupData;
@@ -512,48 +511,32 @@ public class UserUtils {
      * 登录时需要拉取
      * 我收藏的群列表
      */
-    public static void getMyGroupList(final ResponCallback callback) {
+    public static void getMyGroupList(final Impl<String> callback) {
         new GGOKHTTP(UserUtils.getTokenParams(), GGOKHTTP.GET_GROUP_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                JSONObject mainObject = JSONObject.parseObject(responseInfo);
-
-                //返回数据是否为空
-                if (StringUtils.isActuallyEmpty(responseInfo)) {
-                    if (callback != null) callback.onError("responseInfo null");
-                }
-                //返回的json是否包含code字段
-                else if (!mainObject.containsKey("code")) {
-                    if (callback != null) callback.onError("code null");
-                } else {
-                    //code ==0 正常
-                    if (mainObject.getIntValue("code") == 0) {
-                        String resp = mainObject.containsKey("data") ? mainObject.getString("data") : null;
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                if (code == 0) {
+                    if (JSONObject.parseObject(responseInfo).containsKey("data")) {
+                        String data = JSONObject.parseObject(responseInfo).getString("data");
                         if (callback != null) {
-                            if (resp == null) {
-                                callback.onError("data null");
-                            } else {
-                                callback.onSuccess(resp);
-                                SPTools.saveString(UserUtils.getMyAccountId() + "_my_group_list", resp);
-                            }
+                            callback.response(Impl.RESPON_DATA_SUCCESS, data);
                         }
-                    }
-
-                    //code 1001 没有获取到数据
-                    else if (mainObject.getIntValue("code") == 1001) {
-                        if (callback != null) callback.onEmpty();
-                    }
-
-                    //其他code 出错
-                    else {
+                        SPTools.saveString(UserUtils.getMyAccountId() + "_my_group_list", data);
+                    } else {
                         if (callback != null)
-                            callback.onError(mainObject.getString("message"));
+                            callback.response(Impl.RESPON_DATA_ERROR, "data non null");
                     }
+                } else if (code == 1001) {
+                    if (callback != null) callback.response(Impl.RESPON_DATA_EMPTY, "没有数据");
+                } else {
+                    if (callback != null)
+                        callback.response(Impl.RESPON_DATA_ERROR, "api请求出错");
                 }
             }
 
             public void onFailure(String msg) {
-                if (callback != null) callback.onError(msg);
+                if (callback != null) callback.response(Impl.RESPON_DATA_ERROR, "请求失败");
             }
         }).startGet();
     }
@@ -570,12 +553,12 @@ public class UserUtils {
      */
     public static boolean getMyGooupIsCollected(String convId) {
         String string = SPTools.getString(UserUtils.getMyAccountId() + "_my_group_list", null);
-        if (TextUtils.isEmpty(string)){
+        if (TextUtils.isEmpty(string)) {
             return false;
         }
         List<GroupData> groupDatas = JSONObject.parseArray(string, GroupData.class);
-        for (GroupData data:groupDatas){
-            if (data.getConv_id().equalsIgnoreCase(convId)){
+        for (GroupData data : groupDatas) {
+            if (data.getConv_id().equalsIgnoreCase(convId)) {
                 return true;
             }
         }
@@ -606,15 +589,24 @@ public class UserUtils {
     /**
      * 获取投资顾问
      */
-    public static void getAdvisers(final GetAdvisersCallback callback) {
+    public static List<Advisers> getAdvisers() {
+        String string = SPTools.getString(UserUtils.getMyAccountId() + "_ADVISERS_LIST", null);
+        if (StringUtils.isActuallyEmpty(string)) {
+            return null;
+        }
+        return JSONObject.parseArray(string, Advisers.class);
+    }
+
+    /**
+     * 获取投资顾问
+     */
+    public static void getAdvisers(final Impl<String> callback) {
 
         String advisersList = SPTools.getString(UserUtils.getMyAccountId() + "_ADVISERS_LIST", "");
 
         if (!StringUtils.isActuallyEmpty(advisersList)) {
-            List<Advisers> list = JSONObject.parseArray(advisersList, Advisers.class);
             if (callback != null) {
-                callback.onSuccess(list);
-                SPTools.clearItem(UserUtils.getMyAccountId() + "_ADVISERS_LIST");
+                callback.response(Impl.RESPON_DATA_SUCCESS, advisersList);
             }
 
         } else {
@@ -623,31 +615,80 @@ public class UserUtils {
                 public void onSuccess(String responseInfo) {
                     int code = parseObject(responseInfo).getIntValue("code");
                     if (code == 0) {
-                        List<Advisers> data = parseObject(responseInfo, AdvisersBean.class).getData();
-                        SPTools.saveString(UserUtils.getMyAccountId() + "_ADVISERS_LIST", JSONObject.toJSONString(data));
-                        if (callback != null) {
-                            callback.onSuccess(data);
+                        if (JSONObject.parseObject(responseInfo).containsKey("data")) {
+                            String data = JSONObject.parseObject(responseInfo).getString("data");
+                            SPTools.saveString(UserUtils.getMyAccountId() + "_ADVISERS_LIST", data);
+                            if (callback != null)
+                                callback.response(Impl.RESPON_DATA_SUCCESS, data);
+                        } else {
+                            if (callback != null)
+                                callback.response(Impl.RESPON_DATA_ERROR, "data non null");
                         }
+
                     } else if (code == 1001) {
-                        if (callback != null) {
-                            callback.onFailed("数据为空");
-                        }
+                        if (callback != null)
+                            callback.response(Impl.RESPON_DATA_EMPTY, "您没有匹配的投资顾问");
                     } else {
-                        if (callback != null) {
-                            callback.onFailed(parseObject(responseInfo).getString("message"));
-                        }
+                        if (callback != null)
+                            callback.response(Impl.RESPON_DATA_ERROR,
+                                    "api请求出错");
                     }
                 }
 
                 @Override
                 public void onFailure(String msg) {
                     if (callback != null) {
-                        callback.onFailed(msg);
+                        callback.response(Impl.RESPON_DATA_ERROR,msg);
                     }
                 }
             }).startGet();
         }
     }
+
+    /**
+     * 获取投研小工具
+     */
+    public static void getAllMyTools(final Impl<JSONArray> callback) {
+        Map<String, String> map = new HashMap<>();
+        map.put("token", UserUtils.getToken());
+
+        new GGOKHTTP(map, GGOKHTTP.GET_USERCOLUMN, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                if (code == 0) {
+                    if (JSONObject.parseObject(responseInfo).containsKey("data")) {
+                        JSONArray jsonArray =
+                                JSONObject.parseObject(responseInfo).getJSONArray("data");
+                        if (callback != null) {
+                            callback.response(Impl.RESPON_DATA_SUCCESS, jsonArray);
+                        }
+                        SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_all_my_tools", jsonArray);
+                    } else {
+                        if (callback != null)
+                            callback.response(Impl.RESPON_DATA_ERROR, null);
+                    }
+                } else if (code == 1001) {
+                    if (callback != null)
+                        callback.response(Impl.RESPON_DATA_EMPTY, null);
+                } else {
+                    if (callback != null)
+                        callback.response(Impl.RESPON_DATA_ERROR, null);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                if (callback != null)
+                    callback.response(Impl.RESPON_DATA_ERROR, null);
+            }
+        }).startGet();
+    }
+
+    public static String getAllMyTools() {
+        return SPTools.getString(UserUtils.getMyAccountId() + "_all_my_tools", null);
+    }
+
 
     /**
      * 当群信息没有的时候 网上拉取
@@ -757,9 +798,4 @@ public class UserUtils {
         void failed(String errorMsg);
     }
 
-    public interface GetAdvisersCallback {
-        void onSuccess(List<Advisers> advisersList);
-
-        void onFailed(String errorMsg);
-    }
 }

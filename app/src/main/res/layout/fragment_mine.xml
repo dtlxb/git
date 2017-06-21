@@ -143,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/white" />
 
-            <include layout="@layout/layout_sapce_15dp" />
+            <include layout="@layout/layout_space_15dp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_mine"

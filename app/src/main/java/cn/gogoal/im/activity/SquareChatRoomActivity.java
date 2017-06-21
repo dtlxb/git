@@ -22,7 +22,7 @@ import cn.gogoal.im.fragment.ChatFragment;
 import cn.gogoal.im.ui.view.XTitle;
 
 /**
- * Created by huangxx on 2017/2/20.
+ * Created by huangxx on 2017/2/20.;
  */
 
 public class SquareChatRoomActivity extends BaseActivity {

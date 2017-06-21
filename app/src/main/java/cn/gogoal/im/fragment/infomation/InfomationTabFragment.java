@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.View;
 
@@ -229,8 +230,11 @@ public class InfomationTabFragment extends BaseFragment {
 
         @Override
         protected void convert(BaseViewHolder holder, final InfomationData.Data data, int position) {
-            holder.setText(R.id.tv_item_normal_info_title, tabType == INFOMATION_TYPE_SKY_VIEW_POINT ?
-                    data.getSummary() : data.getTitle());
+            holder.setText(R.id.tv_item_normal_info_title,data.getTitle());
+
+            holder.setText(R.id.tv_item_normal_sub_title,
+                    TextUtils.isEmpty(data.getSummary())?"":data.getSummary());
+            holder.setVisible(R.id.tv_item_normal_sub_title,tabType==INFOMATION_TYPE_SKY_VIEW_POINT);
 
             holder.setText(R.id.tv_item_normal_info_info,
                     String.format(Locale.getDefault(),

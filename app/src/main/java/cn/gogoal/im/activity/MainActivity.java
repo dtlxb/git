@@ -101,9 +101,6 @@ public class MainActivity extends BaseActivity {
 
         setTab();
 
-        //登录成功获取投资顾问,缓存
-        UserUtils.getAdvisers(null);
-
         boolean needRefresh = getIntent().getBooleanExtra("isFromLogin", false);
         SPTools.saveBoolean("squareNeedRefresh", needRefresh);
 

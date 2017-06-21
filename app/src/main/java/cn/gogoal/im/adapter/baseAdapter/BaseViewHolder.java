@@ -29,6 +29,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.text.util.Linkify;
 import android.util.SparseArray;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.Adapter;
@@ -111,6 +112,12 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public BaseViewHolder setText(int viewId, CharSequence value) {
         TextView view = getView(viewId);
         view.setText(value);
+        return this;
+    }
+
+    public BaseViewHolder setTextSize(int viewId, int spValueSize) {
+        TextView view = getView(viewId);
+        view.setTextSize(TypedValue.COMPLEX_UNIT_SP,spValueSize);
         return this;
     }
 

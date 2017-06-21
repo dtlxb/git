@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.text.TextUtils;
@@ -30,7 +31,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -65,8 +65,9 @@ import cn.gogoal.im.bean.stock.TreatData;
 import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
+import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
+import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
@@ -82,8 +83,8 @@ import cn.gogoal.im.ui.stock.DialogRecyclerView;
 import cn.gogoal.im.ui.stockviews.BitmapChartView;
 import cn.gogoal.im.ui.stockviews.KChartsBitmap;
 import cn.gogoal.im.ui.stockviews.TimesFivesBitmap;
-import cn.gogoal.im.ui.view.GreatScrollView;
 import cn.gogoal.im.ui.widget.UnSlidingViewPager;
+import cn.gogoal.im.ui.widget.WrapContentHeightViewPager;
 import hply.com.niugu.autofixtext.AutofitTextView;
 import hply.com.niugu.stock.StockMinuteBean;
 
@@ -129,7 +130,7 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     //下拉刷新
     @BindView(R.id.scrollView)
-    GreatScrollView scrollView;
+    NestedScrollView scrollView;
 
     //股票价格
     @BindView(R.id.stock_price)
@@ -222,9 +223,12 @@ public class CopyStockDetailActivity extends BaseActivity {
     //修改的中间新闻模块
     @BindView(R.id.tablayout_news_)
     TabLayout tabLayoutNews;
+
     @BindView(R.id.vp_news_)
-    ViewPager viewPagerNews;
+    WrapContentHeightViewPager viewPagerNews;
+
     private String[] newTitles = {"新闻", "公告", "研报", "资料", "财务"};
+
     private RotateAnimation rotateAnimation;
 
     //交易五档、明细
@@ -233,6 +237,7 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     @BindView(R.id.vp_treat)
     UnSlidingViewPager vpTreat;
+
     private String change_value;
 
     //=====================20170613===================
@@ -241,6 +246,9 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     @BindView(R.id.view_dialog_mask)
     View viewMask;
+
+    @BindView(R.id.view_dialog_mask_bottom)
+    View viewMaskBottom;
 
     @BindView(R.id.iv_show_info_dialog)
     ImageView imageViewShoeDialog;
@@ -340,10 +348,7 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     private void findView() {
         BaseActivity.iniRefresh(ptrFrame);
-
         scrollView.smoothScrollTo(0, 20);
-//        headerView = (HeaderView) LayoutInflater.from(this).inflate(
-//                R.layout.header_layout, new LinearLayout(getActivity()), false);
     }
 
     //初始化
@@ -489,13 +494,6 @@ public class CopyStockDetailActivity extends BaseActivity {
         //股票状态和当前时间
         StockState();
 
-//        //设置下拉头部属性
-//        headerView.setFontColor(
-//
-//                getResColor(R.color.white));
-//        headerView.setPullImage(R.mipmap.arrows_white);
-//        headerView.setLoadingImage(R.mipmap.loading_white);
-
         //设置下拉刷新属性
         ptrFrame.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -504,43 +502,15 @@ public class CopyStockDetailActivity extends BaseActivity {
                 ptrFrame.setRefreshing(false);
             }
         });
-//        ptrFrame.setPtrHandler(new PtrHandler() {
-//            @Override
-//            public void onRefreshBegin(PtrFrameLayout frame) {
-//                //刷新
-//                headerView.loading();
-//
-//                if (canRefreshLine) {
-//                    refreshAll();
-//                } else {
-//                    ptrFrame.refreshComplete();
-//
-//                }
-//            }
-//
-//            @Override
-//            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-//                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
-//            }
-//        });
 
     }
-
-//    @Subscriber(tag = "check_net_work")
-//    private void checkNet(String isnetwork) {
-//        if ("yes".equals(isnetwork)) {
-//            refreshAll();
-//        }
-//    }
 
     private void refreshAll() {
         StockState();
         startAnimation();
         initList(stockCode);
         refreshChart(showItem);
-//        setNewsTab();
         AppManager.getInstance().sendMessage("updata_treat_data");
-//        "updata_treat_data"
     }
 
     void stopAnimation() {
@@ -1009,6 +979,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                     }
                     stock_close.setText(StringUtils.save2Significand(info.getClose_price()));//收盘价
                     //监听当前滚动位置，动态改变状态
+
                     scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
                         @Override
                         public void onScrollChanged() {
@@ -1025,6 +996,7 @@ public class CopyStockDetailActivity extends BaseActivity {
 
                                 text_state.setText(result);
                             }
+                            scrollView.getViewTreeObserver().removeOnScrollChangedListener(this);
                         }
                     });
 
@@ -1234,6 +1206,13 @@ public class CopyStockDetailActivity extends BaseActivity {
 
             case R.id.tv_stockDetail_tools://工具箱
                 StockPopuDialog.newInstance(getStockBean()).show(getSupportFragmentManager());
+                UserUtils.getAllMyTools(new Impl<JSONArray>() {
+                    @Override
+                    public void response(int code, JSONArray data) {
+                        KLog.e(data);
+                    }
+                });
+
                 break;
 
             case R.id.tv_stockDetail_toggle_mystock://tog 加减自选股
@@ -1243,7 +1222,6 @@ public class CopyStockDetailActivity extends BaseActivity {
                 getGroupChartConvsation();
                 break;
             case R.id.tv_stockDetail_interactiveinvestor://投资者互动
-                //TODO 股票圈，进入后台群
                 intent.setClass(v.getContext(), InteractiveInvestorActivity.class);
                 intent.putExtra("stock_info", getStockBean());
                 startActivity(intent);
@@ -1267,20 +1245,22 @@ public class CopyStockDetailActivity extends BaseActivity {
                         final String conversationId = JSONObject.parseObject(responseInfo).
                                 getJSONObject("data").getString("conv_id");
 
-                        AVIMClientManager.getInstance().findConversationById(conversationId, new AVIMClientManager.ChatJoinManager() {
+                        List<Integer> addIdList = new ArrayList<>();
+                        addIdList.add(Integer.parseInt(UserUtils.getMyAccountId()));
+                        //添加群成员
+                        ChatGroupHelper.addAnyone(addIdList, conversationId, new ChatGroupHelper.ChatGroupManager() {
                             @Override
-                            public void joinSuccess(AVIMConversation conversation) {
-
+                            public void groupActionSuccess(JSONObject object) {
                                 Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
-                                intent.putExtra("conversation_id", conversation.getConversationId());
+                                intent.putExtra("conversation_id", conversationId);
                                 intent.putExtra("need_update", false);
-                                intent.putExtra("squareName",conversation.getName());
                                 startActivity(intent);
                             }
 
                             @Override
-                            public void joinFail(String error) {
+                            public void groupActionFail(String error) {
                                 UIHelper.toast(getActivity(), "股票群初始化失败，请稍后重试！");
+                                Log.e("TAG", error);
                             }
                         });
 
@@ -1561,24 +1541,9 @@ public class CopyStockDetailActivity extends BaseActivity {
         rvStockInfo.startAnimation(
                 android.view.animation.AnimationUtils.loadAnimation(getActivity(), R.anim.slide_in_from_top));
         rvStockInfo.setVisibility(View.VISIBLE);
-        viewMask.setEnabled(true);
-        viewMask.setClickable(true);
-        viewMask.setVisibility(View.VISIBLE);
-        viewMask.startAnimation(
-                android.view.animation.AnimationUtils.loadAnimation(getActivity(), R.anim.alpha_in));
 
-        //点击蒙版消失
-        viewMask.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    dismissMarket();
-                    viewMask.setEnabled(false);
-                    viewMask.setClickable(false);
-                }
-                return true;
-            }
-        });
+        functionViewMask(viewMask,true);
+        functionViewMask(viewMaskBottom,true);
 
         //禁止滑动
         scrollView.setOnTouchListener(new View.OnTouchListener() {
@@ -1607,12 +1572,8 @@ public class CopyStockDetailActivity extends BaseActivity {
             rvStockInfo.startAnimation(
                     android.view.animation.AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_from_top));
 
-            viewMask.setClickable(false);
-            viewMask.setEnabled(false);//防止重复点击反复出现
-            viewMask.setVisibility(View.GONE);
-            viewMask.startAnimation(
-                    android.view.animation.AnimationUtils.loadAnimation(getActivity(), R.anim.alpha_out
-                    ));
+            functionViewMask(viewMask,false);
+            functionViewMask(viewMaskBottom,false);
 
             scrollView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -1630,6 +1591,30 @@ public class CopyStockDetailActivity extends BaseActivity {
             //恢复可点击
             imageViewShoeDialog.setImageResource(R.mipmap.img_drop_down);
         }
+    }
+
+    private void functionViewMask(final View viewMask,boolean show) {
+//        viewMaskBottom
+        viewMask.setEnabled(show);
+        viewMask.setClickable(show);
+        viewMask.setVisibility(show ? View.VISIBLE : View.GONE);
+        viewMask.startAnimation(
+                android.view.animation.AnimationUtils.loadAnimation(getActivity(),
+                        show?R.anim.alpha_in:R.anim.alpha_out));
+
+        //点击蒙版消失
+        viewMask.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    dismissMarket();
+                    viewMask.setEnabled(false);
+                    viewMask.setClickable(false);
+                }
+                return true;
+            }
+        });
+
     }
 
     //弹窗是否可见

@@ -35,7 +35,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
-import cn.gogoal.im.common.ResponCallback;
+import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -124,40 +124,39 @@ public class MyGroupsActivity extends BaseActivity {
 
     //收藏群列表
     public void getGroupList(final int type) {
-        UserUtils.getMyGroupList(new ResponCallback() {
+        UserUtils.getMyGroupList(new Impl<String>() {
             @Override
-            public void onSuccess(String jsonString) {
-                dataBeans.clear();
+            public void response(int code, String jsondata) {
+                switch (code) {
+                    case Impl.RESPON_DATA_SUCCESS:
+                        dataBeans.clear();
+                        List<GroupData> data =
+                                JSONObject.parseArray(jsondata, GroupData.class);
 
-                List<GroupData> data =
-                        JSONObject.parseArray(jsonString, GroupData.class);
+                        dataBeans.addAll(data);
 
-                dataBeans.addAll(data);
+                        listAdapter.notifyDataSetChanged();
 
-                listAdapter.notifyDataSetChanged();
+                        xLayout.setStatus(XLayout.Success);
 
-                xLayout.setStatus(XLayout.Success);
-
-                if (type == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
-                    UIHelper.toast(getActivity(), "更新群组数据成功");
+                        if (type == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+                            UIHelper.toast(getActivity(), "更新群组数据成功");
+                        }
+                        break;
+                    case Impl.RESPON_DATA_EMPTY:
+                        xLayout.setStatus(XLayout.Empty);
+                        break;
+                    case Impl.RESPON_DATA_ERROR:
+                        xLayout.setStatus(XLayout.Error);
+                        UIHelper.toastError(getActivity(), jsondata, xLayout);
+                        xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
+                            @Override
+                            public void onReload(View v) {
+                                getGroupList(AppConst.REFRESH_TYPE_PARENT_BUTTON);
+                            }
+                        });
+                        break;
                 }
-            }
-
-            @Override
-            public void onEmpty() {
-                xLayout.setStatus(XLayout.Empty);
-            }
-
-            @Override
-            public void onError(String errorMsg) {
-                xLayout.setStatus(XLayout.Error);
-                UIHelper.toastError(getActivity(), errorMsg, xLayout);
-                xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
-                    @Override
-                    public void onReload(View v) {
-                        getGroupList(AppConst.REFRESH_TYPE_PARENT_BUTTON);
-                    }
-                });
             }
         });
 
@@ -180,7 +179,7 @@ public class MyGroupsActivity extends BaseActivity {
 
             if (!TextUtils.isEmpty(groupUrl)) {//
                 ImageDisplay.loadRoundedRectangleImage(getActivity(), groupUrl, imgAvatar);
-                groupAvatar=groupUrl;
+                groupAvatar = groupUrl;
             } else {
                 ChatGroupHelper.setGroupAvatar(data.getConv_id(), new AvatarTakeListener() {
                     @Override
@@ -189,7 +188,7 @@ public class MyGroupsActivity extends BaseActivity {
                             @Override
                             public void run() {
                                 imgAvatar.setImageBitmap(bitmap);
-                                groupAvatar=bitmap;
+                                groupAvatar = bitmap;
                             }
                         });
                     }

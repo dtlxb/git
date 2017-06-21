@@ -1,4 +1,4 @@
-package cn.gogoal.im.fragment;
+package cn.gogoal.im.fragment.stock;
 
 import android.content.Context;
 import android.graphics.Bitmap;
