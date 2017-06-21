@@ -660,10 +660,9 @@ public class UserUtils {
                     if (JSONObject.parseObject(responseInfo).containsKey("data")) {
                         JSONArray jsonArray =
                                 JSONObject.parseObject(responseInfo).getJSONArray("data");
-                        if (callback != null) {
-                            callback.response(Impl.RESPON_DATA_SUCCESS, jsonArray);
-                        }
                         SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_all_my_tools", jsonArray);
+                        if (callback != null)
+                            callback.response(Impl.RESPON_DATA_SUCCESS, jsonArray);
                     } else {
                         if (callback != null)
                             callback.response(Impl.RESPON_DATA_ERROR, null);
