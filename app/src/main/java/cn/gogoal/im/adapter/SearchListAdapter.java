@@ -64,7 +64,7 @@ public class SearchListAdapter extends BaseSectionQuickAdapter<SearchData, BaseV
 
         holder.itemView.setBackgroundResource(R.drawable.selector_normal_white2gray);
 
-        if (searchBean.getChatType() == AppConst.IM_CHAT_TYPE_SQUARE) {
+        if (searchBean.getChatType() == AppConst.IM_CHAT_TYPE_SQUARE || searchBean.getChatType() == AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
             ChatGroupHelper.setGroupAvatar(searchBean.getConversationId(), new AvatarTakeListener() {
                 @Override
                 public void success(final Bitmap bitmap) {
@@ -100,7 +100,7 @@ public class SearchListAdapter extends BaseSectionQuickAdapter<SearchData, BaseV
                     bundle.putString("nickname", nickname);
                     bundle.putBoolean("need_update", false);
                     intent.putExtras(bundle);
-                } else if (searchBean.getChatType() == AppConst.IM_CHAT_TYPE_SQUARE) {
+                } else if (searchBean.getChatType() == AppConst.IM_CHAT_TYPE_SQUARE || searchBean.getChatType() == AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
                     intent = new Intent(mActivity, SquareChatRoomActivity.class);
                     bundle.putString("conversation_id", convId);
                     bundle.putString("squareName", nickname);

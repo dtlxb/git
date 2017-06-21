@@ -273,7 +273,8 @@ public class ChatFragment extends BaseFragment {
                 if (etInput.getText().toString().trim().equals("")) {
                     functionCheckBox.setVisibility(View.VISIBLE);
                     btnSend.setVisibility(View.INVISIBLE);
-                } else if (etInput.getText().toString().endsWith("@") && chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
+                } else if (etInput.getText().toString().endsWith("@") && (chatType == AppConst.IM_CHAT_TYPE_SQUARE
+                        || chatType == AppConst.IM_CHAT_TYPE_STOCK_SQUARE)) {
                     //@过后跳转加人
                     Intent intent = new Intent(getActivity(), ChooseContactActivity.class);
                     Bundle bundle = new Bundle();
@@ -523,7 +524,7 @@ public class ChatFragment extends BaseFragment {
                         null != userBean.getNickname() ? userBean.getNickname() : "",
                         String.valueOf(userBean.getFriend_id()), String.valueOf(userBean.getAvatar()), JSON.toJSONString(message));
             }
-        } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
+        } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE || chatType == AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
             //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息(群对象和群头像暂时为空)
             if (message instanceof GGTextMessage) {
                 String strMessage = ((GGTextMessage) message).getText();
@@ -820,7 +821,7 @@ public class ChatFragment extends BaseFragment {
     }
 
     private void dealSquareMessage() {
-        if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
+        if (chatType == AppConst.IM_CHAT_TYPE_SQUARE || chatType == AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
             //加群消息特殊处理
             for (int i = 0; i < messageList.size(); i++) {
                 if (messageList.get(i) instanceof GGGroupAddMessage || messageList.get(i) instanceof GGGroupDelMessage) {

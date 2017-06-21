@@ -144,7 +144,8 @@ public class MessageFragment extends BaseFragment {
         //查找到消息列表按时间排序
         IMMessageBeans.addAll(DataSupport.order("lastTime desc").find(IMMessageBean.class));
         if (null != IMMessageBeans && IMMessageBeans.size() > 0) {
-            xLayout.setStatus(XLayout.Success);
+            xLayout.
+                    setStatus(XLayout.Success);
         } else {
             xLayout.setStatus(XLayout.Empty);
         }
@@ -169,6 +170,7 @@ public class MessageFragment extends BaseFragment {
                         startActivity(intent);
                         break;
                     case AppConst.IM_CHAT_TYPE_SQUARE:
+                    case AppConst.IM_CHAT_TYPE_STOCK_SQUARE:
                         //群聊处理
                         intent = new Intent(getContext(), SquareChatRoomActivity.class);
                         bundle.putString("conversation_id", conversation_id);
@@ -344,7 +346,7 @@ public class MessageFragment extends BaseFragment {
                 String _lctype = contentObject.getString("_lctype");
                 nickName = messageBean.getNickname();
                 //头像设置
-                if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
+                if (chatType == AppConst.IM_CHAT_TYPE_SQUARE || chatType == AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
                     if (lcattrsObject != null && lcattrsObject.get("username") != null) {
                         squareMessageFrom = UserUtils.getUserName().equals(lcattrsObject.get("username")) ? "" : lcattrsObject.getString("username");
                     }
@@ -602,6 +604,7 @@ public class MessageFragment extends BaseFragment {
                 avatar = lcattrsObject.getString("avatar");
                 break;
             case AppConst.IM_CHAT_TYPE_SQUARE:
+            case AppConst.IM_CHAT_TYPE_STOCK_SQUARE:
                 nickName = conversation.getName();
                 avatar = (String) conversation.getAttribute("avatar");
                 break;

@@ -62,7 +62,8 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     UserInfoUtils.upDateUserInfo(Integer.parseInt(message.getFrom()), lcattrsObject.getString("avatar"), lcattrsObject.getString("username"));
                                     break;
                                 case AppConst.IM_CHAT_TYPE_SQUARE:
-                                    //群聊
+                                case AppConst.IM_CHAT_TYPE_STOCK_SQUARE:
+                                    //群聊，股票群聊
                                     //更新对话
                                     final JSONObject content_object = JSON.parseObject(message.getContent());
                                     final String _lctype = content_object.getString("_lctype");
