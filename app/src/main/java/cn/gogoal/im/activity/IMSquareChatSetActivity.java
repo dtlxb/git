@@ -9,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
@@ -136,7 +137,8 @@ public class IMSquareChatSetActivity extends BaseActivity {
         }
 
         userBeans.addAll(UserInfoUtils.getAllGroupUserInfo(conversationId));
-        if (null != userBeans && userBeans.size() > 0) {
+
+        if (null != userBeans && userBeans.size() > 1) {
             getAllContacts(userBeans);
         } else {
             getChatGroup();
@@ -145,11 +147,13 @@ public class IMSquareChatSetActivity extends BaseActivity {
         final JSONArray groupsArray = UserUtils.getLocalMyGooupList();
 
         //保存群
-        for (int i = 0; i < groupsArray.size(); i++) {
-            if (((JSONObject) groupsArray.get(i)).getString("conv_id").equals(conversationId)) {
-                saveGroup.setChecked(true);
-                finalThisGroup = (JSONObject) groupsArray.get(i);
-                break;
+        if (null != groupsArray && groupsArray.size() > 0) {
+            for (int i = 0; i < groupsArray.size(); i++) {
+                if (((JSONObject) groupsArray.get(i)).getString("conv_id").equals(conversationId)) {
+                    saveGroup.setChecked(true);
+                    finalThisGroup = (JSONObject) groupsArray.get(i);
+                    break;
+                }
             }
         }
 
@@ -275,6 +279,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         PersonContactBeans.addAll(contactBeans);
         contactBeans.clear();
         contactBeans.addAll(squareCreaterFirst(PersonContactBeans));
+        Log.e("++++contactBeans", contactBeans.toString());
         mPersonInfoAdapter.notifyDataSetChanged();
     }
 
@@ -325,8 +330,10 @@ public class IMSquareChatSetActivity extends BaseActivity {
         UserUtils.getChatGroup(null, conversationId, new UserUtils.SquareInfoCallback() {
             @Override
             public void squareGetSuccess(JSONObject object) {
+                Log.e("++++obj1", object.toString());
                 if (null != object.get("accountList")) {
                     List<UserBean> userBeanList = JSON.parseArray(object.getJSONArray("accountList").toJSONString(), UserBean.class);
+                    Log.e("++++obj2", userBeanList.toString());
                     getAllContacts(userBeanList);
                 } else {
                 }
@@ -543,14 +550,14 @@ public class IMSquareChatSetActivity extends BaseActivity {
     public List<ContactBean> squareCreaterFirst(List<ContactBean> contactBeanList) {
         List<ContactBean> newContactBeanList = new ArrayList<>();
         int size;
-        ContactBean contactBean = new ContactBean();
+        ContactBean contactBean;
         for (int i = 0; i < contactBeanList.size(); i++) {
-            if (contactBeanList.get(i).getFriend_id() == StringUtils.pareseStringDouble(squareCreater)) {
+            if (String.valueOf(contactBeanList.get(i).getFriend_id()).equals(squareCreater)) {
                 contactBean = contactBeanList.get(i);
                 contactBeanList.remove(i);
+                contactBeanList.add(0, contactBean);
             }
         }
-        contactBeanList.add(0, contactBean);
         if (squareCreater.equals(UserUtils.getMyAccountId())) {
             if (contactBeanList.size() > 4) {
                 size = 4;

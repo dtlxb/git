@@ -49,6 +49,7 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.IMSquareChatSetActivity;
 import cn.gogoal.im.activity.MessageHolderActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
 import cn.gogoal.im.activity.stock.InteractiveInvestorActivity;
@@ -66,6 +67,7 @@ import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
+import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
@@ -1267,20 +1269,21 @@ public class CopyStockDetailActivity extends BaseActivity {
                         final String conversationId = JSONObject.parseObject(responseInfo).
                                 getJSONObject("data").getString("conv_id");
 
-                        AVIMClientManager.getInstance().findConversationById(conversationId, new AVIMClientManager.ChatJoinManager() {
+                        List<Integer> addIdList = new ArrayList<>();
+                        addIdList.add(Integer.parseInt(UserUtils.getMyAccountId()));
+                        //添加群成员
+                        ChatGroupHelper.addAnyone(addIdList, conversationId, new ChatGroupHelper.ChatGroupManager() {
                             @Override
-                            public void joinSuccess(AVIMConversation conversation) {
-
+                            public void groupActionSuccess(JSONObject object) {
                                 Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
-                                intent.putExtra("conversation_id", conversation.getConversationId());
+                                intent.putExtra("conversation_id", conversationId);
                                 intent.putExtra("need_update", false);
-                                intent.putExtra("squareName",conversation.getName());
                                 startActivity(intent);
                             }
 
                             @Override
-                            public void joinFail(String error) {
-                                UIHelper.toast(getActivity(), "股票群初始化失败，请稍后重试！");
+                            public void groupActionFail(String error) {
+
                             }
                         });
 

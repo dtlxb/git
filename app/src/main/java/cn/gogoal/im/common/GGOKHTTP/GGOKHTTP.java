@@ -2,6 +2,7 @@ package cn.gogoal.im.common.GGOKHTTP;
 
 import android.util.Log;
 
+import com.socks.library.KLog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -760,7 +761,7 @@ public class GGOKHTTP {
     /*
      * 股票群聊
      * */
-    public static final String GET_STOCK_GROUP_ID="v1/ggm_chat/get_stock_group_id";
+    public static final String GET_STOCK_GROUP_ID = "v1/ggm_chat/get_stock_group_id";
 
     /**
      * F10====公司概况

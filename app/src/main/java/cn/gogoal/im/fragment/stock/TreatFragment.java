@@ -8,12 +8,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -28,8 +30,12 @@ import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.bean.stock.MoneyBean;
+import cn.gogoal.im.bean.stock.MoneyTrade;
 import cn.gogoal.im.bean.stock.StockDetail;
 import cn.gogoal.im.bean.stock.ThreeText;
+import cn.gogoal.im.bean.stock.TodayInfoBean;
+import cn.gogoal.im.bean.stock.TradeBean;
 import cn.gogoal.im.bean.stock.TreatData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
@@ -64,15 +70,13 @@ public class TreatFragment extends BaseFragment {
 
     //===================明细=====================
     private MingxiAdapter mingxiAdapter;
-    private List<TimeDetialData> timeDetialDatas;
+    private List<TimeDetialData> timeDetailDatas;
     private boolean fromStockDetail;
     private int type;
 
     //===================资金=====================
     private MoneyAdapter moneyAdapter;
-    /*private List<TimeDetialData> timeDetialDatas;
-    private boolean fromStockDetail;
-    private int type;*/
+    private List<MoneyTrade> moneyDatas;
 
     private float itemHeight;
     private String stockCode;
@@ -120,10 +124,22 @@ public class TreatFragment extends BaseFragment {
                 recyclerView.addItemDecoration(new WudangDivider(getResColor(R.color.chart_text_color)));
                 getTreatWudang();
             } else if (type == AppConst.TREAT_TYPE_MING_XI) {
-                timeDetialDatas = new ArrayList<>();
-                mingxiAdapter = new MingxiAdapter(timeDetialDatas);
+                timeDetailDatas = new ArrayList<>();
+                mingxiAdapter = new MingxiAdapter(timeDetailDatas);
                 recyclerView.setAdapter(mingxiAdapter);
                 getStockTimeDetail();
+            } else if (type == AppConst.TREAT_TYPE_MONEY) {
+                moneyDatas = new ArrayList<>();
+                moneyAdapter = new MoneyAdapter(moneyDatas);
+                recyclerView.setAdapter(moneyAdapter);
+                recyclerView.setBackgroundColor(Color.RED);
+
+                View viewHeader = LayoutInflater.from(getActivity()).inflate(R.layout.item_map_header, new LinearLayout(getActivity()), false);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(AppDevice.dp2px(getActivity(), 50), AppDevice.dp2px(getActivity(), 35));
+                viewHeader.setLayoutParams(params);
+
+                moneyAdapter.addHeaderView(viewHeader);
+                getMoneyDetail();
             }
         }
 
@@ -141,6 +157,8 @@ public class TreatFragment extends BaseFragment {
             getTreatWudang();
         } else if (type == AppConst.TREAT_TYPE_MING_XI) {
             getStockTimeDetail();
+        } else if (type == AppConst.TREAT_TYPE_MONEY) {
+            getMoneyDetail();
         }
     }
 
@@ -197,13 +215,13 @@ public class TreatFragment extends BaseFragment {
             @Override
             public void onSuccess(String responseInfo) {
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                    timeDetialDatas.clear();
+                    timeDetailDatas.clear();
                     List<TimeDetialData> cacheData =
                             JSONObject.parseObject(responseInfo, TimeDetialBean.class).getData();
                     if (fromStockDetail && cacheData.size() >= 8) {
-                        timeDetialDatas.addAll(cacheData.subList(0, 8));
+                        timeDetailDatas.addAll(cacheData.subList(0, 8));
                     } else {
-                        timeDetialDatas.addAll(cacheData);
+                        timeDetailDatas.addAll(cacheData);
                     }
                     mingxiAdapter.notifyDataSetChanged();
                 }
@@ -214,6 +232,76 @@ public class TreatFragment extends BaseFragment {
         };
         new GGOKHTTP(param, GGOKHTTP.GET_STOCK_TIME_DETIAL, ggHttpInterface).startGet();
     }
+
+    //资金数据
+    private void getMoneyDetail() {
+        /*HashMap<String, String> param = new HashMap<>();
+        param.put("stock_code", stockCode);
+
+        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject result = JSONObject.parseObject(responseInfo);
+                if (result.getIntValue("code") == 0) {
+                    MoneyBean moneyBean = JSONObject.parseObject(responseInfo, TradeBean.class).getData();
+                    TodayInfoBean todayInfoBean = moneyBean.getTodayInfoBean();
+                    initMoneyAdapter(todayInfoBean);
+                }
+            }
+
+            public void onFailure(String msg) {
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.GET_FUAN_INFO, ggHttpInterface).startGet();*/
+
+        String responseInfo = "{\"code\" : 0,\"message\" : \"成功\",\"data\" : {\"fiveDayMessage\" : [{\"2017-06-15\" : -5314130.6000000015},{\"2017-06-14\" : -3626729.0}],\"todayInfo\" : {\"fullcode\" : \"sh603218\",\"tdate\" : \"2017-06-15\",\"flow_into_large_fund\" : 5079070.6,\"flow_out_large_fund\" : 5074659.0,\"flow_into_middle_fund\" : 6643879.44,\"flow_out_middle_fund\" : 1.069072664E7,\"flow_into_small_fund\" : 1127319.0,\"flow_out_small_fund\" : 2399014.0}}}";
+        KLog.e(responseInfo);
+        JSONObject result = JSONObject.parseObject(responseInfo);
+        if (result.getIntValue("code") == 0) {
+            MoneyBean moneyBean = JSONObject.parseObject(responseInfo, TradeBean.class).getData();
+            TodayInfoBean todayInfoBean = moneyBean.getTodayInfo();
+            initMoneyAdapter(todayInfoBean);
+        }
+    }
+
+    private void initMoneyAdapter(TodayInfoBean todayInfoBean) {
+
+        double total = todayInfoBean.getFlow_into_large_fund() + todayInfoBean.getFlow_into_middle_fund()
+                + todayInfoBean.getFlow_into_small_fund() + todayInfoBean.getFlow_out_large_fund() +
+                todayInfoBean.getFlow_out_middle_fund() + todayInfoBean.getFlow_out_small_fund();
+
+        moneyDatas.add(new MoneyTrade("大单", namParse(todayInfoBean.getFlow_into_large_fund()),
+                namParse(todayInfoBean.getFlow_into_large_fund(), total), "#ca2c36"));
+        moneyDatas.add(new MoneyTrade("中单", namParse(todayInfoBean.getFlow_into_middle_fund()),
+                namParse(todayInfoBean.getFlow_into_middle_fund(), total), "#e1515b"));
+        moneyDatas.add(new MoneyTrade("小单", namParse(todayInfoBean.getFlow_into_small_fund()),
+                namParse(todayInfoBean.getFlow_into_small_fund(), total), "#ff9a99"));
+        moneyDatas.add(new MoneyTrade("大单", namParse(todayInfoBean.getFlow_out_large_fund()),
+                namParse(todayInfoBean.getFlow_out_large_fund(), total), "#247c54"));
+        moneyDatas.add(new MoneyTrade("中单", namParse(todayInfoBean.getFlow_out_middle_fund()),
+                namParse(todayInfoBean.getFlow_out_middle_fund(), total), "#34b578"));
+        moneyDatas.add(new MoneyTrade("小单", namParse(todayInfoBean.getFlow_out_small_fund()),
+                namParse(todayInfoBean.getFlow_out_small_fund(), total), "#63dca4"));
+
+        moneyAdapter.notifyDataSetChanged();
+    }
+
+    private String namParse(double number, double total) {
+        return (int) Math.rint(number * 100 / total) + "%";
+    }
+
+    private String namParse(double number) {
+        String num;
+        int intNum = (int) Math.rint(number / 10000);
+        if (intNum == 0) {
+            num = "0";
+        } else {
+            num = String.valueOf(intNum) + "万";
+        }
+        return num;
+    }
+
 
     private class WudangAdapter extends CommonAdapter<ThreeText, BaseViewHolder> {
 
@@ -343,6 +431,19 @@ public class TreatFragment extends BaseFragment {
     }
 
 
-    private class MoneyAdapter {
+    private class MoneyAdapter extends CommonAdapter<MoneyTrade, BaseViewHolder> {
+        public MoneyAdapter(List<MoneyTrade> data) {
+            super(R.layout.item_treat_3_text, data);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder holder, MoneyTrade data, int position) {
+            View view = holder.getView(R.id.item_view);
+            TextView percentTv = holder.getView(R.id.tv_treat_value);
+            percentTv.setTextColor(Color.parseColor(data.getColor()));
+            holder.setText(R.id.tv_treat_name, data.getTradeType());
+            holder.setText(R.id.tv_treat_price, data.getTradeNum());
+            percentTv.setText(data.getTradePer());
+        }
     }
 }

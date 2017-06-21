@@ -126,4 +126,10 @@
     <!--7*24-->
     <color name="color7by24">#C8CFDA</color>
     <color name="colorLevel">#FFEC86</color>
+    <color name="money_into_large">#ca2c36</color>
+    <color name="money_into_middle">#e1515b</color>
+    <color name="money_into_small">#ff9a99</color>
+    <color name="money_out_large">#247c54</color>
+    <color name="money_out_middle">#34b578</color>
+    <color name="money_out_small">#63dca4</color>
 </resources>

@@ -100,6 +100,8 @@ public class AppConst {
     public static final int TREAT_TYPE_WU_DANG = 952;
     //个股-交易明细
     public static final int TREAT_TYPE_MING_XI = 459;
+    //个股-资金
+    public static final int TREAT_TYPE_MONEY = 901;
 
     //=================================关于跳转web页的配置=========================================
     //直播分享
