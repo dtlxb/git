@@ -757,6 +757,10 @@ public class GGOKHTTP {
      */
     public static final String POLICY_DYNAMICS = "v1/news/policy_dynamics";
 
+    /*
+     * 股票群聊
+     * */
+    public static final String GET_STOCK_GROUP_ID="v1/ggm_chat/get_stock_group_id";
 
     /**
      * F10====公司概况

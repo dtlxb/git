@@ -295,11 +295,9 @@ public class ChatFragment extends BaseFragment {
                     String backString = StringUtils.StringFilter(etInput.getText().toString());
                     etInput.setText(backString);
                     etInput.setSelection(backString.length());
-                    KLog.e(backString);
-                } else if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    getActivity().finish();
+                    return true;
                 }
-                return true;
+                return false;
             }
         });
 

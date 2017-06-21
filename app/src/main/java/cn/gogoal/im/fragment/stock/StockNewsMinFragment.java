@@ -26,7 +26,6 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.StockNewsType;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
-import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -185,8 +184,6 @@ public class StockNewsMinFragment extends BaseFragment {
         param.put("type", String.valueOf(type));
         param.put("rows", "6");
 
-        KLog.e(StringUtils.map2ggParameter(param));
-
         new GGOKHTTP(param, GGOKHTTP.GET_STOCK_NEWS, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
@@ -237,7 +234,7 @@ public class StockNewsMinFragment extends BaseFragment {
         new GGOKHTTP(param, GGOKHTTP.REPORT_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                
+
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     ArrayList<StockDetailResearchData> detailResearchDatas = JSONObject.parseObject(

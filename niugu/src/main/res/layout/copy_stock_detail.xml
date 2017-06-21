@@ -392,7 +392,7 @@
         <LinearLayout
             android:id="@+id/linear"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="55dp"
             android:layout_alignParentBottom="true"
             android:background="@drawable/shape_line_top"
             android:gravity="center_vertical"
@@ -403,11 +403,13 @@
             <TextView
                 android:id="@+id/tv_stockDetail_tools"
                 style="@style/stockDetailDockStyle"
+                android:drawableTop="@mipmap/img_stockdetail_tools"
                 android:text="工具箱" />
 
             <TextView
                 android:id="@+id/tv_stockDetail_stockCircle"
                 style="@style/stockDetailDockStyle"
+                android:drawableTop="@mipmap/img_stockdetail_group_chart"
                 android:text="股票圈" />
 
             <TextView
@@ -419,6 +421,7 @@
             <TextView
                 android:id="@+id/tv_stockDetail_toggle_mystock"
                 style="@style/stockDetailDockStyle"
+                android:drawableTop="@mipmap/choose_stock"
                 android:text="自选" />
 
         </LinearLayout>

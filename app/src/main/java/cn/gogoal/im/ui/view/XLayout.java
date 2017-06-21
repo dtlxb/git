@@ -294,7 +294,7 @@ public class XLayout extends FrameLayout {
      * @return
      */
     public XLayout setEmptyText(String text) {
-        if (TextUtils.isEmpty(text)) {
+        if (!TextUtils.isEmpty(text)) {
             emptyText.setText(text);
         }
         return this;

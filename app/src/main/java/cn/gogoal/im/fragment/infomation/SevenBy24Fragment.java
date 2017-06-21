@@ -62,8 +62,6 @@ public class SevenBy24Fragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         dataList = new ArrayList<>();
         adapter = new Sevenby24Adapter(dataList);
-        adapter.openLoadAnimation(CommonAdapter.SCALEIN);
-        adapter.isFirstOnly(false);
         recyclerView.setAdapter(adapter);
 
         get7by24Datas(AppConst.REFRESH_TYPE_FIRST);
@@ -120,7 +118,7 @@ public class SevenBy24Fragment extends BaseFragment {
             public void onSuccess(String responseInfo) {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
-                    xLayout.setStatus(XLayout.Success);
+
                     if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
                         dataList.clear();
                     }
@@ -134,6 +132,8 @@ public class SevenBy24Fragment extends BaseFragment {
                     adapter.setEnableLoadMore(true);
                     adapter.loadMoreComplete();
                     adapter.notifyDataSetChanged();
+                    xLayout.setStatus(XLayout.Success);
+
                 } else if (code == 1001) {
                     xLayout.setStatus(XLayout.Empty);
                 } else {

@@ -15,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
@@ -48,6 +50,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MessageHolderActivity;
+import cn.gogoal.im.activity.SquareChatRoomActivity;
 import cn.gogoal.im.activity.stock.InteractiveInvestorActivity;
 import cn.gogoal.im.adapter.TreatAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
@@ -62,6 +65,7 @@ import cn.gogoal.im.bean.stock.TreatData;
 import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
@@ -73,6 +77,7 @@ import cn.gogoal.im.fragment.stock.CompanyInfoFragment;
 import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
 import cn.gogoal.im.ui.Badge.BadgeView;
 import cn.gogoal.im.ui.dialog.StockPopuDialog;
+import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.stock.DialogRecyclerView;
 import cn.gogoal.im.ui.stockviews.BitmapChartView;
 import cn.gogoal.im.ui.stockviews.KChartsBitmap;
@@ -187,7 +192,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     @BindView(R.id.stock_detail_fragment_time_line)
     BitmapChartView mBitmapChartView;//图表控件
 
-//    //加自选
+    //    //加自选
     @BindView(R.id.tv_stockDetail_toggle_mystock)
     TextView stock_detail_choose;
 
@@ -1217,6 +1222,7 @@ public class CopyStockDetailActivity extends BaseActivity {
             R.id.tv_stockDetail_tools, R.id.tv_stockDetail_stockCircle,
             R.id.tv_stockDetail_interactiveinvestor, R.id.tv_stockDetail_toggle_mystock})
     public void allBtnClick(View v) {
+        Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.iv_show_info_dialog://交易popu
                 if (isMaskViewVisiable()) {
@@ -1233,20 +1239,71 @@ public class CopyStockDetailActivity extends BaseActivity {
             case R.id.tv_stockDetail_toggle_mystock://tog 加减自选股
                 addOptionalShare();//TODO 更换新的删除自选股接口
                 break;
-
             case R.id.tv_stockDetail_stockCircle://股票圈，进入后台群
-                //TODO 股票圈，进入后台群
+                getGroupChartConvsation();
                 break;
             case R.id.tv_stockDetail_interactiveinvestor://投资者互动
                 //TODO 股票圈，进入后台群
-                Intent intent = new Intent(v.getContext(), InteractiveInvestorActivity.class);
+                intent.setClass(v.getContext(), InteractiveInvestorActivity.class);
                 intent.putExtra("stock_info", getStockBean());
                 startActivity(intent);
                 break;
         }
     }
 
-    private Stock getStockBean(){
+    private void getGroupChartConvsation() {
+        final WaitDialog waitDialog = WaitDialog.getInstance("请稍后...", R.mipmap.login_loading, true);
+        waitDialog.show(getSupportFragmentManager());
+
+        HashMap<String, String> params = UserUtils.getTokenParams();
+        params.put("stock_code", stockCode);
+        new GGOKHTTP(params, GGOKHTTP.GET_STOCK_GROUP_ID, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                if (code == 0) {
+                    try {
+                        final String conversationId = JSONObject.parseObject(responseInfo).
+                                getJSONObject("data").getString("conv_id");
+
+                        AVIMClientManager.getInstance().findConversationById(conversationId, new AVIMClientManager.ChatJoinManager() {
+                            @Override
+                            public void joinSuccess(AVIMConversation conversation) {
+
+                                Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
+                                intent.putExtra("conversation_id", conversation.getConversationId());
+                                intent.putExtra("need_update", false);
+                                intent.putExtra("squareName",conversation.getName());
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void joinFail(String error) {
+                                UIHelper.toast(getActivity(), "股票群初始化失败，请稍后重试！");
+                            }
+                        });
+
+                    } catch (Exception e) {
+                        //返回数据异常
+                        UIHelper.toast(getActivity(), "股票群初始化失败，请稍后重试！");
+                        Log.e("TAG", e.getMessage());
+                    }
+                } else {//没有获取到ConvsationId
+                    UIHelper.toast(getActivity(), "股票群初始化失败，请稍后重试！");
+                }
+                waitDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(String msg) {//获取ConvsationId出错
+                waitDialog.dismiss();
+                UIHelper.toast(getActivity(), "请求异常");
+            }
+        }).startGet();
+    }
+
+    private Stock getStockBean() {
         Stock stock = new Stock(stockCode, stockName);
         stock.setChangeValue(StringUtils.save2Significand(change_value));
         stock.setStock_charge_type(stock_charge_type);
@@ -1256,6 +1313,9 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     //添加自选股
     private void addOptionalShare() {
+        final WaitDialog dialog = WaitDialog.getInstance("请稍后", R.mipmap.login_loading, true);
+        dialog.show(getSupportFragmentManager());
+
         if (isChoose) {
             final Map<String, String> param = new HashMap<String, String>();
             param.put("token", UserUtils.getToken());
@@ -1264,18 +1324,19 @@ public class CopyStockDetailActivity extends BaseActivity {
             GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
                 @Override
                 public void onSuccess(String responseInfo) {
-
                     JSONObject result = JSONObject.parseObject(responseInfo);
                     int data = (int) result.get("code");
                     if (data == 0) {
                         toggleIsMyStock(false, true);
                         StockUtils.removeStock(stockCode);
                     }
+                    dialog.dismiss();
                 }
 
                 @Override
                 public void onFailure(String msg) {
-                    UIHelper.toast(getThisContext(), "请检查网络");
+                    dialog.dismiss();
+                    UIHelper.toastError(getThisContext(), msg);
                 }
             };
             new GGOKHTTP(param, GGOKHTTP.MYSTOCK_DELETE, httpInterface).startGet();
@@ -1295,22 +1356,16 @@ public class CopyStockDetailActivity extends BaseActivity {
 
                     int data = (int) result.get("code");
                     if (data == 0) {
-                        JSONObject singleStock = new JSONObject();
-                        singleStock.put("stock_name", stockName);
-                        singleStock.put("stock_code", stockCode);
-                        singleStock.put("stock_type", 1);
-                        singleStock.put("price", 0);
-                        singleStock.put("change_rate", 0);
-
                         toggleIsMyStock(true, true);
                         StockUtils.addStock2MyStock(stockCode);
-
                     }
+                    dialog.dismiss();
                 }
 
                 @Override
                 public void onFailure(String msg) {
-                    UIHelper.toast(getThisContext(), "请检查网络");
+                    dialog.dismiss();
+                    UIHelper.toastError(getThisContext(), msg);
                 }
             };
             new GGOKHTTP(param, GGOKHTTP.MYSTOCK_ADD, httpInterface).startGet();
@@ -1320,7 +1375,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     public void toggleIsMyStock(boolean addMyStock, boolean needToast) {
 
         Drawable drawable = ContextCompat.getDrawable(this,
-                addMyStock ? R.drawable.not_choose_stock : R.drawable.choose_stock);
+                addMyStock ? R.mipmap.not_choose_stock : R.mipmap.choose_stock);
 
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
 

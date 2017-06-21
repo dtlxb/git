@@ -686,7 +686,7 @@ public class ChatGroupHelper {
     /**
      * 查询群信息
      */
-    public static void getGroupInfo(String convId, final Impl<JSONObject> callback) {
+    public static void getGroupInfo(String convId, final Impl<String> callback) {
         if (StringUtils.isActuallyEmpty(convId)) {
             return;
         }
@@ -695,15 +695,17 @@ public class ChatGroupHelper {
         new GGOKHTTP(params, GGOKHTTP.GET_GROUP_INFO, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+
                 if (callback != null) {
                     int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                     if (code == 0) {
                         callback.response(Impl.RESPON_DATA_SUCCESS,
-                                JSONObject.parseObject(responseInfo).getJSONObject("data"));
+                                JSONObject.parseObject(responseInfo).getString("data"));
                     } else if (code == 1001) {
-                        callback.response(Impl.RESPON_DATA_EMPTY, JSONObject.parseObject("没有找到相关信息"));
+                        callback.response(Impl.RESPON_DATA_EMPTY, "暂无相关信息");
                     } else {
-                        callback.response(Impl.RESPON_DATA_ERROR, JSON.parseObject("请求出错"));
+                        callback.response(Impl.RESPON_DATA_ERROR,"请求出错");
                     }
                 }
             }
@@ -711,7 +713,7 @@ public class ChatGroupHelper {
             @Override
             public void onFailure(String msg) {
                 if (callback != null)
-                    callback.response(Impl.RESPON_DATA_ERROR, JSON.parseObject("请求出错"));
+                    callback.response(Impl.RESPON_DATA_ERROR, msg);
             }
         }).startGet();
     }

@@ -114,7 +114,6 @@ public class MarketFragment2 extends BaseFragment {
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     SPTools.saveString("MARKET_RESPONSEINFO_DATA", responseInfo);//缓存
                     reconstructData(responseInfo, refreshType);
-
                 } else {
                     xLayout.setStatus(XLayout.Error);
                     String errorMsg = JSONObject.parseObject(responseInfo).getString("message");

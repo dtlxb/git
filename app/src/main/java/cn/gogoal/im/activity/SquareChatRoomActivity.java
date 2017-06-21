@@ -7,7 +7,6 @@ import android.view.View;
 
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
