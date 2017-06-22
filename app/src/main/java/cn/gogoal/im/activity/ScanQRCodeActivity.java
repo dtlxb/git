@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hply.qrcode_lib.activity.CaptureFragment;
 import com.hply.qrcode_lib.activity.CodeUtils;
 import com.socks.library.KLog;
@@ -15,7 +16,13 @@ import com.socks.library.KLog;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.group.GroupData;
+import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
+import cn.gogoal.im.common.Impl;
+import cn.gogoal.im.common.NormalIntentUtils;
+import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.ggqrcode.GGQrCode;
 
 import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_IMAGE;
 
@@ -99,17 +106,56 @@ public class ScanQRCodeActivity extends BaseActivity {
                 CodeUtils.analyzeBitmap(ImageUtils.getImageAbsolutePath(getActivity(), uri), new CodeUtils.AnalyzeCallback() {
                     @Override
                     public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
-                        KLog.e("result=" + result);
+                        String codeBody = GGQrCode.getUserQrCodeBody(result);
+
+                        KLog.e(codeBody);
+
+                        try {
+                            final JSONObject scanBody = JSONObject.parseObject(codeBody);
+
+                            if (scanBody.getIntValue("qrType") == 0) {
+                                //TODO 跳转个人详情
+                                NormalIntentUtils.go2PersionDetail(getActivity(),
+                                        scanBody.getIntValue("account_id"));
+                            } else {
+                                //TODO 跳转群名片
+                                ChatGroupHelper.getGroupInfo(scanBody.getString("conv_id"), new Impl<String>() {
+                                    @Override
+                                    public void response(int code, String data) {
+                                        KLog.e(data);
+                                        GroupData groupData = JSONObject.parseObject(data, GroupData.class);
+                                        switch (code) {
+                                            case Impl.RESPON_DATA_SUCCESS:
+                                                Intent in = new Intent(getActivity(), SquareCardActivity.class);
+                                                in.putExtra("conversation_id", groupData.getConv_id());
+                                                in.putExtra("square_name", groupData.getName());
+                                                in.putExtra("square_creater", groupData.getC());
+                                                in.putParcelableArrayListExtra("square_members", groupData.getM_info());
+                                                getActivity().startActivity(in);
+                                                break;
+                                        }
+                                    }
+                                });
+
+                            }
+
+                        } catch (Exception e) {
+                            e.getMessage();
+                            KLog.e("结果不是json，或者非GoGoal APP系二维码");
+                            UIHelper.toast(getActivity(), "非GoGoal二维码");
+                        }
                     }
 
                     @Override
                     public void onAnalyzeFailed() {
-                        Toast.makeText(getActivity(), "解析二维码失败", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "未发现二维啊(onAnalyze)", Toast.LENGTH_LONG).show();
                     }
                 });
             } catch (Exception e) {
                 e.printStackTrace();
+                Toast.makeText(getActivity(), "未发现二维啊(e)", Toast.LENGTH_LONG).show();
             }
         }
+        ScanQRCodeActivity.this.finish();
     }
 }

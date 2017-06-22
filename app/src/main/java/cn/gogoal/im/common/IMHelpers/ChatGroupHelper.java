@@ -695,8 +695,6 @@ public class ChatGroupHelper {
         new GGOKHTTP(params, GGOKHTTP.GET_GROUP_INFO, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
-
                 if (callback != null) {
                     int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                     if (code == 0) {

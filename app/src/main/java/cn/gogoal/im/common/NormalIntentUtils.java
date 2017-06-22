@@ -37,7 +37,7 @@ public class NormalIntentUtils {
      * @param title   web页面的原生标题头
      */
     public static void go2WebActivity(Context context, String url, String title) {
-        go2WebActivity(context,url,title,true);
+        go2WebActivity(context, url, title, true);
     }
 
     /**
@@ -51,7 +51,7 @@ public class NormalIntentUtils {
     public static void go2WebActivity(Context context, String url, String title, boolean needShare) {
         Intent intent = new Intent(context, FunctionActivity.class);
         intent.putExtra("function_url", url);
-        intent.putExtra("title", StringUtils.isActuallyEmpty(title)?"":title);
+        intent.putExtra("title", StringUtils.isActuallyEmpty(title) ? "" : title);
         intent.putExtra("need_share", needShare);
         context.startActivity(intent);
     }
@@ -59,11 +59,11 @@ public class NormalIntentUtils {
     /**
      * 跳网页Web pdf预览
      *
-     * @param context   上下文
-     * @param url       pdf url
+     * @param context 上下文
+     * @param url     pdf url
      */
-    public static void go2PdfDisplayActivity(Context context, String url,String pdfTitle) {
-        PdfData data=new PdfData();
+    public static void go2PdfDisplayActivity(Context context, String url, String pdfTitle) {
+        PdfData data = new PdfData();
         data.setPdfUrl(url);
         data.setTitle(pdfTitle);
 
@@ -75,16 +75,17 @@ public class NormalIntentUtils {
     /**
      * 跳网页Web pdf预览
      *
-     * @param context   上下文
+     * @param context 上下文
      */
     public static void go2MainActivity(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
     }
+
     /**
      * 跳网页Web pdf预览
      *
-     * @param context   上下文
+     * @param context 上下文
      */
     public static void go2LoginActivity(Context context) {
         Intent intent = new Intent(context, TypeLoginActivity.class);
@@ -93,10 +94,10 @@ public class NormalIntentUtils {
 
     /**
      * 跳转个人行情
-     * */
-    public static void go2PersionDetail(Context context,int accountId){
-        Intent intent=new Intent(context, IMPersonDetailActivity.class);
-        intent.putExtra("account_id",accountId);
+     */
+    public static void go2PersionDetail(Context context, int accountId) {
+        Intent intent = new Intent(context, IMPersonDetailActivity.class);
+        intent.putExtra("account_id", accountId);
         context.startActivity(intent);
     }
 }

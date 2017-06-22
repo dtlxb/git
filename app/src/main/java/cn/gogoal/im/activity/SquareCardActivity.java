@@ -127,14 +127,6 @@ public class SquareCardActivity extends BaseActivity {
         setMyTitle("群名片", true);
         tvSquareName.setText(squareName);
         tvTeamSize.setText(String.valueOf(mBeanList.size()));
-//        iv_square_head.setImageBitmap((Bitmap) getIntent().getParcelableExtra("bitmap_avatar"));
-//        /*XTitle.ImageAction imageAction = new XTitle.ImageAction(getResDrawable(R.mipmap.arrows_white)) {
-//            @Override
-//            public void actionClick(View view) {
-//
-//            }
-//        };
-//        xTitle.addAction(imageAction, 0);*/
 
         ChatGroupHelper.setGroupAvatar(conversationId, new AvatarTakeListener() {
             @Override
