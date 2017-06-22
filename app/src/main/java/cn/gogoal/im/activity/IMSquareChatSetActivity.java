@@ -279,7 +279,6 @@ public class IMSquareChatSetActivity extends BaseActivity {
         PersonContactBeans.addAll(contactBeans);
         contactBeans.clear();
         contactBeans.addAll(squareCreaterFirst(PersonContactBeans));
-        Log.e("++++contactBeans", contactBeans.toString());
         mPersonInfoAdapter.notifyDataSetChanged();
     }
 
@@ -330,10 +329,8 @@ public class IMSquareChatSetActivity extends BaseActivity {
         UserUtils.getChatGroup(null, conversationId, new UserUtils.SquareInfoCallback() {
             @Override
             public void squareGetSuccess(JSONObject object) {
-                Log.e("++++obj1", object.toString());
                 if (null != object.get("accountList")) {
                     List<UserBean> userBeanList = JSON.parseArray(object.getJSONArray("accountList").toJSONString(), UserBean.class);
-                    Log.e("++++obj2", userBeanList.toString());
                     getAllContacts(userBeanList);
                 } else {
                 }
