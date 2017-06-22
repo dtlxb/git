@@ -23,7 +23,7 @@ import cn.gogoal.im.ui.view.PieView;
  * Created by huangxx on 2017/6/9.
  */
 
-public class ChatDemoActivity extends BaseActivity {
+public class ChartDemoActivity extends BaseActivity {
 
     @BindView(R.id.barView)
     BarView barView;

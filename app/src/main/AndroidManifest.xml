@@ -76,7 +76,7 @@
         <!-- 实时通信模块 END -->
 
         <activity
-            android:name=".activity.copy.TestStockDetailActivity"
+            android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
