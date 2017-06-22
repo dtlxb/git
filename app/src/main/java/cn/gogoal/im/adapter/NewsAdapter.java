@@ -46,6 +46,7 @@ public class NewsAdapter extends CommonAdapter<StockDetailNewsData, BaseViewHold
         } else {
             textView.setSingleLine(false);
         }
+        holder.setText(R.id.big_event_organ_andr_author,data.getOrigin());
 
         holder.setText(R.id.big_event_date, CalendarUtils.getStringDate("yyyy-MM-dd", data.getDate()));
 

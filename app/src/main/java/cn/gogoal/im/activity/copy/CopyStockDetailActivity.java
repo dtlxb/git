@@ -313,6 +313,11 @@ public class CopyStockDetailActivity extends BaseActivity {
     /***/
     private void setNewsTab() {
         final List<Fragment> fragments = new ArrayList<>();
+        /*
+         * stockCode 股票代码
+         * stockName 股票代码
+         * position 第几个tab
+         * */
         fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 0));
         fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 1));
         fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 2));

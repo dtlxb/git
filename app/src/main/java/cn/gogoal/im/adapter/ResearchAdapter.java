@@ -43,8 +43,8 @@ public class ResearchAdapter extends CommonAdapter<StockDetailResearchData, Base
 
         UIHelper.setRippBg(holder.itemView);
 
-//        TextView tvOrganNameAndAuthor = holder.getView(R.id.big_event_organ_andr_author);
-//        tvOrganNameAndAuthor.setText(data.getOrgan_name() + "  " + data.getAuthor());
+        TextView tvOrganNameAndAuthor = holder.getView(R.id.big_event_organ_andr_author);
+        tvOrganNameAndAuthor.setText(data.getOrgan_name() + "  报告共(" + data.getFile_pages()+"页)");
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

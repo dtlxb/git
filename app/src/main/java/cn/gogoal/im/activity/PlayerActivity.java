@@ -1058,7 +1058,7 @@ public class PlayerActivity extends BaseActivity {
                 entity.setTitle("Go-Goal直播");
                 entity.setShareType(GGShareEntity.SHARE_TYPE_LIVE);
                 entity.setLive_id(live_id);
-                entity.setSource("video");
+                entity.setSource("video");//
 
                 Intent intent = new Intent(getContext(), ShareMessageActivity.class);
                 intent.putExtra("share_web_data", entity);
