@@ -108,7 +108,7 @@ public class CompanyExecutivesFragment extends BaseFragment {
 
     private void setListData(JSONObject data) {
         //悬浮头1
-        adapters.add(new CurrencyTitleAdapter(getActivity(), "高管列表"));
+        adapters.add(new CurrencyTitleAdapter(getActivity(), "高管列表", true));
 
         JSONArray senior_info_list = data.getJSONArray("senior_info_list");
         List<ExecutivesData> executivesList = new ArrayList<>();
@@ -121,7 +121,7 @@ public class CompanyExecutivesFragment extends BaseFragment {
         adapters.add(new ExecutivesListAdapter(getActivity(), executivesList));
 
         //悬浮头2
-        adapters.add(new CurrencyTitleAdapter(getActivity(), "高管持股变动"));
+        adapters.add(new CurrencyTitleAdapter(getActivity(), "高管持股变动", true));
 
         JSONArray senior_stock_list = data.getJSONArray("senior_stock_list");
         List<HoldingData> HoldingList = new ArrayList<>();

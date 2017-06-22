@@ -108,7 +108,7 @@ public class CompanyProfileFragment extends BaseFragment {
 
     private void setListData(JSONObject data) {
         //悬浮头1
-        adapters.add(new CurrencyTitleAdapter(getActivity(), "基本资料"));
+        adapters.add(new CurrencyTitleAdapter(getActivity(), "基本资料", true));
 
         JSONObject basic_data = data.getJSONObject("basic_data");
         List<ProfileData> basicList = new ArrayList<>();
@@ -119,7 +119,7 @@ public class CompanyProfileFragment extends BaseFragment {
         adapters.add(new CompanyProfileAdapter(getActivity(), basicList));
 
         //悬浮头2
-        adapters.add(new CurrencyTitleAdapter(getActivity(), "发行相关"));
+        adapters.add(new CurrencyTitleAdapter(getActivity(), "发行相关", true));
 
         JSONObject issue_data = data.getJSONObject("issue_data");
         List<ProfileData> issueList = new ArrayList<>();

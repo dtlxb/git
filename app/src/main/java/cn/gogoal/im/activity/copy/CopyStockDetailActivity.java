@@ -309,7 +309,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 1));
         fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 2));
         fragments.add(CompanyInfoFragment.newInstance(stockCode));
-        fragments.add(new CompanyFinanceFragment());
+        fragments.add(CompanyFinanceFragment.getInstance(stockCode, stockName));
 
         viewPagerNews.setOffscreenPageLimit(4);
         viewPagerNews.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -1542,8 +1542,8 @@ public class CopyStockDetailActivity extends BaseActivity {
                 android.view.animation.AnimationUtils.loadAnimation(getActivity(), R.anim.slide_in_from_top));
         rvStockInfo.setVisibility(View.VISIBLE);
 
-        functionViewMask(viewMask,true);
-        functionViewMask(viewMaskBottom,true);
+        functionViewMask(viewMask, true);
+        functionViewMask(viewMaskBottom, true);
 
         //禁止滑动
         scrollView.setOnTouchListener(new View.OnTouchListener() {
@@ -1572,8 +1572,8 @@ public class CopyStockDetailActivity extends BaseActivity {
             rvStockInfo.startAnimation(
                     android.view.animation.AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_from_top));
 
-            functionViewMask(viewMask,false);
-            functionViewMask(viewMaskBottom,false);
+            functionViewMask(viewMask, false);
+            functionViewMask(viewMaskBottom, false);
 
             scrollView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -1593,14 +1593,14 @@ public class CopyStockDetailActivity extends BaseActivity {
         }
     }
 
-    private void functionViewMask(final View viewMask,boolean show) {
+    private void functionViewMask(final View viewMask, boolean show) {
 //        viewMaskBottom
         viewMask.setEnabled(show);
         viewMask.setClickable(show);
         viewMask.setVisibility(show ? View.VISIBLE : View.GONE);
         viewMask.startAnimation(
                 android.view.animation.AnimationUtils.loadAnimation(getActivity(),
-                        show?R.anim.alpha_in:R.anim.alpha_out));
+                        show ? R.anim.alpha_in : R.anim.alpha_out));
 
         //点击蒙版消失
         viewMask.setOnTouchListener(new View.OnTouchListener() {

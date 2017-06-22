@@ -100,7 +100,7 @@ public class ShareholderResearchFragment extends BaseFragment {
                 if (object.getIntValue("code") == 0) {
                     JSONArray data = object.getJSONObject("data").getJSONArray("data");
                     //悬浮头1
-                    adapters.add(new CurrencyTitleAdapter(getActivity(), "十大股东"));
+                    adapters.add(new CurrencyTitleAdapter(getActivity(), "十大股东", true));
 
                     ArrayList<TenHolderData> HoldingList = new ArrayList<>();
                     for (int i = 0; i < data.size(); i++) {
@@ -138,7 +138,7 @@ public class ShareholderResearchFragment extends BaseFragment {
                 if (object.getIntValue("code") == 0) {
                     JSONArray data = object.getJSONObject("data").getJSONArray("data");
                     //悬浮头2
-                    adapters.add(new CurrencyTitleAdapter(getActivity(), "十大流通股东"));
+                    adapters.add(new CurrencyTitleAdapter(getActivity(), "十大流通股东", true));
 
                     ArrayList<TenTradableHolderData> HolderList = new ArrayList<>();
                     for (int i = 0; i < data.size(); i++) {
@@ -176,7 +176,7 @@ public class ShareholderResearchFragment extends BaseFragment {
                 if (object.getIntValue("code") == 0) {
                     JSONArray data = object.getJSONObject("data").getJSONArray("data");
                     //悬浮头3
-                    adapters.add(new CurrencyTitleAdapter(getActivity(), "基金持股"));
+                    adapters.add(new CurrencyTitleAdapter(getActivity(), "基金持股", true));
 
                     ArrayList<FundHolderData> fundList = new ArrayList<>();
                     fundList.add(new FundHolderData("基金名称", "基金代码", "持股(万股)"));
