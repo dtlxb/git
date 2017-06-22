@@ -27,7 +27,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -665,9 +664,9 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     private void setImageSize(RelativeLayout.LayoutParams params, GGImageMessage message) {
         String rateText;
         int maxWidth = (int) (AppDevice.getWidth(mContext) * 0.4);
-        double width = StringUtils.pareseStringDouble(String.valueOf(message.getFileMetaData().get("width")));
+        double width = StringUtils.parseStringDouble(String.valueOf(message.getFileMetaData().get("width")));
         int dpWidth = (int) width;
-        double height = StringUtils.pareseStringDouble(String.valueOf(message.getFileMetaData().get("height")));
+        double height = StringUtils.parseStringDouble(String.valueOf(message.getFileMetaData().get("height")));
         int dpHeight = (int) height;
 
         if (null != message && 0 != dpWidth && dpHeight != 0) {

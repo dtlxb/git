@@ -1,5 +1,6 @@
 package cn.gogoal.im.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -50,6 +51,7 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.ggqrcode.GGQrCode;
 
 /**
  * Created by huangxx on 2017/3/20.
@@ -237,6 +239,16 @@ public class IMSquareChatSetActivity extends BaseActivity {
         getGroupInfo();
     }
 
+    @OnClick(R.id.layout_square_qrcode)
+    void click(View view){
+        Intent intent = new Intent(view.getContext(), QrCodeActivity.class);
+        intent.putExtra("qr_code_type", GGQrCode.QR_CODE_TYPE_GROUP);
+        intent.putExtra("qrcode_name", squareName);
+        intent.putExtra("qrcode_info", "(" + groupMembers.size() + ")人");
+        intent.putExtra("qrcode_content_id", conversationId);
+        startActivity(intent);
+    }
+
     private ContactBean<Integer> addFunctionHead(String name, @DrawableRes int iconId) {
         ContactBean<Integer> bean = new ContactBean<>();
         bean.setRemark(name);
@@ -254,6 +266,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         return normalBean;
     }
 
+    @SuppressLint("SetTextI18n")
     private void getAllContacts(List<UserBean> list) {
         List<String> memberList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
@@ -265,7 +278,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         if (!TextUtils.isEmpty(headAvatar)) {
             ImageDisplay.loadRoundedRectangleImage(IMSquareChatSetActivity.this, headAvatar, iv_square_head);
         } else {
-            if (null != memberList && memberList.size() > 0) {
+            if (memberList.size() > 0) {
                 groupMembers.clear();
                 groupMembers.addAll(memberList);
                 getNicePicture(urls);
@@ -284,9 +297,9 @@ public class IMSquareChatSetActivity extends BaseActivity {
             @Override
             public void onSuccess(Bitmap matchingBitmap) {
                 ChatGroupHelper.cacheGroupAvatar(conversationId, matchingBitmap);
-                HashMap<String, Object> map = new HashMap<>();
+                HashMap<String, Bitmap> map = new HashMap<>();
                 map.put("matching_bitmap", matchingBitmap);
-                BaseMessage baseMessage = new BaseMessage("Bitmap_Info", map);
+                BaseMessage<Bitmap> baseMessage = new BaseMessage<>("Bitmap_Info", map);
                 AppManager.getInstance().sendMessage("set_square_avatar", baseMessage);
             }
 
@@ -545,7 +558,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         int size;
         ContactBean contactBean = new ContactBean();
         for (int i = 0; i < contactBeanList.size(); i++) {
-            if (contactBeanList.get(i).getFriend_id() == StringUtils.pareseStringDouble(squareCreater)) {
+            if (contactBeanList.get(i).getFriend_id() == StringUtils.parseStringDouble(squareCreater)) {
                 contactBean = contactBeanList.get(i);
                 contactBeanList.remove(i);
             }

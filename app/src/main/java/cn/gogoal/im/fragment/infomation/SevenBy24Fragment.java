@@ -105,10 +105,6 @@ public class SevenBy24Fragment extends BaseFragment {
             xLayout.setStatus(XLayout.Loading);
         }
 
-        if (refreshType==AppConst.REFRESH_TYPE_SWIPEREFRESH){
-            defaultPage=1;//重置回1
-        }
-
         HashMap<String, String> params = new HashMap<>();
         params.put("page", String.valueOf(defaultPage));
         params.put("rows", String.valueOf(15));
@@ -151,7 +147,7 @@ public class SevenBy24Fragment extends BaseFragment {
 
     @Subscriber(tag = "double_click_2_top")
     void doubleClick2Top(String index){
-        if (StringUtils.pareseStringDouble(index)==1){//是本Tab
+        if (StringUtils.parseStringDouble(index)==1){//是本Tab
             recyclerView.smoothScrollToPosition(0);
         }
     }

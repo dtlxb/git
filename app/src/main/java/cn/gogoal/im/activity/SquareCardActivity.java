@@ -115,9 +115,9 @@ public class SquareCardActivity extends BaseActivity {
             case R.id.layout_square_qrcode:
                 intent = new Intent(view.getContext(), QrCodeActivity.class);
                 intent.putExtra("qr_code_type", GGQrCode.QR_CODE_TYPE_GROUP);
-                intent.putExtra("qrcode_name",squareName);
-                intent.putExtra("qrcode_info","("+mBeanList.size()+")人");
-                intent.putExtra("qrcode_content_id",conversationId);
+                intent.putExtra("qrcode_name", squareName);
+                intent.putExtra("qrcode_info", "(" + mBeanList.size() + ")人");
+                intent.putExtra("qrcode_content_id", conversationId);
                 startActivity(intent);
                 break;
         }

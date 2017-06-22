@@ -13,8 +13,7 @@ import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
 import hply.com.niugu.bean.StockData;
 
-import static cn.gogoal.im.common.StringUtils.pareseStringDouble;
-
+import static cn.gogoal.im.common.StringUtils.parseStringDouble;
 
 /**
  * Created by huangxx on 2015/9/17.
@@ -50,19 +49,19 @@ public class MarketTitleAdapter extends MyBaseAdapter<StockData> {
         } else {
             holder.price.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.text_color_normal));
 //            holder.price.setText(String.valueOf(StringUtils.get2Double(list.get(position).getCurrent_price())));
-            holder.price.setText(pareseStringDouble((list.get(position).getCurrent_price()),2));
+            holder.price.setText(parseStringDouble((list.get(position).getCurrent_price()),2));
 
             try {
-                holder.price.setText(String.valueOf(pareseStringDouble(list.get(position).getCurrent_price(),2)));
+                holder.price.setText(String.valueOf(parseStringDouble(list.get(position).getCurrent_price(),2)));
             } catch (Exception e) {
                 holder.price.setText("0.00");
             }
         }
 
-        if (pareseStringDouble(list.get(position).getRate()) < 0) {
+        if (parseStringDouble(list.get(position).getRate()) < 0) {
             holder.rate.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.stock_green));
             holder.rate.setText(String.valueOf(StockUtils.plusMinus(list.get(position).getRate(),true)));
-        } else if (pareseStringDouble(list.get(position).getRate()) == 0) {
+        } else if (parseStringDouble(list.get(position).getRate()) == 0) {
             holder.rate.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.gray_light));
             holder.rate.setText(StockUtils.plusMinus(list.get(position).getRate(),true));
         } else {

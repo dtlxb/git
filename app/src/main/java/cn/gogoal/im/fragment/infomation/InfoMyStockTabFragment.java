@@ -106,7 +106,7 @@ public class InfoMyStockTabFragment extends BaseFragment {
 
     @Subscriber(tag = "double_click_2_top")
     void doubleClick2Top(String index) {
-        if (StringUtils.pareseStringDouble(index) == 0) {//是本Tab
+        if (StringUtils.parseStringDouble(index) == 0) {//是本Tab
             recyclerView.smoothScrollToPosition(0);
         }
     }

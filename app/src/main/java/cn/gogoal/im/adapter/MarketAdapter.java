@@ -228,7 +228,7 @@ public class MarketAdapter extends CommonAdapter<MarkteBean, BaseViewHolder> {
                     break;
                 case 4://换手率
                     holder.setText(R.id.tv_mystock_rate, StringUtils.saveSignificand(
-                            StringUtils.pareseStringDouble(data.getRate()) * 100, 2) + "%");
+                            StringUtils.parseStringDouble(data.getRate()) * 100, 2) + "%");
                     holder.setBackgroundRes(R.id.tv_mystock_rate, R.drawable.shape_my_stock_price_gray);
                     break;
                 case 5://振幅榜

@@ -86,6 +86,7 @@ public class LiveListFragment extends BaseFragment {
                 liveDatas.clear();
                 request(AppConst.REFRESH_TYPE_SWIPEREFRESH, keyword);
                 refreshLayout.setRefreshing(false);
+                page=1;
             }
         });
 

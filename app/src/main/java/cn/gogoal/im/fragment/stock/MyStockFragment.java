@@ -277,9 +277,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 } else if (view.getId() == R.id.tv_mystock_rate) {
                     tvMystockPrice.setViewStateNormal();
                     if (sortType == -1) {
-                        return StringUtils.pareseStringDouble(o2.getChange_rate()).compareTo(StringUtils.pareseStringDouble(o1.getChange_rate()));
+                        return StringUtils.parseStringDouble(o2.getChange_rate()).compareTo(StringUtils.parseStringDouble(o1.getChange_rate()));
                     } else if (sortType == 1) {
-                        return StringUtils.pareseStringDouble(o1.getChange_rate()).compareTo(StringUtils.pareseStringDouble(o2.getChange_rate()));
+                        return StringUtils.parseStringDouble(o1.getChange_rate()).compareTo(StringUtils.parseStringDouble(o2.getChange_rate()));
                     } else {
                         try {
                             return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()), CalendarUtils.parseString2Long(o1.getInsertdate()));

@@ -234,7 +234,6 @@ public class StockNewsMinFragment extends BaseFragment {
         new GGOKHTTP(param, GGOKHTTP.REPORT_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     ArrayList<StockDetailResearchData> detailResearchDatas = JSONObject.parseObject(

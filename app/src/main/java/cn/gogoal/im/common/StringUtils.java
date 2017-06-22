@@ -298,15 +298,19 @@ public class StringUtils {
         return isActuallyEmpty(orderStr) ? "" : orderStr;
     }
 
-    public static Double pareseStringDouble(String value) {
+    public static Double parseStringDouble(String value) {
         if (StringUtils.isActuallyEmpty(value)) {
             return 0.0d;
         }
-        return Double.parseDouble(value);
+        try {
+            return Double.parseDouble(value);
+        }catch (Exception e){
+            return 0.0d;
+        }
     }
 
-    public static String pareseStringDouble(String value, int unit) {
-        return saveSignificand(pareseStringDouble(value), unit);
+    public static String parseStringDouble(String value, int unit) {
+        return saveSignificand(parseStringDouble(value), unit);
     }
 
     /**
@@ -331,7 +335,7 @@ public class StringUtils {
     }
 
     public static String saveSignificand(String strDoubleData, int significand) {
-        return pareseStringDouble(strDoubleData, significand);
+        return parseStringDouble(strDoubleData, significand);
     }
 
     /**

@@ -5,7 +5,6 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -16,9 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
-import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
@@ -40,7 +37,6 @@ import cn.gogoal.im.fragment.copy.FiveDayFragment;
 import cn.gogoal.im.fragment.copy.KChartsFragment;
 import cn.gogoal.im.fragment.copy.TimesFragment;
 import cn.gogoal.im.ui.stock.KChartsView;
-import hply.com.niugu.ConstantUtils;
 import hply.com.niugu.DeviceUtil;
 import hply.com.niugu.ProgressWheel;
 import hply.com.niugu.bean.TimeDetialBean;
@@ -419,7 +415,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
         }
         tv_stock_price.setText(StringUtils.save2Significand(this.price));
         tv_stock_price.setTextColor(Color.GRAY);
-        if (closePrice < StringUtils.pareseStringDouble(price)) {
+        if (closePrice < StringUtils.parseStringDouble(price)) {
             tv_stock_price.setTextColor(Color.RED);
         } else {
             tv_stock_price.setTextColor(Color.GREEN);
@@ -497,8 +493,8 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
         String mData = stockMinuteData.getDate();
         tv_times_date.setText(mData.substring(10, mData.lastIndexOf(":")));
 
-        double price = StringUtils.pareseStringDouble(stockMinuteData.getPrice());
-        double tRate = StringUtils.pareseStringDouble(stockMinuteData.getPrice_change_rate());
+        double price = StringUtils.parseStringDouble(stockMinuteData.getPrice());
+        double tRate = StringUtils.parseStringDouble(stockMinuteData.getPrice_change_rate());
         tv_times_price.setText(StringUtils.save2Significand(price));
         tv_times_price_rate.setText(StringUtils.save2Significand(tRate) + "%");
         tv_times_price.setTextColor(gray);
@@ -525,7 +521,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
             tv_times_volume.setText(s + "手");
         }
 
-        double avg_price = StringUtils.pareseStringDouble(stockMinuteData.getAvg_price());
+        double avg_price = StringUtils.parseStringDouble(stockMinuteData.getAvg_price());
         tv_times_avg_price.setText(StringUtils.save2Significand(avg_price));
         tv_times_avg_price.setTextColor(gray);
         if (closePrice < price) {
