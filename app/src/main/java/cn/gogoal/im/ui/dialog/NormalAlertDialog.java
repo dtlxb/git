@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
 
 /**
@@ -20,6 +21,33 @@ public class NormalAlertDialog extends BaseCentDailog {
 
     private View.OnClickListener cancleListener;
 
+    /**
+     * 双参数
+     *
+     * @param message:弹窗提示文本
+     * @param okClickListener 确定按钮点击事件
+     */
+    public static NormalAlertDialog newInstance(
+            String message,
+            View.OnClickListener okClickListener) {
+
+        NormalAlertDialog dialog = new NormalAlertDialog();
+        Bundle bundle = new Bundle();
+        bundle.putString("message", message);
+        dialog.listener = okClickListener;
+
+        dialog.setArguments(bundle);
+
+        return dialog;
+    }
+
+    /**
+     * 三参数
+     *
+     * @param message:弹窗提示文本
+     * @param ok:[确定]按钮文本
+     * @param okClickListener 确定按钮点击事件
+     */
     public static NormalAlertDialog newInstance(
             String message,
             String ok,
@@ -29,7 +57,6 @@ public class NormalAlertDialog extends BaseCentDailog {
         Bundle bundle = new Bundle();
         bundle.putString("message", message);
         bundle.putString("ok", ok);
-
         dialog.listener = okClickListener;
 
         dialog.setArguments(bundle);
@@ -37,10 +64,13 @@ public class NormalAlertDialog extends BaseCentDailog {
         return dialog;
     }
 
+    /**
+     *
+     * */
     public static NormalAlertDialog newInstance(
             String message,
             String ok,
-            View.OnClickListener okClickListener,View.OnClickListener cancleListener) {
+            View.OnClickListener okClickListener, View.OnClickListener cancleListener) {
 
         NormalAlertDialog dialog = new NormalAlertDialog();
         Bundle bundle = new Bundle();
@@ -48,7 +78,7 @@ public class NormalAlertDialog extends BaseCentDailog {
         bundle.putString("ok", ok);
 
         dialog.listener = okClickListener;
-        dialog.cancleListener=cancleListener;
+        dialog.cancleListener = cancleListener;
 
         dialog.setArguments(bundle);
 
@@ -71,14 +101,14 @@ public class NormalAlertDialog extends BaseCentDailog {
 
         tvMsg.setText(message);
         btnCancle.setText("取消");
-        btnOk.setText(ok);
+        btnOk.setText(StringUtils.isActuallyEmpty(ok) ? "确定" : ok);
 
         btnCancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cancleListener==null) {
+                if (cancleListener == null) {
                     NormalAlertDialog.this.dismiss();
-                }else {
+                } else {
                     cancleListener.onClick(btnCancle);
                     NormalAlertDialog.this.dismiss();
                 }

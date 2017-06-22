@@ -51,6 +51,7 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MessageHolderActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
+import cn.gogoal.im.activity.ToolsSettingActivity;
 import cn.gogoal.im.activity.stock.InteractiveInvestorActivity;
 import cn.gogoal.im.adapter.TreatAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
@@ -58,12 +59,14 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.BaseMessage;
+import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.bean.stock.Stock;
 import cn.gogoal.im.bean.stock.StockDetail;
 import cn.gogoal.im.bean.stock.StockDialogInfo;
 import cn.gogoal.im.bean.stock.TreatData;
 import cn.gogoal.im.common.AnimationUtils;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
@@ -77,7 +80,8 @@ import cn.gogoal.im.fragment.stock.CompanyFinanceFragment;
 import cn.gogoal.im.fragment.stock.CompanyInfoFragment;
 import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
 import cn.gogoal.im.ui.Badge.BadgeView;
-import cn.gogoal.im.ui.dialog.StockPopuDialog;
+import cn.gogoal.im.ui.dialog.NormalAlertDialog;
+import cn.gogoal.im.ui.dialog.StockDetailPopuDialog;
 import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.stock.DialogRecyclerView;
 import cn.gogoal.im.ui.stockviews.BitmapChartView;
@@ -267,6 +271,8 @@ public class CopyStockDetailActivity extends BaseActivity {
 
     private List<StockDialogInfo> stockDialogInfoList;
 
+    private ArrayList<ToolData.Tool> diagnoseStockTools;//诊断工具
+
     @Override
     public int bindLayout() {
         return R.layout.copy_stock_detail;
@@ -289,6 +295,8 @@ public class CopyStockDetailActivity extends BaseActivity {
         onShow(showItem);
 
         initChatMessage();
+
+        diagnoseStockTools=new ArrayList<>();
     }
 
     private void initChatMessage() {
@@ -361,6 +369,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         stockName = getIntent().getStringExtra("stock_name");
 
         TreatAdapter treatAdapter = new TreatAdapter(getSupportFragmentManager(), getActivity(), stockCode, true);
+
         vpTreat.setAdapter(treatAdapter);
         tabLayoutTreat.setupWithViewPager(vpTreat);
 
@@ -748,16 +757,6 @@ public class CopyStockDetailActivity extends BaseActivity {
         } else if (type == 1) {
             load_animation.setVisibility(View.GONE);
         }
-//        minLineTv.setTextColor(getResColor(R.color.text_color_tab));
-//        dayKTv.setTextColor(getResColor(R.color.text_color_tab));
-//        fiveKTv.setTextColor(getResColor(R.color.text_color_tab));
-//        monthKTv.setTextColor(getResColor(R.color.text_color_tab));
-//        WeekKTv.setTextColor(getResColor(R.color.red));
-//        minLine.setVisibility(View.GONE);
-//        fivedayLine.setVisibility(View.GONE);
-//        daykLine.setVisibility(View.GONE);
-//        weekkLine.setVisibility(View.VISIBLE);
-//        monthkLine.setVisibility(View.GONE);
     }
 
     private void setMonthLineStatu(int type) {
@@ -781,7 +780,6 @@ public class CopyStockDetailActivity extends BaseActivity {
     //初始化下拉刷新样式
     private void initRefreshStyle(int color) {
         int c = getResColor(color);
-//        headerView.setBackgroundColor(c);
         ptrFrame.setBackgroundColor(c);
     }
 
@@ -857,6 +855,8 @@ public class CopyStockDetailActivity extends BaseActivity {
 
         unReadCount = MessageListUtils.getAllMessageUnreadCount();
         badge.setBadgeNumber(unReadCount);
+
+        getMyTools();
     }
 
     @Override
@@ -1071,7 +1071,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     }
 
     //异步画图
-    class BitmapTask extends AsyncTask<String, Void, Bitmap> {
+    private class BitmapTask extends AsyncTask<String, Void, Bitmap> {
         private String item_index;
 
         @Override
@@ -1205,13 +1205,17 @@ public class CopyStockDetailActivity extends BaseActivity {
                 break;
 
             case R.id.tv_stockDetail_tools://工具箱
-                StockPopuDialog.newInstance(getStockBean()).show(getSupportFragmentManager());
-                UserUtils.getAllMyTools(new Impl<JSONArray>() {
-                    @Override
-                    public void response(int code, JSONArray data) {
-                        KLog.e(data);
-                    }
-                });
+
+                if (!ArrayUtils.isEmpty(diagnoseStockTools)) {
+                    StockDetailPopuDialog.newInstance(diagnoseStockTools).show(getSupportFragmentManager());
+                } else {
+                    NormalAlertDialog.newInstance("暂无诊股工具\n现在去我的工具中添加?", new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(getThisContext(), ToolsSettingActivity.class));
+                        }
+                    }).show(getSupportFragmentManager());
+                }
 
                 break;
 
@@ -1542,8 +1546,8 @@ public class CopyStockDetailActivity extends BaseActivity {
                 android.view.animation.AnimationUtils.loadAnimation(getActivity(), R.anim.slide_in_from_top));
         rvStockInfo.setVisibility(View.VISIBLE);
 
-        functionViewMask(viewMask,true);
-        functionViewMask(viewMaskBottom,true);
+        functionViewMask(viewMask, true);
+        functionViewMask(viewMaskBottom, true);
 
         //禁止滑动
         scrollView.setOnTouchListener(new View.OnTouchListener() {
@@ -1572,8 +1576,8 @@ public class CopyStockDetailActivity extends BaseActivity {
             rvStockInfo.startAnimation(
                     android.view.animation.AnimationUtils.loadAnimation(getActivity(), R.anim.slide_out_from_top));
 
-            functionViewMask(viewMask,false);
-            functionViewMask(viewMaskBottom,false);
+            functionViewMask(viewMask, false);
+            functionViewMask(viewMaskBottom, false);
 
             scrollView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -1593,14 +1597,14 @@ public class CopyStockDetailActivity extends BaseActivity {
         }
     }
 
-    private void functionViewMask(final View viewMask,boolean show) {
+    private void functionViewMask(final View viewMask, boolean show) {
 //        viewMaskBottom
         viewMask.setEnabled(show);
         viewMask.setClickable(show);
         viewMask.setVisibility(show ? View.VISIBLE : View.GONE);
         viewMask.startAnimation(
                 android.view.animation.AnimationUtils.loadAnimation(getActivity(),
-                        show?R.anim.alpha_in:R.anim.alpha_out));
+                        show ? R.anim.alpha_in : R.anim.alpha_out));
 
         //点击蒙版消失
         viewMask.setOnTouchListener(new View.OnTouchListener() {
@@ -1729,4 +1733,58 @@ public class CopyStockDetailActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+    //========================================20170622============================
+
+    private void getMyTools(){
+        diagnoseStockTools.clear();
+
+        take(new TakeToolsListener() {
+            @Override
+            public void onTakeTools(boolean sueecss, ArrayList<ToolData.Tool> tools) {
+                if (sueecss) {
+                    for (ToolData.Tool tool:tools) {
+                        if (tool.getIsShow()==1) {
+                            diagnoseStockTools.add(tool);
+                        }
+                    }
+                }
+            }
+        });
+    }
+    /**
+     * 获取诊断工具
+     */
+    public void take(final TakeToolsListener listener) {
+        UserUtils.getAllMyTools(new Impl<String>() {
+            @Override
+            public void response(int code, String data) {
+                KLog.e(data);
+                switch (code) {
+                    case Impl.RESPON_DATA_SUCCESS:
+                        List<ToolData> toolDatas = JSONArray.parseArray(data, ToolData.class);
+                        for (ToolData tool : toolDatas) {
+                            if (tool.getTitle_id() == 3) {
+                                if (listener != null) {
+                                    listener.onTakeTools(true, tool.getDatas());
+                                }
+                                break;
+                            }
+                        }
+                        break;
+                    default:
+                        if (listener != null)
+                            listener.onTakeTools(false, null);
+                        break;
+                }
+            }
+        });
+    }
+
+    /**
+     * 诊断工具回调
+     */
+    public interface TakeToolsListener {
+        void onTakeTools(boolean sueecss, ArrayList<ToolData.Tool> tools);
+    }
+
 }

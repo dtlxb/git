@@ -155,7 +155,7 @@ public class MineFragment extends BaseFragment {
                 AppDevice.isLowDpi() ? 3 : 4,
                 StaggeredGridLayoutManager.VERTICAL));
         mGridData = new ArrayList<>();
-        toolsAdapter = new InvestmentResearchAdapter(getActivity(), mGridData);
+        toolsAdapter = new InvestmentResearchAdapter(getActivity(), mGridData,null);
         rvMineTools.setAdapter(toolsAdapter);
         getTouYan();
     }

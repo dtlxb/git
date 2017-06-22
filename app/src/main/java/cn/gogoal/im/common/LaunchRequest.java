@@ -1,7 +1,5 @@
 package cn.gogoal.im.common;
 
-import com.socks.library.KLog;
-
 /**
  * author wangjd on 2017/6/21 0021.
  * Staff_id 1375
@@ -22,7 +20,6 @@ public class LaunchRequest {
         //3.获取我的诊断工具
         UserUtils.getAllMyTools(null);
 
-        KLog.e("初始化拉取数据成功~~~~~~~~~~");
     }
 
 
