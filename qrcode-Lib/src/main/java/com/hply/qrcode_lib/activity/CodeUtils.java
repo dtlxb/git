@@ -131,8 +131,8 @@ public class CodeUtils {
             Bitmap scaleLogo = ImageUtils.makeLogoQrcode(
                     context,
                     getScaleLogo(logo, size),
-                    10,
-                    DisplayUtil.dip2px(context,2));
+                    5,
+                    DisplayUtil.dip2px(context,1));
 
             int offsetX = size / 2;
             int offsetY = size / 2;

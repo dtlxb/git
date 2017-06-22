@@ -638,7 +638,7 @@ public class UserUtils {
                 @Override
                 public void onFailure(String msg) {
                     if (callback != null) {
-                        callback.response(Impl.RESPON_DATA_ERROR,msg);
+                        callback.response(Impl.RESPON_DATA_ERROR, msg);
                     }
                 }
             }).startGet();
@@ -648,46 +648,44 @@ public class UserUtils {
     /**
      * 获取投研小工具
      */
-    public static void getAllMyTools(final Impl<JSONArray> callback) {
+    public static void getAllMyTools(final Impl<String> callback) {
         Map<String, String> map = new HashMap<>();
         map.put("token", UserUtils.getToken());
 
         new GGOKHTTP(map, GGOKHTTP.GET_USERCOLUMN, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     if (JSONObject.parseObject(responseInfo).containsKey("data")) {
-                        JSONArray jsonArray =
-                                JSONObject.parseObject(responseInfo).getJSONArray("data");
-                        SPTools.saveJsonArray(UserUtils.getMyAccountId() + "_all_my_tools", jsonArray);
+                        String jsonArray =
+                                JSONObject.parseObject(responseInfo).getString("data");
+                        SPTools.saveString(UserUtils.getMyAccountId() + "_all_my_tools", jsonArray);
                         if (callback != null)
                             callback.response(Impl.RESPON_DATA_SUCCESS, jsonArray);
                     } else {
                         if (callback != null)
-                            callback.response(Impl.RESPON_DATA_ERROR, null);
+                            callback.response(Impl.RESPON_DATA_ERROR, "data non null");
                     }
                 } else if (code == 1001) {
                     if (callback != null)
-                        callback.response(Impl.RESPON_DATA_EMPTY, null);
+                        callback.response(Impl.RESPON_DATA_EMPTY, "data is empty");
                 } else {
                     if (callback != null)
-                        callback.response(Impl.RESPON_DATA_ERROR, null);
+                        callback.response(Impl.RESPON_DATA_ERROR, "request error=="+
+                                JSONObject.parseObject(responseInfo).getString("message"));
                 }
             }
 
             @Override
             public void onFailure(String msg) {
                 if (callback != null)
-                    callback.response(Impl.RESPON_DATA_ERROR, null);
+                    callback.response(Impl.RESPON_DATA_ERROR, "error=="+msg);
             }
         }).startGet();
     }
-
-    public static String getAllMyTools() {
-        return SPTools.getString(UserUtils.getMyAccountId() + "_all_my_tools", null);
-    }
-
 
     /**
      * 当群信息没有的时候 网上拉取

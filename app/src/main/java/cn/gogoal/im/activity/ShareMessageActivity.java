@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.hply.roundimage.roundImage.RoundedImageView;
 
 import org.litepal.crud.DataSupport;
@@ -33,7 +31,7 @@ import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.StringUtils;
-import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.dialog.ShareMessageDialog;
 import cn.gogoal.im.ui.view.XLayout;
 import cn.gogoal.im.ui.view.XTitle;
@@ -191,6 +189,10 @@ public class ShareMessageActivity extends BaseActivity {
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            if (shareEntity==null){
+                                UIHelper.toast(v.getContext(),"分享数据为空");
+                                return;
+                            }
                             switch (position) {
                                 case 1://好友列表
                                     Intent intent = new Intent(v.getContext(), ChooseContactActivity.class);
@@ -206,7 +208,7 @@ public class ShareMessageActivity extends BaseActivity {
                                     startActivity(intent1);
                                     finish();
                                     break;
-                                default:
+                                default://最近会话
                                     ShareMessageDialog.newInstance(
                                             new ShareItemInfo(image,
                                                     data.getText(),

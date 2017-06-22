@@ -193,6 +193,7 @@ public class StockNewsAllListActivity extends BaseActivity {
             public void onFailure(String msg) {
                 UIHelper.toastError(getActivity(), msg, xLayout);
             }
+
         }).startGet();
     }
 

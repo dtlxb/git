@@ -1865,6 +1865,13 @@ public abstract class CommonAdapter<T, K extends BaseViewHolder> extends Recycle
     }
 
     /**
+     * 数据移除刷新
+     */
+    public final void notifyItemRemoveWrapper(T data) {
+        notifyItemRemoved(mData.indexOf(data));
+    }
+
+    /**
      * 数据添加刷新
      */
     public final void notifyItemInsertedWrapper(int position) {

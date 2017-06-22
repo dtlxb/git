@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
@@ -30,15 +31,14 @@ import cn.gogoal.im.adapter.baseAdapter.OnItemDragListener;
 import cn.gogoal.im.adapter.baseAdapter.callback.ItemDragAndSwipeCallback;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.SectionToolsData;
-import cn.gogoal.im.bean.ToolBean;
 import cn.gogoal.im.bean.ToolData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.XDividerItemDecoration;
 import cn.gogoal.im.ui.view.XTitle;
-import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
 /**
  * author wangjd on 2017/5/10 0010.
@@ -124,9 +124,7 @@ public class ToolsSettingActivity extends BaseActivity {
 
         rvSelected.addItemDecoration(new SelectedDivider());
 
-        rvSelected.setItemAnimator(new NoAlphaItemAnimator());
-
-        rvSelected.setPadding(AppDevice.dp2px(mContext,4),0,AppDevice.dp2px(mContext,4),0);
+        rvSelected.setPadding(AppDevice.dp2px(mContext, 4), 0, AppDevice.dp2px(mContext, 4), 0);
 
         selectedAdapter.setOnItemDragListener(new OnItemDragListener() {
             @Override
@@ -227,40 +225,36 @@ public class ToolsSettingActivity extends BaseActivity {
         Map<String, String> map = new HashMap<>();
         map.put("token", UserUtils.getToken());
 
-        new GGOKHTTP(map, GGOKHTTP.GET_USERCOLUMN, new GGOKHTTP.GGHttpInterface() {
+        UserUtils.getAllMyTools(new Impl<String>() {
             @Override
-            public void onSuccess(String responseInfo) {
-                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
-                if (code == 0) {
-                    List<ToolData> toolDatas = JSONObject.parseObject(responseInfo, ToolBean.class).getData();
-                    for (int i = 0; i < toolDatas.size(); i++) {
-                        ToolData toolData = toolDatas.get(i);
-                        dataAll.add(new SectionToolsData(true, toolData.getTitle()));
-                        List<ToolData.Tool> itemList = toolData.getDatas();
-                        for (ToolData.Tool item : itemList) {
-                            item.setSimulatedArg(false);
-                            dataOriginal.add(item);
-                            dataAll.add(new SectionToolsData(item, itemList.size()));
+            public void response(int code, String data) {
+                switch (code) {
+                    case Impl.RESPON_DATA_SUCCESS:
+                        List<ToolData> toolDatas = JSONArray.parseArray(data, ToolData.class);
+                        for (ToolData toolData: toolDatas) {
+                            dataAll.add(new SectionToolsData(true, toolData.getTitle()));
+                            List<ToolData.Tool> itemList = toolData.getDatas();
+                            for (ToolData.Tool item : itemList) {
+                                item.setSimulatedArg(false);
+                                dataOriginal.add(item);
+                                dataAll.add(new SectionToolsData(item, itemList.size()));
+                            }
+                            addSpace(itemList);
                         }
 
-                        addSpace(itemList);
-                    }
-
-                    tvTips.setVisibility(dataSelected.size() == 0 ? View.GONE : View.VISIBLE);
-                    adapterAllData.notifyDataSetChanged();
-
-                } else if (code == 1001) {
-                    UIHelper.toast(ToolsSettingActivity.this, "你没有符合权限的工具可以使用", Toast.LENGTH_LONG);
-                } else {
-                    UIHelper.toast(ToolsSettingActivity.this, "请求出错", Toast.LENGTH_LONG);
+                        tvTips.setVisibility(dataSelected.size() == 0 ? View.GONE : View.VISIBLE);
+                        adapterAllData.notifyDataSetChanged();
+                        break;
+                    case Impl.RESPON_DATA_EMPTY:
+                        UIHelper.toast(ToolsSettingActivity.this,
+                                "你没有符合权限的工具可以使用", Toast.LENGTH_LONG);
+                        break;
+                    case Impl.RESPON_DATA_ERROR:
+                        UIHelper.toastError(ToolsSettingActivity.this, "请求出错,稍后重试!");
+                        break;
                 }
             }
-
-            @Override
-            public void onFailure(String msg) {
-                UIHelper.toastError(ToolsSettingActivity.this, msg);
-            }
-        }).startGet();
+        });
 
     }
 
@@ -322,7 +316,6 @@ public class ToolsSettingActivity extends BaseActivity {
                 } else {
                     KLog.e("操作出错");
                 }
-//                adapterAllData.notifyDataSetChanged();
                 break;
             }
         }
@@ -363,7 +356,7 @@ public class ToolsSettingActivity extends BaseActivity {
             super(ToolsSettingActivity.this,
                     4,
                     Color.WHITE);
-            isLowDpi=AppDevice.isLowDpi();
+            isLowDpi = AppDevice.isLowDpi();
         }
 
         @Override

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -37,9 +38,12 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
 
     private Context context;
 
-    public InvestmentResearchAdapter(Context context, List<ToolData.Tool> datas) {
+    private DialogFragment dialog;
+
+    public InvestmentResearchAdapter(Context context, List<ToolData.Tool> datas, DialogFragment dialog) {
         super(R.layout.item_touyan_item, datas);
         this.context = context;
+        this.dialog = dialog;
         innerItem = AppDevice.isLowDpi() ?
                 AppDevice.getWidth(context) / 3 :
                 AppDevice.getWidth(context) / 4;
@@ -51,7 +55,7 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
         itemView.setBackgroundColor(Color.WHITE);
 
         TextView tvDesc = holder.getView(R.id.tv_touyan_item_text);
-        holder.setVisible(R.id.img_touyan_operation,false);
+        holder.setVisible(R.id.img_touyan_operation, false);
         ImageView imgIcon = holder.getView(R.id.img_touyan_item_icon);
 
         setViewWidth$Height(itemView, innerItem, innerItem);
@@ -64,9 +68,9 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
         setViewWidth$Height(imgIcon, innerItem / 2, innerItem / 2);
         tvDesc.setText(data.getDesc());
 
-        if (data.getIsClick()==10086){
+        if (data.getIsClick() == 10086) {
             Glide.with(context).load(Uri.parse(data.getIconUrl())).into(imgIcon);
-        }else {
+        } else {
             ImageDisplay.loadImage(context, data.getIconUrl(), imgIcon);
         }
 
@@ -82,14 +86,17 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
                     if (data.getIsClick() == 0) {
                         String[] params = {data.getUrl() + "?code=" + data.getCode(), data.getDesc()};
                         BannerUtils.getInstance(context, data.getType(), params).go();
-                    } else if (data.getIsClick()==10086){
+                    } else if (data.getIsClick() == 10086) {
                         context.startActivity(new Intent(context, ToolsListActivity.class));
-                    }else {
+                    } else {
 //                        new ComingSoonDialog().show(((MainActivity) context).getSupportFragmentManager());
                         UIHelper.toastInCenter(context, "该功能暂未开放使用");
 //                        MessageFullScreen.newInstance("该功能暂未开放使用")
 //                                .show(((MainActivity) context).getSupportFragmentManager());
                     }
+                }
+                if (dialog!=null){
+                    dialog.dismiss();
                 }
             }
         });

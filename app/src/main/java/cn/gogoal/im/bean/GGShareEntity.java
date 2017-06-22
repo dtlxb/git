@@ -3,8 +3,6 @@ package cn.gogoal.im.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Objects;
-
 /**
  * author wangjd on 2017/5/4 0004.
  * Staff_id 1375
@@ -42,16 +40,16 @@ public class GGShareEntity implements Parcelable {
 
     private String live_id;
 
-    private String source;
+    private String source;//直播来源，作为 点击 分享卡片 跳转逻辑依据
 
-    private Parcelable arg;//走分享时其他扩展情况
+    private byte[] image;
 
-    public Parcelable getArg() {
-        return arg;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setArg(Parcelable arg) {
-        this.arg = arg;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public String getDesc() {
@@ -128,7 +126,7 @@ public class GGShareEntity implements Parcelable {
         dest.writeString(this.shareType);
         dest.writeString(this.live_id);
         dest.writeString(this.source);
-        dest.writeParcelable(this.arg, flags);
+        dest.writeByteArray(this.image);
     }
 
     protected GGShareEntity(Parcel in) {
@@ -139,7 +137,7 @@ public class GGShareEntity implements Parcelable {
         this.shareType = in.readString();
         this.live_id = in.readString();
         this.source = in.readString();
-        this.arg = in.readParcelable(Objects.class.getClassLoader());
+        this.image = in.createByteArray();
     }
 
     public static final Creator<GGShareEntity> CREATOR = new Creator<GGShareEntity>() {

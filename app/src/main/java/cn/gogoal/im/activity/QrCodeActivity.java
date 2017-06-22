@@ -2,6 +2,7 @@ package cn.gogoal.im.activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
@@ -63,7 +65,7 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
     private Bitmap qrCodeBitmap;
 
     private int codeType;//二维码类型，群的，还是个人的
-    private String id;
+    private String accountId;
 
     @Override
     public int bindLayout() {
@@ -83,19 +85,19 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
         String name = getIntent().getStringExtra("qrcode_name");
         String userInfo = getIntent().getStringExtra("qrcode_info");
 
-        id = getIntent().getStringExtra("qrcode_content_id");
+        accountId = getIntent().getStringExtra("qrcode_content_id");
 
         tvMyQqrcodeName.setText(StringUtils.isActuallyEmpty(name) ? "--" : name);
         tvMyQqrcodeDuty.setText(StringUtils.isActuallyEmpty(userInfo) ? "--" : userInfo);
 
-
+        //异步处理二维码 bitmap
         AsyncTaskUtil.doAsync(new AsyncTaskUtil.AsyncCallBack() {
             public void onPreExecute() {
             }
             public void doInBackground() {
                 switch (codeType) {
-                    case GGQrCode.QR_CODE_TYPE_PERSIONAL:
-                        if (id.equalsIgnoreCase(UserUtils.getMyAccountId())) {
+                    case GGQrCode.QR_CODE_TYPE_PERSIONAL://个人二维码
+                        if (accountId.equalsIgnoreCase(UserUtils.getMyAccountId())) {//我自己的二维码
                             UserUtils.getUserAvatar(new Impl<Bitmap>() {
                                 @Override
                                 public void response(int code, Bitmap data) {
@@ -106,11 +108,13 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
                                 }
                             });
                         } else {
-                            UserUtils.getUserInfo(id, new Impl<String>() {
+                            UserUtils.getUserInfo(accountId, new Impl<String>() {//别人的二维码
                                 @Override
                                 public void response(int code, String data) {
+                                    //拿别人头像
                                     if (code == 0) {
-                                        ImageUtils.getUrlBitmap(getActivity(), JSONObject.parseObject(data).getString("avatar"), new SimpleTarget<Bitmap>() {
+                                        ImageUtils.getUrlBitmap(getActivity(),
+                                                JSONObject.parseObject(data).getString("avatar"), new SimpleTarget<Bitmap>() {
                                             @Override
                                             public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                                                 configQrCodeBitmap(resource);
@@ -123,8 +127,8 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
                             });
                         }
                         break;
-                    case GGQrCode.QR_CODE_TYPE_GROUP:
-                        ChatGroupHelper.setGroupAvatar(id, new AvatarTakeListener() {
+                    case GGQrCode.QR_CODE_TYPE_GROUP://群二维码
+                        ChatGroupHelper.setGroupAvatar(accountId, new AvatarTakeListener() {
                             @Override
                             public void success(Bitmap bitmap) {
                                 configQrCodeBitmap(bitmap);
@@ -151,15 +155,17 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if (avatar!=null)
                 ivQrcodeAvatar.setImageBitmap(avatar);
             }
         });
 
         qrCodeBitmap = CodeUtils.createImage(
                 getActivity(),//上下文
-                GGQrCode.getQrcodeString(codeType, id),//内容
+                GGQrCode.getQrcodeString(codeType, accountId),//内容
                 400,//尺寸
-                avatar == null ? BitmapFactory.decodeResource(getResources(), R.mipmap.logo) : avatar);//内嵌logo
+                avatar == null ? BitmapFactory.decodeResource(getResources(), R.mipmap.logo) :
+                        avatar);//内嵌logo
     }
 
     @OnClick({R.id.btn_my_qrcode_save_qrcode, R.id.btn_my_qrcode_share_qrcode})
@@ -178,14 +184,12 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
      * 分享
      */
     private void share() {
-//        Intent intent = new Intent(QrCodeActivity.this, ShareMessageActivity.class);
-//        Bundle bundle = new Bundle();
-//        GGShareEntity entity = new GGShareEntity();
-//        entity.setShareType(GGShareEntity.SHARE_TYPE_IMAGE);
-//        entity.setArg(qrCodeBitmap);
-//        bundle.putParcelable("share_web_data", entity);
-//        intent.putExtras(bundle);
-//        startActivity(intent);
+        GGShareEntity entity = new GGShareEntity();
+        entity.setShareType(GGShareEntity.SHARE_TYPE_IMAGE);
+        entity.setImage(ImageUtils.bitmap2Bytes(qrCodeBitmap));
+        Intent intent = new Intent(QrCodeActivity.this, ShareMessageActivity.class);
+        intent.putExtra("share_web_data",entity);
+        startActivity(intent);
     }
 
     @AfterPermissionGranted(PermisstionCode.WRITE_EXTERNAL_STORAGE)

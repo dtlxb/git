@@ -22,12 +22,12 @@ public class GGAPI {
 //    private static final String APP_SECRET = "cGYIsTyTWXGeP4frqOqmdWxRO5xmh2Pi";
 
     //预正式环境
-//    private static final String Native_API = "http://ggservice-pre.go-goal.cn";
+    private static final String Native_API = "http://ggservice-pre.go-goal.cn";
     private static final String APP_KEY = "VzNQumNMxCmPcbD";
     private static final String APP_SECRET = "SYRyCEmkmZsMm8xnN5VrLQLXfc7C9GB1";
 
     //正式环境
-    private static final String Native_API = "https://ggservice.go-goal.cn";
+//    private static final String Native_API = "https://ggservice.go-goal.cn";
 //    private static final String APP_KEY = "GnbhWYzxfcbrMOd";
 //    private static final String APP_SECRET = "I7WFKwulOrcYPHu8ZeQcMFEsiwQ45ruS";
 
