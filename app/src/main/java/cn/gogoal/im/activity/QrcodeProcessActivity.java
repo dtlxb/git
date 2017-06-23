@@ -134,25 +134,30 @@ public class QrcodeProcessActivity extends BaseActivity implements EasyPermissio
 //                        KLog.e(scanBody.getString("qrType"));
 //                        KLog.e(scanBody.getString("account_id"));
 
-                        if (scanBody.getIntValue("qrType")==0) {
+                        if (scanBody.getIntValue("qrType") == 0) {
                             //TODO 跳转个人详情
                             NormalIntentUtils.go2PersionDetail(getActivity(),
                                     scanBody.getIntValue("account_id"));
+                            QrcodeProcessActivity.this.finish();
                         } else {
                             //TODO 跳转群名片
                             ChatGroupHelper.getGroupInfo(scanBody.getString("conv_id"), new Impl<String>() {
                                 @Override
                                 public void response(int code, String data) {
-                                    KLog.e(data);
-                                    GroupData groupData = JSONObject.parseObject(data, GroupData.class);
                                     switch (code) {
                                         case Impl.RESPON_DATA_SUCCESS:
+                                            GroupData groupData = JSONObject.parseObject(data, GroupData.class);
                                             Intent in = new Intent(getActivity(), SquareCardActivity.class);
                                             in.putExtra("conversation_id", groupData.getConv_id());
                                             in.putExtra("square_name", groupData.getName());
                                             in.putExtra("square_creater", groupData.getC());
                                             in.putParcelableArrayListExtra("square_members", groupData.getM_info());
-                                            getActivity().startActivity(in);
+                                            QrcodeProcessActivity.this.startActivity(in);
+                                            QrcodeProcessActivity.this.finish();
+                                            break;
+
+                                        default:
+                                            KLog.e("解析::" + data);
                                             break;
                                     }
                                 }

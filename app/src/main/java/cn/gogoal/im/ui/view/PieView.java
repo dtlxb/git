@@ -3,6 +3,7 @@ package cn.gogoal.im.ui.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
@@ -83,7 +84,7 @@ public class PieView extends View {
         int viewHeight = getHeight() - marginBottom - marginTop;
         int viewWidth = getWidth() - marginLeft - marginRight;
 
-        pieRadius = viewHeight < viewWidth ? viewHeight * 2 / 5 : viewWidth * 2 / 5;
+        pieRadius = viewHeight > viewWidth ? viewHeight / 2 : viewWidth / 2;
         pieCenterX = marginLeft + viewWidth / 2;
         pieCenterY = marginTop + viewHeight / 2;
         drawPie(canvas);
@@ -120,8 +121,13 @@ public class PieView extends View {
             piePaint.setStyle(Paint.Style.FILL);
             for (int i = 0; i < beanList.size(); i++) {
                 //画扇形
-                linePaint.setColor(ContextCompat.getColor(getContext(), beanList.get(i).getColorValue()));
-                piePaint.setColor(ContextCompat.getColor(getContext(), beanList.get(i).getColorValue()));
+                if (beanList.get(i).getColorValue() instanceof Integer) {
+                    linePaint.setColor(ContextCompat.getColor(getContext(), (Integer) beanList.get(i).getColorValue()));
+                    piePaint.setColor(ContextCompat.getColor(getContext(), (Integer) beanList.get(i).getColorValue()));
+                } else if (beanList.get(i).getColorValue() instanceof String) {
+                    linePaint.setColor(Color.parseColor((String) beanList.get(i).getColorValue()));
+                    piePaint.setColor(Color.parseColor((String) beanList.get(i).getColorValue()));
+                }
                 float sweep = beanList.get(i).getPieValue() / totalValue * 360;
                 canvas.drawArc(pieOval, start, sweep * pieRate, true, piePaint);
                 if (ANNULAR_PIE != pieType) {
@@ -165,7 +171,7 @@ public class PieView extends View {
                 canvas.drawCircle(pieCenterX, pieCenterY, pieRadius / 2, piePaint);
             } else if (ANNULAR_PIE == pieType) {
                 piePaint.setColor(ContextCompat.getColor(getContext(), R.color.white));
-                canvas.drawCircle(pieCenterX, pieCenterY, pieRadius * 2 / 3, piePaint);
+                canvas.drawCircle(pieCenterX, pieCenterY, pieRadius / 3, piePaint);
             }
 
             if (pieRate < 1) {

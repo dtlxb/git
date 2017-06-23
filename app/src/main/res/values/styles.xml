@@ -322,4 +322,8 @@
         <item name="android:src">@mipmap/img_face2face_dot</item>
     </style>
 
+    <style name="CustomCheckboxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/stock_map_check</item>
+    </style>
+
 </resources>

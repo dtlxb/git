@@ -48,7 +48,6 @@ import cn.gogoal.im.common.ImageUtils.GroupFaceImage;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.SPTools;
-import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.ggqrcode.GGQrCode;
@@ -138,7 +137,8 @@ public class IMSquareChatSetActivity extends BaseActivity {
         }
 
         userBeans.addAll(UserInfoUtils.getAllGroupUserInfo(conversationId));
-        if (null != userBeans && userBeans.size() > 0) {
+
+        if (null != userBeans && userBeans.size() > 1) {
             getAllContacts(userBeans);
         } else {
             getChatGroup();
@@ -147,11 +147,13 @@ public class IMSquareChatSetActivity extends BaseActivity {
         final JSONArray groupsArray = UserUtils.getLocalMyGooupList();
 
         //保存群
-        for (int i = 0; i < groupsArray.size(); i++) {
-            if (((JSONObject) groupsArray.get(i)).getString("conv_id").equals(conversationId)) {
-                saveGroup.setChecked(true);
-                finalThisGroup = (JSONObject) groupsArray.get(i);
-                break;
+        if (null != groupsArray && groupsArray.size() > 0) {
+            for (int i = 0; i < groupsArray.size(); i++) {
+                if (((JSONObject) groupsArray.get(i)).getString("conv_id").equals(conversationId)) {
+                    saveGroup.setChecked(true);
+                    finalThisGroup = (JSONObject) groupsArray.get(i);
+                    break;
+                }
             }
         }
 
@@ -556,14 +558,14 @@ public class IMSquareChatSetActivity extends BaseActivity {
     public List<ContactBean> squareCreaterFirst(List<ContactBean> contactBeanList) {
         List<ContactBean> newContactBeanList = new ArrayList<>();
         int size;
-        ContactBean contactBean = new ContactBean();
+        ContactBean contactBean;
         for (int i = 0; i < contactBeanList.size(); i++) {
-            if (contactBeanList.get(i).getFriend_id() == StringUtils.parseStringDouble(squareCreater)) {
+            if (String.valueOf(contactBeanList.get(i).getFriend_id()).equals(squareCreater)) {
                 contactBean = contactBeanList.get(i);
                 contactBeanList.remove(i);
+                contactBeanList.add(0, contactBean);
             }
         }
-        contactBeanList.add(0, contactBean);
         if (squareCreater.equals(UserUtils.getMyAccountId())) {
             if (contactBeanList.size() > 4) {
                 size = 4;

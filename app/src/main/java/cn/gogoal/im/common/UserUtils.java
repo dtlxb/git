@@ -168,7 +168,7 @@ public class UserUtils {
                     ImageUtils.saveImageToSD(MyApp.getAppContext(), MyApp.getAppContext().getExternalFilesDir("avatar") +
                                     File.separator + "avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()) +
                                     ImageUtils.getImageSuffix(UserUtils.getUserAvatar()),
-                            resource, 100);
+                            resource);
                 }
             });
         } else {
@@ -655,8 +655,6 @@ public class UserUtils {
         new GGOKHTTP(map, GGOKHTTP.GET_USERCOLUMN, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
-
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     if (JSONObject.parseObject(responseInfo).containsKey("data")) {

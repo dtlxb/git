@@ -31,17 +31,9 @@ public class UFileUpload {
     private UFileUpload() {
     }
     
-    private static UFileUpload instance = null;
-
     public static UFileUpload getInstance() {
-        if (instance == null) {
-            synchronized (UFileUpload.class) {
-                if (instance == null) {
-                    instance = new UFileUpload();
-                    uFileSDK = new UFileSDK(bucket);//域名后缀
-                }
-            }
-        }
+        UFileUpload instance = new UFileUpload();
+        uFileSDK = new UFileSDK(bucket);//域名后缀
         return instance;
     }
 

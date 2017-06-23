@@ -30,6 +30,18 @@
         android:padding="10dp"
         android:text="[链接]【马警方确认一名涉金正男遇刺案嫌犯为朝鲜大使馆工作人员balabalababalabalababalabalababalabalababalabalababalabalababalabalaba】" />
 
+    <ImageView
+        android:id="@+id/iv_dialog_share_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/cache_live_list"
+        android:maxHeight="150dp"
+        android:minHeight="55dp"
+        android:minWidth="55dp"
+        android:visibility="gone"
+        android:scaleType="fitCenter"
+        android:contentDescription="@null" />
+
     <EditText
         android:id="@+id/et_dialog_share_msg_input"
         android:layout_width="match_parent"

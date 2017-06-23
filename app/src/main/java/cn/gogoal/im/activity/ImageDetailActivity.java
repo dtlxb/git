@@ -2,11 +2,14 @@ package cn.gogoal.im.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.View;
 import android.widget.TextView;
 
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.hply.imagepicker.ITakePhoto;
 import com.socks.library.KLog;
 
@@ -24,8 +27,8 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
-import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.MD5Utils;
+import cn.gogoal.im.common.SaveImageAsyncTask;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
@@ -118,12 +121,16 @@ public class ImageDetailActivity extends BaseActivity {
                 dialog.dismiss();
                 switch (position) {
                     case 0:
-                        ImageUtils.saveImage2DCIM(
+                        ImageUtils.getUrlBitmap(getActivity(),
                                 imageUrls.get(vpImageDetail.getCurrentItem()),
-                                MD5Utils.getMD5EncryptyString16(imageUrls.get(vpImageDetail.getCurrentItem())), new Impl<String>() {
+                                new SimpleTarget<Bitmap>() {
                                     @Override
-                                    public void response(int code, String data) {
-                                        UIHelper.toast(getActivity(), code == 0 ? "图片已成功下载到相册" : "图片下载出错");
+                                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                        new SaveImageAsyncTask(
+                                                getActivity(),
+                                                MD5Utils.getMD5EncryptyString16(imageUrls.get(vpImageDetail.getCurrentItem())),
+                                                "图片")
+                                                .execute(resource);
                                     }
                                 });
                         break;
@@ -149,14 +156,15 @@ public class ImageDetailActivity extends BaseActivity {
                         openCamera();
                         break;
                     case 1://保存图片
-                        ImageUtils.saveImage2DCIM(
-                                imageUrls.get(vpImageDetail.getCurrentItem()),
-                                MD5Utils.getMD5EncryptyString16(imageUrls.get(vpImageDetail.getCurrentItem())), new Impl<String>() {
-                                    @Override
-                                    public void response(int code, String data) {
-                                        UIHelper.toast(getActivity(), code == 0 ? "图片已成功下载到相册" : "图片下载出错");
-                                    }
-                                });
+                        ImageUtils.getUrlBitmap(getActivity(), imageUrls.get(vpImageDetail.getCurrentItem()), new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                new SaveImageAsyncTask(getActivity(),
+                                        MD5Utils.getMD5EncryptyString16(imageUrls.get(vpImageDetail.getCurrentItem())),
+                                        "头像")
+                                        .execute(resource);
+                            }
+                        });
                         break;
                 }
             }

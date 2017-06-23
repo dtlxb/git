@@ -851,7 +851,9 @@ public class ChatFragment extends BaseFragment {
                 userBean = user;
             }
             //(刚创建群的时候不拉消息)
-            if (actionType == AppConst.CREATE_SQUARE_ROOM_BUILD || actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
+            if (actionType == AppConst.CREATE_SQUARE_ROOM_BUILD ||
+                    actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE ||
+                    actionType == AppConst.CREATE_SQUARE_ROOM_BY_STOCK) {
             } else {
                 getHistoryMessage(needUpdate, messageList);
             }

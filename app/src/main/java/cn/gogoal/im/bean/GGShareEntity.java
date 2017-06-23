@@ -20,7 +20,7 @@ import android.os.Parcelable;
  */
 public class GGShareEntity implements Parcelable {
 
-    public static final int SHARE_TYPE_TEXT = 0;
+    public static final String SHARE_TYPE_TEXT = "0";
 
     public static final String SHARE_TYPE_WEB = "1";
 
@@ -42,14 +42,22 @@ public class GGShareEntity implements Parcelable {
 
     private String source;//直播来源，作为 点击 分享卡片 跳转逻辑依据
 
-    private byte[] image;
+    private String image;//分享图片时，路径或者url
 
-    public byte[] getImage() {
-        return image;
+    public static String getShareTypeText() {
+        return SHARE_TYPE_TEXT;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
+    public static String getShareTypeWeb() {
+        return SHARE_TYPE_WEB;
+    }
+
+    public static String getShareTypeLive() {
+        return SHARE_TYPE_LIVE;
+    }
+
+    public static String getShareTypeImage() {
+        return SHARE_TYPE_IMAGE;
     }
 
     public String getDesc() {
@@ -108,7 +116,12 @@ public class GGShareEntity implements Parcelable {
         this.source = source;
     }
 
-    public GGShareEntity() {
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
 
@@ -126,7 +139,10 @@ public class GGShareEntity implements Parcelable {
         dest.writeString(this.shareType);
         dest.writeString(this.live_id);
         dest.writeString(this.source);
-        dest.writeByteArray(this.image);
+        dest.writeString(this.image);
+    }
+
+    public GGShareEntity() {
     }
 
     protected GGShareEntity(Parcel in) {
@@ -137,7 +153,7 @@ public class GGShareEntity implements Parcelable {
         this.shareType = in.readString();
         this.live_id = in.readString();
         this.source = in.readString();
-        this.image = in.createByteArray();
+        this.image = in.readString();
     }
 
     public static final Creator<GGShareEntity> CREATOR = new Creator<GGShareEntity>() {

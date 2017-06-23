@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatImageView;
@@ -16,7 +17,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.hply.qrcode_lib.activity.CodeUtils;
+import com.socks.library.KLog;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,11 +32,15 @@ import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.Impl;
+import cn.gogoal.im.common.MD5Utils;
+import cn.gogoal.im.common.SaveImageAsyncTask;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.ggqrcode.GGQrCode;
 import cn.gogoal.im.common.permission.PermisstionCode;
+import cn.gogoal.im.ui.dialog.WaitDialog;
+import cn.gogoal.im.ui.view.SelectorButton;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -62,10 +69,19 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
 
     @BindView(R.id.appCompatImageView)
     AppCompatImageView ivQrCode;
+
+    @BindView(R.id.btn_my_qrcode_save_qrcode)
+    SelectorButton btnMyQrcodeSaveQrcode;
+
+    @BindView(R.id.btn_my_qrcode_share_qrcode)
+    SelectorButton btnMyQrcodeShareQrcode;
+
+
     private Bitmap qrCodeBitmap;
 
     private int codeType;//二维码类型，群的，还是个人的
     private String accountId;
+    private int updataCode;
 
     @Override
     public int bindLayout() {
@@ -94,6 +110,7 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
         AsyncTaskUtil.doAsync(new AsyncTaskUtil.AsyncCallBack() {
             public void onPreExecute() {
             }
+
             public void doInBackground() {
                 switch (codeType) {
                     case GGQrCode.QR_CODE_TYPE_PERSIONAL://个人二维码
@@ -115,11 +132,11 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
                                     if (code == 0) {
                                         ImageUtils.getUrlBitmap(getActivity(),
                                                 JSONObject.parseObject(data).getString("avatar"), new SimpleTarget<Bitmap>() {
-                                            @Override
-                                            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                                                configQrCodeBitmap(resource);
-                                            }
-                                        });
+                                                    @Override
+                                                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                                        configQrCodeBitmap(resource);
+                                                    }
+                                                });
                                     } else {
                                         configQrCodeBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.logo));
                                     }
@@ -155,8 +172,8 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (avatar!=null)
-                ivQrcodeAvatar.setImageBitmap(avatar);
+                if (avatar != null)
+                    ivQrcodeAvatar.setImageBitmap(avatar);
             }
         });
 
@@ -175,6 +192,7 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
                 saveQrCode();
                 break;
             case R.id.btn_my_qrcode_share_qrcode:
+                btnMyQrcodeShareQrcode.setClickable(false);
                 share();
                 break;
         }
@@ -184,25 +202,63 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
      * 分享
      */
     private void share() {
-        GGShareEntity entity = new GGShareEntity();
-        entity.setShareType(GGShareEntity.SHARE_TYPE_IMAGE);
-        entity.setImage(ImageUtils.bitmap2Bytes(qrCodeBitmap));
-        Intent intent = new Intent(QrCodeActivity.this, ShareMessageActivity.class);
-        intent.putExtra("share_web_data",entity);
-        startActivity(intent);
+        final WaitDialog dialog = WaitDialog.getInstance("请稍后...", R.mipmap.login_loading, true);
+        dialog.show(getSupportFragmentManager());
+
+        new AsyncTask<Bitmap, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Bitmap... params) {
+                /*1.*/
+                ImageUtils.saveImageToSD(getActivity(),
+                        getExternalCacheDir().getAbsolutePath() +
+                                File.separator +
+                                String.valueOf(System.currentTimeMillis()) + ".png",
+                        params[0], new Impl<String>() {
+                            @Override
+                            public void response(int code, String data) {
+                                updataCode = code;
+                                if (code == 0) {
+
+                                    GGShareEntity entity = new GGShareEntity();
+                                    entity.setShareType(GGShareEntity.SHARE_TYPE_IMAGE);
+                                    entity.setImage(data);
+
+                                    KLog.e(JSONObject.toJSONString(entity));
+
+                                    Intent intent = new Intent(QrCodeActivity.this, ShareMessageActivity.class);
+                                    intent.putExtra("share_web_data", entity);
+                                    startActivity(intent);
+                                    dialog.dismiss();
+                                } else {
+                                    dialog.dismiss();
+                                    UIHelper.toast(getActivity(), "分享出错！");
+                                }
+                                btnMyQrcodeShareQrcode.setClickable(true);
+                            }
+                        });
+
+                return updataCode;
+            }
+
+            @Override
+            protected void onPostExecute(Integer integer) {
+                super.onPostExecute(integer);
+            }
+        }.execute(ImageUtils.screenshot(scrollView));
+
+
     }
 
     @AfterPermissionGranted(PermisstionCode.WRITE_EXTERNAL_STORAGE)
     public void saveQrCode() {
         if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            ImageUtils.saveImage2DCIM(ImageUtils.screenshot(scrollView), "my_qr_code" + System.currentTimeMillis() + ".png", new Impl<String>() {
-                @Override
-                public void response(int code, String data) {
-                    UIHelper.toast(getActivity(), code == 0 ? "二维码已保存到相册" : "保存二维码出错，请重试");
-                }
-            });
+            new SaveImageAsyncTask(
+                    getActivity(),
+                    "qr_code_" + MD5Utils.getMD5EncryptyString16(StringUtils.isActuallyEmpty(accountId) ?
+                            String.valueOf(System.currentTimeMillis()) : accountId) + ".png",
+                    "二维码")
+                    .execute(ImageUtils.screenshot(scrollView));
         } else {
-            // Ask for one permission
             EasyPermissions.requestPermissions(this, "需要请求存储图片权限",
                     REQUEST_CAMERA_PERM, Manifest.permission.WRITE_EXTERNAL_STORAGE);
             UIHelper.toast(getActivity(), "需要请求存储图片权限,请到设置中开启");
@@ -212,7 +268,6 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // Forward results to EasyPermissions
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
@@ -234,5 +289,4 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
     public void onPermissionsGranted(int requestCode, List<String> perms) {
 
     }
-
 }

@@ -1,6 +1,5 @@
 package cn.gogoal.im.common.ImageUtils;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
@@ -19,7 +18,6 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.DrawableRes;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Base64;
@@ -28,18 +26,17 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.socks.library.KLog;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.Impl;
@@ -49,7 +46,7 @@ import cn.gogoal.im.common.Impl;
  * Staff_id 1375
  * phone 18930640263
  */
-public class ImageUtils{
+public class ImageUtils {
 
     public final static String SDCARD_MNT = "/mnt/sdcard";
     public final static String SDCARD = Environment.getExternalStorageState();
@@ -156,10 +153,11 @@ public class ImageUtils{
     }
 
     /**
-     * 保存图片到DCIM下
+     * bitmap 保存图片到DCIM下
+     *
+     * @see cn.gogoal.im.common.SaveImageAsyncTask
      */
-    public static void saveImage2DCIM(Bitmap bitmap, String filename, Impl<String> callBack) {
-        int selfPermission = ContextCompat.checkSelfPermission(MyApp.getAppContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    public static void saveImage2DCIM(Context context, Bitmap bitmap, String filename, Impl<String> callBack) {
 
         if (bitmap == null) {
             if (callBack != null)
@@ -172,23 +170,31 @@ public class ImageUtils{
 
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             BufferedOutputStream bos = null;
+
+            File file = new File(dirs);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
             try {
+                File imageFile = new File(dirs, filename);
                 bos = new BufferedOutputStream(
-                        new FileOutputStream(new File(dirs,filename)));
+                        new FileOutputStream(imageFile));
 
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
 
                 bos.flush();
 
-                scanPhoto(MyApp.getAppContext(), dirs);
 
-                if (callBack != null)
-                    callBack.response(Impl.RESPON_DATA_SUCCESS,"success");
+                if (callBack != null) {
+                    callBack.response(Impl.RESPON_DATA_SUCCESS, "success");
+                }
+
+                scanPhoto(context, imageFile);
 
             } catch (Exception e) {
                 e.printStackTrace();
                 if (callBack != null)
-                    callBack.response(Impl.RESPON_DATA_ERROR,e.getMessage());
+                    callBack.response(Impl.RESPON_DATA_ERROR, e.getMessage());
             } finally {
                 FileUtil.closeIO(bos);
             }
@@ -201,43 +207,70 @@ public class ImageUtils{
     }
 
     /**
-     * 保存图片到DCIM下
+     * 写图片文件到SD卡
      */
-    public static void saveImage2DCIM(String imageUrl, final String filename, final Impl<String> callBack) {
-        KLog.e(imageUrl);
-
-        getUrlBitmap(MyApp.getAppContext(), imageUrl, new SimpleTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                saveImage2DCIM(resource, filename+".png", callBack);
+    public static void saveImageToSD(Context ctx, String filePath,
+                                     Bitmap bitmap) {
+        if (bitmap != null) {
+            File file = new File(filePath.substring(0,
+                    filePath.lastIndexOf(File.separator)));
+            if (!file.exists()) {
+                file.mkdirs();
             }
-        });
+            BufferedOutputStream bos = null;
+            try {
+                bos = new BufferedOutputStream(
+                        new FileOutputStream(filePath));
+
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+                bos.flush();
+                if (ctx != null) {
+                    scanPhoto(ctx, new File(filePath));
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                FileUtil.closeIO(bos);
+            }
+        }
     }
 
-//    /**
-//     * 判断当前Url是否标准的content://样式，如果不是，则返回绝对路径
-//     *
-//     * @param mUri
-//     * @return
-//     */
-//    public static String getAbsolutePathFromNoStandardUri(Uri mUri) {
-//        String filePath = null;
-//
-//        String mUriString = mUri.toString();
-//        mUriString = Uri.decode(mUriString);
-//
-//        String pre1 = "file://" + SDCARD + File.separator;
-//        String pre2 = "file://" + SDCARD_MNT + File.separator;
-//
-//        if (mUriString.startsWith(pre1)) {
-//            filePath = Environment.getExternalStorageDirectory().getPath()
-//                    + File.separator + mUriString.substring(pre1.length());
-//        } else if (mUriString.startsWith(pre2)) {
-//            filePath = Environment.getExternalStorageDirectory().getPath()
-//                    + File.separator + mUriString.substring(pre2.length());
-//        }
-//        return filePath;
-//    }
+    /**
+     * 写图片文件到SD卡
+     */
+    public static void saveImageToSD(Context ctx, String filePath,
+                                     Bitmap bitmap, Impl<String> callback) {
+        if (bitmap != null) {
+            File file = new File(filePath.substring(0,
+                    filePath.lastIndexOf(File.separator)));
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            BufferedOutputStream bos = null;
+            try {
+                bos = new BufferedOutputStream(
+                        new FileOutputStream(filePath));
+
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+                bos.flush();
+                if (ctx != null) {
+                    scanPhoto(ctx, new File(filePath));
+                }
+                if (callback != null)
+                    callback.response(Impl.RESPON_DATA_SUCCESS, filePath);
+            } catch (Exception e) {
+                e.printStackTrace();
+                if (callback != null)
+                    callback.response(Impl.RESPON_DATA_ERROR, e.getMessage());
+            } finally {
+                FileUtil.closeIO(bos);
+            }
+        } else {
+            if (callback != null)
+                callback.response(Impl.RESPON_DATA_ERROR, "bitmap non null");
+        }
+    }
 
     @TargetApi(19)
     public static String getImageAbsolutePath(Context context, Uri imageUri) {
@@ -539,45 +572,17 @@ public class ImageUtils{
     }
 
     /**
-     * 写图片文件到SD卡
-     */
-    public static void saveImageToSD(Context ctx, String filePath,
-                                     Bitmap bitmap, int quality) {
-        if (bitmap != null) {
-            File file = new File(filePath.substring(0,
-                    filePath.lastIndexOf(File.separator)));
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-            BufferedOutputStream bos = null;
-            try {
-                bos = new BufferedOutputStream(
-                        new FileOutputStream(filePath));
-
-                bitmap.compress(Bitmap.CompressFormat.PNG, quality, bos);
-                bos.flush();
-                if (ctx != null) {
-                    scanPhoto(ctx, filePath);
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                FileUtil.closeIO(bos);
-            }
-        }
-    }
-
-    /**
      * 让Gallery上能马上看到该图片
      */
-    private static void scanPhoto(Context ctx, String imgFileName) {
-        Intent mediaScanIntent = new Intent(
-                Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File file = new File(imgFileName);
-        Uri contentUri = Uri.fromFile(file);
-        mediaScanIntent.setData(contentUri);
-        ctx.sendBroadcast(mediaScanIntent);
+    private static void scanPhoto(Context ctx, File imgFile) {
+        try {
+            MediaStore.Images.Media.insertImage(ctx.getContentResolver(),
+                    imgFile.getAbsolutePath(), imgFile.getName(), null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        ctx.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                Uri.parse("file://" + imgFile.getAbsolutePath())));
     }
 
     /**
@@ -666,12 +671,11 @@ public class ImageUtils{
         return options.outHeight + "x" + options.outWidth;
     }
 
-    public static Bitmap screenshot(View view){
+    public static Bitmap screenshot(View view) {
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();  //启用DrawingCache并创建位图
         Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache()); //创建一个DrawingCache的拷贝，因为DrawingCache得到的位图在禁用后会被回收
         view.setDrawingCacheEnabled(false);  //禁用DrawingCahce否则会影响性能
-
         return bitmap;
     }
 }

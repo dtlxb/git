@@ -6,6 +6,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -60,8 +63,13 @@ public class StockMapsFragment extends BaseFragment {
     @BindView(R.id.tablayout_treat)
     TabLayout tabLayoutTreat;//交易五档、明细表头
 
+    @BindView(R.id.iv_open)
+    CheckBox ivOpen;//图表打开
+
     @BindView(R.id.vp_treat)
     UnSlidingViewPager vpTreat;
+
+
     private String change_value;//交易五档、明细
 
     private int showItem;//当前显示
@@ -81,6 +89,7 @@ public class StockMapsFragment extends BaseFragment {
     //数据集合
     private int stock_charge_type;
     private HashMap<String, Bitmap> map = new HashMap<>();
+    private Bitmap mapPlus = null;
     private List<Map<String, Object>> mOHLCData = new ArrayList<>();
     private StockMinuteBean timesBean;
     private TimesFivesBitmap fiveDayBitmap;
@@ -138,6 +147,34 @@ public class StockMapsFragment extends BaseFragment {
         }
         TabLayout.Tab tabAt = tabChartsTitles.getTabAt(showItem);
         if (tabAt != null) tabAt.select();
+        //图表打开
+        ivOpen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    layoutTreat.setVisibility(View.GONE);
+                    if (null == mapPlus) {
+                        dealMapAction(width, "0");
+                    }
+                    if (stock_charge_type == 1 && StockUtils.isTradeTime()) {
+                        mBitmapChartView.setBitmap(mapPlus, true, timesBitmap);
+                    } else {
+                        mBitmapChartView.setBitmap(mapPlus, false, timesBitmap);
+                    }
+
+                } else {
+                    if (stock_charge_type == 1 && StockUtils.isTradeTime()) {
+                        mBitmapChartView.setBitmap(map.get(String.valueOf("0")), true, timesBitmap);
+                    } else {
+
+                        mBitmapChartView.setBitmap(map.get(String.valueOf("0")), false, timesBitmap);
+                    }
+                    layoutTreat.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+
         //图表头点击事件
         tabChartsTitles.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -152,6 +189,7 @@ public class StockMapsFragment extends BaseFragment {
                             } else {
                                 mBitmapChartView.setBitmap(map.get(String.valueOf("0")), false, timesBitmap);
                             }
+                            ivOpen.setVisibility(View.VISIBLE);
                         } else {
                             needShowLoading(true);
                             GetMinLineData();
@@ -159,6 +197,7 @@ public class StockMapsFragment extends BaseFragment {
                         break;
                     case 1:
                         if (map.containsKey("1")) {
+                            ivOpen.setVisibility(View.GONE);
                             needShowLoading(false);
                             if (stock_charge_type == 1 && StockUtils.isTradeTime()) {
                                 mBitmapChartView.setBitmap(map.get(String.valueOf("1")), true, fiveDayBitmap);
@@ -172,6 +211,7 @@ public class StockMapsFragment extends BaseFragment {
                         break;
                     case 2:
                         if (map.containsKey("2")) {
+                            ivOpen.setVisibility(View.GONE);
                             needShowLoading(false);
                             mBitmapChartView.setBitmap(map.get("2"));
                         } else {
@@ -181,6 +221,7 @@ public class StockMapsFragment extends BaseFragment {
                         break;
                     case 3:
                         if (map.containsKey("3")) {
+                            ivOpen.setVisibility(View.GONE);
                             needShowLoading(false);
                             mBitmapChartView.setBitmap(map.get("3"));
                         } else {
@@ -190,6 +231,7 @@ public class StockMapsFragment extends BaseFragment {
                         break;
                     case 4:
                         if (map.containsKey("4")) {
+                            ivOpen.setVisibility(View.GONE);
                             needShowLoading(false);
                             mBitmapChartView.setBitmap(map.get("4"));
                         } else {
@@ -222,18 +264,23 @@ public class StockMapsFragment extends BaseFragment {
         switch (item) {
             case 0://分时
                 GetMinLineData();
+                layoutTreat.setVisibility(View.VISIBLE);
                 break;
             case 1://五日
                 getFiveData();
+                layoutTreat.setVisibility(View.GONE);
                 break;
             case 2://日K
                 getKLineData(0);
+                layoutTreat.setVisibility(View.GONE);
                 break;
             case 3://周K
                 getKLineData(1);
+                layoutTreat.setVisibility(View.GONE);
                 break;
             case 4://月K
                 getKLineData(2);
+                layoutTreat.setVisibility(View.GONE);
                 break;
         }
 
@@ -406,7 +453,7 @@ public class StockMapsFragment extends BaseFragment {
             item_index = params[0];
             switch (item_index) {
                 case "0":
-                    timesBitmap = new TimesFivesBitmap(13 * width / 20, height);
+                    /*timesBitmap = new TimesFivesBitmap(13 * width / 20, height);
                     timesBitmap.setShowDetail(false);
                     timesBitmap.setLongitudeNum(0);
                     timesBitmap.setmSize(AppDevice.dp2px(getActivity(), 1));
@@ -416,7 +463,10 @@ public class StockMapsFragment extends BaseFragment {
                         bitmap = timesBitmap.setTimesList(timesBean, true, stock_charge_type);
                     } catch (Exception e) {
                     }
-                    map.put(item_index, bitmap);
+                    map.put(item_index, bitmap);*/
+
+                    dealMapAction(13 * width / 20, item_index);
+
                     break;
                 case "1":
                     if (params.length > 1) {
@@ -491,6 +541,7 @@ public class StockMapsFragment extends BaseFragment {
                     } else {
                         mBitmapChartView.setBitmap(map.get(String.valueOf("0")), false, timesBitmap);
                     }
+                    ivOpen.setVisibility(View.VISIBLE);
                     break;
                 case "1":
                     if (stock_charge_type == 1 && StockUtils.isTradeTime()) {
@@ -498,20 +549,43 @@ public class StockMapsFragment extends BaseFragment {
                     } else {
                         mBitmapChartView.setBitmap(map.get(String.valueOf("1")), false, fiveDayBitmap);
                     }
+                    ivOpen.setVisibility(View.GONE);
                     break;
                 case "2":
                     mBitmapChartView.setBitmap(map.get(String.valueOf("2")));
+                    ivOpen.setVisibility(View.GONE);
                     break;
                 case "3":
                     mBitmapChartView.setBitmap(map.get(String.valueOf("3")));
+                    ivOpen.setVisibility(View.GONE);
                     break;
                 case "4":
                     mBitmapChartView.setBitmap(map.get(String.valueOf("4")));
+                    ivOpen.setVisibility(View.GONE);
                     break;
             }
             if (load_animation.getVisibility() == View.VISIBLE) {
                 load_animation.setVisibility(View.GONE);
             }
+        }
+    }
+
+    private void dealMapAction(int mapWidth, String index) {
+        Bitmap bitmap = null;
+        timesBitmap = new TimesFivesBitmap(mapWidth, height);
+        timesBitmap.setShowDetail(false);
+        timesBitmap.setLongitudeNum(0);
+        timesBitmap.setmSize(AppDevice.dp2px(getActivity(), 1));
+        timesBitmap.setmSpaceSize(AppDevice.dp2px(getActivity(), 3));
+        timesBitmap.setmAxisTitleSize(AppDevice.dp2px(getActivity(), 10));
+        try {
+            bitmap = timesBitmap.setTimesList(timesBean, true, stock_charge_type);
+        } catch (Exception e) {
+        }
+        if (mapWidth == width) {
+            mapPlus = bitmap;
+        } else {
+            map.put(index, bitmap);
         }
     }
 

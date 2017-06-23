@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.InvestmentResearchAdapter;
 import cn.gogoal.im.bean.ToolData;
+import cn.gogoal.im.bean.stock.Stock;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.ui.dialog.base.BaseBottomDialog;
 
@@ -26,10 +27,11 @@ public class StockDetailPopuDialog extends BaseBottomDialog {
         return R.layout.dialog_stock_detail_popu;
     }
 
-    public static StockDetailPopuDialog newInstance(ArrayList<ToolData.Tool> tools) {
+    public static StockDetailPopuDialog newInstance(ArrayList<ToolData.Tool> tools, Stock stock) {
         StockDetailPopuDialog dialog = new StockDetailPopuDialog();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("stock_detail_tools", tools);
+        bundle.putParcelable("stock",stock);
         dialog.setArguments(bundle);
         return dialog;
     }
@@ -38,7 +40,7 @@ public class StockDetailPopuDialog extends BaseBottomDialog {
     public void bindView(View v) {
         ArrayList<ToolData.Tool> tools =
                 getArguments().getParcelableArrayList("stock_detail_tools");
-
+        Stock stock=getArguments().getParcelable("stock");
 
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.rv_dialog_stockdetail);
         v.findViewById(R.id.tv_cancle).setOnClickListener(new View.OnClickListener() {
@@ -48,7 +50,12 @@ public class StockDetailPopuDialog extends BaseBottomDialog {
             }
         });
 
-        InvestmentResearchAdapter toolsAdapter = new InvestmentResearchAdapter(getContext(), tools, this);
+        InvestmentResearchAdapter toolsAdapter = new InvestmentResearchAdapter(
+                getContext(),
+                tools,
+                this,
+                stock);
+
         recyclerView.setLayoutManager(new GridLayoutManager(
                 v.getContext(),
                 (AppDevice.isLowDpi() ? 3 : 4),

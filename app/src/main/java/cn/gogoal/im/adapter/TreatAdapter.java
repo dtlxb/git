@@ -35,19 +35,45 @@ public class TreatAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
-        return TreatFragment.getInstance(stockCode,
-                i == 0 ? AppConst.TREAT_TYPE_WU_DANG : AppConst.TREAT_TYPE_MING_XI,
-                fromStockDetail);
+        TreatFragment treatFragment = null;
+        switch (i) {
+            case 0:
+                treatFragment = TreatFragment.getInstance(stockCode, AppConst.TREAT_TYPE_WU_DANG,
+                        fromStockDetail);
+                break;
+            case 1:
+                treatFragment = TreatFragment.getInstance(stockCode, AppConst.TREAT_TYPE_MING_XI,
+                        fromStockDetail);
+                break;
+            case 2:
+                treatFragment = TreatFragment.getInstance(stockCode, AppConst.TREAT_TYPE_MONEY,
+                        fromStockDetail);
+                break;
+        }
+        return treatFragment;
+
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return position == 0 ? "五档" : "明细";
+        String title = "";
+        switch (position) {
+            case 0:
+                title = "五档";
+                break;
+            case 1:
+                title = "明细";
+                break;
+            case 2:
+                title = "资金";
+                break;
+        }
+        return title;
     }
 
     public View getTabView(int position) {

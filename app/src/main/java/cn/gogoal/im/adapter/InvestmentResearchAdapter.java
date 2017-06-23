@@ -21,6 +21,7 @@ import cn.gogoal.im.activity.ToolsListActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.ToolData;
+import cn.gogoal.im.bean.stock.Stock;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.BannerUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
@@ -34,16 +35,23 @@ import cn.gogoal.im.common.UIHelper;
  */
 public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, BaseViewHolder> {
 
+    private Context context;
+    private DialogFragment dialog;
+    private Stock stock;
+
     private int innerItem;
 
-    private Context context;
-
-    private DialogFragment dialog;
-
-    public InvestmentResearchAdapter(Context context, List<ToolData.Tool> datas, DialogFragment dialog) {
+    public InvestmentResearchAdapter(
+            Context context,
+            List<ToolData.Tool> datas,
+            DialogFragment dialog,
+            Stock stock) {
         super(R.layout.item_touyan_item, datas);
+
         this.context = context;
         this.dialog = dialog;
+        this.stock=stock==null?new Stock("000001","平安银行"):stock;
+
         innerItem = AppDevice.isLowDpi() ?
                 AppDevice.getWidth(context) / 3 :
                 AppDevice.getWidth(context) / 4;
@@ -84,15 +92,17 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
                 } else {
                     //TODO 跳网页类型
                     if (data.getIsClick() == 0) {
-                        String[] params = {data.getUrl() + "?code=" + data.getCode(), data.getDesc()};
+                        String[] params = {
+                                data.getUrl() +
+                                        "?code=" + data.getCode()+
+                                        "&stock_code=" + stock.getStock_code() +
+                                        "&stock_name=" + stock.getStock_name(),
+                                data.getDesc()};
                         BannerUtils.getInstance(context, data.getType(), params).go();
-                    } else if (data.getIsClick() == 10086) {
+                    } else if (data.getIsClick() == 10086) {//更多
                         context.startActivity(new Intent(context, ToolsListActivity.class));
                     } else {
-//                        new ComingSoonDialog().show(((MainActivity) context).getSupportFragmentManager());
                         UIHelper.toastInCenter(context, "该功能暂未开放使用");
-//                        MessageFullScreen.newInstance("该功能暂未开放使用")
-//                                .show(((MainActivity) context).getSupportFragmentManager());
                     }
                 }
                 if (dialog!=null){

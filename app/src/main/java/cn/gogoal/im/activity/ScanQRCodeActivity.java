@@ -117,6 +117,7 @@ public class ScanQRCodeActivity extends BaseActivity {
                                 //TODO 跳转个人详情
                                 NormalIntentUtils.go2PersionDetail(getActivity(),
                                         scanBody.getIntValue("account_id"));
+                                ScanQRCodeActivity.this.finish();
                             } else {
                                 //TODO 跳转群名片
                                 ChatGroupHelper.getGroupInfo(scanBody.getString("conv_id"), new Impl<String>() {
@@ -132,6 +133,7 @@ public class ScanQRCodeActivity extends BaseActivity {
                                                 in.putExtra("square_creater", groupData.getC());
                                                 in.putParcelableArrayListExtra("square_members", groupData.getM_info());
                                                 getActivity().startActivity(in);
+                                                ScanQRCodeActivity.this.finish();
                                                 break;
                                         }
                                     }

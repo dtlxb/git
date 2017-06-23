@@ -65,6 +65,7 @@ import cn.gogoal.im.bean.stock.StockDetail;
 import cn.gogoal.im.bean.stock.StockDialogInfo;
 import cn.gogoal.im.bean.stock.TreatData;
 import cn.gogoal.im.common.AnimationUtils;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -296,7 +297,7 @@ public class CopyStockDetailActivity extends BaseActivity {
 
         initChatMessage();
 
-        diagnoseStockTools=new ArrayList<>();
+        diagnoseStockTools = new ArrayList<>();
     }
 
     private void initChatMessage() {
@@ -862,6 +863,12 @@ public class CopyStockDetailActivity extends BaseActivity {
         badge.setBadgeNumber(unReadCount);
 
         getMyTools();
+
+        if (StockUtils.isMyStock(stockCode)) {
+            toggleIsMyStock(true, false);
+        } else {
+            toggleIsMyStock(false, false);
+        }
     }
 
     @Override
@@ -1212,7 +1219,10 @@ public class CopyStockDetailActivity extends BaseActivity {
             case R.id.tv_stockDetail_tools://工具箱
 
                 if (!ArrayUtils.isEmpty(diagnoseStockTools)) {
-                    StockDetailPopuDialog.newInstance(diagnoseStockTools).show(getSupportFragmentManager());
+                    StockDetailPopuDialog.newInstance(
+                            diagnoseStockTools,
+                            new Stock(stockCode, stockName))
+                            .show(getSupportFragmentManager());
                 } else {
                     NormalAlertDialog.newInstance("暂无诊股工具\n现在去我的工具中添加?", new OnClickListener() {
                         @Override
@@ -1263,6 +1273,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                                 Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
                                 intent.putExtra("conversation_id", conversationId);
                                 intent.putExtra("need_update", false);
+                                intent.putExtra("square_action", AppConst.CREATE_SQUARE_ROOM_BY_STOCK);
                                 startActivity(intent);
                             }
 
@@ -1740,15 +1751,15 @@ public class CopyStockDetailActivity extends BaseActivity {
     }
     //========================================20170622============================
 
-    private void getMyTools(){
+    private void getMyTools() {
         diagnoseStockTools.clear();
 
         take(new TakeToolsListener() {
             @Override
             public void onTakeTools(boolean sueecss, ArrayList<ToolData.Tool> tools) {
                 if (sueecss) {
-                    for (ToolData.Tool tool:tools) {
-                        if (tool.getIsShow()==1) {
+                    for (ToolData.Tool tool : tools) {
+                        if (tool.getIsShow() == 1) {
                             diagnoseStockTools.add(tool);
                         }
                     }
@@ -1756,6 +1767,7 @@ public class CopyStockDetailActivity extends BaseActivity {
             }
         });
     }
+
     /**
      * 获取诊断工具
      */
