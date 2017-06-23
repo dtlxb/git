@@ -11,8 +11,8 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.fragment.stock.CompanyFinanceFragment;
 import cn.gogoal.im.fragment.stock.stockften.BusinessAnalysisFragment;
-import cn.gogoal.im.fragment.stock.stockften.CapitalStructureFragment;
 import cn.gogoal.im.fragment.stock.stockften.CompanyExecutivesFragment;
 import cn.gogoal.im.fragment.stock.stockften.CompanyProfileFragment;
 import cn.gogoal.im.fragment.stock.stockften.DividendFinancingFragment;
@@ -76,7 +76,7 @@ public class StockFtenActivity extends BaseActivity {
                     case 5:
                         return ShareholderResearchFragment.getInstance(stockCode, stockName);
                     case 6:
-                        return CapitalStructureFragment.getInstance(stockCode, stockName);
+                        return CompanyFinanceFragment.getInstance(stockCode, stockName);
                     case 7:
                         return CompanyExecutivesFragment.getInstance(stockCode, stockName);
                     default:

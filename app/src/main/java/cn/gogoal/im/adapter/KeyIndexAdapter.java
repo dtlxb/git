@@ -1,6 +1,7 @@
 package cn.gogoal.im.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.hply.alilayout.layout.LinearLayoutHelper;
 import java.util.ArrayList;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.stock.StockFtenActivity;
 import cn.gogoal.im.adapter.market.MainViewHolder;
 import cn.gogoal.im.bean.ProfileData;
 
@@ -59,6 +61,17 @@ public class KeyIndexAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
         } else {
             holder.findView(R.id.imgSeeMore).setVisibility(View.INVISIBLE);
         }
+
+        holder.setOnClickListener(R.id.linearFinance, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, StockFtenActivity.class);
+                intent.putExtra("position", "0");
+                intent.putExtra("stockCode", "000001");
+                intent.putExtra("stockName", "平安银行");
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
