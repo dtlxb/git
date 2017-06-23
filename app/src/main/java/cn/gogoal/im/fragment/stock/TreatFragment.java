@@ -92,6 +92,7 @@ public class TreatFragment extends BaseFragment {
 
     private float itemHeight;
     private String stockCode;
+    private boolean needAnim;//需要动画
 
     @Override
     public int bindLayout() {
@@ -137,6 +138,7 @@ public class TreatFragment extends BaseFragment {
                 wudangAdapter = new WudangAdapter(threeTexts);
                 recyclerView.setAdapter(wudangAdapter);
                 recyclerView.addItemDecoration(new WudangDivider(getResColor(R.color.chart_text_color)));
+                needAnim = true;
                 getTreatWudang();
             } else if (type == AppConst.TREAT_TYPE_MING_XI) {
                 timeDetailDatas = new ArrayList<>();
@@ -175,6 +177,7 @@ public class TreatFragment extends BaseFragment {
     @Subscriber(tag = "updata_treat_data")
     void updataTreatData(String msg) {
         if (type == AppConst.TREAT_TYPE_WU_DANG) {
+            needAnim = false;
             getTreatWudang();
         } else if (type == AppConst.TREAT_TYPE_MING_XI) {
             getStockTimeDetail();
@@ -225,7 +228,7 @@ public class TreatFragment extends BaseFragment {
                     chartBeanList.add(new ChartBean(buy, "#ed1b1b"));
                     chartBeanList.add(new ChartBean(sell, "#26b844"));
                     progressView.setTextSize(AppDevice.dp2px(getActivity(), 9));
-                    progressView.setChartData(chartBeanList);
+                    progressView.setChartData(chartBeanList, needAnim);
                     wudangAdapter.notifyDataSetChanged();
 
                     closePrice = StringUtils.pareseStringDouble(treatData.getClose_price());
@@ -259,7 +262,7 @@ public class TreatFragment extends BaseFragment {
                     chartBeanList.clear();
                     chartBeanList.add(new ChartBean(buy, "#ed1b1b"));
                     chartBeanList.add(new ChartBean(sell, "#26b844"));
-                    progressView.setChartData(chartBeanList);
+                    progressView.setChartData(chartBeanList, needAnim);
                     progressView.setTextSize(AppDevice.dp2px(getActivity(), 9));
                 }
             }

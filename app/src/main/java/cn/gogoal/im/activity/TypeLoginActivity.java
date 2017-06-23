@@ -31,9 +31,11 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.AVIMClientManager;
 import cn.gogoal.im.common.LaunchRequest;
+import cn.gogoal.im.common.LitePalDBHelper;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.servise.MessageSaveService;
 import cn.gogoal.im.ui.KeyboardLaunchLinearLayout;
 import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.view.SelectorButton;
@@ -95,14 +97,14 @@ public class TypeLoginActivity extends BaseActivity {
 //        loginUserName.setText("13166270509");
 //        loginPassWord.setText("888888");
 
-//        loginUserName.setText("E00003645");
+//        loginUserName.setText("E00003645");//热
 //        loginPassWord.setText("258369");
 
-//        loginUserName.setText("E00018279");//冷
-//        loginPassWord.setText("600255");
+        loginUserName.setText("E00018279");//冷
+        loginPassWord.setText("600255");
 
-        loginUserName.setText("E00002639");
-        loginPassWord.setText("412174");
+//        loginUserName.setText("E00002639");
+//        loginPassWord.setText("412174");
 
 //        loginUserName.setText("E00020181");
 //        loginPassWord.setText("394495");
@@ -197,7 +199,7 @@ public class TypeLoginActivity extends BaseActivity {
                         UserUtils.saveUserInfo(data);
 
                         //建立数据库
-//                        LitePalDBHelper.getInstance().createSQLite(UserUtils.getUserId());
+                        //LitePalDBHelper.getInstance().createSQLite(UserUtils.getUserId());
 
                         //存在这个账号则直奔MainActivity
                         if (UserUtils.hadLogin(data.getString("account_id"))) {

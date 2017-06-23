@@ -40,8 +40,6 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
 
-        startService(new Intent(SplashActivity.this, MessageSaveService.class));
-
         bineServise();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -61,8 +59,6 @@ public class SplashActivity extends Activity {
     private void go2Next() {
         if (UserUtils.isLogin()) {
             NormalIntentUtils.go2MainActivity(SplashActivity.this);
-            //建立数据库
-            LitePalDBHelper.getInstance().createSQLite(UserUtils.getUserId());
         } else {
             NormalIntentUtils.go2LoginActivity(SplashActivity.this);
         }
