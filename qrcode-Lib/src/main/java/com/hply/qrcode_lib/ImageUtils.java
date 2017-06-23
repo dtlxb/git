@@ -94,7 +94,7 @@ public class ImageUtils {
                 innerHeight + 2 * border, Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(bitmapResult);
-        canvas.drawARGB(255, 228, 228, 228);
+        canvas.drawARGB(255, 250, 250, 250);
 
         canvas.drawBitmap(getRoundBitmap(context,bitmap,radius),border, border, null);
 

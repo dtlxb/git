@@ -104,8 +104,6 @@ public class ChooseContactActivity extends BaseActivity {
 
     private ChooseAdapter contactAdapter;
 
-//    private int topListMaxWidth;
-
     private Map<Integer, ContactBean> result = new LinkedHashMap<>();
 
     private SelectedAdapter selectedAdapter;
@@ -299,9 +297,9 @@ public class ChooseContactActivity extends BaseActivity {
                         @Override
                         public void getInfoSuccess(JSONObject groupInfo) {
                             if (finalI == result.values().size() - 1) {
-                                Map<Object, Object> messageMap = new HashMap<>();
+                                Map<String, GGShareEntity> messageMap = new HashMap<>();
                                 messageMap.put("share_message", entity);
-                                BaseMessage baseMessage = new BaseMessage("message_map", messageMap);
+                                BaseMessage<GGShareEntity> baseMessage = new BaseMessage<>("message_map", messageMap);
                                 AppManager.getInstance().sendMessage("oneShare", baseMessage);
                                 finish();
                             }

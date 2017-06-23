@@ -3,7 +3,7 @@ package cn.gogoal.im.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * author wangjd on 2017/5/10 0010.
@@ -20,7 +20,7 @@ public class ToolData {
 
     private String title;
     private int title_id;
-    private List<Tool> datas;
+    private ArrayList<Tool> datas;
 
     public String getTitle() {
         return title;
@@ -38,11 +38,11 @@ public class ToolData {
         this.title_id = title_id;
     }
 
-    public List<Tool> getDatas() {
+    public ArrayList<Tool> getDatas() {
         return datas;
     }
 
-    public void setDatas(List<Tool> datas) {
+    public void setDatas(ArrayList<Tool> datas) {
         this.datas = datas;
     }
 
@@ -65,6 +65,9 @@ public class ToolData {
          * title : 模块
          * isShow : 1
          */
+        private int isExploit;
+        private int isPutaway;
+
         private int isOpen;
         private int id;
         private int title_id;
@@ -229,6 +232,22 @@ public class ToolData {
             this.isShow = isShow;
         }
 
+        public int getIsExploit() {
+            return isExploit;
+        }
+
+        public void setIsExploit(int isExploit) {
+            this.isExploit = isExploit;
+        }
+
+        public int getIsPutaway() {
+            return isPutaway;
+        }
+
+        public void setIsPutaway(int isPutaway) {
+            this.isPutaway = isPutaway;
+        }
+
         @Override
         public Tool clone() {
             try {
@@ -244,9 +263,13 @@ public class ToolData {
             return obj instanceof Tool && ((Tool) obj).getId() == getId();
         }
 
+
         @Override
         public int hashCode() {
             return getId();
+        }
+
+        public Tool() {
         }
 
         @Override
@@ -256,6 +279,8 @@ public class ToolData {
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.isExploit);
+            dest.writeInt(this.isPutaway);
             dest.writeInt(this.isOpen);
             dest.writeInt(this.id);
             dest.writeInt(this.title_id);
@@ -276,10 +301,9 @@ public class ToolData {
             dest.writeByte(this.simulatedArg ? (byte) 1 : (byte) 0);
         }
 
-        public Tool() {
-        }
-
         protected Tool(Parcel in) {
+            this.isExploit = in.readInt();
+            this.isPutaway = in.readInt();
             this.isOpen = in.readInt();
             this.id = in.readInt();
             this.title_id = in.readInt();

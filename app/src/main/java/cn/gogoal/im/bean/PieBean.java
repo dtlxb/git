@@ -4,13 +4,13 @@ package cn.gogoal.im.bean;
  * Created by huangxx on 2017/6/14.
  */
 
-public class PieBean {
+public class PieBean<T> {
 
     private String title;
     private float pieValue;
-    private int colorValue;
+    private T colorValue;
 
-    public PieBean(String title, float pieValue, int colorValue) {
+    public PieBean(String title, float pieValue, T colorValue) {
         this.title = title;
         this.pieValue = pieValue;
         this.colorValue = colorValue;
@@ -32,11 +32,11 @@ public class PieBean {
         this.pieValue = pieValue;
     }
 
-    public int getColorValue() {
+    public T getColorValue() {
         return colorValue;
     }
 
-    public void setColorValue(int colorValue) {
+    public void setColorValue(T colorValue) {
         this.colorValue = colorValue;
     }
 
@@ -48,4 +48,5 @@ public class PieBean {
                 ", colorValue=" + colorValue +
                 '}';
     }
+
 }
