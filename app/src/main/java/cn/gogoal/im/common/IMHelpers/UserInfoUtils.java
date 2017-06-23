@@ -7,7 +7,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 
@@ -122,7 +121,6 @@ public class UserInfoUtils {
                 }
             }
         }
-        KLog.e(userBeanList.size());
         return userBeanList;
     }
 

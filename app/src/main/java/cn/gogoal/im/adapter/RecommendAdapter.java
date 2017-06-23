@@ -28,8 +28,6 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 
-import static org.litepal.LitePalApplication.getContext;
-
 /**
  * author wangjd on 2017/6/13 0013.
  * Staff_id 1375
@@ -91,7 +89,6 @@ public class RecommendAdapter extends CommonAdapter<GroupData, BaseViewHolder> {
             ChatGroupHelper.setGroupAvatar(data.getConv_id(), new AvatarTakeListener() {
                 @Override
                 public void success(final Bitmap bitmap) {
-//                    groupAvatarBitmap = bitmap;
                     ((FragmentActivity) context).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -103,8 +100,6 @@ public class RecommendAdapter extends CommonAdapter<GroupData, BaseViewHolder> {
                 @Override
                 public void failed(Exception e) {
                     KLog.e("使用占位图头像--拼接出错");
-//                    groupAvatarBitmap = BitmapFactory.decodeResource(
-//                            context.getResources(), R.mipmap.image_placeholder);
                     ((FragmentActivity) context).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -115,14 +110,7 @@ public class RecommendAdapter extends CommonAdapter<GroupData, BaseViewHolder> {
             });
         } else {
             final String groupUrl = data.getAttr().getAvatar();
-            ImageDisplay.loadRoundedRectangleImage(getContext(), groupUrl, imageView);
-//            ImageUtils.getUrlBitmap(context, groupUrl, new SimpleTarget<Bitmap>() {
-//                @Override
-//                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-//                    groupAvatarBitmap = resource;
-//                }
-//            });
-
+            ImageDisplay.loadRoundedRectangleImage(context, groupUrl, imageView);
         }
 
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -138,7 +126,6 @@ public class RecommendAdapter extends CommonAdapter<GroupData, BaseViewHolder> {
                     in = new Intent(context, SquareCardActivity.class);
                     in.putExtra("conversation_id", data.getConv_id());
                     in.putExtra("square_name", data.getName());
-//                    in.putExtra("bitmap_avatar", groupAvatarBitmap);
                     in.putExtra("square_creater", data.getC());
                     in.putParcelableArrayListExtra("square_members", data.getM_info());
                     context.startActivity(in);

@@ -73,7 +73,7 @@ public class RankListAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
             case RANK_TYPE_CHANGE_LIST://换手率
 
                 holder.setText(R.id.tv_mystock_rate, StringUtils.saveSignificand(
-                        StringUtils.pareseStringDouble(data.getRate()) * 100, 2) + "%");
+                        StringUtils.parseStringDouble(data.getRate()) * 100, 2) + "%");
                 holder.setBackgroundRes(R.id.tv_mystock_rate, R.drawable.shape_my_stock_price_gray);
                 holder.setTextResColor(R.id.tv_mystock_price, R.color.textColor_333333);
                 break;

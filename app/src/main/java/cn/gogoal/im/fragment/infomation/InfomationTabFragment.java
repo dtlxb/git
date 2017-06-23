@@ -120,6 +120,7 @@ public class InfomationTabFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 getInfomation(AppConst.REFRESH_TYPE_SWIPEREFRESH, tabType);
+                defaultPage=1;
             }
         });
 
@@ -159,9 +160,6 @@ public class InfomationTabFragment extends BaseFragment {
         if (refreshType == AppConst.REFRESH_TYPE_FIRST ||
                 refreshType == AppConst.REFRESH_TYPE_RELOAD) {
             xLayout.setStatus(XLayout.Loading);
-        }
-        if (refreshType==AppConst.REFRESH_TYPE_SWIPEREFRESH){
-            defaultPage=1;
         }
 
         HashMap<String, String> params = new HashMap<>();
@@ -217,7 +215,7 @@ public class InfomationTabFragment extends BaseFragment {
 
     @Subscriber(tag = "double_click_2_top")
     void doubleClick2Top(String index){
-        if (StringUtils.pareseStringDouble(index)==tabType){//是本Tab
+        if (StringUtils.parseStringDouble(index)==tabType){//是本Tab
             mRvInfomation.smoothScrollToPosition(0);
         }
     }

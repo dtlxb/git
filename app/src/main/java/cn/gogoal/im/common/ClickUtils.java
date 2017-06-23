@@ -11,22 +11,22 @@ import android.view.View;
  */
 public class ClickUtils implements View.OnClickListener{
 
-    private OnSuperClickListener mCallback;
-
-    private static final int DOUBLE_CLICK_TIME = 250;        //双击间隔时间250毫秒
-
+    private OnSingleDoubleClickListener mCallback;
+    private static final int DOUBLE_CLICK_TIME = 350;        //双击间隔时间500毫秒
     private boolean waitDoubleClick = true;
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            mCallback.onClick((View) msg.obj);
+            mCallback.OnSingleClick((View) msg.obj);
         }
     };
 
-    public ClickUtils(OnSuperClickListener mCallback) {
+    public ClickUtils(OnSingleDoubleClickListener mCallback) {
         this.mCallback = mCallback;
     }
+
+
 
     @Override
     public void onClick(final View view) {
@@ -45,26 +45,19 @@ public class ClickUtils implements View.OnClickListener{
                         Message msg = handler.obtainMessage();
                         msg.obj = view;
                         handler.sendMessage(msg);
-//                        view.post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                mCallback.OnSingleClick(view);
-//                            }
-//                        });
                     }
                 }
 
             }.start();
         } else {
             waitDoubleClick = true;
-            mCallback.onDoubleClick(view);    //执行双击
+            mCallback.OnDoubleClick(view);    //执行双击
         }
     }
 
-    public interface OnSuperClickListener extends View.OnClickListener{
-        void onClick(View v);
+    public interface OnSingleDoubleClickListener {
+        void OnSingleClick(View v);
 
-        void onDoubleClick(View v);
+        void OnDoubleClick(View v);
     }
-
 }

@@ -802,12 +802,12 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
                     stock_amplitude.setText(StockUtils.plusMinus(info.get(0).getAmplitude(), true));//振幅
                     stock_detail_tv3.setText(StringUtils.save2Significand(info.get(0).getHigh_price()));//最高
                     stock_detail_tv3.setTextColor(getResColor(StockUtils.getStockRateColor(
-                            cn.gogoal.im.common.StringUtils.pareseStringDouble(info.get(0).getHigh_price()) -
+                            cn.gogoal.im.common.StringUtils.parseStringDouble(info.get(0).getHigh_price()) -
                                     info.get(0).getClose_price())));
 
                     stock_detail_tv5.setText(StringUtils.save2Significand(info.get(0).getLow_price()));//最低
                     stock_detail_tv5.setTextColor(getResColor(StockUtils.getStockRateColor(
-                            cn.gogoal.im.common.StringUtils.pareseStringDouble(info.get(0).getLow_price()) -
+                            cn.gogoal.im.common.StringUtils.parseStringDouble(info.get(0).getLow_price()) -
                                     info.get(0).getClose_price())));
 
                     String turnover = String.valueOf(Math.ceil(info.get(0).getTurnover() / 10000));

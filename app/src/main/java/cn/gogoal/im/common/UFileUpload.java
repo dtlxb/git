@@ -28,24 +28,15 @@ public class UFileUpload {
 
     private static final String bucket = "hackfile";
 
-    private UFileUpload() {
+    private UFileUpload(UFileSDK uFileSDK) {
+        this.uFileSDK=uFileSDK;
     }
     
-    private static UFileUpload instance = null;
-
     public static UFileUpload getInstance() {
-        if (instance == null) {
-            synchronized (UFileUpload.class) {
-                if (instance == null) {
-                    instance = new UFileUpload();
-                    uFileSDK = new UFileSDK(bucket);//域名后缀
-                }
-            }
-        }
-        return instance;
+        return new UFileUpload(new UFileSDK(bucket));
     }
 
-    private static UFileSDK uFileSDK;
+    private UFileSDK uFileSDK;
 
     public interface UploadListener {
 

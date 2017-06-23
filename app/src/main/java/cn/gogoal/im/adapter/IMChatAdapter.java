@@ -1,12 +1,10 @@
 package cn.gogoal.im.adapter;
 
-import android.app.Activity;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -27,7 +25,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +39,7 @@ import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
+import cn.gogoal.im.common.ClickUtils;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.IMHelpers.GGAudioMessage;
 import cn.gogoal.im.common.IMHelpers.GGImageMessage;
@@ -57,6 +55,7 @@ import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.recording.MediaManager;
+import cn.gogoal.im.ui.dialog.MessageFullScreen;
 
 /**
  * Created by huangxx on 2017/2/27.
@@ -82,13 +81,13 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     //系统,未知
     private static int TYPE_SYSTEM_MESSAGE = 0x13;
     private List<AVIMMessage> messageList;
-    private Activity mContext;
+    private FragmentActivity mContext;
     private LayoutInflater mLayoutInflater;
     private List<String> urls = new ArrayList<>();
     private int chatType;
     private Boolean isYourSelf;
 
-    public IMChatAdapter(Activity mContext, List<AVIMMessage> messageList) {
+    public IMChatAdapter(FragmentActivity mContext, List<AVIMMessage> messageList) {
         this.mLayoutInflater = LayoutInflater.from(mContext);
         this.mContext = mContext;
         this.messageList = messageList;
@@ -205,6 +204,15 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 }
             });
 
+            ((LeftTextViewHolder) holder).what_user_send.setOnClickListener(new ClickUtils(new ClickUtils.OnSingleDoubleClickListener() {
+                public void OnSingleClick(View v) {
+                }
+                @Override
+                public void OnDoubleClick(View v) {
+                    MessageFullScreen.newInstance(textMessage.getText()).show(mContext.getSupportFragmentManager());
+                }
+            }));
+
         } else if (holder instanceof RightTextViewHolder) {
             final GGTextMessage textMessage = (GGTextMessage) avimMessage;
             ((RightTextViewHolder) holder).user_name.setVisibility(View.GONE);
@@ -231,6 +239,14 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                     return false;
                 }
             });
+            ((RightTextViewHolder) holder).what_user_send.setOnClickListener(new ClickUtils(new ClickUtils.OnSingleDoubleClickListener() {
+                public void OnSingleClick(View v) {
+                }
+                @Override
+                public void OnDoubleClick(View v) {
+                    MessageFullScreen.newInstance(textMessage.getText()).show(mContext.getSupportFragmentManager());
+                }
+            }));
         } else if (holder instanceof LeftImageViewHolder) {
             final GGImageMessage imageMessage = (GGImageMessage) avimMessage;
             //获取后台图片大小设置
@@ -665,9 +681,9 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     private void setImageSize(RelativeLayout.LayoutParams params, GGImageMessage message) {
         String rateText;
         int maxWidth = (int) (AppDevice.getWidth(mContext) * 0.4);
-        double width = StringUtils.pareseStringDouble(String.valueOf(message.getFileMetaData().get("width")));
+        double width = StringUtils.parseStringDouble(String.valueOf(message.getFileMetaData().get("width")));
         int dpWidth = (int) width;
-        double height = StringUtils.pareseStringDouble(String.valueOf(message.getFileMetaData().get("height")));
+        double height = StringUtils.parseStringDouble(String.valueOf(message.getFileMetaData().get("height")));
         int dpHeight = (int) height;
 
         if (null != message && 0 != dpWidth && dpHeight != 0) {
@@ -740,12 +756,11 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         mContext.startActivity(intent);
     }
 
-    private void textClickAction(final GGTextMessage imageMessage) {
+    private void textClickAction(final GGTextMessage textMessage) {
         DialogHelp.getSelectDialog(mContext, "", new String[]{"复制文字"}, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ClipboardManager cm = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                cm.setText(imageMessage.getText());
+                AppDevice.copyTextToBoard(mContext,textMessage.getText());
             }
         }, false).show();
     }

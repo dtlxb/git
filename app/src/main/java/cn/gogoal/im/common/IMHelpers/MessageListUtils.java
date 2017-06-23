@@ -47,11 +47,11 @@ public class MessageListUtils {
             AVIMMessage message = JSON.parseObject(imMessageBean.getLastMessage(), AVIMMessage.class);
             //判断消息类型
             if (message instanceof GGImageMessage) {
-                double width = StringUtils.pareseStringDouble(String.valueOf(((GGImageMessage) message).getFileMetaData().get("width")));
+                double width = StringUtils.parseStringDouble(String.valueOf(((GGImageMessage) message).getFileMetaData().get("width")));
                 int mWidth = (int) width;
-                double height = StringUtils.pareseStringDouble(String.valueOf(((GGImageMessage) message).getFileMetaData().get("height")));
+                double height = StringUtils.parseStringDouble(String.valueOf(((GGImageMessage) message).getFileMetaData().get("height")));
                 int mHeight = (int) height;
-                double size = StringUtils.pareseStringDouble(String.valueOf(((GGImageMessage) message).getFileMetaData().get("size")));
+                double size = StringUtils.parseStringDouble(String.valueOf(((GGImageMessage) message).getFileMetaData().get("size")));
                 int mSize = (int) size;
 
                 ((GGImageMessage) message).getFileMetaData().put("width", mWidth);

@@ -264,7 +264,7 @@ public class ChatGroupHelper {
         ImageUtils.saveImageToSD(MyApp.getAppContext(),
                 MyApp.getAppContext().getExternalFilesDir("imagecache")
                         .getAbsolutePath() + File.separator + "_" + conversationId + ".png",
-                bitmap, 100);
+                bitmap);
     }
 
     public static void setGroupAvatar(String conversationId, AvatarTakeListener listener) {
@@ -518,13 +518,17 @@ public class ChatGroupHelper {
 
             @Override
             public void onFailure(String msg) {
+                if (response!=null)
                 response.getInfoFailed(new Exception(msg));
             }
         };
         new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
     }
 
-    public static void sendImageMessage(final String conversationId, final String chatType, final File file, final MessageResponse messageResponse) {
+    public static void sendImageMessage(final String conversationId,
+                                        final int chatType,
+                                        final File file,
+                                        final MessageResponse messageResponse) {
         //图片宽高处理
         Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
         final int width = bitmap.getWidth();
@@ -560,13 +564,13 @@ public class ChatGroupHelper {
                         messageMap.put("url", onlineUri);
                         messageMap.put("name", file.getPath());
                         messageMap.put("format", "jpg");
-                        messageMap.put("height", String.valueOf(height));
-                        messageMap.put("width", String.valueOf(width));
+                        messageMap.put("height", height);
+                        messageMap.put("width", width);
 
                         Map<String, String> params = new HashMap<>();
                         params.put("token", UserUtils.getToken());
                         params.put("conv_id", conversationId);
-                        params.put("chat_type", chatType);
+                        params.put("chat_type", String.valueOf(chatType));
                         params.put("message", JSONObject.toJSON(messageMap).toString());
                         KLog.e(onlineUri);
 
@@ -690,13 +694,12 @@ public class ChatGroupHelper {
         if (StringUtils.isActuallyEmpty(convId)) {
             return;
         }
+
         HashMap<String, String> params = UserUtils.getTokenParams();
         params.put("conv_id", convId);
         new GGOKHTTP(params, GGOKHTTP.GET_GROUP_INFO, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
-
                 if (callback != null) {
                     int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                     if (code == 0) {

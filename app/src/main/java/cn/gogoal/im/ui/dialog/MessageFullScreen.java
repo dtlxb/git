@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
 
 /**
@@ -24,6 +25,11 @@ public class MessageFullScreen extends BaseCentDailog {
         bundle.putString("TOAST_TEXT", text);
         toast.setArguments(bundle);
         return toast;
+    }
+
+    @Override
+    public int getHeight() {
+        return AppDevice.getHeight(getActivity());
     }
 
     @Override

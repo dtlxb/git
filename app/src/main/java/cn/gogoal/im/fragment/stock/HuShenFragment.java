@@ -145,10 +145,10 @@ public class HuShenFragment extends BaseFragment {
             HangqingBean hangqingBean = marketData.getHangqing().get(i);
             MarkteBean.MarketItemData itemData = new MarkteBean.MarketItemData(
                     hangqingBean.getName(),
-                    StringUtils.pareseStringDouble(hangqingBean.getPrice()),
+                    StringUtils.parseStringDouble(hangqingBean.getPrice()),
                     hangqingBean.getPrice_change(),
                     hangqingBean.getPrice_change_rate(), "", null, hangqingBean.getFullcode(),
-                    StringUtils.pareseStringDouble(hangqingBean.getPrice_change()));
+                    StringUtils.parseStringDouble(hangqingBean.getPrice_change()));
 //            "sh000001;sz399001;sz399006;sh000300;sz399005;sh000016"
             switch (hangqingBean.getFullcode()){
                 case "sh000001":
@@ -181,13 +181,13 @@ public class HuShenFragment extends BaseFragment {
             HostIndustrylistBean industrylistBean = marketData.getHostIndustrylist().get(i);
             MarkteBean.MarketItemData itemData = new MarkteBean.MarketItemData(
                     industrylistBean.getIndustry_name(),
-                    StringUtils.pareseStringDouble(industrylistBean.getCurrent_price()),
+                    StringUtils.parseStringDouble(industrylistBean.getCurrent_price()),
                     "",
                     industrylistBean.getRate(),
                     industrylistBean.getIndustry_rate(),
                     industrylistBean.getStock_name(),
                     industrylistBean.getStock_code(),
-                    StringUtils.pareseStringDouble(industrylistBean.getIndustry_rate())
+                    StringUtils.parseStringDouble(industrylistBean.getIndustry_rate())
             );
             listHotIndestry.add(itemData);
         }
@@ -213,13 +213,13 @@ public class HuShenFragment extends BaseFragment {
         for (int i = 0; i < list.size(); i++) {
             MarkteBean.MarketItemData itemData = new MarkteBean.MarketItemData(
                     null,
-                    StringUtils.pareseStringDouble(list.get(i).getCurrent_price()),
+                    StringUtils.parseStringDouble(list.get(i).getCurrent_price()),
                     "",
                     list.get(i).getRate(),
                     "",
                     list.get(i).getStock_name(),
                     list.get(i).getStock_code(),
-                    StringUtils.pareseStringDouble(list.get(i).getRate())
+                    StringUtils.parseStringDouble(list.get(i).getRate())
             );
             increase.add(itemData);
         }

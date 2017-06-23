@@ -2,7 +2,6 @@ package cn.gogoal.im.common.GGOKHTTP;
 
 import android.util.Log;
 
-import com.socks.library.KLog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 

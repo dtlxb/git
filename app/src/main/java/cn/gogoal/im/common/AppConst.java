@@ -68,7 +68,8 @@ public class AppConst {
     public static final int SQUARE_ROOM_AT_SOMEONE = 1104;
     //ChooseContactActivity类型——分享到好友
     public static final int SQUARE_ROOM_AT_SHARE_MESSAGE = 1205;
-
+    //股票创建群
+    public static final int CREATE_SQUARE_ROOM_BY_STOCK =1234;
 
     //改群名，改群简介
     public static final int SQUARE_ROOM_EDIT_NAME = 1105;
@@ -179,5 +180,6 @@ public class AppConst {
     public static final int MESSAGE_SEND_STATUS_SENDING = 1200;         //消息正在发送
     public static final int MESSAGE_SEND_STATUS_SUCCESS = 1201;         //消息发送成功
     public static final int MESSAGE_SEND_STATUS_FAIL = 1202;            //消息发送失败
+
 
 }

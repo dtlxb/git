@@ -245,7 +245,8 @@ public class TypeLoginActivity extends BaseActivity {
                     } else {
                         loginButton.setClickable(true);
                         loginDialog.dismiss(true);
-                        WaitDialog errorDialog = WaitDialog.getInstance(data.getString("message"),
+                        WaitDialog errorDialog = WaitDialog.getInstance(
+                                data.getIntValue("code")==2?"账号或者密码有误":data.getString("message"),
                                 R.mipmap.login_error, false);
                         errorDialog.show(getSupportFragmentManager());
                         errorDialog.dismiss(false);
@@ -255,7 +256,7 @@ public class TypeLoginActivity extends BaseActivity {
                     loginButton.setClickable(true);
                     loginDialog.dismiss(true);
                     WaitDialog errorDialog = WaitDialog.getInstance(
-                            object.getString("message"),
+                            "登录异常",
                             R.mipmap.login_error, false);
                     errorDialog.show(getSupportFragmentManager());
                     errorDialog.dismiss(false);
@@ -268,7 +269,7 @@ public class TypeLoginActivity extends BaseActivity {
 
                 loginDialog.dismiss(true);
                 loginButton.setClickable(true);
-                WaitDialog errorDialog = WaitDialog.getInstance(getString(R.string.str_login_no_net),
+                WaitDialog errorDialog = WaitDialog.getInstance("登录出错",
                         R.mipmap.login_without_net, false);
                 errorDialog.show(getSupportFragmentManager());
                 errorDialog.dismiss(false);

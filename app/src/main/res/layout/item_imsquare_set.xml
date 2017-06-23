@@ -116,6 +116,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:layout_marginTop="19dp"
+                android:layout_marginBottom="19dp"
                 android:background="@drawable/shape_text_border"
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp">
@@ -149,6 +150,8 @@
                     android:background="@mipmap/img_more" />
 
             </RelativeLayout>
+
+            <include layout="@layout/include_group_qrcode"/>
 
             <LinearLayout
                 android:id="@+id/person_base_info"

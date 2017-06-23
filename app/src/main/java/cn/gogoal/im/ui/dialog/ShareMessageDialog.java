@@ -4,12 +4,18 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
 import com.hply.roundimage.roundImage.RoundedImageView;
+import com.socks.library.KLog;
+
+import java.io.File;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
@@ -59,26 +65,40 @@ public class ShareMessageDialog extends BaseCentDailog {
     @Override
     public void bindView(View v) {
         final ShareItemInfo entity = (ShareItemInfo) getArguments().getSerializable("gg_share_list_info");
+        if (entity == null) {
+            return;
+        }
+
+        KLog.e(JSONObject.toJSONString(entity));
 
         final RoundedImageView icon = (RoundedImageView) v.findViewById(R.id.item_contacts_iv_icon);
         TextView name = (TextView) v.findViewById(R.id.item_contacts_tv_nickname);
         TextView tvShareMsgDesc = (TextView) v.findViewById(R.id.tv_dialog_share_msg_desc);
+        ImageView ivShare = (ImageView) v.findViewById(R.id.iv_dialog_share_image);
+
+        KLog.e(entity.getEntity().getImage());
+
+        Glide.with(getActivity()).load(new File(entity.getEntity().getImage())).into(ivShare);
+
+        String shareType = entity.getEntity().getShareType();
+
+        tvShareMsgDesc.setVisibility(shareType.equalsIgnoreCase(GGShareEntity.SHARE_TYPE_IMAGE) ? View.GONE : View.VISIBLE);
+        ivShare.setVisibility(shareType.equalsIgnoreCase(GGShareEntity.SHARE_TYPE_IMAGE) ? View.VISIBLE : View.GONE);
+
         EditText etMessageInput = (EditText) v.findViewById(R.id.et_dialog_share_msg_input);
 
         TextView tvCancel = (TextView) v.findViewById(R.id.btn_dialog_share_msg_cancle);
         TextView tvSend = (TextView) v.findViewById(R.id.btn_dialog_share_msg_send);
 
-        if (entity != null) {
-            Object avatar = entity.getAvatar();
-            if (avatar instanceof Bitmap){
-                icon.setImageBitmap((Bitmap) avatar);
-            }else if (avatar instanceof String){
-                ImageDisplay.loadRoundedRectangleImage(v.getContext(), avatar, icon);
-            }
-
-            name.setText(entity.getName());
-            tvShareMsgDesc.setText(entity.getEntity().getDesc());
+        Object avatar = entity.getAvatar();
+        if (avatar instanceof Bitmap) {
+            icon.setImageBitmap((Bitmap) avatar);
+        } else if (avatar instanceof String) {
+            ImageDisplay.loadRoundedRectangleImage(v.getContext(), avatar, icon);
         }
+
+        name.setText(entity.getName());
+        tvShareMsgDesc.setText(entity.getEntity().getDesc());
 
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,19 +110,26 @@ public class ShareMessageDialog extends BaseCentDailog {
         tvSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //发送
-                ChatGroupHelper.sendShareMessage(entity, new ChatGroupHelper.GroupInfoResponse() {
-                    @Override
-                    public void getInfoSuccess(JSONObject groupInfo) {
-                        ShareMessageDialog.this.dismiss();
-                        getActivity().finish();
-                    }
+                if (entity.getEntity() != null) {
+                    switch (entity.getEntity().getShareType()) {
+                        case GGShareEntity.SHARE_TYPE_TEXT:
+                            break;
+                        case GGShareEntity.SHARE_TYPE_IMAGE:
+                            ChatGroupHelper.sendImageMessage(
+                                    entity.getImMessageBean().getConversationID(),
+                                    entity.getImMessageBean().getChatType(),
+                                    new File(entity.getEntity().getImage()), null);
 
-                    @Override
-                    public void getInfoFailed(Exception e) {
-
+                            ShareMessageDialog.this.dismiss();
+                            getActivity().finish();
+                            break;
+                        default:
+                            ChatGroupHelper.sendShareMessage(entity, null);
+                            ShareMessageDialog.this.dismiss();
+                            getActivity().finish();
+                            break;
                     }
-                });
+                }
             }
         });
     }

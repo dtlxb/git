@@ -76,14 +76,11 @@ public class StockUtils {
 
         Set<String> myStockSet = getMyStockSet();
 
-        KLog.e(myStockSet.size() + ";===" + myStockSet.toString());
-
         if (myStockSet.remove(stockCode)) {
             SPTools.saveSetData("my_stock_set", myStockSet);
         } else {
             myStockSet.remove(stockCode.substring(2));
         }
-        KLog.e(myStockSet.size() + ";===" + myStockSet.toString());
     }
 
     /**

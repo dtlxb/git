@@ -9,7 +9,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hply.roundimage.roundImage.RoundedImageView;
+import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 
@@ -68,6 +70,8 @@ public class ShareMessageActivity extends BaseActivity {
 
         GGShareEntity shareEntity = getIntent().getParcelableExtra("share_web_data");//分享的数据
 
+        KLog.e(JSONObject.toJSONString(shareEntity));
+
         datas = new ArrayList<>();
 
         adapter = new ShareListAdapter(datas, shareEntity);
@@ -105,11 +109,11 @@ public class ShareMessageActivity extends BaseActivity {
      * 获取最近会话
      */
     public void getRecentConversation() {
-        List<IMMessageBean> IMMessageBeans = new ArrayList<>();
-        IMMessageBeans.addAll(DataSupport.findAll(IMMessageBean.class));
+        List<IMMessageBean> imMessageBeans = new ArrayList<>();
+        imMessageBeans.addAll(DataSupport.findAll(IMMessageBean.class));
 
         datas.add(new ShareListBean(ShareListBean.LIST_TYPE_SECTION));
-        for (IMMessageBean bean : IMMessageBeans) {
+        for (IMMessageBean bean : imMessageBeans) {
             if (bean.getChatType() == AppConst.IM_CHAT_TYPE_SINGLE) { //最近单聊会话
                 ShareListBean<String> shareListFriend = new ShareListBean<>(
                         ShareListBean.LIST_TYPE_ITEM, bean.getAvatar(), bean.getNickname(), bean);

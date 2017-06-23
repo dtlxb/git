@@ -65,6 +65,7 @@ import cn.gogoal.im.bean.stock.StockDetail;
 import cn.gogoal.im.bean.stock.StockDialogInfo;
 import cn.gogoal.im.bean.stock.TreatData;
 import cn.gogoal.im.common.AnimationUtils;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -862,6 +863,12 @@ public class CopyStockDetailActivity extends BaseActivity {
         badge.setBadgeNumber(unReadCount);
 
         getMyTools();
+
+        if (StockUtils.isMyStock(stockCode)) {
+            toggleIsMyStock(true, false);
+        } else {
+            toggleIsMyStock(false, false);
+        }
     }
 
     @Override
@@ -905,52 +912,52 @@ public class CopyStockDetailActivity extends BaseActivity {
                     StockUtils.savaColseprice((float) closePrice);
                     priceVolumDatas.clear();
                     //卖
-                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getSell5_price(), 2));
+                    priceVolumDatas.add(StringUtils.parseStringDouble(info.getSell5_price(), 2));
                     priceVolumDatas.add(info.getSell5_volume() + "");
-                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getSell4_price(), 2));
+                    priceVolumDatas.add(StringUtils.parseStringDouble(info.getSell4_price(), 2));
                     priceVolumDatas.add(info.getSell4_volume() + "");
-                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getSell3_price(), 2));
+                    priceVolumDatas.add(StringUtils.parseStringDouble(info.getSell3_price(), 2));
                     priceVolumDatas.add(info.getSell3_volume() + "");
-                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getSell2_price(), 2));
+                    priceVolumDatas.add(StringUtils.parseStringDouble(info.getSell2_price(), 2));
                     priceVolumDatas.add(info.getSell2_volume() + "");
-                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getSell1_price(), 2));
+                    priceVolumDatas.add(StringUtils.parseStringDouble(info.getSell1_price(), 2));
                     priceVolumDatas.add(info.getSell1_volume() + "");
                     //买
-                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getBuy1_price(), 2));
+                    priceVolumDatas.add(StringUtils.parseStringDouble(info.getBuy1_price(), 2));
                     priceVolumDatas.add(info.getBuy1_volume() + "");
-                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getBuy2_price(), 2));
+                    priceVolumDatas.add(StringUtils.parseStringDouble(info.getBuy2_price(), 2));
                     priceVolumDatas.add(info.getBuy2_volume() + "");
-                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getBuy3_price(), 2));
+                    priceVolumDatas.add(StringUtils.parseStringDouble(info.getBuy3_price(), 2));
                     priceVolumDatas.add(info.getBuy3_volume() + "");
-                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getBuy4_price(), 2));
+                    priceVolumDatas.add(StringUtils.parseStringDouble(info.getBuy4_price(), 2));
                     priceVolumDatas.add(info.getBuy4_volume() + "");
-                    priceVolumDatas.add(StringUtils.pareseStringDouble(info.getBuy5_price(), 2));
+                    priceVolumDatas.add(StringUtils.parseStringDouble(info.getBuy5_price(), 2));
                     priceVolumDatas.add(info.getBuy5_volume() + "");
-                    stock_price.setText(StringUtils.pareseStringDouble(info.getPrice(), 2));//股票价格
-                    stock_start.setText(StringUtils.pareseStringDouble(info.getOpen_price(), 2));//开盘价
+                    stock_price.setText(StringUtils.parseStringDouble(info.getPrice(), 2));//股票价格
+                    stock_start.setText(StringUtils.parseStringDouble(info.getOpen_price(), 2));//开盘价
 
                     //涨跌
-                    if (StringUtils.pareseStringDouble(info.getChange_value()) > 0) {
+                    if (StringUtils.parseStringDouble(info.getChange_value()) > 0) {
                         setStatusColorId(R.color.header_red);
                         relative_header.setBackgroundColor(getResColor(R.color.header_red));
                         linear_header.setBackgroundColor(getResColor(R.color.header_red));
                         initRefreshStyle(R.color.header_red);
-                        stock_detail_tv1.setText("+" + StringUtils.pareseStringDouble(info.getChange_value(), 2));
-                        stock_detail_tv2.setText("+" + StringUtils.pareseStringDouble(info.getChange_rate(), 2) + "%");
-                    } else if (StringUtils.pareseStringDouble(info.getChange_value()) < 0) {
+                        stock_detail_tv1.setText("+" + StringUtils.parseStringDouble(info.getChange_value(), 2));
+                        stock_detail_tv2.setText("+" + StringUtils.parseStringDouble(info.getChange_rate(), 2) + "%");
+                    } else if (StringUtils.parseStringDouble(info.getChange_value()) < 0) {
                         setStatusColorId(R.color.header_green);
                         relative_header.setBackgroundColor(getResColor(R.color.header_green));
                         linear_header.setBackgroundColor(getResColor(R.color.header_green));
                         initRefreshStyle(R.color.header_green);
-                        stock_detail_tv1.setText(StringUtils.pareseStringDouble(info.getChange_value(), 2));
-                        stock_detail_tv2.setText(StringUtils.pareseStringDouble(info.getChange_rate(), 2) + "%");
+                        stock_detail_tv1.setText(StringUtils.parseStringDouble(info.getChange_value(), 2));
+                        stock_detail_tv2.setText(StringUtils.parseStringDouble(info.getChange_rate(), 2) + "%");
                     } else {
                         setStatusColorId(R.color.header_gray);
                         relative_header.setBackgroundColor(getResColor(R.color.header_gray));
                         linear_header.setBackgroundColor(getResColor(R.color.header_gray));
                         initRefreshStyle(R.color.header_gray);
-                        stock_detail_tv1.setText(StringUtils.pareseStringDouble(info.getChange_value(), 2));
-                        stock_detail_tv2.setText(StringUtils.pareseStringDouble(info.getChange_rate(), 2) + "%");
+                        stock_detail_tv1.setText(StringUtils.parseStringDouble(info.getChange_value(), 2));
+                        stock_detail_tv2.setText(StringUtils.parseStringDouble(info.getChange_rate(), 2) + "%");
                     }
 
                     if (info.getVolume() == null) {
@@ -958,14 +965,14 @@ public class CopyStockDetailActivity extends BaseActivity {
                     } else {
                         if (info.getVolume().length() > 6) {
 
-                            stock_volume.setText(StringUtils.save2Significand(StringUtils.pareseStringDouble(info.getVolume()) / 1000000) + "万手");//成交量
+                            stock_volume.setText(StringUtils.save2Significand(StringUtils.parseStringDouble(info.getVolume()) / 1000000) + "万手");//成交量
                         } else {
                             String volume = String.valueOf((Double.parseDouble(info.getVolume()) / 100));
                             stock_volume.setText(StringUtils.getIntegerData(volume) + "手");
                         }
                     }
                     stock_turnover_rate.setText(StringUtils.save2Significand(
-                            StringUtils.pareseStringDouble(info.getTurnover_rate()) * 100) + "%");//换手率
+                            StringUtils.parseStringDouble(info.getTurnover_rate()) * 100) + "%");//换手率
                     if (stock_charge_type == 1) {
                         text_state.setVisibility(View.VISIBLE);
                         text_delist.setVisibility(View.GONE);
@@ -1051,7 +1058,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     }
 
     private double $(String volume_outer) {
-        return StringUtils.pareseStringDouble(volume_outer);
+        return StringUtils.parseStringDouble(volume_outer);
     }
 
     private void setZero2Line(TextView tv) {
@@ -1212,7 +1219,10 @@ public class CopyStockDetailActivity extends BaseActivity {
             case R.id.tv_stockDetail_tools://工具箱
 
                 if (!ArrayUtils.isEmpty(diagnoseStockTools)) {
-                    StockDetailPopuDialog.newInstance(diagnoseStockTools).show(getSupportFragmentManager());
+                    StockDetailPopuDialog.newInstance(
+                            diagnoseStockTools,
+                            new Stock(stockCode, stockName))
+                            .show(getSupportFragmentManager());
                 } else {
                     NormalAlertDialog.newInstance("暂无诊股工具\n现在去我的工具中添加?", new OnClickListener() {
                         @Override
@@ -1263,6 +1273,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                                 Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
                                 intent.putExtra("conversation_id", conversationId);
                                 intent.putExtra("need_update", false);
+                                intent.putExtra("square_action", AppConst.CREATE_SQUARE_ROOM_BY_STOCK);
                                 startActivity(intent);
                             }
 
@@ -1453,22 +1464,22 @@ public class CopyStockDetailActivity extends BaseActivity {
         stockDialogInfoList.clear();
         //最高价
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[0],
-                StringUtils.pareseStringDouble(info.getHigh_price(), 2)));
+                StringUtils.parseStringDouble(info.getHigh_price(), 2)));
 
         //最低价
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[1],
-                StringUtils.pareseStringDouble(info.getLow_price(), 2)));
+                StringUtils.parseStringDouble(info.getLow_price(), 2)));
 
         //涨停
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[2],
-                "" + StringUtils.save2Significand(StringUtils.pareseStringDouble(info.getClose_price()) * (
+                "" + StringUtils.save2Significand(StringUtils.parseStringDouble(info.getClose_price()) * (
                         (stockName.startsWith("*") ||
                                 stockName.contains("ST") ||
                                 stockName.startsWith("N")) ? 1.05 : 1.10))));
 
         //跌停
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[3],
-                "" + StringUtils.save2Significand(StringUtils.pareseStringDouble(info.getClose_price()) * (
+                "" + StringUtils.save2Significand(StringUtils.parseStringDouble(info.getClose_price()) * (
                         (stockName.startsWith("*") ||
                                 stockName.contains("ST") ||
                                 stockName.startsWith("N")) ? 0.95 : 0.9))));
@@ -1486,63 +1497,63 @@ public class CopyStockDetailActivity extends BaseActivity {
                                 StringUtils.getIntegerData(String.valueOf((Double.parseDouble(info.getVolume_outer()) / 100))) + "手")));
 
         //成交额
-        String turnover = StringUtils.pareseStringDouble(info.getTurnover(), 2);
+        String turnover = StringUtils.parseStringDouble(info.getTurnover(), 2);
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[6],
-                StringUtils.pareseStringDouble(info.getTurnover()) == 0 ? "0" :
-                        turnover.length() <= 7 ? StringUtils.pareseStringDouble(info.getTurnover(), 2) + "万" :
-                                StringUtils.save2Significand(StringUtils.pareseStringDouble(info.getTurnover()) / 10000) + "亿"));
+                StringUtils.parseStringDouble(info.getTurnover()) == 0 ? "0" :
+                        turnover.length() <= 7 ? StringUtils.parseStringDouble(info.getTurnover(), 2) + "万" :
+                                StringUtils.save2Significand(StringUtils.parseStringDouble(info.getTurnover()) / 10000) + "亿"));
         //振幅
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[7],
-                StringUtils.pareseStringDouble(info.getAmplitude(), 2) + "%"));
+                StringUtils.parseStringDouble(info.getAmplitude(), 2) + "%"));
 
         //委比
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[8],
-                StringUtils.pareseStringDouble(info.getCommission_rate(), 2) + "%"));
+                StringUtils.parseStringDouble(info.getCommission_rate(), 2) + "%"));
 
         //量比
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[9],
-                StringUtils.pareseStringDouble(info.getQuantity_ratio(), 2)));
+                StringUtils.parseStringDouble(info.getQuantity_ratio(), 2)));
 
         //流通市值
-        String mCapString = StringUtils.pareseStringDouble(info.getMcap(), 2);
+        String mCapString = StringUtils.parseStringDouble(info.getMcap(), 2);
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[10],
                 mCapString.length() > 11 ?
-                        StringUtils.saveSignificand(StringUtils.pareseStringDouble(info.getMcap()) / 100000000d, 2) + "万亿" :
-                        mCapString.length() > 8 ? StringUtils.saveSignificand(StringUtils.pareseStringDouble(info.getMcap()) / 10000d, 2) + "亿" :
+                        StringUtils.saveSignificand(StringUtils.parseStringDouble(info.getMcap()) / 100000000d, 2) + "万亿" :
+                        mCapString.length() > 8 ? StringUtils.saveSignificand(StringUtils.parseStringDouble(info.getMcap()) / 10000d, 2) + "亿" :
                                 mCapString + "万"));
 
         //总市值
-        String mTcapString = StringUtils.pareseStringDouble(info.getTcap(), 2);
+        String mTcapString = StringUtils.parseStringDouble(info.getTcap(), 2);
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[11],
                 mTcapString.length() > 11 ?
-                        StringUtils.saveSignificand(StringUtils.pareseStringDouble(info.getTcap()) / 100000000d, 2) + "万亿" :
-                        mTcapString.length() > 8 ? StringUtils.saveSignificand(StringUtils.pareseStringDouble(info.getTcap()) / 10000d, 2) + "亿" :
+                        StringUtils.saveSignificand(StringUtils.parseStringDouble(info.getTcap()) / 100000000d, 2) + "万亿" :
+                        mTcapString.length() > 8 ? StringUtils.saveSignificand(StringUtils.parseStringDouble(info.getTcap()) / 10000d, 2) + "亿" :
                                 mTcapString + "万"));
 
         //市盈率
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[12],
-                StringUtils.pareseStringDouble(info.getPe_y1(), 2)));
+                StringUtils.parseStringDouble(info.getPe_y1(), 2)));
 
         //市净率
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[13],
-                StringUtils.pareseStringDouble(info.getPb_y1(), 2)));
+                StringUtils.parseStringDouble(info.getPb_y1(), 2)));
 
         //每股收益
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[14],
-                StringUtils.pareseStringDouble(info.getEps_y1(), 2)));
+                StringUtils.parseStringDouble(info.getEps_y1(), 2)));
 
         //总股本
-        String capital = StringUtils.pareseStringDouble(info.getCapital(), 2);
+        String capital = StringUtils.parseStringDouble(info.getCapital(), 2);
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[15],
-                StringUtils.pareseStringDouble(info.getCapital()) == 0 ? "0.00" :
-                        (capital.length() > 7 ? StringUtils.save2Significand(StringUtils.pareseStringDouble(info.getCapital()) / 10000) + "亿" :
-                                StringUtils.pareseStringDouble(info.getCapital(), 2) + "万")));
+                StringUtils.parseStringDouble(info.getCapital()) == 0 ? "0.00" :
+                        (capital.length() > 7 ? StringUtils.save2Significand(StringUtils.parseStringDouble(info.getCapital()) / 10000) + "亿" :
+                                StringUtils.parseStringDouble(info.getCapital(), 2) + "万")));
 
         //流通股
         stockDialogInfoList.add(new StockDialogInfo(stockDetailInfos[16],
-                StringUtils.pareseStringDouble(info.getNegotiable_capital()) == 0 ? "0.00" :
-                        (StringUtils.pareseStringDouble(info.getNegotiable_capital(), 2).length() > 7 ? StringUtils.save2Significand(StringUtils.pareseStringDouble(info.getNegotiable_capital()) / 10000) + "亿" :
-                                StringUtils.pareseStringDouble(info.getNegotiable_capital(), 2) + "万")));
+                StringUtils.parseStringDouble(info.getNegotiable_capital()) == 0 ? "0.00" :
+                        (StringUtils.parseStringDouble(info.getNegotiable_capital(), 2).length() > 7 ? StringUtils.save2Significand(StringUtils.parseStringDouble(info.getNegotiable_capital()) / 10000) + "亿" :
+                                StringUtils.parseStringDouble(info.getNegotiable_capital(), 2) + "万")));
 
         infoDialogAdapter.notifyDataSetChanged();
     }
@@ -1671,7 +1682,7 @@ public class CopyStockDetailActivity extends BaseActivity {
                         holder.setTextColor(R.id.tv_item_stock_detail_info_value,
                                 realDouble(data.getValue()) == 0 ? Color.BLACK : getResColor(
                                         StockUtils.getStockRateColor(realDouble(data.getValue()) -
-                                                StringUtils.pareseStringDouble(closePrice))));
+                                                StringUtils.parseStringDouble(closePrice))));
                     } else {
                         holder.setTextColor(R.id.tv_item_stock_detail_info_value, Color.BLACK);
                     }
@@ -1702,7 +1713,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         }
 
         private double realDouble(String value) {
-            return StringUtils.pareseStringDouble(value.replaceAll("[%手亿万]", ""));
+            return StringUtils.parseStringDouble(value.replaceAll("[%手亿万]", ""));
         }
     }
 
@@ -1766,7 +1777,6 @@ public class CopyStockDetailActivity extends BaseActivity {
         UserUtils.getAllMyTools(new Impl<String>() {
             @Override
             public void response(int code, String data) {
-                KLog.e(data);
                 switch (code) {
                     case Impl.RESPON_DATA_SUCCESS:
                         List<ToolData> toolDatas = JSONArray.parseArray(data, ToolData.class);

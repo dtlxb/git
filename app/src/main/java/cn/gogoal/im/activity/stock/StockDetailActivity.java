@@ -261,14 +261,14 @@ public class StockDetailActivity extends BaseActivity {
                     xTitle.setTitle(stockName + "(" + stockCode + ")\n" + (
                             treatData.getStock_type() == 1 ?
                                     String.format(subTitleText, StockUtils.getTreatState(), CalendarUtils.getCurrentTime("MM-dd HH:mm")) :
-                                    String.format(subTitleText, StringUtils.saveSignificand(StringUtils.pareseStringDouble(treatData.getOpen_price()), 2),
+                                    String.format(subTitleText, StringUtils.saveSignificand(StringUtils.parseStringDouble(treatData.getOpen_price()), 2),
                                             StockUtils.getStockStatus(treatData.getStock_type()))
                     ));
 
                     tvStockDetailPrice.setText(StringUtils.saveSignificand(treatData.getPrice(), 2));
                     tvStockDetailChangeValue.setText(
                             StockUtils.plusMinus(StringUtils.saveSignificand(
-                                    StringUtils.pareseStringDouble(treatData.getChange_value()), 2), false));
+                                    StringUtils.parseStringDouble(treatData.getChange_value()), 2), false));
 
                     tvStockDetailChangeRate.setText(
                             StockUtils.plusMinus(treatData.getChange_rate(), true));
@@ -281,27 +281,27 @@ public class StockDetailActivity extends BaseActivity {
                             formatVolume(treatData.getVolume(), true)));//TODO "volume": 14793700,14.79万手
                     listHead.add(new StockDetailText2("换手率",
                             StringUtils.saveSignificand(
-                                    StringUtils.pareseStringDouble(treatData.getTurnover_rate()) * 100, 2) + "%"));
+                                    StringUtils.parseStringDouble(treatData.getTurnover_rate()) * 100, 2) + "%"));
                     headInfoAdapter.notifyDataSetChanged();
 
                     //=============== treat info===================
                     List<String> treatValue = new ArrayList<>(treatDescArray.length);
                     treatValue.add(StringUtils.saveSignificand(
-                            StringUtils.pareseStringDouble(treatData.getHigh_price()), 2));
+                            StringUtils.parseStringDouble(treatData.getHigh_price()), 2));
                     treatValue.add(StringUtils.saveSignificand(
-                            StringUtils.pareseStringDouble(treatData.getLow_price()), 2));
+                            StringUtils.parseStringDouble(treatData.getLow_price()), 2));
                     treatValue.add(formatCapitalization(
-                            StringUtils.pareseStringDouble(treatData.getTurnover()), 2));
+                            StringUtils.parseStringDouble(treatData.getTurnover()), 2));
 
                     treatValue.add(formatVolume(treatData.getVolume_inner(), false));//内盘
                     treatValue.add(formatVolume(treatData.getVolume_outer(), false));//外盘
                     treatValue.add(formatCapitalization(
-                            StringUtils.pareseStringDouble(treatData.getTcap()), 1));//总市值
+                            StringUtils.parseStringDouble(treatData.getTcap()), 1));//总市值
 
                     treatValue.add(StringUtils.saveSignificand(treatData.getPb_y1(), 2));//市盈率
                     treatValue.add(StringUtils.saveSignificand(treatData.getAmplitude(), 2) + "%");//振幅
                     treatValue.add(formatCapitalization(
-                            StringUtils.pareseStringDouble(treatData.getMcap()), 1));//流通市值
+                            StringUtils.parseStringDouble(treatData.getMcap()), 1));//流通市值
 
                     for (int i = 0; i < treatDescArray.length; i++) {
                         listTreat.add(new StockDetailText2(treatDescArray[i], treatValue.get(i)));

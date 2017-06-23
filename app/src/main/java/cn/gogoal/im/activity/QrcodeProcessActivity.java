@@ -14,6 +14,7 @@ import java.util.List;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.group.GroupData;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.NormalIntentUtils;
@@ -26,7 +27,6 @@ import pub.devrel.easypermissions.EasyPermissions;
 import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_CAMERA_PERM;
 import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_CODE;
 import static com.hply.qrcode_lib.activity.CodeUtils.REQUEST_LOCATION_PERM;
-import static org.litepal.LitePalApplication.getContext;
 
 /**
  * author wangjd on 2017/6/13 0013.
@@ -47,7 +47,7 @@ public class QrcodeProcessActivity extends BaseActivity implements EasyPermissio
 
     @AfterPermissionGranted(REQUEST_CAMERA_PERM)
     public void cameraTask() {
-        if (EasyPermissions.hasPermissions(getContext(), Manifest.permission.CAMERA)) {
+        if (EasyPermissions.hasPermissions(getActivity(), Manifest.permission.CAMERA)) {
             // Have permission, do the thing!
             onClick();
         } else {
@@ -58,7 +58,7 @@ public class QrcodeProcessActivity extends BaseActivity implements EasyPermissio
     }
 
     private void onClick() {
-        Intent intent = new Intent(getContext(), ScanQRCodeActivity.class);
+        Intent intent = new Intent(getActivity(), ScanQRCodeActivity.class);
         startActivityForResult(intent, REQUEST_CODE);
     }
 
@@ -126,27 +126,38 @@ public class QrcodeProcessActivity extends BaseActivity implements EasyPermissio
 
                     String codeBody = GGQrCode.getUserQrCodeBody(result);
 
+                    KLog.e(codeBody);
+
                     try {
                         final JSONObject scanBody = JSONObject.parseObject(codeBody);
-                        if (scanBody.getString("qrType").equalsIgnoreCase("0")) {
-                            //TODO 跳转个人详情
-                            NormalIntentUtils.go2PersionDetail(getContext(),
-                                    Integer.parseInt(scanBody.getString("account_id")));
 
-                        } else if (scanBody.getString("qrType").equalsIgnoreCase("1")) {
+//                        KLog.e(scanBody.getString("qrType"));
+//                        KLog.e(scanBody.getString("account_id"));
+
+                        if (scanBody.getIntValue("qrType") == 0) {
+                            //TODO 跳转个人详情
+                            NormalIntentUtils.go2PersionDetail(getActivity(),
+                                    scanBody.getIntValue("account_id"));
+                            QrcodeProcessActivity.this.finish();
+                        } else {
                             //TODO 跳转群名片
                             ChatGroupHelper.getGroupInfo(scanBody.getString("conv_id"), new Impl<String>() {
                                 @Override
                                 public void response(int code, String data) {
                                     switch (code) {
                                         case Impl.RESPON_DATA_SUCCESS:
+                                            GroupData groupData = JSONObject.parseObject(data, GroupData.class);
                                             Intent in = new Intent(getActivity(), SquareCardActivity.class);
-                                            in.putExtra("conversation_id", scanBody.getString("conv_id"));
-                                            in.putExtra("square_name", JSONObject.parseObject(data).getString("name"));
-//                                            in.putExtra("bitmap_avatar", groupAvatarBitmap);
-//                                            in.putExtra("square_creater", data.getC());
-//                                            in.putParcelableArrayListExtra("square_members", data.getM_info());
-//                                            context.startActivity(in);
+                                            in.putExtra("conversation_id", groupData.getConv_id());
+                                            in.putExtra("square_name", groupData.getName());
+                                            in.putExtra("square_creater", groupData.getC());
+                                            in.putParcelableArrayListExtra("square_members", groupData.getM_info());
+                                            QrcodeProcessActivity.this.startActivity(in);
+                                            QrcodeProcessActivity.this.finish();
+                                            break;
+
+                                        default:
+                                            KLog.e("解析::" + data);
                                             break;
                                     }
                                 }
@@ -165,6 +176,6 @@ public class QrcodeProcessActivity extends BaseActivity implements EasyPermissio
                 }
             }
         }
-        finish();
+        QrcodeProcessActivity.this.finish();
     }
 }

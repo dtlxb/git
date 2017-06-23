@@ -297,7 +297,7 @@ public class RankListDetialActivity extends BaseActivity {
                     break;
                 case 2://换手率
                     rateView.setText(""+StringUtils.saveSignificand(
-                            StringUtils.pareseStringDouble(data.getRate()) * 100, 2) + "%");
+                            StringUtils.parseStringDouble(data.getRate()) * 100, 2) + "%");
                     rateView.setBackgroundResource(R.drawable.shape_my_stock_price_gray);
                     break;
                 case 3://振幅榜
@@ -335,7 +335,7 @@ public class RankListDetialActivity extends BaseActivity {
                 TextView rateView = holder.getView(R.id.tv_mystock_price);
                 TextView stockView = holder.getView(R.id.tv_mystock_rate);
 
-                rateView.setText(StockUtils.plusMinus("" + StringUtils.pareseStringDouble(data.getIndustry_rate()), true));// TODO: 2017/4/7 0007
+                rateView.setText(StockUtils.plusMinus("" + StringUtils.parseStringDouble(data.getIndustry_rate()), true));// TODO: 2017/4/7 0007
                 rateView.setTextColor(Color.WHITE);
 
                 stockView.setText(data.getStock_name());

@@ -155,6 +155,8 @@ public class SearchPersonSquareActivity extends BaseActivity {
         new GGOKHTTP(param, GGOKHTTP.SEARCH_FRIEND, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     searchResultList.clear();
 
@@ -190,7 +192,7 @@ public class SearchPersonSquareActivity extends BaseActivity {
      * 搜群
      */
     private void getRecommendGroup(final int loadType, final String keyword) {
-        xLayout.setEmptyText(String.format(getString(R.string.str_result), keyword) + "群组");
+        xLayout.setEmptyText(String.format(getString(R.string.str_result), keyword) + "官方群组");
 
         Map<String, String> map = new HashMap<>();
         map.put("token", UserUtils.getToken());
@@ -202,6 +204,8 @@ public class SearchPersonSquareActivity extends BaseActivity {
         new GGOKHTTP(map, GGOKHTTP.SEARCH_GROUP, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     groupDatas.clear();
                     GroupCollectionData groupCollectionData = JSONObject.parseObject(responseInfo, GroupCollectionData.class);

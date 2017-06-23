@@ -87,7 +87,6 @@ public class StockNewsAllListActivity extends BaseActivity {
                         researchadapter.loadMoreEnd(true);
                         researchadapter.setEnableLoadMore(false);
                         UIHelper.toast(getActivity(),"没有更多数据");
-
                     }
                     researchadapter.loadMoreComplete();
                 }

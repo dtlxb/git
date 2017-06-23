@@ -16,9 +16,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -26,10 +24,13 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.IMPersonSetAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ContactBean;
+import cn.gogoal.im.bean.group.GroupData;
 import cn.gogoal.im.bean.group.GroupMemberInfo;
 import cn.gogoal.im.common.AvatarTakeListener;
-import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
+import cn.gogoal.im.common.Impl;
+import cn.gogoal.im.common.StringUtils;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.ggqrcode.GGQrCode;
 import cn.gogoal.im.ui.view.SelectorButton;
@@ -53,8 +54,8 @@ public class SquareCardActivity extends BaseActivity {
     TextView tvSquareDetail;
     @BindView(R.id.team_size)
     TextView tvTeamSize;
-    @BindView(R.id.jion_group)
-    SelectorButton jion_group;
+    @BindView(R.id.join_group)
+    SelectorButton join_group;
 
     private IMPersonSetAdapter mPersonInfoAdapter;
     private List<ContactBean> contactBeens = new ArrayList<>();
@@ -63,7 +64,9 @@ public class SquareCardActivity extends BaseActivity {
     private String squareName;
     private String squareCreater;
     private List<GroupMemberInfo> mBeanList;
+
     private boolean isIn;
+    private int chatType;
 
     @Override
     public int bindLayout() {
@@ -90,7 +93,7 @@ public class SquareCardActivity extends BaseActivity {
         getGroupInfo();
     }
 
-    @OnClick({R.id.look_more_person, R.id.jion_group, R.id.layout_square_qrcode})
+    @OnClick({R.id.look_more_person, R.id.join_group, R.id.layout_square_qrcode})
     void fuction(View view) {
         switch (view.getId()) {
             case R.id.look_more_person:
@@ -101,23 +104,44 @@ public class SquareCardActivity extends BaseActivity {
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
-            case R.id.jion_group:
+            case R.id.join_group:
                 if (isIn) {
                     Intent intent1 = new Intent(SquareCardActivity.this, SquareChatRoomActivity.class);
                     intent1.putExtra("conversation_id", conversationId);
                     intent1.putExtra("squareName", squareName);
                     intent1.putExtra("need_update", true);
                     startActivity(intent1);
-                } else {
+                } else if (chatType==1010){
+
+                    List<Integer> addIdList = new ArrayList<>();
+                    addIdList.add(Integer.parseInt(UserUtils.getMyAccountId()));
+                    //添加群成员
+                    ChatGroupHelper.addAnyone(addIdList, conversationId, new ChatGroupHelper.ChatGroupManager() {
+                        @Override
+                        public void groupActionSuccess(JSONObject object) {
+                            Intent intent = new Intent(getActivity(), SquareChatRoomActivity.class);
+                            intent.putExtra("conversation_id", conversationId);
+                            intent.putExtra("need_update", false);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void groupActionFail(String error) {
+                            UIHelper.toast(getActivity(), "股票群初始化失败，请稍后重试！");
+                            Log.e("TAG", error);
+                        }
+                    });
+
+                }else {
                     ChatGroupHelper.applyIntoGroup(getActivity(), conversationId);
                 }
                 break;
             case R.id.layout_square_qrcode:
                 intent = new Intent(view.getContext(), QrCodeActivity.class);
                 intent.putExtra("qr_code_type", GGQrCode.QR_CODE_TYPE_GROUP);
-                intent.putExtra("qrcode_name",squareName);
-                intent.putExtra("qrcode_info","("+mBeanList.size()+")人");
-                intent.putExtra("qrcode_content_id",conversationId);
+                intent.putExtra("qrcode_name", squareName);
+                intent.putExtra("qrcode_info", "(" + mBeanList.size() + ")人");
+                intent.putExtra("qrcode_content_id", conversationId);
                 startActivity(intent);
                 break;
         }
@@ -127,14 +151,6 @@ public class SquareCardActivity extends BaseActivity {
         setMyTitle("群名片", true);
         tvSquareName.setText(squareName);
         tvTeamSize.setText(String.valueOf(mBeanList.size()));
-//        iv_square_head.setImageBitmap((Bitmap) getIntent().getParcelableExtra("bitmap_avatar"));
-//        /*XTitle.ImageAction imageAction = new XTitle.ImageAction(getResDrawable(R.mipmap.arrows_white)) {
-//            @Override
-//            public void actionClick(View view) {
-//
-//            }
-//        };
-//        xTitle.addAction(imageAction, 0);*/
 
         ChatGroupHelper.setGroupAvatar(conversationId, new AvatarTakeListener() {
             @Override
@@ -178,49 +194,41 @@ public class SquareCardActivity extends BaseActivity {
 
     //拉取群详情
     public void getGroupInfo() {
-        Map<String, String> params = new HashMap<>();
-        params.put("token", UserUtils.getToken());
-        params.put("conv_id", conversationId);
-        KLog.e(params);
-        jion_group.setClickable(false);
-
-        GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+        join_group.setClickable(false);
+        ChatGroupHelper.getGroupInfo(conversationId, new Impl<String>() {
             @Override
-            public void onSuccess(String responseInfo) {
-                Log.e("=====notice", responseInfo);
-                jion_group.setClickable(true);
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                if ((int) result.get("code") == 0) {
-                    JSONObject dataJsonObject = (JSONObject) result.get("data");
-                    isIn = dataJsonObject.getBoolean("is_in");
-                    tvSquareName.setText((dataJsonObject).get("name") == null ? "" : (dataJsonObject).getString("name"));
-                    JSONObject jsonObject = (JSONObject) (dataJsonObject).get("attr");
-                    if (jsonObject.get("intro") != null && !TextUtils.isEmpty(jsonObject.getString("intro"))) {
-                        tvSquareDetail.setText(jsonObject.get("intro") == null ? "" : jsonObject.getString("intro"));
-                    } else {
-                        tvSquareDetail.setText("暂无群简介");
-                    }
-                    if (jsonObject.get("notice") != null && !TextUtils.isEmpty(jsonObject.getString("notice"))) {
-                        square_notice.setVisibility(View.VISIBLE);
-                        square_notice.setText(jsonObject.get("notice") == null ? "" : jsonObject.getString("notice"));
-                    } else {
-                        square_notice.setVisibility(View.GONE);
-                    }
-                    if (isIn) {
-                        jion_group.setText("进入聊天");
-                    } else {
-                        jion_group.setText("我要报名");
-                    }
-
+            public void response(int code, String data) {
+                switch (code) {
+                    case Impl.RESPON_DATA_SUCCESS:
+                        GroupData groupData = JSONObject.parseObject(data, GroupData.class);
+                        //群名称
+                        tvSquareName.setText(TextUtils.isEmpty(groupData.getName())?"":groupData.getName());
+                        //群详情
+                        tvSquareDetail.setText(TextUtils.isEmpty(groupData.getAttr().getIntro())?
+                        "暂无群简介":groupData.getAttr().getIntro());
+                        //群简介
+                        if (StringUtils.isActuallyEmpty(groupData.getAttr().getNotice())){
+                            square_notice.setVisibility(View.GONE);
+                        }else {
+                            square_notice.setVisibility(View.VISIBLE);
+                            square_notice.setText(groupData.getAttr().getNotice());
+                        }
+                        //加入按钮
+                        isIn=groupData.is_in();
+                        chatType=groupData.getAttr().getChat_type();
+                        if (groupData.is_in() || groupData.getAttr().getChat_type()==1010){
+                            join_group.setText("进入聊天");
+                        }else {
+                            join_group.setText("我要报名");
+                        }
+                        join_group.setClickable(true);
+                        break;
+                    case Impl.RESPON_DATA_ERROR:
+                        UIHelper.toast(getActivity(),"没有信息");
+                        break;
                 }
             }
-
-            @Override
-            public void onFailure(String msg) {
-                jion_group.setClickable(true);
-            }
-        };
-        new GGOKHTTP(params, GGOKHTTP.GET_GROUP_INFO, ggHttpInterface).startGet();
+        });
     }
 
     //取六个人

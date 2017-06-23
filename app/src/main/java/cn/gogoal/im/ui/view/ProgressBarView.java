@@ -9,8 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.socks.library.KLog;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,7 +134,6 @@ public class ProgressBarView extends View {
             for (int i = 0; i < beans.size(); i++) {
                 total += beans.get(i).getBarValue();
             }
-            KLog.e(beans);
             invalidate();
         }
     }
