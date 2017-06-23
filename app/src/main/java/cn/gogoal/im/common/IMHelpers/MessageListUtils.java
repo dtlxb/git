@@ -1,28 +1,18 @@
 package cn.gogoal.im.common.IMHelpers;
 
 import android.content.ContentValues;
-import android.content.Context;
-import android.text.TextUtils;
-import android.view.Gravity;
-import android.view.View;
-
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 
 import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
-import cn.gogoal.im.R;
-import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.UserBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.Badge.BadgeView;
 
 /**
  * Created by huangxx on 2017/2/28.00

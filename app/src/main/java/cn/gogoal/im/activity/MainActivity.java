@@ -40,6 +40,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.IMHelpers.UserInfoUtils;
+import cn.gogoal.im.common.LitePalDBHelper;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -47,6 +48,7 @@ import cn.gogoal.im.fragment.main.InfomationFragment;
 import cn.gogoal.im.fragment.main.LiveListFragment;
 import cn.gogoal.im.fragment.main.MainStockFragment;
 import cn.gogoal.im.fragment.main.MineFragment;
+import cn.gogoal.im.servise.MessageSaveService;
 import cn.gogoal.im.ui.Badge.BadgeView;
 
 public class MainActivity extends BaseActivity {
@@ -96,6 +98,12 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
+
+        //建立数据库
+        LitePalDBHelper.getInstance().createSQLite(UserUtils.getUserId());
+
+        //开启接收消息服务
+        startService(new Intent(MainActivity.this, MessageSaveService.class));
 
         setSupportActionBar(mToolbar);
 

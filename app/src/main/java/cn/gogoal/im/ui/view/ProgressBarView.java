@@ -40,8 +40,9 @@ public class ProgressBarView extends View {
     private float upRate;
     //数据
     private float total;
-    //数据
     private List<ChartBean> beanList;
+    //需要动画
+    private boolean needAnime;
 
     public ProgressBarView(Context context) {
         super(context);
@@ -75,7 +76,7 @@ public class ProgressBarView extends View {
         super.onDraw(canvas);
         viewWidth = getWidth() - marginLeft - marginRight;
         viewHeight = getHeight();
-        barRate = (float) viewHeight / total;
+        barRate = (float) viewWidth / total;
 
         drawProgress(canvas);
     }
@@ -91,19 +92,19 @@ public class ProgressBarView extends View {
         float fontHeight = fontMetrics.descent - fontMetrics.ascent;
         if (null != beanList && beanList.size() > 0) {
             //画柱体
-            float stopX = beanList.get(0).getBarValue() * viewWidth / total;
-            float stopX2 = beanList.get(1).getBarValue() * viewWidth / total;
+            float stopX = beanList.get(0).getBarValue() * barRate;
+            float stopX2 = beanList.get(1).getBarValue() * barRate;
             linePaint.setColor(Color.parseColor(beanList.get(0).getDate()));
             canvas.drawLine(0, viewHeight / 2, stopX * upRate, viewHeight / 2, linePaint);
-            if (titlePaint.measureText(numParse(beanList.get(0).getBarValue())) > (float) textSize) {
-                canvas.drawText(numParse(beanList.get(0).getBarValue()), 0, viewHeight / 2 + fontHeight * 2 / 5, titlePaint);
+            if (titlePaint.measureText(numParse(beanList.get(0).getBarValue())) < stopX) {
+                canvas.drawText(numParse(beanList.get(0).getBarValue()), marginBar, viewHeight / 2 + fontHeight * 2 / 5, titlePaint);
             }
 
             linePaint.setColor(Color.parseColor(beanList.get(1).getDate()));
             canvas.drawLine(viewWidth, viewHeight / 2, viewWidth - stopX2 * upRate, viewHeight / 2, linePaint);
-            if (titlePaint.measureText(numParse(beanList.get(1).getBarValue())) > (float) textSize) {
+            if (titlePaint.measureText(numParse(beanList.get(1).getBarValue())) < stopX2) {
                 canvas.drawText(numParse(beanList.get(1).getBarValue()),
-                        viewWidth - titlePaint.measureText(numParse(beanList.get(1).getBarValue())), viewHeight / 2 + fontHeight * 2 / 5, titlePaint);
+                        viewWidth - titlePaint.measureText(numParse(beanList.get(1).getBarValue())) - marginBar, viewHeight / 2 + fontHeight * 2 / 5, titlePaint);
             }
 
             if (upRate < 1) {
@@ -119,12 +120,16 @@ public class ProgressBarView extends View {
         return (int) Math.rint(number * 100 / total) + "%";
     }
 
-    public void setChartData(List<ChartBean> beans) {
+    public void setChartData(List<ChartBean> beans, boolean anim) {
         if (null != beans && beans.size() > 0) {
             beanList.clear();
             beanList.addAll(beans);
             total = 0;
-            upRate = 0;
+            if (anim) {
+                upRate = 0;
+            } else {
+                upRate = 1;
+            }
             barRate = 0;
             for (int i = 0; i < beans.size(); i++) {
                 total += beans.get(i).getBarValue();

@@ -379,7 +379,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         vpTreat.setAdapter(treatAdapter);
         tabLayoutTreat.setupWithViewPager(vpTreat);
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             TabLayout.Tab tabAt = tabLayoutTreat.getTabAt(i);
             if (tabAt != null) {
                 tabAt.setCustomView(treatAdapter.getTabView(i));
@@ -1439,7 +1439,9 @@ public class CopyStockDetailActivity extends BaseActivity {
     public void toggleTreatMode() {
         if (tabLayoutTreat.getTabAt(0).isSelected()) {
             tabLayoutTreat.getTabAt(1).select();
-        } else {
+        } else if (tabLayoutTreat.getTabAt(1).isSelected()) {
+            tabLayoutTreat.getTabAt(2).select();
+        } else if (tabLayoutTreat.getTabAt(2).isSelected()) {
             tabLayoutTreat.getTabAt(0).select();
         }
     }

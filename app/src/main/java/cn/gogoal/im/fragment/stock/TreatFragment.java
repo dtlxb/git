@@ -71,6 +71,8 @@ public class TreatFragment extends BaseFragment {
     @BindView(R.id.progress)
     ProgressBarView progressView;
 
+    private View headerView;
+
     //===================五档====================
     private WudangAdapter wudangAdapter;
     private List<ThreeText> threeTexts;
@@ -90,6 +92,7 @@ public class TreatFragment extends BaseFragment {
 
     private float itemHeight;
     private String stockCode;
+    private boolean needAnim;//需要动画
 
     @Override
     public int bindLayout() {
@@ -135,12 +138,12 @@ public class TreatFragment extends BaseFragment {
                 wudangAdapter = new WudangAdapter(threeTexts);
                 recyclerView.setAdapter(wudangAdapter);
                 recyclerView.addItemDecoration(new WudangDivider(getResColor(R.color.chart_text_color)));
+                needAnim = true;
                 getTreatWudang();
             } else if (type == AppConst.TREAT_TYPE_MING_XI) {
                 timeDetailDatas = new ArrayList<>();
                 mingxiAdapter = new MingxiAdapter(timeDetailDatas);
                 recyclerView.setAdapter(mingxiAdapter);
-                progressView.setChartData(chartBeanList);
                 getTreatChart();
                 getStockTimeDetail();
             } else if (type == AppConst.TREAT_TYPE_MONEY) {
@@ -148,29 +151,38 @@ public class TreatFragment extends BaseFragment {
                 pieDatas = new ArrayList<>();
                 moneyAdapter = new MoneyAdapter(moneyDatas);
                 recyclerView.setAdapter(moneyAdapter);
-                progressView.setChartData(chartBeanList);
+                headerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_map_header, new LinearLayout(getActivity()), false);
+                moneyAdapter.addHeaderView(headerView);
                 getTreatChart();
                 getMoneyDetail();
+
+                headerView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        toggleParentTab();
+                    }
+                });
             }
 
         }
 
-        /*xLayout.setOnClickListener(new View.OnClickListener() {
+        xLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleParentTab();
             }
-        });*/
+        });
     }
 
     @Subscriber(tag = "updata_treat_data")
     void updataTreatData(String msg) {
         if (type == AppConst.TREAT_TYPE_WU_DANG) {
+            needAnim = false;
             getTreatWudang();
         } else if (type == AppConst.TREAT_TYPE_MING_XI) {
             getStockTimeDetail();
         } else if (type == AppConst.TREAT_TYPE_MONEY) {
-            getMoneyDetail();
+            //getMoneyDetail();资金不需实时刷新
         }
     }
 
@@ -212,10 +224,11 @@ public class TreatFragment extends BaseFragment {
                     threeTexts.add(new ThreeText("买4", treatData.getBuy4_price(), treatData.getBuy4_volume()));
                     threeTexts.add(new ThreeText("买5", treatData.getBuy5_price(), treatData.getBuy5_volume()));
 
+                    chartBeanList.clear();
                     chartBeanList.add(new ChartBean(buy, "#ed1b1b"));
                     chartBeanList.add(new ChartBean(sell, "#26b844"));
                     progressView.setTextSize(AppDevice.dp2px(getActivity(), 9));
-                    progressView.setChartData(chartBeanList);
+                    progressView.setChartData(chartBeanList, needAnim);
                     wudangAdapter.notifyDataSetChanged();
 
                     closePrice = StringUtils.parseStringDouble(treatData.getClose_price());
@@ -235,6 +248,7 @@ public class TreatFragment extends BaseFragment {
         new GGOKHTTP(param, GGOKHTTP.ONE_STOCK_DETAIL, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     TreatData treatData = JSONObject.parseObject(responseInfo, StockDetail.class).getData();
 
@@ -248,7 +262,7 @@ public class TreatFragment extends BaseFragment {
                     chartBeanList.clear();
                     chartBeanList.add(new ChartBean(buy, "#ed1b1b"));
                     chartBeanList.add(new ChartBean(sell, "#26b844"));
-                    progressView.setChartData(chartBeanList);
+                    progressView.setChartData(chartBeanList, needAnim);
                     progressView.setTextSize(AppDevice.dp2px(getActivity(), 9));
                 }
             }
@@ -289,7 +303,7 @@ public class TreatFragment extends BaseFragment {
 
     //资金数据
     private void getMoneyDetail() {
-       /* HashMap<String, String> param = new HashMap<>();
+        HashMap<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
@@ -307,17 +321,7 @@ public class TreatFragment extends BaseFragment {
             public void onFailure(String msg) {
             }
         };
-        new GGOKHTTP(param, GGOKHTTP.GET_FUAN_INFO, ggHttpInterface).startGet();*/
-
-        String responseInfo = "{\"code\" : 0,\"message\" : \"成功\",\"data\" : {\"fiveDayMessage\" : [{\"2017-06-15\" : -5314130.6000000015},{\"2017-06-14\" : -3626729.0}],\"todayInfo\" : {\"fullcode\" : \"sh603218\",\"tdate\" : \"2017-06-15\",\"flow_into_large_fund\" : 5079070.6,\"flow_out_large_fund\" : 5074659.0,\"flow_into_middle_fund\" : 6643879.44,\"flow_out_middle_fund\" : 1.069072664E7,\"flow_into_small_fund\" : 1127319.0,\"flow_out_small_fund\" : 2399014.0}}}";
-        KLog.e(responseInfo);
-        JSONObject result = JSONObject.parseObject(responseInfo);
-        if (result.getIntValue("code") == 0) {
-            MoneyBean moneyBean = JSONObject.parseObject(responseInfo, TradeBean.class).getData();
-            TodayInfoBean todayInfoBean = moneyBean.getTodayInfo();
-            initMoneyAdapter(todayInfoBean);
-        }
-
+        new GGOKHTTP(param, GGOKHTTP.GET_FUAN_INFO, ggHttpInterface).startGet();
     }
 
     private void initMoneyAdapter(TodayInfoBean todayInfoBean) {
@@ -326,6 +330,7 @@ public class TreatFragment extends BaseFragment {
                 + todayInfoBean.getFlow_into_small_fund() + todayInfoBean.getFlow_out_large_fund() +
                 todayInfoBean.getFlow_out_middle_fund() + todayInfoBean.getFlow_out_small_fund();
 
+        moneyDatas.clear();
         moneyDatas.add(new MoneyTrade("大单", namParse(todayInfoBean.getFlow_into_large_fund()),
                 namParse(todayInfoBean.getFlow_into_large_fund(), total), "#ca2c36"));
         moneyDatas.add(new MoneyTrade("中单", namParse(todayInfoBean.getFlow_into_middle_fund()),
@@ -339,26 +344,29 @@ public class TreatFragment extends BaseFragment {
         moneyDatas.add(new MoneyTrade("小单", namParse(todayInfoBean.getFlow_out_small_fund()),
                 namParse(todayInfoBean.getFlow_out_small_fund(), total), "#63dca4"));
 
-        View viewHeader = LayoutInflater.from(getActivity()).inflate(R.layout.item_map_header, new LinearLayout(getActivity()), false);
-
-        PieView pieView = (PieView) viewHeader.findViewById(R.id.money_pie);
+        PieView pieView = (PieView) headerView.findViewById(R.id.money_pie);
         pieView.setPieType(2);
 
-        int width = (int) (0.3 * AppDevice.getWidth(getActivity()));
+        float percent;
+        if (fromStockDetail) {
+            percent = 0.3f;
+        } else {
+            percent = 0.2f;
+        }
+
+        int width = (int) (percent * AppDevice.getWidth(getActivity()));
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, width - AppDevice.dp2px(getActivity(), 22));
         pieView.setLayoutParams(params);
-
         pieView.setMarginLeft(AppDevice.dp2px(getActivity(), 16));
         pieView.setMarginRight(AppDevice.dp2px(getActivity(), 18));
 
+        pieDatas.clear();
         for (int i = moneyDatas.size() - 1; i > -1; i--) {
             pieDatas.add(new PieBean(moneyDatas.get(i).getTradeType(), Float.parseFloat(moneyDatas.get(i).getTradePer().substring(0, moneyDatas.get(i).getTradePer().length() - 1)),
                     moneyDatas.get(i).getColor()));
         }
 
         pieView.setPieData(pieDatas);
-
-        moneyAdapter.addHeaderView(viewHeader);
 
         moneyAdapter.notifyDataSetChanged();
     }
@@ -525,6 +533,13 @@ public class TreatFragment extends BaseFragment {
             holder.setText(R.id.tv_treat_name, data.getTradeType());
             holder.setText(R.id.tv_treat_price, data.getTradeNum());
             percentTv.setText(data.getTradePer());
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toggleParentTab();
+                }
+            });
         }
     }
 }

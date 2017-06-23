@@ -672,7 +672,7 @@ public class UserUtils {
                         callback.response(Impl.RESPON_DATA_EMPTY, "data is empty");
                 } else {
                     if (callback != null)
-                        callback.response(Impl.RESPON_DATA_ERROR, "request error=="+
+                        callback.response(Impl.RESPON_DATA_ERROR, "request error==" +
                                 JSONObject.parseObject(responseInfo).getString("message"));
                 }
             }
@@ -680,7 +680,7 @@ public class UserUtils {
             @Override
             public void onFailure(String msg) {
                 if (callback != null)
-                    callback.response(Impl.RESPON_DATA_ERROR, "error=="+msg);
+                    callback.response(Impl.RESPON_DATA_ERROR, "error==" + msg);
             }
         }).startGet();
     }
