@@ -4,40 +4,85 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:paddingBottom="7.5dp"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
     android:paddingTop="7.5dp">
 
-    <TextView
-        android:id="@+id/textName"
-        android:layout_width="0dp"
+    <RelativeLayout
+        android:id="@+id/relativeFinance"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="left"
-        android:singleLine="true"
-        android:text="@string/text_empty"
-        android:textColor="@color/textColor_333333"
-        android:textSize="14dp" />
+        android:layout_marginBottom="15dp"
+        android:visibility="gone">
 
-    <TextView
-        android:id="@+id/textContent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="right"
-        android:text="@string/text_empty"
-        android:textColor="@android:color/black"
-        android:textSize="14dp" />
+        <TextView
+            android:id="@+id/textline"
+            android:layout_width="3dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:background="@color/hotsearch_list_number1" />
 
-    <ImageView
-        android:id="@+id/imgSeeMore"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/textTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/textline"
+            android:text="@string/text_empty"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="right"
+            android:text="@string/text_empty"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@mipmap/see_more"
-        android:layout_marginLeft="10dp"
-        android:visibility="invisible"/>
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:singleLine="true"
+            android:text="@string/text_empty"
+            android:textColor="@color/textColor_333333"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/textContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="@string/text_empty"
+            android:textColor="@android:color/black"
+            android:textSize="14dp" />
+
+        <ImageView
+            android:id="@+id/imgSeeMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/see_more"
+            android:visibility="invisible" />
+
+    </LinearLayout>
 
 </LinearLayout>

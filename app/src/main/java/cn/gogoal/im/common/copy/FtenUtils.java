@@ -729,7 +729,7 @@ public class FtenUtils {
     //现金流量表
     public static final String[] cashFlow1 = {"经营性现金流", "投资性现金流", "筹资性现金流"};
     public static final String[] cashFlow1_1 = {"manage_lowcash213", "invest_flowcash230", "financing_flowcash246"};
-    public static final String[] cashFlow1_2 = {"cash_flow13", "cash_flow25", "cash_flow35"};
+    public static final String[] cashFlow1_2 = {"cash_flow13", "cash_flow23", "cash_flow32"};
     public static final String[] cashFlow1_3 = {"cash_flow12", "cash_flow23", "cash_flow32"};
     public static final String[] cashFlow1_4 = {"cash_flow10", "cash_flow19", "cash_flow29"};
     public static final String[] cashFlow1_5 = {"cash_flow10", "cash_flow19", "cash_flow29"};
