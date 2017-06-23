@@ -438,7 +438,6 @@ public class ChatFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if ((int) result.get("code") == 0) {
                     JSONObject data = result.getJSONObject("data");
@@ -628,7 +627,6 @@ public class ChatFragment extends BaseFragment {
 
                     @Override
                     public void onSuccess(String onlineUri) {
-
                         if (null == imConversation) {
                             UIHelper.toast(getActivity(), R.string.network_busy);
                             return;
