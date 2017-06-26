@@ -72,6 +72,7 @@ public class TreatFragment extends BaseFragment {
     ProgressBarView progressView;
 
     private View headerView;
+    private PieView pieView;
 
     //===================五档====================
     private WudangAdapter wudangAdapter;
@@ -152,6 +153,7 @@ public class TreatFragment extends BaseFragment {
                 moneyAdapter = new MoneyAdapter(moneyDatas);
                 recyclerView.setAdapter(moneyAdapter);
                 headerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_map_header, new LinearLayout(getActivity()), false);
+                pieView = (PieView) headerView.findViewById(R.id.money_pie);
                 moneyAdapter.addHeaderView(headerView);
                 getTreatChart();
                 getMoneyDetail();
@@ -315,10 +317,13 @@ public class TreatFragment extends BaseFragment {
                     MoneyBean moneyBean = JSONObject.parseObject(responseInfo, TradeBean.class).getData();
                     TodayInfoBean todayInfoBean = moneyBean.getTodayInfo();
                     initMoneyAdapter(todayInfoBean);
+                } else {
+                    drawPieMap();
                 }
             }
 
             public void onFailure(String msg) {
+                drawPieMap();
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_FUAN_INFO, ggHttpInterface).startGet();
@@ -343,8 +348,11 @@ public class TreatFragment extends BaseFragment {
                 namParse(todayInfoBean.getFlow_out_middle_fund(), total), "#34b578"));
         moneyDatas.add(new MoneyTrade("小单", namParse(todayInfoBean.getFlow_out_small_fund()),
                 namParse(todayInfoBean.getFlow_out_small_fund(), total), "#63dca4"));
+        drawPieMap();
+        moneyAdapter.notifyDataSetChanged();
+    }
 
-        PieView pieView = (PieView) headerView.findViewById(R.id.money_pie);
+    private void drawPieMap() {
         pieView.setPieType(2);
 
         float percent;
@@ -367,8 +375,6 @@ public class TreatFragment extends BaseFragment {
         }
 
         pieView.setPieData(pieDatas);
-
-        moneyAdapter.notifyDataSetChanged();
     }
 
     private String namParse(double number, double total) {
