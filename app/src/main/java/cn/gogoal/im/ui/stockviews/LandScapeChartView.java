@@ -283,18 +283,24 @@ public class LandScapeChartView extends View {
                 postInvalidate();
                 break;
             case MotionEvent.ACTION_UP:
-                //MessageHandlerList.sendMessage(StockDetailChartsActivity.class, 0x01, 0);
                 showDetail = false;
                 postInvalidate();
+                //MessageHandlerList.sendMessage(StockDetailChartsActivity.class, 0x01, 0);
+                sendDissChartMsg();
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_OUTSIDE:
                 showDetail = false;
+                sendDissChartMsg();
                 //MessageHandlerList.sendMessage(StockDetailChartsActivity.class, 0x01, 0);
                 break;
             default:
                 break;
         }
         return true;
+    }
+
+    private void sendDissChartMsg() {
+        AppManager.getInstance().sendMessage("Dismiss_Chart");
     }
 
     public void setData(TimesFivesBitmap timesFivesBitmap, int stock_charge_type) {

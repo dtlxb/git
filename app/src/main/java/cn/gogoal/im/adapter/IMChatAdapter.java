@@ -24,7 +24,9 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMMessage;
+import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.hply.roundimage.roundImage.RoundedImageView;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,7 +85,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
     private List<AVIMMessage> messageList;
     private FragmentActivity mContext;
     private LayoutInflater mLayoutInflater;
-    private List<String> urls = new ArrayList<>();
+    private List<String> urls;
     private int chatType;
     private Boolean isYourSelf;
 
@@ -207,6 +209,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             ((LeftTextViewHolder) holder).what_user_send.setOnClickListener(new ClickUtils(new ClickUtils.OnSingleDoubleClickListener() {
                 public void OnSingleClick(View v) {
                 }
+
                 @Override
                 public void OnDoubleClick(View v) {
                     MessageFullScreen.newInstance(textMessage.getText()).show(mContext.getSupportFragmentManager());
@@ -242,6 +245,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             ((RightTextViewHolder) holder).what_user_send.setOnClickListener(new ClickUtils(new ClickUtils.OnSingleDoubleClickListener() {
                 public void OnSingleClick(View v) {
                 }
+
                 @Override
                 public void OnDoubleClick(View v) {
                     MessageFullScreen.newInstance(textMessage.getText()).show(mContext.getSupportFragmentManager());
@@ -708,6 +712,11 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         messageList.add(message);
     }
 
+    //图片集合
+    public void setUrls(List<String> urls) {
+        this.urls = urls;
+    }
+
     //时间处理
     private boolean showTime(Long lastTime, Long rightNow) {
         Long timeDiffer = rightNow - lastTime;
@@ -746,13 +755,11 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
 
     private void imageClickAction(GGImageMessage imageMessage) {
-        if (urls.contains(imageMessage.getAVFile().getUrl())) {
-            urls.remove(imageMessage.getAVFile().getUrl());
-        } else {
-        }
-        urls.add(0, imageMessage.getAVFile().getUrl());
+        KLog.e(urls);
+        int index = urls.indexOf(imageMessage.getAVFile().getUrl());
         Intent intent = new Intent(mContext, ImageDetailActivity.class);
         intent.putStringArrayListExtra("image_urls", (ArrayList<String>) urls);
+        intent.putExtra("index", index);
         mContext.startActivity(intent);
     }
 
@@ -760,7 +767,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         DialogHelp.getSelectDialog(mContext, "", new String[]{"复制文字"}, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                AppDevice.copyTextToBoard(mContext,textMessage.getText());
+                AppDevice.copyTextToBoard(mContext, textMessage.getText());
             }
         }, false).show();
     }

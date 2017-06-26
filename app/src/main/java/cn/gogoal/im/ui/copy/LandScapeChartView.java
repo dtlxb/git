@@ -296,6 +296,7 @@ public class LandScapeChartView extends View {
                 postInvalidate();
                 break;
             case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
                 //MessageHandlerList.sendMessage(StockDetailChartsActivity.class, ConstantUtils.DISS_XCHART_DATA, 0);
                 sendDissChartMsg();
                 showDetail = false;
