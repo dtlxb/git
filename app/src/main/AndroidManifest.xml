@@ -237,9 +237,10 @@
         <activity android:name=".activity.Face2FaceActivity" />
         <activity android:name=".activity.Face2FaceHolderActivity" />
         <activity android:name=".activity.QrcodeProcessActivity" />
-        <activity android:name=".activity.stock.FinancialAnalysisActivity" />
+        <activity android:name=".activity.stock.stockften.FinancialAnalysisActivity" />
         <activity android:name=".activity.QrCodeActivity" />
         <activity android:name=".activity.Test2Activity" />
+        <activity android:name=".activity.stock.stockften.FinancialStatementsActivity" />
     </application>
 
 </manifest>

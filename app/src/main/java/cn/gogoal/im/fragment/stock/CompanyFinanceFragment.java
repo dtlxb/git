@@ -61,9 +61,6 @@ public class CompanyFinanceFragment extends BaseFragment {
 
         BaseActivity.initRecycleView(rv_finance, null);
 
-        adapter = new StockFinanceAdapter(getActivity(), financeList);
-        rv_finance.setAdapter(adapter);
-
         getParamData();
     }
 
@@ -154,6 +151,7 @@ public class CompanyFinanceFragment extends BaseFragment {
         param.put("season", "0");
         param.put("stock_finance_type", stype);
         param.put("page", "1");
+        param.put("stype", "1");
 
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -211,6 +209,7 @@ public class CompanyFinanceFragment extends BaseFragment {
         param.put("season", "0");
         param.put("stock_finance_type", stype);
         param.put("page", "1");
+        param.put("stype", "1");
 
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -269,6 +268,7 @@ public class CompanyFinanceFragment extends BaseFragment {
         param.put("season", "0");
         param.put("stock_finance_type", stype);
         param.put("page", "1");
+        param.put("stype", "1");
 
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
@@ -305,7 +305,9 @@ public class CompanyFinanceFragment extends BaseFragment {
 
                     financeList.addAll(cashList);
 
-                    adapter.notifyDataSetChanged();
+                    adapter = new StockFinanceAdapter(getActivity(), financeList, stockCode,
+                            stockName, stype);
+                    rv_finance.setAdapter(adapter);
                 }
             }
 

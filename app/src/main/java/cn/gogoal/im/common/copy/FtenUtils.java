@@ -323,34 +323,6 @@ public class FtenUtils {
 
     //资产负债表 1一般，2银行，3保险，4证券，5信托
     public static final String[] assetsForm1 = {
-            "现金及存放中央银行款项(万元)", "存放同业和其它金融机构款项(万元)", "贵金属(万元)", "拆出资金(万元)",
-            "交易性金融资产(万元)", "衍生金融资产(万元)", "买入返售金融资产(万元)", "应收利息(万元)",
-            "发放贷款及垫款(万元)", "代理业务资产(万元)", "可供出售金融资产(万元)", "持有至到期投资(万元)",
-            "长期股权投资(万元)", "固定资产(元)", "无形资产(万元)", "递延所得税资产(万元)",
-            "投资性房地产(万元)", "其他资产(万元)", "资产总计(万元)", "同业和其它金融机构存放款项(万元)",
-            "向中央银行借款(万元)", "拆入资金(万元)", "交易性金融负债(万元)", "衍生金融负债(万元)",
-            "卖出回购金融资产款(万元)", "吸收存款(万元)", "应付职工薪酬(万元)", "应交税费(万元)",
-            "应付利息(万元)", "代理业务负债(万元)", "应付债券(万元)", "递延所得税负债",
-            "预计负债(万元)", "其他负债(万元)", "负债合计(万元)", "股本(万元)",
-            "资本公积金(万元)", "减：库存股(万元)", "盈余公积金(万元)", "未分配利润(万元)",
-            "一般风险准备(万元)", "外币报表折算差额(万元)", "少数股东权益(万元)", "归属于母公司所有者权益合计(万元)",
-            "所有者权益合计(万元)", "负债及股东权益总计(万元)"
-    };
-    public static final String[] assetsForm1_1 = {
-            "money_fund1", "deposit_balance2", "lending_funds3", "liability_value4",
-            "trade_financial5", "design_price6", "notes_receivable7", "receivables8",
-            "prepay9", "trade_debt10", "accounts_bill11", "accounts_billcash12",
-            "interest_receivable13", "other_bill14", "dividend_receivable15", "buyfinance_assets16",
-            "inventory17", "noncurrent_assets18", "other_current_assets19", "current_assets20",
-            "current_assets21", "total_current_assets22", "noncurrent_assets23", "noncurrent_assets24",
-            "noncurrent_assets25", "noncurrent_assets26", "noncurrent_assets27", "noncurrent_assets28",
-            "noncurrent_assets29", "noncurrent_assets30", "noncurrent_assets31", "noncurrent_assets32",
-            "noncurrent_assets33", "noncurrent_assets34", "noncurrent_assets35", "noncurrent_assets36",
-            "noncurrent_assets37", "noncurrent_assets38", "noncurrent_assets39", "noncurrent_assets40",
-            "noncurrent_assets41", "noncurrent_assets42", "noncurrent_assets43", "noncurrent_assets44",
-            "noncurrent_assets45", "noncurrent_assets46"
-    };
-    public static final String[] assetsForm2 = {
             "货币资金(万元)", "结算备付金(万元)", "拆出资金(万元)", "其中:交易性金融资产(万元)", "应收票据(万元)",
             "应收账款(万元)", "预付款项(万元)", "应收保费(万元)", "应收分保账款(万元)", "应收分保合同准备金(万元)",
             "应收利息(万元)", "其他应收款(万元)", "应收股利(万元)", "买入返售金融资产(万元)", "存货(万元)",
@@ -370,7 +342,7 @@ public class FtenUtils {
             "未分配利润(万元)", "外币报表折算差额(万元)", "未确认的投资损失(万元)", "少数股东权益(万元)", "归属于母公司所有者权益合计(万元)",
             "所有者权益合计(万元)", "负债和所有者权益总计(万元)"
     };
-    public static final String[] assetsForm2_1 = {
+    public static final String[] assetsForm1_1 = {
             "money_fund1", "deposit_balance2", "lending_funds3", "trade_financial5", "notes_receivable7",
             "receivables8", "prepay9", "trade_debt10", "accounts_bill11", "accounts_billcash12",
             "interest_receivable13", "other_bill14", "dividend_receivable15", "buyfinance_assets16", "inventory17",
@@ -389,6 +361,34 @@ public class FtenUtils {
             "owner_interest98", "owner_interest100", "owner_interest101", "owner_interest102", "owner_interest103",
             "owner_interest104", "owner_interest105", "owner_interest106", "owner_interest107", "owner_interest110",
             "owner_interest111", "owner_interest114"
+    };
+    public static final String[] assetsForm2 = {
+            "现金及存放中央银行款项(万元)", "存放同业和其它金融机构款项(万元)", "贵金属(万元)", "拆出资金(万元)",
+            "交易性金融资产(万元)", "衍生金融资产(万元)", "买入返售金融资产(万元)", "应收利息(万元)",
+            "发放贷款及垫款(万元)", "代理业务资产(万元)", "可供出售金融资产(万元)", "持有至到期投资(万元)",
+            "长期股权投资(万元)", "固定资产(元)", "无形资产(万元)", "递延所得税资产(万元)",
+            "投资性房地产(万元)", "其他资产(万元)", "资产总计(万元)", "同业和其它金融机构存放款项(万元)",
+            "向中央银行借款(万元)", "拆入资金(万元)", "交易性金融负债(万元)", "衍生金融负债(万元)",
+            "卖出回购金融资产款(万元)", "吸收存款(万元)", "应付职工薪酬(万元)", "应交税费(万元)",
+            "应付利息(万元)", "代理业务负债(万元)", "应付债券(万元)", "递延所得税负债",
+            "预计负债(万元)", "其他负债(万元)", "负债合计(万元)", "股本(万元)",
+            "资本公积金(万元)", "减：库存股(万元)", "盈余公积金(万元)", "未分配利润(万元)",
+            "一般风险准备(万元)", "外币报表折算差额(万元)", "少数股东权益(万元)", "归属于母公司所有者权益合计(万元)",
+            "所有者权益合计(万元)", "负债及股东权益总计(万元)"
+    };
+    public static final String[] assetsForm2_1 = {
+            "money_fund1", "deposit_balance2", "lending_funds3", "liability_value4",
+            "trade_financial5", "design_price6", "notes_receivable7", "receivables8",
+            "prepay9", "trade_debt10", "accounts_bill11", "accounts_billcash12",
+            "interest_receivable13", "other_bill14", "dividend_receivable15", "buyfinance_assets16",
+            "inventory17", "noncurrent_assets18", "other_current_assets19", "current_assets20",
+            "current_assets21", "total_current_assets22", "noncurrent_assets23", "noncurrent_assets24",
+            "noncurrent_assets25", "noncurrent_assets26", "noncurrent_assets27", "noncurrent_assets28",
+            "noncurrent_assets29", "noncurrent_assets30", "noncurrent_assets31", "noncurrent_assets32",
+            "noncurrent_assets33", "noncurrent_assets34", "noncurrent_assets35", "noncurrent_assets36",
+            "noncurrent_assets37", "noncurrent_assets38", "noncurrent_assets39", "noncurrent_assets40",
+            "noncurrent_assets41", "noncurrent_assets42", "noncurrent_assets43", "noncurrent_assets44",
+            "noncurrent_assets45", "noncurrent_assets46"
     };
     public static final String[] assetsForm3 = {
             "货币资金(万元)", "拆出资金(万元)", "交易性金融资产(万元)", "衍生金融资产(万元)",
@@ -422,7 +422,7 @@ public class FtenUtils {
             "noncurrent_assets45", "noncurrent_assets46", "flow_debt47", "flow_debt48",
             "flow_debt49", "flow_debt50", "flow_debt51", "flow_debt52",
             "flow_debt53", "flow_debt54", "flow_debt55", "flow_debt56",
-            "flow_debt57", "flow_debt58", "flow_debt59", "flow_debt60",
+            "flow_debt57", "flow_debt58", "flow_debt59", "flow_debt60"
     };
     public static final String[] assetsForm4 = {
             "货币资金(万元)", "其中:客户资金存款(万元)", "结算备付金(万元)", "其中:客户备付金(万元)",
@@ -705,7 +705,8 @@ public class FtenUtils {
     /**
      * 股票详情下的 财务
      */
-//关键指标
+
+    //关键指标
     public static final String[] keyIndex1 = {"每股收益", "每股净资产", "每股经营性现金流", "净资产收益率(ROE)"};
     public static final String[] keyIndex1_1 = {"basic_eps01", "pershare_netasset02", "pershare_cash_activity03", "assets_weighting19"};
     public static final String[] keyIndex1_2 = {"ffajr_01", "ffajr_02", "ffajr_03", "ffajr_16"};
@@ -722,7 +723,7 @@ public class FtenUtils {
     public static final String[] assetsLiabili1 = {"资产合计", "负债合计", "所有者权益合计"};
     public static final String[] assetsLiabili1_1 = {"noncurrent_assets46", "nonflow_debt92", "owner_interest111"};
     public static final String[] assetsLiabili1_2 = {"other_current_assets19", "noncurrent_assets35", "noncurrent_assets45"};
-    public static final String[] assetsLiabili1_3 = {"noncurrent_assets25", "flow_debt50", " flow_debt59"};
+    public static final String[] assetsLiabili1_3 = {"noncurrent_assets25", "flow_debt50", "flow_debt59"};
     public static final String[] assetsLiabili1_4 = {"current_assets20", "noncurrent_assets37", "flow_debt47"};
     public static final String[] assetsLiabili1_5 = {"buyfinance_assets16", "noncurrent_assets31", "noncurrent_assets41"};
 
