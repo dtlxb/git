@@ -142,8 +142,9 @@ public class InfoMyStockTabFragment extends BaseFragment {
                     adapter.setEnableLoadMore(true);
                     adapter.loadMoreComplete();
                     adapter.notifyDataSetChanged();
-
                     xLayout.setStatus(XLayout.Success);
+
+
                 } else if (code == 1001) {
                     if (refreshType == AppConst.REFRESH_TYPE_FIRST) {
                         xLayout.setStatus(XLayout.Empty);

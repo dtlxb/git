@@ -212,6 +212,7 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
                 ImageUtils.saveImageToSD(getActivity(),
                         getExternalCacheDir().getAbsolutePath() +
                                 File.separator +
+                                "image"+File.separator+
                                 String.valueOf(System.currentTimeMillis()) + ".png",
                         params[0], new Impl<String>() {
                             @Override

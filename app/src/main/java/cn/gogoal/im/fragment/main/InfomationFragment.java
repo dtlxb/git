@@ -74,6 +74,7 @@ public class InfomationFragment extends BaseFragment {
         };
 
         xTitle.addAction(messageAction);
+
         ivMessageTag = (ImageView) xTitle.getViewByAction(messageAction);
 
         final int[] tabTypes = {InfomationTabFragment.INFOMATION_TYPE_GET_ASK_NEWS,
@@ -100,6 +101,7 @@ public class InfomationFragment extends BaseFragment {
                 return infoArrays[position];
             }
         });
+
         tabInfomation.setupWithViewPager(vpInfomation);
 
         xTitle.setOnClickListener(new View.OnClickListener() {

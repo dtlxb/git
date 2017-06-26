@@ -12,6 +12,7 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:disabledAlpha">0.5</item>
         <item name="android:listDivider">@drawable/shape_divider_1px</item>
+        <item name="android:progressBarStyle">?android:attr/progressBarStyleInverse</item>
     </style>
 
     <style name="TranslucentTheme" parent="AppTheme" />

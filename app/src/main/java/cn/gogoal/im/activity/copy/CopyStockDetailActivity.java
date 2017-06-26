@@ -518,6 +518,12 @@ public class CopyStockDetailActivity extends BaseActivity {
             }
         });
 
+        linear_header.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageViewShoeDialog.performClick();
+            }
+        });
     }
 
     private void refreshAll() {

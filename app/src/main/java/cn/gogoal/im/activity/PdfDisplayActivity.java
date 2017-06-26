@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.barteksc.pdfviewer.PDFView;
@@ -90,12 +91,20 @@ public class PdfDisplayActivity extends BaseActivity {
         switch (AppDevice.getNetworkType(getActivity())) {
             case 0:
                 xLayout.setStatus(XLayout.No_Network);
+                xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
+                    @Override
+                    public void onReload(View v) {
+                        showPdf();
+                    }
+                });
                 break;
             case 1:
+                xLayout.setStatus(XLayout.Success);
                 new MyLoadAsyncTask().execute(pdfUrl);
                 break;
             case 2:
             case 3:
+                xLayout.setStatus(XLayout.Success);
                 new AlertDialog.Builder(this, R.style.HoloDialogStyle).setTitle("提示")
                         .setMessage("当前处于非WI-FI环境，继续查看将消耗运营商流量，请确认是否继续")
                         .setPositiveButton("继续,有的是流量", new DialogInterface.OnClickListener() {
@@ -254,7 +263,7 @@ public class PdfDisplayActivity extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (pdialog.isShowing()) {
+            if (pdialog!=null && pdialog.isShowing()) {
                 pdialog.dismiss();
                 finish();
             } else {

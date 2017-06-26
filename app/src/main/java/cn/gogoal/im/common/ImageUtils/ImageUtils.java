@@ -241,34 +241,41 @@ public class ImageUtils {
      */
     public static void saveImageToSD(Context ctx, String filePath,
                                      Bitmap bitmap, Impl<String> callback) {
-        if (bitmap != null) {
-            File file = new File(filePath.substring(0,
-                    filePath.lastIndexOf(File.separator)));
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-            BufferedOutputStream bos = null;
-            try {
-                bos = new BufferedOutputStream(
-                        new FileOutputStream(filePath));
-
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
-                bos.flush();
-                if (ctx != null) {
-                    scanPhoto(ctx, new File(filePath));
-                }
-                if (callback != null)
-                    callback.response(Impl.RESPON_DATA_SUCCESS, filePath);
-            } catch (Exception e) {
-                e.printStackTrace();
-                if (callback != null)
-                    callback.response(Impl.RESPON_DATA_ERROR, e.getMessage());
-            } finally {
-                FileUtil.closeIO(bos);
-            }
-        } else {
+        if (bitmap == null) {
             if (callback != null)
                 callback.response(Impl.RESPON_DATA_ERROR, "bitmap non null");
+            return;
+        }
+        if (ctx == null) {
+            if (callback != null) {
+                callback.response(Impl.RESPON_DATA_ERROR, "Context non null");
+            }
+            return;
+        }
+
+        File file = new File(filePath.substring(0,
+                filePath.lastIndexOf(File.separator)));
+
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        BufferedOutputStream bos = null;
+        try {
+            bos = new BufferedOutputStream(
+                    new FileOutputStream(filePath));
+
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            bos.flush();
+            scanPhoto(ctx, new File(filePath));
+            if (callback != null)
+                callback.response(Impl.RESPON_DATA_SUCCESS, filePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (callback != null)
+                callback.response(Impl.RESPON_DATA_ERROR, e.getMessage());
+        } finally {
+            FileUtil.closeIO(bos);
         }
     }
 

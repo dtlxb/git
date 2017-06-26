@@ -465,6 +465,9 @@ public class CalendarUtils {
      * 获取当前时间的时间戳
      */
     public static String getCurrentTime(String format) {
+        if (TextUtils.isEmpty(format)){
+            format="yyyy-MM-dd HH:mm:ss";
+        }
         SimpleDateFormat df = new SimpleDateFormat(format, Locale.CHINA);
         return df.format(System.currentTimeMillis());
     }

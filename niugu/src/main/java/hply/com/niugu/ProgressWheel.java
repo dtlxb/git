@@ -47,7 +47,7 @@ public class ProgressWheel extends View {
     private boolean barGrowingFromFront = true;
 
     private long pausedTimeWithoutGrowing = 0;
-    private final long pauseGrowingTime = 200;
+    private static final long pauseGrowingTime = 200;
 
     //Colors (with defaults)
     private int barColor = 0xAA000000;

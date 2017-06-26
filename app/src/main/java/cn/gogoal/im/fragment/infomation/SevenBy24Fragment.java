@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -112,6 +113,8 @@ public class SevenBy24Fragment extends BaseFragment {
         new GGOKHTTP(params, GGOKHTTP.GET_FULL_TIME_INFO, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
 

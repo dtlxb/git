@@ -88,11 +88,11 @@ public class XLayout extends FrameLayout {
         build();
     }
 
-    public View getEmptyView() {
+    public View getEmptyView(){
         return emptyPage;
     }
 
-    public View getErrorView() {
+    public View getErrorView(){
         return errorPage;
     }
 
@@ -289,9 +289,6 @@ public class XLayout extends FrameLayout {
 
     /**
      * 设置Empty状态提示文本，仅对当前所在的地方有效
-     *
-     * @param text
-     * @return
      */
     public XLayout setEmptyText(String text) {
         if (!TextUtils.isEmpty(text)) {

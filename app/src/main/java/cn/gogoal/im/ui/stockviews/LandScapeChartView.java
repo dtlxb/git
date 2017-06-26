@@ -161,7 +161,7 @@ public class LandScapeChartView extends View {
                 //MessageHandlerList.sendMessage(StockDetailChartsActivity.class, 0x02, fenshiData, 0);
                 HashMap<String, Object> map = new HashMap<>();
                 map.put("fenshi_data", fenshiData);
-                BaseMessage baseMessage = new BaseMessage("Stock_FenShi", map);
+                BaseMessage<Object> baseMessage = new BaseMessage<>("Stock_FenShi", map);
                 AppManager.getInstance().sendMessage("Stock_FenshiData", baseMessage);
 
                 float priceY = (float) (uperBottom - (StringUtils.getDouble(fenshiData.getPrice()) + uperHalfHigh - initialWeightedIndex)
