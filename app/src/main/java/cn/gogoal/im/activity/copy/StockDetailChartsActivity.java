@@ -69,7 +69,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
     @BindView(hply.com.niugu.R.id.times_detail)
     View times_detail;
     @BindView(hply.com.niugu.R.id.head_stock_detail_charts)
-    View fragment_stock_detail;
+    View head_stock_detail_charts;
     //页面加载动画
     @BindView(hply.com.niugu.R.id.load_animation)
     RelativeLayout load_animation;
@@ -487,7 +487,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
     public void showStockIntime(BaseMessage message) {
         times_detail.setVisibility(View.VISIBLE);
         kline_detail.setVisibility(View.INVISIBLE);
-        fragment_stock_detail.setVisibility(View.INVISIBLE);
+        head_stock_detail_charts.setVisibility(View.INVISIBLE);
         Map<String, Object> messageMap = message.getOthers();
         StockMinuteData stockMinuteData = (StockMinuteData) messageMap.get("fenshi_data");
         String mData = stockMinuteData.getDate();
@@ -538,7 +538,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
     public void showKDataIntime(BaseMessage message) {
         kline_detail.setVisibility(View.VISIBLE);
         times_detail.setVisibility(View.INVISIBLE);
-        fragment_stock_detail.setVisibility(View.INVISIBLE);
+        head_stock_detail_charts.setVisibility(View.INVISIBLE);
 
         Map<String, Object> messageMap = message.getOthers();
         int index = (int) messageMap.get("select_index");
@@ -652,7 +652,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
     public void kchartDataDismiss(String code) {
         kline_detail.setVisibility(View.INVISIBLE);
         times_detail.setVisibility(View.INVISIBLE);
-        fragment_stock_detail.setVisibility(View.VISIBLE);
+        head_stock_detail_charts.setVisibility(View.VISIBLE);
     }
 
     /**
