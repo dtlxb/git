@@ -1,4 +1,4 @@
-package cn.gogoal.im.activity.stock;
+package cn.gogoal.im.activity.stock.stockften;
 
 import android.content.Context;
 import android.view.View;

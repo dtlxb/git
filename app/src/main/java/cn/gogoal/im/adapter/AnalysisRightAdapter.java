@@ -5,7 +5,9 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -43,23 +45,44 @@ public class AnalysisRightAdapter extends MyBaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_analysis_right, parent, false);
             holder = new ViewHolder();
             holder.linearAnalysis = (LinearLayout) convertView.findViewById(R.id.linearAnalysis);
+            holder.relaReport1 = (RelativeLayout) convertView.findViewById(R.id.relaReport1);
+            holder.relaReport2 = (RelativeLayout) convertView.findViewById(R.id.relaReport2);
+            holder.relaReport3 = (RelativeLayout) convertView.findViewById(R.id.relaReport3);
+            holder.relaReport4 = (RelativeLayout) convertView.findViewById(R.id.relaReport4);
+            holder.relaReport5 = (RelativeLayout) convertView.findViewById(R.id.relaReport5);
             holder.textReport1 = (TextView) convertView.findViewById(R.id.textReport1);
             holder.textReport2 = (TextView) convertView.findViewById(R.id.textReport2);
             holder.textReport3 = (TextView) convertView.findViewById(R.id.textReport3);
             holder.textReport4 = (TextView) convertView.findViewById(R.id.textReport4);
             holder.textReport5 = (TextView) convertView.findViewById(R.id.textReport5);
+            holder.imgReport1 = (ImageView) convertView.findViewById(R.id.imgReport1);
+            holder.imgReport2 = (ImageView) convertView.findViewById(R.id.imgReport2);
+            holder.imgReport3 = (ImageView) convertView.findViewById(R.id.imgReport3);
+            holder.imgReport4 = (ImageView) convertView.findViewById(R.id.imgReport4);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
+        if (position == 0) {
+            holder.imgReport1.setVisibility(View.VISIBLE);
+            holder.imgReport2.setVisibility(View.VISIBLE);
+            holder.imgReport3.setVisibility(View.VISIBLE);
+            holder.imgReport4.setVisibility(View.VISIBLE);
+        } else {
+            holder.imgReport1.setVisibility(View.INVISIBLE);
+            holder.imgReport2.setVisibility(View.INVISIBLE);
+            holder.imgReport3.setVisibility(View.INVISIBLE);
+            holder.imgReport4.setVisibility(View.INVISIBLE);
+        }
+
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                 screenWidth - AppDevice.dp2px(context, 150), LinearLayout.LayoutParams.MATCH_PARENT);
-        holder.textReport1.setLayoutParams(param);
-        holder.textReport2.setLayoutParams(param);
-        holder.textReport3.setLayoutParams(param);
-        holder.textReport4.setLayoutParams(param);
-        holder.textReport5.setLayoutParams(param);
+        holder.relaReport1.setLayoutParams(param);
+        holder.relaReport2.setLayoutParams(param);
+        holder.relaReport3.setLayoutParams(param);
+        holder.relaReport4.setLayoutParams(param);
+        holder.relaReport5.setLayoutParams(param);
 
         if (position % 2 == 0) {
             holder.linearAnalysis.setBackgroundColor(ContextCompat.getColor(context, R.color.bg_color_1));
@@ -91,6 +114,8 @@ public class AnalysisRightAdapter extends MyBaseAdapter {
 
     class ViewHolder {
         private LinearLayout linearAnalysis;
+        private RelativeLayout relaReport1, relaReport2, relaReport3, relaReport4, relaReport5;
         private TextView textReport1, textReport2, textReport3, textReport4, textReport5;
+        private ImageView imgReport1, imgReport2, imgReport3, imgReport4;
     }
 }

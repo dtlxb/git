@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorTitle"
     android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
@@ -10,5 +11,15 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:scrollbars="vertical" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/app_disclaimer"
+        android:textColor="@color/textColor_666666"
+        android:textSize="14dp" />
 
 </LinearLayout>
