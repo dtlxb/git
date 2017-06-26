@@ -134,6 +134,7 @@ public class ChatFragment extends BaseFragment {
     private FragmentTransaction transaction;
     private FragmentManager childManager;
     private int keyBordHeight;
+    private List<String> imageUrls = new ArrayList<>();//图片集合
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -189,6 +190,7 @@ public class ChatFragment extends BaseFragment {
                         public void done(List<AVIMMessage> list, AVIMException e) {
                             if (e == null && null != list && list.size() > 0) {
                                 messageList.addAll(0, list);
+                                imageUrls.addAll(0, getAllImageUrls(list));
                                 imChatAdapter.notifyItemRangeInserted(0, list.size());
                             }
                             message_swipe.setRefreshing(false);
@@ -579,6 +581,7 @@ public class ChatFragment extends BaseFragment {
     private void refreshRecyclerView(AVIMMessage avimMessage, boolean needJump) {
         if (avimMessage != null) {
             imChatAdapter.addItem(avimMessage);
+            imChatAdapter.setUrls(imageUrls);
             imChatAdapter.notifyItemInserted(messageList.size() - 1);
             if (needJump) {
                 message_recycler.smoothScrollToPosition(messageList.size() - 1);
@@ -608,6 +611,7 @@ public class ChatFragment extends BaseFragment {
         mImageMessage.setMessageSendStatus(AppConst.MESSAGE_SEND_STATUS_SENDING);
         mImageMessage.setTimestamp(CalendarUtils.getCurrentTime());
 
+        imageUrls.add(file.getPath());
         refreshRecyclerView(mImageMessage, true);
 
         AsyncTaskUtil.doAsync(new AsyncTaskUtil.AsyncCallBack() {
@@ -756,10 +760,11 @@ public class ChatFragment extends BaseFragment {
         if (null != imConversation) {
             //查询消息处理
             if (null != avimMessages && avimMessages.size() > 0) {
-                KLog.e(avimMessages.size());
                 messageList.addAll(avimMessages);
+                imageUrls.addAll(getAllImageUrls(messageList));
                 dealSquareMessage();
                 imChatAdapter.setChatType(chatType);
+                imChatAdapter.setUrls(imageUrls);
                 imChatAdapter.notifyDataSetChanged();
                 message_recycler.getLayoutManager().scrollToPosition(0);
             } else {
@@ -805,6 +810,7 @@ public class ChatFragment extends BaseFragment {
 
     private void dealMessages(List<AVIMMessage> list, boolean needUpdate) {
         messageList.addAll(list);
+        imageUrls.addAll(getAllImageUrls(list));
         dealSquareMessage();
         setCacheMessage();
         //单聊，群聊处理(没发消息的时候不保存)
@@ -812,6 +818,7 @@ public class ChatFragment extends BaseFragment {
             saveToMessageList(messageList.get(messageList.size() - 1));
         }
         imChatAdapter.setChatType(chatType);
+        imChatAdapter.setUrls(imageUrls);
         imChatAdapter.notifyDataSetChanged();
         message_recycler.getLayoutManager().scrollToPosition(messageList.size() - 1);
     }
@@ -838,6 +845,20 @@ public class ChatFragment extends BaseFragment {
         ViewGroup.LayoutParams params = view.getLayoutParams();
         params.height = keyBordHeight;
         find_more_layout.setLayoutParams(params);
+    }
+
+    /**
+     * 获取图片组合
+     */
+    private List<String> getAllImageUrls(List<AVIMMessage> messages) {
+        List<String> urls = new ArrayList<>();
+        for (int i = 0; i < messages.size(); i++) {
+            AVIMMessage avimMessage = messages.get(i);
+            if (avimMessage instanceof GGImageMessage) {
+                urls.add(((GGImageMessage) avimMessage).getAVFile().getUrl());
+            }
+        }
+        return urls;
     }
 
     //群会话入口
@@ -997,6 +1018,9 @@ public class ChatFragment extends BaseFragment {
             AVIMMessage message = (AVIMMessage) map.get("message");
             AVIMConversation conversation = (AVIMConversation) map.get("conversation");
 
+            if (message instanceof GGImageMessage) {
+                imageUrls.add(((GGImageMessage) message).getAVFile().getUrl());
+            }
             //判断房间一致然后做消息接收处理
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
                 refreshRecyclerView(message, isVisBottom(message_recycler));

@@ -4,10 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnFten"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_finance"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="F10"/>
+        android:background="@android:color/white"
+        android:scrollbars="vertical" />
 
 </LinearLayout>

@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/tv_sticky_header_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorAccent"
-    android:padding="10dp"
-    android:textColor="@android:color/white"
-    android:textSize="14sp"
-    android:visibility="gone"
-    tools:text="@string/text_empty" />
+    android:background="@android:color/white"
+    android:orientation="horizontal"
+    android:paddingBottom="7.5dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="7.5dp">
+
+    <View
+        android:layout_width="3dp"
+        android:layout_height="match_parent"
+        android:layout_marginRight="5dp"
+        android:background="@color/hotsearch_list_number1" />
+
+    <TextView
+        android:id="@+id/tv_sticky_header_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        tools:text="@string/text_empty" />
+
+</LinearLayout>

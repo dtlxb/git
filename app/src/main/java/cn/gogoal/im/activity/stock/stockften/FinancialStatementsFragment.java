@@ -1,4 +1,4 @@
-package cn.gogoal.im.fragment.stock.stockften;
+package cn.gogoal.im.activity.stock.stockften;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -127,7 +127,7 @@ public class FinancialStatementsFragment extends BaseFragment {
         param.put("stock_code", stockCode);
         param.put("report_stype", "1");
         param.put("season", season);
-        param.put("stype", stype);
+        param.put("stock_finance_type", stype);
         param.put("page", "1");
 
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {

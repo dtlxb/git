@@ -115,7 +115,7 @@ public class TreatFragment extends BaseFragment {
         } else if (type == AppConst.TREAT_TYPE_MING_XI) {
             fragment.itemHeight = 19;
         } else if (type == AppConst.TREAT_TYPE_MONEY) {
-            fragment.itemHeight = fromStockDetail ? 11.2f : 22.5f;
+            fragment.itemHeight = fromStockDetail ? 11.2f : 21f;
         }
         fragment.setArguments(bundle);
         return fragment;

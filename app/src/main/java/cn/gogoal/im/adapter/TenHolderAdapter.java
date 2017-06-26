@@ -35,7 +35,6 @@ public class TenHolderAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
         this.contList = list;
     }
 
-
     @Override
     public LayoutHelper onCreateLayoutHelper() {
         return new LinearLayoutHelper();

@@ -1,4 +1,4 @@
-package cn.gogoal.im.fragment.stock.stockften;
+package cn.gogoal.im.activity.stock.stockften;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
