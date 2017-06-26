@@ -3,17 +3,18 @@ package cn.gogoal.im.bean.stock;
 import android.support.annotation.ColorInt;
 
 /**
- * author wangjd on 2017/6/13 0013.
+ * author wangjd on 2017/4/11 0011.
  * Staff_id 1375
  * phone 18930640263
- * description :
+ * description :${annotated}.
  */
-public class StockDialogInfo {
+public class StockDetail2Text {
     private String key;
     private String value;
-    private @ColorInt int  statusColor;
+    private @ColorInt
+    int  statusColor;
 
-    public StockDialogInfo(String key, String value, int statusColor) {
+    public StockDetail2Text(String key, String value, int statusColor) {
         this.key = key;
         this.value = value;
         this.statusColor = statusColor;
@@ -27,7 +28,7 @@ public class StockDialogInfo {
         this.statusColor = statusColor;
     }
 
-    public StockDialogInfo(String key, String value) {
+    public StockDetail2Text(String key, String value) {
         this.key = key;
         this.value = value;
     }

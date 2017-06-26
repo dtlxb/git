@@ -113,7 +113,6 @@ public class StockNewsMinFragment extends BaseFragment {
         getDatas();
 
         xLayout.setEmptyText("暂无" + stockNewsType.getTitle() + "数据");
-
         xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
             @Override
             public void onReload(View v) {

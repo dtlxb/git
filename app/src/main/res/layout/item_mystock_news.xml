@@ -1,48 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="65dp"
-    android:orientation="vertical"
-    android:paddingEnd="15dp"
+    android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:paddingStart="15dp">
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingEnd="15dp"
+    android:paddingStart="15dp"
+    android:paddingTop="5dp">
 
     <TextView
         android:id="@+id/tv_mystock_news_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true"
         android:ellipsize="end"
+        android:singleLine="true"
         android:text="万科股价如继续下跌，谁能成为中小股东的救星"
         android:textColor="@color/textColor_333333"
-        android:textSize="17sp" />
+        android:textSize="17sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_mystock_news_stockInfo"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_mystock_news_title"
+        android:maxLines="1"
         android:layout_marginTop="5dp"
+        android:text="万科(000002)"
+        android:textColor="@color/textColor_666666"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_mystock_news_stockRate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/tv_mystock_news_stockInfo"
+        android:layout_below="@+id/tv_mystock_news_title"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:maxLines="1"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:text="12.23\u3000\u30000.36%"
+        android:textColor="@color/stock_red"
+        android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/tv_mystock_news_stockInfo"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:text="万科(000002)"
-            android:textColor="@color/textColor_666666"
-            android:textSize="14sp" />
+    <TextView
+        android:id="@+id/tv_mystock_news_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/tv_mystock_news_stockRate"
+        android:maxLines="1"
+        android:layout_marginTop="5dp"
+        android:text="2017-05-12 09-16"
+        android:textColor="@color/textColor_999999"
+        android:textSize="13sp" />
 
-        <TextView
-            android:id="@+id/tv_mystock_news_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:text="2017-05-12 09-16"
-            android:textColor="@color/textColor_999999"
-            android:textSize="13sp" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

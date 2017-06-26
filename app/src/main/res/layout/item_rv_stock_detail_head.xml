@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:layout_marginTop="9dp"
+    android:layout_marginBottom="10dp"
+    android:layout_marginTop="15dp"
+    android:layout_marginStart="10dp"
     android:orientation="vertical">
 
     <TextView
@@ -21,4 +23,5 @@
         android:text="18.88"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
+
 </LinearLayout>

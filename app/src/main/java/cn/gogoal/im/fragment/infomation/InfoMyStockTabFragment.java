@@ -130,6 +130,7 @@ public class InfoMyStockTabFragment extends BaseFragment {
                     if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
                         dataList.clear();
                     }
+
                     List<InfoMyStock.Data> datas =
                             JSONObject.parseObject(responseInfo, InfoMyStock.class).getData();
 

@@ -3,7 +3,6 @@ package cn.gogoal.im.common.ImageUtils;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,7 +31,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +38,7 @@ import java.io.InputStream;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.Impl;
+import cn.gogoal.im.common.SaveBitmapAsyncTask;
 
 /**
  * author wangjd on 2017/2/23 0023.
@@ -155,9 +154,9 @@ public class ImageUtils {
     /**
      * bitmap 保存图片到DCIM下
      *
-     * @see cn.gogoal.im.common.SaveImageAsyncTask
+     * @see SaveBitmapAsyncTask
      */
-    public static void saveImage2DCIM(Context context, Bitmap bitmap, String filename, Impl<String> callBack) {
+    public static void saveBitmap2Pictures(Context context, Bitmap bitmap, String filename, Impl<String> callBack) {
 
         if (bitmap == null) {
             if (callBack != null)
@@ -165,7 +164,7 @@ public class ImageUtils {
             return;
         }
 
-        String dirs = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+        String dirs = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                 .getAbsolutePath() + File.separator + "GoGoal";
 
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -237,7 +236,7 @@ public class ImageUtils {
 
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
             bos.flush();
-            scanPhoto(ctx, new File(filePath));
+//            scanPhoto(ctx, new File(filePath));
             if (callback != null)
                 callback.response(Impl.RESPON_DATA_SUCCESS, filePath);
         } catch (Exception e) {
@@ -253,7 +252,7 @@ public class ImageUtils {
         if (context == null) {
             return;
         }
-        File cacheDir = context.getExternalCacheDir();
+        File cacheDir = context.getExternalFilesDir("cache");
         if (cacheDir != null) {
             boolean exists = cacheDir.exists();
             if (!exists) {
@@ -570,14 +569,14 @@ public class ImageUtils {
      * 让Gallery上能马上看到该图片
      */
     private static void scanPhoto(Context ctx, File imgFile) {
-        try {
-            MediaStore.Images.Media.insertImage(ctx.getContentResolver(),
-                    imgFile.getAbsolutePath(), imgFile.getName(), null);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        ctx.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-                Uri.parse("file://" + imgFile.getAbsolutePath())));
+//        try {
+//            MediaStore.Images.Media.insertImage(ctx.getContentResolver(),
+//                    imgFile.getAbsolutePath(), imgFile.getName(), null);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        ctx.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+//                Uri.parse("file://" + imgFile.getAbsolutePath())));
     }
 
     /**

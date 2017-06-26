@@ -14,7 +14,7 @@ import cn.gogoal.im.common.ImageUtils.ImageUtils;
  * phone 18930640263
  * description :Bitmap异步保存到.../DCIM/GoGoal文件夹
  */
-public class SaveImageAsyncTask extends AsyncTask<Bitmap, Void, Integer> {
+public class SaveBitmapAsyncTask extends AsyncTask<Bitmap, Void, Integer> {
 
     private String flag;//保存的图片类型，
     private Context context;//上下文
@@ -22,12 +22,12 @@ public class SaveImageAsyncTask extends AsyncTask<Bitmap, Void, Integer> {
 
     private int resCode;
 
-    private SaveImageAsyncTask(Context context, String saveName) {
+    private SaveBitmapAsyncTask(Context context, String saveName) {
         this.context = context;
         this.saveName = saveName;
     }
 
-    public SaveImageAsyncTask(Context context,String saveName,String flag) {
+    public SaveBitmapAsyncTask(Context context, String saveName, String flag) {
         this.context = context;
         this.saveName=saveName;
         this.flag = flag;
@@ -44,7 +44,7 @@ public class SaveImageAsyncTask extends AsyncTask<Bitmap, Void, Integer> {
 
     @Override
     protected Integer doInBackground(Bitmap... params) {
-        ImageUtils.saveImage2DCIM(
+        ImageUtils.saveBitmap2Pictures(
                 context,
                 params[0],
                 StringUtils.isActuallyEmpty(saveName) ? String.valueOf(System.currentTimeMillis()) : saveName,

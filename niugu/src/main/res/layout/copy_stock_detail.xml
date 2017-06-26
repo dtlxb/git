@@ -9,34 +9,24 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/relative_header"
+        android:id="@+id/title_header"
         android:layout_width="match_parent"
         android:layout_height="43dp"
         android:background="@color/header_gray">
 
-        <LinearLayout
+
+        <TextView
             android:id="@+id/btnBack"
-            android:layout_width="70dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
+            android:drawableLeft="@mipmap/image_title_back_255"
+            android:drawablePadding="0dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:paddingStart="10dp"
+            android:text="返回"
+            android:textColor="@color/title_base_button_text_color"
+            android:textSize="@dimen/text_size_16" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@mipmap/image_title_back_255" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:text="返回"
-                android:textColor="@color/title_base_button_text_color"
-                android:textSize="@dimen/text_size_14" />
-
-        </LinearLayout>
 
         <TextView
             android:id="@+id/textHeadTitle"
@@ -358,12 +348,12 @@
                             android:id="@+id/vp_news_"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+                            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="15dp"
-                            android:background="#f8f8f8"/>
+                            android:background="#f8f8f8" />
 
                     </LinearLayout>
 
@@ -393,17 +383,17 @@
     <FrameLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"
-        android:background="@android:color/white"
-        android:layout_height="55dp">
+        android:layout_height="55dp"
+        android:background="@android:color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:alpha="0.9"
+            android:background="@android:color/black"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="5dp"
-            android:alpha="0.9"
-            android:background="@android:color/black"
             android:paddingRight="5dp">
 
             <TextView

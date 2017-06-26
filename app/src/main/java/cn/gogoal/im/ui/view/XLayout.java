@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import cn.gogoal.im.R;
@@ -88,11 +89,11 @@ public class XLayout extends FrameLayout {
         build();
     }
 
-    public View getEmptyView(){
+    public View getEmptyView() {
         return emptyPage;
     }
 
-    public View getErrorView(){
+    public View getErrorView() {
         return errorPage;
     }
 
@@ -103,13 +104,24 @@ public class XLayout extends FrameLayout {
     private void build() {
 
         if (mConfig.loadingView == null) {
-            loadingPage = LayoutInflater.from(mContext).inflate(mConfig.loadingLayoutId, null);
+            loadingPage = LayoutInflater.from(mContext).inflate(mConfig.loadingLayoutId,
+                    new LinearLayout(mContext),false);
+            loadingPage.setLayoutParams(new FrameLayout.LayoutParams(-1,-1));
         } else {
             loadingPage = mConfig.loadingView;
         }
-        errorPage = LayoutInflater.from(mContext).inflate(R.layout.widget_error_page, null);
-        emptyPage = LayoutInflater.from(mContext).inflate(R.layout.widget_empty_page, null);
-        networkPage = LayoutInflater.from(mContext).inflate(R.layout.widget_nonetwork_page, null);
+        errorPage = LayoutInflater.from(mContext).inflate(
+                R.layout.widget_error_page, new LinearLayout(mContext), false);
+        errorPage.setLayoutParams(new FrameLayout.LayoutParams(-1,-1));
+
+        emptyPage = LayoutInflater.from(mContext).inflate(
+                R.layout.widget_empty_page, new LinearLayout(mContext), false);
+        emptyPage.setLayoutParams(new FrameLayout.LayoutParams(-1,-1));
+
+        networkPage = LayoutInflater.from(mContext).inflate(
+                R.layout.widget_nonetwork_page, new LinearLayout(mContext), false);
+        networkPage.setLayoutParams(new FrameLayout.LayoutParams(-1,-1));
+
         defineLoadingPage = null;
 
         loadingPage.setBackgroundColor(ContextCompat.getColor(mContext, mConfig.backgroundColor));

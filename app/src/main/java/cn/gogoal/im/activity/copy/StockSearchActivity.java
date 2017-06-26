@@ -159,8 +159,6 @@ public class StockSearchActivity extends BaseActivity {
                         SPTools.saveJsonObject("searchedStock", stockJson);
 
                         NormalIntentUtils.go2StockDetail(getActivity(), stockcode, stockname);
-//                        setResult(ConstantUtils.RESULT_OK, intent);
-//                        finish();
                         HistorySearchData data = new HistorySearchData(stockname, stockcode);
                         StockUtils.addSearchedStock(JSONObject.parseObject(JSONObject.toJSONString(data)));
                         initHotList();

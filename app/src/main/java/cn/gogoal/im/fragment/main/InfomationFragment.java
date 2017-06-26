@@ -21,7 +21,6 @@ import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
-import cn.gogoal.im.fragment.infomation.InfoMyStockTabFragment;
 import cn.gogoal.im.fragment.infomation.InfomationTabFragment;
 import cn.gogoal.im.fragment.infomation.SevenBy24Fragment;
 import cn.gogoal.im.ui.Badge.BadgeView;
@@ -87,8 +86,8 @@ public class InfomationFragment extends BaseFragment {
         vpInfomation.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return position == 0 ? new InfoMyStockTabFragment() : (position == 1 ? new SevenBy24Fragment() :
-                        InfomationTabFragment.newInstance(tabTypes[position - 2]));
+                return (position == 0 ? new SevenBy24Fragment() :
+                        InfomationTabFragment.newInstance(tabTypes[position - 1]));
             }
 
             @Override

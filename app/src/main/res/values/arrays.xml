@@ -78,18 +78,6 @@
         <item>研报</item>
     </string-array>
 
-    <string-array name="treat_info">
-        <item>最 高</item>
-        <item>最 低</item>
-        <item>成交额</item>
-        <item>内 盘</item>
-        <item>外 盘</item>
-        <item>总市值</item>
-        <item>市盈率</item>
-        <item>振 幅</item>
-        <item>流通市值</item>
-    </string-array>
-
     <string-array name="stock_chart_array">
         <item>分时</item>
         <item>五日</item>
@@ -104,12 +92,6 @@
         <item>研报</item>
         <item>资料</item>
         <item>财务</item>
-    </string-array>
-
-    <string-array name="srock_chart_image">
-        <item>EPS变动图</item>
-        <item>净利润变动图</item>
-        <item>估值波动带</item>
     </string-array>
 
     <string-array name="edit_info_key">
@@ -180,7 +162,7 @@
     </string-array>
 
     <string-array name="info_arrar">
-        <item>自选股</item>
+        <!--<item>自选股</item>-->
         <item>7×24</item>
         <item>要闻</item>
         <item>朝阳会务</item>

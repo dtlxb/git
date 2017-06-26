@@ -16,7 +16,7 @@
             android:layout_height="40dp"
             android:background="@color/Kline_item_bg"
             app:tabIndicatorColor="@color/stock_red"
-            app:tabIndicatorHeight="1dp"
+            app:tabIndicatorHeight="1.5dp"
             app:tabSelectedTextColor="@color/stock_red"
             app:tabTextColor="@color/text_color_tab" />
 

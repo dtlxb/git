@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import java.util.HashMap;
 
@@ -44,6 +45,8 @@ public class CompanyInfoFragment extends BaseFragment {
         new GGOKHTTP(map, GGOKHTTP.COMPANY_SUMMARY, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+
                 CompanySummary companySummary =
                         JSONObject.parseObject(responseInfo, CompanySummary.class);
 
