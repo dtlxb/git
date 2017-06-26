@@ -7,8 +7,8 @@ package cn.gogoal.im.bean;
  */
 public class ProfileData {
 
-    public String name;
-    public String content;
+    private String name;
+    private String content;
 
     public ProfileData(String name, String content) {
         this.name = name;

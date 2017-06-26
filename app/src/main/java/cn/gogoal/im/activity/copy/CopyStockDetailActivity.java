@@ -323,9 +323,9 @@ public class CopyStockDetailActivity extends BaseActivity {
         fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 1));
         fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 2));
         fragments.add(CompanyInfoFragment.newInstance(stockCode));
-        fragments.add(new CompanyFinanceFragment());
+        fragments.add(CompanyFinanceFragment.getInstance(stockCode, stockName));
 
-        viewPagerNews.setOffscreenPageLimit(4);
+        viewPagerNews.setOffscreenPageLimit(5);
         viewPagerNews.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             public Fragment getItem(int position) {
                 return fragments.get(position);
