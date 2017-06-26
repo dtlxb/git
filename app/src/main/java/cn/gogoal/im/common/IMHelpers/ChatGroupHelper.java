@@ -261,10 +261,10 @@ public class ChatGroupHelper {
      * 缓存群拼接的九宫头像
      */
     public static void cacheGroupAvatar(String conversationId, Bitmap bitmap) {
-        ImageUtils.saveImageToSD(MyApp.getAppContext(),
+        ImageUtils.saveBitmapToSD(MyApp.getAppContext(),
                 MyApp.getAppContext().getExternalFilesDir("imagecache")
                         .getAbsolutePath() + File.separator + "_" + conversationId + ".png",
-                bitmap);
+                bitmap,null);
     }
 
     public static void setGroupAvatar(String conversationId, AvatarTakeListener listener) {
@@ -553,6 +553,9 @@ public class ChatGroupHelper {
                     public void onSuccess(String onlineUri) {
 
                         if (TextUtils.isEmpty(conversationId)) {
+                            if (null!=messageResponse){
+                                messageResponse.sendFailed();
+                            }
                             return;
                         }
 
@@ -580,6 +583,9 @@ public class ChatGroupHelper {
 
                     @Override
                     public void onFailed() {
+                        if (null!=messageResponse){
+                            messageResponse.sendFailed();
+                        }
                     }
                 });
             }
@@ -610,6 +616,9 @@ public class ChatGroupHelper {
                         }
                     }
                 } else {
+                    if (null!=messageResponse){
+                        messageResponse.sendFailed();
+                    }
                 }
             }
 

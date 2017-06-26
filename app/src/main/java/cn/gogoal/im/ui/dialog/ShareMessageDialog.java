@@ -20,6 +20,7 @@ import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
+import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
 
 /**
@@ -118,7 +119,17 @@ public class ShareMessageDialog extends BaseCentDailog {
                             ChatGroupHelper.sendImageMessage(
                                     entity.getImMessageBean().getConversationID(),
                                     entity.getImMessageBean().getChatType(),
-                                    new File(entity.getEntity().getImage()), null);
+                                    new File(entity.getEntity().getImage()), new ChatGroupHelper.MessageResponse() {
+                                        @Override
+                                        public void sendSuccess() {
+                                            UIHelper.toast(getActivity(),"分享成功!");
+                                        }
+
+                                        @Override
+                                        public void sendFailed() {
+                                            UIHelper.toast(getActivity(),"分享失败!");
+                                        }
+                                    });
 
                             ShareMessageDialog.this.dismiss();
                             getActivity().finish();

@@ -165,10 +165,10 @@ public class UserUtils {
                 @Override
                 public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                     listener.response(Impl.RESPON_DATA_SUCCESS, resource);
-                    ImageUtils.saveImageToSD(MyApp.getAppContext(), MyApp.getAppContext().getExternalFilesDir("avatar") +
+                    ImageUtils.saveBitmapToSD(MyApp.getAppContext(), MyApp.getAppContext().getExternalFilesDir("avatar") +
                                     File.separator + "avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()) +
                                     ImageUtils.getImageSuffix(UserUtils.getUserAvatar()),
-                            resource);
+                            resource,null);
                 }
             });
         } else {

@@ -209,38 +209,8 @@ public class ImageUtils {
     /**
      * 写图片文件到SD卡
      */
-    public static void saveImageToSD(Context ctx, String filePath,
-                                     Bitmap bitmap) {
-        if (bitmap != null) {
-            File file = new File(filePath.substring(0,
-                    filePath.lastIndexOf(File.separator)));
-            if (!file.exists()) {
-                file.mkdirs();
-            }
-            BufferedOutputStream bos = null;
-            try {
-                bos = new BufferedOutputStream(
-                        new FileOutputStream(filePath));
-
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
-                bos.flush();
-                if (ctx != null) {
-                    scanPhoto(ctx, new File(filePath));
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                FileUtil.closeIO(bos);
-            }
-        }
-    }
-
-    /**
-     * 写图片文件到SD卡
-     */
-    public static void saveImageToSD(Context ctx, String filePath,
-                                     Bitmap bitmap, Impl<String> callback) {
+    public static void saveBitmapToSD(Context ctx, String filePath,
+                                      Bitmap bitmap, Impl<String> callback) {
         if (bitmap == null) {
             if (callback != null)
                 callback.response(Impl.RESPON_DATA_ERROR, "bitmap non null");
@@ -276,6 +246,24 @@ public class ImageUtils {
                 callback.response(Impl.RESPON_DATA_ERROR, e.getMessage());
         } finally {
             FileUtil.closeIO(bos);
+        }
+    }
+
+    public static void cacheImage(Context context, Bitmap bitmap, String saveName, Impl<String> callback) {
+        if (context == null) {
+            return;
+        }
+        File cacheDir = context.getExternalCacheDir();
+        if (cacheDir != null) {
+            boolean exists = cacheDir.exists();
+            if (!exists) {
+                exists = cacheDir.mkdirs();
+            }
+            if (exists) {
+                saveBitmapToSD(context,
+                        cacheDir.getAbsolutePath() + File.separator + "image" + File.separator + saveName,
+                        bitmap, callback);
+            }
         }
     }
 

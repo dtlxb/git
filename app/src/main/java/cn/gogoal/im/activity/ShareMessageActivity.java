@@ -9,9 +9,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONObject;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import org.litepal.crud.DataSupport;
 
@@ -69,8 +67,6 @@ public class ShareMessageActivity extends BaseActivity {
         BaseActivity.initRecycleView(recyclerView, 0);
 
         GGShareEntity shareEntity = getIntent().getParcelableExtra("share_web_data");//分享的数据
-
-        KLog.e(JSONObject.toJSONString(shareEntity));
 
         datas = new ArrayList<>();
 

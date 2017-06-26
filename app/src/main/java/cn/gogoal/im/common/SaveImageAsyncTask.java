@@ -12,7 +12,7 @@ import cn.gogoal.im.common.ImageUtils.ImageUtils;
  * author wangjd on 2017/6/23 0023.
  * Staff_id 1375
  * phone 18930640263
- * description :${annotated}.
+ * description :Bitmap异步保存到.../DCIM/GoGoal文件夹
  */
 public class SaveImageAsyncTask extends AsyncTask<Bitmap, Void, Integer> {
 

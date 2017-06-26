@@ -44,7 +44,7 @@ import static cn.gogoal.im.R.id.tv_mystock_news_title;
  * phone 18930640263
  * description :个股详情中的 新闻、公共、研报 单个Tab Fragment
  */
-public class StockDetailNewTab extends BaseFragment {
+public class StockDetailNewTabFragment extends BaseFragment {
 
     @BindView(R.id.recyclerView)
     RecyclerView rvNews;
@@ -57,7 +57,7 @@ public class StockDetailNewTab extends BaseFragment {
     private List<MyStockTabNewsBean> stockNewsDatas = new ArrayList<>();
 
     public static Fragment getInstance(int position) {
-        StockDetailNewTab fragment = new StockDetailNewTab();
+        StockDetailNewTabFragment fragment = new StockDetailNewTabFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("position", position);
         fragment.setArguments(bundle);

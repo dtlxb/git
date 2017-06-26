@@ -19,7 +19,6 @@ import com.bumptech.glide.request.transition.Transition;
 import com.hply.qrcode_lib.activity.CodeUtils;
 import com.socks.library.KLog;
 
-import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -81,6 +80,7 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
 
     private int codeType;//二维码类型，群的，还是个人的
     private String accountId;
+
     private int updataCode;
 
     @Override
@@ -209,12 +209,10 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
             @Override
             protected Integer doInBackground(Bitmap... params) {
                 /*1.*/
-                ImageUtils.saveImageToSD(getActivity(),
-                        getExternalCacheDir().getAbsolutePath() +
-                                File.separator +
-                                "image"+File.separator+
-                                String.valueOf(System.currentTimeMillis()) + ".png",
-                        params[0], new Impl<String>() {
+                ImageUtils.cacheImage(getActivity(),
+                        params[0],
+                        MD5Utils.getMD5EncryptyString32(String.valueOf(System.currentTimeMillis()))+".png",
+                        new Impl<String>() {
                             @Override
                             public void response(int code, String data) {
                                 updataCode = code;
@@ -224,11 +222,10 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
                                     entity.setShareType(GGShareEntity.SHARE_TYPE_IMAGE);
                                     entity.setImage(data);
 
-                                    KLog.e(JSONObject.toJSONString(entity));
-
                                     Intent intent = new Intent(QrCodeActivity.this, ShareMessageActivity.class);
                                     intent.putExtra("share_web_data", entity);
                                     startActivity(intent);
+
                                     dialog.dismiss();
                                 } else {
                                     dialog.dismiss();
@@ -237,7 +234,6 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
                                 btnMyQrcodeShareQrcode.setClickable(true);
                             }
                         });
-
                 return updataCode;
             }
 

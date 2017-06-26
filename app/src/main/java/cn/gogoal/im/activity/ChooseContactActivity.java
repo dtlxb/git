@@ -299,12 +299,12 @@ public class ChooseContactActivity extends BaseActivity {
                                 new File(entity.getImage()), new ChatGroupHelper.MessageResponse() {
                                     @Override
                                     public void sendSuccess() {
-
+                                        UIHelper.toast(getActivity(),"分享成功!");
                                     }
 
                                     @Override
                                     public void sendFailed() {
-
+                                        UIHelper.toast(getActivity(),"分享失败!");
                                     }
                                 });
                     } else if (entity.getShareType() .equalsIgnoreCase(GGShareEntity.SHARE_TYPE_TEXT)) {//分享图片
