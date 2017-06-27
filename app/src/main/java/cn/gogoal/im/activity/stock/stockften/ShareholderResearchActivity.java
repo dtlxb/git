@@ -21,8 +21,8 @@ import cn.gogoal.im.adapter.stockften.FundHolderAdapter;
 import cn.gogoal.im.adapter.stockften.TenHolderAdapter;
 import cn.gogoal.im.adapter.stockften.TenTradableHolderAdapter;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.FundHolderData;
-import cn.gogoal.im.bean.TenHolderData;
+import cn.gogoal.im.bean.f10.FundHolderData;
+import cn.gogoal.im.bean.f10.TenHolderData;
 import cn.gogoal.im.bean.TenTradableHolderData;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
@@ -80,6 +80,9 @@ public class ShareholderResearchActivity extends BaseActivity {
      * 十大股东
      */
     private void getTenHolderData() {
+        //悬浮头1
+        adapters.add(new CurrencyTitleAdapter(getActivity(), "十大股东"));
+
         final Map<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
         //param.put("report_date", "2017-03-31");
@@ -91,8 +94,6 @@ public class ShareholderResearchActivity extends BaseActivity {
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONArray data = object.getJSONObject("data").getJSONArray("data");
-                    //悬浮头1
-                    adapters.add(new CurrencyTitleAdapter(getActivity(), "十大股东"));
 
                     ArrayList<TenHolderData> HoldingList = new ArrayList<>();
                     for (int i = 0; i < data.size(); i++) {
@@ -119,6 +120,9 @@ public class ShareholderResearchActivity extends BaseActivity {
      * 十大流通股东
      */
     private void getTenTradableHolderData() {
+        //悬浮头2
+        adapters.add(new CurrencyTitleAdapter(getActivity(), "十大流通股东"));
+
         final Map<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
         //param.put("report_date", "2017-03-31");
@@ -129,8 +133,6 @@ public class ShareholderResearchActivity extends BaseActivity {
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONArray data = object.getJSONObject("data").getJSONArray("data");
-                    //悬浮头2
-                    adapters.add(new CurrencyTitleAdapter(getActivity(), "十大流通股东"));
 
                     ArrayList<TenTradableHolderData> HolderList = new ArrayList<>();
                     for (int i = 0; i < data.size(); i++) {
@@ -157,6 +159,9 @@ public class ShareholderResearchActivity extends BaseActivity {
      * 基金持股
      */
     private void getFundHolderData() {
+        //悬浮头3
+        adapters.add(new CurrencyTitleAdapter(getActivity(), "基金持股"));
+
         final Map<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
         //param.put("report_date", "2017-03-31");
@@ -167,8 +172,6 @@ public class ShareholderResearchActivity extends BaseActivity {
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONArray data = object.getJSONObject("data").getJSONArray("data");
-                    //悬浮头3
-                    adapters.add(new CurrencyTitleAdapter(getActivity(), "基金持股"));
 
                     ArrayList<FundHolderData> fundList = new ArrayList<>();
                     fundList.add(new FundHolderData("基金名称", "基金代码", "持股(万股)"));

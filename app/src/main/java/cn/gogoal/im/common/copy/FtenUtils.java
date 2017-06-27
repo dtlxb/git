@@ -8,6 +8,45 @@ package cn.gogoal.im.common.copy;
 public class FtenUtils {
 
     /**
+     * 股票详情下的 资料
+     */
+    //公司概况
+    public static final String[] ComSummary1 = {"公司名称", "地址", "所属行业"};
+    public static final String[] ComSummary1_1 = {"company_name", "office_addr", "industry_owned"};
+
+    /**
+     * 股票详情下的 财务
+     */
+    //关键指标
+    public static final String[] keyIndex1 = {"每股收益", "每股净资产", "每股经营性现金流", "净资产收益率(ROE)"};
+    public static final String[] keyIndex1_1 = {"basic_eps01", "pershare_netasset02", "pershare_cash_activity03", "assets_weighting19"};
+    public static final String[] keyIndex1_2 = {"ffajr_01", "ffajr_02", "ffajr_03", "ffajr_16"};
+
+    //利润表
+    public static final String[] profitState1 = {"营业总收入", "营业利润", "净利润"};
+    public static final String[] profitState1_1 = {"trading_income115", "trading_profit141", "net_profit152"};
+    public static final String[] profitState1_2 = {"profit_distribution01", "profit_distribution18", "profit_distribution23"};
+    public static final String[] profitState1_3 = {"profit_distribution01", "profit_distribution26", "profit_distribution31"};
+    public static final String[] profitState1_4 = {"profit_distribution01", "profit_distribution17", "profit_distribution22"};
+    public static final String[] profitState1_5 = {"profit_distribution01", "profit_distribution14", "profit_distribution19"};
+
+    //资产负债表
+    public static final String[] assetsLiabili1 = {"资产合计", "负债合计", "所有者权益合计"};
+    public static final String[] assetsLiabili1_1 = {"noncurrent_assets46", "nonflow_debt92", "owner_interest111"};
+    public static final String[] assetsLiabili1_2 = {"other_current_assets19", "noncurrent_assets35", "noncurrent_assets45"};
+    public static final String[] assetsLiabili1_3 = {"noncurrent_assets25", "flow_debt50", "flow_debt59"};
+    public static final String[] assetsLiabili1_4 = {"current_assets20", "noncurrent_assets37", "flow_debt47"};
+    public static final String[] assetsLiabili1_5 = {"buyfinance_assets16", "noncurrent_assets31", "noncurrent_assets41"};
+
+    //现金流量表
+    public static final String[] cashFlow1 = {"经营性现金流", "投资性现金流", "筹资性现金流"};
+    public static final String[] cashFlow1_1 = {"manage_lowcash213", "invest_flowcash230", "financing_flowcash246"};
+    public static final String[] cashFlow1_2 = {"cash_flow13", "cash_flow23", "cash_flow32"};
+    public static final String[] cashFlow1_3 = {"cash_flow12", "cash_flow23", "cash_flow32"};
+    public static final String[] cashFlow1_4 = {"cash_flow10", "cash_flow19", "cash_flow29"};
+    public static final String[] cashFlow1_5 = {"cash_flow10", "cash_flow19", "cash_flow29"};
+
+    /**
      * 公司简况
      */
     public static final String[] basicName = {
@@ -701,37 +740,4 @@ public class FtenUtils {
             "cash_flow55", "cash_flow56", "cash_flow57",
             "cash_flow58"
     };
-
-    /**
-     * 股票详情下的 财务
-     */
-
-    //关键指标
-    public static final String[] keyIndex1 = {"每股收益", "每股净资产", "每股经营性现金流", "净资产收益率(ROE)"};
-    public static final String[] keyIndex1_1 = {"basic_eps01", "pershare_netasset02", "pershare_cash_activity03", "assets_weighting19"};
-    public static final String[] keyIndex1_2 = {"ffajr_01", "ffajr_02", "ffajr_03", "ffajr_16"};
-
-    //利润表
-    public static final String[] profitState1 = {"营业总收入", "营业利润", "净利润"};
-    public static final String[] profitState1_1 = {"trading_income115", "trading_profit141", "net_profit152"};
-    public static final String[] profitState1_2 = {"profit_distribution01", "profit_distribution18", "profit_distribution23"};
-    public static final String[] profitState1_3 = {"profit_distribution01", "profit_distribution26", "profit_distribution31"};
-    public static final String[] profitState1_4 = {"profit_distribution01", "profit_distribution17", "profit_distribution22"};
-    public static final String[] profitState1_5 = {"profit_distribution01", "profit_distribution14", "profit_distribution19"};
-
-    //资产负债表
-    public static final String[] assetsLiabili1 = {"资产合计", "负债合计", "所有者权益合计"};
-    public static final String[] assetsLiabili1_1 = {"noncurrent_assets46", "nonflow_debt92", "owner_interest111"};
-    public static final String[] assetsLiabili1_2 = {"other_current_assets19", "noncurrent_assets35", "noncurrent_assets45"};
-    public static final String[] assetsLiabili1_3 = {"noncurrent_assets25", "flow_debt50", "flow_debt59"};
-    public static final String[] assetsLiabili1_4 = {"current_assets20", "noncurrent_assets37", "flow_debt47"};
-    public static final String[] assetsLiabili1_5 = {"buyfinance_assets16", "noncurrent_assets31", "noncurrent_assets41"};
-
-    //现金流量表
-    public static final String[] cashFlow1 = {"经营性现金流", "投资性现金流", "筹资性现金流"};
-    public static final String[] cashFlow1_1 = {"manage_lowcash213", "invest_flowcash230", "financing_flowcash246"};
-    public static final String[] cashFlow1_2 = {"cash_flow13", "cash_flow23", "cash_flow32"};
-    public static final String[] cashFlow1_3 = {"cash_flow12", "cash_flow23", "cash_flow32"};
-    public static final String[] cashFlow1_4 = {"cash_flow10", "cash_flow19", "cash_flow29"};
-    public static final String[] cashFlow1_5 = {"cash_flow10", "cash_flow19", "cash_flow29"};
 }

@@ -20,8 +20,8 @@ import cn.gogoal.im.adapter.stockften.CurrencyTitleAdapter;
 import cn.gogoal.im.adapter.stockften.ExecutivesListAdapter;
 import cn.gogoal.im.adapter.stockften.HoldingChangeAdapter;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.ExecutivesData;
-import cn.gogoal.im.bean.HoldingData;
+import cn.gogoal.im.bean.f10.ExecutivesData;
+import cn.gogoal.im.bean.f10.HoldingData;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 

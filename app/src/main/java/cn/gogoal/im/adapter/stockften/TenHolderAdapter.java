@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.market.MainViewHolder;
-import cn.gogoal.im.bean.TenHolderData;
+import cn.gogoal.im.bean.f10.TenHolderData;
 
 /**
  * Created by dave.

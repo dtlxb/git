@@ -18,7 +18,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.stockften.CompanyProfileAdapter;
 import cn.gogoal.im.adapter.stockften.CurrencyTitleAdapter;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.bean.ProfileData;
+import cn.gogoal.im.bean.f10.ProfileData;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.copy.FtenUtils;

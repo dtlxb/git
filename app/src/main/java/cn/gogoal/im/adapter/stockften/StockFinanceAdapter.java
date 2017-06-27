@@ -11,7 +11,7 @@ import cn.gogoal.im.activity.stock.stockften.FinancialAnalysisActivity;
 import cn.gogoal.im.activity.stock.stockften.FinancialStatementsActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.bean.FinanceData;
+import cn.gogoal.im.bean.f10.FinanceData;
 import cn.gogoal.im.common.StringUtils;
 
 /**

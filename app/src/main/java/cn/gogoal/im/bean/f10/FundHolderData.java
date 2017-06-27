@@ -1,4 +1,4 @@
-package cn.gogoal.im.bean;
+package cn.gogoal.im.bean.f10;
 
 /**
  * Created by dave.

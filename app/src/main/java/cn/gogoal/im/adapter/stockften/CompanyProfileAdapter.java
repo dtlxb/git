@@ -14,7 +14,7 @@ import java.util.List;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.market.MainViewHolder;
-import cn.gogoal.im.bean.ProfileData;
+import cn.gogoal.im.bean.f10.ProfileData;
 
 /**
  * Created by dave.

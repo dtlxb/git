@@ -18,14 +18,23 @@ import cn.gogoal.im.adapter.market.MainViewHolder;
  */
 public class CurrencyTitle2Adapter extends DelegateAdapter.Adapter<MainViewHolder> {
 
-    private String[] title;//标题内容
-    private Context context;
-    private boolean isClickable;
+    public static final int TYPE_COMPANY_SUMMARY = 1; //公司概况
+    public static final int TYPE_EQUITY = 2; //股本
+    public static final int TYPE_SENIOR_EXECUTIVE = 3; //高管
 
-    public CurrencyTitle2Adapter(Context context, String[] title, boolean isClickable) {
+    private String title;//标题内容
+    private Context context;
+    private int type;
+    private String stockCode;
+    private String stockName;
+
+    public CurrencyTitle2Adapter(Context context, String title, int type, String stockCode,
+                                 String stockName) {
         this.context = context;
         this.title = title;
-        this.isClickable = isClickable;
+        this.type = type;
+        this.stockCode = stockCode;
+        this.stockName = stockName;
     }
 
     @Override
@@ -41,8 +50,7 @@ public class CurrencyTitle2Adapter extends DelegateAdapter.Adapter<MainViewHolde
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, int position) {
-        holder.setText(R.id.textTitle, title[0]);
-        holder.setText(R.id.textCont, title[1]);
+        holder.setText(R.id.textTitle, title);
     }
 
     @Override
