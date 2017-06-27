@@ -74,7 +74,7 @@ public class FinancialAnalysisActivity extends BaseActivity {
         type = getIntent().getStringExtra("type");
         chartBeanList = new ArrayList<>();
 
-        setMyTitle(stockName + "-资料F10", true);
+        setMyTitle(stockName + "-关键指标", true);
 
         if (stype.equals("1")) {
             textFormName.setText(FtenUtils.title1[Integer.parseInt(type) - 1]);

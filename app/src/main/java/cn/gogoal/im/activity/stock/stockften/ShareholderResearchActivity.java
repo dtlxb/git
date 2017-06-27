@@ -1,7 +1,6 @@
 package cn.gogoal.im.activity.stock.stockften;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -21,7 +20,7 @@ import cn.gogoal.im.adapter.CurrencyTitleAdapter;
 import cn.gogoal.im.adapter.FundHolderAdapter;
 import cn.gogoal.im.adapter.TenHolderAdapter;
 import cn.gogoal.im.adapter.TenTradableHolderAdapter;
-import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.FundHolderData;
 import cn.gogoal.im.bean.TenHolderData;
 import cn.gogoal.im.bean.TenTradableHolderData;
@@ -33,7 +32,7 @@ import cn.gogoal.im.common.UIHelper;
  * Date: 2017/6/7.
  * Desc: 股东研究
  */
-public class ShareholderResearchFragment extends BaseFragment {
+public class ShareholderResearchActivity extends BaseActivity {
 
     @BindView(R.id.rv_research)
     RecyclerView rv_research;
@@ -46,25 +45,18 @@ public class ShareholderResearchFragment extends BaseFragment {
     private DelegateAdapter delegateAdapter;
     private LinkedList<DelegateAdapter.Adapter> adapters;
 
-    public static ShareholderResearchFragment getInstance(String stockCode, String stockName) {
-        ShareholderResearchFragment fragment = new ShareholderResearchFragment();
-        Bundle b = new Bundle();
-        b.putString("stockCode", stockCode);
-        b.putString("stockName", stockName);
-        fragment.setArguments(b);
-        return fragment;
-    }
-
     @Override
     public int bindLayout() {
-        return R.layout.fragment_shareholder_research;
+        return R.layout.activity_shareholder_research;
     }
 
     @Override
     public void doBusiness(Context mContext) {
 
-        stockCode = getArguments().getString("stockCode");
-        stockName = getArguments().getString("stockName");
+        stockCode = getIntent().getStringExtra("stockCode");
+        stockName = getIntent().getStringExtra("stockName");
+
+        setMyTitle(stockName + "-股东", true);
 
         final VirtualLayoutManager layoutManager = new VirtualLayoutManager(getActivity());
         rv_research.setLayoutManager(layoutManager);
@@ -117,7 +109,7 @@ public class ShareholderResearchFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toast(getContext(), R.string.net_erro_hint);
+                UIHelper.toast(ShareholderResearchActivity.this, R.string.net_erro_hint);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.TEN_STOCK_HOLDERS, ggHttpInterface).startGet();

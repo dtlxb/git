@@ -5,6 +5,8 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
+    <include layout="@layout/include_title" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_research"
         android:layout_width="match_parent"

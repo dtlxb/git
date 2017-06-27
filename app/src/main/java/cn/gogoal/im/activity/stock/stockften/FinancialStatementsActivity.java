@@ -51,7 +51,7 @@ public class FinancialStatementsActivity extends BaseActivity {
 
     @Override
     public int bindLayout() {
-        return R.layout.fragment_financial_statements;
+        return R.layout.activity_financial_statements;
     }
 
     @Override
@@ -62,7 +62,13 @@ public class FinancialStatementsActivity extends BaseActivity {
         genre = getIntent().getIntExtra("genre", GENRE_PROFIT_STATEMENTS);
         stype = getIntent().getStringExtra("stype");
 
-        setMyTitle(stockName + "-资料F10", true);
+        if (genre == GENRE_PROFIT_STATEMENTS) {
+            setMyTitle(stockName + "-利润表", true);
+        } else if (genre == GENRE_BALANCE_SHEET) {
+            setMyTitle(stockName + "-资产负债表", true);
+        } else if (genre == GENRE_CASH_FLOW) {
+            setMyTitle(stockName + "-现金流量表", true);
+        }
 
         setLeftListData();
         getStatementsData("0");

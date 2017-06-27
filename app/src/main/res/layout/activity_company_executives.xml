@@ -5,8 +5,10 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
+    <include layout="@layout/include_title" />
+
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/sticky_recyView"
+        android:id="@+id/rv_executives"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

@@ -1,7 +1,6 @@
 package cn.gogoal.im.activity.stock.stockften;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -18,7 +17,7 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.CompanyProfileAdapter;
 import cn.gogoal.im.adapter.CurrencyTitleAdapter;
-import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ProfileData;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
@@ -29,7 +28,7 @@ import cn.gogoal.im.common.copy.FtenUtils;
  * Date: 2017/6/7.
  * Desc: 公司概况
  */
-public class CompanyProfileFragment extends BaseFragment {
+public class CompanyProfileActivity extends BaseActivity {
 
     @BindView(R.id.sticky_recyView)
     RecyclerView recySticky;
@@ -42,25 +41,18 @@ public class CompanyProfileFragment extends BaseFragment {
     private DelegateAdapter delegateAdapter;
     private LinkedList<DelegateAdapter.Adapter> adapters;
 
-    public static CompanyProfileFragment getInstance(String stockCode, String stockName) {
-        CompanyProfileFragment fragment = new CompanyProfileFragment();
-        Bundle b = new Bundle();
-        b.putString("stockCode", stockCode);
-        b.putString("stockName", stockName);
-        fragment.setArguments(b);
-        return fragment;
-    }
-
     @Override
     public int bindLayout() {
-        return R.layout.fragment_company_profile;
+        return R.layout.activity_company_profile;
     }
 
     @Override
     public void doBusiness(Context mContext) {
 
-        stockCode = getArguments().getString("stockCode");
-        stockName = getArguments().getString("stockName");
+        stockCode = getIntent().getStringExtra("stockCode");
+        stockName = getIntent().getStringExtra("stockName");
+
+        setMyTitle(stockName + "-公司概况", true);
 
         initRecyView();
         getProfileData();
@@ -100,7 +92,7 @@ public class CompanyProfileFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toast(getContext(), R.string.net_erro_hint);
+                UIHelper.toast(CompanyProfileActivity.this, R.string.net_erro_hint);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.COMPANY_SUMMARY, ggHttpInterface).startGet();

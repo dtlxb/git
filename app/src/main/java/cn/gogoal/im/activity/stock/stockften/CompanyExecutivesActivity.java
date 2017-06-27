@@ -1,7 +1,6 @@
 package cn.gogoal.im.activity.stock.stockften;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -20,7 +19,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.CurrencyTitleAdapter;
 import cn.gogoal.im.adapter.ExecutivesListAdapter;
 import cn.gogoal.im.adapter.HoldingChangeAdapter;
-import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ExecutivesData;
 import cn.gogoal.im.bean.HoldingData;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -31,7 +30,7 @@ import cn.gogoal.im.common.UIHelper;
  * Date: 2017/6/7.
  * Desc: 公司高管
  */
-public class CompanyExecutivesFragment extends BaseFragment {
+public class CompanyExecutivesActivity extends BaseActivity {
 
     @BindView(R.id.rv_executives)
     RecyclerView rv_executives;
@@ -43,25 +42,18 @@ public class CompanyExecutivesFragment extends BaseFragment {
     private DelegateAdapter delegateAdapter;
     private LinkedList<DelegateAdapter.Adapter> adapters;
 
-    public static CompanyExecutivesFragment getInstance(String stockCode, String stockName) {
-        CompanyExecutivesFragment fragment = new CompanyExecutivesFragment();
-        Bundle b = new Bundle();
-        b.putString("stockCode", stockCode);
-        b.putString("stockName", stockName);
-        fragment.setArguments(b);
-        return fragment;
-    }
-
     @Override
     public int bindLayout() {
-        return R.layout.fragment_company_executives;
+        return R.layout.activity_company_executives;
     }
 
     @Override
     public void doBusiness(Context mContext) {
 
-        stockCode = getArguments().getString("stockCode");
-        stockName = getArguments().getString("stockName");
+        stockCode = getIntent().getStringExtra("stockCode");
+        stockName = getIntent().getStringExtra("stockName");
+
+        setMyTitle(stockName + "-高管", true);
 
         final VirtualLayoutManager layoutManager = new VirtualLayoutManager(getActivity());
         rv_executives.setLayoutManager(layoutManager);
@@ -100,7 +92,7 @@ public class CompanyExecutivesFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toast(getContext(), R.string.net_erro_hint);
+                UIHelper.toast(CompanyExecutivesActivity.this, R.string.net_erro_hint);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.COMPANY_SENIOR, ggHttpInterface).startGet();
