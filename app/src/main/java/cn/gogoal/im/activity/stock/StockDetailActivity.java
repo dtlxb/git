@@ -628,7 +628,7 @@ public class StockDetailActivity extends BaseActivity {
         newsFragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 0));
         newsFragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 1));
         newsFragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 2));
-        newsFragments.add(CompanyInfoFragment.newInstance(stockCode));
+        newsFragments.add(CompanyInfoFragment.newInstance(stockCode, stockName));
         newsFragments.add(CompanyFinanceFragment.getInstance(stockCode, stockName));
 
         for (String newsTabTitle : arrStockNews) {

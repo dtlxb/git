@@ -266,7 +266,7 @@ public class CopyStockDetailActivity extends BaseActivity {
         fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 0));
         fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 1));
         fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 2));
-        fragments.add(CompanyInfoFragment.newInstance(stockCode));
+        fragments.add(CompanyInfoFragment.newInstance(stockCode, stockName));
         fragments.add(CompanyFinanceFragment.getInstance(stockCode, stockName));
 
         viewPagerNews.setOffscreenPageLimit(5);
