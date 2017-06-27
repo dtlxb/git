@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -30,10 +31,12 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.stock.StockDetailActivity;
 import cn.gogoal.im.adapter.copy.HistorySearchAdapter;
 import cn.gogoal.im.adapter.copy.HotSearchAdapter;
 import cn.gogoal.im.adapter.copy.SearchStockAdapter;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.SPTools;
@@ -101,12 +104,12 @@ public class StockSearchActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
 
-        setMyTitle("股票搜索",true);
+        setMyTitle("股票搜索", true);
 
         init();
         Intent intent = getIntent();
         num = intent.getIntExtra("num", 0);
-
+        KLog.e(num);
         initHotList();
     }
 
@@ -146,45 +149,36 @@ public class StockSearchActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 SearchStockData stock = list.get(position);
-                String stockname = stock.getStock_name();
-                String stockcode = stock.getStock_code();
+                String stockName = stock.getStock_name();
+                String stockCode = stock.getStock_code();
                 switch (num) {
                     case 0://点击去个股详情
-                        Intent intent = new Intent();
-                        intent.putExtra("stockName", stockname);
-                        intent.putExtra("stockCode", stockcode);
-                        JSONObject stockJson = new JSONObject();
-                        stockJson.put("stockName", stockname);
-                        stockJson.put("stockCode", stockcode);
-                        SPTools.saveJsonObject("searchedStock", stockJson);
-
-                        NormalIntentUtils.go2StockDetail(getActivity(), stockcode, stockname);
-//                        setResult(ConstantUtils.RESULT_OK, intent);
-//                        finish();
-                        HistorySearchData data = new HistorySearchData(stockname, stockcode);
-                        StockUtils.addSearchedStock(JSONObject.parseObject(JSONObject.toJSONString(data)));
-                        initHotList();
+                        jumpToStockDetail(stockName, stockCode);
                         break;
                     case 1:
                         InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
-                        NormalIntentUtils.go2StockDetail(getActivity(), stockcode, stockname);
+                        NormalIntentUtils.go2StockDetail(getActivity(), stockCode, stockName);
 
                         JSONObject historyStock = new JSONObject();
                         historyStock.put("stock_name", list_hot.get(position).getStock_name());
                         historyStock.put("stock_code", list_hot.get(position).getStock_code());
                         StockUtils.addSearchedStock(historyStock);
 
-                        InitSaveHots(stockname, stockcode);
+                        InitSaveHots(stockName, stockCode);
 
                         break;
-                    case 2:
-                        Intent intent1 = new Intent();
-                        intent1.putExtra("stock_name", stockname);
-                        intent1.putExtra("stock_code", stockcode);
+                    case AppConst.TYPE_GET_STOCK:
+                        /*Intent intent1 = new Intent();
+                        intent1.putExtra("stock_name", stockName);
+                        intent1.putExtra("stock_code", stockCode);
                         setResult(0x01, intent1);
+                        finish();*/
+
+                        jumpToStockDetail(stockName, stockCode);
                         finish();
+
                         break;
                     default:
                         break;
@@ -197,17 +191,18 @@ public class StockSearchActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                String stockname = list_history.get(position).getStock_name();
-                String stockcode = list_history.get(position).getStock_code();
-                if (num == 2) {
-                    Intent intent1 = new Intent();
-                    intent1.putExtra("stock_name", stockname);
-                    intent1.putExtra("stock_code", stockcode);
-                    setResult(0x01, intent1);
+                String stockName = list_history.get(position).getStock_name();
+                String stockCode = list_history.get(position).getStock_code();
+                if (num == AppConst.TYPE_GET_STOCK) {
+                    /*Intent intent1 = new Intent();
+                    intent1.putExtra("stock_name", stockName);
+                    intent1.putExtra("stock_code", stockCode);
+                    setResult(0x01, intent1);*/
                     finish();
+                    jumpToStockDetail(stockName, stockCode);
                 } else {
-                    NormalIntentUtils.go2StockDetail(getActivity(), stockcode,
-                            stockname);
+                    NormalIntentUtils.go2StockDetail(getActivity(), stockCode,
+                            stockName);
                 }
             }
         });
@@ -220,7 +215,7 @@ public class StockSearchActivity extends BaseActivity {
             }
         });
 
-        adapter_hot = new HotSearchAdapter(list_hot,getIntent().getBooleanExtra("show_add_btn",true));
+        adapter_hot = new HotSearchAdapter(list_hot, getIntent().getBooleanExtra("show_add_btn", true));
 
         search_hot_list.setAdapter(adapter_hot);
         search_hot_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -228,14 +223,15 @@ public class StockSearchActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                String stockname = list_hot.get(position).getStock_name();
-                String stockcode = list_hot.get(position).getStock_code();
-                if (num == 2) {
-                    Intent intent1 = new Intent();
-                    intent1.putExtra("stock_name", stockname);
-                    intent1.putExtra("stock_code", stockcode);
-                    setResult(0x01, intent1);
+                String stockName = list_hot.get(position).getStock_name();
+                String stockCode = list_hot.get(position).getStock_code();
+                if (num == AppConst.TYPE_GET_STOCK) {
+                    /*Intent intent1 = new Intent();
+                    intent1.putExtra("stock_name", stockName);
+                    intent1.putExtra("stock_code", stockCode);
+                    setResult(0x01, intent1);*/
                     finish();
+                    jumpToStockDetail(stockName, stockCode);
                 } else {
                     NormalIntentUtils.go2StockDetail(getActivity(), list_hot.get(position).getStock_code(),
                             list_hot.get(position).getStock_name());
@@ -247,6 +243,28 @@ public class StockSearchActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void jumpToStockDetail(String stockName, String stockCode) {
+        Intent intent = new Intent(StockSearchActivity.this, CopyStockDetailActivity.class);
+        intent.putExtra("stock_name", stockName);
+        intent.putExtra("stock_code", stockCode);
+        if (num == AppConst.TYPE_GET_STOCK) {
+            intent.putExtra("num", num);
+        }
+        JSONObject stockJson = new JSONObject();
+        stockJson.put("stockName", stockName);
+        stockJson.put("stockCode", stockCode);
+        SPTools.saveJsonObject("searchedStock", stockJson);
+        startActivity(intent);
+
+//        NormalIntentUtils.go2StockDetail(getActivity(), stockCode, stockName);
+//                        setResult(ConstantUtils.RESULT_OK, intent);
+//                        finish();
+
+        HistorySearchData data = new HistorySearchData(stockName, stockCode);
+        StockUtils.addSearchedStock(JSONObject.parseObject(JSONObject.toJSONString(data)));
+        initHotList();
     }
 
     private void setNoDataFlag() {
@@ -337,13 +355,13 @@ public class StockSearchActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 if (responseInfo != null) {
                     HotSearchStockBean bean = JSONObject.parseObject(responseInfo, HotSearchStockBean.class);
-                    if (bean.getCode()==0) {
+                    if (bean.getCode() == 0) {
                         list_hot.clear();
                         search_hot.setVisibility(View.VISIBLE);
                         ArrayList<HotSearchStockData> info = bean.getData();
                         list_hot.addAll(info);
                         adapter_hot.notifyDataSetChanged();
-                    } else if (bean.getCode()==1001) {
+                    } else if (bean.getCode() == 1001) {
                         search_hot.setVisibility(View.GONE);
                     }
                     load_animation.setVisibility(View.GONE);

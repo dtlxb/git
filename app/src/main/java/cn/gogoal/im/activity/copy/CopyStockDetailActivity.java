@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -35,6 +36,7 @@ import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,6 +52,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.MessageHolderActivity;
+import cn.gogoal.im.activity.ShareMessageActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
 import cn.gogoal.im.activity.ToolsSettingActivity;
 import cn.gogoal.im.activity.stock.InteractiveInvestorActivity;
@@ -71,6 +74,7 @@ import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
+import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
@@ -268,6 +272,10 @@ public class CopyStockDetailActivity extends BaseActivity {
     private BadgeView badge;
     private int unReadCount;
 
+    //是否分享消息
+    private int num;
+    private WaitDialog waitDialog;
+
     private StockInfoDialogAdapter infoDialogAdapter;
 
     private List<StockDialogInfo> stockDialogInfoList;
@@ -373,6 +381,13 @@ public class CopyStockDetailActivity extends BaseActivity {
         dayK4 = SPTools.getInt("tv_ln4", 0);
         stockCode = getIntent().getStringExtra("stock_code");
         stockName = getIntent().getStringExtra("stock_name");
+        num = getIntent().getIntExtra("num", 0);
+        waitDialog = WaitDialog.getInstance("加载中", R.mipmap.login_loading, true);
+
+        if (num == AppConst.TYPE_GET_STOCK) {
+            waitDialog.show(getSupportFragmentManager());
+            waitDialog.setCancelable(false);
+        }
 
         TreatAdapter treatAdapter = new TreatAdapter(getSupportFragmentManager(), getActivity(), stockCode, true);
 
@@ -1197,6 +1212,33 @@ public class CopyStockDetailActivity extends BaseActivity {
             }
             if (load_animation.getVisibility() == View.VISIBLE) {
                 load_animation.setVisibility(View.GONE);
+            }
+            //加载消失,截屏开始
+            if (num == AppConst.TYPE_GET_STOCK) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        waitDialog.dismiss();
+                        int screenWidth = AppDevice.getWidth(CopyStockDetailActivity.this);
+                        final Bitmap bitmapMessage = ImageUtils.screenshot(scrollView, 0, 0, screenWidth, screenWidth);
+                        ImageUtils.saveImageToSD(getActivity(), getExternalCacheDir().getAbsolutePath() +
+                                File.separator +
+                                String.valueOf(System.currentTimeMillis()) + ".png", bitmapMessage, new Impl<String>() {
+                            @Override
+                            public void response(int code, String url) {
+                                HashMap<String, Object> map = new HashMap<>();
+                                map.put("stock_bitmap", bitmapMessage);
+                                map.put("stock_bitmapUrl", url);
+                                map.put("stock_name", stockName);
+                                map.put("stock_code", stockCode);
+                                BaseMessage baseMessage = new BaseMessage("stockInfo", map);
+                                AppManager.getInstance().sendMessage("oneStock", baseMessage);
+                                finish();
+                            }
+                        });
+                    }
+                }, 1000);
+
             }
         }
     }

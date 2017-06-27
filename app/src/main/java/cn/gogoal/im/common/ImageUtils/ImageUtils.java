@@ -675,7 +675,15 @@ public class ImageUtils {
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();  //启用DrawingCache并创建位图
         Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache()); //创建一个DrawingCache的拷贝，因为DrawingCache得到的位图在禁用后会被回收
-        view.setDrawingCacheEnabled(false);  //禁用DrawingCahce否则会影响性能
+        view.setDrawingCacheEnabled(false);  //禁用DrawingCache否则会影响性能
+        return bitmap;
+    }
+
+    public static Bitmap screenshot(View view, int startX, int startY, int stopX, int stopY) {
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache();  //启用DrawingCache并创建位图
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache(), startX, startY, stopX, stopY); //创建一个DrawingCache的拷贝，因为DrawingCache得到的位图在禁用后会被回收
+        view.setDrawingCacheEnabled(false);  //禁用DrawingCache否则会影响性能
         return bitmap;
     }
 }

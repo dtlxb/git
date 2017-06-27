@@ -139,7 +139,7 @@ public class TreatFragment extends BaseFragment {
                 wudangAdapter = new WudangAdapter(threeTexts);
                 recyclerView.setAdapter(wudangAdapter);
                 recyclerView.addItemDecoration(new WudangDivider(getResColor(R.color.chart_text_color)));
-                needAnim = true;
+                needAnim = false;
                 getTreatWudang();
             } else if (type == AppConst.TREAT_TYPE_MING_XI) {
                 timeDetailDatas = new ArrayList<>();
