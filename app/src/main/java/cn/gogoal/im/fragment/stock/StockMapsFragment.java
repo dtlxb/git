@@ -8,7 +8,6 @@ import android.support.design.widget.TabLayout;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -319,12 +318,15 @@ public class StockMapsFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-
-                if (load_animation.getVisibility() == View.VISIBLE) {
-                    load_animation.setVisibility(View.GONE);
-                }
-                if (map.get("0") == null && textLayout.getVisibility() == View.GONE) {
-                    textLayout.setVisibility(View.VISIBLE);
+                try {
+                    if (load_animation.getVisibility() == View.VISIBLE) {
+                        load_animation.setVisibility(View.GONE);
+                    }
+                    if (map.get("0") == null && textLayout.getVisibility() == View.GONE) {
+                        textLayout.setVisibility(View.VISIBLE);
+                    }
+                }catch (Exception e){
+                    e.getMessage();
                 }
             }
         };
@@ -453,20 +455,7 @@ public class StockMapsFragment extends BaseFragment {
             item_index = params[0];
             switch (item_index) {
                 case "0":
-                    /*timesBitmap = new TimesFivesBitmap(13 * width / 20, height);
-                    timesBitmap.setShowDetail(false);
-                    timesBitmap.setLongitudeNum(0);
-                    timesBitmap.setmSize(AppDevice.dp2px(getActivity(), 1));
-                    timesBitmap.setmSpaceSize(AppDevice.dp2px(getActivity(), 3));
-                    timesBitmap.setmAxisTitleSize(AppDevice.dp2px(getActivity(), 10));
-                    try {
-                        bitmap = timesBitmap.setTimesList(timesBean, true, stock_charge_type);
-                    } catch (Exception e) {
-                    }
-                    map.put(item_index, bitmap);*/
-
                     dealMapAction(13 * width / 20, item_index);
-
                     break;
                 case "1":
                     if (params.length > 1) {

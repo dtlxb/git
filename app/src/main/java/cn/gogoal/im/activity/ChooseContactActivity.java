@@ -22,6 +22,7 @@ import com.hply.imagepicker.view.SuperCheckBox;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -290,33 +291,49 @@ public class ChooseContactActivity extends BaseActivity {
                 waitDialog = WaitDialog.getInstance("请稍后...", R.mipmap.login_loading, true);
                 waitDialog.show(getSupportFragmentManager());
 
-                //文字消息基本信息
-                for (int i = 0; i < result.values().size(); i++) {
-                    final int finalI = i;
-                    ChatGroupHelper.sendShareMessage((ContactBean) result.values().toArray()[i], entity, new ChatGroupHelper.GroupInfoResponse() {
-                        @Override
-                        public void getInfoSuccess(JSONObject groupInfo) {
-                            if (finalI == result.values().size() - 1) {
-                                Map<String, GGShareEntity> messageMap = new HashMap<>();
-                                messageMap.put("share_message", entity);
-                                BaseMessage<GGShareEntity> baseMessage = new BaseMessage<>("message_map", messageMap);
-                                AppManager.getInstance().sendMessage("oneShare", baseMessage);
-                                finish();
-                            }
-                        }
+                for (ContactBean contactBean : result.values()) {
+                    if (entity.getShareType() .equalsIgnoreCase(GGShareEntity.SHARE_TYPE_IMAGE)) {//分享图片
+                        ChatGroupHelper.sendImageMessage(
+                                contactBean.getConv_id(),
+                                AppConst.IM_CHAT_TYPE_SINGLE,
+                                new File(entity.getImage()), new ChatGroupHelper.MessageResponse() {
+                                    @Override
+                                    public void sendSuccess() {
+                                        UIHelper.toast(getActivity(),"分享成功!");
+                                    }
 
-                        @Override
-                        public void getInfoFailed(Exception e) {
-                            UIHelper.toast(getActivity(), "分享消息发送失败");
-                            waitDialog.dismiss();
-                            WaitDialog dialog = WaitDialog.getInstance("分享消息发送失败", R.mipmap.login_error, false);
-                            dialog.show(getSupportFragmentManager());
-                            dialog.dismiss(false);
-                        }
-                    });
+                                    @Override
+                                    public void sendFailed() {
+                                        UIHelper.toast(getActivity(),"分享失败!");
+                                    }
+                                });
+                    } else if (entity.getShareType() .equalsIgnoreCase(GGShareEntity.SHARE_TYPE_TEXT)) {//分享图片
+                    } else {//卡片
+                        shareCardMessage(contactBean);
+                    }
                 }
+                waitDialog.dismiss();
+                ChooseContactActivity.this.finish();
                 break;
         }
+    }
+
+    private void shareCardMessage(ContactBean contactbean) {
+        ChatGroupHelper.sendShareMessage(contactbean, entity, new ChatGroupHelper.GroupInfoResponse() {
+            @Override
+            public void getInfoSuccess(JSONObject groupInfo) {
+            }
+
+            @Override
+            public void getInfoFailed(Exception e) {
+                UIHelper.toast(getActivity(), "分享消息发送失败");
+            }
+        });
+
+        Map<String, GGShareEntity> messageMap = new HashMap<>();
+        messageMap.put("share_message", entity);
+        BaseMessage<GGShareEntity> baseMessage = new BaseMessage<>("message_map", messageMap);
+        AppManager.getInstance().sendMessage("oneShare", baseMessage);
     }
 
 

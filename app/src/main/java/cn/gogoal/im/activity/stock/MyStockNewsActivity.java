@@ -1,18 +1,23 @@
 package cn.gogoal.im.activity.stock;
 
 import android.content.Context;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentTransaction;
+
+import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
+
+import java.util.HashMap;
 
 import butterknife.BindArray;
-import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseActivity;
-import cn.gogoal.im.common.AppDevice;
-import cn.gogoal.im.fragment.stock.MyStockTabNewsFragment;
-import cn.gogoal.im.ui.view.XLayout;
+import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.Impl;
+import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.fragment.stock.news_report.MyStockNewsFragment;
+import cn.gogoal.im.fragment.stock.news_report.MyStockNoticesFragment;
+import cn.gogoal.im.fragment.stock.news_report.MyStockReportFragment;
 
 
 /**
@@ -23,15 +28,6 @@ import cn.gogoal.im.ui.view.XLayout;
  */
 
 public class MyStockNewsActivity extends BaseActivity {
-    @BindView(R.id.xLayout)
-    XLayout xLayout;
-
-    @BindView(R.id.tabs)
-    TabLayout tabs;
-
-    @BindView(R.id.pager)
-    ViewPager pager;
-
     @BindArray(R.array.mystock_news_title)
     String[] newsTitle;
 
@@ -42,35 +38,82 @@ public class MyStockNewsActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        setMyTitle(getIntent().getStringExtra("news_title"), true);
+        //展示tab的index====0=新闻；1=公告；2=研报
 
-        int index = getIntent().getIntExtra("showTabIndex", 0);//展示tab的index
+        final int index = getIntent().getIntExtra("showTabIndex", 0);
 
-        pager.setOffscreenPageLimit(2);
-        pager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+        setMyTitle("自选股" + newsTitle[index], true);
+
+        getNewsGroupId(new Impl<String>() {
             @Override
-            public Fragment getItem(int position) {
-                return MyStockTabNewsFragment.getInstance(position);
-            }
-
-            @Override
-            public int getCount() {
-                return newsTitle.length;
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return newsTitle[position];
+            public void response(int code, String data) {
+                if (code == 0) {
+                    switch (index) {
+                        case 0:
+                            shownewsFragment(
+                                    MyStockNewsFragment.newInstance(
+                                            Integer.parseInt(data)));
+                            break;
+                        case 1:
+                            shownewsFragment(
+                                    MyStockNoticesFragment.newInstance(
+                                            Integer.parseInt(data)));
+                            break;
+                        case 2:
+                            shownewsFragment(
+                                    MyStockReportFragment.newInstance(
+                                            Integer.parseInt(data)));
+                            break;
+                    }
+                } else {
+                    KLog.e("======" + data + "========");
+                }
             }
         });
+    }
 
-        tabs.setupWithViewPager(pager);
-        try {
-            tabs.getTabAt(index).select();
-        } catch (Exception e) {
-            e.getMessage();
+    private void shownewsFragment(Fragment showFragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (!showFragment.isAdded()) {
+            transaction.add(R.id.layout_news_content, showFragment);
         }
+        transaction.show(showFragment);
+        transaction.commit();
+    }
 
-        AppDevice.setTabLayoutWidth(tabs,25);
+    /**
+     * 获取自选股股票
+     */
+    private void getNewsGroupId(final Impl<String> callback) {
+
+        HashMap<String, String> params = UserUtils.getTokenParams();
+        params.put("get_sum", String.valueOf(1));
+        new GGOKHTTP(params, GGOKHTTP.GET_GROUP_ID, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                JSONObject responseJson = JSONObject.parseObject(responseInfo);
+                int code = responseJson.getIntValue("code");
+                if (code == 0) {
+                    if (responseJson.containsKey("data")) {
+                        JSONObject data = (JSONObject) responseJson.getJSONArray("data").get(0);
+                        if (callback != null)
+                            callback.response(Impl.RESPON_DATA_SUCCESS, data.getString("group_id"));
+                    } else {//data 字段丢失
+                        if (callback != null)
+                            callback.response(Impl.RESPON_DATA_ERROR, "data non null");
+                    }
+                } else {
+                    if (callback != null)
+                        callback.response(Impl.RESPON_DATA_ERROR,
+                                responseJson.getString("message"));
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                if (callback != null)
+                    callback.response(Impl.RESPON_DATA_ERROR, msg);
+            }
+        }).startGet();
     }
 }

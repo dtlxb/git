@@ -119,8 +119,9 @@ public class InfomationTabFragment extends BaseFragment {
         refreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                defaultPage = 1;
                 getInfomation(AppConst.REFRESH_TYPE_SWIPEREFRESH, tabType);
-                defaultPage=1;
+                refreshlayout.setRefreshing(false);
             }
         });
 
@@ -163,8 +164,8 @@ public class InfomationTabFragment extends BaseFragment {
         }
 
         HashMap<String, String> params = new HashMap<>();
-        if (tabType==INFOMATION_TYPE_GET_ASK_NEWS){
-            params.put("contains_top",String.valueOf(false));
+        if (tabType == INFOMATION_TYPE_GET_ASK_NEWS) {
+            params.put("contains_top", String.valueOf(false));
         }
         params.put("page", String.valueOf(defaultPage));
         params.put("rows", String.valueOf(15));
@@ -207,15 +208,16 @@ public class InfomationTabFragment extends BaseFragment {
             @Override
             public void onFailure(String msg) {
                 KLog.e(msg);
-                xLayout.setStatus(XLayout.Error);
-                refreshlayout.setRefreshing(false);
+                if (xLayout != null && refreshlayout != null) {
+                    xLayout.setStatus(XLayout.Error);
+                }
             }
         }).startGet();
     }
 
     @Subscriber(tag = "double_click_2_top")
-    void doubleClick2Top(String index){
-        if (StringUtils.parseStringDouble(index)==tabType){//是本Tab
+    void doubleClick2Top(String index) {
+        if (StringUtils.parseStringDouble(index) == tabType) {//是本Tab
             mRvInfomation.smoothScrollToPosition(0);
         }
     }
@@ -228,11 +230,11 @@ public class InfomationTabFragment extends BaseFragment {
 
         @Override
         protected void convert(BaseViewHolder holder, final InfomationData.Data data, int position) {
-            holder.setText(R.id.tv_item_normal_info_title,data.getTitle());
+            holder.setText(R.id.tv_item_normal_info_title, data.getTitle());
 
             holder.setText(R.id.tv_item_normal_sub_title,
-                    TextUtils.isEmpty(data.getSummary())?"":data.getSummary());
-            holder.setVisible(R.id.tv_item_normal_sub_title,tabType==INFOMATION_TYPE_SKY_VIEW_POINT);
+                    TextUtils.isEmpty(data.getSummary()) ? "" : data.getSummary());
+            holder.setVisible(R.id.tv_item_normal_sub_title, tabType == INFOMATION_TYPE_SKY_VIEW_POINT);
 
             holder.setText(R.id.tv_item_normal_info_info,
                     String.format(Locale.getDefault(),

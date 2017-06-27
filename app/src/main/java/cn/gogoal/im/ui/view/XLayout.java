@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import cn.gogoal.im.R;
@@ -103,13 +104,24 @@ public class XLayout extends FrameLayout {
     private void build() {
 
         if (mConfig.loadingView == null) {
-            loadingPage = LayoutInflater.from(mContext).inflate(mConfig.loadingLayoutId, null);
+            loadingPage = LayoutInflater.from(mContext).inflate(mConfig.loadingLayoutId,
+                    new LinearLayout(mContext),false);
+            loadingPage.setLayoutParams(new FrameLayout.LayoutParams(-1,-1));
         } else {
             loadingPage = mConfig.loadingView;
         }
-        errorPage = LayoutInflater.from(mContext).inflate(R.layout.widget_error_page, null);
-        emptyPage = LayoutInflater.from(mContext).inflate(R.layout.widget_empty_page, null);
-        networkPage = LayoutInflater.from(mContext).inflate(R.layout.widget_nonetwork_page, null);
+        errorPage = LayoutInflater.from(mContext).inflate(
+                R.layout.widget_error_page, new LinearLayout(mContext), false);
+        errorPage.setLayoutParams(new FrameLayout.LayoutParams(-1,-1));
+
+        emptyPage = LayoutInflater.from(mContext).inflate(
+                R.layout.widget_empty_page, new LinearLayout(mContext), false);
+        emptyPage.setLayoutParams(new FrameLayout.LayoutParams(-1,-1));
+
+        networkPage = LayoutInflater.from(mContext).inflate(
+                R.layout.widget_nonetwork_page, new LinearLayout(mContext), false);
+        networkPage.setLayoutParams(new FrameLayout.LayoutParams(-1,-1));
+
         defineLoadingPage = null;
 
         loadingPage.setBackgroundColor(ContextCompat.getColor(mContext, mConfig.backgroundColor));
@@ -198,81 +210,83 @@ public class XLayout extends FrameLayout {
     }
 
     public void setStatus(@Flavour int status) {
+        try {
+            this.state = status;
 
-        this.state = status;
+            switch (status) {
+                case Success:
+                    contentView.setVisibility(View.VISIBLE);
+                    emptyPage.setVisibility(View.GONE);
+                    errorPage.setVisibility(View.GONE);
+                    networkPage.setVisibility(View.GONE);
+                    if (defineLoadingPage != null) {
 
-        switch (status) {
-            case Success:
+                        defineLoadingPage.setVisibility(View.GONE);
+                    } else {
+                        loadingPage.setVisibility(View.GONE);
+                    }
+                    break;
 
-                contentView.setVisibility(View.VISIBLE);
-                emptyPage.setVisibility(View.GONE);
-                errorPage.setVisibility(View.GONE);
-                networkPage.setVisibility(View.GONE);
-                if (defineLoadingPage != null) {
+                case Loading:
 
-                    defineLoadingPage.setVisibility(View.GONE);
-                } else {
+                    contentView.setVisibility(View.GONE);
+                    emptyPage.setVisibility(View.GONE);
+                    errorPage.setVisibility(View.GONE);
+                    networkPage.setVisibility(View.GONE);
+                    if (defineLoadingPage != null) {
+                        defineLoadingPage.setVisibility(View.VISIBLE);
+                    } else {
+                        loadingPage.setVisibility(View.VISIBLE);
+                    }
+                    break;
+
+                case Empty:
+
+                    contentView.setVisibility(View.GONE);
+                    emptyPage.setVisibility(View.VISIBLE);
+                    errorPage.setVisibility(View.GONE);
+                    networkPage.setVisibility(View.GONE);
+                    if (defineLoadingPage != null) {
+                        defineLoadingPage.setVisibility(View.GONE);
+                    } else {
+                        loadingPage.setVisibility(View.GONE);
+                    }
+                    break;
+
+                case Error:
+
+                    contentView.setVisibility(View.GONE);
                     loadingPage.setVisibility(View.GONE);
-                }
-                break;
+                    emptyPage.setVisibility(View.GONE);
+                    errorPage.setVisibility(View.VISIBLE);
+                    networkPage.setVisibility(View.GONE);
+                    if (defineLoadingPage != null) {
+                        defineLoadingPage.setVisibility(View.GONE);
+                    } else {
+                        loadingPage.setVisibility(View.GONE);
+                    }
+                    break;
 
-            case Loading:
+                case No_Network:
 
-                contentView.setVisibility(View.GONE);
-                emptyPage.setVisibility(View.GONE);
-                errorPage.setVisibility(View.GONE);
-                networkPage.setVisibility(View.GONE);
-                if (defineLoadingPage != null) {
-                    defineLoadingPage.setVisibility(View.VISIBLE);
-                } else {
-                    loadingPage.setVisibility(View.VISIBLE);
-                }
-                break;
-
-            case Empty:
-
-                contentView.setVisibility(View.GONE);
-                emptyPage.setVisibility(View.VISIBLE);
-                errorPage.setVisibility(View.GONE);
-                networkPage.setVisibility(View.GONE);
-                if (defineLoadingPage != null) {
-                    defineLoadingPage.setVisibility(View.GONE);
-                } else {
+                    contentView.setVisibility(View.GONE);
                     loadingPage.setVisibility(View.GONE);
-                }
-                break;
+                    emptyPage.setVisibility(View.GONE);
+                    errorPage.setVisibility(View.GONE);
+                    networkPage.setVisibility(View.VISIBLE);
+                    if (defineLoadingPage != null) {
 
-            case Error:
+                        defineLoadingPage.setVisibility(View.GONE);
+                    } else {
+                        loadingPage.setVisibility(View.GONE);
+                    }
+                    break;
 
-                contentView.setVisibility(View.GONE);
-                loadingPage.setVisibility(View.GONE);
-                emptyPage.setVisibility(View.GONE);
-                errorPage.setVisibility(View.VISIBLE);
-                networkPage.setVisibility(View.GONE);
-                if (defineLoadingPage != null) {
-                    defineLoadingPage.setVisibility(View.GONE);
-                } else {
-                    loadingPage.setVisibility(View.GONE);
-                }
-                break;
-
-            case No_Network:
-
-                contentView.setVisibility(View.GONE);
-                loadingPage.setVisibility(View.GONE);
-                emptyPage.setVisibility(View.GONE);
-                errorPage.setVisibility(View.GONE);
-                networkPage.setVisibility(View.VISIBLE);
-                if (defineLoadingPage != null) {
-
-                    defineLoadingPage.setVisibility(View.GONE);
-                } else {
-                    loadingPage.setVisibility(View.GONE);
-                }
-                break;
-
-            default:
-                break;
+                default:
+                    break;
+            }
+        }catch (Exception e){
+            e.getMessage();
         }
 
     }
@@ -289,9 +303,6 @@ public class XLayout extends FrameLayout {
 
     /**
      * 设置Empty状态提示文本，仅对当前所在的地方有效
-     *
-     * @param text
-     * @return
      */
     public XLayout setEmptyText(String text) {
         if (!TextUtils.isEmpty(text)) {

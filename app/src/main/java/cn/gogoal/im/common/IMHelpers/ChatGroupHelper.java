@@ -3,6 +3,7 @@ package cn.gogoal.im.common.IMHelpers;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -261,10 +262,10 @@ public class ChatGroupHelper {
      * 缓存群拼接的九宫头像
      */
     public static void cacheGroupAvatar(String conversationId, Bitmap bitmap) {
-        ImageUtils.saveImageToSD(MyApp.getAppContext(),
+        ImageUtils.saveBitmapToSD(MyApp.getAppContext(),
                 MyApp.getAppContext().getExternalFilesDir("imagecache")
                         .getAbsolutePath() + File.separator + "_" + conversationId + ".png",
-                bitmap);
+                bitmap, null);
     }
 
     public static void setGroupAvatar(String conversationId, AvatarTakeListener listener) {
@@ -385,7 +386,7 @@ public class ChatGroupHelper {
         });
     }
 
-    public static void sendShareMessage(final ContactBean contactBean, GGShareEntity shareEntity, final GroupInfoResponse response) {
+    public static void sendShareMessage(@NonNull final ContactBean contactBean, GGShareEntity shareEntity, final GroupInfoResponse response) {
         Map<String, Object> lcattrsMap = new HashMap<>();
         lcattrsMap.put("username", UserUtils.getNickname());
         lcattrsMap.put("avatar", UserUtils.getUserAvatar());
@@ -434,12 +435,9 @@ public class ChatGroupHelper {
                         response.getInfoSuccess(result.getJSONObject("data"));
                     }
                     //头像暂时未保存
-                    IMMessageBean imMessageBean = null;
-                    if (null != contactBean) {
-                        imMessageBean = new IMMessageBean(contactBean.getConv_id(), 1001, System.currentTimeMillis(),
-                                "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()),
-                                String.valueOf(contactBean.getAvatar()), JSON.toJSONString(shareMessage));
-                    }
+                    IMMessageBean imMessageBean = new IMMessageBean(contactBean.getConv_id(), 1001, System.currentTimeMillis(),
+                            "0", null != contactBean.getTarget() ? contactBean.getTarget() : "", String.valueOf(contactBean.getUserId()),
+                            String.valueOf(contactBean.getAvatar()), JSON.toJSONString(shareMessage));
                     MessageListUtils.saveMessageInfo(imMessageBean);
                     //通知服务器重新获取
                     AppManager.getInstance().sendMessage("Cache_change");
@@ -518,8 +516,8 @@ public class ChatGroupHelper {
 
             @Override
             public void onFailure(String msg) {
-                if (response!=null)
-                response.getInfoFailed(new Exception(msg));
+                if (response != null)
+                    response.getInfoFailed(new Exception(msg));
             }
         };
         new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
@@ -546,16 +544,16 @@ public class ChatGroupHelper {
                 UFileUpload.getInstance().upload(file, UFileUpload.Type.IMAGE, new UFileUpload.UploadListener() {
                     @Override
                     public void onUploading(int progress) {
-
                     }
-
                     @Override
                     public void onSuccess(String onlineUri) {
 
                         if (TextUtils.isEmpty(conversationId)) {
+                            if (null != messageResponse) {
+                                messageResponse.sendFailed();
+                            }
                             return;
                         }
-
                         //图片消息基本信息
                         Map<Object, Object> messageMap = new HashMap<>();
                         messageMap.put("_lctype", "-2");
@@ -571,8 +569,7 @@ public class ChatGroupHelper {
                         params.put("token", UserUtils.getToken());
                         params.put("conv_id", conversationId);
                         params.put("chat_type", String.valueOf(chatType));
-                        params.put("message", JSONObject.toJSON(messageMap).toString());
-                        KLog.e(onlineUri);
+                        params.put("message", JSONObject.toJSONString(messageMap));
 
                         //发送图片消息
                         sendAVIMMessage(params, messageResponse);
@@ -580,6 +577,9 @@ public class ChatGroupHelper {
 
                     @Override
                     public void onFailed() {
+                        if (null != messageResponse) {
+                            messageResponse.sendFailed();
+                        }
                     }
                 });
             }
@@ -610,6 +610,9 @@ public class ChatGroupHelper {
                         }
                     }
                 } else {
+                    if (null != messageResponse) {
+                        messageResponse.sendFailed();
+                    }
                 }
             }
 
@@ -708,7 +711,7 @@ public class ChatGroupHelper {
                     } else if (code == 1001) {
                         callback.response(Impl.RESPON_DATA_EMPTY, "暂无相关信息");
                     } else {
-                        callback.response(Impl.RESPON_DATA_ERROR,"请求出错");
+                        callback.response(Impl.RESPON_DATA_ERROR, "请求出错");
                     }
                 }
             }

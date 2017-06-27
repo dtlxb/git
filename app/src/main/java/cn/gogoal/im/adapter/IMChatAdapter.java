@@ -24,9 +24,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.avos.avoscloud.im.v2.AVIMMessage;
-import com.avos.avoscloud.im.v2.messages.AVIMImageMessage;
 import com.hply.roundimage.roundImage.RoundedImageView;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -776,7 +774,6 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
 
     private void imageClickAction(GGImageMessage imageMessage) {
-        KLog.e(urls);
         int index = urls.indexOf(imageMessage.getAVFile().getUrl());
         Intent intent = new Intent(mContext, ImageDetailActivity.class);
         intent.putStringArrayListExtra("image_urls", (ArrayList<String>) urls);

@@ -5,20 +5,19 @@
     android:pivotY="50%"
     android:toDegrees="360">
 
-    <!--<shape-->
-        <!--android:innerRadiusRatio="3"-->
-        <!--android:shape="ring"-->
-        <!--android:thicknessRatio="10"-->
-        <!--android:useLevel="false">-->
+    <shape
+        android:innerRadiusRatio="3"
+        android:shape="ring"
+        android:thicknessRatio="10"
+        android:useLevel="false">
 
-        <!--<gradient-->
-            <!--android:centerColor="@color/rdbDetialChecked"-->
-            <!--android:centerY="0.50"-->
-            <!--android:endColor="@color/rdbDetialChecked"-->
-            <!--android:startColor="#FFFFFF"-->
-            <!--android:type="sweep"-->
-            <!--android:useLevel="false" />-->
-    <!--</shape>-->
-    <bitmap android:src="@drawable/loading_fresh"/>
+        <gradient
+            android:centerColor="@color/rdbDetialChecked"
+            android:centerY="0.50"
+            android:endColor="@color/rdbDetialChecked"
+            android:startColor="#FFFFFF"
+            android:type="sweep"
+            android:useLevel="false" />
+    </shape>
 
 </rotate>

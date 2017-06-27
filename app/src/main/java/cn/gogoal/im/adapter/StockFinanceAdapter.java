@@ -1,11 +1,14 @@
 package cn.gogoal.im.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 
 import java.util.ArrayList;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.stock.stockften.FinancialAnalysisActivity;
+import cn.gogoal.im.activity.stock.stockften.FinancialStatementsActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.FinanceData;
@@ -20,11 +23,18 @@ public class StockFinanceAdapter extends CommonAdapter<FinanceData, BaseViewHold
 
     private ArrayList<FinanceData> contList;
     private Context context;
+    private String stockCode;
+    private String stockName;
+    private String stype;
 
-    public StockFinanceAdapter(Context context, ArrayList<FinanceData> contList) {
+    public StockFinanceAdapter(Context context, ArrayList<FinanceData> contList, String stockCode,
+                               String stockName, String stype) {
         super(R.layout.item_key_index, contList);
         this.context = context;
         this.contList = contList;
+        this.stockCode = stockCode;
+        this.stockName = stockName;
+        this.stype = stype;
     }
 
     @Override
@@ -59,27 +69,33 @@ public class StockFinanceAdapter extends CommonAdapter<FinanceData, BaseViewHold
         holder.setOnClickListener(R.id.linearFinance, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 switch (position) {
                     case 0:
                     case 1:
                     case 2:
                     case 3:
-
+                        Intent intent1 = new Intent(context, FinancialAnalysisActivity.class);
+                        intent1.putExtra("stockCode", stockCode);
+                        intent1.putExtra("stockName", stockName);
+                        intent1.putExtra("stype", stype);
+                        intent1.putExtra("type", "1");
+                        context.startActivity(intent1);
                         break;
                     case 4:
                     case 5:
                     case 6:
-
+                        JumpFinancialStatements(FinancialStatementsActivity.GENRE_PROFIT_STATEMENTS);
                         break;
                     case 7:
                     case 8:
                     case 9:
-
+                        JumpFinancialStatements(FinancialStatementsActivity.GENRE_BALANCE_SHEET);
                         break;
                     case 10:
                     case 11:
                     case 12:
-
+                        JumpFinancialStatements(FinancialStatementsActivity.GENRE_CASH_FLOW);
                         break;
 
                 }
@@ -100,5 +116,14 @@ public class StockFinanceAdapter extends CommonAdapter<FinanceData, BaseViewHold
         }
 
         return content;
+    }
+
+    private void JumpFinancialStatements(int genre) {
+        Intent intent = new Intent(context, FinancialStatementsActivity.class);
+        intent.putExtra("stockCode", stockCode);
+        intent.putExtra("stockName", stockName);
+        intent.putExtra("stype", stype);
+        intent.putExtra("genre", genre);
+        context.startActivity(intent);
     }
 }

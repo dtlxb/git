@@ -175,7 +175,6 @@ public class MainActivity extends BaseActivity {
                 tab.setCustomView(tabAdapter.getTabView(i));
             }
         }
-        tabMain.getTabAt(1).select();
     }
 
     public void changeItem(int index) {

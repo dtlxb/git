@@ -140,7 +140,9 @@ public class MarketFragment2 extends BaseFragment {
                     });
                 }
                 AppManager.getInstance().sendMessage("market_stop_animation_refresh");
-                refreshLayout.setRefreshing(false);
+                if (refreshLayout!=null) {
+                    refreshLayout.setRefreshing(false);
+                }
 
             }
         };

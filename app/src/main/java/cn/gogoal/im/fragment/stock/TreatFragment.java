@@ -27,7 +27,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.copy.CopyStockDetailActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
@@ -45,7 +44,6 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.StringUtils;
-import cn.gogoal.im.fragment.copy.TimesFragment;
 import cn.gogoal.im.ui.XDividerItemDecoration;
 import cn.gogoal.im.ui.view.PieView;
 import cn.gogoal.im.ui.view.ProgressBarView;
@@ -189,11 +187,11 @@ public class TreatFragment extends BaseFragment {
     }
 
     private void toggleParentTab() {
-        if (fromStockDetail) {
-            ((CopyStockDetailActivity) getActivity()).toggleTreatMode();
-        } else {
-            ((TimesFragment) getParentFragment()).toggleTreatMode();
-        }
+//        if (fromStockDetail) {
+//            ((CopyStockDetailActivity) getActivity()).toggleTreatMode();
+//        } else {
+//            ((TimesFragment) getParentFragment()).toggleTreatMode();
+//        }
     }
 
     private void getTreatWudang() {

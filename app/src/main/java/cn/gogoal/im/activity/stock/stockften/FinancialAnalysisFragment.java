@@ -17,7 +17,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.stock.FinancialAnalysisActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ChartBean;
 import cn.gogoal.im.common.AppDevice;

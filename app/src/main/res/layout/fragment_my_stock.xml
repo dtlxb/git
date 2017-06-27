@@ -13,6 +13,33 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <cn.gogoal.im.ui.view.DrawableCenterTextView
+                android:id="@+id/btn_news"
+                style="@style/myStockNewsStyle"
+                android:drawableLeft="@mipmap/img_mystock_news"
+                android:text="新闻" />
+
+            <cn.gogoal.im.ui.view.DrawableCenterTextView
+                android:id="@+id/btn_gonggao"
+                style="@style/myStockNewsStyle"
+                android:drawableLeft="@mipmap/img_mystock_gonggao"
+                android:text="公告" />
+
+            <cn.gogoal.im.ui.view.DrawableCenterTextView
+                android:id="@+id/btn_yanbao"
+                style="@style/myStockNewsStyle"
+                android:drawableLeft="@mipmap/img_mystock_yanbao"
+                android:text="研报" />
+
+        </LinearLayout>
+
+        <include layout="@layout/layout_space_15dp" />
+
         <android.support.percent.PercentRelativeLayout
             android:id="@+id/item_mystock"
             android:layout_width="match_parent"
@@ -65,8 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#fff"
-            android:scrollbars="vertical"
-            />
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 

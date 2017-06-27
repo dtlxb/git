@@ -287,6 +287,7 @@ public class IMNewFriendActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
+                if (view!=null)
                 view.setClickable(true);
             }
         };

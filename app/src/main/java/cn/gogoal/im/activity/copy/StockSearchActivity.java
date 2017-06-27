@@ -246,7 +246,7 @@ public class StockSearchActivity extends BaseActivity {
     }
 
     private void jumpToStockDetail(String stockName, String stockCode) {
-        Intent intent = new Intent(StockSearchActivity.this, CopyStockDetailActivity.class);
+        Intent intent = new Intent(StockSearchActivity.this, StockDetailActivity.class);
         intent.putExtra("stock_name", stockName);
         intent.putExtra("stock_code", stockCode);
         if (num == AppConst.TYPE_GET_STOCK) {
@@ -370,7 +370,9 @@ public class StockSearchActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                load_animation.setVisibility(View.GONE);
+                if (load_animation != null) {
+                    load_animation.setVisibility(View.GONE);
+                }
                 UIHelper.toastError(getActivity(), msg);
             }
         };

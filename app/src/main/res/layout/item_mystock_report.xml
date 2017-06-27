@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingEnd="15dp"
+    android:paddingStart="15dp"
+    android:paddingTop="5dp">
+
+    <TextView
+        android:id="@+id/tv_mystock_report_stockInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="5dp"
+        android:maxLines="1"
+        android:textColor="@color/textColor_999999"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_mystock_report_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_mystock_report_stockInfo"
+        android:layout_marginTop="5dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/textColor_333333"
+        android:textSize="17sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_mystock_report_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_mystock_report_title"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/textColor_666666"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_mystock_report_source_and_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/tv_mystock_report_subtitle"
+        android:layout_marginTop="5dp"
+        android:maxLines="1"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/tv_mystock_report_date"
+        android:textColor="@color/textColor_999999"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/tv_mystock_report_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/tv_mystock_report_subtitle"
+        android:layout_marginTop="5dp"
+        android:maxLines="1"
+        android:textColor="@color/textColor_999999"
+        android:textSize="13sp" />
+
+</RelativeLayout>

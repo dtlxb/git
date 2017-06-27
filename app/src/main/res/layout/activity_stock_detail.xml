@@ -15,77 +15,154 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swiperefreshlayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-            <android.support.v4.widget.NestedScrollView
-                android:id="@+id/scrollView"
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <!--head-->
+                <include layout="@layout/inlcude_stock_detail_head" />
+
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
 
-                    <!--head-->
-                    <include layout="@layout/inlcude_stock_detail_head" />
-
-                    <!--treat info-->
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/rv_stock_detail_treat"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!--chart viewpager-->
+                        <FrameLayout
+                            android:id="@+id/layout_chart_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp" />
+
+                        <!--stock news control-->
+                        <android.support.design.widget.TabLayout
+                            android:id="@+id/tab_stock_detail_news"
+                            style="@style/NormalTabLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/stock_market_bg"
+                            app:tabBackground="@color/stock_market_bg" />
+
+                        <!--stock news content-->
+                        <FrameLayout
+                            android:id="@+id/layout_news_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="375dp"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/view_dialog_mask"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#55000000"
+                        android:clickable="true"
+                        android:visibility="gone" />
+
+                    <!--treat info popu-->
+                    <cn.gogoal.im.ui.stock.DialogRecyclerView
+                        android:id="@+id/rv_stock_detail_treat_popu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/white"
                         android:paddingBottom="3dp"
-                        android:paddingEnd="0dp"
-                        android:paddingStart="10dp"
                         android:paddingTop="3dp"
+                        android:visibility="gone"
                         app:layoutManager="android.support.v7.widget.GridLayoutManager"
                         app:spanCount="3"
-                        tools:listitem="@layout/item_rv_stock_detail_treat" />
+                        tools:listitem="@layout/item_stock_detail_dialog_layout" />
 
-                    <!--chart control-->
-                    <android.support.design.widget.TabLayout
-                        android:id="@+id/tab_stock_detail_chart"
-                        style="@style/NormalTabLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/stock_market_bg" />
+                </FrameLayout>
 
-                    <!--chart viewpager-->
-                    <android.support.v4.view.ViewPager
-                        android:id="@+id/chart_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="250dp"/>
+            </LinearLayout>
 
-                    <!--stock news control-->
-                    <android.support.design.widget.TabLayout
-                        android:id="@+id/tab_stock_detail_news"
-                        style="@style/NormalTabLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/stock_market_bg" />
+        </android.support.v4.widget.NestedScrollView>
 
-                    <!--stock news viewpager-->
-                    <android.support.v4.view.ViewPager
-                        android:id="@+id/vp_news"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-
-                    <!--chart image-->
-                    <android.support.design.widget.TabLayout
-                        android:id="@+id/tab_stock_detail_chart_img"
-                        style="@style/NormalTabLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/stock_market_bg" />
-
-                    <android.support.v4.view.ViewPager
-                        android:id="@+id/vp_chart"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-                </LinearLayout>
-
-            </android.support.v4.widget.NestedScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <!---底部dock栏-->
+    <FrameLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@android:color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.9"
+            android:background="@android:color/black"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+
+            <TextView
+                android:id="@+id/tv_stockDetail_tools"
+                style="@style/stockDetailDockStyle"
+                android:drawableTop="@mipmap/img_stockdetail_tools"
+                android:text="工具箱" />
+
+            <TextView
+                android:id="@+id/tv_stockDetail_stockCircle"
+                style="@style/stockDetailDockStyle"
+                android:drawableTop="@mipmap/img_stockdetail_group_chart"
+                android:text="股票圈" />
+
+            <TextView
+                android:id="@+id/tv_stockDetail_interactiveinvestor"
+                style="@style/stockDetailDockStyle"
+                android:drawableTop="@mipmap/img_stock_interactiveinvestor"
+                android:text="互动" />
+
+            <LinearLayout
+                android:id="@+id/layout_stockDetail_toggle_mystock"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/iv_stock_detail_toggle_mystock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/choose_stock" />
+
+                <TextView
+                    android:id="@+id/tv_stockDetail_toggle_mystock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="已自选"
+                    android:textColor="#8e8e8e"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view_dialog_mask_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#55000000"
+            android:clickable="true"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
 </LinearLayout>

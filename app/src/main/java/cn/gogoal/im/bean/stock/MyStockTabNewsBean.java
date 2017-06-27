@@ -10,33 +10,31 @@ public class MyStockTabNewsBean {
 
     private String newsTitle;
 
-    private String stockCode;
-
-    private String stockName;
-
     private String date;
 
     private String newsId;
 
     private String origin_link;
-    //"http://www.cninfo.com.cn/finalpage/2017-05-03/1203473631.DOCX";
-    //"http://www.cninfo.com.cn/finalpage/2017-05-04/1203474660.PDF"
 
-    public MyStockTabNewsBean(String newsTitle, String stockCode, String stockName, String date, String newsId) {
-        this.newsTitle = newsTitle;
-        this.stockCode = stockCode;
-        this.stockName = stockName;
-        this.date = date;
-        this.newsId = newsId;
-    }
+    private Stock stock;//股票
 
-    public MyStockTabNewsBean(String newsTitle, String stockCode, String stockName, String date, String newsId, String origin_link) {
+    private String source;//来源
+
+    public MyStockTabNewsBean(Stock stock,String newsTitle, String date, String newsId, String origin_link,String source) {
+        this.stock=stock;
         this.newsTitle = newsTitle;
-        this.stockCode = stockCode;
-        this.stockName = stockName;
         this.date = date;
         this.newsId = newsId;
         this.origin_link = origin_link;
+        this.source=source;
+    }
+
+    public Stock getStock() {
+        return stock;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
     }
 
     public String getOrigin_link() {
@@ -55,22 +53,6 @@ public class MyStockTabNewsBean {
         this.newsTitle = newsTitle;
     }
 
-    public String getStockCode() {
-        return stockCode;
-    }
-
-    public void setStockCode(String stockCode) {
-        this.stockCode = stockCode;
-    }
-
-    public String getStockName() {
-        return stockName;
-    }
-
-    public void setStockName(String stockName) {
-        this.stockName = stockName;
-    }
-
     public String getDate() {
         return date;
     }
@@ -85,5 +67,13 @@ public class MyStockTabNewsBean {
 
     public void setNewsId(String newsId) {
         this.newsId = newsId;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

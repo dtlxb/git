@@ -3,6 +3,8 @@ package cn.gogoal.im.bean.stock;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import cn.gogoal.im.common.StringUtils;
+
 /**
  * author wangjd on 2017/4/7 0007.
  * Staff_id 1375
@@ -17,8 +19,8 @@ public class Stock implements Parcelable {
     private int stock_type;
 
     private String changeValue;
-    private int stock_charge_type;
     private double closePrice;
+    private String change_rate;
 
     //双参
     public Stock(String stock_code, String stock_name) {
@@ -67,20 +69,20 @@ public class Stock implements Parcelable {
         this.changeValue = changeValue;
     }
 
-    public int getStock_charge_type() {
-        return stock_charge_type;
-    }
-
-    public void setStock_charge_type(int stock_charge_type) {
-        this.stock_charge_type = stock_charge_type;
-    }
-
     public double getClosePrice() {
         return closePrice;
     }
 
     public void setClosePrice(double closePrice) {
         this.closePrice = closePrice;
+    }
+
+    public String getChange_rate() {
+        return StringUtils.save2Significand(change_rate);
+    }
+
+    public void setChange_rate(String change_rate) {
+        this.change_rate = change_rate;
     }
 
 
@@ -96,8 +98,8 @@ public class Stock implements Parcelable {
         dest.writeString(this.stock_name);
         dest.writeInt(this.stock_type);
         dest.writeString(this.changeValue);
-        dest.writeInt(this.stock_charge_type);
         dest.writeDouble(this.closePrice);
+        dest.writeString(this.change_rate);
     }
 
     protected Stock(Parcel in) {
@@ -106,8 +108,8 @@ public class Stock implements Parcelable {
         this.stock_name = in.readString();
         this.stock_type = in.readInt();
         this.changeValue = in.readString();
-        this.stock_charge_type = in.readInt();
         this.closePrice = in.readDouble();
+        this.change_rate = in.readString();
     }
 
     public static final Creator<Stock> CREATOR = new Creator<Stock>() {

@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingBottom="15dp"
-    android:paddingTop="15dp"
+    android:layout_gravity="center"
     android:visibility="gone">
 
     <ImageView

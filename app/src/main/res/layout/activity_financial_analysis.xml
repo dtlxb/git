@@ -100,7 +100,7 @@
                     android:scrollbars="none" />
 
                 <!--右边的ScrollView-->
-                <cn.gogoal.im.ui.view.MySyncHorizontalScrollView
+                <HorizontalScrollView
                     android:id="@+id/rightHorscrollView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -113,7 +113,7 @@
                         android:divider="@null"
                         android:scrollbars="none" />
 
-                </cn.gogoal.im.ui.view.MySyncHorizontalScrollView>
+                </HorizontalScrollView>
             </LinearLayout>
 
         </LinearLayout>

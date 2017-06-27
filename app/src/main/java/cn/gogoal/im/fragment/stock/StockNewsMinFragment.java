@@ -67,7 +67,7 @@ public class StockNewsMinFragment extends BaseFragment {
 
     private StockNewsType stockNewsType;//实现反序列化接口，类型
 
-    public static StockNewsMinFragment getInstance(String stockCode,String stockName,int position) {
+    public static StockNewsMinFragment getInstance(String stockCode, String stockName, int position) {
         StockNewsMinFragment snf = new StockNewsMinFragment();
         Bundle b = new Bundle();
         b.putInt("position", position);
@@ -85,8 +85,8 @@ public class StockNewsMinFragment extends BaseFragment {
                 break;
         }
         b.putParcelable("stock_news_type", stockNewsType);
-        b.putString("stock_code",stockCode);
-        b.putString("stock_name",stockName);
+        b.putString("stock_code", stockCode);
+        b.putString("stock_name", stockName);
         snf.setArguments(b);
         return snf;
     }
@@ -100,8 +100,8 @@ public class StockNewsMinFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         stockNewsType = getArguments().getParcelable("stock_news_type");
 
-        stockName=getArguments().getString("stock_name");
-        stockCode=getArguments().getString("stock_code");
+        stockName = getArguments().getString("stock_name");
+        stockCode = getArguments().getString("stock_code");
 
         parentPosition = getArguments().getInt("position");
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
@@ -113,7 +113,6 @@ public class StockNewsMinFragment extends BaseFragment {
         getDatas();
 
         xLayout.setEmptyText("暂无" + stockNewsType.getTitle() + "数据");
-
         xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
             @Override
             public void onReload(View v) {
@@ -125,12 +124,12 @@ public class StockNewsMinFragment extends BaseFragment {
     private void getDatas() {
         if (parentPosition != 2) {
             dataListsNews = new ArrayList<>();
-            newsAdapter = new NewsAdapter(dataListsNews, stockNewsType,true);
+            newsAdapter = new NewsAdapter(dataListsNews, stockNewsType, true);
             recyclerView.setAdapter(newsAdapter);
-            getNews(stockNewsType.getNewsType());
+            getNews(stockNewsType.getSource());
         } else {
             dataListsResearch = new ArrayList<>();
-            researchadapter = new ResearchAdapter(dataListsResearch, stockNewsType.getNewsSource(),true);
+            researchadapter = new ResearchAdapter(dataListsResearch, stockNewsType.getNewsSource(), true);
             recyclerView.setAdapter(researchadapter);
             getYanBao();
         }
@@ -198,24 +197,25 @@ public class StockNewsMinFragment extends BaseFragment {
                         hideFootView();
 
                     } else {
-                        dataListsNews.addAll(detailNewsDatas.subList(0,detailNewsDatas.size()-1));
+                        dataListsNews.addAll(detailNewsDatas.subList(0, detailNewsDatas.size() - 1));
                         showFootView();
                     }
 
                     newsAdapter.notifyDataSetChanged();
                     xLayout.setStatus(XLayout.Success);
-                } else if (code==1001){
+                } else if (code == 1001) {
                     xLayout.setStatus(XLayout.Empty);
-                }else {
+                } else {
                     xLayout.setStatus(XLayout.Error);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                xLayout.setStatus(XLayout.Error);
+                if (xLayout != null)
+                    xLayout.setStatus(XLayout.Error);
+
                 UIHelper.toastError(getContext(), msg, xLayout);
-                KLog.e(msg);
             }
         }).startGet();
     }
@@ -244,13 +244,13 @@ public class StockNewsMinFragment extends BaseFragment {
                         dataListsResearch.addAll(detailResearchDatas);
                     } else {
                         showFootView();
-                        dataListsResearch.addAll(detailResearchDatas.subList(0,detailResearchDatas.size()-1));
+                        dataListsResearch.addAll(detailResearchDatas.subList(0, detailResearchDatas.size() - 1));
                     }
                     researchadapter.notifyDataSetChanged();
                     xLayout.setStatus(XLayout.Success);
-                } else if (code==1001){
+                } else if (code == 1001) {
                     xLayout.setStatus(XLayout.Empty);
-                }else {
+                } else {
                     xLayout.setStatus(XLayout.Error);
                 }
             }
