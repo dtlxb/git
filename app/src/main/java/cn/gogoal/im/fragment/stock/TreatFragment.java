@@ -27,6 +27,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.stock.StockDetailActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
@@ -44,6 +45,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.StringUtils;
+import cn.gogoal.im.fragment.copy.TimesFragment;
 import cn.gogoal.im.ui.XDividerItemDecoration;
 import cn.gogoal.im.ui.view.PieView;
 import cn.gogoal.im.ui.view.ProgressBarView;
@@ -69,7 +71,6 @@ public class TreatFragment extends BaseFragment {
     @BindView(R.id.progress)
     ProgressBarView progressView;
 
-    private View headerView;
     private PieView pieView;
 
     //===================五档====================
@@ -150,7 +151,7 @@ public class TreatFragment extends BaseFragment {
                 pieDatas = new ArrayList<>();
                 moneyAdapter = new MoneyAdapter(moneyDatas);
                 recyclerView.setAdapter(moneyAdapter);
-                headerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_map_header, new LinearLayout(getActivity()), false);
+                View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_map_header, new LinearLayout(getActivity()), false);
                 pieView = (PieView) headerView.findViewById(R.id.money_pie);
                 moneyAdapter.addHeaderView(headerView);
                 getTreatChart();
@@ -174,8 +175,9 @@ public class TreatFragment extends BaseFragment {
         });
     }
 
-    @Subscriber(tag = "updata_treat_data")
+    @Subscriber(tag = "refresh_stock_news")
     void updataTreatData(String msg) {
+        KLog.e("跑啊你!!!");
         if (type == AppConst.TREAT_TYPE_WU_DANG) {
             needAnim = false;
             getTreatWudang();
@@ -187,11 +189,11 @@ public class TreatFragment extends BaseFragment {
     }
 
     private void toggleParentTab() {
-//        if (fromStockDetail) {
-//            ((CopyStockDetailActivity) getActivity()).toggleTreatMode();
-//        } else {
-//            ((TimesFragment) getParentFragment()).toggleTreatMode();
-//        }
+        if (fromStockDetail) {
+            ((StockMapsFragment) getParentFragment()).toggleTreatMode();
+        } else {
+            ((TimesFragment) getParentFragment()).toggleTreatMode();
+        }
     }
 
     private void getTreatWudang() {

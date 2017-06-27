@@ -1,6 +1,7 @@
 package cn.gogoal.im.fragment.stock;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import java.util.Map;
 import butterknife.BindArray;
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.copy.StockDetailChartsActivity;
 import cn.gogoal.im.adapter.TreatAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.AppDevice;
@@ -93,12 +95,21 @@ public class StockMapsFragment extends BaseFragment {
     private StockMinuteBean timesBean;
     private TimesFivesBitmap fiveDayBitmap;
     private TimesFivesBitmap timesBitmap;
+    private String closePrice;
+    private String price;
+    private String volume;
+    private String updateTime;
 
-    public static StockMapsFragment newInstance(int stock_charge_type, String stockName, String stockCode) {
+    public static StockMapsFragment newInstance(int stock_charge_type, String stockName, String stockCode,
+                                                String closePrice, String price, String volume, String updateTime) {
         StockMapsFragment fragment = new StockMapsFragment();
         Bundle bundle = new Bundle();
         bundle.putString("stock_name", stockName);
         bundle.putString("stock_code", stockCode);
+        bundle.putString("close_price", closePrice);
+        bundle.putString("price", price);
+        bundle.putString("volume", volume);
+        bundle.putString("update_time", updateTime);
         bundle.putInt("stock_charge_type", stock_charge_type);
         fragment.setArguments(bundle);
         return fragment;
@@ -130,12 +141,23 @@ public class StockMapsFragment extends BaseFragment {
         Bundle bundle = getArguments();
         stockCode = bundle.getString("stock_code");
         stockName = bundle.getString("stock_name");
+        closePrice = bundle.getString("close_price");
+        price = bundle.getString("price");
+        volume = bundle.getString("volume");
+        updateTime = bundle.getString("update_time");
         stock_charge_type = bundle.getInt("stock_charge_type");
 
         //五档明细
-        TreatAdapter treatAdapter = new TreatAdapter(getFragmentManager(), getActivity(), stockCode, true);
+        TreatAdapter treatAdapter = new TreatAdapter(getChildFragmentManager(), getActivity(), stockCode, true);
         vpTreat.setAdapter(treatAdapter);
         tabLayoutTreat.setupWithViewPager(vpTreat);
+
+        for (int i = 0; i < 3; i++) {
+            TabLayout.Tab tabAt = tabLayoutTreat.getTabAt(i);
+            if (tabAt != null) {
+                tabAt.setCustomView(treatAdapter.getTabView(i));
+            }
+        }
 
         //初始化图表
         showItem = SPTools.getInt("showItem", 0);
@@ -289,7 +311,9 @@ public class StockMapsFragment extends BaseFragment {
     public void toggleTreatMode() {
         if (tabLayoutTreat.getTabAt(0).isSelected()) {
             tabLayoutTreat.getTabAt(1).select();
-        } else {
+        } else if (tabLayoutTreat.getTabAt(1).isSelected()) {
+            tabLayoutTreat.getTabAt(2).select();
+        } else if (tabLayoutTreat.getTabAt(2).isSelected()) {
             tabLayoutTreat.getTabAt(0).select();
         }
     }
@@ -325,7 +349,7 @@ public class StockMapsFragment extends BaseFragment {
                     if (map.get("0") == null && textLayout.getVisibility() == View.GONE) {
                         textLayout.setVisibility(View.VISIBLE);
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.getMessage();
                 }
             }
@@ -556,6 +580,28 @@ public class StockMapsFragment extends BaseFragment {
             if (load_animation.getVisibility() == View.VISIBLE) {
                 load_animation.setVisibility(View.GONE);
             }
+
+            //图标点击事件
+            mBitmapChartView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (stockCode != null && stockName != null) {
+                        Intent intent = new Intent(getActivity(), StockDetailChartsActivity.class);
+                        Bundle bundle = new Bundle();
+                        intent.putExtras(bundle);
+                        intent.putExtra("position", showItem);
+                        intent.putExtra("closePrice", Double.parseDouble(closePrice));
+                        intent.putExtra("stockCode", stockCode);
+                        intent.putExtra("stockName", stockName);
+                        intent.putExtra("price", price);
+                        intent.putExtra("volume", volume);
+                        intent.putExtra("time", updateTime);
+                        intent.putExtra("stockType", StockDetailChartsActivity.STOCK_COMMON);
+                        intent.putExtra("stock_charge_type", stock_charge_type);
+                        startActivity(intent);
+                    }
+                }
+            });
         }
     }
 

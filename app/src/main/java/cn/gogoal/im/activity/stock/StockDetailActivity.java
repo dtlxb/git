@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -29,6 +30,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
+import org.simple.eventbus.Subscriber;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +42,7 @@ import butterknife.BindArray;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.MessageHolderActivity;
 import cn.gogoal.im.activity.SquareChatRoomActivity;
 import cn.gogoal.im.activity.ToolsSettingActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
@@ -58,6 +62,7 @@ import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.SPTools;
@@ -69,6 +74,7 @@ import cn.gogoal.im.fragment.stock.CompanyFinanceFragment;
 import cn.gogoal.im.fragment.stock.CompanyInfoFragment;
 import cn.gogoal.im.fragment.stock.StockMapsFragment;
 import cn.gogoal.im.fragment.stock.StockNewsMinFragment;
+import cn.gogoal.im.ui.Badge.BadgeView;
 import cn.gogoal.im.ui.dialog.NormalAlertDialog;
 import cn.gogoal.im.ui.dialog.StockDetailPopuDialog;
 import cn.gogoal.im.ui.dialog.WaitDialog;
@@ -146,6 +152,8 @@ public class StockDetailActivity extends BaseActivity {
     @BindView(R.id.view_dialog_mask_bottom)
     View viewMaskBottom;//蒙版2
 
+    private ImageView ivMessageTag;//消息
+
     String subTitleText = "%s\u3000%s";
 
     private String stockCode;
@@ -172,6 +180,10 @@ public class StockDetailActivity extends BaseActivity {
     private int num;
     private WaitDialog waitDialog;
 
+    //消息
+    private BadgeView badge;
+    private int unReadCount;
+
     private boolean isChoose = true;
 
     private int headHeight;
@@ -187,7 +199,7 @@ public class StockDetailActivity extends BaseActivity {
         stockCode = getIntent().getStringExtra("stock_code");
         stockName = getIntent().getStringExtra("stock_name");
 
-        initDialog();
+        initDialog();//初始化截图
 
         initTitle();//初始化标题
 
@@ -196,6 +208,8 @@ public class StockDetailActivity extends BaseActivity {
         getStockHeadInfo(AppConst.REFRESH_TYPE_FIRST);//获取交易数据，并填充头部
 
         initNews();//个股新闻
+
+        initChatMessage();//初始化消息
 
         iniRefresh(swiperefreshlayout);
 
@@ -215,6 +229,16 @@ public class StockDetailActivity extends BaseActivity {
                 layoutHead.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
+    }
+
+    private void initChatMessage() {
+        badge = new BadgeView(getActivity());
+        badge.setGravityOffset(10, 7, true);
+        badge.setShowShadow(false);
+        badge.setBadgeGravity(Gravity.TOP | Gravity.END);
+        badge.setBadgeTextSize(8, true);
+        badge.bindTarget(ivMessageTag);
+        badge.setBadgeNumber(unReadCount);
     }
 
     private void initDialog() {
@@ -237,6 +261,9 @@ public class StockDetailActivity extends BaseActivity {
         } else {
             toggleIsMyStock(false, false);
         }
+        //消息未读数
+        unReadCount = MessageListUtils.getAllMessageUnreadCount();
+        badge.setBadgeNumber(unReadCount);
     }
 
     private void stopRefreshAnimation(ImageView btnRefresh, @DrawableRes int defauleImage) {
@@ -352,12 +379,31 @@ public class StockDetailActivity extends BaseActivity {
     private void initTitle() {
         setStockState();
 
-        xTitle.addAction(new XTitle.ImageAction(getResDrawable(R.mipmap.refresh_white)) {
+       /* xTitle.addAction(new XTitle.ImageAction(getResDrawable(R.mipmap.refresh_white)) {
             @Override
             public void actionClick(View view) {
                 //TODO 刷新
             }
-        });
+        });*/
+
+        XTitle.ImageAction refreshAction = new XTitle.ImageAction(getResDrawable(R.mipmap.refresh_white)) {
+            @Override
+            public void actionClick(View view) {
+                //TODO 刷新
+            }
+        };
+
+        XTitle.ImageAction messageAction = new XTitle.ImageAction(getResDrawable(R.mipmap.message_white)) {
+            @Override
+            public void actionClick(View view) {
+                startActivity(new Intent(StockDetailActivity.this, MessageHolderActivity.class));
+            }
+        };
+
+        xTitle.addAction(refreshAction, 0);
+        xTitle.addAction(messageAction, 1);
+
+        ivMessageTag = (ImageView) xTitle.getViewByAction(messageAction);
 
     }
 
@@ -556,7 +602,8 @@ public class StockDetailActivity extends BaseActivity {
                     stock_status_type = treatData.getStock_type();
                     closePrice = StringUtils.parseStringDouble(treatData.getClose_price());
 
-                    setChart(treatData.getStock_type());//设置表格
+                    setChart(treatData.getStock_type(), treatData.getClose_price(), treatData.getPrice(),
+                            treatData.getVolume(), treatData.getUpdate_time());//设置表格
 
                     setStockHeadColor(treatData.getChange_rate());//设置颜色
                     //设置标题、副标题
@@ -708,10 +755,10 @@ public class StockDetailActivity extends BaseActivity {
     /**
      * 设置表格
      */
-    private void setChart(int stockType) {
+    private void setChart(int stockType, String closePrice, String price, String volume, String updateTime) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.layout_chart_content, StockMapsFragment.newInstance(
-                stockType, stockName, stockCode));
+                stockType, stockName, stockCode, closePrice, price, volume, updateTime));
         transaction.commit();
 
         //加载消失,截屏开始
@@ -1051,4 +1098,12 @@ public class StockDetailActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 消息接收
+     */
+    @Subscriber(tag = "IM_Message")
+    public void handleMessage(BaseMessage baseMessage) {
+        unReadCount++;
+        badge.setBadgeNumber(unReadCount);
+    }
 }
