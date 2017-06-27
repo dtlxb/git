@@ -350,7 +350,9 @@ public class StockSearchActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                load_animation.setVisibility(View.GONE);
+                if (load_animation!=null) {
+                    load_animation.setVisibility(View.GONE);
+                }
                 UIHelper.toastError(getActivity(), msg);
             }
         };

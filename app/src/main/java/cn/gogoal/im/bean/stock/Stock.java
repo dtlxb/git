@@ -20,7 +20,7 @@ public class Stock implements Parcelable {
 
     private String changeValue;
     private double closePrice;
-    private String stock_rate;
+    private String change_rate;
 
     //双参
     public Stock(String stock_code, String stock_name) {
@@ -77,12 +77,12 @@ public class Stock implements Parcelable {
         this.closePrice = closePrice;
     }
 
-    public String getStock_rate() {
-        return StringUtils.save2Significand(stock_rate);
+    public String getChange_rate() {
+        return StringUtils.save2Significand(change_rate);
     }
 
-    public void setStock_rate(String stock_rate) {
-        this.stock_rate = stock_rate;
+    public void setChange_rate(String change_rate) {
+        this.change_rate = change_rate;
     }
 
 
@@ -99,7 +99,7 @@ public class Stock implements Parcelable {
         dest.writeInt(this.stock_type);
         dest.writeString(this.changeValue);
         dest.writeDouble(this.closePrice);
-        dest.writeString(this.stock_rate);
+        dest.writeString(this.change_rate);
     }
 
     protected Stock(Parcel in) {
@@ -109,7 +109,7 @@ public class Stock implements Parcelable {
         this.stock_type = in.readInt();
         this.changeValue = in.readString();
         this.closePrice = in.readDouble();
-        this.stock_rate = in.readString();
+        this.change_rate = in.readString();
     }
 
     public static final Creator<Stock> CREATOR = new Creator<Stock>() {

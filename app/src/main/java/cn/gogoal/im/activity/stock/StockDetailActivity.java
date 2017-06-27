@@ -193,6 +193,7 @@ public class StockDetailActivity extends BaseActivity {
             public void onRefresh() {
                 getStockHeadInfo(AppConst.REFRESH_TYPE_SWIPEREFRESH);
                 AppManager.getInstance().sendMessage("refresh_stock_news");//发个消息刷新新闻
+                swiperefreshlayout.setRefreshing(false);
             }
         });
 
@@ -589,14 +590,12 @@ public class StockDetailActivity extends BaseActivity {
                 } else {
                     setStockHeadColor("-1");//设置颜色
                 }
-                swiperefreshlayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(String msg) {
                 setStockHeadColor("-1");//设置颜色
                 UIHelper.toastError(getActivity(), msg);
-                swiperefreshlayout.setRefreshing(false);
             }
         }).startGet();
 

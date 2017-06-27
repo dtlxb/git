@@ -212,7 +212,9 @@ public class RegisterActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                loginLayout.setEnabled(true);
+                if (loginLayout!=null) {
+                    loginLayout.setEnabled(true);
+                }
                 UIHelper.toast(RegisterActivity.this, R.string.net_erro_hint);
             }
         };
@@ -263,6 +265,7 @@ public class RegisterActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
+                if (loginLayout!=null)
                 loginLayout.setEnabled(true);
                 showErrorDialog("数据请求出错("+msg+")",false);
             }

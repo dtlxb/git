@@ -126,7 +126,7 @@ public class StockNewsAllListActivity extends BaseActivity {
         final Map<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
         param.put("page", String.valueOf(page));
-        param.put("type", String.valueOf(stockNewsType.getNewsType()));
+        param.put("type", String.valueOf(stockNewsType.getSource()));
         param.put("rows", "20");
 
         new GGOKHTTP(param, GGOKHTTP.GET_STOCK_NEWS, new GGOKHTTP.GGHttpInterface() {

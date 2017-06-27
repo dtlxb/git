@@ -8,7 +8,6 @@ import android.support.design.widget.TabLayout;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -319,12 +318,15 @@ public class StockMapsFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-
-                if (load_animation.getVisibility() == View.VISIBLE) {
-                    load_animation.setVisibility(View.GONE);
-                }
-                if (map.get("0") == null && textLayout.getVisibility() == View.GONE) {
-                    textLayout.setVisibility(View.VISIBLE);
+                try {
+                    if (load_animation.getVisibility() == View.VISIBLE) {
+                        load_animation.setVisibility(View.GONE);
+                    }
+                    if (map.get("0") == null && textLayout.getVisibility() == View.GONE) {
+                        textLayout.setVisibility(View.VISIBLE);
+                    }
+                }catch (Exception e){
+                    e.getMessage();
                 }
             }
         };

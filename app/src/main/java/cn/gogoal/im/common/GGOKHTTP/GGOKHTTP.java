@@ -136,6 +136,33 @@ public class GGOKHTTP {
     public static final String RESET_MYSTOCKS = "v1/mystock/reset";
 
     /**
+     * 获取自选股新闻、公告、研报的group_id
+     * token        身份令牌(必)
+     * get_sum  1
+     */
+    public static final String GET_GROUP_ID = "v1/mystock/get_group";
+
+    /**
+     * 自选股 - 新闻、公告
+     * token        身份令牌(必)
+     * page rows    分页(可选)
+     * group_id     通过上一个接口获取
+     *
+     * source   7(新闻)、3(公告)、9(看点、废弃)
+     *
+     * @see cn.gogoal.im.bean.StockNewsType
+     */
+    public static final String MY_STOCK_NEWS = "v1/news/get_mystock_news";
+
+    /**
+     * 自选股 - 研报
+     * token        身份令牌(必)
+     * page rows    分页(可选)
+     * group_id     同上
+     */
+    public static final String MY_STOCK_GET_REPORT = "v1/mystock/get_report";
+
+    /**
      * 个股新闻、公告、投资者互动
      * <p>
      * params stock_code=002285&

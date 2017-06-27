@@ -10,22 +10,29 @@ import android.os.Parcelable;
  * Description :== 个股中新闻、公告、研报类型实体 ==
  */
 public class StockNewsType implements Parcelable {
-    private int newsType;       /*7(新闻)、3(公告)、9(看点，去掉)*/
+
+    public static final int STOCK_INFOMATION_SOURCE_NEWS = 7;//新闻
+
+    public static final int STOCK_INFOMATION_SOURCE_NOTICES = 3;//公告
+
+    public static final int STOCK_INFOMATION_SOURCE_VIEWPOINTS = 9;//看点
+
+    private int source;       /*7(新闻)、3(公告)、9(看点，去掉)*/
     private String title;        /*标题*/
     private int newsSource;     /*个股研报(102)、个股新闻(100)、个股公告(105)*/
 
-    public StockNewsType(int newsType, String title, int newsSource) {
-        this.newsType = newsType;
+    public StockNewsType(int source, String title, int newsSource) {
+        this.source = source;
         this.title = title;
         this.newsSource = newsSource;
     }
 
-    public int getNewsType() {
-        return newsType;
+    public int getSource() {
+        return source;
     }
 
-    public void setNewsType(int newsType) {
-        this.newsType = newsType;
+    public void setSource(int source) {
+        this.source = source;
     }
 
     public String getTitle() {
@@ -51,7 +58,7 @@ public class StockNewsType implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.newsType);
+        dest.writeInt(this.source);
         dest.writeString(this.title);
         dest.writeInt(this.newsSource);
     }
@@ -60,7 +67,7 @@ public class StockNewsType implements Parcelable {
     }
 
     protected StockNewsType(Parcel in) {
-        this.newsType = in.readInt();
+        this.source = in.readInt();
         this.title = in.readString();
         this.newsSource = in.readInt();
     }

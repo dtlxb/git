@@ -135,11 +135,9 @@ public class AppConst {
 
     public static final String WEB_NEWS = WEB_URL + "/report/info/";
 
-    public static final int SOURCE_TYPE_YANBAO = 102;//个股 研报
-    public static final int SOURCE_TYPE_GONGGAO = 105;//个股 公告
-
-    //新闻远端
-    public static final int SOURCE_TYPE_NEWS = 100;//个股 新闻
+    public static final int SOURCE_TYPE_YANBAO = 102;//个股、自选股 研报source跳转
+    public static final int SOURCE_TYPE_GONGGAO = 105;//个股、自选股 公告source跳转
+    public static final int SOURCE_TYPE_NEWS = 100;//个股、自选股 新闻source跳转
 
     //======================关于LeanCloud会话类型，消息类型，发送失败类型==============================
     public static final int IM_CHAT_TYPE_SINGLE = 1001;                 //聊天室类型 单聊

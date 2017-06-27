@@ -580,11 +580,15 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                if (load_animation.getVisibility() == View.VISIBLE) {
-                    load_animation.setVisibility(View.GONE);
-                }
-                if (map.get("0") == null && textLayout.getVisibility() == View.GONE) {
-                    textLayout.setVisibility(View.VISIBLE);
+                try {
+                    if (load_animation.getVisibility() == View.VISIBLE) {
+                        load_animation.setVisibility(View.GONE);
+                    }
+                    if (map.get("0") == null && textLayout.getVisibility() == View.GONE) {
+                        textLayout.setVisibility(View.VISIBLE);
+                    }
+                }catch (Exception e){
+                    e.getMessage();
                 }
             }
         };
@@ -993,9 +997,13 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                load_animation_change.setVisibility(View.GONE);
-                stock_lv.setVisibility(View.GONE);
-                stock_no_data.setVisibility(View.VISIBLE);
+                try {
+                    load_animation_change.setVisibility(View.GONE);
+                    stock_lv.setVisibility(View.GONE);
+                    stock_no_data.setVisibility(View.VISIBLE);
+                }catch (Exception e){
+                    e.getMessage();
+                }
             }
         };
         new GGOKHTTP(param, GGOKHTTP.STOCK_RANK_LIST, ggHttpInterface).startGet();
