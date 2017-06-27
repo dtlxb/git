@@ -108,7 +108,7 @@ public class SevenBy24Fragment extends BaseFragment {
         HashMap<String, String> params = new HashMap<>();
         params.put("page", String.valueOf(defaultPage));
         params.put("rows", String.valueOf(15));
-        params.put("end_time", CalendarUtils.getCurrentTime("yyyy-MM-dd HH:mm:ss"));
+//        params.put("end_time", CalendarUtils.getCurrentTime("yyyy-MM-dd HH:mm:ss"));
         new GGOKHTTP(params, GGOKHTTP.GET_FULL_TIME_INFO, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {

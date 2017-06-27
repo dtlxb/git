@@ -3,7 +3,6 @@ package cn.gogoal.im.common.ImageUtils;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,7 +31,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +38,7 @@ import java.io.InputStream;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.Impl;
+import cn.gogoal.im.common.SaveBitmapAsyncTask;
 
 /**
  * author wangjd on 2017/2/23 0023.
@@ -155,9 +154,9 @@ public class ImageUtils {
     /**
      * bitmap 保存图片到DCIM下
      *
-     * @see cn.gogoal.im.common.SaveImageAsyncTask
+     * @see SaveBitmapAsyncTask
      */
-    public static void saveImage2DCIM(Context context, Bitmap bitmap, String filename, Impl<String> callBack) {
+    public static void saveBitmap2Pictures(Context context, Bitmap bitmap, String filename, Impl<String> callBack) {
 
         if (bitmap == null) {
             if (callBack != null)
@@ -165,7 +164,7 @@ public class ImageUtils {
             return;
         }
 
-        String dirs = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+        String dirs = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                 .getAbsolutePath() + File.separator + "GoGoal";
 
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -209,66 +208,61 @@ public class ImageUtils {
     /**
      * 写图片文件到SD卡
      */
-    public static void saveImageToSD(Context ctx, String filePath,
-                                     Bitmap bitmap) {
-        if (bitmap != null) {
-            File file = new File(filePath.substring(0,
-                    filePath.lastIndexOf(File.separator)));
-            if (!file.exists()) {
-                file.mkdirs();
+    public static void saveBitmapToSD(Context ctx, String filePath,
+                                      Bitmap bitmap, Impl<String> callback) {
+        if (bitmap == null) {
+            if (callback != null)
+                callback.response(Impl.RESPON_DATA_ERROR, "bitmap non null");
+            return;
+        }
+        if (ctx == null) {
+            if (callback != null) {
+                callback.response(Impl.RESPON_DATA_ERROR, "Context non null");
             }
-            BufferedOutputStream bos = null;
-            try {
-                bos = new BufferedOutputStream(
-                        new FileOutputStream(filePath));
+            return;
+        }
 
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
-                bos.flush();
-                if (ctx != null) {
-                    scanPhoto(ctx, new File(filePath));
-                }
+        File file = new File(filePath.substring(0,
+                filePath.lastIndexOf(File.separator)));
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                FileUtil.closeIO(bos);
-            }
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        BufferedOutputStream bos = null;
+        try {
+            bos = new BufferedOutputStream(
+                    new FileOutputStream(filePath));
+
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            bos.flush();
+//            scanPhoto(ctx, new File(filePath));
+            if (callback != null)
+                callback.response(Impl.RESPON_DATA_SUCCESS, filePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (callback != null)
+                callback.response(Impl.RESPON_DATA_ERROR, e.getMessage());
+        } finally {
+            FileUtil.closeIO(bos);
         }
     }
 
-    /**
-     * 写图片文件到SD卡
-     */
-    public static void saveImageToSD(Context ctx, String filePath,
-                                     Bitmap bitmap, Impl<String> callback) {
-        if (bitmap != null) {
-            File file = new File(filePath.substring(0,
-                    filePath.lastIndexOf(File.separator)));
-            if (!file.exists()) {
-                file.mkdirs();
+    public static void cacheImage(Context context, Bitmap bitmap, String saveName, Impl<String> callback) {
+        if (context == null) {
+            return;
+        }
+        File cacheDir = context.getExternalFilesDir("cache");
+        if (cacheDir != null) {
+            boolean exists = cacheDir.exists();
+            if (!exists) {
+                exists = cacheDir.mkdirs();
             }
-            BufferedOutputStream bos = null;
-            try {
-                bos = new BufferedOutputStream(
-                        new FileOutputStream(filePath));
-
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
-                bos.flush();
-                if (ctx != null) {
-                    scanPhoto(ctx, new File(filePath));
-                }
-                if (callback != null)
-                    callback.response(Impl.RESPON_DATA_SUCCESS, filePath);
-            } catch (Exception e) {
-                e.printStackTrace();
-                if (callback != null)
-                    callback.response(Impl.RESPON_DATA_ERROR, e.getMessage());
-            } finally {
-                FileUtil.closeIO(bos);
+            if (exists) {
+                saveBitmapToSD(context,
+                        cacheDir.getAbsolutePath() + File.separator + "image" + File.separator + saveName,
+                        bitmap, callback);
             }
-        } else {
-            if (callback != null)
-                callback.response(Impl.RESPON_DATA_ERROR, "bitmap non null");
         }
     }
 
@@ -575,14 +569,14 @@ public class ImageUtils {
      * 让Gallery上能马上看到该图片
      */
     private static void scanPhoto(Context ctx, File imgFile) {
-        try {
-            MediaStore.Images.Media.insertImage(ctx.getContentResolver(),
-                    imgFile.getAbsolutePath(), imgFile.getName(), null);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        ctx.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-                Uri.parse("file://" + imgFile.getAbsolutePath())));
+//        try {
+//            MediaStore.Images.Media.insertImage(ctx.getContentResolver(),
+//                    imgFile.getAbsolutePath(), imgFile.getName(), null);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        ctx.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+//                Uri.parse("file://" + imgFile.getAbsolutePath())));
     }
 
     /**

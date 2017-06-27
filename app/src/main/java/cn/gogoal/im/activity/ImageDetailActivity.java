@@ -28,7 +28,7 @@ import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
 import cn.gogoal.im.common.ImageUtils.ImageUtils;
 import cn.gogoal.im.common.MD5Utils;
-import cn.gogoal.im.common.SaveImageAsyncTask;
+import cn.gogoal.im.common.SaveBitmapAsyncTask;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UFileUpload;
 import cn.gogoal.im.common.UIHelper;
@@ -66,6 +66,8 @@ public class ImageDetailActivity extends BaseActivity {
 
         XTitle title = setMyTitle(isEditMyAvatar ? "个人头像" : "", true);
 
+        int firstIndex = getIntent().getIntExtra("index", 0);
+
         title.setVisibility(isEditMyAvatar ? View.VISIBLE : View.GONE);
 
         //自己头像,查看修改
@@ -84,9 +86,6 @@ public class ImageDetailActivity extends BaseActivity {
 
         if (isEditMyAvatar) {
             imageUrls.add(UserUtils.getUserAvatar());
-//            imageUrls.add("http://hackfile.ufile.ucloud.cn/gogoal/avatar/ucloud_266F015CFCC3D7AB.jpg");
-//            imageUrls.add("http://www.jcodecraeer.com/uploads/20170330/1490865016182928.jpeg");
-//            imageUrls.add("http://hackfile.ufile.ucloud.cn/gogoal/avatar/ucloud_9385F5CF7F318CEE.jpg@1000x1000");
         } else {
             imageUrls.addAll(getIntent().getStringArrayListExtra("image_urls"));
         }
@@ -105,6 +104,8 @@ public class ImageDetailActivity extends BaseActivity {
         });
 
         vpImageDetail.setOffscreenPageLimit(imageUrls.size());
+
+        vpImageDetail.setCurrentItem(firstIndex);
     }
 
     /**
@@ -123,7 +124,7 @@ public class ImageDetailActivity extends BaseActivity {
                                 new SimpleTarget<Bitmap>() {
                                     @Override
                                     public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                                        new SaveImageAsyncTask(
+                                        new SaveBitmapAsyncTask(
                                                 getActivity(),
                                                 MD5Utils.getMD5EncryptyString16(imageUrls.get(vpImageDetail.getCurrentItem())),
                                                 "图片")
@@ -156,7 +157,7 @@ public class ImageDetailActivity extends BaseActivity {
                         ImageUtils.getUrlBitmap(getActivity(), imageUrls.get(vpImageDetail.getCurrentItem()), new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                                new SaveImageAsyncTask(getActivity(),
+                                new SaveBitmapAsyncTask(getActivity(),
                                         MD5Utils.getMD5EncryptyString16(imageUrls.get(vpImageDetail.getCurrentItem())),
                                         "头像")
                                         .execute(resource);

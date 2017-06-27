@@ -94,7 +94,7 @@
 //
 //            @Override
 //            public void onResponse(Bitmap response, int id) {
-//                ImageUtils.saveImageToSD(context,
+//                ImageUtils.saveBitmapToSD(context,
 //                        dirs+ File.separator + saveName + ImageUtils.getImageSuffix(imageUrl),
 //                        response, 100);
 //            }

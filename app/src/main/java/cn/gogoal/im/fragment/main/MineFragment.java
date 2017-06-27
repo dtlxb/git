@@ -313,7 +313,6 @@ public class MineFragment extends BaseFragment {
                     holder.getView(R.id.item_layout_simple_image_text).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            KLog.e("pos=" + position + ";item=" + data.getItemText());
                             final Intent intent;
                             switch (data.getItemText()) {
                                 case "我要直播"://我要直播

@@ -80,26 +80,6 @@ public class ImageDetailFragment extends BaseFragment {
     }
 
     private void loadImage(Context mContext) {
-//        Glide.with(mContext).load(imageUrl)
-//                .fitCenter().into(new GlideDrawableImageViewTarget(image) {
-//            @Override
-//            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
-//                super.onResourceReady(resource, animation);
-//                xLayout.setStatus(XLayout.Success);
-//            }
-//
-//            @Override
-//            public void onLoadStarted(Drawable placeholder) {
-//                super.onLoadStarted(placeholder);
-//                xLayout.setStatus(XLayout.Loading);
-//            }
-//
-//            @Override
-//            public void onLoadFailed(Exception e, Drawable errorDrawable) {
-//                super.onLoadFailed(e, errorDrawable);
-//                xLayout.setStatus(XLayout.Error);
-//            }
-//        });
         RequestOptions options=new RequestOptions();
         options.fitCenter();
 

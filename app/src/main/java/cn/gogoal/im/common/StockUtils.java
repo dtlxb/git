@@ -2,6 +2,7 @@ package cn.gogoal.im.common;
 
 import android.content.Context;
 import android.support.annotation.ColorRes;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONArray;
@@ -90,6 +91,7 @@ public class StockUtils {
         SPTools.clearItem("my_stock_set");
     }
 
+    //数据处理，1保存两位，2.正数补+，
     public static String plusMinus(String rateString, boolean percent) {
         if (StringUtils.isActuallyEmpty(rateString)) {
             return "--";
@@ -161,7 +163,9 @@ public class StockUtils {
     /**
      * 根据判断的依据字段，返回股票颜色
      */
-    public static @ColorRes int getStockRateColor(String rateOrPriceString) {
+    public static
+    @ColorRes
+    int getStockRateColor(String rateOrPriceString) {
         if (TextUtils.isEmpty(rateOrPriceString) || rateOrPriceString.equals("null")) {
             return R.color.stock_gray;
         }
@@ -174,7 +178,9 @@ public class StockUtils {
     /**
      * 根据判断的依据字段，返回股票颜色
      */
-    public static @ColorRes int getStockRateColor(double rateOrPriceString) {
+    public static
+    @ColorRes
+    int getStockRateColor(double rateOrPriceString) {
         return rateOrPriceString == Double.NaN ?
                 R.color.stock_gray :
                 (rateOrPriceString > 0 ?
@@ -239,6 +245,41 @@ public class StockUtils {
             default:
                 return "0.00";
         }
+    }
+
+    /**
+     * 回调股票状态
+     * */
+    public static void getStockStatus(String stockCode, @NonNull final Impl<String> callback) {
+        final Map<String, String> map = new HashMap<>();
+        map.put("stock_code", stockCode);
+        new GGOKHTTP(map, GGOKHTTP.ONE_STOCK_DETAIL, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    if (object.getJSONObject("data") == null) {
+                        callback.response(Impl.RESPON_DATA_ERROR, "data字段缺失");
+                    }else {
+                        try {
+                            callback.response(Impl.RESPON_DATA_SUCCESS,
+                                    object.getJSONObject("data").getString("stock_type"));
+                        }catch (Exception e){
+                            callback.response(Impl.RESPON_DATA_ERROR,"stock_type字段缺失");
+                        }
+                    }
+                } else if (object.getIntValue("code") == 1001) {
+                    callback.response(Impl.RESPON_DATA_EMPTY, "没有查询到这支股票");
+                } else {
+                    callback.response(Impl.RESPON_DATA_ERROR, object.getString("message"));
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                callback.response(Impl.RESPON_DATA_ERROR, msg);
+            }
+        }).startGet();
     }
 
     public static String getSympolType(int sympolType) {

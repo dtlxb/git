@@ -29,10 +29,12 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.copy.StockDetailMarketIndexActivity;
 import cn.gogoal.im.activity.copy.StockSearchActivity;
 import cn.gogoal.im.activity.stock.EditMyStockActivity;
+import cn.gogoal.im.activity.stock.MyStockNewsActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.AppManager;
@@ -62,7 +64,7 @@ import cn.gogoal.im.ui.view.SortView;
  * phone 18930640263
  * description :自选股
  */
-public class MyStockFragment extends BaseFragment implements MyStockSortInteface{
+public class MyStockFragment extends BaseFragment implements MyStockSortInteface {
 
     //排序头，为了对齐，使用item的引用布局
     @BindView(R.id.item_mystock)
@@ -130,6 +132,27 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         getMyStockData(refreshType);
     }
 
+    @OnClick({R.id.btn_news, R.id.btn_gonggao, R.id.btn_yanbao})
+    void click(View view) {
+        switch (view.getId()) {
+            case R.id.btn_news:
+                intentNews(0);
+                break;
+            case R.id.btn_gonggao:
+                intentNews(1);
+                break;
+            case R.id.btn_yanbao:
+                intentNews(2);
+                break;
+        }
+    }
+
+    private void intentNews(int index) {
+        Intent intent = new Intent(getActivity(), MyStockNewsActivity.class);
+        intent.putExtra("showTabIndex", index);
+        startActivity(intent);
+    }
+
     private void iniMyStockList() {
         myStockAdapter = new MyStockAdapter(myStockDatas);
 
@@ -164,7 +187,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                FileUtil.writeRequestResponse(responseInfo,"我的自选股数据");
+                FileUtil.writeRequestResponse(responseInfo, "我的自选股数据");
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     noData(false);
@@ -182,7 +205,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     StockUtils.saveMyStock(JSONObject.parseObject(responseInfo).getJSONArray("data"));
 
                     if (loadType == AppConst.REFRESH_TYPE_SWIPEREFRESH || loadType == AppConst.REFRESH_TYPE_PARENT_BUTTON) {
-                        UIHelper.toast(getActivity(), "自选"+getString(R.string.str_refresh_ok));
+                        UIHelper.toast(getActivity(), "自选" + getString(R.string.str_refresh_ok));
                     }
 
                 } else if (code == 1001) {
@@ -263,9 +286,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 if (view.getId() == R.id.tv_mystock_price) {
                     tvMystockRate.setViewStateNormal();
                     if (sortType == -1) {
-                        return Double.compare(o2.getPrice(),o1.getPrice());
+                        return Double.compare(o2.getPrice(), o1.getPrice());
                     } else if (sortType == 1) {
-                        return Double.compare(o1.getPrice(),o2.getPrice());
+                        return Double.compare(o1.getPrice(), o2.getPrice());
                     } else {
                         try {
                             return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()), CalendarUtils.parseString2Long(o1.getInsertdate()));

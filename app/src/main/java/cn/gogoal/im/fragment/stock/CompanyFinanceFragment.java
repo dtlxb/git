@@ -60,6 +60,7 @@ public class CompanyFinanceFragment extends BaseFragment {
         stockName = getArguments().getString("stockName");
 
         BaseActivity.initRecycleView(rv_finance, null);
+        rv_finance.setNestedScrollingEnabled(false);
 
         getParamData();
     }

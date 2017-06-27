@@ -76,7 +76,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
     @BindView(R.id.btnBack)
     LinearLayout btnBack;
     //标题栏
-    @BindView(R.id.relative_header)
+    @BindView(R.id.title_header)
     RelativeLayout relative_header;
     //标题
     @BindView(R.id.textHeadTitle)

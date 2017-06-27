@@ -17,14 +17,6 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
 
     private int tag;//预留字段，特殊处理用
 
-//    public int getTag() {
-//        return tag;
-//    }
-//
-//    public void setTag(int tag) {
-//        this.tag = tag;
-//    }
-
     private ContactType contactType;//item类型
 
     private int id;
