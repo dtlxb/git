@@ -1,4 +1,4 @@
-package cn.gogoal.im.adapter;
+package cn.gogoal.im.adapter.stockften;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;

@@ -14,7 +14,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.StockFinanceAdapter;
+import cn.gogoal.im.adapter.stockften.StockFinanceAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.FinanceData;

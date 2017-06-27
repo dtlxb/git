@@ -16,10 +16,10 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.CurrencyTitleAdapter;
-import cn.gogoal.im.adapter.FundHolderAdapter;
-import cn.gogoal.im.adapter.TenHolderAdapter;
-import cn.gogoal.im.adapter.TenTradableHolderAdapter;
+import cn.gogoal.im.adapter.stockften.CurrencyTitleAdapter;
+import cn.gogoal.im.adapter.stockften.FundHolderAdapter;
+import cn.gogoal.im.adapter.stockften.TenHolderAdapter;
+import cn.gogoal.im.adapter.stockften.TenTradableHolderAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.FundHolderData;
 import cn.gogoal.im.bean.TenHolderData;

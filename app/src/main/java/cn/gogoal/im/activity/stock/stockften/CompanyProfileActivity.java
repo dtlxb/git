@@ -15,8 +15,8 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.CompanyProfileAdapter;
-import cn.gogoal.im.adapter.CurrencyTitleAdapter;
+import cn.gogoal.im.adapter.stockften.CompanyProfileAdapter;
+import cn.gogoal.im.adapter.stockften.CurrencyTitleAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ProfileData;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
