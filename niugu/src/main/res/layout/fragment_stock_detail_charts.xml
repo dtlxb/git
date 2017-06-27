@@ -6,267 +6,102 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <android.support.design.widget.TabLayout
+        android:id="@+id/charts_line_tab_up_ll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="40dp"
+        android:background="@color/Kline_item_bg"
+        app:tabIndicatorColor="@color/stock_red"
+        app:tabIndicatorHeight="1dp"
+        app:tabSelectedTextColor="@color/stock_red"
+        app:tabTextColor="@color/text_color_tab" />
 
-        <!--<LinearLayout
-            android:id="@+id/charts_line_tab_up_ll"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/Kline_item_bg"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+    <LinearLayout
+        android:id="@+id/xcharts_line_center_ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/charts_line_tab_up_ll"
+        android:orientation="vertical">
 
-            <RelativeLayout
-                android:id="@+id/charts_min_line_layout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/charts_min_line_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:gravity="center_horizontal"
-                    android:text="分时"
-                    android:textColor="@color/red"
-                    android:textSize="@dimen/text_size_15" />
-
-                <TextView
-                    android:id="@+id/tv_line_min"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="@color/red" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/charts_fiveday_k_layout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/charts_fiveday_k_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:gravity="center_horizontal"
-                    android:text="五日"
-                    android:textColor="@color/text_color_tab"
-                    android:textSize="@dimen/text_size_15" />
-
-                <TextView
-                    android:id="@+id/tv_line_fiveday"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="@color/red"
-                    android:visibility="gone" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/charts_day_k_layout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/charts_day_k_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:gravity="center_horizontal"
-                    android:text="日K"
-                    android:textColor="@color/text_color_tab"
-                    android:textSize="@dimen/text_size_15" />
-
-                <TextView
-                    android:id="@+id/tv_line_dayk"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="@color/red"
-                    android:visibility="gone" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/charts_week_k_layout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/charts_week_k_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:gravity="center_horizontal"
-                    android:text="周K"
-                    android:textColor="@color/text_color_tab"
-                    android:textSize="@dimen/text_size_15" />
-
-                <TextView
-                    android:id="@+id/tv_line_weekk"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="@color/red"
-                    android:visibility="gone" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/charts_mouth_k_layout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/charts_mouth_k_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:gravity="center_horizontal"
-                    android:text="月K"
-                    android:textColor="@color/text_color_tab"
-                    android:textSize="@dimen/text_size_15" />
-
-                <TextView
-                    android:id="@+id/tv_line_monthk"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="@color/red"
-                    android:visibility="gone" />
-
-            </RelativeLayout>
-
-        </LinearLayout>-->
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/charts_line_tab_up_ll"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/Kline_item_bg"
-            app:tabIndicatorColor="@color/stock_red"
-            app:tabIndicatorHeight="1dp"
-            app:tabSelectedTextColor="@color/stock_red"
-            app:tabTextColor="@color/text_color_tab" />
-
-        <LinearLayout
-            android:id="@+id/xcharts_line_center_ll"
+        <RelativeLayout
+            android:id="@+id/load_animation"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/charts_line_tab_up_ll"
-            android:orientation="vertical">
+            android:visibility="gone">
 
-            <RelativeLayout
-                android:id="@+id/load_animation"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone">
+            <hply.com.niugu.ProgressWheel
+                android:id="@+id/progress_wheel"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                app:matProg_barColor="#5588FF"
+                app:matProg_progressIndeterminate="true" />
 
-                <hply.com.niugu.ProgressWheel
-                    android:id="@+id/progress_wheel"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    app:matProg_barColor="#5588FF"
-                    app:matProg_progressIndeterminate="true" />
+        </RelativeLayout>
 
-            </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/stockdetail_textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone">
 
-            <LinearLayout
-                android:id="@+id/stockdetail_textview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/textlayout_blackground"
                 android:gravity="center"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/textlayout_blackground"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="暂无相关数据"
-                    android:textColor="@color/text_color_word" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <cn.gogoal.im.ui.stockviews.BitmapChartView
-                    android:id="@+id/stock_detail_fragment_time_line"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.3"
-                    android:clickable="true" />
-
-                <LinearLayout
-                    android:id="@+id/flag_layout_treat"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.7"
-                    android:orientation="vertical"
-                    android:paddingLeft="10dp">
-
-                    <android.support.design.widget.TabLayout
-                        android:id="@+id/tablayout_treat"
-                        style="@style/RadioTabLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:background="@android:color/transparent"
-                        android:minHeight="0dp"
-                        app:tabBackground="@android:color/transparent"
-                        app:tabGravity="fill"
-                        app:tabIndicatorColor="@android:color/transparent"
-                        app:tabIndicatorHeight="0dp"
-                        app:tabMode="fixed"
-                        app:tabSelectedTextColor="@color/font_blue"
-                        app:tabTextColor="@color/gray" />
-
-                    <cn.gogoal.im.ui.widget.UnSlidingViewPager
-                        android:id="@+id/vp_treat"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+                android:padding="10dp"
+                android:text="暂无相关数据"
+                android:textColor="@color/text_color_word" />
         </LinearLayout>
 
-    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <cn.gogoal.im.ui.stockviews.BitmapChartView
+                android:id="@+id/stock_detail_fragment_time_line"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.3"
+                android:clickable="true" />
+
+            <LinearLayout
+                android:id="@+id/flag_layout_treat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:orientation="vertical"
+                android:paddingLeft="10dp">
+
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tablayout_treat"
+                    style="@style/RadioTabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:background="@android:color/transparent"
+                    android:minHeight="0dp"
+                    app:tabBackground="@android:color/transparent"
+                    app:tabGravity="fill"
+                    app:tabIndicatorColor="@android:color/transparent"
+                    app:tabIndicatorHeight="0dp"
+                    app:tabMode="fixed"
+                    app:tabSelectedTextColor="@color/font_blue"
+                    app:tabTextColor="@color/gray" />
+
+                <cn.gogoal.im.ui.widget.UnSlidingViewPager
+                    android:id="@+id/vp_treat"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

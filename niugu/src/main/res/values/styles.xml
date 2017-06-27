@@ -89,14 +89,28 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <!--个股底部-->
     <style name="stockDetailDockStyle">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>
-        <item name="android:drawablePadding">1dp</item>
+        <item name="android:drawablePadding">2dp</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">#8e8e8e</item>
         <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!--我的自选顶部-->
+    <style name="myStockNewsStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawablePadding">2dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#666666</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
     </style>
 
 </resources>
