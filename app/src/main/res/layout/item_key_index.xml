@@ -14,7 +14,6 @@
         android:id="@+id/relativeFinance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
         android:visibility="gone">
 
         <TextView
@@ -47,6 +46,15 @@
             android:textSize="14sp" />
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/viewLine"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginBottom="7.5dp"
+        android:layout_marginTop="7.5dp"
+        android:background="@color/player_line"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"

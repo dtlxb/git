@@ -41,11 +41,13 @@ public class StockFinanceAdapter extends CommonAdapter<FinanceData, BaseViewHold
     protected void convert(BaseViewHolder holder, FinanceData data, final int position) {
 
         if (position == 0 || position == 4 || position == 7 || position == 10) {
-            holder.getView(R.id.relativeFinance).setVisibility(View.VISIBLE);
+            holder.setVisible(R.id.relativeFinance, true);
+            holder.setVisible(R.id.viewLine, true);
             holder.setText(R.id.textTitle, contList.get(position).getTitle());
             holder.setText(R.id.textHead, contList.get(position).getHead());
         } else {
-            holder.getView(R.id.relativeFinance).setVisibility(View.GONE);
+            holder.setVisible(R.id.relativeFinance, false);
+            holder.setVisible(R.id.viewLine, false);
         }
 
         holder.setText(R.id.textName, contList.get(position).getName());
@@ -61,7 +63,7 @@ public class StockFinanceAdapter extends CommonAdapter<FinanceData, BaseViewHold
         }
 
         if (position == 1 || position == 5 || position == 8 || position == 11) {
-            holder.getView(R.id.imgSeeMore).setVisibility(View.VISIBLE);
+            holder.setVisible(R.id.imgSeeMore, true);
         } else {
             holder.getView(R.id.imgSeeMore).setVisibility(View.INVISIBLE);
         }

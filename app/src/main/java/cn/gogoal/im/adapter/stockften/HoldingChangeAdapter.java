@@ -49,6 +49,9 @@ public class HoldingChangeAdapter extends DelegateAdapter.Adapter<MainViewHolder
             holder.findView(R.id.linearHolding).setBackgroundColor(ContextCompat.getColor(context, R.color.bg_color_2));
         }
 
+        if (position != 0) {
+            holder.setTextResColor(R.id.textContent1, R.color.f10_executives);
+        }
         holder.setText(R.id.textContent1, listData.get(position).getDate() != null
                 ? listData.get(position).getDate() : "--");
         holder.setText(R.id.textContent2, listData.get(position).getName() != null

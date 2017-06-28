@@ -49,6 +49,9 @@ public class ExecutivesListAdapter extends DelegateAdapter.Adapter<MainViewHolde
             holder.findView(R.id.linearHolding).setBackgroundColor(ContextCompat.getColor(context, R.color.bg_color_2));
         }
 
+        if (position != 0) {
+            holder.setTextResColor(R.id.textContent1, R.color.f10_executives);
+        }
         holder.setText(R.id.textContent1, listData.get(position).getName() != null
                 ? listData.get(position).getName() : "--");
         holder.setText(R.id.textContent2, listData.get(position).getDegree() != null
