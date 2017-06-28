@@ -9,6 +9,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -32,7 +33,9 @@ import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.TextDrawable;
 import cn.gogoal.im.ui.view.XLayout;
 
@@ -116,6 +119,12 @@ public class EventChooseStockFragment extends BaseFragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getEventListData(AppConst.REFRESH_TYPE_FIRST);
+    }
+
     private void getEventListData(final int refreshType) {
         if (refreshType == AppConst.REFRESH_TYPE_FIRST) {
             xLayout.setStatus(XLayout.Loading);
@@ -185,20 +194,36 @@ public class EventChooseStockFragment extends BaseFragment {
 
             RecyclerView rvStock = holder.getView(R.id.rv_inner_event);
             rvStock.setNestedScrollingEnabled(false);
+            rvStock.addItemDecoration(new NormalItemDecoration(getActivity()));
 
             rvStock.setAdapter(new CommonAdapter<Stock, BaseViewHolder>(
-                    R.layout.item_stock_rank_list, data.getCatalog()) {
+                    R.layout.item_subject_event_stock_about, data.getCatalog()) {
                 @Override
                 protected void convert(BaseViewHolder holder, final Stock stockData, int position) {
-                    holder.setText(R.id.tv_mystock_stockname, stockData.getStock_name());
-                    holder.setText(R.id.tv_mystock_stockcode, stockData.getStock_code());
-                    holder.setText(R.id.tv_mystock_price, stockData.getStock_price());
-                    holder.setText(R.id.tv_mystock_rate, StockUtils.plusMinus(stockData.getStock_rate(), true));
+                    final ImageView ivAddToggle = holder.getView(R.id.iv_item_subject_about_add_stock);
 
-                    holder.setBackgroundRes(R.id.tv_mystock_rate, StockUtils.getStockRateBackgroundRes(
+                    ivAddToggle.setImageResource(StockUtils.isMyStock(stockData.getStock_code()) ?
+                            R.mipmap.not_choose_stock : R.mipmap.choose_stock);
+
+                    ivAddToggle.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            StockUtils.toggleAddDelStock(stockData.getStock_code(), ivAddToggle);
+                        }
+                    });
+
+                    holder.setText(R.id.tv_item_subject_about_name, stockData.getStock_name());
+
+                    holder.setText(R.id.tv_item_subject_about_code, stockData.getStock_code());
+
+                    holder.setText(R.id.tv_item_subject_about_price,
+                            StringUtils.save2Significand(stockData.getStock_price()));
+                    holder.setTextResColor(R.id.tv_item_subject_about_price, StockUtils.getStockRateColor(
                             stockData.getStock_rate()));
 
-                    holder.setTextResColor(R.id.tv_mystock_price, StockUtils.getStockRateColor(
+                    holder.setText(R.id.tv_item_subject_about_rate,
+                            StockUtils.plusMinus(stockData.getStock_rate(), true));
+                    holder.setTextResColor(R.id.tv_item_subject_about_rate, StockUtils.getStockRateColor(
                             stockData.getStock_rate()));
 
                     holder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -129,15 +129,15 @@ public class SubjectChooseStockFragment extends BaseFragment {
 
         @Override
         protected void convert(BaseViewHolder holder, final SubjectListBean.SubjectData data, int position) {
-            int value = (int) (data.getPrice() - data.getPrice_change());
+            int value = (int) (data.getPrice());
             holder.setText(R.id.tv_item_subject_list_value,
-                    String.valueOf(value));
+                    value == 0 ? "--" : String.valueOf(value));
 
             holder.setBackgroundColor(R.id.layout_item_subject_list_head,
                     value >= 1000 ? 0xffff9233 : 0xfffebd23);
 
             holder.setText(R.id.tv_item_subject_list_rate,
-                    StockUtils.plusMinus(data.getPrice_change_rate(),false));
+                    data.getPrice_change_rate() == 0 ? "--" : StockUtils.plusMinus(data.getPrice_change_rate(), false));
 
             holder.setText(R.id.tv_item_subject_list_theme_name, data.getTheme_name());
             holder.setText(R.id.tv_item_subject_list_date, "发现时间：" + data.getInsert_time());

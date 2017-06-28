@@ -5,7 +5,35 @@
     android:layout_height="wrap_content"
     android:background="@android:color/white"
     android:orientation="horizontal"
+    android:baselineAligned="false"
     android:padding="5dp">
+
+    <LinearLayout
+        android:id="@+id/btn_item_stock_market_event"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:background="@drawable/shape_choose_stock_event"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:src="@mipmap/img_stock_market_event" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="事件选股"
+            android:textColor="@android:color/white"
+            android:textSize="15sp" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/btn_item_stock_market_subject"
@@ -34,31 +62,5 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/btn_item_stock_market_event"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_weight="1"
-        android:background="@drawable/shape_choose_stock_event"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <android.support.v7.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:src="@mipmap/img_stock_market_event" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:text="事件选股"
-            android:textColor="@android:color/white"
-            android:textSize="15sp" />
-
-    </LinearLayout>
     <!--android:id="@+id/btn_item_stock_market_event"-->
 </LinearLayout>

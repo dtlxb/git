@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
@@ -9,15 +11,15 @@
     <!--1000-->
     <LinearLayout
         android:id="@+id/layout_item_subject_list_head"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_width="0dp"
         android:background="#febd23"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingBottom="10dp"
-        android:paddingEnd="15dp"
-        android:paddingStart="15dp"
-        android:paddingTop="10dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/tv_item_subject_list_name"
@@ -31,7 +33,8 @@
             android:id="@+id/tv_item_subject_list_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1888"
+            android:text="188558"
+            android:singleLine="true"
             android:textColor="#ffffff"
             android:textSize="20sp" />
 
@@ -54,17 +57,21 @@
         android:layout_toEndOf="@+id/layout_item_subject_list_head"
         android:text="煤炭"
         android:textColor="@color/textColor_333333"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        app:layout_constraintLeft_toRightOf="@+id/layout_item_subject_list_head"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_item_subject_list_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/tv_item_subject_list_title"
-        android:layout_marginBottom="1.5dp"
         android:layout_alignStart="@+id/tv_item_subject_list_theme_name"
+        android:layout_marginStart="10dp"
         android:text="发现时间：2017-06-24 08:26"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        app:layout_constraintLeft_toRightOf="@+id/layout_item_subject_list_head"
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_subject_list_theme_name" />
 
     <TextView
         android:id="@+id/tv_item_subject_list_title"
@@ -72,26 +79,29 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/tv_item_subject_list_tag2"
         android:layout_alignStart="@+id/tv_item_subject_list_theme_name"
-        android:text="供需加速改善，旺季提前来临"
-        android:singleLine="true"
+        android:layout_marginStart="10dp"
         android:ellipsize="end"
-        android:layout_marginBottom="1.5dp"
+        android:singleLine="true"
+        android:text="供需加速改善，旺季提前来临"
         android:textColor="@color/textColor_333333"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        app:layout_constraintLeft_toRightOf="@+id/layout_item_subject_list_head"
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_subject_list_date" />
 
     <TextView
         android:id="@+id/tv_item_subject_list_tag1"
         style="@style/SubjectTagTextStyle"
-        android:layout_alignBottom="@+id/layout_item_subject_list_head"
-        android:layout_alignStart="@+id/tv_item_subject_list_theme_name"
-        android:text="供给侧改革" />
+        android:layout_marginStart="10dp"
+        android:text="供给侧改革"
+        app:layout_constraintLeft_toRightOf="@+id/layout_item_subject_list_head"
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_subject_list_title" />
 
     <TextView
         android:id="@+id/tv_item_subject_list_tag2"
         style="@style/SubjectTagTextStyle"
-        android:layout_alignBottom="@+id/layout_item_subject_list_head"
         android:layout_marginStart="10dp"
-        android:layout_toEndOf="@+id/tv_item_subject_list_tag1"
-        android:text="业绩扭亏" />
+        android:text="业绩扭亏"
+        app:layout_constraintLeft_toRightOf="@+id/tv_item_subject_list_tag1"
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_subject_list_title" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

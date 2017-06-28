@@ -28,7 +28,8 @@ public class BigDataAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
     @Override
     public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new MainViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.item_stock_makret_big_data, parent, false));
+                LayoutInflater.from(
+                        parent.getContext()).inflate(R.layout.item_stock_makret_big_data, parent, false));
     }
 
     @Override
@@ -38,7 +39,7 @@ public class BigDataAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(v.getContext(), BigDataAcyivity.class);
-                intent.putExtra("big_index",0);//第一个tab
+                intent.putExtra("big_index",1);//第一个tab
                 v.getContext().startActivity(intent);
             }
         });
@@ -48,7 +49,7 @@ public class BigDataAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(v.getContext(), BigDataAcyivity.class);
-                intent.putExtra("big_index",1);//第一个tab
+                intent.putExtra("big_index",0);//第一个tab
                 v.getContext().startActivity(intent);
             }
         });

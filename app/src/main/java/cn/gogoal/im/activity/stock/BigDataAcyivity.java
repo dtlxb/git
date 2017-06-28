@@ -32,7 +32,7 @@ public class BigDataAcyivity extends BaseActivity {
         return R.layout.activity_bigdata;
     }
 
-    private String[] bigDataTitle = {"主题选股", "事件选股"};
+    private String[] bigDataTitle = {"事件选股", "主题选股"};
 
     @Override
     public void doBusiness(Context mContext) {
@@ -44,8 +44,8 @@ public class BigDataAcyivity extends BaseActivity {
         vpBigData.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return position == 0 ? new SubjectChooseStockFragment() :
-                        new EventChooseStockFragment();
+                return position == 0 ? new EventChooseStockFragment() :
+                        new SubjectChooseStockFragment();
             }
 
             @Override
