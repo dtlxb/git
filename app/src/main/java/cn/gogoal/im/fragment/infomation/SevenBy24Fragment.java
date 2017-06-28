@@ -69,8 +69,8 @@ public class SevenBy24Fragment extends BaseFragment {
         refreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                get7by24Datas(AppConst.REFRESH_TYPE_SWIPEREFRESH);
                 defaultPage=1;
+                get7by24Datas(AppConst.REFRESH_TYPE_SWIPEREFRESH);
             }
         });
         adapter.setOnLoadMoreListener(new CommonAdapter.RequestLoadMoreListener() {

@@ -16,24 +16,17 @@ public class MyStockTabNewsBean {
 
     private String origin_link;
 
-    private Stock stock;
+    private Stock stock;//股票
 
-    //"http://www.cninfo.com.cn/finalpage/2017-05-03/1203473631.DOCX";
-    //"http://www.cninfo.com.cn/finalpage/2017-05-04/1203474660.PDF"
+    private String source;//来源
 
-    public MyStockTabNewsBean(Stock stock,String newsTitle, String date, String newsId) {
-        this.stock=stock;
-        this.newsTitle = newsTitle;
-        this.date = date;
-        this.newsId = newsId;
-    }
-
-    public MyStockTabNewsBean(Stock stock,String newsTitle, String date, String newsId, String origin_link) {
+    public MyStockTabNewsBean(Stock stock,String newsTitle, String date, String newsId, String origin_link,String source) {
         this.stock=stock;
         this.newsTitle = newsTitle;
         this.date = date;
         this.newsId = newsId;
         this.origin_link = origin_link;
+        this.source=source;
     }
 
     public Stock getStock() {
@@ -74,5 +67,13 @@ public class MyStockTabNewsBean {
 
     public void setNewsId(String newsId) {
         this.newsId = newsId;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

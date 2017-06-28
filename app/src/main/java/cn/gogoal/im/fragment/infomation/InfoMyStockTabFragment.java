@@ -74,8 +74,8 @@ public class InfoMyStockTabFragment extends BaseFragment {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getMyStockInfo(AppConst.REFRESH_TYPE_SWIPEREFRESH);
                 defaultPage = 1;
+                getMyStockInfo(AppConst.REFRESH_TYPE_SWIPEREFRESH);
             }
         });
         xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
@@ -159,7 +159,7 @@ public class InfoMyStockTabFragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                if (refreshType == AppConst.REFRESH_TYPE_FIRST) {
+                if (refreshType == AppConst.REFRESH_TYPE_FIRST && xLayout!=null) {
                     xLayout.setStatus(XLayout.Error);
                 }
                 refreshLayout.setRefreshing(false);

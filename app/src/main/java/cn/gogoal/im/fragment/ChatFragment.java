@@ -188,12 +188,14 @@ public class ChatFragment extends BaseFragment {
                     imConversation.queryMessages(messageList.get(0).getMessageId(), messageList.get(0).getTimestamp(), 15, new AVIMMessagesQueryCallback() {
                         @Override
                         public void done(List<AVIMMessage> list, AVIMException e) {
-                            if (e == null && null != list && list.size() > 0) {
-                                messageList.addAll(0, list);
-                                imageUrls.addAll(0, getAllImageUrls(list));
-                                imChatAdapter.notifyItemRangeInserted(0, list.size());
-                            }
-                            message_swipe.setRefreshing(false);
+                            refreshMessage(list, e);
+                        }
+                    });
+                } else {
+                    imConversation.queryMessages(15, new AVIMMessagesQueryCallback() {
+                        @Override
+                        public void done(List<AVIMMessage> list, AVIMException e) {
+                            refreshMessage(list, e);
                         }
                     });
                 }
@@ -313,6 +315,16 @@ public class ChatFragment extends BaseFragment {
             }
         });
 
+    }
+
+    //下拉加载更多消息
+    private void refreshMessage(List<AVIMMessage> list, AVIMException e) {
+        if (e == null && null != list && list.size() > 0) {
+            messageList.addAll(0, list);
+            imageUrls.addAll(0, getAllImageUrls(list));
+            imChatAdapter.notifyItemRangeInserted(0, list.size());
+        }
+        message_swipe.setRefreshing(false);
     }
 
     //生成未读消息
@@ -539,43 +551,83 @@ public class ChatFragment extends BaseFragment {
         AppManager.getInstance().sendMessage("Cache_change");
     }
 
-    private void sendStockMessage(String stockCode, String stockName) {
+    private void sendStockMessage(String bitmapUrl, String stockCode, String stockName) {
 
         if (null == imConversation) {
             UIHelper.toast(getActivity(), R.string.network_busy);
             return;
         }
 
-        GGStockMessage mStockMessage = new GGStockMessage();
+        final GGStockMessage mStockMessage = new GGStockMessage();
         mStockMessage.setTimestamp(CalendarUtils.getCurrentTime());
         mStockMessage.setMessageSendStatus(AppConst.MESSAGE_SEND_STATUS_SENDING);
         mStockMessage.setFrom(UserUtils.getMyAccountId());
 
         //添加股票信息
-        Map<String, Object> lcattrsMap;
+        final Map<String, Object> lcattrsMap;
         lcattrsMap = AVIMClientManager.getInstance().userBaseInfo();
         lcattrsMap.put("stockCode", stockCode);
         lcattrsMap.put("stockName", stockName);
+        lcattrsMap.put("stockImgUrl", bitmapUrl);
 
-        //消息基本信息
-        Map<Object, Object> messageMap = new HashMap<>();
-        messageMap.put("_lctype", "11");
-        messageMap.put("_lctext", "股票消息");
-        messageMap.put("_lcattrs", lcattrsMap);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("token", UserUtils.getToken());
-        params.put("conv_id", imConversation.getConversationId());
-        params.put("chat_type", String.valueOf(chatType));
-        params.put("message", JSONObject.toJSONString(messageMap));
-
+        //消息构造完成
         mStockMessage.setText("股票消息");
         mStockMessage.setAttrs(lcattrsMap);
         refreshRecyclerView(mStockMessage, true);
 
-        etInput.setText("");
-        //发送股票消息
-        sendAVIMMessage(params, mStockMessage);
+        final File file = new File(bitmapUrl);
+        AsyncTaskUtil.doAsync(new AsyncTaskUtil.AsyncCallBack() {
+            @Override
+            public void onPreExecute() {
+
+            }
+
+            @Override
+            public void doInBackground() {
+                //上传UFile;
+                UFileUpload.getInstance().upload(file, UFileUpload.Type.IMAGE, new UFileUpload.UploadListener() {
+                    @Override
+                    public void onUploading(int progress) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(String onlineUri) {
+                        if (null == imConversation) {
+                            UIHelper.toast(getActivity(), R.string.network_busy);
+                            return;
+                        }
+                        //消息基本信息
+                        lcattrsMap.put("stockImgUrl", onlineUri);
+                        Map<Object, Object> messageMap = new HashMap<>();
+                        messageMap.put("_lctype", "11");
+                        messageMap.put("_lctext", "股票消息");
+                        messageMap.put("_lcattrs", lcattrsMap);
+
+                        Map<String, String> params = new HashMap<>();
+                        params.put("token", UserUtils.getToken());
+                        params.put("conv_id", imConversation.getConversationId());
+                        params.put("chat_type", String.valueOf(chatType));
+                        params.put("message", JSONObject.toJSONString(messageMap));
+
+                        etInput.setText("");
+                        //发送股票消息
+                        sendAVIMMessage(params, mStockMessage);
+                    }
+
+                    @Override
+                    public void onFailed() {
+                        messageStatusChange(mStockMessage, AppConst.MESSAGE_SEND_STATUS_FAIL);
+                    }
+                });
+            }
+
+            @Override
+            public void onPostExecute() {
+
+            }
+        });
+
     }
 
     private void refreshRecyclerView(AVIMMessage avimMessage, boolean needJump) {
@@ -982,10 +1034,13 @@ public class ChatFragment extends BaseFragment {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         Map map = baseMessage.getOthers();
+        Bitmap stockBitmap = (Bitmap) map.get("stock_bitmap");
+        String bitmapUrl = (String) map.get("stock_bitmapUrl");
+        KLog.e(stockBitmap);
         String stockName = (String) map.get("stock_name");
         String stockCode = (String) map.get("stock_code");
-        if (!TextUtils.isEmpty(stockName) && !TextUtils.isEmpty(stockCode)) {
-            sendStockMessage(stockCode, stockName);
+        if (!TextUtils.isEmpty(stockName) && !TextUtils.isEmpty(stockCode) && !TextUtils.isEmpty(bitmapUrl)) {
+            sendStockMessage(bitmapUrl, stockCode, stockName);
         }
     }
 

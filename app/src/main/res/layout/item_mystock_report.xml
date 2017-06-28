@@ -12,67 +12,63 @@
     android:paddingTop="5dp">
 
     <TextView
-        android:id="@+id/tv_mystock_news_stockInfo"
+        android:id="@+id/tv_mystock_report_stockInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="5dp"
         android:maxLines="1"
-        android:text="万科(000002)"
-        android:textColor="@color/textColor_666666"
+        android:textColor="@color/textColor_999999"
         android:textSize="14sp" />
 
     <TextView
-        android:id="@+id/tv_mystock_news_stockRate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_toEndOf="@+id/tv_mystock_news_stockInfo"
-        android:gravity="center_vertical"
-        android:maxLines="1"
-        android:text="0.36%\u3000\u300012.23"
-        android:textColor="@color/stock_red"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/tv_mystock_news_title"
+        android:id="@+id/tv_mystock_report_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_mystock_news_stockInfo"
+        android:layout_below="@+id/tv_mystock_report_stockInfo"
+        android:layout_marginTop="5dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:text="万科股价如继续下跌，谁能成为中小股东的救星"
         android:textColor="@color/textColor_333333"
         android:textSize="17sp"
-        android:layout_marginTop="5dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_mystock_news_source"
+        android:id="@+id/tv_mystock_report_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_mystock_report_title"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/textColor_666666"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_mystock_report_source_and_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/tv_mystock_news_title"
+        android:layout_below="@id/tv_mystock_report_subtitle"
         android:layout_marginTop="5dp"
         android:maxLines="1"
-        android:text="新浪财经网"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/tv_mystock_report_date"
         android:textColor="@color/textColor_999999"
         android:textSize="13sp" />
 
     <TextView
-        android:id="@+id/tv_mystock_news_date"
+        android:id="@+id/tv_mystock_report_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_below="@id/tv_mystock_news_title"
+        android:layout_below="@id/tv_mystock_report_subtitle"
         android:layout_marginTop="5dp"
         android:maxLines="1"
-        android:text="2017-05-12 09-16"
         android:textColor="@color/textColor_999999"
         android:textSize="13sp" />
 

@@ -69,7 +69,7 @@ public class AppConst {
     //ChooseContactActivity类型——分享到好友
     public static final int SQUARE_ROOM_AT_SHARE_MESSAGE = 1205;
     //股票创建群
-    public static final int CREATE_SQUARE_ROOM_BY_STOCK =1234;
+    public static final int CREATE_SQUARE_ROOM_BY_STOCK = 1234;
 
     //改群名，改群简介
     public static final int SQUARE_ROOM_EDIT_NAME = 1105;
@@ -90,7 +90,7 @@ public class AppConst {
     //开发环境
 //    public static final String WEB_URL = "http://192.168.72.155:9000/#";
     public static final String WEB_URL_LLJ = "http://192.168.52.156:9000/#/hello";
-//    public static final String WEB_URL = "http://ggmobile.sandbox.go-goal.cn/#";
+    //    public static final String WEB_URL = "http://ggmobile.sandbox.go-goal.cn/#";
 //    public static final String WEB_URL_LLJ = "http://192.168.52.156:9000/#/hello";
     //    public static final String WEB_URL = "http://ggmobile.sandbox.go-goal.cn/#";
     public static final String WEB_URL = "http://app.go-goal.cn/#";
@@ -140,6 +140,8 @@ public class AppConst {
 
     //新闻远端
     public static final int SOURCE_TYPE_NEWS = 100;//个股 新闻
+    //股票消息标识
+    public static final int TYPE_GET_STOCK = 1011;//个股 新闻
 
     //======================关于LeanCloud会话类型，消息类型，发送失败类型==============================
     public static final int IM_CHAT_TYPE_SINGLE = 1001;                 //聊天室类型 单聊

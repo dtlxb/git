@@ -27,6 +27,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.stock.StockDetailActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
@@ -44,6 +45,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.StringUtils;
+import cn.gogoal.im.fragment.copy.TimesFragment;
 import cn.gogoal.im.ui.XDividerItemDecoration;
 import cn.gogoal.im.ui.view.PieView;
 import cn.gogoal.im.ui.view.ProgressBarView;
@@ -69,7 +71,7 @@ public class TreatFragment extends BaseFragment {
     @BindView(R.id.progress)
     ProgressBarView progressView;
 
-    private View headerView;
+    private PieView pieView;
 
     //===================五档====================
     private WudangAdapter wudangAdapter;
@@ -136,7 +138,7 @@ public class TreatFragment extends BaseFragment {
                 wudangAdapter = new WudangAdapter(threeTexts);
                 recyclerView.setAdapter(wudangAdapter);
                 recyclerView.addItemDecoration(new WudangDivider(getResColor(R.color.chart_text_color)));
-                needAnim = true;
+                needAnim = false;
                 getTreatWudang();
             } else if (type == AppConst.TREAT_TYPE_MING_XI) {
                 timeDetailDatas = new ArrayList<>();
@@ -149,7 +151,8 @@ public class TreatFragment extends BaseFragment {
                 pieDatas = new ArrayList<>();
                 moneyAdapter = new MoneyAdapter(moneyDatas);
                 recyclerView.setAdapter(moneyAdapter);
-                headerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_map_header, new LinearLayout(getActivity()), false);
+                View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.item_map_header, new LinearLayout(getActivity()), false);
+                pieView = (PieView) headerView.findViewById(R.id.money_pie);
                 moneyAdapter.addHeaderView(headerView);
                 getTreatChart();
                 getMoneyDetail();
@@ -172,8 +175,9 @@ public class TreatFragment extends BaseFragment {
         });
     }
 
-    @Subscriber(tag = "updata_treat_data")
+    @Subscriber(tag = "refresh_stock_news")
     void updataTreatData(String msg) {
+        KLog.e("跑啊你!!!");
         if (type == AppConst.TREAT_TYPE_WU_DANG) {
             needAnim = false;
             getTreatWudang();
@@ -185,11 +189,11 @@ public class TreatFragment extends BaseFragment {
     }
 
     private void toggleParentTab() {
-//        if (fromStockDetail) {
-//            ((CopyStockDetailActivity) getActivity()).toggleTreatMode();
-//        } else {
-//            ((TimesFragment) getParentFragment()).toggleTreatMode();
-//        }
+        if (fromStockDetail) {
+            ((StockMapsFragment) getParentFragment()).toggleTreatMode();
+        } else {
+            ((TimesFragment) getParentFragment()).toggleTreatMode();
+        }
     }
 
     private void getTreatWudang() {
@@ -313,10 +317,13 @@ public class TreatFragment extends BaseFragment {
                     MoneyBean moneyBean = JSONObject.parseObject(responseInfo, TradeBean.class).getData();
                     TodayInfoBean todayInfoBean = moneyBean.getTodayInfo();
                     initMoneyAdapter(todayInfoBean);
+                } else {
+                    drawPieMap();
                 }
             }
 
             public void onFailure(String msg) {
+                drawPieMap();
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_FUAN_INFO, ggHttpInterface).startGet();
@@ -341,8 +348,11 @@ public class TreatFragment extends BaseFragment {
                 namParse(todayInfoBean.getFlow_out_middle_fund(), total), "#34b578"));
         moneyDatas.add(new MoneyTrade("小单", namParse(todayInfoBean.getFlow_out_small_fund()),
                 namParse(todayInfoBean.getFlow_out_small_fund(), total), "#63dca4"));
+        drawPieMap();
+        moneyAdapter.notifyDataSetChanged();
+    }
 
-        PieView pieView = (PieView) headerView.findViewById(R.id.money_pie);
+    private void drawPieMap() {
         pieView.setPieType(2);
 
         float percent;
@@ -365,8 +375,6 @@ public class TreatFragment extends BaseFragment {
         }
 
         pieView.setPieData(pieDatas);
-
-        moneyAdapter.notifyDataSetChanged();
     }
 
     private String namParse(double number, double total) {
