@@ -101,6 +101,12 @@ public class EventDetailActivity extends BaseActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getEventDetailData(-1);
+    }
+
     private void getEventDetailData(int refreshType) {
         if (refreshType == AppConst.REFRESH_TYPE_FIRST) {
             xLayout.setStatus(XLayout.Loading);

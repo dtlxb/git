@@ -41,11 +41,14 @@ public class BigDataAcyivity extends BaseActivity {
 
         int index = getIntent().getIntExtra("big_index", 0);
 
+        final EventChooseStockFragment eventChooseStockFragment = new EventChooseStockFragment();
+        final SubjectChooseStockFragment subjectChooseStockFragment = new SubjectChooseStockFragment();
+
         vpBigData.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                return position == 0 ? new EventChooseStockFragment() :
-                        new SubjectChooseStockFragment();
+                return position == 0 ?  eventChooseStockFragment:
+                        subjectChooseStockFragment;
             }
 
             @Override
@@ -58,6 +61,8 @@ public class BigDataAcyivity extends BaseActivity {
                 return bigDataTitle[position];
             }
         });
+
+        vpBigData.setOffscreenPageLimit(2);
 
         tabBigData.setupWithViewPager(vpBigData);
 

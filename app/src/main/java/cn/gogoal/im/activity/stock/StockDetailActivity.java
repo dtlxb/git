@@ -1016,14 +1016,14 @@ public class StockDetailActivity extends BaseActivity {
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, StockDetail2Text item, int position) {
+        protected void convert(BaseViewHolder holder, final StockDetail2Text item, int position) {
             holder.setText(R.id.tv_stock_detail_head_desc, item.getKey());
             holder.setText(R.id.tv_stock_detail_head_value, item.getValue());
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ivToggleMyStock.performClick();
+                    imageViewShoeDialog.performClick();
                 }
             });
         }

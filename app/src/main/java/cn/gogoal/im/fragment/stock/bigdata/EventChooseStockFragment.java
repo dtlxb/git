@@ -91,6 +91,7 @@ public class EventChooseStockFragment extends BaseFragment {
         swiperefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                defaultPage=1;
                 getEventListData(AppConst.REFRESH_TYPE_SWIPEREFRESH);
                 swiperefreshlayout.setRefreshing(false);
             }
@@ -114,15 +115,10 @@ public class EventChooseStockFragment extends BaseFragment {
         xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
             @Override
             public void onReload(View v) {
+                defaultPage=1;
                 getEventListData(AppConst.REFRESH_TYPE_RELOAD);
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getEventListData(AppConst.REFRESH_TYPE_FIRST);
     }
 
     private void getEventListData(final int refreshType) {
@@ -134,12 +130,13 @@ public class EventChooseStockFragment extends BaseFragment {
         map.put("get_related_stock", "1");
         map.put("rows", String.valueOf(15));
         map.put("page", String.valueOf(defaultPage));
+
         new GGOKHTTP(map, GGOKHTTP.GET_HOTS_HEADLINES_LIST, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
-                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+                    if (refreshType != AppConst.REFRESH_TYPE_LOAD_MORE) {
                         eventListDatas.clear();
                     }
                     List<EventListBean.EventListData> datas =
