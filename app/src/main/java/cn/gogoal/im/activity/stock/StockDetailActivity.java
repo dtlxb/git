@@ -197,7 +197,7 @@ public class StockDetailActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         stockCode = getIntent().getStringExtra("stock_code");
-        stockName = getIntent().getStringExtra("stock_name");
+        stockName = getIntent().getStringExtra("stock_name").replace(" ","");
 
         initDialog();//初始化截图
 
@@ -378,13 +378,6 @@ public class StockDetailActivity extends BaseActivity {
      */
     private void initTitle() {
         setStockState();
-
-       /* xTitle.addAction(new XTitle.ImageAction(getResDrawable(R.mipmap.refresh_white)) {
-            @Override
-            public void actionClick(View view) {
-                //TODO 刷新
-            }
-        });*/
 
         XTitle.ImageAction refreshAction = new XTitle.ImageAction(getResDrawable(R.mipmap.refresh_white)) {
             @Override
@@ -675,6 +668,7 @@ public class StockDetailActivity extends BaseActivity {
                 StockUtils.getTreatState(), CalendarUtils.getCurrentTime("MM-dd HH:mm")), true)
                 .setSubTitleSize(TypedValue.COMPLEX_UNIT_SP, 10)
                 .setSubTitleColor(Color.argb(204, 255, 255, 255))
+                .setTitleSize(TypedValue.COMPLEX_UNIT_SP,15)
                 .setLeftImageResource(R.mipmap.image_title_back_255)
                 .setLeftText(getString(R.string.str_title_back))
                 .setTitleColor(Color.WHITE)
