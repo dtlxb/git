@@ -66,7 +66,7 @@ public class TestStockDetailActivity extends BaseActivity {
 
                     TreatData info = bean.getData();
 
-                    stockMapsFragment = StockMapsFragment.newInstance(info.getStock_type(), stockName, stockCode);
+                    //stockMapsFragment = StockMapsFragment.newInstance(info.getStock_type(), stockName, stockCode);
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
 

@@ -108,9 +108,9 @@ public class IMChatAdapter extends RecyclerView.Adapter {
         } else if (viewType == TYPE_RIGHT_VOICE_MESSAGE) {
             return new RightAudioViewHolder(mLayoutInflater.inflate(R.layout.item_right_audio, parent, false));
         } else if (viewType == TYPE_RIGHT_STOCK_MESSAGE) {
-            return new RightStockViewHolder(mLayoutInflater.inflate(R.layout.item_right_text, parent, false));
+            return new RightStockViewHolder(mLayoutInflater.inflate(R.layout.item_right_stock, parent, false));
         } else if (viewType == TYPE_LEFT_STOCK_MESSAGE) {
-            return new LeftStockViewHolder(mLayoutInflater.inflate(R.layout.item_left_text, parent, false));
+            return new LeftStockViewHolder(mLayoutInflater.inflate(R.layout.item_left_stock, parent, false));
         } else if (viewType == TYPE_RIGHT_NORMAL_SHARE) {
             return new RightShareViewHolder(mLayoutInflater.inflate(R.layout.item_right_share, parent, false));
         } else if (viewType == TYPE_LEFT_NORMAL_SHARE) {
@@ -393,10 +393,20 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             Map<String, Object> attrMap = stockMessage.getAttrs();
             final String stockCode = String.valueOf(attrMap.get("stockCode"));
             final String stockName = String.valueOf(attrMap.get("stockName"));
+            final String stockImgUrl = String.valueOf(attrMap.get("stockImgUrl"));
 
-            ((LeftStockViewHolder) holder).what_user_send.setText(formatStockMessage(stockCode, stockName));
+            ((LeftStockViewHolder) holder).tv_stock_title.setText(stockName + "(" + stockCode + ")");
 
-            ((LeftStockViewHolder) holder).what_user_send.setOnClickListener(new View.OnClickListener() {
+            //设置股票图宽高
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ((LeftStockViewHolder) holder).iv_stock_image.getLayoutParams();
+            if (!TextUtils.isEmpty(stockImgUrl)) {
+                params.width = AppDevice.getWidth(mContext) - AppDevice.dp2px(mContext, 145);
+                params.height = params.width;
+                ((LeftStockViewHolder) holder).iv_stock_image.setLayoutParams(params);
+                ImageDisplay.loadImage(mContext, stockImgUrl, ((LeftStockViewHolder) holder).iv_stock_image);
+            }
+
+            ((LeftStockViewHolder) holder).user_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     NormalIntentUtils.go2StockDetail(mContext, stockCode, stockName);
@@ -419,11 +429,22 @@ public class IMChatAdapter extends RecyclerView.Adapter {
             Map<String, Object> attrMap = stockMessage.getAttrs();
             final String stockCode = String.valueOf(attrMap.get("stockCode"));
             final String stockName = String.valueOf(attrMap.get("stockName"));
+            final String stockImgUrl = String.valueOf(attrMap.get("stockImgUrl"));
 
-            ((RightStockViewHolder) holder).what_user_send.setText(formatStockMessage(stockCode, stockName));
+            ((RightStockViewHolder) holder).tv_stock_title.setText(stockName + "(" + stockCode + ")");
+
+            //设置股票图宽高
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ((RightStockViewHolder) holder).iv_stock_image.getLayoutParams();
+            if (!TextUtils.isEmpty(stockImgUrl)) {
+                params.width = AppDevice.getWidth(mContext) - AppDevice.dp2px(mContext, 145);
+                params.height = params.width;
+                ((RightStockViewHolder) holder).iv_stock_image.setLayoutParams(params);
+                ImageDisplay.loadImage(mContext, stockImgUrl, ((RightStockViewHolder) holder).iv_stock_image);
+            }
+
             ((RightStockViewHolder) holder).user_name.setVisibility(View.GONE);
 
-            ((RightStockViewHolder) holder).what_user_send.setOnClickListener(new View.OnClickListener() {
+            ((RightStockViewHolder) holder).user_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     NormalIntentUtils.go2StockDetail(mContext, stockCode, stockName);
@@ -926,22 +947,26 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 
     private class RightStockViewHolder extends IMCHatViewHolder {
 
-        private TextView what_user_send;
+        private TextView tv_stock_title;
+        private ImageView iv_stock_image;
 
         RightStockViewHolder(View itemView) {
             super(itemView);
-            what_user_send = (TextView) itemView.findViewById(R.id.what_user_send);
+            tv_stock_title = (TextView) itemView.findViewById(R.id.tv_stock_title);
+            iv_stock_image = (ImageView) itemView.findViewById(R.id.iv_stock_image);
         }
     }
 
     private class LeftStockViewHolder extends IMCHatViewHolder {
 
-        private TextView what_user_send;
+        private TextView tv_stock_title;
+        private ImageView iv_stock_image;
 
         LeftStockViewHolder(View itemView) {
             super(itemView);
             user_name = (TextView) itemView.findViewById(R.id.user_name);
-            what_user_send = (TextView) itemView.findViewById(R.id.what_user_send);
+            tv_stock_title = (TextView) itemView.findViewById(R.id.tv_stock_title);
+            iv_stock_image = (ImageView) itemView.findViewById(R.id.iv_stock_image);
         }
 
     }

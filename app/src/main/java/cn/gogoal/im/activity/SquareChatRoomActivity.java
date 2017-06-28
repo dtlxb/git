@@ -3,6 +3,7 @@ package cn.gogoal.im.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.avos.avoscloud.im.v2.AVIMConversation;
@@ -111,7 +112,7 @@ public class SquareChatRoomActivity extends BaseActivity {
     @Subscriber(tag = "correct_square_name")
     private void correctName(String msg) {
         //群改名字
-        if (null != msg) {
+        if (!TextUtils.isEmpty(msg)) {
             xTitle.setTitle(msg);
         }
     }

@@ -184,7 +184,7 @@ public class PieView extends View {
             //无数据处理
             titlePaint.setTextSize(2 * textSize);
             String text = "暂无数据";
-            canvas.drawText(text, getWidth() / 2 - titlePaint.measureText(text) / 2, getHeight() / 2, titlePaint);
+            canvas.drawText(text, getWidth() / 2 - titlePaint.measureText(text) / 2, getHeight() / 2 + fontHeight / 2, titlePaint);
         }
     }
 

@@ -107,7 +107,7 @@ public class TimesFivesBitmap {
     private int lastPoint;
 
     //绘图工具
-    private Paint tilte_paint;
+    private Paint title_paint;
     private Paint paintTop;
     private Paint paintShadow;
     private Rect r;
@@ -138,7 +138,7 @@ public class TimesFivesBitmap {
         uperBlueX = 0;
         isFromDetail = false;
         initialWeightedIndex = 0;
-        tilte_paint = new Paint();
+        title_paint = new Paint();
         paintTop = new Paint();
         paintShadow = new Paint();
         paintBottom = new Paint();
@@ -171,10 +171,10 @@ public class TimesFivesBitmap {
         drawLines(canvas);
 
         //绘制Y轴下的坐标值
-        drawXtitle(canvas);
+        drawXTitle(canvas);
 
         //绘制xy轴数据
-        drawXYPostion(canvas);
+        drawXYPosition(canvas);
 
         //停牌状态图表处理
         drawStopLines(canvas);
@@ -256,19 +256,19 @@ public class TimesFivesBitmap {
     /**
      * 绘制xy轴数据
      */
-    public void drawXYPostion(Canvas canvas) {
+    public void drawXYPosition(Canvas canvas) {
         String unit = "";
         String volume = "";
 
-        tilte_paint.setTextSize(mAxisTitleSize);
-        tilte_paint.setColor(gray);
-        tilte_paint.setAntiAlias(true);
+        title_paint.setTextSize(mAxisTitleSize);
+        title_paint.setColor(gray);
+        title_paint.setAntiAlias(true);
 
-        Paint.FontMetrics fontMetrics = tilte_paint.getFontMetrics();
+        Paint.FontMetrics fontMetrics = title_paint.getFontMetrics();
         float fontHeight = fontMetrics.descent - fontMetrics.ascent;
 
         //绘制左边价格
-        String pos_max_price = "";
+        String pos_max_price;
         if (isTimes && isSuspension) {
             pos_max_price = StringUtils.save2Significand(1.01 * closePrice);
         } else {
@@ -277,7 +277,7 @@ public class TimesFivesBitmap {
 
         String close_price = StringUtils.save2Significand(closePrice);
 
-        String pos_min_price = "";
+        String pos_min_price;
         if (isTimes && isSuspension) {
             pos_min_price = StringUtils.save2Significand(0.99 * closePrice);
         } else {
@@ -295,7 +295,7 @@ public class TimesFivesBitmap {
         }
 
         //绘制右边率
-        String pos_max_rate = "";
+        String pos_max_rate;
         if (isTimes && isSuspension) {
             pos_max_rate = StringUtils.save2Significand(1.00) + "%";
         } else {
@@ -304,7 +304,7 @@ public class TimesFivesBitmap {
 
         String close_rate = StringUtils.save2Significand(0.00) + "%";
 
-        String pos_min_rate = "";
+        String pos_min_rate;
         if (isTimes && isSuspension) {
             pos_min_rate = StringUtils.save2Significand(-1.00) + "%";
         } else {
@@ -314,59 +314,58 @@ public class TimesFivesBitmap {
         fontHeight = r.height();
         //margin+5，使左右游标显示完全
         if (isFromDetail) {
-            canvas.drawText(pos_max_price, leftMargin - tilte_paint.measureText(pos_max_price) - mSize, fontHeight + mSpaceSize, tilte_paint);
-            canvas.drawText(close_price, leftMargin - tilte_paint.measureText(close_price) - mSize, (mUperChartHeight + mSpaceSize) / 2 + fontHeight / 3, tilte_paint);
-            canvas.drawText(pos_min_price, leftMargin - tilte_paint.measureText(pos_min_price) - mSize, mUperChartHeight, tilte_paint);
-            canvas.drawText(volume, leftMargin - tilte_paint.measureText(volume) - mSize, viewHeight - mLowerChartHeight + fontHeight, tilte_paint);
-            canvas.drawText(unit, leftMargin - tilte_paint.measureText(unit) - mSize, viewHeight - mSize, tilte_paint);
-            canvas.drawText(pos_max_rate, viewWidth - rightMargin + mSize, fontHeight + mSpaceSize, tilte_paint);
-            canvas.drawText(close_rate, viewWidth - rightMargin + mSize, (mUperChartHeight + mSpaceSize) / 2 + fontHeight / 3, tilte_paint);
-            canvas.drawText(pos_min_rate, viewWidth - rightMargin + mSize, mUperChartHeight, tilte_paint);
+            canvas.drawText(pos_max_price, leftMargin - title_paint.measureText(pos_max_price) - mSize, fontHeight + mSpaceSize, title_paint);
+            canvas.drawText(close_price, leftMargin - title_paint.measureText(close_price) - mSize, (mUperChartHeight + mSpaceSize) / 2 + fontHeight / 3, title_paint);
+            canvas.drawText(pos_min_price, leftMargin - title_paint.measureText(pos_min_price) - mSize, mUperChartHeight, title_paint);
+            canvas.drawText(volume, leftMargin - title_paint.measureText(volume) - mSize, viewHeight - mLowerChartHeight + fontHeight, title_paint);
+            canvas.drawText(unit, leftMargin - title_paint.measureText(unit) - mSize, viewHeight - mSize, title_paint);
+            canvas.drawText(pos_max_rate, viewWidth - rightMargin + mSize, fontHeight + mSpaceSize, title_paint);
+            canvas.drawText(close_rate, viewWidth - rightMargin + mSize, (mUperChartHeight + mSpaceSize) / 2 + fontHeight / 3, title_paint);
+            canvas.drawText(pos_min_rate, viewWidth - rightMargin + mSize, mUperChartHeight, title_paint);
         } else {
             // 绘制左边Y轴的坐标
-            canvas.drawText(pos_max_price, leftMargin, fontHeight + 3 * mSize + mSpaceSize, tilte_paint);
-            canvas.drawText(pos_min_price, leftMargin, mUperChartHeight - 3 * mSize, tilte_paint);
+            canvas.drawText(pos_max_price, leftMargin, fontHeight + 3 * mSize + mSpaceSize, title_paint);
+            canvas.drawText(pos_min_price, leftMargin, mUperChartHeight - 3 * mSize, title_paint);
             // 绘制右边Y轴的坐标
-            canvas.drawText(pos_max_rate, viewWidth - rightMargin - tilte_paint.measureText(pos_max_rate) - mSize / 2, fontHeight + 3 * mSize + mSpaceSize, tilte_paint);
-            canvas.drawText(pos_min_rate, viewWidth - rightMargin - tilte_paint.measureText(pos_min_rate) - mSize / 2, mUperChartHeight - 3 * mSize, tilte_paint);
+            canvas.drawText(pos_max_rate, viewWidth - rightMargin - title_paint.measureText(pos_max_rate) - mSize / 2, fontHeight + 3 * mSize + mSpaceSize, title_paint);
+            canvas.drawText(pos_min_rate, viewWidth - rightMargin - title_paint.measureText(pos_min_rate) - mSize / 2, mUperChartHeight - 3 * mSize, title_paint);
         }
     }
 
     /**
      * 绘制Y轴下的坐标值
      */
-    private void drawXtitle(Canvas canvas) {
+    private void drawXTitle(Canvas canvas) {
 
-        tilte_paint.setTextSize(mAxisTitleSize);
-        tilte_paint.setColor(gray);
-        tilte_paint.setAntiAlias(true);
-        Paint.FontMetrics fontMetrics = tilte_paint.getFontMetrics();
+        title_paint.setTextSize(mAxisTitleSize);
+        title_paint.setColor(gray);
+        title_paint.setAntiAlias(true);
+        Paint.FontMetrics fontMetrics = title_paint.getFontMetrics();
         float fontHeight = fontMetrics.descent - fontMetrics.ascent;
         if (isTimes) {
             // 底部坐标
             String beginTime = "9:30";
-            tilte_paint.getTextBounds(beginTime, 0, beginTime.length(), r);
-            int beginTimeSize = r.width();
+            title_paint.getTextBounds(beginTime, 0, beginTime.length(), r);
 
             String middleTime = "11:30/13:00";
-            tilte_paint.getTextBounds(middleTime, 0, middleTime.length(), r);
+            title_paint.getTextBounds(middleTime, 0, middleTime.length(), r);
             int middleTimeSize = r.width();
 
             String overTime = "15:00";
-            tilte_paint.getTextBounds(overTime, 0, overTime.length(), r);
+            title_paint.getTextBounds(overTime, 0, overTime.length(), r);
             int overTimeSize = r.width();
 
             // 绘制上表的X轴坐标
-            canvas.drawText(beginTime, leftMargin, (viewHeight - mUperChartHeight - mLowerChartHeight + fontHeight) / 2 + mUperChartHeight, tilte_paint);
-            canvas.drawText(middleTime, (viewWidth - leftMargin - rightMargin - middleTimeSize) / 2 + leftMargin, (viewHeight - mUperChartHeight - mLowerChartHeight + fontHeight) / 2 + mUperChartHeight, tilte_paint);
-            canvas.drawText(overTime, viewWidth - rightMargin - overTimeSize - 2, (viewHeight - mUperChartHeight - mLowerChartHeight + fontHeight) / 2 + mUperChartHeight, tilte_paint);
+            canvas.drawText(beginTime, leftMargin, (viewHeight - mUperChartHeight - mLowerChartHeight + fontHeight) / 2 + mUperChartHeight, title_paint);
+            canvas.drawText(middleTime, (viewWidth - leftMargin - rightMargin - middleTimeSize) / 2 + leftMargin, (viewHeight - mUperChartHeight - mLowerChartHeight + fontHeight) / 2 + mUperChartHeight, title_paint);
+            canvas.drawText(overTime, viewWidth - rightMargin - overTimeSize - 2, (viewHeight - mUperChartHeight - mLowerChartHeight + fontHeight) / 2 + mUperChartHeight, title_paint);
         } else {
             for (int i = 0; i < dateList.size(); i++) {
                 String beginTime = dateList.get(i);
-                tilte_paint.getTextBounds(beginTime, 0, beginTime.length(), r);
+                title_paint.getTextBounds(beginTime, 0, beginTime.length(), r);
                 int beginTimeSize = r.width();
                 canvas.drawText(beginTime, leftMargin + getLongitudeSpacing() / 2 + getLongitudeSpacing() * i - beginTimeSize / 2,
-                        (viewHeight - mUperChartHeight - mLowerChartHeight) / 2 + mUperChartHeight + fontHeight / 3, tilte_paint);
+                        (viewHeight - mUperChartHeight - mLowerChartHeight) / 2 + mUperChartHeight + fontHeight / 3, title_paint);
             }
         }
     }
@@ -581,17 +580,17 @@ public class TimesFivesBitmap {
             DATA_MAX_COUNT = 302;
         }
         c = Calendar.getInstance();
-        List<StockMinuteData> timesorFivesList = new ArrayList<StockMinuteData>();
+        List<StockMinuteData> timesOrFivesList = new ArrayList<StockMinuteData>();
         SimpleDateFormat date_format_get_year = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date tmp_date = null;
+        Date tmp_date;
         List<Date> unsorted_date_list = new ArrayList<>();
         Bitmap bitmap = Bitmap.createBitmap(viewWidth, viewHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         if (bean != null) {
             if (bean.getCode() == 0) {
-                timesorFivesList.clear();
-                timesorFivesList.addAll(bean.getData());
+                timesOrFivesList.clear();
+                timesOrFivesList.addAll(bean.getData());
                 if (!isTimes) {
                     for (int i = 0; i < bean.getData().size(); i++) {
                         try {
@@ -614,7 +613,7 @@ public class TimesFivesBitmap {
             }
             //停牌处理
             if (isSuspension) {
-                String m = null;
+                String m;
                 int month = c.get(Calendar.MONTH) + 1;
                 int day = c.get(Calendar.DAY_OF_MONTH);
                 if (month < 10) {
@@ -625,15 +624,15 @@ public class TimesFivesBitmap {
                 String today = m + "-" + day;
                 dateList.add(today);
             }
-            if (timesorFivesList != null && timesorFivesList.size() > 0) {
-                StockMinuteData fiveDayData = timesorFivesList.get(0);
+            if (timesOrFivesList != null && timesOrFivesList.size() > 0) {
+                StockMinuteData fiveDayData = timesOrFivesList.get(0);
                 //分时和五日数据处理
                 double weightedIndex;
                 double nonWeightedIndex;
                 this.closePrice = StringUtils.getDouble(fiveDayData.getPrice()) / (1 + (StringUtils.getDouble(fiveDayData.getPrice_change_rate()) / 100.00f));
                 initialWeightedIndex = StringUtils.getDouble(fiveDayData.getPrice()) / (1 + (StringUtils.getDouble(fiveDayData.getPrice_change_rate()) / 100.00f));
-                for (int i = 1; i < timesorFivesList.size(); i++) {
-                    fiveDayData = timesorFivesList.get(i);
+                for (int i = 1; i < timesOrFivesList.size(); i++) {
+                    fiveDayData = timesOrFivesList.get(i);
                     weightedIndex = StringUtils.getDouble(fiveDayData.getPrice());
                     nonWeightedIndex = StringUtils.getDouble(fiveDayData.getAvg_price());
 
@@ -644,15 +643,15 @@ public class TimesFivesBitmap {
                             : Math.abs(weightedIndex - initialWeightedIndex));
                 }
                 if (isTimes) {
-                    timesList.addAll(timesorFivesList);
+                    timesList.addAll(timesOrFivesList);
                     //找到最后一点位置
                     StockMinuteData MinuteDataLast = timesList.get(timesList.size() - 1);
                     int stock_hour = Integer.parseInt(MinuteDataLast.getDate().substring(11, 13));
                     int stock_minute = Integer.parseInt(MinuteDataLast.getDate().substring(14, 16));
                     lastPoint = getMinute(stock_hour, stock_minute);
                 } else {
-                    for (int i = 0; i < timesorFivesList.size(); i += 4) {
-                        timesList.add(timesorFivesList.get(i));
+                    for (int i = 0; i < timesOrFivesList.size(); i += 4) {
+                        timesList.add(timesOrFivesList.get(i));
                     }
                 }
 

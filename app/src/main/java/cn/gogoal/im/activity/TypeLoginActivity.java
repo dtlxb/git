@@ -101,14 +101,14 @@ public class TypeLoginActivity extends BaseActivity {
 //        loginUserName.setText("E00018279");//冷
 //        loginPassWord.setText("600255");
 
-//        loginUserName.setText("E00002639");
-//        loginPassWord.setText("412174");
+        loginUserName.setText("E00002639");
+        loginPassWord.setText("412174");
 
 //        loginUserName.setText("E00020181");
 //        loginPassWord.setText("394495");
 
-        loginUserName.setText("E00002638");
-        loginPassWord.setText("123456");
+//        loginUserName.setText("E00002638");
+//        loginPassWord.setText("123456");
 
 //        loginUserName.setText("E010399");
 //        loginPassWord.setText("198122");
@@ -244,7 +244,7 @@ public class TypeLoginActivity extends BaseActivity {
                         loginButton.setClickable(true);
                         loginDialog.dismiss(true);
                         WaitDialog errorDialog = WaitDialog.getInstance(
-                                data.getIntValue("code")==2?"账号或者密码有误":data.getString("message"),
+                                data.getIntValue("code") == 2 ? "账号或者密码有误" : data.getString("message"),
                                 R.mipmap.login_error, false);
                         errorDialog.show(getSupportFragmentManager());
                         errorDialog.dismiss(false);

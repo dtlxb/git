@@ -25,6 +25,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.bean.FoundData;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.ImageUtils.ImageTakeUtils;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
@@ -85,10 +86,10 @@ public class FunctionFragment extends Fragment {
                         //跳转股票页面发送股票
                         Intent intent = new Intent(getActivity(), StockSearchActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putInt("num", 2);
+                        bundle.putInt("num", AppConst.TYPE_GET_STOCK);
                         bundle.putBoolean("show_add_btn", false);
                         intent.putExtras(bundle);
-                        startActivityForResult(intent, GET_STOCK);
+                        startActivity(intent);
                         break;
                     default:
                         break;
@@ -130,20 +131,6 @@ public class FunctionFragment extends Fragment {
 
                         }
                     }).launch();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != 0) {
-            if (requestCode == GET_STOCK) {
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("stock_name", data.getStringExtra("stock_name"));
-                map.put("stock_code", data.getStringExtra("stock_code"));
-                BaseMessage baseMessage = new BaseMessage("stockInfo", map);
-                AppManager.getInstance().sendMessage("oneStock", baseMessage);
-            }
         }
     }
 }
