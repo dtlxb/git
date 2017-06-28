@@ -40,8 +40,7 @@ public class CompanySummaryAdapter extends CommonAdapter<CompanyInforData, BaseV
     @Override
     protected void convert(BaseViewHolder holder, CompanyInforData data, final int position) {
         if (position == 0 || position == 4 || position == 7 || position == 10) {
-            holder.setVisible(R.id.relativeProfile, true);
-            holder.setVisible(R.id.viewLine, true);
+            holder.setVisible(R.id.linearProfile, true);
             if (position == 10) {
                 holder.setVisible(R.id.textCont, false);
             } else {
@@ -50,8 +49,7 @@ public class CompanySummaryAdapter extends CommonAdapter<CompanyInforData, BaseV
 
             holder.setText(R.id.textTitle, listData.get(position).getInforTitle());
         } else {
-            holder.setVisible(R.id.relativeProfile, false);
-            holder.setVisible(R.id.viewLine, false);
+            holder.setVisible(R.id.linearProfile, false);
         }
 
         if (position == 3) {

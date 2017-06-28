@@ -41,13 +41,11 @@ public class StockFinanceAdapter extends CommonAdapter<FinanceData, BaseViewHold
     protected void convert(BaseViewHolder holder, FinanceData data, final int position) {
 
         if (position == 0 || position == 4 || position == 7 || position == 10) {
-            holder.setVisible(R.id.relativeFinance, true);
-            holder.setVisible(R.id.viewLine, true);
+            holder.setVisible(R.id.layoutFinance, true);
             holder.setText(R.id.textTitle, contList.get(position).getTitle());
             holder.setText(R.id.textHead, contList.get(position).getHead());
         } else {
-            holder.setVisible(R.id.relativeFinance, false);
-            holder.setVisible(R.id.viewLine, false);
+            holder.setVisible(R.id.layoutFinance, false);
         }
 
         holder.setText(R.id.textName, contList.get(position).getName());
