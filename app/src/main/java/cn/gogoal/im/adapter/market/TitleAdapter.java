@@ -25,7 +25,9 @@ public class TitleAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
 
     public static final int RANK_LIST_TITLE_HOT_INDUSTRY = 0x0;
 
-    private String[] rankListTitles = {"热门行业", "涨幅榜", "跌幅榜", "换手率", "振幅榜"};
+    public static final int RANK_LIST_TITLE_BIG_DATA_CHOOSE_STOCK = 0x5;
+
+    private String[] rankListTitles = {"热门行业", "涨幅榜", "跌幅榜", "换手率", "振幅榜","大数据选股"};
 
     private int titleType;//标题类型，热门行业，还是涨跌振换标题
     private Context context;
@@ -61,6 +63,9 @@ public class TitleAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
                     case RANK_LIST_TITLE_HOT_INDUSTRY:
                         intent.putExtra("MODULE_TYPE", RankListDetialActivity.MODULE_TYPE_TITLE_HOT_INDUSTRY);
                         context.startActivity(intent);
+                        break;
+                    case RANK_LIST_TITLE_BIG_DATA_CHOOSE_STOCK:
+
                         break;
                     default:
                         intent.putExtra("MODULE_TYPE", RankListDetialActivity.MODULE_TYPE_TTILE_RANK_LIST);

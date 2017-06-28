@@ -20,6 +20,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.adapter.market.BigDataAdapter;
 import cn.gogoal.im.adapter.market.HostIndustryGridAdapter;
 import cn.gogoal.im.adapter.market.MarketViewPaerAdapter;
 import cn.gogoal.im.adapter.market.RankListAdapter;
@@ -186,26 +187,33 @@ public class MarketFragment2 extends BaseFragment {
             }
         });
 
+        //滑动指数
         adapters.add(new MarketViewPaerAdapter(newList));
 
-        TitleAdapter titleAdapter = new TitleAdapter(getContext(), TitleAdapter.RANK_LIST_TITLE_HOT_INDUSTRY);
-//        titleAdapter.notifyDataSetChanged();
-        adapters.add(titleAdapter);
-
+        //热门行业
+        adapters.add(new TitleAdapter(getContext(), TitleAdapter.RANK_LIST_TITLE_HOT_INDUSTRY));
         adapters.add(new HostIndustryGridAdapter(marketData.getHostIndustrylist()));
 
+        //大数据选股
+        adapters.add(new TitleAdapter(getContext(), TitleAdapter.RANK_LIST_TITLE_BIG_DATA_CHOOSE_STOCK));
+        adapters.add(new BigDataAdapter());
+
+        //涨
         adapters.add(new TitleAdapter(getContext(),RankListAdapter.RANK_TYPE_INCREASE_LIST));
         adapters.add(new RankListAdapter(marketData.getStockRanklist().getIncrease_list(),
                 RankListAdapter.RANK_TYPE_INCREASE_LIST));
 
+        //跌
         adapters.add(new TitleAdapter(getContext(),RankListAdapter.RANK_TYPE_DOWN_LIST));
         adapters.add(new RankListAdapter(marketData.getStockRanklist().getDown_list(),
                 RankListAdapter.RANK_TYPE_DOWN_LIST));
 
+        //换
         adapters.add(new TitleAdapter(getContext(),RankListAdapter.RANK_TYPE_CHANGE_LIST));
         adapters.add(new RankListAdapter(marketData.getStockRanklist().getChange_list(),
                 RankListAdapter.RANK_TYPE_CHANGE_LIST));
 
+        //振
         adapters.add(new TitleAdapter(getContext(),RankListAdapter.RANK_TYPE_AMPLITUDE_LIST));
         adapters.add(new RankListAdapter(marketData.getStockRanklist().getAmplitude_list(),
                 RankListAdapter.RANK_TYPE_AMPLITUDE_LIST));

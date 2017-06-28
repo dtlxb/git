@@ -174,7 +174,7 @@ public class CopyStockDetailActivity extends BaseActivity {
     private ArrayList<String> priceVolumDatas = new ArrayList<>();
     //定时刷新
     private Timer timer;
-    private double closePrice;
+    private String closePrice;
 
     private boolean isChoose = true;
 
@@ -464,9 +464,9 @@ public class CopyStockDetailActivity extends BaseActivity {
                     //保存收盘价
                     stock_type = info.getStock_type();
 
-                    closePrice = hply.com.niugu.StringUtils.getDouble(String.valueOf(info.getClose_price()));
+                    closePrice = String.valueOf(info.getClose_price());
                     change_value = info.getChange_value();
-                    StockUtils.savaColseprice((float) closePrice);
+                    StockUtils.savaColseprice(closePrice);
 
                     priceVolumDatas.clear();
                     stock_price.setText(StringUtils.parseStringDouble(info.getPrice(), 2));//股票价格

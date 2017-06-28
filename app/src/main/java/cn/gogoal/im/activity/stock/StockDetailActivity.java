@@ -397,7 +397,7 @@ public class StockDetailActivity extends BaseActivity {
         Stock stock = new Stock(stockCode, stockName);
         stock.setChangeValue(StringUtils.save2Significand(change_value));
         stock.setStock_type(stock_status_type);
-        stock.setClosePrice(closePrice);
+        stock.setClosePrice(""+closePrice);
         return stock;
     }
 

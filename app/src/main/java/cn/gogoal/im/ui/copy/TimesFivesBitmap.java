@@ -550,7 +550,7 @@ public class TimesFivesBitmap extends Grid {
                 Collections.sort(list);
                 lowerHigh = list.get(list.size() - 1);
             } else {
-                this.closePrice = StockUtils.getColseprice();
+                this.closePrice = Double.parseDouble(StockUtils.getColseprice());
             }
         }
         drawBitMap(canvas);

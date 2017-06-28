@@ -3,8 +3,6 @@ package cn.gogoal.im.bean.stock;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import cn.gogoal.im.common.StringUtils;
-
 /**
  * author wangjd on 2017/4/7 0007.
  * Staff_id 1375
@@ -13,13 +11,14 @@ import cn.gogoal.im.common.StringUtils;
  */
 public class Stock implements Parcelable {
 
-    private String current_price;
+    private String stock_price;
     private String stock_code;
     private String stock_name;
     private int stock_type;
+    private String stock_rate;
 
     private String changeValue;
-    private double closePrice;
+    private String closePrice;
     private String change_rate;
 
     //双参
@@ -28,13 +27,15 @@ public class Stock implements Parcelable {
         this.stock_name = stock_name;
     }
 
-
-    public String getCurrent_price() {
-        return current_price;
+    public Stock() {
     }
 
-    public void setCurrent_price(String current_price) {
-        this.current_price = current_price;
+    public String getStock_price() {
+        return stock_price;
+    }
+
+    public void setStock_price(String stock_price) {
+        this.stock_price = stock_price;
     }
 
     public String getStock_code() {
@@ -61,6 +62,14 @@ public class Stock implements Parcelable {
         this.stock_type = stock_type;
     }
 
+    public String getStock_rate() {
+        return stock_rate;
+    }
+
+    public void setStock_rate(String stock_rate) {
+        this.stock_rate = stock_rate;
+    }
+
     public String getChangeValue() {
         return changeValue;
     }
@@ -69,16 +78,16 @@ public class Stock implements Parcelable {
         this.changeValue = changeValue;
     }
 
-    public double getClosePrice() {
+    public String getClosePrice() {
         return closePrice;
     }
 
-    public void setClosePrice(double closePrice) {
+    public void setClosePrice(String closePrice) {
         this.closePrice = closePrice;
     }
 
     public String getChange_rate() {
-        return StringUtils.save2Significand(change_rate);
+        return change_rate;
     }
 
     public void setChange_rate(String change_rate) {
@@ -93,22 +102,24 @@ public class Stock implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.current_price);
+        dest.writeString(this.stock_price);
         dest.writeString(this.stock_code);
         dest.writeString(this.stock_name);
         dest.writeInt(this.stock_type);
+        dest.writeString(this.stock_rate);
         dest.writeString(this.changeValue);
-        dest.writeDouble(this.closePrice);
+        dest.writeString(this.closePrice);
         dest.writeString(this.change_rate);
     }
 
     protected Stock(Parcel in) {
-        this.current_price = in.readString();
+        this.stock_price = in.readString();
         this.stock_code = in.readString();
         this.stock_name = in.readString();
         this.stock_type = in.readInt();
+        this.stock_rate = in.readString();
         this.changeValue = in.readString();
-        this.closePrice = in.readDouble();
+        this.closePrice = in.readString();
         this.change_rate = in.readString();
     }
 

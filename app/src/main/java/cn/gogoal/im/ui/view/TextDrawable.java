@@ -12,6 +12,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RectShape;
 import android.graphics.drawable.shapes.RoundRectShape;
+import android.support.annotation.ColorInt;
 
 public class TextDrawable extends ShapeDrawable {
 
@@ -250,25 +251,25 @@ public class TextDrawable extends ShapeDrawable {
         }
 
         @Override
-        public TextDrawable buildRect(String text, int color) {
+        public TextDrawable buildRect(String text,@ColorInt int color) {
             rect();
             return build(text, color);
         }
 
         @Override
-        public TextDrawable buildRoundRect(String text, int color, int radius) {
+        public TextDrawable buildRoundRect(String text,@ColorInt  int color, int radius) {
             roundRect(radius);
             return build(text, color);
         }
 
         @Override
-        public TextDrawable buildRound(String text, int color) {
+        public TextDrawable buildRound(String text,@ColorInt  int color) {
             round();
             return build(text, color);
         }
 
         @Override
-        public TextDrawable build(String text, int color) {
+        public TextDrawable build(String text,@ColorInt int color) {
             this.color = color;
             this.text = text;
             return new TextDrawable(this);
@@ -297,7 +298,7 @@ public class TextDrawable extends ShapeDrawable {
 
     public interface IBuilder {
 
-        TextDrawable build(String text, int color);
+        TextDrawable build(String text,@ColorInt int color);
     }
 
     public interface IShapeBuilder {

@@ -327,4 +327,28 @@
         <item name="android:button">@drawable/stock_map_check</item>
     </style>
 
+    <!--主题选股 标签-->
+    <style name="SubjectTagTextStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:background">@drawable/shape_subject_tag</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:paddingStart">5dp</item>
+        <item name="android:paddingEnd">5dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minWidth">60dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <!--主题选股-主题详情 列表头-->
+    <style name="SubjuectListHeadStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/textColor_333333</item>
+    </style>
+
 </resources>

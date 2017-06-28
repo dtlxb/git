@@ -85,7 +85,7 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     compile "com.android.support:cardview-v7:$ANDROID_SUPPORT_VERSION"
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
-    /** 第三方依赖   */
+    /** 第三方依赖    */
     //微信登录、分享、支付依赖
     compile files('libs/libammsdk.jar')
     //网络请求
@@ -135,4 +135,5 @@ dependencies {
     compile files('libs/AMap_Location_V3.4.0_20170427.jar')
     compile project(':alilayout')
     compile project(':roundImage')
+    compile files('libs/hellocharts-library-1.5.8.jar')
 }
