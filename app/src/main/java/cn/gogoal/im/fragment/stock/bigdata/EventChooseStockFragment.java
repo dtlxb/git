@@ -20,7 +20,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.stock.stockften.EventDetailActivity;
+import cn.gogoal.im.activity.stock.EventDetailActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
@@ -147,9 +147,9 @@ public class EventChooseStockFragment extends BaseFragment {
                     eventAdapter.setEnableLoadMore(true);
                     eventAdapter.loadMoreComplete();
 
-                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
-                        UIHelper.toast(getActivity(), "数据更新成功!");
-                    }
+//                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+//                        UIHelper.toast(getActivity(), "数据更新成功!");
+//                    }
 
                     xLayout.setStatus(XLayout.Success);
                 } else if (code == 1001) {
@@ -191,8 +191,13 @@ public class EventChooseStockFragment extends BaseFragment {
 
             RecyclerView rvStock = holder.getView(R.id.rv_inner_event);
             rvStock.setNestedScrollingEnabled(false);
+            rvStock.setHasFixedSize(true);
+            rvStock.addItemDecoration(new NormalItemDecoration(getContext()));
+//            LinearLayoutManager layoutManager=new LinearLayoutManager(getContext());
+//            layoutManager.setAutoMeasureEnabled(true);
+//            layoutManager.setSmoothScrollbarEnabled(true);
+//            rvStock.setLayoutManager(layoutManager);
             rvStock.addItemDecoration(new NormalItemDecoration(getActivity()));
-
             rvStock.setAdapter(new CommonAdapter<Stock, BaseViewHolder>(
                     R.layout.item_subject_event_stock_about, data.getCatalog()) {
                 @Override

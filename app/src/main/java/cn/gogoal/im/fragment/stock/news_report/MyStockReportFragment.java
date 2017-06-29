@@ -82,6 +82,7 @@ public class MyStockReportFragment extends BaseFragment {
         reportList = new ArrayList<>();
         reportAdapter = new MyStockReportAdapter(reportList);
         recyclerView.setAdapter(reportAdapter);
+        xLayout.setEmptyText("暂无研报数据\n请添加自选股后重试!");
 
         getReportDatas(AppConst.REFRESH_TYPE_FIRST);
 

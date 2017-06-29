@@ -78,6 +78,8 @@ public class MyStockNewsFragment extends BaseFragment {
         BaseActivity.iniRefresh(swiperefreshlayout);
         rvNews.setAdapter(newsAdapter);
 
+        xLayout.setEmptyText("暂无新闻数据\n请添加自选股后重试!");
+
         getStockNews(AppConst.REFRESH_TYPE_FIRST);
 
         swiperefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
