@@ -215,6 +215,10 @@ public class XTitle extends ViewGroup implements View.OnClickListener {
         mCenterText.setTextSize(size);
         return this;
     }
+    public XTitle setTitleSize(int unit,float size) {
+        mCenterText.setTextSize(unit,size);
+        return this;
+    }
 
     public XTitle setTitleBackground(int resid) {
         mCenterText.setBackgroundResource(resid);

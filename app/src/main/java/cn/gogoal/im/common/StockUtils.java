@@ -4,19 +4,22 @@ import android.content.Context;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 
 /**
@@ -42,6 +45,36 @@ public class StockUtils {
      */
     public static Set<String> getMyStockSet() {
         return SPTools.getSetData("my_stock_set", new HashSet<String>());
+    }
+
+    public static String getStockCodes(@NonNull JSONArray array) {
+        List<String> codeArrs = new ArrayList<>();
+
+        if (array.isEmpty()) {
+            return null;
+        }
+        for (int i = 0; i < array.size(); i++) {
+            JSONObject object = (JSONObject) array.get(i);
+            if (!StringUtils.isActuallyEmpty(object.getString("stock_code"))) {
+                codeArrs.add(object.getString("stock_code"));
+            }
+        }
+        return ArrayUtils.mosaicListElement(codeArrs);
+    }
+
+    public static <T> String getStockCodes(@NonNull List<T> array) {
+        List<String> codeArrs = new ArrayList<>();
+
+        if (array.isEmpty()) {
+            return null;
+        }
+        for (int i = 0; i < array.size(); i++) {
+            JSONObject object = JSONObject.parseObject(JSONObject.toJSONString(array.get(i)));
+            if (!StringUtils.isActuallyEmpty(object.getString("stock_code"))) {
+                codeArrs.add(object.getString("stock_code"));
+            }
+        }
+        return ArrayUtils.mosaicListElement(codeArrs);
     }
 
     /**
@@ -249,7 +282,7 @@ public class StockUtils {
 
     /**
      * 回调股票状态
-     * */
+     */
     public static void getStockStatus(String stockCode, @NonNull final Impl<String> callback) {
         final Map<String, String> map = new HashMap<>();
         map.put("stock_code", stockCode);
@@ -260,12 +293,12 @@ public class StockUtils {
                 if (object.getIntValue("code") == 0) {
                     if (object.getJSONObject("data") == null) {
                         callback.response(Impl.RESPON_DATA_ERROR, "data字段缺失");
-                    }else {
+                    } else {
                         try {
                             callback.response(Impl.RESPON_DATA_SUCCESS,
                                     object.getJSONObject("data").getString("stock_type"));
-                        }catch (Exception e){
-                            callback.response(Impl.RESPON_DATA_ERROR,"stock_type字段缺失");
+                        } catch (Exception e) {
+                            callback.response(Impl.RESPON_DATA_ERROR, "stock_type字段缺失");
                         }
                     }
                 } else if (object.getIntValue("code") == 1001) {
@@ -363,18 +396,18 @@ public class StockUtils {
     /**
      * 保存收盘价
      */
-    public static double getColseprice() {
-        return 0;
+    public static String getColseprice() {
+        return SPTools.getString("closePrice", "0");
     }
 
-    public static void savaColseprice(float closePrice) {
-        SPTools.saveFloat("closePrice", closePrice);
+    public static void savaColseprice(String closePrice) {
+        SPTools.saveString("closePrice", closePrice);
     }
 
     /**
      * 添加自选股
      */
-    public static void addMyStock(final Context context, final String stock_name, final String stock_code) {
+    public static void addMyStock(final String stock_code, final Impl<Boolean> callback) {
         final Map<String, String> param = new HashMap<String, String>();
         param.put("token", UserUtils.getToken());
         param.put("group_id", "0");
@@ -387,25 +420,78 @@ public class StockUtils {
 
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if (result.getIntValue("code") == 0) {
                     StockUtils.addStock2MyStock(stock_code);
-                    AppManager.getInstance().sendMessage("updata_my_stock_data");
+                    if (callback != null) {
+                        callback.response(Impl.RESPON_DATA_SUCCESS, true);
+                    }
+                } else {
+                    if (callback != null)
+                        callback.response(Impl.RESPON_DATA_ERROR, false);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                UIHelper.toastError(context, msg);
+                if (callback != null)
+                    callback.response(Impl.RESPON_DATA_ERROR, false);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.MYSTOCK_ADD, ggHttpInterface).startGet();
     }
 
+
+    private static RotateAnimation rotateAnimation;//旋转动画
+
+    private static void stopRefreshAnimation(ImageView btnRefresh) {
+        if (rotateAnimation != null) {
+            AnimationUtils.getInstance().cancleLoadingAnime(rotateAnimation, btnRefresh, R.mipmap.choose_stock);
+        } else {
+            btnRefresh.clearAnimation();
+        }
+    }
+
+    private static void startRefreshAnimation(ImageView btnRefresh) {
+        rotateAnimation = AnimationUtils.getInstance().setLoadingAnime(btnRefresh, R.mipmap.img_loading_refresh);
+        rotateAnimation.startNow();
+    }
+
+    public static void toggleAddDelStock(@NonNull String stockCode,
+                                         @NonNull final ImageView imageView) {
+        startRefreshAnimation(imageView);
+        //删除自选股
+        if (isMyStock(stockCode)) {
+            deleteMyStockOld(stockCode, new Impl<String>() {
+                @Override
+                public void response(int code, String data) {
+                    UIHelper.toast(imageView.getContext(),
+                            "删除自选" + (code == Impl.RESPON_DATA_SUCCESS ? "成功" : "失败"));
+                    stopRefreshAnimation(imageView);
+                    imageView.setImageResource(
+                            code == Impl.RESPON_DATA_SUCCESS ? R.mipmap.choose_stock : R.mipmap.not_choose_stock);
+                }
+            });
+        }
+        //添加自选股
+        else {
+            addMyStock(stockCode, new Impl<Boolean>() {
+                @Override
+                public void response(int code, Boolean data) {
+                    UIHelper.toast(imageView.getContext(), "添加自选" + (data ? "成功" : "失败"));
+                    stopRefreshAnimation(imageView);
+                    imageView.setImageResource(
+                            code == Impl.RESPON_DATA_SUCCESS ? R.mipmap.not_choose_stock : R.mipmap.choose_stock);
+                }
+            });
+        }
+    }
+
     /**
      * 删除自选股 新接口
      */
-    public static void deleteMyStock(final Context context, final String full_code, final ToggleMyStockCallBack callBack) {
+    public static void deleteMyStock(final Context context, final String full_code, final Impl<String> callBack) {
         final Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
         param.put("group_id", "0");
@@ -417,24 +503,26 @@ public class StockUtils {
                 KLog.e(responseInfo);
 
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                int code = (int) result.get("code");
+                int code = result.getIntValue("code");
                 if (code == 0 || code == 1001) {
                     UIHelper.toast(context, "删除自选成功");
                     if (callBack != null) {
-                        callBack.success();
+                        callBack.response(Impl.RESPON_DATA_SUCCESS, result.getString("message"));
                     }
                     removeStock(full_code.substring(2));
                 } else {
                     if (callBack != null) {
-                        callBack.failed(JSONObject.parseObject(responseInfo).getString("message"));
+                        callBack.response(Impl.RESPON_DATA_ERROR,
+                                result.getString("message"));
                     }
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                callBack.failed(msg);
-                UIHelper.toastError(context, msg);
+                if (callBack != null) {
+                    callBack.response(Impl.RESPON_DATA_ERROR, msg);
+                }
             }
         };
         new GGOKHTTP(param, GGOKHTTP.DELETE_MY_STOCKS, httpInterface).startGet();
@@ -443,7 +531,7 @@ public class StockUtils {
     /**
      * 删除自选股
      */
-    public static void deleteMyStockOld(final Context context, final String stock_code, final ToggleMyStockCallBack callBack) {
+    public static void deleteMyStockOld(final String stock_code, final Impl<String> callBack) {
         final Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
         param.put("stock_code", stock_code);
@@ -451,35 +539,27 @@ public class StockUtils {
         GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
-
                 JSONObject result = JSONObject.parseObject(responseInfo);
-                int code = (int) result.get("code");
+                int code = result.getIntValue("code");
                 if (code == 0 || code == 1001) {
-                    UIHelper.toast(context, "删除自选成功");
                     if (callBack != null) {
-                        callBack.success();
+                        callBack.response(Impl.RESPON_DATA_SUCCESS, result.getString("message"));
                     }
                     removeStock(stock_code);
                 } else {
                     if (callBack != null) {
-                        callBack.failed(JSONObject.parseObject(responseInfo).getString("message"));
+                        callBack.response(Impl.RESPON_DATA_ERROR,
+                                result.getString("message"));
                     }
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                callBack.failed(msg);
-                UIHelper.toastError(context, msg);
+                if (callBack != null)
+                    callBack.response(Impl.RESPON_DATA_ERROR, msg);
             }
         };
         new GGOKHTTP(param, GGOKHTTP.MYSTOCK_DELETE, httpInterface).startGet();
-    }
-
-    public interface ToggleMyStockCallBack {
-        void success();
-
-        void failed(String msg);
     }
 }

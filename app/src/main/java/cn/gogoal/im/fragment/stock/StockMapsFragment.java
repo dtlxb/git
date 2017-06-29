@@ -546,7 +546,9 @@ public class StockMapsFragment extends BaseFragment {
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
+            if (timesBitmap == null || map == null || map.isEmpty() || mBitmapChartView == null) {
+                return;
+            }
             switch (String.valueOf(showItem)) {
                 case "0":
                     if (stock_charge_type == 1 && StockUtils.isTradeTime()) {

@@ -197,7 +197,7 @@ public class StockDetailActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         stockCode = getIntent().getStringExtra("stock_code");
-        stockName = getIntent().getStringExtra("stock_name");
+        stockName = getIntent().getStringExtra("stock_name").replace(" ","");
 
         initDialog();//初始化截图
 
@@ -379,13 +379,6 @@ public class StockDetailActivity extends BaseActivity {
     private void initTitle() {
         setStockState();
 
-       /* xTitle.addAction(new XTitle.ImageAction(getResDrawable(R.mipmap.refresh_white)) {
-            @Override
-            public void actionClick(View view) {
-                //TODO 刷新
-            }
-        });*/
-
         XTitle.ImageAction refreshAction = new XTitle.ImageAction(getResDrawable(R.mipmap.refresh_white)) {
             @Override
             public void actionClick(View view) {
@@ -464,7 +457,7 @@ public class StockDetailActivity extends BaseActivity {
         Stock stock = new Stock(stockCode, stockName);
         stock.setChangeValue(StringUtils.save2Significand(change_value));
         stock.setStock_type(stock_status_type);
-        stock.setClosePrice(closePrice);
+        stock.setClosePrice(""+closePrice);
         return stock;
     }
 
@@ -675,6 +668,7 @@ public class StockDetailActivity extends BaseActivity {
                 StockUtils.getTreatState(), CalendarUtils.getCurrentTime("MM-dd HH:mm")), true)
                 .setSubTitleSize(TypedValue.COMPLEX_UNIT_SP, 10)
                 .setSubTitleColor(Color.argb(204, 255, 255, 255))
+                .setTitleSize(TypedValue.COMPLEX_UNIT_SP,15)
                 .setLeftImageResource(R.mipmap.image_title_back_255)
                 .setLeftText(getString(R.string.str_title_back))
                 .setTitleColor(Color.WHITE)
@@ -1016,9 +1010,16 @@ public class StockDetailActivity extends BaseActivity {
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, StockDetail2Text item, int position) {
+        protected void convert(BaseViewHolder holder, final StockDetail2Text item, int position) {
             holder.setText(R.id.tv_stock_detail_head_desc, item.getKey());
             holder.setText(R.id.tv_stock_detail_head_value, item.getValue());
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    imageViewShoeDialog.performClick();
+                }
+            });
         }
     }
 

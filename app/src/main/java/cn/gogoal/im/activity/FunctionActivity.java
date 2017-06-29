@@ -30,6 +30,7 @@ import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
+import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
@@ -245,9 +246,12 @@ public class FunctionActivity extends BaseActivity {
             public void handler(String data, ValueCallback<String> function) {
                 KLog.e("添加", data);
                 JSONObject stockObject = JSONObject.parseObject(data);
-                StockUtils.addMyStock(getContext(),
-                        stockObject.getString("stock_name"),
-                        stockObject.getString("stock_code"));
+                StockUtils.addMyStock(stockObject.getString("stock_code"), new Impl<Boolean>() {
+                    @Override
+                    public void response(int code, Boolean data) {
+                        UIHelper.toast(getContext(), data ? "添加成功" : "添加失败");
+                    }
+                });
             }
         });
 
@@ -257,8 +261,13 @@ public class FunctionActivity extends BaseActivity {
             public void handler(String data, ValueCallback<String> function) {
                 KLog.e("移除", data);
                 JSONObject stockObject = JSONObject.parseObject(data);
-                StockUtils.deleteMyStockOld(getContext(),
-                        stockObject.getString("stock_code"), null);
+                StockUtils.deleteMyStockOld(stockObject.getString("stock_code"), new Impl<String>() {
+                    @Override
+                    public void response(int code, String data) {
+                        UIHelper.toast(getContext(), "删除自选股" +
+                                (code == Impl.RESPON_DATA_SUCCESS ? "成功" : "失败"));
+                    }
+                });
             }
         });
 

@@ -2,6 +2,8 @@ package cn.gogoal.im.adapter;
 
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -11,6 +13,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.bean.StockNewsType;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.UIHelper;
@@ -36,6 +39,8 @@ public class NewsAdapter extends CommonAdapter<StockDetailNewsData, BaseViewHold
 
     @Override
     protected void convert(BaseViewHolder holder, final StockDetailNewsData data, int position) {
+        RelativeLayout itemLayout=holder.getView(R.id.layout_item_stock_detail_news);
+        ViewGroup.LayoutParams params = itemLayout.getLayoutParams();
 
         TextView textView = holder.getView(R.id.big_event_tittle_tv);
         textView.setText(data.getTitle());
@@ -43,9 +48,13 @@ public class NewsAdapter extends CommonAdapter<StockDetailNewsData, BaseViewHold
         if (singleLineTitle) {
             textView.setSingleLine();
             textView.setEllipsize(TextUtils.TruncateAt.END);
+            params.height= AppDevice.dp2px(itemLayout.getContext(),65);
         } else {
             textView.setSingleLine(false);
+            params.height=ViewGroup.LayoutParams.WRAP_CONTENT;
         }
+        itemLayout.setLayoutParams(params);
+
         holder.setText(R.id.big_event_organ_andr_author,data.getOrigin());
 
         holder.setText(R.id.big_event_date, CalendarUtils.getStringDate("yyyy-MM-dd", data.getDate()));

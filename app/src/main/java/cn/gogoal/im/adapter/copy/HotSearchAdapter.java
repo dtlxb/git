@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.StockUtils;
-import cn.gogoal.im.common.UserUtils;
 import hply.com.niugu.bean.HotSearchStockData;
 
 
@@ -46,13 +46,13 @@ public class HotSearchAdapter extends MyBaseAdapter<HotSearchStockData> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (showAddBtn){
+        if (showAddBtn) {
             holder.stock_add.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             holder.stock_add.setVisibility(View.INVISIBLE);
         }
 
-        int num = position + 1;
+        final int num = position + 1;
         holder.stock_number.setText(num + "");
         if (position == 0) {
             holder.stock_number.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.white));
@@ -79,30 +79,25 @@ public class HotSearchAdapter extends MyBaseAdapter<HotSearchStockData> {
                 holder.stock_add.setClickable(false);
             } else {
                 holder.stock_add.setText("");
-                holder.stock_add.setCompoundDrawablesWithIntrinsicBounds(parent.getContext().getResources()
+                holder.stock_add.setCompoundDrawablesWithIntrinsicBounds(
+                        parent.getContext().getResources()
                         .getDrawable(R.drawable.add_icon), null, null, null);
                 holder.stock_add.setClickable(true);
 
                 holder.stock_add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!UserUtils.isLogin()) {
-                            StockUtils.addStock2MyStock(list.get(position).getStock_code());
 
-                            holder.stock_add.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                            holder.stock_add.setText("已添加");
-                            holder.stock_add.setClickable(false);
-
-                        } else {
-                            //登录时
-                            StockUtils.addMyStock(v.getContext(),
-                                    list.get(position).getStock_name(),
-                                    list.get(position).getStock_code());
-
-                            holder.stock_add.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-                            holder.stock_add.setText("已添加");
-                            holder.stock_add.setClickable(false);
-                        }
+                        StockUtils.addMyStock(list.get(position).getStock_code(), new Impl<Boolean>() {
+                            @Override
+                            public void response(int code, Boolean data) {
+                                if (data){
+                                    holder.stock_add.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                                    holder.stock_add.setText("已添加");
+                                    holder.stock_add.setClickable(false);
+                                }
+                            }
+                        });
                     }
                 });
             }

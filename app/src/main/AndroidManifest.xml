@@ -200,7 +200,6 @@
         <activity android:name=".activity.stock.StockDetailActivity" />
         <!-- <activity android:name=".activity.Test2Activity"></activity> -->
 
-        <activity android:name=".activity.copy.CopyStockDetailActivity" />
         <activity
             android:name=".activity.copy.StockDetailChartsActivity"
             android:configChanges="orientation|screenSize|keyboard"
@@ -235,7 +234,6 @@
         <activity android:name=".activity.SettingStockActivity" />
         <activity android:name=".activity.ScanQRCodeActivity" />
         <activity android:name=".activity.Face2FaceActivity" />
-        <activity android:name=".activity.Face2FaceHolderActivity" />
         <activity android:name=".activity.QrcodeProcessActivity" />
         <activity android:name=".activity.stock.stockften.FinancialAnalysisActivity" />
         <activity android:name=".activity.QrCodeActivity" />
@@ -245,6 +243,9 @@
         <activity android:name=".activity.stock.stockften.CompanyProfileActivity" />
         <activity android:name=".activity.stock.stockften.ShareholderResearchActivity" />
         <activity android:name=".activity.stock.stockften.CapitalStructureActivity" />
+        <activity android:name=".activity.stock.BigDataAcyivity" />
+        <activity android:name=".activity.stock.SubjectDetailActivity" />
+        <activity android:name=".activity.stock.stockften.EventDetailActivity" />
     </application>
 
 </manifest>
