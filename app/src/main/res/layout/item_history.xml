@@ -1,34 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_height="100dp"
+    android:id="@+id/layout_item"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_history_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="33dp"
         android:background="@drawable/shape_text_border"
         android:gravity="center"
-        android:padding="8dp"
-        android:text="2017第一季" />
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:text="2017第一季"
+        android:textColor="@color/textColor_333333"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tv_history_week"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="33dp"
         android:background="@drawable/shape_text_border"
         android:gravity="center"
-        android:padding="8dp"
-        android:text="符合预期" />
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:text="符合预期"
+        android:textColor="@color/textColor_333333"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tv_history_day"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="33dp"
         android:background="@drawable/shape_text_border"
         android:gravity="center"
-        android:padding="8dp"
-        android:text="符合预期" />
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:text="符合预期"
+        android:textColor="@color/textColor_333333"
+        android:textSize="12sp" />
 
 </LinearLayout>

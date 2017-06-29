@@ -203,7 +203,6 @@
         <activity android:name=".activity.stock.StockDetailActivity" />
         <!-- <activity android:name=".activity.Test2Activity"></activity> -->
 
-        <activity android:name=".activity.copy.CopyStockDetailActivity" />
         <activity
             android:name=".activity.copy.StockDetailChartsActivity"
             android:configChanges="orientation|screenSize|keyboard"
@@ -243,9 +242,9 @@
         <activity android:name=".activity.QrCodeActivity" />
         <activity android:name=".activity.Test2Activity" />
         <activity android:name=".activity.stock.stockften.FinancialStatementsActivity" />
-        <activity android:name=".activity.stock.BigDataAcyivity"/>
-        <activity android:name=".activity.stock.SubjectDetailActivity"/>
-        <activity android:name=".activity.stock.stockften.EventDetailActivity"/>
+        <activity android:name=".activity.stock.BigDataAcyivity" />
+        <activity android:name=".activity.stock.SubjectDetailActivity" />
+        <activity android:name=".activity.stock.stockften.EventDetailActivity" />
     </application>
 
 </manifest>
