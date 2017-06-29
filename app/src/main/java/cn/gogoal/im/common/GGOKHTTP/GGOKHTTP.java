@@ -937,6 +937,12 @@ public class GGOKHTTP {
      */
     public static final String GET_STOCK_MAIN_BUSINESS = "v1/graph_industry/get_stock_main_business";
 
+    /**
+     * F10-分红转送
+     * stock_code
+     */
+    public static final String DIVIDEND_FINANCING = "v1/f10/dividend_financing";
+
 //--------------------------------------------------------------------------------------------------
 
     /**

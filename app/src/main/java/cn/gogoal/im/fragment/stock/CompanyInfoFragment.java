@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.hply.alilayout.VirtualLayoutManager;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -22,17 +21,18 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.activity.stock.stockften.ShareholderResearchActivity;
 import cn.gogoal.im.adapter.stockften.CompanySummaryAdapter;
+import cn.gogoal.im.adapter.stockften.DividendTransAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ChartBean;
 import cn.gogoal.im.bean.f10.CompanyInforData;
+import cn.gogoal.im.bean.f10.DividendTransData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.copy.FtenUtils;
 import cn.gogoal.im.ui.view.BarView;
-import cn.gogoal.im.ui.view.FullyLinearLayoutManager;
 
 /**
  * author wangjd on 2017/6/16 0016.
@@ -56,18 +56,22 @@ public class CompanyInfoFragment extends BaseFragment {
     @BindView(R.id.textPerfor)
     TextView textPerfor;
 
-    private FullyLinearLayoutManager mLayoutManager;
+    @BindView(R.id.rv_dividend_transfer)
+    RecyclerView rvDivTransfer;
 
     private String stockCode;
     private String stockName;
 
     private ArrayList<CompanyInforData> infoList = new ArrayList<>();
-    private CompanySummaryAdapter adapter;
+    private CompanySummaryAdapter summaryAdapter;
 
     private String stype;
     private JSONObject finacialData;
     private int chartTab = 0;
     List<ChartBean> chartBeanList;
+
+    private ArrayList<DividendTransData> transDatas = new ArrayList<>();
+    private DividendTransAdapter transAdapter;
 
     public static CompanyInfoFragment newInstance(String stockCode, String stockName) {
         CompanyInfoFragment infoFragment = new CompanyInfoFragment();
@@ -90,17 +94,19 @@ public class CompanyInfoFragment extends BaseFragment {
         chartBeanList = new ArrayList<>();
 
         BaseActivity.initRecycleView(rvComSummary, null);
+        BaseActivity.initRecycleView(rvDivTransfer, null);
 
-        mLayoutManager = new FullyLinearLayoutManager(getActivity());
-        mLayoutManager.setOrientation(VirtualLayoutManager.VERTICAL);
-        mLayoutManager.setAutoMeasureEnabled(true);
-        rvComSummary.setLayoutManager(mLayoutManager);
-        rvComSummary.setHasFixedSize(false);
+        rvComSummary.setHasFixedSize(true);
         rvComSummary.setNestedScrollingEnabled(false);
+
+        rvDivTransfer.setHasFixedSize(true);
+        rvDivTransfer.setNestedScrollingEnabled(false);
 
         getCompanySummary();
 
         getParamData();
+
+        getDividendTransfer();
     }
 
     /**
@@ -228,8 +234,8 @@ public class CompanyInfoFragment extends BaseFragment {
                     }
                     infoList.addAll(revenueList);
 
-                    adapter = new CompanySummaryAdapter(getActivity(), infoList, stockCode, stockName);
-                    rvComSummary.setAdapter(adapter);
+                    summaryAdapter = new CompanySummaryAdapter(getActivity(), infoList, stockCode, stockName);
+                    rvComSummary.setAdapter(summaryAdapter);
                 }
             }
 
@@ -281,7 +287,6 @@ public class CompanyInfoFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     finacialData = object.getJSONObject("data");
@@ -346,6 +351,39 @@ public class CompanyInfoFragment extends BaseFragment {
         }
         barPerforView.setTextSize(AppDevice.dp2px(getActivity(), 10));
         barPerforView.setChartData(chartBeanList);
+    }
+
+    /**
+     * 分红转送
+     */
+    private void getDividendTransfer() {
+        final Map<String, String> param = new HashMap<>();
+        param.put("stock_code", stockCode);
+
+        final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONArray data = object.getJSONArray("data");
+
+                    for (int i = 0; i < (data.size() > 3 ? 3 : data.size()); i++) {
+                        transDatas.add(new DividendTransData(
+                                data.getJSONObject(i).getString("dividend_program"),
+                                data.getJSONObject(i).getString("date")));
+                    }
+
+                    transAdapter = new DividendTransAdapter(getActivity(), transDatas);
+                    rvDivTransfer.setAdapter(transAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.DIVIDEND_FINANCING, ggHttpInterface).startGet();
     }
 
     @OnClick({R.id.chart_tab_one, R.id.chart_tab_two, R.id.chart_tab_three, R.id.relative_share_holder,
