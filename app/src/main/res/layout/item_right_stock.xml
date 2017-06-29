@@ -56,37 +56,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_name"
             android:layout_marginRight="5dp"
-            android:background="@drawable/message_right_stock"
+            android:background="@drawable/item_right_share_bg"
             android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="8dp">
-
-                <ImageView
-                    android:id="@+id/iv_from"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/icon_share_gogoal" />
-
-                <TextView
-                    android:id="@+id/tv_from"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="6dp"
-                    android:layout_toRightOf="@id/iv_from"
-                    android:text="Go-Goal"
-                    android:textColor="@color/textColor_666666"
-                    android:textSize="12dp" />
-
-            </RelativeLayout>
+            android:paddingTop="5dp">
 
             <TextView
                 android:id="@+id/tv_stock_title"
@@ -109,6 +81,40 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="5dp"
                 android:scaleType="fitXY" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="5dp"
+                android:background="@color/marketcompare_stockcode" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="5dp">
+
+                <ImageView
+                    android:id="@+id/iv_from"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/icon_share_gogoal" />
+
+                <TextView
+                    android:id="@+id/tv_from"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="6dp"
+                    android:layout_toRightOf="@id/iv_from"
+                    android:text="Go-Goal"
+                    android:textColor="@color/textColor_666666"
+                    android:textSize="12dp" />
+
+            </RelativeLayout>
 
         </LinearLayout>
 

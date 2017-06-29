@@ -2,6 +2,7 @@ package cn.gogoal.im.common.IMHelpers;
 
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMClientEventHandler;
+import com.socks.library.KLog;
 
 import cn.gogoal.im.base.AppManager;
 
@@ -22,7 +23,7 @@ public class MyClientEventHandler extends AVIMClientEventHandler {
     }
 
     @Override
-    public void onClientOffline(AVIMClient avimClient, int i) {
+    public void onClientOffline(AVIMClient avimClient, int code) {
         AppManager.getInstance().sendMessage("show_client_status");
     }
 }

@@ -53,15 +53,43 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_name"
             android:layout_marginStart="5dp"
-            android:background="@drawable/message_left_stock"
+            android:background="@drawable/message_background"
             android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp">
+            android:paddingTop="5dp">
+
+            <TextView
+                android:id="@+id/tv_stock_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="14dp"
+                android:layout_marginTop="3dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="平安银行"
+                android:textColor="@color/textColor_333333"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/iv_stock_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="14dp"
+                android:layout_marginTop="5dp"
+                android:scaleType="fitXY" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="5dp"
+                android:background="@color/marketcompare_stockcode" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="3dp"
+                android:layout_marginTop="5dp"
                 android:paddingLeft="12dp"
                 android:paddingRight="14dp">
 
@@ -85,28 +113,6 @@
                     android:textSize="12dp" />
 
             </RelativeLayout>
-
-            <TextView
-                android:id="@+id/tv_stock_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="14dp"
-                android:layout_marginTop="3dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="平安银行"
-                android:textColor="@color/textColor_333333"
-                android:textSize="14sp" />
-
-            <ImageView
-                android:id="@+id/iv_stock_image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="14dp"
-                android:layout_marginTop="8dp"
-                android:scaleType="fitXY" />
 
         </LinearLayout>
 

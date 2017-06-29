@@ -537,13 +537,13 @@ public class MessageFragment extends BaseFragment {
         //移除站位
         xLayout.setStatus(XLayout.Success);
         //获取免打扰
-        KLog.e(conversation.get("mu"));
+        /*KLog.e(conversation.get("mu"));
         if (conversation.get("mu") != null) {
             boolean canBother = (boolean) conversation.get("mu");
             SPTools.saveBoolean(UserUtils.getMyAccountId() + ConversationId + "noBother", canBother);
         } else {
             SPTools.saveBoolean(UserUtils.getMyAccountId() + ConversationId + "noBother", false);
-        }
+        }*/
 
         int chatType = (int) conversation.getAttribute("chat_type");
         Long rightNow = CalendarUtils.getCurrentTime();
