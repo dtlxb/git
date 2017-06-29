@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">GD_test_00</string>
+    <string name="title_activity_location">LocationActivity</string>
+    <string name="location_errInfo_text">Error</string>
+</resources>
