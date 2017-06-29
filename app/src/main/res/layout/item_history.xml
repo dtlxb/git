@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_history_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_text_border"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="2017第一季" />
+
+    <TextView
+        android:id="@+id/tv_history_week"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_text_border"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="符合预期" />
+
+    <TextView
+        android:id="@+id/tv_history_day"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_text_border"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="符合预期" />
+
+</LinearLayout>

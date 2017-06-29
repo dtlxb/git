@@ -111,16 +111,7 @@ public class MyApp extends LitePalApplication {
         AVIMMessageManager.setConversationEventHandler(new MyConversationHandler());
         //相互踢监听
         AVIMClientManager.setEventHandler();
-        //连接服务器
-            /*AVIMClientManager.getInstance().open(UserUtils.getMyAccountId(), new AVIMClientCallback() {
-                @Override
-                public void done(AVIMClient avimClient, AVIMException e) {
-                    //KLog.e(e.getAppCode()+";"+e.getMessage());
-                }
-            });*/
-
         //TODO 注册消息接收器
-
         BaseActivity.requestRuntimePermission(new String[]{Manifest.permission.READ_PHONE_STATE}, new IPermissionListner() {
             @Override
             public void onUserAuthorize() {
