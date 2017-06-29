@@ -15,12 +15,13 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.AnalysisLeftAdapter;
-import cn.gogoal.im.adapter.AnalysisRightAdapter;
+import cn.gogoal.im.adapter.stockften.AnalysisLeftAdapter;
+import cn.gogoal.im.adapter.stockften.AnalysisRightAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ChartBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.copy.FtenUtils;
 import cn.gogoal.im.ui.copy.InnerListView;
@@ -74,7 +75,7 @@ public class FinancialAnalysisActivity extends BaseActivity {
         type = getIntent().getStringExtra("type");
         chartBeanList = new ArrayList<>();
 
-        setMyTitle(stockName + "-资料F10", true);
+        setMyTitle(stockName + "-关键指标", true);
 
         if (stype.equals("1")) {
             textFormName.setText(FtenUtils.title1[Integer.parseInt(type) - 1]);
@@ -195,7 +196,7 @@ public class FinancialAnalysisActivity extends BaseActivity {
 
         List<Float> values = new ArrayList<>();
         for (int i = 0; i < retained_profits.size(); i++) {
-            values.add(retained_profits.getFloatValue(i));
+            values.add(Float.valueOf(StringUtils.save2Significand(retained_profits.getDoubleValue(i) / 10000)));
         }
 
         JSONArray title = data.getJSONArray("title");
