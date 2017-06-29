@@ -188,14 +188,22 @@ public class ChatFragment extends BaseFragment {
                     imConversation.queryMessages(messageList.get(0).getMessageId(), messageList.get(0).getTimestamp(), 15, new AVIMMessagesQueryCallback() {
                         @Override
                         public void done(List<AVIMMessage> list, AVIMException e) {
-                            refreshMessage(list, e);
+                            if (e == null && null != list && list.size() > 0) {
+                                messageList.addAll(0, list);
+                                imageUrls.addAll(0, getAllImageUrls(list));
+                                imChatAdapter.notifyItemRangeInserted(0, list.size());
+                            }
+                            message_swipe.setRefreshing(false);
                         }
                     });
                 } else {
                     imConversation.queryMessages(15, new AVIMMessagesQueryCallback() {
                         @Override
                         public void done(List<AVIMMessage> list, AVIMException e) {
-                            refreshMessage(list, e);
+                            if (e == null && null != list && list.size() > 0) {
+                                dealMessages(list, false);
+                            }
+                            message_swipe.setRefreshing(false);
                         }
                     });
                 }
@@ -315,16 +323,6 @@ public class ChatFragment extends BaseFragment {
             }
         });
 
-    }
-
-    //下拉加载更多消息
-    private void refreshMessage(List<AVIMMessage> list, AVIMException e) {
-        if (e == null && null != list && list.size() > 0) {
-            messageList.addAll(0, list);
-            imageUrls.addAll(0, getAllImageUrls(list));
-            imChatAdapter.notifyItemRangeInserted(0, list.size());
-        }
-        message_swipe.setRefreshing(false);
     }
 
     //生成未读消息
@@ -456,7 +454,9 @@ public class ChatFragment extends BaseFragment {
                 if ((int) result.get("code") == 0) {
                     JSONObject data = result.getJSONObject("data");
                     if (data.getBoolean("success")) {
-                        saveToMessageList(message);
+                        if (chatType != AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
+                            saveToMessageList(message);
+                        }
                         messageStatusChange(message, AppConst.MESSAGE_SEND_STATUS_SUCCESS);
                     } else {
                         GGUnReadMessage failMessage = null;
@@ -535,7 +535,7 @@ public class ChatFragment extends BaseFragment {
                         null != userBean.getNickname() ? userBean.getNickname() : "",
                         String.valueOf(userBean.getFriend_id()), String.valueOf(userBean.getAvatar()), JSON.toJSONString(message));
             }
-        } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE || chatType == AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
+        } else if (chatType == AppConst.IM_CHAT_TYPE_SQUARE) {
             //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息(群对象和群头像暂时为空)
             if (message instanceof GGTextMessage) {
                 String strMessage = ((GGTextMessage) message).getText();
@@ -547,7 +547,7 @@ public class ChatFragment extends BaseFragment {
                     "", imConversation.getAttribute("avatar") != null ? (String) imConversation.getAttribute("avatar") : "", JSON.toJSONString(message));
         }
         MessageListUtils.saveMessageInfo(imMessageBean);
-        //通知服务器重新获取
+        //通知服务重新获取
         AppManager.getInstance().sendMessage("Cache_change");
     }
 
@@ -923,8 +923,7 @@ public class ChatFragment extends BaseFragment {
             }
             //(刚创建群的时候不拉消息)
             if (actionType == AppConst.CREATE_SQUARE_ROOM_BUILD ||
-                    actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE ||
-                    actionType == AppConst.CREATE_SQUARE_ROOM_BY_STOCK) {
+                    actionType == AppConst.CREATE_SQUARE_ROOM_BY_ONE) {
             } else {
                 getHistoryMessage(needUpdate, messageList);
             }
@@ -934,7 +933,8 @@ public class ChatFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (!TextUtils.isEmpty(etInput.getText()) && !etInput.getText().toString().equals("@")) {
+        if (!TextUtils.isEmpty(etInput.getText()) && !etInput.getText().toString().equals("@") &&
+                chatType != AppConst.IM_CHAT_TYPE_STOCK_SQUARE) {
             GGTextMessage mTextMessage = createTextMessage("[草稿] " + etInput.getText());
             saveToMessageList(mTextMessage);
         }
@@ -1078,7 +1078,9 @@ public class ChatFragment extends BaseFragment {
             }
             //判断房间一致然后做消息接收处理
             if (imConversation.getConversationId().equals(conversation.getConversationId())) {
-                refreshRecyclerView(message, isVisBottom(message_recycler));
+                if (!message.getMessageId().equals(messageList.get(messageList.size() - 1).getMessageId())) {
+                    refreshRecyclerView(message, isVisBottom(message_recycler));
+                }
                 //此处头像，昵称日后有数据再改
                 /*IMMessageBean imMessageBean = null;
                 if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {

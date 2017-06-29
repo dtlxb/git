@@ -3,6 +3,7 @@ package cn.gogoal.im.common.IMHelpers;
 import android.text.TextUtils;
 
 import com.avos.avoscloud.im.v2.AVIMClient;
+import com.avos.avoscloud.im.v2.AVIMClientOpenOption;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMConversationQuery;
 import com.avos.avoscloud.im.v2.AVIMException;
@@ -50,8 +51,10 @@ public class AVIMClientManager {
     public void open(String clientId, AVIMClientCallback callback) {
         this.clientId = clientId;
         avimClient = AVIMClient.getInstance(clientId, clientId);
+        AVIMClientOpenOption openOption = new AVIMClientOpenOption();
+        openOption.setForceSingleLogin(true);
         avimClient.setMessageQueryCacheEnable(true);
-        avimClient.open(callback);
+        avimClient.open(openOption, callback);
     }
 
     /**
@@ -65,11 +68,11 @@ public class AVIMClientManager {
         }
     }
 
-    public AVIMClient getClient() {
+    private AVIMClient getClient() {
         return avimClient;
     }
 
-    public String getClientId() {
+    String getClientId() {
         if (TextUtils.isEmpty(clientId)) {
             throw new IllegalStateException("Please call AVIMClientManager.open first");
         }

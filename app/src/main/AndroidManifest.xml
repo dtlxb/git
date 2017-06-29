@@ -140,6 +140,9 @@
             android:name=".activity.FunctionActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".activity.CompanyTagActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".activity.SquareChatRoomActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize" />

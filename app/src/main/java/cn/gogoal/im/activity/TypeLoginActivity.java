@@ -214,6 +214,7 @@ public class TypeLoginActivity extends BaseActivity {
 
                                 @Override
                                 public void done(AVIMClient avimClient, AVIMException e) {
+
                                     if (e == null) {
                                         KLog.e("IM登录成功");
 

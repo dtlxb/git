@@ -147,7 +147,7 @@ public class GGOKHTTP {
      * token        身份令牌(必)
      * page rows    分页(可选)
      * group_id     通过上一个接口获取
-     *
+     * <p>
      * source   7(新闻)、3(公告)、9(看点、废弃)
      *
      * @see cn.gogoal.im.bean.StockNewsType
@@ -879,6 +879,85 @@ public class GGOKHTTP {
      */
     public static final String GET_FUAN_INFO = "v1/ggm_fund/get_fuan_info";
 
+    /**
+     * 公司荣誉
+     * stock_code
+     * token
+     */
+    public static final String GET_GOOD_COMPANY_HISTORY = "v1/mystocktags/get_good_company_history";
+    /**
+     * 标签变动
+     * stock_code
+     * token
+     */
+    public static final String GET_TAGS_CHANGE = "v1/mystocktags/get_tags_change";
+    /**
+     * 业绩鉴定-历史
+     * stock_code
+     * token
+     */
+    public static final String GET_HISTORY_ACHIEVEMENT_APPRAISE = "v1/mystocktags/get_history_achievement_appraise";
+    /**
+     * 业绩鉴定-当季
+     * stock_code
+     * token
+     */
+    public static final String GET_IN_SEASON_AUTHENTICATE = "v1/mystocktags/get_in_season_authenticate";
+    /**
+     * 季度胜率-历史
+     * stock_code
+     * token
+     */
+    public static final String GET_MYSTOCK_SUCCESS_RATE = "v1/mystocktags/get_mystock_success_rate";
+    /**
+     * 当季超额收益率
+     * stock_code
+     * token
+     */
+    public static final String GET_MYSTOCK_OVER_RATE = "v1/mystocktags/get_mystock_over_rate";
+    /**
+     * 主流机构持仓
+     * stock_code
+     * token
+     */
+    public static final String GET_TEN_TRADABLE_STOCK_HOLDERS = "v1/mystocktags/get_ten_tradable_stock_holders";
+    /**
+     * 未来事件提示
+     * stock_code
+     * token
+     */
+    public static final String GET_FUTURE_EVENT = "v1/mystocktags/get_future_event";
+    /**
+     * 行业龙头
+     * stock_code
+     * token
+     */
+    public static final String GET_BUSINESS_STATUS = "v1/mystocktags/get_business_status";
+    /**
+     * 业绩季节性
+     * stock_code
+     * token
+     */
+    public static final String GET_REVENUE_RATE = "v1/mystocktags/get_revenue_rate";
+    /**
+     * 分歧度
+     * stock_code
+     * token
+     */
+    public static final String GET_TURNOVER_RATE = "v1/mystocktags/get_turnover_rate";
+    /**
+     * AH股折溢价
+     * stock_code
+     * token
+     */
+    public static final String GET_DISCOUNT_PREMIUM = "v1/mystocktags/get_discount_premium";
+    /**
+     * 事件足迹
+     * stock_code
+     * token
+     */
+    public static final String GET_LARGE_EVENT = "v1/mystocktags/get_large_event";
+
 //--------------------------------------------------------------------------------------------------
 
     /**
@@ -925,7 +1004,6 @@ public class GGOKHTTP {
                                     httpInterface.onFailure(e.getMessage());
                                 }
                             }
-                            ;
                         }
                     });
         } catch (Exception e) {

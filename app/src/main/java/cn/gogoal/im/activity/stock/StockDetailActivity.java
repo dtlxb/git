@@ -568,14 +568,14 @@ public class StockDetailActivity extends BaseActivity {
                         UIHelper.toast(getActivity(), "股票群初始化失败，请稍后重试！");
                         Log.e("TAG", e.getMessage());
                     }
-                } else {//没有获取到ConvsationId
+                } else {//没有获取到ConversationId
                     UIHelper.toast(getActivity(), "股票群初始化失败，请稍后重试！");
                 }
                 waitDialog.dismiss();
             }
 
             @Override
-            public void onFailure(String msg) {//获取ConvsationId出错
+            public void onFailure(String msg) {//获取ConversationId出错
                 waitDialog.dismiss();
                 UIHelper.toast(getActivity(), "请求异常");
             }
