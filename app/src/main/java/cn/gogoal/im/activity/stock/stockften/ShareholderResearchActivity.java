@@ -21,9 +21,9 @@ import cn.gogoal.im.adapter.stockften.FundHolderAdapter;
 import cn.gogoal.im.adapter.stockften.TenHolderAdapter;
 import cn.gogoal.im.adapter.stockften.TenTradableHolderAdapter;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.TenTradableHolderData;
 import cn.gogoal.im.bean.f10.FundHolderData;
 import cn.gogoal.im.bean.f10.TenHolderData;
-import cn.gogoal.im.bean.TenTradableHolderData;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 
@@ -34,11 +34,16 @@ import cn.gogoal.im.common.UIHelper;
  */
 public class ShareholderResearchActivity extends BaseActivity {
 
+    public static final int TEN_HOLDER = 1;
+    public static final int TEN_TRADABLE_HOLDER = 2;
+    public static final int FUND_HOLDER = 3;
+
     @BindView(R.id.rv_research)
     RecyclerView rv_research;
 
     private String stockCode;
     private String stockName;
+    private int genre;
 
     //缓存池
     private RecyclerView.RecycledViewPool viewPool;
@@ -55,6 +60,7 @@ public class ShareholderResearchActivity extends BaseActivity {
 
         stockCode = getIntent().getStringExtra("stockCode");
         stockName = getIntent().getStringExtra("stockName");
+        genre = getIntent().getIntExtra("genre", TEN_HOLDER);
 
         setMyTitle(stockName + "-股东", true);
 
@@ -184,6 +190,12 @@ public class ShareholderResearchActivity extends BaseActivity {
                     adapters.add(new FundHolderAdapter(getActivity(), fundList));
 
                     delegateAdapter.setAdapters(adapters);
+
+                    if (genre == 2) {
+                        rv_research.scrollToPosition(12);
+                    } else if (genre == 3) {
+                        rv_research.scrollToPosition(23);
+                    }
                 }
             }
 

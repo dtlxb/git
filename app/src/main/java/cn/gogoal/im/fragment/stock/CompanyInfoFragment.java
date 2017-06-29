@@ -1,8 +1,11 @@
 package cn.gogoal.im.fragment.stock;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -11,17 +14,24 @@ import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.gogoal.im.R;
+import cn.gogoal.im.activity.stock.stockften.ShareholderResearchActivity;
 import cn.gogoal.im.adapter.stockften.CompanySummaryAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.bean.ChartBean;
 import cn.gogoal.im.bean.f10.CompanyInforData;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.copy.FtenUtils;
+import cn.gogoal.im.ui.view.BarView;
 import cn.gogoal.im.ui.view.FullyLinearLayoutManager;
 
 /**
@@ -35,6 +45,17 @@ public class CompanyInfoFragment extends BaseFragment {
     @BindView(R.id.rv_company_summary)
     RecyclerView rvComSummary;
 
+    @BindView(R.id.chart_tab_one)
+    TextView chart_tab_one;
+    @BindView(R.id.chart_tab_two)
+    TextView chart_tab_two;
+    @BindView(R.id.chart_tab_three)
+    TextView chart_tab_three;
+    @BindView(R.id.barPerforView)
+    BarView barPerforView;
+    @BindView(R.id.textPerfor)
+    TextView textPerfor;
+
     private FullyLinearLayoutManager mLayoutManager;
 
     private String stockCode;
@@ -42,6 +63,11 @@ public class CompanyInfoFragment extends BaseFragment {
 
     private ArrayList<CompanyInforData> infoList = new ArrayList<>();
     private CompanySummaryAdapter adapter;
+
+    private String stype;
+    private JSONObject finacialData;
+    private int chartTab = 0;
+    List<ChartBean> chartBeanList;
 
     public static CompanyInfoFragment newInstance(String stockCode, String stockName) {
         CompanyInfoFragment infoFragment = new CompanyInfoFragment();
@@ -61,6 +87,7 @@ public class CompanyInfoFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         stockCode = getArguments().getString("stockCode");
         stockName = getArguments().getString("stockName");
+        chartBeanList = new ArrayList<>();
 
         BaseActivity.initRecycleView(rvComSummary, null);
 
@@ -72,6 +99,8 @@ public class CompanyInfoFragment extends BaseFragment {
         rvComSummary.setNestedScrollingEnabled(false);
 
         getCompanySummary();
+
+        getParamData();
     }
 
     /**
@@ -184,7 +213,6 @@ public class CompanyInfoFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
@@ -210,5 +238,185 @@ public class CompanyInfoFragment extends BaseFragment {
             }
         };
         new GGOKHTTP(param, GGOKHTTP.GET_STOCK_MAIN_BUSINESS, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 获取股票类型
+     */
+    private void getParamData() {
+        final Map<String, String> param = new HashMap<>();
+        param.put("stock_code", stockCode);
+
+        final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONObject data = object.getJSONObject("data");
+                    stype = data.getString("stype");
+
+                    getFinacialData(stype);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.GET_STOCK_FINANCIAL_TYPE, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 业绩表现
+     */
+    private void getFinacialData(final String stype) {
+
+        final Map<String, String> param = new HashMap<>();
+        param.put("stock_code", stockCode);
+        param.put("stock_finance_type", stype);
+        param.put("season", "4");
+        param.put("type", "0");
+        param.put("page", "1");
+
+        final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    finacialData = object.getJSONObject("data");
+
+                    setBarViewData(finacialData, stype, chartTab);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.FINANCIAL_ANALYSIS, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 设置柱状图数据
+     */
+    private void setBarViewData(JSONObject data, String stype, int chartTab) {
+        String profits = null;
+        if (chartTab == 0) {
+            if (stype.equals("1")) {
+                profits = "business_income04";
+            } else {
+                profits = "ffajr_04";
+            }
+        } else if (chartTab == 1) {
+            if (stype.equals("1")) {
+                profits = "retained_profits10";
+            } else {
+                profits = "ffajr_09";
+            }
+        } else {
+            if (stype.equals("1")) {
+                profits = "perbasic_eps20";
+            } else {
+                profits = "ffajr_19";
+            }
+        }
+
+        JSONArray retained_profits = data.getJSONArray(profits);
+        List<Float> values = new ArrayList<>();
+        if (chartTab == 2) {
+            for (int i = 0; i < retained_profits.size(); i++) {
+                values.add(retained_profits.getFloatValue(i));
+            }
+        } else {
+            for (int i = 0; i < retained_profits.size(); i++) {
+                values.add(Float.valueOf(StringUtils.save2Significand(retained_profits.getDoubleValue(i) / 10000)));
+            }
+        }
+
+        JSONArray title = data.getJSONArray("title");
+        List<String> dates = new ArrayList<>();
+        for (int i = 0; i < title.size(); i++) {
+            dates.add(FtenUtils.getReportType(title.getString(i)));
+        }
+
+        chartBeanList.clear();
+        for (int i = 0; i < title.size(); i++) {
+            chartBeanList.add(new ChartBean(values.get(i), dates.get(i)));
+        }
+        barPerforView.setTextSize(AppDevice.dp2px(getActivity(), 10));
+        barPerforView.setChartData(chartBeanList);
+    }
+
+    @OnClick({R.id.chart_tab_one, R.id.chart_tab_two, R.id.chart_tab_three, R.id.relative_share_holder,
+            R.id.relative_circula_holder, R.id.relative_institu_investor})
+    public void ChartTabClick(View v) {
+        switch (v.getId()) {
+            case R.id.chart_tab_one:
+                chart_tab_one.setEnabled(false);
+                chart_tab_two.setEnabled(true);
+                chart_tab_three.setEnabled(true);
+                chart_tab_one.setTextColor(getResColor(R.color.white));
+                chart_tab_one.setBackgroundResource(R.drawable.chart_tab_shape_select_left);
+                chart_tab_two.setTextColor(getResColor(R.color.colorPrimary));
+                chart_tab_two.setBackgroundResource(R.drawable.chart_tab_center_shape);
+                chart_tab_three.setTextColor(getResColor(R.color.colorPrimary));
+                chart_tab_three.setBackgroundResource(0);
+
+                textPerfor.setText("单位:亿元");
+
+                chartTab = 0;
+                setBarViewData(finacialData, stype, chartTab);
+                break;
+            case R.id.chart_tab_two:
+                chart_tab_one.setEnabled(true);
+                chart_tab_two.setEnabled(false);
+                chart_tab_three.setEnabled(true);
+                chart_tab_one.setTextColor(getResColor(R.color.colorPrimary));
+                chart_tab_one.setBackgroundResource(0);
+                chart_tab_two.setTextColor(getResColor(R.color.white));
+                chart_tab_two.setBackgroundResource(R.drawable.chart_tab_shape_select_center);
+                chart_tab_three.setTextColor(getResColor(R.color.colorPrimary));
+                chart_tab_three.setBackgroundResource(0);
+
+                textPerfor.setText("单位:亿元");
+
+                chartTab = 1;
+                setBarViewData(finacialData, stype, chartTab);
+                break;
+            case R.id.chart_tab_three:
+                chart_tab_one.setEnabled(true);
+                chart_tab_two.setEnabled(true);
+                chart_tab_three.setEnabled(false);
+                chart_tab_one.setTextColor(getResColor(R.color.colorPrimary));
+                chart_tab_one.setBackgroundResource(0);
+                chart_tab_two.setTextColor(getResColor(R.color.colorPrimary));
+                chart_tab_two.setBackgroundResource(R.drawable.chart_tab_center_shape);
+                chart_tab_three.setTextColor(getResColor(R.color.white));
+                chart_tab_three.setBackgroundResource(R.drawable.chart_tab_shape_select_right);
+
+                textPerfor.setText("单位:元");
+
+                chartTab = 2;
+                setBarViewData(finacialData, stype, chartTab);
+                break;
+            case R.id.relative_share_holder:
+                JumpShareholderResearch(ShareholderResearchActivity.TEN_HOLDER);
+                break;
+            case R.id.relative_circula_holder:
+                JumpShareholderResearch(ShareholderResearchActivity.TEN_TRADABLE_HOLDER);
+                break;
+            case R.id.relative_institu_investor:
+                JumpShareholderResearch(ShareholderResearchActivity.FUND_HOLDER);
+                break;
+        }
+    }
+
+    private void JumpShareholderResearch(int genre) {
+        Intent intent = new Intent(getContext(), ShareholderResearchActivity.class);
+        intent.putExtra("stockCode", stockCode);
+        intent.putExtra("stockName", stockName);
+        intent.putExtra("genre", genre);
+        startActivity(intent);
     }
 }

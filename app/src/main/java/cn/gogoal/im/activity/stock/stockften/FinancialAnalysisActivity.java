@@ -21,6 +21,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ChartBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.copy.FtenUtils;
 import cn.gogoal.im.ui.copy.InnerListView;
@@ -195,7 +196,7 @@ public class FinancialAnalysisActivity extends BaseActivity {
 
         List<Float> values = new ArrayList<>();
         for (int i = 0; i < retained_profits.size(); i++) {
-            values.add(retained_profits.getFloatValue(i));
+            values.add(Float.valueOf(StringUtils.save2Significand(retained_profits.getDoubleValue(i) / 10000)));
         }
 
         JSONArray title = data.getJSONArray("title");
