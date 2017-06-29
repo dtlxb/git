@@ -880,6 +880,7 @@ public class GGOKHTTP {
     public static final String GET_FUAN_INFO = "v1/ggm_fund/get_fuan_info";
 
     /**
+     * <<<<<<< HEAD
      * 公司荣誉
      * stock_code
      * token
@@ -957,6 +958,50 @@ public class GGOKHTTP {
      * token
      */
     public static final String GET_LARGE_EVENT = "v1/mystocktags/get_large_event";
+    /**
+     * 大数据选股--主题列表
+     * type 0;
+     * token
+     */
+    public static final String GET_RECOMMEND_LIST = "v1/theme/get_recommend_list";
+
+    /**
+     * 大数据选股--主题追踪
+     * theme_word 0;
+     * stock_codes 代码数组
+     * token
+     */
+    public static final String GET_THEME_WORDS_ATTENTION_YEAR = "v1/theme/get_theme_words_attention_year";
+
+    /**
+     * 大数据选股--相关股票池
+     * rows:19
+     * stock_codes:002643;000050;600160;300097;000725;000823;
+     * keyword:OLED
+     * page:1
+     * token:c3ba1c8c05e64992a66618da569ddbd5
+     */
+    public static final String GET_STOCK_POOL = "v1/theme/get_stock_pool";
+
+    /**
+     * 大数据选股--主题内容
+     * id 21;
+     * token
+     */
+    public static final String GET_RECOMMEND_CONTENT = "v1/theme/get_recommend_content";
+
+    /**
+     * 事件选股列表
+     * get_related_stock
+     */
+    public static final String GET_HOTS_HEADLINES_LIST = "v1/news/get_hots_headlines_list";
+
+    /**
+     * 事件详情
+     * id:5436
+     * token:c3ba1c8c05e64992a66618da569ddbd5
+     */
+    public static final String GET_CONTENT = "v1/hot/get_content";
 
 //--------------------------------------------------------------------------------------------------
 

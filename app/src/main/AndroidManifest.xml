@@ -238,12 +238,14 @@
         <activity android:name=".activity.SettingStockActivity" />
         <activity android:name=".activity.ScanQRCodeActivity" />
         <activity android:name=".activity.Face2FaceActivity" />
-        <activity android:name=".activity.Face2FaceHolderActivity" />
         <activity android:name=".activity.QrcodeProcessActivity" />
         <activity android:name=".activity.stock.stockften.FinancialAnalysisActivity" />
         <activity android:name=".activity.QrCodeActivity" />
         <activity android:name=".activity.Test2Activity" />
         <activity android:name=".activity.stock.stockften.FinancialStatementsActivity" />
+        <activity android:name=".activity.stock.BigDataAcyivity"/>
+        <activity android:name=".activity.stock.SubjectDetailActivity"/>
+        <activity android:name=".activity.stock.stockften.EventDetailActivity"/>
     </application>
 
 </manifest>

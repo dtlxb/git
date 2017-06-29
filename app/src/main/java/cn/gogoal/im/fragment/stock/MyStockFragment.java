@@ -46,6 +46,7 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.MyStockSortInteface;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
@@ -326,7 +327,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, final MyStockData data, int position) {
+        protected void convert(BaseViewHolder holder, final MyStockData data, final int position) {
             holder.setText(R.id.tv_mystock_stockname, data.getStock_name());
             holder.setText(R.id.tv_mystock_stockcode, data.getStock_code());
 
@@ -417,30 +418,43 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                             .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    StockUtils.deleteMyStock(
-                                            getContext(),
+                                    StockUtils.deleteMyStock(getContext(),
                                             data.getSource() + data.getStock_code(),//使用股票代码+股票source
-                                            new StockUtils.ToggleMyStockCallBack() {
+                                            new Impl<String>() {
                                                 @Override
-                                                public void success() {
-                                                    MyStockAdapter.this.removeItem(data);
-                                                    try {
-                                                        new android.os.Handler().postDelayed(new Runnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                myStockAdapter.notifyDataSetChanged();
-                                                            }
-                                                        }, 1000);
-                                                    } catch (Exception e) {
-                                                        e.getMessage();
+                                                public void response(int code, String resData) {
+                                                    if (code == Impl.RESPON_DATA_SUCCESS) {
+                                                        MyStockAdapter.this.removeItem(data);
+                                                        MyStockAdapter.this.notifyItemRangeChanged(
+                                                                position, getData().size() - position - 1
+                                                        );
                                                     }
                                                 }
-
-                                                @Override
-                                                public void failed(String msg) {
-                                                    UIHelper.toast(getActivity(), msg);
-                                                }
                                             });
+//                                    StockUtils.deleteMyStock(
+//                                            getContext(),
+//                                            data.getSource() + data.getStock_code(),//使用股票代码+股票source
+//                                            new Impl<String>() {
+//                                                @Override
+//                                                public void success() {
+//                                                    MyStockAdapter.this.removeItem(data);
+//                                                    try {
+//                                                        new android.os.Handler().postDelayed(new Runnable() {
+//                                                            @Override
+//                                                            public void run() {
+//                                                                myStockAdapter.notifyDataSetChanged();
+//                                                            }
+//                                                        }, 1000);
+//                                                    } catch (Exception e) {
+//                                                        e.getMessage();
+//                                                    }
+//                                                }
+//
+//                                                @Override
+//                                                public void failed(String msg) {
+//                                                    UIHelper.toast(getActivity(), msg);
+//                                                }
+//                                            });
                                 }
                             }).show();
                     return true;

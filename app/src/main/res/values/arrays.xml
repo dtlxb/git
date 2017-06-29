@@ -170,4 +170,14 @@
         <item>天高视点</item>
         <item>政策动态</item>
     </string-array>
+
+    <string-array name="market_arr_title">
+        <item>热门行业</item>
+        <item>大数据选股</item>
+        <item>涨幅榜</item>
+        <item>跌幅榜</item>
+        <item>换手率</item>
+        <item>振幅榜</item>
+    </string-array>
+
 </resources>

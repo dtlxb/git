@@ -22,7 +22,7 @@ public class SettingStockActivity extends BaseActivity {
     }
     @Override
     public void doBusiness(Context mContext) {
-        setMyTitle("自选股设置",true);
+        setMyTitle("行情设置",true);
     }
 
     @OnClick({R.id.tv_set_stock_refresh_time, R.id.tv_set_stock_k_line,

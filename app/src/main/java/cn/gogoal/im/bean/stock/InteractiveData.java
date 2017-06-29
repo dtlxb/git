@@ -35,7 +35,7 @@ public class InteractiveData {
     private String origin;
     private String answer;
     private String date;
-    private List<StockEle> stock;
+    private List<Stock> stock;
 
     public String getId() {
         return id;
@@ -117,11 +117,11 @@ public class InteractiveData {
         this.date = date;
     }
 
-    public List<StockEle> getStock() {
+    public List<Stock> getStock() {
         return stock;
     }
 
-    public void setStock(List<StockEle> stock) {
+    public void setStock(List<Stock> stock) {
         this.stock = stock;
     }
 }
