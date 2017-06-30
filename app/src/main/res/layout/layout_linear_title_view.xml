@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
@@ -23,9 +22,9 @@
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="8dp"
         android:layout_toRightOf="@+id/textline"
+        android:text="@string/text_empty"
         android:textColor="@android:color/black"
-        android:textSize="14sp"
-        tools:text="@string/text_empty" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/textCont"
@@ -33,9 +32,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_gravity="right"
-        android:textColor="@android:color/black"
-        android:textSize="14sp"
-        tools:text="@string/text_empty" />
+        android:text="查看更多"
+        android:textColor="@color/hotsearch_list_number3"
+        android:textSize="14sp" />
 
 </RelativeLayout>

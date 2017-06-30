@@ -237,4 +237,11 @@
     <string name="thousand_million_cell">%s亿手</string>
     <string name="infomation_bottom">%1$s | %2$s</string>
 
+    <string name="company_info_performance">业绩表现</string>
+    <string name="company_info_holder">股东</string>
+    <string name="info_dividend_transfer">分红转送</string>
+    <string name="info_peer_comparison">同业比较</string>
+    <string name="share_holder">十大股东</string>
+    <string name="circula_holder">十大流通股东</string>
+    <string name="institu_investor">机构投资者</string>
 </resources>

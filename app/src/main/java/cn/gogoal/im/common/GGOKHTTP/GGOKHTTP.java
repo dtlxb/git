@@ -1004,6 +1004,25 @@ public class GGOKHTTP {
      */
     public static final String GET_CONTENT = "v1/hot/get_content";
 
+    /**
+     * F10-股本结构
+     * stock_code
+     */
+    public static final String STOCK_STRUCTURE = "v1/f10/stock_structure";
+
+    /**
+     * F10-主营收入
+     * stock_code
+     * token(选填)
+     */
+    public static final String GET_STOCK_MAIN_BUSINESS = "v1/graph_industry/get_stock_main_business";
+
+    /**
+     * F10-分红转送
+     * stock_code
+     */
+    public static final String DIVIDEND_FINANCING = "v1/f10/dividend_financing";
+
 //--------------------------------------------------------------------------------------------------
 
     /**

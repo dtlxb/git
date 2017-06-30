@@ -10,43 +10,57 @@
     android:paddingRight="15dp"
     android:paddingTop="7.5dp">
 
-    <RelativeLayout
-        android:id="@+id/relativeFinance"
+    <LinearLayout
+        android:id="@+id/layoutFinance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="7.5dp"
+        android:orientation="vertical"
         android:visibility="gone">
 
-        <TextView
-            android:id="@+id/textline"
-            android:layout_width="3dp"
-            android:layout_height="20dp"
-            android:layout_centerVertical="true"
-            android:background="@color/hotsearch_list_number1" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textline"
+                android:layout_width="3dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:background="@color/hotsearch_list_number1" />
+
+            <TextView
+                android:id="@+id/textTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/textline"
+                android:text="@string/text_empty"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textHead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right"
+                android:text="@string/text_empty"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
 
         <TextView
-            android:id="@+id/textTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="8dp"
-            android:layout_toRightOf="@+id/textline"
-            android:text="@string/text_empty"
-            android:textColor="@android:color/black"
-            android:textSize="14sp" />
+            android:id="@+id/viewLine"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="7.5dp"
+            android:background="@color/player_line" />
 
-        <TextView
-            android:id="@+id/textHead"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="right"
-            android:text="@string/text_empty"
-            android:textColor="@android:color/black"
-            android:textSize="14sp" />
-
-    </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -15,7 +15,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.AnalysisLeftAdapter;
+import cn.gogoal.im.adapter.stockften.AnalysisLeftAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
