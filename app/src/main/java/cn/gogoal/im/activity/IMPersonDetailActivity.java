@@ -66,8 +66,6 @@ public class IMPersonDetailActivity extends BaseActivity {
 
         accountId = getIntent().getIntExtra("account_id", -1);
 
-        KLog.e(accountId);
-
         if (String.valueOf(accountId).equals(UserUtils.getMyAccountId())) {
             addFriendBtn.setVisibility(View.GONE);
         }
@@ -85,7 +83,6 @@ public class IMPersonDetailActivity extends BaseActivity {
         UserUtils.getUserInfo(String.valueOf(accountId), new Impl<String>() {
             @Override
             public void response(int code, String data) {
-                KLog.e(data);
                 switch (code) {
                     case Impl.RESPON_DATA_SUCCESS:
                         final ContactBean contactBean = JSONObject.parseObject(data, ContactBean.class);

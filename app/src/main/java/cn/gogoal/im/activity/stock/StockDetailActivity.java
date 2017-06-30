@@ -13,10 +13,8 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -79,7 +77,6 @@ import cn.gogoal.im.ui.dialog.NormalAlertDialog;
 import cn.gogoal.im.ui.dialog.StockDetailPopuDialog;
 import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.stock.DialogRecyclerView;
-import cn.gogoal.im.ui.view.XTitle;
 
 
 /**
@@ -91,6 +88,15 @@ import cn.gogoal.im.ui.view.XTitle;
 public class StockDetailActivity extends BaseActivity {
 
     protected static RotateAnimation rotateAnimation;//旋转动画
+
+    @BindView(R.id.layout_title)
+    View layoutTitle;
+
+    @BindView(R.id.tv_stockdetail_info)
+    TextView tvStockdetailInfo;
+
+    @BindView(R.id.tv_stockdetail_state)
+    TextView tvStockdetailState;
 
     //下拉刷新
     @BindView(R.id.swiperefreshlayout)
@@ -115,11 +121,17 @@ public class StockDetailActivity extends BaseActivity {
     @BindView(R.id.tv_stock_detail_change_rate)
     TextView tvStockDetailChangeRate;
 
-    //交易头部右侧列表
-    @BindView(R.id.rv_stock_detail_head)
-    RecyclerView rvStockDetailHead;
-    private List<StockDetail2Text> listHead = new ArrayList<>();
-    private HeadInfoAdapter headInfoAdapter;
+    //今开
+    private TextView tvTodayOpenprice;
+
+    //昨收
+    private TextView tvYesCloseprice;
+
+    //成交量
+    private TextView tvTreatVol;
+
+    //换手率
+    private TextView tvChangeRata;
 
     @BindView(R.id.iv_show_info_dialog)
     ImageView imageViewShoeDialog;
@@ -152,17 +164,14 @@ public class StockDetailActivity extends BaseActivity {
     @BindView(R.id.view_dialog_mask_bottom)
     View viewMaskBottom;//蒙版2
 
-    private ImageView ivMessageTag;//消息
-
     String subTitleText = "%s\u3000%s";
 
     private String stockCode;
     private String stockName;
     private String change_value;
     private int stock_status_type = 1;
-    private double closePrice;
 
-    private XTitle xTitle;
+    private double closePrice;
 
     //加自选
     @BindView(R.id.tv_stockDetail_toggle_mystock)
@@ -176,7 +185,13 @@ public class StockDetailActivity extends BaseActivity {
     private ArrayList<ToolData.Tool> diagnoseStockTools
             = new ArrayList<>();
 
-    //是否分享消息
+    @BindView(R.id.btn_refresh)
+    ImageView btnRefresh;
+
+    @BindView(R.id.iv_message)
+    ImageView btn2IMActivity;//消息
+
+    //==================================是否分享消息
     private int num;
     private WaitDialog waitDialog;
 
@@ -197,11 +212,11 @@ public class StockDetailActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         stockCode = getIntent().getStringExtra("stock_code");
-        stockName = getIntent().getStringExtra("stock_name").replace(" ","");
+        stockName = getIntent().getStringExtra("stock_name").replace(" ", "");
 
         initDialog();//初始化截图
 
-        initTitle();//初始化标题
+        setStockState();//初始化标题
 
         initHead();//初始化头部控件
 
@@ -231,13 +246,18 @@ public class StockDetailActivity extends BaseActivity {
         });
     }
 
+    private void refreshDatas() {
+        getStockHeadInfo(AppConst.REFRESH_TYPE_SWIPEREFRESH);
+        AppManager.getInstance().sendMessage("updata_news_data");
+    }
+
     private void initChatMessage() {
         badge = new BadgeView(getActivity());
         badge.setGravityOffset(10, 7, true);
         badge.setShowShadow(false);
         badge.setBadgeGravity(Gravity.TOP | Gravity.END);
         badge.setBadgeTextSize(8, true);
-        badge.bindTarget(ivMessageTag);
+        badge.bindTarget(btn2IMActivity);
         badge.setBadgeNumber(unReadCount);
     }
 
@@ -354,11 +374,14 @@ public class StockDetailActivity extends BaseActivity {
      * 初始化头部控件
      */
     private void initHead() {
-        //grid treat
-        rvStockDetailHead.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        headInfoAdapter = new HeadInfoAdapter(listHead);
-        rvStockDetailHead.setAdapter(headInfoAdapter);
-
+        tvTodayOpenprice = (TextView) findViewById(R.id.include_detail_0).
+                findViewById(R.id.tv_stock_detail_head_value);
+        tvYesCloseprice = (TextView) findViewById(R.id.include_detail_1).
+                findViewById(R.id.tv_stock_detail_head_value);
+        tvTreatVol = (TextView) findViewById(R.id.include_detail_2).
+                findViewById(R.id.tv_stock_detail_head_value);
+        tvChangeRata = (TextView) findViewById(R.id.include_detail_3).
+                findViewById(R.id.tv_stock_detail_head_value);
         //popu
         rvStockTreatPopu.setLayoutManager(new
                 GridLayoutManager(getActivity(), 4, GridLayoutManager.VERTICAL, false));
@@ -373,39 +396,16 @@ public class StockDetailActivity extends BaseActivity {
         });
     }
 
-    /**
-     * 初始化标题
-     */
-    private void initTitle() {
-        setStockState();
-
-        XTitle.ImageAction refreshAction = new XTitle.ImageAction(getResDrawable(R.mipmap.refresh_white)) {
-            @Override
-            public void actionClick(View view) {
-                //TODO 刷新
-            }
-        };
-
-        XTitle.ImageAction messageAction = new XTitle.ImageAction(getResDrawable(R.mipmap.message_white)) {
-            @Override
-            public void actionClick(View view) {
-                startActivity(new Intent(StockDetailActivity.this, MessageHolderActivity.class));
-            }
-        };
-
-        xTitle.addAction(refreshAction, 0);
-        xTitle.addAction(messageAction, 1);
-
-        ivMessageTag = (ImageView) xTitle.getViewByAction(messageAction);
-
-    }
-
-    @OnClick({R.id.iv_show_info_dialog,
-            R.id.tv_stockDetail_tools, R.id.tv_stockDetail_stockCircle,
-            R.id.tv_stockDetail_interactiveinvestor, R.id.layout_stockDetail_toggle_mystock})
+    @OnClick({R.id.iv_show_info_dialog, R.id.tv_stockDetail_tools,
+            R.id.tv_stockDetail_stockCircle, R.id.tv_stockDetail_interactiveinvestor,
+            R.id.layout_stockDetail_toggle_mystock, R.id.iv_message, R.id.btn_refresh})
     public void allBtnClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
+            case R.id.btn_refresh:
+                startRefreshAnimation(btnRefresh);
+                refreshDatas();
+                break;
             //交易popu
             case R.id.iv_show_info_dialog:
                 if (isMaskViewVisiable()) {
@@ -450,6 +450,10 @@ public class StockDetailActivity extends BaseActivity {
                 intent.putExtra("stock_info", getStockBean());
                 startActivity(intent);
                 break;
+            //去IM
+            case R.id.iv_message:
+                startActivity(new Intent(StockDetailActivity.this, MessageHolderActivity.class));
+                break;
         }
     }
 
@@ -457,7 +461,7 @@ public class StockDetailActivity extends BaseActivity {
         Stock stock = new Stock(stockCode, stockName);
         stock.setChangeValue(StringUtils.save2Significand(change_value));
         stock.setStock_type(stock_status_type);
-        stock.setClosePrice(""+closePrice);
+        stock.setClosePrice("" + closePrice);
         return stock;
     }
 
@@ -586,7 +590,6 @@ public class StockDetailActivity extends BaseActivity {
             public void onSuccess(String responseInfo) {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
-                    listHead.clear();
                     listTreatPopu.clear();
 
                     TreatData treatData = JSONObject.parseObject(responseInfo, StockDetail.class).getData();
@@ -600,12 +603,7 @@ public class StockDetailActivity extends BaseActivity {
 
                     setStockHeadColor(treatData.getChange_rate());//设置颜色
                     //设置标题、副标题
-                    xTitle.setTitle(stockName + "(" + stockCode + ")\n" + (
-                            treatData.getStock_type() == 1 ?
-                                    String.format(subTitleText, StockUtils.getTreatState(), CalendarUtils.getCurrentTime("MM-dd HH:mm")) :
-                                    String.format(subTitleText, StringUtils.saveSignificand(StringUtils.parseStringDouble(treatData.getOpen_price()), 2),
-                                            StockUtils.getStockStatus(treatData.getStock_type()))
-                    ));
+                    setStockState();
 
                     tvStockDetailPrice.setText(StringUtils.saveSignificand(treatData.getPrice(), 2));
                     tvStockDetailChangeValue.setText(
@@ -615,16 +613,13 @@ public class StockDetailActivity extends BaseActivity {
                     tvStockDetailChangeRate.setText(
                             StockUtils.plusMinus(treatData.getChange_rate(), true));
 
-                    /*=================数据重构======================================*/
                     //================ head ======================
-                    listHead.add(new StockDetail2Text("今开", StringUtils.saveSignificand(treatData.getOpen_price(), 2)));
-                    listHead.add(new StockDetail2Text("昨收", StringUtils.saveSignificand(treatData.getClose_price(), 2)));
-                    listHead.add(new StockDetail2Text("成交量",
-                            formatVolume(treatData.getVolume(), true)));//TODO "volume": 14793700,14.79万手
-                    listHead.add(new StockDetail2Text("换手率",
-                            StringUtils.saveSignificand(
-                                    StringUtils.parseStringDouble(treatData.getTurnover_rate()) * 100, 2) + "%"));
-                    headInfoAdapter.notifyDataSetChanged();
+                    tvTodayOpenprice.setText(StringUtils.saveSignificand(treatData.getOpen_price(), 2));
+                    tvYesCloseprice.setText(StringUtils.saveSignificand(treatData.getClose_price(), 2));
+                    tvTreatVol.setText(formatVolume(treatData.getVolume(), true));
+                    //"volume": 14793700,14.79万手
+                    tvChangeRata.setText(StockUtils.plusMinus(
+                            StringUtils.parseStringDouble(treatData.getTurnover_rate()) * 100, true));
 
                     //=============== treat info popu===================\
                     setDialogInfoData(treatData);
@@ -664,15 +659,9 @@ public class StockDetailActivity extends BaseActivity {
 
     //股票状态
     private void setStockState() {
-        xTitle = setMyTitle(stockName + "(" + stockCode + ")" + "\n" + String.format(subTitleText,
-                StockUtils.getTreatState(), CalendarUtils.getCurrentTime("MM-dd HH:mm")), true)
-                .setSubTitleSize(TypedValue.COMPLEX_UNIT_SP, 10)
-                .setSubTitleColor(Color.argb(204, 255, 255, 255))
-                .setTitleSize(TypedValue.COMPLEX_UNIT_SP,15)
-                .setLeftImageResource(R.mipmap.image_title_back_255)
-                .setLeftText(getString(R.string.str_title_back))
-                .setTitleColor(Color.WHITE)
-                .setLeftTextColor(Color.WHITE);
+        tvStockdetailInfo.setText(stockName + "(" + stockCode + ")");
+        tvStockdetailState.setText(String.format(subTitleText,
+                StockUtils.getTreatState(), CalendarUtils.getCurrentTime("MM-dd HH:mm")));
     }
 
     /**
@@ -737,11 +726,11 @@ public class StockDetailActivity extends BaseActivity {
     private void setStockHeadColor(String change_rate) {
         if (TextUtils.isEmpty(change_rate)) {
             setStatusColor(getResColor(R.color.stock_gray));
-            xTitle.setBackgroundColor(getResColor(R.color.stock_gray));
+            layoutTitle.setBackgroundColor(getResColor(R.color.stock_gray));
             layoutHead.setBackgroundColor(getResColor(R.color.stock_gray));
         } else {
             setStatusColorId(StockUtils.getStockRateColor(change_rate));
-            xTitle.setBackgroundResource(StockUtils.getStockRateColor(change_rate));
+            layoutTitle.setBackgroundColor(getResColor(StockUtils.getStockRateColor(change_rate)));
             layoutHead.setBackgroundResource(StockUtils.getStockRateColor(change_rate));
         }
     }
@@ -1000,28 +989,6 @@ public class StockDetailActivity extends BaseActivity {
         return rvStockTreatPopu.getVisibility() == View.VISIBLE;
     }
 
-    /**
-     * 头部适配器
-     */
-    private class HeadInfoAdapter extends CommonAdapter<StockDetail2Text, BaseViewHolder> {
-
-        private HeadInfoAdapter(List<StockDetail2Text> data) {
-            super(R.layout.item_rv_stock_detail_head, data);
-        }
-
-        @Override
-        protected void convert(BaseViewHolder holder, final StockDetail2Text item, int position) {
-            holder.setText(R.id.tv_stock_detail_head_desc, item.getKey());
-            holder.setText(R.id.tv_stock_detail_head_value, item.getValue());
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    imageViewShoeDialog.performClick();
-                }
-            });
-        }
-    }
 
     /**
      * 交易适配器
