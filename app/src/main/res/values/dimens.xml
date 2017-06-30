@@ -30,4 +30,7 @@
     <dimen name="tabtop_radius">4dp</dimen>
 
     <dimen name="icon_radius">4dp</dimen>
+
+
+    <dimen name="bigDataTabRadius">2dp</dimen>
 </resources>

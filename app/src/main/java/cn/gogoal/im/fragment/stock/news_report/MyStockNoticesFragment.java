@@ -24,6 +24,8 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.NormalIntentUtils;
+import cn.gogoal.im.common.StockUtils;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.stock.news_report.bean.MyStockNoticeBean;
@@ -77,6 +79,7 @@ public class MyStockNoticesFragment extends BaseFragment {
         rvNotices.setLayoutManager(new LinearLayoutManager(mContext));
         BaseActivity.iniRefresh(swiperefreshlayout);
         rvNotices.setAdapter(noticeAdapter);
+        xLayout.setEmptyText("暂无公告数据\n请添加自选股后重试!");
 
         getStockNews(AppConst.REFRESH_TYPE_FIRST);
 
@@ -125,6 +128,7 @@ public class MyStockNoticesFragment extends BaseFragment {
         params.put("group_id", String.valueOf(groupId));
         params.put("page", String.valueOf(defaultPage));
         params.put("rows", "15");
+        params.put("get_hq", "true");
         params.put("source", String.valueOf(StockNewsType.STOCK_INFOMATION_SOURCE_NOTICES));
 
         new GGOKHTTP(params, GGOKHTTP.MY_STOCK_NEWS, new GGOKHTTP.GGHttpInterface() {
@@ -173,12 +177,21 @@ public class MyStockNoticesFragment extends BaseFragment {
 
         @Override
         protected void convert(BaseViewHolder holder, final MyStockNoticeBean.MyStockNotice data, int position) {
-            holder.setVisible(R.id.tv_mystock_news_stockRate,false);
-            holder.setText(R.id.tv_mystock_news_title, data.getTitle());
+            holder.setText(R.id.tv_mystock_news_title,data.getTitle());
             holder.setText(R.id.tv_mystock_news_stockInfo,
                     data.getStock_name() + " (" + data.getStock_code() + ")");
-            holder.setText(R.id.tv_mystock_news_date, CalendarUtils.getStringDate("yyyy-MM-dd HH:mm", data.getDate()));
+            holder.setText(R.id.tv_mystock_news_date,
+                    CalendarUtils.getStringDate("yyyy-MM-dd", data.getDate()));
             UIHelper.setRippBg(holder.itemView);
+
+            holder.setText(R.id.tv_mystock_news_stockRate,
+                    StringUtils.save2Significand(data.getPrice()) + "\u3000\u3000" +
+                            StockUtils.plusMinus(data.getChange_rate(), true));
+
+            holder.setTextColor(R.id.tv_mystock_news_stockRate,
+                    getResColor(StockUtils.getStockRateColor(
+                            data.getChange_rate())));
+
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

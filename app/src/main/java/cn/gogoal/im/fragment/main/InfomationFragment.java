@@ -107,9 +107,8 @@ public class InfomationFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 AppManager.getInstance().sendMessage("double_click_2_top",
-                        tabInfomation.getSelectedTabPosition()==0?"0":
-                                (tabInfomation.getSelectedTabPosition()==1?"1":
-                                        ""+tabTypes[tabInfomation.getSelectedTabPosition()-2]));
+                                (tabInfomation.getSelectedTabPosition()==0?"0":
+                                        ""+tabTypes[tabInfomation.getSelectedTabPosition()-1]));
             }
         });
         badge = new BadgeView(getActivity());

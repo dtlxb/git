@@ -78,6 +78,8 @@ public class MyStockNewsFragment extends BaseFragment {
         BaseActivity.iniRefresh(swiperefreshlayout);
         rvNews.setAdapter(newsAdapter);
 
+        xLayout.setEmptyText("暂无新闻数据\n请添加自选股后重试!");
+
         getStockNews(AppConst.REFRESH_TYPE_FIRST);
 
         swiperefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -143,7 +145,11 @@ public class MyStockNewsFragment extends BaseFragment {
                     xLayout.setStatus(XLayout.Success);
 
                 } else if (code == 1001) {
-                    xLayout.setStatus(XLayout.Empty);
+                    if (refreshType!=AppConst.REFRESH_TYPE_LOAD_MORE) {
+                        xLayout.setStatus(XLayout.Empty);
+                    }else {
+                        UIHelper.toast(getActivity(),"没有更多");
+                    }
                 } else {
                     xLayout.setStatus(XLayout.Error);
                 }

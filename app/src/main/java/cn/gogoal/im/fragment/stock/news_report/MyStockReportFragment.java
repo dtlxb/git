@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -16,9 +17,13 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
+import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.NormalIntentUtils;
+import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -66,6 +71,8 @@ public class MyStockReportFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         groupId = getArguments().getInt("group_id");
 
+        BaseActivity.iniRefresh(swiperefreshlayout);
+
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(
                         mContext,
@@ -82,6 +89,7 @@ public class MyStockReportFragment extends BaseFragment {
         reportList = new ArrayList<>();
         reportAdapter = new MyStockReportAdapter(reportList);
         recyclerView.setAdapter(reportAdapter);
+        xLayout.setEmptyText("暂无研报数据\n请添加自选股后重试!");
 
         getReportDatas(AppConst.REFRESH_TYPE_FIRST);
 
@@ -122,6 +130,7 @@ public class MyStockReportFragment extends BaseFragment {
 
         params.put("group_id", String.valueOf(groupId));
         params.put("page", String.valueOf(defaultPage));
+        params.put("get_hq", "true");
         params.put("rows", "15");
 
         new GGOKHTTP(params, GGOKHTTP.MY_STOCK_GET_REPORT, new GGOKHTTP.GGHttpInterface() {
@@ -161,31 +170,61 @@ public class MyStockReportFragment extends BaseFragment {
     private class MyStockReportAdapter extends CommonAdapter<
             MyStockReportBean.MyStockReport, BaseViewHolder> {
 
+//        private MyStockReportAdapter(List<MyStockReportBean.MyStockReport> data) {
+//            super(R.layout.item_mystock_report, data);
+//        }
         private MyStockReportAdapter(List<MyStockReportBean.MyStockReport> data) {
-            super(R.layout.item_mystock_report, data);
+            super(R.layout.item_mystock_news, data);
         }
 
         @Override
-        protected void convert(BaseViewHolder holder, MyStockReportBean.MyStockReport data, int position) {
-            holder.setText(R.id.tv_mystock_report_stockInfo,
-                    data.getCode_name() + "(" + data.getCode() + ")\u3000\u3000" +
-                            data.getFirst_class() + "\u3000" + data.getSecond_class());
+        protected void convert(BaseViewHolder holder, final MyStockReportBean.MyStockReport data, int position) {
+//            holder.setText(R.id.tv_mystock_report_stockInfo,
+//                    data.getCode_name() + "(" + data.getCode() + ")\u3000\u3000" +
+//                            data.getFirst_class() + "\u3000" + data.getSecond_class());
+//
+//            holder.setText(R.id.tv_mystock_report_title,
+//                    data.getReport_title());
+//
+//            if (StringUtils.isActuallyEmpty(data.getRadar())) {
+//                holder.setVisible(R.id.tv_mystock_report_subtitle, false);
+//            } else {
+//                holder.setVisible(R.id.tv_mystock_report_subtitle, true);
+//                holder.setText(R.id.tv_mystock_report_subtitle, data.getRadar());
+//            }
+//
+//            holder.setText(R.id.tv_mystock_report_source_and_author,
+//                    data.getOrgan_name() + "\u3000" + data.getAuthor());
+//
+//            holder.setText(R.id.tv_mystock_report_date,
+//                    data.getCreate_date());
 
-            holder.setText(R.id.tv_mystock_report_title,
-                    data.getReport_title());
+            holder.setText(R.id.tv_mystock_news_title,data.getReport_title());
 
-            if (StringUtils.isActuallyEmpty(data.getRadar())) {
-                holder.setVisible(R.id.tv_mystock_report_subtitle, false);
-            } else {
-                holder.setVisible(R.id.tv_mystock_report_subtitle, true);
-                holder.setText(R.id.tv_mystock_report_subtitle, data.getRadar());
-            }
+            holder.setText(R.id.tv_mystock_news_stockInfo,
+                    data.getCode_name() + " (" + data.getCode() + ")");
 
-            holder.setText(R.id.tv_mystock_report_source_and_author,
-                    data.getOrgan_name() + "\u3000" + data.getAuthor());
+            holder.setText(R.id.tv_mystock_news_date, CalendarUtils.getStringDate("yyyy-MM-dd HH:mm",
+                    data.getCreate_date()));
 
-            holder.setText(R.id.tv_mystock_report_date,
-                    data.getCreate_date());
+            UIHelper.setRippBg(holder.itemView);
+
+            holder.setText(R.id.tv_mystock_news_stockRate,
+                    StringUtils.save2Significand(data.getPrice()) + "\u3000\u3000" +
+                            StockUtils.plusMinus(data.getChange_rate(), true));
+
+            holder.setTextColor(R.id.tv_mystock_news_stockRate,
+                    getResColor(StockUtils.getStockRateColor(
+                            data.getChange_rate())));
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NormalIntentUtils.go2WebActivity(v.getContext(),
+                            AppConst.WEB_NEWS + data.getGuid() + "?source=" + AppConst.SOURCE_TYPE_YANBAO,
+                            null, true);
+                }
+            });
         }
     }
 }

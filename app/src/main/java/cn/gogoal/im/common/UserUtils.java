@@ -168,7 +168,7 @@ public class UserUtils {
                     ImageUtils.saveBitmapToSD(MyApp.getAppContext(), MyApp.getAppContext().getExternalFilesDir("avatar") +
                                     File.separator + "avatar_" + MD5Utils.getMD5EncryptyString16(UserUtils.getUserAvatar()) +
                                     ImageUtils.getImageSuffix(UserUtils.getUserAvatar()),
-                            resource,null);
+                            resource, null);
                 }
             });
         } else {
@@ -194,24 +194,22 @@ public class UserUtils {
     /**
      * 通过用户account_id直接获取用户信息
      */
-    public static void getUserInfo(String accountId, final Impl<String> listener) {
+    public static void getUserInfo(String accountId, @NonNull final Impl<String> listener) {
         HashMap<String, String> params = getTokenParams();
         params.put("account_id", accountId);
         new GGOKHTTP(params, GGOKHTTP.GET_ACCOUNT_DETAIL, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                if (listener != null) {
-                    if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
-                        listener.response(Impl.RESPON_DATA_SUCCESS, JSONObject.parseObject(responseInfo).getString("data"));
-                    } else {
-                        listener.response(Impl.RESPON_DATA_EMPTY, "没有查询到相关信息");
-                    }
+                if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
+                    listener.response(Impl.RESPON_DATA_SUCCESS, JSONObject.parseObject(responseInfo).getString("data"));
+                } else {
+                    listener.response(Impl.RESPON_DATA_EMPTY, "没有查询到相关信息");
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                if (listener != null) listener.response(Impl.RESPON_DATA_ERROR, "请求出错");
+                listener.response(Impl.RESPON_DATA_ERROR, "请求出错");
             }
         }).startGet();
     }

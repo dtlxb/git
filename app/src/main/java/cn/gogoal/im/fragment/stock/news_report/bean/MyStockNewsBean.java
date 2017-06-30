@@ -60,13 +60,13 @@ public class MyStockNewsBean {
          */
 
         private String change_rate;
+        private String price;
         private String origin;
         private String stock_code;
         private String date;
         private String author;
         private String origin_link;
         private String title;
-        private double price;
         private int source;
         private int origin_id;
         private String stock_name;
@@ -127,11 +127,11 @@ public class MyStockNewsBean {
             this.title = title;
         }
 
-        public double getPrice() {
+        public String getPrice() {
             return price;
         }
 
-        public void setPrice(double price) {
+        public void setPrice(String price) {
             this.price = price;
         }
 

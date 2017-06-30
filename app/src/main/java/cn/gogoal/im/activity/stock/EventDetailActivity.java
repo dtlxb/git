@@ -10,19 +10,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
@@ -52,8 +49,7 @@ import cn.gogoal.im.bean.stock.bigdata.BigDataDetailList;
 import cn.gogoal.im.bean.stock.bigdata.BigDataDetailListBean;
 import cn.gogoal.im.bean.stock.bigdata.ChartBean;
 import cn.gogoal.im.bean.stock.bigdata.ChartData;
-import cn.gogoal.im.bean.stock.bigdata.subject.SubjectDetailBean;
-import cn.gogoal.im.bean.stock.bigdata.subject.SubjectDetailData;
+import cn.gogoal.im.bean.stock.bigdata.event.EventDetailBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
@@ -64,31 +60,33 @@ import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.XLayout;
 
-import static android.text.Html.fromHtml;
-
 /**
- * author wangjd on 2017/6/27 0027.
+ * author wangjd on 2017/6/28 0028.
  * Staff_id 1375
  * phone 18930640263
- * description :主题内容
+ * description :事件选股详情
  */
-public class SubjectDetailActivity extends BaseActivity {
+public class EventDetailActivity extends BaseActivity {
 
     @BindView(R.id.tv_opportunity)
     TextView tvOpportunity;
 
     @BindView(R.id.rv_subject_about_stocks)
-    RecyclerView rvSubjectAboutStocks;
+    RecyclerView rvAboutStocks;
 
-    @BindView(R.id.iv_describe)
-    ImageView imgDescibe;
-
-    @BindView(R.id.swiperefreshlayout)
-    SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.refreshlayout)
+    SwipeRefreshLayout refreshlayout;
 
     @BindView(R.id.xLayout)
     XLayout xLayout;
 
+    private int typeId;
+
+    private BigDataDetailAdapter dataDetailAdapter;
+
+    private List<BigDataDetailList> dataDetailLists;
+
+    //
     @BindView(R.id.line_chart_price)
     LineChart mChartPrice;
 
@@ -101,49 +99,46 @@ public class SubjectDetailActivity extends BaseActivity {
     @BindView(R.id.rdg_change_chart)
     RadioGroup rdgChangeChart;
 
-    private List<BigDataDetailList> subjectContentList;
-    private BigDataDetailAdapter subjectContentAdapter;
-    private String subjectId;
-
     @Override
     public int bindLayout() {
-        return R.layout.activity_subject;
+        return R.layout.activity_event_detail;
     }
 
     @Override
     public void doBusiness(Context mContext) {
-        String subject_type = getIntent().getStringExtra("subject_type");
-        setMyTitle(subject_type + "产业", true);
+//        GET_CONTENT
+        String typeTitle = getIntent().getStringExtra("event_type_title");
+        setMyTitle(typeTitle, true);
+        typeId = getIntent().getIntExtra("event_type_id", -1080);
 
-        subjectId = getIntent().getStringExtra("subject_id");
+        BaseActivity.iniRefresh(refreshlayout);
 
-        BaseActivity.iniRefresh(refreshLayout);
+        dataDetailLists = new ArrayList<>();
+        dataDetailAdapter = new BigDataDetailAdapter(dataDetailLists);
 
-        subjectContentList = new ArrayList<>();
-        subjectContentAdapter = new BigDataDetailAdapter(subjectContentList);
-        rvSubjectAboutStocks.setLayoutManager(new LinearLayoutManager(mContext));
-        rvSubjectAboutStocks.setNestedScrollingEnabled(false);
-        rvSubjectAboutStocks.setAdapter(subjectContentAdapter);
+        rvAboutStocks.setLayoutManager(new LinearLayoutManager(mContext));
+        rvAboutStocks.setNestedScrollingEnabled(false);
+        rvAboutStocks.setAdapter(dataDetailAdapter);
 
         //
-        if (StringUtils.isActuallyEmpty(subjectId)) {
-            tvOpportunity.setText("获取主题信息失败,请稍后重试");
+        if (typeId == -1080) {
+            tvOpportunity.setText("获取事件信息失败,请稍后重试");
         } else {
-            getSubjectDetail(AppConst.REFRESH_TYPE_FIRST);
+            getEventDetailData(AppConst.REFRESH_TYPE_FIRST);
         }
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getSubjectDetail(AppConst.REFRESH_TYPE_SWIPEREFRESH);
-                refreshLayout.setRefreshing(false);
+                getEventDetailData(AppConst.REFRESH_TYPE_SWIPEREFRESH);
+                refreshlayout.setRefreshing(false);
             }
         });
 
         xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
             @Override
             public void onReload(View v) {
-                getSubjectDetail(AppConst.REFRESH_TYPE_RELOAD);
+                getEventDetailData(AppConst.REFRESH_TYPE_RELOAD);
             }
         });
 
@@ -162,49 +157,37 @@ public class SubjectDetailActivity extends BaseActivity {
                 }
             }
         });
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getSubjectDetail(AppConst.REFRESH_TYPE_RESUME);
+        getEventDetailData(AppConst.REFRESH_TYPE_RESUME);
     }
 
-    //请求基本详情数据
-    private void getSubjectDetail(int refreshType) {
+    private void getEventDetailData(int refreshType) {
         if (refreshType == AppConst.REFRESH_TYPE_FIRST) {
             xLayout.setStatus(XLayout.Loading);
         }
-
         HashMap<String, String> params = UserUtils.getTokenParams();
-        params.put("id", subjectId);
-        new GGOKHTTP(params, GGOKHTTP.GET_RECOMMEND_CONTENT, new GGOKHTTP.GGHttpInterface() {
+        params.put("id", String.valueOf(typeId));
+        new GGOKHTTP(params, GGOKHTTP.GET_CONTENT, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
-                    SubjectDetailData subjectDetailData =
-                            JSONObject.parseObject(responseInfo, SubjectDetailBean.class).getData();
+                    EventDetailBean.EventDetailData eventDetailData =
+                            JSONObject.parseObject(responseInfo, EventDetailBean.class).getData();
 
                     tvOpportunity.setText(
-                            fromHtml(
-                                    subjectDetailData.getTheme_summarize().getDescribe(), null, new HtmlTagHandler()));
+                            Html.fromHtml(
+                                    eventDetailData.getContent(), null, new HtmlTagHandler()));
 
-                    RequestOptions options = new RequestOptions();
-                    options.fitCenter()
-                            .diskCacheStrategy(DiskCacheStrategy.ALL);
-                    Glide.with(getActivity())
-                            .load(subjectDetailData.getTheme_summarize().getPhone_image_url())
-                            .apply(options)
-                            .into(imgDescibe);
-
-                    //
                     getStockPoolDatas(StockUtils.getStockCodes(
-                            subjectDetailData.getStocks()), subjectDetailData.getTheme_name());
+                            eventDetailData.getStocks()), eventDetailData.getSource());
                     //
-                    getThemeWordsAttentionYear(StockUtils.getStockCodes(subjectDetailData.getStocks()),
-                            subjectDetailData.getTheme_name());
+                    getThemeWordsAttentionYear(StockUtils.getStockCodes(eventDetailData.getStocks()),
+                            eventDetailData.getSource());
 
                 } else if (code == 1001) {
                     xLayout.setStatus(XLayout.Empty);
@@ -221,14 +204,13 @@ public class SubjectDetailActivity extends BaseActivity {
         }).startGet();
     }
 
-    //通过详情数据的股票集参数二次请求股票池详细数据
-    private void getStockPoolDatas(String stock_codes, String keyword) {
+    private void getStockPoolDatas(String stock_codes, String content) {
         HashMap<String, String> params = UserUtils.getTokenParams();
         params.put("rows", "15");
         params.put("page", "1");
         params.put("get_hq", "1");
         params.put("stock_codes", stock_codes);
-        params.put("keyword", keyword);
+        params.put("keyword", content);
 
         params.put("order", "price_change_rate");
         params.put("order_type", "-1");
@@ -236,23 +218,25 @@ public class SubjectDetailActivity extends BaseActivity {
         new GGOKHTTP(params, GGOKHTTP.GET_STOCK_POOL, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
-                    subjectContentList.clear();
-                    List<BigDataDetailList> subjectContents =
+                    dataDetailLists.clear();
+                    List<BigDataDetailList> bigDataDetailLists =
                             JSONObject.parseObject(responseInfo, BigDataDetailListBean.class).getData();
 
-                    subjectContentList.addAll(subjectContents);
-                    subjectContentAdapter.notifyDataSetChanged();
-
+                    dataDetailLists.addAll(bigDataDetailLists);
+                    dataDetailAdapter.notifyDataSetChanged();
                     xLayout.setStatus(XLayout.Success);
+                } else {
+                    if (xLayout != null)
+                        xLayout.setStatus(XLayout.Error);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-
+                if (xLayout != null)
+                    xLayout.setStatus(XLayout.Error);
             }
         }).startGet();
     }
@@ -514,4 +498,5 @@ public class SubjectDetailActivity extends BaseActivity {
             mChart.setData(data);
         }
     }
+
 }

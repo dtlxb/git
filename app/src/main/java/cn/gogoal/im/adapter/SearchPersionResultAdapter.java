@@ -21,7 +21,7 @@ import cn.gogoal.im.common.UIHelper;
  * phone 18930640263
  * description :搜人适配器
  */
-public class SearchPersionResultAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
+public class SearchPersionResultAdapter extends CommonAdapter<ContactBean,BaseViewHolder> {
 
     public SearchPersionResultAdapter(List<ContactBean> datas) {
         super(R.layout.item_search_type_persion, datas);
@@ -47,7 +47,8 @@ public class SearchPersionResultAdapter extends CommonAdapter<ContactBean, BaseV
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NormalIntentUtils.go2PersionDetail(v.getContext(), data.getUserId());
+                NormalIntentUtils.go2PersionDetail(v.getContext(),
+                        data.getUserId());
             }
         });
     }

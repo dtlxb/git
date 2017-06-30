@@ -14,6 +14,7 @@ import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindArray;
@@ -68,7 +69,7 @@ public class SearchPersonSquareActivity extends BaseActivity {
     @Override
     public void doBusiness(Context mContext) {
         searchIndex = getIntent().getIntExtra("search_index", 0);
-        setMyTitle(searchIndex==0?"搜索好友":"搜索群", true);
+        setMyTitle(searchIndex == 0 ? "搜索好友" : "搜索群", true);
 
         initData();
         //一些监听
@@ -78,8 +79,8 @@ public class SearchPersonSquareActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (searchIndex==1){
-            getRecommendGroup(AppConst.REFRESH_TYPE_FIRST,null);
+        if (searchIndex == 1) {
+            getRecommendGroup(AppConst.REFRESH_TYPE_FIRST, null);
         }
     }
 
@@ -87,13 +88,13 @@ public class SearchPersonSquareActivity extends BaseActivity {
     private void initData() {
         rvSearchResult.addItemDecoration(new NormalItemDecoration(getActivity()));
 
-        if (searchIndex==0){
-            searchResultList=new ArrayList<>();
-            persionAdapter=new SearchPersionResultAdapter(searchResultList);
+        if (searchIndex == 0) {
+            searchResultList = new ArrayList<>();
+            persionAdapter = new SearchPersionResultAdapter(searchResultList);
             rvSearchResult.setAdapter(persionAdapter);
-        }else {
-            groupDatas=new ArrayList<>();
-            groupdAdapter=new RecommendAdapter(getActivity(),groupDatas);
+        } else {
+            groupDatas = new ArrayList<>();
+            groupdAdapter = new RecommendAdapter(getActivity(), groupDatas);
             rvSearchResult.setAdapter(groupdAdapter);
         }
     }
@@ -160,12 +161,12 @@ public class SearchPersonSquareActivity extends BaseActivity {
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     searchResultList.clear();
 
-                    JSONObject jsonObject = JSONObject.parseObject(responseInfo);
-                    searchResultList.addAll(JSONObject.parseArray(jsonObject.getJSONArray("data")
-                            .toJSONString(), ContactBean.class));
+                    List<ContactBean> persionDatas = JSONObject.parseArray(
+                            JSONObject.parseObject(responseInfo).getString("data"), ContactBean.class);
+
+                    searchResultList.addAll(persionDatas);
 
                     persionAdapter.setEnableLoadMore(true);
-
                     persionAdapter.loadMoreComplete();
 
                     persionAdapter.notifyDataSetChanged();
@@ -183,7 +184,8 @@ public class SearchPersonSquareActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                xLayout.setStatus(XLayout.Error);
+                if (xLayout != null)
+                    xLayout.setStatus(XLayout.Error);
             }
         }).startGet();
     }
@@ -216,14 +218,14 @@ public class SearchPersonSquareActivity extends BaseActivity {
                     }
                 } else if (JSONObject.parseObject(responseInfo).getIntValue("code") == 1001) {
                     xLayout.setStatus(XLayout.Empty);
-                }else {
+                } else {
                     xLayout.setStatus(XLayout.Error);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                if (loadType!=AppConst.REFRESH_TYPE_FIRST){
+                if (loadType != AppConst.REFRESH_TYPE_FIRST) {
                     xLayout.setStatus(XLayout.Error);
                 }
             }

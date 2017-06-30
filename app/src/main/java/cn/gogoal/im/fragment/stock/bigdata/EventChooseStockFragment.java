@@ -20,7 +20,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.stock.stockften.EventDetailActivity;
+import cn.gogoal.im.activity.stock.EventDetailActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
@@ -35,7 +35,6 @@ import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.TextDrawable;
 import cn.gogoal.im.ui.view.XLayout;
 
@@ -91,7 +90,7 @@ public class EventChooseStockFragment extends BaseFragment {
         swiperefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                defaultPage=1;
+                defaultPage = 1;
                 getEventListData(AppConst.REFRESH_TYPE_SWIPEREFRESH);
                 swiperefreshlayout.setRefreshing(false);
             }
@@ -115,10 +114,16 @@ public class EventChooseStockFragment extends BaseFragment {
         xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
             @Override
             public void onReload(View v) {
-                defaultPage=1;
+                defaultPage = 1;
                 getEventListData(AppConst.REFRESH_TYPE_RELOAD);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getEventListData(-1);
     }
 
     private void getEventListData(final int refreshType) {
@@ -147,13 +152,17 @@ public class EventChooseStockFragment extends BaseFragment {
                     eventAdapter.setEnableLoadMore(true);
                     eventAdapter.loadMoreComplete();
 
-                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
-                        UIHelper.toast(getActivity(), "数据更新成功!");
-                    }
+//                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+//                        UIHelper.toast(getActivity(), "数据更新成功!");
+//                    }
 
                     xLayout.setStatus(XLayout.Success);
                 } else if (code == 1001) {
-                    xLayout.setStatus(XLayout.Empty);
+                    if (refreshType != AppConst.REFRESH_TYPE_LOAD_MORE) {
+                        xLayout.setStatus(XLayout.Empty);
+                    } else {
+                        UIHelper.toast(getActivity(), "没有更多");
+                    }
                 } else {
                     xLayout.setStatus(XLayout.Error);
                 }
@@ -191,8 +200,6 @@ public class EventChooseStockFragment extends BaseFragment {
 
             RecyclerView rvStock = holder.getView(R.id.rv_inner_event);
             rvStock.setNestedScrollingEnabled(false);
-            rvStock.addItemDecoration(new NormalItemDecoration(getActivity()));
-
             rvStock.setAdapter(new CommonAdapter<Stock, BaseViewHolder>(
                     R.layout.item_subject_event_stock_about, data.getCatalog()) {
                 @Override
@@ -248,7 +255,7 @@ public class EventChooseStockFragment extends BaseFragment {
             TextDrawable.IBuilder iBuilder = TextDrawable
                     .builder()
                     .beginConfig()
-                    .fontSize(AppDevice.sp2px(getActivity(), 12))
+                    .fontSize(AppDevice.sp2px(getActivity(), 11))
                     .endConfig().round();
             return iBuilder.build(text, bgColor);
         }

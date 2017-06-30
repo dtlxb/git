@@ -530,7 +530,6 @@ public class ChatFragment extends BaseFragment {
         if (chatType == AppConst.IM_CHAT_TYPE_SINGLE) {
             if (null != userBean) {
                 //"0"开始:未读数-对话名字-对方名字-对话头像-最后信息
-                KLog.e(userBean);
                 imMessageBean = new IMMessageBean(imConversation.getConversationId(), chatType, message.getTimestamp(), "0",
                         null != userBean.getNickname() ? userBean.getNickname() : "",
                         String.valueOf(userBean.getFriend_id()), String.valueOf(userBean.getAvatar()), JSON.toJSONString(message));
