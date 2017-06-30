@@ -40,7 +40,7 @@
                         android:drawableStart="@mipmap/index"
                         android:gravity="center_vertical"
                         android:text="主题提示"
-                        android:textColor="#354346"
+                        android:textColor="@color/colorBigDataTitle"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -62,10 +62,8 @@
                         android:layout_marginBottom="10dp"
                         android:layout_marginTop="10dp"
                         android:adjustViewBounds="true"
-                        android:padding="25dp"
                         android:contentDescription="@null"
-                        android:scaleType="centerCrop"
-                        android:background="#ffffff"/>
+                        android:scaleType="centerInside" />
 
                     <include layout="@layout/layout_space_15dp" />
 
@@ -77,7 +75,7 @@
                         android:drawableStart="@mipmap/index"
                         android:gravity="center_vertical"
                         android:text="相关股票"
-                        android:textColor="#354346"
+                        android:textColor="@color/colorBigDataTitle"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -123,29 +121,80 @@
                         android:id="@+id/rv_subject_about_stocks"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/shape_line_bottom"
-                        tools:listitem="@layout/item_subject_event_stock_about" />
+                        android:background="@drawable/shape_line_bottom" />
 
                     <include layout="@layout/layout_space_15dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:drawablePadding="5dp"
-                        android:drawableStart="@mipmap/index"
-                        android:gravity="center_vertical"
-                        android:text="热点追踪"
-                        android:textColor="#354346"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:visibility="gone" />
-
-                    <lecho.lib.hellocharts.view.LineChartView
-                        android:id="@+id/chartView"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="260dp"
-                        android:visibility="gone" />
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="5dp"
+                            android:drawableStart="@mipmap/index"
+                            android:gravity="center_vertical"
+                            android:text="主题追踪"
+                            android:textColor="@color/colorBigDataTitle"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <RadioGroup
+                            android:id="@+id/rdg_change_chart"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="15dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rdb_checked_price"
+                                style="@style/SubjectDetailChartRdbStyle"
+                                android:background="@drawable/selector_rdb_subject_detail_chart_left"
+                                android:checked="true"
+                                android:text="价格" />
+
+                            <RadioButton
+                                android:id="@+id/rdb_checked_attention"
+                                style="@style/SubjectDetailChartRdbStyle"
+                                android:background="@drawable/selector_rdb_subject_detail_chart_right"
+                                android:text="关注度" />
+
+                        </RadioGroup>
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/tv_point_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:visibility="invisible"
+                        android:textSize="12sp" />
+
+                    <cn.gogoal.im.ui.widget.ForbitParentLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginBottom="50dp">
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/line_chart_price"
+                            android:layout_width="match_parent"
+                            android:visibility="visible"
+                            android:layout_height="match_parent" />
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/line_chart_attention"
+                            android:layout_width="match_parent"
+                            android:background="@android:color/white"
+                            android:visibility="invisible"
+                            android:layout_height="match_parent"/>
+
+                    </cn.gogoal.im.ui.widget.ForbitParentLayout>
 
                 </LinearLayout>
             </android.support.v4.widget.NestedScrollView>

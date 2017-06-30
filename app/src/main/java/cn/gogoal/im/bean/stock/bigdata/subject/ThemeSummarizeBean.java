@@ -15,8 +15,18 @@ public class ThemeSummarizeBean {
     private String img_url;
     private String describe;
 
+    private String phone_image_url;
+
     public String getImg_url() {
         return img_url;
+    }
+
+    public String getPhone_image_url() {
+        return phone_image_url;
+    }
+
+    public void setPhone_image_url(String phone_image_url) {
+        this.phone_image_url = phone_image_url;
     }
 
     public void setImg_url(String img_url) {

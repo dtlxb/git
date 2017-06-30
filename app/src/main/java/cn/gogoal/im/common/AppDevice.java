@@ -52,6 +52,7 @@ import android.widget.LinearLayout;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -196,10 +197,12 @@ public class AppDevice {
         return isConnected;
     }
 
-    /**跳转到应用详情设置页*/
-    public static void go2AppDetail(Context context){
-        Uri packageURI = Uri.parse("package:"+ context.getPackageName());
-        Intent intent =  new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,packageURI);
+    /**
+     * 跳转到应用详情设置页
+     */
+    public static void go2AppDetail(Context context) {
+        Uri packageURI = Uri.parse("package:" + context.getPackageName());
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);
         context.startActivity(intent);
     }
 
@@ -260,6 +263,17 @@ public class AppDevice {
         green = (int) (green * a + 0.5);
         blue = (int) (blue * a + 0.5);
         return 0xff << 24 | red << 16 | green << 8 | blue;
+    }
+
+    /**
+     * @param alpher      透明度,0.0d~1.0d
+     * @param colorString 6位颜色值 ffaa25
+     */
+    private static String get16Alpher(double alpher, String colorString) {
+        return new BigInteger(
+                String.valueOf(
+                        Math.round(alpher * 255)), 10)
+                .toString(16)+colorString;
     }
 
     //获取真实的手机屏幕尺寸
@@ -1181,7 +1195,7 @@ public class AppDevice {
     /**
      * 反射修改TabLayout的默认宽度
      */
-    public static void setTabLayoutWidth(TabLayout t,int dpMargin) {
+    public static void setTabLayoutWidth(TabLayout t, int dpMargin) {
         try {
             Class<?> tablayout = t.getClass();
             Field tabStrip = tablayout.getDeclaredField("mTabStrip");

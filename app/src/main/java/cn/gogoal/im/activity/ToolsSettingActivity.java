@@ -75,10 +75,10 @@ public class ToolsSettingActivity extends BaseActivity {
     @Override
     public void doBusiness(final Context mContext) {
         SpannableString spannableString = new SpannableString("我的工具(按住拖动调整排序)");
-        spannableString.setSpan(new ForegroundColorSpan(getResColor(R.color.textColor_333333)), 0, 8,
+        spannableString.setSpan(new ForegroundColorSpan(getResColor(R.color.textColor_333333)), 0, 4,
                 Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 
-        spannableString.setSpan(new ForegroundColorSpan(getResColor(R.color.textColor_999999)), 8,
+        spannableString.setSpan(new ForegroundColorSpan(getResColor(R.color.textColor_999999)), 4,
                 spannableString.length(),
                 Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 

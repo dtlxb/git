@@ -120,7 +120,7 @@ public class InteractiveInvestorActivity extends BaseActivity {
     }
 
 
-    private void getInteractiveInvestorData(int refreshType) {
+    private void getInteractiveInvestorData(final int refreshType) {
         adapter.setEnableLoadMore(false);
 
         if (refreshType == AppConst.REFRESH_TYPE_FIRST) {
@@ -139,6 +139,7 @@ public class InteractiveInvestorActivity extends BaseActivity {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
 
                 if (code == 0) {
+
                     List<InteractiveData> interactiveDatas =
                             JSONObject.parseObject(responseInfo, InteractiveBean.class).getData();
 
@@ -149,8 +150,13 @@ public class InteractiveInvestorActivity extends BaseActivity {
                     adapter.loadMoreComplete();
 
                     xLayout.setStatus(XLayout.Success);
+
                 } else if (code == 1001) {
-                    xLayout.setStatus(XLayout.Empty);
+                    if (refreshType!=AppConst.REFRESH_TYPE_LOAD_MORE) {
+                        xLayout.setStatus(XLayout.Empty);
+                    }else {
+                        UIHelper.toast(getActivity(),"没有更多");
+                    }
                 } else {
                     xLayout.setStatus(XLayout.Error);
                 }

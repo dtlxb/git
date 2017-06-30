@@ -5,6 +5,7 @@ import android.util.Log;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -1038,14 +1039,19 @@ public class GGOKHTTP {
                         public void onResponse(String response, int id) {
                             if (httpInterface != null) {
                                 try {
-                                    JSONObject jsonObject = new JSONObject(response);
+                                    JSONObject jsonObject = null;
+                                    try {
+                                        jsonObject = new JSONObject(response);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                     if (!jsonObject.isNull("code")) {
                                         httpInterface.onSuccess(response);
                                     } else {
                                         httpInterface.onFailure("最外层没有code字段");
                                     }
 
-                                } catch (Exception e) {//解析出错，返回就TM就不是json
+                                } catch (Exception e) {//解析出错
                                     httpInterface.onFailure(e.getMessage());
                                 }
                             }

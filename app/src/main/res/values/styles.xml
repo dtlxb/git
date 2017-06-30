@@ -351,4 +351,16 @@
         <item name="android:textColor">@color/textColor_333333</item>
     </style>
 
+    <style name="SubjectDetailChartRdbStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">55dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:paddingStart">5dp</item>
+        <item name="android:paddingEnd">5dp</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/selector_tab_subjec_chart_text</item>
+    </style>
+
 </resources>
