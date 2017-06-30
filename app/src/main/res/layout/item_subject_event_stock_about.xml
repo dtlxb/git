@@ -25,6 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="太极股份"
+            android:textStyle="bold"
             android:textColor="@color/textColor_333333"
             android:textSize="16sp" />
 
@@ -33,6 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="002368"
+            android:textStyle="bold"
             android:layout_marginTop="2dp"
             android:textColor="@color/textColor_666666"
             android:textSize="12sp" />
@@ -45,6 +47,7 @@
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/flag_layout_stock_info"
         android:text="+7.52%"
+        android:textStyle="bold"
         android:gravity="center"
         android:textColor="@color/stock_red"
         app:layout_widthPercent="25%"/>
@@ -56,6 +59,7 @@
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/tv_item_subject_about_rate"
         android:text="4433.40"
+        android:textStyle="bold"
         android:gravity="center"
         android:textColor="@color/textColor_333333"
         app:layout_widthPercent="25%"/>

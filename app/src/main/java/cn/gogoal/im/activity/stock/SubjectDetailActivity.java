@@ -5,6 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,11 +28,14 @@ import cn.gogoal.im.bean.stock.bigdata.BigDataDetailList;
 import cn.gogoal.im.bean.stock.bigdata.BigDataDetailListBean;
 import cn.gogoal.im.bean.stock.bigdata.subject.SubjectDetailBean;
 import cn.gogoal.im.bean.stock.bigdata.subject.SubjectDetailData;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.HtmlTagHandler;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
+import cn.gogoal.im.ui.view.XLayout;
 import lecho.lib.hellocharts.view.LineChartView;
 
 /**
@@ -56,6 +60,9 @@ public class SubjectDetailActivity extends BaseActivity {
 
     @BindView(R.id.chartView)
     LineChartView chartView;
+
+    @BindView(R.id.xLayout)
+    XLayout xLayout;
 
     private List<BigDataDetailList> subjectContentList;
     private BigDataDetailAdapter subjectContentAdapter;
@@ -86,14 +93,21 @@ public class SubjectDetailActivity extends BaseActivity {
         if (StringUtils.isActuallyEmpty(subjectId)) {
             tvOpportunity.setText("获取主题信息失败,请稍后重试");
         } else {
-            getSubjectDetail();
+            getSubjectDetail(AppConst.REFRESH_TYPE_FIRST);
         }
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getSubjectDetail();
+                getSubjectDetail(AppConst.REFRESH_TYPE_SWIPEREFRESH);
                 refreshLayout.setRefreshing(false);
+            }
+        });
+
+        xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
+            @Override
+            public void onReload(View v) {
+                getSubjectDetail(AppConst.REFRESH_TYPE_RELOAD);
             }
         });
 
@@ -102,11 +116,15 @@ public class SubjectDetailActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getSubjectDetail();
+        getSubjectDetail(AppConst.REFRESH_TYPE_RESUME);
     }
 
     //请求基本详情数据
-    private void getSubjectDetail() {
+    private void getSubjectDetail(int refreshType) {
+        if (refreshType != AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+            xLayout.setStatus(XLayout.Loading);
+        }
+
         HashMap<String, String> params = UserUtils.getTokenParams();
         params.put("id", subjectId);
         new GGOKHTTP(params, GGOKHTTP.GET_RECOMMEND_CONTENT, new GGOKHTTP.GGHttpInterface() {
@@ -118,7 +136,8 @@ public class SubjectDetailActivity extends BaseActivity {
                             JSONObject.parseObject(responseInfo, SubjectDetailBean.class).getData();
 
                     tvOpportunity.setText(
-                            Html.fromHtml(subjectDetailData.getTheme_summarize().getDescribe()));
+                            Html.fromHtml(
+                                    subjectDetailData.getTheme_summarize().getDescribe(),null,new HtmlTagHandler()));
 
                     RequestOptions options = new RequestOptions();
                     options.centerCrop()
@@ -135,17 +154,19 @@ public class SubjectDetailActivity extends BaseActivity {
                     getThemeWordsAttentionYear(StockUtils.getStockCodes(subjectDetailData.getStocks()),
                             subjectDetailData.getTheme_name());
 
+                    xLayout.setStatus(XLayout.Success);
+
                 } else if (code == 1001) {
-                    tvOpportunity.setText("暂无相关描述");
+                    xLayout.setStatus(XLayout.Empty);
                 } else {
-                    tvOpportunity.setText("请求出错");
+                    xLayout.setStatus(XLayout.Error);
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                if (tvOpportunity != null)
-                    tvOpportunity.setText("出错啦" + msg);
+                if (xLayout != null)
+                    xLayout.setStatus(XLayout.Error);
             }
         }).startGet();
     }
@@ -172,7 +193,7 @@ public class SubjectDetailActivity extends BaseActivity {
                     Collections.sort(subjectContents, new Comparator<BigDataDetailList>() {
                         @Override
                         public int compare(BigDataDetailList o1, BigDataDetailList o2) {
-                            return Double.compare(o2.getPrice_change_rate(),o1.getPrice_change_rate());
+                            return Double.compare(o2.getPrice_change_rate(), o1.getPrice_change_rate());
                         }
                     });
                     subjectContentList.addAll(subjectContents);

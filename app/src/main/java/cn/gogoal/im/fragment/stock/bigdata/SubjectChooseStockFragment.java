@@ -18,12 +18,14 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.activity.stock.SubjectDetailActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
+import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.bigdata.subject.SubjectListBean;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.StockUtils;
-import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.view.XLayout;
@@ -54,6 +56,8 @@ public class SubjectChooseStockFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
+        BaseActivity.iniRefresh(swiperefreshlayout);
+
         rvSubject.setLayoutManager(new LinearLayoutManager(mContext));
         rvSubject.addItemDecoration(new NormalItemDecoration(mContext));
         subjectDataList = new ArrayList<>();
@@ -98,13 +102,15 @@ public class SubjectChooseStockFragment extends BaseFragment {
 
                     List<SubjectListBean.SubjectData> subjectDatas =
                             JSONObject.parseObject(responseInfo, SubjectListBean.class).getData();
+
                     subjectDataList.addAll(subjectDatas);
                     subjectChooseStockAdapter.notifyDataSetChanged();
                     xLayout.setStatus(XLayout.Success);
 
-                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
-                        UIHelper.toast(getActivity(), "更新数据成功");
-                    }
+//                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+//                        UIHelper.toast(getActivity(), "更新数据成功");
+//                    }
+
                 } else if (code == 1001) {
                     xLayout.setStatus(XLayout.Empty);
                 } else {
@@ -129,7 +135,7 @@ public class SubjectChooseStockFragment extends BaseFragment {
 
         @Override
         protected void convert(BaseViewHolder holder, final SubjectListBean.SubjectData data, int position) {
-            int value = (int) (data.getPrice());
+            int value = StringUtils.parseStringDouble(data.getPrice()).intValue();
             holder.setText(R.id.tv_item_subject_list_value,
                     value == 0 ? "--" : String.valueOf(value));
 
@@ -137,10 +143,14 @@ public class SubjectChooseStockFragment extends BaseFragment {
                     value >= 1000 ? 0xffff9233 : 0xfffebd23);
 
             holder.setText(R.id.tv_item_subject_list_rate,
-                    data.getPrice_change_rate() == 0 ? "--" : StockUtils.plusMinus(data.getPrice_change_rate(), false));
+                    StringUtils.parseStringDouble(data.getPrice_change_rate()) == 0 ?
+                            "--" : StockUtils.plusMinus(data.getPrice_change_rate(), false));
 
             holder.setText(R.id.tv_item_subject_list_theme_name, data.getTheme_name());
-            holder.setText(R.id.tv_item_subject_list_date, "发现时间：" + data.getInsert_time());
+
+            holder.setText(R.id.tv_item_subject_list_date, "发现时间：" +
+                    CalendarUtils.formatDate("yyyy-MM-dd HH:mm:ss","yyyy-MM-dd HH:mm",data.getInsert_time()));
+
             holder.setText(R.id.tv_item_subject_list_title, data.getTitle());
             holder.setText(R.id.tv_item_subject_list_tag1, data.getTags().get(0));
             holder.setText(R.id.tv_item_subject_list_tag2, data.getTags().get(1));

@@ -1,4 +1,4 @@
-package cn.gogoal.im.activity.stock.stockften;
+package cn.gogoal.im.activity.stock;
 
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -25,6 +25,7 @@ import cn.gogoal.im.bean.stock.bigdata.BigDataDetailListBean;
 import cn.gogoal.im.bean.stock.bigdata.event.EventDetailBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.HtmlTagHandler;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -121,7 +122,9 @@ public class EventDetailActivity extends BaseActivity {
                     EventDetailBean.EventDetailData eventDetailData =
                             JSONObject.parseObject(responseInfo, EventDetailBean.class).getData();
 
-                    tvOpportunity.setText(Html.fromHtml(eventDetailData.getContent()));
+                    tvOpportunity.setText(
+                            Html.fromHtml(
+                                    eventDetailData.getContent(),null,new HtmlTagHandler()));
 
                     getStockPoolDatas(StockUtils.getStockCodes(
                             eventDetailData.getStocks()), eventDetailData.getSource());

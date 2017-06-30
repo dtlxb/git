@@ -242,6 +242,7 @@
         <activity android:name=".activity.QrCodeActivity" />
         <activity android:name=".activity.Test2Activity" />
         <activity android:name=".activity.stock.stockften.FinancialStatementsActivity" />
+
         <activity android:name=".activity.stock.stockften.CompanyExecutivesActivity" />
         <activity android:name=".activity.stock.stockften.CompanyProfileActivity" />
         <activity android:name=".activity.stock.stockften.ShareholderResearchActivity" />

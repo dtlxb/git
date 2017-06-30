@@ -77,6 +77,7 @@ public class MyStockNoticesFragment extends BaseFragment {
         rvNotices.setLayoutManager(new LinearLayoutManager(mContext));
         BaseActivity.iniRefresh(swiperefreshlayout);
         rvNotices.setAdapter(noticeAdapter);
+        xLayout.setEmptyText("暂无公告数据\n请添加自选股后重试!");
 
         getStockNews(AppConst.REFRESH_TYPE_FIRST);
 
@@ -125,6 +126,7 @@ public class MyStockNoticesFragment extends BaseFragment {
         params.put("group_id", String.valueOf(groupId));
         params.put("page", String.valueOf(defaultPage));
         params.put("rows", "15");
+        params.put("get_hq", "true");
         params.put("source", String.valueOf(StockNewsType.STOCK_INFOMATION_SOURCE_NOTICES));
 
         new GGOKHTTP(params, GGOKHTTP.MY_STOCK_NEWS, new GGOKHTTP.GGHttpInterface() {
