@@ -22,11 +22,13 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.activity.stock.stockften.ShareholderResearchActivity;
 import cn.gogoal.im.adapter.stockften.CompanySummaryAdapter;
 import cn.gogoal.im.adapter.stockften.DividendTransAdapter;
+import cn.gogoal.im.adapter.stockften.PeerComparisonAdaprer;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ChartBean;
 import cn.gogoal.im.bean.f10.CompanyInforData;
 import cn.gogoal.im.bean.f10.DividendTransData;
+import cn.gogoal.im.bean.f10.PeerCompariData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.StringUtils;
@@ -44,7 +46,7 @@ public class CompanyInfoFragment extends BaseFragment {
 
     @BindView(R.id.rv_company_summary)
     RecyclerView rvComSummary;
-
+    //业绩表现
     @BindView(R.id.chart_tab_one)
     TextView chart_tab_one;
     @BindView(R.id.chart_tab_two)
@@ -55,9 +57,18 @@ public class CompanyInfoFragment extends BaseFragment {
     BarView barPerforView;
     @BindView(R.id.textPerfor)
     TextView textPerfor;
-
+    //分红转送
     @BindView(R.id.rv_dividend_transfer)
     RecyclerView rvDivTransfer;
+    //同业比较
+    @BindView(R.id.chart_peer_one)
+    TextView chart_peer_one;
+    @BindView(R.id.chart_peer_two)
+    TextView chart_peer_two;
+    @BindView(R.id.chart_peer_three)
+    TextView chart_peer_three;
+    @BindView(R.id.rv_peer)
+    RecyclerView rvPeer;
 
     private String stockCode;
     private String stockName;
@@ -72,6 +83,11 @@ public class CompanyInfoFragment extends BaseFragment {
 
     private ArrayList<DividendTransData> transDatas = new ArrayList<>();
     private DividendTransAdapter transAdapter;
+
+    private ArrayList<PeerCompariData> peerLists = new ArrayList<>();
+    private PeerComparisonAdaprer peerAdapter;
+    private JSONObject peerData;
+    private int screenWidth;
 
     public static CompanyInfoFragment newInstance(String stockCode, String stockName) {
         CompanyInfoFragment infoFragment = new CompanyInfoFragment();
@@ -92,9 +108,11 @@ public class CompanyInfoFragment extends BaseFragment {
         stockCode = getArguments().getString("stockCode");
         stockName = getArguments().getString("stockName");
         chartBeanList = new ArrayList<>();
+        screenWidth = AppDevice.getWidth(getActivity());
 
         BaseActivity.initRecycleView(rvComSummary, null);
         BaseActivity.initRecycleView(rvDivTransfer, null);
+        BaseActivity.initRecycleView(rvPeer, null);
 
         rvComSummary.setHasFixedSize(true);
         rvComSummary.setNestedScrollingEnabled(false);
@@ -102,11 +120,16 @@ public class CompanyInfoFragment extends BaseFragment {
         rvDivTransfer.setHasFixedSize(true);
         rvDivTransfer.setNestedScrollingEnabled(false);
 
+        rvPeer.setHasFixedSize(true);
+        rvPeer.setNestedScrollingEnabled(false);
+
         getCompanySummary();
 
         getParamData();
 
         getDividendTransfer();
+
+        getPeerComparison();
     }
 
     /**
@@ -363,7 +386,6 @@ public class CompanyInfoFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONArray data = object.getJSONArray("data");
@@ -386,8 +408,92 @@ public class CompanyInfoFragment extends BaseFragment {
         new GGOKHTTP(param, GGOKHTTP.DIVIDEND_FINANCING, ggHttpInterface).startGet();
     }
 
+    /**
+     * 同业比较
+     */
+    private void getPeerComparison() {
+        final Map<String, String> param = new HashMap<>();
+        param.put("stock_code", stockCode);
+
+        final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    peerData = object.getJSONObject("data");
+
+                    setPeerListData(peerData, PeerComparisonAdaprer.TYPE_MARKET_CAP);
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.GET_PEERCOMPARISON_INFO, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 设置同业列表数据
+     */
+    private void setPeerListData(JSONObject data, int listType) {
+        peerLists.clear();
+        JSONArray jsonArray = null;
+        String value = null;
+        if (listType == PeerComparisonAdaprer.TYPE_MARKET_CAP) {
+            jsonArray = data.getJSONArray("totalValueData");
+            value = StringUtils.save2Significand(jsonArray.getJSONObject(jsonArray.size() - 1).getString("top1"));
+        } else if (listType == PeerComparisonAdaprer.TYPE_GROSS_INCOME) {
+            jsonArray = data.getJSONArray("grossRevenueData");
+            value = StringUtils.save2Significand(jsonArray.getJSONObject(jsonArray.size() - 1).getDoubleValue("top1") / 10000);
+        } else {
+            jsonArray = data.getJSONArray("retainedProfitsData");
+            value = StringUtils.save2Significand(jsonArray.getJSONObject(jsonArray.size() - 1).getDoubleValue("top1") / 10000);
+        }
+
+        if (listType == PeerComparisonAdaprer.TYPE_MARKET_CAP) {
+            for (int i = 0; i < jsonArray.size() - 1; i++) {
+                peerLists.add(new PeerCompariData(jsonArray.getJSONObject(i).getString("order"),
+                        jsonArray.getJSONObject(i).getString("sname"),
+                        StringUtils.save2Significand(jsonArray.getJSONObject(i).getString("tcap"))));
+            }
+
+            peerLists.add(1, new PeerCompariData(null, "最高值", value));
+            peerLists.add(2, new PeerCompariData(null, "中位值", StringUtils.save2Significand(
+                    jsonArray.getJSONObject(jsonArray.size() - 1).getString("top6"))));
+
+        } else if (listType == PeerComparisonAdaprer.TYPE_GROSS_INCOME) {
+            for (int i = 0; i < jsonArray.size() - 1; i++) {
+                peerLists.add(new PeerCompariData(jsonArray.getJSONObject(i).getString("order"),
+                        jsonArray.getJSONObject(i).getString("sname"), StringUtils.save2Significand(
+                        jsonArray.getJSONObject(i).getDoubleValue("ffs2_01") / 10000)));
+            }
+
+            peerLists.add(1, new PeerCompariData(null, "最高值", value));
+            peerLists.add(2, new PeerCompariData(null, "中位值", StringUtils.save2Significand(
+                    jsonArray.getJSONObject(jsonArray.size() - 1).getDoubleValue("top6") / 10000)));
+
+        } else {
+            for (int i = 0; i < jsonArray.size() - 1; i++) {
+                peerLists.add(new PeerCompariData(jsonArray.getJSONObject(i).getString("order"),
+                        jsonArray.getJSONObject(i).getString("sname"), StringUtils.save2Significand(
+                        jsonArray.getJSONObject(i).getDoubleValue("ffs2_40") / 10000)));
+            }
+
+            peerLists.add(1, new PeerCompariData(null, "最高值", value));
+            peerLists.add(2, new PeerCompariData(null, "中位值", StringUtils.save2Significand(
+                    jsonArray.getJSONObject(jsonArray.size() - 1).getDoubleValue("top6") / 10000)));
+
+        }
+
+        peerAdapter = new PeerComparisonAdaprer(getActivity(), peerLists, value, screenWidth, listType);
+        rvPeer.setAdapter(peerAdapter);
+    }
+
     @OnClick({R.id.chart_tab_one, R.id.chart_tab_two, R.id.chart_tab_three, R.id.relative_share_holder,
-            R.id.relative_circula_holder, R.id.relative_institu_investor})
+            R.id.relative_circula_holder, R.id.relative_institu_investor, R.id.chart_peer_one,
+            R.id.chart_peer_two, R.id.chart_peer_three})
     public void ChartTabClick(View v) {
         switch (v.getId()) {
             case R.id.chart_tab_one:
@@ -446,6 +552,45 @@ public class CompanyInfoFragment extends BaseFragment {
                 break;
             case R.id.relative_institu_investor:
                 JumpShareholderResearch(ShareholderResearchActivity.FUND_HOLDER);
+                break;
+            case R.id.chart_peer_one:
+                chart_peer_one.setEnabled(false);
+                chart_peer_two.setEnabled(true);
+                chart_peer_three.setEnabled(true);
+                chart_peer_one.setTextColor(getResColor(R.color.white));
+                chart_peer_one.setBackgroundResource(R.drawable.chart_tab_shape_select_left);
+                chart_peer_two.setTextColor(getResColor(R.color.colorPrimary));
+                chart_peer_two.setBackgroundResource(R.drawable.chart_tab_center_shape);
+                chart_peer_three.setTextColor(getResColor(R.color.colorPrimary));
+                chart_peer_three.setBackgroundResource(0);
+
+                setPeerListData(peerData, PeerComparisonAdaprer.TYPE_MARKET_CAP);
+                break;
+            case R.id.chart_peer_two:
+                chart_peer_one.setEnabled(true);
+                chart_peer_two.setEnabled(false);
+                chart_peer_three.setEnabled(true);
+                chart_peer_one.setTextColor(getResColor(R.color.colorPrimary));
+                chart_peer_one.setBackgroundResource(0);
+                chart_peer_two.setTextColor(getResColor(R.color.white));
+                chart_peer_two.setBackgroundResource(R.drawable.chart_tab_shape_select_center);
+                chart_peer_three.setTextColor(getResColor(R.color.colorPrimary));
+                chart_peer_three.setBackgroundResource(0);
+
+                setPeerListData(peerData, PeerComparisonAdaprer.TYPE_GROSS_INCOME);
+                break;
+            case R.id.chart_peer_three:
+                chart_peer_one.setEnabled(true);
+                chart_peer_two.setEnabled(true);
+                chart_peer_three.setEnabled(false);
+                chart_peer_one.setTextColor(getResColor(R.color.colorPrimary));
+                chart_peer_one.setBackgroundResource(0);
+                chart_peer_two.setTextColor(getResColor(R.color.colorPrimary));
+                chart_peer_two.setBackgroundResource(R.drawable.chart_tab_center_shape);
+                chart_peer_three.setTextColor(getResColor(R.color.white));
+                chart_peer_three.setBackgroundResource(R.drawable.chart_tab_shape_select_right);
+
+                setPeerListData(peerData, PeerComparisonAdaprer.TYPE_NET_PROFIT);
                 break;
         }
     }
