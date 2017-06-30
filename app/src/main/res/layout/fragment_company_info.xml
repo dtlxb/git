@@ -373,6 +373,60 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/chart_tab_shape"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/chart_peer_one"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/chart_tab_shape_select_left"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:singleLine="true"
+                    android:text="总市值(亿元)"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_14" />
+
+                <TextView
+                    android:id="@+id/chart_peer_two"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/chart_tab_center_shape"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:singleLine="true"
+                    android:text="总收入(LYR,万元)"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_size_14" />
+
+                <TextView
+                    android:id="@+id/chart_peer_three"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:singleLine="true"
+                    android:text="净利润(LYR,万元)"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_size_14" />
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_peer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
