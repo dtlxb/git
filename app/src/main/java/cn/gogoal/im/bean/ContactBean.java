@@ -19,8 +19,6 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
 
     private ContactType contactType;//item类型
 
-    private int id;
-
     private int friend_id;
 
     private int account_id;
@@ -74,20 +72,15 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
 
     private String department;
 
+    public ContactBean() {
+    }
+
     public ContactType getContactType() {
         return contactType;
     }
 
     public void setContactType(ContactType contactType) {
         this.contactType = contactType;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getAccount_id() {
@@ -384,7 +377,6 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
         return "ContactBean{" +
                 "tag=" + tag +
                 ", contactType=" + contactType +
-                ", id=" + id +
                 ", friend_id=" + friend_id +
                 ", account_id=" + account_id +
                 ", userId=" + userId +

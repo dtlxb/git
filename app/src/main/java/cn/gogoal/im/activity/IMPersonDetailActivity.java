@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hply.roundimage.roundImage.RoundedImageView;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +66,8 @@ public class IMPersonDetailActivity extends BaseActivity {
 
         accountId = getIntent().getIntExtra("account_id", -1);
 
+        KLog.e(accountId);
+
         if (String.valueOf(accountId).equals(UserUtils.getMyAccountId())) {
             addFriendBtn.setVisibility(View.GONE);
         }
@@ -82,6 +85,7 @@ public class IMPersonDetailActivity extends BaseActivity {
         UserUtils.getUserInfo(String.valueOf(accountId), new Impl<String>() {
             @Override
             public void response(int code, String data) {
+                KLog.e(data);
                 switch (code) {
                     case Impl.RESPON_DATA_SUCCESS:
                         final ContactBean contactBean = JSONObject.parseObject(data, ContactBean.class);
@@ -96,10 +100,6 @@ public class IMPersonDetailActivity extends BaseActivity {
                         infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, false, "职位", contactBean.getDuty()));
                         infos.add(new UserDetailInfo(UserDetailInfo.SPACE));
                         infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, false, "个人描述", contactBean.getDuty()));
-//                    infos.add(new UserDetailInfo(UserDetailInfo.SPACE));
-//                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, true, "研网活动(5)", ""));
-//                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, true, "参加活动活动(4)", ""));
-//                    infos.add(new UserDetailInfo(UserDetailInfo.TEXT_ITEM_2, true, "加入群组(3)", ""));
 
                         personDetailRecycler.setAdapter(new UserInfoAdapter(infos));
 
