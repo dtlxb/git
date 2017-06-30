@@ -131,7 +131,11 @@ public class SevenBy24Fragment extends BaseFragment {
                     xLayout.setStatus(XLayout.Success);
 
                 } else if (code == 1001) {
-                    xLayout.setStatus(XLayout.Empty);
+                    if (refreshType!=AppConst.REFRESH_TYPE_LOAD_MORE) {
+                        xLayout.setStatus(XLayout.Empty);
+                    }else {
+                        UIHelper.toast(getActivity(),"没有更多");
+                    }
                 } else {
                     xLayout.setStatus(XLayout.Error);
                 }

@@ -135,5 +135,6 @@ dependencies {
     compile files('libs/AMap_Location_V3.4.0_20170427.jar')
     compile project(':alilayout')
     compile project(':roundImage')
-    compile files('libs/hellocharts-library-1.5.8.jar')
+
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 }

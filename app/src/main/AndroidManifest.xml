@@ -249,7 +249,7 @@
         <activity android:name=".activity.stock.stockften.CapitalStructureActivity" />
         <activity android:name=".activity.stock.BigDataAcyivity" />
         <activity android:name=".activity.stock.SubjectDetailActivity" />
-        <activity android:name=".activity.stock.stockften.EventDetailActivity" />
+        <activity android:name=".activity.stock.EventDetailActivity" />
     </application>
 
 </manifest>
