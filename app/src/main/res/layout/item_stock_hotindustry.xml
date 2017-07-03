@@ -14,7 +14,7 @@
         android:id="@+id/tv_hot_industry_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/text_empty"
+        android:text="@string/default_char"
         android:textColor="@color/stock_text_black"
         android:textSize="13sp" />
 
@@ -22,14 +22,14 @@
         android:id="@+id/tv_hot_industry_rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/text_empty"
+        android:text="@string/default_char"
         android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tv_hot_industry_stockname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/text_empty"
+        android:text="@string/default_char"
         android:textColor="@color/stock_text_gray"
         android:textSize="13sp" />
 
@@ -37,7 +37,7 @@
         android:id="@+id/tv_hot_industry_curentPrice$rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/text_empty"
+        android:text="@string/default_char"
         android:textColor="@color/stock_text_gray"
         android:textSize="13sp" />
 

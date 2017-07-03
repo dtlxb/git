@@ -16,7 +16,7 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/text_empty"
+        android:text="@string/default_char"
         android:textColor="@color/textColor_333333"
         android:textSize="14dp" />
 
@@ -25,7 +25,7 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/text_empty"
+        android:text="@string/default_char"
         android:textColor="@color/textColor_333333"
         android:textSize="14dp" />
 

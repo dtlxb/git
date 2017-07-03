@@ -66,6 +66,7 @@ public class PhoneContactsActivity extends BaseActivity {
     // 库 phone表字段
     private static final String[] PHONES_PROJECTION = new String[]{
             Phone.DISPLAY_NAME, Phone.NUMBER, Photo.PHOTO_ID, Phone.CONTACT_ID};
+
     //联系人显示名称
     private static final int PHONES_DISPLAY_NAME_INDEX = 0;
     //电话号码
@@ -74,8 +75,6 @@ public class PhoneContactsActivity extends BaseActivity {
     private static final int PHONES_PHOTO_ID_INDEX = 2;
     //联系人的ID
     private static final int PHONES_CONTACT_ID_INDEX = 3;
-
-    private XTitle xTitle;
 
     @BindView(R.id.rv_contacts)
     RecyclerView rvContacts;
@@ -137,7 +136,7 @@ public class PhoneContactsActivity extends BaseActivity {
     }
 
     private void init() {
-        xTitle = setMyTitle(R.string.im_phone_num, true);
+        XTitle xTitle = setMyTitle(R.string.im_phone_num, true);
         XTitle.TextAction textAction = new XTitle.TextAction("添加") {
             @Override
             public void actionClick(View view) {

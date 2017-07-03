@@ -1050,8 +1050,9 @@ public class GGOKHTTP {
      * 获取公司标签
      * <p>
      * //1：好公司 2：希望之星  0：历史好公司 -1 未选入
+     * codes=000001;600758
      */
-    public static final String GET_STOCK_TAG = "stock/get_stock_tag";
+    public static final String GET_STOCK_TAG = "v1/stock/get_stock_tag";
 
 //--------------------------------------------------------------------------------------------------
 
@@ -1087,21 +1088,16 @@ public class GGOKHTTP {
                         @Override
                         public void onResponse(String response, int id) {
                             if (httpInterface != null) {
+                                JSONObject jsonObject = null;
                                 try {
-                                    JSONObject jsonObject = null;
-                                    try {
-                                        jsonObject = new JSONObject(response);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
+                                    jsonObject = new JSONObject(response);
                                     if (!jsonObject.isNull("code")) {
                                         httpInterface.onSuccess(response);
                                     } else {
                                         httpInterface.onFailure("最外层没有code字段");
                                     }
-
-                                } catch (Exception e) {//解析出错
-                                    httpInterface.onFailure(e.getMessage());
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
                             }
                         }

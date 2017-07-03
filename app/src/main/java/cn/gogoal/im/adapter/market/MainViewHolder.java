@@ -34,6 +34,10 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
         super.finalize();
     }
 
+    public Context getItemContext(){
+        return context;
+    }
+
     public <T extends View> T findView(@IdRes int id) {
         return (T) itemView.findViewById(id);
     }

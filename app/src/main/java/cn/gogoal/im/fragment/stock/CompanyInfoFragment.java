@@ -350,6 +350,8 @@ public class CompanyInfoFragment extends BaseFragment {
         }
 
         JSONArray retained_profits = data.getJSONArray(profits);
+
+
         List<Float> values = new ArrayList<>();
         if (chartTab == 2) {
             for (int i = 0; i < retained_profits.size(); i++) {

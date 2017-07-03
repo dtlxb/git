@@ -12,6 +12,7 @@ import java.util.List;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.bean.stock.stockRanklist.StockRankBean;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
@@ -62,6 +63,8 @@ public class RankListAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
         holder.setText(R.id.tv_mystock_stockcode, data.getStock_code());
         holder.setText(R.id.tv_mystock_price, StringUtils.saveSignificand(data.getCurrent_price(), 2));
 
+        holder.findView(R.id.layout_item_rank_value_with_bg).setPadding(
+                AppDevice.dp2px(holder.getItemContext(),10),0,0,0);
 
         switch (rankType) {
             case RANK_TYPE_INCREASE_LIST:
@@ -71,7 +74,6 @@ public class RankListAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
                 holder.setTextResColor(R.id.tv_mystock_price, StockUtils.getStockRateColor(data.getRate()));
                 break;
             case RANK_TYPE_CHANGE_LIST://换手率
-
                 holder.setText(R.id.tv_mystock_rate, StringUtils.saveSignificand(
                         StringUtils.parseStringDouble(data.getRate()) * 100, 2) + "%");
                 holder.setBackgroundRes(R.id.tv_mystock_rate, R.drawable.shape_my_stock_price_gray);

@@ -204,12 +204,13 @@ public class TreatFragment extends BaseFragment {
                     threeTexts.clear();
                     TreatData treatData = JSONObject.parseObject(responseInfo, StockDetail.class).getData();
 
-                    float sell = Float.parseFloat(treatData.getSell5_volume()) + Float.parseFloat(treatData.getSell4_volume()) +
-                            Float.parseFloat(treatData.getSell3_volume()) + Float.parseFloat(treatData.getSell2_volume()) +
-                            Float.parseFloat(treatData.getSell1_volume());
-                    float buy = Float.parseFloat(treatData.getBuy5_volume()) + Float.parseFloat(treatData.getBuy4_volume()) +
-                            Float.parseFloat(treatData.getBuy3_volume()) + Float.parseFloat(treatData.getBuy2_volume()) +
-                            Float.parseFloat(treatData.getBuy1_volume());
+                    float sell = parseFloat(treatData.getSell5_volume()) + parseFloat(treatData.getSell4_volume()) +
+                            parseFloat(treatData.getSell3_volume()) + parseFloat(treatData.getSell2_volume()) +
+                            parseFloat(treatData.getSell1_volume());
+
+                    float buy = parseFloat(treatData.getBuy5_volume()) + parseFloat(treatData.getBuy4_volume()) +
+                            parseFloat(treatData.getBuy3_volume()) + parseFloat(treatData.getBuy2_volume()) +
+                            parseFloat(treatData.getBuy1_volume());
 
                     threeTexts.add(new ThreeText("卖5", treatData.getSell5_price(), treatData.getSell5_volume()));
                     threeTexts.add(new ThreeText("卖4", treatData.getSell4_price(), treatData.getSell4_volume()));
@@ -251,12 +252,12 @@ public class TreatFragment extends BaseFragment {
                 if (JSONObject.parseObject(responseInfo).getIntValue("code") == 0) {
                     TreatData treatData = JSONObject.parseObject(responseInfo, StockDetail.class).getData();
 
-                    float sell = Float.parseFloat(treatData.getSell5_volume()) + Float.parseFloat(treatData.getSell4_volume()) +
-                            Float.parseFloat(treatData.getSell3_volume()) + Float.parseFloat(treatData.getSell2_volume()) +
-                            Float.parseFloat(treatData.getSell1_volume());
-                    float buy = Float.parseFloat(treatData.getBuy5_volume()) + Float.parseFloat(treatData.getBuy4_volume()) +
-                            Float.parseFloat(treatData.getBuy3_volume()) + Float.parseFloat(treatData.getBuy2_volume()) +
-                            Float.parseFloat(treatData.getBuy1_volume());
+                    float sell = parseFloat(treatData.getSell5_volume()) + parseFloat(treatData.getSell4_volume()) +
+                            parseFloat(treatData.getSell3_volume()) + parseFloat(treatData.getSell2_volume()) +
+                            parseFloat(treatData.getSell1_volume());
+                    float buy = parseFloat(treatData.getBuy5_volume()) + parseFloat(treatData.getBuy4_volume()) +
+                            parseFloat(treatData.getBuy3_volume()) + parseFloat(treatData.getBuy2_volume()) +
+                            parseFloat(treatData.getBuy1_volume());
 
                     chartBeanList.clear();
                     chartBeanList.add(new ChartBean(buy, "#ed1b1b"));
@@ -270,6 +271,18 @@ public class TreatFragment extends BaseFragment {
             public void onFailure(String msg) {
             }
         }).startGet();
+    }
+
+    private float parseFloat(String floatString){
+        if (StringUtils.isActuallyEmpty(floatString)){
+            return 0.0f;
+        }else {
+            try {
+                return Float.parseFloat(floatString);
+            }catch (Exception e){
+                return 0.0f;
+            }
+        }
     }
 
     //分时数据交易明细
@@ -366,7 +379,7 @@ public class TreatFragment extends BaseFragment {
 
         pieDatas.clear();
         for (int i = moneyDatas.size() - 1; i > -1; i--) {
-            pieDatas.add(new PieBean(moneyDatas.get(i).getTradeType(), Float.parseFloat(moneyDatas.get(i).getTradePer().substring(0, moneyDatas.get(i).getTradePer().length() - 1)),
+            pieDatas.add(new PieBean(moneyDatas.get(i).getTradeType(), parseFloat(moneyDatas.get(i).getTradePer().substring(0, moneyDatas.get(i).getTradePer().length() - 1)),
                     moneyDatas.get(i).getColor()));
         }
 
