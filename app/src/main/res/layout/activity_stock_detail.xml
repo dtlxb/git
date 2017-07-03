@@ -9,14 +9,79 @@
     android:orientation="vertical"
     tools:context=".activity.stock.StockDetailActivity">
 
-    <!--title-->
-    <include layout="@layout/include_title" />
+    <RelativeLayout
+        android:id="@+id/layout_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/titlebar_size"
+        android:background="@color/stock_gray">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableStart="@mipmap/img_actionbar_back"
+            android:gravity="center_vertical"
+            android:paddingStart="10dp"
+            android:text="返回"
+            android:textColor="@android:color/white"
+            android:textSize="17sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_stockdetail_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="平安银行(000001)"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_stockdetail_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已收盘\u300006-30 17:49"
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_message"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/titlebar_size"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:paddingEnd="15dp"
+            android:paddingStart="7dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/message_white" />
+
+        <ImageView
+            android:id="@+id/btn_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/titlebar_size"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/iv_message"
+            android:contentDescription="@null"
+            android:paddingEnd="7dp"
+            android:paddingStart="7dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/refresh_white" />
+
+    </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swiperefreshlayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/scrollView"
@@ -29,7 +94,7 @@
                 android:orientation="vertical">
 
                 <!--head-->
-                <include layout="@layout/inlcude_stock_detail_head" />
+                <include layout="@layout/inlcude_stock_detail_head"/>
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -60,7 +125,7 @@
                             android:id="@+id/layout_news_content"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:minHeight="375dp"/>
+                            android:minHeight="375dp" />
 
                     </LinearLayout>
 

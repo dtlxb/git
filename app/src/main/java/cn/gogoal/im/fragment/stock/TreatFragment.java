@@ -16,7 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -176,7 +175,6 @@ public class TreatFragment extends BaseFragment {
 
     @Subscriber(tag = "refresh_stock_news")
     void updataTreatData(String msg) {
-        KLog.e("跑啊你!!!");
         if (type == AppConst.TREAT_TYPE_WU_DANG) {
             needAnim = false;
             getTreatWudang();
@@ -310,7 +308,6 @@ public class TreatFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if (result.getIntValue("code") == 0) {
                     MoneyBean moneyBean = JSONObject.parseObject(responseInfo, TradeBean.class).getData();

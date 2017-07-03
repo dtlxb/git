@@ -109,6 +109,25 @@ public class MyStockReportBean {
         private List<String> sw_second_class;
         private List<String> sw_second_name;
 
+        private String change_rate;
+        private String price;
+
+        public String getChange_rate() {
+            return change_rate;
+        }
+
+        public void setChange_rate(String change_rate) {
+            this.change_rate = change_rate;
+        }
+
+        public String getPrice() {
+            return price;
+        }
+
+        public void setPrice(String price) {
+            this.price = price;
+        }
+
         public int getOpen_file() {
             return open_file;
         }

@@ -116,5 +116,4 @@
     <string name="title_activity_market_compare">MarketCompareActivity</string>
     <string name="title_activity_industry_compare_fragment">IndustryCompareFragment</string>
     <string name="title_activity_stock_detail_comment_acticity">StockDetailCommentActicity</string>
-    <string name="default__">--</string>
 </resources>

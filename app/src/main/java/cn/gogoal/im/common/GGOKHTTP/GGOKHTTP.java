@@ -5,6 +5,7 @@ import android.util.Log;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -1021,6 +1022,26 @@ public class GGOKHTTP {
      */
     public static final String DIVIDEND_FINANCING = "v1/f10/dividend_financing";
 
+    /**
+     * F10-同业比较
+     * stock_code
+     */
+    public static final String GET_PEERCOMPARISON_INFO = "v1/ggm_peercomparison/get_peercomparison_info";
+
+    /**
+     * F10-限售解禁
+     * stock_code
+     */
+    public static final String RESTRICT_SALE = "v1/f10/restrict_sale";
+
+    /**
+     * 获取公司标签
+     *
+     * //1：好公司 2：希望之星  0：历史好公司 -1 未选入
+     *
+     * */
+    public static final String GET_STOCK_TAG ="stock/get_stock_tag";
+
 //--------------------------------------------------------------------------------------------------
 
     /**
@@ -1056,14 +1077,19 @@ public class GGOKHTTP {
                         public void onResponse(String response, int id) {
                             if (httpInterface != null) {
                                 try {
-                                    JSONObject jsonObject = new JSONObject(response);
+                                    JSONObject jsonObject = null;
+                                    try {
+                                        jsonObject = new JSONObject(response);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                     if (!jsonObject.isNull("code")) {
                                         httpInterface.onSuccess(response);
                                     } else {
                                         httpInterface.onFailure("最外层没有code字段");
                                     }
 
-                                } catch (Exception e) {//解析出错，返回就TM就不是json
+                                } catch (Exception e) {//解析出错
                                     httpInterface.onFailure(e.getMessage());
                                 }
                             }

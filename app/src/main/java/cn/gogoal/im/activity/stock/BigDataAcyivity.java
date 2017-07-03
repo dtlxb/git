@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 
 import butterknife.BindView;
@@ -35,7 +36,7 @@ public class BigDataAcyivity extends BaseActivity {
     private String[] bigDataTitle = {"事件选股", "主题选股"};
 
     @Override
-    public void doBusiness(Context mContext) {
+    public void doBusiness(final Context mContext) {
 
         setMyTitle("大数据选股", true);
 
@@ -64,6 +65,20 @@ public class BigDataAcyivity extends BaseActivity {
 
         vpBigData.setOffscreenPageLimit(2);
 
+        tabBigData.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                tabBigData.setBackground(ContextCompat.getDrawable(mContext,
+                        tab.getPosition()==0?
+                                R.drawable.shape_bottom_line_1dp
+                                :android.R.color.transparent));
+            }
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+
         tabBigData.setupWithViewPager(vpBigData);
 
         TabLayout.Tab tabAt = tabBigData.getTabAt(index);
@@ -73,6 +88,8 @@ public class BigDataAcyivity extends BaseActivity {
         }
 
         AppDevice.setTabLayoutWidth(tabBigData, 50);
+
+
     }
 
 }

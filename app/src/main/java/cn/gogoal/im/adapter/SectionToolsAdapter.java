@@ -25,13 +25,13 @@ import cn.gogoal.im.common.ImageUtils.ImageDisplay;
  * phone 18930640263
  * description :投研适配器
  */
-public class SectionAdapter extends BaseSectionQuickAdapter<SectionToolsData, BaseViewHolder> {
+public class SectionToolsAdapter extends BaseSectionQuickAdapter<SectionToolsData, BaseViewHolder> {
 
     private Context context;
 
     private int innerItem;
 
-    public SectionAdapter(Context context, List<SectionToolsData> data) {
+    public SectionToolsAdapter(Context context, List<SectionToolsData> data) {
         super(R.layout.item_touyan_item, R.layout.item_touyan_title, data);
         this.context = context;
 

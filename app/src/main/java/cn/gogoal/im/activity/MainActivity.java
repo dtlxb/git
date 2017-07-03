@@ -44,7 +44,6 @@ import cn.gogoal.im.common.LitePalDBHelper;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.fragment.companytags.HistoryFragment;
 import cn.gogoal.im.fragment.main.InfomationFragment;
 import cn.gogoal.im.fragment.main.LiveListFragment;
 import cn.gogoal.im.fragment.main.MainStockFragment;
@@ -122,6 +121,7 @@ public class MainActivity extends BaseActivity {
 
         badge = new BadgeView(MainActivity.this);
         initBadge(unReadCount, badge);
+
     }
 
     //底部tab

@@ -69,6 +69,25 @@ public class MyStockNoticeBean {
         private int has_read;
         private String date;
 
+        private String change_rate;
+        private String price;
+
+        public String getChange_rate() {
+            return change_rate;
+        }
+
+        public void setChange_rate(String change_rate) {
+            this.change_rate = change_rate;
+        }
+
+        public String getPrice() {
+            return price;
+        }
+
+        public void setPrice(String price) {
+            this.price = price;
+        }
+
         public String getAuthor() {
             return author;
         }

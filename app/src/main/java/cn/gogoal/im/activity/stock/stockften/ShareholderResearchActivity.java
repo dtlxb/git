@@ -26,6 +26,7 @@ import cn.gogoal.im.bean.f10.FundHolderData;
 import cn.gogoal.im.bean.f10.TenHolderData;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.ui.NormalItemDecoration;
 
 /**
  * Created by dave.
@@ -66,6 +67,7 @@ public class ShareholderResearchActivity extends BaseActivity {
 
         final VirtualLayoutManager layoutManager = new VirtualLayoutManager(getActivity());
         rv_research.setLayoutManager(layoutManager);
+        rv_research.addItemDecoration(new NormalItemDecoration(mContext));
         layoutManager.setAutoMeasureEnabled(true);
 
         viewPool = new RecyclerView.RecycledViewPool();

@@ -2,6 +2,8 @@ package cn.gogoal.im.bean.stock.bigdata.subject;
 
 import java.util.List;
 
+import cn.gogoal.im.common.CalendarUtils;
+
 /**
  * author wangjd on 2017/6/27 0027.
  * Staff_id 1375
@@ -64,10 +66,14 @@ public class SubjectListBean {
         private String insert_time;
         private String theme_name;
         private int position_id;
-        private double price_change_rate;
-        private double price_change;
-        private double price;
+        private String price_change_rate;
+        private String price_change;
+        private String price;
         private List<String> tags;
+
+        public String getGroupDate() {
+            return CalendarUtils.getStringDate("yyyy-MM-dd",getInsert_time());
+        }
 
         public int getId() {
             return id;
@@ -117,27 +123,27 @@ public class SubjectListBean {
             this.position_id = position_id;
         }
 
-        public double getPrice_change_rate() {
+        public String getPrice_change_rate() {
             return price_change_rate;
         }
 
-        public void setPrice_change_rate(double price_change_rate) {
+        public void setPrice_change_rate(String price_change_rate) {
             this.price_change_rate = price_change_rate;
         }
 
-        public double getPrice_change() {
+        public String getPrice_change() {
             return price_change;
         }
 
-        public void setPrice_change(double price_change) {
+        public void setPrice_change(String price_change) {
             this.price_change = price_change;
         }
 
-        public double getPrice() {
+        public String getPrice() {
             return price;
         }
 
-        public void setPrice(double price) {
+        public void setPrice(String price) {
             this.price = price;
         }
 
