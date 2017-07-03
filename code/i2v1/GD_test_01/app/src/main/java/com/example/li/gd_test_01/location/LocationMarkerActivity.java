@@ -57,7 +57,7 @@ public class LocationMarkerActivity extends Activity implements LocationSource,
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
         init();
-        Log.d("LocationActivity","OnCreate successes.");
+        Log.d("LocationActivity","OnCreate successes.");//在日志里找不到这句。Log方法有问题？
     }
 
     /**
@@ -154,6 +154,7 @@ public class LocationMarkerActivity extends Activity implements LocationSource,
                     mCircle.setRadius(amapLocation.getAccuracy());
                     mLocMarker.setPosition(location);
                 }
+                //每次定位都会把地图Camera移到定位点所在的位置。若去掉下面这一行，用户就可以自己拖拽控制Camera
                 aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 18));
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
