@@ -40,52 +40,62 @@
 
         <include layout="@layout/layout_space_15dp" />
 
-        <android.support.percent.PercentRelativeLayout
+        <LinearLayout
             android:id="@+id/item_mystock"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@drawable/shape_line_bottom"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingEnd="10dp"
+            android:gravity="center_vertical"
+            android:paddingStart="15dp">
 
             <TextView
                 android:id="@+id/tv_mystock_stockname"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="15dp"
-                android:layout_toStartOf="@+id/tv_mystock_price"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:text="全部"
                 android:textColor="@color/textColor_333333"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_mystock_rag"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="公司荣誉"
+                android:textColor="@color/textColor_333333"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <cn.gogoal.im.ui.view.SortView
                 android:id="@+id/tv_mystock_price"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="20dp"
-                android:layout_toStartOf="@+id/tv_mystock_rate"
-                android:gravity="center|end"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="最新价"
                 android:textColor="@color/textColor_333333"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_widthPercent="25%" />
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <cn.gogoal.im.ui.view.SortView
                 android:id="@+id/tv_mystock_rate"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:gravity="center"
+                android:layout_weight="1"
+                android:gravity="center_vertical|end"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
                 android:text="涨跌幅"
                 android:textColor="@color/textColor_333333"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_widthPercent="25%" />
-        </android.support.percent.PercentRelativeLayout>
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_mystock"

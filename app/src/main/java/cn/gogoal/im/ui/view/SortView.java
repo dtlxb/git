@@ -101,8 +101,6 @@ public class SortView extends AppCompatTextView {
         SpannableString spannableString = new SpannableString(defaultText);
         CenterImageSpan imageSpan = new CenterImageSpan(getContext(),drawableId);
         spannableString.setSpan(imageSpan, defaultText.length()-1, defaultText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-
-        setText(spannableString);
         return spannableString;
     }
 }

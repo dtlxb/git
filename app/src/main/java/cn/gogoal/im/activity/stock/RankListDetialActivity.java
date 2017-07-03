@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.stock.HotIndustryBean;
 import cn.gogoal.im.bean.stock.RankListStockBean;
 import cn.gogoal.im.bean.stock.stockRanklist.StockRankBean;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
@@ -279,7 +281,8 @@ public class RankListDetialActivity extends BaseActivity {
                                final StockRankBean data, int position) {
 
             TextView tv_price = holder.getView(R.id.tv_mystock_price);
-
+            tv_price.setPadding(0, 0, 0, 0);
+            tv_price.setGravity(Gravity.CENTER);
             tv_price.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
 
             holder.setText(R.id.tv_mystock_stockname, data.getStock_name());
@@ -288,7 +291,6 @@ public class RankListDetialActivity extends BaseActivity {
             tv_price.setText(StringUtils.saveSignificand(data.getCurrent_price(), 2));
 
             TextView rateView = holder.getView(R.id.tv_mystock_rate);
-
             switch (listType) {
                 case 0://涨幅榜
                 case 1://跌幅榜
@@ -296,12 +298,12 @@ public class RankListDetialActivity extends BaseActivity {
                     rateView.setBackgroundResource(StockUtils.getStockRateBackgroundRes(data.getRate()));
                     break;
                 case 2://换手率
-                    rateView.setText(""+StringUtils.saveSignificand(
+                    rateView.setText("" + StringUtils.saveSignificand(
                             StringUtils.parseStringDouble(data.getRate()) * 100, 2) + "%");
                     rateView.setBackgroundResource(R.drawable.shape_my_stock_price_gray);
                     break;
                 case 3://振幅榜
-                    rateView.setText(""+StringUtils.saveSignificand(data.getRate(), 2) + "%");
+                    rateView.setText("" + StringUtils.saveSignificand(data.getRate(), 2) + "%");
                     rateView.setBackgroundResource(R.drawable.shape_my_stock_price_gray);
                     break;
             }
@@ -321,28 +323,37 @@ public class RankListDetialActivity extends BaseActivity {
      */
     private class IndustryAdapter extends CommonAdapter<HotIndustryBean.DataBean, BaseViewHolder> {
 
+        private int padding5dp;
+        private int padding15dp;
+
         private IndustryAdapter(List<HotIndustryBean.DataBean> datas) {
             super(R.layout.item_stock_rank_list, datas);
+            padding5dp = AppDevice.dp2px(getActivity(), 5);
+            padding15dp = AppDevice.dp2px(getActivity(), 15);
         }
 
         @Override
         protected void convert(BaseViewHolder holder, final HotIndustryBean.DataBean data, int position) {
 
-            if (moduleType == MODULE_TYPE_TITLE_HOT_INDUSTRY) {
+            if (moduleType == MODULE_TYPE_TITLE_HOT_INDUSTRY) {//from 热门行业标题
                 holder.setText(R.id.tv_mystock_stockname, data.getIndustry_name());
                 holder.getView(R.id.tv_mystock_stockcode).setVisibility(View.GONE);
 
+                //中间 涨跌幅View
                 TextView rateView = holder.getView(R.id.tv_mystock_price);
-                TextView stockView = holder.getView(R.id.tv_mystock_rate);
-
                 rateView.setText(StockUtils.plusMinus("" + StringUtils.parseStringDouble(data.getIndustry_rate()), true));// TODO: 2017/4/7 0007
                 rateView.setTextColor(Color.WHITE);
+                rateView.setGravity(Gravity.CENTER);
+                rateView.setPadding(0, padding5dp, 0, padding5dp);
+                rateView.setBackgroundResource(StockUtils.getStockRateBackgroundRes(data.getIndustry_rate()));
 
+                //右侧 领涨股View
+                TextView stockView = holder.getView(R.id.tv_mystock_rate);
+                stockView.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
                 stockView.setText(data.getStock_name());
                 stockView.setTextColor(getResColor(R.color.textColor_333333));
                 stockView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
 
-                rateView.setBackgroundResource(StockUtils.getStockRateBackgroundRes(data.getIndustry_rate()));
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -355,13 +366,19 @@ public class RankListDetialActivity extends BaseActivity {
                     }
                 });
 
-            } else {
+            } else {//from 热门行业grid item
 
+                holder.getView(R.id.layout_item_rank_value_with_bg).setPadding(
+                        padding15dp, 0, 0, 0);
+
+                //右侧 涨跌幅View
                 TextView rateView = holder.getView(R.id.tv_mystock_rate);
                 rateView.setTextColor(Color.WHITE);
 
+                //中间 股价View
                 TextView priceView = holder.getView(R.id.tv_mystock_price);
-                priceView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                priceView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                priceView.setGravity(Gravity.CENTER);
 
                 holder.setText(R.id.tv_mystock_stockname, data.getStock_name());
                 holder.setText(R.id.tv_mystock_stockcode, data.getStock_code());

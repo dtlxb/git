@@ -24,6 +24,7 @@ public class MyStockData implements Parcelable {
      * change_rate : 0.43383947939261547
      * stock_type : 1
      */
+
     private String eps_y2;
     private int symbol_type;
     private String open_price;
@@ -46,10 +47,7 @@ public class MyStockData implements Parcelable {
     private String turnover_rate;
     private long volume;
     private String full_code;
-//    private Tag tag; 好公司 标志
-
-    //添加选择的字段
-    private boolean check=false;
+    private StockTag tag; //好公司 标志
 
     private int group_id;
     private String date;
@@ -63,6 +61,17 @@ public class MyStockData implements Parcelable {
     private double price;
     private String change_rate;
     private int stock_type;
+
+    //添加选择的字段
+    private boolean check=false;
+
+    public StockTag getTag() {
+        return tag;
+    }
+
+    public void setTag(StockTag tag) {
+        this.tag = tag;
+    }
 
     public String getEps_y2() {
         return eps_y2;
@@ -346,9 +355,8 @@ public class MyStockData implements Parcelable {
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof MyStockData) && ((MyStockData) obj).getStock_code().equalsIgnoreCase(this.getStock_code());
+        return (obj instanceof MyStockData) && ((MyStockData) obj).getFull_code().equalsIgnoreCase(this.getFull_code());
     }
-
 
     @Override
     public int describeContents() {
@@ -379,6 +387,7 @@ public class MyStockData implements Parcelable {
         dest.writeString(this.turnover_rate);
         dest.writeLong(this.volume);
         dest.writeString(this.full_code);
+        dest.writeParcelable(this.tag, flags);
         dest.writeByte(this.check ? (byte) 1 : (byte) 0);
         dest.writeInt(this.group_id);
         dest.writeString(this.date);
@@ -420,6 +429,7 @@ public class MyStockData implements Parcelable {
         this.turnover_rate = in.readString();
         this.volume = in.readLong();
         this.full_code = in.readString();
+        this.tag = in.readParcelable(StockTag.class.getClassLoader());
         this.check = in.readByte() != 0;
         this.group_id = in.readInt();
         this.date = in.readString();
