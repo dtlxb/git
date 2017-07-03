@@ -355,7 +355,7 @@ public class MyStockData implements Parcelable {
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof MyStockData) && ((MyStockData) obj).getStock_code().equalsIgnoreCase(this.getStock_code());
+        return (obj instanceof MyStockData) && ((MyStockData) obj).getFull_code().equalsIgnoreCase(this.getFull_code());
     }
 
     @Override

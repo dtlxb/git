@@ -17,6 +17,7 @@ import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -62,6 +63,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
     private View mContentView;
 
     private static IPermissionListner mListener;
+    private AlertDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -315,7 +317,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
      */
     @Subscriber(tag = "show_client_status")
     public void imClientLoad(String msg) {
-        DialogHelp.getMessageDialog(getActivity(), "账号已在其他设备登录，点击\"确定\"跳转登录页面，重新登录。", new DialogInterface.OnClickListener() {
+        mDialog = DialogHelp.getMessageDialog(getActivity(), "账号已在其他设备登录，点击\"确定\"跳转登录页面，重新登录。", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 UserUtils.logout(getActivity());
@@ -328,6 +330,10 @@ public abstract class BaseActivity extends AppCompatActivity implements IBase {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(mDialog != null) {
+            mDialog.dismiss();
+        }
+
         EventBus.getDefault().unregister(this);
         fixInputMethodManagerLeak(this);
         try {

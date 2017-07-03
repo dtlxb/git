@@ -120,7 +120,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     public void onResume() {
         super.onResume();
         try {
-            refreshMyStock(AppConst.REFRESH_TYPE_FIRST);
+            refreshMyStock(AppConst.REFRESH_TYPE_RESUME);
         } catch (Exception e) {
             KLog.e(e.getMessage());
         }
@@ -190,6 +190,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
                     noData(false);
+
                     myStockDatas.clear();
 
                     editEnable(true);
@@ -226,7 +227,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                                     tag.setType(-2);
                                 }
                                 data.setTag(tag);
-                                myStockDatas.add(data);
+                                if (!myStockDatas.contains(data)) {
+                                    myStockDatas.add(data);
+                                }
                             }
                             myStockAdapter.notifyDataSetChanged();
                         }
@@ -380,7 +383,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             priceView.setText(StringUtils.saveSignificand(data.getPrice(), 2));
 
             //标签
-            holder.setVisible(R.id.tv_mystock_tag, true);
+            holder.setVisible(R.id.layout_stock_tag, true);
             if (data.getTag() == null) {
                 holder.setText(R.id.tv_mystock_tag, "未鉴定");
             } else {
