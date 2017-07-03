@@ -33,6 +33,11 @@ public class FtenUtils {
             "tradable_B_stock", "tradable_H_stock", "other_stock", "tradable_limit_stock",
             "country_holder", "country_legal_holder", "other_land_holder", "land_no_country_legal_holder",
             "land_natural_holder", "foreign_holder", "foreign_legal_holder", "foreign_natural_holder"};
+    //历年股本变动
+    public static final String[] EquityChange1 = {"单位(万股)", "总股本(万股)", "流通受限股份(万股)",
+            "已流通股份(万股)", "已上市流通A股(万股)", "境外上市流通股(万股)", "变动原因"};
+    public static final String[] EquityChange1_1 = {"date", "stock_total", "tradable_limit_stock",
+            "tradable_stock", "tradable_A_stock", "tradable_H_stock", "change_reason"};
 
     /**
      * 股票详情下的 财务

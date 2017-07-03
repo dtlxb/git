@@ -1035,12 +1035,23 @@ public class GGOKHTTP {
     public static final String RESTRICT_SALE = "v1/f10/restrict_sale";
 
     /**
+     * F10-股本变动明细
+     * stock_code
+     */
+    public static final String STOCK_CHANGE_DETAIL = "v1/f10/stock_change_detail";
+
+    /**
+     * F10-历年股本变动
+     * stock_code
+     */
+    public static final String OVER_YEAR_STOCK_CHANGE = "v1/f10/over_year_stock_change";
+
+    /**
      * 获取公司标签
-     *
+     * <p>
      * //1：好公司 2：希望之星  0：历史好公司 -1 未选入
-     *
-     * */
-    public static final String GET_STOCK_TAG ="stock/get_stock_tag";
+     */
+    public static final String GET_STOCK_TAG = "stock/get_stock_tag";
 
 //--------------------------------------------------------------------------------------------------
 
