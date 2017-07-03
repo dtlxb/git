@@ -243,7 +243,7 @@ public class CapitalStructureActivity extends BaseActivity {
                     data.getJSONObject(i).getString("date")));
         }
         multiBarView.setMarginBottom(AppDevice.dp2px(getActivity(), 30));
-        multiBarView.setMarginLeft(AppDevice.dp2px(getActivity(), 50));
+        multiBarView.setMarginLeft(AppDevice.dp2px(getActivity(), 60));
         multiBarView.setMarginRight(AppDevice.dp2px(getActivity(), 10));
         multiBarView.setTextSize(AppDevice.dp2px(getActivity(), 10));
         multiBarView.setChartData(chartBeanList);
