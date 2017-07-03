@@ -6,13 +6,18 @@ import android.support.v7.widget.RecyclerView;
 import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
+import cn.gogoal.im.adapter.stockften.CapitalStructureAdapter;
 import cn.gogoal.im.base.BaseActivity;
+import cn.gogoal.im.bean.f10.ProfileData;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.copy.FtenUtils;
 
 /**
  * Created by dave.
@@ -26,6 +31,9 @@ public class CapitalStructureActivity extends BaseActivity {
 
     private String stockCode;
     private String stockName;
+
+    private ArrayList<ProfileData> capitalData = new ArrayList<>();
+    private CapitalStructureAdapter capitalAdapter;
 
     @Override
     public int bindLayout() {
@@ -57,10 +65,55 @@ public class CapitalStructureActivity extends BaseActivity {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                JSONObject object = JSONObject.parseObject(responseInfo);
+                if (object.getIntValue("code") == 0) {
+                    JSONObject data = object.getJSONArray("data").getJSONObject(0);
+                    ArrayList<ProfileData> saleData = new ArrayList<>();
+                    saleData.add(new ProfileData("限售解禁", null));
+                    for (int i = 0; i < FtenUtils.RestrictSale1.length; i++) {
+                        saleData.add(new ProfileData(FtenUtils.RestrictSale1[i],
+                                data.getString(FtenUtils.RestrictSale1_1[i])));
+                    }
+
+                    capitalData.addAll(saleData);
+
+                    getCapitalStructure();
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                UIHelper.toast(CapitalStructureActivity.this, R.string.net_erro_hint);
+            }
+        };
+        new GGOKHTTP(param, GGOKHTTP.RESTRICT_SALE, ggHttpInterface).startGet();
+    }
+
+    /**
+     * 股本结构
+     */
+    private void getCapitalStructure() {
+        final Map<String, String> param = new HashMap<>();
+        param.put("stock_code", stockCode);
+
+        final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
                 KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
+                    JSONObject data = object.getJSONObject("data");
+                    ArrayList<ProfileData> strucData = new ArrayList<>();
+                    strucData.add(new ProfileData("股本结构", null));
+                    for (int i = 0; i < FtenUtils.capital1.length; i++) {
+                        strucData.add(new ProfileData(FtenUtils.capital1[i],
+                                data.getString(FtenUtils.capital1_1[i])));
+                    }
 
+                    capitalData.addAll(strucData);
+
+                    capitalAdapter = new CapitalStructureAdapter(CapitalStructureActivity.this, capitalData);
+                    rvEquity.setAdapter(capitalAdapter);
                 }
             }
 
@@ -68,6 +121,6 @@ public class CapitalStructureActivity extends BaseActivity {
             public void onFailure(String msg) {
             }
         };
-        new GGOKHTTP(param, GGOKHTTP.RESTRICT_SALE, ggHttpInterface).startGet();
+        new GGOKHTTP(param, GGOKHTTP.STOCK_STRUCTURE, ggHttpInterface).startGet();
     }
 }

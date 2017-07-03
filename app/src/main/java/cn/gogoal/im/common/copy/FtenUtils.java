@@ -17,10 +17,22 @@ public class FtenUtils {
     //股本
     public static final String[] equity1 = {"总股本(万股)", "流通股本(万股)", "流通A股(万股)"};
     public static final String[] equity1_1 = {"stock_total", "tradable_stock", "tradable_A_stock"};
-    //股本详情
+    /**
+     * 股本详情
+     */
+    //限售解禁
     public static final String[] RestrictSale1 = {"解禁时间:", "数量:", "占总股本:", "占流通股本:", "股票类型"};
     public static final String[] RestrictSale1_1 = {"date", "restrict_count", "restrict_tradable_stock_ratio",
             "restrict_stock_all_ratio", "stock_type"};
+    //股本结构
+    public static final String[] capital1 = {"总股本(万股)", "流通股本(万股)", "流通A股(万股)",
+            "境内上市外资股(B股)", "境外上市外资股(H股)", "其他", "有限售条件股份/流通受限股份", "国家持股",
+            "国有法人持股", "其他内资持股", "境内非国有法人持股", "境内自然人持股", "外资持股", "境外法人持股",
+            "境外自然人持股"};
+    public static final String[] capital1_1 = {"stock_total", "tradable_stock", "tradable_A_stock",
+            "tradable_B_stock", "tradable_H_stock", "other_stock", "tradable_limit_stock",
+            "country_holder", "country_legal_holder", "other_land_holder", "land_no_country_legal_holder",
+            "land_natural_holder", "foreign_holder", "foreign_legal_holder", "foreign_natural_holder"};
 
     /**
      * 股票详情下的 财务
