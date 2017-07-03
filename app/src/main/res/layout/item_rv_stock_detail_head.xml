@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="0dp"
+    android:layout_weight="1"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center_vertical"
-    android:paddingTop="10dp"
-    android:paddingStart="5dp"
-    android:paddingEnd="0dp"
-    android:paddingBottom="10dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#963563"
+    android:layout_marginStart="10dp">
 
     <TextView
-        android:id="@+id/tv_stock_detail_head_desc"
+        android:id="@+id/tv_stock_detail_head_key"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="今开"
@@ -19,10 +19,6 @@
 
     <TextView
         android:id="@+id/tv_stock_detail_head_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="18.88"
-        android:textColor="@android:color/white"
-        android:textSize="14sp" />
+        style="@style/TextTreatValueStyle"/>
 
 </LinearLayout>

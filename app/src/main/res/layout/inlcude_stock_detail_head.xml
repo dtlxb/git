@@ -1,83 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_stock_detail_head"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/stock_gray"
-    android:baselineAligned="false"
-    android:orientation="horizontal"
-    android:weightSum="2"
-    tools:background="@color/stock_green">
+    android:layout_height="110dp"
+    android:background="@color/stock_gray">
 
     <TextView
         android:id="@+id/tv_stock_detail_price"
         android:layout_width="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/space"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="25dp"
-        android:text="0.00"
+        android:includeFontPadding="true"
+        android:text="@string/default_char"
+        android:gravity="center"
         android:textColor="@android:color/white"
-        android:textSize="45sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/tv_stock_detail_change_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_stock_detail_price"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:text="--"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_stock_detail_change_rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_stock_detail_price"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="20dp"
+        android:layout_alignEnd="@+id/tv_stock_detail_price"
+        android:layout_marginTop="5dp"
+        android:text="--"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+    <android.support.v4.widget.Space
+        android:id="@+id/space"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true" />
 
     <RelativeLayout
-        android:id="@+id/layout_value_rate"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_stock_detail_price"
-        app:layout_constraintRight_toLeftOf="@+id/rv_stock_detail_head">
+        android:id="@+id/layout_stock_detail_treat_head"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/space"
+        android:paddingTop="10dp">
 
         <TextView
-            android:id="@+id/tv_stock_detail_change_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/flag_tv_stock_detail_head_tody_open"
+            style="@style/TextTreatKeyStyle"
             android:layout_alignParentStart="true"
-            android:gravity="center_vertical"
-            android:text="--"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:layout_toStartOf="@+id/space_horizental"
+            android:text="今开" />
 
         <TextView
-            android:id="@+id/tv_stock_detail_change_rate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:text="--"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:id="@+id/tv_stock_detail_head_tody_open"
+            style="@style/TextTreatValueStyle"
+            android:layout_above="@+id/space_vertical"
+            android:layout_below="@+id/flag_tv_stock_detail_head_tody_open" />
+
+        <android.support.v4.widget.Space
+            android:id="@+id/space_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/flag_tv_stock_detail_head_volumes"
+            style="@style/TextTreatKeyStyle"
+            android:layout_below="@+id/space_vertical"
+            android:text="成交量" />
+
+        <TextView
+            android:id="@+id/tv_stock_detail_head_volumes"
+            style="@style/TextTreatValueStyle"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/flag_tv_stock_detail_head_volumes" />
+
+        <android.support.v4.widget.Space
+            android:id="@+id/space_horizental"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/flag_tv_stock_detail_head_yest_close"
+            style="@style/TextTreatKeyStyle"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/space_horizental"
+            android:text="昨收" />
+
+        <TextView
+            android:id="@+id/tv_stock_detail_head_yest_close"
+            style="@style/TextTreatValueStyle"
+            android:layout_above="@+id/space_vertical"
+            android:layout_alignStart="@+id/flag_tv_stock_detail_head_yest_close"
+            android:layout_below="@+id/flag_tv_stock_detail_head_yest_close" />
+
+        <TextView
+            android:id="@+id/flag_tv_stock_detail_head_change_rate"
+            style="@style/TextTreatKeyStyle"
+            android:layout_alignStart="@+id/flag_tv_stock_detail_head_yest_close"
+            android:layout_below="@+id/space_vertical"
+            android:text="换手率" />
+
+        <TextView
+            android:id="@+id/tv_stock_detail_head_change_rate"
+            style="@style/TextTreatValueStyle"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@id/flag_tv_stock_detail_head_yest_close"
+            android:layout_below="@+id/flag_tv_stock_detail_head_change_rate" />
 
     </RelativeLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_stock_detail_head"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layoutManager="android.support.v7.widget.GridLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/iv_show_info_dialog"
-        app:layout_constraintTop_toTopOf="parent"
-        app:spanCount="2"
-        tools:listitem="@layout/item_rv_stock_detail_head"
-        app:layout_constraintLeft_toRightOf="@+id/tv_stock_detail_price"
-        android:layout_marginStart="15dp"/>
 
     <ImageView
         android:id="@+id/iv_show_info_dialog"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/layout_stock_detail_treat_head"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/layout_stock_detail_treat_head"
         android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
         android:contentDescription="@null"
         android:scaleType="centerInside"
-        android:src="@mipmap/img_drop_down"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:src="@mipmap/img_drop_down" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

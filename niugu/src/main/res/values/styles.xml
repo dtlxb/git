@@ -78,7 +78,7 @@
     </style>
 
     <style name="stock_market_text_value">
-        <item name="android:text">@string/default__</item>
+        <item name="android:text">--</item>
         <item name="android:gravity">right</item>
         <item name="android:singleLine">true</item>
         <item name="android:layout_height">wrap_content</item>
