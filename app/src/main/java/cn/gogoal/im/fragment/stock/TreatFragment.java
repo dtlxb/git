@@ -27,7 +27,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.stock.StockDetailActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
@@ -354,6 +353,7 @@ public class TreatFragment extends BaseFragment {
 
     private void drawPieMap() {
         pieView.setPieType(2);
+        pieView.setNeedInnerCircle(true);
 
         float percent;
         if (fromStockDetail) {

@@ -138,4 +138,10 @@
     <color name="f10_executives">#4c6aa0</color>
     <color name="dividend_trans_axis">#D9E2E7</color>
 
+    <!-- 好公司-->
+    <color name="company_normal">#FF691D</color>>
+    <color name="company_good">#F34858</color>>
+    <color name="company_hope">#FE9B1A</color>>
+    <color name="company_history">#599EFD</color>>
+
 </resources>

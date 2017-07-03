@@ -1,10 +1,12 @@
 package cn.gogoal.im.bean.companytags;
 
+import cn.gogoal.im.bean.BaseBeanList;
+
 /**
  * Created by huangxx on 2017/6/29.
  */
 
-public class IncidentData {
+public class IncidentData extends BaseBeanList {
 
     private int id;
     private String event_type;

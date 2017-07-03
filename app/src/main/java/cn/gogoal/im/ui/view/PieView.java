@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -17,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.gogoal.im.R;
-import cn.gogoal.im.bean.ChartBean;
 import cn.gogoal.im.bean.PieBean;
 import cn.gogoal.im.common.StringUtils;
 
@@ -49,6 +49,11 @@ public class PieView extends View {
     //数据
     private List<PieBean> beanList;
     private float totalValue;
+    //是否需要画内白圆
+    private boolean needInnerCircle;
+
+    //是否需要弧形内标注
+    private boolean needInnerTitle;
 
     public PieView(Context context) {
         super(context);
@@ -130,20 +135,22 @@ public class PieView extends View {
                 }
                 float sweep = beanList.get(i).getPieValue() / totalValue * 360;
                 canvas.drawArc(pieOval, start, sweep * pieRate, true, piePaint);
+
+                float rate;
+                String title;
+                if (CIRCLE_PIE == pieType || ANNULAR_PIE == pieType) {
+                    rate = 1.1f;
+                    title = StringUtils.getIntegerData(String.valueOf(beanList.get(i).getPieValue() * 100 * pieRate / totalValue)) + "%";
+                } else {
+                    rate = 1.0f;
+                    title = beanList.get(i).getTitle();
+                }
+                //画标注连线
+                float radians = (float) ((start + sweep / 2) / 180 * Math.PI);
+                float lineStartX = pieCenterX + pieRadius * rate * (float) (Math.cos(radians));
+                float lineStartY = pieCenterY + pieRadius * rate * (float) (Math.sin(radians));
+
                 if (ANNULAR_PIE != pieType) {
-                    float rate;
-                    String title;
-                    if (CIRCLE_PIE == pieType) {
-                        rate = 1.1f;
-                        title = StringUtils.getIntegerData(String.valueOf(beanList.get(i).getPieValue() * 100 * pieRate / totalValue)) + "%";
-                    } else {
-                        rate = 1.0f;
-                        title = beanList.get(i).getTitle();
-                    }
-                    //画标注连线
-                    float radians = (float) ((start + sweep / 2) / 180 * Math.PI);
-                    float lineStartX = pieCenterX + pieRadius * rate * (float) (Math.cos(radians));
-                    float lineStartY = pieCenterY + pieRadius * rate * (float) (Math.sin(radians));
                     rate = 1.3f;
                     float lineStopX = pieCenterX + pieRadius * rate * (float) (Math.cos(radians));
                     float lineStopY = pieCenterY + pieRadius * rate * (float) (Math.sin(radians));
@@ -162,6 +169,13 @@ public class PieView extends View {
                     float fontWidth = titlePaint.measureText(title);
                     canvas.drawText(title, textLineStopX - (lineStartX > pieCenterX ? -5 * lineSize : fontWidth + 5 * lineSize),
                             lineStopY + fontHeight / 4, titlePaint);
+                } else {
+                    //圈内标注
+                    if (needInnerTitle && !TextUtils.isEmpty(title)) {
+                        titlePaint.setColor(ContextCompat.getColor(getContext(), R.color.white));
+                        canvas.drawText(title, pieCenterX + (lineStartX - pieCenterX - titlePaint.measureText(title)) / 2,
+                                pieCenterY + (lineStartY - pieCenterY + fontHeight) / 2, titlePaint);
+                    }
                 }
                 start += sweep;
             }
@@ -170,8 +184,10 @@ public class PieView extends View {
                 piePaint.setColor(ContextCompat.getColor(getContext(), R.color.half_alpha_white));
                 canvas.drawCircle(pieCenterX, pieCenterY, pieRadius / 2, piePaint);
             } else if (ANNULAR_PIE == pieType) {
-                piePaint.setColor(ContextCompat.getColor(getContext(), R.color.white));
-                canvas.drawCircle(pieCenterX, pieCenterY, pieRadius / 3, piePaint);
+                if (needInnerCircle) {
+                    piePaint.setColor(ContextCompat.getColor(getContext(), R.color.white));
+                    canvas.drawCircle(pieCenterX, pieCenterY, pieRadius / 3, piePaint);
+                }
             }
 
             if (pieRate < 1) {
@@ -200,6 +216,22 @@ public class PieView extends View {
             }
             invalidate();
         }
+    }
+
+    public boolean isNeedInnerTitle() {
+        return needInnerTitle;
+    }
+
+    public void setNeedInnerTitle(boolean needInnerTitle) {
+        this.needInnerTitle = needInnerTitle;
+    }
+
+    public boolean isNeedInnerCircle() {
+        return needInnerCircle;
+    }
+
+    public void setNeedInnerCircle(boolean needInnerCircle) {
+        this.needInnerCircle = needInnerCircle;
     }
 
     public int getPieType() {

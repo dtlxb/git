@@ -1,10 +1,12 @@
 package cn.gogoal.im.bean.companytags;
 
+import cn.gogoal.im.bean.BaseBeanList;
+
 /**
  * Created by huangxx on 2017/6/29.
  */
 
-public class HistoryData {
+public class HistoryData extends BaseBeanList {
     private String report_publish;
     private int year;
     private String report_period;

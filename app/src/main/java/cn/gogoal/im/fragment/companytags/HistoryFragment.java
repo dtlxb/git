@@ -6,15 +6,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +23,8 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
-import cn.gogoal.im.bean.companytags.HistoryBean;
+import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.companytags.HistoryData;
-import cn.gogoal.im.bean.companytags.IndustryBean;
 import cn.gogoal.im.bean.companytags.IndustryData;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
@@ -93,7 +91,6 @@ public class HistoryFragment extends BaseFragment {
             //绑定
             recyclerView.setAdapter(industryAdapter);
             getIndustry();
-
         }
     }
 
@@ -106,10 +103,16 @@ public class HistoryFragment extends BaseFragment {
             public void onSuccess(String responseInfo) {
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 if (result.getIntValue("code") == 0) {
-                    historyDatas.addAll(JSONObject.parseObject(responseInfo, HistoryBean.class).getData());
-                    HistoryData historyData = new HistoryData("财报周期", 0, "财报发布日", 0);
-                    historyDatas.add(0, historyData);
-                    historyAdapter.notifyDataSetChanged();
+                    BaseBeanList<HistoryData> beanList = JSONObject.parseObject(
+                            responseInfo,
+                            new TypeReference<BaseBeanList<HistoryData>>() {
+                            });
+                    historyDatas.addAll(beanList.getData());
+                    if (historyDatas.size() > 0) {
+                        HistoryData historyData = new HistoryData("财报周期", 0, "财报发布日", 0);
+                        historyDatas.add(0, historyData);
+                        historyAdapter.notifyDataSetChanged();
+                    }
                 }
             }
 
@@ -131,10 +134,16 @@ public class HistoryFragment extends BaseFragment {
                 JSONObject result = JSONObject.parseObject(responseInfo);
                 KLog.e(responseInfo);
                 if (result.getIntValue("code") == 0) {
-                    industryDatas.addAll(JSONObject.parseObject(responseInfo, IndustryBean.class).getData());
-                    IndustryData industryData = new IndustryData(0.0f, "所属行业", "", "代码", "名称");
-                    industryDatas.add(0, industryData);
-                    industryAdapter.notifyDataSetChanged();
+                    BaseBeanList<IndustryData> beanList = JSONObject.parseObject(
+                            responseInfo,
+                            new TypeReference<BaseBeanList<IndustryData>>() {
+                            });
+                    industryDatas.addAll(beanList.getData());
+                    if (industryDatas.size() > 0) {
+                        IndustryData industryData = new IndustryData(0.0f, "所属行业", "", "代码", "名称");
+                        industryDatas.add(0, industryData);
+                        industryAdapter.notifyDataSetChanged();
+                    }
                 }
             }
 

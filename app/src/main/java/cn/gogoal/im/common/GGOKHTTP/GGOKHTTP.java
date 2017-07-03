@@ -880,7 +880,6 @@ public class GGOKHTTP {
     public static final String GET_FUAN_INFO = "v1/ggm_fund/get_fuan_info";
 
     /**
-     * <<<<<<< HEAD
      * 公司荣誉
      * stock_code
      * token
