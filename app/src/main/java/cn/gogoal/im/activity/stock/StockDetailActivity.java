@@ -122,16 +122,20 @@ public class StockDetailActivity extends BaseActivity {
     TextView tvStockDetailChangeRate;
 
     //今开
-    private TextView tvTodayOpenprice;
+    @BindView(R.id.tv_stock_detail_head_tody_open)
+    TextView tvTodayOpenprice;
 
     //昨收
-    private TextView tvYesCloseprice;
+    @BindView(R.id.tv_stock_detail_head_yest_close)
+    TextView tvYesCloseprice;
 
     //成交量
-    private TextView tvTreatVol;
+    @BindView(R.id.tv_stock_detail_head_volumes)
+    TextView tvTreatVol;
 
     //换手率
-    private TextView tvChangeRata;
+    @BindView(R.id.tv_stock_detail_head_change_rate)
+    TextView tvChangeRata;
 
     @BindView(R.id.iv_show_info_dialog)
     ImageView imageViewShoeDialog;
@@ -198,8 +202,6 @@ public class StockDetailActivity extends BaseActivity {
     //消息
     private BadgeView badge;
     private int unReadCount;
-
-    private boolean isChoose = true;
 
     private int headHeight;
     private List<Fragment> newsFragments;
@@ -365,8 +367,6 @@ public class StockDetailActivity extends BaseActivity {
         if (needToast) {
             UIHelper.toast(getActivity(), addMyStock ? "添加自选成功" : "删除自选成功");
         }
-
-        isChoose = addMyStock;
     }
 
 
@@ -374,14 +374,6 @@ public class StockDetailActivity extends BaseActivity {
      * 初始化头部控件
      */
     private void initHead() {
-        tvTodayOpenprice = (TextView) findViewById(R.id.include_detail_0).
-                findViewById(R.id.tv_stock_detail_head_value);
-        tvYesCloseprice = (TextView) findViewById(R.id.include_detail_1).
-                findViewById(R.id.tv_stock_detail_head_value);
-        tvTreatVol = (TextView) findViewById(R.id.include_detail_2).
-                findViewById(R.id.tv_stock_detail_head_value);
-        tvChangeRata = (TextView) findViewById(R.id.include_detail_3).
-                findViewById(R.id.tv_stock_detail_head_value);
         //popu
         rvStockTreatPopu.setLayoutManager(new
                 GridLayoutManager(getActivity(), 4, GridLayoutManager.VERTICAL, false));
@@ -436,8 +428,7 @@ public class StockDetailActivity extends BaseActivity {
 
             //tog 加减自选股
             case R.id.layout_stockDetail_toggle_mystock:
-                startRefreshAnimation(ivToggleMyStock);
-                addOptionalShare();
+                StockUtils.toggleAddDelStock(stockCode, ivToggleMyStock);
                 break;
             //股票圈，进入后台群
             case R.id.tv_stockDetail_stockCircle:
@@ -463,64 +454,6 @@ public class StockDetailActivity extends BaseActivity {
         stock.setStock_type(stock_status_type);
         stock.setClosePrice("" + closePrice);
         return stock;
-    }
-
-    //添加自选股
-    private void addOptionalShare() {
-        if (isChoose) {
-            final Map<String, String> param = new HashMap<String, String>();
-            param.put("token", UserUtils.getToken());
-            param.put("stock_code", stockCode);
-
-            GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
-                @Override
-                public void onSuccess(String responseInfo) {
-                    JSONObject result = JSONObject.parseObject(responseInfo);
-                    int data = (int) result.get("code");
-                    if (data == 0) {
-                        toggleIsMyStock(false, true);
-                        StockUtils.removeStock(stockCode);
-                    }
-                    stopRefreshAnimation(ivToggleMyStock, R.mipmap.choose_stock);
-                }
-
-                @Override
-                public void onFailure(String msg) {
-                    UIHelper.toastError(getActivity(), msg);
-                    stopRefreshAnimation(ivToggleMyStock, R.mipmap.not_choose_stock);
-                }
-            };
-            new GGOKHTTP(param, GGOKHTTP.MYSTOCK_DELETE, httpInterface).startGet();
-        } else {
-            final Map<String, String> param = new HashMap<String, String>();
-            param.put("token", UserUtils.getToken());
-            param.put("group_id", "0");
-            param.put("stock_code", stockCode);
-            param.put("stock_class", "0");
-            param.put("source", "9");
-            param.put("group_class", "1");
-
-            GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
-                @Override
-                public void onSuccess(String responseInfo) {
-                    JSONObject result = JSONObject.parseObject(responseInfo);
-
-                    int data = (int) result.get("code");
-                    if (data == 0) {
-                        toggleIsMyStock(true, true);
-                        StockUtils.addStock2MyStock(stockCode);
-                    }
-                    stopRefreshAnimation(ivToggleMyStock, R.mipmap.not_choose_stock);
-                }
-
-                @Override
-                public void onFailure(String msg) {
-                    UIHelper.toastError(getActivity(), msg);
-                    stopRefreshAnimation(ivToggleMyStock, R.mipmap.choose_stock);
-                }
-            };
-            new GGOKHTTP(param, GGOKHTTP.MYSTOCK_ADD, httpInterface).startGet();
-        }
     }
 
     //获取股票群
@@ -639,19 +572,20 @@ public class StockDetailActivity extends BaseActivity {
                         }
                     });
 
-
                 } else if (code == 1001) {
                     setStockHeadColor("-1");//设置颜色
                     //值数据从缓存中取
                 } else {
                     setStockHeadColor("-1");//设置颜色
                 }
+                stopRefreshAnimation(btnRefresh, R.mipmap.refresh_white);
             }
 
             @Override
             public void onFailure(String msg) {
                 setStockHeadColor("-1");//设置颜色
                 UIHelper.toastError(getActivity(), msg);
+                stopRefreshAnimation(btnRefresh, R.mipmap.refresh_white);
             }
         }).startGet();
 

@@ -243,13 +243,14 @@
         <activity android:name=".activity.Test2Activity" />
         <activity android:name=".activity.stock.stockften.FinancialStatementsActivity" />
 
+        <activity android:name=".activity.stock.BigDataAcyivity"/>
+        <activity android:name=".activity.stock.SubjectDetailActivity"/>
+        <activity android:name=".activity.stock.EventDetailActivity"/>
+
         <activity android:name=".activity.stock.stockften.CompanyExecutivesActivity" />
         <activity android:name=".activity.stock.stockften.CompanyProfileActivity" />
         <activity android:name=".activity.stock.stockften.ShareholderResearchActivity" />
         <activity android:name=".activity.stock.stockften.CapitalStructureActivity" />
-        <activity android:name=".activity.stock.BigDataAcyivity" />
-        <activity android:name=".activity.stock.SubjectDetailActivity" />
-        <activity android:name=".activity.stock.EventDetailActivity" />
     </application>
 
 </manifest>

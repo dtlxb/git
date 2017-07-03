@@ -2,6 +2,8 @@ package cn.gogoal.im.bean.stock.bigdata.subject;
 
 import java.util.List;
 
+import cn.gogoal.im.common.CalendarUtils;
+
 /**
  * author wangjd on 2017/6/27 0027.
  * Staff_id 1375
@@ -68,6 +70,10 @@ public class SubjectListBean {
         private String price_change;
         private String price;
         private List<String> tags;
+
+        public String getGroupDate() {
+            return CalendarUtils.getStringDate("yyyy-MM-dd",getInsert_time());
+        }
 
         public int getId() {
             return id;

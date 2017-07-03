@@ -71,6 +71,7 @@ public class TenHolderAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
             textPropor.setBackgroundColor(ContextCompat.getColor(context, R.color.textColor_666666));
             holder.setTextResColor(R.id.textSerialNum, R.color.textColor_666666);
         }
+
         holder.setText(R.id.textSerialNum, position + 1 + "");
 
         holder.setText(R.id.textName, contList.get(position).getStock_holder_name() != null

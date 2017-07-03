@@ -24,7 +24,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.SectionAdapter;
+import cn.gogoal.im.adapter.SectionToolsAdapter;
 import cn.gogoal.im.adapter.SelectedAdapter;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.OnItemDragListener;
@@ -59,7 +59,7 @@ public class ToolsSettingActivity extends BaseActivity {
     @BindView(R.id.tv_touyan_setting_tips)
     TextView tvTips;
 
-    private SectionAdapter adapterAllData;
+    private SectionToolsAdapter adapterAllData;
 
     private List<SectionToolsData> dataAll;
     private List<ToolData.Tool> dataOriginal = new ArrayList<>();
@@ -156,7 +156,7 @@ public class ToolsSettingActivity extends BaseActivity {
         rvAll.setLayoutManager(new StaggeredGridLayoutManager(AppDevice.isLowDpi() ? 3 : 4,
                 StaggeredGridLayoutManager.VERTICAL));
         dataAll = new ArrayList<>();
-        adapterAllData = new SectionAdapter(ToolsSettingActivity.this, dataAll);
+        adapterAllData = new SectionToolsAdapter(ToolsSettingActivity.this, dataAll);
         rvAll.setAdapter(adapterAllData);
         getTouYan();
     }
@@ -239,7 +239,7 @@ public class ToolsSettingActivity extends BaseActivity {
                                 dataOriginal.add(item);
                                 dataAll.add(new SectionToolsData(item, itemList.size()));
                             }
-                            addSpace(itemList);
+                            addEmpty(itemList);
                         }
 
                         tvTips.setVisibility(dataSelected.size() == 0 ? View.GONE : View.VISIBLE);
@@ -258,7 +258,7 @@ public class ToolsSettingActivity extends BaseActivity {
 
     }
 
-    private void addSpace(List<ToolData.Tool> itemList) {
+    private void addEmpty(List<ToolData.Tool> itemList) {
         //模拟填充空数据
         ToolData.Tool clone = itemList.get(0).clone();
         clone.setSimulatedArg(true);

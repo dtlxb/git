@@ -2,6 +2,7 @@ package cn.gogoal.im.fragment.stock.bigdata;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +23,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.bigdata.subject.SubjectListBean;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.StockUtils;
@@ -29,6 +31,7 @@ import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.NormalItemDecoration;
+import cn.gogoal.im.ui.StickyDecoration;
 import cn.gogoal.im.ui.view.XLayout;
 
 /**
@@ -99,6 +102,24 @@ public class SubjectChooseStockFragment extends BaseFragment {
                 subjectChooseStockAdapter.loadMoreComplete();
             }
         }, rvSubject);
+
+        StickyDecoration decoration = StickyDecoration.Builder
+                .init(new StickyDecoration.GroupListener() {
+                    @Override
+                    public String getGroupName(int position) {
+                        //组名回调
+                        if (subjectDataList.size() > position) {
+                            return subjectDataList.get(position).getGroupDate();
+                        }
+                        return null;
+                    }
+                })
+                .setGroupBackground(Color.parseColor("#e4e4e4"))    //背景色
+                .setGroupHeight(AppDevice.dp2px(mContext, 30))       //高度
+                .setGroupTextSize(AppDevice.sp2px(mContext, 15))      //字体大小
+                .setTextLeftMargin(AppDevice.dp2px(mContext, 10))    //左边距
+                .build();
+        rvSubject.addItemDecoration(decoration);
     }
 
     private void getSubjectList(final int refreshType) {

@@ -20,49 +20,58 @@
             android:layout_height="match_parent"
             android:drawableStart="@mipmap/img_actionbar_back"
             android:gravity="center_vertical"
-            android:paddingStart="15dp"
+            android:paddingStart="10dp"
             android:text="返回"
             android:textColor="@android:color/white"
             android:textSize="17sp" />
 
-        <TextView
-            android:id="@+id/tv_stockdetail_info"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
-            android:text="平安银行(000001)"
-            android:textColor="@android:color/white"
-            android:textSize="16sp" />
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_stockdetail_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_stockdetail_info"
-            android:layout_centerHorizontal="true"
-            android:text="已收盘\u300006-30 17:49"
-            android:textColor="@android:color/white"
-            android:textSize="12sp" />
+            <TextView
+                android:id="@+id/tv_stockdetail_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="平安银行(000001)"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_stockdetail_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已收盘\u300006-30 17:49"
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/iv_message"
-            android:layout_width="@dimen/titlebar_size"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/titlebar_size"
             android:layout_alignParentEnd="true"
-            android:scaleType="centerInside"
             android:layout_centerVertical="true"
-            android:src="@mipmap/message_white"
-            android:contentDescription="@null" />
+            android:contentDescription="@null"
+            android:paddingEnd="15dp"
+            android:paddingStart="7dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/message_white" />
 
         <ImageView
             android:id="@+id/btn_refresh"
-            android:layout_width="@dimen/titlebar_size"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/titlebar_size"
-            android:scaleType="centerInside"
             android:layout_centerVertical="true"
             android:layout_toStartOf="@+id/iv_message"
-            android:src="@mipmap/refresh_white"
-            android:contentDescription="@null" />
+            android:contentDescription="@null"
+            android:paddingEnd="7dp"
+            android:paddingStart="7dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/refresh_white" />
 
     </RelativeLayout>
 
@@ -85,7 +94,7 @@
                 android:orientation="vertical">
 
                 <!--head-->
-                <include layout="@layout/inlcude_stock_detail_head" />
+                <include layout="@layout/inlcude_stock_detail_head"/>
 
                 <FrameLayout
                     android:layout_width="match_parent"
