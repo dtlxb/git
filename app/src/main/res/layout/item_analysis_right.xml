@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/imgReport1"
             android:gravity="right"
-            android:text="@string/text_empty"
+            android:text="@string/default_char"
             android:textColor="@color/textColor_333333"
             android:textSize="14dp" />
 
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/imgReport2"
             android:gravity="right"
-            android:text="@string/text_empty"
+            android:text="@string/default_char"
             android:textColor="@color/textColor_333333"
             android:textSize="14dp" />
 
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/imgReport3"
             android:gravity="right"
-            android:text="@string/text_empty"
+            android:text="@string/default_char"
             android:textColor="@color/textColor_333333"
             android:textSize="14dp" />
 
@@ -111,7 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/imgReport4"
             android:gravity="right"
-            android:text="@string/text_empty"
+            android:text="@string/default_char"
             android:textColor="@color/textColor_333333"
             android:textSize="14dp" />
 
@@ -141,7 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/imgReport5"
             android:gravity="right"
-            android:text="@string/text_empty"
+            android:text="@string/default_char"
             android:textColor="@color/textColor_333333"
             android:textSize="14dp" />
 

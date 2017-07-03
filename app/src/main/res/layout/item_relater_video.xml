@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="@string/text_empty"
+            android:text="@string/default_char"
             android:textColor="@color/textColor_333333"
             android:textSize="16dp" />
 
@@ -78,7 +78,7 @@
             android:drawableLeft="@mipmap/play_count"
             android:drawablePadding="6dp"
             android:gravity="center_vertical"
-            android:text="@string/text_empty"
+            android:text="@string/default_char"
             android:textColor="@color/relater_play_count"
             android:textSize="12dp" />
 
@@ -105,7 +105,7 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="@string/text_empty"
+                android:text="@string/default_char"
                 android:textColor="@color/relater_play_count"
                 android:textSize="12dp" />
 
@@ -122,7 +122,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="@string/text_empty"
+                    android:text="@string/default_char"
                     android:textColor="@color/relater_play_count"
                     android:textSize="12dp" />
 
