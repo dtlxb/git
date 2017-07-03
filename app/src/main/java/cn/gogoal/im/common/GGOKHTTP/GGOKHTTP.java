@@ -1028,6 +1028,12 @@ public class GGOKHTTP {
      */
     public static final String GET_PEERCOMPARISON_INFO = "v1/ggm_peercomparison/get_peercomparison_info";
 
+    /**
+     * F10-限售解禁
+     * stock_code
+     */
+    public static final String RESTRICT_SALE = "v1/f10/restrict_sale";
+
 //--------------------------------------------------------------------------------------------------
 
     /**

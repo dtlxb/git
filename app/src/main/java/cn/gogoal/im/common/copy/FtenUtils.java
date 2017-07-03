@@ -14,9 +14,13 @@ public class FtenUtils {
     public static final String[] comSummary1 = {"公司名称", "地址", "所属行业", "公司简介"};
     public static final String[] comSummary1_1 = {"company_name", "office_addr", "industry_owned", "company_summary"};
 
-    //公司概况
+    //股本
     public static final String[] equity1 = {"总股本(万股)", "流通股本(万股)", "流通A股(万股)"};
     public static final String[] equity1_1 = {"stock_total", "tradable_stock", "tradable_A_stock"};
+    //股本详情
+    public static final String[] RestrictSale1 = {"解禁时间:", "数量:", "占总股本:", "占流通股本:", "股票类型"};
+    public static final String[] RestrictSale1_1 = {"date", "restrict_count", "restrict_tradable_stock_ratio",
+            "restrict_stock_all_ratio", "stock_type"};
 
     /**
      * 股票详情下的 财务
