@@ -30,6 +30,7 @@ import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
+import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.StickyDecoration;
 import cn.gogoal.im.ui.view.XLayout;
 
@@ -64,7 +65,7 @@ public class SubjectChooseStockFragment extends BaseFragment {
         BaseActivity.iniRefresh(swiperefreshlayout);
 
         rvSubject.setLayoutManager(new LinearLayoutManager(mContext));
-//        rvSubject.addItemDecoration(new NormalItemDecoration(mContext));
+        rvSubject.addItemDecoration(new NormalItemDecoration(mContext));
         subjectDataList = new ArrayList<>();
         subjectChooseStockAdapter = new SubjectChooseStockAdapter(subjectDataList);
         rvSubject.setAdapter(subjectChooseStockAdapter);

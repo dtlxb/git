@@ -1034,6 +1034,14 @@ public class GGOKHTTP {
      */
     public static final String RESTRICT_SALE = "v1/f10/restrict_sale";
 
+    /**
+     * 获取公司标签
+     *
+     * //1：好公司 2：希望之星  0：历史好公司 -1 未选入
+     *
+     * */
+    public static final String GET_STOCK_TAG ="stock/get_stock_tag";
+
 //--------------------------------------------------------------------------------------------------
 
     /**
