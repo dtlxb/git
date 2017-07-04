@@ -1,9 +1,14 @@
 package cn.gogoal.im.fragment.companytags;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -109,7 +114,7 @@ public class HistoryFragment extends BaseFragment {
                             });
                     historyDatas.addAll(beanList.getData());
                     if (historyDatas.size() > 0) {
-                        HistoryData historyData = new HistoryData("财报周期", 0, "财报发布日", 0);
+                        HistoryData historyData = new HistoryData("报表发布日", 0, "报表周期", 0);
                         historyDatas.add(0, historyData);
                         historyAdapter.notifyDataSetChanged();
                     }
@@ -165,17 +170,26 @@ public class HistoryFragment extends BaseFragment {
         protected void convert(BaseViewHolder holder, HistoryData data, int position) {
 
             View itemView = holder.getView(R.id.layout_item);
+            TextView tvPeriod = holder.getView(R.id.tv_history_week);
+            TextView tvPublish = holder.getView(R.id.tv_history_day);
             ViewGroup.LayoutParams params = itemView.getLayoutParams();
             params.width = (AppDevice.getWidth(getActivity()) - AppDevice.dp2px(getActivity(), 20)) / 5;
             itemView.setLayoutParams(params);
-
-            if (position == 0) {
+            if (data.getYear() == 0) {
                 holder.setText(R.id.tv_history_item, "");
             } else {
-                holder.setText(R.id.tv_history_item, data.getYear() + "第" + data.getQuarter() + "季");
+                holder.setText(R.id.tv_history_item, data.getYear() + stringParse(data.getQuarter()));
             }
-            holder.setText(R.id.tv_history_week, data.getReport_period());
-            holder.setText(R.id.tv_history_day, data.getReport_publish());
+            if (TextUtils.isEmpty(data.getReport_period())) {
+                tvPeriod.setText("--");
+            } else {
+                tvPeriod.setText(colorParse(data.getReport_period()));
+            }
+            if (TextUtils.isEmpty(data.getReport_publish())) {
+                tvPublish.setText("--");
+            } else {
+                tvPublish.setText(colorParse(data.getReport_publish()));
+            }
         }
 
     }
@@ -216,5 +230,41 @@ public class HistoryFragment extends BaseFragment {
             tv_name.setText(data.getStock_name());
         }
 
+    }
+
+    private String stringParse(int num) {
+        String season;
+        switch (num) {
+            case 1:
+                season = "第一季";
+                break;
+            case 2:
+                season = "中报";
+                break;
+            case 3:
+                season = "第三季";
+                break;
+            case 4:
+                season = "年报";
+                break;
+            default:
+                season = "";
+                break;
+        }
+
+        return season;
+    }
+
+    private SpannableStringBuilder colorParse(String report) {
+        SpannableStringBuilder sb = new SpannableStringBuilder(report); // 包装字体内容
+        ForegroundColorSpan fcs; // 设置字体颜色
+        if (report.equals("超预期")) {
+            fcs = new ForegroundColorSpan(Color.RED);
+        } else {
+            fcs = new ForegroundColorSpan(getResColor(R.color.textColor_333333));
+        }
+        sb.setSpan(fcs, 0, report.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        KLog.e(sb);
+        return sb;
     }
 }

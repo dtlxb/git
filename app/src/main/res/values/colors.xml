@@ -141,9 +141,15 @@
     <color name="dividend_trans_axis">#D9E2E7</color>
 
     <!-- 好公司-->
-    <color name="company_normal">#FF691D</color>>
-    <color name="company_good">#F34858</color>>
-    <color name="company_hope">#FE9B1A</color>>
-    <color name="company_history">#599EFD</color>>
+    <color name="company_normal">#FF691D</color>
+    <color name="company_good">#F34858</color>
+    <color name="company_hope">#FE9B1A</color>
+    <color name="company_history">#599EFD</color>
+    <color name="company_change_bar">#C9866B</color>
+    <color name="company_industry">#DA5141</color>
+    <color name="company_orange">#FE9B1A</color>
+    <color name="company_ff691d">#FF691D</color>
+    <color name="company_f34858">#F34858</color>
+    <color name="company_599efd">#599EFD</color>
 
 </resources>

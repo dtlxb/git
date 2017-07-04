@@ -48,9 +48,9 @@ public class PieData implements Comparable<PieData> {
 
     @Override
     public int compareTo(@NonNull PieData o) {
-        if (this.report_year > o.report_year)
-            return 1;
         if (this.report_year < o.report_year)
+            return 1;
+        if (this.report_year > o.report_year)
             return -1;
         else
             return 0;

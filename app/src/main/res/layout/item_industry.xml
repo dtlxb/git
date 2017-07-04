@@ -82,7 +82,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="end"
-        android:textColor="@color/textColor_333333"
+        android:paddingEnd="3dp"
+        android:textColor="@color/company_industry"
         android:textSize="12sp" />
 
     <View

@@ -16,6 +16,7 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.ChartBean;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UserUtils;
@@ -77,6 +78,7 @@ public class TurnoverRateFragment extends BaseFragment {
                     barView.setTextSize(AppDevice.dp2px(getActivity(), 10));
                     barView.setMarginBottom(AppDevice.dp2px(getActivity(), 30));
                     barView.setMarginTop(AppDevice.dp2px(getActivity(), 10));
+                    barView.setBarType(AppConst.TYPE_FRAGMENT_TURNOVER_RATE);
                     barView.setChartData(chartBeanList);
                 }
             }

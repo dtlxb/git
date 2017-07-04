@@ -13,6 +13,7 @@ import java.util.List;
 
 import cn.gogoal.im.R;
 import cn.gogoal.im.bean.ChartBean;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.StringUtils;
 
 
@@ -53,6 +54,8 @@ public class BarView extends View {
     private float upRate;
     //数据
     private List<ChartBean> beanList;
+
+    private int barType;
 
     public BarView(Context context) {
         super(context);
@@ -114,18 +117,24 @@ public class BarView extends View {
             rectPaint.setStrokeWidth(viewWidth / (beanList.size() * 2));
             for (int i = 0; i < beanList.size(); i++) {
                 float barHeight;
+                String titleText;
                 float startX = marginLeft + viewWidth * i / beanList.size() + viewWidth / (beanList.size() * 2);
                 barHeight = startY - barRate * beanList.get(i).getBarValue() * upRate;
-                //画笔颜色
-                titlePaint.setColor(beanList.get(i).getBarValue() < 0 ? ContextCompat.getColor(getContext(), R.color.stock_green_market)
-                        : ContextCompat.getColor(getContext(), R.color.stock_red_market));
-                rectPaint.setColor(beanList.get(i).getBarValue() < 0 ? ContextCompat.getColor(getContext(), R.color.stock_green_market)
-                        : ContextCompat.getColor(getContext(), R.color.stock_red_market));
+                if (barType == AppConst.TYPE_FRAGMENT_TURNOVER_RATE) {
+                    titleText = StringUtils.save2Significand(beanList.get(i).getBarValue() * upRate) + "%";
+                    rectPaint.setColor(ContextCompat.getColor(getContext(), R.color.company_change_bar));
+                } else {
+                    titleText = StringUtils.save2Significand(beanList.get(i).getBarValue() * upRate);
+                    //画笔颜色
+                    titlePaint.setColor(beanList.get(i).getBarValue() < 0 ? ContextCompat.getColor(getContext(), R.color.stock_green_market)
+                            : ContextCompat.getColor(getContext(), R.color.stock_red_market));
+                    rectPaint.setColor(beanList.get(i).getBarValue() < 0 ? ContextCompat.getColor(getContext(), R.color.stock_green_market)
+                            : ContextCompat.getColor(getContext(), R.color.stock_red_market));
+                }
                 //画柱体
                 canvas.drawLine(startX, startY, startX, barHeight, rectPaint);
                 //画标注
-                canvas.drawText(StringUtils.save2Significand(beanList.get(i).getBarValue() * upRate),
-                        startX - titlePaint.measureText(StringUtils.save2Significand(beanList.get(i).getBarValue() * upRate)) / 2,
+                canvas.drawText(titleText, startX - titlePaint.measureText(titleText) / 2,
                         beanList.get(i).getBarValue() < 0 ? barHeight + fontHeight * 3 / 5 + marginBar : barHeight - marginBar, titlePaint);
                 //画日期
                 titlePaint.setColor(ContextCompat.getColor(getContext(), R.color.gray));
@@ -170,6 +179,14 @@ public class BarView extends View {
         }
     }
 
+
+    public int getBarType() {
+        return barType;
+    }
+
+    public void setBarType(int barType) {
+        this.barType = barType;
+    }
 
     public int getMarginLeft() {
         return marginLeft;

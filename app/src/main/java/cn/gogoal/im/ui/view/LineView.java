@@ -56,6 +56,8 @@ public class LineView extends View {
 
     //最大数
     private float lineBiggest;
+    //最大数
+    private float lineMini;
     //线率
     private float lineRate;
 
@@ -102,7 +104,7 @@ public class LineView extends View {
         super.onDraw(canvas);
         viewHeight = getHeight() - marginBottom - marginTop;
         viewWidth = getWidth() - marginLeft - marginRight;
-        lineRate = (float) viewHeight / lineBiggest;
+        lineRate = (float) viewHeight / (lineBiggest - lineMini);
         drawLines(canvas);
     }
 
@@ -124,7 +126,7 @@ public class LineView extends View {
         dashLine.setColor(ContextCompat.getColor(getContext(), R.color.actionsheet_gray));
         dashLine.setPathEffect(mDashEffect);
         //刻度
-        float leftNum = lineBiggest / (horizontalLines > 1 ? (horizontalLines - 1) : 1);
+        float leftNum = (lineBiggest - lineMini) / (horizontalLines > 1 ? (horizontalLines - 1) : 1);
         float eachWidth = viewWidth / (verticalLines > 1 ? (verticalLines - 1) : 1);
 
         if (null != beanList && beanList.size() > 0) {
@@ -180,13 +182,13 @@ public class LineView extends View {
             linePaint.setStyle(Paint.Style.STROKE);
             for (int i = 0; i < beanList.size(); i++) {
                 float startX = marginLeft + eachWidth * i + eachWidth / 2;
-                float pointY = viewHeight - beanList.get(i).getStock_total_ratio() * lineRate + marginTop;
+                float pointY = viewHeight - (beanList.get(i).getStock_total_ratio() - lineMini) * lineRate + marginTop;
                 //画圈圈
                 linePath.addCircle(startX, pointY, lineSize * 2, Path.Direction.CCW);
                 circlePath.addCircle(startX, pointY, lineSize * 2, Path.Direction.CCW);
                 //画折线
                 if (i > 0) {
-                    canvas.drawLine(startX - eachWidth, viewHeight - beanList.get(i - 1).getStock_total_ratio() * lineRate + marginTop,
+                    canvas.drawLine(startX - eachWidth, viewHeight - (beanList.get(i - 1).getStock_total_ratio() - lineMini) * lineRate + marginTop,
                             startX, pointY, linePaint);
                 }
                 //画字
@@ -207,11 +209,12 @@ public class LineView extends View {
             beanList.addAll(beans);
             lineBiggest = 0;
             lineRate = 0;
+            lineMini = beans.get(0).getStock_total_ratio();
             for (int i = 0; i < beans.size(); i++) {
                 float num = beans.get(i).getStock_total_ratio();
+                lineMini = lineMini < num ? lineMini : num;
                 lineBiggest = lineBiggest > num ? lineBiggest : num;
             }
-            KLog.e(lineBiggest);
             invalidate();
         }
     }

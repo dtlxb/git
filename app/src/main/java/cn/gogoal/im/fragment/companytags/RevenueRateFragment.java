@@ -143,7 +143,7 @@ public class RevenueRateFragment extends BaseFragment {
             params.width = AppDevice.getWidth(getActivity()) / pieDatas.size();
             pieView.setLayoutParams(params);
             List<PieBean> pieBeanList = new ArrayList<>();
-            for (int i = 0; i < data.getData().size(); i++) {
+            for (int i = data.getData().size() - 1; i > -1; i--) {
                 PieBean pieBean = new PieBean((float) data.getData().get(i).getIncomezb(), getColor(data.getData().get(i).getSession_name()));
                 pieBeanList.add(pieBean);
             }
@@ -163,15 +163,15 @@ public class RevenueRateFragment extends BaseFragment {
     private int getColor(String session) {
         switch (session) {
             case "一季度":
-                return R.color.stock_green;
+                return R.color.company_ff691d;
             case "中期":
-                return R.color.card_color_orange;
+                return R.color.company_f34858;
             case "三季度":
-                return R.color.card_color_purple;
+                return R.color.company_599efd;
             case "年度":
-                return R.color.blue_light;
+                return R.color.company_orange;
             default:
-                return R.color.blue_light;
+                return R.color.company_orange;
         }
     }
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_item"
     android:layout_width="wrap_content"
     android:layout_height="100dp"
-    android:id="@+id/layout_item"
     android:orientation="vertical">
 
     <TextView
@@ -13,7 +13,6 @@
         android:gravity="center"
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
-        android:text="2017第一季"
         android:textColor="@color/textColor_333333"
         android:textSize="12sp" />
 
@@ -25,7 +24,7 @@
         android:gravity="center"
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
-        android:text="符合预期"
+        android:text="--"
         android:textColor="@color/textColor_333333"
         android:textSize="12sp" />
 
@@ -37,7 +36,7 @@
         android:gravity="center"
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
-        android:text="符合预期"
+        android:text="--"
         android:textColor="@color/textColor_333333"
         android:textSize="12sp" />
 
