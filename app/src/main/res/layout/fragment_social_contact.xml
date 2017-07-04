@@ -33,7 +33,7 @@
                 android:button="@null"
                 android:drawablePadding="6dp"
                 android:drawableRight="@drawable/social_fragment_screen"
-                android:text="分类"
+                android:text="@string/classification"
                 android:textColor="@color/textColor_333333"
                 android:textSize="16dp" />
 

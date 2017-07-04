@@ -12,7 +12,7 @@
         android:paddingBottom="5dp"
         android:paddingLeft="14dp"
         android:paddingTop="15dp"
-        android:text="默认复权选择"
+        android:text="@string/default_rehabilitation_choose"
         android:textColor="@color/textColor_999999"
         android:textSize="12sp" />
 
@@ -32,7 +32,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="26dp"
         android:paddingTop="14dp"
-        android:text="不复权"
+        android:text="@string/authority_rb1"
         android:textColor="@color/textColor_333333"
         android:textSize="17sp" />
 
@@ -52,7 +52,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="26dp"
         android:paddingTop="14dp"
-        android:text="前复权"
+        android:text="@string/authority_rb2"
         android:textColor="@color/textColor_333333"
         android:textSize="17sp" />
 
@@ -72,7 +72,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="26dp"
         android:paddingTop="14dp"
-        android:text="后复权"
+        android:text="@string/authority_rb3"
         android:textColor="@color/textColor_333333"
         android:textSize="17sp" />
 

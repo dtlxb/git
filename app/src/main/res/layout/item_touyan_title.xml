@@ -37,7 +37,7 @@
             android:id="@+id/tv_touyan_title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="朝阳组合"
+            android:text="@string/combination"
             android:textColor="@color/textColor_333333"
             android:textSize="16sp" />
     </LinearLayout>

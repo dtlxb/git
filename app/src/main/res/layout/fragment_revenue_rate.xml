@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="单季节营业收入占比"
+        android:text="@string/single_season_revenue_sharing"
         android:textColor="@color/textColor_333333"
         android:textSize="16sp" />
 
@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
-                android:text="一季度"
+                android:text="@string/one_quarter"
                 android:textColor="@color/textColor_666666"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
-                android:text="二季度"
+                android:text="@string/two_quarter"
                 android:textColor="@color/textColor_666666"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -76,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
-                android:text="三季度"
+                android:text="@string/three_quarter"
                 android:textColor="@color/textColor_666666"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -97,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
-                android:text="四季度"
+                android:text="@string/four_quarter"
                 android:textColor="@color/textColor_666666"
                 android:textSize="14sp" />
         </LinearLayout>

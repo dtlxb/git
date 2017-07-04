@@ -12,7 +12,7 @@
         android:id="@+id/btn_mine_my_friend"
         style="@style/MineMiddleButtonStyle"
         android:drawableTop="@mipmap/img_mine_my_friend"
-        android:text="我的好友" />
+        android:text="@string/my_friend" />
 
     <View
         android:layout_width="1px"
@@ -23,7 +23,7 @@
         android:id="@+id/btn_mine_my_group"
         style="@style/MineMiddleButtonStyle"
         android:drawableTop="@mipmap/img_mine_my_group"
-        android:text="群组" />
+        android:text="@string/my_group" />
 
     <View
         android:layout_width="1px"
@@ -34,7 +34,7 @@
         android:id="@+id/btn_mine_my_phone_contacts"
         style="@style/MineMiddleButtonStyle"
         android:drawableTop="@mipmap/img_mine_my_phone_contact"
-        android:text="手机通讯录" />
+        android:text="@string/my_phone_contacts" />
 
     <View
         android:layout_width="1px"
@@ -45,5 +45,5 @@
         android:id="@+id/btn_mine_inviting_friends"
         style="@style/MineMiddleButtonStyle"
         android:drawableTop="@mipmap/img_mine_inviting_friends"
-        android:text="邀请好友" />
+        android:text="@string/inviting_friends" />
 </LinearLayout>

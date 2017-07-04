@@ -24,7 +24,7 @@
         android:drawableLeft="@mipmap/img_search"
         android:drawablePadding="5dp"
         android:gravity="center_vertical"
-        android:hint="搜索"
+        android:hint="@string/search"
         android:imeOptions="actionSearch"
         android:singleLine="true"
         android:textSize="14sp" />

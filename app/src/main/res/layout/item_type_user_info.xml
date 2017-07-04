@@ -13,7 +13,7 @@
         android:id="@+id/item_text_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Go-Goal账号"
+        android:text="@string/go_goal_account"
         android:textColor="@color/textColor_666666"
         android:textSize="16sp" />
 
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
-        android:text="E00001234"
+        android:text="@string/text_empty"
         android:textColor="@color/textColor_666666"
         android:textSize="16sp" />
 

@@ -16,7 +16,7 @@
         android:paddingBottom="5dp"
         android:paddingLeft="14dp"
         android:paddingTop="15dp"
-        android:text="均线参数设置(1-250日)"
+        android:text="@string/average_setting_1_250"
         android:textColor="@color/textColor_999999"
         android:textSize="12sp" />
 
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
-            android:text="第一根均线设置"
+            android:text="@string/flag_tv_type_1"
             android:textColor="@color/textColor_333333"
             android:textSize="17sp" />
 
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:text="日"
+            android:text="@string/day"
             android:textColor="@color/textColor_333333"
             android:textSize="17sp" />
 
@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
-            android:text="第二根均线设置"
+            android:text="@string/flag_tv_type_2"
             android:textColor="@color/textColor_333333"
             android:textSize="17sp" />
 
@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:text="日"
+            android:text="@string/day"
             android:textColor="@color/textColor_333333"
             android:textSize="17sp" />
 
@@ -132,7 +132,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
-            android:text="第三根均线设置"
+            android:text="@string/flag_tv_type_3"
             android:textColor="@color/textColor_333333"
             android:textSize="17sp" />
 
@@ -142,7 +142,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:text="日"
+            android:text="@string/day"
             android:textColor="@color/textColor_333333"
             android:textSize="17sp" />
 

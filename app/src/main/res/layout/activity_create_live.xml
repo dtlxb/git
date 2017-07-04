@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center_horizontal"
                 android:layout_marginBottom="10dp"
-                android:text="更换封面"
+                android:text="@string/change_cover"
                 android:textColor="@android:color/white"
                 android:textSize="13dp" />
 
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:background="@null"
-            android:hint="给直播写个标题吧"
+            android:hint="@string/write_title_for_live"
             android:maxLines="4"
             android:textColor="@android:color/white"
             android:textColorHint="@color/textColor_999999"
@@ -71,7 +71,7 @@
         android:layout_marginRight="50dp"
         android:layout_marginTop="123dp"
         android:background="@drawable/create_btn_bg"
-        android:text="开始直播"
+        android:text="@string/start_live"
         android:textColor="@android:color/white"
         android:textSize="17sp" />
 
@@ -86,7 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
-            android:text="直播即代表你同意"
+            android:text="@string/live_means_consent"
             android:textColor="@android:color/white"
             android:textSize="12dp" />
 
@@ -94,7 +94,7 @@
             android:id="@+id/textAgreement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="《Go-Goal直播协议》"
+            android:text="@string/go_goal_live_protocol"
             android:textColor="@color/live_together"
             android:textSize="12dp" />
 

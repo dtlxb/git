@@ -2,17 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/shape_dialog_share_message_bg"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:background="@drawable/shape_dialog_share_message_bg"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:text="发送给:"
+        android:text="@string/send_for"
         android:textColor="@android:color/black"
         android:textSize="20sp" />
 
@@ -28,32 +27,32 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:padding="10dp"
-        android:text="[链接]【马警方确认一名涉金正男遇刺案嫌犯为朝鲜大使馆工作人员balabalababalabalababalabalababalabalababalabalababalabalababalabalaba】" />
+        android:text="@string/text_empty" />
 
     <ImageView
         android:id="@+id/iv_dialog_share_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@mipmap/cache_live_list"
+        android:contentDescription="@null"
         android:maxHeight="150dp"
         android:minHeight="55dp"
         android:minWidth="55dp"
-        android:visibility="gone"
         android:scaleType="fitCenter"
-        android:contentDescription="@null" />
+        android:src="@mipmap/cache_live_list"
+        android:visibility="gone" />
 
     <EditText
         android:id="@+id/et_dialog_share_msg_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:maxLines="3"
-        android:textSize="14sp"
         android:background="@drawable/dialog_invite_auth"
+        android:hint="@string/leave_message_for_friend"
+        android:maxLines="3"
         android:padding="7dp"
-        android:hint="给朋友留言" />
+        android:textSize="14sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -65,17 +64,17 @@
             android:id="@+id/btn_dialog_share_msg_cancle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp"
             android:background="@android:color/transparent"
-            android:text="取消" />
+            android:padding="16dp"
+            android:text="@string/cancel" />
 
         <TextView
             android:id="@+id/btn_dialog_share_msg_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
-            android:padding="16dp"
             android:background="@android:color/transparent"
-            android:text="发送" />
+            android:padding="16dp"
+            android:text="@string/send"
+            android:textColor="@color/colorPrimary" />
     </LinearLayout>
 </LinearLayout>

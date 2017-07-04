@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:singleLine="true"
-        android:text="同业比较"
+        android:text="@string/text_empty"
         android:textColor="@color/textColor_666666"
         android:textSize="14sp"/>
 </LinearLayout>

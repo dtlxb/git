@@ -72,7 +72,7 @@
         android:layout_marginBottom="11dp"
         android:layout_marginRight="12dp"
         android:layout_marginTop="5dp"
-        android:text="2015-06-06 22:00"
+        android:text="@string/text_empty"
         android:textColor="@color/interactive_date" />
 
 </LinearLayout>

@@ -23,5 +23,5 @@
         android:paddingTop="15dp"
         android:background="@drawable/shape_line_top"
         android:paddingBottom="15dp"
-        android:text="取消"/>
+        android:text="@string/cancel"/>
 </LinearLayout>

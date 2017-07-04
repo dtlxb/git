@@ -37,7 +37,7 @@
                 android:drawableTop="@mipmap/img_do_live"
                 android:paddingEnd="15dp"
                 android:paddingStart="15dp"
-                android:text="我要直播"
+                android:text="@string/want_start_live"
                 android:textColor="#ee3131"
                 android:textSize="12sp" />
 
@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="直播"
+                android:text="@string/live"
                 android:textColor="@color/textColor_333333"
                 android:textSize="@dimen/title_text_size" />
 

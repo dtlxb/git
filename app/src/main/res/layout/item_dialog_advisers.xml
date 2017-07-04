@@ -29,7 +29,7 @@
             android:id="@+id/tv_advisers_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="刘龙杰"
+            android:text="@string/text_empty"
             android:textColor="@color/textColor_333333"
             android:textSize="14sp" />
 
@@ -37,7 +37,7 @@
             android:id="@+id/tv_advisers_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="186-6666-6666"
+            android:text="@string/text_empty"
             android:textColor="@color/textColor_333333"
             android:textSize="14sp" />
     </LinearLayout>

@@ -76,7 +76,7 @@
                         android:id="@+id/tv_published_brief"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="发布后将以聊天消息发送到群聊"
+                        android:text="@string/release_chat_sent_news"
                         android:textColor="@color/textColor_b2b2b2"
                         android:textSize="14sp" />
 
@@ -85,7 +85,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:text="字数:0/50"
+                        android:text="@string/word_count_0_50"
                         android:textColor="@color/textColor_b2b2b2"
                         android:textSize="14sp" />
 
@@ -115,7 +115,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="12dp"
-                android:text="编辑"
+                android:text="@string/button_edit"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 app:normalBackgroundColor="@color/stock_red"

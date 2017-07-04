@@ -16,7 +16,7 @@
         android:paddingEnd="15dp"
         android:paddingStart="15dp"
         android:paddingTop="25dp"
-        android:text="尊敬的用户：\n\n该功能为付费模块，您的权限不足，不能使用该功能。为了不影响您的使用，请及时购买。"
+        android:text="@string/module_power_nead_buy"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
 

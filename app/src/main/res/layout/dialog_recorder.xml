@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:padding="10dp"
-        android:text="手指上滑,取消发送"
+        android:text="@string/finger_off_cancel_send"
         android:textColor="#ffffffff" />
 
     <!--@drawable/shape_wechat_record_text_error-->

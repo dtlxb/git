@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="14dp"
         android:paddingTop="14dp"
-        android:text="不刷新"
+        android:text="@string/not_refreshed"
         android:textColor="@color/textColor_333333"
         android:textSize="17sp" />
 

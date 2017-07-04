@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_marginTop="-3dp"
-            android:text="what the fag say"
+            android:text="@string/text_empty"
             android:textColor="@color/textColor_333333"
             android:textSize="12sp"
             android:visibility="gone" />
@@ -69,7 +69,7 @@
                 android:layout_marginTop="3dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="平安银行"
+                android:text="@string/text_empty"
                 android:textColor="@color/textColor_333333"
                 android:textSize="14sp" />
 
@@ -110,7 +110,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="6dp"
                     android:layout_toRightOf="@id/iv_from"
-                    android:text="Go-Goal"
+                    android:text="@string/share_gogoal"
                     android:textColor="@color/textColor_666666"
                     android:textSize="12dp" />
 

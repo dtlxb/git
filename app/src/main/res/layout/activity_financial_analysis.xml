@@ -61,7 +61,7 @@
                             android:layout_weight="1"
                             android:background="@drawable/chart_tab_shape_select_left"
                             android:gravity="center"
-                            android:text="表1"
+                            android:text="@string/chart_tab_one"
                             android:textColor="@color/white"
                             android:textSize="@dimen/text_size_14" />
 
@@ -71,7 +71,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="表2"
+                            android:text="@string/chart_tab_two"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/text_size_14" />
 
@@ -137,7 +137,7 @@
             android:gravity="center"
             android:paddingBottom="15dp"
             android:paddingTop="15dp"
-            android:text="全部"
+            android:text="@string/all_report"
             android:textColor="@drawable/analysis_radio_button"
             android:textSize="14dp" />
 
@@ -150,7 +150,7 @@
             android:gravity="center"
             android:paddingBottom="15dp"
             android:paddingTop="15dp"
-            android:text="年报"
+            android:text="@string/annual_report"
             android:textColor="@drawable/analysis_radio_button"
             android:textSize="14dp" />
 
@@ -163,7 +163,7 @@
             android:gravity="center"
             android:paddingBottom="15dp"
             android:paddingTop="15dp"
-            android:text="中报"
+            android:text="@string/Interim_report"
             android:textColor="@drawable/analysis_radio_button"
             android:textSize="14dp" />
 
@@ -176,7 +176,7 @@
             android:gravity="center"
             android:paddingBottom="15dp"
             android:paddingTop="15dp"
-            android:text="一季报"
+            android:text="@string/one_quarterly_reports"
             android:textColor="@drawable/analysis_radio_button"
             android:textSize="14dp" />
 
@@ -189,7 +189,7 @@
             android:gravity="center"
             android:paddingBottom="15dp"
             android:paddingTop="15dp"
-            android:text="三季报"
+            android:text="@string/three_quarterly_reports"
             android:textColor="@drawable/analysis_radio_button"
             android:textSize="14dp" />
 

@@ -9,7 +9,7 @@
         android:id="@+id/tv_title"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="股票投研"
+        android:text="@string/stock_investment_research"
         android:layout_margin="10dp"
         android:textColor="#333333"
         android:textSize="14sp" />

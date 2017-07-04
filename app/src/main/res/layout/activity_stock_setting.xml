@@ -20,7 +20,7 @@
         android:background="@drawable/selector_normal_white2gray"
         android:drawableEnd="@mipmap/img_more"
         android:padding="15dp"
-        android:text="行情刷新频率"
+        android:text="@string/refresh_time"
         android:textColor="@color/textColor_333333"
         android:textSize="17sp" />
 
@@ -31,7 +31,7 @@
         android:background="@drawable/selector_normal_white2gray"
         android:drawableEnd="@mipmap/img_more"
         android:padding="15dp"
-        android:text="K线设置"
+        android:text="@string/k_line_setting"
         android:textColor="@color/textColor_333333"
         android:textSize="17sp" />
 
@@ -42,7 +42,7 @@
         android:background="@drawable/selector_normal_white2gray"
         android:drawableEnd="@mipmap/img_more"
         android:padding="15dp"
-        android:text="涨跌显示设置"
+        android:text="@string/up_and_down_setting"
         android:textColor="@color/textColor_333333"
         android:textSize="17sp" />
 
