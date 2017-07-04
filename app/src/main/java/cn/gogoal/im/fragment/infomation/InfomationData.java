@@ -57,10 +57,20 @@ public class InfomationData {
         private String id;
         private String title;
         private String source;
-        private String image;
         private int type;
         private String date;
         private String summary;
+        private String image;
+
+        private String origin;
+
+        public String getOrigin() {
+            return origin;
+        }
+
+        public void setOrigin(String origin) {
+            this.origin = origin;
+        }
 
         public String getSummary() {
             return summary;

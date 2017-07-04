@@ -234,7 +234,7 @@ public class FocusNewsFragment extends BaseFragment {
                     String.format(Locale.getDefault(),
                             getString(R.string.infomation_bottom),
                             data.getDate(),
-                            data.getSource()));
+                            data.getOrigin()));
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -243,6 +243,7 @@ public class FocusNewsFragment extends BaseFragment {
                             AppConst.WEB_NEWS + data.getId() + "?source=" + INFOMATION_TYPE_GET_ASK_NEWS, "");
                 }
             });
+
         }
     }
 }
