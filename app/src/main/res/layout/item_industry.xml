@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/industry_layout"
+    android:layout_width="match_parent"
+    android:layout_height="33dp"
+    android:background="@drawable/shape_text_border"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_order"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="序号"
+        android:textColor="@color/textColor_333333"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="34dp"
+        android:background="#e4e4e4" />
+
+    <TextView
+        android:id="@+id/tv_NO_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="序号"
+        android:textColor="@color/textColor_333333"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="34dp"
+        android:background="#e4e4e4" />
+
+    <TextView
+        android:id="@+id/tv_belong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="所属行业"
+        android:textColor="@color/textColor_333333"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="34dp"
+        android:background="#e4e4e4" />
+
+    <TextView
+        android:id="@+id/tv_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="代码"
+        android:textColor="@color/textColor_333333"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="34dp"
+        android:background="#e4e4e4" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="名称"
+        android:textColor="@color/textColor_333333"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="34dp"
+        android:background="#e4e4e4" />
+
+    <TextView
+        android:id="@+id/tv_worth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:paddingEnd="3dp"
+        android:textColor="@color/company_industry"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="1px"
+        android:layout_height="34dp"
+        android:background="#e4e4e4" />
+
+</LinearLayout>
