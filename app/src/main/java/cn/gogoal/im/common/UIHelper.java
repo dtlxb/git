@@ -120,7 +120,7 @@ public class UIHelper {
                 mToast = Toast.makeText(cont, "服务器开小差了...", Toast.LENGTH_LONG);
                 xLayout.setStatus(XLayout.Error);
             } else {
-                mToast = Toast.makeText(cont, "网络断开了一下", Toast.LENGTH_LONG);
+                mToast = Toast.makeText(cont, "网络断开了", Toast.LENGTH_LONG);
                 xLayout.setStatus(XLayout.No_Network);
             }
         } else {

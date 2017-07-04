@@ -21,6 +21,7 @@ import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
+import cn.gogoal.im.fragment.infomation.FocusNewsFragment;
 import cn.gogoal.im.fragment.infomation.InfomationTabFragment;
 import cn.gogoal.im.fragment.infomation.SevenBy24Fragment;
 import cn.gogoal.im.ui.Badge.BadgeView;
@@ -76,7 +77,8 @@ public class InfomationFragment extends BaseFragment {
 
         ivMessageTag = (ImageView) xTitle.getViewByAction(messageAction);
 
-        final int[] tabTypes = {InfomationTabFragment.INFOMATION_TYPE_GET_ASK_NEWS,
+        final int[] tabTypes = {
+//                InfomationTabFragment.INFOMATION_TYPE_GET_ASK_NEWS,
                 InfomationTabFragment.INFOMATION_TYPE_SUN_BUSINESS,
                 InfomationTabFragment.INFOMATION_TYPE_PRIVATE_VIEW_POINT,
                 InfomationTabFragment.INFOMATION_TYPE_SKY_VIEW_POINT,
@@ -84,10 +86,12 @@ public class InfomationFragment extends BaseFragment {
 
 
         vpInfomation.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
+
             @Override
             public Fragment getItem(int position) {
-                return (position == 0 ? new SevenBy24Fragment() :
-                        InfomationTabFragment.newInstance(tabTypes[position - 1]));
+                return (position == 0 ? new SevenBy24Fragment() : (
+                        position == 1 ? new FocusNewsFragment() :
+                        InfomationTabFragment.newInstance(tabTypes[position - 2])));
             }
 
             @Override
@@ -102,13 +106,13 @@ public class InfomationFragment extends BaseFragment {
         });
 
         tabInfomation.setupWithViewPager(vpInfomation);
+        vpInfomation.setOffscreenPageLimit(7);
 
         xTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AppManager.getInstance().sendMessage("double_click_2_top",
-                                (tabInfomation.getSelectedTabPosition()==0?"0":
-                                        ""+tabTypes[tabInfomation.getSelectedTabPosition()-1]));
+                        "" +tabInfomation.getSelectedTabPosition());
             }
         });
         badge = new BadgeView(getActivity());

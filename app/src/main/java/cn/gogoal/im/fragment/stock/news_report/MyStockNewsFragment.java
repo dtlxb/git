@@ -192,7 +192,7 @@ public class MyStockNewsFragment extends BaseFragment {
                 public void onClick(View v) {
                     NormalIntentUtils.go2WebActivity(
                             v.getContext(),
-                            AppConst.WEB_NEWS + data.getOrigin_id() + "?source=7",
+                            AppConst.WEB_NEWS + data.getOrigin_id() + "?source="+AppConst.SOURCE_TYPE_NEWS,
                             null,
                             true);
                 }

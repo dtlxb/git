@@ -26,6 +26,7 @@ public class StickyDecoration extends RecyclerView.ItemDecoration {
     private GroupListener mGroupListener;
 
     private TextPaint mTextPaint;
+
     private Paint mGroutPaint;
 
     private StickyDecoration(GroupListener groupListener) {

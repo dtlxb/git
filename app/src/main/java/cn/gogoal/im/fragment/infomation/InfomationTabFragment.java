@@ -15,8 +15,11 @@ import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -106,9 +109,10 @@ public class InfomationTabFragment extends BaseFragment {
         tabArrays = Arrays.copyOfRange(tabArrays, 2, 7);
 
         tabType = getArguments().getInt("tab_type");
+
         apis = new SparseArray<>();
 
-        apis.put(INFOMATION_TYPE_GET_ASK_NEWS, GGOKHTTP.GET_ASK_NEWS);
+//        apis.put(INFOMATION_TYPE_GET_ASK_NEWS, GGOKHTTP.GET_ASK_NEWS);
         apis.put(INFOMATION_TYPE_SUN_BUSINESS, GGOKHTTP.SUN_BUSINESS);
         apis.put(INFOMATION_TYPE_PRIVATE_VIEW_POINT, GGOKHTTP.PRIVATE_VIEW_POINT);
         apis.put(INFOMATION_TYPE_SKY_VIEW_POINT, GGOKHTTP.SKY_VIEW_POINT);
@@ -164,9 +168,9 @@ public class InfomationTabFragment extends BaseFragment {
         }
 
         HashMap<String, String> params = new HashMap<>();
-        if (tabType == INFOMATION_TYPE_GET_ASK_NEWS) {
-            params.put("contains_top", String.valueOf(false));
-        }
+//        if (tabType == INFOMATION_TYPE_GET_ASK_NEWS) {
+//            params.put("contains_top", String.valueOf(false));
+//        }
         params.put("page", String.valueOf(defaultPage));
         params.put("rows", String.valueOf(15));
 
@@ -188,12 +192,6 @@ public class InfomationTabFragment extends BaseFragment {
                     adapter.loadMoreComplete();
 
                     adapter.notifyDataSetChanged();
-
-                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
-                        UIHelper.toast(getActivity(), tabArrays[tabType - (
-                                tabType == INFOMATION_TYPE_GET_ASK_NEWS ? 116 : 111
-                        )] + "数据更新成功");
-                    }
 
                     xLayout.setStatus(XLayout.Success);
 
@@ -217,7 +215,8 @@ public class InfomationTabFragment extends BaseFragment {
 
     @Subscriber(tag = "double_click_2_top")
     void doubleClick2Top(String index) {
-        if (StringUtils.parseStringDouble(index) == tabType) {//是本Tab
+        KLog.e(index);
+        if (StringUtils.parseStringDouble(index) == tabType-110) {//是本Tab
             mRvInfomation.smoothScrollToPosition(0);
         }
     }
@@ -234,12 +233,13 @@ public class InfomationTabFragment extends BaseFragment {
 
             holder.setText(R.id.tv_item_normal_sub_title,
                     TextUtils.isEmpty(data.getSummary()) ? "" : data.getSummary());
+
             holder.setVisible(R.id.tv_item_normal_sub_title, tabType == INFOMATION_TYPE_SKY_VIEW_POINT);
 
             holder.setText(R.id.tv_item_normal_info_info,
                     String.format(Locale.getDefault(),
                             getString(R.string.infomation_bottom),
-                            data.getDate(),
+                            getMyDate(tabType, data.getDate()),
                             data.getSource()));
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -249,6 +249,29 @@ public class InfomationTabFragment extends BaseFragment {
                             AppConst.WEB_NEWS + data.getId() + "?source=" + tabType, "");
                 }
             });
+        }
+
+        private String getMyDate(int tabType, String dateString) {
+            if (StringUtils.isActuallyEmpty(dateString)){
+                return "";
+            }
+            Date date = SimpleDateFormat.getDateTimeInstance().parse(
+                    dateString, new ParsePosition(0));
+
+            switch (tabType) {
+                case INFOMATION_TYPE_SUN_BUSINESS://朝阳会务
+                    return dateString;
+                case INFOMATION_TYPE_PRIVATE_VIEW_POINT://私募观点
+                    KLog.e(dateString);
+                    KLog.e(date);
+                    return dateString;
+                case INFOMATION_TYPE_SKY_VIEW_POINT://天高视点
+                    return dateString;
+                case INFOMATION_TYPE_POLICY_DYNAMICS://政策动态
+                    return dateString;
+                default:
+                    return dateString;
+            }
         }
     }
 }

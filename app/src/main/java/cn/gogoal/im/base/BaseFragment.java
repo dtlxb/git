@@ -28,8 +28,6 @@ public abstract class BaseFragment extends Fragment implements IBase {
     private Unbinder bind;
     private View view;
 
-    public String keyword;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(bindLayout(), container, false);
@@ -75,25 +73,10 @@ public abstract class BaseFragment extends Fragment implements IBase {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-//        if (getUserVisibleHint()) {
-//            immersionInit();
-//        }
-    }
-
-//    //此时是否将状态栏文字变成黑色
-//    protected void immersionInit(){
-//        StatusBarUtil.with(getActivity())
-//                .statusBarDarkFont(StatusBarUtil.isSupportStatusBarDarkFont())
-//                .barColor(R.color.colorTitle)
-//                .init();
-//    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         bind.unbind();
+
         EventBus.getDefault().unregister(this);
     }
 

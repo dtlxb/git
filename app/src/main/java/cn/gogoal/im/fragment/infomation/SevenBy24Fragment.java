@@ -128,6 +128,9 @@ public class SevenBy24Fragment extends BaseFragment {
                     adapter.setEnableLoadMore(true);
                     adapter.loadMoreComplete();
                     adapter.notifyDataSetChanged();
+
+
+
                     xLayout.setStatus(XLayout.Success);
 
                 } else if (code == 1001) {
@@ -145,13 +148,14 @@ public class SevenBy24Fragment extends BaseFragment {
             @Override
             public void onFailure(String msg) {
                 refreshlayout.setRefreshing(false);
+                UIHelper.toastError(getContext(),msg,xLayout);
             }
         }).startGet();
     }
 
     @Subscriber(tag = "double_click_2_top")
     void doubleClick2Top(String index){
-        if (StringUtils.parseStringDouble(index)==1){//是本Tab
+        if (StringUtils.parseStringDouble(index)==0){//是本Tab
             recyclerView.smoothScrollToPosition(0);
         }
     }
