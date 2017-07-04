@@ -14,17 +14,15 @@
         android:id="@+id/linearCont"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:layout_marginBottom="7.5dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:visibility="gone">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="20dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
+            android:layout_weight="6"
             android:orientation="vertical">
 
             <TextView
@@ -38,18 +36,19 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
+            android:layout_weight="1.5"
             android:gravity="center"
             android:text="占比"
             android:textColor="@color/textColor_333333"
             android:textSize="14dp" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_weight="2.5"
+            android:gravity="right"
             android:text="持股(万股)"
             android:textColor="@color/textColor_333333"
             android:textSize="14dp" />
@@ -65,8 +64,11 @@
 
         <TextView
             android:id="@+id/textSerialNum"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:gravity="right"
+            android:paddingRight="5dp"
             android:text="@string/default_char"
             android:textSize="14dp" />
 
@@ -74,9 +76,7 @@
             android:id="@+id/linearPropor"
             android:layout_width="0dp"
             android:layout_height="20dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
+            android:layout_weight="5"
             android:orientation="horizontal">
 
             <TextView
@@ -89,19 +89,20 @@
 
         <TextView
             android:id="@+id/textRatio"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:gravity="center"
+            android:layout_weight="1.5"
+            android:gravity="right"
             android:text="@string/default_char"
             android:textColor="@color/textColor_333333"
             android:textSize="14dp" />
 
         <TextView
             android:id="@+id/textQuantity"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_weight="2.5"
+            android:gravity="right"
             android:text="@string/default_char"
             android:textColor="@color/textColor_333333"
             android:textSize="14dp" />
@@ -114,6 +115,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:gravity="left"
+        android:singleLine="true"
         android:text="@string/default_char"
         android:textColor="@color/textColor_333333"
         android:textSize="14dp" />

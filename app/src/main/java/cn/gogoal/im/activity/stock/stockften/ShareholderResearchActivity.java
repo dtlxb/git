@@ -24,6 +24,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.TenTradableHolderData;
 import cn.gogoal.im.bean.f10.FundHolderData;
 import cn.gogoal.im.bean.f10.TenHolderData;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.NormalItemDecoration;
@@ -51,6 +52,8 @@ public class ShareholderResearchActivity extends BaseActivity {
     private DelegateAdapter delegateAdapter;
     private LinkedList<DelegateAdapter.Adapter> adapters;
 
+    private int screenWidth;
+
     @Override
     public int bindLayout() {
         return R.layout.activity_shareholder_research;
@@ -62,6 +65,8 @@ public class ShareholderResearchActivity extends BaseActivity {
         stockCode = getIntent().getStringExtra("stockCode");
         stockName = getIntent().getStringExtra("stockName");
         genre = getIntent().getIntExtra("genre", TEN_HOLDER);
+
+        screenWidth = AppDevice.getWidth(getActivity());
 
         setMyTitle(stockName + "-股东", true);
 
@@ -110,7 +115,8 @@ public class ShareholderResearchActivity extends BaseActivity {
                                 data.getJSONObject(i).getString("stock_holding_quantity"),
                                 data.getJSONObject(i).getString("stock_holder_name")));
                     }
-                    adapters.add(new TenHolderAdapter(getActivity(), HoldingList));
+                    adapters.add(new TenHolderAdapter(getActivity(), HoldingList, screenWidth,
+                            data.getJSONObject(0).getDoubleValue("stock_holder_ratio")));
 
                     getTenTradableHolderData();
                 }
@@ -149,7 +155,8 @@ public class ShareholderResearchActivity extends BaseActivity {
                                 data.getJSONObject(i).getString("stock_holding_quantity"),
                                 data.getJSONObject(i).getString("stock_holder_ratio")));
                     }
-                    adapters.add(new TenTradableHolderAdapter(getActivity(), HolderList));
+                    adapters.add(new TenTradableHolderAdapter(getActivity(), HolderList, screenWidth,
+                            data.getJSONObject(0).getDoubleValue("stock_holder_ratio")));
 
                     getFundHolderData();
                 }
