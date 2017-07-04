@@ -388,9 +388,9 @@ public class StockDetailActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.iv_show_info_dialog, R.id.tv_stockDetail_tools,
-            R.id.tv_stockDetail_stockCircle, R.id.tv_stockDetail_interactiveinvestor,
-            R.id.layout_stockDetail_toggle_mystock, R.id.iv_message, R.id.btn_refresh})
+    @OnClick({R.id.iv_show_info_dialog, R.id.tv_stockDetail_tools, R.id.tv_stockDetail_stockCircle,
+            R.id.tv_stockDetail_interactiveinvestor, R.id.layout_stockDetail_toggle_mystock,
+            R.id.iv_message, R.id.btn_refresh, R.id.textFinish})
     public void allBtnClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
@@ -444,6 +444,9 @@ public class StockDetailActivity extends BaseActivity {
             //去IM
             case R.id.iv_message:
                 startActivity(new Intent(StockDetailActivity.this, MessageHolderActivity.class));
+                break;
+            case R.id.textFinish:
+                finish();
                 break;
         }
     }

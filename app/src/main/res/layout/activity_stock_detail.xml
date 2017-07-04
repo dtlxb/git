@@ -16,6 +16,7 @@
         android:background="@color/stock_gray">
 
         <TextView
+            android:id="@+id/textFinish"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:drawableStart="@mipmap/img_actionbar_back"
@@ -94,7 +95,7 @@
                 android:orientation="vertical">
 
                 <!--head-->
-                <include layout="@layout/inlcude_stock_detail_head"/>
+                <include layout="@layout/inlcude_stock_detail_head" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
