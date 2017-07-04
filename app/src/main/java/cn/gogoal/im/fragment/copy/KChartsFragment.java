@@ -25,6 +25,7 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseMessage;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.FileUtil;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
@@ -123,6 +124,7 @@ public class KChartsFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                FileUtil.writeRequestResponse(responseInfo, "GetKLineDataPage");
                 if (KChartsFragment.this.isVisible()) {
                     if (is_authroity) mOHLCData.clear();
                     JSONObject result = JSONObject.parseObject(responseInfo);

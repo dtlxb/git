@@ -10,6 +10,11 @@ public class PieBean<T> {
     private float pieValue;
     private T colorValue;
 
+    public PieBean(float pieValue, T colorValue) {
+        this.pieValue = pieValue;
+        this.colorValue = colorValue;
+    }
+
     public PieBean(String title, float pieValue, T colorValue) {
         this.title = title;
         this.pieValue = pieValue;

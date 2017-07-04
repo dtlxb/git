@@ -145,6 +145,16 @@ public class AppConst {
     //股票消息标识
     public static final int TYPE_GET_STOCK = 1011;//个股 新闻
 
+    //======================关于好公司标签==============================
+    public static final int TYPE_FRAGMENT_HISTORY = 1300;//业绩鉴定-历史
+    public static final int TYPE_FRAGMENT_INDUSTRY = 1301;//行业地位
+    public static final int TYPE_FRAGMENT_INCIDENT_FUTURE = 1302;//未来事件提示
+    public static final int TYPE_FRAGMENT_INCIDENT_FEET = 1303;//事件足迹
+    public static final int TYPE_FRAGMENT_TURNOVER_RATE = 1304;//分歧度
+    public static final int TYPE_FRAGMENT_REVENUE_RATE = 1305;//业绩季节性
+    public static final int TYPE_FRAGMENT_STOCK_HOLDERS = 1306;//主流机构持仓
+    public static final int TYPE_FRAGMENT_GOOD_COMPANY = 1307;//公司荣誉
+
     //======================关于LeanCloud会话类型，消息类型，发送失败类型==============================
     public static final int IM_CHAT_TYPE_SINGLE = 1001;                 //聊天室类型 单聊
     public static final int IM_CHAT_TYPE_SQUARE = 1002;                 //聊天室类型 群聊

@@ -3,17 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:id="@+id/turnOver_layout"
     android:paddingBottom="15dp"
-    android:id="@+id/fragment_layout_history"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:paddingTop="15dp">
+    android:paddingTop="30dp">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_history"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="近5日换手率" />
 
-    </android.support.v7.widget.RecyclerView>
+    <cn.gogoal.im.ui.view.BarView
+        android:id="@+id/barView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp" />
 
 </LinearLayout>

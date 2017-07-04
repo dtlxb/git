@@ -363,6 +363,7 @@ public class TreatFragment extends BaseFragment {
 
     private void drawPieMap() {
         pieView.setPieType(2);
+        pieView.setNeedInnerCircle(true);
 
         float percent;
         if (fromStockDetail) {
