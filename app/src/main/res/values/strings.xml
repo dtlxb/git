@@ -163,6 +163,7 @@
     <string name="nomoredata_hint">没有更多数据</string>
     <string name="net_erro_hint">数据请求出错</string>
     <string name="str_cancle">取消</string>
+    <string name="text_empty">--</string>
 
     <string name="str_search_man_square">手机号/Go-Goal账号</string>
     <string name="str_title_ok">确定%s</string>
@@ -243,5 +244,7 @@
     <string name="share_holder">十大股东</string>
     <string name="circula_holder">十大流通股东</string>
     <string name="institu_investor">机构投资者</string>
+    <string name="equity_change">股本变动明细</string>
+    <string name="calendar_share_capital">历年股本变动</string>
 
 </resources>

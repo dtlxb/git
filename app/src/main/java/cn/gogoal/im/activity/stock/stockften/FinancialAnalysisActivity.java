@@ -53,7 +53,7 @@ public class FinancialAnalysisActivity extends BaseActivity {
     private String stype;
     private String type;
 
-    private JSONObject data;
+    private JSONObject data = null;
     private int chartTab = 0;
 
     List<ChartBean> chartBeanList;
@@ -192,23 +192,29 @@ public class FinancialAnalysisActivity extends BaseActivity {
                 profits = FtenUtils.cotent2_1[Integer.parseInt(type) - 1];
             }
         }
-        retained_profits = data.getJSONArray(profits);
 
-        List<Float> values = new ArrayList<>();
-        for (int i = 0; i < retained_profits.size(); i++) {
-            values.add(Float.valueOf(StringUtils.save2Significand(retained_profits.getDoubleValue(i) / 10000)));
+        if (data != null) {
+            retained_profits = data.getJSONArray(profits);
+
+            List<Float> values = new ArrayList<>();
+            for (int i = 0; i < retained_profits.size(); i++) {
+                values.add(Float.valueOf(StringUtils.save2Significand(retained_profits.getDoubleValue(i) / 10000)));
+            }
+
+            JSONArray title = data.getJSONArray("title");
+            List<String> dates = new ArrayList<>();
+            for (int i = 0; i < title.size(); i++) {
+                dates.add(FtenUtils.getReportType(title.getString(i)));
+            }
+
+            chartBeanList.clear();
+            for (int i = 0; i < title.size(); i++) {
+                chartBeanList.add(new ChartBean(values.get(i), dates.get(i)));
+            }
+        } else {
+            chartBeanList = null;
         }
 
-        JSONArray title = data.getJSONArray("title");
-        List<String> dates = new ArrayList<>();
-        for (int i = 0; i < title.size(); i++) {
-            dates.add(FtenUtils.getReportType(title.getString(i)));
-        }
-
-        chartBeanList.clear();
-        for (int i = 0; i < title.size(); i++) {
-            chartBeanList.add(new ChartBean(values.get(i), dates.get(i)));
-        }
         barAnalysisView.setTextSize(AppDevice.dp2px(FinancialAnalysisActivity.this, 10));
         barAnalysisView.setChartData(chartBeanList);
     }
