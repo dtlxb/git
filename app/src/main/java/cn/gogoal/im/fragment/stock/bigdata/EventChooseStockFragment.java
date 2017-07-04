@@ -5,7 +5,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -15,9 +14,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
-import cn.gogoal.im.activity.stock.EventDetailActivity;
 import cn.gogoal.im.adapter.EventStcokAdapter;
-import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
@@ -27,7 +24,6 @@ import cn.gogoal.im.bean.stock.bigdata.event.EventListBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
-import cn.gogoal.im.ui.view.TextDrawable;
 import cn.gogoal.im.ui.view.XLayout;
 
 /**
@@ -113,7 +109,8 @@ public class EventChooseStockFragment extends BaseFragment {
     }
 
     private void getEventListData(final int refreshType) {
-        if (refreshType == AppConst.REFRESH_TYPE_FIRST) {
+        if (refreshType == AppConst.REFRESH_TYPE_FIRST ||
+                refreshType==AppConst.REFRESH_TYPE_RELOAD) {
             xLayout.setStatus(XLayout.Loading);
         }
         eventAdapter.setEnableLoadMore(false);

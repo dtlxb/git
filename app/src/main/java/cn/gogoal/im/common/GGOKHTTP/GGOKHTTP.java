@@ -763,7 +763,7 @@ public class GGOKHTTP {
     /**
      * 资讯——要闻
      */
-    public static final String GET_ASK_NEWS = "v1/news/get_ask_news";
+    public static final String GET_ASK_NEWS = "v1/news/get_ask_news_info";
 
     /**
      * 资讯——朝阳会务
