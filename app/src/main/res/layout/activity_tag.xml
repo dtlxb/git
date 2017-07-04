@@ -23,18 +23,17 @@
                 android:layout_height="35dp">
 
                 <ImageView
-                    android:layout_width="18dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/timg" />
+                    android:background="@color/red"
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="15dp"
                     android:text="公司荣誉"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
@@ -74,19 +73,18 @@
                 android:layout_height="35dp">
 
                 <ImageView
-                    android:layout_width="18dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/timg" />
+                    android:background="@color/red"
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="15dp"
                     android:text="业绩鉴定-历史"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
@@ -127,18 +125,17 @@
                 android:layout_height="35dp">
 
                 <ImageView
-                    android:layout_width="18dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/timg" />
+                    android:background="@color/red"
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="15dp"
                     android:text="主流机构持仓"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
@@ -178,18 +175,17 @@
                 android:layout_height="35dp">
 
                 <ImageView
-                    android:layout_width="18dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/timg" />
+                    android:background="@color/red"
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="15dp"
                     android:text="未来事件提示"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
@@ -229,18 +225,17 @@
                 android:layout_height="35dp">
 
                 <ImageView
-                    android:layout_width="18dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/timg" />
+                    android:background="@color/red"
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="15dp"
                     android:text="业绩季节性"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
@@ -280,18 +275,17 @@
                 android:layout_height="35dp">
 
                 <ImageView
-                    android:layout_width="18dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/timg" />
+                    android:background="@color/red"
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="15dp"
                     android:text="分歧度"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
@@ -331,18 +325,17 @@
                 android:layout_height="35dp">
 
                 <ImageView
-                    android:layout_width="18dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/timg" />
+                    android:background="@color/red"
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="15dp"
                     android:text="事件足迹"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
@@ -382,18 +375,17 @@
                 android:layout_height="35dp">
 
                 <ImageView
-                    android:layout_width="18dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/timg" />
+                    android:background="@color/red"
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="15dp"
                     android:text="行业地位"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />

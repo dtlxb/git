@@ -23,15 +23,6 @@ import cn.gogoal.im.ui.view.XTitle;
 
 public class CompanyTagActivity extends BaseActivity {
 
-    @BindView(R.id.layout_honor)
-    FrameLayout layoutHonor;
-    @BindView(R.id.layout_history)
-    FrameLayout layoutHistory;
-    private XTitle xTitle;
-
-    private String stockCode;
-    private String stockName;
-
     @Override
     public int bindLayout() {
         return R.layout.activity_tag;
@@ -39,31 +30,31 @@ public class CompanyTagActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        stockCode = getIntent().getStringExtra("stock_code");
-        stockName = getIntent().getStringExtra("stock_name");
+        String stockCode = getIntent().getStringExtra("stock_code");
+        String stockName = getIntent().getStringExtra("stock_name");
         //业绩鉴定-历史
-        setFragment(AppConst.TYPE_FRAGMENT_HISTORY);
+        setFragment(AppConst.TYPE_FRAGMENT_HISTORY, stockCode);
         //行业地位
-        setFragment(AppConst.TYPE_FRAGMENT_INDUSTRY);
+        setFragment(AppConst.TYPE_FRAGMENT_INDUSTRY, stockCode);
         //未来事件提醒
-        setFragment(AppConst.TYPE_FRAGMENT_INCIDENT_FUTURE);
+        setFragment(AppConst.TYPE_FRAGMENT_INCIDENT_FUTURE, stockCode);
         //事件足迹
-        setFragment(AppConst.TYPE_FRAGMENT_INCIDENT_FEET);
+        setFragment(AppConst.TYPE_FRAGMENT_INCIDENT_FEET, stockCode);
         //分歧度
-        setFragment(AppConst.TYPE_FRAGMENT_TURNOVER_RATE);
+        setFragment(AppConst.TYPE_FRAGMENT_TURNOVER_RATE, stockCode);
         //业绩季节性
-        setFragment(AppConst.TYPE_FRAGMENT_REVENUE_RATE);
+        setFragment(AppConst.TYPE_FRAGMENT_REVENUE_RATE, stockCode);
         //主流机构持仓
-        setFragment(AppConst.TYPE_FRAGMENT_STOCK_HOLDERS);
+        setFragment(AppConst.TYPE_FRAGMENT_STOCK_HOLDERS, stockCode);
         //公司荣誉
-        setFragment(AppConst.TYPE_FRAGMENT_GOOD_COMPANY);
+        setFragment(AppConst.TYPE_FRAGMENT_GOOD_COMPANY, stockCode);
 
         setMyTitle(stockName + "(" + stockCode + ")", true);
 
     }
 
 
-    private void setFragment(int fragmentType) {
+    private void setFragment(int fragmentType, String stockCode) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         switch (fragmentType) {
             case AppConst.TYPE_FRAGMENT_HISTORY:

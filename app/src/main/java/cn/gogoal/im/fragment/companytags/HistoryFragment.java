@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -43,6 +44,9 @@ import cn.gogoal.im.common.UserUtils;
 
 public class HistoryFragment extends BaseFragment {
 
+    @BindView(R.id.fragment_layout_history)
+    LinearLayout fragment_layout_history;
+
     @BindView(R.id.rv_history)
     RecyclerView recyclerView;
 
@@ -72,6 +76,7 @@ public class HistoryFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         stockCode = getArguments().getString("stock_code");
         fragmentType = getArguments().getInt("fragment_type");
+        fragment_layout_history.setVisibility(View.GONE);
         init();
     }
 
@@ -114,6 +119,7 @@ public class HistoryFragment extends BaseFragment {
                             });
                     historyDatas.addAll(beanList.getData());
                     if (historyDatas.size() > 0) {
+                        fragment_layout_history.setVisibility(View.VISIBLE);
                         HistoryData historyData = new HistoryData("报表发布日", 0, "报表周期", 0);
                         historyDatas.add(0, historyData);
                         historyAdapter.notifyDataSetChanged();
@@ -145,6 +151,7 @@ public class HistoryFragment extends BaseFragment {
                             });
                     industryDatas.addAll(beanList.getData());
                     if (industryDatas.size() > 0) {
+                        fragment_layout_history.setVisibility(View.VISIBLE);
                         IndustryData industryData = new IndustryData(0.0f, "所属行业", "", "代码", "名称");
                         industryDatas.add(0, industryData);
                         industryAdapter.notifyDataSetChanged();

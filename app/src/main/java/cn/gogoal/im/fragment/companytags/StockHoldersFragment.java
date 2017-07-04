@@ -2,6 +2,8 @@ package cn.gogoal.im.fragment.companytags;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
@@ -29,6 +31,9 @@ import cn.gogoal.im.ui.view.LineView;
 
 public class StockHoldersFragment extends BaseFragment {
 
+    @BindView(R.id.stockHolder_layout)
+    LinearLayout stockHolder_layout;
+
     @BindView(R.id.stock_lineView)
     LineView stockLineView;
 
@@ -55,6 +60,7 @@ public class StockHoldersFragment extends BaseFragment {
         stockCode = getArguments().getString("stock_code");
         fragmentType = getArguments().getInt("fragment_type");
         stockHolderBeans = new ArrayList<>();
+        stockHolder_layout.setVisibility(View.GONE);
         getStockHolders();
     }
 
@@ -73,15 +79,18 @@ public class StockHoldersFragment extends BaseFragment {
                             new TypeReference<BaseBeanList<StockHolderBean>>() {
                             });
                     stockHolderBeans.addAll(beanList.getData());
-                    stockLineView.setMarginTop(AppDevice.dp2px(getActivity(), 25));
-                    stockLineView.setMarginBottom(AppDevice.dp2px(getActivity(), 33));
-                    stockLineView.setMarginLeft(AppDevice.dp2px(getActivity(), 40));
-                    stockLineView.setMarginRight(AppDevice.dp2px(getActivity(), 10));
-                    stockLineView.setTextSize(AppDevice.dp2px(getActivity(), 8));
-                    stockLineView.setMarginBar(AppDevice.dp2px(getActivity(), 3));
-                    stockLineView.setLineSize(AppDevice.dp2px(getActivity(), 1));
-                    stockLineView.setChartData(stockHolderBeans);
-                    KLog.e(stockHolderBeans);
+                    if (stockHolderBeans.size() > 0) {
+                        stockHolder_layout.setVisibility(View.VISIBLE);
+                        stockLineView.setMarginTop(AppDevice.dp2px(getActivity(), 25));
+                        stockLineView.setMarginBottom(AppDevice.dp2px(getActivity(), 33));
+                        stockLineView.setMarginLeft(AppDevice.dp2px(getActivity(), 40));
+                        stockLineView.setMarginRight(AppDevice.dp2px(getActivity(), 10));
+                        stockLineView.setTextSize(AppDevice.dp2px(getActivity(), 8));
+                        stockLineView.setMarginBar(AppDevice.dp2px(getActivity(), 3));
+                        stockLineView.setLineSize(AppDevice.dp2px(getActivity(), 1));
+                        stockLineView.setChartData(stockHolderBeans);
+                        KLog.e(stockHolderBeans);
+                    }
                 }
             }
 

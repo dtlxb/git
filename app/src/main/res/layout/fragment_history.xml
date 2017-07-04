@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingBottom="15dp"
+    android:id="@+id/fragment_layout_history"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:paddingTop="15dp">

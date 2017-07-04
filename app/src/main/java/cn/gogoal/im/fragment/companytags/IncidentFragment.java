@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
@@ -32,6 +34,9 @@ import cn.gogoal.im.common.UserUtils;
  */
 
 public class IncidentFragment extends BaseFragment {
+
+    @BindView(R.id.layout_incident)
+    LinearLayout layout_incident;
 
     @BindView(R.id.rv_history)
     RecyclerView recyclerView;
@@ -62,6 +67,7 @@ public class IncidentFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         stockCode = getArguments().getString("stock_code");
         fragmentType = getArguments().getInt("fragment_type");
+        layout_incident.setVisibility(View.GONE);
         initThis();
     }
 
@@ -100,6 +106,9 @@ public class IncidentFragment extends BaseFragment {
                             new TypeReference<BaseBeanList<IncidentData>>() {
                             });
                     incidentDatas.addAll(beanList.getData());
+                    if (incidentDatas.size() > 0) {
+                        layout_incident.setVisibility(View.VISIBLE);
+                    }
                     incidentAdapter.notifyDataSetChanged();
                 }
             }

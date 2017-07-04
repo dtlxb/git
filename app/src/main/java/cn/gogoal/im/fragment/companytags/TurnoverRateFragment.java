@@ -2,6 +2,8 @@ package cn.gogoal.im.fragment.companytags;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -27,6 +29,9 @@ import cn.gogoal.im.ui.view.BarView;
  */
 
 public class TurnoverRateFragment extends BaseFragment {
+
+    @BindView(R.id.turnOver_layout)
+    LinearLayout turnOver_layout;
 
     @BindView(R.id.barView)
     BarView barView;
@@ -54,6 +59,7 @@ public class TurnoverRateFragment extends BaseFragment {
         stockCode = getArguments().getString("stock_code");
         fragmentType = getArguments().getInt("fragment_type");
         chartBeanList = new ArrayList<>();
+        turnOver_layout.setVisibility(View.GONE);
         getTurnOverRate();
     }
 
@@ -75,11 +81,14 @@ public class TurnoverRateFragment extends BaseFragment {
                                 chartObject.getString("date").substring(5, 10)));
                     }
                     KLog.e(chartBeanList);
-                    barView.setTextSize(AppDevice.dp2px(getActivity(), 10));
-                    barView.setMarginBottom(AppDevice.dp2px(getActivity(), 30));
-                    barView.setMarginTop(AppDevice.dp2px(getActivity(), 10));
-                    barView.setBarType(AppConst.TYPE_FRAGMENT_TURNOVER_RATE);
-                    barView.setChartData(chartBeanList);
+                    if (chartBeanList.size() > 0) {
+                        turnOver_layout.setVisibility(View.VISIBLE);
+                        barView.setTextSize(AppDevice.dp2px(getActivity(), 10));
+                        barView.setMarginBottom(AppDevice.dp2px(getActivity(), 30));
+                        barView.setMarginTop(AppDevice.dp2px(getActivity(), 10));
+                        barView.setBarType(AppConst.TYPE_FRAGMENT_TURNOVER_RATE);
+                        barView.setChartData(chartBeanList);
+                    }
                 }
             }
 

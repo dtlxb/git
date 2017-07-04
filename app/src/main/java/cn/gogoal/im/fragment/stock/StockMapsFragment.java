@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.mikephil.charting.formatter.IFillFormatter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -547,6 +548,9 @@ public class StockMapsFragment extends BaseFragment {
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
+            if ((timesBitmap == null && showItem == 0) || (fiveDayBitmap == null && showItem == 1)) {
+                return;
+            }
             switch (String.valueOf(showItem)) {
                 case "0":
                     if (stock_charge_type == 1 && StockUtils.isTradeTime()) {
