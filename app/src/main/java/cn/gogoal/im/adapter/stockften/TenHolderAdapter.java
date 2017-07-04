@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.market.MainViewHolder;
 import cn.gogoal.im.bean.f10.TenHolderData;
+import cn.gogoal.im.common.AppDevice;
 
 /**
  * Created by dave.
@@ -27,12 +28,15 @@ public class TenHolderAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
 
     private ArrayList<TenHolderData> contList;
     private Context context;
+    private int tenWidth;
 
     private double ratio = 0;
 
-    public TenHolderAdapter(Context context, ArrayList<TenHolderData> list) {
+    public TenHolderAdapter(Context context, ArrayList<TenHolderData> list, int screenWidth, double ratio) {
         this.context = context;
         this.contList = list;
+        this.ratio = ratio;
+        tenWidth = (screenWidth - AppDevice.dp2px(context, 30)) / 2;
     }
 
     @Override
@@ -52,7 +56,6 @@ public class TenHolderAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
         final TextView textPropor = holder.findView(R.id.textPropor);
 
         if (position == 0) {
-            ratio = Double.parseDouble(contList.get(position).getStock_holder_ratio());
             holder.findView(R.id.linearCont).setVisibility(View.VISIBLE);
         } else {
             holder.findView(R.id.linearCont).setVisibility(View.GONE);
@@ -77,20 +80,15 @@ public class TenHolderAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
         holder.setText(R.id.textName, contList.get(position).getStock_holder_name() != null
                 ? contList.get(position).getStock_holder_name() : "--");
         holder.setText(R.id.textRatio, contList.get(position).getStock_holder_ratio() != null
-                ? contList.get(position).getStock_holder_ratio() : "--");
+                ? contList.get(position).getStock_holder_ratio() + "%" : "--");
         holder.setText(R.id.textQuantity, contList.get(position).getStock_holding_quantity() != null
                 ? contList.get(position).getStock_holding_quantity() : "--");
 
-        if (position == 0) {
-            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            textPropor.setLayoutParams(param);
-        } else {
-            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                    (int) (400 * Double.parseDouble(contList.get(position).getStock_holder_ratio())
-                            / ratio), LinearLayout.LayoutParams.MATCH_PARENT);
-            textPropor.setLayoutParams(param);
-        }
+        int valWidth = (int) (tenWidth * Double.parseDouble(
+                contList.get(position).getStock_holder_ratio()) / ratio);
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(valWidth < 1 ? 1 : valWidth,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        textPropor.setLayoutParams(param);
     }
 
     @Override
