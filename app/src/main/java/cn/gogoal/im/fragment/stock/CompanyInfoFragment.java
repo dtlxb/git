@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,7 +77,7 @@ public class CompanyInfoFragment extends BaseFragment {
     private CompanySummaryAdapter summaryAdapter;
 
     private String stype;
-    private JSONObject finacialData;
+    private JSONObject finacialData = null;
     private int chartTab = 0;
     List<ChartBean> chartBeanList;
 
@@ -278,6 +279,7 @@ public class CompanyInfoFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
@@ -309,6 +311,7 @@ public class CompanyInfoFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     finacialData = object.getJSONObject("data");
@@ -349,30 +352,34 @@ public class CompanyInfoFragment extends BaseFragment {
             }
         }
 
-        JSONArray retained_profits = data.getJSONArray(profits);
+        if (data != null) {
+            JSONArray retained_profits = data.getJSONArray(profits);
 
+            List<Float> values = new ArrayList<>();
+            if (chartTab == 2) {
+                for (int i = 0; i < retained_profits.size(); i++) {
+                    values.add(retained_profits.getFloatValue(i));
+                }
+            } else {
+                for (int i = 0; i < retained_profits.size(); i++) {
+                    values.add(Float.valueOf(StringUtils.save2Significand(retained_profits.getDoubleValue(i) / 10000)));
+                }
+            }
 
-        List<Float> values = new ArrayList<>();
-        if (chartTab == 2) {
-            for (int i = 0; i < retained_profits.size(); i++) {
-                values.add(retained_profits.getFloatValue(i));
+            JSONArray title = data.getJSONArray("title");
+            List<String> dates = new ArrayList<>();
+            for (int i = 0; i < title.size(); i++) {
+                dates.add(FtenUtils.getReportType(title.getString(i)));
+            }
+
+            chartBeanList.clear();
+            for (int i = 0; i < title.size(); i++) {
+                chartBeanList.add(new ChartBean(values.get(i), dates.get(i)));
             }
         } else {
-            for (int i = 0; i < retained_profits.size(); i++) {
-                values.add(Float.valueOf(StringUtils.save2Significand(retained_profits.getDoubleValue(i) / 10000)));
-            }
+            chartBeanList = null;
         }
 
-        JSONArray title = data.getJSONArray("title");
-        List<String> dates = new ArrayList<>();
-        for (int i = 0; i < title.size(); i++) {
-            dates.add(FtenUtils.getReportType(title.getString(i)));
-        }
-
-        chartBeanList.clear();
-        for (int i = 0; i < title.size(); i++) {
-            chartBeanList.add(new ChartBean(values.get(i), dates.get(i)));
-        }
         barPerforView.setTextSize(AppDevice.dp2px(getActivity(), 10));
         barPerforView.setChartData(chartBeanList);
     }

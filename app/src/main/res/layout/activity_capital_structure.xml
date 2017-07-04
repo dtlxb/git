@@ -27,33 +27,95 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_color_2"
+                android:paddingBottom="7.5dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="7.5dp"
+                android:singleLine="true"
+                android:text="@string/equity_change"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_size_14" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <!--左边的ListView-->
                 <cn.gogoal.im.ui.copy.InnerListView
-                    android:id="@+id/lsv_left"
+                    android:id="@+id/equity_change_left"
                     android:layout_width="150dp"
                     android:layout_height="match_parent"
                     android:divider="@null"
                     android:scrollbars="none" />
 
                 <!--右边的ScrollView-->
-                <HorizontalScrollView
-                    android:id="@+id/rightHorscrollView"
+                <cn.gogoal.im.ui.view.MySyncHorizontalScrollView
+                    android:id="@+id/equity_change_horscroll"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scrollbars="none">
 
                     <cn.gogoal.im.ui.copy.InnerListView
-                        android:id="@+id/lsv_right"
+                        android:id="@+id/equity_change_right"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:divider="@null"
                         android:scrollbars="none" />
 
-                </HorizontalScrollView>
+                </cn.gogoal.im.ui.view.MySyncHorizontalScrollView>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_color_2"
+                android:paddingBottom="7.5dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="7.5dp"
+                android:singleLine="true"
+                android:text="@string/calendar_share_capital"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_size_14" />
+
+            <cn.gogoal.im.ui.view.MultiBarView
+                android:id="@+id/multiBarView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/white" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <!--左边的ListView-->
+                <cn.gogoal.im.ui.copy.InnerListView
+                    android:id="@+id/over_year_equity_change_left"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:divider="@null"
+                    android:scrollbars="none" />
+
+                <!--右边的ScrollView-->
+                <cn.gogoal.im.ui.view.MySyncHorizontalScrollView
+                    android:id="@+id/over_year_equity_change_horscroll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none">
+
+                    <cn.gogoal.im.ui.copy.InnerListView
+                        android:id="@+id/over_year_equity_change_right"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:divider="@null"
+                        android:scrollbars="none" />
+
+                </cn.gogoal.im.ui.view.MySyncHorizontalScrollView>
             </LinearLayout>
 
         </LinearLayout>
