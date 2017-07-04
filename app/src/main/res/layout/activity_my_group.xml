@@ -23,7 +23,7 @@
         android:drawableLeft="@mipmap/img_search"
         android:drawablePadding="5dp"
         android:gravity="center_vertical"
-        android:text="搜索"
+        android:text="@string/search"
         android:textColor="@color/colorXLayout"
         android:textSize="14sp"
         app:layout_scrollFlags="scroll|enterAlways" />

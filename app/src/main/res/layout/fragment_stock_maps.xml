@@ -57,7 +57,7 @@
                     android:background="@drawable/textlayout_blackground"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="暂无相关数据"
+                    android:text="@string/relevant_data"
                     android:textColor="@color/text_color_word" />
             </LinearLayout>
 

@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:text="最新直播"
+        android:text="@string/text_empty"
         android:textColor="@color/textColor_333333"
         android:textSize="16sp" />
 
@@ -36,7 +36,7 @@
         android:lineSpacingExtra="2dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:text="最新直播最新直播最新直播最新直播最新直播最新直播最新直播最新直播"
+        android:text="@string/text_empty"
         android:textColor="@color/textColor_333333"
         android:textSize="16sp" />
 
@@ -49,7 +49,7 @@
         android:lineSpacingExtra="2dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:text="最新直播最新直播最新直播最新直播最新直播最新直播最新直播最新直播"
+        android:text="@string/text_empty"
         android:textColor="@color/textColor_666666"
         android:textSize="14sp" />
 
@@ -60,7 +60,7 @@
         android:lineSpacingExtra="2dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:text="最新直播最新直播最新直播最新直播最新直播最新直播最新直播最新直播"
+        android:text="@string/text_empty"
         android:textColor="@color/textColor_666666"
         android:textSize="14sp" />
 
@@ -80,7 +80,7 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:paddingTop="14dp"
-        android:text="查看详情"
+        android:text="@string/look_more"
         android:textColor="@color/textColor_333333"
         android:textSize="16sp" />
 

@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="10dp"
-        android:text="登录中"
+        android:text="@string/tv_login_status"
         android:textColor="@android:color/white"
         android:textSize="15sp" />
 </FrameLayout>

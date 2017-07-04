@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="群二维码"
+        android:text="@string/im_str_square_code"
         android:layout_centerVertical="true"
         android:textColor="@color/textColor_333333"
         android:textSize="16sp" />

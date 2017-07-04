@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="最近搜索"
+        android:text="@string/recent_search"
         android:layout_centerVertical="true"
         android:textColor="@color/textColor_333333"
         android:textSize="14sp" />

@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="消息"
+            android:text="@string/title_message"
             android:textColor="@color/textColor_333333"
             android:textSize="18sp" />
 
@@ -68,7 +68,7 @@
                 android:drawableLeft="@mipmap/img_search"
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
-                android:text="搜索"
+                android:text="@string/search"
                 android:textColor="@color/colorXLayout"
                 android:textSize="14sp"
                 app:layout_scrollFlags="scroll|enterAlways" />

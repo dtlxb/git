@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:padding="12dp"
-        android:text="群名称"
+        android:text="@string/group_name"
         android:textColor="@color/textColor_999999"
         android:textSize="14sp" />
 

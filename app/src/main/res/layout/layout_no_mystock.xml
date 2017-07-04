@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="17dp"
-        android:text="添加自选股"
+        android:text="@string/add_my_stock"
         android:layout_centerInParent="true"
         android:textColor="#9d9d9d" />
 </android.support.percent.PercentRelativeLayout>

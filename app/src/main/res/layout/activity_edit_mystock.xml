@@ -26,7 +26,7 @@
             android:layout_centerVertical="true"
             android:gravity="center_vertical"
             android:singleLine="true"
-            android:text="全部"
+            android:text="@string/edit_mystock_all"
             android:textColor="@color/textColor_333333"
             android:textSize="16sp" />
 
@@ -37,7 +37,7 @@
             android:layout_centerVertical="true"
             android:gravity="center_vertical"
             android:singleLine="true"
-            android:text="置顶"
+            android:text="@string/edit_mystock_top"
             app:layout_marginRightPercent="18%"
             android:layout_toStartOf="@+id/img_drag"
             android:textColor="@color/textColor_333333"
@@ -51,7 +51,7 @@
             android:layout_centerVertical="true"
             android:gravity="center_vertical"
             android:singleLine="true"
-            android:text="拖动"
+            android:text="@string/edit_mystock_drag"
             android:textColor="@color/textColor_333333"
             android:textSize="16sp" />
 
@@ -76,7 +76,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="全选"
+            android:text="@string/edit_mystock_select"
             android:textColor="@color/textColor_333333"
             android:textSize="18sp" />
 
@@ -93,7 +93,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="删除"
+            android:text="@string/edit_mystock_delete"
             android:textColor="@color/textColor_333333"
             android:textSize="18sp" />
     </LinearLayout>

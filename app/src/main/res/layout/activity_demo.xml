@@ -107,8 +107,8 @@
             </android.support.design.widget.TabLayout>
 
             <TableRow>
-                <android.support.v4.view.ViewPager android:id="@+id/vp_demo"
-                    />
+
+                <android.support.v4.view.ViewPager android:id="@+id/vp_demo" />
             </TableRow>
         </TableLayout>
 

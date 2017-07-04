@@ -14,7 +14,7 @@
         android:paddingEnd="20dp"
         android:paddingStart="20dp"
         android:paddingTop="25dp"
-        android:text="该直播目前仅限由朝阳永续定向邀约发起，如果您有直播合作意向请联系曹小姐：021-68889706-8127"
+        android:text="@string/live_need_contact"
         android:textColor="@color/textColor_333333"
         android:textSize="16sp" />
 
@@ -43,7 +43,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/flag_view_btm"
         android:layout_toStartOf="@id/flag_view_middle"
-        android:text="取消"
+        android:text="@string/cancel"
         android:background="@drawable/shape_dialog_normal_alert_btn_cancle"
         android:textColor="@color/textColor_333333"/>
 
@@ -55,7 +55,7 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/flag_view_btm"
         android:layout_toEndOf="@id/flag_view_middle"
-        android:text="确定"
+        android:text="@string/sure"
         android:background="@drawable/shape_dialog_normal_alert_btn_ok"
         android:textColor="#2782d7" />
 

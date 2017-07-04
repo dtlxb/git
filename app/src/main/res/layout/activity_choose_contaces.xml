@@ -79,7 +79,7 @@
             android:paddingEnd="20dp"
             android:paddingStart="20dp"
             android:paddingTop="7dp"
-            android:text="确定"
+            android:text="@string/sure"
             android:textColor="@android:color/white"
             android:textSize="13sp"
             app:pressedBackgroundColor="@android:color/holo_red_dark"

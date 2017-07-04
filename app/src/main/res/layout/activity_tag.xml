@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="35dp"
-                    android:text="公司荣誉"
+                    android:text="@string/company_honor"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
 
@@ -87,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="35dp"
-                    android:text="业绩鉴定-历史"
+                    android:text="@string/performance_appraisal_history"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
 
@@ -139,7 +139,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="35dp"
-                    android:text="主流机构持仓"
+                    android:text="@string/mainstream_institutional_positions"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
 
@@ -190,7 +190,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="35dp"
-                    android:text="未来事件提示"
+                    android:text="@string/future_events_prompt"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
 
@@ -241,7 +241,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="35dp"
-                    android:text="业绩季节性"
+                    android:text="@string/seasonal_performance"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
 
@@ -292,7 +292,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="35dp"
-                    android:text="分歧度"
+                    android:text="@string/divergence_degree"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
 
@@ -343,7 +343,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="35dp"
-                    android:text="事件足迹"
+                    android:text="@string/event_footprint"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
 
@@ -394,7 +394,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="35dp"
-                    android:text="行业地位"
+                    android:text="@string/lndustry_status"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
 

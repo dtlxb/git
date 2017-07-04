@@ -87,7 +87,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="群成员"
+                        android:text="@string/title_square_contacts"
                         android:textColor="@color/textColor_333333"
                         android:textSize="16sp" />
 
@@ -145,7 +145,7 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="12dp"
                 android:lines="1"
-                android:text="我要报名"
+                android:text="@string/want_sign_up"
                 android:textColor="@android:color/white"
                 android:textSize="17sp"
                 app:normalBackgroundColor="@color/colorPrimary"

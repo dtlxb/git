@@ -1,3 +1,4 @@
+/*
 package cn.gogoal.im.activity.stock.stockften;
 
 import android.content.Context;
@@ -25,11 +26,13 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.copy.FtenUtils;
 import cn.gogoal.im.ui.view.BarView;
 
+*/
 /**
  * Created by dave.
  * Date: 2017/6/7.
  * Desc: 财务分析
- */
+ *//*
+
 public class FinancialAnalysisFragment extends BaseFragment {
 
     @BindView(R.id.textProfit1)
@@ -260,3 +263,4 @@ public class FinancialAnalysisFragment extends BaseFragment {
         startActivity(intent);
     }
 }
+*/

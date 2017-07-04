@@ -24,7 +24,7 @@
         android:textSize="17sp"
         android:textColor="@color/textColor_333333"
         android:layout_centerVertical="true"
-        android:text="好想你" />
+        android:text="@string/text_empty" />
 
     <ImageView
         android:id="@+id/img_2_top"

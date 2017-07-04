@@ -77,7 +77,7 @@
                     android:background="@drawable/chart_tab_shape_select_left"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="主营收入"
+                    android:text="@string/principal_revenue"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size_14" />
 
@@ -88,7 +88,7 @@
                     android:background="@drawable/chart_tab_center_shape"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="净利润"
+                    android:text="@string/net_profit"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/text_size_14" />
 
@@ -98,7 +98,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="每股收益"
+                    android:text="@string/earnings_per_share"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/text_size_14" />
 
@@ -118,7 +118,7 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:text="单位:亿元"
+                android:text="@string/perfor_unit"
                 android:textColor="@color/textColor_333333"
                 android:textSize="@dimen/text_size_14" />
 
@@ -392,7 +392,7 @@
                     android:gravity="center"
                     android:padding="5dp"
                     android:singleLine="true"
-                    android:text="总市值(亿元)"
+                    android:text="@string/chart_peer_one"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size_13" />
 
@@ -405,7 +405,7 @@
                     android:gravity="center"
                     android:padding="5dp"
                     android:singleLine="true"
-                    android:text="总收入(LYR,万元)"
+                    android:text="@string/chart_peer_two"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/text_size_13" />
 
@@ -417,7 +417,7 @@
                     android:gravity="center"
                     android:padding="5dp"
                     android:singleLine="true"
-                    android:text="净利润(LYR,万元)"
+                    android:text="@string/chart_peer_three"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/text_size_13" />
 

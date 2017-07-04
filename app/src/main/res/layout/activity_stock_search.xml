@@ -64,7 +64,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        android:text="历史搜索"
+                        android:text="@string/history_search"
                         android:textColor="@color/search_history"
                         android:textSize="@dimen/text_size_13" />
 
@@ -107,7 +107,7 @@
                     android:layout_marginBottom="8dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="8dp"
-                    android:text="热门搜索"
+                    android:text="@string/hot_search"
                     android:textColor="@color/search_history"
                     android:textSize="@dimen/text_size_13" />
 

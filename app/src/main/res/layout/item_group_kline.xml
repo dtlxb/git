@@ -12,7 +12,7 @@
         android:paddingBottom="5dp"
         android:paddingLeft="14dp"
         android:paddingTop="15dp"
-        android:text="默认K线样式选择"
+        android:text="@string/default_style_selection"
         android:textColor="@color/textColor_999999"
         android:textSize="12sp" />
 
@@ -32,7 +32,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="26dp"
         android:paddingTop="14dp"
-        android:text="实心阳线"
+        android:text="@string/kline_b1"
         android:textColor="@color/textColor_333333"
         android:textSize="17sp" />
 
@@ -52,7 +52,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="26dp"
         android:paddingTop="14dp"
-        android:text="空心阳线"
+        android:text="@string/kline_b2"
         android:textColor="@color/textColor_333333"
         android:textSize="17sp" />
 

@@ -22,7 +22,7 @@
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="what the fag say"
+            android:text="@string/text_empty"
             android:textColor="@color/textColor_666666"
             android:textSize="12sp" />
 
@@ -35,7 +35,7 @@
             android:layout_below="@+id/user_name"
             android:background="@android:color/white"
             android:gravity="center_vertical"
-            android:text="为什么没有人了,人呢?"
+            android:text="@string/text_empty"
             android:textColor="@color/textColor_333333"
             android:textSize="14sp" />
 

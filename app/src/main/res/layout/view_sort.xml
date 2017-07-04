@@ -9,7 +9,7 @@
         android:id="@+id/tv_sort_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="最新价"
+        android:text="@string/new_price"
         android:layout_centerInParent="true"
         android:includeFontPadding="false"
         android:lineSpacingExtra="0dp"

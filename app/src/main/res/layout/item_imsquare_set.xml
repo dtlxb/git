@@ -94,7 +94,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="群成员"
+                        android:text="@string/title_square_contacts"
                         android:textColor="@color/textColor_333333"
                         android:textSize="16sp" />
 

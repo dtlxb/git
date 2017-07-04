@@ -14,7 +14,7 @@
         android:layout_marginTop="29dp"
         android:background="@drawable/dialog_invite_auth"
         android:gravity="center_vertical|left"
-        android:hint="请输入4位邀请码"
+        android:hint="@string/edit_Invite_4"
         android:maxLength="4"
         android:paddingLeft="15dp"
         android:textColor="@color/textColor_333333"
