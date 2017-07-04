@@ -23,18 +23,17 @@
                 android:layout_height="35dp">
 
                 <ImageView
-                    android:layout_width="18dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/timg" />
+                    android:background="@color/red"
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="15dp"
                     android:text="@string/company_honor"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
@@ -74,19 +73,18 @@
                 android:layout_height="35dp">
 
                 <ImageView
-                    android:layout_width="18dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/timg" />
+                    android:background="@color/red"
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="15dp"
                     android:text="@string/performance_appraisal_history"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
@@ -127,18 +125,17 @@
                 android:layout_height="35dp">
 
                 <ImageView
-                    android:layout_width="18dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/timg" />
+                    android:background="@color/red"
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="15dp"
                     android:text="@string/mainstream_institutional_positions"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
@@ -178,18 +175,17 @@
                 android:layout_height="35dp">
 
                 <ImageView
-                    android:layout_width="18dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/timg" />
+                    android:background="@color/red"
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="15dp"
                     android:text="@string/future_events_prompt"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
@@ -229,18 +225,17 @@
                 android:layout_height="35dp">
 
                 <ImageView
-                    android:layout_width="18dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/timg" />
+                    android:background="@color/red"
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="15dp"
                     android:text="@string/seasonal_performance"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
@@ -280,18 +275,17 @@
                 android:layout_height="35dp">
 
                 <ImageView
-                    android:layout_width="18dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/timg" />
+                    android:background="@color/red"
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="15dp"
                     android:text="@string/divergence_degree"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
@@ -331,18 +325,17 @@
                 android:layout_height="35dp">
 
                 <ImageView
-                    android:layout_width="18dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/timg" />
+                    android:background="@color/red"
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="15dp"
                     android:text="@string/event_footprint"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />
@@ -382,18 +375,17 @@
                 android:layout_height="35dp">
 
                 <ImageView
-                    android:layout_width="18dp"
+                    android:layout_width="5dp"
                     android:layout_height="15dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@mipmap/timg" />
+                    android:background="@color/red"
+                    android:scaleType="fitXY" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="35dp"
+                    android:layout_marginStart="15dp"
                     android:text="@string/lndustry_status"
                     android:textColor="@color/textColor_333333"
                     android:textSize="16sp" />

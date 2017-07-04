@@ -153,9 +153,9 @@ public class KlineSettingActivity extends BaseActivity {
                 break;
         }
         if (hollow) {
-            kline_b1.setChecked(true);
-        } else {
             kline_b2.setChecked(true);
+        } else {
+            kline_b1.setChecked(true);
         }
         if (follow) {
             rb_follow.setChecked(true);
@@ -178,7 +178,7 @@ public class KlineSettingActivity extends BaseActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 int rbId = group.getCheckedRadioButtonId();
-                SPTools.saveBoolean("hollow", rbId == kline_b1.getId());
+                SPTools.saveBoolean("hollow", rbId == kline_b2.getId());
             }
         });
 

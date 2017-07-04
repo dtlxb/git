@@ -9,6 +9,7 @@ import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -41,6 +42,9 @@ public class GoodCompanyFragment extends BaseFragment {
     @BindView(R.id.rv_goodCompany)
     RecyclerView recyclerView;
 
+    @BindView(R.id.layout_goodCompany)
+    LinearLayout layout_goodCompany;
+
     private String stockCode;
     private int fragmentType;
     private List<CompanyTagData> companyTagDatas;
@@ -64,6 +68,8 @@ public class GoodCompanyFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         stockCode = getArguments().getString("stock_code");
         fragmentType = getArguments().getInt("fragment_type");
+        layout_goodCompany.setVisibility(View.GONE);
+
         companyTagDatas = new ArrayList<>();
         goodCompanyAdapter = new GoodCompanyAdapter(companyTagDatas);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -91,6 +97,7 @@ public class GoodCompanyFragment extends BaseFragment {
                             });
                     companyTagDatas.addAll(beanList.getData());
                     if (companyTagDatas.size() > 0) {
+                        layout_goodCompany.setVisibility(View.VISIBLE);
                         CompanyTagData companyTagData = new CompanyTagData(0, 0, 0, 0, 0);
                         companyTagDatas.add(0, companyTagData);
                         if (companyTagDatas.size() > 1) {

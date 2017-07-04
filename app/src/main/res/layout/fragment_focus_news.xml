@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.gogoal.im.ui.view.XLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/xLayout"
+    tools:context="cn.gogoal.im.fragment.infomation.FocusNewsFragment">
+
+    <!--<android.support.v4.widget.SwipeRefreshLayout-->
+        <!--android:id="@+id/swipeRefreshLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_main"
+            android:orientation="vertical">
+
+            <!--title date-->
+            <TextView
+                android:id="@+id/tv_current_month"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="10dp"
+                android:text="2017年07月"
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
+
+            <!--week 7 day-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/WeekIndicatorStyle"
+                    android:text="日" />
+
+                <TextView
+                    style="@style/WeekIndicatorStyle"
+                    android:text="一" />
+
+                <TextView
+                    style="@style/WeekIndicatorStyle"
+                    android:text="二" />
+
+                <TextView
+                    style="@style/WeekIndicatorStyle"
+                    android:text="三" />
+
+                <TextView
+                    style="@style/WeekIndicatorStyle"
+                    android:text="四" />
+
+                <TextView
+                    style="@style/WeekIndicatorStyle"
+                    android:text="五" />
+
+                <TextView
+                    style="@style/WeekIndicatorStyle"
+                    android:text="六" />
+
+            </LinearLayout>
+
+            <cn.gogoal.im.ui.calender.CalendarLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <cn.gogoal.im.ui.calender.CalendarDateView
+                    android:id="@+id/calendarDateView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_focus_news"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#ffffff" />
+
+            </cn.gogoal.im.ui.calender.CalendarLayout>
+
+        </LinearLayout>
+    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
+</cn.gogoal.im.ui.view.XLayout>

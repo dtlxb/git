@@ -21,6 +21,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.stock.bigdata.subject.SubjectListBean;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
@@ -53,6 +54,7 @@ public class SubjectChooseStockFragment extends BaseFragment {
     private SubjectChooseStockAdapter subjectChooseStockAdapter;
     private List<SubjectListBean.SubjectData> subjectDataList;
 
+    private StickyDecoration decoration;
     private int defaultPage = 1;
 
     @Override
@@ -75,7 +77,7 @@ public class SubjectChooseStockFragment extends BaseFragment {
         swiperefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                defaultPage=1;
+                defaultPage = 1;
                 getSubjectList(AppConst.REFRESH_TYPE_SWIPEREFRESH);
                 swiperefreshlayout.setRefreshing(false);
             }
@@ -103,23 +105,6 @@ public class SubjectChooseStockFragment extends BaseFragment {
             }
         }, rvSubject);
 
-        StickyDecoration decoration = StickyDecoration.Builder
-                .init(new StickyDecoration.GroupListener() {
-                    @Override
-                    public String getGroupName(int position) {
-                        //组名回调
-                        if (subjectDataList.size() > position) {
-                            return subjectDataList.get(position).getGroupDate();
-                        }
-                        return null;
-                    }
-                })
-                .setGroupBackground(Color.parseColor("#e4e4e4"))    //背景色
-                .setGroupHeight(AppDevice.dp2px(mContext, 30))       //高度
-                .setGroupTextSize(AppDevice.sp2px(mContext, 15))      //字体大小
-                .setTextLeftMargin(AppDevice.dp2px(mContext, 10))    //左边距
-                .build();
-        rvSubject.addItemDecoration(decoration);
     }
 
     private void getSubjectList(final int refreshType) {
@@ -150,6 +135,12 @@ public class SubjectChooseStockFragment extends BaseFragment {
                     subjectDataList.addAll(subjectDatas);
                     subjectChooseStockAdapter.notifyDataSetChanged();
 
+                    if (rvSubject != null) {
+                        rvSubject.removeItemDecoration(decoration);
+                        decoration=getDecoration(subjectDataList);
+                        rvSubject.addItemDecoration(decoration);
+                    }
+
                     subjectChooseStockAdapter.setEnableLoadMore(true);
                     subjectChooseStockAdapter.loadMoreComplete();
 
@@ -160,10 +151,10 @@ public class SubjectChooseStockFragment extends BaseFragment {
 //                    }
 
                 } else if (code == 1001) {
-                    if (refreshType!=AppConst.REFRESH_TYPE_LOAD_MORE) {
+                    if (refreshType != AppConst.REFRESH_TYPE_LOAD_MORE) {
                         xLayout.setStatus(XLayout.Empty);
-                    }else {
-                        UIHelper.toast(getActivity(),"没有更多");
+                    } else {
+                        UIHelper.toast(getActivity(), "没有更多");
                     }
                 } else {
                     xLayout.setStatus(XLayout.Error);
@@ -176,6 +167,25 @@ public class SubjectChooseStockFragment extends BaseFragment {
                     xLayout.setStatus(XLayout.Error);
             }
         }).startGet();
+    }
+
+    private StickyDecoration getDecoration(final List<SubjectListBean.SubjectData> list) {
+        return StickyDecoration.Builder
+                .init(new StickyDecoration.GroupListener() {
+                    @Override
+                    public String getGroupName(int position) {
+                        //组名回调
+                        if (list.size() > position && position>=0) {
+                            return list.get(position).getGroupDate();
+                        }
+                        return null;
+                    }
+                })
+                .setGroupBackground(Color.parseColor("#e4e4e4"))    //背景色
+                .setGroupHeight(AppDevice.dp2px(MyApp.getAppContext(), 30))       //高度
+                .setGroupTextSize(AppDevice.sp2px(MyApp.getAppContext(), 15))      //字体大小
+                .setTextLeftMargin(AppDevice.dp2px(MyApp.getAppContext(), 10))    //左边距
+                .build();
     }
 
     private class SubjectChooseStockAdapter extends CommonAdapter<SubjectListBean.SubjectData, BaseViewHolder> {
@@ -205,11 +215,11 @@ public class SubjectChooseStockFragment extends BaseFragment {
             holder.setText(R.id.tv_item_subject_list_title, data.getTitle());
 
             holder.setText(R.id.tv_item_subject_list_tag1, data.getTags().get(0));
-            if (data.getTags().size()>1) {
-                holder.setVisible(R.id.tv_item_subject_list_tag2,true);
+            if (data.getTags().size() > 1) {
+                holder.setVisible(R.id.tv_item_subject_list_tag2, true);
                 holder.setText(R.id.tv_item_subject_list_tag2, data.getTags().get(1));
-            }else {
-                holder.setVisible(R.id.tv_item_subject_list_tag2,false);
+            } else {
+                holder.setVisible(R.id.tv_item_subject_list_tag2, false);
             }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {

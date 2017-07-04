@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.mikephil.charting.formatter.IFillFormatter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.activity.copy.StockDetailChartsActivity;
 import cn.gogoal.im.adapter.TreatAdapter;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
@@ -475,7 +477,7 @@ public class StockMapsFragment extends BaseFragment {
 
         @Override
         protected Bitmap doInBackground(String... params) {
-            Bitmap bitmap = null;
+            Bitmap bitmap;
             item_index = params[0];
             switch (item_index) {
                 case "0":
@@ -487,9 +489,9 @@ public class StockMapsFragment extends BaseFragment {
                         fiveDayBitmap = new TimesFivesBitmap(width, height);
                         fiveDayBitmap.setShowDetail(false);
                         fiveDayBitmap.setLongitudeNum(4);
-                        fiveDayBitmap.setmSpaceSize(AppDevice.dp2px(getActivity(), 3));
-                        fiveDayBitmap.setmSize(AppDevice.dp2px(getActivity(), 1));
-                        fiveDayBitmap.setmAxisTitleSize(AppDevice.dp2px(getActivity(), 10));
+                        fiveDayBitmap.setmSpaceSize(AppDevice.dp2px(MyApp.getAppContext(), 3));
+                        fiveDayBitmap.setmSize(AppDevice.dp2px(MyApp.getAppContext(), 1));
+                        fiveDayBitmap.setmAxisTitleSize(AppDevice.dp2px(MyApp.getAppContext(), 10));
 
                         bitmap = fiveDayBitmap.setTimesList(bean, false, stock_charge_type);
                         map.put(item_index, bitmap);
@@ -502,9 +504,9 @@ public class StockMapsFragment extends BaseFragment {
                         KChartsBitmap kChartsBitmap = new KChartsBitmap(width, height);
                         kChartsBitmap.setShowDetail(false);
                         kChartsBitmap.setLongitudeNum(1);
-                        kChartsBitmap.setmSpaceSize(AppDevice.dp2px(getActivity(), 3));
-                        kChartsBitmap.setmAxisTitleSize(AppDevice.dp2px(getActivity(), 10));
-                        kChartsBitmap.setmSize(AppDevice.dp2px(getActivity(), 1));
+                        kChartsBitmap.setmSpaceSize(AppDevice.dp2px(MyApp.getAppContext(), 3));
+                        kChartsBitmap.setmAxisTitleSize(AppDevice.dp2px(MyApp.getAppContext(), 10));
+                        kChartsBitmap.setmSize(AppDevice.dp2px(MyApp.getAppContext(), 1));
 
                         bitmap = kChartsBitmap.setOHLCData(mOHLCData);
                         map.put(item_index, bitmap);
@@ -517,9 +519,9 @@ public class StockMapsFragment extends BaseFragment {
                         KChartsBitmap kChartsBitmap1 = new KChartsBitmap(width, height);
                         kChartsBitmap1.setShowDetail(false);
                         kChartsBitmap1.setLongitudeNum(1);
-                        kChartsBitmap1.setmSpaceSize(AppDevice.dp2px(getActivity(), 3));
-                        kChartsBitmap1.setmAxisTitleSize(AppDevice.dp2px(getActivity(), 10));
-                        kChartsBitmap1.setmSize(AppDevice.dp2px(getActivity(), 1));
+                        kChartsBitmap1.setmSpaceSize(AppDevice.dp2px(MyApp.getAppContext(), 3));
+                        kChartsBitmap1.setmAxisTitleSize(AppDevice.dp2px(MyApp.getAppContext(), 10));
+                        kChartsBitmap1.setmSize(AppDevice.dp2px(MyApp.getAppContext(), 1));
 
                         bitmap = kChartsBitmap1.setOHLCData(mOHLCData);
                         map.put(item_index, bitmap);
@@ -532,9 +534,9 @@ public class StockMapsFragment extends BaseFragment {
                         KChartsBitmap kChartsBitmap2 = new KChartsBitmap(width, height);
                         kChartsBitmap2.setShowDetail(false);
                         kChartsBitmap2.setLongitudeNum(1);
-                        kChartsBitmap2.setmSpaceSize(AppDevice.dp2px(getActivity(), 3));
-                        kChartsBitmap2.setmAxisTitleSize(AppDevice.dp2px(getActivity(), 10));
-                        kChartsBitmap2.setmSize(AppDevice.dp2px(getActivity(), 1));
+                        kChartsBitmap2.setmSpaceSize(AppDevice.dp2px(MyApp.getAppContext(), 3));
+                        kChartsBitmap2.setmAxisTitleSize(AppDevice.dp2px(MyApp.getAppContext(), 10));
+                        kChartsBitmap2.setmSize(AppDevice.dp2px(MyApp.getAppContext(), 1));
 
                         bitmap = kChartsBitmap2.setOHLCData(mOHLCData);
                         map.put(item_index, bitmap);
@@ -546,7 +548,7 @@ public class StockMapsFragment extends BaseFragment {
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            if (timesBitmap == null || map == null || map.isEmpty() || mBitmapChartView == null) {
+            if ((timesBitmap == null && showItem == 0) || (fiveDayBitmap == null && showItem == 1)) {
                 return;
             }
             switch (String.valueOf(showItem)) {
@@ -612,9 +614,9 @@ public class StockMapsFragment extends BaseFragment {
         timesBitmap = new TimesFivesBitmap(mapWidth, height);
         timesBitmap.setShowDetail(false);
         timesBitmap.setLongitudeNum(0);
-        timesBitmap.setmSize(AppDevice.dp2px(getActivity(), 1));
-        timesBitmap.setmSpaceSize(AppDevice.dp2px(getActivity(), 3));
-        timesBitmap.setmAxisTitleSize(AppDevice.dp2px(getActivity(), 10));
+        timesBitmap.setmSize(AppDevice.dp2px(MyApp.getAppContext(), 1));
+        timesBitmap.setmSpaceSize(AppDevice.dp2px(MyApp.getAppContext(), 3));
+        timesBitmap.setmAxisTitleSize(AppDevice.dp2px(MyApp.getAppContext(), 10));
         try {
             bitmap = timesBitmap.setTimesList(timesBean, true, stock_charge_type);
         } catch (Exception e) {

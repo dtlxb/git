@@ -42,6 +42,9 @@ import cn.gogoal.im.ui.view.PieView;
 
 public class RevenueRateFragment extends BaseFragment {
 
+    @BindView(R.id.layout_revenue)
+    LinearLayout layout_revenue;
+
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -69,6 +72,7 @@ public class RevenueRateFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         stockCode = getArguments().getString("stock_code");
         fragmentType = getArguments().getInt("fragment_type");
+        layout_revenue.setVisibility(View.GONE);
         initThis();
     }
 
@@ -100,25 +104,27 @@ public class RevenueRateFragment extends BaseFragment {
                             new TypeReference<BaseBeanList<RevenueData>>() {
                             });
                     revenueDatas.addAll(beanList.getData());
-
-                    Map<Integer, List<RevenueData>> map = new HashMap<>();
-                    for (int i = 0; i < revenueDatas.size(); i++) {
-                        RevenueData data = revenueDatas.get(i);
-                        List<RevenueData> listRevenue = map.get(data.getReport_year());
-                        if (listRevenue == null) {
-                            listRevenue = new ArrayList<>();
-                            map.put(data.getReport_year(), listRevenue);
+                    if (revenueDatas.size() > 0) {
+                        layout_revenue.setVisibility(View.VISIBLE);
+                        Map<Integer, List<RevenueData>> map = new HashMap<>();
+                        for (int i = 0; i < revenueDatas.size(); i++) {
+                            RevenueData data = revenueDatas.get(i);
+                            List<RevenueData> listRevenue = map.get(data.getReport_year());
+                            if (listRevenue == null) {
+                                listRevenue = new ArrayList<>();
+                                map.put(data.getReport_year(), listRevenue);
+                            }
+                            listRevenue.add(data);
                         }
-                        listRevenue.add(data);
+                        Set<Map.Entry<Integer, List<RevenueData>>> entries = map.entrySet();
+                        for (Map.Entry<Integer, List<RevenueData>> entry : entries) {
+                            pieDatas.add(new PieData(entry.getKey(), entry.getValue()));
+                        }
+                        //排序
+                        Collections.sort(pieDatas);
+                        KLog.e(pieDatas);
+                        revenueAdapter.notifyDataSetChanged();
                     }
-                    Set<Map.Entry<Integer, List<RevenueData>>> entries = map.entrySet();
-                    for (Map.Entry<Integer, List<RevenueData>> entry : entries) {
-                        pieDatas.add(new PieData(entry.getKey(), entry.getValue()));
-                    }
-                    //排序
-                    Collections.sort(pieDatas);
-                    KLog.e(pieDatas);
-                    revenueAdapter.notifyDataSetChanged();
                 }
             }
 
