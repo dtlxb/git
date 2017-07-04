@@ -84,8 +84,8 @@ public class TurnoverRateFragment extends BaseFragment {
                     if (chartBeanList.size() > 0) {
                         turnOver_layout.setVisibility(View.VISIBLE);
                         barView.setTextSize(AppDevice.dp2px(getActivity(), 10));
-                        barView.setMarginBottom(AppDevice.dp2px(getActivity(), 30));
-                        barView.setMarginTop(AppDevice.dp2px(getActivity(), 10));
+                        barView.setMarginBottom(AppDevice.dp2px(getActivity(), 25));
+                        barView.setMarginTop(AppDevice.dp2px(getActivity(), 20));
                         barView.setBarType(AppConst.TYPE_FRAGMENT_TURNOVER_RATE);
                         barView.setChartData(chartBeanList);
                     }
