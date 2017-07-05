@@ -119,7 +119,11 @@
         ]
     },
     {
+<<<<<<< HEAD
         "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-xlarge-v4\\values-xlarge-v4.xml",
+=======
+        "outputFile": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-xlarge-v4\\values-xlarge-v4.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
         "map": [
             {
                 "to": {
@@ -130,7 +134,11 @@
                     "endOffset": 121
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
@@ -149,7 +157,11 @@
                     "endOffset": 192
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
@@ -168,7 +180,11 @@
                     "endOffset": 262
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
@@ -187,7 +203,11 @@
                     "endOffset": 332
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 5,
                         "startColumn": 4,
@@ -206,7 +226,11 @@
                     "endOffset": 400
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,
@@ -225,7 +249,11 @@
                     "endOffset": 468
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,

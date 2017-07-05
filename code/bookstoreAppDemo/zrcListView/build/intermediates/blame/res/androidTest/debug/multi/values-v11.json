@@ -392,7 +392,11 @@
         ]
     },
     {
+<<<<<<< HEAD
         "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-v11\\values-v11.xml",
+=======
+        "outputFile": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
         "map": [
             {
                 "to": {
@@ -404,7 +408,11 @@
                     "endOffset": 469
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
@@ -425,7 +433,11 @@
                     "endOffset": 894
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 8,
                         "startColumn": 4,
@@ -446,7 +458,11 @@
                     "endOffset": 1322
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 14,
                         "startColumn": 4,
@@ -467,7 +483,11 @@
                     "endOffset": 1748
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 20,
                         "startColumn": 4,
@@ -488,7 +508,11 @@
                     "endOffset": 2175
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 26,
                         "startColumn": 4,
@@ -509,7 +533,11 @@
                     "endOffset": 2600
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 32,
                         "startColumn": 4,
@@ -529,7 +557,11 @@
                     "endOffset": 2689
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 38,
                         "startColumn": 4,
@@ -548,7 +580,11 @@
                     "endOffset": 2790
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 39,
                         "startColumn": 4,
@@ -567,7 +603,11 @@
                     "endOffset": 2893
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 40,
                         "startColumn": 4,
@@ -587,7 +627,11 @@
                     "endOffset": 3301
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 41,
                         "startColumn": 4,
@@ -608,7 +652,11 @@
                     "endOffset": 3721
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 46,
                         "startColumn": 4,
@@ -629,7 +677,11 @@
                     "endOffset": 4143
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 51,
                         "startColumn": 4,
@@ -650,7 +702,11 @@
                     "endOffset": 4250
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 56,
                         "startColumn": 4,
@@ -671,7 +727,11 @@
                     "endOffset": 4379
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 58,
                         "startColumn": 4,
@@ -691,7 +751,11 @@
                     "endOffset": 4450
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 60,
                         "startColumn": 4,
@@ -710,7 +774,11 @@
                     "endOffset": 4533
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 61,
                         "startColumn": 4,
@@ -730,7 +798,11 @@
                     "endOffset": 8464
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 62,
                         "startColumn": 4,
@@ -751,7 +823,11 @@
                     "endOffset": 12538
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 115,
                         "startColumn": 4,
@@ -771,7 +847,11 @@
                     "endOffset": 12629
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-v11\\values-v11.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-v11\\values-v11.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 169,
                         "startColumn": 4,

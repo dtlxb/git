@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <merger version="3"><dataSet config="main"><source path="C:\Users\dell\Documents\git\code\bookstoreAppDemo\zrcListView\src\main\shaders"/></dataSet><dataSet config="release"><source path="C:\Users\dell\Documents\git\code\bookstoreAppDemo\zrcListView\src\release\shaders"/></dataSet></merger>
+=======
+<merger version="3"><dataSet config="main"><source path="D:\Users\huzeyu\Documents\git\code\bookstoreAppDemo\zrcListView\src\main\shaders"/></dataSet><dataSet config="release"><source path="D:\Users\huzeyu\Documents\git\code\bookstoreAppDemo\zrcListView\src\release\shaders"/></dataSet></merger>
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c

@@ -8,18 +8,28 @@
         "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_slide_out_bottom.xml"
     },
     {
+<<<<<<< HEAD
         "merged": "C:\\Users\\dell\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_slide_in_top.xml",
         "source": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\anim\\abc_slide_in_top.xml"
     },
     {
         "merged": "C:\\Users\\dell\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\topitem_in.xml",
         "source": "C:\\Users\\dell\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\bundles\\debug\\res\\anim\\topitem_in.xml"
+=======
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_fade_in.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_fade_in.xml"
+    },
+    {
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_slide_out_top.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_slide_out_top.xml"
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
     },
     {
         "merged": "D:\\androidsdk\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_fade_out.xml",
         "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_fade_out.xml"
     },
     {
+<<<<<<< HEAD
         "merged": "C:\\Users\\dell\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_slide_in_bottom.xml",
         "source": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\anim\\abc_slide_in_bottom.xml"
     },
@@ -34,12 +44,35 @@
     {
         "merged": "C:\\Users\\dell\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\bottomitem_in.xml",
         "source": "C:\\Users\\dell\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\bundles\\debug\\res\\anim\\bottomitem_in.xml"
+=======
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_shrink_fade_out_from_bottom.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
+    },
+    {
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\bottomitem_in.xml",
+        "source": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\bundles\\debug\\res\\anim\\bottomitem_in.xml"
+    },
+    {
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_grow_fade_in_from_bottom.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_grow_fade_in_from_bottom.xml"
+    },
+    {
+        "merged": "D:\\androidsdk\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_grow_fade_in_from_bottom.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_grow_fade_in_from_bottom.xml"
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
     },
     {
         "merged": "D:\\androidsdk\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\topitem_in.xml",
         "source": "D:\\androidsdk\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\bundles\\debug\\res\\anim\\topitem_in.xml"
     },
     {
+<<<<<<< HEAD
+=======
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_slide_in_bottom.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_slide_in_bottom.xml"
+    },
+    {
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
         "merged": "D:\\androidsdk\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_shrink_fade_out_from_bottom.xml",
         "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
     },
@@ -48,12 +81,21 @@
         "source": "D:\\androidsdk\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\bundles\\debug\\res\\anim\\bottomitem_in.xml"
     },
     {
+<<<<<<< HEAD
         "merged": "C:\\Users\\dell\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_shrink_fade_out_from_bottom.xml",
         "source": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
     },
     {
         "merged": "C:\\Users\\dell\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_grow_fade_in_from_bottom.xml",
         "source": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\anim\\abc_grow_fade_in_from_bottom.xml"
+=======
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_slide_in_top.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_slide_in_top.xml"
+    },
+    {
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_popup_enter.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_popup_enter.xml"
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
     },
     {
         "merged": "D:\\androidsdk\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_slide_out_top.xml",
@@ -68,10 +110,13 @@
         "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_popup_exit.xml"
     },
     {
+<<<<<<< HEAD
         "merged": "C:\\Users\\dell\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_fade_in.xml",
         "source": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\anim\\abc_fade_in.xml"
     },
     {
+=======
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
         "merged": "D:\\androidsdk\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_slide_in_bottom.xml",
         "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_slide_in_bottom.xml"
     },
@@ -80,19 +125,37 @@
         "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_fade_in.xml"
     },
     {
+<<<<<<< HEAD
         "merged": "C:\\Users\\dell\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_popup_enter.xml",
         "source": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\anim\\abc_popup_enter.xml"
     },
     {
         "merged": "C:\\Users\\dell\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_fade_out.xml",
         "source": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\anim\\abc_fade_out.xml"
+=======
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_slide_out_bottom.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_slide_out_bottom.xml"
+    },
+    {
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_popup_exit.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_popup_exit.xml"
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
     },
     {
         "merged": "D:\\androidsdk\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_popup_enter.xml",
         "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_popup_enter.xml"
     },
     {
+<<<<<<< HEAD
         "merged": "C:\\Users\\dell\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_slide_out_top.xml",
         "source": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\anim\\abc_slide_out_top.xml"
+=======
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\abc_fade_out.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\anim\\abc_fade_out.xml"
+    },
+    {
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\androidTest\\debug\\anim\\topitem_in.xml",
+        "source": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\bundles\\debug\\res\\anim\\topitem_in.xml"
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
     }
 ]

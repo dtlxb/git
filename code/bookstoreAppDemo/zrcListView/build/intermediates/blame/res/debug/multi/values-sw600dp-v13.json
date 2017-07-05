@@ -157,7 +157,11 @@
         ]
     },
     {
+<<<<<<< HEAD
         "outputFile": "C:\\Users\\dell\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+=======
+        "outputFile": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
         "map": [
             {
                 "to": {
@@ -168,7 +172,11 @@
                     "endOffset": 119
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
@@ -187,7 +195,11 @@
                     "endOffset": 188
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
@@ -206,7 +218,11 @@
                     "endOffset": 258
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
@@ -225,7 +241,11 @@
                     "endOffset": 332
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 5,
                         "startColumn": 4,
@@ -244,7 +264,11 @@
                     "endOffset": 408
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,
@@ -263,7 +287,11 @@
                     "endOffset": 467
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,
@@ -282,7 +310,11 @@
                     "endOffset": 538
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 8,
                         "startColumn": 4,
@@ -301,7 +333,11 @@
                     "endOffset": 606
                 },
                 "from": {
+<<<<<<< HEAD
                     "file": "C:\\Users\\dell\\.android\\build-cache\\7aab17d3d866aae6e334b60775d475e6bb2d02ab\\output\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+=======
+                    "file": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+>>>>>>> 5634f736cd2a30527fd0339673ace3fb8f36f41c
                     "position": {
                         "startLine": 9,
                         "startColumn": 4,

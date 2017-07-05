@@ -6,5 +6,13 @@
     {
         "merged": "D:\\androidsdk\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\release\\color-v11\\abc_background_cache_hint_selector_material_dark.xml",
         "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml"
+    },
+    {
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\release\\color-v11\\abc_background_cache_hint_selector_material_dark.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml"
+    },
+    {
+        "merged": "D:\\Users\\huzeyu\\Documents\\git\\code\\bookstoreAppDemo\\zrcListView\\build\\intermediates\\res\\merged\\release\\color-v11\\abc_background_cache_hint_selector_material_light.xml",
+        "source": "C:\\Users\\huzeyu\\.android\\build-cache\\40a13da59b4399fd9c47d9321a8f997ced76d413\\output\\res\\color-v11\\abc_background_cache_hint_selector_material_light.xml"
     }
 ]

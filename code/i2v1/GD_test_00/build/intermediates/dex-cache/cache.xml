@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="C:\Users\dell\Documents\git\code\i2v1\GD_test_00\app\libs\android-support-v4.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="307c1cc532eabbf1d135b43e5c983c9da700449d">
+        <dex dex="C:\Users\dell\Documents\git\code\i2v1\GD_test_00\app\build\intermediates\transforms\dex\debug\folders\1000\2\android-support-v4_47e9570af14002b16d033c1ea7739f20c36fa85c\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\dell\Documents\git\code\i2v1\GD_test_00\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="025e89e2cb8b044e312ce5f114c75013166a0f57">
+        <dex dex="C:\Users\dell\Documents\git\code\i2v1\GD_test_00\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_e98b70709626dd89023919b538dc5fbc2c9b744f\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\dell\Documents\git\code\i2v1\GD_test_00\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="C:\Users\dell\Documents\git\code\i2v1\GD_test_00\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_dffbca9701d1da297788e30d56d2ffae9acf33f1\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\dell\Documents\git\code\i2v1\GD_test_00\app\libs\Volley.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.0"
+        sha1="77faa9ffd189160d1e22c58fdf5eed0a9a08b816">
+        <dex dex="C:\Users\dell\Documents\git\code\i2v1\GD_test_00\app\build\intermediates\transforms\dex\debug\folders\1000\2\Volley_327183114a80c6906efa34cd1959047598ddc537\classes.dex" />
+    </item>
+
+</items>

@@ -1,0 +1,4 @@
+#Fri Jun 30 16:33:33 CST 2017
+base.0=C\:\\Users\\dell\\Documents\\git\\code\\i2v1\\GD_test_00\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\5\\slice_3
+renamed.0=classes.dex
+file.0=C\:\\Users\\dell\\Documents\\git\\code\\i2v1\\GD_test_00\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\5\\slice_3\\classes.dex
