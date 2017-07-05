@@ -79,11 +79,6 @@ public class MyStockReportFragment extends BaseFragment {
                         LinearLayoutManager.VERTICAL,
                         false));
 
-//        DividerItemDecoration decoration = new DividerItemDecoration(
-//                mContext, LinearLayoutManager.VERTICAL);
-//        decoration.setDrawable(
-//                ContextCompat.getDrawable(mContext, R.drawable.shape_divider_10dp));
-
         recyclerView.addItemDecoration(new DashlineItemDivider());
 
         reportList = new ArrayList<>();
@@ -126,6 +121,12 @@ public class MyStockReportFragment extends BaseFragment {
             xLayout.setStatus(XLayout.Error);
             return;
         }
+
+        if (refreshType == AppConst.REFRESH_TYPE_FIRST ||
+                refreshType == AppConst.REFRESH_TYPE_RELOAD) {
+            xLayout.setStatus(XLayout.Loading);
+        }
+
         reportAdapter.setEnableLoadMore(false);
 
         params.put("group_id", String.valueOf(groupId));

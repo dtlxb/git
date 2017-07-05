@@ -29,6 +29,7 @@ import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
+import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.bean.ChartBean;
 import cn.gogoal.im.bean.PieBean;
 import cn.gogoal.im.bean.stock.MoneyBean;
@@ -227,7 +228,7 @@ public class TreatFragment extends BaseFragment {
                     chartBeanList.clear();
                     chartBeanList.add(new ChartBean(buy, "#ed1b1b"));
                     chartBeanList.add(new ChartBean(sell, "#26b844"));
-                    progressView.setTextSize(AppDevice.dp2px(getActivity(), 9));
+                    progressView.setTextSize(AppDevice.dp2px(9));
                     progressView.setChartData(chartBeanList, needAnim);
                     wudangAdapter.notifyDataSetChanged();
 
@@ -263,7 +264,7 @@ public class TreatFragment extends BaseFragment {
                     chartBeanList.add(new ChartBean(buy, "#ed1b1b"));
                     chartBeanList.add(new ChartBean(sell, "#26b844"));
                     progressView.setChartData(chartBeanList, needAnim);
-                    progressView.setTextSize(AppDevice.dp2px(getActivity(), 9));
+                    progressView.setTextSize(AppDevice.dp2px(9));
                 }
             }
 
@@ -373,10 +374,10 @@ public class TreatFragment extends BaseFragment {
         }
 
         int width = (int) (percent * AppDevice.getWidth(getActivity()));
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, width - AppDevice.dp2px(getActivity(), 22));
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, width - AppDevice.dp2px( 22));
         pieView.setLayoutParams(params);
-        pieView.setMarginLeft(AppDevice.dp2px(getActivity(), 16));
-        pieView.setMarginRight(AppDevice.dp2px(getActivity(), 18));
+        pieView.setMarginLeft(AppDevice.dp2px( 16));
+        pieView.setMarginRight(AppDevice.dp2px( 18));
 
         pieDatas.clear();
         for (int i = moneyDatas.size() - 1; i > -1; i--) {
@@ -467,9 +468,8 @@ public class TreatFragment extends BaseFragment {
 
     private class WudangDivider extends XDividerItemDecoration {
 
-
         private WudangDivider(@ColorInt int color) {
-            super(getActivity(), 1, color);
+            super(MyApp.getAppContext(), 1, color);
         }
 
         @Override

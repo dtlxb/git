@@ -179,8 +179,10 @@ public class MainActivity extends BaseActivity {
     }
 
     public void changeItem(int index) {
-        if (index > 0 && index < tabMain.getTabCount()) {
-            tabMain.getTabAt(index).select();
+        if (index >= 0 && index < tabMain.getTabCount()) {
+            TabLayout.Tab at = tabMain.getTabAt(index);
+            if (at != null)
+                at.select();
         }
     }
 
