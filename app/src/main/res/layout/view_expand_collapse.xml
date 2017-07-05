@@ -26,7 +26,7 @@
         android:paddingEnd="4dp"
         android:paddingStart="4dp"
         android:paddingTop="2dp"
-        android:text="收起"
+        android:text="@string/expand_collapse"
         android:textColor="@android:color/white"
         android:textSize="12sp" />
 </LinearLayout>

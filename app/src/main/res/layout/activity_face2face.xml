@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="3dp"
-            android:text="和身边的朋友输入同样的四个数字\n进入同一个群聊"
+            android:text="@string/enter_same_number_into_group"
             android:textColor="#6e7275"
             android:textSize="18sp" />
 
@@ -67,7 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="这些朋友也将加入群聊"
+                android:text="@string/friends_join_group_chat"
                 android:textColor="#6e7275"
                 android:textSize="16sp" />
 
@@ -98,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="25dp"
-            android:text="进入该群"
+            android:text="@string/enter_the_group"
             android:visibility="gone"
             android:textColor="@android:color/white"
             android:textSize="16sp"

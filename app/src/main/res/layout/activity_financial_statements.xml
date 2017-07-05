@@ -61,7 +61,7 @@
             android:gravity="center"
             android:paddingBottom="15dp"
             android:paddingTop="15dp"
-            android:text="全部"
+            android:text="@string/all_report"
             android:textColor="@drawable/analysis_radio_button"
             android:textSize="14dp" />
 
@@ -74,7 +74,7 @@
             android:gravity="center"
             android:paddingBottom="15dp"
             android:paddingTop="15dp"
-            android:text="年报"
+            android:text="@string/annual_report"
             android:textColor="@drawable/analysis_radio_button"
             android:textSize="14dp" />
 
@@ -87,7 +87,7 @@
             android:gravity="center"
             android:paddingBottom="15dp"
             android:paddingTop="15dp"
-            android:text="中报"
+            android:text="@string/Interim_report"
             android:textColor="@drawable/analysis_radio_button"
             android:textSize="14dp" />
 
@@ -100,7 +100,7 @@
             android:gravity="center"
             android:paddingBottom="15dp"
             android:paddingTop="15dp"
-            android:text="一季报"
+            android:text="@string/one_quarterly_reports"
             android:textColor="@drawable/analysis_radio_button"
             android:textSize="14dp" />
 
@@ -113,7 +113,7 @@
             android:gravity="center"
             android:paddingBottom="15dp"
             android:paddingTop="15dp"
-            android:text="三季报"
+            android:text="@string/three_quarterly_reports"
             android:textColor="@drawable/analysis_radio_button"
             android:textSize="14dp" />
 

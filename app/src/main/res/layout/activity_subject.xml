@@ -39,7 +39,7 @@
                         android:drawablePadding="5dp"
                         android:drawableStart="@mipmap/index"
                         android:gravity="center_vertical"
-                        android:text="主题提示"
+                        android:text="@string/subject_prompt"
                         android:textColor="@color/colorBigDataTitle"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -74,7 +74,7 @@
                         android:drawablePadding="5dp"
                         android:drawableStart="@mipmap/index"
                         android:gravity="center_vertical"
-                        android:text="相关股票"
+                        android:text="@string/related_stock"
                         android:textColor="@color/colorBigDataTitle"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -92,28 +92,28 @@
                             android:gravity="center_vertical"
                             android:paddingEnd="15dp"
                             android:paddingStart="15dp"
-                            android:text="股票信息"
+                            android:text="@string/stock_info"
                             app:layout_widthPercent="30%" />
 
                         <TextView
                             android:id="@+id/tv_item_subject_about_rate"
                             style="@style/SubjuectListHeadStyle"
                             android:layout_toEndOf="@+id/flag_layout_stock_info"
-                            android:text="涨跌幅"
+                            android:text="@string/subject_about_rate"
                             app:layout_widthPercent="25%" />
 
                         <TextView
                             android:id="@+id/tv_item_subject_about_price"
                             style="@style/SubjuectListHeadStyle"
                             android:layout_toEndOf="@+id/tv_item_subject_about_rate"
-                            android:text="价格"
+                            android:text="@string/subject_about_price"
                             app:layout_widthPercent="25%" />
 
                         <TextView
                             android:id="@+id/iv_item_subject_about_add_stock"
                             style="@style/SubjuectListHeadStyle"
                             android:layout_alignParentEnd="true"
-                            android:text="操作"
+                            android:text="@string/subject_about_add_stock"
                             app:layout_widthPercent="15%" />
                     </android.support.percent.PercentRelativeLayout>
 
@@ -136,7 +136,7 @@
                             android:drawablePadding="5dp"
                             android:drawableStart="@mipmap/index"
                             android:gravity="center_vertical"
-                            android:text="主题追踪"
+                            android:text="@string/subject_tracking"
                             android:textColor="@color/colorBigDataTitle"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -156,13 +156,13 @@
                                 style="@style/SubjectDetailChartRdbStyle"
                                 android:background="@drawable/selector_rdb_subject_detail_chart_left"
                                 android:checked="true"
-                                android:text="价格" />
+                                android:text="@string/checked_price" />
 
                             <RadioButton
                                 android:id="@+id/rdb_checked_attention"
                                 style="@style/SubjectDetailChartRdbStyle"
                                 android:background="@drawable/selector_rdb_subject_detail_chart_right"
-                                android:text="关注度" />
+                                android:text="@string/checked_attention" />
 
                         </RadioGroup>
 
@@ -173,8 +173,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:visibility="invisible"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        android:visibility="invisible" />
 
                     <cn.gogoal.im.ui.widget.ForbitParentLayout
                         android:layout_width="match_parent"
@@ -184,15 +184,15 @@
                         <com.github.mikephil.charting.charts.LineChart
                             android:id="@+id/line_chart_price"
                             android:layout_width="match_parent"
-                            android:visibility="visible"
-                            android:layout_height="match_parent" />
+                            android:layout_height="match_parent"
+                            android:visibility="visible" />
 
                         <com.github.mikephil.charting.charts.LineChart
                             android:id="@+id/line_chart_attention"
                             android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:background="@android:color/white"
-                            android:visibility="invisible"
-                            android:layout_height="match_parent"/>
+                            android:visibility="invisible" />
 
                     </cn.gogoal.im.ui.widget.ForbitParentLayout>
 

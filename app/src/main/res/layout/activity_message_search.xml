@@ -20,7 +20,7 @@
         android:drawableLeft="@mipmap/img_search"
         android:drawablePadding="5dp"
         android:gravity="center_vertical"
-        android:hint="搜索"
+        android:hint="@string/search"
         android:imeOptions="actionSearch"
         android:singleLine="true"
         android:textSize="14sp" />
@@ -41,7 +41,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="110dp"
         android:gravity="center_horizontal"
-        android:text="无结果"
+        android:text="@string/not_find"
         android:textColor="@color/textColor_999999"
         android:textSize="18sp"
         android:textStyle="bold"

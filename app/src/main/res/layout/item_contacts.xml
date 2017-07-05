@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="新的朋友"
+            android:text="@string/new_friend"
             android:textColor="@color/textColor_333333"
             android:textSize="16sp" />
 
@@ -59,7 +59,7 @@
             android:layout_gravity="bottom"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="职位"
+            android:text="@string/contacts_position"
             android:textColor="@color/textColor_999999"
             android:textSize="12sp"
             android:visibility="gone" />

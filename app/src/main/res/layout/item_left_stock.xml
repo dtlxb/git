@@ -66,7 +66,7 @@
                 android:layout_marginTop="3dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="平安银行"
+                android:text="@string/text_empty"
                 android:textColor="@color/textColor_333333"
                 android:textSize="14sp" />
 
@@ -108,7 +108,7 @@
                     android:layout_marginLeft="6dp"
                     android:layout_toRightOf="@id/iv_from"
                     android:maxLines="1"
-                    android:text="Go_Goal"
+                    android:text="@string/go_goal_1"
                     android:textColor="@color/textColor_666666"
                     android:textSize="12dp" />
 

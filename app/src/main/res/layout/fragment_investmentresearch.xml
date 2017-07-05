@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/stock_market_bg"
-    tools:context=".fragment.main.InvestmentResearchFragment">
+    android:orientation="vertical">
 
     <include layout="@layout/include_title" />
 
@@ -39,7 +37,7 @@
                 android:layout_marginTop="15dp"
                 android:background="@drawable/shape_line_top_and_bottom"
                 android:padding="15dp"
-                android:text="我的工具"
+                android:text="@string/my_tools"
                 android:textColor="@color/textColor_333333"
                 android:textSize="18sp" />
 
@@ -47,7 +45,7 @@
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"/>
+                android:background="@android:color/white" />
 
             <TextView
                 android:id="@+id/btn_tools_center"
@@ -60,7 +58,7 @@
                 android:drawablePadding="10dp"
                 android:drawableStart="@mipmap/img_tools_center"
                 android:padding="15dp"
-                android:text="工具中心"
+                android:text="@string/tools_center"
                 android:textColor="@color/textColor_333333"
                 android:textSize="18sp" />
         </LinearLayout>

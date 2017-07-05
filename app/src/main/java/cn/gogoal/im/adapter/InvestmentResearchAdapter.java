@@ -87,7 +87,7 @@ public class InvestmentResearchAdapter extends CommonAdapter<ToolData.Tool, Base
             public void onClick(View v) {
                 //TODO 跳原生类型
                 if (data.getDesc().equalsIgnoreCase("行情")) {
-                    ((MainActivity) context).changeItem(1);
+                    ((MainActivity) context).changeItem(0);
                     ((MainActivity) context).mainStockFragment.changeItem(1);
                 } else {
                     //TODO 跳网页类型

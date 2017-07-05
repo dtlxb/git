@@ -38,7 +38,7 @@
                 android:layout_gravity="top|start"
                 android:layout_margin="10dp"
                 android:background="@drawable/shape_social_live_status_red"
-                android:text="回放 05-26 11:28"
+                android:text="@string/text_empty"
                 android:textColor="@android:color/white"
                 android:textSize="13sp" />
 
@@ -51,7 +51,7 @@
                 android:background="@drawable/shape_social_online_time"
                 android:drawablePadding="5dp"
                 android:drawableStart="@mipmap/social_time"
-                android:text="距离开始16天"
+                android:text="@string/text_empty"
                 android:textColor="@android:color/white"
                 android:textSize="13sp" />
 
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@drawable/shape_social_live_invite"
-                android:text="邀约"
+                android:text="@string/invite"
                 android:visibility="gone"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
@@ -80,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="曲径通幽·寻路2017（第十二届）中国私募基金风云榜研讨会"
+                android:text="@string/text_empty"
                 android:textColor="@color/textColor_333333"
                 android:textSize="16sp" />
 
@@ -106,7 +106,7 @@
                     android:layout_marginStart="8dp"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="朝阳永续"
+                    android:text="@string/text_empty"
                     android:textColor="@color/textColor_666666"
                     android:textSize="12sp" />
 
@@ -124,7 +124,7 @@
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="中国私募基金风云榜"
+                    android:text="@string/text_empty"
                     android:textColor="@color/textColor_666666"
                     android:textSize="12sp" />
 
@@ -133,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_social_live_order_red"
-                    android:text="已预约"
+                    android:text="@string/reservation"
                     android:layout_marginEnd="10dp"
                     android:textColor="@color/colorPrimary"
                     android:textSize="14sp" />

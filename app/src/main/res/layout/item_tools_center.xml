@@ -34,7 +34,7 @@
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
                 android:singleLine="true"
-                android:text="数据一分钟"
+                android:text="@string/text_empty"
                 android:textColor="@color/textColor_333333"
                 android:textSize="15sp" />
 
@@ -42,7 +42,7 @@
                 android:id="@+id/tv_item_tools_introduce"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="数据一分钟数据一分钟数据一分钟数据一分钟数据一分钟数据一分钟"
+                android:text="@string/text_empty"
                 android:textColor="@color/textColor_999999"
                 android:textSize="14sp" />
 
@@ -57,7 +57,7 @@
             android:layout_marginStart="15dp"
             android:background="@drawable/shape_add_friend"
             android:gravity="center"
-            android:text="获取开通"
+            android:text="@string/tools_operation"
             android:textColor="@android:color/white"
             android:textSize="13sp" />
     </RelativeLayout>

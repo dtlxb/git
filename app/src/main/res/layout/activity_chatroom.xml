@@ -52,7 +52,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:minHeight="0dp"
-            android:text="按住 说话"
+            android:text="@string/hold_to_talk"
             app:normalBackgroundColor="@color/colorTitle"
             app:normalStrokeColor="@android:color/darker_gray"
             app:normalStrokeWidth="1dp"

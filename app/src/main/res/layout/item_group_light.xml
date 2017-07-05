@@ -12,7 +12,7 @@
         android:paddingBottom="5dp"
         android:paddingLeft="14dp"
         android:paddingTop="15dp"
-        android:text="默认长按K线选择"
+        android:text="@string/default_long_press_selection"
         android:textColor="@color/textColor_999999"
         android:textSize="12sp" />
 
@@ -32,7 +32,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="26dp"
         android:paddingTop="14dp"
-        android:text="光标跟随K线"
+        android:text="@string/rb_follow"
         android:textColor="@color/textColor_333333"
         android:textSize="17sp" />
 
@@ -52,7 +52,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="26dp"
         android:paddingTop="14dp"
-        android:text="光标不跟随K线"
+        android:text="@string/rb_unfollow"
         android:textColor="@color/textColor_333333"
         android:textSize="17sp" />
 

@@ -68,7 +68,7 @@
             android:background="@drawable/voice_button_null"
             android:gravity="center"
             android:minHeight="36dp"
-            android:text="按住 说话"
+            android:text="@string/str_recorder_normal"
             android:visibility="gone" />
 
         <!--<FrameLayout

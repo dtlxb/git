@@ -15,11 +15,8 @@ import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -32,6 +29,7 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StringUtils;
@@ -216,7 +214,7 @@ public class InfomationTabFragment extends BaseFragment {
     @Subscriber(tag = "double_click_2_top")
     void doubleClick2Top(String index) {
         KLog.e(index);
-        if (StringUtils.parseStringDouble(index) == tabType-110) {//是本Tab
+        if (StringUtils.parseStringDouble(index) == tabType - 110) {//是本Tab
             mRvInfomation.smoothScrollToPosition(0);
         }
     }
@@ -252,21 +250,18 @@ public class InfomationTabFragment extends BaseFragment {
         }
 
         private String getMyDate(int tabType, String dateString) {
-            if (StringUtils.isActuallyEmpty(dateString)){
+            if (StringUtils.isActuallyEmpty(dateString)) {
                 return "";
             }
-            Date date = SimpleDateFormat.getDateTimeInstance().parse(
-                    dateString, new ParsePosition(0));
-
             switch (tabType) {
                 case INFOMATION_TYPE_SUN_BUSINESS://朝阳会务
                     return dateString;
                 case INFOMATION_TYPE_PRIVATE_VIEW_POINT://私募观点
-                    KLog.e(dateString);
-                    KLog.e(date);
-                    return dateString;
+                    return CalendarUtils.formatDate("yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd", dateString);
                 case INFOMATION_TYPE_SKY_VIEW_POINT://天高视点
-                    return dateString;
+//                    SimpleDateFormat.getDateTimeInstance().parse()
+                    return CalendarUtils.formatDate("yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", dateString);
+
                 case INFOMATION_TYPE_POLICY_DYNAMICS://政策动态
                     return dateString;
                 default:

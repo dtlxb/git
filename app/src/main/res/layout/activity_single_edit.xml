@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
-        android:text="使用真实名字让人更快的找到和联系你"
+        android:text="@string/use_real_name_faster_find"
         android:textColor="#9d9d9d"
         android:textSize="14sp" />
 </cn.gogoal.im.ui.KeyboardLaunchLinearLayout>

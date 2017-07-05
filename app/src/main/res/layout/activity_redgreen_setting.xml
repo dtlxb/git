@@ -30,7 +30,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="26dp"
             android:paddingTop="14dp"
-            android:text="红涨绿跌"
+            android:text="@string/redup_rb"
             android:textColor="@color/textColor_333333"
             android:textSize="17sp" />
 
@@ -50,7 +50,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="26dp"
             android:paddingTop="14dp"
-            android:text="绿涨红跌"
+            android:text="@string/greenup_rb"
             android:textColor="@color/textColor_333333"
             android:textSize="17sp" />
 

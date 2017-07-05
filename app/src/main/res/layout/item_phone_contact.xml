@@ -33,7 +33,7 @@
         android:layout_toStartOf="@+id/tv_invite"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="王尼玛"
+        android:text="@string/text_empty"
         android:textColor="@color/textColor_333333"
         android:textSize="16sp" />
 
@@ -47,7 +47,7 @@
         android:layout_gravity="bottom"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="188-8888-8888"
+        android:text="@string/text_empty"
         android:textColor="@color/textColor_999999"
         android:textSize="12sp" />
 
@@ -60,7 +60,7 @@
         android:layout_centerVertical="true"
         android:background="@drawable/shape_add_friend"
         android:gravity="center"
-        android:text="邀请 "
+        android:text="@string/phone_contact_invite"
         android:textColor="@android:color/white"
         android:textSize="13sp" />
 

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/head_event_stock_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/head_event_stock_list"
     android:background="@android:color/white"
     android:orientation="vertical">
 
@@ -12,15 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="15dp"
         android:layout_alignParentTop="true"
-        android:background="#f0f0f0"/>
+        android:background="#f0f0f0" />
 
     <LinearLayout
         android:id="@+id/layout_item_event_list_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:gravity="center_vertical"
         android:layout_below="@+id/view_divider"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="15dp">
 
@@ -34,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:text="石墨烯"
+            android:text="@string/text_empty"
             android:textColor="@color/textColor_333333"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -46,11 +45,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:drawablePadding="15dp"
         android:layout_below="@+id/view_divider"
+        android:drawablePadding="15dp"
         android:drawableRight="@mipmap/img_more_in_bigdata"
         android:padding="15dp"
-        android:text="2017-06-29"
+        android:text="@string/text_empty"
         android:textColor="@color/textColor_666666"
         android:textSize="15sp" />
 
@@ -61,7 +60,7 @@
         android:layout_below="@+id/layout_item_event_list_name"
         android:layout_marginEnd="15dp"
         android:layout_marginStart="15dp"
-        android:text="askdjhfakjsdfhalkjdhfalkjsdfhaljkdfhalskdfhalkjdfaskdjhfakjsdfhalkjdhfalkjsdfhaljkdfhalskdfhalkjdf"
+        android:text="@string/text_empty"
         android:textSize="14sp" />
 
 </RelativeLayout>
