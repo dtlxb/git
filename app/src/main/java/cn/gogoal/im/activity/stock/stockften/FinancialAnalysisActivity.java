@@ -15,8 +15,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.gogoal.im.R;
-import cn.gogoal.im.adapter.stockften.AnalysisLeftAdapter;
-import cn.gogoal.im.adapter.stockften.AnalysisRightAdapter;
+import cn.gogoal.im.adapter.stockften.FinancialAnalysisLeftAdapter;
+import cn.gogoal.im.adapter.stockften.FinancialAnalysisRightAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.ChartBean;
 import cn.gogoal.im.common.AppDevice;
@@ -58,8 +58,8 @@ public class FinancialAnalysisActivity extends BaseActivity {
 
     List<ChartBean> chartBeanList;
 
-    private AnalysisLeftAdapter leftAdapter;
-    private AnalysisRightAdapter rightAdapter;
+    private FinancialAnalysisLeftAdapter leftAdapter;
+    private FinancialAnalysisRightAdapter rightAdapter;
 
     @Override
     public int bindLayout() {
@@ -280,7 +280,7 @@ public class FinancialAnalysisActivity extends BaseActivity {
             titleList.add(stringList[i]);
         }
 
-        leftAdapter = new AnalysisLeftAdapter(getActivity(), titleList);
+        leftAdapter = new FinancialAnalysisLeftAdapter(getActivity(), titleList);
         lsvLeft.setAdapter(leftAdapter);
     }
 
@@ -346,7 +346,7 @@ public class FinancialAnalysisActivity extends BaseActivity {
             contList.add(data.getJSONArray(stringList[i]));
         }
 
-        rightAdapter = new AnalysisRightAdapter(getContext(), contList);
+        rightAdapter = new FinancialAnalysisRightAdapter(getContext(), contList);
         lsvRight.setAdapter(rightAdapter);
     }
 
