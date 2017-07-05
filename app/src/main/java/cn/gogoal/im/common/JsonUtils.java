@@ -3,6 +3,8 @@ package cn.gogoal.im.common;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 /**
  * author wangjd on 2017/7/5 0005.
@@ -23,10 +25,37 @@ public class JsonUtils {
     private JsonUtils() {
     }
 
+    /**
+     * 解析json成实体类
+     *
+     * @param jsonString json串
+     * @param cls        类型
+     */
     public static <T> T parseJsonObject(@NonNull String jsonString, @NonNull Class<T> cls) {
         if (gson == null) {
             gson = new Gson();
         }
-        return gson.fromJson(jsonString, cls);
+        return gson.fromJson(jsonString, cls);//fastjson == JSONObject.parseObject(jsonString,cls);
+    }
+
+    /**
+     * 实体类转json
+     *
+     * @param cls 需要转换的类
+     */
+    public static String toJsonString(@NonNull Class cls) {
+        if (gson == null) {
+            gson = new Gson();
+        }
+        return gson.toJson(cls);//fastjson == JSONObject.toJSONString(cls)
+    }
+
+    /**
+     * 字段key是否存在
+     * @param key key
+     * */
+    public static boolean containsKey(@NonNull String jsonoString, @NonNull String key) {
+        JsonObject object=new JsonParser().parse(jsonoString).getAsJsonObject();
+        return object.has(key);//fastjson == JSONObject.parseObject(jsonoString).containsKey(key)
     }
 }
