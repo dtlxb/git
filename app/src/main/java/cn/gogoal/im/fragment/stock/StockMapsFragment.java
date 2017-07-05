@@ -35,6 +35,7 @@ import cn.gogoal.im.base.MyApp;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.ui.stockviews.BitmapChartView;
@@ -494,9 +495,8 @@ public class StockMapsFragment extends BaseFragment {
                 case "1":
                     if (params.length > 1) {
                         time = System.currentTimeMillis();
-                        Gson gson=new Gson();
                         //StockMinuteBean bean = JSONObject.parseObject(params[1], StockMinuteBean.class);
-                        StockMinuteBean bean = gson.fromJson(params[1], StockMinuteBean.class);
+                        StockMinuteBean bean = JsonUtils.parseJsonObject(params[1], StockMinuteBean.class);
                         KLog.e(System.currentTimeMillis() - time);
                         time = System.currentTimeMillis();
                         fiveDayBitmap = new TimesFivesBitmap(width, height);

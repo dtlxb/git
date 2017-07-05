@@ -38,7 +38,7 @@ public class JsonUtils {
         if (gson == null) {
             gson = new Gson();
         }
-        return gson.fromJson(jsonString, cls);//fastjson == JSONObject.parseObject(jsonString,cls);
+        return gson.fromJson(jsonString, cls);//fastJson == JSONObject.parseObject(jsonString,cls);
     }
 
     /**
@@ -50,22 +50,24 @@ public class JsonUtils {
         if (gson == null) {
             gson = new Gson();
         }
-        return gson.toJson(cls);//fastjson == JSONObject.toJSONString(cls)
+        return gson.toJson(cls);//fastJson == JSONObject.toJSONString(cls)
     }
 
     /**
      * 字段key是否存在
+     *
      * @param key key
-     * */
-    public static boolean containsKey(@NonNull String jsonoString, @NonNull String key) {
-        JsonObject object=new JsonParser().parse(jsonoString).getAsJsonObject();
-        return object.has(key);//fastjson == JSONObject.parseObject(jsonoString).containsKey(key)
+     */
+    public static boolean containsKey(@NonNull String jsonString, @NonNull String key) {
+        JsonObject object = new JsonParser().parse(jsonString).getAsJsonObject();
+        return object.has(key);//fastJson == JSONObject.parseObject(jsonString).containsKey(key)
     }
 
-    public static Map<String,String> toMap(@NonNull String jsonString){
-        if (gson==null){
-            gson=new Gson();
+    public static Map<String, String> toMap(@NonNull String jsonString) {
+        if (gson == null) {
+            gson = new Gson();
         }
-        return gson.fromJson(jsonString,new TypeToken<Map<String,String>>(){}.getType());
+        return gson.fromJson(jsonString, new TypeToken<Map<String, String>>() {
+        }.getType());
     }
 }
