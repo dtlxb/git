@@ -5,6 +5,9 @@ import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.Map;
 
 /**
  * author wangjd on 2017/7/5 0005.
@@ -57,5 +60,12 @@ public class JsonUtils {
     public static boolean containsKey(@NonNull String jsonoString, @NonNull String key) {
         JsonObject object=new JsonParser().parse(jsonoString).getAsJsonObject();
         return object.has(key);//fastjson == JSONObject.parseObject(jsonoString).containsKey(key)
+    }
+
+    public static Map<String,String> toMap(@NonNull String jsonString){
+        if (gson==null){
+            gson=new Gson();
+        }
+        return gson.fromJson(jsonString,new TypeToken<Map<String,String>>(){}.getType());
     }
 }
