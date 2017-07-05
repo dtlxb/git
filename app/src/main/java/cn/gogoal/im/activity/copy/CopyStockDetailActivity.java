@@ -1,4 +1,3 @@
-/*
 //package cn.gogoal.im.activity.copy;
 //
 //import android.content.Context;
@@ -99,13 +98,11 @@
 //import hply.com.niugu.stock.StockMinuteBean;
 //
 //
-//*/
-/*
-/*/
-/* 普通股票详情
-/*/
-/* *//*
-
+//
+//
+//普通股票详情
+//
+//
 //public class CopyStockDetailActivity extends BaseActivity {
 //
 //    public static final String TAG = "CopyStockDetailActivity";
@@ -324,18 +321,16 @@
 //        });
 //    }
 //
-//    */
-/***//*
-
+//
+//
 //    private void setNewsTab() {
 //        final List<Fragment> fragments = new ArrayList<>();
-//        */
-/*
+//
 //         * stockCode 股票代码
 //         * stockName 股票代码
 //         * position 第几个tab
-//         * *//*
-
+//         *
+//
 //        fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 0));
 //        fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 1));
 //        fragments.add(StockNewsMinFragment.getInstance(stockCode, stockName, 2));
@@ -902,13 +897,13 @@
 //        }
 //    }
 //
-//    */
-/**
+//
+//
 //     * 初始化数据
 //     *
 //     * @param stockCode;
-//     *//*
-
+//
+//
 //    private void initList(final String stockCode) {
 //        final Map<String, String> param = new HashMap<String, String>();
 //        param.put("stock_code", stockCode);
@@ -1487,9 +1482,9 @@
 //        return avg_price;
 //    }
 //
-//    */
-/*五档、明细切换*//*
-
+//
+//    //五档、明细切换
+//
 //    public void toggleTreatMode() {
 //        if (tabLayoutTreat.getTabAt(0).isSelected()) {
 //            tabLayoutTreat.getTabAt(1).select();
@@ -1511,11 +1506,10 @@
 //        rvStockInfo.setAdapter(infoDialogAdapter);
 //    }
 //
-//    */
-/**
-//     * 设置-修改个股详情为弹窗
-//     *//*
-
+//
+//     //设置-修改个股详情为弹窗
+//
+//
 //    private void setDialogInfoData(TreatData info) {
 //        stockDialogInfoList.clear();
 //        //最高价
@@ -1641,11 +1635,10 @@
 //        imageViewShoeDialog.setImageResource(R.mipmap.img_drop_up);
 //    }
 //
-//    */
-/**
-//     * 销毁指数[弹窗]
-//     *//*
-
+//
+//     //销毁指数[弹窗]
+//
+//
 //    public void dismissMarket() {
 //        if (isMaskViewVisiable()) {
 //            rvStockInfo.setVisibility(View.GONE);
@@ -1706,11 +1699,11 @@
 //
 //        private String closePrice;
 //
-//        */
-/**
-//         * @serialField StockUtils.getStockStatus();
-//         *//*
-
+//
+//
+//         // @serialField StockUtils.getStockStatus();
+//
+//
 //        private int stockType;
 //
 //        public void setStockType(int stockType) {
@@ -1786,11 +1779,11 @@
 //        badge.setBadgeNumber(num);
 //    }
 //
-//    */
-/**
-//     * 消息接收
-//     *//*
-
+//
+//
+//     // 消息接收
+//
+//
 //    @Subscriber(tag = "IM_Message")
 //    public void handleMessage(BaseMessage baseMessage) {
 //        unReadCount++;
@@ -1832,11 +1825,11 @@
 //        });
 //    }
 //
-//    */
-/**
-//     * 获取诊断工具
-//     *//*
-
+//
+//
+//     //获取诊断工具
+//
+//
 //    public void take(final TakeToolsListener listener) {
 //        UserUtils.getAllMyTools(new Impl<String>() {
 //            @Override
@@ -1862,13 +1855,13 @@
 //        });
 //    }
 //
-//    */
-/**
+//
+//
 //     * 诊断工具回调
-//     *//*
-
+//
+//
 //    public interface TakeToolsListener {
 //        void onTakeTools(boolean sueecss, ArrayList<ToolData.Tool> tools);
 //    }
 //
-//}*/
+//}

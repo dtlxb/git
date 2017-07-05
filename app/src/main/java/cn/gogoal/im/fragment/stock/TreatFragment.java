@@ -175,7 +175,7 @@ public class TreatFragment extends BaseFragment {
     }
 
     @Subscriber(tag = "refresh_stock_news")
-    void updataTreatData(String msg) {
+    void updateTreatData(String msg) {
         if (type == AppConst.TREAT_TYPE_WU_DANG) {
             needAnim = false;
             getTreatWudang();
@@ -274,13 +274,13 @@ public class TreatFragment extends BaseFragment {
         }).startGet();
     }
 
-    private float parseFloat(String floatString){
-        if (StringUtils.isActuallyEmpty(floatString)){
+    private float parseFloat(String floatString) {
+        if (StringUtils.isActuallyEmpty(floatString)) {
             return 0.0f;
-        }else {
+        } else {
             try {
                 return Float.parseFloat(floatString);
-            }catch (Exception e){
+            } catch (Exception e) {
                 return 0.0f;
             }
         }
