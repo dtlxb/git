@@ -96,8 +96,6 @@ dependencies {
     //注释框架
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    //日志框架
-    compile 'com.github.zhaokaiqiang.klog:library:1.6.0'
     compile 'com.github.bumptech.glide:glide:4.0.0-RC0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC0'
     compile 'pub.devrel:easypermissions:0.4.0'
