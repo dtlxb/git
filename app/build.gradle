@@ -137,4 +137,7 @@ dependencies {
     compile project(':roundImage')
 
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+
+    //测试
+    compile 'com.google.code.gson:gson:2.8.1'
 }

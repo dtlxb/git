@@ -15,6 +15,10 @@ import android.widget.RelativeLayout;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.mikephil.charting.formatter.IFillFormatter;
+import com.google.gson.Gson;
+import com.socks.library.KLog;
+
+import org.simple.eventbus.Subscriber;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +32,7 @@ import cn.gogoal.im.activity.copy.StockDetailChartsActivity;
 import cn.gogoal.im.adapter.TreatAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.base.MyApp;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
@@ -479,13 +484,21 @@ public class StockMapsFragment extends BaseFragment {
         protected Bitmap doInBackground(String... params) {
             Bitmap bitmap;
             item_index = params[0];
+            long time;
             switch (item_index) {
                 case "0":
+                    time = System.currentTimeMillis();
                     dealMapAction(13 * width / 20, item_index);
+                    KLog.e(System.currentTimeMillis() - time);
                     break;
                 case "1":
                     if (params.length > 1) {
-                        StockMinuteBean bean = JSONObject.parseObject(params[1], StockMinuteBean.class);
+                        time = System.currentTimeMillis();
+                        Gson gson=new Gson();
+                        //StockMinuteBean bean = JSONObject.parseObject(params[1], StockMinuteBean.class);
+                        StockMinuteBean bean = gson.fromJson(params[1], StockMinuteBean.class);
+                        KLog.e(System.currentTimeMillis() - time);
+                        time = System.currentTimeMillis();
                         fiveDayBitmap = new TimesFivesBitmap(width, height);
                         fiveDayBitmap.setShowDetail(false);
                         fiveDayBitmap.setLongitudeNum(4);
@@ -494,13 +507,16 @@ public class StockMapsFragment extends BaseFragment {
                         fiveDayBitmap.setmAxisTitleSize(AppDevice.dp2px(MyApp.getAppContext(), 10));
 
                         bitmap = fiveDayBitmap.setTimesList(bean, false, stock_charge_type);
+                        KLog.e(System.currentTimeMillis() - time);
                         map.put(item_index, bitmap);
                     }
                     break;
                 case "2":
                     if (params.length > 1) {
                         mOHLCData.clear();
+                        time = System.currentTimeMillis();
                         parseObjects(params[1]);
+                        KLog.e(System.currentTimeMillis() - time);
                         KChartsBitmap kChartsBitmap = new KChartsBitmap(width, height);
                         kChartsBitmap.setShowDetail(false);
                         kChartsBitmap.setLongitudeNum(1);
@@ -509,6 +525,7 @@ public class StockMapsFragment extends BaseFragment {
                         kChartsBitmap.setmSize(AppDevice.dp2px(MyApp.getAppContext(), 1));
 
                         bitmap = kChartsBitmap.setOHLCData(mOHLCData);
+                        KLog.e(System.currentTimeMillis() - time);
                         map.put(item_index, bitmap);
                     }
                     break;
@@ -548,7 +565,8 @@ public class StockMapsFragment extends BaseFragment {
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            if ((timesBitmap == null && showItem == 0) || (fiveDayBitmap == null && showItem == 1)) {
+            if ((timesBitmap == null && showItem == 0) || (fiveDayBitmap == null && showItem == 1)
+                    || map.isEmpty() || mBitmapChartView == null) {
                 return;
             }
             switch (String.valueOf(showItem)) {
@@ -670,6 +688,12 @@ public class StockMapsFragment extends BaseFragment {
             avg_price = Float.parseFloat(s);
         }
         return avg_price;
+    }
+
+    //定时刷新
+    @Subscriber(tag = "refresh_stock_data")
+    public void updateMapData(String msg) {
+        onShow(showItem);
     }
 
 }
