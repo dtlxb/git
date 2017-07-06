@@ -1,7 +1,6 @@
 package cn.gogoal.im.fragment.main;
 
 import android.content.Context;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -16,7 +15,6 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.LiveListAdapter;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.LiveListItemBean;
 import cn.gogoal.im.bean.SocialLiveBean;
@@ -28,6 +26,9 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.widget.WrapContentLinearLayoutManager;
+import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 /**
  * author wangjd on 2017/5/27 0027.
@@ -38,7 +39,7 @@ import cn.gogoal.im.ui.widget.WrapContentLinearLayoutManager;
 public class LiveListFragment extends BaseFragment {
 
     @BindView(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout refreshLayout;
+    RefreshLayout refreshLayout;
 
     @BindView(R.id.rv_live_list)
     RecyclerView rvLiveList;
@@ -64,8 +65,6 @@ public class LiveListFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        BaseActivity.iniRefresh(refreshLayout);
-
         rvLiveList.setLayoutManager(
                 new WrapContentLinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
 
@@ -80,13 +79,13 @@ public class LiveListFragment extends BaseFragment {
 
         request(AppConst.REFRESH_TYPE_FIRST, keyword);
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshLayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
-            public void onRefresh() {
+            public void onRefreshBegin(PtrFrameLayout frame) {
                 page=1;
                 liveDatas.clear();
                 request(AppConst.REFRESH_TYPE_SWIPEREFRESH, keyword);
-                refreshLayout.setRefreshing(false);
+                refreshLayout.refreshComplete();
             }
         });
 

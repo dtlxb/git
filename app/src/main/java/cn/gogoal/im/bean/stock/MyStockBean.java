@@ -1,6 +1,7 @@
 package cn.gogoal.im.bean.stock;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * 作者 wangjd on 2017/3/5 0005 16:27.
@@ -9,7 +10,7 @@ import java.util.List;
  * 简介:
  */
 
-public class MyStockBean {
+public class MyStockBean implements Serializable{
 
     /**
      * message : 成功
@@ -19,7 +20,7 @@ public class MyStockBean {
 
     private String message;
     private int code;
-    private List<MyStockData> data;
+    private ArrayList<MyStockData> data;
 
     public String getMessage() {
         return message;
@@ -37,11 +38,11 @@ public class MyStockBean {
         this.code = code;
     }
 
-    public List<MyStockData> getData() {
+    public ArrayList<MyStockData> getData() {
         return data;
     }
 
-    public void setData(List<MyStockData> data) {
+    public void setData(ArrayList<MyStockData> data) {
         this.data = data;
     }
 

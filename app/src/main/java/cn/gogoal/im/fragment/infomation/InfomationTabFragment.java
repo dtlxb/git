@@ -3,7 +3,6 @@ package cn.gogoal.im.fragment.infomation;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -26,7 +25,6 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.CalendarUtils;
@@ -36,6 +34,9 @@ import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.DashlineItemDivider;
 import cn.gogoal.im.ui.view.XLayout;
+import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 import static cn.gogoal.im.R.id.recyclerView;
 
@@ -61,7 +62,7 @@ public class InfomationTabFragment extends BaseFragment {
     RecyclerView mRvInfomation;
 
     @BindView(R.id.swiperefreshlayout)
-    SwipeRefreshLayout refreshlayout;
+    RefreshLayout refreshlayout;
 
     @BindView(R.id.xLayout)
     XLayout xLayout;
@@ -94,8 +95,6 @@ public class InfomationTabFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        BaseActivity.iniRefresh(refreshlayout);
-
         mRvInfomation.setBackgroundColor(Color.WHITE);
         mRvInfomation.setLayoutManager(new LinearLayoutManager(mContext));
         mRvInfomation.addItemDecoration(new DashlineItemDivider());
@@ -118,12 +117,12 @@ public class InfomationTabFragment extends BaseFragment {
 
         getInfomation(AppConst.REFRESH_TYPE_FIRST, tabType);
 
-        refreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshlayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
-            public void onRefresh() {
+            public void onRefreshBegin(PtrFrameLayout frame) {
                 defaultPage = 1;
                 getInfomation(AppConst.REFRESH_TYPE_SWIPEREFRESH, tabType);
-                refreshlayout.setRefreshing(false);
+                refreshlayout.refreshComplete();
             }
         });
 
@@ -198,7 +197,6 @@ public class InfomationTabFragment extends BaseFragment {
                 } else {
                     xLayout.setStatus(XLayout.Error);
                 }
-                refreshlayout.setRefreshing(false);
             }
 
             @Override

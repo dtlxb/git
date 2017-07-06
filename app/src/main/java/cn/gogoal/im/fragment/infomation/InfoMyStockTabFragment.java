@@ -1,7 +1,6 @@
 package cn.gogoal.im.fragment.infomation;
 
 import android.content.Context;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -18,7 +17,6 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.infomation.InfoMyStock;
 import cn.gogoal.im.common.AppConst;
@@ -29,6 +27,9 @@ import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.DashlineItemDivider;
 import cn.gogoal.im.ui.view.XLayout;
+import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 /**
  * author wangjd on 2017/6/19 0019.
@@ -42,7 +43,7 @@ public class InfoMyStockTabFragment extends BaseFragment {
     RecyclerView recyclerView;
 
     @BindView(R.id.swiperefreshlayout)
-    SwipeRefreshLayout refreshLayout;
+    RefreshLayout refreshLayout;
 
     @BindView(R.id.xLayout)
     XLayout xLayout;
@@ -60,8 +61,6 @@ public class InfoMyStockTabFragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        BaseActivity.iniRefresh(refreshLayout);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.addItemDecoration(new DashlineItemDivider());
 
@@ -71,13 +70,14 @@ public class InfoMyStockTabFragment extends BaseFragment {
 
         getMyStockInfo(AppConst.REFRESH_TYPE_FIRST);
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshLayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
-            public void onRefresh() {
+            public void onRefreshBegin(PtrFrameLayout frame) {
                 defaultPage = 1;
                 getMyStockInfo(AppConst.REFRESH_TYPE_SWIPEREFRESH);
             }
         });
+
         xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
             @Override
             public void onReload(View v) {
@@ -153,8 +153,13 @@ public class InfoMyStockTabFragment extends BaseFragment {
                 } else {
                     xLayout.setStatus(XLayout.Error);
                 }
-
-                refreshLayout.setRefreshing(false);
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (refreshLayout!=null)
+                            refreshLayout.refreshComplete();
+                    }
+                },800);
             }
 
             @Override
@@ -162,7 +167,13 @@ public class InfoMyStockTabFragment extends BaseFragment {
                 if (refreshType == AppConst.REFRESH_TYPE_FIRST && xLayout!=null) {
                     xLayout.setStatus(XLayout.Error);
                 }
-                refreshLayout.setRefreshing(false);
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (refreshLayout!=null)
+                            refreshLayout.refreshComplete();
+                    }
+                },800);
             }
         }).startGet();
     }

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,7 +37,6 @@ import cn.gogoal.im.activity.stock.MyStockNewsActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.AppManager;
-import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.MyStockBean;
 import cn.gogoal.im.bean.stock.MyStockData;
@@ -58,6 +56,9 @@ import cn.gogoal.im.fragment.main.MainStockFragment;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.view.SortView;
+import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 /**
  * author wangjd on 2017/4/27 0027.
@@ -83,7 +84,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     RecyclerView rvMyStock;
 
     @BindView(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout refreshLayout;
+    RefreshLayout refreshLayout;
 
     //自选股集合
     private ArrayList<MyStockData> myStockDatas = new ArrayList<>();
@@ -97,23 +98,25 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     @Override
     public void doBusiness(Context mContext) {
 
-        BaseActivity.iniRefresh(refreshLayout);
-
         initSortTitle();
 
         iniMyStockList();
 
         refreshMyStock(AppConst.REFRESH_TYPE_FIRST);
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshLayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
-            public void onRefresh() {
+            public void onRefreshBegin(PtrFrameLayout frame) {
                 //刷新自选股，大盘缩略
                 refreshMyStock(AppConst.REFRESH_TYPE_SWIPEREFRESH);
-                refreshLayout.setEnabled(false);
-                refreshLayout.setRefreshing(false);
-
+                refreshLayout.refreshComplete();
             }
+
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return ((LinearLayoutManager) rvMyStock.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0 ;
+            }
+
         });
 
     }
@@ -197,17 +200,18 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
                     noData(false);
 
-                    myStockDatas.clear();
+//                    myStockDatas.clear();
 
                     editEnable(true);
 
-                    final List<MyStockData> parseData = JSONObject.parseObject(responseInfo, MyStockBean.class).getData();
+                    final ArrayList<MyStockData> parseData = JSONObject.parseObject(responseInfo, MyStockBean.class).getData();
 
                     String stockCodes =
                             StockUtils.getStockCodes(JSONObject.parseObject(responseInfo).getJSONArray("data"));
 
                     HashMap<String, String> map = new HashMap<>();
                     map.put("codes", stockCodes);
+
                     new GGOKHTTP(map, GGOKHTTP.GET_STOCK_TAG, new GGOKHTTP.GGHttpInterface() {
                         @Override
                         public void onSuccess(String responseInfo) {
@@ -239,6 +243,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                                     }
                                 }
                             }
+
                             myStockAdapter.notifyDataSetChanged();
                         }
 
@@ -248,14 +253,8 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                         }
                     }).startGet();
 
-//                    myStockAdapter.notifyDataSetChanged();
-
                     //缓存自选股
                     StockUtils.saveMyStock(JSONObject.parseObject(responseInfo).getJSONArray("data"));
-
-                    if (loadType == AppConst.REFRESH_TYPE_SWIPEREFRESH || loadType == AppConst.REFRESH_TYPE_PARENT_BUTTON) {
-                        UIHelper.toast(getActivity(), "自选" + getString(R.string.str_refresh_ok));
-                    }
 
                 } else if (code == 1001) {
                     myStockDatas.clear();
