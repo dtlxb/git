@@ -1088,7 +1088,7 @@ public class GGOKHTTP {
                         @Override
                         public void onResponse(String response, int id) {
                             if (httpInterface != null) {
-                                JSONObject jsonObject = null;
+                                JSONObject jsonObject;
                                 try {
                                     jsonObject = new JSONObject(response);
                                     if (!jsonObject.isNull("code")) {

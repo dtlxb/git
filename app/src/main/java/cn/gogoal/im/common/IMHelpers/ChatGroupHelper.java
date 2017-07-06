@@ -545,6 +545,7 @@ public class ChatGroupHelper {
                     @Override
                     public void onUploading(int progress) {
                     }
+
                     @Override
                     public void onSuccess(String onlineUri) {
 
@@ -693,8 +694,9 @@ public class ChatGroupHelper {
     /**
      * 查询群信息
      */
-    public static void getGroupInfo(String convId, final Impl<String> callback) {
+    public static void getGroupInfo(String convId, @NonNull final Impl<String> callback) {
         if (StringUtils.isActuallyEmpty(convId)) {
+            callback.response(Impl.RESPON_DATA_ERROR, "convId non null");
             return;
         }
 
@@ -703,23 +705,22 @@ public class ChatGroupHelper {
         new GGOKHTTP(params, GGOKHTTP.GET_GROUP_INFO, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                if (callback != null) {
-                    int code = JSONObject.parseObject(responseInfo).getIntValue("code");
-                    if (code == 0) {
-                        callback.response(Impl.RESPON_DATA_SUCCESS,
-                                JSONObject.parseObject(responseInfo).getString("data"));
-                    } else if (code == 1001) {
-                        callback.response(Impl.RESPON_DATA_EMPTY, "暂无相关信息");
-                    } else {
-                        callback.response(Impl.RESPON_DATA_ERROR, "请求出错");
-                    }
+                KLog.e(responseInfo);
+
+                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                if (code == 0) {
+                    callback.response(Impl.RESPON_DATA_SUCCESS,
+                            JSONObject.parseObject(responseInfo).getString("data"));
+                } else if (code == 1001) {
+                    callback.response(Impl.RESPON_DATA_EMPTY, "暂无相关信息");
+                } else {
+                    callback.response(Impl.RESPON_DATA_ERROR, "请求出错");
                 }
             }
 
             @Override
             public void onFailure(String msg) {
-                if (callback != null)
-                    callback.response(Impl.RESPON_DATA_ERROR, msg);
+                callback.response(Impl.RESPON_DATA_ERROR, msg);
             }
         }).startGet();
     }

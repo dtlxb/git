@@ -200,7 +200,8 @@
         <activity android:name=".activity.stock.MyStockNewsActivity" />
         <activity android:name=".activity.ContactsActivity" />
         <activity android:name=".activity.stock.EditMyStockActivity" />
-        <activity android:name=".activity.stock.StockDetailActivity" />
+        <activity android:name=".activity.stock.StockDetailActivity"
+            android:screenOrientation="portrait"/>
         <!-- <activity android:name=".activity.Test2Activity"></activity> -->
 
         <activity

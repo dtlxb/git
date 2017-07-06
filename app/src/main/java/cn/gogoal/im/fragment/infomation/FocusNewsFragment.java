@@ -2,19 +2,17 @@ package cn.gogoal.im.fragment.infomation;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONObject;
 import com.socks.library.KLog;
 
+import org.simple.eventbus.Subscriber;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -25,16 +23,12 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.AppConst;
-import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.NormalIntentUtils;
+import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.DashlineItemDivider;
-import cn.gogoal.im.ui.calender.CaledarAdapter;
-import cn.gogoal.im.ui.calender.CalendarBean;
-import cn.gogoal.im.ui.calender.CalendarDateView;
-import cn.gogoal.im.ui.calender.CalendarUtil;
-import cn.gogoal.im.ui.calender.CalendarView;
 import cn.gogoal.im.ui.view.XLayout;
 
 import static cn.gogoal.im.fragment.infomation.InfomationTabFragment.INFOMATION_TYPE_GET_ASK_NEWS;
@@ -50,20 +44,17 @@ public class FocusNewsFragment extends BaseFragment {
     @BindView(R.id.xLayout)
     XLayout xLayout;
 
-//    @BindView(R.id.swipeRefreshLayout)
-//    SwipeRefreshLayout refreshLayout;
-
-    @BindView(R.id.calendarDateView)
-    CalendarDateView mCalendarDateView;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout refreshLayout;
 
     @BindView(R.id.rv_focus_news)
     RecyclerView rvNews;
 
-    @BindView(R.id.tv_current_month)
-    TextView mTitle;
     private ArrayList<InfomationData.Data> dataList;
     private FocusNewsAdapter adapter;
-    private int defaultPage=1;
+    private int defaultPage = 1;
+
+    private String dateString;
 
     @Override
     public int bindLayout() {
@@ -72,42 +63,7 @@ public class FocusNewsFragment extends BaseFragment {
 
     @Override
     public void doBusiness(final Context mContext) {
-        mCalendarDateView.setAdapter(new CaledarAdapter() {
-            @Override
-            public View getView(View convertView, ViewGroup parentView, CalendarBean bean) {
-                TextView view;
-                if (convertView == null) {
-                    convertView = LayoutInflater.from(parentView.getContext()).inflate(R.layout.item_calendar, null);
-                    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-                            AppDevice.dp2px(mContext, 48), AppDevice.dp2px(mContext, 48));
-                    convertView.setLayoutParams(params);
-                }
-
-                view = (TextView) convertView.findViewById(R.id.text);
-
-                view.setText("" + bean.day);
-                if (bean.mothFlag != 0) {
-                    view.setTextColor(0xff9299a1);
-                } else {
-                    view.setTextColor(0xffffffff);
-                }
-
-                return convertView;
-            }
-        });
-
-        mCalendarDateView.setOnItemClickListener(new CalendarView.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int postion, CalendarBean bean) {
-                mTitle.setText(bean.year + "/" + getDisPlayNumber(bean.moth) + "/" + getDisPlayNumber(bean.day));
-            }
-        });
-
-        int[] data = CalendarUtil.getYMD(new Date());
-        mTitle.setText(data[0] + "/" + data[1] + "/" + data[2]);
-
         iniList();
-
     }
 
     private void iniList() {
@@ -121,18 +77,19 @@ public class FocusNewsFragment extends BaseFragment {
 
         getNewsData(AppConst.REFRESH_TYPE_FIRST);
 
-//        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                defaultPage=1;
-//                getNewsData(AppConst.REFRESH_TYPE_SWIPEREFRESH);
-//            }
-//        });
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                defaultPage = 1;
+                dateString = null;
+                getNewsData(AppConst.REFRESH_TYPE_SWIPEREFRESH);
+            }
+        });
 
         xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
             @Override
             public void onReload(View v) {
-                defaultPage=1;
+                defaultPage = 1;
                 getNewsData(AppConst.REFRESH_TYPE_RELOAD);
             }
         });
@@ -155,11 +112,12 @@ public class FocusNewsFragment extends BaseFragment {
         }, rvNews);
     }
 
-    //双位
-    private String getDisPlayNumber(int num) {
-        return num < 10 ? "0" + num : "" + num;
+    @Subscriber(tag = "focus_news_in_date")
+    void focusNewsInDate(String msg) {
+        dateString=msg;
+        defaultPage=1;
+        getNewsData(AppConst.REFRESH_TYPE_RELOAD);
     }
-
 
     private void getNewsData(final int refreshType) {
         adapter.setEnableLoadMore(false);
@@ -171,38 +129,48 @@ public class FocusNewsFragment extends BaseFragment {
 
         HashMap<String, String> params = new HashMap<>();
         params.put("page", String.valueOf(defaultPage));
+        if (dateString != null) {
+            params.put("start_date", dateString);
+            params.put("end_date", dateString);
+        }
         params.put("rows", String.valueOf(15));
 
         new GGOKHTTP(params, GGOKHTTP.GET_ASK_NEWS, new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
 
-                int code = JSONObject.parseObject(responseInfo).getIntValue("code");
+                int code = JsonUtils.getIntValue(responseInfo, "code");
+
                 if (code == 0) {
-                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH ||
+                            refreshType == AppConst.REFRESH_TYPE_RELOAD) {
                         dataList.clear();
                     }
 
                     List<InfomationData.Data> datas =
-                            JSONObject.parseObject(responseInfo, InfomationData.class).getData();
+                            JsonUtils.parseJsonObject(responseInfo, InfomationData.class).getData();
 
                     dataList.addAll(datas);
                     adapter.setEnableLoadMore(true);
                     adapter.loadMoreComplete();
 
                     adapter.notifyDataSetChanged();
-                    if (xLayout!=null)
-                    xLayout.setStatus(XLayout.Success);
+                    if (xLayout != null)
+                        xLayout.setStatus(XLayout.Success);
 
                 } else if (code == 1001) {
-                    if (xLayout!=null)
-                    xLayout.setStatus(XLayout.Empty);
+                    if (refreshType!=AppConst.REFRESH_TYPE_LOAD_MORE) {
+                        if (xLayout != null)
+                            xLayout.setStatus(XLayout.Empty);
+                    }else {
+                        UIHelper.toast(getActivity(),"该日没有更多要闻了!");
+                    }
                 } else {
-                    if (xLayout!=null)
-                    xLayout.setStatus(XLayout.Error);
+                    if (xLayout != null)
+                        xLayout.setStatus(XLayout.Error);
                 }
-//                if (refreshLayout!=null)
-//                refreshLayout.setRefreshing(false);
+                if (refreshLayout!=null)
+                refreshLayout.setRefreshing(false);
             }
 
             @Override
@@ -214,6 +182,13 @@ public class FocusNewsFragment extends BaseFragment {
 //                }
             }
         }).startGet();
+    }
+
+    @Subscriber(tag = "double_click_2_top")
+    void doubleClick2Top(String index){
+        if (StringUtils.parseStringDouble(index)==1){//是本Tab
+            rvNews.smoothScrollToPosition(0);
+        }
     }
 
     /*适配器*/

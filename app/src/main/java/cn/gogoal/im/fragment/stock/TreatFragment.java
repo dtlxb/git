@@ -228,8 +228,12 @@ public class TreatFragment extends BaseFragment {
                     chartBeanList.clear();
                     chartBeanList.add(new ChartBean(buy, "#ed1b1b"));
                     chartBeanList.add(new ChartBean(sell, "#26b844"));
-                    progressView.setTextSize(AppDevice.dp2px(9));
-                    progressView.setChartData(chartBeanList, needAnim);
+
+                    if (isAdded() && progressView!=null) {
+                        progressView.setTextSize(AppDevice.dp2px(9));
+                        progressView.setChartData(chartBeanList, needAnim);
+                    }
+
                     wudangAdapter.notifyDataSetChanged();
 
                     closePrice = StringUtils.parseStringDouble(treatData.getClose_price());

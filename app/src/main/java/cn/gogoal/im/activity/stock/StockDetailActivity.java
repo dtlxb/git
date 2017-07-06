@@ -1001,6 +1001,7 @@ public class StockDetailActivity extends BaseActivity {
         private double realDouble(String value) {
             return StringUtils.parseStringDouble(value.replaceAll("[%手亿万]", ""));
         }
+
     }
 
     /**

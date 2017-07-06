@@ -191,7 +191,6 @@ public class RankListDetialActivity extends BaseActivity {
 
             @Override
             public void onSuccess(String responseInfo) {
-//                KLog.e(responseInfo);
                 int responseCode = JSONObject.parseObject(responseInfo).getIntValue("code");
 
                 if (responseCode == 0) {

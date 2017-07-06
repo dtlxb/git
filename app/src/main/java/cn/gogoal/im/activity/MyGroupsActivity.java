@@ -36,6 +36,7 @@ import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
 import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.Impl;
+import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
@@ -130,8 +131,11 @@ public class MyGroupsActivity extends BaseActivity {
                 switch (code) {
                     case Impl.RESPON_DATA_SUCCESS:
                         dataBeans.clear();
+
                         List<GroupData> data =
-                                JSONObject.parseArray(jsondata, GroupData.class);
+                                JsonUtils.parseJsonArray(jsondata,GroupData.class);
+
+//                                Arrays.asList(new Gson().fromJson(jsondata, GroupData[].class));
 
                         dataBeans.addAll(data);
 

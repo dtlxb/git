@@ -61,6 +61,7 @@ public class MyStockNewsBean {
 
         private String change_rate;
         private String price;
+
         private String origin;
         private String stock_code;
         private String date;

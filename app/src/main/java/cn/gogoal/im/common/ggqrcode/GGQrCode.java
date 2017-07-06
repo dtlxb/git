@@ -8,7 +8,6 @@ import java.util.Map;
 import cn.gogoal.im.common.Base64Decoder;
 import cn.gogoal.im.common.Base64Encoder;
 import cn.gogoal.im.common.StringUtils;
-import cn.gogoal.im.common.UserUtils;
 
 /**
  * author wangjd on 2017/6/5 0005.
@@ -56,9 +55,9 @@ public class GGQrCode {
         if (!StringUtils.isActuallyEmpty(id)) {
             Map<String, String> map = new HashMap<>();
             map.put("qrType", String.valueOf(type));
-            map.put(type == QR_CODE_TYPE_PERSIONAL ? "account_id" : "conv_id", UserUtils.getMyAccountId());
+            map.put(type == QR_CODE_TYPE_PERSIONAL ? "account_id" : "conv_id", id);
             return getUserQrCodeBase64String(JSONObject.toJSONString(map));
         }
-        return null;
+        return "";
     }
 }

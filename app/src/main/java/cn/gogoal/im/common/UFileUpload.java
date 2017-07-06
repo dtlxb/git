@@ -29,9 +29,9 @@ public class UFileUpload {
     private static final String bucket = "hackfile";
 
     private UFileUpload(UFileSDK uFileSDK) {
-        this.uFileSDK=uFileSDK;
+        this.uFileSDK = uFileSDK;
     }
-    
+
     public static UFileUpload getInstance() {
         return new UFileUpload(new UFileSDK(bucket));
     }
@@ -92,11 +92,9 @@ public class UFileUpload {
 
         String date = "";
 
-        String key_name = "gogoal"+File.separator+"avatar"+File.separator+"ucloud_"+
+        String key_name = "gogoal" + File.separator + "avatar" + File.separator + "ucloud_" +
                 MD5Utils.getMD5EncryptyString16(file.getPath()) +
                 file.getPath().substring(file.getPath().lastIndexOf('.'));
-
-        KLog.e(key_name);
 
         String authorization = getAuthorization(http_method, content_md5, content_type, date, bucket, key_name);
         final UFileRequest request = new UFileRequest();
@@ -128,7 +126,7 @@ public class UFileUpload {
 
     private String decode(String separator) {
         try {
-            return URLDecoder.decode(separator,"utf-8");
+            return URLDecoder.decode(separator, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

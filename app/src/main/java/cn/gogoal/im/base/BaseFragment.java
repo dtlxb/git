@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.IdRes;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -95,6 +96,10 @@ public abstract class BaseFragment extends Fragment implements IBase {
 
     public Drawable getResDrawable(@DrawableRes int drawableid) {
         return ContextCompat.getDrawable(getContext(), drawableid);
+    }
+
+    public <V extends View> V getViewById(@IdRes int resId){
+        return (V) view.findViewById(resId);
     }
 
 }

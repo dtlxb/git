@@ -1,47 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/include_title"/>
+    <RelativeLayout
+        android:id="@+id/layout_title_infomation"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/titlebar_size"
+        android:background="@drawable/shape_line_bottom_unpress">
 
-    <LinearLayout
+        <ImageView
+            android:id="@+id/iv_calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:src="@mipmap/img_calendar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="资讯"
+            android:textColor="@color/textColor_333333"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/iv_message"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@null"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:src="@mipmap/message_dark" />
+
+    </RelativeLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:orientation="horizontal"
-        android:background="@drawable/shape_line_bottom_unpress">
+        android:background="@drawable/shape_line_bottom_unpress"
+        android:orientation="horizontal">
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_infomation"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            app:tabGravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/colorPrimary"
             app:tabMode="scrollable"
             app:tabSelectedTextColor="@color/colorPrimary"
-            app:tabIndicatorColor="@color/colorPrimary"
-            app:tabTextColor="@color/textColor_666666"/>
+            app:tabTextColor="@color/textColor_666666" />
 
-        <!--<View
-            android:layout_width="5dp"
+        <!--<ImageView
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/shapw_gradient"/>
+            android:adjustViewBounds="true"
+            android:layout_gravity="end"
+            android:background="#0000"
+            android:scaleType="centerInside"
+            android:src="@mipmap/contact_add_message"
+            android:contentDescription="@null" />-->
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:gravity="center"
-            android:text="+"
-            android:textSize="35sp" />-->
-    </LinearLayout>
+    </FrameLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_infomation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -179,6 +179,8 @@ public class MyStockNewsFragment extends BaseFragment {
             holder.setText(R.id.tv_mystock_news_date, CalendarUtils.getStringDate("yyyy-MM-dd HH:mm", data.getDate()));
             UIHelper.setRippBg(holder.itemView);
 
+            holder.setText(R.id.tv_mystock_news_source,data.getOrigin());
+
             holder.setText(R.id.tv_mystock_news_stockRate,
                     StringUtils.save2Significand(data.getPrice()) + "\u3000\u3000" +
                             StockUtils.plusMinus(data.getChange_rate(), true));

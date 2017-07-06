@@ -1,12 +1,16 @@
 package cn.gogoal.im.fragment.infomation;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
+import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -15,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
@@ -24,6 +29,8 @@ import cn.gogoal.im.bean.infomation.Sevenby24;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.JsonUtils;
+import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.ExpandableLayout;
@@ -37,6 +44,8 @@ import cn.gogoal.im.ui.view.XLayout;
  */
 public class SevenBy24Fragment extends BaseFragment {
 
+    private static final long INTERVAL_TIME = 5000;//定时刷新间隔(毫秒)
+
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -45,6 +54,27 @@ public class SevenBy24Fragment extends BaseFragment {
 
     @BindView(R.id.xLayout)
     XLayout xLayout;
+
+    @BindView(R.id.tv_new_message)
+    TextView tvNewMessageCount;
+
+    //定时刷新
+    Handler handler = new Handler();
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                handler.postDelayed(this, INTERVAL_TIME);
+
+                get7by24NewsCount();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
 
     private int defaultPage = 1;
 
@@ -69,7 +99,7 @@ public class SevenBy24Fragment extends BaseFragment {
         refreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                defaultPage=1;
+                defaultPage = 1;
                 get7by24Datas(AppConst.REFRESH_TYPE_SWIPEREFRESH);
             }
         });
@@ -88,7 +118,7 @@ public class SevenBy24Fragment extends BaseFragment {
                 }
                 adapter.loadMoreComplete();
             }
-        },recyclerView);
+        }, recyclerView);
 
         xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
             @Override
@@ -96,6 +126,13 @@ public class SevenBy24Fragment extends BaseFragment {
                 get7by24Datas(AppConst.REFRESH_TYPE_RELOAD);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        handler.removeCallbacks(runnable);
+        handler.postDelayed(runnable, INTERVAL_TIME);//启动定时刷新
     }
 
     private void get7by24Datas(final int refreshType) {
@@ -115,49 +152,99 @@ public class SevenBy24Fragment extends BaseFragment {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
 
+                    get7by24NewsCount();//查询总条数
+
                     if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
                         dataList.clear();
                     }
 
                     List<Sevenby24.Data> datas =
                             JSONObject.parseObject(responseInfo, Sevenby24.class).getData();
-                    if (refreshType==AppConst.REFRESH_TYPE_SWIPEREFRESH){
-                        UIHelper.toast(getContext(),"7×24数据更新成功");
-                    }
+//                    if (refreshType == AppConst.REFRESH_TYPE_SWIPEREFRESH) {
+//                        UIHelper.toast(getContext(), "7×24数据更新成功");
+//                    }
                     dataList.addAll(datas);
                     adapter.setEnableLoadMore(true);
                     adapter.loadMoreComplete();
                     adapter.notifyDataSetChanged();
-
-
-
                     xLayout.setStatus(XLayout.Success);
 
                 } else if (code == 1001) {
-                    if (refreshType!=AppConst.REFRESH_TYPE_LOAD_MORE) {
+                    if (refreshType != AppConst.REFRESH_TYPE_LOAD_MORE) {
                         xLayout.setStatus(XLayout.Empty);
-                    }else {
-                        UIHelper.toast(getActivity(),"没有更多");
+                    } else {
+                        UIHelper.toast(getActivity(), "没有更多");
                     }
                 } else {
                     xLayout.setStatus(XLayout.Error);
                 }
-                refreshlayout.setRefreshing(false);
+
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshlayout.setRefreshing(false);
+                    }
+                },800);
+
             }
 
             @Override
             public void onFailure(String msg) {
                 refreshlayout.setRefreshing(false);
-                UIHelper.toastError(getContext(),msg,xLayout);
+                UIHelper.toastError(getContext(), msg, xLayout);
+            }
+        }).startGet();
+    }
+
+    private void get7by24NewsCount() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("get_count", "1");
+        new GGOKHTTP(map, GGOKHTTP.GET_FULL_TIME_INFO, new GGOKHTTP.GGHttpInterface() {
+            @Override
+            public void onSuccess(String responseInfo) {
+//                KLog.e(responseInfo);
+                if (JsonUtils.getIntValue(responseInfo, "code") == 0) {
+                    JsonObject data = JsonUtils.getJsonArray(responseInfo, "data")
+                            .get(0).getAsJsonObject();
+                    long count = JsonUtils.getLongValue(data, "count");
+
+                    KLog.e(count);
+                    long oldCount = SPTools.getLong("new_message_count", 0);
+                    if (oldCount > 0 && count > oldCount) {
+                        tvNewMessageCount.setVisibility(View.VISIBLE);
+                        tvNewMessageCount.setText("有" + (count - oldCount) + "条更新");
+                        SPTools.saveLong("new_message_count", count);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String msg) {
+
             }
         }).startGet();
     }
 
     @Subscriber(tag = "double_click_2_top")
-    void doubleClick2Top(String index){
-        if (StringUtils.parseStringDouble(index)==0){//是本Tab
+    void doubleClick2Top(String index) {
+        if (StringUtils.parseStringDouble(index) == 0) {//是本Tab
             recyclerView.smoothScrollToPosition(0);
         }
+    }
+
+    @OnClick(R.id.tv_new_message)
+    void click(View view) {
+        recyclerView.smoothScrollToPosition(0);
+        refreshlayout.setRefreshing(true);
+        defaultPage = 1;
+        get7by24Datas(AppConst.REFRESH_TYPE_SWIPEREFRESH);
+        tvNewMessageCount.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        handler.removeCallbacks(runnable);
     }
 
     private class Sevenby24Adapter extends CommonAdapter<Sevenby24.Data, BaseViewHolder> {

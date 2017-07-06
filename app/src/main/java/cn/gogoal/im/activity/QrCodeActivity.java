@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.hply.qrcode_lib.activity.CodeUtils;
+import com.socks.library.KLog;
 
 import java.util.List;
 
@@ -102,6 +103,8 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
 
         accountId = getIntent().getStringExtra("qrcode_content_id");
 
+        KLog.e(accountId);
+
         tvMyQqrcodeName.setText(StringUtils.isActuallyEmpty(name) ? "--" : name);
         tvMyQqrcodeDuty.setText(StringUtils.isActuallyEmpty(userInfo) ? "--" : userInfo);
 
@@ -175,6 +178,8 @@ public class QrCodeActivity extends BaseActivity implements EasyPermissions.Perm
                     ivQrcodeAvatar.setImageBitmap(avatar);
             }
         });
+
+        KLog.e(accountId);
 
         qrCodeBitmap = CodeUtils.createImage(
                 getActivity(),//上下文

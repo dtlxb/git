@@ -124,6 +124,8 @@ public class QrcodeProcessActivity extends BaseActivity implements EasyPermissio
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                     String result = bundle.getString(CodeUtils.RESULT_STRING);
 
+                    KLog.e(result);
+
                     String codeBody = GGQrCode.getUserQrCodeBody(result);
 
                     KLog.e(codeBody);
@@ -158,6 +160,7 @@ public class QrcodeProcessActivity extends BaseActivity implements EasyPermissio
 
                                         default:
                                             KLog.e("解析::" + data);
+                                            UIHelper.toast(getActivity(),"暂无相关信息");
                                             break;
                                     }
                                 }

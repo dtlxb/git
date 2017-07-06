@@ -47,6 +47,7 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.Impl;
+import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.MyStockSortInteface;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StockUtils;
@@ -98,7 +99,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
         BaseActivity.iniRefresh(refreshLayout);
 
-        initSortTitle(mContext);
+        initSortTitle();
 
         iniMyStockList();
 
@@ -167,7 +168,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     /**
      * 初始化排序头
      */
-    private void initSortTitle(Context ctx) {
+    private void initSortTitle() {
         tvMystockPrice.setDefaultText("最新价");
         tvMystockRate.setDefaultText("涨跌幅");
         tvMystockPrice.setViewStateNormal();
@@ -179,6 +180,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     }
 
     private void getMyStockData(final int loadType) {
+
         Map<String, String> params = new HashMap<>();
         params.put("page", "1");
         params.put("rows", "500");
@@ -189,6 +191,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             public void onSuccess(String responseInfo) {
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
+
+                    initSortTitle();
+
                     noData(false);
 
                     myStockDatas.clear();
@@ -205,30 +210,32 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     new GGOKHTTP(map, GGOKHTTP.GET_STOCK_TAG, new GGOKHTTP.GGHttpInterface() {
                         @Override
                         public void onSuccess(String responseInfo) {
-                            for (MyStockData data : parseData) {
-                                StockTag tag = new StockTag();
-                                JSONObject objectTag = JSONObject.parseObject(responseInfo).getJSONObject("data");
-                                if (data.getStock_code()!=null && objectTag.getString(data.getStock_code())!=null) {
-                                    switch (objectTag.getString(data.getStock_code())) {
-                                        case "-1":
-                                            tag.setType(-1);
-                                            break;
-                                        case "0":
-                                            tag.setType(0);
-                                            break;
-                                        case "1":
-                                            tag.setType(1);
-                                            break;
-                                        case "2":
-                                            tag.setType(2);
-                                            break;
+                            if (JsonUtils.getIntValue(responseInfo, "code") == 0) {
+                                for (MyStockData data : parseData) {
+                                    StockTag tag = new StockTag();
+                                    JSONObject objectTag = JSONObject.parseObject(responseInfo).getJSONObject("data");
+                                    if (data.getStock_code() != null && objectTag.getString(data.getStock_code()) != null) {
+                                        switch (objectTag.getString(data.getStock_code())) {
+                                            case "-1":
+                                                tag.setType(-1);
+                                                break;
+                                            case "0":
+                                                tag.setType(0);
+                                                break;
+                                            case "1":
+                                                tag.setType(1);
+                                                break;
+                                            case "2":
+                                                tag.setType(2);
+                                                break;
+                                        }
+                                    } else {
+                                        tag.setType(-2);
                                     }
-                                }else {
-                                    tag.setType(-2);
-                                }
-                                data.setTag(tag);
-                                if (!myStockDatas.contains(data)) {
-                                    myStockDatas.add(data);
+                                    data.setTag(tag);
+                                    if (!myStockDatas.contains(data)) {
+                                        myStockDatas.add(data);
+                                    }
                                 }
                             }
                             myStockAdapter.notifyDataSetChanged();
@@ -258,6 +265,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     UIHelper.toastResponseError(getActivity(), responseInfo);
                     editEnable(false);
                 }
+
                 AppManager.getInstance().sendMessage("market_stop_animation_refresh");
             }
 
@@ -463,8 +471,8 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), CompanyTagActivity.class);
-                    intent.putExtra("stock_code",data.getStock_code());
-                    intent.putExtra("stock_name",data.getStock_name());
+                    intent.putExtra("stock_code", data.getStock_code());
+                    intent.putExtra("stock_name", data.getStock_name());
                     startActivity(intent);
                 }
             });

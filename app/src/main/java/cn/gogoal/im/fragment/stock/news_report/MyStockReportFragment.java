@@ -171,34 +171,14 @@ public class MyStockReportFragment extends BaseFragment {
     private class MyStockReportAdapter extends CommonAdapter<
             MyStockReportBean.MyStockReport, BaseViewHolder> {
 
-//        private MyStockReportAdapter(List<MyStockReportBean.MyStockReport> data) {
-//            super(R.layout.item_mystock_report, data);
-//        }
         private MyStockReportAdapter(List<MyStockReportBean.MyStockReport> data) {
             super(R.layout.item_mystock_news, data);
         }
 
         @Override
         protected void convert(BaseViewHolder holder, final MyStockReportBean.MyStockReport data, int position) {
-//            holder.setText(R.id.tv_mystock_report_stockInfo,
-//                    data.getCode_name() + "(" + data.getCode() + ")\u3000\u3000" +
-//                            data.getFirst_class() + "\u3000" + data.getSecond_class());
-//
-//            holder.setText(R.id.tv_mystock_report_title,
-//                    data.getReport_title());
-//
-//            if (StringUtils.isActuallyEmpty(data.getRadar())) {
-//                holder.setVisible(R.id.tv_mystock_report_subtitle, false);
-//            } else {
-//                holder.setVisible(R.id.tv_mystock_report_subtitle, true);
-//                holder.setText(R.id.tv_mystock_report_subtitle, data.getRadar());
-//            }
-//
-//            holder.setText(R.id.tv_mystock_report_source_and_author,
-//                    data.getOrgan_name() + "\u3000" + data.getAuthor());
-//
-//            holder.setText(R.id.tv_mystock_report_date,
-//                    data.getCreate_date());
+
+            holder.setText(R.id.tv_mystock_news_source,data.getOrgan_name()+"\u3000"+"报告共("+data.getFile_pages()+")");
 
             holder.setText(R.id.tv_mystock_news_title,data.getReport_title());
 

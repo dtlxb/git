@@ -304,7 +304,7 @@ public class StringUtils {
         }
         try {
             return Double.parseDouble(value);
-        }catch (Exception e){
+        } catch (Exception e) {
             return 0.0d;
         }
     }
@@ -356,7 +356,7 @@ public class StringUtils {
      * 取整
      */
     public static String getIntegerData(String floatData) {
-        return floatData.substring(0, floatData.indexOf("."));
+        return String.valueOf(parseStringDouble(floatData).intValue());
     }
 
     public static Date getNextDay(Date date) {

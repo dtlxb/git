@@ -1035,7 +1035,6 @@ public class ChatFragment extends BaseFragment {
         Map map = baseMessage.getOthers();
         Bitmap stockBitmap = (Bitmap) map.get("stock_bitmap");
         String bitmapUrl = (String) map.get("stock_bitmapUrl");
-        KLog.e(stockBitmap);
         String stockName = (String) map.get("stock_name");
         String stockCode = (String) map.get("stock_code");
         if (!TextUtils.isEmpty(stockName) && !TextUtils.isEmpty(stockCode) && !TextUtils.isEmpty(bitmapUrl)) {
