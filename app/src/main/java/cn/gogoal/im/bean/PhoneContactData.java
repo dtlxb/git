@@ -98,7 +98,7 @@ public class PhoneContactData {
          */
 
         private String conv_id;
-        private int friend_id;
+        private String friend_id;
         private Object group;
         private Object remark;
         private String nickname;
@@ -113,11 +113,11 @@ public class PhoneContactData {
             this.conv_id = conv_id;
         }
 
-        public int getFriend_id() {
+        public String getFriend_id() {
             return friend_id;
         }
 
-        public void setFriend_id(int friend_id) {
+        public void setFriend_id(String friend_id) {
             this.friend_id = friend_id;
         }
 

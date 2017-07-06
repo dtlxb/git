@@ -48,7 +48,7 @@ import static cn.gogoal.im.common.UserUtils.getToken;
 public class ChatGroupHelper {
 
     //添加群成员
-    public static void addAnyone(List<Integer> idList, final String conversationId, final ChatGroupManager groupManager) {
+    public static void addAnyone(List<String> idList, final String conversationId, final ChatGroupManager groupManager) {
         Map<String, String> params = new HashMap<>();
         params.put("token", getToken());
         params.put("id_list", JSONObject.toJSONString(idList));
@@ -78,7 +78,7 @@ public class ChatGroupHelper {
     }
 
     //删除群成员
-    public static void deleteAnyone(final List<Integer> idSet, final String conversationId, final ChatGroupManager groupManager) {
+    public static void deleteAnyone(final List<String> idSet, final String conversationId, final ChatGroupManager groupManager) {
         Map<String, String> params = new HashMap<>();
         params.put("token", getToken());
         params.put("id_list", JSONObject.toJSONString(idSet));

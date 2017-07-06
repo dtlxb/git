@@ -19,18 +19,18 @@ public class GroupMemberInfo implements Parcelable {
      * nickname : 燃烧的岁月2
      */
 
-    private int account_id;
+    private String account_id;
     private String account_name;
     private String avatar;
     private String city;
     private String duty;
     private String nickname;
 
-    public int getAccount_id() {
+    public String getAccount_id() {
         return account_id;
     }
 
-    public void setAccount_id(int account_id) {
+    public void setAccount_id(String account_id) {
         this.account_id = account_id;
     }
 
@@ -82,7 +82,7 @@ public class GroupMemberInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.account_id);
+        dest.writeString(this.account_id);
         dest.writeString(this.account_name);
         dest.writeString(this.avatar);
         dest.writeString(this.city);
@@ -94,7 +94,7 @@ public class GroupMemberInfo implements Parcelable {
     }
 
     protected GroupMemberInfo(Parcel in) {
-        this.account_id = in.readInt();
+        this.account_id = in.readString();
         this.account_name = in.readString();
         this.avatar = in.readString();
         this.city = in.readString();

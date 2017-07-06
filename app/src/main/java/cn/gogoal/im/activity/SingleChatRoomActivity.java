@@ -132,7 +132,7 @@ public class SingleChatRoomActivity extends BaseActivity {
             }
         } else {
         }
-        userBean = UserInfoUtils.getSomeone(Integer.parseInt(speakTo));
+        userBean = UserInfoUtils.getSomeone(speakTo);
         return userBean;
     }
 

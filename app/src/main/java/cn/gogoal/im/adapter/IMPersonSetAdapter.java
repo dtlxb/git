@@ -2,11 +2,13 @@ package cn.gogoal.im.adapter;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hply.roundimage.roundImage.RoundedImageView;
+import com.socks.library.KLog;
 
 import java.util.List;
 
@@ -69,7 +71,8 @@ public class IMPersonSetAdapter extends CommonAdapter<ContactBean, BaseViewHolde
         } else if (avatar instanceof Integer) {
             imageIcon.setImageResource((Integer) avatar);
         }
-        if (squareCreater!=null && (String.valueOf(contactBean.getFriend_id()).equals(squareCreater) && chatType == 1002)) {
+        if (!TextUtils.isEmpty(squareCreater) && !TextUtils.isEmpty(contactBean.getFriend_id())
+                && (contactBean.getFriend_id().equals(squareCreater) && chatType == 1002)) {
             squareManTag.setVisibility(View.VISIBLE);
         } else {
             squareManTag.setVisibility(View.GONE);

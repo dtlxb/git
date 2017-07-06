@@ -476,8 +476,8 @@ public class StockDetailActivity extends BaseActivity {
                         final String conversationId = JSONObject.parseObject(responseInfo).
                                 getJSONObject("data").getString("conv_id");
 
-                        List<Integer> addIdList = new ArrayList<>();
-                        addIdList.add(Integer.parseInt(UserUtils.getMyAccountId()));
+                        List<String> addIdList = new ArrayList<>();
+                        addIdList.add(UserUtils.getMyAccountId());
                         //添加群成员
                         ChatGroupHelper.addAnyone(addIdList, conversationId, new ChatGroupHelper.ChatGroupManager() {
                             @Override

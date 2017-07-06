@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -44,7 +45,7 @@ public class IMPersonDetailActivity extends BaseActivity {
     @BindView(R.id.person_detail)
     RecyclerView personDetailRecycler;
 
-    private int accountId = -1;
+    private String accountId;
 
     @BindView(R.id.add_friend_button)
     SelectorButton addFriendBtn;
@@ -64,15 +65,15 @@ public class IMPersonDetailActivity extends BaseActivity {
         personDetailRecycler.setLayoutManager(new LinearLayoutManager(mContext));
         personDetailRecycler.addItemDecoration(new NormalItemDecoration(mContext));
 
-        accountId = getIntent().getIntExtra("account_id", -1);
+        accountId = getIntent().getStringExtra("account_id");
 
-        if (String.valueOf(accountId).equals(UserUtils.getMyAccountId())) {
+        if (accountId.equals(UserUtils.getMyAccountId())) {
             addFriendBtn.setVisibility(View.GONE);
         }
 
         addFriendBtn.setText(UserUtils.isMyFriend(accountId) ? "发送消息" : "添加好友");
 
-        if (accountId != -1) {
+        if (!TextUtils.isEmpty(accountId)) {
             getUserInfo();
         }
     }
@@ -80,7 +81,7 @@ public class IMPersonDetailActivity extends BaseActivity {
     private void getUserInfo() {
         xLayout.setStatus(XLayout.Loading);
 
-        UserUtils.getUserInfo(String.valueOf(accountId), new Impl<String>() {
+        UserUtils.getUserInfo(accountId, new Impl<String>() {
             @Override
             public void response(int code, String data) {
                 switch (code) {
@@ -137,7 +138,7 @@ public class IMPersonDetailActivity extends BaseActivity {
 
     public void click(ContactBean contactBean) {
         Intent intent;
-        if (accountId != -1) {
+        if (!TextUtils.isEmpty(accountId)) {
             if (UserUtils.isMyFriend(accountId)) {
                 intent = new Intent(IMPersonDetailActivity.this, SingleChatRoomActivity.class);
                 intent.putExtra("conversation_id", UserUtils.findAnyoneByFriendId(accountId) != null ?

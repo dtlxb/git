@@ -37,14 +37,14 @@ public class StockUtils {
             JSONObject object = (JSONObject) array.get(i);
             set.add(object.getString("stock_code"));
         }
-        SPTools.saveSetData(UserUtils.getMyAccountId()+"_my_stock_set", set);
+        SPTools.saveSetData(UserUtils.getMyAccountId() + "_my_stock_set", set);
     }
 
     /**
      * 获取本地自选股集合
      */
     public static Set<String> getMyStockSet() {
-        return SPTools.getSetData(UserUtils.getMyAccountId()+"_my_stock_set", new HashSet<String>());
+        return SPTools.getSetData(UserUtils.getMyAccountId() + "_my_stock_set", new HashSet<String>());
     }
 
     public static String getStockCodes(@NonNull JSONArray array) {
@@ -93,7 +93,7 @@ public class StockUtils {
         }
         Set<String> myStockSet = getMyStockSet();
         myStockSet.add(stockCode);
-        SPTools.saveSetData(UserUtils.getMyAccountId()+"_my_stock_set", myStockSet);
+        SPTools.saveSetData(UserUtils.getMyAccountId() + "_my_stock_set", myStockSet);
     }
 
     /**
@@ -111,7 +111,7 @@ public class StockUtils {
         Set<String> myStockSet = getMyStockSet();
 
         if (myStockSet.remove(stockCode)) {
-            SPTools.saveSetData(UserUtils.getMyAccountId()+"_my_stock_set", myStockSet);
+            SPTools.saveSetData(UserUtils.getMyAccountId() + "_my_stock_set", myStockSet);
         } else {
             myStockSet.remove(stockCode.substring(2));
         }
@@ -121,7 +121,7 @@ public class StockUtils {
      * 清除自选股
      */
     public static void clearLocalMyStock() {
-        SPTools.clearItem(UserUtils.getMyAccountId()+"_my_stock_set");
+        SPTools.clearItem(UserUtils.getMyAccountId() + "_my_stock_set");
     }
 
     //数据处理，1保存两位，2.正数补+，

@@ -412,20 +412,20 @@ public class UserUtils {
     }
 
     // TODO: 目前没接口，先从本地查
-    public static boolean isMyFriend(int friendId) {
+    public static boolean isMyFriend(String friendId) {
         List<ContactBean> userContacts = getUserContacts();
         for (ContactBean bean : userContacts) {
-            if (bean.getUserId() == friendId) {
+            if (bean.getUserId().equals(friendId)) {
                 return true;
             }
         }
         return false;
     }
 
-    public static ContactBean findAnyoneByFriendId(int friendId) {
+    public static ContactBean findAnyoneByFriendId(String friendId) {
         List<ContactBean> userContacts = getUserContacts();
         for (ContactBean bean : userContacts) {
-            if (bean.getUserId() == friendId) {
+            if (bean.getUserId().equals(friendId)) {
                 return bean;
             }
         }
@@ -482,7 +482,7 @@ public class UserUtils {
         List<ContactBean> list = getAllFriendsInTeam(conversationId);
         ContactBean mySelfBean = new ContactBean();
 
-        mySelfBean.setFriend_id(Integer.parseInt(getMyAccountId()));
+        mySelfBean.setFriend_id(getMyAccountId());
         mySelfBean.setNickname(getUserName());
         mySelfBean.setAvatar(getUserAvatar());
         for (int i = 0; i < list.size(); i++) {
@@ -497,8 +497,8 @@ public class UserUtils {
     /**
      * 传入 好友集合 返回好友的id集合
      */
-    public static TreeSet<Integer> getUserFriendsIdList(Collection<ContactBean> friends) {
-        TreeSet<Integer> list = new TreeSet<>();
+    public static TreeSet<String> getUserFriendsIdList(Collection<ContactBean> friends) {
+        TreeSet<String> list = new TreeSet<>();
         for (ContactBean contactBean : friends) {
             list.add(contactBean.getFriend_id());
         }
@@ -542,7 +542,7 @@ public class UserUtils {
     /**
      * 获取本地缓存的【我的群组】集
      */
-    public static JSONArray getLocalMyGooupList() {
+    public static JSONArray getLocalMyGroupList() {
         return SPTools.getJsonArray(UserUtils.getMyAccountId() + "_my_group_list", null);
     }
 

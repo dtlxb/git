@@ -244,7 +244,7 @@ public class Face2FaceActivity extends BaseActivity {
                     //添加成员,自己，和拉取到的成员
 
                     final GroupMemberInfo contactMe = new GroupMemberInfo();
-                    contactMe.setAccount_id(Integer.parseInt(UserUtils.getMyAccountId()));
+                    contactMe.setAccount_id(UserUtils.getMyAccountId());
                     contactMe.setAvatar(UserUtils.getUserAvatar());
                     contactMe.setNickname(UserUtils.getNickname());
 
