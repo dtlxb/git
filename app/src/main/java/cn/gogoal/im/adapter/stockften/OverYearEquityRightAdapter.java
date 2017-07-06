@@ -54,17 +54,66 @@ public class OverYearEquityRightAdapter extends MyBaseAdapter {
             holder.linearEquity.setBackgroundColor(ContextCompat.getColor(context, R.color.bg_color_2));
         }
 
-        holder.textReport1.setText(contList.get(position).getString(0) != null ?
-                contList.get(position).getString(0) : "--");
-        holder.textReport2.setText(contList.get(position).getString(1) != null ?
-                contList.get(position).getString(1) : "--");
-        holder.textReport3.setText(contList.get(position).getString(2) != null ?
-                contList.get(position).getString(2) : "--");
-        holder.textReport4.setText(contList.get(position).getString(3) != null ?
-                contList.get(position).getString(3) : "--");
-        holder.textReport5.setText(contList.get(position).getString(4) != null ?
-                contList.get(position).getString(4) : "--");
+        if (contList.get(position).size() == 0) {
+            holder.textReport1.setVisibility(View.VISIBLE);
 
+            holder.textReport1.setText("--");
+        } else if (contList.get(position).size() == 1) {
+            holder.textReport1.setVisibility(View.VISIBLE);
+
+            holder.textReport1.setText(contList.get(position).getString(0) != null ?
+                    contList.get(position).getString(0) : "--");
+        } else if (contList.get(position).size() == 2) {
+            holder.textReport1.setVisibility(View.VISIBLE);
+            holder.textReport2.setVisibility(View.VISIBLE);
+
+            holder.textReport1.setText(contList.get(position).getString(0) != null ?
+                    contList.get(position).getString(0) : "--");
+            holder.textReport2.setText(contList.get(position).getString(1) != null ?
+                    contList.get(position).getString(1) : "--");
+        } else if (contList.get(position).size() == 3) {
+            holder.textReport1.setVisibility(View.VISIBLE);
+            holder.textReport2.setVisibility(View.VISIBLE);
+            holder.textReport3.setVisibility(View.VISIBLE);
+
+            holder.textReport1.setText(contList.get(position).getString(0) != null ?
+                    contList.get(position).getString(0) : "--");
+            holder.textReport2.setText(contList.get(position).getString(1) != null ?
+                    contList.get(position).getString(1) : "--");
+            holder.textReport3.setText(contList.get(position).getString(2) != null ?
+                    contList.get(position).getString(2) : "--");
+        } else if (contList.get(position).size() == 4) {
+            holder.textReport1.setVisibility(View.VISIBLE);
+            holder.textReport2.setVisibility(View.VISIBLE);
+            holder.textReport3.setVisibility(View.VISIBLE);
+            holder.textReport4.setVisibility(View.VISIBLE);
+
+            holder.textReport1.setText(contList.get(position).getString(0) != null ?
+                    contList.get(position).getString(0) : "--");
+            holder.textReport2.setText(contList.get(position).getString(1) != null ?
+                    contList.get(position).getString(1) : "--");
+            holder.textReport3.setText(contList.get(position).getString(2) != null ?
+                    contList.get(position).getString(2) : "--");
+            holder.textReport4.setText(contList.get(position).getString(3) != null ?
+                    contList.get(position).getString(3) : "--");
+        } else if (contList.get(position).size() == 5) {
+            holder.textReport1.setVisibility(View.VISIBLE);
+            holder.textReport2.setVisibility(View.VISIBLE);
+            holder.textReport3.setVisibility(View.VISIBLE);
+            holder.textReport4.setVisibility(View.VISIBLE);
+            holder.textReport5.setVisibility(View.VISIBLE);
+
+            holder.textReport1.setText(contList.get(position).getString(0) != null ?
+                    contList.get(position).getString(0) : "--");
+            holder.textReport2.setText(contList.get(position).getString(1) != null ?
+                    contList.get(position).getString(1) : "--");
+            holder.textReport3.setText(contList.get(position).getString(2) != null ?
+                    contList.get(position).getString(2) : "--");
+            holder.textReport4.setText(contList.get(position).getString(3) != null ?
+                    contList.get(position).getString(3) : "--");
+            holder.textReport5.setText(contList.get(position).getString(4) != null ?
+                    contList.get(position).getString(4) : "--");
+        }
 
         return convertView;
     }
