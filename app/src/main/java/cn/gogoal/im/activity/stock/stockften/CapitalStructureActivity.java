@@ -1,10 +1,12 @@
 package cn.gogoal.im.activity.stock.stockften;
 
 import android.content.Context;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +38,9 @@ import cn.gogoal.im.ui.view.MySyncHorizontalScrollView;
  * Desc: 股本结构
  */
 public class CapitalStructureActivity extends BaseActivity {
+
+    @BindView(R.id.scrollCapital)
+    NestedScrollView scrollCapital;
 
     @BindView(R.id.rv_equity)
     RecyclerView rvEquity;
@@ -85,6 +90,14 @@ public class CapitalStructureActivity extends BaseActivity {
         rvEquity.setHasFixedSize(true);
         rvEquity.setNestedScrollingEnabled(false);
 
+        equityChangeLeft.setFocusable(false);
+        equityChangeRight.setFocusable(false);
+        overYearEquityChangeLeft.setFocusable(false);
+        overYearEquityChangeRight.setFocusable(false);
+        scrollCapital.setFocusable(true);
+        scrollCapital.setFocusableInTouchMode(true);
+        scrollCapital.requestFocus();
+
         getRestrictSale();
 
         getEquityChange();
@@ -96,26 +109,28 @@ public class CapitalStructureActivity extends BaseActivity {
      * 限售解禁
      */
     private void getRestrictSale() {
+        capitalData.add(new ProfileData("限售解禁", "caption"));
+
         final Map<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
 
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONArray("data").getJSONObject(0);
                     ArrayList<ProfileData> saleData = new ArrayList<>();
-                    saleData.add(new ProfileData("限售解禁", null));
                     for (int i = 0; i < FtenUtils.RestrictSale1.length; i++) {
                         saleData.add(new ProfileData(FtenUtils.RestrictSale1[i],
                                 data.getString(FtenUtils.RestrictSale1_1[i])));
                     }
 
                     capitalData.addAll(saleData);
-
-                    getCapitalStructure();
                 }
+
+                getCapitalStructure();
             }
 
             @Override
@@ -130,27 +145,29 @@ public class CapitalStructureActivity extends BaseActivity {
      * 股本结构
      */
     private void getCapitalStructure() {
+        capitalData.add(new ProfileData("股本结构", "caption"));
+
         final Map<String, String> param = new HashMap<>();
         param.put("stock_code", stockCode);
 
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
                     ArrayList<ProfileData> strucData = new ArrayList<>();
-                    strucData.add(new ProfileData("股本结构", null));
                     for (int i = 0; i < FtenUtils.capital1.length; i++) {
                         strucData.add(new ProfileData(FtenUtils.capital1[i],
                                 data.getString(FtenUtils.capital1_1[i])));
                     }
 
                     capitalData.addAll(strucData);
-
-                    capitalAdapter = new CapitalStructureAdapter(CapitalStructureActivity.this, capitalData);
-                    rvEquity.setAdapter(capitalAdapter);
                 }
+
+                capitalAdapter = new CapitalStructureAdapter(CapitalStructureActivity.this, capitalData);
+                rvEquity.setAdapter(capitalAdapter);
             }
 
             @Override

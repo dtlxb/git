@@ -35,7 +35,7 @@ public class CapitalStructureAdapter extends CommonAdapter<ProfileData, BaseView
 
         holder.setText(R.id.textName, data.getName());
 
-        if (position == 0 || position == 6) {
+        if (data.getContent().equals("caption")) {
             holder.setTextColor(R.id.textName, Color.BLACK);
             holder.setText(R.id.textContent, "");
         } else {

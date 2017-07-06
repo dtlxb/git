@@ -2,6 +2,7 @@ package cn.gogoal.im.activity.stock.stockften;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -33,6 +34,9 @@ import cn.gogoal.im.ui.view.BarView;
  * Desc: 财务分析详情
  */
 public class FinancialAnalysisActivity extends BaseActivity {
+
+    @BindView(R.id.scrollAnalysis)
+    ScrollView scrollAnalysis;
 
     @BindView(R.id.textFormName)
     TextView textFormName;
@@ -82,6 +86,12 @@ public class FinancialAnalysisActivity extends BaseActivity {
         } else {
             textFormName.setText(FtenUtils.title2[Integer.parseInt(type) - 1]);
         }
+
+        lsvLeft.setFocusable(false);
+        lsvRight.setFocusable(false);
+        scrollAnalysis.setFocusable(true);
+        scrollAnalysis.setFocusableInTouchMode(true);
+        scrollAnalysis.requestFocus();
 
         setLeftListData();
 
