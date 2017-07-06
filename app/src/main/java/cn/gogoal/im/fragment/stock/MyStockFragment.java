@@ -110,8 +110,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             public void onRefresh() {
                 //刷新自选股，大盘缩略
                 refreshMyStock(AppConst.REFRESH_TYPE_SWIPEREFRESH);
-
+                refreshLayout.setEnabled(false);
                 refreshLayout.setRefreshing(false);
+
             }
         });
 
