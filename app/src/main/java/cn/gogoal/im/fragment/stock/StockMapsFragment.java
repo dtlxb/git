@@ -14,9 +14,6 @@ import android.widget.RelativeLayout;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.github.mikephil.charting.formatter.IFillFormatter;
-import com.google.gson.Gson;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -32,7 +29,6 @@ import cn.gogoal.im.activity.copy.StockDetailChartsActivity;
 import cn.gogoal.im.adapter.TreatAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.base.MyApp;
-import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.JsonUtils;
@@ -108,8 +104,13 @@ public class StockMapsFragment extends BaseFragment {
     private String volume;
     private String updateTime;
 
-    public static StockMapsFragment newInstance(int stock_charge_type, String stockName, String stockCode,
-                                                String closePrice, String price, String volume, String updateTime) {
+    public static StockMapsFragment newInstance(int stock_charge_type,
+                                                String stockName,
+                                                String stockCode,
+                                                String closePrice,
+                                                String price,
+                                                String volume,
+                                                String updateTime) {
         StockMapsFragment fragment = new StockMapsFragment();
         Bundle bundle = new Bundle();
         bundle.putString("stock_name", stockName);
@@ -485,20 +486,14 @@ public class StockMapsFragment extends BaseFragment {
         protected Bitmap doInBackground(String... params) {
             Bitmap bitmap;
             item_index = params[0];
-            long time;
             switch (item_index) {
                 case "0":
-                    time = System.currentTimeMillis();
                     dealMapAction(13 * width / 20, item_index);
-                    KLog.e(System.currentTimeMillis() - time);
                     break;
                 case "1":
                     if (params.length > 1) {
-                        time = System.currentTimeMillis();
                         //StockMinuteBean bean = JSONObject.parseObject(params[1], StockMinuteBean.class);
                         StockMinuteBean bean = JsonUtils.parseJsonObject(params[1], StockMinuteBean.class);
-                        KLog.e(System.currentTimeMillis() - time);
-                        time = System.currentTimeMillis();
                         fiveDayBitmap = new TimesFivesBitmap(width, height);
                         fiveDayBitmap.setShowDetail(false);
                         fiveDayBitmap.setLongitudeNum(4);
@@ -507,16 +502,13 @@ public class StockMapsFragment extends BaseFragment {
                         fiveDayBitmap.setmAxisTitleSize(AppDevice.dp2px(MyApp.getAppContext(), 10));
 
                         bitmap = fiveDayBitmap.setTimesList(bean, false, stock_charge_type);
-                        KLog.e(System.currentTimeMillis() - time);
                         map.put(item_index, bitmap);
                     }
                     break;
                 case "2":
                     if (params.length > 1) {
                         mOHLCData.clear();
-                        time = System.currentTimeMillis();
                         parseObjects(params[1]);
-                        KLog.e(System.currentTimeMillis() - time);
                         KChartsBitmap kChartsBitmap = new KChartsBitmap(width, height);
                         kChartsBitmap.setShowDetail(false);
                         kChartsBitmap.setLongitudeNum(1);
@@ -525,7 +517,6 @@ public class StockMapsFragment extends BaseFragment {
                         kChartsBitmap.setmSize(AppDevice.dp2px(MyApp.getAppContext(), 1));
 
                         bitmap = kChartsBitmap.setOHLCData(mOHLCData);
-                        KLog.e(System.currentTimeMillis() - time);
                         map.put(item_index, bitmap);
                     }
                     break;

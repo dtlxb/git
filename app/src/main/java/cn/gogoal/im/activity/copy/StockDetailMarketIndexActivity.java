@@ -51,6 +51,7 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.fragment.copy.TimesFragment;
 import cn.gogoal.im.ui.copy.InnerListView;
 import cn.gogoal.im.ui.stockviews.BitmapChartView;
 import cn.gogoal.im.ui.stockviews.KChartsBitmap;
@@ -382,6 +383,7 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), StockDetailChartsActivity.class);
                 intent.putExtra("position", showItem);
+                intent.putExtra("fromtype", TimesFragment.TREAT_FROM_MARKET_INFO);//是指数详情
                 intent.putExtra("stockCode", stockCode);
                 intent.putExtra("stockName", stockName);
                 intent.putExtra("price", info.get(0).getPrice());
@@ -761,8 +763,6 @@ public class StockDetailMarketIndexActivity extends BaseActivity {
         GGOKHTTP.GGHttpInterface httpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-
-                KLog.e(responseInfo);
 
                 StockDetailMarketIndexBean bean = JSONObject.parseObject(responseInfo, StockDetailMarketIndexBean.class);
 

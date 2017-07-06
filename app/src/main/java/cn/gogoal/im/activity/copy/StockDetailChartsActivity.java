@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -203,6 +204,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
         fragmentList = new ArrayList<>();
 
         //将碎片加入碎片集合
+        KLog.e(getIntent().getIntExtra("fromtype", 0));
         timesFragment = new TimesFragment();
         fiveDayFragment = new FiveDayFragment();
 
@@ -291,6 +293,7 @@ public class StockDetailChartsActivity extends BaseActivity implements View.OnCl
             monthKBundle.putInt("stockType", STOCK_COMMON);
         }
         timesBundle.putInt("stock_charge_type", stock_charge_type);
+        timesBundle.putInt("treat_from",getIntent().getIntExtra("fromtype",0));
         fiveDayBundle.putInt("stock_charge_type", stock_charge_type);
         timesBundle.putDouble("closePrice", closePrice);
         putInBundle(timesBundle);

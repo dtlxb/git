@@ -205,7 +205,7 @@ public class SubjectChooseStockFragment extends BaseFragment {
 
             holder.setText(R.id.tv_item_subject_list_rate,
                     StringUtils.parseStringDouble(data.getPrice_change_rate()) == 0 ?
-                            "--" : StockUtils.plusMinus(data.getPrice_change_rate(), false));
+                            "--" : StockUtils.plusMinus(data.getPrice_change_rate(), true));
 
             holder.setText(R.id.tv_item_subject_list_theme_name, data.getTheme_name());
 

@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginStart="15dp"
-        android:text="@string/text_empty"
+        android:text="头像"
         android:textColor="@color/textColor_333333"
         android:textSize="18sp" />
 

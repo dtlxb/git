@@ -79,7 +79,11 @@ public class ShareMessageDialog extends BaseCentDailog {
 
         KLog.e(entity.getEntity().getImage());
 
-        Glide.with(getActivity()).load(new File(entity.getEntity().getImage())).into(ivShare);
+        try {
+            Glide.with(getActivity()).load(new File(entity.getEntity().getImage())).into(ivShare);
+        }catch (Exception e){
+            KLog.e(entity.getEntity().getImage());
+        }
 
         String shareType = entity.getEntity().getShareType();
 
@@ -122,12 +126,12 @@ public class ShareMessageDialog extends BaseCentDailog {
                                     new File(entity.getEntity().getImage()), new ChatGroupHelper.MessageResponse() {
                                         @Override
                                         public void sendSuccess() {
-                                            UIHelper.toast(getActivity(),"分享成功!");
+                                            UIHelper.toast(getActivity(), "分享成功!");
                                         }
 
                                         @Override
                                         public void sendFailed() {
-                                            UIHelper.toast(getActivity(),"分享失败!");
+                                            UIHelper.toast(getActivity(), "分享失败!");
                                         }
                                     });
 

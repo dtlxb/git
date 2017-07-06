@@ -66,7 +66,6 @@ import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.DrawableCenterTextView;
 import cn.gogoal.im.ui.view.PopupMoreMenu;
 import cn.gogoal.im.ui.view.XLayout;
-import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -113,7 +112,6 @@ public class MessageFragment extends BaseFragment {
 
         initTitle();
         initRecycleView(message_recycler, R.drawable.shape_divider_1px);
-        message_recycler.setItemAnimator(new NoAlphaItemAnimator());
         IMMessageBeans = new ArrayList<>();
         listAdapter = new ListAdapter(R.layout.item_fragment_message, IMMessageBeans);
         message_recycler.setAdapter(listAdapter);

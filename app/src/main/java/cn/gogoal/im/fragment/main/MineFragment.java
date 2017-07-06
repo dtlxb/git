@@ -56,7 +56,6 @@ import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.common.ggqrcode.GGQrCode;
 import cn.gogoal.im.ui.Badge.BadgeView;
 import cn.gogoal.im.ui.view.XTitle;
-import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
 /**
  * 我的
@@ -150,7 +149,6 @@ public class MineFragment extends BaseFragment {
 
     private void initools() {
         rvMineTools.setNestedScrollingEnabled(false);
-        rvMineTools.setItemAnimator(new NoAlphaItemAnimator());
         rvMineTools.setLayoutManager(new StaggeredGridLayoutManager(
                 AppDevice.isLowDpi() ? 3 : 4,
                 StaggeredGridLayoutManager.VERTICAL));

@@ -10,7 +10,6 @@ import com.alibaba.fastjson.JSONObject;
 
 import org.simple.eventbus.Subscriber;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
@@ -34,21 +33,26 @@ import hply.com.niugu.stock.StockMinuteBean;
 import hply.com.niugu.stock.StockMinuteData;
 
 public class TimesFragment extends BaseFragment {
+
+    public static final int TREAT_FROM_STOCK_DETAIL = 0;
+
+    public static final int TREAT_FROM_MARKET_INFO = 1;
+
     @BindView(R.id.times_view)
     LandScapeChartView mTimesView;
     private TimesFivesBitmap timesBitmap;
 
-    private int totalHeight;
-
     private String stockCode;
     private List<StockMinuteData> stockMinuteDatas;
     private int stockType;
-    private ArrayList<String> priceVolumeDatas;
     //定时刷新
     private Timer timer;
     private int stock_charge_type;
     private int width;
     private int height;
+
+    @BindView(R.id.layout_treat)
+    View layoutTreat;
 
     //交易五档、明细
     @BindView(R.id.tablayout_treat)
@@ -63,21 +67,20 @@ public class TimesFragment extends BaseFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void doBusiness(Context mContext) {
+
+        layoutTreat.setVisibility(getArguments().getInt("treat_from") ==
+                TREAT_FROM_STOCK_DETAIL ? View.VISIBLE : View.GONE);
+
         stockCode = getActivity().getIntent().getStringExtra("stockCode");
         Bundle bundle = getArguments();
         stockType = bundle.getInt("type");
-        totalHeight = bundle.getInt("totalHeight", 0);
-        priceVolumeDatas = bundle.getStringArrayList("priceVolumeDatas");
 
         stock_charge_type = bundle.getInt("stock_charge_type");
         width = bundle.getInt("width", 0);
         height = bundle.getInt("height", 0);
-    }
 
-    @Override
-    public void doBusiness(Context mContext) {
+        GetMinLineData(true);
 
         TreatAdapter treatAdapter = new TreatAdapter(getChildFragmentManager(), mContext, stockCode, false);
         vpTreat.setAdapter(treatAdapter);
@@ -89,17 +92,6 @@ public class TimesFragment extends BaseFragment {
                 tabAt.setCustomView(treatAdapter.getTabView(i));
             }
         }
-    }
-
-    @Override
-    public void initView(View view) {
-        super.initView(view);
-        if (stockType == StockDetailChartsActivity.STOCK_MARKE_INDEX) {
-
-        } else if (stockType == StockDetailChartsActivity.STOCK_COMMON) {
-            initValue();
-        }
-        GetMinLineData(true);
     }
 
     /*五档、明细切换*/
@@ -124,6 +116,7 @@ public class TimesFragment extends BaseFragment {
             param.put("fullcode", stockCode);
             param.put("avg_line_type", "150");
         }
+
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
@@ -225,27 +218,6 @@ public class TimesFragment extends BaseFragment {
                 timer.cancel();
                 timer = null;
             }
-        }
-    }
-
-    private void initValue() {
-        if (priceVolumeDatas != null && priceVolumeDatas.size() > 0) {
-//            for (int i = 0; i < priceVolumeIds.length; i++) {
-//                if (!priceVolumeDatas.get(i).equals("null") && !priceVolumeDatas.get(i).equals("")) {
-//                    if (i % 2 == 0) {
-//                        priceVolumes[i].setText(priceVolumeDatas.get(i));
-//                        if (StringUtils.getDouble(priceVolumeDatas.get(i)) > closePrice) {
-//                            priceVolumes[i].setTextColor(getResColor(R.color.stock_red));
-//                        } else if (StringUtils.getDouble(priceVolumeDatas.get(i)) == closePrice || StringUtils.getDouble(priceVolumeDatas.get(i)) == 0) {
-//                            priceVolumes[i].setTextColor(getResColor(R.color.gray_light));
-//                        } else {
-//                            priceVolumes[i].setTextColor(getResColor(R.color.stock_green));
-//                        }
-//                    } else {
-//                        priceVolumes[i].setText(Integer.parseInt(priceVolumeDatas.get(i)) / 100 + "");
-//                    }
-//                }
-//            }
         }
     }
 

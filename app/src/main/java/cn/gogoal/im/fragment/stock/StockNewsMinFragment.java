@@ -202,11 +202,14 @@ public class StockNewsMinFragment extends BaseFragment {
                     }
 
                     newsAdapter.notifyDataSetChanged();
-                    xLayout.setStatus(XLayout.Success);
+                    if (xLayout != null)
+                        xLayout.setStatus(XLayout.Success);
                 } else if (code == 1001) {
-                    xLayout.setStatus(XLayout.Empty);
+                    if (xLayout != null)
+                        xLayout.setStatus(XLayout.Empty);
                 } else {
-                    xLayout.setStatus(XLayout.Error);
+                    if (xLayout != null)
+                        xLayout.setStatus(XLayout.Error);
                 }
             }
 

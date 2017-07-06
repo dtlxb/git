@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.JsonObject;
-import com.socks.library.KLog;
 
 import org.simple.eventbus.Subscriber;
 
@@ -208,7 +207,6 @@ public class SevenBy24Fragment extends BaseFragment {
                             .get(0).getAsJsonObject();
                     long count = JsonUtils.getLongValue(data, "count");
 
-                    KLog.e(count);
                     long oldCount = SPTools.getLong("new_message_count", 0);
                     if (oldCount > 0 && count > oldCount) {
                         tvNewMessageCount.setVisibility(View.VISIBLE);

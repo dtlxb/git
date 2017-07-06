@@ -15,10 +15,12 @@
         android:layout_weight="4" />
 
     <LinearLayout
+        android:id="@+id/layout_treat"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
         android:layout_marginRight="5dp"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <android.support.design.widget.TabLayout

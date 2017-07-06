@@ -57,7 +57,6 @@ import cn.gogoal.im.ui.index.SuspendedDecoration;
 import cn.gogoal.im.ui.view.HintCenterEditText;
 import cn.gogoal.im.ui.view.SelectorButton;
 import cn.gogoal.im.ui.view.XTitle;
-import cn.gogoal.im.ui.widget.NoAlphaItemAnimator;
 
 
 /**
@@ -119,9 +118,6 @@ public class ChooseContactActivity extends BaseActivity {
     @Override
     public void doBusiness(final Context mContext) {
         title = setMyTitle(R.string.title_group_chat, true);
-
-        rvContacts.setItemAnimator(new NoAlphaItemAnimator());
-        rvSelectedContacts.setItemAnimator(new NoAlphaItemAnimator());
 
         /*
          * 选择好友类型：
