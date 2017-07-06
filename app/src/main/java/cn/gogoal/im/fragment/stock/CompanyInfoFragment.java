@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.socks.library.KLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -214,7 +213,7 @@ public class CompanyInfoFragment extends BaseFragment {
                     JSONArray senior_info_list = data.getJSONArray("senior_info_list");
 
                     ArrayList<CompanyInforData> executivesList = new ArrayList<>();
-                    for (int i = 0; i < 3; i++) {
+                    for (int i = 0; i < (senior_info_list.size() >= 3 ? 3 : senior_info_list.size()); i++) {
                         executivesList.add(new CompanyInforData("高管",
                                 senior_info_list.getJSONObject(i).getString("duty"),
                                 senior_info_list.getJSONObject(i).getString("name"), null));
@@ -249,7 +248,7 @@ public class CompanyInfoFragment extends BaseFragment {
 
                     ArrayList<CompanyInforData> revenueList = new ArrayList<>();
                     revenueList.add(new CompanyInforData("主营收入", "主营收入构成", "收入(万元)", "占比"));
-                    for (int i = 0; i < 3; i++) {
+                    for (int i = 0; i < main_business_income.size(); i++) {
                         revenueList.add(new CompanyInforData(null,
                                 main_business_income.getJSONObject(i).getString("name"),
                                 main_business_income.getJSONObject(i).getString("product_value"),
@@ -279,7 +278,6 @@ public class CompanyInfoFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     JSONObject data = object.getJSONObject("data");
@@ -311,7 +309,6 @@ public class CompanyInfoFragment extends BaseFragment {
         final GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                KLog.e(responseInfo);
                 JSONObject object = JSONObject.parseObject(responseInfo);
                 if (object.getIntValue("code") == 0) {
                     finacialData = object.getJSONObject("data");
