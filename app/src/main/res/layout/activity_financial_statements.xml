@@ -17,7 +17,7 @@
             android:layout_height="match_parent"
             android:drawableStart="@mipmap/image_title_back_0"
             android:gravity="center_vertical"
-            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
             android:text="@string/str_title_back"
             android:textColor="@android:color/black"
             android:textSize="17sp" />
@@ -37,8 +37,8 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:button="@null"
-            android:paddingEnd="15dp"
-            android:paddingStart="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:text="同比"
             android:textColor="@drawable/analysis_radio_button"
             android:textSize="15dp"
@@ -59,7 +59,7 @@
             <!--左边的ListView-->
             <cn.gogoal.im.ui.copy.InnerListView
                 android:id="@+id/lsv_left"
-                android:layout_width="150dp"
+                android:layout_width="155dp"
                 android:layout_height="match_parent"
                 android:divider="@null"
                 android:scrollbars="none" />
@@ -87,7 +87,7 @@
         android:id="@+id/radioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/radio_group"
         android:orientation="horizontal">
 
         <RadioButton

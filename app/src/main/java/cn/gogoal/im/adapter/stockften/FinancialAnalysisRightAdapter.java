@@ -89,7 +89,7 @@ public class FinancialAnalysisRightAdapter extends MyBaseAdapter {
         }
 
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                screenWidth - AppDevice.dp2px(context, 150), LinearLayout.LayoutParams.MATCH_PARENT);
+                screenWidth - AppDevice.dp2px(context, 155), LinearLayout.LayoutParams.MATCH_PARENT);
         holder.relaReport1.setLayoutParams(param);
         holder.relaReport2.setLayoutParams(param);
         holder.relaReport3.setLayoutParams(param);
