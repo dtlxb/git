@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearAnalysis"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:id="@+id/relaReport1"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="7.5dp"
+        android:paddingRight="15dp"
+        android:paddingTop="7.5dp">
+
+        <TextView
+            android:id="@+id/textReport1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/imgReport1"
+            android:gravity="right|center_vertical"
+            android:text="@string/default_char"
+            android:textColor="@color/textColor_333333"
+            android:textSize="14dp" />
+
+        <ImageView
+            android:id="@+id/imgReport1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:src="@mipmap/more_red"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relaReport2"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="7.5dp"
+        android:paddingRight="15dp"
+        android:paddingTop="7.5dp">
+
+        <TextView
+            android:id="@+id/textReport2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/imgReport2"
+            android:gravity="right|center_vertical"
+            android:text="@string/default_char"
+            android:textColor="@color/textColor_333333"
+            android:textSize="14dp" />
+
+        <ImageView
+            android:id="@+id/imgReport2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:src="@mipmap/more_red"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relaReport3"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="7.5dp"
+        android:paddingRight="15dp"
+        android:paddingTop="7.5dp">
+
+        <TextView
+            android:id="@+id/textReport3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/imgReport3"
+            android:gravity="right|center_vertical"
+            android:text="@string/default_char"
+            android:textColor="@color/textColor_333333"
+            android:textSize="14dp" />
+
+        <ImageView
+            android:id="@+id/imgReport3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:src="@mipmap/more_red"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relaReport4"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="7.5dp"
+        android:paddingRight="15dp"
+        android:paddingTop="7.5dp">
+
+        <TextView
+            android:id="@+id/textReport4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/imgReport4"
+            android:gravity="right|center_vertical"
+            android:text="@string/default_char"
+            android:textColor="@color/textColor_333333"
+            android:textSize="14dp" />
+
+        <ImageView
+            android:id="@+id/imgReport4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:src="@mipmap/more_red"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relaReport5"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="7.5dp"
+        android:paddingRight="15dp"
+        android:paddingTop="7.5dp">
+
+        <TextView
+            android:id="@+id/textReport5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/imgReport5"
+            android:gravity="right|center_vertical"
+            android:text="@string/default_char"
+            android:textColor="@color/textColor_333333"
+            android:textSize="14dp" />
+
+        <ImageView
+            android:id="@+id/imgReport5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:src="@mipmap/more_red"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+</LinearLayout>

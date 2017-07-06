@@ -122,7 +122,7 @@ public class StockFinanceAdapter extends CommonAdapter<FinanceData, BaseViewHold
         Intent intent = new Intent(context, FinancialStatementsActivity.class);
         intent.putExtra("stockCode", stockCode);
         intent.putExtra("stockName", stockName);
-        intent.putExtra("stype", stype);
+        intent.putExtra("stock_finance_type", stype);
         intent.putExtra("genre", genre);
         context.startActivity(intent);
     }

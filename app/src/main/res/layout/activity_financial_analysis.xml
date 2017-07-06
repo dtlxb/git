@@ -94,7 +94,7 @@
                 <!--左边的ListView-->
                 <cn.gogoal.im.ui.copy.InnerListView
                     android:id="@+id/lsv_left"
-                    android:layout_width="150dp"
+                    android:layout_width="155dp"
                     android:layout_height="match_parent"
                     android:divider="@null"
                     android:scrollbars="none" />
@@ -124,7 +124,7 @@
         android:id="@+id/radioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/radio_group"
         android:orientation="horizontal">
 
         <RadioButton

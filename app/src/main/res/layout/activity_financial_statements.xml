@@ -2,10 +2,49 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <include layout="@layout/include_title" />
+    <RelativeLayout
+        android:id="@+id/title_financial"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/titlebar_size">
+
+        <TextView
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableStart="@mipmap/image_title_back_0"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="@string/str_title_back"
+            android:textColor="@android:color/black"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/textTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/text_empty"
+            android:textColor="@color/textColor_333333"
+            android:textSize="@dimen/title_text_size" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/checkFrom"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:button="@null"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="同比"
+            android:textColor="@drawable/analysis_radio_button"
+            android:textSize="15dp"
+            android:visibility="gone" />
+
+    </RelativeLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -20,7 +59,7 @@
             <!--左边的ListView-->
             <cn.gogoal.im.ui.copy.InnerListView
                 android:id="@+id/lsv_left"
-                android:layout_width="150dp"
+                android:layout_width="155dp"
                 android:layout_height="match_parent"
                 android:divider="@null"
                 android:scrollbars="none" />
@@ -48,7 +87,7 @@
         android:id="@+id/radioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/radio_group"
         android:orientation="horizontal">
 
         <RadioButton

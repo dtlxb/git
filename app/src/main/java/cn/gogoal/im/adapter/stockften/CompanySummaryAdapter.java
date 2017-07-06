@@ -57,7 +57,7 @@ public class CompanySummaryAdapter extends CommonAdapter<CompanyInforData, BaseV
             holder.setText(R.id.textName2, listData.get(position).getCompanyName());
             ExpandableLayout expandableLayout = holder.getView(R.id.textContent2);
             expandableLayout.setText(listData.get(position).getCompanyContent(), position);
-        } else if (position == 10 || position == 11 || position == 12 || position == 13) {
+        } else if (position >= 10) {
             holder.setVisible(R.id.linearProfile3, true);
             holder.setText(R.id.textName3, listData.get(position).getCompanyName());
             if (position == 10) {
