@@ -2,7 +2,6 @@ package cn.gogoal.im.fragment.infomation;
 
 import android.content.Context;
 import android.os.Handler;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -22,7 +21,6 @@ import butterknife.OnClick;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.infomation.Sevenby24;
 import cn.gogoal.im.common.AppConst;
@@ -34,6 +32,9 @@ import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.ExpandableLayout;
 import cn.gogoal.im.ui.view.XLayout;
+import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 /**
  * author wangjd on 2017/6/19 0019.
@@ -49,7 +50,7 @@ public class SevenBy24Fragment extends BaseFragment {
     RecyclerView recyclerView;
 
     @BindView(R.id.swiperefreshlayout)
-    SwipeRefreshLayout refreshlayout;
+    RefreshLayout refreshlayout;
 
     @BindView(R.id.xLayout)
     XLayout xLayout;
@@ -87,7 +88,6 @@ public class SevenBy24Fragment extends BaseFragment {
 
     @Override
     public void doBusiness(Context mContext) {
-        BaseActivity.iniRefresh(refreshlayout);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         dataList = new ArrayList<>();
         adapter = new Sevenby24Adapter(dataList);
@@ -95,13 +95,14 @@ public class SevenBy24Fragment extends BaseFragment {
 
         get7by24Datas(AppConst.REFRESH_TYPE_FIRST);
 
-        refreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshlayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
-            public void onRefresh() {
+            public void onRefreshBegin(PtrFrameLayout frame) {
                 defaultPage = 1;
                 get7by24Datas(AppConst.REFRESH_TYPE_SWIPEREFRESH);
             }
         });
+
         adapter.setOnLoadMoreListener(new CommonAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
@@ -181,7 +182,7 @@ public class SevenBy24Fragment extends BaseFragment {
                 new android.os.Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        refreshlayout.setRefreshing(false);
+                        refreshlayout.refreshComplete();
                     }
                 },800);
 
@@ -189,7 +190,8 @@ public class SevenBy24Fragment extends BaseFragment {
 
             @Override
             public void onFailure(String msg) {
-                refreshlayout.setRefreshing(false);
+                if (refreshlayout!=null)
+                refreshlayout.refreshComplete();
                 UIHelper.toastError(getContext(), msg, xLayout);
             }
         }).startGet();
@@ -233,7 +235,6 @@ public class SevenBy24Fragment extends BaseFragment {
     @OnClick(R.id.tv_new_message)
     void click(View view) {
         recyclerView.smoothScrollToPosition(0);
-        refreshlayout.setRefreshing(true);
         defaultPage = 1;
         get7by24Datas(AppConst.REFRESH_TYPE_SWIPEREFRESH);
         tvNewMessageCount.setVisibility(View.GONE);

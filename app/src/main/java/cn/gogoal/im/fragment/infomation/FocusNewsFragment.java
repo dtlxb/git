@@ -2,7 +2,6 @@ package cn.gogoal.im.fragment.infomation;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -30,6 +29,9 @@ import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.DashlineItemDivider;
 import cn.gogoal.im.ui.view.XLayout;
+import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 import static cn.gogoal.im.fragment.infomation.InfomationTabFragment.INFOMATION_TYPE_GET_ASK_NEWS;
 
@@ -45,7 +47,7 @@ public class FocusNewsFragment extends BaseFragment {
     XLayout xLayout;
 
     @BindView(R.id.swipeRefreshLayout)
-    SwipeRefreshLayout refreshLayout;
+    RefreshLayout refreshLayout;
 
     @BindView(R.id.rv_focus_news)
     RecyclerView rvNews;
@@ -77,9 +79,9 @@ public class FocusNewsFragment extends BaseFragment {
 
         getNewsData(AppConst.REFRESH_TYPE_FIRST);
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshLayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
-            public void onRefresh() {
+            public void onRefreshBegin(PtrFrameLayout frame) {
                 defaultPage = 1;
                 dateString = null;
                 getNewsData(AppConst.REFRESH_TYPE_SWIPEREFRESH);
@@ -170,7 +172,7 @@ public class FocusNewsFragment extends BaseFragment {
                         xLayout.setStatus(XLayout.Error);
                 }
                 if (refreshLayout!=null)
-                refreshLayout.setRefreshing(false);
+                refreshLayout.refreshComplete();
             }
 
             @Override

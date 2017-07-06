@@ -154,4 +154,6 @@
 
     <color name="radio_group">#f4f4f4</color>
 
+    <color name="refesh_main_bg">@color/radio_group</color>
+
 </resources>

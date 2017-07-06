@@ -2,7 +2,6 @@ package cn.gogoal.im.fragment.stock.news_report;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,7 +16,6 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.StockNewsType;
 import cn.gogoal.im.common.AppConst;
@@ -31,6 +29,9 @@ import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.stock.news_report.bean.MyStockNoticeBean;
 import cn.gogoal.im.ui.DashlineItemDivider;
 import cn.gogoal.im.ui.view.XLayout;
+import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 /**
  * author wangjd on 2017/6/27 0027.
@@ -44,7 +45,7 @@ public class MyStockNoticesFragment extends BaseFragment {
     RecyclerView rvNotices;
 
     @BindView(R.id.swiperefreshlayout)
-    SwipeRefreshLayout swiperefreshlayout;
+    RefreshLayout swiperefreshlayout;
 
     @BindView(R.id.xLayout)
     XLayout xLayout;
@@ -77,18 +78,17 @@ public class MyStockNoticesFragment extends BaseFragment {
         noticeAdapter = new MyStockNoticeAdapter(noticeDatas);
         rvNotices.addItemDecoration(new DashlineItemDivider());
         rvNotices.setLayoutManager(new LinearLayoutManager(mContext));
-        BaseActivity.iniRefresh(swiperefreshlayout);
         rvNotices.setAdapter(noticeAdapter);
         xLayout.setEmptyText("暂无公告数据\n请添加自选股后重试!");
 
         getStockNews(AppConst.REFRESH_TYPE_FIRST);
 
-        swiperefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swiperefreshlayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
-            public void onRefresh() {
+            public void onRefreshBegin(PtrFrameLayout frame) {
                 defaultPage = 1;
                 getStockNews(AppConst.REFRESH_TYPE_SWIPEREFRESH);
-                swiperefreshlayout.setRefreshing(false);
+                swiperefreshlayout.refreshComplete();
             }
         });
 

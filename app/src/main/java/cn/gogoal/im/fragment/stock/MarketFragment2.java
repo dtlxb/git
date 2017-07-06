@@ -1,7 +1,7 @@
 package cn.gogoal.im.fragment.stock;
 
 import android.content.Context;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
@@ -26,7 +26,6 @@ import cn.gogoal.im.adapter.market.MarketViewPaerAdapter;
 import cn.gogoal.im.adapter.market.RankListAdapter;
 import cn.gogoal.im.adapter.market.TitleAdapter;
 import cn.gogoal.im.base.AppManager;
-import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.HangqingBean;
 import cn.gogoal.im.bean.stock.Market;
@@ -36,7 +35,9 @@ import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.SPTools;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.XLayout;
-import cn.gogoal.im.ui.widget.VpSwipeRefreshLayout;
+import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 import static cn.gogoal.im.R.id.rv_market;
 import static cn.gogoal.im.common.AppConst.REFRESH_TYPE_PARENT_BUTTON;
@@ -55,7 +56,7 @@ public class MarketFragment2 extends BaseFragment {
     RecyclerView rvMarket;
 
     @BindView(R.id.swiperefreshlayout)
-    VpSwipeRefreshLayout refreshLayout;
+    RefreshLayout refreshLayout;
 
     private DelegateAdapter delegateAdapter;
 
@@ -71,7 +72,6 @@ public class MarketFragment2 extends BaseFragment {
 
     @Override
     public void doBusiness(final Context mContext) {
-        BaseActivity.iniRefresh(refreshLayout);
         final VirtualLayoutManager layoutManager = new VirtualLayoutManager(mContext);
         rvMarket.setLayoutManager(layoutManager);
         layoutManager.setAutoMeasureEnabled(true);
@@ -80,19 +80,18 @@ public class MarketFragment2 extends BaseFragment {
         adapters = new LinkedList<>();
 
         rvMarket.setAdapter(delegateAdapter);
-        rvMarket.setHasFixedSize(true);
         rvMarket.setNestedScrollingEnabled(false);
-        rvMarket.setBackgroundColor(getResColor(R.color.colorDivider_d9d9d9));
+        rvMarket.setBackgroundColor(Color.WHITE);
 
         getMarketInformation(AppConst.REFRESH_TYPE_FIRST);
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshLayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
-            public void onRefresh() {
-                getMarketInformation(REFRESH_TYPE_SWIPEREFRESH);
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                getMarketInformation(AppConst.REFRESH_TYPE_SWIPEREFRESH);
+                refreshLayout.refreshComplete();
             }
         });
-
     }
 
     /**
@@ -124,7 +123,6 @@ public class MarketFragment2 extends BaseFragment {
                     }
                 }
                 AppManager.getInstance().sendMessage("market_stop_animation_refresh");
-                refreshLayout.setRefreshing(false);
             }
 
             @Override
@@ -141,10 +139,6 @@ public class MarketFragment2 extends BaseFragment {
                     });
                 }
                 AppManager.getInstance().sendMessage("market_stop_animation_refresh");
-                if (refreshLayout!=null) {
-                    refreshLayout.setRefreshing(false);
-                }
-
             }
         };
         new GGOKHTTP(param, GGOKHTTP.APP_HQ_INFORMATION, ggHttpInterface).startGet();

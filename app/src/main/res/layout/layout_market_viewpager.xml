@@ -3,6 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="110dp"
     android:orientation="vertical"
-    android:background="#f0f0f0">
+    android:background="@android:color/white">
 
 </cn.gogoal.im.ui.view.AutoScrollViewPager>

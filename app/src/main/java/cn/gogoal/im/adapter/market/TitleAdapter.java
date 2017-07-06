@@ -49,9 +49,15 @@ public class TitleAdapter extends DelegateAdapter.Adapter<MainViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(MainViewHolder holder, int position) {
+    public void onBindViewHolder(final MainViewHolder holder, int position) {
         TextView title = (TextView) holder.itemView.findViewById(R.id.tv_stock_ranklist_title);
         title.setText(rankListTitles[titleType]);
+
+        if (titleType==RANK_LIST_TITLE_BIG_DATA_CHOOSE_STOCK){
+            holder.itemView.setEnabled(false);
+            holder.itemView.setClickable(false);
+            holder.findView(R.id.flag_tv_more).setVisibility(View.INVISIBLE);
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

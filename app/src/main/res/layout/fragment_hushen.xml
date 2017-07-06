@@ -3,9 +3,10 @@
     android:id="@+id/xLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/refesh_main_bg"
     android:orientation="vertical">
 
-    <cn.gogoal.im.ui.widget.VpSwipeRefreshLayout
+    <cn.gogoal.im.ui.widget.refresh.RefreshLayout
         android:id="@+id/swiperefreshlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -15,6 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-    </cn.gogoal.im.ui.widget.VpSwipeRefreshLayout>
+    </cn.gogoal.im.ui.widget.refresh.RefreshLayout>
 
 </cn.gogoal.im.ui.view.XLayout>
