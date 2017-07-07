@@ -9,15 +9,13 @@ package cn.gogoal.im.bean.f10;
 public class FinanceData {
 
     private String title;
-    private String head;
-    private String name;
     private String content;
+    private int financeType;
 
-    public FinanceData(String title, String head, String name, String content) {
+    public FinanceData(String title, String content, int financeType) {
         this.title = title;
-        this.head = head;
-        this.name = name;
         this.content = content;
+        this.financeType = financeType;
     }
 
     public String getTitle() {
@@ -28,27 +26,19 @@ public class FinanceData {
         this.title = title;
     }
 
-    public String getHead() {
-        return head;
-    }
-
-    public void setHead(String head) {
-        this.head = head;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getContent() {
         return content;
     }
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public int getFinanceType() {
+        return financeType;
+    }
+
+    public void setFinanceType(int financeType) {
+        this.financeType = financeType;
     }
 }
