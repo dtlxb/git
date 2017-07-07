@@ -209,7 +209,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
                     noData(false);
 
-//                    myStockDatas.clear();
+                    myStockDatas.clear();
 
                     editEnable(true);
 
@@ -363,9 +363,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     tvMystockPrice.setViewStateNormal();
                     tvMystockRate.setViewStateNormal();
                     if (sortType == -1) {
-                        return compareInt(o2.getTag().getType(),o1.getTag().getType());
+                        return compareLong(o2.getTag().getType(),o1.getTag().getType());
                     } else if (sortType == 1) {
-                        return compareInt(o1.getTag().getType(),o2.getTag().getType());
+                        return compareLong(o1.getTag().getType(),o2.getTag().getType());
                     } else {
                         try {
                             return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()),
@@ -382,7 +382,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
         myStockAdapter.notifyDataSetChanged();
     }
 
-    public static int compareInt(int x, int y) {
+    public static int compareLong(long x, long y) {
         return (x < y) ? -1 : ((x == y) ? 0 : 1);
     }
 
