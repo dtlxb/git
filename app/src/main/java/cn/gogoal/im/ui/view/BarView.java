@@ -113,8 +113,11 @@ public class BarView extends View {
             linePaint.setColor(ContextCompat.getColor(getContext(), R.color.actionsheet_gray));
             float startY = marginTop + barRate * positive_num;
             canvas.drawLine(marginLeft, startY, getWidth() - marginRight, startY, linePaint);
-
-            rectPaint.setStrokeWidth(viewWidth / (beanList.size() * 2));
+            if (beanList.size() < 3) {
+                rectPaint.setStrokeWidth(viewWidth / 10);
+            } else {
+                rectPaint.setStrokeWidth(viewWidth / (beanList.size() * 2));
+            }
             for (int i = 0; i < beanList.size(); i++) {
                 float barHeight;
                 String titleText;
@@ -140,7 +143,7 @@ public class BarView extends View {
                 titlePaint.setColor(ContextCompat.getColor(getContext(), R.color.gray));
                 canvas.drawText(beanList.get(i).getDate(),
                         startX - titlePaint.measureText(beanList.get(i).getDate()) / 2,
-                        beanList.get(i).getBarValue() > 0 ? startY + fontHeight * 3 / 5 + 3 * marginBar : startY - 3 * marginBar, titlePaint);
+                        beanList.get(i).getBarValue() < 0 ? startY - 3 * marginBar : startY + fontHeight * 3 / 5 + 3 * marginBar, titlePaint);
             }
             if (upRate < 1) {
                 upRate += 0.02;
