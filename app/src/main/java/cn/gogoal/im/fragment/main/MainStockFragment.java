@@ -97,11 +97,6 @@ public class MainStockFragment extends BaseFragment {
 
         INTERVAL_TIME = SPTools.getLong("interval_time", 15000);
 
-        ArrayList<MyStockData> datas = (ArrayList<MyStockData>)
-                SPTools.getSPObject(UserUtils.getMyAccountId() + "_my_stock_array");
-
-        KLog.e(datas.size());
-
         myStockFragment = new MyStockFragment();
 //        marketFragment = new MarketFragment();
         huShenFragment = new MarketFragment2();
