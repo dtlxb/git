@@ -24,6 +24,7 @@ import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.NormalIntentUtils;
 import cn.gogoal.im.common.StringUtils;
@@ -216,6 +217,7 @@ public class FocusNewsFragment extends BaseFragment {
                         data.getDate() + "|" + data.getOrigin());
             } else {
                 newsImage.setVisibility(View.VISIBLE);
+                ImageDisplay.loadImage(getContext(),data.getImage(),newsImage);
                 holder.setText(R.id.tv_item_normal_info_info,
                         data.getDate()+" | "+(AppDevice.isLowDpi() ? "\n" : "") + data.getOrigin());
             }

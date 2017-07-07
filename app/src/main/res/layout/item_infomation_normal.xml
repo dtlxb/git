@@ -49,7 +49,6 @@
         android:contentDescription="@null"
         android:scaleType="centerCrop"
         android:visibility="gone"
-        android:layout_marginStart="15dp"
-        android:src="@mipmap/cache_live_list" />
+        android:layout_marginStart="15dp"/>
 
 </RelativeLayout>
