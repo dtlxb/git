@@ -8,7 +8,7 @@ import java.io.Serializable;
  * phone 18930640263
  * description :${annotated}.
  */
-public class MyStockData implements Serializable {
+public class MyStockData implements Serializable,Cloneable {
     /**
      * group_id : 137269
      * date : 2016-10-13 17:50:46
@@ -352,4 +352,13 @@ public class MyStockData implements Serializable {
         this.check = check;
     }
 
+    @Override
+    public MyStockData clone() {
+        try {
+            return (MyStockData) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

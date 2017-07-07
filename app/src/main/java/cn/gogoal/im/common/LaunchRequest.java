@@ -77,9 +77,17 @@ public class LaunchRequest {
                 String stockCodes = getStockCodes(myStockDatas);
                 HashMap<String, String> map = new HashMap<>();
                 map.put("codes", stockCodes);
+                new GGOKHTTP(map, GGOKHTTP.GET_STOCK_TAG, new GGOKHTTP.GGHttpInterface() {
+                    @Override
+                    public void onSuccess(String responseInfo) {
+                        KLog.e(responseInfo);
+                    }
 
+                    @Override
+                    public void onFailure(String msg) {
 
-
+                    }
+                });
                 return result;
 
             } else {
@@ -139,7 +147,7 @@ public class LaunchRequest {
         }
     }
 
-    public static String getStockCodes(@NonNull List<MyStockData> array) {
+    private static String getStockCodes(@NonNull List<MyStockData> array) {
         List<String> codeArrs = new ArrayList<>();
 
         if (array.isEmpty()) {
