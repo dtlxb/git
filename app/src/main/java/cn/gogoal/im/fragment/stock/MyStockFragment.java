@@ -346,7 +346,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     }
                 } else if (view.getId() == R.id.tv_mystock_rate) {
                     tvMystockPrice.setViewStateNormal();
-                    tvMystockRate.setViewStateNormal();
+                    tvMystockRag.setViewStateNormal();
                     if (sortType == -1) {
                         return StringUtils.parseStringDouble(o2.getChange_rate()).compareTo(StringUtils.parseStringDouble(o1.getChange_rate()));
                     } else if (sortType == 1) {
@@ -361,14 +361,15 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     }
                 }else if (view.getId() == R.id.tv_mystock_rag) {
                     tvMystockPrice.setViewStateNormal();
-                    tvMystockRag.setViewStateNormal();
+                    tvMystockRate.setViewStateNormal();
                     if (sortType == -1) {
                         return compareInt(o2.getTag().getType(),o1.getTag().getType());
                     } else if (sortType == 1) {
                         return compareInt(o1.getTag().getType(),o2.getTag().getType());
                     } else {
                         try {
-                            return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()), CalendarUtils.parseString2Long(o1.getInsertdate()));
+                            return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()),
+                                    CalendarUtils.parseString2Long(o1.getInsertdate()));
                         } catch (Exception e) {
                             getMyStockData(AppConst.REFRESH_TYPE_FIRST);
                             return 0;
