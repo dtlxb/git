@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public class SquareUserBean extends DataSupport implements Serializable {
     private String conversationId;
-    private int friend_id;
+    private String friend_id;
 
     public String getConversationId() {
         return conversationId;
@@ -20,18 +20,18 @@ public class SquareUserBean extends DataSupport implements Serializable {
         this.conversationId = conversationId;
     }
 
-    public int getFriend_id() {
+    public String getFriend_id() {
         return friend_id;
     }
 
-    public void setFriend_id(int friend_id) {
+    public void setFriend_id(String friend_id) {
         this.friend_id = friend_id;
     }
 
     public SquareUserBean() {
     }
 
-    public SquareUserBean(String conversationId, int friend_id) {
+    public SquareUserBean(String conversationId, String friend_id) {
         this.conversationId = conversationId;
         this.friend_id = friend_id;
     }
@@ -48,7 +48,7 @@ public class SquareUserBean extends DataSupport implements Serializable {
     public boolean equals(Object obj) {
         try {
             SquareUserBean other = (SquareUserBean) obj;
-            return this.getFriend_id() == other.getFriend_id() &&
+            return this.getFriend_id().equals(other.getFriend_id()) &&
                     this.conversationId.equals(other.getConversationId());
         } catch (ClassCastException e) {
             e.printStackTrace();

@@ -124,11 +124,7 @@ public class QrcodeProcessActivity extends BaseActivity implements EasyPermissio
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                     String result = bundle.getString(CodeUtils.RESULT_STRING);
 
-                    KLog.e(result);
-
                     String codeBody = GGQrCode.getUserQrCodeBody(result);
-
-                    KLog.e(codeBody);
 
                     try {
                         final JSONObject scanBody = JSONObject.parseObject(codeBody);
@@ -139,7 +135,7 @@ public class QrcodeProcessActivity extends BaseActivity implements EasyPermissio
                         if (scanBody.getIntValue("qrType") == 0) {
                             //TODO 跳转个人详情
                             NormalIntentUtils.go2PersionDetail(getActivity(),
-                                    scanBody.getIntValue("account_id"));
+                                    scanBody.getString("account_id"));
                             QrcodeProcessActivity.this.finish();
                         } else {
                             //TODO 跳转群名片

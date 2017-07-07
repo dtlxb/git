@@ -54,10 +54,10 @@ public class UserInfoUtils {
     /**
      * 删除通讯录里某人
      */
-    public static boolean deleteSomeone(int friendId) {
-        List<UserBean> listBean = DataSupport.where("friend_id = ? ", friendId + "").find(UserBean.class);
+    public static boolean deleteSomeone(String friendId) {
+        List<UserBean> listBean = DataSupport.where("friend_id = ? ", friendId).find(UserBean.class);
         if (listBean != null && listBean.size() > 0) {
-            DataSupport.deleteAll(UserBean.class, "friend_id = ? ", friendId + "");
+            DataSupport.deleteAll(UserBean.class, "friend_id = ? ", friendId);
             return true;
         }
         return false;
@@ -66,8 +66,8 @@ public class UserInfoUtils {
     /**
      * 返回通讯录里某人
      */
-    public static UserBean getSomeone(int friendId) {
-        List<UserBean> listBean = DataSupport.where("friend_id = ? ", friendId + "").find(UserBean.class);
+    public static UserBean getSomeone(String friendId) {
+        List<UserBean> listBean = DataSupport.where("friend_id = ? ", friendId).find(UserBean.class);
         if (listBean != null && listBean.size() > 0) {
             return listBean.get(0);
         }
@@ -86,14 +86,14 @@ public class UserInfoUtils {
             for (int i = 0; i < userBeanList.size(); i++) {
                 //先查询有没，然后存储
                 List<UserBean> beanList = DataSupport.where("friend_id = ? ",
-                        userBeanList.get(i).getFriend_id() + "").find(UserBean.class);
+                        userBeanList.get(i).getFriend_id()).find(UserBean.class);
                 if (null == beanList || beanList.size() == 0) {
                     userBeanList.get(i).save();
                 }
 
                 //先查询有没，然后存储
                 List<SquareUserBean> SquareUserBeanList = DataSupport.where("conversationId = ? and friend_id = ?",
-                        conversationId, userBeanList.get(i).getFriend_id() + "").find(SquareUserBean.class);
+                        conversationId, userBeanList.get(i).getFriend_id()).find(SquareUserBean.class);
 
                 if (SquareUserBeanList == null || SquareUserBeanList.size() == 0) {
                     SquareUserBean squareUserBean = new SquareUserBean(conversationId, userBeanList.get(i).getFriend_id());
@@ -115,7 +115,7 @@ public class UserInfoUtils {
         if (null != beanList && beanList.size() > 0) {
             for (int i = 0; i < beanList.size(); i++) {
                 List<UserBean> listBean = DataSupport.where("friend_id = ? ",
-                        beanList.get(i).getFriend_id() + "").find(UserBean.class);
+                        beanList.get(i).getFriend_id()).find(UserBean.class);
                 if (null != listBean && listBean.size() > 0) {
                     userBeanList.add(listBean.get(0));
                 }
@@ -136,11 +136,11 @@ public class UserInfoUtils {
             for (int i = 0; i < beanList.size(); i++) {
 
                 List<UserBean> listBean = DataSupport.where("friend_id = ? and inYourContact = ?",
-                        beanList.get(i).getFriend_id() + "", "0").find(UserBean.class);
+                        beanList.get(i).getFriend_id(), "0").find(UserBean.class);
 
                 if (null != listBean && listBean.size() > 0) {
                     DataSupport.deleteAll(UserBean.class, "friend_id = ? and inYourContact = ?",
-                            beanList.get(i).getFriend_id() + "", "0");
+                            beanList.get(i).getFriend_id(), "0");
                 }
             }
         }
@@ -163,10 +163,10 @@ public class UserInfoUtils {
             for (int i = 0; i < userBeanList.size(); i++) {
                 //删除群列表联系人
                 DataSupport.deleteAll(SquareUserBean.class, "conversationId = ? and friend_id = ?",
-                        conversationId, userBeanList.get(i).getFriend_id() + "");
+                        conversationId, userBeanList.get(i).getFriend_id());
                 //删除联系人
                 DataSupport.deleteAll(UserBean.class, "friend_id = ? and inYourContact = ?",
-                        userBeanList.get(i).getFriend_id() + "", "0");
+                        userBeanList.get(i).getFriend_id(), "0");
             }
         }
     }
@@ -176,11 +176,11 @@ public class UserInfoUtils {
      *
      * @param friendId
      */
-    public static void upDateUserInfo(int friendId, String avatar, String nickname) {
+    public static void upDateUserInfo(String friendId, String avatar, String nickname) {
         ContentValues values = new ContentValues();
         values.put("avatar", avatar);
         values.put("nickname", nickname);
-        DataSupport.update(UserBean.class, values, friendId);
+        DataSupport.updateAll(UserBean.class, values, "friend_id = ?", friendId);
     }
 
 }

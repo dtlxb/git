@@ -113,8 +113,8 @@ public class SquareCardActivity extends BaseActivity {
                     startActivity(intent1);
                 } else if (chatType==1010){
 
-                    List<Integer> addIdList = new ArrayList<>();
-                    addIdList.add(Integer.parseInt(UserUtils.getMyAccountId()));
+                    List<String> addIdList = new ArrayList<>();
+                    addIdList.add(UserUtils.getMyAccountId());
                     //添加群成员
                     ChatGroupHelper.addAnyone(addIdList, conversationId, new ChatGroupHelper.ChatGroupManager() {
                         @Override
@@ -182,7 +182,7 @@ public class SquareCardActivity extends BaseActivity {
         mPersonInfoAdapter.notifyDataSetChanged();
     }
 
-    private ContactBean<String> addNomoralFuns(String name, int friend_id, String avatar, String accountName) {
+    private ContactBean<String> addNomoralFuns(String name, String friend_id, String avatar, String accountName) {
         ContactBean<String> nomoralbean = new ContactBean<>();
         nomoralbean.setNickname(name);
         nomoralbean.setFriend_id(friend_id);

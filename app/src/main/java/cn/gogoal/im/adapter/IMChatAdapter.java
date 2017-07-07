@@ -142,8 +142,8 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 headPicUrl = UserUtils.getUserAvatar();
                 speakerName = UserUtils.getNickname();
             } else {
-                headPicUrl = MessageListUtils.getContactWantedInfo("avatar", Integer.parseInt(avimMessage.getFrom()));
-                speakerName = MessageListUtils.getContactWantedInfo("nickname", Integer.parseInt(avimMessage.getFrom()));
+                headPicUrl = MessageListUtils.getContactWantedInfo("avatar", avimMessage.getFrom());
+                speakerName = MessageListUtils.getContactWantedInfo("nickname", avimMessage.getFrom());
 
                 if (TextUtils.isEmpty(headPicUrl)) {
                     JSONObject contentObject = JSON.parseObject(avimMessage.getContent());
@@ -169,7 +169,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 //                    Intent intent = new Intent(mContext, IMPersonDetailActivity.class);
 //                    intent.putExtra("account_id", Integer.parseInt(avimMessage.getFrom()));
 //                    mContext.startActivity(intent);
-                    NormalIntentUtils.go2PersionDetail(mContext, Integer.parseInt(avimMessage.getFrom()));
+                    NormalIntentUtils.go2PersionDetail(mContext, avimMessage.getFrom());
                 }
             });
             //长按头像AT某人

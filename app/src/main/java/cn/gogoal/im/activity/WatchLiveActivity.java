@@ -260,9 +260,9 @@ public class WatchLiveActivity extends BaseActivity {
      * 加入聊天室
      */
     private void joinSquare(final AVIMConversation conversation) {
-        List<Integer> idList = new ArrayList<>();
+        List<String> idList = new ArrayList<>();
 
-        idList.add(Integer.parseInt(UserUtils.getMyAccountId()));
+        idList.add(UserUtils.getMyAccountId());
         ChatGroupHelper.addAnyone(idList, conversation.getConversationId(), new ChatGroupHelper.ChatGroupManager() {
             @Override
             public void groupActionSuccess(JSONObject object) {
@@ -311,9 +311,9 @@ public class WatchLiveActivity extends BaseActivity {
      * 退出聊天室
      */
     private void quiteSquare(AVIMConversation conversation) {
-        List<Integer> idList = new ArrayList<>();
+        List<String> idList = new ArrayList<>();
 
-        idList.add(Integer.parseInt(UserUtils.getMyAccountId()));
+        idList.add(UserUtils.getMyAccountId());
 
         ChatGroupHelper.deleteAnyone(idList, conversation.getConversationId(), new ChatGroupHelper.ChatGroupManager() {
             @Override

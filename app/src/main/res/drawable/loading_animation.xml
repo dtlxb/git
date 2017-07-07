@@ -4,23 +4,53 @@
 
     <item
         android:drawable="@mipmap/loading_3x_0"
-        android:duration="125" />
+        android:duration="95" />
     <item
         android:drawable="@mipmap/loading_3x_1"
-        android:duration="125" />
+        android:duration="95" />
     <item
         android:drawable="@mipmap/loading_3x_2"
-        android:duration="125" />
+        android:duration="95" />
     <item
         android:drawable="@mipmap/loading_3x_3"
-        android:duration="125" />
+        android:duration="95" />
     <item
         android:drawable="@mipmap/loading_3x_4"
-        android:duration="125" />
+        android:duration="95" />
     <item
         android:drawable="@mipmap/loading_3x_5"
-        android:duration="125" />
+        android:duration="95" />
     <item
         android:drawable="@mipmap/loading_3x_6"
-        android:duration="125" />
+        android:duration="95" />
+    <item
+        android:drawable="@mipmap/loading_3x_7"
+        android:duration="95" />
+    <item
+        android:drawable="@mipmap/loading_3x_8"
+        android:duration="95" />
+    <item
+        android:drawable="@mipmap/loading_3x_9"
+        android:duration="95" />
+    <item
+        android:drawable="@mipmap/loading_3x_10"
+        android:duration="95" />
+    <item
+        android:drawable="@mipmap/loading_3x_11"
+        android:duration="95" />
+    <item
+        android:drawable="@mipmap/loading_3x_12"
+        android:duration="95" />
+    <item
+        android:drawable="@mipmap/loading_3x_13"
+        android:duration="95" />
+    <item
+        android:drawable="@mipmap/loading_3x_14"
+        android:duration="95" />
+    <item
+        android:drawable="@mipmap/loading_3x_15"
+        android:duration="95" />
+    <item
+        android:drawable="@mipmap/loading_3x_16"
+        android:duration="95" />
 </animation-list>

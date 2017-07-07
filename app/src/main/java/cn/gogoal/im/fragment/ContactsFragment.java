@@ -229,10 +229,10 @@ public class ContactsFragment extends BaseFragment {
         return bean;
     }
 
-    private void deleteFriend(int friendID) {
+    private void deleteFriend(String friendID) {
         Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
-        param.put("friend_id", String.valueOf(friendID));
+        param.put("friend_id", friendID);
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {

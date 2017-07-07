@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
@@ -32,6 +32,9 @@ import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.XLayout;
+import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 import static cn.gogoal.im.common.AppConst.REFRESH_TYPE_AUTO;
 import static cn.gogoal.im.common.AppConst.REFRESH_TYPE_SWIPEREFRESH;
@@ -56,7 +59,7 @@ public class RankListDetialActivity extends BaseActivity {
     RecyclerView recyclerView;
 
     @BindView(R.id.swiperefreshlayout)
-    SwipeRefreshLayout swiperefreshlayout;
+    RefreshLayout refreshlayout;
 
     @BindView(R.id.xLayout)
     XLayout xLayout;
@@ -89,9 +92,9 @@ public class RankListDetialActivity extends BaseActivity {
 
     @Override
     public void doBusiness(Context mContext) {
-        initRecycleView(recyclerView, R.drawable.shape_divider_1px);
-        iniRefresh(swiperefreshlayout);
-
+//        initRecycleView(recyclerView, R.drawable.shape_divider_1px);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        
         setMyTitle(getIntent().getStringExtra("MODULE_TITLE"), true);
 
         moduleType = getIntent().getIntExtra("MODULE_TYPE", 0);
@@ -117,9 +120,28 @@ public class RankListDetialActivity extends BaseActivity {
 
         iniHead();//详情头部
 
-        swiperefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//        refreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                refreshType = REFRESH_TYPE_SWIPEREFRESH;
+//                switch (moduleType) {
+//                    case MODULE_TYPE_TITLE_HOT_INDUSTRY:
+//                        getHotIndustryList(null);
+//                        break;
+//                    case MODULE_TYPE_HOT_INDUSTRY:
+//                        getHotIndustryList(getIntent().getStringExtra("INDUSTRY_NAME"));
+//                        break;
+//                    case MODULE_TYPE_TTILE_RANK_LIST:
+//                        listType = getIntent().getIntExtra("RANK_LIST_TYPE", -1);
+//                        getRanKList();
+//                        break;
+//                }
+//                refreshlayout.setRefreshing(false);
+//            }
+//        });
+        refreshlayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
-            public void onRefresh() {
+            public void onRefreshBegin(PtrFrameLayout frame) {
                 refreshType = REFRESH_TYPE_SWIPEREFRESH;
                 switch (moduleType) {
                     case MODULE_TYPE_TITLE_HOT_INDUSTRY:
@@ -133,7 +155,7 @@ public class RankListDetialActivity extends BaseActivity {
                         getRanKList();
                         break;
                 }
-                swiperefreshlayout.setRefreshing(false);
+                refreshlayout.refreshComplete();
             }
         });
 
@@ -191,6 +213,7 @@ public class RankListDetialActivity extends BaseActivity {
 
             @Override
             public void onSuccess(String responseInfo) {
+//                KLog.e(responseInfo);
                 int responseCode = JSONObject.parseObject(responseInfo).getIntValue("code");
 
                 if (responseCode == 0) {

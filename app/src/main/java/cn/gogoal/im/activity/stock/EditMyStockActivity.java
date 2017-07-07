@@ -20,6 +20,7 @@ import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.stock.MyStockData;
 import cn.gogoal.im.common.ArrayUtils;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
@@ -140,14 +141,32 @@ public class EditMyStockActivity extends BaseActivity {
         tvDragDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (MyStockData data : result) {
-                    fullCodeDatas.add(data.getSource() + data.getStock_code());
-                    dragAdapter.removeItem(data);
+                if (isSelectedAll(myStockList)){
+                    HashMap<String,String> params=new HashMap<>();
+                    params.put("clear", "1");
+                    new GGOKHTTP(params, GGOKHTTP.RESET_MYSTOCKS, new GGOKHTTP.GGHttpInterface() {
+                        @Override
+                        public void onSuccess(String responseInfo) {
+                            KLog.e(responseInfo);
+                            if (JsonUtils.getIntValue(responseInfo,"code")==0){
+
+                            }
+                        }
+                        @Override
+                        public void onFailure(String msg) {
+
+                        }
+                    });
+                }else {
+                    for (MyStockData data : result) {
+                        fullCodeDatas.add(data.getSource() + data.getStock_code());
+                        dragAdapter.removeItem(data);
+                    }
+                    result.clear();
+                    notifCountText(0);
+                    StockUtils.deleteMyStock(getActivity(),
+                            ArrayUtils.mosaicListElement(fullCodeDatas), null);
                 }
-                result.clear();
-                notifCountText(0);
-                StockUtils.deleteMyStock(getActivity(),
-                        ArrayUtils.mosaicListElement(fullCodeDatas), null);
             }
         });
 

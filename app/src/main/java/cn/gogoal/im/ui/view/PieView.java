@@ -137,10 +137,12 @@ public class PieView extends View {
                 canvas.drawArc(pieOval, start, sweep * pieRate, true, piePaint);
 
                 float rate;
-                String title;
+                String title = "";
                 if (CIRCLE_PIE == pieType || ANNULAR_PIE == pieType) {
                     rate = 1.1f;
-                    title = StringUtils.getIntegerData(String.valueOf(beanList.get(i).getPieValue() * 100 * pieRate / totalValue)) + "%";
+                    if (totalValue != 0.0f || totalValue != 0) {
+                        title = StringUtils.getIntegerData(String.valueOf(beanList.get(i).getPieValue() * 100 * pieRate / totalValue)) + "%";
+                    }
                 } else {
                     rate = 1.0f;
                     title = beanList.get(i).getTitle();

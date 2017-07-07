@@ -2,7 +2,6 @@ package cn.gogoal.im.fragment.stock.news_report;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,7 +16,6 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.CalendarUtils;
@@ -30,6 +28,9 @@ import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.fragment.stock.news_report.bean.MyStockReportBean;
 import cn.gogoal.im.ui.DashlineItemDivider;
 import cn.gogoal.im.ui.view.XLayout;
+import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 /**
  * author wangjd on 2017/6/27 0027.
@@ -43,7 +44,7 @@ public class MyStockReportFragment extends BaseFragment {
     RecyclerView recyclerView;
 
     @BindView(R.id.swiperefreshlayout)
-    SwipeRefreshLayout swiperefreshlayout;
+    RefreshLayout swiperefreshlayout;
 
     @BindView(R.id.xLayout)
     XLayout xLayout;
@@ -71,8 +72,6 @@ public class MyStockReportFragment extends BaseFragment {
     public void doBusiness(Context mContext) {
         groupId = getArguments().getInt("group_id");
 
-        BaseActivity.iniRefresh(swiperefreshlayout);
-
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(
                         mContext,
@@ -88,12 +87,17 @@ public class MyStockReportFragment extends BaseFragment {
 
         getReportDatas(AppConst.REFRESH_TYPE_FIRST);
 
-        swiperefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swiperefreshlayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
-            public void onRefresh() {
+            public void onRefreshBegin(PtrFrameLayout frame) {
                 defaultPage = 1;
                 getReportDatas(AppConst.REFRESH_TYPE_SWIPEREFRESH);
-                swiperefreshlayout.setRefreshing(false);
+                swiperefreshlayout.refreshComplete();
+            }
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+//                return ((LinearLayoutManager) rvMyStock.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0 ;
+                return !recyclerView.canScrollVertically(-1);
             }
         });
 

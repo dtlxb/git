@@ -19,14 +19,14 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
 
     private ContactType contactType;//item类型
 
-    private int friend_id;
+    private String friend_id;
 
-    private int account_id;
+    private String account_id;
 
-    private int userId;
+    private String userId;
 
-    public int getUserId() {
-        return getFriend_id() == 0 ? getAccount_id() : getFriend_id();
+    public String getUserId() {
+        return TextUtils.isEmpty(getFriend_id()) ? getAccount_id() : getFriend_id();
     }
 
     private String remark;//备注
@@ -83,19 +83,19 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
         this.contactType = contactType;
     }
 
-    public int getAccount_id() {
+    public String getAccount_id() {
         return account_id;
     }
 
-    public void setAccount_id(int account_id) {
+    public void setAccount_id(String account_id) {
         this.account_id = account_id;
     }
 
-    public int getFriend_id() {
+    public String getFriend_id() {
         return friend_id;
     }
 
-    public void setFriend_id(int friend_id) {
+    public void setFriend_id(String friend_id) {
         this.friend_id = friend_id;
     }
 
@@ -143,7 +143,7 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
         this.tag = tag;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -426,8 +426,5 @@ public class ContactBean<T> extends BaseIndexPinyinBean implements Serializable 
         return super.equals(o);
     }
 
-    @Override
-    public int hashCode() {
-        return getFriend_id();
-    }
+
 }

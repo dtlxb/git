@@ -7,7 +7,6 @@ import android.graphics.DashPathEffect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -63,6 +62,9 @@ import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.XLayout;
+import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 import static android.text.Html.fromHtml;
 
@@ -84,7 +86,7 @@ public class SubjectDetailActivity extends BaseActivity {
     ImageView imgDescibe;
 
     @BindView(R.id.swiperefreshlayout)
-    SwipeRefreshLayout refreshLayout;
+    RefreshLayout refreshLayout;
 
     @BindView(R.id.xLayout)
     XLayout xLayout;
@@ -117,8 +119,6 @@ public class SubjectDetailActivity extends BaseActivity {
 
         subjectId = getIntent().getStringExtra("subject_id");
 
-        BaseActivity.iniRefresh(refreshLayout);
-
         subjectContentList = new ArrayList<>();
         subjectContentAdapter = new BigDataDetailAdapter(subjectContentList);
         rvSubjectAboutStocks.setLayoutManager(new LinearLayoutManager(mContext));
@@ -132,11 +132,11 @@ public class SubjectDetailActivity extends BaseActivity {
             getSubjectDetail(AppConst.REFRESH_TYPE_FIRST);
         }
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshLayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
-            public void onRefresh() {
+            public void onRefreshBegin(PtrFrameLayout frame) {
                 getSubjectDetail(AppConst.REFRESH_TYPE_SWIPEREFRESH);
-                refreshLayout.setRefreshing(false);
+                refreshLayout.refreshComplete();
             }
         });
 

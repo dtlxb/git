@@ -222,7 +222,7 @@ public class ContactsActivity extends BaseActivity {
         return bean;
     }
 
-    private void deleteFriend(int friendID) {
+    private void deleteFriend(String friendID) {
         Map<String, String> param = new HashMap<>();
         param.put("token", UserUtils.getToken());
         param.put("friend_id", String.valueOf(friendID));

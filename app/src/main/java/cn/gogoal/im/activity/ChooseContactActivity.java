@@ -104,7 +104,7 @@ public class ChooseContactActivity extends BaseActivity {
 
     private ChooseAdapter contactAdapter;
 
-    private Map<Integer, ContactBean> result = new LinkedHashMap<>();
+    private Map<String, ContactBean> result = new LinkedHashMap<>();
 
     private SelectedAdapter selectedAdapter;
 
@@ -259,15 +259,15 @@ public class ChooseContactActivity extends BaseActivity {
 
         btnActionDown.setClickable(false);
 
-        TreeSet<Integer> userFriendsIdList = UserUtils.getUserFriendsIdList(result.values());
+        TreeSet<String> userFriendsIdList = UserUtils.getUserFriendsIdList(result.values());
 
         switch (actionType) {
             case AppConst.CREATE_SQUARE_ROOM_BUILD:
-                userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getMyAccountId()));
+                userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? "" : UserUtils.getMyAccountId());
                 createChatGroup(userFriendsIdList);
                 break;
             case AppConst.CREATE_SQUARE_ROOM_BY_ONE:
-                userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? -1 : Integer.parseInt(UserUtils.getMyAccountId()));
+                userFriendsIdList.add(UserUtils.checkToken(getActivity()) ? "" : UserUtils.getMyAccountId());
                 userFriendsIdList.add(itContactBean.getFriend_id());
                 createChatGroup(userFriendsIdList);
                 break;
@@ -288,22 +288,22 @@ public class ChooseContactActivity extends BaseActivity {
                 waitDialog.show(getSupportFragmentManager());
 
                 for (ContactBean contactBean : result.values()) {
-                    if (entity.getShareType() .equalsIgnoreCase(GGShareEntity.SHARE_TYPE_IMAGE)) {//分享图片
+                    if (entity.getShareType().equalsIgnoreCase(GGShareEntity.SHARE_TYPE_IMAGE)) {//分享图片
                         ChatGroupHelper.sendImageMessage(
                                 contactBean.getConv_id(),
                                 AppConst.IM_CHAT_TYPE_SINGLE,
                                 new File(entity.getImage()), new ChatGroupHelper.MessageResponse() {
                                     @Override
                                     public void sendSuccess() {
-                                        UIHelper.toast(getActivity(),"分享成功!");
+                                        UIHelper.toast(getActivity(), "分享成功!");
                                     }
 
                                     @Override
                                     public void sendFailed() {
-                                        UIHelper.toast(getActivity(),"分享失败!");
+                                        UIHelper.toast(getActivity(), "分享失败!");
                                     }
                                 });
-                    } else if (entity.getShareType() .equalsIgnoreCase(GGShareEntity.SHARE_TYPE_TEXT)) {//分享图片
+                    } else if (entity.getShareType().equalsIgnoreCase(GGShareEntity.SHARE_TYPE_TEXT)) {//分享图片
                     } else {//卡片
                         shareCardMessage(contactBean);
                     }
@@ -336,7 +336,7 @@ public class ChooseContactActivity extends BaseActivity {
     /**
      * 创建群组
      */
-    public void createChatGroup(final TreeSet<Integer> userIdList) {
+    public void createChatGroup(final TreeSet<String> userIdList) {
 
         if (userIdList.size() < 3) {
             UIHelper.toast(ChooseContactActivity.this, "三个人以上才可以创建群组");
@@ -467,7 +467,7 @@ public class ChooseContactActivity extends BaseActivity {
     private class ChooseAdapter extends CommonAdapter<ContactBean, BaseViewHolder> {
 
         // 存储勾选框状态的map集合
-        private Map<Integer, Boolean> map = new LinkedHashMap<>();
+        private Map<String, Boolean> map = new LinkedHashMap<>();
 
         private List<ContactBean> datas;
 
@@ -539,7 +539,7 @@ public class ChooseContactActivity extends BaseActivity {
 
         }
 
-        private void setSelectItem(int selectItemId, int position) {
+        private void setSelectItem(String selectItemId, int position) {
             //checkbox 及其Item 对当前状态取反
             if (map.get(selectItemId)) {
                 map.put(selectItemId, false);
@@ -625,13 +625,13 @@ public class ChooseContactActivity extends BaseActivity {
         }
     }
 
-    private int valueGetKey(Map<Integer, ContactBean> map, ContactBean contactBean) {
-        for (Map.Entry<Integer, ContactBean> entry : map.entrySet()) {
+    private String valueGetKey(Map<String, ContactBean> map, ContactBean contactBean) {
+        for (Map.Entry<String, ContactBean> entry : map.entrySet()) {
             if (entry.getValue() == contactBean) {
                 return entry.getKey();
             }
         }
-        return -1;
+        return "";
     }
 
     @Override

@@ -58,7 +58,7 @@ public class JsonUtils {
      *
      * @param cls 需要转换的类
      */
-    public static String toJsonString(@NonNull Class cls) {
+    public static <T> String toJsonString(@NonNull T cls) {
         if (gson == null) {
             gson = new Gson();
         }
@@ -139,6 +139,5 @@ public class JsonUtils {
         }
         return mList;
     }
-
 
 }

@@ -252,6 +252,7 @@
         <activity android:name=".activity.stock.stockften.CompanyProfileActivity" />
         <activity android:name=".activity.stock.stockften.ShareholderResearchActivity" />
         <activity android:name=".activity.stock.stockften.CapitalStructureActivity" />
+        <activity android:name=".activity.stock.MyStockEditActivity"/>
     </application>
 
 </manifest>

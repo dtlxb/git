@@ -1,7 +1,6 @@
 package cn.gogoal.im.fragment.stock.bigdata;
 
 import android.content.Context;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -16,7 +15,6 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.EventStcokAdapter;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
-import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.SectionEventStockData;
 import cn.gogoal.im.bean.stock.Stock;
@@ -25,6 +23,9 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.ui.view.XLayout;
+import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 /**
  * author wangjd on 2017/6/27 0027.
@@ -37,7 +38,7 @@ public class EventChooseStockFragment extends BaseFragment {
     RecyclerView rvEventList;
 
     @BindView(R.id.swiperefreshlayout)
-    SwipeRefreshLayout swiperefreshlayout;
+    RefreshLayout swiperefreshlayout;
 
     @BindView(R.id.xLayout)
     XLayout xLayout;
@@ -56,7 +57,6 @@ public class EventChooseStockFragment extends BaseFragment {
         eventListDatas = new ArrayList<>();
         eventAdapter = new EventStcokAdapter(mContext, eventListDatas);
 
-        BaseActivity.iniRefresh(swiperefreshlayout);
         rvEventList.setLayoutManager(new LinearLayoutManager(mContext));
         rvEventList.setAdapter(eventAdapter);
 
@@ -69,12 +69,17 @@ public class EventChooseStockFragment extends BaseFragment {
             }
         });
 
-        swiperefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swiperefreshlayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
-            public void onRefresh() {
+            public void onRefreshBegin(PtrFrameLayout frame) {
                 defaultPage = 1;
                 getEventListData(AppConst.REFRESH_TYPE_SWIPEREFRESH);
-                swiperefreshlayout.setRefreshing(false);
+                swiperefreshlayout.refreshComplete();
+            }
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+//                return ((LinearLayoutManager) rvMyStock.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0 ;
+                return !rvEventList.canScrollVertically(-1);
             }
         });
 

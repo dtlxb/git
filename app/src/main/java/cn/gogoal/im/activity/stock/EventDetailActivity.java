@@ -7,7 +7,6 @@ import android.graphics.DashPathEffect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -59,6 +58,9 @@ import cn.gogoal.im.common.StockUtils;
 import cn.gogoal.im.common.StringUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.XLayout;
+import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 /**
  * author wangjd on 2017/6/28 0028.
@@ -75,7 +77,7 @@ public class EventDetailActivity extends BaseActivity {
     RecyclerView rvAboutStocks;
 
     @BindView(R.id.refreshlayout)
-    SwipeRefreshLayout refreshlayout;
+    RefreshLayout refreshlayout;
 
     @BindView(R.id.xLayout)
     XLayout xLayout;
@@ -111,8 +113,6 @@ public class EventDetailActivity extends BaseActivity {
         setMyTitle(typeTitle, true);
         typeId = getIntent().getIntExtra("event_type_id", -1080);
 
-        BaseActivity.iniRefresh(refreshlayout);
-
         dataDetailLists = new ArrayList<>();
         dataDetailAdapter = new BigDataDetailAdapter(dataDetailLists);
 
@@ -127,11 +127,11 @@ public class EventDetailActivity extends BaseActivity {
             getEventDetailData(AppConst.REFRESH_TYPE_FIRST);
         }
 
-        refreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshlayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
-            public void onRefresh() {
+            public void onRefreshBegin(PtrFrameLayout frame) {
                 getEventDetailData(AppConst.REFRESH_TYPE_SWIPEREFRESH);
-                refreshlayout.setRefreshing(false);
+                refreshlayout.refreshComplete();
             }
         });
 

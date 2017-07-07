@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,7 +37,6 @@ import cn.gogoal.im.activity.stock.MyStockNewsActivity;
 import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.AppManager;
-import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.stock.MyStockBean;
 import cn.gogoal.im.bean.stock.MyStockData;
@@ -58,6 +56,9 @@ import cn.gogoal.im.fragment.main.MainStockFragment;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.view.SortView;
+import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 /**
  * author wangjd on 2017/4/27 0027.
@@ -75,6 +76,10 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     @BindView(R.id.tv_mystock_price)
     SortView tvMystockPrice;
 
+    //按价格排序按钮
+    @BindView(R.id.tv_mystock_rag)
+    SortView tvMystockRag;
+
     //按涨跌幅排序按钮
     @BindView(R.id.tv_mystock_rate)
     SortView tvMystockRate;
@@ -83,7 +88,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     RecyclerView rvMyStock;
 
     @BindView(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout refreshLayout;
+    RefreshLayout refreshLayout;
 
     //自选股集合
     private ArrayList<MyStockData> myStockDatas = new ArrayList<>();
@@ -97,23 +102,26 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     @Override
     public void doBusiness(Context mContext) {
 
-        BaseActivity.iniRefresh(refreshLayout);
-
         initSortTitle();
 
         iniMyStockList();
 
         refreshMyStock(AppConst.REFRESH_TYPE_FIRST);
 
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshLayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
-            public void onRefresh() {
+            public void onRefreshBegin(PtrFrameLayout frame) {
                 //刷新自选股，大盘缩略
                 refreshMyStock(AppConst.REFRESH_TYPE_SWIPEREFRESH);
-                refreshLayout.setEnabled(false);
-                refreshLayout.setRefreshing(false);
-
+                refreshLayout.refreshComplete();
             }
+
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+//                return ((LinearLayoutManager) rvMyStock.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0 ;
+                return !rvMyStock.canScrollVertically(-1);
+            }
+
         });
 
     }
@@ -171,12 +179,16 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
      */
     private void initSortTitle() {
         tvMystockPrice.setDefaultText("最新价");
-        tvMystockRate.setDefaultText("涨跌幅");
         tvMystockPrice.setViewStateNormal();
-        tvMystockRate.setViewStateNormal();
-
         tvMystockPrice.seOntSortListener(this);
+
+        tvMystockRate.setDefaultText("涨跌幅");
+        tvMystockRate.setViewStateNormal();
         tvMystockRate.seOntSortListener(this);
+
+        tvMystockRag.setDefaultText("公司荣誉");
+        tvMystockRag.setViewStateNormal();
+        tvMystockRag.seOntSortListener(this);
 
     }
 
@@ -197,17 +209,18 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
                     noData(false);
 
-                    myStockDatas.clear();
+//                    myStockDatas.clear();
 
                     editEnable(true);
 
-                    final List<MyStockData> parseData = JSONObject.parseObject(responseInfo, MyStockBean.class).getData();
+                    final ArrayList<MyStockData> parseData = JSONObject.parseObject(responseInfo, MyStockBean.class).getData();
 
                     String stockCodes =
                             StockUtils.getStockCodes(JSONObject.parseObject(responseInfo).getJSONArray("data"));
 
                     HashMap<String, String> map = new HashMap<>();
                     map.put("codes", stockCodes);
+
                     new GGOKHTTP(map, GGOKHTTP.GET_STOCK_TAG, new GGOKHTTP.GGHttpInterface() {
                         @Override
                         public void onSuccess(String responseInfo) {
@@ -216,20 +229,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                                     StockTag tag = new StockTag();
                                     JSONObject objectTag = JSONObject.parseObject(responseInfo).getJSONObject("data");
                                     if (data.getStock_code() != null && objectTag.getString(data.getStock_code()) != null) {
-                                        switch (objectTag.getString(data.getStock_code())) {
-                                            case "-1":
-                                                tag.setType(-1);
-                                                break;
-                                            case "0":
-                                                tag.setType(0);
-                                                break;
-                                            case "1":
-                                                tag.setType(1);
-                                                break;
-                                            case "2":
-                                                tag.setType(2);
-                                                break;
-                                        }
+                                        tag.setType(
+                                                StringUtils.parseStringDouble(
+                                                        objectTag.getString(data.getStock_code())).intValue());
                                     } else {
                                         tag.setType(-2);
                                     }
@@ -248,14 +250,8 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                         }
                     }).startGet();
 
-//                    myStockAdapter.notifyDataSetChanged();
-
                     //缓存自选股
                     StockUtils.saveMyStock(JSONObject.parseObject(responseInfo).getJSONArray("data"));
-
-                    if (loadType == AppConst.REFRESH_TYPE_SWIPEREFRESH || loadType == AppConst.REFRESH_TYPE_PARENT_BUTTON) {
-                        UIHelper.toast(getActivity(), "自选" + getString(R.string.str_refresh_ok));
-                    }
 
                 } else if (code == 1001) {
                     myStockDatas.clear();
@@ -335,6 +331,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             public int compare(MyStockData o1, MyStockData o2) {
                 if (view.getId() == R.id.tv_mystock_price) {
                     tvMystockRate.setViewStateNormal();
+                    tvMystockRag.setViewStateNormal();
                     if (sortType == -1) {
                         return Double.compare(o2.getPrice(), o1.getPrice());
                     } else if (sortType == 1) {
@@ -349,6 +346,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     }
                 } else if (view.getId() == R.id.tv_mystock_rate) {
                     tvMystockPrice.setViewStateNormal();
+                    tvMystockRag.setViewStateNormal();
                     if (sortType == -1) {
                         return StringUtils.parseStringDouble(o2.getChange_rate()).compareTo(StringUtils.parseStringDouble(o1.getChange_rate()));
                     } else if (sortType == 1) {
@@ -361,11 +359,31 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                             return 0;
                         }
                     }
+                }else if (view.getId() == R.id.tv_mystock_rag) {
+                    tvMystockPrice.setViewStateNormal();
+                    tvMystockRate.setViewStateNormal();
+                    if (sortType == -1) {
+                        return compareInt(o2.getTag().getType(),o1.getTag().getType());
+                    } else if (sortType == 1) {
+                        return compareInt(o1.getTag().getType(),o2.getTag().getType());
+                    } else {
+                        try {
+                            return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()),
+                                    CalendarUtils.parseString2Long(o1.getInsertdate()));
+                        } catch (Exception e) {
+                            getMyStockData(AppConst.REFRESH_TYPE_FIRST);
+                            return 0;
+                        }
+                    }
                 }
                 return 0;
             }
         });
         myStockAdapter.notifyDataSetChanged();
+    }
+
+    public static int compareInt(int x, int y) {
+        return (x < y) ? -1 : ((x == y) ? 0 : 1);
     }
 
     /**
