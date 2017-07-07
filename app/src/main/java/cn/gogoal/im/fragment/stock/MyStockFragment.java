@@ -113,7 +113,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             public void onRefreshBegin(PtrFrameLayout frame) {
                 //刷新自选股，大盘缩略
                 refreshMyStock(AppConst.REFRESH_TYPE_SWIPEREFRESH);
-                refreshLayout.refreshComplete();
             }
 
             @Override
@@ -224,6 +223,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     new GGOKHTTP(map, GGOKHTTP.GET_STOCK_TAG, new GGOKHTTP.GGHttpInterface() {
                         @Override
                         public void onSuccess(String responseInfo) {
+
                             if (JsonUtils.getIntValue(responseInfo, "code") == 0) {
                                 for (MyStockData data : parseData) {
                                     StockTag tag = new StockTag();
@@ -241,12 +241,14 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                                     }
                                 }
                             }
+                            refreshComplate();
                             myStockAdapter.notifyDataSetChanged();
                         }
 
                         @Override
                         public void onFailure(String msg) {
                             KLog.e(msg);
+                            refreshComplate();
                         }
                     }).startGet();
 
@@ -254,15 +256,16 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     StockUtils.saveMyStock(JSONObject.parseObject(responseInfo).getJSONArray("data"));
 
                 } else if (code == 1001) {
+                    refreshComplate();
                     myStockDatas.clear();
                     StockUtils.clearLocalMyStock();
                     myStockAdapter.notifyDataSetChanged();
                     noData(true);
                 } else {
+                    refreshComplate();
                     UIHelper.toastResponseError(getActivity(), responseInfo);
                     editEnable(false);
                 }
-
                 AppManager.getInstance().sendMessage("market_stop_animation_refresh");
             }
 
@@ -271,9 +274,16 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 AppManager.getInstance().sendMessage("market_stop_animation_refresh");
                 UIHelper.toastError(getActivity(), msg);
                 editEnable(false);
+                refreshComplate();
             }
         };
         new GGOKHTTP(params, GGOKHTTP.GET_MYSTOCKS, ggHttpInterface).startGet();
+    }
+
+    private void refreshComplate(){
+        if (refreshLayout!=null){
+            refreshLayout.refreshComplete();
+        }
     }
 
     /**
@@ -388,6 +398,10 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
     public static int compareLong(long x, long y) {
         return (x < y) ? -1 : ((x == y) ? 0 : 1);
+    }
+
+    private void sortReset(){
+
     }
 
     /**
