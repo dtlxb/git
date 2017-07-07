@@ -359,13 +359,13 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                             return 0;
                         }
                     }
-                }else if (view.getId() == R.id.tv_mystock_rag) {
+                } else if (view.getId() == R.id.tv_mystock_rag) {
                     tvMystockPrice.setViewStateNormal();
                     tvMystockRate.setViewStateNormal();
                     if (sortType == -1) {
-                        return compareInt(o2.getTag().getType(),o1.getTag().getType());
+                        return compareInt(o2.getTag().getType(), o1.getTag().getType());
                     } else if (sortType == 1) {
-                        return compareInt(o1.getTag().getType(),o2.getTag().getType());
+                        return compareInt(o1.getTag().getType(), o2.getTag().getType());
                     } else {
                         try {
                             return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()),

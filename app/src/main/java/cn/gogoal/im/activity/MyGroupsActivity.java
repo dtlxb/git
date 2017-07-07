@@ -11,11 +11,13 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseActivity;
 import cn.gogoal.im.bean.GGShareEntity;
+import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ShareItemInfo;
 import cn.gogoal.im.bean.group.GroupData;
 import cn.gogoal.im.common.AppConst;
@@ -133,7 +136,7 @@ public class MyGroupsActivity extends BaseActivity {
                         dataBeans.clear();
 
                         List<GroupData> data =
-                                JsonUtils.parseJsonArray(jsondata,GroupData.class);
+                                JsonUtils.parseJsonArray(jsondata, GroupData.class);
 
 //                                Arrays.asList(new Gson().fromJson(jsondata, GroupData[].class));
 
@@ -220,8 +223,9 @@ public class MyGroupsActivity extends BaseActivity {
                         intent.putExtras(bundle);
                         startActivity(intent);
                     } else {
-                        ShareItemInfo shareItemInfo = new ShareItemInfo<>(groupAvatar, data.getName(), entity,
-                                MessageListUtils.getIMMessageBeanById(data.getConv_id()));
+                        IMMessageBean imMessageBean = new IMMessageBean(data.getConv_id(), AppConst.IM_CHAT_TYPE_SQUARE, new Date().getTime(), "0",
+                                data.getName(), "", "", "");
+                        ShareItemInfo shareItemInfo = new ShareItemInfo<>(groupAvatar, data.getName(), entity, imMessageBean);
                         ShareMessageDialog.newInstance(shareItemInfo).show(getSupportFragmentManager());
                     }
                 }

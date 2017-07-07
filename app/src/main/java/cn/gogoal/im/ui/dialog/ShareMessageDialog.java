@@ -1,26 +1,39 @@
 package cn.gogoal.im.ui.dialog;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.AVFile;
 import com.bumptech.glide.Glide;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
 
 import java.io.File;
+import java.util.HashMap;
 
 import cn.gogoal.im.R;
+import cn.gogoal.im.base.AppManager;
 import cn.gogoal.im.bean.GGShareEntity;
+import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ShareItemInfo;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AppDevice;
+import cn.gogoal.im.common.CalendarUtils;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
+import cn.gogoal.im.common.IMHelpers.GGImageMessage;
+import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.UIHelper;
+import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.dialog.base.BaseCentDailog;
 
 /**
@@ -81,7 +94,7 @@ public class ShareMessageDialog extends BaseCentDailog {
 
         try {
             Glide.with(getActivity()).load(new File(entity.getEntity().getImage())).into(ivShare);
-        }catch (Exception e){
+        } catch (Exception e) {
             KLog.e(entity.getEntity().getImage());
         }
 
@@ -103,7 +116,10 @@ public class ShareMessageDialog extends BaseCentDailog {
         }
 
         name.setText(entity.getName());
-        tvShareMsgDesc.setText(entity.getEntity().getDesc());
+
+        if (!TextUtils.isEmpty(entity.getEntity().getDesc())) {
+            tvShareMsgDesc.setText(Html.fromHtml(entity.getEntity().getDesc()));
+        }
 
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +143,18 @@ public class ShareMessageDialog extends BaseCentDailog {
                                         @Override
                                         public void sendSuccess() {
                                             UIHelper.toast(getActivity(), "分享成功!");
+                                            //消息缓存消息列表
+                                            if (null != entity.getImMessageBean()) {
+
+                                                IMMessageBean imMessageBean = new IMMessageBean(entity.getImMessageBean().getConversationID(),
+                                                        entity.getImMessageBean().getChatType(), System.currentTimeMillis(), "0",
+                                                        entity.getImMessageBean().getNickname(), String.valueOf(entity.getImMessageBean().getFriend_id()),
+                                                        entity.getImMessageBean().getAvatar(), JSON.toJSONString(ChatGroupHelper.getImageMessage(entity.getEntity())));
+
+                                                MessageListUtils.saveMessageInfo(imMessageBean);
+                                                //通知服务器重新获取
+                                                AppManager.getInstance().sendMessage("Cache_change");
+                                            }
                                         }
 
                                         @Override
