@@ -356,7 +356,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     } else {
                         return sortReset();
                     }
-                }else if (view.getId() == R.id.tv_mystock_rag) {
+                } else if (view.getId() == R.id.tv_mystock_rag) {
                     tvMystockPrice.setViewStateNormal();
                     tvMystockRate.setViewStateNormal();
                     if (sortType == -1) {

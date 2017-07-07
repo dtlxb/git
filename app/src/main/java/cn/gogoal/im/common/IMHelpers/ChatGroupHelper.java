@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.socks.library.KLog;
 
@@ -25,6 +26,7 @@ import cn.gogoal.im.bean.ContactBean;
 import cn.gogoal.im.bean.GGShareEntity;
 import cn.gogoal.im.bean.IMMessageBean;
 import cn.gogoal.im.bean.ShareItemInfo;
+import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.AsyncTaskUtil;
 import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.CalendarUtils;
@@ -626,6 +628,30 @@ public class ChatGroupHelper {
         };
         new GGOKHTTP(params, GGOKHTTP.CHAT_SEND_MESSAGE, ggHttpInterface).startGet();
 
+    }
+
+    public static GGImageMessage getImageMessage(GGShareEntity entity) {
+        //图片宽高处理
+        Bitmap bitmap = BitmapFactory.decodeFile(entity.getImage());
+        final int width = bitmap.getWidth();
+        final int height = bitmap.getHeight();
+
+        //封装一个AVFile对象
+        HashMap<String, Object> metaData = new HashMap<>();
+        metaData.put("width", width);
+        metaData.put("height", height);
+
+        HashMap<String, Object> attrsMap = new HashMap<>();
+        attrsMap.put("username", UserUtils.getNickname());
+        attrsMap.put("avatar", UserUtils.getUserAvatar());
+        AVFile imageFile = new AVFile("imageFile", entity.getImage(), metaData);
+        GGImageMessage mImageMessage = new GGImageMessage(imageFile);
+        mImageMessage.setFrom(UserUtils.getMyAccountId());
+        mImageMessage.setAttrs(attrsMap);
+        mImageMessage.setMessageSendStatus(AppConst.MESSAGE_SEND_STATUS_SUCCESS);
+        mImageMessage.setTimestamp(CalendarUtils.getCurrentTime());
+
+        return mImageMessage;
     }
 
 

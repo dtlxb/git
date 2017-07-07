@@ -33,7 +33,7 @@ public class SortView extends AppCompatTextView {
     private String defaultText;
 
     public void setDefaultText(String defaultText) {
-        this.defaultText = defaultText+"  ";
+        this.defaultText = defaultText + "  ";
     }
 
     public void seOntSortListener(MyStockSortInteface sortInteface) {
@@ -97,10 +97,10 @@ public class SortView extends AppCompatTextView {
     }
 
 
-    private SpannableString setSortContent(int drawableId){
+    private SpannableString setSortContent(int drawableId) {
         SpannableString spannableString = new SpannableString(defaultText);
-        CenterImageSpan imageSpan = new CenterImageSpan(getContext(),drawableId);
-        spannableString.setSpan(imageSpan, defaultText.length()-1, defaultText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        CenterImageSpan imageSpan = new CenterImageSpan(getContext(), drawableId);
+        spannableString.setSpan(imageSpan, defaultText.length() - 1, defaultText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         return spannableString;
     }
 }

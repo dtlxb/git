@@ -38,43 +38,43 @@ public class StockFinanceAdapter extends CommonAdapter<FinanceData, BaseViewHold
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, FinanceData data, final int position) {
+    protected void convert(BaseViewHolder holder, final FinanceData data, final int position) {
 
-        if (position == 0 || position == 4 || position == 7 || position == 10) {
+        if (data.getFinanceType() == 1) {
             holder.setVisible(R.id.layoutFinance, true);
             holder.setText(R.id.textTitle, contList.get(position).getTitle());
-            holder.setText(R.id.textHead, contList.get(position).getHead());
+            holder.setText(R.id.textHead, contList.get(position).getContent());
         } else {
-            holder.setVisible(R.id.layoutFinance, false);
-        }
+            holder.setVisible(R.id.layoutFinance1, true);
+            holder.setText(R.id.textName, contList.get(position).getTitle());
 
-        holder.setText(R.id.textName, contList.get(position).getName());
+            if (data.getFinanceType() == 2 || data.getFinanceType() == 3) {
+                holder.setText(R.id.textContent, contList.get(position).getContent() != null
+                        ? contList.get(position).getContent() + "元" : "--");
+            } else if (data.getFinanceType() == 4) {
+                holder.setText(R.id.textContent, contList.get(position).getContent() != null
+                        ? contList.get(position).getContent() + "%" : "--");
+            } else {
+                holder.setText(R.id.textContent, setTextContent(contList.get(position).getContent()));
+            }
 
-        if (position == 0 || position == 1 || position == 2) {
-            holder.setText(R.id.textContent, contList.get(position).getContent() != null
-                    ? contList.get(position).getContent() + "元" : "--");
-        } else if (position == 3) {
-            holder.setText(R.id.textContent, contList.get(position).getContent() != null
-                    ? contList.get(position).getContent() + "%" : "--");
-        } else {
-            holder.setText(R.id.textContent, setTextContent(contList.get(position).getContent()));
-        }
+            if (data.getFinanceType() == 3 || data.getFinanceType() == 6 || data.getFinanceType() == 8
+                    || data.getFinanceType() == 10) {
 
-        if (position == 1 || position == 5 || position == 8 || position == 11) {
-            holder.setVisible(R.id.imgSeeMore, true);
-        } else {
-            holder.getView(R.id.imgSeeMore).setVisibility(View.INVISIBLE);
+                holder.setVisible(R.id.imgSeeMore, true);
+            } else {
+                holder.getView(R.id.imgSeeMore).setVisibility(View.INVISIBLE);
+            }
         }
 
         holder.setOnClickListener(R.id.linearFinance, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                switch (position) {
-                    case 0:
-                    case 1:
+                switch (data.getFinanceType()) {
                     case 2:
                     case 3:
+                    case 4:
                         Intent intent1 = new Intent(context, FinancialAnalysisActivity.class);
                         intent1.putExtra("stockCode", stockCode);
                         intent1.putExtra("stockName", stockName);
@@ -82,19 +82,16 @@ public class StockFinanceAdapter extends CommonAdapter<FinanceData, BaseViewHold
                         intent1.putExtra("type", "1");
                         context.startActivity(intent1);
                         break;
-                    case 4:
                     case 5:
                     case 6:
                         JumpFinancialStatements(FinancialStatementsActivity.GENRE_PROFIT_STATEMENTS);
                         break;
                     case 7:
                     case 8:
-                    case 9:
                         JumpFinancialStatements(FinancialStatementsActivity.GENRE_BALANCE_SHEET);
                         break;
+                    case 9:
                     case 10:
-                    case 11:
-                    case 12:
                         JumpFinancialStatements(FinancialStatementsActivity.GENRE_CASH_FLOW);
                         break;
 
