@@ -26,6 +26,7 @@ public class AppBackServise extends Service {
     public class AppBackBinder extends Binder {
 
         public void ggAutoLogin(final Activity activity) {
+
             if (!UserUtils.isLogin()) return;
             Map<String, String> map = new HashMap<>();
             map.put("token", UserUtils.getToken());
