@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -56,6 +56,7 @@ import cn.gogoal.im.fragment.main.MainStockFragment;
 import cn.gogoal.im.ui.NormalItemDecoration;
 import cn.gogoal.im.ui.dialog.WaitDialog;
 import cn.gogoal.im.ui.view.SortView;
+import cn.gogoal.im.ui.widget.CatchLayoutManager;
 import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -165,8 +166,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     private void iniMyStockList() {
         myStockAdapter = new MyStockAdapter(myStockDatas);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        rvMyStock.setLayoutManager(layoutManager);
+        rvMyStock.setLayoutManager(new CatchLayoutManager(getContext()));
         rvMyStock.addItemDecoration(new NormalItemDecoration(getContext()));
 
         rvMyStock.setItemAnimator(new DefaultItemAnimator());
@@ -212,10 +212,10 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
                     editEnable(true);
 
-                    final ArrayList<MyStockData> parseData = JSONObject.parseObject(responseInfo, MyStockBean.class).getData();
+                    final ArrayList<MyStockData> parseData = JsonUtils.parseJsonObject(responseInfo, MyStockBean.class).getData();
 
                     String stockCodes =
-                            StockUtils.getStockCodes(JSONObject.parseObject(responseInfo).getJSONArray("data"));
+                            StockUtils.getStockCodes(JsonUtils.parseJsonObject(responseInfo).getAsJsonArray("data"));
 
                     HashMap<String, String> map = new HashMap<>();
                     map.put("codes", stockCodes);
@@ -227,11 +227,11 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                             if (JsonUtils.getIntValue(responseInfo, "code") == 0) {
                                 for (MyStockData data : parseData) {
                                     StockTag tag = new StockTag();
-                                    JSONObject objectTag = JSONObject.parseObject(responseInfo).getJSONObject("data");
-                                    if (data.getStock_code() != null && objectTag.getString(data.getStock_code()) != null) {
+                                    JsonObject objectTag = JsonUtils.parseJsonObject(responseInfo).get("data").getAsJsonObject();
+                                    if (data.getStock_code() != null && objectTag.has(data.getStock_code())) {
                                         tag.setType(
                                                 StringUtils.parseStringDouble(
-                                                        objectTag.getString(data.getStock_code())).intValue());
+                                                        objectTag.get(data.getStock_code()).getAsString()).intValue());
                                     } else {
                                         tag.setType(-2);
                                     }
@@ -389,9 +389,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 return 0;
             }
         });
-        for (MyStockData data:myStockDatas){
-            KLog.e("name="+data.getStock_name()+"；type="+data.getTag().getType()+"；inserttime="+data.getInsertdate());
-        }
 
         myStockAdapter.notifyDataSetChanged();
     }

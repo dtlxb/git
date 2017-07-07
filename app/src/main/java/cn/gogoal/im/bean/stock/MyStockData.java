@@ -31,7 +31,7 @@ public class MyStockData implements Parcelable {
     private int id;
     private String pe_y2;
     private String pe_y1;
-    private int turnover;
+    private String turnover;
     private String pe_y0;
     private int is_keypoint;
     private double close_price;
@@ -43,9 +43,9 @@ public class MyStockData implements Parcelable {
     private String high_price;
     private String insertdate;
     private String source;
-    private int low_price;
+    private String low_price;
     private String turnover_rate;
-    private long volume;
+    private String volume;
     private String full_code;
     private StockTag tag; //好公司 标志
 
@@ -63,15 +63,7 @@ public class MyStockData implements Parcelable {
     private int stock_type;
 
     //添加选择的字段
-    private boolean check=false;
-
-    public StockTag getTag() {
-        return tag;
-    }
-
-    public void setTag(StockTag tag) {
-        this.tag = tag;
-    }
+    private boolean check = false;
 
     public String getEps_y2() {
         return eps_y2;
@@ -121,11 +113,11 @@ public class MyStockData implements Parcelable {
         this.pe_y1 = pe_y1;
     }
 
-    public int getTurnover() {
+    public String getTurnover() {
         return turnover;
     }
 
-    public void setTurnover(int turnover) {
+    public void setTurnover(String turnover) {
         this.turnover = turnover;
     }
 
@@ -217,11 +209,11 @@ public class MyStockData implements Parcelable {
         this.source = source;
     }
 
-    public int getLow_price() {
+    public String getLow_price() {
         return low_price;
     }
 
-    public void setLow_price(int low_price) {
+    public void setLow_price(String low_price) {
         this.low_price = low_price;
     }
 
@@ -233,11 +225,11 @@ public class MyStockData implements Parcelable {
         this.turnover_rate = turnover_rate;
     }
 
-    public long getVolume() {
+    public String getVolume() {
         return volume;
     }
 
-    public void setVolume(long volume) {
+    public void setVolume(String volume) {
         this.volume = volume;
     }
 
@@ -249,12 +241,12 @@ public class MyStockData implements Parcelable {
         this.full_code = full_code;
     }
 
-    public boolean isCheck() {
-        return check;
+    public StockTag getTag() {
+        return tag;
     }
 
-    public void setCheck(boolean check) {
-        this.check = check;
+    public void setTag(StockTag tag) {
+        this.tag = tag;
     }
 
     public int getGroup_id() {
@@ -353,9 +345,12 @@ public class MyStockData implements Parcelable {
         this.stock_type = stock_type;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof MyStockData) && ((MyStockData) obj).getFull_code().equalsIgnoreCase(this.getFull_code());
+    public boolean isCheck() {
+        return check;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
     }
 
     @Override
@@ -371,7 +366,7 @@ public class MyStockData implements Parcelable {
         dest.writeInt(this.id);
         dest.writeString(this.pe_y2);
         dest.writeString(this.pe_y1);
-        dest.writeInt(this.turnover);
+        dest.writeString(this.turnover);
         dest.writeString(this.pe_y0);
         dest.writeInt(this.is_keypoint);
         dest.writeDouble(this.close_price);
@@ -383,12 +378,11 @@ public class MyStockData implements Parcelable {
         dest.writeString(this.high_price);
         dest.writeString(this.insertdate);
         dest.writeString(this.source);
-        dest.writeInt(this.low_price);
+        dest.writeString(this.low_price);
         dest.writeString(this.turnover_rate);
-        dest.writeLong(this.volume);
+        dest.writeString(this.volume);
         dest.writeString(this.full_code);
         dest.writeParcelable(this.tag, flags);
-        dest.writeByte(this.check ? (byte) 1 : (byte) 0);
         dest.writeInt(this.group_id);
         dest.writeString(this.date);
         dest.writeInt(this.remind_headlines);
@@ -401,6 +395,7 @@ public class MyStockData implements Parcelable {
         dest.writeDouble(this.price);
         dest.writeString(this.change_rate);
         dest.writeInt(this.stock_type);
+        dest.writeByte(this.check ? (byte) 1 : (byte) 0);
     }
 
     public MyStockData() {
@@ -413,7 +408,7 @@ public class MyStockData implements Parcelable {
         this.id = in.readInt();
         this.pe_y2 = in.readString();
         this.pe_y1 = in.readString();
-        this.turnover = in.readInt();
+        this.turnover = in.readString();
         this.pe_y0 = in.readString();
         this.is_keypoint = in.readInt();
         this.close_price = in.readDouble();
@@ -425,12 +420,11 @@ public class MyStockData implements Parcelable {
         this.high_price = in.readString();
         this.insertdate = in.readString();
         this.source = in.readString();
-        this.low_price = in.readInt();
+        this.low_price = in.readString();
         this.turnover_rate = in.readString();
-        this.volume = in.readLong();
+        this.volume = in.readString();
         this.full_code = in.readString();
         this.tag = in.readParcelable(StockTag.class.getClassLoader());
-        this.check = in.readByte() != 0;
         this.group_id = in.readInt();
         this.date = in.readString();
         this.remind_headlines = in.readInt();
@@ -443,6 +437,7 @@ public class MyStockData implements Parcelable {
         this.price = in.readDouble();
         this.change_rate = in.readString();
         this.stock_type = in.readInt();
+        this.check = in.readByte() != 0;
     }
 
     public static final Creator<MyStockData> CREATOR = new Creator<MyStockData>() {
