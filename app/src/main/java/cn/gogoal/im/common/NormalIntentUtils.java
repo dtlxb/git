@@ -95,7 +95,7 @@ public class NormalIntentUtils {
     /**
      * 跳转个人行情
      */
-    public static void go2PersionDetail(Context context, int accountId) {
+    public static void go2PersionDetail(Context context, String accountId) {
         Intent intent = new Intent(context, IMPersonDetailActivity.class);
         intent.putExtra("account_id", accountId);
         context.startActivity(intent);

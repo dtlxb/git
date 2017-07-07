@@ -116,7 +116,7 @@ public class ScanQRCodeActivity extends BaseActivity {
                             if (scanBody.getIntValue("qrType") == 0) {
                                 //TODO 跳转个人详情
                                 NormalIntentUtils.go2PersionDetail(getActivity(),
-                                        scanBody.getIntValue("account_id"));
+                                        scanBody.getString("account_id"));
                                 ScanQRCodeActivity.this.finish();
                             } else {
                                 //TODO 跳转群名片

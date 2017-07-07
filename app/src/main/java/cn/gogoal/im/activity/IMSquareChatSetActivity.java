@@ -10,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
@@ -144,7 +145,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
             getChatGroup();
         }
 
-        final JSONArray groupsArray = UserUtils.getLocalMyGooupList();
+        final JSONArray groupsArray = UserUtils.getLocalMyGroupList();
 
         //保存群
         if (null != groupsArray && groupsArray.size() > 0) {
@@ -242,7 +243,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
     }
 
     @OnClick(R.id.layout_square_qrcode)
-    void click(View view){
+    void click(View view) {
         Intent intent = new Intent(view.getContext(), QrCodeActivity.class);
         intent.putExtra("qr_code_type", GGQrCode.QR_CODE_TYPE_GROUP);
         intent.putExtra("qrcode_name", squareName);
@@ -259,7 +260,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
         return bean;
     }
 
-    private ContactBean<String> addNormalFans(String name, int friend_id, String avatar) {
+    private ContactBean<String> addNormalFans(String name, String friend_id, String avatar) {
         ContactBean<String> normalBean = new ContactBean<>();
         normalBean.setNickname(name);
         normalBean.setFriend_id(friend_id);
@@ -290,6 +291,8 @@ public class IMSquareChatSetActivity extends BaseActivity {
         PersonContactBeans.addAll(contactBeans);
         contactBeans.clear();
         contactBeans.addAll(squareCreaterFirst(PersonContactBeans));
+        KLog.e(contactBeans);
+        Log.e("+++++contactBeans", contactBeans.toString());
         mPersonInfoAdapter.notifyDataSetChanged();
     }
 
@@ -322,8 +325,8 @@ public class IMSquareChatSetActivity extends BaseActivity {
     }
 
     //删除群成员后
-    public void afterDeleteAnyone(List<Integer> idList) {
-        if (idList.size() == 1 && idList.get(0) == (Integer.parseInt(UserUtils.getMyAccountId()))) {
+    public void afterDeleteAnyone(List<String> idList) {
+        if (idList.size() == 1 && idList.get(0).equals(UserUtils.getMyAccountId())) {
             UIHelper.toast(IMSquareChatSetActivity.this, "退群并删除群成功");
             //群列表删除
             UserInfoUtils.deleteTheGroup(conversationId);
@@ -444,8 +447,8 @@ public class IMSquareChatSetActivity extends BaseActivity {
                 break;
             case R.id.tv_delete_square:
                 //删除并退出群
-                final List<Integer> quitList = new ArrayList<>();
-                quitList.add(Integer.parseInt(UserUtils.getMyAccountId()));
+                final List<String> quitList = new ArrayList<>();
+                quitList.add(UserUtils.getMyAccountId());
                 ChatGroupHelper.deleteAnyone(quitList, conversationId, new ChatGroupHelper.ChatGroupManager() {
                     @Override
                     public void groupActionSuccess(JSONObject object) {
@@ -479,7 +482,7 @@ public class IMSquareChatSetActivity extends BaseActivity {
             switch (requestCode) {
                 case AppConst.SQUARE_ROOM_ADD_ANYONE:
                     List<ContactBean> addContactBeans = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
-                    List<Integer> addIdList = new ArrayList<>();
+                    List<String> addIdList = new ArrayList<>();
                     for (int i = 0; i < addContactBeans.size(); i++) {
                         addIdList.add(addContactBeans.get(i).getFriend_id());
                         urls.add((String) addContactBeans.get(i).getAvatar());
@@ -505,10 +508,10 @@ public class IMSquareChatSetActivity extends BaseActivity {
                     break;
                 case AppConst.SQUARE_ROOM_DELETE_ANYONE:
                     List<ContactBean> changeContactBeans = (List<ContactBean>) data.getSerializableExtra("choose_friend_array");
-                    final List<Integer> idList = new ArrayList<>();
+                    final List<String> idList = new ArrayList<>();
                     for (int i = 0; i < changeContactBeans.size(); i++) {
                         idList.add(changeContactBeans.get(i).getFriend_id());
-                        urls.remove((String) changeContactBeans.get(i).getAvatar());
+                        urls.remove(changeContactBeans.get(i).getAvatar());
                     }
                     //删除群成员
                     ChatGroupHelper.deleteAnyone(idList, conversationId, new ChatGroupHelper.ChatGroupManager() {

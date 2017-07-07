@@ -169,7 +169,7 @@ public class IMChatAdapter extends RecyclerView.Adapter {
 //                    Intent intent = new Intent(mContext, IMPersonDetailActivity.class);
 //                    intent.putExtra("account_id", Integer.parseInt(avimMessage.getFrom()));
 //                    mContext.startActivity(intent);
-                    NormalIntentUtils.go2PersionDetail(mContext, Integer.parseInt(avimMessage.getFrom()));
+                    NormalIntentUtils.go2PersionDetail(mContext, avimMessage.getFrom());
                 }
             });
             //长按头像AT某人

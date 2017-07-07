@@ -60,7 +60,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     //更新通讯录
                                     JSONObject contentObject = JSON.parseObject(message.getContent());
                                     JSONObject lcattrsObject = contentObject.getJSONObject("_lcattrs");
-                                    UserInfoUtils.upDateUserInfo(Integer.parseInt(message.getFrom()), lcattrsObject.getString("avatar"), lcattrsObject.getString("username"));
+                                    UserInfoUtils.upDateUserInfo(message.getFrom(), lcattrsObject.getString("avatar"), lcattrsObject.getString("username"));
                                     break;
                                 case AppConst.IM_CHAT_TYPE_SQUARE:
                                 case AppConst.IM_CHAT_TYPE_STOCK_SQUARE:
@@ -109,7 +109,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                         }
 
                                         //更新群通讯录
-                                        UserInfoUtils.upDateUserInfo(Integer.parseInt(message.getFrom()), lcattrsGroup.getString("avatar"), lcattrsGroup.getString("username"));
+                                        UserInfoUtils.upDateUserInfo(message.getFrom(), lcattrsGroup.getString("avatar"), lcattrsGroup.getString("username"));
                                         sendIMMessage(message, conversation);
                                     }
 
@@ -138,7 +138,7 @@ public class MyMessageHandler extends AVIMMessageHandler {
                                     String nickName = lcattrsObject1.getString("nickname");
                                     String conv_id = lcattrsObject1.getString("conv_id");
                                     String duty = lcattrsObject1.getString("duty");
-                                    int friend_id = lcattrsObject1.getInteger("friend_id");
+                                    String friend_id = lcattrsObject1.getString("friend_id");
 
                                     UserBean userBean = new UserBean();
                                     userBean.setConv_id(conv_id);

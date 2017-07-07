@@ -197,7 +197,7 @@ public class IMNewFriendActivity extends BaseActivity {
         Map<String, String> params = new HashMap<>();
         params.put("token", UserUtils.getToken());
         params.put("friend_id", friend_id);
-        params.put("text", "你好啊！！！");
+        params.put("text", "你好！");
         KLog.e(params);
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
@@ -287,8 +287,8 @@ public class IMNewFriendActivity extends BaseActivity {
 
             @Override
             public void onFailure(String msg) {
-                if (view!=null)
-                view.setClickable(true);
+                if (view != null)
+                    view.setClickable(true);
             }
         };
         new GGOKHTTP(params, GGOKHTTP.ADD_MEMBER, ggHttpInterface).startGet();

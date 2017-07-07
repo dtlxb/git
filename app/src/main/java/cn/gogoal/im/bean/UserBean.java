@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class UserBean extends DataSupport implements Serializable {
 
     @Column(unique = true)
-    private int friend_id;//账号
+    private String friend_id;//账号
 
     private String nickname;//昵称
 
@@ -24,11 +24,11 @@ public class UserBean extends DataSupport implements Serializable {
 
     private boolean inYourContact;
 
-    public int getFriend_id() {
+    public String getFriend_id() {
         return friend_id;
     }
 
-    public void setFriend_id(int friend_id) {
+    public void setFriend_id(String friend_id) {
         this.friend_id = friend_id;
     }
 
