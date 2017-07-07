@@ -153,8 +153,8 @@ public class MessageListUtils {
     /**
      * 获取所需要的字段(头像，昵称)
      */
-    public static String getContactWantedInfo(String wanted, int friendId) {
-        List<UserBean> userBeanList = DataSupport.where("friend_id = ? ", friendId + "").find(UserBean.class);
+    public static String getContactWantedInfo(String wanted, String friendId) {
+        List<UserBean> userBeanList = DataSupport.where("friend_id = ? ", friendId).find(UserBean.class);
         if (null != userBeanList && userBeanList.size() > 0) {
             if (wanted.equals("avatar")) {
                 return userBeanList.get(0).getAvatar();

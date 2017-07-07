@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     android:id="@+id/layout_revenue"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:padding="10dp"
         android:text="@string/single_season_revenue_sharing"
         android:textColor="@color/textColor_333333"
@@ -28,7 +29,7 @@
             <View
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:background="@color/stock_green" />
+                android:background="@color/company_ff691d" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -49,7 +50,7 @@
             <View
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:background="@color/card_color_orange" />
+                android:background="@color/company_f34858" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -70,7 +71,7 @@
             <View
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:background="@color/card_color_purple" />
+                android:background="@color/company_599efd" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -91,7 +92,7 @@
             <View
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:background="@color/blue_light" />
+                android:background="@color/company_orange" />
 
             <TextView
                 android:layout_width="wrap_content"

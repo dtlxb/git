@@ -142,8 +142,8 @@ public class IMChatAdapter extends RecyclerView.Adapter {
                 headPicUrl = UserUtils.getUserAvatar();
                 speakerName = UserUtils.getNickname();
             } else {
-                headPicUrl = MessageListUtils.getContactWantedInfo("avatar", Integer.parseInt(avimMessage.getFrom()));
-                speakerName = MessageListUtils.getContactWantedInfo("nickname", Integer.parseInt(avimMessage.getFrom()));
+                headPicUrl = MessageListUtils.getContactWantedInfo("avatar", avimMessage.getFrom());
+                speakerName = MessageListUtils.getContactWantedInfo("nickname", avimMessage.getFrom());
 
                 if (TextUtils.isEmpty(headPicUrl)) {
                     JSONObject contentObject = JSON.parseObject(avimMessage.getContent());

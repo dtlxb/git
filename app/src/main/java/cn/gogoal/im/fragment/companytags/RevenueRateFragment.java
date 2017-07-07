@@ -147,6 +147,7 @@ public class RevenueRateFragment extends BaseFragment {
             PieView pieView = holder.getView(R.id.pieView);
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) pieView.getLayoutParams();
             params.width = AppDevice.getWidth(getActivity()) / pieDatas.size();
+            params.height = AppDevice.getWidth(getActivity()) / pieDatas.size();
             pieView.setLayoutParams(params);
             List<PieBean> pieBeanList = new ArrayList<>();
             for (int i = data.getData().size() - 1; i > -1; i--) {
@@ -156,11 +157,11 @@ public class RevenueRateFragment extends BaseFragment {
             pieView.setPieType(2);
             pieView.setNeedInnerTitle(true);
             pieView.setPieData(pieBeanList);
-            pieView.setMarginLeft(AppDevice.dp2px(getActivity(), 20));
-            pieView.setMarginRight(AppDevice.dp2px(getActivity(), 20));
-            pieView.setMarginBottom(AppDevice.dp2px(getActivity(), 20));
-            pieView.setMarginTop(AppDevice.dp2px(getActivity(), 20));
-            pieView.setTextSize(AppDevice.dp2px(getActivity(), 10));
+            pieView.setMarginLeft(AppDevice.dp2px(20));
+            pieView.setMarginRight(AppDevice.dp2px(20));
+            pieView.setMarginBottom(AppDevice.dp2px(15));
+            pieView.setMarginTop(AppDevice.dp2px(20));
+            pieView.setTextSize(AppDevice.dp2px(10));
             holder.setText(R.id.tv_year, data.getReport_year() + "年");
         }
 
