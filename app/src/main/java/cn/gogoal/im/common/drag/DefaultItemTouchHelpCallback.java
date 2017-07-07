@@ -8,6 +8,8 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.gogoal.im.common.ArrayUtils;
+
 public class DefaultItemTouchHelpCallback extends ItemTouchHelper.Callback {
 
     /**
@@ -142,9 +144,9 @@ public class DefaultItemTouchHelpCallback extends ItemTouchHelper.Callback {
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
 //        KLog.e(fromPositions.get(0)+":;;"+viewHolder.getAdapterPosition());
-        if (onItemTouchCallbackListener != null) {
+        if (onItemTouchCallbackListener != null && !ArrayUtils.isEmpty(fromPositions)) {
             onItemTouchCallbackListener.onSelectedChanged(
-                    (fromPositions != null&&fromPositions.isEmpty() ? fromPositions.get(0) : viewHolder.getAdapterPosition()),
+                    (fromPositions != null && fromPositions.isEmpty() ? fromPositions.get(0) : viewHolder.getAdapterPosition()),
                     viewHolder.getAdapterPosition());
         }
 

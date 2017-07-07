@@ -83,7 +83,7 @@ public class TenTradableHolderAdapter extends DelegateAdapter.Adapter<MainViewHo
         holder.setText(R.id.textQuantity, listData.get(position).getStock_holding_quantity() != null
                 ? listData.get(position).getStock_holding_quantity() : "--");
         holder.setText(R.id.textRatio, listData.get(position).getStock_holder_ratio() != null
-                ? listData.get(position).getStock_holder_ratio() : "--");
+                ? listData.get(position).getStock_holder_ratio() + "%" : "--");
 
         int valWidth = (int) (tenWidth * Double.parseDouble(
                 listData.get(position).getStock_holder_ratio()) / ratio);

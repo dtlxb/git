@@ -111,6 +111,8 @@ public class CompanyFinanceFragment extends BaseFragment {
                     String title = data.getJSONArray("title").getString(0);
 
                     ArrayList<FinanceData> keyList = new ArrayList<>();
+                    keyList.add(new FinanceData("关键指标", title, 1));
+
                     for (int i = 0; i < FtenUtils.keyIndex1.length; i++) {
                         JSONArray content = null;
                         if (stype.equals("1")) {
@@ -120,17 +122,28 @@ public class CompanyFinanceFragment extends BaseFragment {
                         }
 
                         if (content.size() != 0) {
-                            keyList.add(new FinanceData("关键指标", title,
-                                    FtenUtils.keyIndex1[i], content.getString(0)));
+                            if (i == 1) {
+                                keyList.add(new FinanceData(FtenUtils.keyIndex1[i], content.getString(0), 3));
+                            } else if (i == 3) {
+                                keyList.add(new FinanceData(FtenUtils.keyIndex1[i], content.getString(0), 4));
+                            } else {
+                                keyList.add(new FinanceData(FtenUtils.keyIndex1[i], content.getString(0), 2));
+                            }
                         } else {
-                            keyList.add(new FinanceData("关键指标", title, FtenUtils.keyIndex1[i], "--"));
+                            if (i == 1) {
+                                keyList.add(new FinanceData(FtenUtils.keyIndex1[i], "--", 3));
+                            } else if (i == 3) {
+                                keyList.add(new FinanceData(FtenUtils.keyIndex1[i], "--", 4));
+                            } else {
+                                keyList.add(new FinanceData(FtenUtils.keyIndex1[i], "--", 2));
+                            }
                         }
                     }
 
                     financeList.addAll(keyList);
-
-                    getProfitStateData(stype);
                 }
+
+                getProfitStateData(stype);
             }
 
             @Override
@@ -176,20 +189,29 @@ public class CompanyFinanceFragment extends BaseFragment {
                     }
 
                     ArrayList<FinanceData> profitList = new ArrayList<>();
+                    profitList.add(new FinanceData("利润表", title, 1));
+
                     for (int i = 0; i < FtenUtils.profitState1.length; i++) {
                         JSONArray profit = data.getJSONObject(content[i]).getJSONArray("original_data");
                         if (profit.size() != 0) {
-                            profitList.add(new FinanceData("利润表", title,
-                                    FtenUtils.profitState1[i], profit.getString(0)));
+                            if (i == 1) {
+                                profitList.add(new FinanceData(FtenUtils.profitState1[i], profit.getString(0), 6));
+                            } else {
+                                profitList.add(new FinanceData(FtenUtils.profitState1[i], profit.getString(0), 5));
+                            }
                         } else {
-                            profitList.add(new FinanceData("利润表", title, FtenUtils.profitState1[i], "--"));
+                            if (i == 1) {
+                                profitList.add(new FinanceData(FtenUtils.profitState1[i], "--", 6));
+                            } else {
+                                profitList.add(new FinanceData(FtenUtils.profitState1[i], "--", 5));
+                            }
                         }
                     }
 
                     financeList.addAll(profitList);
-
-                    getBalanceSheetData(stype);
                 }
+
+                getBalanceSheetData(stype);
             }
 
             @Override
@@ -234,20 +256,29 @@ public class CompanyFinanceFragment extends BaseFragment {
                     }
 
                     ArrayList<FinanceData> balanceList = new ArrayList<>();
+                    balanceList.add(new FinanceData("资产负债表", title, 1));
+
                     for (int i = 0; i < FtenUtils.assetsLiabili1.length; i++) {
                         JSONArray balance = data.getJSONObject(content[i]).getJSONArray("original_data");
                         if (balance.size() != 0) {
-                            balanceList.add(new FinanceData("资产负债表", title,
-                                    FtenUtils.assetsLiabili1[i], balance.getString(0)));
+                            if (i == 1) {
+                                balanceList.add(new FinanceData(FtenUtils.assetsLiabili1[i], balance.getString(0), 8));
+                            } else {
+                                balanceList.add(new FinanceData(FtenUtils.assetsLiabili1[i], balance.getString(0), 7));
+                            }
                         } else {
-                            balanceList.add(new FinanceData("资产负债表", title, FtenUtils.assetsLiabili1[i], "--"));
+                            if (i == 1) {
+                                balanceList.add(new FinanceData(FtenUtils.assetsLiabili1[i], "--", 8));
+                            } else {
+                                balanceList.add(new FinanceData(FtenUtils.assetsLiabili1[i], "--", 7));
+                            }
                         }
                     }
 
                     financeList.addAll(balanceList);
-
-                    getCashFlowData(stype);
                 }
+
+                getCashFlowData(stype);
             }
 
             @Override
@@ -293,22 +324,31 @@ public class CompanyFinanceFragment extends BaseFragment {
                     }
 
                     ArrayList<FinanceData> cashList = new ArrayList<>();
+                    cashList.add(new FinanceData("现金流量表", title, 1));
+
                     for (int i = 0; i < FtenUtils.cashFlow1.length; i++) {
                         JSONArray profit = data.getJSONObject(content[i]).getJSONArray("original_data");
                         if (profit.size() != 0) {
-                            cashList.add(new FinanceData("现金流量表", title,
-                                    FtenUtils.cashFlow1[i], profit.getString(0)));
+                            if (i == 1) {
+                                cashList.add(new FinanceData(FtenUtils.cashFlow1[i], profit.getString(0), 10));
+                            } else {
+                                cashList.add(new FinanceData(FtenUtils.cashFlow1[i], profit.getString(0), 9));
+                            }
                         } else {
-                            cashList.add(new FinanceData("现金流量表", title, FtenUtils.cashFlow1[i], "--"));
+                            if (i == 1) {
+                                cashList.add(new FinanceData(FtenUtils.cashFlow1[i], "--", 10));
+                            } else {
+                                cashList.add(new FinanceData(FtenUtils.cashFlow1[i], "--", 9));
+                            }
                         }
                     }
 
                     financeList.addAll(cashList);
-
-                    adapter = new StockFinanceAdapter(getActivity(), financeList, stockCode,
-                            stockName, stype);
-                    rv_finance.setAdapter(adapter);
                 }
+
+                adapter = new StockFinanceAdapter(getActivity(), financeList, stockCode,
+                        stockName, stype);
+                rv_finance.setAdapter(adapter);
             }
 
             @Override

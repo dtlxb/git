@@ -90,10 +90,20 @@ public class FocusNewsFragment extends BaseFragment {
             }
         });
 
+        xLayout.setEmptyText("该日没有更多要闻了!\n点击查看全部要闻");
         xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
             @Override
             public void onReload(View v) {
                 defaultPage = 1;
+                dateString=null;
+                getNewsData(AppConst.REFRESH_TYPE_RELOAD);
+            }
+        });
+        xLayout.getEmptyView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                defaultPage = 1;
+                dateString=null;
                 getNewsData(AppConst.REFRESH_TYPE_RELOAD);
             }
         });

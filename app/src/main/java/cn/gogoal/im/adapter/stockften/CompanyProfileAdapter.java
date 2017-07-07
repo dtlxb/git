@@ -15,6 +15,7 @@ import java.util.List;
 import cn.gogoal.im.R;
 import cn.gogoal.im.adapter.market.MainViewHolder;
 import cn.gogoal.im.bean.f10.ProfileData;
+import cn.gogoal.im.common.CalendarUtils;
 
 /**
  * Created by dave.
@@ -51,8 +52,14 @@ public class CompanyProfileAdapter extends DelegateAdapter.Adapter<MainViewHolde
         }
 
         holder.setText(R.id.textName, listData.get(position).getName());
-        holder.setText(R.id.textContent, listData.get(position).getContent() != null
-                ? listData.get(position).getContent() : "--");
+        if (position == 0 || position == 1 || position == 3) {
+            holder.setText(R.id.textContent, listData.get(position).getContent() != null ?
+                    CalendarUtils.formatDate("yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd",
+                            listData.get(position).getContent()) : "--");
+        } else {
+            holder.setText(R.id.textContent, listData.get(position).getContent() != null
+                    ? listData.get(position).getContent() : "--");
+        }
 
     }
 

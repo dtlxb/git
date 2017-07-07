@@ -74,7 +74,7 @@ public class SortView extends AppCompatTextView {
                 }
             } else if (sortType == -1) {
                 if (sortInteface != null) {
-                    sortInteface.doSort(v, 0);
+                    sortInteface.doSort(v, 200);
                     setViewStateNormal();
                 }
             }

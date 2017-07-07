@@ -14,7 +14,6 @@
         android:id="@+id/layoutFinance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="7.5dp"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -63,10 +62,12 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layoutFinance1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/textName"
