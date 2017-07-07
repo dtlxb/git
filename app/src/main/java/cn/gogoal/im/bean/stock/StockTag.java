@@ -1,7 +1,6 @@
 package cn.gogoal.im.bean.stock;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
 /**
  * author wangjd on 2017/7/3 0003.
@@ -9,7 +8,7 @@ import android.os.Parcelable;
  * phone 18930640263
  * description :${annotated}.
  */
-public class StockTag implements Parcelable{
+public class StockTag implements Serializable{
     /**
      * _id : -2
      * name : 好公司
@@ -53,37 +52,4 @@ public class StockTag implements Parcelable{
         this.remark = remark;
     }
 
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this._id);
-        dest.writeString(this.name);
-        dest.writeString(this.remark);
-    }
-
-    public StockTag() {
-    }
-
-    protected StockTag(Parcel in) {
-        this._id = in.readInt();
-        this.name = in.readString();
-        this.remark = in.readString();
-    }
-
-    public static final Creator<StockTag> CREATOR = new Creator<StockTag>() {
-        @Override
-        public StockTag createFromParcel(Parcel source) {
-            return new StockTag(source);
-        }
-
-        @Override
-        public StockTag[] newArray(int size) {
-            return new StockTag[size];
-        }
-    };
 }

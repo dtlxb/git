@@ -1074,9 +1074,11 @@ public class GGOKHTTP {
     }
 
     public void startGet() {
+        String baseUrl;
         try {
+            baseUrl = GGAPI.get(url, param);
             OkHttpUtils.get()
-                    .url(GGAPI.get(url, param))
+                    .url(baseUrl)
                     .build()
                     .execute(new StringCallback() {
                         @Override
