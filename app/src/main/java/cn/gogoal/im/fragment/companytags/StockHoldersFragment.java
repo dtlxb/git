@@ -5,8 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -18,10 +19,11 @@ import butterknife.BindView;
 import cn.gogoal.im.R;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
-import cn.gogoal.im.bean.companytags.IndustryData;
+import cn.gogoal.im.bean.companytags.RevenueData;
 import cn.gogoal.im.bean.companytags.StockHolderBean;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.LineView;
 
@@ -71,13 +73,13 @@ public class StockHoldersFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                JSONObject result = JSONObject.parseObject(responseInfo);
+                JsonObject result = JsonUtils.toJsonObject(responseInfo);
                 KLog.e(responseInfo);
-                if (result.getIntValue("code") == 0) {
-                    BaseBeanList<StockHolderBean> beanList = JSONObject.parseObject(
-                            responseInfo,
-                            new TypeReference<BaseBeanList<StockHolderBean>>() {
-                            });
+                if (result.get("code").getAsInt() == 0) {
+                    Gson gson = new Gson();
+                    BaseBeanList<StockHolderBean> beanList = gson.fromJson(responseInfo,
+                            new TypeToken<BaseBeanList<StockHolderBean>>() {
+                            }.getType());
                     stockHolderBeans.addAll(beanList.getData());
                     if (stockHolderBeans.size() > 0) {
                         stockHolder_layout.setVisibility(View.VISIBLE);

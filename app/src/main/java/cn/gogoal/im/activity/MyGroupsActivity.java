@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hply.roundimage.roundImage.RoundedImageView;
 import com.socks.library.KLog;
@@ -36,7 +35,6 @@ import cn.gogoal.im.common.AvatarTakeListener;
 import cn.gogoal.im.common.DialogHelp;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.IMHelpers.ChatGroupHelper;
-import cn.gogoal.im.common.IMHelpers.MessageListUtils;
 import cn.gogoal.im.common.ImageUtils.ImageDisplay;
 import cn.gogoal.im.common.Impl;
 import cn.gogoal.im.common.JsonUtils;
@@ -130,13 +128,13 @@ public class MyGroupsActivity extends BaseActivity {
     public void getGroupList(final int type) {
         UserUtils.getMyGroupList(new Impl<String>() {
             @Override
-            public void response(int code, String jsondata) {
+            public void response(int code, String jsonData) {
                 switch (code) {
                     case Impl.RESPON_DATA_SUCCESS:
                         dataBeans.clear();
 
                         List<GroupData> data =
-                                JsonUtils.parseJsonArray(jsondata, GroupData.class);
+                                JsonUtils.parseJsonArray(jsonData, GroupData.class);
 
 //                                Arrays.asList(new Gson().fromJson(jsondata, GroupData[].class));
 
@@ -155,7 +153,7 @@ public class MyGroupsActivity extends BaseActivity {
                         break;
                     case Impl.RESPON_DATA_ERROR:
                         xLayout.setStatus(XLayout.Error);
-                        UIHelper.toastError(getActivity(), jsondata, xLayout);
+                        UIHelper.toastError(getActivity(), jsonData, xLayout);
                         xLayout.setOnReloadListener(new XLayout.OnReloadListener() {
                             @Override
                             public void onReload(View v) {

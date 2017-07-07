@@ -5,19 +5,16 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,10 +26,12 @@ import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.bean.BaseBeanList;
 import cn.gogoal.im.bean.PieBean;
+import cn.gogoal.im.bean.companytags.IncidentData;
 import cn.gogoal.im.bean.companytags.PieData;
 import cn.gogoal.im.bean.companytags.RevenueData;
 import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
+import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.UserUtils;
 import cn.gogoal.im.ui.view.PieView;
 
@@ -96,13 +95,15 @@ public class RevenueRateFragment extends BaseFragment {
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
-                JSONObject result = JSONObject.parseObject(responseInfo);
-                if (result.getIntValue("code") == 0) {
+                KLog.e(responseInfo);
+                JsonObject result = JsonUtils.toJsonObject(responseInfo);
+                if (result.get("code").getAsInt() == 0) {
 
-                    BaseBeanList<RevenueData> beanList = JSONObject.parseObject(
-                            responseInfo,
-                            new TypeReference<BaseBeanList<RevenueData>>() {
-                            });
+                    Gson gson = new Gson();
+                    BaseBeanList<RevenueData> beanList = gson.fromJson(responseInfo,
+                            new TypeToken<BaseBeanList<RevenueData>>() {
+                            }.getType());
+
                     revenueDatas.addAll(beanList.getData());
                     if (revenueDatas.size() > 0) {
                         layout_revenue.setVisibility(View.VISIBLE);
@@ -159,7 +160,7 @@ public class RevenueRateFragment extends BaseFragment {
             pieView.setPieData(pieBeanList);
             pieView.setMarginLeft(AppDevice.dp2px(20));
             pieView.setMarginRight(AppDevice.dp2px(20));
-            pieView.setMarginBottom(AppDevice.dp2px(15));
+            pieView.setMarginBottom(AppDevice.dp2px(10));
             pieView.setMarginTop(AppDevice.dp2px(20));
             pieView.setTextSize(AppDevice.dp2px(10));
             holder.setText(R.id.tv_year, data.getReport_year() + "年");
