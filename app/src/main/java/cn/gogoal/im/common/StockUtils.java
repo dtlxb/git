@@ -9,6 +9,8 @@ import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.socks.library.KLog;
 
 import java.util.ArrayList;
@@ -47,17 +49,17 @@ public class StockUtils {
         return SPTools.getSetData(UserUtils.getMyAccountId()+"_my_stock_set", new LinkedHashSet<String>());
     }
 
-    public static String getStockCodes(@NonNull JSONArray array) {
+    public static String getStockCodes(@NonNull JsonArray array) {
         List<String> codeArrs = new ArrayList<>();
 
-        if (array.isEmpty()) {
+        if (array.isJsonNull()) {
             return null;
         }
 
         for (int i = 0; i < array.size(); i++) {
-            JSONObject object = (JSONObject) array.get(i);
-            if (!StringUtils.isActuallyEmpty(object.getString("stock_code"))) {
-                codeArrs.add(object.getString("stock_code"));
+            JsonObject object = array.get(i).getAsJsonObject();
+            if (!StringUtils.isActuallyEmpty(object.get("stock_code").getAsString())) {
+                codeArrs.add(object.get("stock_code").getAsString());
             }
         }
         return ArrayUtils.mosaicListElement(codeArrs);

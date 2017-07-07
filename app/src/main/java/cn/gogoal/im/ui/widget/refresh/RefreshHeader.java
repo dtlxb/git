@@ -1,10 +1,12 @@
 package cn.gogoal.im.ui.widget.refresh;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import cn.gogoal.im.R;
@@ -61,6 +63,12 @@ public class RefreshHeader extends FrameLayout implements PtrUIHandler {
     private void initView() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.header_refresh, this, false);
         mTvRemind = (TextView) view.findViewById(R.id.tv_refresh_flag);
+        ImageView ivProgress= (ImageView) view.findViewById(R.id.progress_loading);
+
+        ivProgress.setImageResource(R.drawable.loading_animation);
+        AnimationDrawable animationDrawable = (AnimationDrawable) ivProgress.getDrawable();
+        animationDrawable.start();
+
 //        AVLoadingIndicatorView indicatorView= (AVLoadingIndicatorView) view.findViewById(R.id.indicatorView);
 
 //        indicatorView.setIndicator(new LineScalePulseOutIndicator());

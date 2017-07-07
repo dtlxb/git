@@ -140,4 +140,8 @@ public class JsonUtils {
         return mList;
     }
 
+    public static JsonArray parseJsonArray(String json) {
+        return new JsonParser().parse(json).getAsJsonArray();
+    }
+
 }
