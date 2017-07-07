@@ -101,6 +101,11 @@ public class SevenBy24Fragment extends BaseFragment {
                 defaultPage = 1;
                 get7by24Datas(AppConst.REFRESH_TYPE_SWIPEREFRESH);
             }
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+//                return ((LinearLayoutManager) rvMyStock.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0 ;
+                return !recyclerView.canScrollVertically(-1);
+            }
         });
 
         adapter.setOnLoadMoreListener(new CommonAdapter.RequestLoadMoreListener() {

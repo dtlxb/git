@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.socks.library.KLog;
 
@@ -14,7 +15,6 @@ import org.simple.eventbus.Subscriber;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import cn.gogoal.im.R;
@@ -22,6 +22,7 @@ import cn.gogoal.im.adapter.baseAdapter.BaseViewHolder;
 import cn.gogoal.im.adapter.baseAdapter.CommonAdapter;
 import cn.gogoal.im.base.BaseFragment;
 import cn.gogoal.im.common.AppConst;
+import cn.gogoal.im.common.AppDevice;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.JsonUtils;
 import cn.gogoal.im.common.NormalIntentUtils;
@@ -207,11 +208,17 @@ public class FocusNewsFragment extends BaseFragment {
             holder.setText(R.id.tv_item_normal_sub_title,
                     TextUtils.isEmpty(data.getSummary()) ? "" : data.getSummary());
 
-            holder.setText(R.id.tv_item_normal_info_info,
-                    String.format(Locale.getDefault(),
-                            getString(R.string.infomation_bottom),
-                            data.getDate(),
-                            data.getOrigin()));
+            ImageView newsImage = holder.getView(R.id.iv_news_iamge);
+
+            if (StringUtils.isActuallyEmpty(data.getImage())) {
+                newsImage.setVisibility(View.GONE);
+                holder.setText(R.id.tv_item_normal_info_info,
+                        data.getDate() + "|" + data.getOrigin());
+            } else {
+                newsImage.setVisibility(View.VISIBLE);
+                holder.setText(R.id.tv_item_normal_info_info,
+                        data.getDate()+" | "+(AppDevice.isLowDpi() ? "\n" : "") + data.getOrigin());
+            }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

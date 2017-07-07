@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".activity.stock.MyStockEditActivity">
+
+    <include layout="@layout/include_title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:baselineAligned="true"
+        android:background="@drawable/shape_line_bottom_main_bg"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="全部"
+            android:paddingStart="15dp"
+            android:paddingEnd="0dp"
+            android:textColor="@color/gray"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="置顶"
+            android:textSize="16sp"
+            android:textColor="@color/gray"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:text="拖动"
+            android:paddingStart="0dp"
+            android:paddingEnd="15dp"
+            android:textColor="@color/gray"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <cn.gogoal.im.ui.widget.drag.DragSortListView
+        android:id="@+id/draglist"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_weight="1"
+        android:scrollbars="none"
+        android:cacheColorHint="@color/white"
+        android:choiceMode="singleChoice"
+        android:divider="@color/gray"
+        android:dividerHeight="1px"
+        android:listSelector="@color/white"
+        android:overScrollMode="never"
+        app:collapsed_height="1px"
+        app:drag_enabled="true"
+        app:drag_handle_id="@+id/draghandler"
+        app:drag_scroll_start="0.33"
+        app:drag_start_mode="onDown"
+        app:float_alpha="1"
+        app:slide_shuffle_speed="0.3" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@drawable/shape_line_top"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/select_all"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/edit_mystock_select"
+            android:textColor="@color/textColor_333333"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorDivider_d9d9d9" />
+
+        <TextView
+            android:id="@+id/delete_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/edit_mystock_delete"
+            android:textColor="@color/textColor_333333"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+</LinearLayout>

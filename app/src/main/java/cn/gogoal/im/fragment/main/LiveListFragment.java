@@ -1,6 +1,7 @@
 package cn.gogoal.im.fragment.main;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -25,7 +26,7 @@ import cn.gogoal.im.common.AppConst;
 import cn.gogoal.im.common.GGOKHTTP.GGOKHTTP;
 import cn.gogoal.im.common.UIHelper;
 import cn.gogoal.im.common.UserUtils;
-import cn.gogoal.im.ui.widget.WrapContentLinearLayoutManager;
+import cn.gogoal.im.ui.widget.CatchLayoutManager;
 import cn.gogoal.im.ui.widget.refresh.RefreshLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -66,7 +67,7 @@ public class LiveListFragment extends BaseFragment {
     @Override
     public void doBusiness(Context mContext) {
         rvLiveList.setLayoutManager(
-                new WrapContentLinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+                new CatchLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
 
         liveDatas = new ArrayList<>();
         persionalDatas = new ArrayList<>();
@@ -78,6 +79,17 @@ public class LiveListFragment extends BaseFragment {
         rvLiveList.setAdapter(liveListAdapter);
 
         request(AppConst.REFRESH_TYPE_FIRST, keyword);
+
+        refreshLayout.getHeaderView().setBackgroundColor(Color.WHITE);
+
+//        rvLiveList.setOnTouchListener(
+//                new View.OnTouchListener() {
+//                    @Override
+//                    public boolean onTouch(View v, MotionEvent event) {
+//                        return refreshLayout.getHeaderView().getVisibility()!=View.GONE;
+//                    }
+//                }
+//        );
 
         refreshLayout.setPtrHandler(new PtrDefaultHandler() {
             @Override

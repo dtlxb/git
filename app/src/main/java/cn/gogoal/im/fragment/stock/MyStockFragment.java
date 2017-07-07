@@ -76,6 +76,10 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
     @BindView(R.id.tv_mystock_price)
     SortView tvMystockPrice;
 
+    //按价格排序按钮
+    @BindView(R.id.tv_mystock_rag)
+    SortView tvMystockRag;
+
     //按涨跌幅排序按钮
     @BindView(R.id.tv_mystock_rate)
     SortView tvMystockRate;
@@ -114,7 +118,8 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return ((LinearLayoutManager) rvMyStock.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0 ;
+//                return ((LinearLayoutManager) rvMyStock.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0 ;
+                return !rvMyStock.canScrollVertically(-1);
             }
 
         });
@@ -174,12 +179,16 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
      */
     private void initSortTitle() {
         tvMystockPrice.setDefaultText("最新价");
-        tvMystockRate.setDefaultText("涨跌幅");
         tvMystockPrice.setViewStateNormal();
-        tvMystockRate.setViewStateNormal();
-
         tvMystockPrice.seOntSortListener(this);
+
+        tvMystockRate.setDefaultText("涨跌幅");
+        tvMystockRate.setViewStateNormal();
         tvMystockRate.seOntSortListener(this);
+
+        tvMystockRag.setDefaultText("公司荣誉");
+        tvMystockRag.setViewStateNormal();
+        tvMystockRag.seOntSortListener(this);
 
     }
 
@@ -220,20 +229,9 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                                     StockTag tag = new StockTag();
                                     JSONObject objectTag = JSONObject.parseObject(responseInfo).getJSONObject("data");
                                     if (data.getStock_code() != null && objectTag.getString(data.getStock_code()) != null) {
-                                        switch (objectTag.getString(data.getStock_code())) {
-                                            case "-1":
-                                                tag.setType(-1);
-                                                break;
-                                            case "0":
-                                                tag.setType(0);
-                                                break;
-                                            case "1":
-                                                tag.setType(1);
-                                                break;
-                                            case "2":
-                                                tag.setType(2);
-                                                break;
-                                        }
+                                        tag.setType(
+                                                StringUtils.parseStringDouble(
+                                                        objectTag.getString(data.getStock_code())).intValue());
                                     } else {
                                         tag.setType(-2);
                                     }
@@ -243,7 +241,6 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                                     }
                                 }
                             }
-
                             myStockAdapter.notifyDataSetChanged();
                         }
 
@@ -334,6 +331,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             public int compare(MyStockData o1, MyStockData o2) {
                 if (view.getId() == R.id.tv_mystock_price) {
                     tvMystockRate.setViewStateNormal();
+                    tvMystockRag.setViewStateNormal();
                     if (sortType == -1) {
                         return Double.compare(o2.getPrice(), o1.getPrice());
                     } else if (sortType == 1) {
@@ -348,10 +346,26 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                     }
                 } else if (view.getId() == R.id.tv_mystock_rate) {
                     tvMystockPrice.setViewStateNormal();
+                    tvMystockRate.setViewStateNormal();
                     if (sortType == -1) {
                         return StringUtils.parseStringDouble(o2.getChange_rate()).compareTo(StringUtils.parseStringDouble(o1.getChange_rate()));
                     } else if (sortType == 1) {
                         return StringUtils.parseStringDouble(o1.getChange_rate()).compareTo(StringUtils.parseStringDouble(o2.getChange_rate()));
+                    } else {
+                        try {
+                            return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()), CalendarUtils.parseString2Long(o1.getInsertdate()));
+                        } catch (Exception e) {
+                            getMyStockData(AppConst.REFRESH_TYPE_FIRST);
+                            return 0;
+                        }
+                    }
+                }else if (view.getId() == R.id.tv_mystock_rag) {
+                    tvMystockPrice.setViewStateNormal();
+                    tvMystockRag.setViewStateNormal();
+                    if (sortType == -1) {
+                        return compareInt(o2.getTag().getType(),o1.getTag().getType());
+                    } else if (sortType == 1) {
+                        return compareInt(o1.getTag().getType(),o2.getTag().getType());
                     } else {
                         try {
                             return Long.compare(CalendarUtils.parseString2Long(o2.getInsertdate()), CalendarUtils.parseString2Long(o1.getInsertdate()));
@@ -365,6 +379,10 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
             }
         });
         myStockAdapter.notifyDataSetChanged();
+    }
+
+    public static int compareInt(int x, int y) {
+        return (x < y) ? -1 : ((x == y) ? 0 : 1);
     }
 
     /**

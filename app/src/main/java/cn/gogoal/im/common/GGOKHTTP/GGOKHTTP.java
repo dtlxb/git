@@ -5,7 +5,6 @@ import android.util.Log;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -1096,7 +1095,9 @@ public class GGOKHTTP {
                                     } else {
                                         httpInterface.onFailure("最外层没有code字段");
                                     }
-                                } catch (JSONException e) {
+                                } catch (Exception e) {
+                                    Log.e("TAG", "==操作出错==" + e.getMessage() + "==出错接口：" + url + "==");
+                                    httpInterface.onFailure("出错了！");
                                     e.printStackTrace();
                                 }
                             }
@@ -1138,6 +1139,7 @@ public class GGOKHTTP {
                                     }
 
                                 } catch (Exception e) {//解析出错，返回就TM就不是json
+                                    Log.e("TAG", "==操作出错==" + e.getMessage() + "==出错接口：" + url + "==");
                                     httpInterface.onFailure(e.getMessage());
                                 }
                             }

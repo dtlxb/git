@@ -61,7 +61,7 @@
                 android:textColor="@color/textColor_333333"
                 android:textSize="14sp" />
 
-            <TextView
+            <cn.gogoal.im.ui.view.SortView
                 android:id="@+id/tv_mystock_rag"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
