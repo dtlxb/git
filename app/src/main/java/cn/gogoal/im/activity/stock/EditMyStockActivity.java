@@ -84,7 +84,7 @@ public class EditMyStockActivity extends BaseActivity {
 
         BaseActivity.initRecycleView(rvEditDrag, 0);
 
-        myStockList = getIntent().getParcelableArrayListExtra("my_stock_edit_list");
+        myStockList = (List<MyStockData>) getIntent().getSerializableExtra("my_stock_edit_list");
 
         dragAdapter = new DragAdapter(mContext, myStockList);
         dragAdapter.setOnItemCheckedChangeListener(onCheckedChangeListener);

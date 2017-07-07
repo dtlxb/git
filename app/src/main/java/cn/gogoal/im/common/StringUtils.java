@@ -3,6 +3,7 @@ package cn.gogoal.im.common;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -294,8 +295,8 @@ public class StringUtils {
         return Character.toUpperCase(lastCode) == checkCodeList[idSum % 11];
     }
 
-    public static String getNotNullString(String orderStr) {
-        return isActuallyEmpty(orderStr) ? "" : orderStr;
+    public static CharSequence getNotNullString(String orderStr) {
+        return isActuallyEmpty(orderStr) ? "" : Html.fromHtml(orderStr);
     }
 
     public static Double parseStringDouble(String value) {

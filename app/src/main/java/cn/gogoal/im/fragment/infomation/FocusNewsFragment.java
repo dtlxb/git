@@ -229,7 +229,8 @@ public class FocusNewsFragment extends BaseFragment {
                 newsImage.setVisibility(View.VISIBLE);
                 ImageDisplay.loadImage(getContext(),data.getImage(),newsImage);
                 holder.setText(R.id.tv_item_normal_info_info,
-                        data.getDate()+" | "+(AppDevice.isLowDpi() ? "\n" : "") + data.getOrigin());
+                        data.getDate()+" | "+(AppDevice.isLowDpi() ? "\n" : "") +
+                                StringUtils.getNotNullString(data.getOrigin()));
             }
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {

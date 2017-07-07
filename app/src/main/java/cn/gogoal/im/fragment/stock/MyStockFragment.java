@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -195,12 +194,13 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
 
         Map<String, String> params = new HashMap<>();
         params.put("page", "1");
-        params.put("rows", "500");
+        params.put("rows", "200");
         params.put("token", UserUtils.getToken());
 
         GGOKHTTP.GGHttpInterface ggHttpInterface = new GGOKHTTP.GGHttpInterface() {
             @Override
             public void onSuccess(String responseInfo) {
+
                 int code = JSONObject.parseObject(responseInfo).getIntValue("code");
                 if (code == 0) {
 
@@ -298,9 +298,7 @@ public class MyStockFragment extends BaseFragment implements MyStockSortInteface
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), EditMyStockActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList("my_stock_edit_list", myStockDatas);
-                    intent.putExtras(bundle);
+                    intent.putExtra("my_stock_edit_list", myStockDatas);
                     startActivity(intent);
                 }
             });

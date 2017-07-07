@@ -233,7 +233,7 @@ public class InfomationTabFragment extends BaseFragment {
             holder.setText(R.id.tv_item_normal_info_title, data.getTitle());
 
             holder.setText(R.id.tv_item_normal_sub_title,
-                    TextUtils.isEmpty(data.getSummary()) ? "" : data.getSummary());
+                    TextUtils.isEmpty(data.getSummary()) ? "" : StringUtils.getNotNullString(data.getSummary()));
 
             holder.setVisible(R.id.tv_item_normal_sub_title, tabType == INFOMATION_TYPE_SKY_VIEW_POINT);
 
